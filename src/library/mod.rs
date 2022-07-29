@@ -196,6 +196,12 @@ pub fn process_sync<'a>(
         "get-data" => fpm::library::get_data::processor(section, doc, config),
         "sitemap" => fpm::library::sitemap::processor(section, doc, config),
         "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, config),
+        "document-readers" => {
+            fpm::library::sitemap::document_readers(section, document_id, doc, config)
+        }
+        "document-writers" => {
+            fpm::library::sitemap::document_writers(section, document_id, doc, config)
+        }
         "user-groups" => fpm::user_group::processor::user_groups(section, doc, config),
         "user-group-by-id" => fpm::user_group::processor::user_group_by_id(section, doc, config),
         "package-query" => fpm::library::sqlite::processor_(section, doc, config),
@@ -379,6 +385,18 @@ impl Library2 {
             "sitemap" => fpm::library::sitemap::processor(section, doc, &self.config),
             "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, &self.config),
             "user-groups" => fpm::user_group::processor::user_groups(section, doc, &self.config),
+            "document-readers" => fpm::library::sitemap::document_readers(
+                section,
+                self.document_id.as_str(),
+                doc,
+                &self.config,
+            ),
+            "document-writers" => fpm::library::sitemap::document_writers(
+                section,
+                self.document_id.as_str(),
+                doc,
+                &self.config,
+            ),
             "user-group-by-id" => {
                 fpm::user_group::processor::user_group_by_id(section, doc, &self.config)
             }

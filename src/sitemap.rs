@@ -189,6 +189,8 @@ pub struct SiteMapCompat {
     pub current_subsection: Option<TocItemCompat>,
     #[serde(rename = "current-page")]
     pub current_page: Option<TocItemCompat>,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 #[derive(Debug, Default, Clone, serde::Serialize)]
@@ -211,6 +213,8 @@ pub struct TocItemCompat {
     #[serde(rename = "img-src")]
     pub image_src: Option<String>,
     pub children: Vec<TocItemCompat>,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 impl TocItemCompat {
@@ -219,6 +223,8 @@ impl TocItemCompat {
         title: Option<String>,
         is_active: bool,
         is_open: bool,
+        readers: Vec<String>,
+        writers: Vec<String>,
     ) -> TocItemCompat {
         TocItemCompat {
             url,
@@ -232,6 +238,8 @@ impl TocItemCompat {
             is_open,
             image_src: None,
             children: vec![],
+            readers,
+            writers,
         }
     }
 
@@ -304,6 +312,24 @@ impl SitemapElement {
         *skip = flag;
     }
 
+    pub(crate) fn set_readers(&mut self, group: &str) {
+        let readers = match self {
+            SitemapElement::Section(s) => &mut s.readers,
+            SitemapElement::Subsection(s) => &mut s.readers,
+            SitemapElement::TocItem(s) => &mut s.readers,
+        };
+        readers.push(group.to_string());
+    }
+
+    pub(crate) fn set_writers(&mut self, group: &str) {
+        let writers = match self {
+            SitemapElement::Section(s) => &mut s.writers,
+            SitemapElement::Subsection(s) => &mut s.writers,
+            SitemapElement::TocItem(s) => &mut s.writers,
+        };
+        writers.push(group.to_string());
+    }
+
     pub(crate) fn get_title(&self) -> Option<String> {
         match self {
             SitemapElement::Section(s) => &s.title,
@@ -351,6 +377,14 @@ pub struct SitemapParser {
     sections: Vec<(SitemapElement, usize)>,
     temp_item: Option<(SitemapElement, usize)>,
     doc_name: String,
+}
+
+#[derive(Debug, serde::Deserialize, Clone)]
+pub struct SitemapTemp {
+    #[serde(rename = "sitemap-body")]
+    pub body: String,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 impl SitemapParser {
@@ -534,6 +568,13 @@ impl SitemapParser {
                                 }
                             })?)
                         }
+
+                        if k.eq("readers") {
+                            i.set_readers(v);
+                        }
+                        if k.eq("writers") {
+                            i.set_writers(v);
+                        }
                         i.insert_key_value(k, v);
                     }
                     _ => todo!(),
@@ -572,7 +613,6 @@ impl Sitemap {
         }
         let mut sitemap = Sitemap {
             sections: construct_tree_util(parser.finalize()?),
-
             readers: vec![],
             writers: vec![],
         };
@@ -920,7 +960,14 @@ impl Sitemap {
                             v.id.as_ref()
                                 .map(|v| fpm::sitemap::Sitemap::ids_matches(v, id))
                                 .unwrap_or(false);
-                        let toc = TocItemCompat::new(v.id.clone(), v.title.clone(), active, active);
+                        let toc = TocItemCompat::new(
+                            v.id.clone(),
+                            v.title.clone(),
+                            active,
+                            active,
+                            v.readers.clone(),
+                            v.writers.clone(),
+                        );
                         if active {
                             let mut curr_subsection = toc.clone();
                             if let Some(ref title) = v.nav_title {
@@ -952,6 +999,8 @@ impl Sitemap {
                     section.title.clone(),
                     true,
                     true,
+                    section.readers.clone(),
+                    section.writers.clone(),
                 );
                 sections.push(section_toc.clone());
                 if let Some(ref title) = section.nav_title {
@@ -973,6 +1022,8 @@ impl Sitemap {
                     section.title.clone(),
                     true,
                     true,
+                    section.readers.clone(),
+                    section.writers.clone(),
                 );
                 sections.push(section_toc.clone());
                 if let Some(ref title) = section.nav_title {
@@ -988,6 +1039,8 @@ impl Sitemap {
                     section.title.clone(),
                     false,
                     false,
+                    section.readers.clone(),
+                    section.writers.clone(),
                 ));
             }
         }
@@ -996,7 +1049,14 @@ impl Sitemap {
                 .iter()
                 .filter(|s| !s.skip)
                 .map(|v| {
-                    TocItemCompat::new(Some(get_url(v.id.as_str())), v.title.clone(), false, false)
+                    TocItemCompat::new(
+                        Some(get_url(v.id.as_str())),
+                        v.title.clone(),
+                        false,
+                        false,
+                        v.readers.clone(),
+                        v.writers.clone(),
+                    )
                 }),
         );
         return Some(SiteMapCompat {
@@ -1006,6 +1066,8 @@ impl Sitemap {
             current_section,
             current_subsection,
             current_page,
+            readers: self.readers.clone(),
+            writers: self.writers.clone(),
         });
 
         #[allow(clippy::type_complexity)]
@@ -1042,6 +1104,8 @@ impl Sitemap {
                         subsection.title.clone(),
                         true,
                         true,
+                        subsection.readers.clone(),
+                        subsection.writers.clone(),
                     );
                     subsection_list.push(subsection_toc.clone());
                     if let Some(ref title) = subsection.nav_title {
@@ -1062,6 +1126,8 @@ impl Sitemap {
                             subsection.title.clone(),
                             true,
                             true,
+                            subsection.readers.clone(),
+                            subsection.writers.clone(),
                         );
                         subsection_list.push(subsection_toc.clone());
                         if let Some(ref title) = subsection.nav_title {
@@ -1079,17 +1145,25 @@ impl Sitemap {
                         subsection.title.clone(),
                         false,
                         false,
+                        subsection.readers.clone(),
+                        subsection.writers.clone(),
                     ));
                 }
             }
 
             if found {
-                subsection_list.extend(
-                    subsections[index + 1..]
-                        .iter()
-                        .filter(|s| !s.skip)
-                        .map(|v| TocItemCompat::new(v.id.clone(), v.title.clone(), false, false)),
-                );
+                subsection_list.extend(subsections[index + 1..].iter().filter(|s| !s.skip).map(
+                    |v| {
+                        TocItemCompat::new(
+                            v.id.clone(),
+                            v.title.clone(),
+                            false,
+                            false,
+                            v.readers.clone(),
+                            v.writers.clone(),
+                        )
+                    },
+                ));
                 return Some((subsection_list, toc, current_subsection, current_page));
             }
             None
@@ -1128,6 +1202,8 @@ impl Sitemap {
                         toc_item.title.clone(),
                         is_active,
                         is_active || is_open,
+                        toc_item.readers.clone(),
+                        toc_item.writers.clone(),
                     );
                     current_toc.children = children;
                     if is_open {
@@ -1220,6 +1296,167 @@ impl Sitemap {
                 }
             }
             None
+        }
+    }
+
+    /// This function will return all the readers and readers which are inherited from parent
+    pub fn readers<'a>(
+        &self,
+        doc_path: &str,
+        groups: &'a std::collections::BTreeMap<String, fpm::user_group::UserGroup>,
+    ) -> Vec<&'a fpm::user_group::UserGroup> {
+        for section in self.sections.iter() {
+            let readers = find_section(section, doc_path);
+            if readers.is_empty() {
+                continue;
+            }
+            let readers: Vec<String> = self.readers.iter().cloned().chain(readers).collect();
+            return readers
+                .iter()
+                .unique()
+                .filter_map(|g| groups.get(g))
+                .collect();
+        }
+
+        return vec![];
+
+        fn find_toc(toc: &TocItem, doc_path: &str) -> Vec<String> {
+            if toc.id.eq(doc_path) {
+                return toc.readers.clone();
+            }
+
+            for child in toc.children.iter() {
+                let readers = find_toc(child, doc_path);
+                if readers.is_empty() {
+                    continue;
+                }
+                return readers
+                    .into_iter()
+                    .chain(toc.readers.iter().cloned())
+                    .collect();
+            }
+            vec![]
+        }
+
+        fn find_subsection(subsection: &Subsection, doc_path: &str) -> Vec<String> {
+            if subsection
+                .id
+                .as_ref()
+                .map(|id| id.eq(doc_path))
+                .unwrap_or(false)
+            {
+                return subsection.readers.clone();
+            }
+
+            for toc in subsection.toc.iter() {
+                let readers = find_toc(toc, doc_path);
+                if readers.is_empty() {
+                    continue;
+                }
+                return readers
+                    .into_iter()
+                    .chain(subsection.readers.iter().cloned())
+                    .collect();
+            }
+            vec![]
+        }
+
+        fn find_section(section: &Section, doc_path: &str) -> Vec<String> {
+            if section.id.eq(doc_path) {
+                return section.readers.clone();
+            }
+
+            for subsection in section.subsections.iter() {
+                let readers = find_subsection(subsection, doc_path);
+                if readers.is_empty() {
+                    continue;
+                }
+                return readers
+                    .into_iter()
+                    .chain(section.readers.iter().cloned())
+                    .collect();
+            }
+            vec![]
+        }
+    }
+
+    pub fn writers<'a>(
+        &self,
+        doc_path: &str,
+        groups: &'a std::collections::BTreeMap<String, fpm::user_group::UserGroup>,
+    ) -> Vec<&'a fpm::user_group::UserGroup> {
+        for section in self.sections.iter() {
+            let writers = find_section(section, doc_path);
+            if writers.is_empty() {
+                continue;
+            }
+            let writers: Vec<String> = self.writers.iter().cloned().chain(writers).collect();
+            return writers
+                .iter()
+                .unique()
+                .filter_map(|g| groups.get(g))
+                .collect();
+        }
+
+        return vec![];
+
+        fn find_toc(toc: &TocItem, doc_path: &str) -> Vec<String> {
+            if toc.id.eq(doc_path) {
+                return toc.writers.clone();
+            }
+
+            for child in toc.children.iter() {
+                let writers = find_toc(child, doc_path);
+                if writers.is_empty() {
+                    continue;
+                }
+                return writers
+                    .into_iter()
+                    .chain(toc.writers.iter().cloned())
+                    .collect();
+            }
+            vec![]
+        }
+
+        fn find_subsection(subsection: &Subsection, doc_path: &str) -> Vec<String> {
+            if subsection
+                .id
+                .as_ref()
+                .map(|id| id.eq(doc_path))
+                .unwrap_or(false)
+            {
+                return subsection.writers.clone();
+            }
+
+            for toc in subsection.toc.iter() {
+                let writers = find_toc(toc, doc_path);
+                if writers.is_empty() {
+                    continue;
+                }
+                return writers
+                    .into_iter()
+                    .chain(subsection.writers.iter().cloned())
+                    .collect();
+            }
+            vec![]
+        }
+
+        fn find_section(section: &Section, doc_path: &str) -> Vec<String> {
+            if section.id.eq(doc_path) {
+                return section.writers.clone();
+            }
+
+            for subsection in section.subsections.iter() {
+                let writers = find_subsection(subsection, doc_path);
+                if writers.is_empty() {
+                    continue;
+                }
+                return writers
+                    .into_iter()
+                    .chain(section.writers.iter().cloned())
+                    .collect();
+            }
+            vec![]
         }
     }
 }

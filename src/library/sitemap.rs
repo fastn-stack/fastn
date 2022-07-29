@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 pub fn processor(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc,
@@ -21,4 +23,52 @@ pub fn processor(
         }
     }
     doc.from_json(&fpm::sitemap::SiteMapCompat::default(), section)
+}
+
+pub fn document_readers(
+    section: &ftd::p1::Section,
+    document_id: &str,
+    doc: &ftd::p2::TDoc,
+    config: &fpm::Config,
+) -> ftd::p1::Result<ftd::Value> {
+    // TODO: document key should be optional
+    let document =
+        section
+            .header
+            .string_with_default(document_id, section.line_number, "document", "/")?;
+
+    let readers = match config.sitemap.as_ref() {
+        Some(s) => s
+            .readers(document.as_str(), &config.groups)
+            .into_iter()
+            .map(|g| g.to_group_compat())
+            .collect_vec(),
+        None => vec![],
+    };
+
+    doc.from_json(&readers, section)
+}
+
+pub fn document_writers(
+    section: &ftd::p1::Section,
+    document_id: &str,
+    doc: &ftd::p2::TDoc,
+    config: &fpm::Config,
+) -> ftd::p1::Result<ftd::Value> {
+    // TODO: document key should be optional
+    let document =
+        section
+            .header
+            .string_with_default(document_id, section.line_number, "document", "/")?;
+
+    let writers = match config.sitemap.as_ref() {
+        Some(s) => s
+            .writers(document.as_str(), &config.groups)
+            .into_iter()
+            .map(|g| g.to_group_compat())
+            .collect_vec(),
+        None => vec![],
+    };
+
+    doc.from_json(&writers, section)
 }

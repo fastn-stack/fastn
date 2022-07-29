@@ -112,8 +112,15 @@ async fn insert(
             .map(|v| full_path.trim_end_matches(v))
             .unwrap_or(full_path);
         tree.push(
-            fpm::sitemap::TocItemCompat::new(None, Some(path.to_string()), false, false)
-                .add_path(full_path),
+            fpm::sitemap::TocItemCompat::new(
+                None,
+                Some(path.to_string()),
+                false,
+                false,
+                vec![],
+                vec![],
+            )
+            .add_path(full_path),
         );
         tree.last_mut().unwrap()
     };

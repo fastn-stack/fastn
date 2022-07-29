@@ -1,7 +1,5 @@
-use itertools::Itertools;
-
 // identities to group, test also
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize)]
 pub struct UserGroup {
     pub title: Option<String>,
     pub id: String,
@@ -77,6 +75,7 @@ pub struct UserGroupCompat {
 
 impl UserGroup {
     pub fn to_group_compat(&self) -> UserGroupCompat {
+        use itertools::Itertools;
         let mut group_members = vec![];
 
         group_members.extend(self.identities.clone());
@@ -98,11 +97,53 @@ impl UserGroup {
                 .collect_vec(),
         }
     }
+
+    // TODO:
+    // This function will check whether given identities are part or given groups or not,
+    // It will return true if all are part of provided groups
+    // pub fn belongs_to(_identities: &[&str], _groups: &[UserGroup]) -> fpm::Result<bool> {
+    //     Ok(false)
+    // }
 }
 
 impl UserGroupTemp {
+    pub fn are_unique(groups: &[UserGroupTemp]) -> Result<bool, String> {
+        // TODO: Tell all the repeated ids at once, this will only tell one at a time
+        // TODO: todo this we have to count frequencies and return error if any frequency is
+        // greater that one
+        let mut set = std::collections::HashSet::new();
+        for group in groups {
+            if set.contains(&group.id) {
+                return Err(format!(
+                    "user-group ids are not unique: repeated id: {}",
+                    group.id
+                ));
+            }
+            set.insert(&group.id);
+        }
+        Ok(true)
+    }
+
+    pub fn user_groups(
+        user_groups: Vec<UserGroupTemp>,
+    ) -> fpm::Result<std::collections::BTreeMap<String, UserGroup>> {
+        Self::are_unique(&user_groups).map_err(|e| {
+            crate::sitemap::ParseError::InvalidUserGroup {
+                doc_id: "FPM.ftd".to_string(),
+                message: e,
+                row_content: "".to_string(),
+            }
+        })?;
+        let mut groups = std::collections::BTreeMap::new();
+        for group in user_groups.into_iter() {
+            groups.insert(group.id.to_string(), group.to_user_group()?);
+        }
+        Ok(groups)
+    }
+
     #[allow(clippy::wrong_self_convention)]
     pub fn to_user_group(self) -> fpm::Result<UserGroup> {
+        use itertools::Itertools;
         let mut identities = vec![];
         let mut excluded_identities = vec![];
 

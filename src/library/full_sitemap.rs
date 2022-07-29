@@ -12,6 +12,8 @@ pub struct TocItemCompat {
     pub nav_title: Option<String>,
     pub children: Vec<TocItemCompat>,
     pub skip: bool,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 #[derive(Default, Debug, serde::Serialize)]
@@ -27,6 +29,8 @@ struct SubSectionCompat {
     pub nav_title: Option<String>,
     pub toc: Vec<TocItemCompat>,
     pub skip: bool,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 #[derive(Default, Debug, serde::Serialize)]
@@ -40,6 +44,8 @@ struct SectionCompat {
     #[serde(rename = "nav-title")]
     nav_title: Option<String>,
     subsections: Vec<SubSectionCompat>,
+    readers: Vec<String>,
+    writers: Vec<String>,
 }
 
 #[derive(Default, Debug, serde::Serialize)]
@@ -51,6 +57,8 @@ pub struct KeyValueData {
 #[derive(Default, Debug, serde::Serialize)]
 struct SiteMapCompat {
     sections: Vec<SectionCompat>,
+    readers: Vec<String>,
+    writers: Vec<String>,
 }
 
 pub fn processor(
@@ -85,6 +93,8 @@ fn to_sitemap_compat(sitemap: &fpm::sitemap::Sitemap) -> SiteMapCompat {
             nav_title: toc_item.nav_title.clone(),
             children: toc_item.children.iter().map(to_toc_compat).collect_vec(),
             skip: toc_item.skip,
+            readers: toc_item.readers.clone(),
+            writers: toc_item.writers.clone(),
         };
         toc_compat
     }
@@ -103,6 +113,8 @@ fn to_sitemap_compat(sitemap: &fpm::sitemap::Sitemap) -> SiteMapCompat {
             nav_title: subsection.nav_title.clone(),
             toc: subsection.toc.iter().map(to_toc_compat).collect_vec(),
             skip: subsection.skip,
+            readers: subsection.readers.clone(),
+            writers: subsection.writers.clone(),
         }
     }
 
@@ -122,10 +134,14 @@ fn to_sitemap_compat(sitemap: &fpm::sitemap::Sitemap) -> SiteMapCompat {
                 .iter()
                 .map(to_subsection_compat)
                 .collect_vec(),
+            readers: section.readers.clone(),
+            writers: section.writers.clone(),
         }
     }
 
     SiteMapCompat {
         sections: sitemap.sections.iter().map(to_section_compat).collect_vec(),
+        readers: sitemap.readers.clone(),
+        writers: sitemap.writers.clone(),
     }
 }
