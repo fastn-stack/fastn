@@ -102,7 +102,11 @@ impl CursorController {
                     }
                 }
             }
-            crossterm::event::KeyCode::End => self.cursor_x = self.screen_columns - 1,
+            crossterm::event::KeyCode::End => {
+                if self.cursor_y < number_of_rows {
+                    self.cursor_x = editor_rows.get_row(self.cursor_y).len();
+                }
+            }
             crossterm::event::KeyCode::Home => self.cursor_x = 0,
             _ => unimplemented!(),
         }
@@ -211,7 +215,7 @@ struct Output {
 impl Output {
     fn new(content: &str) -> Self {
         let win_size = crossterm::terminal::size()
-            .map(|(x, y)| (x as usize, y as usize))
+            .map(|(x, y)| (x as usize, y as usize - 1))
             .unwrap();
         Self {
             win_size,
@@ -262,9 +266,7 @@ impl Output {
                 crossterm::terminal::Clear(crossterm::terminal::ClearType::UntilNewLine)
             )
             .unwrap();
-            if i < screen_rows - 1 {
-                self.editor_contents.push_str("\r\n");
-            }
+            self.editor_contents.push_str("\r\n");
         }
     }
 
@@ -364,14 +366,25 @@ impl Editor {
                 code:
                     val @ (crossterm::event::KeyCode::PageUp | crossterm::event::KeyCode::PageDown),
                 modifiers: crossterm::event::KeyModifiers::NONE,
-            } => (0..self.output.win_size.1).for_each(|_| {
-                self.output
-                    .move_cursor(if matches!(val, crossterm::event::KeyCode::PageUp) {
-                        crossterm::event::KeyCode::Up
-                    } else {
-                        crossterm::event::KeyCode::Down
-                    });
-            }),
+            } => {
+                if matches!(val, crossterm::event::KeyCode::PageUp) {
+                    self.output.cursor_controller.cursor_y =
+                        self.output.cursor_controller.row_offset
+                } else {
+                    self.output.cursor_controller.cursor_y = std::cmp::min(
+                        self.output.win_size.1 + self.output.cursor_controller.row_offset - 1,
+                        self.output.editor_rows.number_of_rows(),
+                    );
+                }
+                (0..self.output.win_size.1).for_each(|_| {
+                    self.output
+                        .move_cursor(if matches!(val, crossterm::event::KeyCode::PageUp) {
+                            crossterm::event::KeyCode::Up
+                        } else {
+                            crossterm::event::KeyCode::Down
+                        });
+                })
+            }
             _ => {}
         }
         Ok(true)
