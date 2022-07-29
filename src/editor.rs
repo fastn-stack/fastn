@@ -104,7 +104,7 @@ impl CursorController {
             }
             crossterm::event::KeyCode::End => {
                 if self.cursor_y < number_of_rows {
-                    self.cursor_x = editor_rows.get_row(self.cursor_y).len();
+                    self.cursor_x = editor_rows.get_render(self.cursor_y).len();
                 }
             }
             crossterm::event::KeyCode::Home => self.cursor_x = 0,
