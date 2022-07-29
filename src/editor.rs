@@ -114,6 +114,37 @@ impl CursorController {
     }
 }
 
+struct StatusMessage {
+    message: Option<String>,
+    set_time: Option<std::time::Instant>,
+}
+
+impl StatusMessage {
+    fn new(initial_message: String) -> Self {
+        Self {
+            message: Some(initial_message),
+            set_time: None,
+        }
+    }
+
+    fn set_message(&mut self, message: String) {
+        self.message = Some(message);
+        self.set_time = Some(std::time::Instant::now())
+    }
+
+    fn message(&mut self) -> Option<&String> {
+        self.set_time.and_then(move |time| {
+            if time.elapsed() > std::time::Duration::from_secs(5) {
+                self.message = None;
+                self.set_time = None;
+                None
+            } else {
+                Some(self.message.as_ref().unwrap())
+            }
+        })
+    }
+}
+
 struct Reader;
 
 impl Reader {
@@ -128,17 +159,23 @@ impl Reader {
     }
 }
 
+#[derive(Default)]
 struct Row {
-    row_content: Box<str>,
+    row_content: String,
     render: String,
 }
 
 impl Row {
-    fn new(row_content: Box<str>, render: String) -> Self {
+    fn new(row_content: String, render: String) -> Self {
         Self {
             row_content,
             render,
         }
+    }
+
+    fn insert_char(&mut self, at: usize, ch: char) {
+        self.row_content.insert(at, ch);
+        EditorRows::render_row(self)
     }
 }
 
@@ -186,6 +223,14 @@ impl EditorRows {
             }
         });
         row.render = render;
+    }
+
+    fn insert_row(&mut self) {
+        self.row_contents.push(Row::default());
+    }
+
+    fn get_editor_row_mut(&mut self, at: usize) -> &mut Row {
+        &mut self.row_contents[at]
     }
 
     fn get_render(&self, at: usize) -> &String {
@@ -245,18 +290,20 @@ struct Output {
     editor_contents: EditorContents,
     cursor_controller: CursorController,
     editor_rows: EditorRows,
+    status_message: StatusMessage,
 }
 
 impl Output {
     fn new(content: &str, filename: Option<std::path::PathBuf>) -> Self {
         let win_size = crossterm::terminal::size()
-            .map(|(x, y)| (x as usize, y as usize - 1))
+            .map(|(x, y)| (x as usize, y as usize - 2)) // minus 2 for draw_status_bar and draw_message_bar
             .unwrap();
         Self {
             win_size,
             editor_contents: EditorContents::new(),
             cursor_controller: CursorController::new(win_size),
             editor_rows: EditorRows::new(content, filename),
+            status_message: StatusMessage::new("HELP: Ctrl-Q = Quit".into()),
         }
     }
 
@@ -290,6 +337,19 @@ impl Output {
         }
         self.editor_contents
             .push_str(&crossterm::style::Attribute::Reset.to_string());
+        self.editor_contents.push_str("\r\n");
+    }
+
+    fn draw_message_bar(&mut self) {
+        crossterm::queue!(
+            self.editor_contents,
+            crossterm::terminal::Clear(crossterm::terminal::ClearType::UntilNewLine)
+        )
+        .unwrap();
+        if let Some(msg) = self.status_message.message() {
+            self.editor_contents
+                .push_str(&msg[..std::cmp::min(self.win_size.0, msg.len())]);
+        }
     }
 
     fn clear_screen() -> crossterm::Result<()> {
@@ -346,6 +406,7 @@ impl Output {
         )?;
         self.draw_rows();
         self.draw_status_bar();
+        self.draw_message_bar();
         let cursor_x = self.cursor_controller.render_x - self.cursor_controller.column_offset;
         let cursor_y = self.cursor_controller.cursor_y - self.cursor_controller.row_offset;
         crossterm::queue!(
@@ -359,6 +420,20 @@ impl Output {
     fn move_cursor(&mut self, direction: crossterm::event::KeyCode) {
         self.cursor_controller
             .move_cursor(direction, &self.editor_rows);
+    }
+
+    fn insert_char(&mut self, ch: char) {
+        if self
+            .cursor_controller
+            .cursor_y
+            .eq(&self.editor_rows.number_of_rows())
+        {
+            self.editor_rows.insert_row()
+        }
+        self.editor_rows
+            .get_editor_row_mut(self.cursor_controller.cursor_y)
+            .insert_char(self.cursor_controller.cursor_x, ch);
+        self.cursor_controller.cursor_x += 1;
     }
 }
 
@@ -414,6 +489,15 @@ impl Editor {
                         });
                 })
             }
+            crossterm::event::KeyEvent {
+                code: code @ (crossterm::event::KeyCode::Char(..) | crossterm::event::KeyCode::Tab),
+                modifiers:
+                    crossterm::event::KeyModifiers::NONE | crossterm::event::KeyModifiers::SHIFT,
+            } => self.output.insert_char(match code {
+                crossterm::event::KeyCode::Tab => '\t',
+                crossterm::event::KeyCode::Char(ch) => ch,
+                _ => unreachable!(),
+            }),
             _ => {}
         }
         Ok(true)
