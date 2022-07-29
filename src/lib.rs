@@ -14,6 +14,7 @@ mod config;
 mod controller;
 mod dependency;
 mod doc;
+mod editor;
 mod file;
 mod font;
 mod history;
@@ -34,10 +35,10 @@ pub(crate) use auto_import::AutoImport;
 pub(crate) use commands::build::process_file;
 pub use commands::{
     abort_merge::abort_merge, add::add, build::build, build2::build2, clone::clone, diff::diff,
-    mark_resolve::mark_resolve, mark_upto_date::mark_upto_date, revert::revert, rm::rm,
-    serve::fpm_serve, start_project::start_project, start_tracking::start_tracking, status::status,
-    stop_tracking::stop_tracking, sync::sync, sync2::sync2, sync_status::sync_status,
-    translation_status::translation_status, update::update,
+    mark_resolve::mark_resolve, mark_upto_date::mark_upto_date, resolve_conflict::resolve_conflict,
+    revert::revert, rm::rm, serve::fpm_serve, start_project::start_project,
+    start_tracking::start_tracking, status::status, stop_tracking::stop_tracking, sync::sync,
+    sync2::sync2, sync_status::sync_status, translation_status::translation_status, update::update,
 };
 pub use config::Config;
 pub(crate) use config::Package;

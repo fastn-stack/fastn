@@ -1,17 +1,25 @@
 use itertools::Itertools;
 use sha2::Digest;
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug)]
 pub enum Status {
-    Conflict,
+    Conflict(i32),
     NoConflict,
-    ClientEditedServerDeleted,
-    ClientDeletedServerEdited,
+    ClientEditedServerDeleted(i32),
+    ClientDeletedServerEdited(i32),
 }
 
 impl Status {
     pub(crate) fn is_conflicted(&self) -> bool {
         Status::NoConflict.ne(self)
+    }
+    pub(crate) fn conflicted_version(&self) -> Option<i32> {
+        match self {
+            Status::Conflict(version) => Some(*version),
+            Status::NoConflict => None,
+            Status::ClientEditedServerDeleted(version) => Some(*version),
+            Status::ClientDeletedServerEdited(version) => Some(*version),
+        }
     }
 }
 
@@ -84,8 +92,22 @@ impl FileStatus {
         })
     }
 }
+pub(crate) async fn get_files_status(config: &fpm::Config) -> fpm::Result<Vec<FileStatus>> {
+    let file_list = config.read_workspace().await?;
+    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> =
+        file_list
+            .iter()
+            .map(|v| (v.filename.to_string(), v.clone()))
+            .collect();
+    let mut changed_files = get_files_status_wrt_workspace(config, &workspace).await?;
+    get_files_status_wrt_server_latest(config, &mut changed_files, &mut workspace).await?;
+    config
+        .write_workspace(workspace.into_values().collect_vec().as_slice())
+        .await?;
+    Ok(changed_files)
+}
 
-pub(crate) async fn get_files_status(
+pub(crate) async fn get_files_status_with_workspace(
     config: &fpm::Config,
     workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
 ) -> fpm::Result<Vec<FileStatus>> {
@@ -159,7 +181,11 @@ async fn get_files_status_wrt_server_latest(
             FileStatus::Untracked { .. } => {
                 continue;
             }
-            FileStatus::Add { path, content, .. } => {
+            FileStatus::Add {
+                path,
+                content,
+                status,
+            } => {
                 let server_version = if let Some(file_edit) = server_latest.get(path) {
                     if file_edit.is_deleted() {
                         continue;
@@ -179,9 +205,10 @@ async fn get_files_status_wrt_server_latest(
                             version: Some(server_version),
                         },
                     );
+                    remove_files.push(index);
+                } else {
+                    *status = Status::Conflict(server_version);
                 }
-
-                remove_files.push(index);
             }
             FileStatus::Update {
                 path,
@@ -197,7 +224,7 @@ async fn get_files_status_wrt_server_latest(
 
                 if server_file_edit.is_deleted() {
                     // Conflict: ClientEditedServerDeleted
-                    *status = Status::ClientEditedServerDeleted;
+                    *status = Status::ClientEditedServerDeleted(server_file_edit.version);
                     continue;
                 }
 
@@ -211,7 +238,7 @@ async fn get_files_status_wrt_server_latest(
                     content
                 } else {
                     // binary file like images, can't resolve conflict
-                    *status = Status::Conflict;
+                    *status = Status::Conflict(server_file_edit.version);
                     continue;
                 };
 
@@ -232,7 +259,7 @@ async fn get_files_status_wrt_server_latest(
                     }
                     Err(_) => {
                         // can't resolve conflict, so cannot sync
-                        *status = Status::Conflict;
+                        *status = Status::Conflict(server_file_edit.version);
                     }
                 }
             }
@@ -255,7 +282,7 @@ async fn get_files_status_wrt_server_latest(
                 }
                 if !server_file_edit.version.eq(version) {
                     // Conflict modified by server and deleted by client
-                    *status = Status::ClientDeletedServerEdited;
+                    *status = Status::ClientDeletedServerEdited(server_file_edit.version);
                 }
             }
         }

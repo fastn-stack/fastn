@@ -1,13 +1,7 @@
 use itertools::Itertools;
 
 pub async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
-    let file_list = config.read_workspace().await?;
-    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> =
-        file_list
-            .into_iter()
-            .map(|v| (v.filename.to_string(), v))
-            .collect();
-    let get_files_status = fpm::sync_utils::get_files_status(config, &mut workspace).await?;
+    let get_files_status = fpm::sync_utils::get_files_status(config).await?;
     if let Some(source) = source {
         if let Some(file_status) = get_files_status
             .iter()
@@ -24,9 +18,6 @@ pub async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Res
         .iter()
         .map(|v| print_status(v, false))
         .collect_vec();
-    config
-        .write_workspace(workspace.into_values().collect_vec().as_slice())
-        .await?;
     Ok(())
 }
 
@@ -43,11 +34,11 @@ fn print_status(file_status: &fpm::sync_utils::FileStatus, print_untracked: bool
         }
     };
     match status {
-        fpm::sync_utils::Status::Conflict => println!("Conflicted: {}", path),
-        fpm::sync_utils::Status::ClientEditedServerDeleted => {
+        fpm::sync_utils::Status::Conflict(_) => println!("Conflicted: {}", path),
+        fpm::sync_utils::Status::ClientEditedServerDeleted(_) => {
             println!("ClientEditedServerDeleted: {}", path)
         }
-        fpm::sync_utils::Status::ClientDeletedServerEdited => {
+        fpm::sync_utils::Status::ClientDeletedServerEdited(_) => {
             println!("ClientDeletedServerEdited: {}", path)
         }
         fpm::sync_utils::Status::NoConflict => println!("{}: {}", file_status, path),

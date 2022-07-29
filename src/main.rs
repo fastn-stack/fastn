@@ -108,6 +108,12 @@ async fn main() -> fpm::Result<()> {
             fpm::diff(&config, None, all).await?;
         }
     }
+    if let Some(resolve_conflict) = matches.subcommand_matches("resolve-conflict") {
+        let use_ours = resolve_conflict.is_present("use-ours");
+        let use_theirs = resolve_conflict.is_present("use-theirs");
+        let source = resolve_conflict.value_of("source").unwrap();
+        fpm::resolve_conflict(&config, source, use_ours, use_theirs).await?;
+    }
     if let Some(tracks) = matches.subcommand_matches("start-tracking") {
         let source = tracks.value_of("source").unwrap();
         let target = tracks.value_of("target").unwrap();
@@ -259,6 +265,16 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 .args(&[
                     clap::Arg::with_name("source").multiple(true),
                     clap::Arg::with_name("all").long("--all").short("a"),
+                ])
+                .about("Show un-synced changes to files in this fpm package")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("resolve-conflict")
+                .args(&[
+                    clap::Arg::with_name("source").multiple(true),
+                    clap::Arg::with_name("use-ours").long("--use-ours"),
+                    clap::Arg::with_name("use-theirs").long("--use-theirs"),
                 ])
                 .about("Show un-synced changes to files in this fpm package")
                 .version(env!("CARGO_PKG_VERSION")),

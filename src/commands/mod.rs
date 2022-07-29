@@ -6,6 +6,7 @@ pub(crate) mod clone;
 pub(crate) mod diff;
 pub(crate) mod mark_resolve;
 pub(crate) mod mark_upto_date;
+pub(crate) mod resolve_conflict;
 pub(crate) mod revert;
 pub(crate) mod rm;
 pub(crate) mod serve;

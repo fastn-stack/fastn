@@ -20,6 +20,7 @@ local = []
 
 
 [dependencies]
+crossterm = "0.21.0"
 async-recursion = "0.3.2"
 camino = "1.0.5"
 clap = "2.33.3"

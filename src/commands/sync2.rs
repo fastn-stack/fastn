@@ -8,7 +8,8 @@ pub async fn sync2(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Res
             .map(|v| (v.filename.to_string(), v.clone()))
             .collect();
     let changed_files = {
-        let mut changed_files = fpm::sync_utils::get_files_status(config, &mut workspace).await?;
+        let mut changed_files =
+            fpm::sync_utils::get_files_status_with_workspace(config, &mut workspace).await?;
         if let Some(ref files) = files {
             changed_files = changed_files
                 .into_iter()
