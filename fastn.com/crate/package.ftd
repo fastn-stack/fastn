@@ -28,6 +28,8 @@ pub struct Package {
     pub fonts: Vec<fpm::Font>,
 
     pub import_auto_imports_from_original: bool,
+    pub sitemap: Option<fpm::sitemap::SitemapTemp>,
+    pub favicon: Option<String>,
 }
 
 -- ft.markdown:

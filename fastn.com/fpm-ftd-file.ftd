@@ -127,12 +127,13 @@ lang: ftd
 
 Any number of patterns can be specified.
 
--- ft.h1: `fpm.sitemap`
 
-You can add a sitemap in FPM.ftd file. Details in [sitemap docs](sitemap/).
+-- ft.h1: User Group `fpm.user-group`
+
+You can add user groups to FPM.ftd file. Details in [user-group
+docs](/dev/user-group)
 
 
--- ft.h1: User Group
 
 -- ft.code:
 lang: ftd
@@ -145,3 +146,41 @@ github: arpita@gmail.com
 -github: amitu@gmail.com
 -github: amitu1@gmail.com
 group: fifthtry.github.io/doc-site/group_id
+
+\-- fpm.user-group: writers
+email: abrark@gmail.com
+email: arpita@gmail.com
+-email: amitu@gmail.com
+github: arpita@gmail.com
+-github: amitu@gmail.com
+-github: amitu1@gmail.com
+group: fifthtry.github.io/doc-site/group_id
+
+
+
+-- ft.h1: `fpm.sitemap`
+
+You can add a sitemap in FPM.ftd file. Details in [sitemap docs](sitemap/).
+In sitemap you can also put `readers` and `writers` user groups at section,
+subsection and toc level.
+
+-- ft.code:
+lang: ftd
+
+\--fpm.sitemap:
+readers: readers
+writers: writers
+
+# Section1: /
+readers: readers
+writers: writers
+
+## Subsection1: /subsection1
+readers: readers
+writers: writers
+
+- ToC 1: /page1
+readers: random
+
+- ToC 2: /page2
+readers: random

@@ -51,3 +51,66 @@ caption id:
 optional string title:
 optional string description:
 key-value-data list group-members:
+
+
+
+-- ft.h1: Sitemap
+
+Sitemap structure in FPM, It contains reader, writer groups and sitemap body.
+
+-- ft.code:
+lang: ftd
+
+\-- optional sitemap-rec sitemap:
+
+\-- record sitemap-rec:
+string list readers:
+string list writers:
+body sitemap-body:
+
+
+
+-- ft.h1: Sitemap Compat
+
+Sitemap Compat is the output for UI of `fpm.sitemap`
+
+-- ft.code:
+lang: ftd
+
+\-- record sitemap-compat-data:
+section-compat-data list sections:
+string list readers:
+string list writers:
+
+\-- record section-compat-data:
+string id:
+optional string title:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
+subsection-compat-data list subsections:
+string list readers:
+string list writers:
+
+\-- record subsection-compat-data:
+optional string id:
+optional string title:
+boolean visible:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
+toc-compat-data list toc:
+boolean skip:
+string list readers:
+string list writers:
+
+\-- record toc-compat-data:
+string id:
+optional string title:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
+toc-compat-data list children:
+boolean skip:
+string list readers:
+string list writers:
