@@ -5,7 +5,19 @@ pub async fn resolve_conflict(
     use_theirs: bool,
 ) -> fpm::Result<()> {
     let new_content = fpm::editor::editor(
-        "Hello World\nThis is Arpita\n",
+        "Hello World\nThis is Arpita\n\
+        Unlike other package managers like\npypi, npm and crates, there is no 
+        central package repository in FPM. 
+         \nSince every FPM package is a website, that website acts as the package repository.\n\n
+        What this means is when fpm sees fifthtry.github.io/doc-site as a dependency, \n
+        it fetches the content of fifthtry.github.io/doc-site/FPM.ftd file which acts \n
+        as the meta data for the package, and the meta data includes the URL from \n
+        where the package ZIP can be downloaded.\n\n\
+        \
+        In our examples we use Github’s zip serving feature to let Github generate \n
+        and distribute our .zip file. If you are not using Github, you can store \n
+        the zip file containing entire package in some other location, like S3, \n
+        or a server you control, and fpm will work with that.",
         Some(std::path::PathBuf::from("index.ftd")),
     )?;
     dbg!(&new_content);

@@ -62,6 +62,36 @@ const HELP_TEXT: &'static str =
     "HELP: Ctrl-H = Help | Ctrl-S = Save | Ctrl-Q = Quit | Ctrl-F = Find";
 const QUIT_TIMES: u8 = 2;
 
+enum SearchDirection {
+    Forward,
+    Backward,
+}
+
+struct SearchIndex {
+    x_index: usize,
+    y_index: usize,
+    x_direction: Option<SearchDirection>,
+    y_direction: Option<SearchDirection>,
+}
+
+impl SearchIndex {
+    fn new() -> Self {
+        Self {
+            x_index: 0,
+            y_index: 0,
+            x_direction: None,
+            y_direction: None,
+        }
+    }
+
+    fn reset(&mut self) {
+        self.y_index = 0;
+        self.x_index = 0;
+        self.y_direction = None;
+        self.x_direction = None;
+    }
+}
+
 struct CleanUp;
 
 impl Drop for CleanUp {
@@ -397,6 +427,7 @@ struct Output {
     editor_rows: EditorRows,
     status_message: StatusMessage,
     dirty: u64,
+    search_index: SearchIndex,
 }
 
 impl Output {
@@ -411,6 +442,7 @@ impl Output {
             editor_rows: EditorRows::new(content, filename),
             status_message: StatusMessage::new(HELP_TEXT.into()),
             dirty: 0,
+            search_index: SearchIndex::new(),
         }
     }
 
@@ -599,12 +631,76 @@ impl Output {
 
     fn find_callback(output: &mut Output, keyword: &str, key_code: crossterm::event::KeyCode) {
         match key_code {
-            crossterm::event::KeyCode::Esc | crossterm::event::KeyCode::Enter => {}
+            crossterm::event::KeyCode::Esc | crossterm::event::KeyCode::Enter => {
+                output.search_index.reset();
+            }
             _ => {
+                output.search_index.y_direction = None;
+                output.search_index.x_direction = None;
+                match key_code {
+                    crossterm::event::KeyCode::Down => {
+                        output.search_index.y_direction = SearchDirection::Forward.into()
+                    }
+                    crossterm::event::KeyCode::Up => {
+                        output.search_index.y_direction = SearchDirection::Backward.into()
+                    }
+                    crossterm::event::KeyCode::Left => {
+                        output.search_index.x_direction = SearchDirection::Backward.into()
+                    }
+                    crossterm::event::KeyCode::Right => {
+                        output.search_index.x_direction = SearchDirection::Forward.into()
+                    }
+                    _ => {}
+                }
                 for i in 0..output.editor_rows.number_of_rows() {
+                    let row_index = match output.search_index.y_direction.as_ref() {
+                        None => {
+                            if output.search_index.x_direction.is_none() {
+                                output.search_index.y_index = i;
+                            }
+                            output.search_index.y_index
+                        }
+                        Some(dir) => {
+                            if matches!(dir, SearchDirection::Forward) {
+                                output.search_index.y_index + i + 1
+                            } else {
+                                let res = output.search_index.y_index.saturating_sub(i);
+                                if res == 0 {
+                                    break;
+                                }
+                                res - 1
+                            }
+                        }
+                    };
+                    if row_index > output.editor_rows.number_of_rows() - 1 {
+                        break;
+                    }
                     let row = output.editor_rows.get_editor_row(i);
-                    if let Some(index) = row.render.find(&keyword) {
-                        output.cursor_controller.cursor_y = i;
+
+                    let index = match output.search_index.x_direction.as_ref() {
+                        None => row.render.find(&keyword),
+                        Some(dir) => {
+                            let index = if matches!(dir, SearchDirection::Forward) {
+                                let start = std::cmp::min(
+                                    row.render.len(),
+                                    output.search_index.x_index + 1,
+                                );
+                                row.render[start..]
+                                    .find(&keyword)
+                                    .map(|index| index + start)
+                            } else {
+                                row.render[..output.search_index.x_index].rfind(&keyword)
+                            };
+                            if index.is_none() {
+                                break;
+                            }
+                            index
+                        }
+                    };
+                    if let Some(index) = index {
+                        output.cursor_controller.cursor_y = row_index;
+                        output.search_index.y_index = row_index;
+                        output.search_index.x_index = index;
                         output.cursor_controller.cursor_x = row.get_row_content_x(index);
                         output.cursor_controller.row_offset = output.editor_rows.number_of_rows();
                         break;
@@ -618,7 +714,7 @@ impl Output {
         let cursor_controller = self.cursor_controller.clone();
         let search = prompt!(
             self,
-            "Search: {} (ESC to cancel)",
+            "Search: {} (ESC/Enter to cancel, ArrowKeys to search other occurrences)",
             callback = Output::find_callback
         );
         if search.is_none() {
