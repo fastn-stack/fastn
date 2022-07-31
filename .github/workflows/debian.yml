@@ -8,15 +8,14 @@ on:
         required: true
       productionRelease:
         type: boolean
-        description: Mark release as production ready
+        description: Uses debian file to install fpm
 jobs:
   release-ubuntu:
     name: Build for Linux
     runs-on: ubuntu-latest
     env:
       CARGO_TERM_COLOR: always
-      BUILD_TARGET: x86_64-unknown-linux-musl
-      BINARY_NAME: fpm
+      BINARY_NAME: deb
     steps:
       - uses: actions/checkout@main
       - uses: actions/cache@v2
@@ -34,7 +33,6 @@ jobs:
         with:
           name: fpm_debian
           path: target/debian/${{ env.BINARY_NAME }}*
-
   create-release:
     name: Create github tag and release
     runs-on: ubuntu-latest
