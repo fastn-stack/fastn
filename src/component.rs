@@ -2466,8 +2466,6 @@ pub fn read_properties(
         root_arguments
     };
 
-    // dbg!(&root_arguments, &arguments, &root_properties, &p1);
-
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
             properties.insert(name.to_string(), prop.clone());
@@ -2654,18 +2652,8 @@ pub fn read_properties(
         }
     }
 
-    // dbg!(root);
-    // dbg!(fn_name);
-    // dbg!(line_number);
-    // dbg!(&arguments.keys());
-    // dbg!(&root_arguments.keys());
-    // dbg!(&properties.keys());
-
-    // if is_invocation(root, fn_name) {
-    //     assert_caption_body_checks(root, p1, doc, caption, body, line_number)?;
-    // }
-
-    assert_caption_body_checks(root, p1, doc, caption, body, line_number)?;
+    // Checking for any caption body conflicts
+    assert_caption_body_checks(root, doc, caption, body, line_number)?;
 
     // Checking if the user has entered conflicting values for ftd.input
     if root.eq("ftd#input") {
@@ -2675,33 +2663,13 @@ pub fn read_properties(
     Ok(properties)
 }
 
-/// returns true if the component is invoked
-///
-/// todo.. not sure if I should segregate these types
-/// and do selective checks
-fn is_invocation(root: &str, fn_name: &str) {
-    // Kernel (by default it's invoked)
-    // -> root = fn_name
-
-    // Variable Component (definition)
-    // -> root = <some-kernel-component>
-    // fn_name = [var_component_name]
-
-    // Variable Component (invoked)
-    // -> root = [doc_id]#[var_component_name]
-    // -> fn_name = [var_component_name]
-
-    todo!()
-}
 fn assert_caption_body_checks(
     root: &str,
-    p1: &ftd::p1::Header,
     doc: &ftd::p2::TDoc,
     caption: &Option<String>,
     body: &Option<(usize, String)>,
     line_number: usize,
 ) -> ftd::p1::Result<()> {
-    // dbg!(root);
     /// checks for body and caption conflicts in the given
     /// arguments map (string -> kind)
     fn check_caption_body_conflicts(
@@ -2711,9 +2679,6 @@ fn assert_caption_body_checks(
         has_body: bool,
         line_number: usize,
     ) -> ftd::p1::Result<()> {
-        // dbg!(has_caption, has_body, line_number);
-        // dbg!(&arguments.keys());
-
         let mut caption_pass = false;
         let mut body_pass = false;
 
@@ -2806,16 +2771,16 @@ fn assert_caption_body_checks(
         Ok(())
     }
 
-    /// fetch all the arguments till the root component
-    /// is found to be a kernel component
+    /// fetch all the arguments till you find the kernel
+    /// level component on top of which the variable
+    /// component is built recursively
     fn get_kernel_arguments(
         var_comp_name: &str,
         doc: &ftd::p2::TDoc,
     ) -> std::collections::BTreeMap<String, ftd::p2::Kind> {
         let mut arguments = std::collections::BTreeMap::new();
-        // dbg!(var_comp_name);
         let var_thing = &doc.bag[var_comp_name];
-        // dbg!(&var_thing);
+
         if let ftd::p2::Thing::Component(c) = var_thing {
             if c.kernel {
                 arguments.extend(c.arguments.clone());
@@ -2835,7 +2800,6 @@ fn assert_caption_body_checks(
         // Either the component is kernel or variable/derived component
         if c.kernel {
             // check on root arguments if any of them conflicts with body or caption
-            dbg!(root);
             return check_caption_body_conflicts(
                 &c.arguments,
                 doc,
@@ -2850,7 +2814,6 @@ fn assert_caption_body_checks(
             all_arguments.extend(c.arguments.clone());
             all_arguments.extend(get_kernel_arguments(&c.root, doc));
 
-            dbg!(root);
             return check_caption_body_conflicts(
                 &all_arguments,
                 doc,
