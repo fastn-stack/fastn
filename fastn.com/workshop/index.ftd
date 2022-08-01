@@ -25,6 +25,25 @@ likely to buy a product from you.
 2. Their goal(s)
 3. The roadblocks that prevent them from achieving their goal
 
+Our ISP is a developer, with good algo, ds, programming fundamentals, but struggles with
+building user interfaces. Our student is not confident about CSS and DOM quirks, they have
+difficulty realising basic design in browser. If they can do some frontend, it is usually
+an unmaintainable mess. There is no proper modular design, the code is barely re-usable or
+extendable. 
+
+They maybe be fluent with Python, Django, Flask. Or Golang, Rust etc. Or maybe they are
+devops, who create basic scripts, but struggle with converting those scripts to web based
+dashboards, because UI is their weak point.
+
+Our target also includes people who are really new to programming. Who have just written
+their hello world, and now want to make something more interesting, with some sort of
+interactable user interface.
+
+Our workshop also targets people who can professionally use Javascript and CSS, know the
+ins and outs the latest frontend technolgy, but do not want to maintain all that complexity
+for their blog, or simple web application. Who want to get some UI out, who want to use 
+our extensive design library to get something done quickly.
+
 
 -- ft.h1: PURE Framework
 
