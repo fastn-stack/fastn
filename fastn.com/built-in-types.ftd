@@ -191,7 +191,13 @@ dark: orange
 
 This would return `red` color in light mode and `orange` color in dark mode.
 
+-- ft.h2: Supported Color Formats
 
+The value of `light` and `dark` can be any string supported by [CSS3 Color
+spec](https://www.w3.org/TR/css-color-3/).
+
+Along with CSS3 colors we also support 8 digit RGBA format (eg `#RRGGBBAA`) from
+[CSS Color Module Level 4](https://www.w3.org/TR/css-color-4/).
 
 
 -- ft.h1: `ftd.font-size`

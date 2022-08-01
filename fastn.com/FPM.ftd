@@ -110,7 +110,7 @@ language: en
 - Changelog: changelog/
 - Internals: internals/
 - How to add `foreign-variables`: foreign-variable/
-
+- Supported Browsers: /supported-browsers/
 
 # Course: /c1/
 
@@ -148,5 +148,6 @@ language: en
 
 
 
-# Github: https://github.com/fifthtry/ftd/
+# Github
+url: https://github.com/fifthtry/ftd/
 
