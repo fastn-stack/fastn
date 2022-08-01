@@ -2711,8 +2711,11 @@ fn assert_caption_body_checks(
         has_body: bool,
         line_number: usize,
     ) -> ftd::p1::Result<()> {
-        dbg!(has_caption, has_body, line_number);
-        dbg!(&arguments.keys());
+        // dbg!(has_caption, has_body, line_number);
+        // dbg!(&arguments.keys());
+
+        let mut caption_pass = false;
+        let mut body_pass = false;
 
         for (arg, kind) in arguments.iter() {
             // in case the kind is optional
@@ -2744,6 +2747,14 @@ fn assert_caption_body_checks(
                                 line_number,
                             });
                         }
+
+                        if has_caption {
+                            caption_pass = true;
+                        }
+
+                        if has_body {
+                            body_pass = true;
+                        }
                     }
                     (true, false) => {
                         // check if the component has caption or not
@@ -2755,6 +2766,7 @@ fn assert_caption_body_checks(
                                 line_number,
                             });
                         }
+                        caption_pass = true;
                     }
                     (false, true) => {
                         // check if the component has body or not
@@ -2766,11 +2778,31 @@ fn assert_caption_body_checks(
                                 line_number,
                             });
                         }
+                        body_pass = true;
                     }
                     (false, false) => continue,
                 }
             }
         }
+
+        if !(caption_pass && body_pass) {
+            if !caption_pass && has_caption {
+                return Err(ftd::p1::Error::ParseError {
+                    message: "caption passed with no header accepting it !!".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                });
+            }
+
+            if !body_pass && has_body {
+                return Err(ftd::p1::Error::ParseError {
+                    message: "body passed with no header accepting it !!".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                });
+            }
+        }
+
         Ok(())
     }
 
@@ -2812,6 +2844,8 @@ fn assert_caption_body_checks(
                 line_number,
             );
         } else {
+            // In case the component is derived from an existing kernel component
+            // Fetch all its arguments
             let mut all_arguments = std::collections::BTreeMap::new();
             all_arguments.extend(c.arguments.clone());
             all_arguments.extend(get_kernel_arguments(&c.root, doc));
