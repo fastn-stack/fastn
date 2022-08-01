@@ -2654,12 +2654,180 @@ pub fn read_properties(
         }
     }
 
+    // dbg!(root);
+    // dbg!(fn_name);
+    // dbg!(line_number);
+    // dbg!(&arguments.keys());
+    // dbg!(&root_arguments.keys());
+    // dbg!(&properties.keys());
+
+    // if is_invocation(root, fn_name) {
+    //     assert_caption_body_checks(root, p1, doc, caption, body, line_number)?;
+    // }
+
+    assert_caption_body_checks(root, p1, doc, caption, body, line_number)?;
+
     // Checking if the user has entered conflicting values for ftd.input
     if root.eq("ftd#input") {
         check_input_conflicting_values(&properties, doc, line_number)?;
     }
 
     Ok(properties)
+}
+
+/// returns true if the component is invoked
+///
+/// todo.. not sure if I should segregate these types
+/// and do selective checks
+fn is_invocation(root: &str, fn_name: &str) {
+    // Kernel (by default it's invoked)
+    // -> root = fn_name
+
+    // Variable Component (definition)
+    // -> root = <some-kernel-component>
+    // fn_name = [var_component_name]
+
+    // Variable Component (invoked)
+    // -> root = [doc_id]#[var_component_name]
+    // -> fn_name = [var_component_name]
+
+    todo!()
+}
+fn assert_caption_body_checks(
+    root: &str,
+    p1: &ftd::p1::Header,
+    doc: &ftd::p2::TDoc,
+    caption: &Option<String>,
+    body: &Option<(usize, String)>,
+    line_number: usize,
+) -> ftd::p1::Result<()> {
+    // dbg!(root);
+    /// checks for body and caption conflicts in the given
+    /// arguments map (string -> kind)
+    fn check_caption_body_conflicts(
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        doc: &ftd::p2::TDoc,
+        has_caption: bool,
+        has_body: bool,
+        line_number: usize,
+    ) -> ftd::p1::Result<()> {
+        dbg!(has_caption, has_body, line_number);
+        dbg!(&arguments.keys());
+
+        for (arg, kind) in arguments.iter() {
+            // in case the kind is optional
+            let inner_kind = kind.inner();
+            if let ftd::p2::Kind::String { caption, body, .. } = inner_kind {
+                match (caption, body) {
+                    (true, true) => {
+                        // accepts data from either body or caption (not both)
+                        // if both are passed throw error
+                        if has_caption && has_body {
+                            return Err(ftd::p1::Error::ParseError {
+                                message: format!(
+                                    "Pass either body or caption, ambiguity in \'{}\'",
+                                    arg
+                                ),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            });
+                        }
+
+                        // if none of them are passed throw error
+                        if !(has_caption || has_body) {
+                            return Err(ftd::p1::Error::ParseError {
+                                message: format!(
+                                    "body or caption, none of them are passed for \'{}\'",
+                                    arg
+                                ),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            });
+                        }
+                    }
+                    (true, false) => {
+                        // check if the component has caption or not
+                        // if caption not passed throw error
+                        if !has_caption {
+                            return Err(ftd::p1::Error::ParseError {
+                                message: format!("caption not passed for \'{}\'", arg),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            });
+                        }
+                    }
+                    (false, true) => {
+                        // check if the component has body or not
+                        // if body is not passed throw error
+                        if !has_body {
+                            return Err(ftd::p1::Error::ParseError {
+                                message: format!("body not passed for \'{}\'", arg),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            });
+                        }
+                    }
+                    (false, false) => continue,
+                }
+            }
+        }
+        Ok(())
+    }
+
+    /// fetch all the arguments till the root component
+    /// is found to be a kernel component
+    fn get_kernel_arguments(
+        var_comp_name: &str,
+        doc: &ftd::p2::TDoc,
+    ) -> std::collections::BTreeMap<String, ftd::p2::Kind> {
+        let mut arguments = std::collections::BTreeMap::new();
+        // dbg!(var_comp_name);
+        let var_thing = &doc.bag[var_comp_name];
+        // dbg!(&var_thing);
+        if let ftd::p2::Thing::Component(c) = var_thing {
+            if c.kernel {
+                arguments.extend(c.arguments.clone());
+                return arguments;
+            }
+            arguments.extend(get_kernel_arguments(&c.root, doc));
+        }
+        arguments
+    }
+
+    let bag = doc.bag;
+    let thing = &bag[root];
+    let has_caption = caption.is_some();
+    let has_body = body.is_some();
+
+    if let ftd::p2::Thing::Component(c) = thing {
+        // Either the component is kernel or variable/derived component
+        if c.kernel {
+            // check on root arguments if any of them conflicts with body or caption
+            dbg!(root);
+            return check_caption_body_conflicts(
+                &c.arguments,
+                doc,
+                has_caption,
+                has_body,
+                line_number,
+            );
+        } else {
+            let mut all_arguments = std::collections::BTreeMap::new();
+            all_arguments.extend(c.arguments.clone());
+            all_arguments.extend(get_kernel_arguments(&c.root, doc));
+
+            dbg!(root);
+            return check_caption_body_conflicts(
+                &all_arguments,
+                doc,
+                has_caption,
+                has_body,
+                line_number,
+            );
+        }
+    }
+
+    Ok(())
 }
 
 pub(crate) fn default_arguments() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
