@@ -142,7 +142,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CARGO_TERM_COLOR: always
-      BUILD_TARGET: x86_64-unknown-linux-musl
       BINARY_NAME: deb
     steps:
       - uses: actions/checkout@main
@@ -156,26 +155,26 @@ jobs:
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build-debian
-        run: cargo install cargo-deb && cargo deb --target $BUILD_TARGET --release
+        run: cargo deb
       - uses: actions/upload-artifact@v2
         with:
-          name: linux_musl_x86_64
-          path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}*
+          name: fpm_debian
+          path: target/debian/${{ env.BINARY_NAME }}*
   create-debian-release:
-    name: Release for debian file
+    name: Create github tag and release for debian file
     runs-on: ubuntu-latest
-    needs: [release-ubuntu]
+    needs: [release-ubuntu, release-macos, release-windows]
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: linux_musl_x86_64
-          path: ~/download/linux_musl
+          name: ubuntu_x64_latest
+          path: ~/download/ubuntu
       - name: Rename assets
         run: |
-          mv ~/download/linux_musl/${{ env.BINARY_NAME }}* ~/download/linux_musl/${{ env.BINARY_NAME }}*
+          mv ~/download/ubuntu/${{ env.BINARY_NAME }}* ~/download/ubuntu_x64_latest/${{ env.BINARY_NAME }}*
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/linux_musl/${{ env.BINARY_NAME }}*
+          artifacts: "~/download/ubuntu_x64_latest/${{ env.BINARY_NAME }}*"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
