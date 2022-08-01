@@ -168,14 +168,14 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: linux_musl_x86_64
-          path: ~/download/linux_musl
+          name: fpm_debian
+          path: ~/target/debian/fpm_0.1.10_amd64.deb
       - name: Rename assets
         run:
-          mv ~/download/linux_musl/fpm_0.1.10_amd64.deb ~/download/linux_musl/pm_0.1.10_amd64.deb
+          mv ~/download/target/debian/fpm_0.1.10_amd64.deb ~/download/target/debian/fpm_0.1.10_amd64.deb
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/ubuntu_x64_latest/fpm_0.1.10_amd64.deb"
+          artifacts: "~/download/target/debian/fpm_0.1.10_amd64.deb"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
