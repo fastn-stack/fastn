@@ -1,0 +1,12 @@
+# Requirements
+
+- Motivation, Why to use `ftd`
+- What is `ftd` and it’s all components
+    - How to start a `ftd` project
+    - How to use them
+        - Section Subsections
+        - Component Definition, Calling, Lifecycle
+        - If and else
+        - loop
+        - events
+        - processor etc
