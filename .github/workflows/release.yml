@@ -142,6 +142,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CARGO_TERM_COLOR: always
+      BUILD_TARGET: debian
       BINARY_NAME: deb
     steps:
       - uses: actions/checkout@main
@@ -155,7 +156,7 @@ jobs:
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build-debian
-        run: cargo deb
+        run: cargo install cargo-deb && cargo-deb
       - uses: actions/upload-artifact@v2
         with:
           name: fpm_debian
@@ -163,12 +164,15 @@ jobs:
   create-debian-release:
     name: Create github tag and release for debian file
     runs-on: ubuntu-latest
-    needs: [release-ubuntu, release-macos, release-windows]
+    needs: [release-ubuntu]
     steps:
       - uses: actions/download-artifact@v2
+        id: download
         with:
           name: ubuntu_x64_latest
           path: ~/download/ubuntu
+      - name: "Echo download path"
+        run: echo ${{steps.download.outputs.download-path}}
       - name: Rename assets
         run: |
           mv ~/download/ubuntu/${{ env.BINARY_NAME }}* ~/download/ubuntu_x64_latest/${{ env.BINARY_NAME }}*
