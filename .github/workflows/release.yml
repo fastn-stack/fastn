@@ -160,7 +160,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: fpm_debian
-          path: target/debian/${{ env.BINARY_NAME }}*
+          path: target/debian/fpm_0.1.10_amd64.deb
   create-debian-release:
     name: Create github tag and release for debian file
     runs-on: ubuntu-latest
@@ -175,10 +175,10 @@ jobs:
         run: echo ${{steps.download.outputs.download-path}}
       - name: Rename assets
         run: |
-          mv ~/download/ubuntu/${{ env.BINARY_NAME }}* ~/download/ubuntu_x64_latest/${{ env.BINARY_NAME }}*
+          mv ~/download/ubuntu/fpm_0.1.10_amd64.deb ~/download/ubuntu_x64_latest/fpm_0.1.10_amd64.deb
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/ubuntu_x64_latest/${{ env.BINARY_NAME }}*"
+          artifacts: "~/download/ubuntu_x64_latest/fpm_0.1.10_amd64.deb"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
