@@ -167,15 +167,12 @@ jobs:
     needs: [release-ubuntu]
     steps:
       - uses: actions/download-artifact@v2
-        id: download
         with:
-          name: ubuntu_x64_latest
-          path: ~/download/ubuntu
-      - name: "Echo download path"
-        run: echo ${{steps.download.outputs.download-path}}
+          name: linux_musl_x86_64
+          path: ~/download/linux_musl
       - name: Rename assets
-        run: |
-          mv ~/download/ubuntu/fpm_0.1.10_amd64.deb ~/download/ubuntu_x64_latest/fpm_0.1.10_amd64.deb
+        run:
+          mv ~/download/linux_musl/fpm_0.1.10_amd64.deb ~/download/linux_musl/pm_0.1.10_amd64.deb
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "~/download/ubuntu_x64_latest/fpm_0.1.10_amd64.deb"
