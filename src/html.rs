@@ -1027,9 +1027,6 @@ impl ftd::Image {
             img.style.insert(s("width"), s("100%"));
             img.style.insert(s("height"), s("100%"));
             img.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            if let Some(ref title) = self.title {
-                img.attrs.insert(s("title"), escape(title));
-            }
             if let Some(ref description) = self.description {
                 img.attrs.insert(s("alt"), escape(description));
             }
@@ -1040,9 +1037,6 @@ impl ftd::Image {
             n.children.push(img);
         } else {
             n.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            if let Some(ref title) = self.title {
-                n.attrs.insert(s("title"), escape(title));
-            }
             if let Some(ref description) = self.description {
                 n.attrs.insert(s("alt"), escape(description));
             }
@@ -1550,6 +1544,9 @@ impl ftd::Common {
         // TODO(move-to-ftd): the link should be escaped
         if let Some(ref link) = self.link {
             d.insert(s("href"), link.to_string());
+        }
+        if let Some(ref title) = self.title {
+            d.insert(s("title"), escape(title));
         }
         if self.open_in_new_tab {
             d.insert(s("target"), escape("_blank"));

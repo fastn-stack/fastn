@@ -2318,6 +2318,7 @@ pub struct Common {
     pub white_space: Option<String>,
     pub border_style: Option<String>,
     pub text_transform: Option<String>,
+    pub title: Option<String>,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
     // TODO: border-{shadow, glow}
@@ -2365,7 +2366,6 @@ impl Container {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Image {
     pub src: ImageSrc,
-    pub title: Option<String>,
     pub description: Option<String>,
     pub common: Common,
     pub crop: bool,
