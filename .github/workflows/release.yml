@@ -155,7 +155,7 @@ jobs:
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build-debian
-        run: cargo deb
+        run: cargo install cargo-deb && cargo deb
       - uses: actions/upload-artifact@v2
         with:
           name: fpm_debian
