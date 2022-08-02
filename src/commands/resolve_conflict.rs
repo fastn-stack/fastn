@@ -9,6 +9,12 @@ pub async fn resolve_conflict(
     revive_it: bool,
     delete_it: bool,
 ) -> fpm::Result<()> {
+    let number_of_times_flag_used = [use_ours, use_theirs, print, revive_it, delete_it]
+        .iter()
+        .fold(0, |val, x| val + (*x as i32));
+    if number_of_times_flag_used > 1 {
+        return fpm::usage_error(format!("AmbiguousOptionError: Use only one flag"));
+    }
     let get_files_status = fpm::sync_utils::get_files_status(config).await?;
     let file_status =
         if let Some(file_status) = get_files_status.iter().find(|v| v.get_file_path().eq(path)) {
