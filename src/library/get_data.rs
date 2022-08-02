@@ -3,6 +3,8 @@ pub fn processor(
     doc: &ftd::p2::TDoc,
     config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
+    dbg!(&config.current_document);
+
     let name = match section.header.string(doc.name, section.line_number, "key") {
         Ok(name) => name,
         _ => {
@@ -38,6 +40,8 @@ pub fn processor(
             })
             .trim()
             .replace(std::path::MAIN_SEPARATOR, "/");
+
+        dbg!(&doc_id);
 
         if let Some(extra_data) = sitemap.get_extra_data_by_id(doc_id.as_str()) {
             if let Some(data) = extra_data.get(name.as_str()) {

@@ -397,6 +397,45 @@ impl Config {
         Ok(file)
     }
 
+    pub fn doc_id(&self) -> Option<String> {
+        self.current_document
+            .clone()
+            .map(|v| fpm::utils::id_to_path(v.as_str()))
+            .map(|v| v.trim().replace(std::path::MAIN_SEPARATOR, "/"))
+    }
+
+    pub async fn get_file_path(&self, id: &str) -> fpm::Result<String> {
+        let (package_name, package) = self.find_package_by_doc_id(id).await?;
+        let mut id = id.to_string();
+        let mut add_packages = "".to_string();
+        if let Some(new_id) = id.strip_prefix("-/") {
+            // Check if the id is alias for index.ftd. eg: `/-/bar/`
+            if new_id.starts_with(&package_name) || !package.name.eq(self.package.name.as_str()) {
+                id = new_id.to_string();
+            }
+            if !package.name.eq(self.package.name.as_str()) {
+                add_packages = format!(".packages/{}/", package.name);
+            }
+        }
+        let id = {
+            let mut id = id
+                .split_once("-/")
+                .map(|(id, _)| id)
+                .unwrap_or_else(|| id.as_str())
+                .trim()
+                .trim_start_matches(package_name.as_str());
+            if id.is_empty() {
+                id = "/";
+            }
+            id
+        };
+        Ok(format!(
+            "{}{}",
+            add_packages,
+            package.resolve_by_id(id, None).await?.0
+        ))
+    }
+
     pub(crate) async fn get_file_path_and_resolve(&mut self, id: &str) -> fpm::Result<String> {
         let (package_name, package) = self.find_package_by_id(id).await?;
         let package = self.resolve_package(&package).await?;
@@ -430,6 +469,43 @@ impl Config {
             add_packages,
             package.resolve_by_id(id, None).await?.0
         ))
+    }
+
+    /// Return (package name or alias, package)
+    /// Duplicate code with find_package_by_id: this function is updating all_packages
+    pub(crate) async fn find_package_by_doc_id(
+        &self,
+        id: &str,
+    ) -> fpm::Result<(String, fpm::Package)> {
+        let id = if let Some(id) = id.strip_prefix("-/") {
+            id
+        } else {
+            return Ok((self.package.name.to_string(), self.package.to_owned()));
+        };
+
+        if let Some(package) = self.package.aliases().iter().find_map(|(alias, d)| {
+            if id.starts_with(alias) {
+                Some((alias.to_string(), (*d).to_owned()))
+            } else {
+                None
+            }
+        }) {
+            return Ok(package);
+        }
+
+        for (package_name, package) in self.all_packages.iter() {
+            if id.starts_with(package_name) {
+                return Ok((package_name.to_string(), package.to_owned()));
+            }
+        }
+
+        if let Some(package_root) = find_root_for_file(&self.packages_root.join(id), "FPM.ftd") {
+            let mut package = fpm::Package::new("unknown-package");
+            package.resolve(&package_root.join("FPM.ftd")).await?;
+            return Ok((package.name.to_string(), package));
+        }
+
+        Ok((self.package.name.to_string(), self.package.to_owned()))
     }
 
     /// Return (package name or alias, package)

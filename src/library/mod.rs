@@ -1,3 +1,4 @@
+mod document;
 mod fetch_file;
 mod fpm_dot_ftd;
 pub(crate) mod full_sitemap;
@@ -176,6 +177,9 @@ impl Library {
                 )
                 .await
             }
+            "document-filename" => {
+                document::processor::document_filename(section, doc, &self.config).await
+            }
             _ => process_sync(&self.config, section, self.document_id.as_str(), doc),
         }
     }
@@ -207,6 +211,9 @@ pub fn process_sync<'a>(
         "package-query" => fpm::library::sqlite::processor_(section, doc, config),
         "fetch-file" => fpm::library::fetch_file::processor_sync(section, doc, config),
         "package-tree" => fpm::library::package_tree::processor_sync(section, doc, config),
+        "document-id" => document::processor::document_id(section, doc, config),
+        "document-full-id" => document::processor::document_full_id(section, doc, config),
+        "document-suffix" => document::processor::document_suffix(section, doc, config),
         t => Err(ftd::p1::Error::NotFound {
             doc_id: document_id.to_string(),
             line_number: section.line_number,
@@ -381,7 +388,10 @@ impl Library2 {
             "package-query" => fpm::library::sqlite::processor(section, doc, &self.config).await,
             "toc" => fpm::library::toc::processor(section, doc, &self.config),
             "include" => fpm::library::include::processor(section, doc, &self.config),
-            "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
+            "get-data" => {
+                dbg!(&self.document_id);
+                fpm::library::get_data::processor(section, doc, &self.config)
+            }
             "sitemap" => fpm::library::sitemap::processor(section, doc, &self.config),
             "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, &self.config),
             "user-groups" => fpm::user_group::processor::user_groups(section, doc, &self.config),
@@ -400,6 +410,12 @@ impl Library2 {
             "user-group-by-id" => {
                 fpm::user_group::processor::user_group_by_id(section, doc, &self.config)
             }
+            "document-id" => document::processor::document_id(section, doc, &self.config),
+            "document-full-id" => document::processor::document_full_id(section, doc, &self.config),
+            "document-filename" => {
+                document::processor::document_filename(section, doc, &self.config).await
+            }
+            "document-suffix" => document::processor::document_suffix(section, doc, &self.config),
             "package-tree" => {
                 fpm::library::package_tree::processor(section, doc, &self.config).await
             }
