@@ -52,10 +52,14 @@ our extensive design library to get something done quickly.
 This workshop will focus on creating modern content centric websites using modular,
 re-usable ui components, so they are easy to extend and re-use. You will learn how to 
 work with data driven UI, how to do event handling and how to communicate with the 
-backend.
+backend. 
 
 We will create pricing page, slide show. The website will support dark mode, will be
 mobile responsive and use proper style guide with focus on typography.
+
+Along with `ftd`, you will also learn about `fpm`, which lets you create websites with
+online content editor, granular access control, and collaborative content editing us
+Github Pull Request like workflow.
 
 
 
