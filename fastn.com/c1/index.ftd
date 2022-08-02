@@ -1,2 +1,48 @@
 -- ft.page: FTD Courses
 
+- How to use crate
+- Data Modeling
+
+Crash Course
+If you want to understand basic FTD
+
+Workshop:
+For Application
+
+Course Material
+
+C1. P1 Grammar
+
+C2. Data Modeling(Variable, List and all, Processors, Special Variables)
+
+C3. Using Components (Using existing component, container management)
+
+C4. Creating your own components, Event Handling, Inner Container management
+
+C5. Package Management(Using package dependency, Using other packages)
+
+C6. Backend Communication
+
+C7. Hosting FTD
+- Parsing a FTD document
+- Getting data from FTD document
+- Setting data
+- Writing Processor
+- Writing Special Variable
+- To creating special JavaScript functions
+
+C8. Publishing FTD
+- Vercel
+- Github
+- Self Hosting
+- Hosted FifthTry
+
+-- ft.h1: Part 2
+
+C1. Using FTD as config language
+C2. Creating a slide show using ftd
+C3. Creating a dropdown using ftd
+C4. Creating todo app
+
+
+
