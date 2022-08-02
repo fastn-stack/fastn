@@ -45,6 +45,23 @@ for their blog, or simple web application. Who want to get some UI out, who want
 our extensive design library to get something done quickly.
 
 
+
+
+-- ft.h1: Tangible Outcome
+
+This workshop will focus on creating modern content centric websites using modular,
+re-usable ui components, so they are easy to extend and re-use. You will learn how to 
+work with data driven UI, how to do event handling and how to communicate with the 
+backend.
+
+We will create pricing page, slide show. The website will support dark mode, will be
+mobile responsive and use proper style guide with focus on typography.
+
+
+
+
+
+
 -- ft.h1: PURE Framework
 
 -- ft.h2: Pain
@@ -108,14 +125,7 @@ Frontend is `painful`. The importance of frontend is `recognised`. And FTD is `e
 So we are 3 of 4. `urgency` wise we are as good as any other technology to be frank,
 if there is no urgency to learn FTD probably there is none to learn React.
 
--- ft.h1: Tangible Outcome
 
-In this workshop you will learn how to create fully functional frontend applications
-from scratch. You will learn how to create modular components, so your frontend is
-easy to extend and re-use. You will learn how to work with data driven UI, so your
-application does not get bogged down in tangled interdepndent state. You will learn
-how to do event handling. And finally you will learn wow to communicate with the 
-backend.
 
 
 -- ft.h1: Requirements
