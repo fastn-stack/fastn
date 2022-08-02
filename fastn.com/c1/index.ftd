@@ -14,19 +14,21 @@ For Application
 
 Course Material
 
-C1. P1 Grammar
+C0: Introduction (10 mins)
 
-C2. Data Modeling(Variable, List and all, Processors, Special Variables)
+C1. P1 Grammar (10 mins)
 
-C3. Using Components (Using existing component, container management)
+C2. Data Modeling(Variable, List and all, Processors, Special Variables) (10 mins)
 
-C4. Creating your own components, Event Handling, Inner Container management
+C3. Using Components (Using existing component, container management) (10 mins)
 
-C5. Package Management(Using package dependency, Using other packages)
+C4. Creating your own components, Event Handling, Inner Container management (10 mins)
 
-C6. Backend Communication
+C5. Package Management(Using package dependency, Using other packages) (10 mins)
 
-C7. Hosting FTD
+C6. Backend Communication (10 mins)
+
+C7. Hosting FTD (10 mins)
 - Parsing a FTD document
 - Getting data from FTD document
 - Setting data
@@ -34,7 +36,7 @@ C7. Hosting FTD
 - Writing Special Variable
 - To creating special JavaScript functions
 
-C8. Publishing FTD
+C8. Publishing FTD (10 mins)
 - Vercel
 - Github
 - Self Hosting
@@ -43,10 +45,10 @@ C8. Publishing FTD
 
 -- ft.h1: Part 2
 
-C1. Using FTD as config language
-C2. Creating a slide show using ftd
-C3. Creating a dropdown using ftd
-C4. Creating todo app
+C1. Using FTD as config language (10 mins)
+C2. Creating a slide show using ftd (10 mins)
+C3. Creating a dropdown using ftd (10 mins)
+C4. Creating todo app (10 mins)
 
 
 
