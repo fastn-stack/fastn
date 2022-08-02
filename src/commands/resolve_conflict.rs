@@ -13,7 +13,7 @@ pub async fn resolve_conflict(
         .iter()
         .fold(0, |val, x| val + (*x as i32));
     if number_of_times_flag_used > 1 {
-        return fpm::usage_error(format!("AmbiguousOptionError: Use only one flag"));
+        return fpm::usage_error("AmbiguousOptionError: Use only one flag".to_string());
     }
     let get_files_status = fpm::sync_utils::get_files_status(config).await?;
     let file_status =
