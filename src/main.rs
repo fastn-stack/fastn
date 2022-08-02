@@ -112,8 +112,13 @@ async fn main() -> fpm::Result<()> {
         let use_ours = resolve_conflict.is_present("use-ours");
         let use_theirs = resolve_conflict.is_present("use-theirs");
         let print = resolve_conflict.is_present("print");
+        let revive_it = resolve_conflict.is_present("revive-it");
+        let delete_it = resolve_conflict.is_present("delete-it");
         let source = resolve_conflict.value_of("source").unwrap();
-        fpm::resolve_conflict(&config, source, use_ours, use_theirs, print).await?;
+        fpm::resolve_conflict(
+            &config, source, use_ours, use_theirs, print, revive_it, delete_it,
+        )
+        .await?;
     }
     if let Some(tracks) = matches.subcommand_matches("start-tracking") {
         let source = tracks.value_of("source").unwrap();

@@ -6,6 +6,8 @@ pub async fn resolve_conflict(
     use_ours: bool,
     use_theirs: bool,
     print: bool,
+    revive_it: bool,
+    delete_it: bool,
 ) -> fpm::Result<()> {
     let get_files_status = fpm::sync_utils::get_files_status(config).await?;
     let file_status =
@@ -27,6 +29,12 @@ pub async fn resolve_conflict(
                     path
                 ),
             })?;
+        if conflicted_data.theirs.deleted() {
+            return fpm::usage_error(format!(
+                "`delete-edit-conflict`, Help: Use `fpm resolve-conflict --revive-it {}`",
+                path
+            ));
+        }
         fpm::utils::update(&config.root.join(path), content).await?;
     } else if use_theirs {
         let content = conflicted_data
@@ -38,7 +46,29 @@ pub async fn resolve_conflict(
                     path
                 ),
             })?;
+        if conflicted_data.ours.deleted() {
+            return fpm::usage_error(format!(
+                "`delete-edit-conflict`, Help: Use `fpm resolve-conflict --revive-it {}`",
+                path
+            ));
+        }
         fpm::utils::update(&config.root.join(path), content).await?;
+    } else if revive_it {
+        let content = conflicted_data
+            .ours
+            .get_content()
+            .or_else(|| conflicted_data.theirs.get_content())
+            .ok_or(fpm::Error::UsageError {
+                message: format!("Can't find content: `{}`", path),
+            })?;
+        fpm::utils::update(&config.root.join(path), content).await?;
+    } else if delete_it {
+        if !(conflicted_data.ours.deleted() || conflicted_data.theirs.deleted()) {
+            return fpm::usage_error(format!("{} is not in `delete-edit-conflict`", path));
+        }
+        if config.root.join(path).exists() {
+            tokio::fs::remove_file(config.root.join(path)).await?;
+        }
     } else if print {
         let content = conflicted_data
             .marker
@@ -65,13 +95,14 @@ pub async fn resolve_conflict(
         fpm::utils::update(&config.root.join(path), edited.as_bytes()).await?;
     }
 
-    mark_resolve(config, file_status).await?;
+    mark_resolve(config, file_status, delete_it).await?;
     Ok(())
 }
 
 async fn mark_resolve(
     config: &fpm::Config,
     file_status: &fpm::sync_utils::FileStatus,
+    delete_it: bool,
 ) -> fpm::Result<()> {
     let path = file_status.get_file_path();
     let server_version = file_status
@@ -87,10 +118,20 @@ async fn mark_resolve(
             .iter()
             .map(|v| (v.filename.to_string(), v.clone()))
             .collect();
-    let file_workspace_entry = workspace_map.get_mut(&path).ok_or(fpm::Error::UsageError {
-        message: format!("Can't find entry in workspace for `{}`", path),
-    })?;
-    file_workspace_entry.version = Some(server_version);
+    if delete_it
+        && file_status
+            .status()
+            .map(|v| v.is_client_deleted_server_edited())
+            .unwrap_or(false)
+    {
+        workspace_map.remove(&path);
+    } else {
+        let file_workspace_entry = workspace_map.get_mut(&path).ok_or(fpm::Error::UsageError {
+            message: format!("Can't find entry in workspace for `{}`", path),
+        })?;
+        file_workspace_entry.version = Some(server_version);
+        file_workspace_entry.deleted = if delete_it { Some(true) } else { None };
+    }
     config
         .write_workspace(workspace_map.into_values().collect_vec().as_slice())
         .await
@@ -107,6 +148,10 @@ impl Content {
             Content::Content(content) => Some(content),
             Content::Deleted => None,
         }
+    }
+
+    fn deleted(&self) -> bool {
+        matches!(self, Content::Deleted)
     }
 }
 

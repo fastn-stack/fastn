@@ -13,6 +13,9 @@ impl Status {
     pub(crate) fn is_conflicted(&self) -> bool {
         Status::NoConflict.ne(self)
     }
+    pub(crate) fn is_client_deleted_server_edited(&self) -> bool {
+        matches!(self, Status::ClientDeletedServerEdited(_))
+    }
     pub(crate) fn conflicted_version(&self) -> Option<i32> {
         match self {
             Status::Conflict(version) => Some(*version),
