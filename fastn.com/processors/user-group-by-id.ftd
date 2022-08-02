@@ -16,4 +16,4 @@ $processor$: user-group-by-id
 This will initialize the `group` variable with group which are present in the
 current FPM package by it's `id`.
 
-Check type [user-group-compat](/theme/fpm/)
+Check type [user-group-compat](/theme/fpm/#user-group-compat)

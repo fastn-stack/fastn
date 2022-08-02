@@ -1,0 +1,19 @@
+-- ft.page: `document-readers` processor
+
+`document-readers` processor is used to find all the [groups](/dev/user-group/)
+by group `document`.
+
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.user-group-compat group:
+$processor$: document-readers
+document: /
+
+-- ft.markdown:
+
+This will initialize the `group` variable with group which have permission to
+read for passed `document`.
+
+Check type [user-group-compat](/theme/fpm/#user-group-compat)
