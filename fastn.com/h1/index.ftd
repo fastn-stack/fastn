@@ -1,0 +1,133 @@
+-- ft.page: Workshop: Patna
+
+We are going to have a FTD Handson Workshop In Patna.
+
+Data: 28th Aug 2022
+
+Venue: To be decided.
+
+
+
+
+-- boolean internal-user: false
+
+-- ftd.text: Toggle Internal User
+$on-click$: toggle $internal-user
+
+
+
+-- ft.h1: What is an Ideal Student Persona?
+‍
+An ISP is a fictional person representing a key segment of your audience which is more 
+likely to buy a product from you.
+
+1. Their current situation
+2. Their goal(s)
+3. The roadblocks that prevent them from achieving their goal
+
+Our ISP is a developer, with good algo, ds, programming fundamentals, but struggles with
+building user interfaces. Our student is not confident about CSS and DOM quirks, they have
+difficulty realising basic design in browser. If they can do some frontend, it is usually
+an unmaintainable mess. There is no proper modular design, the code is barely re-usable or
+extendable. 
+
+They maybe be fluent with Python, Django, Flask. Or Golang, Rust etc. Or maybe they are
+devops, who create basic scripts, but struggle with converting those scripts to web based
+dashboards, because UI is their weak point.
+
+Our target also includes people who are really new to programming. Who have just written
+their hello world, and now want to make something more interesting, with some sort of
+interactable user interface.
+
+Our workshop also targets people who can professionally use Javascript and CSS, know the
+ins and outs the latest frontend technolgy, but do not want to maintain all that complexity
+for their blog, or simple web application. Who want to get some UI out, who want to use 
+our extensive design library to get something done quickly.
+
+
+-- ft.h1: PURE Framework
+
+-- ft.h2: Pain
+
+Good: I hate my job and I want to quit, so I really need to make money online
+
+Not so good: It would be nice to have more money
+
+Ours: 
+
+I want to build a good looking UI for the project I am working on and hate
+deisgning things from scratch, and want to focus on getting it done, instead of
+wasting time on React and Webpack and endless CSS courses.
+
+I hate that I am good at programming, live and breath algo and ds, and yet the UI 
+I create ends up taking a lot of time to build and still looking like crap. 
+
+-- ft.h2: Urgent
+
+Good: I want to get in shape before my wedding
+
+Not so good: I want to lose weight
+
+Ours:
+
+I have wasted so much time in collage, and I still do not have anything good looking
+to show for. All my coding projects are just give in github repo and no one can 
+use them, it because hard to stand out, if they had working UI I would have had
+much better impact.
+
+Every day I am not finishing and deploying a project is a day wasted. I already had
+so many years of experience.
+
+I do not have forever to evaluate this project. I have to learn frontend in few months
+or I have to go back to becoming better at core programming. I can not waste lot of
+time on this.
+
+-- ft.h2: Recognised
+
+How to prove that enough people want to solve this problem.
+
+Full stack programmers get higher salaries, are in large demand. Knowing only backend
+means so many projects you can do, but you can not, because it needs a bit of UI, where
+you start to struggle.
+
+Virtually every programmer who prepares for interviews ends up learning algo and ds, but
+their very few programmers end up getting frontend skills. 
+
+-- ft.h2: Easy
+
+We have designed FTD to make frontend easy. No one has time to learn and re-learn 
+constantly evolving frontend library landscape. Material design or bootstrap? Tailwind
+or PostCSS? React or Vue or Angular or Dart? React with hooks or without? Which SPA
+framework, which data routing etc etc.
+
+FTD makes it very easy.
+
+-- ft.h2: Are we really PURE?
+
+Frontend is `painful`. The importance of frontend is `recognised`. And FTD is `easy`.
+So we are 3 of 4. `urgency` wise we are as good as any other technology to be frank,
+if there is no urgency to learn FTD probably there is none to learn React.
+
+-- ft.h1: Tangible Outcome
+
+In this workshop you will learn how to create fully functional frontend applications
+from scratch. You will learn how to create modular components, so your frontend is
+easy to extend and re-use. You will learn how to work with data driven UI, so your
+application does not get bogged down in tangled interdepndent state. You will learn
+how to do event handling. And finally you will learn wow to communicate with the 
+backend.
+
+
+-- ft.h1: Requirements
+
+- Motivation, Why to use `ftd`
+- What is `ftd` and it’s all components
+    - How to start a `ftd` project
+    - How to use them
+        - Section Subsections
+        - Component Definition, Calling, Lifecycle
+        - If and else
+        - loop
+        - events
+        - processor etc
+        
