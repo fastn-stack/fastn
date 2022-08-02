@@ -388,10 +388,7 @@ impl Library2 {
             "package-query" => fpm::library::sqlite::processor(section, doc, &self.config).await,
             "toc" => fpm::library::toc::processor(section, doc, &self.config),
             "include" => fpm::library::include::processor(section, doc, &self.config),
-            "get-data" => {
-                dbg!(&self.document_id);
-                fpm::library::get_data::processor(section, doc, &self.config)
-            }
+            "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
             "sitemap" => fpm::library::sitemap::processor(section, doc, &self.config),
             "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, &self.config),
             "user-groups" => fpm::user_group::processor::user_groups(section, doc, &self.config),
