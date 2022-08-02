@@ -116,13 +116,22 @@ email: arpita@fifthtry.com
   - `$processor$: full-sitemap`
     url: /processors/full-sitemap/
   - `$processor$: user-groups`
-    url: processors/user-groups/
+    url: /processors/user-groups/
   - `$processor$: user-group-by-id`
-    url: processors/user-group-by-id/
+    url: /processors/user-group-by-id/
   - `$processor$: document-readers`
-    url: processors/document-readers/
+    url: /processors/document-readers/
   - `$processor$: document-writers`
-    url: processors/document-writers/
+    url: /processors/document-writers/
+  - `$processor$: document-filename`
+    url: /processors/document-filename/
+  - `$processor$: document-id`
+    url: /processors/document-id/
+  - `$processor$: document-full-id`
+    url: /processors/document-full-id/
+  - `$processor$: document-suffix`
+    url: /processors/document-suffix/
+
 
 
 # Development: /journal/

@@ -1,0 +1,19 @@
+-- ft.page: `document-filename` processor
+
+`document-filename` processor is used to get filename in system of accessed
+document.
+
+Let's say, If request path is `/foo/ftd/` or `/foo/ftd/-/x/y/` for file
+`foo/abc.ftd`, so filename will be `foo/abc.ftd`, It is relative path with
+respect to your project `FPM.ftd` file.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: Document Filename
+
+\-- string document-filename:
+$processor$: document-filename
+
+\-- ftd.text: $document-filename

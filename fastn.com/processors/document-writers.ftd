@@ -1,7 +1,7 @@
 -- ft.page: `document-writers` processor
 
-`document-writers` processor is used to find all the [groups](/dev/user-group/)
-by group `document`.
+`document-writers` processor is used to find all the writers
+[groups](/dev/user-group/) by `document`.
 
 
 -- ft.code:
@@ -13,7 +13,7 @@ document: /
 
 -- ft.markdown:
 
-This will initialize the `group` variable with group which have permission to
-write for passed `document`.
+This will initialize the `group` variable with group who have permission to
+write in passed `document`.
 
 Check type [user-group-compat](/theme/fpm/#user-group-compat)
