@@ -1,26 +1,12 @@
+use itertools::Itertools;
+
 pub async fn resolve_conflict(
     config: &fpm::Config,
     path: &str,
     use_ours: bool,
     use_theirs: bool,
+    print: bool,
 ) -> fpm::Result<()> {
-    let new_content = fpm::editor::editor(
-        "Hello World\nThis is Arpita\n\
-        Unlike other package managers like\npypi, npm and crates, there is no 
-        central package repository in FPM. 
-         \nSince every FPM package is a website, that website acts as the package repository.\n\n
-        What this means is when fpm sees fifthtry.github.io/doc-site as a dependency, \n
-        it fetches the content of fifthtry.github.io/doc-site/FPM.ftd file which acts \n
-        as the meta data for the package, and the meta data includes the URL from \n
-        where the package ZIP can be downloaded.\n\n\
-        \
-        In our examples we use Github’s zip serving feature to let Github generate \n
-        and distribute our .zip file. If you are not using Github, you can store \n
-        the zip file containing entire package in some other location, like S3, \n
-        or a server you control, and fpm will work with that.",
-        Some(std::path::PathBuf::from("index.ftd")),
-    )?;
-    dbg!(&new_content);
     let get_files_status = fpm::sync_utils::get_files_status(config).await?;
     let file_status =
         if let Some(file_status) = get_files_status.iter().find(|v| v.get_file_path().eq(path)) {
@@ -30,13 +16,98 @@ pub async fn resolve_conflict(
                 message: format!("{} not found", path),
             });
         };
+    let conflicted_data = get_conflict_data(config, file_status).await?;
+    if use_ours {
+        let content = conflicted_data
+            .ours
+            .get_content()
+            .ok_or(fpm::Error::UsageError {
+                message: format!(
+                    "Can't find content, Help: Use `fpm resolve-conflict --delete-it {}`",
+                    path
+                ),
+            })?;
+        fpm::utils::update(&config.root.join(path), content).await?;
+    } else if use_theirs {
+        let content = conflicted_data
+            .theirs
+            .get_content()
+            .ok_or(fpm::Error::UsageError {
+                message: format!(
+                    "Can't find content, Help: Use `fpm resolve-conflict --delete-it {}`",
+                    path
+                ),
+            })?;
+        fpm::utils::update(&config.root.join(path), content).await?;
+    } else if print {
+        let content = conflicted_data
+            .marker
+            .ok_or(fpm::Error::UsageError {
+                message: format!(
+                    "Can't find marked content, Help: Use `fpm resolve-conflict --use-ours {}` && `fpm resolve-conflict --use-theirs {}`",
+                    path, path
+                ),
+            })?;
+        println!("{}", content);
+        return Ok(());
+    } else {
+        let content = conflicted_data
+            .marker
+            .ok_or(fpm::Error::UsageError {
+                message: format!(
+                    "Can't find marked content, Help: Use `fpm resolve-conflict --use-ours {}` && `fpm resolve-conflict --use-theirs {}`",
+                    path, path
+                ),
+            })?;
+        let edited = edit::edit(content).map_err(|e| fpm::Error::UsageError {
+            message: format!("{}, Help: Use `fpm resolve-conflict --print {}`", e, path,),
+        })?;
+        fpm::utils::update(&config.root.join(path), edited.as_bytes()).await?;
+    }
 
+    mark_resolve(config, file_status).await?;
     Ok(())
+}
+
+async fn mark_resolve(
+    config: &fpm::Config,
+    file_status: &fpm::sync_utils::FileStatus,
+) -> fpm::Result<()> {
+    let path = file_status.get_file_path();
+    let server_version = file_status
+        .status()
+        .and_then(|v| v.conflicted_version())
+        .ok_or(fpm::Error::UsageError {
+            message: format!("{} is not in conflict", path),
+        })?;
+    let mut workspace_map: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> =
+        config
+            .read_workspace()
+            .await?
+            .iter()
+            .map(|v| (v.filename.to_string(), v.clone()))
+            .collect();
+    let file_workspace_entry = workspace_map.get_mut(&path).ok_or(fpm::Error::UsageError {
+        message: format!("Can't find entry in workspace for `{}`", path),
+    })?;
+    file_workspace_entry.version = Some(server_version);
+    config
+        .write_workspace(workspace_map.into_values().collect_vec().as_slice())
+        .await
 }
 
 enum Content {
     Content(Vec<u8>),
     Deleted,
+}
+
+impl Content {
+    fn get_content(&self) -> Option<&[u8]> {
+        match self {
+            Content::Content(content) => Some(content),
+            Content::Deleted => None,
+        }
+    }
 }
 
 struct ConflictData {
@@ -45,7 +116,7 @@ struct ConflictData {
     marker: Option<String>,
 }
 
-/*fn get_conflict_data(
+async fn get_conflict_data(
     config: &fpm::Config,
     file_status: &fpm::sync_utils::FileStatus,
 ) -> fpm::Result<ConflictData> {
@@ -137,11 +208,11 @@ struct ConflictData {
                     }
                 }
             }
-            return Ok(ConflictData {
+            Ok(ConflictData {
                 ours: Content::Content(content.to_vec()),
                 theirs: Content::Content(theirs_content),
                 marker: None,
-            });
+            })
         }
         fpm::sync_utils::FileStatus::Delete {
             path,
@@ -159,11 +230,11 @@ struct ConflictData {
             }
             let theirs_path = config.history_path(path, *version);
             let theirs_content = tokio::fs::read(theirs_path).await?;
-            return Ok(ConflictData {
+            Ok(ConflictData {
                 theirs: Content::Content(theirs_content),
                 ours: Content::Deleted,
                 marker: None,
-            });
+            })
         }
         fpm::sync_utils::FileStatus::Untracked { path, version } => {
             return fpm::usage_error(format!(
@@ -172,5 +243,4 @@ struct ConflictData {
             ))
         }
     }
-    Ok(())
-}*/
+}

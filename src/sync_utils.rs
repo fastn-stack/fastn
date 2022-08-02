@@ -58,6 +58,15 @@ impl FileStatus {
         status.is_conflicted()
     }
 
+    pub(crate) fn status(&self) -> Option<&Status> {
+        match self {
+            FileStatus::Add { status, .. }
+            | FileStatus::Update { status, .. }
+            | FileStatus::Delete { status, .. } => Some(status),
+            FileStatus::Untracked { .. } => None,
+        }
+    }
+
     pub(crate) fn get_file_path(&self) -> String {
         match self {
             FileStatus::Add { path, .. }
@@ -99,8 +108,7 @@ pub(crate) async fn get_files_status(config: &fpm::Config) -> fpm::Result<Vec<Fi
             .iter()
             .map(|v| (v.filename.to_string(), v.clone()))
             .collect();
-    let mut changed_files = get_files_status_wrt_workspace(config, &workspace).await?;
-    get_files_status_wrt_server_latest(config, &mut changed_files, &mut workspace).await?;
+    let changed_files = get_files_status_with_workspace(config, &mut workspace).await?;
     config
         .write_workspace(workspace.into_values().collect_vec().as_slice())
         .await?;

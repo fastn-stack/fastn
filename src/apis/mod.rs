@@ -5,8 +5,8 @@ pub(crate) mod sync;
 pub(crate) mod sync2;
 pub(crate) mod view_source;
 
+pub(crate) use self::edit::edit;
 pub(crate) use clone::clone;
-pub(crate) use edit::edit;
 pub(crate) use response::{error, success};
 pub(crate) use sync::sync;
 pub(crate) use sync2::sync2;
