@@ -707,6 +707,11 @@ impl ftd::Collector {
         if font.style.strike {
             styles.insert(s("text-decoration"), s("line-through"));
         }
+
+        if let Some(ref weight) = font.style.weight {
+            let (key, value) = style(weight);
+            styles.insert(s(key.as_str()), value);
+        }
         // if self.common.conditional_attribute.keys().any(|x| styles.keys().contains(&x)) {
         //     // todo: then don't make class
         //     // since font is not a conditional attribute this is not yet needed
