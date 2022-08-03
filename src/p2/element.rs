@@ -1586,10 +1586,7 @@ pub fn input_function() -> ftd::Component {
                     "role".to_string(),
                     ftd::p2::Kind::record("ftd#type").into_optional(),
                 ),
-                (
-                    "type".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("type".to_string(), ftd::p2::Kind::string().into_optional()),
             ],
             common_arguments(),
         ]
