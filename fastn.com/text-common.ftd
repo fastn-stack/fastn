@@ -98,8 +98,6 @@ color: $fpm.color.main.text-strong
 
 -- ft.h1: `line-clamp:`
 
--- ft.markdown:
-
 This `line-clamp` property takes input like this:
 
 -- ft.code: specifying line-clamp
@@ -111,6 +109,7 @@ width: 300
 min-height: 300
 boolean read_more: true
 integer max_lines:
+spacing: 20
 
 \--- ftd.text: $text
 line-clamp if $read_more: $max_lines
@@ -129,6 +128,8 @@ if: not $read_more
 max_lines: 1
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+tempor incididunt ut labore et dolore magna aliqua. elit, sed do eiusmod.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua.
 
 -- ft.markdown:
@@ -139,11 +140,11 @@ This will render like this:
 
 -- ftd.column card:
 body text:
-width: 300
-min-height: 300
+width: fill
 boolean read_more: true
 integer max_lines:
 color: $fpm.color.main.text-strong
+spacing: 20
 
 --- ftd.text: $text
 line-clamp if $read_more: $max_lines
@@ -162,4 +163,6 @@ if: not $read_more
 max_lines: 1
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+tempor incididunt ut labore et dolore magna aliqua. elit, sed do eiusmod.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua.

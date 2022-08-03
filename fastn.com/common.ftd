@@ -13,6 +13,9 @@ id: outer
 These attributes are available to all `ftd` "kernel" components.
 
 
+
+
+
 -- ft.h1: `color:` [`ftd.color`](/built-in-types/#ftd-color)
 
 -- ft.markdown:
@@ -48,6 +51,10 @@ color: $red
 -- container: outer
 
 
+
+
+
+
 -- ft.h1: `background-color:` [`ftd.color`](/built-in-types/#ftd-color)
 
 The background-color property sets the background color of an element. It takes
@@ -74,6 +81,14 @@ background-color: $red
 
 -- container: outer
 
+
+
+
+-- ft.h1: `title: Optional String`
+
+This is used to create
+[title attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title)
+on generated DOM.
 
 
 -- ft.h1: `border-width: Integer`

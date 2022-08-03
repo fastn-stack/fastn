@@ -1,20 +1,26 @@
--- ft.page: Image
+-- ft.page: `ftd.image`: Image Kernel Element
     
 -- ft.markdown: 
 
-Renders an Image.
-
--- ft.h3: Usage
+`ftd.image` is the kernel elment used to render images in ftd.
 
 -- ft.code:
 lang: ftd
 
 \-- ftd.image:
 
--- ft.h3: Attributes
+
+-- ft.tip: Common Attributes
 
 Image accepts the below attributes as well all the [common attributes ](common/).
 
-- `src`
-- `description` 
-- `align`
+-- ft.h1: `src: String`
+
+`src` is the image to show. This is the only required element.
+
+-- ft.h1: `description: Optional String`
+
+Content of `description` is added as `alt` text in HTML.
+
+
+

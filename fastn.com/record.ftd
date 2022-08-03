@@ -35,8 +35,8 @@ A variable can be created with type `record`:
 -- ft.code:
 lang: ftd
 
-\-- person amitu: Amit Upadhyay
-age: 40
+\-- person john-snow: John Snow
+age: 14
 
 -- ft.markdown:
 
@@ -46,6 +46,39 @@ from the "caption" area, and `age` is read from the "header".
 
 Note that we have not passed `bio`, since `bio` is declared as `optional body`,
 so it's not a problem. Had it been `body` the above would not have been valid.
+
+-- ft.h1: Record Field Update Syntax
+
+An individual field of a record can be updated using a syntax like this:
+
+-- ft.code:
+lang: ftd
+
+\-- person john-snow: John Snow
+age: 14
+
+\-- john-snow.age: 15
+
+-- ft.markdown:
+
+Here we have used `-- john-snow.age: 15` to update a single field of a record.
+
+This also works if the field is a list:
+
+-- ft.code:
+lang: ftd
+
+\-- record person:
+caption name:
+string list alias:
+
+\-- person john-snow: John Snow
+
+\-- john-snow.alias: Aegon Targaryen
+\-- john-snow.alias: Lord Crow
+\-- john-snow.alias: The White Wolf
+\-- john-snow.alias: The Prince That Was Promised
+
 
 -- ft.h1: Reading A Record From Rust
 

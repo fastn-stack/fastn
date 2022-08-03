@@ -1,4 +1,4 @@
--- ft.page: Text
+-- ft.page: `ftd.text`: Text Block Kernel Element
 
 
 -- ftd.column:
@@ -7,7 +7,7 @@ id: main
 
 -- ft.markdown: 
 
-Renders a text block.
+`ftd.text` can be used to renders text.
 
 
 -- ft.code:
@@ -22,8 +22,6 @@ Text accepts the below attributes as well all the [common attributes](common/).
 
 --- ft.code: captions are cool
 lang: ftd
-
-\-- ft.tip: is cool
 
 -- ft.h1: `text: String`
 
