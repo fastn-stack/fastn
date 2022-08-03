@@ -2621,11 +2621,26 @@ pub struct ExternalFont {
     pub display: FontDisplay,
 }
 
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[serde(tag = "type")]
+pub enum Weight {
+    Heavy,
+    ExtraBold,
+    Bold,
+    SemiBold,
+    Medium,
+    Regular,
+    Light,
+    ExtraLight,
+    HairLine,
+}
+
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Style {
     pub italic: bool,
     pub underline: bool,
     pub strike: bool,
+    pub weight: Option<ftd::Weight>,
 }
 
 impl Style {
@@ -2634,6 +2649,7 @@ impl Style {
             italic: false,
             underline: false,
             strike: false,
+            weight: Default::default(),
         };
         let l = match l {
             Some(v) => v,
@@ -2645,6 +2661,15 @@ impl Style {
                 "italic" => s.italic = true,
                 "underline" => s.underline = true,
                 "strike" => s.strike = true,
+                "heavy" => s.weight = Some(ftd::Weight::Heavy),
+                "extra-bold" => s.weight = Some(ftd::Weight::ExtraBold),
+                "bold" => s.weight = Some(ftd::Weight::Bold),
+                "semi-bold" => s.weight = Some(ftd::Weight::SemiBold),
+                "medium" => s.weight = Some(ftd::Weight::Medium),
+                "regular" => s.weight = Some(ftd::Weight::Regular),
+                "light" => s.weight = Some(ftd::Weight::Light),
+                "extra-light" => s.weight = Some(ftd::Weight::ExtraLight),
+                "hairline" => s.weight = Some(ftd::Weight::HairLine),
                 t => return ftd::e2(format!("{} is not a valid style", t), doc_id, 0),
             }
         }

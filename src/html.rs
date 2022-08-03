@@ -707,6 +707,11 @@ impl ftd::Collector {
         if font.style.strike {
             styles.insert(s("text-decoration"), s("line-through"));
         }
+
+        if let Some(ref weight) = font.style.weight {
+            let (key, value) = style(weight);
+            styles.insert(s(key.as_str()), value);
+        }
         // if self.common.conditional_attribute.keys().any(|x| styles.keys().contains(&x)) {
         //     // todo: then don't make class
         //     // since font is not a conditional attribute this is not yet needed
@@ -897,6 +902,11 @@ impl ftd::Text {
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
 
+        if let Some(ref weight) = self.style.weight {
+            let (key, value) = style(weight);
+            n.style.insert(s(key.as_str()), value);
+        }
+
         // TODO: text styles
         n
     }
@@ -952,6 +962,12 @@ impl ftd::TextBlock {
             let (key, value) = length(indent, "text-indent");
             n.style.insert(s(key.as_str()), value);
         }
+
+        if let Some(ref weight) = self.style.weight {
+            let (key, value) = style(weight);
+            n.style.insert(s(key.as_str()), value);
+        }
+
         n
     }
 }
@@ -992,6 +1008,11 @@ impl ftd::Code {
 
         if let Some(p) = &self.text_indent {
             let (key, value) = length(p, "text-indent");
+            n.style.insert(s(key.as_str()), value);
+        }
+
+        if let Some(ref weight) = self.style.weight {
+            let (key, value) = style(weight);
             n.style.insert(s(key.as_str()), value);
         }
 
@@ -1105,6 +1126,12 @@ impl ftd::Markups {
         if self.children.is_empty() {
             n.text = Some(self.text.rendered.clone());
         }
+
+        if let Some(ref weight) = self.style.weight {
+            let (key, value) = style(weight);
+            n.style.insert(s(key.as_str()), value);
+        }
+
         n.children = self
             .children
             .iter()
@@ -2011,5 +2038,19 @@ pub fn spacing(l: &ftd::Spacing, f: &str) -> (String, String) {
         ftd::Spacing::SpaceBetween => (s("justify-content"), s("space-between")),
         ftd::Spacing::SpaceAround => (s("justify-content"), s("space-around")),
         ftd::Spacing::Absolute { value } => (s(f), s(value)),
+    }
+}
+
+fn style(l: &ftd::Weight) -> (String, String) {
+    match l {
+        ftd::Weight::Heavy => ("font-weight".to_string(), "900".to_string()),
+        ftd::Weight::ExtraBold => ("font-weight".to_string(), "800".to_string()),
+        ftd::Weight::Bold => ("font-weight".to_string(), "700".to_string()),
+        ftd::Weight::SemiBold => ("font-weight".to_string(), "600".to_string()),
+        ftd::Weight::Medium => ("font-weight".to_string(), "500".to_string()),
+        ftd::Weight::Regular => ("font-weight".to_string(), "400".to_string()),
+        ftd::Weight::Light => ("font-weight".to_string(), "300".to_string()),
+        ftd::Weight::ExtraLight => ("font-weight".to_string(), "200".to_string()),
+        ftd::Weight::HairLine => ("font-weight".to_string(), "100".to_string()),
     }
 }
