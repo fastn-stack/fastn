@@ -142,8 +142,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CARGO_TERM_COLOR: always
-      BUILD_TARGET: debian
-      BINARY_NAME: fpm_0.1.10_amd64.deb
+      BUILD_TARGET: x86_64-unknown-linux-musl
+      BINARY_NAME: fpm_debian
     steps:
       - uses: actions/checkout@main
       - uses: actions/cache@v2
@@ -161,11 +161,11 @@ jobs:
         with:
           args: cargo build --target $BUILD_TARGET --release
       - name: Build-debian
-        run: cargo install cargo-deb && cargo deb
+        run: cargo install cargo-deb && cargo deb --target $BUILD_TARGET
       - uses: actions/upload-artifact@v2
         with:
-          name: fpm_debian
-          path: target/debian/fpm_0.1.10_amd64.deb
+          name: linux_musl_x86_64
+          path: target/x86_64-unknown-linux-musl/debian/fpm_debian
   create-debian-release:
     name: Create github tag and release for debian file
     runs-on: ubuntu-latest
@@ -173,14 +173,14 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: fpm_debian
-          path: ~/download/ubuntu/
+          name: linux_musl_x86_64
+          path: ~/download/linux_musl
       - name: Rename assets
         run:
-          mv ~/download/ubuntu/fpm_debian ~/download/target/debian/fpm
+          mv ~/download/linux_musl/fpm_debian ~/download/target/debian/fpm_debian_linux_musl_x86_64
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~//download/target/debian/fpm"
+          artifacts: "~/download/target/debian/fpm_debian_linux_musl_x86_64"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
