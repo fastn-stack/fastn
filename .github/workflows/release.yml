@@ -170,7 +170,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: fpm_debian
-          path: ~/download/ubuntu
+          path: ~/download
       - name: Rename assets
         run:
           mv ~/download/fpm_debian ~/download/fpm_deb
