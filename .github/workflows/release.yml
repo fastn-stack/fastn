@@ -173,10 +173,10 @@ jobs:
           path: ~/download/ubuntu
       - name: Rename assets
         run:
-          mv ~/download/ubuntu/fpm_debian ~/download/target/debian/fpm_deb
+          mv ~/download/fpm_debian ~/download/fpm_deb
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/target/debian/fpm_deb"
+          artifacts: "~/download/fpm_deb"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
