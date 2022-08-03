@@ -2816,6 +2816,7 @@ pub struct Input {
     pub common: Common,
     pub placeholder: Option<String>,
     pub value: Option<String>,
+    pub type_: Option<String>,
     pub multiline: bool,
     pub font: Option<Type>,
     pub default_value: Option<String>,

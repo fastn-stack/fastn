@@ -1586,6 +1586,10 @@ pub fn input_function() -> ftd::Component {
                     "role".to_string(),
                     ftd::p2::Kind::record("ftd#type").into_optional(),
                 ),
+                (
+                    "type".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
             ],
             common_arguments(),
         ]
@@ -1640,6 +1644,7 @@ pub fn input_from_properties(
         )?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
         multiline: ftd::p2::utils::bool("multiline", properties, doc.name, 0)?,
+        type_: ftd::p2::utils::string_optional("type", properties, doc.name, 0)?,
         value: ftd::p2::utils::string_optional("value", properties, doc.name, 0)?,
         default_value: ftd::p2::utils::string_optional("default-value", properties, doc.name, 0)?,
         font,

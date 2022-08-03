@@ -1191,6 +1191,9 @@ impl ftd::Input {
         if let Some(ref p) = self.placeholder {
             n.attrs.insert(s("placeholder"), escape(p));
         }
+        if let Some(ref type_) = self.type_ {
+            n.attrs.insert(s("type"), escape(type_));
+        }
         if let Some(ref p) = self.value {
             if self.multiline {
                 n.text = Some(p.to_string());
