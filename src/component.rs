@@ -2652,6 +2652,7 @@ pub fn read_properties(
         }
     }
 
+    // println!("===================================================");
     // dbg!(root);
     // dbg!(fn_name);
     // dbg!(line_number);
@@ -2681,6 +2682,7 @@ pub fn read_properties(
 }
 
 /// returns true if the component is invoked
+#[allow(dead_code)]
 fn is_invocation(root: &str, fn_name: &str, doc_id: &str) -> bool {
     // Kernel (by default it's invoked)
     // -> root = fn_name
@@ -2711,9 +2713,21 @@ fn assert_caption_body_checks(
     body: &Option<(usize, String)>,
     line_number: usize,
 ) -> ftd::p1::Result<()> {
+    // TODO: need to adjust these cases
+    if root.is_empty()
+        || root.eq("ftd#ui")
+        || root.eq("ftd#integer")
+        || root.eq("ftd#boolean")
+        || root.eq("ftd#decimal")
+    {
+        return Ok(());
+    }
+
     let bag = doc.bag;
     let mut has_caption = caption.is_some();
     let mut has_body = body.is_some();
+
+    // dbg!(&body);
 
     let mut local_arguments = arguments;
     let mut properties = None;
@@ -2735,13 +2749,22 @@ fn assert_caption_body_checks(
     // )?;
 
     // Then check on its parent ones
+    // dbg!(root);
+
+    // dbg!(&caption, &body);
     let mut thing = &bag[root];
     loop {
         if let ftd::p2::Thing::Component(c) = thing {
             // Either the component is kernel or variable/derived component
+
             // dbg!(&c.root, &c.full_name);
             // dbg!(&c.arguments.keys());
             // dbg!(&c.properties.keys());
+            // dbg!(&c.locals);
+            // dbg!(&c.instructions);
+            // dbg!(&c.invocations);
+            // dbg!(&c.instructions);
+            // dbg!(&c.events);
 
             local_arguments = &c.arguments;
 
@@ -2825,6 +2848,9 @@ fn assert_caption_body_checks(
             };
         }
 
+        // dbg!(has_caption);
+        // dbg!(has_body);
+
         let mut caption_pass = false;
         let mut body_pass = false;
         let header_set = get_header_set_with_values(p1);
@@ -2832,6 +2858,10 @@ fn assert_caption_body_checks(
         for (arg, kind) in arguments.iter() {
             // in case the kind is optional
             let inner_kind = kind.inner();
+            // dbg!(&arg);
+            // dbg!(kind);
+            // dbg!(inner_kind);
+
             let has_value = has_header_value(arg, Some(&header_set));
             let has_property = has_property_value(arg, properties);
 
@@ -2843,8 +2873,7 @@ fn assert_caption_body_checks(
             } = inner_kind
             {
                 let has_default = default.is_some();
-                // dbg!(&arg, &default);
-                // dbg!(has_caption, has_body, has_value, has_default);
+                // dbg!(caption, body);
                 match (caption, body) {
                     (true, true) => {
                         // accepts data from either body or caption or header_value
@@ -2867,7 +2896,10 @@ fn assert_caption_body_checks(
                         }
 
                         // if none of them are passed throw error
-                        if !(has_caption || has_body || has_value || has_property) && !has_default {
+                        if !(has_caption || has_body || has_value || has_property)
+                            && !has_default
+                            && !kind.is_optional()
+                        {
                             return Err(ftd::p1::Error::ParseError {
                                 message: format!(
                                     "body or caption or header_value, none of them are passed for \'{}\'",
@@ -2889,6 +2921,7 @@ fn assert_caption_body_checks(
                     (true, false) => {
                         // check if the component has caption or not
                         // if caption not passed throw error
+                        //println!("1");
                         if (has_caption && has_value)
                             || (has_caption && has_property)
                             || (has_value && has_property)
@@ -2903,7 +2936,10 @@ fn assert_caption_body_checks(
                             });
                         }
 
-                        if !(has_caption || has_value || has_property) && !has_default {
+                        if !(has_caption || has_value || has_property)
+                            && !has_default
+                            && !kind.is_optional()
+                        {
                             return Err(ftd::p1::Error::ParseError {
                                 message: format!(
                                     "caption or header_value, none of them are passed for \'{}\'",
@@ -2915,12 +2951,14 @@ fn assert_caption_body_checks(
                         }
 
                         if has_caption {
+                            //println!("caption adjusted!!");
                             caption_pass = true;
                         }
                     }
                     (false, true) => {
                         // check if the component has body or not
                         // if body is not passed throw error
+                        //println!("2");
                         if (has_body && has_value)
                             || (has_body && has_property)
                             || (has_property && has_value)
@@ -2935,7 +2973,10 @@ fn assert_caption_body_checks(
                             });
                         }
 
-                        if !(has_body || has_value || has_property) && !has_default {
+                        if !(has_body || has_value || has_property)
+                            && !has_default
+                            && !kind.is_optional()
+                        {
                             return Err(ftd::p1::Error::ParseError {
                                 message: format!(
                                     "body or header_value, none of them are passed for \'{}\'",
@@ -2947,6 +2988,7 @@ fn assert_caption_body_checks(
                         }
 
                         if has_body {
+                            //println!("body adjusted!!");
                             body_pass = true;
                         }
                     }
@@ -2979,6 +3021,7 @@ fn assert_caption_body_checks(
     /// fetch all the arguments till you find the kernel
     /// level component on top of which the variable
     /// component is built recursively
+    #[allow(dead_code)]
     fn get_kernel_arguments(
         var_comp_name: &str,
         doc: &ftd::p2::TDoc,
