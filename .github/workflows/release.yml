@@ -143,7 +143,7 @@ jobs:
     env:
       CARGO_TERM_COLOR: always
       BUILD_TARGET: x86_64-unknown-linux-musl
-      BINARY_NAME: fpm_0.1.10_amd64
+      BINARY_NAME: fpm
     steps:
       - uses: actions/checkout@main
       - uses: actions/cache@v2
@@ -172,10 +172,10 @@ jobs:
           path: ~/download/linux_musl
       - name: Rename assets
         run: |
-          mv ~/download/linux_musl/${{ env.BINARY_NAME }}* ~/download/linux_musl/fpm_0.1.10_amd64_linux_musl_x86_64
+          mv ~/download/linux_musl/${{ env.BINARY_NAME }}* ~/download/linux_musl/fpm_deb
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/linux_musl/fpm_0.1.10_amd64_linux_musl_x86_64"
+          artifacts: "~/download/linux_musl/fpm_deb"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
