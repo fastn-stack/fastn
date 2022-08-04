@@ -58,9 +58,25 @@ color: $fpm.color.main.text-strong
 
 -- ft.markdown:
 
-This `style` property takes input like this:
+The `style` property specifies the font style for a text component. It accepts
+multiple style separated using space ` `. It takes following values:
 
--- ft.code: specifying style
+- `italic`: This gives italic style to text
+- `underline`: Text has a line beneath it.
+- `strike`: Text has a line going through its middle.
+- `heavy`: Heavy Bold font. Same as font weight as 900.
+- `extra-bold`: Extra Bold font. Same as font weight as 800.
+- `bold`: Bold font. Same as font weight as 700.
+- `semi-bold`: Semi Bold font. Same as font weight as 600.
+- `medium`: Medium font. Same as font weight as 500.
+- `regular`: Regular font. Same as font weight as 400.
+- `light`: Light font. Same as font weight as 300.
+- `extra-light`: Extra Light font. Same as font weight as 200.
+- `hairline`: Very thin font. Same as font weight as 100.
+
+ This property takes input like this:
+
+-- ft.code: specifying style (underline)
 lang: ftd
 
 \-- ftd.text: FifthTry
@@ -78,7 +94,7 @@ color: $fpm.color.main.text-strong
 
 -- container: outer
 
--- ft.code: specifying style
+-- ft.code: specifying style (strike)
 lang: ftd
 
 \-- ftd.text: FifthTry
@@ -92,6 +108,24 @@ This will render like this:
 
 -- ftd.text: FifthTry
 style: strike
+color: $fpm.color.main.text-strong
+
+-- container: outer
+
+-- ft.code: specifying multiple styles
+lang: ftd
+
+\-- ftd.text: FifthTry
+style: italic heavy underline
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+style: italic heavy underline
 color: $fpm.color.main.text-strong
 
 -- container: outer
