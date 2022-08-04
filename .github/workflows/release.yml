@@ -1,4 +1,3 @@
-
 name: Build release
 
 on:
@@ -157,7 +156,7 @@ jobs:
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build-debian
-        run: cargo install cargo-deb && cargo-deb --target=$BUILD_TARGET
+        run: cargo install cargo-deb && cargo-deb --target=x86_64-unknown-linux-musl
       - uses: actions/upload-artifact@v2
         with:
           name: linux_musl_x86_64
