@@ -159,8 +159,8 @@ jobs:
         run: cargo install cargo-deb && cargo-deb && rustup target add x86_64-unknown-linux-musl
       - uses: actions/upload-artifact@v2
         with:
-          name: linux_musl_x86_64
-          path: target/x86_64-unknown-linux-musl/fpm_0.1.10_amd64
+          name: fpm
+          path: target/debian/fpm_0.1.10_amd64
   create-debian-release:
     name: Create github tag and release for debian file
     runs-on: ubuntu-latest
@@ -168,7 +168,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: linux_musl_x86_64
+          name: fpm
           path: ~/download/linux_musl
       - name: Rename assets
         run: |
