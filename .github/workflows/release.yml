@@ -161,7 +161,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: fpm_0.1.10_amd64
-          path: target/debian/${{ env.BINARY_NAME }}*
+          path: target/debian/${{ env.BINARY_NAME }}
   create-debian-release:
     name: Create github tag and release for debian file
     runs-on: ubuntu-latest
