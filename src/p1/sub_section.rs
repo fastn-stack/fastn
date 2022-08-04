@@ -46,12 +46,12 @@ impl SubSection {
             match body {
                 Some(ref b) if b.1.trim().is_empty() => None,
                 // If body is commented, ignore body
-                Some(ref b) if b.1.trim().starts_with('/') => None,
+                // Some(ref b) if b.1.trim().starts_with('/') => None,
                 // To allow '/content' as subsection body, we need to use "\/content"
                 // while stripping out the initial '\' from this body
-                Some(ref b) if b.1.trim().starts_with(r"\/") => {
-                    Some((b.0, b.1.trim().replacen('\\', "", 1)))
-                }
+                // Some(ref b) if b.1.trim().starts_with(r"\/") => {
+                //     Some((b.0, b.1.trim().replacen('\\', "", 1)))
+                // }
                 Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
                 None => None,
             }
@@ -62,10 +62,10 @@ impl SubSection {
             match caption {
                 Some(ref c) if c.trim().is_empty() => None,
                 // If caption is commented, ignore it
-                Some(ref c) if c.trim().starts_with('/') => None,
+                // Some(ref c) if c.trim().starts_with('/') => None,
                 // To allow '/caption' as subsection caption, we need to use "\/caption"
                 // while stripping out the initial '\' from this caption
-                Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen('\\', "", 1)),
+                // Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen('\\', "", 1)),
                 Some(ref c) => Some(c.trim().to_string()),
                 None => None,
             }
