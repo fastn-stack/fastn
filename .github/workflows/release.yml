@@ -52,7 +52,7 @@ jobs:
           args: cargo install cargo-deb && cargo deb && rustup target add $BUILD_TARGET
       - uses: actions/upload-artifact@v2
         with:
-          name: fpm_debian
+          name: fpm.deb
           path: target/debian/${{ env.BINARY_NAME }}*
   release-windows:
     name: Build for Windows
@@ -127,7 +127,7 @@ jobs:
           path: ~/download/fpm_controller_linux_musl
       - uses: actions/download-artifact@v2
         with:
-          name: fpm_debian
+          name: fpm.deb
           path: ~/download/linux_musl
       - uses: actions/download-artifact@v2
         with:
@@ -137,7 +137,7 @@ jobs:
         run: |
           mv ~/download/windows/fpm.exe ~/download/windows/fpm_windows_x86_64.exe
           mv ~/download/macos/fpm ~/download/macos/fpm_macos_x86_64
-          mv ~/download/linux_musl/fpm_debian ~/download/linux_musl/fpm_linux_musl_x86_64.deb
+          mv ~/download/linux_musl/fpm.deb ~/download/linux_musl/fpm_linux_musl_x86_64.deb
           mv ~/download/linux_musl/fpm ~/download/linux_musl/fpm_linux_musl_x86_64
           mv ~/download/linux_musl/fpm.d ~/download/linux_musl/fpm_linux_musl_x86_64.d
           mv ~/download/fpm_controller_linux_musl/fpm ~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64
