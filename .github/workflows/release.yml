@@ -144,7 +144,7 @@ jobs:
     env:
       CARGO_TERM_COLOR: always
       BUILD_TARGET: debian
-      BINARY_NAME: fpm_0.1.10_amd64.deb
+      BINARY_NAME: fpm_0.1.10_amd64
     steps:
       - uses: actions/checkout@main
       - uses: actions/cache@v2
@@ -160,7 +160,7 @@ jobs:
         run: cargo install cargo-deb && cargo-deb
       - uses: actions/upload-artifact@v2
         with:
-          name: fpm_debian
+          name: fpm_0.1.10_amd64
           path: target/debian/${{ env.BINARY_NAME }}*
   create-debian-release:
     name: Create github tag and release for debian file
@@ -169,11 +169,14 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: fpm_debian
+          name: fpm_0.1.10_amd64
           path: ~/download
+      - name: Rename assets
+        run: |
+          mv ~/download/fpm_0.1.10_amd64 ~/download/fpm
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/fpm_debian"
+          artifacts: "~/download/fpm_0.1.10_amd64"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
