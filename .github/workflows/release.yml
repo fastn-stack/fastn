@@ -49,7 +49,7 @@ jobs:
         uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
         continue-on-error: false
         with:
-          args: cargo deb --target $BUILD_TARGET --release
+          args: cargo-deb && rustup target add $BUILD_TARGET
       - uses: actions/upload-artifact@v2
         with:
           name: fpm_linux_musl_x86_64.deb
@@ -144,7 +144,7 @@ jobs:
           mv ~/download/fpm_controller_linux_musl/fpm.d ~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64.d
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/windows/fpm_windows_x86_64.exe,~/download/macos/fpm_macos_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64.d,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64.d"
+          artifacts: "~/download/windows/fpm_windows_x86_64.exe,~/download/macos/fpm_macos_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64.deb,~/download/linux_musl/fpm_linux_musl_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64.d,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64.d"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
