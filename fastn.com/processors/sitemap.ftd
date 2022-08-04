@@ -5,18 +5,28 @@
 lang: ftd
 
 \-- fpm.sitemap:
+readers: <group name>
+writers: <group name>
 
 # Section: section/url/
+readers: <group name>
+writers: <group name>
+
 
 # If Section: Has A Colon In The Name
 url: sectionURL
 
 ## Sub Section: sub/url/
+readers: <group name>
+writers: <group name>
+
 
 ## If Sub Section: Has A Colon In The Name
 url: whatever
 
 - ToC Item: toc/
+readers: <group name>
+writers: <group name>
 
 -- ft.markdown:
 
@@ -33,6 +43,8 @@ toc-item list toc:
 optional toc-item current-section:
 optional toc-item current-subsection:
 optional toc-item current-page:
+string list readers:
+string list writers:
 
 
 \-- record toc-item:
@@ -44,6 +56,8 @@ boolean is-heading:
 boolean is-disabled:
 boolean is-active: false
 toc-item list children:
+string list readers:
+string list writers:
 
 
 -- ft.markdown:
@@ -54,3 +68,8 @@ document these values would be different. We can get this values by calling the
 
 Note: nav-title override for any page can be specified in sitemap, if
 specified, the `current-*` will use the overridden titles.
+
+
+In sitemap, we can now use `readers` and `writers` for access control. `readers`
+and `writers` are [user groups](/dev/user-group). We can use access controls at `sitemap`,
+`section`, `subsection` and `toc` levels.

@@ -167,7 +167,7 @@ subsection and toc level.
 -- ft.code:
 lang: ftd
 
-\--fpm.sitemap:
+\-- fpm.sitemap:
 readers: readers
 writers: writers
 
