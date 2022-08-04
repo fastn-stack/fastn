@@ -172,7 +172,7 @@ jobs:
           path: ~/download/linux_musl
       - name: Rename assets
         run: |
-          mv ~/download/linux_musl/fpm_debian ~/download/linux_musl/fpm_0.1.10_amd64_linux_musl_x86_64
+          mv ~/download/linux_musl/${{ env.BINARY_NAME }}* ~/download/linux_musl/fpm_0.1.10_amd64_linux_musl_x86_64
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "~/download/linux_musl/fpm_0.1.10_amd64_linux_musl_x86_64"
