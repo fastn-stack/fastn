@@ -201,10 +201,15 @@ dark: #141414
 light: #585656
 dark: #585656
 
+-- ftd.color overlay-:
+light: rgba(0, 0, 0, 0.8)
+dark: rgba(0, 0, 0, 0.8)
+
 -- ftd.background-colors background-:
 base: $base-
 step-1: $step-1-
 step-2: $step-2-
+overlay: $overlay-
 
 -- ftd.color border-:
 light: #434547
