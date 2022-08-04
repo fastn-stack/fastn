@@ -62,7 +62,7 @@ impl SubSection {
             match caption {
                 Some(ref c) if c.trim().is_empty() => None,
                 // If caption is commented, ignore it
-                Some(ref c) if c.trim().starts_with('/') => None,
+                // Some(ref c) if c.trim().starts_with('/') => None,
                 // To allow '/caption' as subsection caption, we need to use "\/caption"
                 // while stripping out the initial '\' from this caption
                 Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen('\\', "", 1)),
