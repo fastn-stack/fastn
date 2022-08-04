@@ -2732,7 +2732,7 @@ mod test {
             id: /ChildBuilding/
             name: ChildLog
 
-            --- container: \/welcome/
+            --- container: /welcome/
 
             --- parent:
             id: /Building2/
