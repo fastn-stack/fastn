@@ -262,7 +262,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         document_id = lib.document_id,
         title = lib.config.package.name,
         package_name = lib.config.package.name,
-        home_url = format!("//{}", lib.config.package.name),
+        home_url = format!("https://{}", lib.config.package.name),
     );
 
     if lib.config.package.translation_of.is_some() {
