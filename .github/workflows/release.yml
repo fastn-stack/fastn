@@ -16,7 +16,6 @@ jobs:
     env:
       CARGO_TERM_COLOR: always
       BUILD_TARGET: x86_64-unknown-linux-musl
-      BINARY_NAME: fpm
     steps:
       - uses: actions/checkout@main
       - uses: actions/cache@v2
@@ -28,7 +27,7 @@ jobs:
             ftd/target
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Build-musl
+      - name: Build fpm Binary
         uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
         continue-on-error: false
         with:
@@ -36,8 +35,8 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: linux_musl_x86_64
-          path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}*
-      - name: Build-musl
+          path: target/x86_64-unknown-linux-musl/release/fpm*
+      - name: Build fpm_controller binary
         uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
         continue-on-error: false
         with:
@@ -46,6 +45,15 @@ jobs:
         with:
           name: fpm_controller_linux_musl_x86_64
           path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}*
+      - name: Build fpm.deb
+        uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
+        continue-on-error: false
+        with:
+          args: cargo deb --target $BUILD_TARGET --release
+      - uses: actions/upload-artifact@v2
+        with:
+          name: fpm_linux_musl_x86_64.deb
+          path: target/x86_64-unknown-linux-musl/release/fpm.deb
   release-windows:
     name: Build for Windows
     runs-on: windows-latest
@@ -119,12 +127,17 @@ jobs:
           path: ~/download/fpm_controller_linux_musl
       - uses: actions/download-artifact@v2
         with:
+          name: fpm_linux_musl_x86_64.deb
+          path: ~/download/fpm_linux_musl.deb
+      - uses: actions/download-artifact@v2
+        with:
           name: windows_x64_latest
           path: ~/download/windows
       - name: Rename assets
         run: |
           mv ~/download/windows/fpm.exe ~/download/windows/fpm_windows_x86_64.exe
           mv ~/download/macos/fpm ~/download/macos/fpm_macos_x86_64
+          mv ~/download/linux_musl/fpm_linux_musl.deb ~/download/linux_musl/fpm_linux_musl_x86_64.deb
           mv ~/download/linux_musl/fpm ~/download/linux_musl/fpm_linux_musl_x86_64
           mv ~/download/linux_musl/fpm.d ~/download/linux_musl/fpm_linux_musl_x86_64.d
           mv ~/download/fpm_controller_linux_musl/fpm ~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64
@@ -137,46 +150,3 @@ jobs:
           tag: ${{ github.event.inputs.releaseTag }}
           prerelease: ${{ github.event.inputs.productionRelease && github.event.inputs.productionRelease == 'false' }}
 
-  release-debian:
-    name: Build for Linux
-    runs-on: ubuntu-latest
-    env:
-      CARGO_TERM_COLOR: always
-      BUILD_TARGET: x86_64-unknown-linux-musl
-      BINARY_NAME: fpm
-    steps:
-      - uses: actions/checkout@main
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-            ftd/target
-            fifthtry_content/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Build-debian
-        run: cargo install cargo-deb && cargo-deb && rustup target add x86_64-unknown-linux-musl
-      - uses: actions/upload-artifact@v2
-        with:
-          name: fpm_debian
-          path: target/debian/${{ env.BINARY_NAME }}*
-  create-debian-release:
-    name: Create github tag and release for debian file
-    runs-on: ubuntu-latest
-    needs: [release-ubuntu]
-    steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: fpm_debian
-          path: ~/download/linux_musl
-      - name: Rename assets
-        run: |
-          mv ~/download/linux_musl/${{ env.BINARY_NAME }}* ~/download/linux_musl/fpm_deb
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: "~/download/linux_musl/fpm_deb"
-          generateReleaseNotes: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.event.inputs.releaseTag }}
-          prerelease: ${{ github.event.inputs.productionRelease && github.event.inputs.productionRelease == 'false' }}
