@@ -98,6 +98,7 @@ email: arpita@fifthtry.com
 - How to use Google Font: theme/google-font-how-to-use/
 - FPM Sitemap: sitemap/
 - FTD Host Features: /ftd-host/
+  - Glossary: /theme/glossary/
   - `import: fpm`
     url: /theme/fpm/
   - `$processor$: http`
