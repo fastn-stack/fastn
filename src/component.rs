@@ -600,6 +600,12 @@ impl ChildComponent {
         let root_property =
             get_root_property(line_number, name, caption, doc, &all_arguments, inherits)?;
 
+        // dbg!(root.full_name.as_str());
+        // dbg!(name);
+        // println!("Here 1");
+
+        assert_caption_body_checks(&root.full_name, p1, doc, caption, body, line_number)?;
+
         return Ok(Self {
             line_number,
             properties: read_properties(
@@ -1820,6 +1826,19 @@ impl Component {
 
         let events = p1.header.get_events(p1.line_number, doc, &arguments)?;
 
+        // dbg!(root.as_str());
+        // dbg!(name.as_str());
+        // println!("Here 2");
+
+        assert_caption_body_checks(
+            &root,
+            &p1.header,
+            doc,
+            &p1.caption,
+            &p1.body,
+            p1.line_number,
+        )?;
+
         return Ok(Component {
             full_name: doc.resolve_name(p1.line_number, &name)?,
             properties: read_properties(
@@ -2234,6 +2253,19 @@ pub fn recursive_child_component(
             new_caption = None;
         }
     }
+
+    // dbg!(full_name.as_str());
+    // dbg!(sub.name.as_str());
+    // println!("Here 3");
+
+    assert_caption_body_checks(
+        full_name.as_str(),
+        &sub.header,
+        doc,
+        &sub.caption,
+        &sub.body,
+        sub.line_number,
+    )?;
 
     properties.extend(read_properties(
         sub.line_number,
@@ -2669,7 +2701,7 @@ pub fn read_properties(
     //     assert_caption_body_checks(root, Some(p1), &arguments, doc, caption, body, line_number)?;
     // }
 
-    assert_caption_body_checks(root, Some(p1), &arguments, doc, caption, body, line_number)?;
+    // assert_caption_body_checks(root, p1, doc, caption, body, line_number)?;
 
     // Checking if the user has entered conflicting values for ftd.input
     if root.eq("ftd#input") {
@@ -2706,8 +2738,7 @@ fn is_invocation(root: &str, fn_name: &str, doc_id: &str) -> bool {
 
 fn assert_caption_body_checks(
     root: &str,
-    mut p1: Option<&ftd::p1::Header>,
-    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    p1: &ftd::p1::Header,
     doc: &ftd::p2::TDoc,
     caption: &Option<String>,
     body: &Option<(usize, String)>,
@@ -2727,29 +2758,8 @@ fn assert_caption_body_checks(
     let mut has_caption = caption.is_some();
     let mut has_body = body.is_some();
 
-    // dbg!(&body);
-
-    let mut local_arguments = arguments;
     let mut properties = None;
-
-    // dbg!(has_caption, has_body);
-    // println!("local arguments !");
-    // dbg!(local_arguments);
-    // dbg!(properties);
-
-    // // Check current component first
-    // check_caption_body_conflicts(
-    //     local_arguments,
-    //     None,
-    //     Some(p1),
-    //     doc,
-    //     has_caption,
-    //     has_body,
-    //     line_number,
-    // )?;
-
-    // Then check on its parent ones
-    // dbg!(root);
+    let mut header_list: Option<&ftd::p1::Header> = Some(p1);
 
     // dbg!(&caption, &body);
     let mut thing = &bag[root];
@@ -2761,17 +2771,13 @@ fn assert_caption_body_checks(
             // dbg!(&c.arguments.keys());
             // dbg!(&c.properties.keys());
             // dbg!(&c.locals);
-            // dbg!(&c.instructions);
-            // dbg!(&c.invocations);
-            // dbg!(&c.instructions);
-            // dbg!(&c.events);
 
-            local_arguments = &c.arguments;
+            let local_arguments = &c.arguments;
 
             check_caption_body_conflicts(
                 local_arguments,
                 properties,
-                p1,
+                header_list,
                 doc,
                 has_caption,
                 has_body,
@@ -2786,7 +2792,7 @@ fn assert_caption_body_checks(
             properties = Some(&c.properties);
             has_caption = false;
             has_body = false;
-            p1 = None;
+            header_list = None;
         }
     }
 
