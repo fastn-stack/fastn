@@ -2777,7 +2777,7 @@ fn assert_caption_body_checks(
                 s.contains(argument)
             } else {
                 false
-            };
+            }
         }
 
         /// checks if the argument has been passed down as property
@@ -2789,7 +2789,7 @@ fn assert_caption_body_checks(
                 p.contains_key(argument)
             } else {
                 false
-            };
+            }
         }
 
         let mut caption_pass = false;
