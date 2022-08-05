@@ -707,6 +707,11 @@ impl ftd::Collector {
         if font.style.strike {
             styles.insert(s("text-decoration"), s("line-through"));
         }
+
+        if let Some(ref weight) = font.style.weight {
+            let (key, value) = style(weight);
+            styles.insert(s(key.as_str()), value);
+        }
         // if self.common.conditional_attribute.keys().any(|x| styles.keys().contains(&x)) {
         //     // todo: then don't make class
         //     // since font is not a conditional attribute this is not yet needed
@@ -897,6 +902,11 @@ impl ftd::Text {
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
 
+        if let Some(ref weight) = self.style.weight {
+            let (key, value) = style(weight);
+            n.style.insert(s(key.as_str()), value);
+        }
+
         // TODO: text styles
         n
     }
@@ -952,6 +962,12 @@ impl ftd::TextBlock {
             let (key, value) = length(indent, "text-indent");
             n.style.insert(s(key.as_str()), value);
         }
+
+        if let Some(ref weight) = self.style.weight {
+            let (key, value) = style(weight);
+            n.style.insert(s(key.as_str()), value);
+        }
+
         n
     }
 }
@@ -995,6 +1011,11 @@ impl ftd::Code {
             n.style.insert(s(key.as_str()), value);
         }
 
+        if let Some(ref weight) = self.style.weight {
+            let (key, value) = style(weight);
+            n.style.insert(s(key.as_str()), value);
+        }
+
         n
     }
 }
@@ -1027,9 +1048,6 @@ impl ftd::Image {
             img.style.insert(s("width"), s("100%"));
             img.style.insert(s("height"), s("100%"));
             img.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            if let Some(ref title) = self.title {
-                img.attrs.insert(s("title"), escape(title));
-            }
             if let Some(ref description) = self.description {
                 img.attrs.insert(s("alt"), escape(description));
             }
@@ -1040,9 +1058,6 @@ impl ftd::Image {
             n.children.push(img);
         } else {
             n.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            if let Some(ref title) = self.title {
-                n.attrs.insert(s("title"), escape(title));
-            }
             if let Some(ref description) = self.description {
                 n.attrs.insert(s("alt"), escape(description));
             }
@@ -1111,6 +1126,12 @@ impl ftd::Markups {
         if self.children.is_empty() {
             n.text = Some(self.text.rendered.clone());
         }
+
+        if let Some(ref weight) = self.style.weight {
+            let (key, value) = style(weight);
+            n.style.insert(s(key.as_str()), value);
+        }
+
         n.children = self
             .children
             .iter()
@@ -1169,6 +1190,9 @@ impl ftd::Input {
         n.classes.extend(self.common.add_class());
         if let Some(ref p) = self.placeholder {
             n.attrs.insert(s("placeholder"), escape(p));
+        }
+        if let Some(ref type_) = self.type_ {
+            n.attrs.insert(s("type"), escape(type_));
         }
         if let Some(ref p) = self.value {
             if self.multiline {
@@ -1550,6 +1574,9 @@ impl ftd::Common {
         // TODO(move-to-ftd): the link should be escaped
         if let Some(ref link) = self.link {
             d.insert(s("href"), link.to_string());
+        }
+        if let Some(ref title) = self.title {
+            d.insert(s("title"), escape(title));
         }
         if self.open_in_new_tab {
             d.insert(s("target"), escape("_blank"));
@@ -2014,5 +2041,19 @@ pub fn spacing(l: &ftd::Spacing, f: &str) -> (String, String) {
         ftd::Spacing::SpaceBetween => (s("justify-content"), s("space-between")),
         ftd::Spacing::SpaceAround => (s("justify-content"), s("space-around")),
         ftd::Spacing::Absolute { value } => (s(f), s(value)),
+    }
+}
+
+fn style(l: &ftd::Weight) -> (String, String) {
+    match l {
+        ftd::Weight::Heavy => ("font-weight".to_string(), "900".to_string()),
+        ftd::Weight::ExtraBold => ("font-weight".to_string(), "800".to_string()),
+        ftd::Weight::Bold => ("font-weight".to_string(), "700".to_string()),
+        ftd::Weight::SemiBold => ("font-weight".to_string(), "600".to_string()),
+        ftd::Weight::Medium => ("font-weight".to_string(), "500".to_string()),
+        ftd::Weight::Regular => ("font-weight".to_string(), "400".to_string()),
+        ftd::Weight::Light => ("font-weight".to_string(), "300".to_string()),
+        ftd::Weight::ExtraLight => ("font-weight".to_string(), "200".to_string()),
+        ftd::Weight::HairLine => ("font-weight".to_string(), "100".to_string()),
     }
 }

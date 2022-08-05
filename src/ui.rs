@@ -2318,6 +2318,7 @@ pub struct Common {
     pub white_space: Option<String>,
     pub border_style: Option<String>,
     pub text_transform: Option<String>,
+    pub title: Option<String>,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
     // TODO: border-{shadow, glow}
@@ -2365,7 +2366,6 @@ impl Container {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Image {
     pub src: ImageSrc,
-    pub title: Option<String>,
     pub description: Option<String>,
     pub common: Common,
     pub crop: bool,
@@ -2621,11 +2621,26 @@ pub struct ExternalFont {
     pub display: FontDisplay,
 }
 
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[serde(tag = "type")]
+pub enum Weight {
+    Heavy,
+    ExtraBold,
+    Bold,
+    SemiBold,
+    Medium,
+    Regular,
+    Light,
+    ExtraLight,
+    HairLine,
+}
+
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Style {
     pub italic: bool,
     pub underline: bool,
     pub strike: bool,
+    pub weight: Option<ftd::Weight>,
 }
 
 impl Style {
@@ -2634,6 +2649,7 @@ impl Style {
             italic: false,
             underline: false,
             strike: false,
+            weight: Default::default(),
         };
         let l = match l {
             Some(v) => v,
@@ -2645,6 +2661,15 @@ impl Style {
                 "italic" => s.italic = true,
                 "underline" => s.underline = true,
                 "strike" => s.strike = true,
+                "heavy" => s.weight = Some(ftd::Weight::Heavy),
+                "extra-bold" => s.weight = Some(ftd::Weight::ExtraBold),
+                "bold" => s.weight = Some(ftd::Weight::Bold),
+                "semi-bold" => s.weight = Some(ftd::Weight::SemiBold),
+                "medium" => s.weight = Some(ftd::Weight::Medium),
+                "regular" => s.weight = Some(ftd::Weight::Regular),
+                "light" => s.weight = Some(ftd::Weight::Light),
+                "extra-light" => s.weight = Some(ftd::Weight::ExtraLight),
+                "hairline" => s.weight = Some(ftd::Weight::HairLine),
                 t => return ftd::e2(format!("{} is not a valid style", t), doc_id, 0),
             }
         }
@@ -2791,6 +2816,7 @@ pub struct Input {
     pub common: Common,
     pub placeholder: Option<String>,
     pub value: Option<String>,
+    pub type_: Option<String>,
     pub multiline: bool,
     pub font: Option<Type>,
     pub default_value: Option<String>,

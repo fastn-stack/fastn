@@ -16,6 +16,7 @@ spacing: 20
 
 -- ftd.input:
 placeholder: Type Something Here...
+type: password
 width: 400
 border-width: 2
 $on-input$: $query=$VALUE
