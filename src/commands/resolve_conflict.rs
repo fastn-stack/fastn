@@ -15,7 +15,7 @@ pub async fn resolve_conflict(
     if number_of_times_flag_used > 1 {
         return fpm::usage_error("AmbiguousOptionError: Use only one flag".to_string());
     }
-    let get_files_status = fpm::sync_utils::get_files_status(config).await?;
+    let get_files_status = config.get_files_status().await?;
     let file_status =
         if let Some(file_status) = get_files_status.iter().find(|v| v.get_file_path().eq(path)) {
             file_status

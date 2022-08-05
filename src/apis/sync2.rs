@@ -116,7 +116,6 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
         Default::default();
     let mut synced_files = std::collections::HashMap::new();
     for file in request.files {
-        dbg!(&file);
         match &file {
             SyncRequestFile::Add { path, content } => {
                 // TODO: We need to check if, file is already available on server
@@ -250,30 +249,25 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
             }
         }
     }
-    dbg!(&file_list, &server_history);
 
     fpm::history::insert_into_history(&config.root, &file_list, &mut server_history).await?;
 
-    dbg!("insert_into_history done");
-
     let server_latest =
         fpm::history::FileHistory::get_latest_file_edits(server_history.as_slice())?;
-    dbg!("1");
+
     let client_history = fpm::history::FileHistory::from_ftd(request.history.as_str())?;
     let client_latest =
         fpm::history::FileHistory::get_latest_file_edits(client_history.as_slice())?;
-    dbg!("2");
+
     client_current_files(&config, &server_latest, &client_latest, &mut synced_files).await?;
-    dbg!("3");
+
     let history_files = client_history_files(&config, &server_latest, &client_latest).await?;
-    dbg!("4");
-    let r = SyncResponse {
+
+    Ok(SyncResponse {
         files: synced_files.into_values().collect_vec(),
         dot_history: history_files,
         latest_ftd: tokio::fs::read_to_string(config.history_file()).await?,
-    };
-    dbg!("5");
-    Ok(r)
+    })
 }
 
 async fn client_history_files(

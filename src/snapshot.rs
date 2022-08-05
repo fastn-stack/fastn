@@ -100,10 +100,6 @@ impl Workspace {
     pub(crate) fn set_abort(&mut self) {
         self.workspace = WorkspaceType::AbortMerge;
     }
-
-    pub(crate) fn set_revert(&mut self) {
-        self.workspace = WorkspaceType::Revert;
-    }
 }
 
 pub(crate) async fn resolve_workspace(

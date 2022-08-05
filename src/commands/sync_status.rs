@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 pub async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
-    let get_files_status = fpm::sync_utils::get_files_status(config).await?;
+    let get_files_status = config.get_files_status().await?;
     if let Some(source) = source {
         if let Some(file_status) = get_files_status
             .iter()

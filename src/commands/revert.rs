@@ -1,4 +1,47 @@
+use itertools::Itertools;
+
 pub async fn revert(config: &fpm::Config, path: &str) -> fpm::Result<()> {
+    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> = config
+        .read_workspace()
+        .await?
+        .iter()
+        .map(|v| (v.filename.to_string(), v.clone()))
+        .collect();
+    let get_files_status = config
+        .get_files_status_with_workspace(&mut workspace)
+        .await?;
+    let file_status =
+        if let Some(file_status) = get_files_status.iter().find(|v| v.get_file_path().eq(path)) {
+            file_status
+        } else {
+            config
+                .write_workspace(workspace.into_values().collect_vec().as_slice())
+                .await?;
+            return Err(fpm::Error::UsageError {
+                message: format!("{} not found", path),
+            });
+        };
+
+    if let Some(server_version) = file_status.get_latest_version() {
+        let server_path = config.history_path(path, server_version);
+        let content = tokio::fs::read(&server_path).await?;
+        fpm::utils::update(&config.root.join(path), content.as_slice()).await?;
+        if let Some(workspace_entry) = workspace.get_mut(path) {
+            workspace_entry.version = Some(server_version);
+            workspace_entry.deleted = None;
+        }
+    } else {
+        // in case of new file added
+        tokio::fs::remove_file(path).await?;
+        workspace.remove(path);
+    }
+    config
+        .write_workspace(workspace.into_values().collect_vec().as_slice())
+        .await?;
+    Ok(())
+}
+
+/*pub async fn revert_(config: &fpm::Config, path: &str) -> fpm::Result<()> {
     use itertools::Itertools;
 
     let mut workspaces = fpm::snapshot::get_workspace(config).await?;
@@ -36,4 +79,4 @@ pub async fn revert(config: &fpm::Config, path: &str) -> fpm::Result<()> {
     }
 
     Ok(())
-}
+}*/
