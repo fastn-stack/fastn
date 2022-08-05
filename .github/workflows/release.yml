@@ -4,12 +4,12 @@ name: Build release
 on:
   workflow_dispatch:
     inputs:
-      releaseTag:
-        description: 'Release Tag'
-        required: true
-      productionRelease:
-        type: boolean
-        description: Mark release as production ready
+    releaseTag:
+      description: 'Release Tag'
+      required: true
+    productionRelease:
+      type: boolean
+      description: Mark release as production ready
 jobs:
   release-ubuntu:
     name: Build for Linux
