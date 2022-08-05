@@ -600,10 +600,6 @@ impl ChildComponent {
         let root_property =
             get_root_property(line_number, name, caption, doc, &all_arguments, inherits)?;
 
-        // dbg!(root.full_name.as_str());
-        // dbg!(name);
-        // println!("Here 1");
-
         assert_caption_body_checks(&root.full_name, p1, doc, caption, body, line_number)?;
 
         return Ok(Self {
@@ -1826,10 +1822,6 @@ impl Component {
 
         let events = p1.header.get_events(p1.line_number, doc, &arguments)?;
 
-        // dbg!(root.as_str());
-        // dbg!(name.as_str());
-        // println!("Here 2");
-
         assert_caption_body_checks(
             &root,
             &p1.header,
@@ -2253,10 +2245,6 @@ pub fn recursive_child_component(
             new_caption = None;
         }
     }
-
-    // dbg!(full_name.as_str());
-    // dbg!(sub.name.as_str());
-    // println!("Here 3");
 
     assert_caption_body_checks(
         full_name.as_str(),
@@ -2684,56 +2672,12 @@ pub fn read_properties(
         }
     }
 
-    // println!("===================================================");
-    // dbg!(root);
-    // dbg!(fn_name);
-    // dbg!(line_number);
-
-    // Checking for any caption body conflicts
-    // if is_invocation(root, fn_name, doc.name) {
-    //     println!(
-    //         "Invokation for root {}, fm_name {}, ln: {}",
-    //         root, fn_name, line_number
-    //     );
-    //     // dbg!(root);
-    //     // dbg!(fn_name);
-    //     // dbg!(line_number);
-    //     assert_caption_body_checks(root, Some(p1), &arguments, doc, caption, body, line_number)?;
-    // }
-
-    // assert_caption_body_checks(root, p1, doc, caption, body, line_number)?;
-
     // Checking if the user has entered conflicting values for ftd.input
     if root.eq("ftd#input") {
         check_input_conflicting_values(&properties, doc, line_number)?;
     }
 
-    // dbg!(&properties);
-
     Ok(properties)
-}
-
-/// returns true if the component is invoked
-#[allow(dead_code)]
-fn is_invocation(root: &str, fn_name: &str, doc_id: &str) -> bool {
-    // Kernel (by default it's invoked)
-    // -> root = fn_name
-    if root.eq(fn_name.replace(".", "#").as_str()) {
-        return true;
-    }
-
-    // Variable Component (invoked)
-    // -> root = [doc_id]#[var_component_name]
-    // -> fn_name = [var_component_name]
-    if root.starts_with(doc_id) && root.ends_with(fn_name) {
-        return true;
-    }
-
-    // Variable Component (definition)
-    // -> root = <some-kernel-component>
-    // fn_name = [var_component_name]
-
-    return false;
 }
 
 fn assert_caption_body_checks(
@@ -2761,17 +2705,10 @@ fn assert_caption_body_checks(
     let mut properties = None;
     let mut header_list: Option<&ftd::p1::Header> = Some(p1);
 
-    // dbg!(&caption, &body);
     let mut thing = &bag[root];
     loop {
         if let ftd::p2::Thing::Component(c) = thing {
             // Either the component is kernel or variable/derived component
-
-            // dbg!(&c.root, &c.full_name);
-            // dbg!(&c.arguments.keys());
-            // dbg!(&c.properties.keys());
-            // dbg!(&c.locals);
-
             let local_arguments = &c.arguments;
 
             check_caption_body_conflicts(
@@ -2790,6 +2727,8 @@ fn assert_caption_body_checks(
 
             thing = &bag[&c.root];
             properties = Some(&c.properties);
+
+            // These things are only available to the lowest level component
             has_caption = false;
             has_body = false;
             header_list = None;
@@ -2820,7 +2759,6 @@ fn assert_caption_body_checks(
             // For Some(header = p1) we need to make a set of headers with values
             if let Some(header) = p1 {
                 for (_ln, k, v) in header.0.iter() {
-                    // dbg!(_ln, k, v);
                     if !v.is_empty() {
                         header_set.insert(k.to_string());
                     }
@@ -2835,7 +2773,7 @@ fn assert_caption_body_checks(
             argument: &str,
             header_set: Option<&std::collections::HashSet<String>>,
         ) -> bool {
-            return if let Some(s) = header_set {
+            if let Some(s) = header_set {
                 s.contains(argument)
             } else {
                 false
@@ -2847,15 +2785,12 @@ fn assert_caption_body_checks(
             argument: &str,
             properties: Option<&std::collections::BTreeMap<String, Property>>,
         ) -> bool {
-            return if let Some(p) = properties {
+            if let Some(p) = properties {
                 p.contains_key(argument)
             } else {
                 false
             };
         }
-
-        // dbg!(has_caption);
-        // dbg!(has_body);
 
         let mut caption_pass = false;
         let mut body_pass = false;
@@ -2864,9 +2799,6 @@ fn assert_caption_body_checks(
         for (arg, kind) in arguments.iter() {
             // in case the kind is optional
             let inner_kind = kind.inner();
-            // dbg!(&arg);
-            // dbg!(kind);
-            // dbg!(inner_kind);
 
             let has_value = has_header_value(arg, Some(&header_set));
             let has_property = has_property_value(arg, properties);
@@ -2879,7 +2811,6 @@ fn assert_caption_body_checks(
             } = inner_kind
             {
                 let has_default = default.is_some();
-                // dbg!(caption, body);
                 match (caption, body) {
                     (true, true) => {
                         // accepts data from either body or caption or header_value
@@ -2927,7 +2858,6 @@ fn assert_caption_body_checks(
                     (true, false) => {
                         // check if the component has caption or not
                         // if caption not passed throw error
-                        //println!("1");
                         if (has_caption && has_value)
                             || (has_caption && has_property)
                             || (has_value && has_property)
@@ -2957,14 +2887,12 @@ fn assert_caption_body_checks(
                         }
 
                         if has_caption {
-                            //println!("caption adjusted!!");
                             caption_pass = true;
                         }
                     }
                     (false, true) => {
                         // check if the component has body or not
                         // if body is not passed throw error
-                        //println!("2");
                         if (has_body && has_value)
                             || (has_body && has_property)
                             || (has_property && has_value)
@@ -2994,7 +2922,6 @@ fn assert_caption_body_checks(
                         }
 
                         if has_body {
-                            //println!("body adjusted!!");
                             body_pass = true;
                         }
                     }
@@ -3022,27 +2949,6 @@ fn assert_caption_body_checks(
         }
 
         Ok(())
-    }
-
-    /// fetch all the arguments till you find the kernel
-    /// level component on top of which the variable
-    /// component is built recursively
-    #[allow(dead_code)]
-    fn get_kernel_arguments(
-        var_comp_name: &str,
-        doc: &ftd::p2::TDoc,
-    ) -> std::collections::BTreeMap<String, ftd::p2::Kind> {
-        let mut arguments = std::collections::BTreeMap::new();
-        let var_thing = &doc.bag[var_comp_name];
-
-        if let ftd::p2::Thing::Component(c) = var_thing {
-            if c.kernel {
-                arguments.extend(c.arguments.clone());
-                return arguments;
-            }
-            arguments.extend(get_kernel_arguments(&c.root, doc));
-        }
-        arguments
     }
 }
 
