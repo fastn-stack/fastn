@@ -2810,11 +2810,8 @@ fn assert_caption_body_checks(
                         (true, true) => {
                             // accepts data from either body or caption or header_value
                             // if passed by 2 or more ways then throw error
-                            if (has_caption && has_body)
-                                || (has_caption && has_value)
-                                || (has_body && has_value)
-                                || (has_property && has_caption)
-                                || (has_property && has_value)
+                            if ((has_property || has_body || has_caption && has_value)
+                                && (has_caption || has_value))
                                 || (has_property && has_body)
                             {
                                 return Err(ftd::p1::Error::ParseError {
@@ -2856,8 +2853,7 @@ fn assert_caption_body_checks(
                         (true, false) => {
                             // check if the component has caption or not
                             // if caption not passed throw error
-                            if (has_caption && has_value)
-                                || (has_caption && has_property)
+                            if ((has_property || has_value) && has_caption)
                                 || (has_value && has_property)
                             {
                                 return Err(ftd::p1::Error::ParseError {
@@ -2893,8 +2889,7 @@ fn assert_caption_body_checks(
                         (false, true) => {
                             // check if the component has body or not
                             // if body is not passed throw error
-                            if (has_body && has_value)
-                                || (has_body && has_property)
+                            if ((has_property || has_value) && has_body)
                                 || (has_property && has_value)
                             {
                                 return Err(ftd::p1::Error::ParseError {
@@ -2938,10 +2933,7 @@ fn assert_caption_body_checks(
                     // checks on ftd.integer, ftd.decimal, ftd.boolean
                     let has_default = default.is_some();
 
-                    if (has_caption && has_value)
-                        || (has_caption && has_property)
-                        || (has_value && has_property)
-                    {
+                    if ((has_property || has_value) && has_caption) || (has_value && has_property) {
                         return Err(ftd::p1::Error::ParseError {
                             message: format!(
                                 "Pass either caption or header_value for header \'{}\'",
