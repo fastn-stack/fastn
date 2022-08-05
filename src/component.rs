@@ -2824,7 +2824,9 @@ fn assert_caption_body_checks(
                                 });
                             }
 
-                            // if none of them are passed throw error
+                            // check if data is available in exactly one way
+                            // also avoid throwing error when argument is optional kind or has default value
+                            // and no data is passed in any way
                             if !(has_caption
                                 || has_body
                                 || has_value
@@ -2842,17 +2844,19 @@ fn assert_caption_body_checks(
                                 });
                             }
 
+                            // check if caption is utilized if passed
                             if has_caption {
                                 caption_pass = true;
                             }
 
+                            // check if body is utilized if passed
                             if has_body {
                                 body_pass = true;
                             }
                         }
                         (true, false) => {
-                            // check if the component has caption or not
-                            // if caption not passed throw error
+                            // check if the component has caption or header_value (not both)
+                            // if data conflicts from any 2 ways
                             if ((has_property || has_value) && has_caption)
                                 || (has_value && has_property)
                             {
@@ -2866,6 +2870,9 @@ fn assert_caption_body_checks(
                                 });
                             }
 
+                            // check if data is available from either caption/header_value
+                            // also avoid throwing error when argument is optional kind or has default value
+                            // and no data is passed in any way
                             if !(has_caption
                                 || has_value
                                 || has_property
@@ -2882,6 +2889,7 @@ fn assert_caption_body_checks(
                                 });
                             }
 
+                            // check if caption is utilized if passed
                             if has_caption {
                                 caption_pass = true;
                             }
@@ -2902,6 +2910,9 @@ fn assert_caption_body_checks(
                                 });
                             }
 
+                            // check if data is available from either body/header_value
+                            // also avoid throwing error when argument is optional kind or has default value
+                            // and no data is passed in any way
                             if !(has_body
                                 || has_value
                                 || has_property
@@ -2918,6 +2929,7 @@ fn assert_caption_body_checks(
                                 });
                             }
 
+                            // check if body is utilized if passed
                             if has_body {
                                 body_pass = true;
                             }
@@ -2931,8 +2943,12 @@ fn assert_caption_body_checks(
                     if arg.eq("value") =>
                 {
                     // checks on ftd.integer, ftd.decimal, ftd.boolean
+                    // these components take data from either caption or
+                    // header_value when invoked or when data is passed
+                    // by any variable component
                     let has_default = default.is_some();
 
+                    // check if data conflicts from any 2 two ways
                     if ((has_property || has_value) && has_caption) || (has_value && has_property) {
                         return Err(ftd::p1::Error::ParseError {
                             message: format!(
@@ -2944,6 +2960,7 @@ fn assert_caption_body_checks(
                         });
                     }
 
+                    // check if data is available in exaclty one way
                     if !(has_caption
                         || has_value
                         || has_property
@@ -2960,6 +2977,7 @@ fn assert_caption_body_checks(
                         });
                     }
 
+                    // check if caption is utilized if passed
                     if has_caption {
                         caption_pass = true;
                     }
@@ -2968,7 +2986,9 @@ fn assert_caption_body_checks(
             }
         }
 
+        // check if both caption and body is utlized
         if !(caption_pass && body_pass) {
+            // if caption is passed and caption not utilized then throw error
             if !caption_pass && has_caption {
                 return Err(ftd::p1::Error::ParseError {
                     message: "caption passed with no header accepting it !!".to_string(),
@@ -2977,6 +2997,7 @@ fn assert_caption_body_checks(
                 });
             }
 
+            // if body is passed and body not utilized then throw error
             if !body_pass && has_body {
                 return Err(ftd::p1::Error::ParseError {
                     message: "body passed with no header accepting it !!".to_string(),
