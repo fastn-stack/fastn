@@ -280,6 +280,8 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 .args(&[
                     clap::Arg::with_name("use-ours").long("--use-ours"),
                     clap::Arg::with_name("use-theirs").long("--use-theirs"),
+                    clap::Arg::with_name("revive-it").long("--revive-it"),
+                    clap::Arg::with_name("delete-it").long("--delete-it"),
                     clap::Arg::with_name("print").long("--print"),
                     clap::Arg::with_name("source").required(true),
                 ])

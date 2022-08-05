@@ -13,8 +13,8 @@ impl Status {
     pub(crate) fn is_conflicted(&self) -> bool {
         Status::NoConflict.ne(self)
     }
-    pub(crate) fn is_client_deleted_server_edited(&self) -> bool {
-        matches!(self, Status::ClientDeletedServerEdited(_))
+    pub(crate) fn is_client_edited_server_deleted(&self) -> bool {
+        matches!(self, Status::ClientEditedServerDeleted(_))
     }
     pub(crate) fn conflicted_version(&self) -> Option<i32> {
         match self {
@@ -186,7 +186,7 @@ async fn get_files_status_wrt_server_latest(
     workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
 ) -> fpm::Result<()> {
     let mut remove_files = vec![];
-    let server_latest = config.get_latest_file_edits_with_deleted().await?;
+    let server_latest = config.get_latest_file_edits().await?;
     for (index, file) in files.iter_mut().enumerate() {
         match file {
             FileStatus::Untracked { .. } => {

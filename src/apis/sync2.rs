@@ -111,11 +111,12 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
     let config = fpm::Config::read2(None, false).await?;
     let mut server_history = config.get_history().await?;
     let server_latest =
-        fpm::history::FileHistory::get_latest_file_edits(server_history.as_slice())?;
+        fpm::history::FileHistory::get_non_deleted_latest_file_edits(server_history.as_slice())?;
     let mut file_list: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
         Default::default();
     let mut synced_files = std::collections::HashMap::new();
     for file in request.files {
+        dbg!(&file);
         match &file {
             SyncRequestFile::Add { path, content } => {
                 // TODO: We need to check if, file is already available on server
@@ -249,21 +250,29 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
             }
         }
     }
+    dbg!(&file_list, &server_history);
 
     fpm::history::insert_into_history(&config.root, &file_list, &mut server_history).await?;
 
+    dbg!("insert_into_history done");
+
     let server_latest =
         fpm::history::FileHistory::get_latest_file_edits(server_history.as_slice())?;
+    dbg!("1");
     let client_history = fpm::history::FileHistory::from_ftd(request.history.as_str())?;
     let client_latest =
         fpm::history::FileHistory::get_latest_file_edits(client_history.as_slice())?;
+    dbg!("2");
     client_current_files(&config, &server_latest, &client_latest, &mut synced_files).await?;
+    dbg!("3");
     let history_files = client_history_files(&config, &server_latest, &client_latest).await?;
+    dbg!("4");
     let r = SyncResponse {
         files: synced_files.into_values().collect_vec(),
         dot_history: history_files,
         latest_ftd: tokio::fs::read_to_string(config.history_file()).await?,
     };
+    dbg!("5");
     Ok(r)
 }
 
@@ -373,7 +382,9 @@ fn snapshot_diff(
     let mut diff = vec![];
     for (snapshot_path, file_edit) in server_latest {
         match client_latest.get(snapshot_path) {
-            Some(client_file_edit) if client_file_edit.version.lt(&file_edit.version) => {
+            Some(client_file_edit)
+                if client_file_edit.version.lt(&file_edit.version) && !file_edit.is_deleted() =>
+            {
                 diff.push(snapshot_path.to_string());
             }
             None => {

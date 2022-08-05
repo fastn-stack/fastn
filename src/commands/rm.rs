@@ -9,7 +9,7 @@ pub async fn rm(config: &fpm::Config, file: &str) -> fpm::Result<()> {
         .collect();
 
     if !config
-        .get_latest_file_paths()
+        .get_non_deleted_latest_file_paths()
         .await?
         .iter()
         .any(|(v, _)| v.eq(file))

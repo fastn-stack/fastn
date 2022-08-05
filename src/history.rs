@@ -28,7 +28,7 @@ impl FileEdit {
     }
 
     pub(crate) fn is_deleted(&self) -> bool {
-        self.operation.eq(&FileOperation::Deleted)
+        self.operation.is_deleted()
     }
 }
 
@@ -61,12 +61,10 @@ pub enum FileOperation {
     Merged,
 }
 
-#[derive(serde::Serialize, serde::Deserialize)]
-pub enum FileOperation1 {
-    Added,
-    Updated,
-    Deleted,
-    Merged,
+impl FileOperation {
+    fn is_deleted(&self) -> bool {
+        self.eq(&FileOperation::Deleted)
+    }
 }
 
 impl fpm::Config {
@@ -76,14 +74,14 @@ impl fpm::Config {
         FileHistory::from_ftd(history_content.as_str())
     }
 
-    pub async fn get_latest_file_edits_with_deleted(
+    pub async fn get_latest_file_edits(
         &self,
     ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
         let history_list = self.get_history().await?;
         fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())
     }
 
-    pub async fn get_latest_file_edits(
+    pub async fn get_non_deleted_latest_file_edits(
         &self,
     ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
         let history_list = self.get_history().await?;
@@ -95,9 +93,11 @@ impl fpm::Config {
         )
     }
 
-    pub async fn get_latest_file_paths(&self) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
+    pub async fn get_non_deleted_latest_file_paths(
+        &self,
+    ) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
         Ok(self
-            .get_latest_file_edits()
+            .get_non_deleted_latest_file_edits()
             .await?
             .iter()
             .map(|(file_name, file_edit)| {
@@ -123,8 +123,35 @@ impl FileHistory {
             .collect())
     }
 
+    pub(crate) fn get_non_deleted_latest_file_edits(
+        list: &[FileHistory],
+    ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
+        Ok(list
+            .iter()
+            .filter_map(|v| {
+                v.get_non_deleted_latest_file()
+                    .map(|file_edit| (v.filename.to_string(), file_edit))
+            })
+            .collect())
+    }
+
     fn get_latest_file_edit(&self) -> Option<FileEdit> {
         for file_edit in self.file_edit.iter() {
+            if file_edit.operation.eq(&FileOperation::Merged) {
+                return Some(file_edit.clone());
+            }
+            if file_edit.src_cr.is_none() {
+                return Some(file_edit.clone());
+            }
+        }
+        None
+    }
+
+    fn get_non_deleted_latest_file(&self) -> Option<FileEdit> {
+        for file_edit in self.file_edit.iter() {
+            if file_edit.is_deleted() {
+                return None;
+            }
             if file_edit.operation.eq(&FileOperation::Merged) {
                 return Some(file_edit.clone());
             }
