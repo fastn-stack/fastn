@@ -20,9 +20,6 @@ lang: ftd
 
 Text accepts the below attributes as well all the [common attributes](common/).
 
---- ft.code: captions are cool
-lang: ftd
-
 -- ft.h1: `text: String`
 
 You can pass any string value.
