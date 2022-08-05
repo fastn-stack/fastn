@@ -2688,13 +2688,8 @@ fn assert_caption_body_checks(
     body: &Option<(usize, String)>,
     line_number: usize,
 ) -> ftd::p1::Result<()> {
-    // TODO: need to adjust these cases
-    if root.is_empty()
-        || root.eq("ftd#ui")
-        || root.eq("ftd#integer")
-        || root.eq("ftd#boolean")
-        || root.eq("ftd#decimal")
-    {
+    // (ignoring checks on ftd.ui)
+    if root.is_empty() || root.eq("ftd#ui") {
         return Ok(());
     }
 
@@ -2803,130 +2798,181 @@ fn assert_caption_body_checks(
             let has_value = has_header_value(arg, Some(&header_set));
             let has_property = has_property_value(arg, properties);
 
-            if let ftd::p2::Kind::String {
-                caption,
-                body,
-                default,
-                ..
-            } = inner_kind
-            {
-                let has_default = default.is_some();
-                match (caption, body) {
-                    (true, true) => {
-                        // accepts data from either body or caption or header_value
-                        // if passed by 2 or more ways then throw error
-                        if (has_caption && has_body)
-                            || (has_caption && has_value)
-                            || (has_body && has_value)
-                            || (has_property && has_caption)
-                            || (has_property && has_value)
-                            || (has_property && has_body)
-                        {
-                            return Err(ftd::p1::Error::ParseError {
-                                message: format!(
-                                    "Pass either body or caption or header_value, ambiguity in \'{}\'",
-                                    arg
-                                ),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            });
-                        }
+            match inner_kind {
+                ftd::p2::Kind::String {
+                    caption,
+                    body,
+                    default,
+                    ..
+                } => {
+                    let has_default = default.is_some();
+                    match (caption, body) {
+                        (true, true) => {
+                            // accepts data from either body or caption or header_value
+                            // if passed by 2 or more ways then throw error
+                            if (has_caption && has_body)
+                                || (has_caption && has_value)
+                                || (has_body && has_value)
+                                || (has_property && has_caption)
+                                || (has_property && has_value)
+                                || (has_property && has_body)
+                            {
+                                return Err(ftd::p1::Error::ParseError {
+                                    message: format!(
+                                        "Pass either body or caption or header_value, ambiguity in \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
 
-                        // if none of them are passed throw error
-                        if !(has_caption || has_body || has_value || has_property)
-                            && !has_default
-                            && !kind.is_optional()
-                        {
-                            return Err(ftd::p1::Error::ParseError {
-                                message: format!(
-                                    "body or caption or header_value, none of them are passed for \'{}\'",
-                                    arg
-                                ),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            });
-                        }
+                            // if none of them are passed throw error
+                            if !(has_caption
+                                || has_body
+                                || has_value
+                                || has_property
+                                || has_default
+                                || kind.is_optional())
+                            {
+                                return Err(ftd::p1::Error::ParseError {
+                                    message: format!(
+                                        "body or caption or header_value, none of them are passed for \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
 
-                        if has_caption {
-                            caption_pass = true;
-                        }
+                            if has_caption {
+                                caption_pass = true;
+                            }
 
-                        if has_body {
-                            body_pass = true;
+                            if has_body {
+                                body_pass = true;
+                            }
                         }
+                        (true, false) => {
+                            // check if the component has caption or not
+                            // if caption not passed throw error
+                            if (has_caption && has_value)
+                                || (has_caption && has_property)
+                                || (has_value && has_property)
+                            {
+                                return Err(ftd::p1::Error::ParseError {
+                                    message: format!(
+                                        "Pass either caption or header_value for header \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            if !(has_caption
+                                || has_value
+                                || has_property
+                                || has_default
+                                || kind.is_optional())
+                            {
+                                return Err(ftd::p1::Error::ParseError {
+                                    message: format!(
+                                        "caption or header_value, none of them are passed for \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            if has_caption {
+                                caption_pass = true;
+                            }
+                        }
+                        (false, true) => {
+                            // check if the component has body or not
+                            // if body is not passed throw error
+                            if (has_body && has_value)
+                                || (has_body && has_property)
+                                || (has_property && has_value)
+                            {
+                                return Err(ftd::p1::Error::ParseError {
+                                    message: format!(
+                                        "Pass either body or header_value for header \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            if !(has_body
+                                || has_value
+                                || has_property
+                                || has_default
+                                || kind.is_optional())
+                            {
+                                return Err(ftd::p1::Error::ParseError {
+                                    message: format!(
+                                        "body or header_value, none of them are passed for \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            if has_body {
+                                body_pass = true;
+                            }
+                        }
+                        (false, false) => continue,
                     }
-                    (true, false) => {
-                        // check if the component has caption or not
-                        // if caption not passed throw error
-                        if (has_caption && has_value)
-                            || (has_caption && has_property)
-                            || (has_value && has_property)
-                        {
-                            return Err(ftd::p1::Error::ParseError {
-                                message: format!(
-                                    "Pass either caption or header_value for header \'{}\'",
-                                    arg
-                                ),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            });
-                        }
-
-                        if !(has_caption || has_value || has_property)
-                            && !has_default
-                            && !kind.is_optional()
-                        {
-                            return Err(ftd::p1::Error::ParseError {
-                                message: format!(
-                                    "caption or header_value, none of them are passed for \'{}\'",
-                                    arg
-                                ),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            });
-                        }
-
-                        if has_caption {
-                            caption_pass = true;
-                        }
-                    }
-                    (false, true) => {
-                        // check if the component has body or not
-                        // if body is not passed throw error
-                        if (has_body && has_value)
-                            || (has_body && has_property)
-                            || (has_property && has_value)
-                        {
-                            return Err(ftd::p1::Error::ParseError {
-                                message: format!(
-                                    "Pass either body or header_value for header \'{}\'",
-                                    arg
-                                ),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            });
-                        }
-
-                        if !(has_body || has_value || has_property)
-                            && !has_default
-                            && !kind.is_optional()
-                        {
-                            return Err(ftd::p1::Error::ParseError {
-                                message: format!(
-                                    "body or header_value, none of them are passed for \'{}\'",
-                                    arg
-                                ),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            });
-                        }
-
-                        if has_body {
-                            body_pass = true;
-                        }
-                    }
-                    (false, false) => continue,
                 }
+                ftd::p2::Kind::Integer { default, .. }
+                | ftd::p2::Kind::Decimal { default, .. }
+                | ftd::p2::Kind::Boolean { default, .. }
+                    if arg.eq("value") =>
+                {
+                    // checks on ftd.integer, ftd.decimal, ftd.boolean
+                    let has_default = default.is_some();
+
+                    if (has_caption && has_value)
+                        || (has_caption && has_property)
+                        || (has_value && has_property)
+                    {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!(
+                                "Pass either caption or header_value for header \'{}\'",
+                                arg
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        });
+                    }
+
+                    if !(has_caption
+                        || has_value
+                        || has_property
+                        || has_default
+                        || kind.is_optional())
+                    {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!(
+                                "caption or header_value, none of them are passed for \'{}\'",
+                                arg
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        });
+                    }
+
+                    if has_caption {
+                        caption_pass = true;
+                    }
+                }
+                _ => continue,
             }
         }
 
