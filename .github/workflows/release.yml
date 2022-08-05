@@ -17,7 +17,6 @@ jobs:
     env:
       CARGO_TERM_COLOR: always
       BUILD_TARGET: x86_64-unknown-linux-musl
-      BINARY_NAME: fpm
     steps:
       - uses: actions/checkout@main
       - uses: actions/cache@v2
@@ -46,7 +45,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: fpm_controller_linux_musl_x86_64
-          path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}*
+          path: target/x86_64-unknown-linux-musl/release/fpm
       - name: Build fpm.deb
         uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
         continue-on-error: false
