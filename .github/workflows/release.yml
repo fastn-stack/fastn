@@ -55,7 +55,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: fpm_debian
-          path: target/dedian/${{ env.BINARY_NAME }}*
+          path: target/debian/${{ env.BINARY_NAME }}*
   release-windows:
     name: Build for Windows
     runs-on: windows-latest
