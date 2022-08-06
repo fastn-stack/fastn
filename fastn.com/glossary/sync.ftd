@@ -53,7 +53,7 @@ the [server project](glossary/sync/#server-project). Also to bring the server's
 changes after the client diverged into the client project. In the end results
 the server and the client to be exact copy of each other.
 
-Sync is specific to a file. Though the [`fpm sync`](cli/fpm-sync/) commands
+Sync is specific to a file. Though the [`fpm sync`](cli/sync/) commands
 results in syncing of all the changed file.
 
 Syncing is performed by an automatic process that identifies changes made since

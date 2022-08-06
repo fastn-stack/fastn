@@ -68,7 +68,7 @@ email: arpita@fifthtry.com
 - `fpm` Usage: /usage/
   - `fpm start-project`: /start-project/
   - `fpm build`: /build/
-  - `fpm sync`: /sync/
+  - `fpm sync`: /cli/sync/
   - `fpm status`: /status/
   - `fpm diff`: /diff/
   - `fpm update`: /update/
