@@ -8,3 +8,4 @@ server.
 
 This default configuration is achieved by creating `.client-state` and take all
 server-latest as an entry to the client [workspace](glossary/sync/#workspace).
+
