@@ -1,0 +1,9 @@
+-- ft.page: `fpm resolve-conflict <file-name>`
+
+This command is used to resolve the conflict in the file introduced by attempt,
+done by client, to sync a file having different latest version in the server
+and the client and has failed in three way merge. To understand sync better,
+read [`How Sync Works`](dev/sync/).
+
+
+

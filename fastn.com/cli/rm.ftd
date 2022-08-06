@@ -1,4 +1,5 @@
 -- ft.page: `fpm rm <file-name>`
 
 
-This would create entry in workspace.ftd and this file is consider for sync
+This would create entry in workspace.ftd for deletion and this file is consider
+for sync.

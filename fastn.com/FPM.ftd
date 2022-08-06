@@ -145,6 +145,7 @@ email: arpita@fifthtry.com
 - Contribution Guide: /dev/contribute/
 - How Versioning Works: /dev/versioning/
 - How Sync Works: /dev/sync/
+- Understanding FPM sync conflicts: /sync-conflict/
 - What is `FPM.manifest.ftd`?: /dev/fpm-manifest/
 - File System Organization: /fs/
   - `FPM.ftd`: /fpm-ftd-file/

@@ -28,9 +28,9 @@ lang: ftd
 
 \-- record file-history:
 caption filename:
-file-edit list history:
+file-edit-data list file-edit:
 
-\-- record file-edit:
+\-- record file-edit-data:
 caption or body message:
 integer timestamp:
 integer version:
@@ -52,8 +52,7 @@ one for every change in that file. Delete also increments the version number.
 
 -- ft.h1: Client state
 
-On the client, the state is largely two: workspace content and the unsynced
-tracking information.
+On the client, the state contains the workspace information
 
 
 -- ft.code:
@@ -87,8 +86,9 @@ We detect a file is updated locally by finding the version for every file in
 considered modified.
 
 Say file is file.ftd, and its current version on server is v1. On sync server
-will get file.ftd, v1 and new content of file. Server sees their version is also
-v1, so server computes v2, and stored the new content of the file.
+will get version (v1) and new content of file (file.ftd). Server sees it's own
+version of the file, let's consider it's also v1, so server computes v2, and
+stored the new content of the file.
 
 Server returns latest `file.v2.ftd` content, and client stores it in
 `.server-state`, and updates the `.client-state/workspace.ftd` and `file.ftd`
@@ -111,7 +111,8 @@ folder, and updates the workspace.ftd and file.ftd's content in the workspace.
 If on server, v2 and our changes do not merge cleanly with v1 version as based,
 server notifies the client that the sync for that file failed. Server sends the
 v2 version of file which client stored in `.server-state` folder. `workspace.ftd`
-and `file.ftd` in workspace are not modified.
+and `file.ftd` in workspace are not modified. This conflict, then, can be
+resolved by client using [`fpm resolve-conflict <file>`](cli/resolve-conflict)
 
 
 -- ft.h2: Only a file with no known conflicts are sent to server
@@ -125,12 +126,12 @@ three way merge, and if the merge fails, we know there is conflict.
 
 -- ft.h2: Deleting a file, no edits on server case
 
-If a file is deleted from workspace and if [`fpm rm <file>`](/cli/rm/) command has been run,
-this sets deleted in `workspace.ftd` entry, we send this information to server
-on `fpm sync`, and our version number. Server will see our version numbers match,
-so server will create a new version number to mark deletion of the file, and
-update the `.server-state/history.ftd`. And the client will delete the entry
-from `.client-state/workspace.ftd`.
+If a file is deleted from workspace and if [`fpm rm <file>`](/cli/rm/) command
+has been run, this sets deleted in `workspace.ftd` entry, we send this
+information to server on `fpm sync`, and our version number. Server will see our
+version numbers match, so server will create a new version number to mark
+deletion of the file, and update the `.server-state/history.ftd`. And the client
+will delete the entry from `.client-state/workspace.ftd`.
 
 
 -- ft.h2: Deleted by us, edited on server
