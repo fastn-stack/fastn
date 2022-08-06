@@ -1,0 +1,87 @@
+-- ft.page: syncglossary
+
+An FPM sync Glossary
+
+-- ft.h2: client project
+
+An [fpm project](glossary/sync/#fpm-project) which is a clone to the
+[server project](glossary/sync/#server-project) and tracks it. The interaction
+with server project is established using [sync](glossary/sync/#sync).
+
+
+-- ft.h2: clone
+
+Clone a [server project](glossary/sync/#server-project) into a new directory
+which becomes [client](glossary/sync/#server-project)
+
+
+-- ft.h2: conflict-state
+
+The file is said to be in the `conflict-state` if the file gets in conflict with
+server latest [version](glossary/sync/#version) of the same file.
+
+```
+The file, in conflict-state, is never considered to be synced unless its
+conflict is resolved.
+```
+
+-- ft.h2: fpm project
+
+The unit folder that contains `FPM.ftd` and any number of folders or files of
+any extension along with states (server-state and/or client-state).
+
+
+-- ft.h2: server project
+
+An fpm project which is used to track the same project but resides somewhere
+else. To communicate with server, see [clone](glossary/sync/#clone) or
+[sync](glossary/sync/#sync).
+
+
+-- ft.h2: sync
+
+To bring the contents of [client project](glossary/sync/#client-project) into
+the [server project](glossary/sync/#server-project). Also to bring the server's
+changes after the client diverged into the client project. In the end results
+the server and the client to be exact copy of each other.
+
+Sync is specific to a file. Though the [`fpm sync`](cli/fpm-sync/) commands
+results in syncing of all the changed file.
+
+Syncing is performed by an automatic process that identifies changes made since
+the client and the server diverged, and then applies all those changes together.
+In cases where changes conflict in the file, file enters into conflict-state and
+manual intervention may be required to complete the sync of conflicted file.
+
+A successful sync results in the creation of a new [version](glossary/sync/#version)
+of the file.
+
+
+-- ft.h2: Three-way merge
+
+Three-way merges use a dedicated [version](glossary/sync/#version), also known
+as base version, to tie together the histories in server and [un-synced
+file](glossary/sync/#un-synced-file) in client. FPM uses three state of file to
+generate the new version: first: latest version in server, second: un-synced
+file in client and third: their common ancestor version.
+
+
+-- ft.h2: un-synced file
+
+The changes in the file that resides in the [client
+project](glossary/sync/#client-project) and are not yet [sync](glossary/sync/#sync)ed.
+
+-- ft.h2: version
+
+As a noun: A single point in the FPM project history of a file; the entire
+history of a file in a project is represented as a set of interrelated version.
+
+As a verb: The action of storing a new snapshot of the file’s state in the
+[fpm project](glossary/sync/#fpm-project) history, by creating a new version
+representing the current state of the file. The new version is created by
+[sync](glossary/sync/#sync) action.
+
+
+
+
+

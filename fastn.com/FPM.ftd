@@ -75,6 +75,7 @@ email: arpita@fifthtry.com
   - `fpm serve`: /serve/
   - `fpm add`: /cli/add/
   - `fpm rm`: /cli/rm/
+  - `fpm resolve-conflict`: /cli/resolve-conflict/
 - How to use Favicon: /favicon/
 
 
@@ -165,6 +166,8 @@ email: arpita@fifthtry.com
   - `edit` API: /sitemap/edit/
   - `editor-sync` API: /sitemap/editor-sync/
   - `clone` API: /sitemap/clone/
+- Glossary:
+  - syncglossary: /glossary/sync/
 
 ## Using `fpm` Crate: crate/
 

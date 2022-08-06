@@ -1,22 +1,25 @@
 -- ft.page: Understanding FPM Sync Conflict
 
--- ft.h1: What is an FPM Sync Conflicts?
+-- ft.h1: What is an FPM Sync Conflict?
 
-FPM can handle most sync operation on its own with automatic merging features.
-The sync conflict is an event that occurs when FPM is unable to automatically
-resolve differences in file between different latest version available in the
-server and the client.
+FPM can handle most [sync](glossary/sync/#sync) operations on its own with
+automatic merging features. A sync conflict is an event that occurs when FPM is
+unable to automatically resolve differences in the file between latest
+[version](glossary/sync/#version) available on the [server](glossary/sync/#server-project)
+and the changes done against [client](glossary/sync/#client-project)'s latest
+version.
 
-Conflicts generally arise when two clients try to sync it's changes to server in
-following cases:
+Conflicts generally arise when two clients try to sync their changes to the
+server in the following cases:
 - They have changed the same lines in a file
 - if one client deleted a file while another client was modifying it.
 
 In these cases, FPM cannot automatically determine what is correct. Conflicts
 only affect the client conducting the sync, the rest of the clients are unaware
-of the conflict. FPM will notify the file is being conflicted and halt the
-syncing process for that file. Though, the rest of the file gets synced. It is
-then the clients' responsibility to resolve the conflict.
+of the conflict. FPM notifies that the file gets in
+[conflict-state](glossary/sync/#conflict-state) and halt the syncing
+process for that file. Though, the rest of the file gets synced. It is then the
+client's responsibility to resolve the conflict.
 
 Now that we have gone through the basics of the fpm sync conflict, let’s look
 at the various types of conflicts next.
@@ -28,32 +31,32 @@ A conflict can be of various types depending on how it occurs.
 -- ft.h2: edit-edit-conflict
 
 The `edit-edit-conflict` occurs when two clients try to sync the file in which
-they have done the independent changes and three way merge of the file has
+they have done the independent changes and three-way merge of the file has
 failed.
 
-Let's assume there are two clients A and B for the some server having fpm
-project XYZ. Both of them sync the same file from the server which has latest
-version v1 and try to make various amendments in that file. After making the
-changes, A syncs the file to the server from it's local. The server, then,
-create a new version of the file v2, containing content send by A and response
-it back to A. Now A and server has same version of the file v2, i.e. they are in
-sync. But, when B tries to sync the same file after making the changes from
-it's end, it fails to do so, as the server and B are out of sync with respect to
-that file, i.e. the server has new version v2 of that file and B has done it's
+Let's assume there are two clients A and B for some server having fpm project
+XYZ. Both of them sync the same file from the server which has the latest
+version v1 and try to make various amendments to that file. After making the
+changes, A syncs the file to the server from its local. The server, then,
+create a new version of the file v2, containing content sent by A and responds
+back to A. Now A and server have the same version of the file v2, i.e. they are
+in sync. But, when B tries to sync the same file after making the changes from
+its end, it fails to do so, as the server and B are out of sync with respect to
+that file, i.e. the server has new version v2 of that file and B has done its
 changes against the version v1. Now server doesn't know what is correct.
 
 -- ft.h2: edit-delete-conflict
 
-The `edit-delete-conflict` occurs when server contains new version of the file
-and client tries to delete the same file against some older version.
+The `edit-delete-conflict` occurs when the server contains a new version of the
+file and the client tries to delete the same file against some older version.
 
-Let's again assume there are two clients A and B for the some server having fpm
-project XYZ. Both of them sync the same file from the server which has latest
-version v1. After making some the changes, A syncs the file to the server from
-it's local. The server, then, create a new version of the file v2, containing
-content send by A and response it back to A. Now A and server has same version
+Let's again assume there are two clients A and B for some server having fpm
+project XYZ. Both of them sync the same file from the server which has the latest
+version v1. After making some changes, A syncs the file to the server from
+its local. The server, then, create a new version of the file v2, containing
+content sent by A and responds back to A. Now A and server have the same version
 of the file v2, i.e. they are in sync. B, then, deletes the same file using
-[`fpm rm <file>`](cli/rm/) and tries to sync it, it fails to do so, as the
+[`fpm rm <file>`](cli/rm/) and tries to sync it, but it fails to do so, as the
 server and B are out of sync with respect to that file, i.e. the server has new
 version v2 of that file and B has deleted it against the version v1.
 Now server doesn't know what to do.
@@ -61,16 +64,16 @@ Now server doesn't know what to do.
 
 -- ft.h2: delete-edit-conflict
 
-The `edit-delete-conflict` occurs when on server file is deleted and client
-tries to edit the same file against some older version.
+The `edit-delete-conflict` occurs when on the server, the file is deleted and
+the client tries to edit the same file against some older version.
 
-Let's again assume there are two clients A and B for the some server having fpm
-project XYZ. Both of them sync the same file from the server which has latest
-version v1. A deletes the file and syncs it to the server from it's local.
-The server, then, deletes the file and response it back to A. Now A and server
-are in sync. B, then, edits the same file and tries to sync it, it fails to do
+Let's again assume there are two clients A and B for some server having fpm
+project XYZ. Both of them sync the same file from the server which has the latest
+version v1. A deletes the file and syncs it to the server from its local.
+The server, then, deletes the file and responds back to A. Now A and server
+are in sync. B, then, edits the same file and tries to sync it, but it fails to do
 so, as the server and B are out of sync with respect to that file, i.e. the file
-is deleted on server and B has done it's changes against the version v1.
+is deleted on the server and B has done its changes against the version v1.
 Now server doesn't know what to do.
 
 
@@ -79,6 +82,16 @@ Now server doesn't know what to do.
 On sync, FPM produces some descriptive output letting us know that a CONFLICT
 has occurred. We can gain further insight by running the
 [`fpm sync-status`](cli/sync-status/) command. The output from `fpm sync-status`
-indicates that there are some unsynced files due to a conflict. These files
-cannot be synced in future syncs too unless their conflicts has been resolved.
+indicates that there are some un-synced files due to a conflict. These files
+cannot be synced in future syncs too unless their conflicts have been resolved.
+
+
+
+-- ft.h1: How to resolve sync conflicts
+
+Once knowing the files that have conflicts, you can resolve their conflicts
+using the [`fpm resolve-conflict <file-name>`](cli/resolve-conflict/) command.
+This command gives you various endpoints to address conflict according to its
+type.
+
 
