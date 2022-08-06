@@ -97,6 +97,7 @@ impl State {
     }
 
     fn reading_header(&mut self, line_number: usize, line: &str, doc_id: &str) -> Result<()> {
+        // change state to reading body iff after an empty line is found
         if line.trim().is_empty() {
             self.state = ParsingState::ReadingBody;
             return Ok(());
@@ -110,8 +111,15 @@ impl State {
             return self.read_subsection(line_number, line, doc_id);
         }
 
+        // If no empty line or start of next section/subsection found
+        // immediately after reading all possible headers for the current section/subsection
+        // then throw error
         if !line.contains(':') {
-            return self.reading_body(line_number, line, doc_id);
+            return Err(ftd::p1::Error::ParseError {
+                message: "start section body after a newline!!".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number,
+            });
         }
 
         let (name, value) = colon_separated_values(line_number, line, doc_id)?;
@@ -139,8 +147,17 @@ impl State {
         if line.starts_with("--- ") || line.starts_with("/--- ") {
             return self.read_subsection(line_number, line, doc_id);
         }
+
+        // similar strict check for subsection, change state to reading body
+        // iff an empty line is found prior to reading body
+        // or read next section/subsection
+        // otherwise throw error
         if !line.contains(':') {
-            return self.reading_sub_body(line_number, line, doc_id);
+            return Err(ftd::p1::Error::ParseError {
+                message: "start sub-section body after a newline!!".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number,
+            });
         }
         let (name, value) = colon_separated_values(line_number, line, doc_id)?;
         if let Some(mut s) = self.sub_section.take() {
