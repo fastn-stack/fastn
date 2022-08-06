@@ -12,7 +12,7 @@ with server project is established using [sync](glossary/sync/#sync).
 -- ft.h2: clone
 
 Clone a [server project](glossary/sync/#server-project) into a new directory
-which becomes [client](glossary/sync/#server-project)
+which becomes a [client](glossary/sync/#server-project).
 
 
 -- ft.h2: conflict-state

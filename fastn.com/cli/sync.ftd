@@ -1,0 +1,13 @@
+-- ft.page: `fpm sync`
+
+This commands executes the [sync](glossary/sync/#sync) operation on all the files
+that are part of [workspace](glossary/sync/#workspace) and are different
+from [server-latest](glossary/sync/#client-project). The files, in
+[conflict-state](glossary/sync/#conflict-state), cannot participate in this
+operation.
+
+In case of [sync conflict](sync-conflict/), It also produces some output letting
+us know what [type of sync conflict](sync-conflict/#types-of-fpm-sync-conflicts)
+has occurred. It displays the conflict same as [`fpm sync-status`](cli/sync-status/).
+
+The conflicts can be resolved using [`fpm resolve-conflict <file-name>`](cli/resolve-conflict/).

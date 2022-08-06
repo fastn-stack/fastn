@@ -82,7 +82,7 @@ Now server doesn't know what to do.
 On sync, FPM produces some descriptive output letting us know that a CONFLICT
 has occurred. We can gain further insight by running the
 [`fpm sync-status`](cli/sync-status/) command. The output from `fpm sync-status`
-indicates that there are some un-synced files due to a conflict. These files
+indicates that there are some [un-synced file](glossary/sync/#un-synced-file) s due to a conflict. These files
 cannot be synced in future syncs too unless their conflicts have been resolved.
 
 

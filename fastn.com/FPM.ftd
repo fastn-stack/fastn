@@ -76,6 +76,7 @@ email: arpita@fifthtry.com
   - `fpm add`: /cli/add/
   - `fpm rm`: /cli/rm/
   - `fpm resolve-conflict`: /cli/resolve-conflict/
+  - `fpm clone`: /cli/clone/
 - How to use Favicon: /favicon/
 
 
