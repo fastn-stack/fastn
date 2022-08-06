@@ -1,0 +1,40 @@
+-- ft.page: `fpm sync-status`
+
+This command shows the [workspace](glossary/sync/#workspace) status.
+
+It displays files that have differences between the [server-latest](glossary/sync/#server-latest)
+and your workspace, and new files in the workspace that are not tracked by FPM
+
+-- ft.h1: Options
+
+- <file-name>
+  File to check sync status
+
+
+
+-- ft.h1: Output
+
+This commands gives following status of the file.
+
+-- ft.h2: Added
+
+This is the status for the new files added to workspace using
+[`fpm add <file-name>`](cli/add/).
+
+-- ft.h2: Updated
+
+This is the status for the files that already exist in workspace and are
+modified but not yet synced.
+
+-- ft.h2: Deleted
+
+This is the status for the files that already exist in workspace and are
+marked deleted using [`fpm rm <file-name>`](cli/rm/)
+
+-- ft.h2: Unchanged
+
+This is the status for the files that already exist in workspace and are
+unchanged. This status is only visible when trying to check the status of
+unchanged file using `fpm sync-status <file-name>`.
+
+

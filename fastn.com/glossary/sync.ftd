@@ -38,6 +38,14 @@ else. To communicate with server, see [clone](glossary/sync/#clone) or
 [sync](glossary/sync/#sync).
 
 
+
+-- ft.h2: server-latest
+
+The current tree of files in server. This can be derived by looking at the server
+history and get the latest version of each file. The file having the content
+from its latest version, if not deleted, becomes the part of current tree.
+
+
 -- ft.h2: sync
 
 To bring the contents of [client project](glossary/sync/#client-project) into
@@ -57,7 +65,7 @@ A successful sync results in the creation of a new [version](glossary/sync/#vers
 of the file.
 
 
--- ft.h2: Three-way merge
+-- ft.h2: three-way merge
 
 Three-way merges use a dedicated [version](glossary/sync/#version), also known
 as base version, to tie together the histories in server and [un-synced
@@ -66,10 +74,23 @@ generate the new version: first: latest version in server, second: un-synced
 file in client and third: their common ancestor version.
 
 
+-- ft.h2: tracked file
+
+The file that resides in the [client project](glossary/sync/#client-project) and
+has entry in workspace.
+
+
 -- ft.h2: un-synced file
 
 The changes in the file that resides in the [client
 project](glossary/sync/#client-project) and are not yet [sync](glossary/sync/#sync)ed.
+
+
+-- ft.h2: un-tracked file
+
+The file that resides in the [client project](glossary/sync/#client-project) but
+has no entry in workspace.
+
 
 -- ft.h2: version
 
@@ -80,6 +101,16 @@ As a verb: The action of storing a new snapshot of the file’s state in the
 [fpm project](glossary/sync/#fpm-project) history, by creating a new version
 representing the current state of the file. The new version is created by
 [sync](glossary/sync/#sync) action.
+
+
+-- ft.h2: workspace
+
+The workspace contains all the files present in the
+[server-latest](glossary/sync/#server-latest), plus any local changes that have
+been made but not yet synced. It also includes the new files added to workspace
+using [`fpm add <file-name>`](cli/add).
+
+
 
 
 
