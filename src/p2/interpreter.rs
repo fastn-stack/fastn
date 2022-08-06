@@ -17719,7 +17719,6 @@ mod test {
 
 
             -- ftd.column bar1:
-            ftd.ui
 
             -- ftd.column bar:
             string title:

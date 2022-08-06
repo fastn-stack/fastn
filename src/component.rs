@@ -2991,6 +2991,7 @@ mod test {
             -- string name: Amit
 
             -- ftd.text:
+
             $name
             ",
             (bag, main),
