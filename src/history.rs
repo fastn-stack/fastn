@@ -62,7 +62,7 @@ pub enum FileOperation {
 }
 
 impl FileOperation {
-    fn is_deleted(&self) -> bool {
+    pub(crate) fn is_deleted(&self) -> bool {
         self.eq(&FileOperation::Deleted)
     }
 }

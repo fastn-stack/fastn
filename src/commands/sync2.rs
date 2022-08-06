@@ -29,7 +29,7 @@ pub async fn sync2(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Res
         history,
     };
     let response = send_to_fpm_serve(&sync_request).await?;
-    update_current_directory(config, &response.files).await?;
+    update_current_directory(config, &response).await?;
     update_history(config, &response.dot_history, &response.latest_ftd).await?;
     update_workspace(&response, &mut workspace).await?;
     config
@@ -57,7 +57,7 @@ async fn update_workspace(
         })
         .collect_vec();
     for (file, file_edit) in server_latest.iter() {
-        if conflicted_files.contains(file) {
+        if conflicted_files.contains(file) || file_edit.is_deleted() {
             continue;
         }
         workspace.insert(file.to_string(), file_edit.to_workspace(file));
@@ -92,9 +92,9 @@ async fn update_history(
 
 async fn update_current_directory(
     config: &fpm::Config,
-    files: &[fpm::apis::sync2::SyncResponseFile],
+    response: &fpm::apis::sync2::SyncResponse,
 ) -> fpm::Result<()> {
-    for file in files {
+    for file in response.files.iter() {
         match file {
             fpm::apis::sync2::SyncResponseFile::Add { path, content, .. } => {
                 fpm::utils::update(&config.root.join(path), content).await?;

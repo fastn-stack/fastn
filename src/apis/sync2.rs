@@ -291,7 +291,7 @@ async fn client_history_files(
         .collect::<Vec<String>>();
 
     let mut dot_history = vec![];
-    for ref path in diff {
+    for (path, _) in diff.iter() {
         let client_file_edit = client_latest.get(path);
         let history_paths = get_all_versions(path, history.as_slice())?
             .into_iter()
@@ -333,8 +333,19 @@ async fn client_current_files(
     synced_files: &mut std::collections::HashMap<String, SyncResponseFile>,
 ) -> fpm::Result<()> {
     let diff = snapshot_diff(server_latest, client_latest);
-    for ref path in diff {
+    for (path, operation) in diff.iter() {
         if synced_files.contains_key(path) {
+            continue;
+        }
+        if operation.is_deleted() {
+            synced_files.insert(
+                path.clone(),
+                SyncResponseFile::Delete {
+                    path: path.clone(),
+                    status: SyncStatus::NoConflict,
+                    content: vec![],
+                },
+            );
             continue;
         }
         let content = tokio::fs::read(config.root.join(path)).await?;
@@ -372,17 +383,16 @@ async fn client_current_files(
 fn snapshot_diff(
     server_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
     client_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
-) -> Vec<String> {
-    let mut diff = vec![];
+) -> std::collections::BTreeMap<String, fpm::history::FileOperation> {
+    let mut diff: std::collections::BTreeMap<String, fpm::history::FileOperation> =
+        Default::default();
     for (snapshot_path, file_edit) in server_latest {
         match client_latest.get(snapshot_path) {
-            Some(client_file_edit)
-                if client_file_edit.version.lt(&file_edit.version) && !file_edit.is_deleted() =>
-            {
-                diff.push(snapshot_path.to_string());
+            Some(client_file_edit) if client_file_edit.version.lt(&file_edit.version) => {
+                diff.insert(snapshot_path.to_string(), file_edit.operation.clone());
             }
             None => {
-                diff.push(snapshot_path.to_string());
+                diff.insert(snapshot_path.to_string(), file_edit.operation.clone());
             }
             _ => {}
         };
