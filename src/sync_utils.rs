@@ -7,6 +7,7 @@ pub enum Status {
     NoConflict,
     ClientEditedServerDeleted(i32),
     ClientDeletedServerEdited(i32),
+    ClientAddedServerAdded(i32),
 }
 
 impl Status {
@@ -22,6 +23,7 @@ impl Status {
             Status::NoConflict => None,
             Status::ClientEditedServerDeleted(version) => Some(*version),
             Status::ClientDeletedServerEdited(version) => Some(*version),
+            Status::ClientAddedServerAdded(version) => Some(*version),
         }
     }
 }
@@ -236,7 +238,7 @@ impl fpm::Config {
                         );
                         remove_files.push(index);
                     } else {
-                        *status = Status::Conflict(server_version);
+                        *status = Status::ClientAddedServerAdded(server_version);
                     }
                 }
                 FileStatus::Update {

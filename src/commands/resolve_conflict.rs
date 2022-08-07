@@ -58,7 +58,7 @@ pub async fn resolve_conflict(
                 path
             ));
         }
-        fpm::utils::update(dbg!(&config.root.join(path)), content).await?;
+        fpm::utils::update(&config.root.join(path), content).await?;
     } else if revive_it {
         let content = conflicted_data
             .ours

@@ -34,10 +34,26 @@ pub struct SyncResponse {
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq)]
 pub enum SyncStatus {
-    Conflict,
+    RegularConflict,
     NoConflict,
     ClientEditedServerDeleted,
     ClientDeletedServerEdited,
+    ClientAddedServerAdded,
+}
+
+impl SyncStatus {
+    pub(crate) fn delete_edit_conflict(&self) -> bool {
+        SyncStatus::ClientEditedServerDeleted.eq(self)
+    }
+    pub(crate) fn edit_delete_conflict(&self) -> bool {
+        SyncStatus::ClientDeletedServerEdited.eq(self)
+    }
+    pub(crate) fn add_add_conflict(&self) -> bool {
+        SyncStatus::ClientAddedServerAdded.eq(self)
+    }
+    pub(crate) fn edit_edit_conflict(&self) -> bool {
+        SyncStatus::RegularConflict.eq(self)
+    }
 }
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug)]
@@ -112,16 +128,27 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
     let mut server_history = config.get_history().await?;
     let server_latest =
         fpm::history::FileHistory::get_non_deleted_latest_file_edits(server_history.as_slice())?;
-    let mut file_list: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
+    let mut to_be_in_history: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
         Default::default();
     let mut synced_files = std::collections::HashMap::new();
     for file in request.files {
+        // TODO: get all data like message, author, src-cr from request
         match &file {
             SyncRequestFile::Add { path, content } => {
-                // TODO: We need to check if, file is already available on server
+                if server_latest.contains_key(path) {
+                    // add-add-conflict
+                    synced_files.insert(
+                        path.to_string(),
+                        SyncResponseFile::Add {
+                            path: path.to_string(),
+                            status: SyncStatus::ClientAddedServerAdded,
+                            content: content.clone(),
+                        },
+                    );
+                    continue;
+                }
                 fpm::utils::update(&config.root.join(path), content).await?;
-                // TODO: get all data like message, author, src-cr from request
-                file_list.insert(
+                to_be_in_history.insert(
                     path.to_string(),
                     fpm::history::FileEditTemp {
                         message: None,
@@ -140,7 +167,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                     if file_edit.version.eq(version) {
                         fpm::utils::update(&config.root.join(path), content).await?;
                         // TODO: get all data like message, author, src-cr from request
-                        file_list.insert(
+                        to_be_in_history.insert(
                             path.to_string(),
                             fpm::history::FileEditTemp {
                                 message: None,
@@ -151,9 +178,23 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         );
                     } else {
                         // else: Both has modified the same file
-                        // TODO: Need to handle static files like images, don't require merging
                         let ancestor_path = config.history_path(path, *version);
-                        let ancestor_content = tokio::fs::read_to_string(ancestor_path).await?;
+                        let ancestor_content = if let Ok(ancestor_content) =
+                            tokio::fs::read_to_string(ancestor_path).await
+                        {
+                            ancestor_content
+                        } else {
+                            // It's a binary file like image etc, can't try merging
+                            synced_files.insert(
+                                path.to_string(),
+                                SyncResponseFile::Update {
+                                    path: path.to_string(),
+                                    status: SyncStatus::RegularConflict,
+                                    content: content.clone(),
+                                },
+                            );
+                            continue;
+                        };
                         let theirs_path = config.history_path(path, file_edit.version);
                         let theirs_content = tokio::fs::read_to_string(theirs_path).await?;
                         let ours_content = String::from_utf8(content.clone())
@@ -165,7 +206,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                             Ok(data) => {
                                 fpm::utils::update(&config.root.join(path), data.as_bytes())
                                     .await?;
-                                file_list.insert(
+                                to_be_in_history.insert(
                                     path.to_string(),
                                     fpm::history::FileEditTemp {
                                         message: None,
@@ -189,7 +230,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                                     path.to_string(),
                                     SyncResponseFile::Update {
                                         path: path.to_string(),
-                                        status: SyncStatus::Conflict,
+                                        status: SyncStatus::RegularConflict,
                                         content: data.as_bytes().to_vec(),
                                     },
                                 );
@@ -236,7 +277,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                     if config.root.join(path).exists() {
                         tokio::fs::remove_file(config.root.join(path)).await?;
                     }
-                    file_list.insert(
+                    to_be_in_history.insert(
                         path.to_string(),
                         fpm::history::FileEditTemp {
                             message: None,
@@ -250,7 +291,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
         }
     }
 
-    fpm::history::insert_into_history(&config.root, &file_list, &mut server_history).await?;
+    fpm::history::insert_into_history(&config.root, &to_be_in_history, &mut server_history).await?;
 
     let server_latest =
         fpm::history::FileHistory::get_latest_file_edits(server_history.as_slice())?;

@@ -96,19 +96,27 @@ async fn update_current_directory(
 ) -> fpm::Result<()> {
     for file in response.files.iter() {
         match file {
-            fpm::apis::sync2::SyncResponseFile::Add { path, content, .. } => {
-                fpm::utils::update(&config.root.join(path), content).await?;
+            fpm::apis::sync2::SyncResponseFile::Add {
+                path,
+                content,
+                status,
+            } => {
+                if status.add_add_conflict() {
+                    println!("ClientAddedServerAdded: {}", path);
+                } else {
+                    fpm::utils::update(&config.root.join(path), content).await?;
+                }
             }
             fpm::apis::sync2::SyncResponseFile::Update {
                 path,
                 content,
                 status,
             } => {
-                if fpm::apis::sync2::SyncStatus::ClientDeletedServerEdited.eq(status) {
+                if status.edit_delete_conflict() {
                     println!("ClientDeletedServerEdit: {}", path);
-                } else if fpm::apis::sync2::SyncStatus::ClientEditedServerDeleted.eq(status) {
+                } else if status.delete_edit_conflict() {
                     println!("ClientEditedServerDeleted: {}", path);
-                } else if fpm::apis::sync2::SyncStatus::Conflict.eq(status) {
+                } else if status.edit_edit_conflict() {
                     println!("Conflict: {}", path);
                 } else {
                     fpm::utils::update(&config.root.join(path), content).await?;

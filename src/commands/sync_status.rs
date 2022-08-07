@@ -42,5 +42,8 @@ fn print_status(file_status: &fpm::sync_utils::FileStatus, print_untracked: bool
             println!("ClientDeletedServerEdited: {}", path)
         }
         fpm::sync_utils::Status::NoConflict => println!("{}: {}", file_status, path),
+        fpm::sync_utils::Status::ClientAddedServerAdded(_) => {
+            println!("ClientAddedServerAdded: {}", path)
+        }
     }
 }
