@@ -1,9 +1,9 @@
 -- ft.page: `fpm sync`
 
-This commands executes the [sync](glossary/sync/#sync) operation on all the files
-that are part of [workspace](glossary/sync/#workspace) and are different
-from [server-latest](glossary/sync/#client-project). The files, in
-[conflict-state](glossary/sync/#conflict-state), cannot participate in this
+This commands executes the [sync](glossary/#sync) operation on all the files
+that are part of [workspace](glossary/#workspace) and are different
+from [server-latest](glossary/#client-project). The files, in
+[conflict-state](glossary/#conflict-state), cannot participate in this
 operation.
 
 In case of [sync conflict](sync-conflict/), It also produces some output letting

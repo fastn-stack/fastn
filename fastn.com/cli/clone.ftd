@@ -1,11 +1,11 @@
 -- ft.page: `fpm clone <url>`
 
-Clones a [server project](glossary/sync/#server-project) into a newly created
-directory which then becomes the [client](glossary/sync/#client-project).
+Clones a [server project](glossary/#server-project) into a newly created
+directory which then becomes the [client](glossary/#client-project).
 
 After the clone, a [`fpm sync`](cli/sync/) will keep the client in sync with
 server.
 
 This default configuration is achieved by creating `.client-state` and take all
-server-latest as an entry to the client [workspace](glossary/sync/#workspace).
+server-latest as an entry to the client [workspace](glossary/#workspace).
 

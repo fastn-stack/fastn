@@ -2,11 +2,11 @@
 
 -- ft.h1: What is an FPM Sync Conflict?
 
-FPM can handle most [sync](glossary/sync/#sync) operations on its own with
+FPM can handle most [sync](glossary/#sync) operations on its own with
 automatic merging features. A sync conflict is an event that occurs when FPM is
 unable to automatically resolve differences in the file between latest
-[version](glossary/sync/#version) available on the [server](glossary/sync/#server-project)
-and the changes done against [client](glossary/sync/#client-project)'s latest
+[version](glossary/#version) available on the [server](glossary/#server-project)
+and the changes done against [client](glossary/#client-project)'s latest
 version.
 
 Conflicts generally arise when two clients try to sync their changes to the
@@ -17,7 +17,7 @@ server in the following cases:
 In these cases, FPM cannot automatically determine what is correct. Conflicts
 only affect the client conducting the sync, the rest of the clients are unaware
 of the conflict. FPM notifies that the file gets in
-[conflict-state](glossary/sync/#conflict-state) and halt the syncing
+[conflict-state](glossary/#conflict-state) and halt the syncing
 process for that file. Though, the rest of the file gets synced. It is then the
 client's responsibility to resolve the conflict.
 
@@ -98,8 +98,9 @@ and B has created its own new file. Now server doesn't know what is correct.
 On sync, FPM produces some descriptive output letting us know that a CONFLICT
 has occurred. We can gain further insight by running the
 [`fpm sync-status`](cli/sync-status/) command. The output from `fpm sync-status`
-indicates that there are some [un-synced file](glossary/sync/#un-synced-file) s due to a conflict. These files
-cannot be synced in future syncs too unless their conflicts have been resolved.
+indicates that there are some [un-synced file](glossary/#un-synced-file) s due
+to a conflict. These files cannot be synced in future syncs too unless their
+conflicts have been resolved.
 
 
 

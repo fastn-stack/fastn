@@ -168,7 +168,7 @@ email: arpita@fifthtry.com
   - `editor-sync` API: /sitemap/editor-sync/
   - `clone` API: /sitemap/clone/
 - Glossary:
-  - syncglossary: /glossary/sync/
+  - syncglossary: /glossary/
 
 ## Using `fpm` Crate: crate/
 

@@ -1,22 +1,219 @@
 -- ft.page: Glossary
 
-For readers/writers of document by id, we have three kinds of id: `id: /foo/`,
-`full-id: /foo/-/x/`, `filename: foo.ftd`.
+An FPM Glossary
 
 
-Since we need to get `id`, `full-id` and `filename` of current document, to power
-document-readers, lets create processors `document-id`, `document-full-id` and
-`document-filename` as helpers as well. These three processors will return ids
-for current document.
+
+-- ft.h2: client project
+
+An [fpm project](glossary/#fpm-project) which is a clone to the
+[server project](glossary/#server-project) and tracks it. The interaction
+with server project is established using [sync](glossary/#sync).
 
 
-Also note current document is the "main document", the document requested
-over HTTP. If `/foo/` is accessed, and foo.ftd imports `bar.ftd`, and in
-`bar.ftd` we use `document-id` processor, it will still return `/foo/`.
+-- ft.h2: clone
+
+Clone a [server project](glossary/#server-project) into a new directory
+which becomes a [client](glossary/#server-project).
 
 
-Lets also create document-suffix processor, which will return `optional string`,
-for `/foo/` the suffix is null, and for `/foo/-/x/y/` the suffix is `/x/y/`.
+-- ft.h2: conflict-state
+
+The file is said to be in the `conflict-state` if the file gets in conflict with
+server latest [version](glossary/#version) of the same file.
+
+```
+The file, in conflict-state, is never considered to be synced unless its
+conflict is resolved.
+```
 
 
-Suffix is what comes after `/-/` in the `document-full-id`.
+-- ft.h2: document
+
+The [file](glossary/#file) with extension that are compiled using FPM.
+Currently, there are two such extensions `.md` and `.ftd`.
+
+
+-- ft.h2: document-name
+
+The unique identifier of a [document](glossary/#document).
+
+This can accessed using [`document-filename`](processors/document-filename/)
+processor.
+
+
+-- ft.h2: document-full-id
+
+The `document-full-id` is same as the [`document-id`](glossary/#document-id).
+Though, in some case, it could be alias to `document-id` with a
+[`document-suffix`](glossary/#document-suffix) added after special character
+`/-/`. In case, when `document-suffix` is not present, `document-full-id` and
+`document-id` are same.
+
+For a document `foo.ftd`, the `document-id` is `/foo/` but `document-full-id`
+could be `/foo/-/x/` where `/x/` is the `document-suffix`. Both `/foo/` and
+`/foo/-/x/` points to `foo.ftd`, probably with different
+[`document-metadata`](glossary/#document-metadata).
+
+This can accessed using [`document-full-id`](processors/document-full-id/)
+processor.
+
+
+-- ft.h2: document-id
+
+The `document-id` is the url read-only property of the document interface
+returns the location from where the compiled version of document can be
+accessed. Though it can differ from [`document-full-id`](glossary/#document-full-id)
+in the respect that KVP.
+
+For a document `foo.ftd`, the `document-id` is `/foo/`
+
+This can accessed using [`document-id`](processors/document-id/)
+processor.
+
+
+-- ft.h2: document-metadata
+
+The `document-metadata` is the key-value pair data provided to
+[`document-full-id`](glossary/#document-full-id) in the
+[sitemap](glossary/#sitemap). This data can be accessed by the document, it's
+pointing to via `document-id`, using [`get-data`](processors/get-data/)
+processor.
+
+
+-- ft.code: `document-metadata` in sitemap
+lang: ftd
+
+# Foo title: /foo/
+  name: Arpita
+
+
+-- ft.markdown:
+
+Here, `/foo/` is both `document-full-id` and [`document-id`](glossary/#document-id).
+`name: Arpita` is `document-metadata` where `name` is key and `Arpita` is value.
+`foo.ftd` is the [`document-filename`](glossary/#document-filename). This
+document, `foo.ftd`, can access the `document-metadata` using `get-data`
+processor.
+
+
+
+-- ft.h2: document-suffix
+
+The `document-suffix` is the special read-only property in
+[`document-full-id`](glossary/#document-full-id) which is added after special
+character `/-/`.
+
+It helps to provide different [`document-metadata`](glossary/#document-metadata)
+to render different content.
+
+For `/foo/-/x/` as `document-full-id`, /x/ is `document-suffix`.
+
+This can accessed using [`document-suffix`](processors/document-suffix/)
+processor.
+
+
+-- ft.h2: file
+
+The unit of storage in FPM. It is uniquely identified by the
+[filename](glossary/#filename).
+
+
+
+-- ft.h2: filename
+
+The unique identifier of an [file](glossary/#file).
+
+
+
+-- ft.h2: fpm project
+
+The unit folder that contains `FPM.ftd` and any number of folders or files of
+any extension along with states (server-state and/or client-state).
+
+
+-- ft.h2: server project
+
+An fpm project which is used to track the same project but resides somewhere
+else. To communicate with server, see [clone](glossary/#clone) or
+[sync](glossary/#sync).
+
+
+
+-- ft.h2: server-latest
+
+The current tree of files in server. This can be derived by looking at the server
+history and get the latest version of each file. The file having the content
+from its latest version, if not deleted, becomes the part of current tree.
+
+
+-- ft.h2: sync
+
+To bring the contents of [client project](glossary/#client-project) into
+the [server project](glossary/#server-project). Also to bring the server's
+changes after the client diverged into the client project. In the end results
+the server and the client to be exact copy of each other.
+
+Sync is specific to a file. Though the [`fpm sync`](cli/sync/) commands
+results in syncing of all the changed file.
+
+Syncing is performed by an automatic process that identifies changes made since
+the client and the server diverged, and then applies all those changes together.
+In cases where changes conflict in the file, file enters into conflict-state and
+manual intervention may be required to complete the sync of conflicted file.
+
+A successful sync results in the creation of a new [version](glossary/#version)
+of the file.
+
+
+-- ft.h2: three-way merge
+
+Three-way merges use a dedicated [version](glossary/#version), also known
+as base version, to tie together the histories in server and [un-synced
+file](glossary/#un-synced-file) in client. FPM uses three state of file to
+generate the new version: first: latest version in server, second: un-synced
+file in client and third: their common ancestor version.
+
+
+-- ft.h2: tracked file
+
+The file that resides in the [client project](glossary/#client-project) and
+has entry in workspace.
+
+
+-- ft.h2: un-synced file
+
+The changes in the file that resides in the [client
+project](glossary/#client-project) and are not yet [sync](glossary/#sync)ed.
+
+
+-- ft.h2: un-tracked file
+
+The file that resides in the [client project](glossary/#client-project) but
+has no entry in workspace.
+
+
+-- ft.h2: version
+
+As a noun: A single point in the FPM project history of a file; the entire
+history of a file in a project is represented as a set of interrelated version.
+
+As a verb: The action of storing a new snapshot of the file’s state in the
+[fpm project](glossary/#fpm-project) history, by creating a new version
+representing the current state of the file. The new version is created by
+[sync](glossary/#sync) action.
+
+
+-- ft.h2: workspace
+
+The workspace contains all the files present in the
+[server-latest](glossary/#server-latest), plus any local changes that have
+been made but not yet synced. It also includes the new files added to workspace
+using [`fpm add <file-name>`](cli/add).
+
+
+
+
+
+
+
