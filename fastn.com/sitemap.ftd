@@ -3,8 +3,8 @@
 -- ft.page: FPM Sitemap
 
 "FPM Sitemap" is the name of a structure we recommend for sites. It is
-optional, you can create any sitemap you want for your sites. FPM has
-built in support for FPM Sitemap.
+optional, you can create any [sitemap](glossary/#sitemap) you want for your sites.
+FPM has built in support for FPM Sitemap.
 
 -- ft.h1: The Structure
 
@@ -205,17 +205,17 @@ will include the canonical url pointing to `foo/`.
 
 
 
--- ft.h1: Key Value Data in Sitemap
+-- ft.h1: `document-metadata`: Key Value Data in Sitemap
 
 Document can use `get-data` processor to get value of any key specified in
 the sitemap. Since a document would get rendered once for each occurrence
 of the document in the sitemap, each occurrence can have different data
 and the occurrence specific data would be returned by `get-data`.
 
-The key value pair supports inheritance. This means that the key-value pair data
-presents in section get passed to it's subsection and TOCs. Similarly, subsection
-key value data get passed to TOCs. And also the parent TOC-item's key value data
-get passed to its children TOC.
+The [`document-metadata`](glossary/#document-metadata) supports inheritance.
+This means that the document-metadata presents in section get passed to it's
+subsection and TOCs. Similarly, subsection document-metadata get passed to TOCs.
+And also the parent TOC-item's document-metadata get passed to its children TOC.
 
 -- ft.code:
 lang: ftd
@@ -234,22 +234,22 @@ key3: value3
 
 -- ft.markdown:
 
-In the above example, the `section/url/` section have two key value data
+In the above example, the `section/url/` section have two document-metadata
 `key1: value1` and `key2: value2`
-The `subsection/url/` subsection have three key value data where two are
+The `subsection/url/` subsection have three document-metadata where two are
 inherited from section. i.e. `key1: value1`, `key2: value2` and `key3:
 value3`
-The `toc/url/` toc item have four key value data, where three are inherited
+The `toc/url/` toc item have four document-metadata, where three are inherited
 from section and subsection. i.e. `key1: value1`, `key2: value2`, `key3: value3`
 and `key4: value4`
-The `childtoc/url/` toc item have five key value data, where four are inherited
+The `childtoc/url/` toc item have five document-metadata, where four are inherited
 from section, subsection and it's parent TOC. i.e. `key1: value1`, `key2: value2`,
 `key3: value3`, `key4: value4` and `key5: value5`
 
 
 
 
--- ft.h1: Variable can be changed based on key value data
+-- ft.h1: Variable can be changed based on document-metadata
 
 Using the `get-data`, the title can be different:
 
