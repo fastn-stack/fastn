@@ -2127,7 +2127,7 @@ padding-horizontal: 2
 width: fill
 
 --- ftd.row:
-if: $status == Untracked
+if: $status == Uptodate
 spacing: 10
 width: fill
 $on-mouse-enter$: $show-action-on-status = true

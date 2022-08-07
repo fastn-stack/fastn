@@ -41,7 +41,7 @@ async fn file_status(
     let track_status = get_track_status(&file, snapshots, base_path.as_str())?;
 
     let mut clean = true;
-    if !file_status.eq(&FileStatus::Untracked) {
+    if !file_status.eq(&FileStatus::Uptodate) {
         println!("{:?}: {}", file_status, source);
         clean = false;
     }
@@ -130,7 +130,7 @@ pub(crate) async fn get_file_status(
         let content = tokio::fs::read(&doc.get_full_path()).await?;
         let existing_doc = tokio::fs::read(&path).await?;
         if sha2::Sha256::digest(content).eq(&sha2::Sha256::digest(existing_doc)) {
-            return Ok(FileStatus::Untracked);
+            return Ok(FileStatus::Uptodate);
         }
         return Ok(FileStatus::Modified);
     }
@@ -204,7 +204,7 @@ fn print_file_status(file_status: &std::collections::BTreeMap<String, FileStatus
 
     for (id, status) in file_status
         .iter()
-        .filter(|(_, f)| !f.eq(&&FileStatus::Untracked))
+        .filter(|(_, f)| !f.eq(&&FileStatus::Uptodate))
     {
         any_modification = true;
         println!("{:?}: {}", status, id);
@@ -218,7 +218,7 @@ pub(crate) enum FileStatus {
     Modified,
     Added,
     Deleted,
-    Untracked,
+    Uptodate,
     Conflicted,
     Outdated,
     ClientEditedServerDeleted,

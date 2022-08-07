@@ -46,7 +46,7 @@ pub enum FileStatus {
         version: i32,
         status: Status,
     },
-    Untracked {
+    Uptodate {
         path: String,
         version: i32,
     },
@@ -58,7 +58,7 @@ impl FileStatus {
             FileStatus::Add { status, .. }
             | FileStatus::Update { status, .. }
             | FileStatus::Delete { status, .. } => status,
-            FileStatus::Untracked { .. } => return false,
+            FileStatus::Uptodate { .. } => return false,
         };
         status.is_conflicted()
     }
@@ -74,7 +74,7 @@ impl FileStatus {
             | FileStatus::Delete {
                 status, version, ..
             } => Some(status.conflicted_version().unwrap_or(*version)),
-            FileStatus::Untracked { version, .. } => Some(*version),
+            FileStatus::Uptodate { version, .. } => Some(*version),
         }
     }
 
@@ -83,7 +83,7 @@ impl FileStatus {
             FileStatus::Add { status, .. }
             | FileStatus::Update { status, .. }
             | FileStatus::Delete { status, .. } => Some(status),
-            FileStatus::Untracked { .. } => None,
+            FileStatus::Uptodate { .. } => None,
         }
     }
 
@@ -92,7 +92,7 @@ impl FileStatus {
             FileStatus::Add { path, .. }
             | FileStatus::Update { path, .. }
             | FileStatus::Delete { path, .. }
-            | FileStatus::Untracked { path, .. } => path.to_string(),
+            | FileStatus::Uptodate { path, .. } => path.to_string(),
         }
     }
 
@@ -117,7 +117,7 @@ impl FileStatus {
             FileStatus::Delete { path, version, .. } => {
                 fpm::apis::sync2::SyncRequestFile::Delete { path, version }
             }
-            FileStatus::Untracked { .. } => return None,
+            FileStatus::Uptodate { .. } => return None,
         })
     }
 }
@@ -184,7 +184,7 @@ impl fpm::Config {
             let history_path = self.history_path(workspace_entry.filename.as_str(), version);
             let history_content = tokio::fs::read(history_path).await?;
             if sha2::Sha256::digest(&content).eq(&sha2::Sha256::digest(&history_content)) {
-                changed_files.push(FileStatus::Untracked {
+                changed_files.push(FileStatus::Uptodate {
                     path: workspace_entry.filename.to_string(),
                     version,
                 });
@@ -209,7 +209,7 @@ impl fpm::Config {
         let server_latest = self.get_latest_file_edits().await?;
         for (index, file) in files.iter_mut().enumerate() {
             match file {
-                FileStatus::Untracked { .. } => {
+                FileStatus::Uptodate { .. } => {
                     continue;
                 }
                 FileStatus::Add {

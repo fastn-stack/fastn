@@ -26,9 +26,9 @@ fn print_status(file_status: &fpm::sync_utils::FileStatus, print_untracked: bool
         fpm::sync_utils::FileStatus::Add { path, status, .. } => ("Added", path, status),
         fpm::sync_utils::FileStatus::Update { path, status, .. } => ("Updated", path, status),
         fpm::sync_utils::FileStatus::Delete { path, status, .. } => ("Deleted", path, status),
-        fpm::sync_utils::FileStatus::Untracked { path, .. } => {
+        fpm::sync_utils::FileStatus::Uptodate { path, .. } => {
             if print_untracked {
-                println!("Untracked: {}", path);
+                println!("Up-to-date: {}", path);
             }
             return;
         }

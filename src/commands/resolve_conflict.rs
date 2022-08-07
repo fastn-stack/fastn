@@ -285,7 +285,7 @@ async fn get_conflict_data(
                 marker: None,
             })
         }
-        fpm::sync_utils::FileStatus::Untracked { path, version } => {
+        fpm::sync_utils::FileStatus::Uptodate { path, version } => {
             return fpm::usage_error(format!(
                 "No changes detected for file `{}` with latest version: `{}`",
                 path, version
