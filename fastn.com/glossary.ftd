@@ -147,6 +147,14 @@ history and get the latest version of each file. The file having the content
 from its latest version, if not deleted, becomes the part of current tree.
 
 
+-- ft.h2: sitemap
+
+
+A sitemap is a data-structure where information is provided about the files on
+site. A sitemap tells which pages are important in site, and placed in proper
+structure. See also [sitemap](sitemap/).
+
+
 -- ft.h2: sync
 
 To bring the contents of [client project](glossary/#client-project) into
