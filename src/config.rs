@@ -68,8 +68,16 @@ impl Config {
         self.client_dir().join("workspace.ftd")
     }
 
-    pub fn client_available_crs(&self) -> camino::Utf8PathBuf {
+    pub fn client_available_crs_path(&self) -> camino::Utf8PathBuf {
         self.client_dir().join("cr")
+    }
+
+    pub fn cr_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
+        self.root.join("-/").join(cr_number.to_string())
+    }
+
+    pub fn cr_about_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
+        self.cr_path(cr_number).join("-/about.ftd")
     }
 
     pub fn server_dir(&self) -> camino::Utf8PathBuf {
@@ -985,18 +993,27 @@ impl Config {
         Ok(fpm::doc::parse_ftd("FPM", doc.as_str(), &lib)?)
     }
 
-    pub(crate) async fn get_reserved_crs(&self) -> fpm::Result<Vec<i32>> {
+    pub(crate) async fn get_reserved_crs(
+        &self,
+        number_of_crs_to_reserve: Option<usize>,
+    ) -> fpm::Result<Vec<i32>> {
+        let number_of_crs_to_reserve =
+            if let Some(number_of_crs_to_reserve) = number_of_crs_to_reserve {
+                number_of_crs_to_reserve
+            } else {
+                fpm::NUMBER_OF_CRS_TO_RESERVE
+            };
         if !cfg!(feature = "remote") {
             return fpm::usage_error("Can be used by remote only".to_string());
         }
         let value = fpm::cache::update(
             self.server_cr().to_string().as_str(),
-            fpm::NUMBER_OF_CRS_TO_RESERVE,
+            number_of_crs_to_reserve,
         )
         .await? as i32;
 
         Ok(Vec::from_iter(
-            (value - (fpm::NUMBER_OF_CRS_TO_RESERVE as i32))..value,
+            (value - (number_of_crs_to_reserve as i32))..value,
         ))
     }
 }

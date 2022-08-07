@@ -92,6 +92,9 @@ async fn main() -> fpm::Result<()> {
         let source = status.value_of("source");
         fpm::sync_status(&config, source).await?;
     }
+    if matches.subcommand_matches("create-cr").is_some() {
+        fpm::create_cr(&config).await?;
+    }
     if let Some(status) = matches.subcommand_matches("status") {
         let source = status.value_of("source");
         fpm::status(&config, source).await?;
@@ -259,6 +262,11 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
             clap::SubCommand::with_name("sync-status")
                 .arg(clap::Arg::with_name("source"))
                 .about("Show the sync status of files in this fpm package")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("create-cr")
+                .about("Create a Change Request")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(

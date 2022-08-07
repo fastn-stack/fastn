@@ -26,7 +26,7 @@ impl fpm::Config {
 
     pub(crate) async fn write_client_available_cr(&self, reserved_crs: &[i32]) -> fpm::Result<()> {
         fpm::utils::update(
-            &self.client_available_crs(),
+            &self.client_available_crs_path(),
             reserved_crs
                 .iter()
                 .map(|v| v.to_string())
@@ -35,6 +35,28 @@ impl fpm::Config {
         )
         .await?;
         Ok(())
+    }
+
+    pub async fn get_available_crs(&self) -> fpm::Result<Vec<i32>> {
+        let mut response = vec![];
+        if self.client_available_crs_path().exists() {
+            let crs = tokio::fs::read_to_string(self.client_available_crs_path()).await?;
+            for cr in crs.split("\n") {
+                response.push(cr.parse()?)
+            }
+        }
+        Ok(response)
+    }
+
+    pub async fn extract_cr_number(&self) -> fpm::Result<i32> {
+        let mut available_crs = self.get_available_crs().await?;
+        if available_crs.is_empty() {
+            return fpm::usage_error("No available cr number, try `fpm sync`".to_string());
+        }
+        let cr_number = available_crs.remove(0);
+        self.write_client_available_cr(available_crs.as_slice())
+            .await?;
+        Ok(cr_number)
     }
 
     pub(crate) async fn read_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {

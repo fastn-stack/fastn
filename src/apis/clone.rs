@@ -54,6 +54,6 @@ async fn clone_worker() -> fpm::Result<CloneResponse> {
     Ok(CloneResponse {
         package_name: config.package.name.to_string(),
         files,
-        reserved_crs: config.get_reserved_crs().await?,
+        reserved_crs: config.get_reserved_crs(None).await?,
     })
 }
