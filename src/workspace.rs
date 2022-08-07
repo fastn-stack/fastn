@@ -24,6 +24,19 @@ impl fpm::Config {
         Ok(())
     }
 
+    pub(crate) async fn write_client_available_cr(&self, reserved_crs: &[i32]) -> fpm::Result<()> {
+        fpm::utils::update(
+            &self.client_available_crs(),
+            reserved_crs
+                .iter()
+                .map(|v| v.to_string())
+                .join("\n")
+                .as_bytes(),
+        )
+        .await?;
+        Ok(())
+    }
+
     pub(crate) async fn read_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
         let workspace = {
             let workspace = tokio::fs::read_to_string(self.workspace_file());

@@ -9,6 +9,7 @@ pub mod utils;
 // Temp comment
 mod apis;
 mod auto_import;
+mod cache;
 mod commands;
 mod config;
 mod controller;
@@ -56,6 +57,7 @@ pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
 pub const PACKAGE_INFO_INTERFACE: &str = "fifthtry.github.io/package-info";
 pub const PACKAGE_THEME_INTERFACE: &str = "fifthtry.github.io/theme";
+pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
 pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
 
@@ -410,7 +412,7 @@ pub enum Error {
     #[error("IoError: {}", _0)]
     IoError(#[from] std::io::Error),
 
-    #[error("IoError: {}", _0)]
+    #[error("ZipError: {}", _0)]
     ZipError(#[from] zip::result::ZipError),
 
     #[error("SerdeJsonError: {}", _0)]
@@ -439,6 +441,12 @@ pub enum Error {
 
     #[error("UTF8Error: {}", _0)]
     UTF8Error(#[from] std::string::FromUtf8Error),
+
+    #[error("ParseIntError: {}", _0)]
+    ParseIntError(#[from] std::num::ParseIntError),
+
+    #[error("GenericError: {}", _0)]
+    GenericError(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

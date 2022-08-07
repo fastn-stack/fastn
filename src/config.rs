@@ -1,4 +1,5 @@
 use std::convert::TryInto;
+use std::iter::FromIterator;
 
 /// `Config` struct keeps track of configuration parameters that is shared with the entire
 /// program. It is constructed from the content of `FPM.ftd` file for the package.
@@ -67,12 +68,21 @@ impl Config {
         self.client_dir().join("workspace.ftd")
     }
 
+    pub fn client_available_crs(&self) -> camino::Utf8PathBuf {
+        self.client_dir().join("cr")
+    }
+
     pub fn server_dir(&self) -> camino::Utf8PathBuf {
         self.root.join(".server-state")
     }
 
     pub fn server_history_dir(&self) -> camino::Utf8PathBuf {
         self.server_dir().join("history")
+    }
+
+    /// location that stores lowest available cr number
+    pub fn server_cr(&self) -> camino::Utf8PathBuf {
+        self.server_dir().join("cr")
     }
 
     pub fn history_file(&self) -> camino::Utf8PathBuf {
@@ -973,6 +983,21 @@ impl Config {
         let doc = std::fs::read_to_string(package_fpm_path)?;
         let lib = fpm::FPMLibrary::default();
         Ok(fpm::doc::parse_ftd("FPM", doc.as_str(), &lib)?)
+    }
+
+    pub(crate) async fn get_reserved_crs(&self) -> fpm::Result<Vec<i32>> {
+        if !cfg!(feature = "remote") {
+            return fpm::usage_error("Can be used by remote only".to_string());
+        }
+        let value = fpm::cache::update(
+            self.server_cr().to_string().as_str(),
+            fpm::NUMBER_OF_CRS_TO_RESERVE,
+        )
+        .await? as i32;
+
+        Ok(Vec::from_iter(
+            (value - (fpm::NUMBER_OF_CRS_TO_RESERVE as i32))..value,
+        ))
     }
 }
 
