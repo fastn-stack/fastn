@@ -2732,8 +2732,8 @@ fn assert_caption_body_checks(
 
     return Ok(());
 
-    /// checks for body and caption conflicts in the given
-    /// arguments map (string -> kind)
+    /// checks for body and caption conflicts using the given header list,
+    /// arguments and properties map of the component
     fn check_caption_body_conflicts(
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
         properties: Option<&std::collections::BTreeMap<String, Property>>,
@@ -2944,8 +2944,8 @@ fn assert_caption_body_checks(
                 {
                     // checks on ftd.integer, ftd.decimal, ftd.boolean
                     // these components take data from either caption or
-                    // header_value when invoked or when data is passed
-                    // by any variable component
+                    // header_value when invoked or when data is passed to it
+                    // from any variable component
                     let has_default = default.is_some();
 
                     // check if data conflicts from any 2 two ways
@@ -2960,7 +2960,7 @@ fn assert_caption_body_checks(
                         });
                     }
 
-                    // check if data is available in exaclty one way
+                    // check if data is available in exactly one way
                     if !(has_caption
                         || has_value
                         || has_property
@@ -2986,7 +2986,7 @@ fn assert_caption_body_checks(
             }
         }
 
-        // check if both caption and body is utlized
+        // check if both caption and body is utilized
         if !(caption_pass && body_pass) {
             // if caption is passed and caption not utilized then throw error
             if !caption_pass && has_caption {
