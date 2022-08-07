@@ -1,5 +1,7 @@
 -- ft.page: Understanding FPM Sync Conflict
 
+Prerequisite: [How Sync Works](dev/sync/)
+
 -- ft.h1: What is an FPM Sync Conflict?
 
 FPM can handle most [sync](glossary/#sync) operations on its own with
