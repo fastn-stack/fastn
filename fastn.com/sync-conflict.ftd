@@ -28,7 +28,7 @@ at the various types of conflicts next.
 
 A conflict can be of various types depending on how it occurs.
 
--- ft.h2: edit-edit-conflict
+-- ft.h2: `edit-edit-conflict`
 
 The `edit-edit-conflict` occurs when two clients try to sync the file in which
 they have done the independent changes and three-way merge of the file has
@@ -45,7 +45,7 @@ its end, it fails to do so, as the server and B are out of sync with respect to
 that file, i.e. the server has new version v2 of that file and B has done its
 changes against the version v1. Now server doesn't know what is correct.
 
--- ft.h2: edit-delete-conflict
+-- ft.h2: `edit-delete-conflict`
 
 The `edit-delete-conflict` occurs when the server contains a new version of the
 file and the client tries to delete the same file against some older version.
@@ -62,7 +62,7 @@ version v2 of that file and B has deleted it against the version v1.
 Now server doesn't know what to do.
 
 
--- ft.h2: delete-edit-conflict
+-- ft.h2: `delete-edit-conflict`
 
 The `edit-delete-conflict` occurs when on the server, the file is deleted and
 the client tries to edit the same file against some older version.
@@ -77,7 +77,7 @@ is deleted on the server and B has done its changes against the version v1.
 Now server doesn't know what to do.
 
 
--- ft.h2: add-add-conflict
+-- ft.h2: `add-add-conflict`
 
 The `add-add-conflict` occurs when two clients create a new file with same
 filename and independent content and try to sync the file.
