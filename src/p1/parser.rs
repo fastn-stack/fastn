@@ -917,4 +917,56 @@ mod test {
 
         f!("invalid", "foo:1 -> Expecting -- , found: invalid")
     }
+
+    #[test]
+    fn strict_body() {
+        // section body without headers
+        f!(
+            indoc!(
+                "-- some-section:
+                This is body
+                "
+            ),
+            "foo:2 -> start section body 'This is body' after a newline!!"
+        );
+
+        // section body with headers
+        f!(
+            indoc!(
+                "-- some-section:
+                h1: v1
+                This is body
+                "
+            ),
+            "foo:3 -> start section body 'This is body' after a newline!!"
+        );
+
+        // subsection body without headers
+        f!(
+            indoc!(
+                "-- some-section:
+                h1: val
+
+                --- some-sub-section:
+                This is body
+                "
+            ),
+            "foo:5 -> start sub-section body 'This is body' after a newline!!"
+        );
+
+        // subsection body with headers
+        f!(
+            indoc!(
+                "-- some-section:
+                h1: val
+
+                --- some-sub-section:
+                h2: val
+                h3: val
+                This is body
+                "
+            ),
+            "foo:7 -> start sub-section body 'This is body' after a newline!!"
+        );
+    }
 }
