@@ -401,8 +401,6 @@ width: fill
 if: not $ft.is-mobile
 footer-toc: $footer-toc
 
-container: ftd.main
-
 --- footer-mobile:
 if: $ft.is-mobile
 footer-toc: $footer-toc

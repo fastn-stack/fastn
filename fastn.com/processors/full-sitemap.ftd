@@ -42,25 +42,25 @@ string list writers:
 
 
 \-- record section-compat-data:
- string id:
- optional string title:
- key-value-data list extra-data:
- boolean is-active:
- optional string nav-title:
- subsection-compat-data list subsections:
+string id:
+optional string title:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
+subsection-compat-data list subsections:
 string list readers:
 string list writers:
 
 
 \-- record subsection-compat-data:
- optional string id:
- optional string title:
- boolean visible:
- key-value-data list extra-data:
- boolean is-active:
- optional string nav-title:
- toc-compat-data list toc:
- boolean skip:
+optional string id:
+optional string title:
+boolean visible:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
+toc-compat-data list toc:
+boolean skip:
 string list readers:
 string list writers:
 
@@ -78,10 +78,11 @@ string list writers:
 
 
 \-- record key-value-data:
- string key:
- string value:
+string key:
+string value:
 
 -- ft.markdown:
+
 The record `sitemap-compat-data` contains sections, section contains
 subsections, subsections contains list of toc, and toc again contains list of
 toc.
