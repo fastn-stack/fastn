@@ -1364,6 +1364,7 @@ format!(
 
         -- ui-data ui:
         last-modified-on: {last_modified_on}
+
      "},
     last_modified_on = fpm::i18n::translation::search(
         &lang,

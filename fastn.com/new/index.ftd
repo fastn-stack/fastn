@@ -1,7 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
-\-- import: new/lib as lib
+/-- import: new/lib as lib
 
 
 -- ft.page:
@@ -19,7 +19,7 @@ id: outer
 open: true
 append-at: m
 
-\--- lib.ftd-header:
+/--- lib.ftd-header:
 
 --- ftd.column:
 width: fill
@@ -27,7 +27,7 @@ padding: 100
 
 --- container: ftd.main
 
-\--- lib.ftd-footer:
+/--- lib.ftd-footer:
 
 
 -- container: outer

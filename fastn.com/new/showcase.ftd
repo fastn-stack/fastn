@@ -17,8 +17,6 @@ padding-right: 100
 background-color: $fpm.color.main.background.base
 id: nav-bar
 
-id: nav-bar
-
 
 -- ftd.image:
 src: $assets.files.images.fpm-logo-1.png

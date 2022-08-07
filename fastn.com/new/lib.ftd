@@ -1,7 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
-\-- component page:
+/-- component page:
 component: ftd.column
 open: m
 
@@ -27,10 +27,10 @@ lang: ftd
 
 -- ft.output:
 
-\--- ftd-header:
+/--- ftd-header:
 
 
-\-- component ftd-header:
+/-- component ftd-header:
 component: ftd.column
 width: fill
 
@@ -43,14 +43,12 @@ padding-bottom: 20
 background-color: $fpm.color.main.background.base
 id: nav-bar
 
-id: nav-bar
-
 --- ftd.image:
 src: $assets.files.images.fpm-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
 width: 130
 
-\--- container: nav-bar
+/--- container: nav-bar
 
 --- ftd.row:
 spacing: 50
@@ -98,10 +96,10 @@ lang: ftd
 
 -- ft.output:
 
-\--- ftd-footer:
+/--- ftd-footer:
 
 
-\-- component ftd-footer:
+/-- component ftd-footer:
 component: ftd.column
 width: fill
 background-color: $fpm.color.main.background.base
@@ -134,7 +132,7 @@ role: $fpm.type.heading-large
 color: $fpm.color.main.text
 padding-left: 20
 
-\--- container: ftd.main
+/--- container: ftd.main
 
 --- ftd.row:
 width: fill

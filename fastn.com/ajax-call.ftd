@@ -38,6 +38,7 @@ $always-include$: true
 
 -- ft.code:
 lang: json
+
 {
     "data": {
         "foo.ftd#name": "Abrar Khan"

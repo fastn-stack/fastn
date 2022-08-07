@@ -27,6 +27,7 @@ This is some **markdown text**.
 --- ft.code:
 if: $open
 lang: py
+
 import os
 
 print(os)
