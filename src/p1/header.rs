@@ -36,6 +36,7 @@ impl Header {
             .push((*line_number, name.to_string(), value.to_string()))
     }
 
+    // Check that text-style has only one weight attribute
     pub fn conflict_style(&self) -> ftd::p1::Result<()> {
         let mut hm = std::collections::HashMap::new();
         for (ln, k, v) in self.0.iter() {
