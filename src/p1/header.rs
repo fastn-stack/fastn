@@ -38,13 +38,11 @@ impl Header {
 
     pub fn conflict_style(&self) -> ftd::p1::Result<()> {
         let mut hm = std::collections::HashMap::new();
-        for (ln, k, v) in self
-            .0
-            .iter()
-        {
-            if k.starts_with("style"){
+        for (ln, k, v) in self.0.iter() {
+            if k.starts_with("style") {
                 let mut count = 0;
-                for i in ["heavy",
+                for i in [
+                    "heavy",
                     "ExtraBold",
                     "bold",
                     "SemiBold",
@@ -52,16 +50,16 @@ impl Header {
                     "regular",
                     "Light",
                     "ExtraLight",
-                    "HairLine"
-                ]{
+                    "HairLine",
+                ] {
                     if v.contains(i) {
                         count += 1;
-                        hm.insert(v,i);
+                        hm.insert(v, i);
                         if count >= 2 {
                             return Err(ftd::p1::Error::ParseError {
                                 doc_id: k.to_string(),
                                 line_number: *ln,
-                                message: format!("conflicting text weight styles found"),
+                                message: "conflicting text weight styles found".to_string(),
                             });
                         }
                     }
