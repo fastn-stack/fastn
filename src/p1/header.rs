@@ -36,7 +36,7 @@ impl Header {
             .push((*line_number, name.to_string(), value.to_string()))
     }
 
-    // Check that text-style has only one weight attribute
+    // Returns error is text style is assigned two or more weights
     pub fn conflict_style(&self) -> ftd::p1::Result<()> {
         let mut hm = std::collections::HashMap::new();
         for (ln, k, v) in self.0.iter() {
@@ -44,14 +44,14 @@ impl Header {
                 let mut count = 0;
                 for i in [
                     "heavy",
-                    "ExtraBold",
+                    "extra-bold",
                     "bold",
-                    "SemiBold",
-                    "Medium",
+                    "semi-bold",
+                    "medium",
                     "regular",
-                    "Light",
-                    "ExtraLight",
-                    "HairLine",
+                    "light",
+                    "extra-light",
+                    "hairline"
                 ] {
                     if v.contains(i) {
                         count += 1;
