@@ -2754,12 +2754,8 @@ fn read_arguments(
     let mut args: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
     let mut inherits: Vec<String> = Default::default();
 
-    // dbg!(root);
-    // dbg!(&arguments.keys());
-    // dbg!(&root_arguments.keys());
     // contains parent arguments and current arguments
     let mut all_args = arguments.clone();
-    // dbg!(&all_args.keys());
 
     // Set of root arguments which are invoked once
     let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
@@ -2769,7 +2765,6 @@ fn read_arguments(
             continue;
         }
 
-        // dbg!(k, v);
         let var_data = match ftd::variable::VariableData::get_name_kind(
             k,
             doc,
@@ -2866,15 +2861,6 @@ fn read_arguments(
         args.insert(var_data.name.to_string(), kind.clone());
         all_args.insert(var_data.name.to_string(), kind);
     }
-
-    // dbg!(&root_arguments.keys());
-    // dbg!(&args.keys());
-    // println!("-------------------------------------------");
-    // dbg!(&all_args.keys());
-    // println!("Headers: ");
-    // for (_, k, v) in p1.0.iter() {
-    //     dbg!(k, v);
-    // }
 
     Ok((args, inherits))
 }
