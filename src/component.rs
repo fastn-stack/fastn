@@ -2756,15 +2756,22 @@ fn read_arguments(
     let mut args: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
     let mut inherits: Vec<String> = Default::default();
 
+    // dbg!(root);
+    // dbg!(&arguments.keys());
+    // dbg!(&root_arguments.keys());
     // contains parent arguments and current arguments
     let mut all_args = arguments.clone();
+    // dbg!(&all_args.keys());
 
+    // Set of root arguments which are invoked once
+    let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
     for (idx, (i, k, v)) in p1.0.iter().enumerate() {
         if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('>') {
             // event and loop matches
             continue;
         }
 
+        // dbg!(k, v);
         let var_data = match ftd::variable::VariableData::get_name_kind(
             k,
             doc,
@@ -2772,7 +2779,25 @@ fn read_arguments(
             vec![].as_slice(),
         ) {
             Ok(v) => v,
-            _ => continue,
+            _ => {
+                // Duplicate header usage check
+                if root_args_set.contains(k) {
+                    if let Some(kind) = root_arguments.get(k) {
+                        if kind.inner().is_list() {
+                            continue;
+                        }
+                        return Err(ftd::p1::Error::ForbiddenUsage {
+                            message: format!("repeated usage of \'{}\' not allowed !!", k),
+                            doc_id: doc.name.to_string(),
+                            line_number: *i,
+                        });
+                    }
+                } else {
+                    root_args_set.insert(k.to_string());
+                }
+
+                continue;
+            }
         };
 
         let option_v = if v.is_empty() {
@@ -2827,9 +2852,31 @@ fn read_arguments(
             *h = headers;
             *ui_id = doc.resolve_name(*i, ui_id.as_str())?;
         }
+
+        // Duplicate header definition check
+        if args.contains_key(var_data.name.as_str()) {
+            return Err(ftd::p1::Error::ForbiddenUsage {
+                message: format!(
+                    "\'{}\' is already used as header name/identifier !!",
+                    &var_data.name
+                ),
+                doc_id: doc.name.to_string(),
+                line_number: *i,
+            });
+        }
+
         args.insert(var_data.name.to_string(), kind.clone());
         all_args.insert(var_data.name.to_string(), kind);
     }
+
+    // dbg!(&root_arguments.keys());
+    // dbg!(&args.keys());
+    // println!("-------------------------------------------");
+    // dbg!(&all_args.keys());
+    // println!("Headers: ");
+    // for (_, k, v) in p1.0.iter() {
+    //     dbg!(k, v);
+    // }
 
     Ok((args, inherits))
 }
