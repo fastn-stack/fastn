@@ -7,6 +7,17 @@ pub struct CRAbout {
     pub open: bool,
 }
 
+impl CRAbout {
+    pub(crate) fn unset_open(self) -> CRAbout {
+        CRAbout {
+            title: self.title,
+            description: self.description,
+            cr_number: self.cr_number,
+            open: false,
+        }
+    }
+}
+
 pub(crate) async fn get_cr_about(
     config: &fpm::Config,
     cr_number: usize,
