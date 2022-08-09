@@ -100,7 +100,7 @@ macro_rules! intf {
                 let expected_error = $m.trim();
                 let err_found = e.to_string();
                 let found = err_found.trim();
-                if expected_error != err_found {
+                if expected_error != found {
                     let patch = diffy::create_patch(expected_error, found);
                     let f = diffy::PatchFormatter::new().with_color();
                     print!(
