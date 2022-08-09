@@ -89,6 +89,37 @@ macro_rules! p {
     };
 }
 
+macro_rules! intf {
+    ($s:expr, $m: expr,) => {
+        int_fail!($s, $m)
+    };
+    ($s:expr, $m: expr) => {
+        match ftd::test::interpret("foo", indoc::indoc!($s), &ftd::p2::TestLibrary {}) {
+            Ok(some_value) => panic!("expected failure {:?}, found: {:?}", $m, some_value),
+            Err(e) => {
+                let expected_error = $m.trim();
+                let err_found = e.to_string();
+                let found = err_found.trim();
+                if expected_error != err_found {
+                    let patch = diffy::create_patch(expected_error, found);
+                    let f = diffy::PatchFormatter::new().with_color();
+                    print!(
+                        "{}",
+                        f.fmt_patch(&patch)
+                            .to_string()
+                            .replace("\\ No newline at end of file", "")
+                    );
+                    println!(
+                        "expected error:\n{}\nfound:\n{}\n",
+                        expected_error, err_found
+                    );
+                    panic!("test failed")
+                }
+            }
+        }
+    };
+}
+
 pub fn s(s: &str) -> String {
     s.to_string()
 }

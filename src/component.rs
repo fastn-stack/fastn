@@ -2711,7 +2711,6 @@ pub(crate) fn default_arguments() -> std::collections::BTreeMap<String, ftd::p2:
         ftd::p2::Kind::decimal().into_optional(),
     );
     default_argument.insert("slot".to_string(), ftd::p2::Kind::string().into_optional());
-
     default_argument
 }
 
@@ -2967,6 +2966,27 @@ mod test {
                 line_number: 1,
                 ..Default::default()
             }
+        );
+    }
+
+    #[test]
+    fn duplicate_headers() {
+        // Repeated header definition with the same name (forbidden)
+        intf!(
+            "-- ftd.row foo:
+            caption name:
+            string name:
+            ",
+            "forbidden usage: 'name' is already used as header name/identifier !!, line_number: 3, doc: foo"
+        );
+
+        // Value assignment on the same header twice (not allowed)
+        intf!(
+            "-- ftd.text: Hello friends
+            align: center
+            align: left
+            ",
+            "forbidden usage: repeated usage of 'align' not allowed !!, line_number: 3, doc: foo"
         );
     }
 
