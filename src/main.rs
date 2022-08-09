@@ -22,9 +22,11 @@ async fn main() -> fpm::Result<()> {
                     .unwrap_or_else(|_| panic!("provided port {} is wrong", p))
             });
 
+        let identities = mark.value_of("identities").map(|x| x.to_string());
+
         let bind = mark.value_of("bind").unwrap_or("127.0.0.1").to_string();
         tokio::task::spawn_blocking(move || {
-            fpm::fpm_serve(bind.as_str(), port).expect("http service error");
+            fpm::fpm_serve(bind.as_str(), port, identities).expect("http service error");
         })
         .await
         .expect("Thread spawn error");

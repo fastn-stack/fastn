@@ -449,6 +449,9 @@ pub enum Error {
 
     #[error("GenericError: {}", _0)]
     GenericError(String),
+
+    #[error("GroupNotFound: id: {}, {message}")]
+    GroupNotFound { message: String },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

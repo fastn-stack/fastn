@@ -111,11 +111,11 @@ async fn mark_resolve(
     delete_it: bool,
 ) -> fpm::Result<()> {
     let path = file_status.get_file_path();
-    let is_client_edited_server_deleted = file_status
+    let is_clone_edited_remote_deleted = file_status
         .status()
-        .map(|v| v.is_client_edited_server_deleted())
+        .map(|v| v.is_clone_edited_remote_deleted())
         .unwrap_or(false);
-    let server_version = file_status
+    let remote_version = file_status
         .status()
         .and_then(|v| v.conflicted_version())
         .ok_or(fpm::Error::UsageError {
@@ -128,15 +128,15 @@ async fn mark_resolve(
             .iter()
             .map(|v| (v.filename.to_string(), v.clone()))
             .collect();
-    if delete_it && is_client_edited_server_deleted {
+    if delete_it && is_clone_edited_remote_deleted {
         workspace_map.remove(&path);
     } else {
         let file_workspace_entry = workspace_map.get_mut(&path).ok_or(fpm::Error::UsageError {
             message: format!("Can't find entry in workspace for `{}`", path),
         })?;
-        file_workspace_entry.version = Some(server_version);
+        file_workspace_entry.version = Some(remote_version);
         file_workspace_entry.deleted = if delete_it { Some(true) } else { None };
-        if is_client_edited_server_deleted {
+        if is_clone_edited_remote_deleted {
             file_workspace_entry.version = None;
         }
     }
@@ -179,12 +179,12 @@ async fn get_conflict_data(
             content,
             status,
         } => {
-            let server_version = if let Some(version) = status.conflicted_version() {
+            let remote_version = if let Some(version) = status.conflicted_version() {
                 version
             } else {
                 return fpm::usage_error(format!("`{}` is not in conflict state", path));
             };
-            let history_path = config.history_path(path, server_version);
+            let history_path = config.history_path(path, remote_version);
             let history_content = tokio::fs::read(history_path).await?;
             /* if let Ok(theirs_string) = String::from_utf8(history_content.to_vec()) {
                 let ours_string = String::from_utf8(content.to_vec())?;
@@ -214,15 +214,12 @@ async fn get_conflict_data(
             version,
             status,
         } => {
-            let server_version = if let Some(version) = status.conflicted_version() {
+            let remote_version = if let Some(version) = status.conflicted_version() {
                 version
             } else {
                 return fpm::usage_error(format!("`{}` is not in conflict state", path));
             };
-            if matches!(
-                status,
-                fpm::sync_utils::Status::ClientEditedServerDeleted(_)
-            ) {
+            if matches!(status, fpm::sync_utils::Status::CloneEditedRemoteDeleted(_)) {
                 return Ok(ConflictData {
                     ours: Content::Content(content.to_vec()),
                     theirs: Content::Deleted,
@@ -236,7 +233,7 @@ async fn get_conflict_data(
                     status
                 ));
             }
-            let theirs_path = config.history_path(path, server_version);
+            let theirs_path = config.history_path(path, remote_version);
             let theirs_content = tokio::fs::read(theirs_path).await?;
             if let Ok(theirs_string) = String::from_utf8(theirs_content.to_vec()) {
                 let ours_string = String::from_utf8(content.to_vec())?;
@@ -268,15 +265,15 @@ async fn get_conflict_data(
             })
         }
         fpm::sync_utils::FileStatus::Delete { path, status, .. } => {
-            let version =
-                if let fpm::sync_utils::Status::ClientDeletedServerEdited(version) = status {
-                    version
-                } else {
-                    return fpm::usage_error(format!(
-                        "Expected status of the file is ClientDeletedServerEdited, found: {:?}",
-                        status
-                    ));
-                };
+            let version = if let fpm::sync_utils::Status::CloneDeletedRemoteEdited(version) = status
+            {
+                version
+            } else {
+                return fpm::usage_error(format!(
+                    "Expected status of the file is CloneDeletedRemoteEdited, found: {:?}",
+                    status
+                ));
+            };
             let theirs_path = config.history_path(path, *version);
             let theirs_content = tokio::fs::read(theirs_path).await?;
             Ok(ConflictData {

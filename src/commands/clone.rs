@@ -17,7 +17,7 @@ pub async fn clone(source: &str) -> fpm::Result<()> {
     .await;
 
     let config = fpm::Config::read2(Some(root.as_str().to_string()), false).await?;
-    config.create_client_workspace().await?;
+    config.create_clone_workspace().await?;
     config
         .write_client_available_cr(clone_response.reserved_crs.as_slice())
         .await?;

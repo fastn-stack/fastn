@@ -8,7 +8,7 @@ pub struct WorkspaceEntry {
 }
 
 impl fpm::Config {
-    pub(crate) async fn evaluate_client_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
+    pub(crate) async fn evaluate_clone_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
         let history_list = self.get_history().await?;
         Ok(
             fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
@@ -18,15 +18,15 @@ impl fpm::Config {
         )
     }
 
-    pub(crate) async fn create_client_workspace(&self) -> fpm::Result<()> {
-        let workspace_list = self.evaluate_client_workspace().await?;
+    pub(crate) async fn create_clone_workspace(&self) -> fpm::Result<()> {
+        let workspace_list = self.evaluate_clone_workspace().await?;
         self.write_workspace(workspace_list.as_slice()).await?;
         Ok(())
     }
 
     pub(crate) async fn write_client_available_cr(&self, reserved_crs: &[i32]) -> fpm::Result<()> {
         fpm::utils::update(
-            &self.client_available_crs_path(),
+            &self.clone_available_crs_path(),
             reserved_crs
                 .iter()
                 .map(|v| v.to_string())
@@ -39,8 +39,8 @@ impl fpm::Config {
 
     pub async fn get_available_crs(&self) -> fpm::Result<Vec<i32>> {
         let mut response = vec![];
-        if self.client_available_crs_path().exists() {
-            let crs = tokio::fs::read_to_string(self.client_available_crs_path()).await?;
+        if self.clone_available_crs_path().exists() {
+            let crs = tokio::fs::read_to_string(self.clone_available_crs_path()).await?;
             for cr in crs.split("\n") {
                 response.push(cr.parse()?)
             }

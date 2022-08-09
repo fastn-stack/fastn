@@ -312,6 +312,7 @@ string list writers:
 caption id:
 optional string title:
 optional string description:
+string list groups:
 key-value-data list group-members:
 
 ; Need to think of a type like object

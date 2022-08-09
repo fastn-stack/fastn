@@ -115,11 +115,11 @@ pub(crate) async fn get_file_status(
                     _ => FileStatus::Conflicted,
                 }
             }
-            fpm::snapshot::WorkspaceType::ClientEditedServerDeleted => {
-                FileStatus::ClientEditedServerDeleted
+            fpm::snapshot::WorkspaceType::CloneEditedRemoteDeleted => {
+                FileStatus::CloneEditedRemoteDeleted
             }
-            fpm::snapshot::WorkspaceType::ClientDeletedServerEdited => {
-                FileStatus::ClientDeletedServerEdited
+            fpm::snapshot::WorkspaceType::CloneDeletedRemoteEdited => {
+                FileStatus::CloneDeletedRemoteEdited
             }
         });
     }
@@ -221,8 +221,8 @@ pub(crate) enum FileStatus {
     Uptodate,
     Conflicted,
     Outdated,
-    ClientEditedServerDeleted,
-    ClientDeletedServerEdited,
+    CloneEditedRemoteDeleted,
+    CloneDeletedRemoteEdited,
 }
 
 #[derive(Debug, PartialEq)]

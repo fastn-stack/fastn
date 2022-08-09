@@ -4,8 +4,8 @@ use itertools::Itertools;
 pub enum SyncStatus {
     Conflict,
     NoConflict,
-    ClientEditedServerDeleted,
-    ClientDeletedServerEdited,
+    CloneEditedRemoteDeleted,
+    CloneDeletedRemoteEdited,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug)]
@@ -127,7 +127,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         path.to_string(),
                         SyncResponseFile::Update {
                             path: path.to_string(),
-                            status: SyncStatus::ClientDeletedServerEdited,
+                            status: SyncStatus::CloneDeletedRemoteEdited,
                             content: data,
                         },
                     );
@@ -218,7 +218,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         path.to_string(),
                         SyncResponseFile::Update {
                             path: path.to_string(),
-                            status: SyncStatus::ClientEditedServerDeleted,
+                            status: SyncStatus::CloneEditedRemoteDeleted,
                             content: content.clone(),
                         },
                     );

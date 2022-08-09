@@ -5,7 +5,7 @@ pub async fn abort_merge(config: &fpm::Config, path: &str) -> fpm::Result<()> {
     if let Some(workspace) = workspaces.get_mut(path) {
         if workspace
             .workspace
-            .eq(&fpm::snapshot::WorkspaceType::ClientDeletedServerEdited)
+            .eq(&fpm::snapshot::WorkspaceType::CloneDeletedRemoteEdited)
         {
             if config.root.join(path).exists() {
                 tokio::fs::remove_file(config.root.join(path)).await?;

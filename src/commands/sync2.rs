@@ -102,7 +102,7 @@ async fn update_current_directory(
                 status,
             } => {
                 if status.add_add_conflict() {
-                    println!("ClientAddedServerAdded: {}", path);
+                    println!("CloneAddedRemoteAdded: {}", path);
                 } else {
                     fpm::utils::update(&config.root.join(path), content).await?;
                 }
@@ -113,9 +113,9 @@ async fn update_current_directory(
                 status,
             } => {
                 if status.edit_delete_conflict() {
-                    println!("ClientDeletedServerEdit: {}", path);
+                    println!("CloneDeletedRemoteEdit: {}", path);
                 } else if status.delete_edit_conflict() {
-                    println!("ClientEditedServerDeleted: {}", path);
+                    println!("CloneEditedRemoteDeleted: {}", path);
                 } else if status.edit_edit_conflict() {
                     println!("Conflict: {}", path);
                 } else {

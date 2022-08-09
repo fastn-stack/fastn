@@ -1300,6 +1300,7 @@ impl Sitemap {
     }
 
     /// This function will return all the readers and readers which are inherited from parent
+    // TODO: All writers are also readers
     pub fn readers<'a>(
         &self,
         doc_path: &str,
