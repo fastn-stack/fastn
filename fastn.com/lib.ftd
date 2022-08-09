@@ -218,7 +218,6 @@ align: center
 
 --- ftd.text: $title
 width: fill
-width: fill
 text-align: center
 color if $ftd.dark-mode: $fpm.color.main.text
 role: $fpm.type.label-big
@@ -227,7 +226,6 @@ role: $fpm.type.label-big
 text: $body
 width: fill
 role: $fpm.type.label-big
-width: fill
 text-align: center
 color if $ftd.dark-mode: $fpm.color.main.text
 
@@ -281,7 +279,6 @@ align: center
 
 --- ftd.text: $title
 width: fill
-width: fill
 text-align: center
 role: $fpm.type.label-big
 color: $fpm.color.main.text
@@ -289,7 +286,6 @@ color: $fpm.color.main.text
 --- ftd.text: $designation
 width: fill
 role: $fpm.type.label-small
-width: fill
 text-align: center
 color: $fpm.color.main.text
 

@@ -699,7 +699,6 @@ text: $title
 caption $title:
 region: title
 role: $fpm.type.heading-large
-text: $title
 color: $fpm.color.main.text
 padding-bottom: 16
 padding-top: 8
@@ -973,7 +972,6 @@ align: center
 
 --- ftd.text: $title
 width: fill
-width: fill
 text-align: center
 color: $fpm.color.main.text
 role: $fpm.type.label-big
@@ -1045,13 +1043,11 @@ align: center
 
 --- ftd.text: $title
 width: fill
-width: fill
 text-align: center
 color: $fpm.color.main.text
 role: $fpm.type.heading-large
 
 --- ftd.text: $designation
-width: fill
 width: fill
 text-align: center
 color: $fpm.color.main.text
@@ -1059,7 +1055,6 @@ role: $fpm.type.heading-medium
 
 --- ftd.text:
 text: $body
-width: fill
 width: fill
 text-align: center
 color: $fpm.color.main.text
