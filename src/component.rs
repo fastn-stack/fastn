@@ -2466,8 +2466,6 @@ pub fn read_properties(
         root_arguments
     };
 
-    // dbg!(&root_arguments, &arguments, &root_properties, &p1);
-
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
             properties.insert(name.to_string(), prop.clone());

@@ -8,6 +8,8 @@ width: fill
 
 --- ftd.integer: $current
 
+--- ftd.integer: $CHILDREN-COUNT
+
 --- ftd.column:
 id: col-id
 
@@ -18,14 +20,28 @@ if: $PARENT.current == $SIBLING-INDEX
 $on-click$: increment $PARENT.current clamp 1 $PARENT.CHILDREN-COUNT
 
 
+-- ftd.column page:
+open: true
+append-at: child-id
 
+--- ftd.text: Page Title
+
+--- ftd.column:
+id: child-id
+
+
+
+-- ftd.column:
+spacing: 40
 
 -- presentation:
 
---- slide: First
+--- slide: First 11
 
---- slide: Second
+--- slide: Second 11
 
+
+-- page:
 
 -- presentation:
 
