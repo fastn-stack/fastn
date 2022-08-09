@@ -104,8 +104,6 @@ impl InterpreterState {
             // This ensures that a section is evaluated once only.
             let p1 = parsed_document.sections.pop().unwrap();
 
-            // Check that text-style has only one weight attribute
-            p1.header.conflict_style()?;
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.

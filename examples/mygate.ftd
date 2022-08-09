@@ -78,6 +78,7 @@ open: false
 align: center
 padding-top: 20
 padding-bottom: 20
+
 $body
 
 --- ftd.text: frequent entry code

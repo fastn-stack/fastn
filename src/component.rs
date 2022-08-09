@@ -2756,6 +2756,12 @@ fn read_arguments(
     let mut args: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
     let mut inherits: Vec<String> = Default::default();
 
+    // Checking Component is text.ftd
+     if root.eq("ftd.text")
+     {
+         p1.conflict_style()?;
+     }
+
     // contains parent arguments and current arguments
     let mut all_args = arguments.clone();
 
