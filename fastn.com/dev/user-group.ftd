@@ -13,15 +13,79 @@ lang: ftd
 \-- fpm.package: amitu.com
 
 \-- fpm.user-group: fifthtry-people
+title: FifthTry People
 email-domain: fifthtry.com
 github-team: FifthTry/everyone
 
+Description-Body: This group is for FifthTry People
 
 -- ft.markdown:
 
 This creates a new user-group, whose unique id is `fifthtry-people`.
 
 The `id` of every `user-group` must be unique in a given package.
+
+
+-- ft.h1: Group Properties
+
+A group have different properties like `id`, `title`, `description` and
+identities.
+
+-- ft.h2: `id`
+
+`id` which should be unique for a package
+
+-- ft.h2: `title`
+
+`title` is a optional key in user-group.
+
+-- ft.h2: `description`
+
+`description` is a optional `body` in user-group.
+
+-- ft.h2: Identities
+
+Identities in a user-group contains `email`, `-email`, `group`, `-group`, etc...
+
+-- ft.h3: All Supported Identities
+
+These are all supported identities for [fpm.user-group](/theme/fpm/#user-group).
+
+- `email`
+- `-email`
+- `domain`
+- `-domain`
+- `telegram`
+- `-telegram`
+- `github`
+- `-github`
+- `github-team`
+- `-github-team`
+- `discord`
+- `-discord`
+- `group`
+- `-group`
+
+
+-- ft.h1: How To Create Group with Multiple Identities
+
+In the below group, `email` key can be used multiple times, `-email` means that
+`do-not-include-email` and for other identities as well.
+
+-- ft.code: User Group
+lang: ftd
+
+\fpm.user-group:
+email: abrark@fifthtry.com
+-email: amitu@fifthtry.com
+email: shobhit@fifthtry.com
+discord: abrark#12345
+domain: @fifthtry.com
+-domain: @foo.com
+github: abrark
+github-team: abrarnitk/team-a
+
+
 
 -- ft.h1: Re-using groups
 
@@ -71,3 +135,7 @@ github: abrarnitk
 
 This will combine all `group` and other group identities, but `except` ones
 will be explicitly removed from the combined set.
+
+-- ft.h1: How to Use User Groups In Sitemap
+
+Please check [this](/sitemap/#readers-and-writers-in-sitemap)

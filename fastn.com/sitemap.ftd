@@ -435,3 +435,8 @@ skip: true
 move-down: 15
 src: $assets.files.static.images.sitemap.toc_with_skip_header.png
 width: 725
+
+
+-- ft.h1: Readers and Writers in Sitemap
+
+TODO: How to use readers and writers in Sitemap at sitemap, section, subsection and toc level

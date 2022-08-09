@@ -27,3 +27,7 @@ All these are called user identities. Example identities:
 `github: amitu`, `telegram: fifthtry`, `telegram-group: fossunited` and so on.
 
 All these strings are now known as `user identity`.
+
+-- ft.h1: All Identities
+
+Find all identities [here](/dev/user-group/#all-supported-identities)

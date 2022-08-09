@@ -132,7 +132,8 @@ email: arpita@fifthtry.com
     url: /processors/document-full-id/
   - `$processor$: document-suffix`
     url: /processors/document-suffix/
-
+  - `$processor$: get-identities`
+    url: /processors/get-identities/
 
 
 # Development: /journal/

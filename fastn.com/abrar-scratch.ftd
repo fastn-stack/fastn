@@ -1,0 +1,60 @@
+
+-- fpm.user-group: likes-abrark
+github-likes: abrarnitk/abrark
+
+-- fpm.user-group: fpm-fan
+email: abrark@fifthtry.com
+github-likes: fifthtry/fpm
+discord-channel: fpm@fifthtry.com
+github-repo: abrarnitk/abrark
+
+
+Read request for /
+
+get-identities(/, is_read: true)
+groups: get-readers(/) -> [fpm-fan]
+identity: get_dynamic_identities(fpm-fan) -> [github-likes: fifthtry-fpm, discord-channel: fpm@fifthtry.com]
+
+/get-identities/?github-likes=fifthtry-fpm&discord-channel=fpm@fifthtry.com
+headers:
+    cookie:
+        sid: <token>
+
+empty or some-data
+
+list of identity authenticated on fifthtry
+this response only by passing sid
+
+github: abrarnitk
+discord: abrark#12345
+
+by passing by sid and groups
+basic identities
+
+
+
+5thtry.com
+/dj/
+OAuth
+
+
+django
+    - application github
+    - application discord
+    -
+
+Response:
+
+
+
+
+FPM Auth Workflow
+   - Identities from fpm controller
+       Get Identities from sitemap by document
+       Get Identities from fpm controller
+   - Identities from request cookies
+   - Identities from cli parameter
+   Call function belongs to on them
+
+Pass all the cookies to `get-identities` API
+
