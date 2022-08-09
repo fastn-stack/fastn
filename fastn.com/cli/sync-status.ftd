@@ -39,24 +39,24 @@ unchanged file using `fpm sync-status <file-name>`.
 
 -- ft.h2: `Conflict`
 
-This is the status for the files that gets in [conflict-state](glossary/#conflict-state)
+This is the status for the files that are [file-with-conflict](glossary/#file-with-conflict)
 while syncing and the conflict type is [`edit-edit-conflict`](sync-conflict/#edit-edit-conflict).
 
 
 -- ft.h2: `ClientEditedServerDeleted`
 
-This is the status for the files that gets in [conflict-state](glossary/#conflict-state)
+This is the status for the files that are [file-with-conflict](glossary/#file-with-conflict)
 while syncing and the conflict type is [`delete-edit-conflict`](sync-conflict/#delete-edit-conflict).
 
 
 -- ft.h2: `ClientDeletedServerEdited`
 
-This is the status for the files that gets in [conflict-state](glossary/#conflict-state)
+This is the status for the files that are [file-with-conflict](glossary/#file-with-conflict)
 while syncing and the conflict type is [`edit-delete-conflict`](sync-conflict/#edit-delete-conflict).
 
 
 -- ft.h2: `ClientAddedServerAdded`
 
-This is the status for the files that gets in [conflict-state](glossary/#conflict-state)
+This is the status for the files that are [file-with-conflict](glossary/#file-with-conflict)
 while syncing and the conflict type is [`add-add-conflict`](sync-conflict/#add-add-conflict).
 

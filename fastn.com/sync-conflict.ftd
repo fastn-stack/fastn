@@ -8,7 +8,7 @@ FPM can handle most [sync](glossary/#sync) operations on its own with
 automatic merging features. A sync conflict is an event that occurs when FPM is
 unable to automatically resolve differences in the file between latest
 [version](glossary/#version) available on the [server](glossary/#server-project)
-and the changes done against [client](glossary/#client-project)'s latest
+and the changes done against [clone](glossary/#clone)'s latest
 version.
 
 Conflicts generally arise when two clients try to sync their changes to the
@@ -19,7 +19,7 @@ server in the following cases:
 In these cases, FPM cannot automatically determine what is correct. Conflicts
 only affect the client conducting the sync, the rest of the clients are unaware
 of the conflict. FPM notifies that the file gets in
-[conflict-state](glossary/#conflict-state) and halt the syncing
+[conflict-state](glossary/#file-with-conflict) and halt the syncing
 process for that file. Though, the rest of the file gets synced. It is then the
 client's responsibility to resolve the conflict.
 

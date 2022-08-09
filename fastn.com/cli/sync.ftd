@@ -2,8 +2,8 @@
 
 This commands executes the [sync](glossary/#sync) operation on all the files
 that are part of [workspace](glossary/#workspace) and are different
-from [server-latest](glossary/#client-project). The files, in
-[conflict-state](glossary/#conflict-state), cannot participate in this
+from [server-latest](glossary/#server-latest). The
+[file-with-conflict](glossary/#file-with-conflict) cannot participate in this
 operation.
 
 In case of [sync conflict](sync-conflict/), It also produces some output letting

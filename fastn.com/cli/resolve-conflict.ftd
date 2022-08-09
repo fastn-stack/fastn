@@ -1,9 +1,9 @@
 -- ft.page: `fpm resolve-conflict <file-name>`
 
 This command is used to resolve the [conflict](sync-conflict/) in the file
-introduced by attempt, done by the [client](glossary/#client-project), to
-sync a file having different latest [version](glossary/#version) in the
-[server](glossary/#server-project) and has failed in three way merge.
+introduced by attempt, done by the [clone](glossary/#clone), to sync a file
+having different latest [version](glossary/#version) in the
+[remote](glossary/#remote) and has failed in three way merge.
 
 On successful execution of this command, the file gets out of conflict state and
 gets ready to be synced.
@@ -37,8 +37,8 @@ Sometimes, there's a need to keep the current/local changes of the file,
 discarding the changes from the server version. In such case, this command is
 helpful.
 
-It keeps the current content of the file and gets the file out of
-[conflict-state](glossary/#conflict-state)
+It keeps the current content of the file and the file is no longer
+[file-with-conflict](glossary/#file-with-conflict)
 
 
 -- ft.h1: `fpm resolve-conflict --use-theirs <file-name>`
@@ -48,8 +48,7 @@ and [`add-add-conflict`](sync-conflict/#add-add-conflict).
 
 This command accomplishes the opposite of `--use-ours` flag discussed above.
 It discards the current/local changes and keep the changes present in server
-version. It, then, gets the file out of
-[conflict-state](glossary/#conflict-state).
+version. Then, file is no longer [file-with-conflict](glossary/#file-with-conflict).
 
 
 -- ft.h1: `fpm resolve-conflict --delete-it <file-name>`
@@ -60,7 +59,7 @@ and [`delete-edit-conflict`](sync-conflict/#delete-edit-conflict).
 It deletes the file, discarding changes from server version, in case of
 [`edit-delete-conflict`](sync-conflict/#edit-delete-conflict), or current
 changes, in case of [`delete-edit-conflict`](sync-conflict/#delete-edit-conflict)
-and gets the file out of [conflict-state](glossary/#conflict-state)
+and the file is no longer [file-with-conflict](glossary/#file-with-conflict).
 
 
 -- ft.h1: `fpm resolve-conflict --revive-it <file-name>`
@@ -71,7 +70,7 @@ and [`delete-edit-conflict`](sync-conflict/#delete-edit-conflict).
 It keeps the changes of the file from server version, in case of
 [`edit-delete-conflict`](sync-conflict/#edit-delete-conflict), or from current
 changes, in case of [`delete-edit-conflict`](sync-conflict/#delete-edit-conflict)
-and gets the file out of [conflict-state](glossary/#conflict-state)
+and the file is no longer [file-with-conflict](glossary/#file-with-conflict).
 
 
 
