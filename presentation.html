@@ -32,10 +32,36 @@
     "value": false,
     "dependencies": {}
   },
-  "presentation.ftd#current@0": {
+  "presentation.ftd#CHILDREN-COUNT@0,0": {
+    "value": 2,
+    "dependencies": {
+      "0,0,2": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "presentation.ftd#CHILDREN-COUNT@0,1,2": {
+    "value": 3,
+    "dependencies": {
+      "0,1,1,0,2:child-id-external:0,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "presentation.ftd#current@0,0": {
     "value": 1,
     "dependencies": {
-      "0,1": [
+      "0,0,1": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -43,7 +69,7 @@
           "remaining": null
         }
       ],
-      "0,2,0:col-id-external:0": [
+      "0,0,3,0:col-id-external:0,0": [
         {
           "condition": 1,
           "dependency_type": "Visible",
@@ -51,7 +77,7 @@
           "remaining": null
         }
       ],
-      "0,2,1:col-id-external:0": [
+      "0,0,3,1:col-id-external:0,0": [
         {
           "condition": 2,
           "dependency_type": "Visible",
@@ -61,10 +87,10 @@
       ]
     }
   },
-  "presentation.ftd#current@1": {
+  "presentation.ftd#current@0,1,2": {
     "value": 1,
     "dependencies": {
-      "1,1": [
+      "0,1,1,0,1:child-id-external:0,1": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -72,7 +98,7 @@
           "remaining": null
         }
       ],
-      "1,2,0:col-id-external:1": [
+      "0,1,1,0,3,0:child-id-external:0,1.col-id-external:0,1,1,0": [
         {
           "condition": 1,
           "dependency_type": "Visible",
@@ -80,7 +106,7 @@
           "remaining": null
         }
       ],
-      "1,2,1:col-id-external:1": [
+      "0,1,1,0,3,1:child-id-external:0,1.col-id-external:0,1,1,0": [
         {
           "condition": 2,
           "dependency_type": "Visible",
@@ -88,7 +114,7 @@
           "remaining": null
         }
       ],
-      "1,2,2:col-id-external:1": [
+      "0,1,1,0,3,2:child-id-external:0,1.col-id-external:0,1,1,0": [
         {
           "condition": 3,
           "dependency_type": "Visible",
@@ -98,10 +124,10 @@
       ]
     }
   },
-  "presentation.ftd#title@0,0": {
-    "value": "First",
+  "presentation.ftd#title@0,0,0": {
+    "value": "First 11",
     "dependencies": {
-      "0,2,0:col-id-external:0": [
+      "0,0,3,0:col-id-external:0,0": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -111,10 +137,10 @@
       ]
     }
   },
-  "presentation.ftd#title@0,1": {
-    "value": "Second",
+  "presentation.ftd#title@0,0,1": {
+    "value": "Second 11",
     "dependencies": {
-      "0,2,1:col-id-external:0": [
+      "0,0,3,1:col-id-external:0,0": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -124,10 +150,10 @@
       ]
     }
   },
-  "presentation.ftd#title@1,0": {
+  "presentation.ftd#title@0,1,2,0": {
     "value": "First 1",
     "dependencies": {
-      "1,2,0:col-id-external:1": [
+      "0,1,1,0,3,0:child-id-external:0,1.col-id-external:0,1,1,0": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -137,10 +163,10 @@
       ]
     }
   },
-  "presentation.ftd#title@1,1": {
+  "presentation.ftd#title@0,1,2,1": {
     "value": "Second 1",
     "dependencies": {
-      "1,2,1:col-id-external:1": [
+      "0,1,1,0,3,1:child-id-external:0,1.col-id-external:0,1,1,0": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -150,10 +176,10 @@
       ]
     }
   },
-  "presentation.ftd#title@1,2": {
+  "presentation.ftd#title@0,1,2,2": {
     "value": "Third 1",
     "dependencies": {
-      "1,2,2:col-id-external:1": [
+      "0,1,1,0,3,2:child-id-external:0,1.col-id-external:0,1,1,0": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -167,20 +193,28 @@
     </script>
     <script type="ftd" id="ftd-external-children">
         {
-  "col-id-external:0": [
+  "child-id-external:0,1": [
     {
       "condition": [
-        "col-id:0,2"
+        "child-id:0,1,1"
       ],
-      "set_at": "col-id:0,2"
+      "set_at": "child-id:0,1,1"
     }
   ],
-  "col-id-external:1": [
+  "child-id-external:0,1.col-id-external:0,1,1,0": [
     {
       "condition": [
-        "col-id:1,2"
+        "col-id:0,1,1,0,3:child-id-external:0,1"
       ],
-      "set_at": "col-id:1,2"
+      "set_at": "col-id:0,1,1,0,3:child-id-external:0,1"
+    }
+  ],
+  "col-id-external:0,0": [
+    {
+      "condition": [
+        "col-id:0,0,3"
+      ],
+      "set_at": "col-id:0,0,3"
     }
   ]
 }
@@ -379,7 +413,7 @@ body.fpm-dark .ft_md a:visited code {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is presentation</div><div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">1</div><div data-id="col-id:0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="col-id-external:0:main" data-id="0,2,0:col-id-external:0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@0&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:2,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">First</div><div data-ext-id="col-id-external:0:main" data-id="0,2,1:col-id-external:0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@0&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:2,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Second</div></div></div><div data-id="1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is presentation</div><div data-id="1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">1</div><div data-id="col-id:1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="col-id-external:1:main" data-id="1,2,0:col-id-external:1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@1&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:3,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">First 1</div><div data-ext-id="col-id-external:1:main" data-id="1,2,1:col-id-external:1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@1&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:3,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Second 1</div><div data-ext-id="col-id-external:1:main" data-id="1,2,2:col-id-external:1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@1&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:3,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Third 1</div></div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" data-spacing="margin-top:40px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is presentation</div><div data-id="0,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">1</div><div data-id="0,0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">2</div><div data-id="col-id:0,0,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="col-id-external:0,0:main" data-id="0,0,3,0:col-id-external:0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@0,0&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:2,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">First 11</div><div data-ext-id="col-id-external:0,0:main" data-id="0,0,3,1:col-id-external:0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@0,0&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:2,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Second 11</div></div></div><div data-id="0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-top: 40px; text-decoration: none; white-space: initial" ><div data-id="0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Page Title</div><div data-id="child-id:0,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="child-id-external:0,1:main" data-id="0,1,1,0:child-id-external:0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,1,1,0,0:child-id-external:0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is presentation</div><div data-id="0,1,1,0,1:child-id-external:0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">1</div><div data-id="0,1,1,0,2:child-id-external:0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">3</div><div data-id="col-id:0,1,1,0,3:child-id-external:0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="child-id-external:0,1.col-id-external:0,1,1,0:main" data-id="0,1,1,0,3,0:child-id-external:0,1.col-id-external:0,1,1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@0,1,2&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:3,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">First 1</div><div data-ext-id="child-id-external:0,1.col-id-external:0,1,1,0:main" data-id="0,1,1,0,3,1:child-id-external:0,1.col-id-external:0,1,1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@0,1,2&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:3,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Second 1</div><div data-ext-id="child-id-external:0,1.col-id-external:0,1,1,0:main" data-id="0,1,1,0,3,2:child-id-external:0,1.col-id-external:0,1,1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;presentation.ftd#current@0,1,2&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:1,&quot;reference&quot;:null},{&quot;value&quot;:3,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Third 1</div></div></div></div></div></div></div>
 
 
     <script>
