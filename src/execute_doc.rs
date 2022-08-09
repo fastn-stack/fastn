@@ -137,6 +137,7 @@ impl<'a> ExecuteDoc<'a> {
                         None,
                         container_children,
                         referenced_local_variables,
+                        parent_children_length,
                     )?;
                 }
                 ftd::Instruction::ChildComponent { child: f } if !f.is_recursive => {
@@ -219,6 +220,7 @@ impl<'a> ExecuteDoc<'a> {
                         id.clone(),
                         vec![],
                         referenced_local_variables,
+                        parent_children_length,
                     )?;
                 }
                 ftd::Instruction::RecursiveChildComponent { child: f }
@@ -237,6 +239,7 @@ impl<'a> ExecuteDoc<'a> {
                             None,
                             vec![],
                             referenced_local_variables,
+                            parent_children_length,
                         )?
                     }
                 }
@@ -267,6 +270,7 @@ impl<'a> ExecuteDoc<'a> {
         id: Option<String>,
         container_children: Vec<ftd::Element>,
         referenced_local_variables: &mut std::collections::BTreeMap<String, String>,
+        parent_children_length: usize,
     ) -> ftd::p1::Result<Vec<ftd::Element>> {
         let mut current = &mut main;
         for i in current_container.iter() {
@@ -324,7 +328,7 @@ impl<'a> ExecuteDoc<'a> {
                         let mut new_parent_container = parent_container.to_vec();
                         new_parent_container
                             .extend(current_container.iter().map(ToOwned::to_owned));
-                        new_parent_container.push(len);
+                        new_parent_container.push(len + parent_children_length);
                         ftd::p2::utils::get_string_container(new_parent_container.as_slice())
                     };
                     let child = if container_children.is_empty() && is_open {
@@ -412,7 +416,7 @@ impl<'a> ExecuteDoc<'a> {
             let string_container = {
                 let mut new_parent_container = parent_container.to_vec();
                 new_parent_container.extend(current_container.iter().map(ToOwned::to_owned));
-                new_parent_container.push(len);
+                new_parent_container.push(len + parent_children_length);
                 ftd::p2::utils::get_string_container(new_parent_container.as_slice())
             };
             let mut child_count = 0;

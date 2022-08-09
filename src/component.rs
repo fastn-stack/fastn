@@ -3108,6 +3108,8 @@ fn read_arguments(
     // contains parent arguments and current arguments
     let mut all_args = arguments.clone();
 
+    // Set of root arguments which are invoked once
+    let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
     for (idx, (i, k, v)) in p1.0.iter().enumerate() {
         if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('>') {
             // event and loop matches
@@ -3121,7 +3123,25 @@ fn read_arguments(
             vec![].as_slice(),
         ) {
             Ok(v) => v,
-            _ => continue,
+            _ => {
+                // Duplicate header usage check
+                if root_args_set.contains(k) {
+                    if let Some(kind) = root_arguments.get(k) {
+                        if kind.inner().is_list() {
+                            continue;
+                        }
+                        return Err(ftd::p1::Error::ForbiddenUsage {
+                            message: format!("repeated usage of \'{}\' not allowed !!", k),
+                            doc_id: doc.name.to_string(),
+                            line_number: *i,
+                        });
+                    }
+                } else {
+                    root_args_set.insert(k.to_string());
+                }
+
+                continue;
+            }
         };
 
         let option_v = if v.is_empty() {
@@ -3176,6 +3196,19 @@ fn read_arguments(
             *h = headers;
             *ui_id = doc.resolve_name(*i, ui_id.as_str())?;
         }
+
+        // Duplicate header definition check
+        if args.contains_key(var_data.name.as_str()) {
+            return Err(ftd::p1::Error::ForbiddenUsage {
+                message: format!(
+                    "\'{}\' is already used as header name/identifier !!",
+                    &var_data.name
+                ),
+                doc_id: doc.name.to_string(),
+                line_number: *i,
+            });
+        }
+
         args.insert(var_data.name.to_string(), kind.clone());
         all_args.insert(var_data.name.to_string(), kind);
     }
@@ -3287,6 +3320,27 @@ mod test {
     }
 
     #[test]
+    fn duplicate_headers() {
+        // Repeated header definition with the same name (forbidden)
+        intf!(
+            "-- ftd.row foo:
+            caption name:
+            string name:
+            ",
+            "forbidden usage: 'name' is already used as header name/identifier !!, line_number: 3, doc: foo"
+        );
+
+        // Value assignment on the same header twice (not allowed)
+        intf!(
+            "-- ftd.text: Hello friends
+            align: center
+            align: left
+            ",
+            "forbidden usage: repeated usage of 'align' not allowed !!, line_number: 3, doc: foo"
+        );
+    }
+
+    #[test]
     fn referring_variables() {
         let mut bag = default_bag();
         bag.insert(
@@ -3340,6 +3394,7 @@ mod test {
             -- string name: Amit
 
             -- ftd.text:
+
             $name
             ",
             (bag, main),

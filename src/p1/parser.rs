@@ -97,6 +97,7 @@ impl State {
     }
 
     fn reading_header(&mut self, line_number: usize, line: &str, doc_id: &str) -> Result<()> {
+        // change state to reading body iff after an empty line is found
         if line.trim().is_empty() {
             self.state = ParsingState::ReadingBody;
             return Ok(());
@@ -110,8 +111,15 @@ impl State {
             return self.read_subsection(line_number, line, doc_id);
         }
 
+        // If no empty line or start of next section/subsection found
+        // immediately after reading all possible headers for the current section/subsection
+        // then throw error
         if !line.contains(':') {
-            return self.reading_body(line_number, line, doc_id);
+            return Err(ftd::p1::Error::ParseError {
+                message: format!("start section body \'{}\' after a newline!!", line),
+                doc_id: doc_id.to_string(),
+                line_number,
+            });
         }
 
         let (name, value) = colon_separated_values(line_number, line, doc_id)?;
@@ -139,8 +147,17 @@ impl State {
         if line.starts_with("--- ") || line.starts_with("/--- ") {
             return self.read_subsection(line_number, line, doc_id);
         }
+
+        // similar strict check for subsection, change state to reading body
+        // iff an empty line is found prior to reading body
+        // or read next section/subsection
+        // otherwise throw error
         if !line.contains(':') {
-            return self.reading_sub_body(line_number, line, doc_id);
+            return Err(ftd::p1::Error::ParseError {
+                message: format!("start sub-section body \'{}\' after a newline!!", line),
+                doc_id: doc_id.to_string(),
+                line_number,
+            });
         }
         let (name, value) = colon_separated_values(line_number, line, doc_id)?;
         if let Some(mut s) = self.sub_section.take() {
@@ -377,7 +394,7 @@ mod test {
         );
 
         p!(
-            "-- foo:\nhello world\n--- bar:",
+            "-- foo:\n\nhello world\n--- bar:",
             super::Section::with_name("foo")
                 .and_body("hello world")
                 .add_sub_section(super::SubSection::with_name("bar"))
@@ -388,9 +405,11 @@ mod test {
             indoc!(
                 "
             -- foo:
+
             body ho
             --- dodo:
             -- bar:
+
             bar body
             "
             ),
@@ -406,8 +425,10 @@ mod test {
             indoc!(
                 "
             -- foo:
+
             body ho
             -- bar:
+
             bar body
             --- dodo:
             "
@@ -424,8 +445,10 @@ mod test {
             indoc!(
                 "
             -- foo:
+
             body ho
             -- bar:
+
             bar body
             --- dodo:
             --- rat:
@@ -495,10 +518,13 @@ mod test {
             indoc!(
                 "
             -- foo:
+
             body ho
             -- bar:
+
             bar body
             --- dodo:
+
             hello
             "
             ),
@@ -511,7 +537,7 @@ mod test {
         );
 
         p!(
-            "-- foo:\nhello world\n--- bar:",
+            "-- foo:\n\nhello world\n--- bar:",
             super::Section::with_name("foo")
                 .and_body("hello world")
                 .add_sub_section(super::SubSection::with_name("bar"))
@@ -519,7 +545,7 @@ mod test {
         );
 
         p!(
-            "-- foo:\nhello world\n--- bar: foo",
+            "-- foo:\n\nhello world\n--- bar: foo",
             super::Section::with_name("foo")
                 .and_body("hello world")
                 .add_sub_section(super::SubSection::with_name("bar").and_caption("foo"))
@@ -590,12 +616,14 @@ mod test {
             ; yo
             b: ba
             ; yo
+
             bar body
             ; yo
             --- dodo:
             ; yo
             k: v
             ; yo
+
             hello
             ; yo
             "
@@ -628,9 +656,11 @@ mod test {
 
             -- bar:
             b: ba
+
             bar body
             --- dodo:
             k: v
+
             hello
             "
             ),
@@ -719,6 +749,7 @@ mod test {
             &indoc!(
                 "
                  -- markdown:
+
                  hello world is
 
                      not enough
@@ -831,7 +862,7 @@ mod test {
         );
 
         p!(
-            "-- foo:\nbody ho",
+            "-- foo:\n\nbody ho",
             super::Section::with_name("foo").and_body("body ho").list()
         );
 
@@ -839,8 +870,10 @@ mod test {
             indoc!(
                 "
             -- foo:
+
             body ho
             -- bar:
+
             bar body
             "
             ),
@@ -883,5 +916,57 @@ mod test {
         );
 
         f!("invalid", "foo:1 -> Expecting -- , found: invalid")
+    }
+
+    #[test]
+    fn strict_body() {
+        // section body without headers
+        f!(
+            indoc!(
+                "-- some-section:
+                This is body
+                "
+            ),
+            "foo:2 -> start section body 'This is body' after a newline!!"
+        );
+
+        // section body with headers
+        f!(
+            indoc!(
+                "-- some-section:
+                h1: v1
+                This is body
+                "
+            ),
+            "foo:3 -> start section body 'This is body' after a newline!!"
+        );
+
+        // subsection body without headers
+        f!(
+            indoc!(
+                "-- some-section:
+                h1: val
+
+                --- some-sub-section:
+                This is body
+                "
+            ),
+            "foo:5 -> start sub-section body 'This is body' after a newline!!"
+        );
+
+        // subsection body with headers
+        f!(
+            indoc!(
+                "-- some-section:
+                h1: val
+
+                --- some-sub-section:
+                h2: val
+                h3: val
+                This is body
+                "
+            ),
+            "foo:7 -> start sub-section body 'This is body' after a newline!!"
+        );
     }
 }

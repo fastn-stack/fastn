@@ -1096,6 +1096,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     color("step-1"),
                     color("step-2"),
                     color("overlay"),
+                    color("code"),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -1104,6 +1105,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     "step-1".to_string(),
                     "step-2".to_string(),
                     "overlay".to_string(),
+                    "code".to_string(),
                 ],
             }),
         ),
