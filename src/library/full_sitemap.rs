@@ -54,6 +54,12 @@ pub struct KeyValueData {
     pub value: String,
 }
 
+impl KeyValueData {
+    pub fn from(key: String, value: String) -> Self {
+        Self { key, value }
+    }
+}
+
 #[derive(Default, Debug, serde::Serialize)]
 struct SiteMapCompat {
     sections: Vec<SectionCompat>,

@@ -439,6 +439,9 @@ pub enum Error {
 
     #[error("UTF8Error: {}", _0)]
     UTF8Error(#[from] std::string::FromUtf8Error),
+
+    #[error("GroupNotFound: id: {}, {message}")]
+    GroupNotFound { message: String },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

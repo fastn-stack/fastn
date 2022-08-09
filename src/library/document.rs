@@ -8,6 +8,18 @@ document id
 /x/y/ - suffix
 */
 
+pub fn document_full_id<'a>(
+    config: &fpm::Config,
+    doc: &ftd::p2::TDoc<'a>,
+) -> ftd::p1::Result<String> {
+    let full_document_id = config.doc_id().unwrap_or_else(|| {
+        doc.name
+            .to_string()
+            .replace(config.package.name.as_str(), "")
+    });
+    Ok(format!("/{}/", full_document_id.trim_matches('/')))
+}
+
 pub mod processor {
 
     pub fn document_id<'a>(
@@ -37,17 +49,12 @@ pub mod processor {
         doc: &ftd::p2::TDoc<'a>,
         config: &fpm::Config,
     ) -> ftd::p1::Result<ftd::Value> {
-        let full_document_id = config.doc_id().unwrap_or_else(|| {
-            doc.name
-                .to_string()
-                .replace(config.package.name.as_str(), "")
-        });
-
         Ok(ftd::Value::String {
-            text: format!("/{}/", full_document_id.trim_matches('/')),
+            text: super::document_full_id(config, doc)?,
             source: ftd::TextSource::Default,
         })
     }
+
     pub async fn document_filename<'a>(
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc<'a>,

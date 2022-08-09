@@ -97,7 +97,11 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
 }
 
 #[actix_web::main]
-pub async fn fpm_serve(bind_address: &str, port: Option<u16>) -> std::io::Result<()> {
+pub async fn fpm_serve(
+    bind_address: &str,
+    port: Option<u16>,
+    _identities: Option<String>,
+) -> std::io::Result<()> {
     if cfg!(feature = "controller") {
         // fpm-controller base path and ec2 instance id (hardcoded for now)
         let fpm_controller: String = std::env::var("FPM_CONTROLLER")
@@ -193,6 +197,10 @@ You can try without providing port, it will automatically pick unused port"#,
         .run()
         .await
 }
+
+// fn authentication(req: &actix_web::HttpRequest) -> bool {
+//     false
+// }
 
 // cargo install --features controller --path=.
 // FPM_CONTROLLER=http://127.0.0.1:8000 FPM_INSTANCE_ID=12345 fpm serve 8001

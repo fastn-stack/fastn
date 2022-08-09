@@ -895,6 +895,9 @@ impl Config {
             }
         }
 
+        // TODO: resolve group dependent packages, there may be imported group from foreign package
+        // TODO: We need to make sure to resolve that package as well before moving ahead
+        // TODO: Because in `UserGroup::get_identities` we have to resolve identities of a group
         let user_groups: Vec<crate::user_group::UserGroupTemp> = fpm_doc.get("fpm#user-group")?;
         let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
 
@@ -968,8 +971,9 @@ impl Config {
 
     #[allow(dead_code)]
     pub(crate) fn get_fpm_document(&self, package_name: &str) -> fpm::Result<ftd::p2::Document> {
-        // TODO: check if self package or imported package
-        let package_fpm_path = self.packages_root.join(package_name).join("FPM.ftd");
+        let package = Package::new(package_name);
+        let root = self.get_root_for_package(&package);
+        let package_fpm_path = root.join("FPM.ftd");
         let doc = std::fs::read_to_string(package_fpm_path)?;
         let lib = fpm::FPMLibrary::default();
         Ok(fpm::doc::parse_ftd("FPM", doc.as_str(), &lib)?)
@@ -1928,4 +1932,32 @@ impl Package {
         package.resolve(&file_extract_path).await?;
         Ok(package)
     }
+}
+
+// TODO Doc: group-id should not contain / in it
+pub fn user_groups_by_package(
+    config: &Config,
+    package: &str,
+) -> fpm::Result<Vec<fpm::user_group::UserGroup>> {
+    let fpm_document = config.get_fpm_document(package)?;
+    fpm_document
+        .get::<Vec<fpm::user_group::UserGroupTemp>>("fpm#user-group")?
+        .into_iter()
+        .map(|g| g.to_user_group())
+        .collect()
+}
+
+/// group_id: "<package_name>/<group_id>" or "<group_id>"
+pub fn user_group_by_id(
+    config: &Config,
+    group_id: &str,
+) -> fpm::Result<Option<fpm::user_group::UserGroup>> {
+    // If group `id` does not contain `/` then it is current package group_id
+    let (package, group_id) = group_id
+        .rsplit_once('/')
+        .unwrap_or((&config.package.name, group_id));
+
+    Ok(user_groups_by_package(config, package)?
+        .into_iter()
+        .find(|g| g.id.as_str() == group_id))
 }

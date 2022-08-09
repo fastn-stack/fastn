@@ -1,10 +1,31 @@
 // identities to group, test also
 #[derive(Debug, Clone, serde::Serialize)]
+pub struct UserIdentity {
+    pub key: String,
+    pub value: String,
+}
+
+impl UserIdentity {
+    pub fn from(key: &str, value: &str) -> Self {
+        Self {
+            key: key.to_string(),
+            value: value.to_string(),
+        }
+    }
+}
+
+impl ToString for UserIdentity {
+    fn to_string(&self) -> String {
+        format!("{}: {}", self.key, self.value)
+    }
+}
+
+#[derive(Debug, Clone, serde::Serialize)]
 pub struct UserGroup {
     pub title: Option<String>,
     pub id: String,
-    pub identities: Vec<(String, String)>,
-    pub excluded_identities: Vec<(String, String)>,
+    pub identities: Vec<UserIdentity>,
+    pub excluded_identities: Vec<UserIdentity>,
 
     /// if package name is abrark.com and it has user-group with id my-all-readers
     /// so import string will be abrark.com/my-all-readers
@@ -54,15 +75,6 @@ pub struct UserGroupTemp {
     pub excluded_discord: Vec<String>,
 }
 
-/*
-.ftd code
--- fpm.user-group list email-groups:
-$processor$: user-groups
-
--- fpm.user-group list email-groups:
-$processor$: user-groups
- */
-
 #[derive(Debug, serde::Serialize)]
 pub struct UserGroupCompat {
     id: String,
@@ -71,31 +83,54 @@ pub struct UserGroupCompat {
     // It will contain all group members, like group, email and -email, etc...
     #[serde(rename = "group-members")]
     group_members: Vec<fpm::library::full_sitemap::KeyValueData>,
+    groups: Vec<String>,
 }
 
 impl UserGroup {
     pub fn to_group_compat(&self) -> UserGroupCompat {
-        use itertools::Itertools;
         let mut group_members = vec![];
 
-        group_members.extend(self.identities.clone());
-        for (k, v) in self.excluded_identities.iter() {
-            group_members.push((format!("-{}", k), v.to_string()));
-        }
+        // Group Identities
+        group_members.extend(
+            self.identities
+                .clone()
+                .into_iter()
+                .map(|i| fpm::library::KeyValueData::from(i.key, i.value)),
+        );
 
-        for import in self.groups.iter() {
-            group_members.push(("group".to_string(), import.to_string()));
-        }
+        group_members.extend(
+            self.excluded_identities.iter().map(|i| {
+                fpm::library::KeyValueData::from(format!("-{}", i.key), i.value.to_string())
+            }),
+        );
 
         UserGroupCompat {
             id: self.id.clone(),
             title: self.title.clone(),
             description: self.description.clone(),
-            group_members: group_members
-                .into_iter()
-                .map(|(key, value)| fpm::library::full_sitemap::KeyValueData { key, value })
-                .collect_vec(),
+            group_members,
+            groups: self.groups.clone(),
         }
+    }
+
+    // TODO: Need to handle excluded_identities and excluded_groups
+    // Maybe Logic: group.identities + (For all group.groups(g.group - g.excluded_group)).identities
+    //              - group.excluded_identities
+    pub fn get_identities(&self, config: &fpm::Config) -> fpm::Result<Vec<UserIdentity>> {
+        let mut identities = vec![];
+        for group in self.groups.iter() {
+            let group =
+                fpm::config::user_group_by_id(config, group.as_str())?.ok_or_else(|| {
+                    fpm::Error::GroupNotFound {
+                        message: format!("group: {}, not found in FPM.ftd", group),
+                    }
+                })?;
+            // Recursive call to get child groups identities
+            identities.extend(group.get_identities(config)?)
+        }
+        identities.extend(self.identities.clone());
+
+        Ok(identities)
     }
 
     // TODO:
@@ -147,25 +182,25 @@ impl UserGroupTemp {
         let mut identities = vec![];
         let mut excluded_identities = vec![];
 
-        fn to_key_value(name: &str, values: Vec<String>) -> Vec<(String, String)> {
+        fn to_user_identity(name: &str, values: Vec<String>) -> Vec<UserIdentity> {
             values
                 .into_iter()
-                .map(|v| (name.to_string(), v))
+                .map(|v| UserIdentity::from(name, v.as_str()))
                 .collect_vec()
         }
 
-        identities.extend(to_key_value("email", self.email));
-        excluded_identities.extend(to_key_value("-email", self.excluded_email));
-        identities.extend(to_key_value("domain", self.domain));
-        excluded_identities.extend(to_key_value("-domain", self.excluded_domain));
-        identities.extend(to_key_value("domain", self.telegram));
-        excluded_identities.extend(to_key_value("-telegram", self.excluded_telegram));
-        identities.extend(to_key_value("github", self.github));
-        excluded_identities.extend(to_key_value("-github", self.excluded_github));
-        identities.extend(to_key_value("github-team", self.github_team));
-        excluded_identities.extend(to_key_value("-github-team", self.excluded_github_team));
-        identities.extend(to_key_value("discord", self.discord));
-        excluded_identities.extend(to_key_value("-discord", self.excluded_discord));
+        identities.extend(to_user_identity("email", self.email));
+        excluded_identities.extend(to_user_identity("-email", self.excluded_email));
+        identities.extend(to_user_identity("domain", self.domain));
+        excluded_identities.extend(to_user_identity("-domain", self.excluded_domain));
+        identities.extend(to_user_identity("domain", self.telegram));
+        excluded_identities.extend(to_user_identity("-telegram", self.excluded_telegram));
+        identities.extend(to_user_identity("github", self.github));
+        excluded_identities.extend(to_user_identity("-github", self.excluded_github));
+        identities.extend(to_user_identity("github-team", self.github_team));
+        excluded_identities.extend(to_user_identity("-github-team", self.excluded_github_team));
+        identities.extend(to_user_identity("discord", self.discord));
+        excluded_identities.extend(to_user_identity("-discord", self.excluded_discord));
 
         Ok(UserGroup {
             id: self.id,
@@ -177,6 +212,37 @@ impl UserGroupTemp {
             excluded_groups: self.excluded_group,
         })
     }
+}
+
+pub fn get_identities(
+    config: &crate::Config,
+    doc_path: &str,
+    is_read: bool,
+) -> fpm::Result<Vec<String>> {
+    // TODO: cookies or cli parameter
+
+    let readers_writers = if let Some(sitemap) = &config.sitemap {
+        if is_read {
+            sitemap.readers(doc_path, &config.groups)
+        } else {
+            sitemap.writers(doc_path, &config.groups)
+        }
+    } else {
+        vec![]
+    };
+
+    let identities: fpm::Result<Vec<Vec<UserIdentity>>> = readers_writers
+        .into_iter()
+        .map(|g| g.get_identities(config))
+        .collect();
+
+    let identities = identities?
+        .into_iter()
+        .flat_map(|x| x.into_iter())
+        .map(|identity| identity.to_string())
+        .collect();
+
+    Ok(identities)
 }
 
 pub mod processor {
@@ -212,87 +278,48 @@ pub mod processor {
             })?;
         doc.from_json(&g, section)
     }
+
+    pub fn get_identities(
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+        config: &fpm::Config,
+    ) -> ftd::p1::Result<ftd::Value> {
+        let doc_id = fpm::library::document::document_full_id(config, doc)?;
+        let identities = super::get_identities(config, doc_id.as_str(), true).map_err(|e| {
+            ftd::p1::Error::ParseError {
+                message: e.to_string(),
+                doc_id,
+                line_number: section.line_number,
+            }
+        })?;
+
+        Ok(ftd::Value::List {
+            data: identities
+                .into_iter()
+                .map(|i| ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: i,
+                        source: ftd::TextSource::Default,
+                    },
+                })
+                .collect_vec(),
+            kind: ftd::p2::Kind::List {
+                kind: Box::new(ftd::p2::Kind::String {
+                    caption: false,
+                    body: false,
+                    default: None,
+                    is_reference: false,
+                }),
+                default: None,
+                is_reference: false,
+            },
+        })
+    }
 }
 
-// fn a_minus_b_ref<'a>(
-//     a: &'a [(&'a str, &'a str)],
-//     b: &'a [(&'a str, &'a str)],
-// ) -> Vec<&'a (&'a str, &'a str)> {
-//     let mut excluded: HashMap<_, HashSet<_>> = HashMap::new();
-//     for (k, v) in b {
-//         if excluded.contains_key(k) {
-//             let t = excluded.get_mut(k).unwrap();
-//             t.insert(v);
-//         } else {
-//             let mut t = HashSet::new();
-//             t.insert(v);
-//             excluded.insert(k, t);
-//         }
-//     }
-//
-//     let is_in_b = |k: &str, v: &str| {
-//         if let Some(set) = excluded.get(&k) {
-//             return set.contains(&v);
-//         }
-//         false
-//     };
-//     a.into_iter().filter(|(k, v)| !is_in_b(k, v)).collect_vec()
-// }
-//
-// fn a_minus_b<'a>(
-//     a: &'a Vec<(String, String)>,
-//     b: &'a Vec<(String, String)>,
-// ) -> Vec<(String, String)> {
-//     let mut excluded: HashMap<_, HashSet<_>> = HashMap::new();
-//     for (k, v) in b {
-//         if excluded.contains_key(k) {
-//             let t = excluded.get_mut(k).unwrap();
-//             t.insert(v);
-//         } else {
-//             let mut t = HashSet::new();
-//             t.insert(v);
-//             excluded.insert(k, t);
-//         }
-//     }
-//     let is_in_b = |k: &String, v: &String| {
-//         if let Some(set) = excluded.get(&k) {
-//             return set.contains(v);
-//         }
-//         false
-//     };
-//     //TODO: Remove .map(|(k, v)| (k.to_string(), v.to_string()))
-//     a.into_iter()
-//         .filter(|(k, v)| !is_in_b(k, v))
-//         .map(|(k, v)| (k.to_string(), v.to_string()))
-//         .collect_vec()
-// }
-
-// pub fn get_group_members(&self, config: &fpm::Config) -> Vec<(String, String)> {
-//     if self.import.len() == 0 {
-//         return UserGroup::a_minus_b(&self.identities, &self.excluded_identities);
-//     }
-//
-//     let mut group_identities = vec![];
-//     for group in self.import.iter() {
-//         let (package, group_id) = group
-//             .rsplit_once('/')
-//             .ok_or_else(|| ftd::p1::Error::ParseError {
-//                 message: format!("import_identity: {}, does not contain `/`", group),
-//                 doc_id: "FPM.ftd".to_string(),
-//                 line_number: 0,
-//             })
-//             .unwrap();
-//
-//         // TODO: Remove unwrap
-//         let fpm_document = config.get_fpm_document(package).unwrap();
-//         let user_groups: Vec<UserGroupTemp> = fpm_document.get("fpm#user-group").unwrap();
-//         let user_group = user_groups.into_iter().find(|g| g.id.eq(group_id)).unwrap();
-//         let user_group = user_group.to_user_group();
-//         let user_group_members = user_group.get_group_members(config);
-//         group_identities.extend(user_group_members);
-//     }
-//
-//     //TODO: Remove Clone
-//     group_identities.extend(self.identities.clone());
-//     return UserGroup::a_minus_b(&group_identities, &self.excluded_identities);
-// }
+#[cfg(test)]
+mod tests {
+    // TODO:
+    #[test]
+    fn get_identities() {}
+}
