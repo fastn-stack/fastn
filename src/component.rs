@@ -2709,6 +2709,7 @@ pub(crate) fn default_arguments() -> std::collections::BTreeMap<String, ftd::p2:
         ftd::p2::Kind::decimal().into_optional(),
     );
     default_argument.insert("slot".to_string(), ftd::p2::Kind::string().into_optional());
+
     default_argument
 }
 
