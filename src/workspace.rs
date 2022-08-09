@@ -24,7 +24,7 @@ impl fpm::Config {
         Ok(())
     }
 
-    pub(crate) async fn write_client_available_cr(&self, reserved_crs: &[i32]) -> fpm::Result<()> {
+    pub(crate) async fn write_clone_available_cr(&self, reserved_crs: &[i32]) -> fpm::Result<()> {
         fpm::utils::update(
             &self.clone_available_crs_path(),
             reserved_crs
@@ -54,7 +54,7 @@ impl fpm::Config {
             return fpm::usage_error("No available cr number, try `fpm sync`".to_string());
         }
         let cr_number = available_crs.remove(0);
-        self.write_client_available_cr(available_crs.as_slice())
+        self.write_clone_available_cr(available_crs.as_slice())
             .await?;
         Ok(cr_number)
     }
