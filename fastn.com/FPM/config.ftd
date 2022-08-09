@@ -6,10 +6,10 @@
 
 -- ps.current-product: 3
 
--- ft.site-url: /
+/-- ft.site-url: /
 
 -- ft.site-logo:
-light: $assets.files.static.logo-fifthtry-dark.svg.light
+light: $assets.files.static.logo-fifthtry-light.svg.light
 dark: $assets.files.static.logo-fifthtry-dark.svg.dark
 
 
