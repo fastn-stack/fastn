@@ -5,25 +5,25 @@ use sha2::Digest;
 pub enum Status {
     Conflict(i32),
     NoConflict,
-    ClientEditedServerDeleted(i32),
-    ClientDeletedServerEdited(i32),
-    ClientAddedServerAdded(i32),
+    CloneEditedRemoteDeleted(i32),
+    CloneDeletedRemoteEdited(i32),
+    CloneAddedRemoteAdded(i32),
 }
 
 impl Status {
     pub(crate) fn is_conflicted(&self) -> bool {
         Status::NoConflict.ne(self)
     }
-    pub(crate) fn is_client_edited_server_deleted(&self) -> bool {
-        matches!(self, Status::ClientEditedServerDeleted(_))
+    pub(crate) fn is_clone_edited_remote_deleted(&self) -> bool {
+        matches!(self, Status::CloneEditedRemoteDeleted(_))
     }
     pub(crate) fn conflicted_version(&self) -> Option<i32> {
         match self {
             Status::Conflict(version) => Some(*version),
             Status::NoConflict => None,
-            Status::ClientEditedServerDeleted(version) => Some(*version),
-            Status::ClientDeletedServerEdited(version) => Some(*version),
-            Status::ClientAddedServerAdded(version) => Some(*version),
+            Status::CloneEditedRemoteDeleted(version) => Some(*version),
+            Status::CloneDeletedRemoteEdited(version) => Some(*version),
+            Status::CloneAddedRemoteAdded(version) => Some(*version),
         }
     }
 }
@@ -141,7 +141,7 @@ impl fpm::Config {
         workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
     ) -> fpm::Result<Vec<FileStatus>> {
         let mut changed_files = self.get_files_status_wrt_workspace(workspace).await?;
-        self.get_files_status_wrt_server_latest(&mut changed_files, workspace)
+        self.get_files_status_wrt_remote_latest(&mut changed_files, workspace)
             .await?;
         Ok(changed_files)
     }
@@ -200,7 +200,7 @@ impl fpm::Config {
         Ok(changed_files)
     }
 
-    async fn get_files_status_wrt_server_latest(
+    async fn get_files_status_wrt_remote_latest(
         &self,
         files: &mut Vec<FileStatus>,
         workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
@@ -238,7 +238,7 @@ impl fpm::Config {
                         );
                         remove_files.push(index);
                     } else {
-                        *status = Status::ClientAddedServerAdded(server_version);
+                        *status = Status::CloneAddedRemoteAdded(server_version);
                     }
                 }
                 FileStatus::Update {
@@ -254,8 +254,8 @@ impl fpm::Config {
                     };
 
                     if server_file_edit.is_deleted() {
-                        // Conflict: ClientEditedServerDeleted
-                        *status = Status::ClientEditedServerDeleted(server_file_edit.version);
+                        // Conflict: CloneEditedRemoteDeleted
+                        *status = Status::CloneEditedRemoteDeleted(server_file_edit.version);
                         continue;
                     }
 
@@ -314,7 +314,7 @@ impl fpm::Config {
                     }
                     if !server_file_edit.version.eq(version) {
                         // Conflict modified by server and deleted by client
-                        *status = Status::ClientDeletedServerEdited(server_file_edit.version);
+                        *status = Status::CloneDeletedRemoteEdited(server_file_edit.version);
                     }
                 }
             }

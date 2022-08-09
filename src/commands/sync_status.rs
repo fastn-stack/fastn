@@ -35,15 +35,15 @@ fn print_status(file_status: &fpm::sync_utils::FileStatus, print_untracked: bool
     };
     match status {
         fpm::sync_utils::Status::Conflict(_) => println!("Conflicted: {}", path),
-        fpm::sync_utils::Status::ClientEditedServerDeleted(_) => {
-            println!("ClientEditedServerDeleted: {}", path)
+        fpm::sync_utils::Status::CloneEditedRemoteDeleted(_) => {
+            println!("CloneEditedRemoteDeleted: {}", path)
         }
-        fpm::sync_utils::Status::ClientDeletedServerEdited(_) => {
-            println!("ClientDeletedServerEdited: {}", path)
+        fpm::sync_utils::Status::CloneDeletedRemoteEdited(_) => {
+            println!("CloneDeletedRemoteEdited: {}", path)
         }
         fpm::sync_utils::Status::NoConflict => println!("{}: {}", file_status, path),
-        fpm::sync_utils::Status::ClientAddedServerAdded(_) => {
-            println!("ClientAddedServerAdded: {}", path)
+        fpm::sync_utils::Status::CloneAddedRemoteAdded(_) => {
+            println!("CloneAddedRemoteAdded: {}", path)
         }
     }
 }

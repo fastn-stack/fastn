@@ -8,7 +8,7 @@ pub struct WorkspaceEntry {
 }
 
 impl fpm::Config {
-    pub(crate) async fn evaluate_client_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
+    pub(crate) async fn evaluate_clone_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
         let history_list = self.get_history().await?;
         Ok(
             fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
@@ -18,8 +18,8 @@ impl fpm::Config {
         )
     }
 
-    pub(crate) async fn create_client_workspace(&self) -> fpm::Result<()> {
-        let workspace_list = self.evaluate_client_workspace().await?;
+    pub(crate) async fn create_clone_workspace(&self) -> fpm::Result<()> {
+        let workspace_list = self.evaluate_clone_workspace().await?;
         self.write_workspace(workspace_list.as_slice()).await?;
         Ok(())
     }

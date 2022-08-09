@@ -36,20 +36,20 @@ pub struct SyncResponse {
 pub enum SyncStatus {
     RegularConflict,
     NoConflict,
-    ClientEditedServerDeleted,
-    ClientDeletedServerEdited,
-    ClientAddedServerAdded,
+    CloneEditedRemoteDeleted,
+    CloneDeletedRemoteEdited,
+    CloneAddedRemoteAdded,
 }
 
 impl SyncStatus {
     pub(crate) fn delete_edit_conflict(&self) -> bool {
-        SyncStatus::ClientEditedServerDeleted.eq(self)
+        SyncStatus::CloneEditedRemoteDeleted.eq(self)
     }
     pub(crate) fn edit_delete_conflict(&self) -> bool {
-        SyncStatus::ClientDeletedServerEdited.eq(self)
+        SyncStatus::CloneDeletedRemoteEdited.eq(self)
     }
     pub(crate) fn add_add_conflict(&self) -> bool {
-        SyncStatus::ClientAddedServerAdded.eq(self)
+        SyncStatus::CloneAddedRemoteAdded.eq(self)
     }
     pub(crate) fn edit_edit_conflict(&self) -> bool {
         SyncStatus::RegularConflict.eq(self)
@@ -141,7 +141,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         path.to_string(),
                         SyncResponseFile::Add {
                             path: path.to_string(),
-                            status: SyncStatus::ClientAddedServerAdded,
+                            status: SyncStatus::CloneAddedRemoteAdded,
                             content: content.clone(),
                         },
                     );
@@ -245,7 +245,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         path.to_string(),
                         SyncResponseFile::Update {
                             path: path.to_string(),
-                            status: SyncStatus::ClientEditedServerDeleted,
+                            status: SyncStatus::CloneEditedRemoteDeleted,
                             content: content.clone(),
                         },
                     );
@@ -269,7 +269,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         path.to_string(),
                         SyncResponseFile::Update {
                             path: path.to_string(),
-                            status: SyncStatus::ClientDeletedServerEdited,
+                            status: SyncStatus::CloneDeletedRemoteEdited,
                             content: server_content,
                         },
                     );

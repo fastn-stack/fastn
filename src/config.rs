@@ -59,24 +59,24 @@ impl Config {
         self.root.join(".build")
     }
 
-    pub fn client_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".client-state")
+    pub fn clone_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".clone-state")
     }
 
     pub fn workspace_file(&self) -> camino::Utf8PathBuf {
-        self.client_dir().join("workspace.ftd")
+        self.clone_dir().join("workspace.ftd")
     }
 
-    pub fn server_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".server-state")
+    pub fn remote_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".remote-state")
     }
 
     pub fn server_history_dir(&self) -> camino::Utf8PathBuf {
-        self.server_dir().join("history")
+        self.remote_dir().join("history")
     }
 
     pub fn history_file(&self) -> camino::Utf8PathBuf {
-        self.server_dir().join("history.ftd")
+        self.remote_dir().join("history.ftd")
     }
 
     pub(crate) fn history_path(&self, id: &str, version: i32) -> camino::Utf8PathBuf {

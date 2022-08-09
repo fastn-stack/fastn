@@ -237,22 +237,22 @@ pub(crate) async fn insert_into_history_(
                 },
             );
         }
-        let server_state = root.join(".server-state").join("history");
+        let remote_state = root.join(".remote-state").join("history");
 
-        if !server_state.exists() {
-            tokio::fs::create_dir_all(&server_state).await?;
+        if !remote_state.exists() {
+            tokio::fs::create_dir_all(&remote_state).await?;
         }
 
         if !file_op.operation.eq(&FileOperation::Deleted) {
             let new_file_path =
-                server_state.join(fpm::utils::snapshot_id(file, &(version as u128)));
+                remote_state.join(fpm::utils::snapshot_id(file, &(version as u128)));
             tokio::fs::copy(root.join(file), new_file_path).await?;
         }
     }
 
     let history_ftd = FileHistory::to_ftd(file_history.values().collect_vec().as_slice());
     tokio::fs::write(
-        root.join(".server-state").join("history.ftd"),
+        root.join(".remote-state").join("history.ftd"),
         history_ftd.as_str(),
     )
     .await?;

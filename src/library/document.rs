@@ -55,7 +55,7 @@ pub mod processor {
         })
     }
 
-    pub async fn document_filename<'a>(
+    pub async fn document_name<'a>(
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc<'a>,
         config: &fpm::Config,
