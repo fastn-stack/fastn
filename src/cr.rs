@@ -6,7 +6,7 @@ pub struct CRAbout {
     pub cr_number: usize,
 }
 
-pub(crate) async fn get_cr_about(
+pub(crate) async fn _get_cr_about(
     config: &fpm::Config,
     cr_number: usize,
 ) -> fpm::Result<fpm::cr::CRAbout> {
@@ -31,11 +31,11 @@ pub(crate) async fn resolve_cr_about(
     }
 
     impl CRAboutTemp {
-        fn to_cr_about(self, cr_number: usize) -> CRAbout {
+        fn into_cr_about(self, cr_number: usize) -> CRAbout {
             CRAbout {
                 title: self.title,
                 description: self.description,
-                cr_number: cr_number,
+                cr_number,
             }
         }
     }
@@ -54,7 +54,8 @@ pub(crate) async fn resolve_cr_about(
         }
     };
 
-    Ok(b.get::<CRAboutTemp>("fpm#cr-about")?.to_cr_about(cr_number))
+    Ok(b.get::<CRAboutTemp>("fpm#cr-about")?
+        .into_cr_about(cr_number))
 }
 
 pub(crate) async fn create_cr_about(

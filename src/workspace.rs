@@ -41,7 +41,7 @@ impl fpm::Config {
         let mut response = vec![];
         if self.clone_available_crs_path().exists() {
             let crs = tokio::fs::read_to_string(self.clone_available_crs_path()).await?;
-            for cr in crs.split("\n") {
+            for cr in crs.split('\n') {
                 response.push(cr.parse()?)
             }
         }
