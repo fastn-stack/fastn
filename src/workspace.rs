@@ -5,6 +5,7 @@ pub struct WorkspaceEntry {
     pub filename: String,
     pub deleted: Option<bool>,
     pub version: Option<i32>,
+    pub cr: Option<usize>,
 }
 
 impl fpm::Config {
@@ -13,7 +14,7 @@ impl fpm::Config {
         Ok(
             fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
                 .into_iter()
-                .map(|(file_name, file_edit)| file_edit.to_workspace(file_name.as_str()))
+                .map(|(file_name, file_edit)| file_edit.into_workspace(file_name.as_str()))
                 .collect_vec(),
         )
     }
@@ -93,9 +94,14 @@ impl WorkspaceEntry {
             } else {
                 "".to_string()
             };
+            let cr = if let Some(cr) = workspace_entry.cr {
+                format!("cr: {}\n", cr)
+            } else {
+                "".to_string()
+            };
             workspace_data = format!(
-                "{}\n\n-- fpm.client-workspace: {}\n{}{}",
-                workspace_data, workspace_entry.filename, version, deleted
+                "{}\n\n-- fpm.client-workspace: {}\n{}{}{}",
+                workspace_data, workspace_entry.filename, version, deleted, cr
             );
         }
         workspace_data

@@ -4,6 +4,7 @@ pub async fn create_cr(config: &fpm::Config) -> fpm::Result<()> {
         title: format!("CR#{cr_number}"),
         description: Some(format!("Change Request {cr_number}")),
         cr_number: cr_number as usize,
+        open: true,
     });
     let cr_about_content = fpm::cr::resolve_cr_about(
         edit::edit(cr_about_content)

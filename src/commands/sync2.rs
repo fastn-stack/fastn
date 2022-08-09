@@ -56,11 +56,11 @@ async fn update_workspace(
             }
         })
         .collect_vec();
-    for (file, file_edit) in server_latest.iter() {
-        if conflicted_files.contains(file) || file_edit.is_deleted() {
+    for (file, file_edit) in server_latest.into_iter() {
+        if conflicted_files.contains(&file) || file_edit.is_deleted() {
             continue;
         }
-        workspace.insert(file.to_string(), file_edit.to_workspace(file));
+        workspace.insert(file.to_string(), file_edit.into_workspace(&file));
     }
     for deleted_files in response.files.iter().filter_map(|v| {
         if !v.is_conflicted() && v.is_deleted() {

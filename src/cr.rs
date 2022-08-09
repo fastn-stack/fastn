@@ -4,16 +4,16 @@ pub struct CRAbout {
     pub description: Option<String>,
     #[serde(rename = "cr-number")]
     pub cr_number: usize,
+    pub open: bool,
 }
 
-pub(crate) async fn _get_cr_about(
+pub(crate) async fn get_cr_about(
     config: &fpm::Config,
     cr_number: usize,
 ) -> fpm::Result<fpm::cr::CRAbout> {
     let cr_about_path = config.cr_path(cr_number).join("-/about.ftd");
     if !cr_about_path.exists() {
-        // TODO: should we error out here?
-        return Ok(Default::default());
+        return fpm::usage_error(format!("CR#{} doesn't exists", cr_number));
     }
 
     let doc = std::fs::read_to_string(&cr_about_path)?;
@@ -28,6 +28,7 @@ pub(crate) async fn resolve_cr_about(
     struct CRAboutTemp {
         pub title: String,
         pub description: Option<String>,
+        pub open: Option<bool>,
     }
 
     impl CRAboutTemp {
@@ -36,6 +37,7 @@ pub(crate) async fn resolve_cr_about(
                 title: self.title,
                 description: self.description,
                 cr_number,
+                open: self.open.unwrap_or(true),
             }
         }
     }
@@ -73,8 +75,15 @@ pub(crate) async fn create_cr_about(
 
 pub(crate) fn generate_cr_about_content(cr_about: &fpm::cr::CRAbout) -> String {
     let mut about_content = format!("-- import: fpm\n\n\n-- fpm.cr-about: {}", cr_about.title,);
-    if let Some(ref description) = cr_about.description {
-        about_content = format!("{}\n\n{}\n", about_content, description);
+    if !cr_about.open {
+        about_content = format!("{}\n{}", about_content, cr_about.open);
     }
-    about_content
+    if let Some(ref description) = cr_about.description {
+        about_content = format!("{}\n\n{}", about_content, description);
+    }
+    format!("{about_content}\n")
+}
+
+pub(crate) async fn is_open_cr_exists(config: &fpm::Config, cr_number: usize) -> fpm::Result<bool> {
+    get_cr_about(config, cr_number).await.map(|v| v.open)
 }

@@ -45,7 +45,7 @@ async fn main() -> fpm::Result<()> {
     }
 
     if let Some(add) = matches.subcommand_matches("add") {
-        fpm::add(&config, add.value_of("file").unwrap()).await?;
+        fpm::add(&config, add.value_of("file").unwrap(), add.value_of("cr")).await?;
         return Ok(());
     }
 
@@ -228,7 +228,10 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
         .subcommand(
             clap::SubCommand::with_name("add")
                 .about("Adds a file in workspace")
-                .arg(clap::Arg::with_name("file").required(true))
+                .args(&[
+                    clap::Arg::with_name("file").required(true),
+                    clap::Arg::with_name("cr").long("--cr").takes_value(true),
+                ])
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
