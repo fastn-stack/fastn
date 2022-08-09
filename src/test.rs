@@ -91,7 +91,7 @@ macro_rules! p {
 
 macro_rules! intf {
     ($s:expr, $m: expr,) => {
-        int_fail!($s, $m)
+        intf!($s, $m)
     };
     ($s:expr, $m: expr) => {
         match ftd::test::interpret("foo", indoc::indoc!($s), &ftd::p2::TestLibrary {}) {
