@@ -2656,21 +2656,23 @@ impl Style {
             None => return Ok(s),
         };
         // TODO: assert no word is repeated?
+
+        // Returns error is text style is assigned two or more weights
         for part in l.split_ascii_whitespace() {
             match part {
-                "italic" => s.italic = true,
-                "underline" => s.underline = true,
-                "strike" => s.strike = true,
-                "heavy" => s.weight = Some(ftd::Weight::Heavy),
-                "extra-bold" => s.weight = Some(ftd::Weight::ExtraBold),
-                "bold" => s.weight = Some(ftd::Weight::Bold),
-                "semi-bold" => s.weight = Some(ftd::Weight::SemiBold),
-                "medium" => s.weight = Some(ftd::Weight::Medium),
-                "regular" => s.weight = Some(ftd::Weight::Regular),
-                "light" => s.weight = Some(ftd::Weight::Light),
-                "extra-light" => s.weight = Some(ftd::Weight::ExtraLight),
-                "hairline" => s.weight = Some(ftd::Weight::HairLine),
-                t => return ftd::e2(format!("{} is not a valid style", t), doc_id, 0),
+                "italic" if !s.italic => s.italic = true,
+                "underline" if !s.underline => s.underline = true,
+                "strike" if !s.strike => s.strike = true,
+                "heavy" if s.weight.is_none() => s.weight = Some(ftd::Weight::Heavy),
+                "extra-bold" if s.weight.is_none() => s.weight = Some(ftd::Weight::ExtraBold),
+                "bold" if s.weight.is_none() => s.weight = Some(ftd::Weight::Bold),
+                "semi-bold" if s.weight.is_none() => s.weight = Some(ftd::Weight::SemiBold),
+                "medium" if s.weight.is_none() => s.weight = Some(ftd::Weight::Medium),
+                "regular" if s.weight.is_none() => s.weight = Some(ftd::Weight::Regular),
+                "light" if s.weight.is_none() => s.weight = Some(ftd::Weight::Light),
+                "extra-light" if s.weight.is_none() => s.weight = Some(ftd::Weight::ExtraLight),
+                "hairline" if s.weight.is_none() => s.weight = Some(ftd::Weight::HairLine),
+                _t => return ftd::e2(format!("\'{}\' is not a valid style", &l), doc_id, 0),
             }
         }
         Ok(s)

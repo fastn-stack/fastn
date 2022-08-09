@@ -36,40 +36,6 @@ impl Header {
             .push((*line_number, name.to_string(), value.to_string()))
     }
 
-    // Returns error is text style is assigned two or more weights
-    pub fn conflict_style(&self) -> ftd::p1::Result<()> {
-        let mut hm = std::collections::HashMap::new();
-        for (ln, k, v) in self.0.iter() {
-            if k.starts_with("style") {
-                let mut count = 0;
-                for i in [
-                    "heavy",
-                    "extra-bold",
-                    "bold",
-                    "semi-bold",
-                    "medium",
-                    "regular",
-                    "light",
-                    "extra-light",
-                    "hairline"
-                ] {
-                    if v.contains(i) {
-                        count += 1;
-                        hm.insert(v, i);
-                        if count >= 2 {
-                            return Err(ftd::p1::Error::ParseError {
-                                doc_id: k.to_string(),
-                                line_number: *ln,
-                                message: "conflicting text weight styles found".to_string(),
-                            });
-                        }
-                    }
-                }
-            }
-        }
-        Ok(())
-    }
-
     pub fn bool_with_default(
         &self,
         doc_id: &str,
