@@ -43,19 +43,19 @@ This is the status for the files that are [file-with-conflict](glossary/#file-wi
 while syncing and the conflict type is [`edit-edit-conflict`](sync-conflict/#edit-edit-conflict).
 
 
--- ft.h2: `ClientEditedServerDeleted`
+-- ft.h2: `CloneEditedRemoteDeleted`
 
 This is the status for the files that are [file-with-conflict](glossary/#file-with-conflict)
 while syncing and the conflict type is [`delete-edit-conflict`](sync-conflict/#delete-edit-conflict).
 
 
--- ft.h2: `ClientDeletedServerEdited`
+-- ft.h2: `CloneDeletedRemoteEdited`
 
 This is the status for the files that are [file-with-conflict](glossary/#file-with-conflict)
 while syncing and the conflict type is [`edit-delete-conflict`](sync-conflict/#edit-delete-conflict).
 
 
--- ft.h2: `ClientAddedServerAdded`
+-- ft.h2: `CloneAddedRemoteAdded`
 
 This is the status for the files that are [file-with-conflict](glossary/#file-with-conflict)
 while syncing and the conflict type is [`add-add-conflict`](sync-conflict/#add-add-conflict).

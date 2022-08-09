@@ -201,7 +201,7 @@ has no entry in workspace.
 -- ft.h2: version
 
 As a noun: A single point in the FPM project history of a file; the entire
-history of a file in a project is represented as a set of interrelated version.
+history of a file in a project is represented as a series of versions.
 
 As a verb: The action of storing a new snapshot of the file’s state in the
 [fpm project](glossary/#fpm-project) history, by creating a new version
