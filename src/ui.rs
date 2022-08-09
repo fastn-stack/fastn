@@ -2657,7 +2657,7 @@ impl Style {
         };
         // TODO: assert no word is repeated?
 
-        // Returns error is text style is assigned two or more weights
+        // Returns error if text style is assigned two or more weights
         for part in l.split_ascii_whitespace() {
             match part {
                 "italic" if !s.italic => s.italic = true,
