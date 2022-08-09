@@ -190,23 +190,23 @@ blockquote: $blockquote
 
 
 -- ftd.color base-:
-light: #18181b
+light: #FFFFFF
 dark: #18181b
 
 -- ftd.color step-1-:
-light: #141414
+light: #E0E0E0
 dark: #141414
 
 -- ftd.color step-2-:
-light: #585656
+light: #BDBDBD
 dark: #585656
 
 -- ftd.color overlay-:
-light: rgba(0, 0, 0, 0.8)
+light: rgba(242, 242, 242, 0.8)
 dark: rgba(0, 0, 0, 0.8)
 
 -- ftd.color code-:
-light: #2B303B
+light: #f6f8fa
 dark: #2B303B
 
 -- ftd.background-colors background-:
@@ -217,27 +217,27 @@ overlay: $overlay-
 code: $code-
 
 -- ftd.color border-:
-light: #434547
+light: #828282
 dark: #434547
 
 -- ftd.color border-strong-:
-light: #919192
+light: #4F4F4F
 dark: #919192
 
 -- ftd.color text-:
-light: #a8a29e
+light: #1c1e21
 dark: #a8a29e
 
 -- ftd.color text-strong-:
-light: #ffffff
+light: #000000
 dark: #ffffff
 
 -- ftd.color shadow-:
-light: #007f9b
+light: #E0E0E0
 dark: #007f9b
 
 -- ftd.color scrim-:
-light: #007f9b
+light: #E0E0E0
 dark: #007f9b
 
 -- ftd.color cta-primary-base-:
@@ -245,7 +245,7 @@ light: #2dd4bf
 dark: #2dd4bf
 
 -- ftd.color cta-primary-hover-:
-light: #2c9f90
+light: #2cc9b5
 dark: #2c9f90
 
 -- ftd.color cta-primary-pressed-:
@@ -253,7 +253,7 @@ light: #2cc9b5
 dark: #2cc9b5
 
 -- ftd.color cta-primary-disabled-:
-light: rgba(44, 201, 181, 0.1)
+light: rgba(224, 224, 224, 0.1)
 dark: rgba(44, 201, 181, 0.1)
 
 -- ftd.color cta-primary-focused-:
@@ -290,7 +290,7 @@ light: #4fb2df
 dark: #4fb2df
 
 -- ftd.color cta-secondary-disabled-:
-light: rgba(79, 178, 223, 0.1)
+light: rgba(224, 224, 224, 0.1)
 dark: rgba(79, 178, 223, 0.1)
 
 -- ftd.color cta-secondary-focused-:
