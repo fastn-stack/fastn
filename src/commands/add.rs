@@ -1,5 +1,4 @@
 use itertools::Itertools;
-use std::option::Option::Some;
 
 pub async fn add(config: &fpm::Config, file: &str, cr: Option<&str>) -> fpm::Result<()> {
     if let Some(cr) = cr {
