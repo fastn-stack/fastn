@@ -83,8 +83,8 @@ email: arpita@fifthtry.com
 
 
 # Themes Guide: themes/
-
 - About Themes: themes/
+- Best Practices: /best-practices/
 - Package Interface: package-interface/
 - Theme Config: theme/config/
 - Responsive Themes: theme/responsive/
