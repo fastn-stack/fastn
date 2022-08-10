@@ -1163,6 +1163,7 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
             return ftd::e2(format!("{} is not a valid color", v), doc_id, 0);
         }
 
+        //Code for accepting 6-digit hexa-color code
         Ok(Some(ftd::ColorValue {
             r: ((iv & 0xff000000) >> 24) as u8,
             g: ((iv & 0xff0000) >> 16) as u8,
