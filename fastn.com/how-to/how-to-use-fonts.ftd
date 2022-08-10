@@ -25,7 +25,3 @@ lang: ftd
 
 \-- ftd.text:
 role: $fpm.type.heading-small
-
-
-
-

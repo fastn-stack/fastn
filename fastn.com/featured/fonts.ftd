@@ -1,0 +1,51 @@
+-- import: fpm.dev/assets
+-- import: fpm.dev/featured as ft-ui
+
+
+-- boolean show-grid: true
+-- boolean show-list: false
+
+-- ft.page: List of fonts
+
+We have created some Google Fonts listed below:
+
+
+-- ft-ui.grid-view:
+if: $show-grid
+templates: $font
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list font:
+
+-- font: Inter
+template-url: https://fifthtry.github.io/inter/
+licence-url: https://github.com/FifthTry/inter/blob/main/LICENSE
+github-url: https://github.com/FifthTry/inter
+
+`fifthtry.github.io/inter` font is available and can be used inside `FTD` web 
+packages.
+
+-- font: Roboto
+template-url: https://fifthtry.github.io/roboto/
+licence-url: https://github.com/FifthTry/roboto/blob/main/LICENSE
+github-url: https://github.com/FifthTry/roboto/
+
+`fifthtry.github.io/roboto` font is available and can be used inside `FTD` web 
+packages.
+
+-- font: Roboto Mono
+template-url: https://fifthtry.github.io/roboto-mono/
+licence-url: https://github.com/FifthTry/roboto-mono/blob/main/LICENSE
+github-url: https://github.com/FifthTry/roboto-mono/
+is-last: true
+
+`fifthtry.github.io/roboto-mono` font is available and can be used inside `FTD` web 
+packages.

@@ -59,13 +59,14 @@ email: arpita@fifthtry.com
   - Resumes: /featured/resumes/
   - Color Schemes: /featured/color-cs/
   - Component Libraries: /featured/components-library/
-  - How to Use Fonts: /featured/how-to-use-fonts/
+  - Fonts: /featured/fonts/
 - How To:
   - Install `fpm`: /how-to/install/
   - Update `fpm`: /how-to/update/
   - Get started with Github pages: /how-to/get-started-github-pages/
   - Get started with Vercel: /how-to/get-started-vercel/
   - Use Favicon: /favicon/
+  - How to Use Fonts: /how-to/how-to-use-fonts/
 - `fpm` Usage: /usage/
   - `fpm start-project`: /start-project/
   - `fpm build`: /build/

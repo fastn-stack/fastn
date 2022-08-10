@@ -264,7 +264,7 @@ width: fill
 height: auto
 border-radius: 12
 
---- container: ftd.main
+--- container: parent
 
 --- ftd.column:
 width: fill
