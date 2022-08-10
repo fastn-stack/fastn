@@ -1,6 +1,6 @@
--- ft.page: `document-filename` processor
+-- ft.page: `document-name` processor
 
-`document-filename` processor is used to get filename in system of accessed
+`document-name` processor is used to get filename in system of accessed
 document.
 
 Let's say, If request path is `/foo/ftd/` or `/foo/ftd/-/x/y/` for file
@@ -13,7 +13,7 @@ lang: ftd
 
 \-- ftd.text: Document Filename
 
-\-- string document-filename:
-$processor$: document-filename
+\-- string document-name:
+$processor$: document-name
 
-\-- ftd.text: $document-filename
+\-- ftd.text: $document-name

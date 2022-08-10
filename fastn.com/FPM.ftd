@@ -126,8 +126,8 @@ email: arpita@fifthtry.com
     url: /processors/document-readers/
   - `$processor$: document-writers`
     url: /processors/document-writers/
-  - `$processor$: document-filename`
-    url: /processors/document-filename/
+  - `$processor$: document-name`
+    url: /processors/document-name/
   - `$processor$: document-id`
     url: /processors/document-id/
   - `$processor$: document-full-id`

@@ -6,7 +6,7 @@ For readers/writers of document by id, we have three kinds of id: `id: /foo/`,
 
 Since we need to get `id`, `full-id` and `filename` of current document, to power
 document-readers, lets create processors `document-id`, `document-full-id` and
-`document-filename` as helpers as well. These three processors will return ids
+`document-name` as helpers as well. These three processors will return ids
 for current document.
 
 

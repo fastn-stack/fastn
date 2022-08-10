@@ -22,7 +22,7 @@ Currently, there are two such extensions `.md` and `.ftd`.
 -- ft.h2: document-name
 
 The unique identifier of a [document](glossary/#document). See more
-[`document-filename`](processors/document-filename/) processors.
+[`document-name`](processors/document-name/) processors.
 
 
 -- ft.h2: document-full-id
@@ -70,7 +70,7 @@ lang: ftd
 
 Here, `/foo/` is both `document-full-id` and [`document-id`](glossary/#document-id).
 `name: Arpita` is `document-metadata` where `name` is key and `Arpita` is value.
-`foo.ftd` is the [`document-filename`](glossary/#document-filename). This
+`foo.ftd` is the [`document-name`](glossary/#document-name). This
 document, `foo.ftd`, can access the `document-metadata` using `get-data`
 processor.
 
@@ -136,11 +136,18 @@ else. To communicate with remote, see [clone](glossary/#clone) or
 
 
 
--- ft.h2: server-latest
+-- ft.h2: remote-manifest
 
 The current tree of files in remote. This can be derived by looking at the remote
 history and get the latest version of each file. The file having the content
 from its latest version, if not deleted, becomes the part of current tree.
+
+
+-- ft.h2: remote-manifest-last-sync
+
+The [`remote-manifest-last-sync`](glossary/#remote-manifest-last-sync) is same
+as [`remote-manifest`](glossary/#remote-manifest), but it is derived against
+last synced remote state in clone.
 
 
 -- ft.h2: sitemap
@@ -212,7 +219,7 @@ representing the current state of the file. The new version is created by
 -- ft.h2: workspace
 
 The workspace contains all the files present in the
-[server-latest](glossary/#server-latest), plus any local changes that have
+[remote-manifest](glossary/#remote-manifest), plus any local changes that have
 been made but not yet synced. It also includes the new files added to workspace
 using [`fpm add <file-name>`](cli/add).
 

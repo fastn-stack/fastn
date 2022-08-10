@@ -2,7 +2,7 @@
 
 This commands executes the [sync](glossary/#sync) operation on all the files
 that are part of [workspace](glossary/#workspace) and are different
-from [server-latest](glossary/#server-latest). The
+from [remote-manifest](glossary/#remote-manifest). The
 [file-with-conflict](glossary/#file-with-conflict) cannot participate in this
 operation.
 

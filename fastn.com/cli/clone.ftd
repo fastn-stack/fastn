@@ -7,5 +7,5 @@ After the clone, a [`fpm sync`](cli/sync/) will keep the clone project in sync
 with remote.
 
 This default configuration is achieved by creating `.client-state` and take all
-server-latest as an entry to the client [workspace](glossary/#workspace).
+remote-manifest as an entry to the clone [workspace](glossary/#workspace).
 
