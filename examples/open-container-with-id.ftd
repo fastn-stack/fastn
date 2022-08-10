@@ -28,7 +28,6 @@ width: fill
 
 --- ftd.text:
 text: $title
-text: $title
 color: $black
 /style: bold
 padding-bottom: 12
