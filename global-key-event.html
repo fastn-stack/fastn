@@ -905,8 +905,7 @@ let ftd_utils = {
                                             continue;
                                         }
                                         let current_value = dependent_dependencies[d].parameters[style_attr].default.value;
-                                        if (ftd_utils.is_equal_condition(dependent, dependent_dependencies[d].condition)
-                                            && !ftd_utils.deepEqual(current_value, full_value)) {
+                                        if (!ftd_utils.deepEqual(current_value, full_value)) {
                                             call = true;
                                         }
                                         dependent_dependencies[d].parameters[style_attr].default.value = full_value;
