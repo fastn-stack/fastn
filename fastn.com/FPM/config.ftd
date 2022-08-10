@@ -9,7 +9,7 @@
 /-- ft.site-url: /
 
 -- ft.site-logo:
-light: $assets.files.static.logo-fifthtry-light.svg.light
+light: $assets.files.static.logo-fifthtry-dark.svg.light
 dark: $assets.files.static.logo-fifthtry-dark.svg.dark
 
 
