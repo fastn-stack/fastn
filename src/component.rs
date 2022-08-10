@@ -2693,14 +2693,13 @@ fn assert_caption_body_checks(
         return Ok(());
     }
 
-    let bag = doc.bag;
     let mut has_caption = caption.is_some();
     let mut has_body = body.is_some();
 
     let mut properties = None;
     let mut header_list: Option<&ftd::p1::Header> = Some(p1);
 
-    let mut thing = &bag[root];
+    let mut thing = get_thing(root, doc.bag, doc.name, line_number)?;
     loop {
         if let ftd::p2::Thing::Component(c) = thing {
             // Either the component is kernel or variable/derived component
@@ -2716,11 +2715,13 @@ fn assert_caption_body_checks(
                 line_number,
             )?;
 
+            // stop checking once you hit the top-most kernel component
             if c.kernel {
                 break;
             }
 
-            thing = &bag[&c.root];
+            // get the parent component and do the same checks
+            thing = get_thing(&c.root, doc.bag, doc.name, line_number)?;
             properties = Some(&c.properties);
 
             // These things are only available to the lowest level component
@@ -2731,6 +2732,22 @@ fn assert_caption_body_checks(
     }
 
     return Ok(());
+
+    fn get_thing<'t>(
+        bag_entry: &str,
+        bag: &'t std::collections::BTreeMap<String, ftd::p2::Thing>,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::p1::Result<&'t ftd::p2::Thing> {
+        if bag.contains_key(bag_entry) {
+            return Ok(&bag[bag_entry]);
+        }
+        Err(ftd::p1::Error::NotFound {
+            doc_id: doc_id.to_string(),
+            line_number,
+            key: bag_entry.to_string(),
+        })
+    }
 
     /// checks for body and caption conflicts using the given header list,
     /// arguments and properties map of the component
