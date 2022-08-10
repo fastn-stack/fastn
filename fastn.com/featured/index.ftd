@@ -42,6 +42,12 @@ templates: $schemes
 more-link: /featured/color-cs/
 
 
+-- grid-view: Fonts
+if: $show-grid
+templates: $font
+more-link-text: How to use fonts
+more-link: /featured/how-to-use-fonts/
+
 
 
 
@@ -54,6 +60,7 @@ more-link: /featured/color-cs/
 optional caption title:
 template list templates:
 optional string more-link: 
+optional string more-link-text: View all 
 boolean hover: false
 width: fill
 border-top: 1
@@ -84,7 +91,7 @@ margin-top: $fpm.space.space-5
 padding-right: $fpm.space.space-5
 padding-right if $ft.is-mobile: $fpm.space.space-0
 
---- ftd.text: View all
+--- ftd.text: $more-link-text
 if: $more-link is not null
 link: $more-link
 role: $fpm.type.fine-print
@@ -149,7 +156,7 @@ boolean is-last:
 boolean github-hover: false
 boolean mit-hover: false
 body body:
-ftd.image-src screenshot:
+optional ftd.image-src screenshot:
 width if not $ft.is-mobile: percent 46
 margin-top: $fpm.space.space-6
 margin-bottom: $fpm.space.space-6
@@ -241,6 +248,7 @@ $on-mouse-leave$: $mit-hover = false
 --- container: parent
 
 --- ftd.column:
+if: $screenshot is not null
 width: fill
 border-width: 1
 border-color: $fpm.color.main.text
@@ -250,12 +258,13 @@ link: $template-url
 open-in-new-tab: true
 
 --- ftd.image:
+if: $screenshot is not null
 src: $screenshot
 width: fill
 height: auto
 border-radius: 12
 
---- container: parent
+--- container: ftd.main
 
 --- ftd.column:
 width: fill
@@ -279,7 +288,7 @@ color: $fpm.color.main.text
 -- record template:
 caption title:
 string template-url: 
-ftd.image-src screenshot:
+optional ftd.image-src screenshot:
 string licence-url: 
 string github-url:
 body body: 
@@ -404,6 +413,32 @@ inside `FTD` web packages.
 
 
 
+-- template list font:
+
+-- font: Inter
+template-url: https://fifthtry.github.io/inter/
+licence-url: https://github.com/FifthTry/inter/blob/main/LICENSE
+github-url: https://github.com/FifthTry/inter
+
+`fifthtry.github.io/inter` font is available and can be used inside `FTD` web 
+packages.
+
+-- font: Roboto
+template-url: https://fifthtry.github.io/roboto/
+licence-url: https://github.com/FifthTry/roboto/blob/main/LICENSE
+github-url: https://github.com/FifthTry/roboto/
+
+`fifthtry.github.io/roboto` font is available and can be used inside `FTD` web 
+packages.
+
+
+
+
+
+
+
+
+
 -- ftd.font-size copy-print-medium-desktop:
 line-height: 20
 size: 13
@@ -415,3 +450,71 @@ mobile: $copy-print-medium-desktop
 xl: $copy-print-medium-desktop
 weight: 400
 
+
+
+
+
+
+
+
+
+
+-- ftd.column font-package:
+caption name:
+string github:
+string google:
+string site:
+padding: 20
+border-width: 2
+border-radius: 5
+border-color: $fpm.color.main.border
+margin-bottom: 20
+spacing: 10
+
+--- ftd.text: $name
+role: $fpm.type.copy-large
+color: $fpm.color.main.text-strong
+
+--- kv: Google:
+value: $google
+
+--- kv: Github:
+value: $github
+
+--- kv: Site:
+value: $site
+
+-- ftd.row kv:
+caption key:
+body value:
+width: fill
+spacing: 5
+
+--- ftd.text: $key
+role: $fpm.type.copy-tight
+color: $fpm.color.main.text
+
+--- ftd.text: $value
+role: $fpm.type.copy-tight
+color: $fpm.color.main.text-strong
+
+
+
+
+
+-- ftd.column fonts:
+width: fill
+
+--- ftd.row:
+width: fill
+spacing: 34
+
+--- font-package: Inter
+google: https://fonts.google.com/specimen/Inter
+site: https://fifthtry.github.io/inter/
+github: https://github.com/FifthTry/inter
+
+--- font-package: Roboto
+google: https://fonts.google.com/specimen/Roboto
+site: https://fifthtry.github.io/roboto/
+github: https://github.com/FifthTry/roboto

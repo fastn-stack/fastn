@@ -1,13 +1,18 @@
 
--- fpm.user-group: likes-abrark
+-- ft.code:
+lang: ftd
+
+\-- fpm.user-group: likes-abrark
 github-likes: abrarnitk/abrark
 
--- fpm.user-group: fpm-fan
+\-- fpm.user-group: fpm-fan
 email: abrark@fifthtry.com
 github-likes: fifthtry/fpm
 discord-channel: fpm@fifthtry.com
 github-repo: abrarnitk/abrark
 
+
+-- ft.markdown:
 
 Read request for /
 

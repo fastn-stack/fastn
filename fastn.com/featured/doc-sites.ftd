@@ -1,5 +1,5 @@
 -- import: fpm.dev/assets
--- import: fpm.dev/featured/featured as ft-ui
+-- import: fpm.dev/featured as ft-ui
 
 
 -- boolean show-grid: true

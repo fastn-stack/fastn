@@ -1,0 +1,31 @@
+-- ft.page: How to use Fonts
+
+We have created some Google Fonts listed in featured page:
+
+include fifthtry.github.io/inter package into FPM.ftd file
+
+
+-- ft.code: Add Dependency To `FPM.ftd`
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/inter
+
+\-- fpm.auto-import: fifthtry.github.io/inter
+
+
+-- ft.markdown:
+
+Inside your .ftd file to change for any specific token use:
+
+
+-- ft.code: using font
+lang: ftd
+
+\-- fpm.type.headline-small.font: $inter.fonts.Inter
+
+\-- ftd.text:
+role: $fpm.type.heading-small
+
+
+
+

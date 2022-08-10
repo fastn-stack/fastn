@@ -59,6 +59,7 @@ email: arpita@fifthtry.com
   - Resumes: /featured/resumes/
   - Color Schemes: /featured/color-cs/
   - Component Libraries: /featured/components-library/
+  - How to Use Fonts: /featured/how-to-use-fonts/
 - How To:
   - Install `fpm`: /how-to/install/
   - Update `fpm`: /how-to/update/
@@ -97,7 +98,7 @@ email: arpita@fifthtry.com
 - FPM Typography: theme/type/
 - FPM Color: theme/color/
 - FPM Space: theme/space/
-- How to use Google Font: theme/google-font-how-to-use/
+- How to Create Font Package: theme/how-to-create-font-package/
 - FPM Sitemap: sitemap/
 - FTD Host Features: /ftd-host/
 - Glossary: /glossary/
