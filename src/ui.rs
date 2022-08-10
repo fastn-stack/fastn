@@ -2643,8 +2643,17 @@ pub struct Style {
     pub weight: Option<ftd::Weight>,
 }
 
+
 impl Style {
     pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<ftd::Style> {
+        fn add_in_map(style: &str, map: &mut std::collections::BTreeMap<String, i32>) {
+            if !map.contains_key(style) {
+                map.insert(style.to_string(), 1);
+                return;
+            }
+            map.insert(style.to_string(), map[style] + 1);
+        }
+
         let mut s = Style {
             italic: false,
             underline: false,
@@ -2655,29 +2664,100 @@ impl Style {
             Some(v) => v,
             None => return Ok(s),
         };
-        // TODO: assert no word is repeated?
+        let mut booleans: std::collections::BTreeMap<String, i32> =
+            std::collections::BTreeMap::new();
+        let mut weights: std::collections::BTreeMap<String, i32> =
+            std::collections::BTreeMap::new();
 
-        // Returns error if text style is assigned two or more weights
         for part in l.split_ascii_whitespace() {
             match part {
-                "italic" if !s.italic => s.italic = true,
-                "underline" if !s.underline => s.underline = true,
-                "strike" if !s.strike => s.strike = true,
-                "heavy" if s.weight.is_none() => s.weight = Some(ftd::Weight::Heavy),
-                "extra-bold" if s.weight.is_none() => s.weight = Some(ftd::Weight::ExtraBold),
-                "bold" if s.weight.is_none() => s.weight = Some(ftd::Weight::Bold),
-                "semi-bold" if s.weight.is_none() => s.weight = Some(ftd::Weight::SemiBold),
-                "medium" if s.weight.is_none() => s.weight = Some(ftd::Weight::Medium),
-                "regular" if s.weight.is_none() => s.weight = Some(ftd::Weight::Regular),
-                "light" if s.weight.is_none() => s.weight = Some(ftd::Weight::Light),
-                "extra-light" if s.weight.is_none() => s.weight = Some(ftd::Weight::ExtraLight),
-                "hairline" if s.weight.is_none() => s.weight = Some(ftd::Weight::HairLine),
-                _t => return ftd::e2(format!("\'{}\' is not a valid style", &l), doc_id, 0),
+                "italic" => {
+                    s.italic = true;
+                    add_in_map("italic", &mut booleans);
+                }
+                "underline" => {
+                    s.underline = true;
+                    add_in_map("underline", &mut booleans);
+                }
+                "strike" => {
+                    s.strike = true;
+                    add_in_map("strike", &mut booleans);
+                }
+                "heavy" => {
+                    s.weight = Some(ftd::Weight::Heavy);
+                    add_in_map("heavy", &mut weights);
+                }
+                "extra-bold" => {
+                    s.weight = Some(ftd::Weight::ExtraBold);
+                    add_in_map("extra-bold", &mut weights);
+                }
+                "bold" => {
+                    s.weight = Some(ftd::Weight::Bold);
+                    add_in_map("bold", &mut weights);
+                }
+                "semi-bold" => {
+                    s.weight = Some(ftd::Weight::SemiBold);
+                    add_in_map("semi-bold", &mut weights);
+                }
+                "medium" => {
+                    s.weight = Some(ftd::Weight::Medium);
+                    add_in_map("medium", &mut weights);
+                }
+                "regular" => {
+                    s.weight = Some(ftd::Weight::Regular);
+                    add_in_map("regular", &mut weights);
+                }
+                "light" => {
+                    s.weight = Some(ftd::Weight::Light);
+                    add_in_map("light", &mut weights);
+                }
+                "extra-light" => {
+                    s.weight = Some(ftd::Weight::ExtraLight);
+                    add_in_map("extra-light", &mut weights);
+                }
+                "hairline" => {
+                    s.weight = Some(ftd::Weight::HairLine);
+                    add_in_map("hairline", &mut weights);
+                }
+                t => return ftd::e2(format!("{} is not a valid style", t), doc_id, 0),
             }
         }
+
+        // Checks if there is repeatation in Underline,italic,strike
+        for (style, count) in booleans.iter() {
+            if count > &1 {
+                return Err(ftd::p1::Error::ForbiddenUsage {
+                    message: format!("\'{}\' repeated {} times in \'{}\'", style, count, &l),
+                    doc_id: doc_id.to_string(),
+                    line_number: 0,
+                });
+            }
+        }
+
+        // Checks if there is conflict in font weights
+        if weights.len() > 1 {
+            return Err(ftd::p1::Error::ForbiddenUsage {
+                message: format!("Conflicting weights {:?} in \'{}\'", weights.keys(), &l),
+                doc_id: doc_id.to_string(),
+                line_number: 0,
+            });
+        }
+
+        // Checks if there is repeatation in font weights
+        for (weight, count) in weights.iter() {
+            if count > &1 {
+                return Err(ftd::p1::Error::ForbiddenUsage {
+                    message: format!("\'{}\' repeated {} times in \'{}\'", weight, count, &l),
+                    doc_id: doc_id.to_string(),
+                    line_number: 0,
+                });
+            }
+        }
+
         Ok(s)
     }
 }
+
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
