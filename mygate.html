@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Foo says Hello</title>
+    <title>toggle</title>
     <script type="ftd" id="ftd-data">
         {
   "ftd#dark-mode": {
@@ -32,12 +32,72 @@
     "value": false,
     "dependencies": {}
   },
-  "open-with-append-at.ftd#body@0,3": {
-    "value": null,
+  "mygate.ftd#body@0,0,1": {
+    "value": "**Amit Upadhyay** has added you as a frequent...",
     "dependencies": {
-      "0,1,0,1:foo-id-external:0": [
+      "0,0,1,2": [
         {
-          "condition": "$IsNotNull$",
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "mygate.ftd#body@0,0,2": {
+    "value": "The Gateway Protection Programme was operated by the British government.",
+    "dependencies": {
+      "0,0,2,2": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "mygate.ftd#code@0,0,1": {
+    "value": 123123,
+    "dependencies": {
+      "0,0,1,4,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "mygate.ftd#code@0,0,2": {
+    "value": 998822,
+    "dependencies": {
+      "0,0,2,4,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "mygate.ftd#open": {
+    "value": true,
+    "dependencies": {
+      "0,0,1": [
+        {
+          "condition": true,
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "0,0,2": [
+        {
+          "condition": true,
           "dependency_type": "Visible",
           "parameters": {},
           "remaining": null
@@ -45,25 +105,12 @@
       ]
     }
   },
-  "open-with-append-at.ftd#body@0,3,1": {
-    "value": null,
+  "mygate.ftd#open@0,0,1": {
+    "value": true,
     "dependencies": {
-      "0,1,0,1:foo-id-external:0": [
+      "0,0,1,4": [
         {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "open-with-append-at.ftd#body@1,0": {
-    "value": null,
-    "dependencies": {
-      "1,1,0,1:foo-id-external:1": [
-        {
-          "condition": "$IsNotNull$",
+          "condition": true,
           "dependency_type": "Visible",
           "parameters": {},
           "remaining": null
@@ -71,25 +118,12 @@
       ]
     }
   },
-  "open-with-append-at.ftd#body@1,0,1": {
-    "value": null,
+  "mygate.ftd#open@0,0,2": {
+    "value": true,
     "dependencies": {
-      "1,1,0,1:foo-id-external:1": [
+      "0,0,2,4": [
         {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "open-with-append-at.ftd#body@3": {
-    "value": null,
-    "dependencies": {
-      "3,1": [
-        {
-          "condition": "$IsNotNull$",
+          "condition": true,
           "dependency_type": "Visible",
           "parameters": {},
           "remaining": null
@@ -97,10 +131,10 @@
       ]
     }
   },
-  "open-with-append-at.ftd#body@3,1": {
-    "value": null,
+  "mygate.ftd#title@0,0,1": {
+    "value": "Invitation",
     "dependencies": {
-      "3,1": [
+      "0,0,1,0,0,0": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -110,75 +144,10 @@
       ]
     }
   },
-  "open-with-append-at.ftd#body@4,0": {
-    "value": null,
+  "mygate.ftd#title@0,0,2": {
+    "value": "Yo Yo Honey Singh",
     "dependencies": {
-      "4,1,0,1:bar-id-external:4": [
-        {
-          "condition": "$IsNotNull$",
-          "dependency_type": "Visible",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "open-with-append-at.ftd#body@4,0,1": {
-    "value": null,
-    "dependencies": {
-      "4,1,0,1:bar-id-external:4": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "open-with-append-at.ftd#title@0,3": {
-    "value": "Foo says Hello",
-    "dependencies": {
-      "0,1,0,0:foo-id-external:0": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "open-with-append-at.ftd#title@1,0": {
-    "value": "Foo says Hello Again",
-    "dependencies": {
-      "1,1,0,0:foo-id-external:1": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "open-with-append-at.ftd#title@3": {
-    "value": "This is not bar text",
-    "dependencies": {
-      "3,0": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "open-with-append-at.ftd#title@4,0": {
-    "value": "Bar says Hello",
-    "dependencies": {
-      "4,1,0,0:bar-id-external:4": [
+      "0,0,2,0,0,0": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -191,38 +160,19 @@
 }
     </script>
     <script type="ftd" id="ftd-external-children">
-        {
-  "bar-id-external:4": [
-    {
-      "condition": [
-        "bar-id:4,1"
-      ],
-      "set_at": "bar-id:4,1"
-    }
-  ],
-  "foo-id-external:0": [
-    {
-      "condition": [
-        "foo-id:0,1"
-      ],
-      "set_at": "foo-id:0,1"
-    }
-  ],
-  "foo-id-external:1": [
-    {
-      "condition": [
-        "foo-id:1,1"
-      ],
-      "set_at": "foo-id:1,1"
-    }
-  ]
-}
+        {}
     </script>
     <script>
         
     </script>
     <style>
-        html {
+        body, ol ol, ol ul, ul ol, ul ul {
+    margin:0
+}
+pre, table{
+    overflow:auto
+}
+html {
     height: 100%;
     width: 100%;
 }
@@ -231,11 +181,27 @@ body {
     margin: 0;
     height: 100%;
     width: 100%;
+    word-wrap: break-word;
 }
-
-
+pre,
+table {
+    overflow: auto;
+}
+input, code {
+    vertical-align: middle;
+}
 pre {
     white-space: break-spaces;
+}
+html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+iframe {
+    border: 0;
+    color-scheme: auto;
 }
 
 pre code {
@@ -253,49 +219,14 @@ ul {
 }
 
 .ft_md ul,
-.ft_md ol,
-.ft_md p {
+.ft_md ol{
     margin: 10px 0;
-}
-
-.ft_md h1 {
-    font-size: 48px;
-    font-weight: 400;
-    line-height: 52px;
-    color: #ffffff;
-}
-
-.ft_md h2 {
-    font-size: 40px;
-    font-weight: 400;
-    line-height: 48px;
-    color: #ffffff;
-}
-
-.ft_md h3 {
-    font-size: 32px;
-    font-weight: 400;
-    line-height: 44px;
-    color: #ffffff;
-}
-
-.ft_md h4 {
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 36px;
-    color: #ffffff;
-}
-
-.ft_md h5 {
-    line-height: 1.2em;
-    color: #ffffff;
 }
 
 .ft_md ul ul,
 .ft_md ul ol,
 .ft_md ol ul,
 .ft_md ol ol {
-    line-height: 1.5em;
     margin: 0;
 }
 
@@ -351,12 +282,12 @@ ul {
 }
 
 .ft_md a {
-    color: #6a89b8;
+    color: #136351;
     text-decoration: none;
 }
 
 .ft_md a:visited {
-    color: #9475cb;
+    color: #7b3ee8;
 }
 
 .ft_md a:hover {
@@ -364,20 +295,19 @@ ul {
 }
 
 .ft_md code {
-    font-size: 0.9em;
-    padding: 0.1em 0.25em;
-    background-color: rgba(159, 155, 155, 0.27);
+    padding: 0.1rem 0.25rem;
+    background-color: #f6f7f8;
     border-radius: 4px;
 }
 
 .ft_md blockquote {
-    padding: 0.25em 1em;
-    margin: 1em 0;
-    background-color: #f0f0f0;
+    padding: 0.25rem 1rem;
+    margin: 1rem 0;
+    background-color: #f6f7f8;
     border-radius: 3px;
 }
 
-.ft_md blockquote>blockquote {
+.ft_md blockquote > blockquote {
     margin: 0;
 }
 
@@ -391,67 +321,103 @@ body.fpm-dark .ft_md blockquote {
 }
 
 body.fpm-dark .ft_md a {
-    color: #58a6ff;
+    color: #25c19f;
     text-decoration: none;
 }
 
 body.fpm-dark .ft_md a:visited {
-    color: #a27de7;
+    color: #0f5750;
 }
 
 body.fpm-dark .ft_md a code {
-    color: #58a6ff;
+    color: #25c19f;
 }
 
 body.fpm-dark .ft_md a:visited code {
-    color: #a27de7;
+    color: #0f5750;
 }
         
 
-body.fpm-dark .c_0 {
-    color: rgba(255,0,0,1)
+.b_0 {
+    border-color: rgba(255,255,0,1)
 }
 
 
 
-body.fpm-dark .c_1 {
-    color: rgba(0,0,0,1)
+.b_1 {
+    background-color: rgba(0,128,0,1)
 }
 
 
 
-body.fpm-dark .c_2 {
-    color: rgba(77,77,77,1)
+.b_2 {
+    background-color: rgba(255,255,255,1)
+}
+
+
+
+.b_4 {
+    border-color: rgba(255,0,0,1)
+}
+
+
+
+.b_5 {
+    background-color: rgba(255,165,0,1)
+}
+
+
+
+body.fpm-dark .b_0 {
+    border-color: rgba(255,255,0,1)
+}
+
+
+
+body.fpm-dark .b_1 {
+    background-color: rgba(0,128,0,1)
+}
+
+
+
+body.fpm-dark .b_2 {
+    background-color: rgba(255,255,255,1)
+}
+
+
+
+body.fpm-dark .b_4 {
+    border-color: rgba(255,0,0,1)
+}
+
+
+
+body.fpm-dark .b_5 {
+    background-color: rgba(255,165,0,1)
 }
 
 
 
 body.fpm-dark .c_3 {
-    color: rgba(0,128,0,1)
-}
-
-
-
-.c_0 {
     color: rgba(255,0,0,1)
 }
 
 
 
-.c_1 {
-    color: rgba(0,0,0,1)
-}
-
-
-
-.c_2 {
-    color: rgba(77,77,77,1)
+body.fpm-dark .c_6 {
+    color: rgba(255,255,255,1)
 }
 
 
 
 .c_3 {
-    color: rgba(0,128,0,1)
+    color: rgba(255,0,0,1)
+}
+
+
+
+.c_6 {
+    color: rgba(255,255,255,1)
 }
 
 
@@ -460,7 +426,7 @@ body.fpm-dark .c_3 {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 20px; text-decoration: none; white-space: initial" class="c_0"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Before Foo</div><div data-id="foo-id:0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><h2 data-ext-id="foo-id-external:0:main" data-id="0,1,0:foo-id-external:0:main" id="foo-says-hello" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,1,0,0:foo-id-external:0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Foo says Hello</div><div data-id="0,1,0,1:foo-id-external:0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_2 ft_md"></div></h2></div><div data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">After Foo</div></div><div data-id="1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 20px; text-decoration: none; white-space: initial" class="c_0"><div data-id="1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Before Foo</div><div data-id="foo-id:1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><h2 data-ext-id="foo-id-external:1:main" data-id="1,1,0:foo-id-external:1:main" id="foo-says-hello-again" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="1,1,0,0:foo-id-external:1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Foo says Hello Again</div><div data-id="1,1,0,1:foo-id-external:1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_2 ft_md"></div></h2></div><div data-id="1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">After Foo</div></div><div data-id="2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 20px; text-decoration: none; white-space: initial" class="c_3"><div data-id="2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Before Bar</div><div data-id="bar-id:2,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ></div><div data-id="2,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">After Bar</div></div><h2 data-id="3:main" id="this-is-not-bar-text" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">This is not bar text</div><div data-id="3,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_2 ft_md"></div></h2><div data-id="4:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 20px; text-decoration: none; white-space: initial" class="c_3"><div data-id="4,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Before Bar</div><div data-id="bar-id:4,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><h2 data-ext-id="bar-id-external:4:main" data-id="4,1,0:bar-id-external:4:main" id="bar-says-hello" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="4,1,0,0:bar-id-external:4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Bar says Hello</div><div data-id="4,1,0,1:bar-id-external:4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_2 ft_md"></div></h2></div><div data-id="4,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">After Bar</div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; padding: 100px; text-decoration: none; white-space: initial" ><div data-id="0,0:main" data-spacing="margin-left:30px" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;mygate.ftd#open&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">toggle</div><div data-id="0,0,1:main" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 5px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; margin-left: 30px; margin-top: auto; text-decoration: none; white-space: initial; width: 400px" class="b_0"><div data-id="0,0,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-top: 40px; text-decoration: none; white-space: initial; width: 100%" class="b_1"><div data-id="0,0,1,0,0:main" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; text-decoration: none; white-space: initial; width: 100px" ><div data-id="0,0,1,0,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;mygate.ftd#open@0,0,1&quot;,&quot;parameters&quot;:{}}]', this)" style="align-self: center; border-left-width: 4px !important; border-radius: 0px; border-right-width: 4px !important; border-style: solid; border-top-width: 4px !important; border-width: 0px; box-sizing: border-box; cursor: pointer; margin-bottom: auto; margin-top: auto; padding: 5px; text-align: left; text-decoration: none; white-space: initial; width: 100px" class="b_2 c_3 ft_md">Invitation</div></div></div><div data-id="0,0,1,1:main" style="align-items: flex-start; align-self: center; border-bottom-width: 4px !important; border-left-width: 4px !important; border-radius: 0px; border-right-width: 4px !important; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; padding-top: 2px; text-decoration: none; white-space: initial; width: 100px" class="b_4"></div><div data-id="0,0,1,2:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-left: auto; margin-right: auto; padding-bottom: 20px; padding-top: 20px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><strong>Amit Upadhyay</strong> has added you as a frequent…</div><div data-id="0,0,1,3:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-left: auto; margin-right: auto; padding: 20px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="ft_md">frequent entry code</div><div data-id="0,0,1,4:main" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; padding: 20px; text-decoration: none; white-space: initial" class="b_5"><div data-id="0,0,1,4,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; margin-bottom: auto; margin-top: auto; text-align: left; text-decoration: none; white-space: initial" class="c_6 ft_md">123123</div></div><div data-id="0,0,1,5:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0,1,5,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-style: italic; margin-bottom: auto; margin-top: auto; padding: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="ft_md">Use this code at the gate</div></div><div data-id="0,0,1,6:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; height: 20px; justify-content: flex-start; text-decoration: none; white-space: initial" ></div><div data-id="0,0,1,7:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 20px; text-decoration: none; white-space: initial; width: 100%" class="b_1"><div data-id="0,0,1,7,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: auto; margin-top: auto; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="c_6 ft_md">www-mygate-com</div></div></div><div data-id="0,0,2:main" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 5px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; margin-left: 30px; margin-top: auto; text-decoration: none; white-space: initial; width: 400px" class="b_0"><div data-id="0,0,2,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-top: 40px; text-decoration: none; white-space: initial; width: 100%" class="b_1"><div data-id="0,0,2,0,0:main" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; text-decoration: none; white-space: initial; width: 100px" ><div data-id="0,0,2,0,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;mygate.ftd#open@0,0,2&quot;,&quot;parameters&quot;:{}}]', this)" style="align-self: center; border-left-width: 4px !important; border-radius: 0px; border-right-width: 4px !important; border-style: solid; border-top-width: 4px !important; border-width: 0px; box-sizing: border-box; cursor: pointer; margin-bottom: auto; margin-top: auto; padding: 5px; text-align: left; text-decoration: none; white-space: initial; width: 100px" class="b_2 c_3 ft_md">Yo Yo Honey Singh</div></div></div><div data-id="0,0,2,1:main" style="align-items: flex-start; align-self: center; border-bottom-width: 4px !important; border-left-width: 4px !important; border-radius: 0px; border-right-width: 4px !important; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; padding-top: 2px; text-decoration: none; white-space: initial; width: 100px" class="b_4"></div><div data-id="0,0,2,2:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-left: auto; margin-right: auto; padding-bottom: 20px; padding-top: 20px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Gateway Protection Programme was operated by the British government.</div><div data-id="0,0,2,3:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-left: auto; margin-right: auto; padding: 20px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="ft_md">frequent entry code</div><div data-id="0,0,2,4:main" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; padding: 20px; text-decoration: none; white-space: initial" class="b_5"><div data-id="0,0,2,4,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; margin-bottom: auto; margin-top: auto; text-align: left; text-decoration: none; white-space: initial" class="c_6 ft_md">998822</div></div><div data-id="0,0,2,5:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0,2,5,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-style: italic; margin-bottom: auto; margin-top: auto; padding: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="ft_md">Use this code at the gate</div></div><div data-id="0,0,2,6:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; height: 20px; justify-content: flex-start; text-decoration: none; white-space: initial" ></div><div data-id="0,0,2,7:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 20px; text-decoration: none; white-space: initial; width: 100%" class="b_1"><div data-id="0,0,2,7,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: auto; margin-top: auto; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="c_6 ft_md">www-mygate-com</div></div></div></div></div></div>
 
 
     <script>
@@ -972,8 +938,9 @@ let ftd_utils = {
                                 for (const parameter in json_dependency.parameters) {
                                     let param_val = json_dependency.parameters[parameter].value.value;
                                     let node = param_val["$node$"];
-                                    let variable = param_val["$variable$"];
-                                    let dependent = data[variable].value;
+                                    let var_ = param_val["$variable$"];
+                                    let dependent = ftd_utils.get_data_value(data, var_);
+                                    let variable = ftd_utils.get_name_and_remaining(var_)[0];
                                     let dependent_dependencies = data[variable].dependencies[node];
                                     let call = false;
                                     for (const d in dependent_dependencies) {
@@ -1073,8 +1040,9 @@ let ftd_utils = {
                                 let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
                                 let call = false;
                                 for (const idx in set) {
-                                    let dependent = data[set[idx]].value;
-                                    let dependent_dependencies = data[set[idx]].dependencies[dependency];
+                                    let dependent = ftd_utils.get_data_value(data, set[idx]);
+                                    let variable = ftd_utils.get_name_and_remaining(set[idx])[0];
+                                    let dependent_dependencies = data[variable].dependencies[dependency];
                                     for (const d in dependent_dependencies) {
                                         if (dependent_dependencies[d].dependency_type !== "Style"
                                             || !dependent_dependencies[d].parameters[style_attr]) {
@@ -1087,7 +1055,7 @@ let ftd_utils = {
                                         }
                                         dependent_dependencies[d].parameters[style_attr].default.value = full_value;
                                     }
-                                    data[set[idx]].dependencies[dependency] = dependent_dependencies;
+                                    data[variable].dependencies[dependency] = dependent_dependencies;
                                     if (call) {
                                         handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited, visibility_change);
                                     }
@@ -1376,7 +1344,7 @@ window.ftd = (function () {
             return;
         }
 
-        let value = parseInt(data[variable].value);
+        let value = parseInt(ftd_utils.get_data_value(data, variable));
         value += increment_by;
 
         if (clamp_max !== undefined) {
@@ -1453,7 +1421,7 @@ window.ftd = (function () {
             console_log(variable, "is not in data, ignoring");
             return;
         }
-        return data[variable].value;
+        return ftd_utils.get_data_value(data, variable);
     }
 
     exports.set_multi_value = function (id, list) {

@@ -91,7 +91,13 @@
         
     </script>
     <style>
-        html {
+        body, ol ol, ol ul, ul ol, ul ul {
+    margin:0
+}
+pre, table{
+    overflow:auto
+}
+html {
     height: 100%;
     width: 100%;
 }
@@ -100,11 +106,27 @@ body {
     margin: 0;
     height: 100%;
     width: 100%;
+    word-wrap: break-word;
 }
-
-
+pre,
+table {
+    overflow: auto;
+}
+input, code {
+    vertical-align: middle;
+}
 pre {
     white-space: break-spaces;
+}
+html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+iframe {
+    border: 0;
+    color-scheme: auto;
 }
 
 pre code {
@@ -122,49 +144,14 @@ ul {
 }
 
 .ft_md ul,
-.ft_md ol,
-.ft_md p {
+.ft_md ol{
     margin: 10px 0;
-}
-
-.ft_md h1 {
-    font-size: 48px;
-    font-weight: 400;
-    line-height: 52px;
-    color: #ffffff;
-}
-
-.ft_md h2 {
-    font-size: 40px;
-    font-weight: 400;
-    line-height: 48px;
-    color: #ffffff;
-}
-
-.ft_md h3 {
-    font-size: 32px;
-    font-weight: 400;
-    line-height: 44px;
-    color: #ffffff;
-}
-
-.ft_md h4 {
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 36px;
-    color: #ffffff;
-}
-
-.ft_md h5 {
-    line-height: 1.2em;
-    color: #ffffff;
 }
 
 .ft_md ul ul,
 .ft_md ul ol,
 .ft_md ol ul,
 .ft_md ol ol {
-    line-height: 1.5em;
     margin: 0;
 }
 
@@ -220,12 +207,12 @@ ul {
 }
 
 .ft_md a {
-    color: #6a89b8;
+    color: #136351;
     text-decoration: none;
 }
 
 .ft_md a:visited {
-    color: #9475cb;
+    color: #7b3ee8;
 }
 
 .ft_md a:hover {
@@ -233,20 +220,19 @@ ul {
 }
 
 .ft_md code {
-    font-size: 0.9em;
-    padding: 0.1em 0.25em;
-    background-color: rgba(159, 155, 155, 0.27);
+    padding: 0.1rem 0.25rem;
+    background-color: #f6f7f8;
     border-radius: 4px;
 }
 
 .ft_md blockquote {
-    padding: 0.25em 1em;
-    margin: 1em 0;
-    background-color: #f0f0f0;
+    padding: 0.25rem 1rem;
+    margin: 1rem 0;
+    background-color: #f6f7f8;
     border-radius: 3px;
 }
 
-.ft_md blockquote>blockquote {
+.ft_md blockquote > blockquote {
     margin: 0;
 }
 
@@ -260,20 +246,20 @@ body.fpm-dark .ft_md blockquote {
 }
 
 body.fpm-dark .ft_md a {
-    color: #58a6ff;
+    color: #25c19f;
     text-decoration: none;
 }
 
 body.fpm-dark .ft_md a:visited {
-    color: #a27de7;
+    color: #0f5750;
 }
 
 body.fpm-dark .ft_md a code {
-    color: #58a6ff;
+    color: #25c19f;
 }
 
 body.fpm-dark .ft_md a:visited code {
-    color: #a27de7;
+    color: #0f5750;
 }
         
 
@@ -838,8 +824,9 @@ let ftd_utils = {
                                 for (const parameter in json_dependency.parameters) {
                                     let param_val = json_dependency.parameters[parameter].value.value;
                                     let node = param_val["$node$"];
-                                    let variable = param_val["$variable$"];
-                                    let dependent = data[variable].value;
+                                    let var_ = param_val["$variable$"];
+                                    let dependent = ftd_utils.get_data_value(data, var_);
+                                    let variable = ftd_utils.get_name_and_remaining(var_)[0];
                                     let dependent_dependencies = data[variable].dependencies[node];
                                     let call = false;
                                     for (const d in dependent_dependencies) {
@@ -939,8 +926,9 @@ let ftd_utils = {
                                 let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
                                 let call = false;
                                 for (const idx in set) {
-                                    let dependent = data[set[idx]].value;
-                                    let dependent_dependencies = data[set[idx]].dependencies[dependency];
+                                    let dependent = ftd_utils.get_data_value(data, set[idx]);
+                                    let variable = ftd_utils.get_name_and_remaining(set[idx])[0];
+                                    let dependent_dependencies = data[variable].dependencies[dependency];
                                     for (const d in dependent_dependencies) {
                                         if (dependent_dependencies[d].dependency_type !== "Style"
                                             || !dependent_dependencies[d].parameters[style_attr]) {
@@ -953,7 +941,7 @@ let ftd_utils = {
                                         }
                                         dependent_dependencies[d].parameters[style_attr].default.value = full_value;
                                     }
-                                    data[set[idx]].dependencies[dependency] = dependent_dependencies;
+                                    data[variable].dependencies[dependency] = dependent_dependencies;
                                     if (call) {
                                         handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited, visibility_change);
                                     }
@@ -1242,7 +1230,7 @@ window.ftd = (function () {
             return;
         }
 
-        let value = parseInt(data[variable].value);
+        let value = parseInt(ftd_utils.get_data_value(data, variable));
         value += increment_by;
 
         if (clamp_max !== undefined) {
@@ -1319,7 +1307,7 @@ window.ftd = (function () {
             console_log(variable, "is not in data, ignoring");
             return;
         }
-        return data[variable].value;
+        return ftd_utils.get_data_value(data, variable);
     }
 
     exports.set_multi_value = function (id, list) {
