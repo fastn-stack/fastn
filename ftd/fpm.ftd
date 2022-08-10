@@ -254,6 +254,7 @@ file-edit-data list file-edit:
 caption filename:
 optional boolean deleted:
 optional integer version:
+optional integer cr:
 
 
 -- workspace-entry list client-workspace:
@@ -336,3 +337,13 @@ string list group:
 string list -group:
 
 -- user-group-data list user-group:
+
+
+
+-- record cr-about-data:
+caption title:
+optional boolean open:
+optional body description:
+
+
+-- optional cr-about-data cr-about:

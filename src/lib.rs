@@ -9,9 +9,11 @@ pub mod utils;
 // Temp comment
 mod apis;
 mod auto_import;
+mod cache;
 mod commands;
 mod config;
 mod controller;
+mod cr;
 mod dependency;
 mod doc;
 mod file;
@@ -33,11 +35,12 @@ mod workspace;
 pub(crate) use auto_import::AutoImport;
 pub(crate) use commands::build::process_file;
 pub use commands::{
-    abort_merge::abort_merge, add::add, build::build, build2::build2, clone::clone, diff::diff,
-    mark_resolve::mark_resolve, mark_upto_date::mark_upto_date, resolve_conflict::resolve_conflict,
-    revert::revert, rm::rm, serve::fpm_serve, start_project::start_project,
-    start_tracking::start_tracking, status::status, stop_tracking::stop_tracking, sync::sync,
-    sync2::sync2, sync_status::sync_status, translation_status::translation_status, update::update,
+    abort_merge::abort_merge, add::add, build::build, build2::build2, clone::clone,
+    close_cr::close_cr, create_cr::create_cr, diff::diff, mark_resolve::mark_resolve,
+    mark_upto_date::mark_upto_date, resolve_conflict::resolve_conflict, revert::revert, rm::rm,
+    serve::fpm_serve, start_project::start_project, start_tracking::start_tracking, status::status,
+    stop_tracking::stop_tracking, sync::sync, sync2::sync2, sync_status::sync_status,
+    translation_status::translation_status, update::update,
 };
 pub use config::Config;
 pub(crate) use config::Package;
@@ -56,6 +59,7 @@ pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
 pub const PACKAGE_INFO_INTERFACE: &str = "fifthtry.github.io/package-info";
 pub const PACKAGE_THEME_INTERFACE: &str = "fifthtry.github.io/theme";
+pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
 pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
 
@@ -410,7 +414,7 @@ pub enum Error {
     #[error("IoError: {}", _0)]
     IoError(#[from] std::io::Error),
 
-    #[error("IoError: {}", _0)]
+    #[error("ZipError: {}", _0)]
     ZipError(#[from] zip::result::ZipError),
 
     #[error("SerdeJsonError: {}", _0)]
@@ -439,6 +443,12 @@ pub enum Error {
 
     #[error("UTF8Error: {}", _0)]
     UTF8Error(#[from] std::string::FromUtf8Error),
+
+    #[error("ParseIntError: {}", _0)]
+    ParseIntError(#[from] std::num::ParseIntError),
+
+    #[error("GenericError: {}", _0)]
+    GenericError(String),
 
     #[error("GroupNotFound: id: {}, {message}")]
     GroupNotFound { message: String },

@@ -5,6 +5,7 @@ pub struct WorkspaceEntry {
     pub filename: String,
     pub deleted: Option<bool>,
     pub version: Option<i32>,
+    pub cr: Option<usize>,
 }
 
 impl fpm::Config {
@@ -13,7 +14,7 @@ impl fpm::Config {
         Ok(
             fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
                 .into_iter()
-                .map(|(file_name, file_edit)| file_edit.to_workspace(file_name.as_str()))
+                .map(|(file_name, file_edit)| file_edit.into_workspace(file_name.as_str()))
                 .collect_vec(),
         )
     }
@@ -22,6 +23,41 @@ impl fpm::Config {
         let workspace_list = self.evaluate_clone_workspace().await?;
         self.write_workspace(workspace_list.as_slice()).await?;
         Ok(())
+    }
+
+    pub(crate) async fn write_clone_available_cr(&self, reserved_crs: &[i32]) -> fpm::Result<()> {
+        fpm::utils::update(
+            &self.clone_available_crs_path(),
+            reserved_crs
+                .iter()
+                .map(|v| v.to_string())
+                .join("\n")
+                .as_bytes(),
+        )
+        .await?;
+        Ok(())
+    }
+
+    pub async fn get_available_crs(&self) -> fpm::Result<Vec<i32>> {
+        let mut response = vec![];
+        if self.clone_available_crs_path().exists() {
+            let crs = tokio::fs::read_to_string(self.clone_available_crs_path()).await?;
+            for cr in crs.split('\n') {
+                response.push(cr.parse()?)
+            }
+        }
+        Ok(response)
+    }
+
+    pub async fn extract_cr_number(&self) -> fpm::Result<i32> {
+        let mut available_crs = self.get_available_crs().await?;
+        if available_crs.is_empty() {
+            return fpm::usage_error("No available cr number, try `fpm sync`".to_string());
+        }
+        let cr_number = available_crs.remove(0);
+        self.write_clone_available_cr(available_crs.as_slice())
+            .await?;
+        Ok(cr_number)
     }
 
     pub(crate) async fn read_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
@@ -58,9 +94,14 @@ impl WorkspaceEntry {
             } else {
                 "".to_string()
             };
+            let cr = if let Some(cr) = workspace_entry.cr {
+                format!("cr: {}\n", cr)
+            } else {
+                "".to_string()
+            };
             workspace_data = format!(
-                "{}\n\n-- fpm.client-workspace: {}\n{}{}",
-                workspace_data, workspace_entry.filename, version, deleted
+                "{}\n\n-- fpm.client-workspace: {}\n{}{}{}",
+                workspace_data, workspace_entry.filename, version, deleted, cr
             );
         }
         workspace_data

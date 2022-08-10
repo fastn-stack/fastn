@@ -14,16 +14,17 @@ pub struct FileEdit {
     pub version: i32,
     pub author: Option<String>,
     #[serde(rename = "src-cr")]
-    pub src_cr: Option<i32>,
+    pub src_cr: Option<usize>,
     pub operation: FileOperation,
 }
 
 impl FileEdit {
-    pub(crate) fn to_workspace(&self, file_name: &str) -> fpm::workspace::WorkspaceEntry {
+    pub(crate) fn into_workspace(self, file_name: &str) -> fpm::workspace::WorkspaceEntry {
         fpm::workspace::WorkspaceEntry {
             filename: file_name.to_string(),
             deleted: Some(self.operation.eq(&FileOperation::Deleted)),
             version: Some(self.version),
+            cr: self.src_cr,
         }
     }
 
@@ -36,7 +37,7 @@ impl FileEdit {
 pub struct FileEditTemp {
     pub message: Option<String>,
     pub author: Option<String>,
-    pub src_cr: Option<i32>,
+    pub src_cr: Option<usize>,
     pub operation: FileOperation,
 }
 

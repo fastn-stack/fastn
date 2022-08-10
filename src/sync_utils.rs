@@ -234,6 +234,7 @@ impl fpm::Config {
                                 filename: path.to_string(),
                                 deleted: None,
                                 version: Some(server_version),
+                                cr: None,
                             },
                         );
                         remove_files.push(index);

@@ -22,6 +22,8 @@ SUBCOMMANDS:
     build                 Build static site from this fpm package
     check                 Check if everything is fine with current fpm package
     clone                 Clone a package into a new directory
+    close-cr              Create a Change Request
+    create-cr             Create a Change Request
     diff                  Show un-synced changes to files in this fpm package
     help                  Prints this message or the help of the given subcommand(s)
     mark-resolve          Marks the conflicted file as resolved

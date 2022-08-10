@@ -45,7 +45,7 @@ async fn main() -> fpm::Result<()> {
     }
 
     if let Some(add) = matches.subcommand_matches("add") {
-        fpm::add(&config, add.value_of("file").unwrap()).await?;
+        fpm::add(&config, add.value_of("file").unwrap(), add.value_of("cr")).await?;
         return Ok(());
     }
 
@@ -93,6 +93,13 @@ async fn main() -> fpm::Result<()> {
     if let Some(status) = matches.subcommand_matches("sync-status") {
         let source = status.value_of("source");
         fpm::sync_status(&config, source).await?;
+    }
+    if matches.subcommand_matches("create-cr").is_some() {
+        fpm::create_cr(&config).await?;
+    }
+    if let Some(close_cr) = matches.subcommand_matches("close-cr") {
+        let cr = close_cr.value_of("cr").unwrap();
+        fpm::close_cr(&config, cr).await?;
     }
     if let Some(status) = matches.subcommand_matches("status") {
         let source = status.value_of("source");
@@ -225,7 +232,10 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
         .subcommand(
             clap::SubCommand::with_name("add")
                 .about("Adds a file in workspace")
-                .arg(clap::Arg::with_name("file").required(true))
+                .args(&[
+                    clap::Arg::with_name("file").required(true),
+                    clap::Arg::with_name("cr").long("--cr").takes_value(true),
+                ])
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
@@ -261,6 +271,17 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
             clap::SubCommand::with_name("sync-status")
                 .arg(clap::Arg::with_name("source"))
                 .about("Show the sync status of files in this fpm package")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("create-cr")
+                .about("Create a Change Request")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("close-cr")
+                .arg(clap::Arg::with_name("cr").required(true))
+                .about("Create a Change Request")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(

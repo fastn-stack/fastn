@@ -3,6 +3,8 @@ pub(crate) mod add;
 pub(crate) mod build;
 pub(crate) mod build2;
 pub(crate) mod clone;
+pub(crate) mod close_cr;
+pub(crate) mod create_cr;
 pub(crate) mod diff;
 pub(crate) mod mark_resolve;
 pub(crate) mod mark_upto_date;
