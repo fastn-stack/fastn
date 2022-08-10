@@ -506,8 +506,9 @@ let ftd_utils = {
                                 for (const parameter in json_dependency.parameters) {
                                     let param_val = json_dependency.parameters[parameter].value.value;
                                     let node = param_val["$node$"];
-                                    let variable = param_val["$variable$"];
-                                    let dependent = data[variable].value;
+                                    let var_ = param_val["$variable$"];
+                                    let dependent = ftd_utils.get_data_value(data, var_);
+                                    let variable = ftd_utils.get_name_and_remaining(var_)[0];
                                     let dependent_dependencies = data[variable].dependencies[node];
                                     let call = false;
                                     for (const d in dependent_dependencies) {
@@ -607,8 +608,9 @@ let ftd_utils = {
                                 let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
                                 let call = false;
                                 for (const idx in set) {
-                                    let dependent = data[set[idx]].value;
-                                    let dependent_dependencies = data[set[idx]].dependencies[dependency];
+                                    let dependent = ftd_utils.get_data_value(data, set[idx]);
+                                    let variable = ftd_utils.get_name_and_remaining(set[idx])[0];
+                                    let dependent_dependencies = data[variable].dependencies[dependency];
                                     for (const d in dependent_dependencies) {
                                         if (dependent_dependencies[d].dependency_type !== "Style"
                                             || !dependent_dependencies[d].parameters[style_attr]) {
@@ -621,7 +623,7 @@ let ftd_utils = {
                                         }
                                         dependent_dependencies[d].parameters[style_attr].default.value = full_value;
                                     }
-                                    data[set[idx]].dependencies[dependency] = dependent_dependencies;
+                                    data[variable].dependencies[dependency] = dependent_dependencies;
                                     if (call) {
                                         handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited, visibility_change);
                                     }
@@ -910,7 +912,7 @@ window.ftd = (function () {
             return;
         }
 
-        let value = parseInt(data[variable].value);
+        let value = parseInt(ftd_utils.get_data_value(data, variable));
         value += increment_by;
 
         if (clamp_max !== undefined) {
@@ -987,7 +989,7 @@ window.ftd = (function () {
             console_log(variable, "is not in data, ignoring");
             return;
         }
-        return data[variable].value;
+        return ftd_utils.get_data_value(data, variable);
     }
 
     exports.set_multi_value = function (id, list) {
