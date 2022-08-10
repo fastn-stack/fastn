@@ -2680,6 +2680,20 @@ pub fn read_properties(
     Ok(properties)
 }
 
+/// asserts caption-body checks on components.
+///
+/// It includes
+///
+/// # Caption/Body/Header_value conflicts
+/// - This happens if any argument accepts data from more than one way
+/// and the user doesn't pass this data in exactly one way
+///
+/// # Missing data checks
+/// - This happens if any (required) argument doesn't get the data from any way it takes
+///
+/// # Unknown data checks
+/// - This happens when there is no argument to accept the data passed from caption/body
+///
 fn assert_caption_body_checks(
     root: &str,
     p1: &ftd::p1::Header,
@@ -2734,10 +2748,12 @@ fn assert_caption_body_checks(
 
     return Ok(());
 
+    /// checks if the root == ftd#ui
     fn is_it_ui(root: &str) -> bool {
         root.eq("ftd#ui")
     }
 
+    /// fetches the thing from the bag
     fn get_thing<'t>(
         bag_entry: &str,
         bag: &'t std::collections::BTreeMap<String, ftd::p2::Thing>,
@@ -2767,9 +2783,7 @@ fn assert_caption_body_checks(
         has_body: bool,
         line_number: usize,
     ) -> ftd::p1::Result<()> {
-        /// returns a hashset of headers which are possed with non empty values
-        ///
-        /// ## Converts header list < usize, key, value > -> hashset < key > which have values
+        /// returns a hashset`<key>` of header keys which have non-empty values
         fn get_header_set_with_values(
             p1: Option<&ftd::p1::Header>,
         ) -> std::collections::HashSet<String> {
