@@ -2643,7 +2643,6 @@ pub struct Style {
     pub weight: Option<ftd::Weight>,
 }
 
-
 impl Style {
     pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<ftd::Style> {
         fn add_in_map(style: &str, map: &mut std::collections::BTreeMap<String, i32>) {
@@ -2757,7 +2756,6 @@ impl Style {
         Ok(s)
     }
 }
-
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
