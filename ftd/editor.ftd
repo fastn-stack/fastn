@@ -521,8 +521,9 @@ id: desktop-container
 overflow-x: auto
 height: calc 100vh
 anchor: window
-left:0
-top:0
+left: 0
+left if $open: -700
+top: 0
 background-color: $fpm.color.main.background.base
 
 --- ftd.row:
@@ -754,6 +755,10 @@ package base not found. Package: fifthtry.github.io/doc-site, File: filename.png
 
 --- container: code-container
 
+--- ftd.row:
+width: fill
+id: edit-input
+
 --- ftd.input:
 if: $edits
 width: fill
@@ -769,6 +774,8 @@ color: $fpm.color.main.text
 role: $monospace
 background-color: $fpm.color.main.background.base
 white-space: pre
+
+--- container: edit-input
 
 --- guide-80chars:
 if: $show-guide
@@ -2401,10 +2408,10 @@ id: iamoverlay
 -- ftd.row guide-80chars:
 border-right: 1
 border-color: $fpm.color.main.border
-height: calc 100vh - 82px
+height: calc 100vh - 52px
 anchor: parent
-top: 43
-left: 634
+top: 0
+left: 619
 width: 10
 z-index: 9999
 
@@ -2577,6 +2584,16 @@ width: 12
 if: $children is not empty
 src: $right-arrow
 $on-click$ if not $show-children:$show-children = false
+align: center
+padding-right: $fpm.space.space-1
+
+--- container: switch-container
+
+--- ftd.image:
+if: $children is empty
+src: $file
+width: 15
+height: auto
 align: center
 padding-right: $fpm.space.space-1
 
