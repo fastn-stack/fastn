@@ -2688,8 +2688,8 @@ fn assert_caption_body_checks(
     body: &Option<(usize, String)>,
     line_number: usize,
 ) -> ftd::p1::Result<()> {
-    // (ignoring checks on ftd.ui)
-    if root.is_empty() || root.eq("ftd#ui") {
+    // No checks on ftd#ui
+    if is_it_ui(root) {
         return Ok(());
     }
 
@@ -2701,11 +2701,12 @@ fn assert_caption_body_checks(
 
     let mut thing = get_thing(root, doc.bag, doc.name, line_number)?;
     loop {
+        // Either the component is kernel or variable/derived component
         if let ftd::p2::Thing::Component(c) = thing {
-            // Either the component is kernel or variable/derived component
             let local_arguments = &c.arguments;
 
             check_caption_body_conflicts(
+                &c.full_name,
                 local_arguments,
                 properties,
                 header_list,
@@ -2715,8 +2716,8 @@ fn assert_caption_body_checks(
                 line_number,
             )?;
 
-            // stop checking once you hit the top-most kernel component
-            if c.kernel {
+            // stop checking once you hit the top-most kernel component or ftd#ui component
+            if c.kernel || is_it_ui(&c.root) {
                 break;
             }
 
@@ -2732,6 +2733,10 @@ fn assert_caption_body_checks(
     }
 
     return Ok(());
+
+    fn is_it_ui(root: &str) -> bool {
+        root.eq("ftd#ui")
+    }
 
     fn get_thing<'t>(
         bag_entry: &str,
@@ -2751,7 +2756,9 @@ fn assert_caption_body_checks(
 
     /// checks for body and caption conflicts using the given header list,
     /// arguments and properties map of the component
+    #[allow(clippy::too_many_arguments)]
     fn check_caption_body_conflicts(
+        full_name: &str,
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
         properties: Option<&std::collections::BTreeMap<String, Property>>,
         p1: Option<&ftd::p1::Header>,
@@ -2957,7 +2964,8 @@ fn assert_caption_body_checks(
                 ftd::p2::Kind::Integer { default, .. }
                 | ftd::p2::Kind::Decimal { default, .. }
                 | ftd::p2::Kind::Boolean { default, .. }
-                    if arg.eq("value") =>
+                    if arg.eq("value")
+                        && matches!(full_name, "ftd#integer" | "ftd#boolean" | "ftd#decimal") =>
                 {
                     // checks on ftd.integer, ftd.decimal, ftd.boolean
                     // these components take data from either caption or
@@ -3341,7 +3349,7 @@ mod test {
         // Caption and Header Value conflict
         intf!(
              "-- ftd.row A: 
-            caption message: 
+            caption message: Default message
             
             -- A: Im the message here 
             message: No, I'm the chosen one
