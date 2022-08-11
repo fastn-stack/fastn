@@ -61,8 +61,110 @@ Along with `ftd`, you will also learn about `fpm`, which lets you create website
 online content editor, granular access control, and collaborative content editing us
 Github Pull Request like workflow.
 
+------
 
+FTD is not the techonlgy to build the next google maps, or gmail, or figma etc.
+Consider Github. Or Twitter. These applications do not have much interaction,
+they data heavy.
 
+Limited interaction, data drive, simple forms, pages. With emphasis on creating
+reusable components, and scalable architecture. You have a lot of components,
+how to package those components as standalone libraries etc. The website will
+support dark mode, will be mobile responsive and use proper style guide with
+focus on typography.
+
+-- ft.h1: Application: Mini IMDb
+
+We will be build a movie review website. The backend is already done. It will
+have a concept of a movie, and on top of movie there would be reviews.
+
+-- ft.h2: Dependency: APIs
+
+We will create a django app that will be deployed on heroku. We will also have
+complete API documentation.
+
+-- ft.h3: Movie List
+
+Optional Query. Sort: [release-date, rating, updated_on].
+
+-- ft.code:
+lang: ftd
+
+\-- record response:
+integer page-number:
+optional string next:
+optional string previous:
+integer count:
+movie list movies:
+
+\-- record movie:
+integer id:
+caption title:
+string release-date:
+string poster:
+string director:
+body description:
+decimal rating:
+integer review-count:
+review list reviews:
+
+\-- record review:
+integer id:
+caption title:
+body description:
+string reviewer:
+integer rating:
+
+-- ft.h3: Add Movie
+
+Movie data without id. On error it returns error dict with one string for every
+field. On success ftd redirect to movie page.
+
+-- ft.h3: Add Review
+
+Review data without id. On success redirect to movie page.
+
+-- ft.h3: Get Movie
+
+Movie id -> response record.
+
+-- ft.code:
+lang: ftd
+
+\-- record response:
+optional movie movie:
+
+-- ft.h2: Dependency: Get Data Processor To Fetch Data From Query Params
+
+If the request is to `/movie/?id=<>`, (file is `movie.ftd`), the following will
+load the value of `id` parameter from the query parameter by the same name.
+
+-- ft.code:
+lang: ftd
+
+\-- optional integer id:
+$processor$: get-data
+
+-- ft.h2: Dependency: FPM Proxy API
+
+FPM will expose an api `/-/proxy/`, which will take URL. `proxy` will make a
+request to `url`, it will use the same method.
+
+-- ft.code:
+lang: py
+
+def proxy(request):
+    url = request.REQUEST.get("url")
+    method = request.method
+    query = request.QUERY
+    query.delete("url")
+    body = request.body
+    headers = request.headers
+
+    headers.delete_cookie()
+
+    resp = make_request(url, method, query, body)
+    return resp
 
 
 
