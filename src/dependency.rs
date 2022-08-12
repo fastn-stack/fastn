@@ -527,7 +527,7 @@ impl fpm::Package {
             .collect();
         package.auto_import = auto_import;
         package.fonts = ftd_document.get("fpm#font")?;
-        package.sitemap = ftd_document.get("fpm#sitemap")?;
+        package.sitemap_temp = ftd_document.get("fpm#sitemap")?;
 
         if download_dependencies {
             for dep in package.dependencies.iter_mut() {
@@ -645,7 +645,7 @@ impl fpm::Package {
             .collect();
         package.auto_import = auto_import;
         package.fonts = ftd_document.get("fpm#font")?;
-        package.sitemap = ftd_document.get("fpm#sitemap")?;
+        package.sitemap_temp = ftd_document.get("fpm#sitemap")?;
 
         if download_dependencies {
             for dep in package.dependencies.iter_mut() {

@@ -169,7 +169,7 @@ pub async fn resolve_import<'a>(
 ) -> ftd::p1::Result<String> {
     lib.packages_under_process
         .truncate(state.document_stack.len());
-    let current_package = lib.get_current_package()?.to_owned();
+    let current_package = lib.get_current_package()?;
     let source = if module.eq("fpm/time") {
         state.add_foreign_variable_prefix(module, vec![module.to_string()]);
         lib.push_package_under_process(&current_package).await?;
@@ -190,6 +190,7 @@ pub async fn resolve_import<'a>(
                     font_ftd = lib
                         .config
                         .all_packages
+                        .borrow()
                         .get(package.name.as_str())
                         .unwrap()
                         .get_font_ftd()
@@ -216,7 +217,7 @@ pub async fn resolve_foreign_variable2(
 ) -> ftd::p1::Result<ftd::Value> {
     lib.packages_under_process
         .truncate(state.document_stack.len());
-    let package = lib.get_current_package()?.to_owned();
+    let package = lib.get_current_package()?;
     if let Ok(value) = resolve_ftd_foreign_variable(variable, doc_name) {
         return Ok(value);
     }

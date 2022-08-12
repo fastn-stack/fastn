@@ -80,7 +80,7 @@ pub async fn sync(
 
 pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
     // TODO: Need to call at once only
-    let config = fpm::Config::read2(None, false).await?;
+    let config = fpm::Config::read(None, false).await?;
     let mut snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
     let client_snapshots = fpm::snapshot::resolve_snapshots(&request.latest_ftd).await?;
     // let latest_ftd = tokio::fs::read_to_string(config.history_dir().join(".latest.ftd")).await?;

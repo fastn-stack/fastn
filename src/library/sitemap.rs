@@ -5,7 +5,7 @@ pub fn processor(
     doc: &ftd::p2::TDoc,
     config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
-    if let Some(ref sitemap) = config.sitemap {
+    if let Some(ref sitemap) = config.package.sitemap {
         let doc_id = config
             .current_document
             .clone()
@@ -37,9 +37,9 @@ pub fn document_readers(
             .header
             .string_with_default(document_id, section.line_number, "document", "/")?;
 
-    let readers = match config.sitemap.as_ref() {
+    let readers = match config.package.sitemap.as_ref() {
         Some(s) => s
-            .readers(document.as_str(), &config.groups)
+            .readers(document.as_str(), &config.package.groups)
             .into_iter()
             .map(|g| g.to_group_compat())
             .collect_vec(),
@@ -61,9 +61,9 @@ pub fn document_writers(
             .header
             .string_with_default(document_id, section.line_number, "document", "/")?;
 
-    let writers = match config.sitemap.as_ref() {
+    let writers = match config.package.sitemap.as_ref() {
         Some(s) => s
-            .writers(document.as_str(), &config.groups)
+            .writers(document.as_str(), &config.package.groups)
             .into_iter()
             .map(|g| g.to_group_compat())
             .collect_vec(),

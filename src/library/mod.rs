@@ -208,13 +208,14 @@ pub fn process_sync<'a>(
         }
         "user-groups" => fpm::user_group::processor::user_groups(section, doc, config),
         "user-group-by-id" => fpm::user_group::processor::user_group_by_id(section, doc, config),
-        "get-identities" => fpm::user_group::processor::get_identities(section, doc, config),
         "package-query" => fpm::library::sqlite::processor_(section, doc, config),
         "fetch-file" => fpm::library::fetch_file::processor_sync(section, doc, config),
         "package-tree" => fpm::library::package_tree::processor_sync(section, doc, config),
         "document-id" => document::processor::document_id(section, doc, config),
         "document-full-id" => document::processor::document_full_id(section, doc, config),
         "document-suffix" => document::processor::document_suffix(section, doc, config),
+        "get-identities" => fpm::user_group::processor::get_identities(section, doc, config),
+
         t => Err(ftd::p1::Error::NotFound {
             doc_id: document_id.to_string(),
             line_number: section.line_number,
@@ -241,11 +242,16 @@ impl Library2 {
         package: &fpm::Package,
     ) -> ftd::p1::Result<()> {
         self.packages_under_process.push(package.name.to_string());
-        if self.config.all_packages.contains_key(package.name.as_str()) {
+        if self
+            .config
+            .all_packages
+            .borrow()
+            .contains_key(package.name.as_str())
+        {
             return Ok(());
         }
-        self.config.all_packages.insert(
-            package.name.to_string(),
+
+        let package =
             self.config
                 .resolve_package(package)
                 .await
@@ -253,12 +259,16 @@ impl Library2 {
                     message: format!("Cannot resolve the package: {}", package.name),
                     doc_id: self.document_id.to_string(),
                     line_number: 0,
-                })?,
-        );
+                })?;
+
+        self.config
+            .all_packages
+            .borrow_mut()
+            .insert(package.name.to_string(), package);
         Ok(())
     }
 
-    pub(crate) fn get_current_package(&self) -> ftd::p1::Result<&fpm::Package> {
+    pub(crate) fn get_current_package(&self) -> ftd::p1::Result<fpm::Package> {
         let current_package_name =
             self.packages_under_process
                 .last()
@@ -267,9 +277,12 @@ impl Library2 {
                     doc_id: "".to_string(),
                     line_number: 0,
                 })?;
+
         self.config
             .all_packages
+            .borrow()
             .get(current_package_name)
+            .map(|p| p.to_owned())
             .ok_or_else(|| ftd::p1::Error::ParseError {
                 message: format!("Can't find current package: {}", current_package_name),
                 doc_id: "".to_string(),
@@ -287,19 +300,19 @@ impl Library2 {
     pub async fn get(&mut self, name: &str) -> Option<String> {
         if name == "fpm" {
             self.packages_under_process
-                .push(self.get_current_package().ok()?.name.to_string());
+                .push(self.get_current_package().ok()?.name);
             return Some(fpm_dot_ftd::get2(self));
         }
         if name == "fpm-lib" {
             self.packages_under_process
-                .push(self.get_current_package().ok()?.name.to_string());
+                .push(self.get_current_package().ok()?.name);
             return Some(fpm::fpm_lib_ftd().to_string());
         }
 
         return get_for_package(format!("{}/", name.trim_end_matches('/')).as_str(), self).await;
 
         async fn get_for_package(name: &str, lib: &mut fpm::Library2) -> Option<String> {
-            let package = lib.get_current_package().ok()?.to_owned();
+            let package = lib.get_current_package().ok()?;
             if name.starts_with(package.name.as_str()) {
                 if let Some(r) = get_data_from_package(name, &package, lib).await {
                     return Some(r);
@@ -355,11 +368,8 @@ impl Library2 {
             lib: &mut Library2,
         ) -> Option<String> {
             lib.push_package_under_process(package).await.ok()?;
-            let package = lib
-                .config
-                .all_packages
-                .get(package.name.as_str())
-                .unwrap_or(package);
+            let packages = lib.config.all_packages.borrow();
+            let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
             if !name.starts_with(&package.name.as_str()) {
                 return None;

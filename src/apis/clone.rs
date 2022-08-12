@@ -18,7 +18,7 @@ pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
 }
 
 async fn clone_worker() -> fpm::Result<CloneResponse> {
-    let config = fpm::Config::read2(None, false).await?;
+    let config = fpm::Config::read(None, false).await?;
     let all_files = config
         .get_all_file_path(&config.package, Default::default())?
         .into_iter()

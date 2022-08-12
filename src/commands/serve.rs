@@ -77,7 +77,7 @@ async fn static_file(
 }
 async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
-    let mut config = fpm::Config::read2(None, false).await.unwrap();
+    let mut config = fpm::Config::read(None, false).await.unwrap();
     let path: std::path::PathBuf = req.match_info().query("path").parse().unwrap();
 
     println!("request for path: {:?}", path);

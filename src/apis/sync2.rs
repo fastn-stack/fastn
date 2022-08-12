@@ -124,7 +124,7 @@ pub async fn sync2(
 
 pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
     // TODO: Need to call at once only
-    let config = fpm::Config::read2(None, false).await?;
+    let config = fpm::Config::read(None, false).await?;
     let mut server_history = config.get_history().await?;
     let server_latest =
         fpm::history::FileHistory::get_non_deleted_latest_file_edits(server_history.as_slice())?;

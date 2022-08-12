@@ -117,7 +117,7 @@ async fn build_simple(
             .map(|v| (v.get_id(), v)),
     );
 
-    if let Some(ref sitemap) = config.sitemap {
+    if let Some(ref sitemap) = config.package.sitemap {
         let get_all_locations = sitemap.get_all_locations();
         let mut files: std::collections::HashMap<String, fpm::File> = Default::default();
         for (doc_path, _, url) in get_all_locations {
@@ -176,7 +176,7 @@ async fn build_with_translations(
             .map(|v| (v.get_id(), v)),
     );
 
-    if let Some(ref sitemap) = config.sitemap {
+    if let Some(ref sitemap) = config.package.sitemap {
         let get_all_locations = sitemap.get_all_locations();
         let mut files: std::collections::HashMap<String, fpm::File> = Default::default();
         for (doc_path, _, url) in get_all_locations {
@@ -290,7 +290,7 @@ async fn build_with_original(
             .map(|v| (v.get_id(), v)),
     );
 
-    if let Some(ref sitemap) = config.sitemap {
+    if let Some(ref sitemap) = config.package.sitemap {
         let get_all_locations = sitemap.get_all_locations();
         let mut files: std::collections::HashMap<String, fpm::File> = Default::default();
         let mut translation_files: std::collections::HashMap<String, fpm::File> =
@@ -1236,7 +1236,7 @@ pub(crate) async fn process_ftd(
                 )
                 .replace(
                     "__message__",
-                    format!("{}{}", message_rt_doc.html, config.get_font_style(),).as_str(),
+                    format!("{}{}", message_rt_doc.html, config.get_font_style()).as_str(),
                 )
                 .as_str(),
             config,
@@ -1342,7 +1342,7 @@ pub(crate) async fn process_ftd(
                 )
                 .replace(
                     "__message__",
-                    format!("{}{}", message_rt_doc.html, config.get_font_style(),).as_str(),
+                    format!("{}{}", message_rt_doc.html, config.get_font_style()).as_str(),
                 )
                 .replace(
                     "__ftd_data_fallback__",

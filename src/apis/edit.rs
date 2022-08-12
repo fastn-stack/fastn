@@ -37,7 +37,7 @@ pub async fn edit(
 }
 
 pub(crate) async fn edit_worker(request: EditRequest) -> fpm::Result<EditResponse> {
-    let mut config = fpm::Config::read2(None, false).await?;
+    let config = fpm::Config::read(None, false).await?;
 
     if request.is_delete() {
         let path = config.root.join(&request.path);
@@ -156,7 +156,7 @@ pub(crate) async fn edit_worker(request: EditRequest) -> fpm::Result<EditRespons
 }
 
 pub async fn sync() -> actix_web::Result<actix_web::HttpResponse> {
-    let config = match fpm::Config::read2(None, false).await {
+    let config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
         Err(err) => {
             return fpm::apis::error(
@@ -188,7 +188,7 @@ pub struct RevertRequest {
 pub async fn revert(
     req: actix_web::web::Json<RevertRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
-    let config = match fpm::Config::read2(None, false).await {
+    let config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
         Err(err) => {
             return fpm::apis::error(

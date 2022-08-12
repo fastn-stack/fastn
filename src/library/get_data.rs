@@ -26,7 +26,7 @@ pub fn processor(
         return doc.from_json(data, section);
     }
 
-    if let Some(ref sitemap) = config.sitemap {
+    if let Some(ref sitemap) = config.package.sitemap {
         let doc_id = config
             .current_document
             .clone()

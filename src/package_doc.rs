@@ -291,13 +291,14 @@ pub(crate) async fn read_ftd(
     base_url: &str,
     download_assets: bool,
 ) -> fpm::Result<Vec<u8>> {
-    let current_package = config
-        .all_packages
+    let lib_config = config.clone();
+    let mut all_packages = config.all_packages.borrow_mut();
+    let current_package = all_packages
         .get(main.package_name.as_str())
         .unwrap_or(&config.package);
 
     let mut lib = fpm::Library2 {
-        config: config.clone(),
+        config: lib_config,
         markdown: None,
         document_id: main.id.clone(),
         translated_data: Default::default(),
@@ -328,7 +329,9 @@ pub(crate) async fn read_ftd(
         }
     };
 
-    config.all_packages.extend(lib.config.all_packages);
+    all_packages.extend(lib.config.all_packages.into_inner());
+    drop(all_packages);
+
     config
         .downloaded_assets
         .extend(lib.config.downloaded_assets);

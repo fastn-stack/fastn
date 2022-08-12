@@ -1,55 +1,17 @@
+// Document: https://fpm.dev/crate/config/
+// Document: https://fpm.dev/crate/package/
 use std::convert::TryInto;
 use std::iter::FromIterator;
 
-/// `Config` struct keeps track of configuration parameters that is shared with the entire
-/// program. It is constructed from the content of `FPM.ftd` file for the package.
-///
-/// `Config` is created using `Config::read()` method, and should be constructed only once in the
-/// `main()` and passed everywhere.
 #[derive(Debug, Clone)]
 pub struct Config {
     pub package: fpm::Package,
-    /// `root` is the package root folder, this is the folder where `FPM.ftd` file is stored.
-    ///
-    /// Technically the rest of the program can simply call `std::env::current_dir()` and that
-    /// is guaranteed to be same as `Config.root`, but `Config.root` is camino path, instead of
-    /// std::path::Path, so we can treat `root` as a handy helper.
-    ///
-    /// A utility that returns camino version of `current_dir()` may be used in future.
     pub root: camino::Utf8PathBuf,
-    /// Keeps a track of the package root for a particular config. For a dep2 of a dep1,
-    /// this could point to the <original_root>/.packages/
-    /// whereas the project root could be at <original_root>/.packages/<dep1_root>
     pub packages_root: camino::Utf8PathBuf,
-    /// `original_directory` is the directory from which the `fpm` command was invoked
-    ///
-    /// During the execution of `fpm`, we change the directory to the package root so the program
-    /// can be written with the assumption that they are running from package `root`.
-    ///
-    /// When printing filenames for users consumption we want to print the paths relative to the
-    /// `original_directory`, so we keep track of the original directory.
     pub original_directory: camino::Utf8PathBuf,
-    /// The extra_data stores the data passed for variables in ftd files as context.
-    ///
-    /// This data is processed by `get-data` processor.
     pub extra_data: serde_json::Map<String, serde_json::Value>,
-    /// sitemap stores the structure of the package. The structure includes sections, subsections
-    /// and table of content (`toc`). This automatically converts the documents in package into the
-    /// corresponding to structure.
-    pub sitemap: Option<fpm::sitemap::Sitemap>,
-
-    pub groups: std::collections::BTreeMap<String, crate::user_group::UserGroup>,
-    /// `current_document` stores the document id (Eg: `foo.ftd` or `bar/foo.ftd`) which is
-    /// currently in building process.
-    /// It's value is injected by `fpm::build()` function according to the currently processing
-    /// document.
-    /// It is consumed by the `sitemap` processor.
     pub current_document: Option<String>,
-    /// `all_packages` stores the package data for all the packages that are dependencies
-    /// of current package directly or indirectly. It also includes current package,
-    /// translation packages, original package (of which the current package is translation)
-    /// The key store the name of the package and value stores corresponding package data
-    pub all_packages: std::collections::BTreeMap<String, fpm::Package>,
+    pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fpm::Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
 }
 
@@ -222,16 +184,16 @@ impl Config {
                         new = dep.package.get_font_html()
                     )
                 });
-            generated_style =
-                self.all_packages
-                    .values()
-                    .fold(generated_style, |accumulator, package| {
-                        format!(
-                            "{pre}\n{new}",
-                            pre = accumulator,
-                            new = package.get_font_html()
-                        )
-                    });
+            generated_style = self.all_packages.borrow().values().fold(
+                generated_style,
+                |accumulator, package| {
+                    format!(
+                        "{pre}\n{new}",
+                        pre = accumulator,
+                        new = package.get_font_html()
+                    )
+                },
+            );
             generated_style
         };
         return match generated_style.trim().is_empty() {
@@ -423,7 +385,7 @@ impl Config {
     }
 
     pub async fn get_file_path(&self, id: &str) -> fpm::Result<String> {
-        let (package_name, package) = self.find_package_by_doc_id(id).await?;
+        let (package_name, package) = self.find_package_by_id(id).await?;
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
         if let Some(new_id) = id.strip_prefix("-/") {
@@ -454,7 +416,7 @@ impl Config {
         ))
     }
 
-    pub(crate) async fn get_file_path_and_resolve(&mut self, id: &str) -> fpm::Result<String> {
+    pub(crate) async fn get_file_path_and_resolve(&self, id: &str) -> fpm::Result<String> {
         let (package_name, package) = self.find_package_by_id(id).await?;
         let package = self.resolve_package(&package).await?;
         self.add_package(&package);
@@ -490,11 +452,7 @@ impl Config {
     }
 
     /// Return (package name or alias, package)
-    /// Duplicate code with find_package_by_id: this function is updating all_packages
-    pub(crate) async fn find_package_by_doc_id(
-        &self,
-        id: &str,
-    ) -> fpm::Result<(String, fpm::Package)> {
+    pub(crate) async fn find_package_by_id(&self, id: &str) -> fpm::Result<(String, fpm::Package)> {
         let id = if let Some(id) = id.strip_prefix("-/") {
             id
         } else {
@@ -511,7 +469,7 @@ impl Config {
             return Ok(package);
         }
 
-        for (package_name, package) in self.all_packages.iter() {
+        for (package_name, package) in self.all_packages.borrow().iter() {
             if id.starts_with(package_name) {
                 return Ok((package_name.to_string(), package.to_owned()));
             }
@@ -520,44 +478,7 @@ impl Config {
         if let Some(package_root) = find_root_for_file(&self.packages_root.join(id), "FPM.ftd") {
             let mut package = fpm::Package::new("unknown-package");
             package.resolve(&package_root.join("FPM.ftd")).await?;
-            return Ok((package.name.to_string(), package));
-        }
-
-        Ok((self.package.name.to_string(), self.package.to_owned()))
-    }
-
-    /// Return (package name or alias, package)
-    pub(crate) async fn find_package_by_id(
-        &mut self,
-        id: &str,
-    ) -> fpm::Result<(String, fpm::Package)> {
-        let id = if let Some(id) = id.strip_prefix("-/") {
-            id
-        } else {
-            return Ok((self.package.name.to_string(), self.package.to_owned()));
-        };
-
-        if let Some(package) = self.package.aliases().iter().find_map(|(alias, d)| {
-            if id.starts_with(alias) {
-                Some((alias.to_string(), (*d).to_owned()))
-            } else {
-                None
-            }
-        }) {
-            return Ok(package);
-        }
-
-        for (package_name, package) in self.all_packages.iter() {
-            if id.starts_with(package_name) {
-                return Ok((package_name.to_string(), package.to_owned()));
-            }
-        }
-
-        if let Some(package_root) = find_root_for_file(&self.packages_root.join(id), "FPM.ftd") {
-            let mut package = fpm::Package::new("unknown-package");
-            package.resolve(&package_root.join("FPM.ftd")).await?;
-            self.all_packages
-                .insert(package.name.to_string(), package.clone());
+            self.add_package(&package);
             return Ok((package.name.to_string(), package));
         }
 
@@ -810,7 +731,7 @@ impl Config {
     }
 
     /// `read()` is the way to read a Config.
-    pub async fn read2(root: Option<String>, resolve_sitemap: bool) -> fpm::Result<fpm::Config> {
+    pub async fn read(root: Option<String>, resolve_sitemap: bool) -> fpm::Result<fpm::Config> {
         let (root, original_directory) = match root {
             Some(r) => {
                 let root: camino::Utf8PathBuf = tokio::fs::canonicalize(r.as_str())
@@ -884,18 +805,15 @@ impl Config {
 
             package.dependencies = deps;
 
-            let auto_imports: Vec<String> = fpm_doc.get("fpm#auto-import")?;
-
-            // let mut aliases = std::collections::HashMap::<String, String>::new();
-            let auto_import = auto_imports
+            package.auto_import = fpm_doc
+                .get::<Vec<String>>("fpm#auto-import")?
                 .iter()
                 .map(|f| fpm::AutoImport::from_string(f.as_str()))
                 .collect();
-            package.auto_import = auto_import;
 
             package.ignored_paths = fpm_doc.get::<Vec<String>>("fpm#ignore")?;
             package.fonts = fpm_doc.get("fpm#font")?;
-            package.sitemap = fpm_doc.get("fpm#sitemap")?;
+            package.sitemap_temp = fpm_doc.get("fpm#sitemap")?;
             package
         };
 
@@ -916,17 +834,16 @@ impl Config {
         // TODO: resolve group dependent packages, there may be imported group from foreign package
         // TODO: We need to make sure to resolve that package as well before moving ahead
         // TODO: Because in `UserGroup::get_identities` we have to resolve identities of a group
+
         let user_groups: Vec<crate::user_group::UserGroupTemp> = fpm_doc.get("fpm#user-group")?;
         let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
-
+        package.groups = groups;
         let mut config = Config {
             package: package.clone(),
             packages_root: root.clone().join(".packages"),
             root,
             original_directory,
             extra_data: Default::default(),
-            sitemap: None,
-            groups,
             current_document: None,
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
@@ -934,12 +851,12 @@ impl Config {
 
         let asset_documents = config.get_assets("/").await?;
 
-        config.sitemap = {
+        config.package.sitemap = {
             let sitemap = match package.translation_of.as_ref() {
                 Some(translation) => translation,
                 None => &package,
             }
-            .sitemap
+            .sitemap_temp
             .as_ref();
 
             let sitemap = match sitemap {
@@ -974,16 +891,22 @@ impl Config {
         if self.package.name.eq(package.name.as_str()) {
             return Ok(self.package.clone());
         }
-        if let Some(package) = self.all_packages.get(package.name.as_str()) {
+
+        if let Some(package) = { self.all_packages.borrow().get(package.name.as_str()) } {
             return Ok(package.clone());
         }
-        package
+
+        let package = package
             .get_and_resolve(&self.get_root_for_package(package))
-            .await
+            .await?;
+
+        self.add_package(&package);
+        Ok(package)
     }
 
-    pub(crate) fn add_package(&mut self, package: &fpm::Package) {
+    pub(crate) fn add_package(&self, package: &fpm::Package) {
         self.all_packages
+            .borrow_mut()
             .insert(package.name.to_string(), package.to_owned());
     }
 
@@ -1093,7 +1016,9 @@ impl PackageTemp {
             ignored_paths: vec![],
             fonts: vec![],
             import_auto_imports_from_original: self.import_auto_imports_from_original,
+            groups: std::collections::BTreeMap::new(),
             sitemap: None,
+            sitemap_temp: None,
             favicon: self.favicon,
         }
     }
@@ -1127,10 +1052,14 @@ pub struct Package {
     /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
     pub fonts: Vec<fpm::Font>,
     pub import_auto_imports_from_original: bool,
+
+    pub groups: std::collections::BTreeMap<String, crate::user_group::UserGroup>,
+
     /// sitemap stores the structure of the package. The structure includes sections, subsections
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
-    pub sitemap: Option<fpm::sitemap::SitemapTemp>,
+    pub sitemap: Option<fpm::sitemap::Sitemap>,
+    pub sitemap_temp: Option<fpm::sitemap::SitemapTemp>,
     /// Optional path for favicon icon to be used.
     ///
     /// By default if any file favicon.* is present in package and favicon is not specified
@@ -1160,6 +1089,8 @@ impl Package {
             ignored_paths: vec![],
             fonts: vec![],
             import_auto_imports_from_original: true,
+            groups: std::collections::BTreeMap::new(),
+            sitemap_temp: None,
             sitemap: None,
             favicon: None,
         }
@@ -1917,25 +1848,25 @@ impl Package {
     }
 
     pub(crate) async fn resolve(&mut self, fpm_path: &camino::Utf8PathBuf) -> fpm::Result<()> {
-        let ftd_document = {
+        let fpm_document = {
             let doc = tokio::fs::read_to_string(fpm_path).await?;
             let lib = fpm::FPMLibrary::default();
             match fpm::doc::parse_ftd("FPM", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.ftd 2: {:?}", &e),
+                        message: format!("failed to parse FPM.ftd: {:?}", &e),
                     });
                 }
             }
         };
         let mut package = {
-            let temp_package: fpm::config::PackageTemp = ftd_document.get("fpm#package")?;
+            let temp_package: fpm::config::PackageTemp = fpm_document.get("fpm#package")?;
             temp_package.into_package()
         };
-        package.translation_status_summary = ftd_document.get("fpm#translation-status-summary")?;
+        package.translation_status_summary = fpm_document.get("fpm#translation-status-summary")?;
         package.fpm_path = Some(fpm_path.to_owned());
-        package.dependencies = ftd_document
+        package.dependencies = fpm_document
             .get::<Vec<fpm::dependency::DependencyTemp>>("fpm#dependency")?
             .into_iter()
             .map(|v| v.into_dependency())
@@ -1943,13 +1874,17 @@ impl Package {
             .into_iter()
             .collect::<fpm::Result<Vec<fpm::Dependency>>>()?;
 
-        package.auto_import = ftd_document
+        let user_groups: Vec<crate::user_group::UserGroupTemp> =
+            fpm_document.get("fpm#user-group")?;
+        let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
+        package.groups = groups;
+        package.auto_import = fpm_document
             .get::<Vec<String>>("fpm#auto-import")?
             .iter()
             .map(|f| fpm::AutoImport::from_string(f.as_str()))
             .collect();
-        package.fonts = ftd_document.get("fpm#font")?;
-        package.sitemap = ftd_document.get("fpm#sitemap")?;
+        package.fonts = fpm_document.get("fpm#font")?;
+        package.sitemap_temp = fpm_document.get("fpm#sitemap")?;
         *self = package;
         Ok(())
     }
@@ -1974,32 +1909,4 @@ impl Package {
         package.resolve(&file_extract_path).await?;
         Ok(package)
     }
-}
-
-// TODO Doc: group-id should not contain / in it
-pub fn user_groups_by_package(
-    config: &Config,
-    package: &str,
-) -> fpm::Result<Vec<fpm::user_group::UserGroup>> {
-    let fpm_document = config.get_fpm_document(package)?;
-    fpm_document
-        .get::<Vec<fpm::user_group::UserGroupTemp>>("fpm#user-group")?
-        .into_iter()
-        .map(|g| g.to_user_group())
-        .collect()
-}
-
-/// group_id: "<package_name>/<group_id>" or "<group_id>"
-pub fn user_group_by_id(
-    config: &Config,
-    group_id: &str,
-) -> fpm::Result<Option<fpm::user_group::UserGroup>> {
-    // If group `id` does not contain `/` then it is current package group_id
-    let (package, group_id) = group_id
-        .rsplit_once('/')
-        .unwrap_or((&config.package.name, group_id));
-
-    Ok(user_groups_by_package(config, package)?
-        .into_iter()
-        .find(|g| g.id.as_str() == group_id))
 }

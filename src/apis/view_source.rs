@@ -26,7 +26,7 @@ pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpR
 }
 
 async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
-    let mut config = fpm::Config::read2(None, false).await?;
+    let mut config = fpm::Config::read(None, false).await?;
     let file_name = config.get_file_path_and_resolve(path).await?;
     let file = config.get_file_and_package_by_id(path).await?;
     let editor_ftd = if config.root.join("e.ftd").exists() {
