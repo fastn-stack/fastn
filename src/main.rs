@@ -60,7 +60,7 @@ async fn main() -> fpm::Result<()> {
     }
 
     if let Some(rm) = matches.subcommand_matches("rm") {
-        fpm::rm(&config, rm.value_of("file").unwrap()).await?;
+        fpm::rm(&config, rm.value_of("file").unwrap(), rm.value_of("cr")).await?;
         return Ok(());
     }
 
@@ -258,7 +258,10 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
         .subcommand(
             clap::SubCommand::with_name("rm")
                 .about("Removes a file in workspace")
-                .arg(clap::Arg::with_name("file").required(true))
+                .args(&[
+                    clap::Arg::with_name("file").required(true),
+                    clap::Arg::with_name("cr").long("--cr").takes_value(true),
+                ])
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(

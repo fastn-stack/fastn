@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default)]
 pub struct CRAbout {
     pub title: String, // relative file name with respect to package root
@@ -97,4 +99,32 @@ pub(crate) fn generate_cr_about_content(cr_about: &fpm::cr::CRAbout) -> String {
 
 pub(crate) async fn is_open_cr_exists(config: &fpm::Config, cr_number: usize) -> fpm::Result<bool> {
     get_cr_about(config, cr_number).await.map(|v| v.open)
+}
+
+pub(crate) async fn get_deleted_files(
+    config: &fpm::Config,
+    cr_number: usize,
+) -> fpm::Result<Vec<String>> {
+    if config.cr_path(cr_number).exists() {
+        return fpm::usage_error(format!("CR#{} doesn't exist", cr_number));
+    }
+    let deleted_files_path = config.delete_cr_path(cr_number);
+    if !deleted_files_path.exists() {
+        return Ok(vec![]);
+    }
+    let deleted_files_content = tokio::fs::read_to_string(&deleted_files_path).await?;
+    Ok(deleted_files_content
+        .split('\n')
+        .map(ToString::to_string)
+        .collect_vec())
+}
+
+pub(crate) async fn create_deleted_files(
+    config: &fpm::Config,
+    cr_number: usize,
+    deleted_files: &[String],
+) -> fpm::Result<()> {
+    let deleted_files_path = config.delete_cr_path(cr_number);
+    let content: String = deleted_files.join("\n");
+    fpm::utils::update(&deleted_files_path, content.as_bytes()).await
 }

@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 pub async fn edit(config: &fpm::Config, file: &str, cr: &str) -> fpm::Result<()> {
     let cr = cr.parse::<usize>()?;
 
@@ -40,6 +42,10 @@ pub async fn edit(config: &fpm::Config, file: &str, cr: &str) -> fpm::Result<()>
             cr: Some(cr),
         },
     );
+
+    config
+        .write_workspace(workspace.into_values().collect_vec().as_slice())
+        .await?;
 
     // copy file to cr directory
     let file_path = config.root.join(file);
