@@ -12,7 +12,7 @@ impl fpm::Config {
     pub(crate) async fn evaluate_clone_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
         let history_list = self.get_history().await?;
         Ok(
-            fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
+            fpm::history::FileHistory::get_remote_manifest_with_deleted(history_list.as_slice())?
                 .into_iter()
                 .map(|(file_name, file_edit)| file_edit.into_workspace(file_name.as_str()))
                 .collect_vec(),

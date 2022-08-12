@@ -75,19 +75,19 @@ impl fpm::Config {
         FileHistory::from_ftd(history_content.as_str())
     }
 
-    pub async fn get_latest_file_edits(
+    pub async fn get_remote_manifest_with_deleted(
         &self,
     ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
         let history_list = self.get_history().await?;
-        fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())
+        fpm::history::FileHistory::get_remote_manifest_with_deleted(history_list.as_slice())
     }
 
-    pub async fn get_non_deleted_latest_file_edits(
+    pub async fn get_remote_manifest(
         &self,
     ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
         let history_list = self.get_history().await?;
         Ok(
-            fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
+            fpm::history::FileHistory::get_remote_manifest_with_deleted(history_list.as_slice())?
                 .into_iter()
                 .filter(|(_, v)| !v.is_deleted())
                 .collect(),
@@ -98,7 +98,7 @@ impl fpm::Config {
         &self,
     ) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
         Ok(self
-            .get_non_deleted_latest_file_edits()
+            .get_remote_manifest()
             .await?
             .iter()
             .map(|(file_name, file_edit)| {
@@ -112,7 +112,7 @@ impl fpm::Config {
 }
 
 impl FileHistory {
-    pub(crate) fn get_latest_file_edits(
+    pub(crate) fn get_remote_manifest_with_deleted(
         list: &[FileHistory],
     ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
         Ok(list
@@ -124,7 +124,7 @@ impl FileHistory {
             .collect())
     }
 
-    pub(crate) fn get_non_deleted_latest_file_edits(
+    pub(crate) fn get_remote_manifest(
         list: &[FileHistory],
     ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
         Ok(list

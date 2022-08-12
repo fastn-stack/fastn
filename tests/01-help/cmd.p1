@@ -25,6 +25,7 @@ SUBCOMMANDS:
     close-cr              Create a Change Request
     create-cr             Create a Change Request
     diff                  Show un-synced changes to files in this fpm package
+    edit                  Edit a file in CR workspace
     help                  Prints this message or the help of the given subcommand(s)
     mark-resolve          Marks the conflicted file as resolved
     mark-upto-date        Marks file as up to date.

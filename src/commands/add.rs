@@ -50,6 +50,15 @@ async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> 
     if !fpm::cr::is_open_cr_exists(config, cr).await? {
         return fpm::usage_error(format!("CR#{} is closed", cr));
     };
+    let remote_manifest = config.get_remote_manifest().await?;
+    if remote_manifest.contains_key(file) {
+        return Err(fpm::Error::UsageError {
+            message: format!(
+                "{} is present in remote manifest. Help: Use `fpm edit {} --cr {}",
+                file, file, cr
+            ),
+        });
+    }
 
     let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> = config
         .read_workspace()
@@ -58,19 +67,11 @@ async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> 
         .map(|v| (v.filename.to_string(), v))
         .collect();
 
-    if workspace.contains_key(file) {
-        return Err(fpm::Error::UsageError {
-            message: format!(
-                "{} is already in workspace. Help: Use `fpm edit {} --cr {}",
-                file, file, cr
-            ),
-        });
-    }
-
+    let cr_file_path = config.cr_path(cr).join(file);
     workspace.insert(
         file.to_string(),
         fpm::workspace::WorkspaceEntry {
-            filename: file.to_string(),
+            filename: cr_file_path.to_string(),
             deleted: None,
             version: None,
             cr: Some(cr),
@@ -82,7 +83,6 @@ async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> 
         .await?;
 
     let file_path = config.root.join(file);
-    let cr_file_path = config.cr_path(cr).join(file);
 
     if file_path.exists() {
         fpm::utils::copy(&file_path, &cr_file_path).await?;

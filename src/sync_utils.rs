@@ -206,7 +206,7 @@ impl fpm::Config {
         workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
     ) -> fpm::Result<()> {
         let mut remove_files = vec![];
-        let server_latest = self.get_latest_file_edits().await?;
+        let remote_manifest = self.get_remote_manifest_with_deleted().await?;
         for (index, file) in files.iter_mut().enumerate() {
             match file {
                 FileStatus::Uptodate { .. } => {
@@ -217,7 +217,7 @@ impl fpm::Config {
                     content,
                     status,
                 } => {
-                    let server_version = if let Some(file_edit) = server_latest.get(path) {
+                    let server_version = if let Some(file_edit) = remote_manifest.get(path) {
                         if file_edit.is_deleted() {
                             continue;
                         }
@@ -248,7 +248,7 @@ impl fpm::Config {
                     version,
                     status,
                 } => {
-                    let server_file_edit = if let Some(file_edit) = server_latest.get(path) {
+                    let server_file_edit = if let Some(file_edit) = remote_manifest.get(path) {
                         file_edit
                     } else {
                         continue;
@@ -301,7 +301,8 @@ impl fpm::Config {
                     version,
                     status,
                 } => {
-                    let server_file_edit = if let Some(server_file_edit) = server_latest.get(path) {
+                    let server_file_edit = if let Some(server_file_edit) = remote_manifest.get(path)
+                    {
                         server_file_edit
                     } else {
                         remove_files.push(index);

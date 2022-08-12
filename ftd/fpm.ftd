@@ -347,3 +347,12 @@ optional body description:
 
 
 -- optional cr-about-data cr-about:
+
+
+-- record tracking-info:
+caption filename:
+integer version:
+option integer self-version:
+
+
+-- tracking-info list tracks:

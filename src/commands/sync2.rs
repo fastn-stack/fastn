@@ -43,8 +43,8 @@ async fn update_workspace(
     workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
 ) -> fpm::Result<()> {
     let server_history = fpm::history::FileHistory::from_ftd(response.latest_ftd.as_str())?;
-    let server_latest =
-        fpm::history::FileHistory::get_latest_file_edits(server_history.as_slice())?;
+    let remote_manifest =
+        fpm::history::FileHistory::get_remote_manifest_with_deleted(server_history.as_slice())?;
     let conflicted_files = response
         .files
         .iter()
@@ -56,7 +56,7 @@ async fn update_workspace(
             }
         })
         .collect_vec();
-    for (file, file_edit) in server_latest.into_iter() {
+    for (file, file_edit) in remote_manifest.into_iter() {
         if conflicted_files.contains(&file) || file_edit.is_deleted() {
             continue;
         }

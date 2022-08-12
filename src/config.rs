@@ -38,6 +38,26 @@ impl Config {
         self.root.join("-/").join(cr_number.to_string())
     }
 
+    pub fn track_path(&self, path: &camino::Utf8PathBuf) -> camino::Utf8PathBuf {
+        let path_without_root = path.to_string().replace(self.root.to_string().as_str(), "");
+        let track_path = format!("{}.track", path_without_root);
+        self.track_dir().join(track_path)
+    }
+
+    pub fn cr_track_path(
+        &self,
+        path: &camino::Utf8PathBuf,
+        cr_number: usize,
+    ) -> camino::Utf8PathBuf {
+        let path_without_root = self
+            .cr_path(cr_number)
+            .join(path)
+            .to_string()
+            .replace(self.root.to_string().as_str(), "");
+        let track_path = format!("{}.track", path_without_root);
+        self.track_dir().join(track_path)
+    }
+
     pub fn cr_about_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
         self.cr_path(cr_number).join("-/about.ftd")
     }

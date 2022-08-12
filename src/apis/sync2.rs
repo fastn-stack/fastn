@@ -126,8 +126,8 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
     // TODO: Need to call at once only
     let config = fpm::Config::read(None, false).await?;
     let mut server_history = config.get_history().await?;
-    let server_latest =
-        fpm::history::FileHistory::get_non_deleted_latest_file_edits(server_history.as_slice())?;
+    let remote_manifest =
+        fpm::history::FileHistory::get_remote_manifest(server_history.as_slice())?;
     let mut to_be_in_history: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
         Default::default();
     let mut synced_files = std::collections::HashMap::new();
@@ -135,7 +135,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
         // TODO: get all data like message, author, src-cr from request
         match &file {
             SyncRequestFile::Add { path, content } => {
-                if server_latest.contains_key(path) {
+                if remote_manifest.contains_key(path) {
                     // add-add-conflict
                     synced_files.insert(
                         path.to_string(),
@@ -163,7 +163,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                 content,
                 version,
             } => {
-                if let Some(file_edit) = server_latest.get(path) {
+                if let Some(file_edit) = remote_manifest.get(path) {
                     if file_edit.version.eq(version) {
                         fpm::utils::update(&config.root.join(path), content).await?;
                         // TODO: get all data like message, author, src-cr from request
@@ -253,7 +253,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                 };
             }
             SyncRequestFile::Delete { path, version } => {
-                let file_edit = if let Some(file_edit) = server_latest.get(path) {
+                let file_edit = if let Some(file_edit) = remote_manifest.get(path) {
                     file_edit
                 } else {
                     // ALready deleted in server, do nothing
@@ -293,16 +293,16 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
 
     fpm::history::insert_into_history(&config.root, &to_be_in_history, &mut server_history).await?;
 
-    let server_latest =
-        fpm::history::FileHistory::get_latest_file_edits(server_history.as_slice())?;
+    let remote_manifest =
+        fpm::history::FileHistory::get_remote_manifest_with_deleted(server_history.as_slice())?;
 
     let client_history = fpm::history::FileHistory::from_ftd(request.history.as_str())?;
     let client_latest =
-        fpm::history::FileHistory::get_latest_file_edits(client_history.as_slice())?;
+        fpm::history::FileHistory::get_remote_manifest_with_deleted(client_history.as_slice())?;
 
-    client_current_files(&config, &server_latest, &client_latest, &mut synced_files).await?;
+    client_current_files(&config, &remote_manifest, &client_latest, &mut synced_files).await?;
 
-    let history_files = client_history_files(&config, &server_latest, &client_latest).await?;
+    let history_files = client_history_files(&config, &remote_manifest, &client_latest).await?;
 
     Ok(SyncResponse {
         files: synced_files.into_values().collect_vec(),
@@ -313,10 +313,10 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
 
 async fn client_history_files(
     config: &fpm::Config,
-    server_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
+    remote_manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
     client_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
 ) -> fpm::Result<Vec<File>> {
-    let diff = snapshot_diff(server_latest, client_latest);
+    let diff = snapshot_diff(remote_manifest, client_latest);
     let history = ignore::WalkBuilder::new(config.server_history_dir())
         .build()
         .into_iter()
@@ -369,11 +369,11 @@ fn get_all_versions(path: &str, history: &[String]) -> fpm::Result<Vec<(i32, Str
 
 async fn client_current_files(
     config: &fpm::Config,
-    server_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
+    remote_manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
     client_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
     synced_files: &mut std::collections::HashMap<String, SyncResponseFile>,
 ) -> fpm::Result<()> {
-    let diff = snapshot_diff(server_latest, client_latest);
+    let diff = snapshot_diff(remote_manifest, client_latest);
     for (path, operation) in diff.iter() {
         if synced_files.contains_key(path) {
             continue;
@@ -403,7 +403,7 @@ async fn client_current_files(
     // Deleted files
     let diff = client_latest
         .iter()
-        .filter(|(path, _)| !server_latest.contains_key(path.as_str()));
+        .filter(|(path, _)| !remote_manifest.contains_key(path.as_str()));
 
     // TODO: If already in synced files need to handle that case
     for (path, _) in diff {
@@ -422,12 +422,12 @@ async fn client_current_files(
 }
 
 fn snapshot_diff(
-    server_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
+    remote_manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
     client_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
 ) -> std::collections::BTreeMap<String, fpm::history::FileOperation> {
     let mut diff: std::collections::BTreeMap<String, fpm::history::FileOperation> =
         Default::default();
-    for (snapshot_path, file_edit) in server_latest {
+    for (snapshot_path, file_edit) in remote_manifest {
         match client_latest.get(snapshot_path) {
             Some(client_file_edit) if client_file_edit.version.lt(&file_edit.version) => {
                 diff.insert(snapshot_path.to_string(), file_edit.operation.clone());
