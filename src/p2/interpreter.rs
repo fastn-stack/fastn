@@ -413,18 +413,13 @@ impl InterpreterState {
             rt.render()?
         };
 
-        let mut d = ftd::p2::document::Document {
+        let d = ftd::p2::document::Document {
             main,
             name: rt.name,
             data: rt.bag.clone(),
             aliases: rt.aliases,
             instructions: rt.instructions,
         };
-
-        d.data.extend(rt.bag);
-
-        // d.main = rt.render()?;
-        // d.data.extend(rt.bag);
 
         Ok(Interpreter::Done { document: d })
     }
