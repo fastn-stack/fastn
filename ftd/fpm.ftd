@@ -349,6 +349,13 @@ optional body description:
 -- optional cr-about-data cr-about:
 
 
+-- record cr-deleted-data:
+caption filename:
+integer version:
+
+-- cr-deleted-data list cr-deleted:
+
+
 -- record tracking-info:
 caption filename:
 integer version:

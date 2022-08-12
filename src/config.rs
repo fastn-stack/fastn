@@ -38,7 +38,7 @@ impl Config {
         self.root.join("-/").join(cr_number.to_string())
     }
 
-    pub fn delete_cr_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
+    pub fn cr_deleted_file_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
         self.cr_path(cr_number).join("-/deleted")
     }
 

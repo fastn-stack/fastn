@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default)]
 pub struct CRAbout {
     pub title: String, // relative file name with respect to package root
@@ -64,7 +62,7 @@ pub(crate) async fn resolve_cr_about(
     let b = match fpm::doc::parse_ftd(".about.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
-            eprintln!("failed to parse .latest.ftd: {:?}", &e);
+            eprintln!("failed to parse .about.ftd for CR#{}: {:?}", cr_number, &e);
             todo!();
         }
     };
@@ -101,30 +99,80 @@ pub(crate) async fn is_open_cr_exists(config: &fpm::Config, cr_number: usize) ->
     get_cr_about(config, cr_number).await.map(|v| v.open)
 }
 
+#[derive(serde::Serialize, serde::Deserialize, Debug, Default)]
+pub struct CRDeleted {
+    pub filename: String,
+    pub version: i32,
+}
+
+impl CRDeleted {
+    pub(crate) fn new(filename: &str, version: i32) -> CRDeleted {
+        CRDeleted {
+            filename: filename.to_string(),
+            version,
+        }
+    }
+}
+
 pub(crate) async fn get_deleted_files(
     config: &fpm::Config,
     cr_number: usize,
-) -> fpm::Result<Vec<String>> {
+) -> fpm::Result<Vec<CRDeleted>> {
     if config.cr_path(cr_number).exists() {
         return fpm::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
-    let deleted_files_path = config.delete_cr_path(cr_number);
+    let deleted_files_path = config.cr_deleted_file_path(cr_number);
     if !deleted_files_path.exists() {
         return Ok(vec![]);
     }
     let deleted_files_content = tokio::fs::read_to_string(&deleted_files_path).await?;
-    Ok(deleted_files_content
-        .split('\n')
-        .map(ToString::to_string)
-        .collect_vec())
+    resolve_cr_deleted(deleted_files_content.as_str(), cr_number).await
+}
+
+pub(crate) async fn resolve_cr_deleted(
+    content: &str,
+    cr_number: usize,
+) -> fpm::Result<Vec<CRDeleted>> {
+    if content.trim().is_empty() {
+        return Ok(vec![]);
+    }
+    let lib = fpm::FPMLibrary::default();
+    let b = match fpm::doc::parse_ftd("deleted.ftd", content, &lib) {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("failed to parse deleted.ftd for CR#{}: {:?}", cr_number, &e);
+            todo!();
+        }
+    };
+
+    Ok(b.get("fpm#cr-deleted")?)
 }
 
 pub(crate) async fn create_deleted_files(
     config: &fpm::Config,
     cr_number: usize,
-    deleted_files: &[String],
+    cr_deleted: &[CRDeleted],
 ) -> fpm::Result<()> {
-    let deleted_files_path = config.delete_cr_path(cr_number);
-    let content: String = deleted_files.join("\n");
-    fpm::utils::update(&deleted_files_path, content.as_bytes()).await
+    let cr_deleted_content = generate_deleted_files_content(cr_deleted);
+    fpm::utils::update(
+        &config.cr_deleted_file_path(cr_number),
+        cr_deleted_content.as_bytes(),
+    )
+    .await?;
+    Ok(())
+}
+
+pub(crate) fn generate_deleted_files_content(cr_deleted_files: &[CRDeleted]) -> String {
+    let mut deleted_files_content = vec!["-- import: fpm".to_string()];
+
+    for cr_deleted_file in cr_deleted_files {
+        let content = format!(
+            "-- fpm.cr-deleted: {}\nversion: {}",
+            cr_deleted_file.filename, cr_deleted_file.version
+        );
+        deleted_files_content.push(content)
+    }
+
+    let content = deleted_files_content.join("\n\n");
+    format!("{content}\n")
 }

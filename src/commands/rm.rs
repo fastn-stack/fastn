@@ -82,10 +82,14 @@ async fn cr_rm(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> {
 
     // create delete entry
     let mut deleted_files = fpm::cr::get_deleted_files(config, cr).await?;
-    if deleted_files.contains(&file.to_string()) {
+    if deleted_files
+        .iter()
+        .map(|v| &v.filename)
+        .contains(&file.to_string())
+    {
         return fpm::usage_error(format!("{} is already deleted in CR#{}", file, cr));
     }
-    deleted_files.push(file.to_string());
+    deleted_files.push(fpm::cr::CRDeleted::new(file, file_edit.version));
 
     fpm::cr::create_deleted_files(config, cr, deleted_files.as_slice()).await?;
 
