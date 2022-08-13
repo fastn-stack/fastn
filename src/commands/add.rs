@@ -10,12 +10,7 @@ pub async fn add(config: &fpm::Config, file: &str, cr: Option<&str>) -> fpm::Res
 }
 
 async fn simple_add(config: &fpm::Config, file: &str) -> fpm::Result<()> {
-    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> = config
-        .read_workspace()
-        .await?
-        .into_iter()
-        .map(|v| (v.filename.to_string(), v))
-        .collect();
+    let mut workspace = config.get_clone_workspace().await?;
 
     if workspace.contains_key(file) {
         return Err(fpm::Error::UsageError {
@@ -40,7 +35,7 @@ async fn simple_add(config: &fpm::Config, file: &str) -> fpm::Result<()> {
     );
 
     config
-        .write_workspace(workspace.into_values().collect_vec().as_slice())
+        .update_workspace(workspace.into_values().collect_vec())
         .await?;
 
     Ok(())
@@ -50,7 +45,7 @@ async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> 
     if !fpm::cr::is_open_cr_exists(config, cr).await? {
         return fpm::usage_error(format!("CR#{} is closed", cr));
     };
-    let remote_manifest = config.get_remote_manifest().await?;
+    let remote_manifest = config.get_remote_manifest(false).await?;
     if remote_manifest.contains_key(file) {
         return Err(fpm::Error::UsageError {
             message: format!(
@@ -60,18 +55,13 @@ async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> 
         });
     }
 
-    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> = config
-        .read_workspace()
-        .await?
-        .into_iter()
-        .map(|v| (v.filename.to_string(), v))
-        .collect();
+    let mut workspace = config.get_workspace_map().await?;
 
     let cr_file_path = config.cr_path(cr).join(file);
     workspace.insert(
-        file.to_string(),
+        config.path_without_root(&cr_file_path)?,
         fpm::workspace::WorkspaceEntry {
-            filename: cr_file_path.to_string(),
+            filename: config.path_without_root(&cr_file_path)?,
             deleted: None,
             version: None,
             cr: Some(cr),

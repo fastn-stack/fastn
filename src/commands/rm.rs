@@ -10,12 +10,7 @@ pub async fn rm(config: &fpm::Config, file: &str, cr: Option<&str>) -> fpm::Resu
 }
 
 async fn simple_rm(config: &fpm::Config, file: &str) -> fpm::Result<()> {
-    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> = config
-        .read_workspace()
-        .await?
-        .into_iter()
-        .map(|v| (v.filename.to_string(), v))
-        .collect();
+    let mut workspace = config.get_workspace_map().await?;
 
     if !config
         .get_non_deleted_latest_file_paths()
@@ -48,15 +43,7 @@ async fn simple_rm(config: &fpm::Config, file: &str) -> fpm::Result<()> {
 }
 
 async fn cr_rm(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> {
-    // create workspace entry
-    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> = config
-        .read_workspace()
-        .await?
-        .into_iter()
-        .map(|v| (v.filename.to_string(), v))
-        .collect();
-
-    let remote_manifest = config.get_remote_manifest().await?;
+    let remote_manifest = config.get_remote_manifest(false).await?;
     let file_edit = if let Some(file_edit) = remote_manifest.get(file) {
         file_edit
     } else {
@@ -64,21 +51,6 @@ async fn cr_rm(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> {
             message: format!("{} is not present in remote manifest.", file,),
         });
     };
-
-    let cr_file_path = config.cr_path(cr).join(file);
-    workspace.insert(
-        file.to_string(),
-        fpm::workspace::WorkspaceEntry {
-            filename: cr_file_path.to_string(),
-            deleted: Some(true),
-            version: Some(file_edit.version),
-            cr: Some(cr),
-        },
-    );
-
-    config
-        .write_workspace(workspace.into_values().collect_vec().as_slice())
-        .await?;
 
     // create delete entry
     let mut deleted_files = fpm::cr::get_deleted_files(config, cr).await?;
@@ -90,8 +62,25 @@ async fn cr_rm(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> {
         return fpm::usage_error(format!("{} is already deleted in CR#{}", file, cr));
     }
     deleted_files.push(fpm::cr::CRDeleted::new(file, file_edit.version));
-
     fpm::cr::create_deleted_files(config, cr, deleted_files.as_slice()).await?;
+
+    // create workspace entry
+    let mut workspace = config.get_workspace_map().await?;
+    let deleted_file_path = &config.cr_deleted_file_path(cr);
+    if !workspace.contains_key(config.path_without_root(&deleted_file_path)?.as_str()) {
+        workspace.insert(
+            config.path_without_root(&deleted_file_path)?,
+            fpm::workspace::WorkspaceEntry {
+                filename: config.path_without_root(&deleted_file_path)?,
+                deleted: Some(true),
+                version: Some(file_edit.version),
+                cr: Some(cr),
+            },
+        );
+        config
+            .write_workspace(workspace.into_values().collect_vec().as_slice())
+            .await?;
+    }
 
     Ok(())
 }

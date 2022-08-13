@@ -1,12 +1,7 @@
 use itertools::Itertools;
 
 pub async fn revert(config: &fpm::Config, path: &str) -> fpm::Result<()> {
-    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> = config
-        .read_workspace()
-        .await?
-        .iter()
-        .map(|v| (v.filename.to_string(), v.clone()))
-        .collect();
+    let mut workspace = config.get_workspace_map().await?;
     let get_files_status = config
         .get_files_status_with_workspace(&mut workspace)
         .await?;

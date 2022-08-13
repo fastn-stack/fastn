@@ -8,11 +8,37 @@ pub struct WorkspaceEntry {
     pub cr: Option<usize>,
 }
 
+/*pub(crate) struct CRWorkspace {
+    pub cr: usize,
+    pub workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
+}
+
+impl CRWorkspace {
+    fn new(
+        cr: usize,
+        workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
+    ) -> CRWorkspace {
+        CRWorkspace { cr, workspace }
+    }
+
+    pub(crate) fn insert_workspace_entry(&mut self, workspace: WorkspaceEntry) {
+        let cr_file_path = format!("{}/{}", fpm::cr::cr_path(self.cr), workspace.filename);
+        let workspace = fpm::workspace::WorkspaceEntry {
+            filename: cr_file_path,
+            deleted: workspace.deleted,
+            version: workspace.version,
+            cr: Some(self.cr),
+        };
+        self.workspace
+            .insert(workspace.filename.to_string(), workspace);
+    }
+}*/
+
 impl fpm::Config {
     pub(crate) async fn evaluate_clone_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
         let history_list = self.get_history().await?;
         Ok(
-            fpm::history::FileHistory::get_remote_manifest_with_deleted(history_list.as_slice())?
+            fpm::history::FileHistory::get_remote_manifest(history_list.as_slice(), true)?
                 .into_iter()
                 .map(|(file_name, file_edit)| file_edit.into_workspace(file_name.as_str()))
                 .collect_vec(),
@@ -69,6 +95,43 @@ impl fpm::Config {
         Ok(workspace.get("fpm#client-workspace")?)
     }
 
+    pub(crate) async fn get_workspace_map(
+        &self,
+    ) -> fpm::Result<std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>> {
+        Ok(self
+            .read_workspace()
+            .await?
+            .into_iter()
+            .map(|v| (v.filename.to_string(), v))
+            .collect())
+    }
+
+    pub(crate) async fn get_clone_workspace(
+        &self,
+    ) -> fpm::Result<std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>> {
+        Ok(self
+            .get_workspace_map()
+            .await?
+            .into_iter()
+            // .filter(|(_, v)| v.cr.is_none())
+            .collect())
+    }
+
+    /*pub(crate) async fn get_cr_workspace(&self, cr_number: usize) -> fpm::Result<CRWorkspace> {
+        let workspace = self
+            .get_workspace_map()
+            .await?
+            .into_iter()
+            .filter_map(|(k, v)| match v.cr {
+                Some(ref cr) if cr_number.eq(cr) => {
+                    Some((self.cr_path_to_file_name(cr_number, k.as_str())?, v))
+                }
+                _ => None,
+            })
+            .collect::<std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>>();
+        Ok(CRWorkspace::new(cr_number, workspace))
+    }*/
+
     pub(crate) async fn write_workspace(&self, workspace: &[WorkspaceEntry]) -> fpm::Result<()> {
         let workspace_path = self.workspace_file();
         fpm::utils::update(
@@ -77,6 +140,16 @@ impl fpm::Config {
         )
         .await?;
         Ok(())
+    }
+
+    pub(crate) async fn update_workspace(&self, workspace: Vec<WorkspaceEntry>) -> fpm::Result<()> {
+        let workspace = {
+            let mut initial_workspace = self.get_workspace_map().await?;
+            initial_workspace.extend(workspace.into_iter().map(|v| (v.filename.to_string(), v)));
+            initial_workspace
+        };
+        self.write_workspace(workspace.into_values().collect_vec().as_slice())
+            .await
     }
 }
 

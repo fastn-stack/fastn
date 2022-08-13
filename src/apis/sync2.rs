@@ -125,9 +125,9 @@ pub async fn sync2(
 pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
     // TODO: Need to call at once only
     let config = fpm::Config::read(None, false).await?;
-    let mut server_history = config.get_history().await?;
+    let mut remote_history = config.get_history().await?;
     let remote_manifest =
-        fpm::history::FileHistory::get_remote_manifest(server_history.as_slice())?;
+        fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), false)?;
     let mut to_be_in_history: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
         Default::default();
     let mut synced_files = std::collections::HashMap::new();
@@ -291,18 +291,18 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
         }
     }
 
-    fpm::history::insert_into_history(&config.root, &to_be_in_history, &mut server_history).await?;
+    fpm::history::insert_into_history(&config.root, &to_be_in_history, &mut remote_history).await?;
 
     let remote_manifest =
-        fpm::history::FileHistory::get_remote_manifest_with_deleted(server_history.as_slice())?;
+        fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
 
-    let client_history = fpm::history::FileHistory::from_ftd(request.history.as_str())?;
+    let clone_history = fpm::history::FileHistory::from_ftd(request.history.as_str())?;
     let client_latest =
-        fpm::history::FileHistory::get_remote_manifest_with_deleted(client_history.as_slice())?;
+        fpm::history::FileHistory::get_remote_manifest(clone_history.as_slice(), true)?;
 
     client_current_files(&config, &remote_manifest, &client_latest, &mut synced_files).await?;
 
-    let history_files = client_history_files(&config, &remote_manifest, &client_latest).await?;
+    let history_files = clone_history_files(&config, &remote_manifest, &client_latest).await?;
 
     Ok(SyncResponse {
         files: synced_files.into_values().collect_vec(),
@@ -311,13 +311,13 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
     })
 }
 
-async fn client_history_files(
+async fn clone_history_files(
     config: &fpm::Config,
     remote_manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
     client_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
 ) -> fpm::Result<Vec<File>> {
     let diff = snapshot_diff(remote_manifest, client_latest);
-    let history = ignore::WalkBuilder::new(config.server_history_dir())
+    let history = ignore::WalkBuilder::new(config.remote_history_dir())
         .build()
         .into_iter()
         .flatten()
@@ -325,7 +325,7 @@ async fn client_history_files(
             x.into_path()
                 .to_str()
                 .unwrap()
-                .trim_start_matches(config.server_history_dir().as_str())
+                .trim_start_matches(config.remote_history_dir().as_str())
                 .trim_matches('/')
                 .to_string()
         })
@@ -339,7 +339,7 @@ async fn client_history_files(
             .filter(|x| client_file_edit.map(|c| x.0.gt(&c.version)).unwrap_or(true))
             .collect_vec();
         for (_, path) in history_paths {
-            let content = tokio::fs::read(config.server_history_dir().join(&path)).await?;
+            let content = tokio::fs::read(config.remote_history_dir().join(&path)).await?;
             dot_history.push(File { path, content });
         }
     }

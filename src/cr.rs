@@ -176,3 +176,49 @@ pub(crate) fn generate_deleted_files_content(cr_deleted_files: &[CRDeleted]) -> 
     let content = deleted_files_content.join("\n\n");
     format!("{content}\n")
 }
+
+impl fpm::Config {
+    pub(crate) fn cr_path_to_file_name(
+        &self,
+        cr_number: usize,
+        cr_file_path: &str,
+    ) -> fpm::Result<String> {
+        let cr_path = self.cr_path(cr_number);
+        let cr_path_without_root = cr_path.strip_prefix(&self.root)?;
+        Ok(cr_file_path
+            .replace(cr_path_without_root.to_string().as_str(), "")
+            .trim_matches('/')
+            .to_string())
+    }
+
+    pub(crate) async fn get_cr_tracking_info(
+        &self,
+        cr_number: usize,
+    ) -> fpm::Result<Vec<fpm::track::TrackingInfo>> {
+        let cr_track_paths = ignore::WalkBuilder::new(self.cr_track_dir(cr_number))
+            .build()
+            .into_iter()
+            .flatten()
+            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap())
+            .filter(|x| x.is_file() && x.extension().map(|v| v.eq("track")).unwrap_or(false))
+            .collect::<Vec<camino::Utf8PathBuf>>();
+        let mut tracking_infos = vec![];
+
+        for cr_track_path in cr_track_paths {
+            let tracked_file = cr_track_path.strip_prefix(self.track_dir())?;
+            let tracked_file_str = self.cr_path_to_file_name(cr_number, tracked_file.as_str())?;
+            let cr_tracking_infos = fpm::track::get_tracking_info_(&cr_track_path).await?;
+            if let Some(tracking_info) = cr_tracking_infos
+                .into_iter()
+                .find(|v| tracked_file_str.eq(&v.filename))
+            {
+                tracking_infos.push(tracking_info);
+            }
+        }
+        Ok(tracking_infos)
+    }
+}
+
+pub(crate) fn cr_path(cr_number: usize) -> String {
+    format!("-/{}", cr_number)
+}

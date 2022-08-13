@@ -229,7 +229,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
 
     client_current_files(&config, &snapshots, &client_snapshots, &mut synced_files).await?;
 
-    let history_files = client_history_files(&config, &snapshots, &client_snapshots).await?;
+    let history_files = clone_history_files(&config, &snapshots, &client_snapshots).await?;
 
     fpm::snapshot::create_latest_snapshots(
         &config,
@@ -330,7 +330,7 @@ async fn client_current_files(
     Ok(())
 }
 
-async fn client_history_files(
+async fn clone_history_files(
     config: &fpm::Config,
     server_snapshot: &std::collections::BTreeMap<String, u128>,
     client_snapshot: &std::collections::BTreeMap<String, u128>,

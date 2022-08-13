@@ -436,6 +436,9 @@ pub enum Error {
     #[error("FromPathBufError: {}", _0)]
     FromPathBufError(#[from] camino::FromPathBufError),
 
+    #[error("StripPrefixError: {}", _0)]
+    StripPrefixError(#[from] std::path::StripPrefixError),
+
     #[error("SitemapParseError: {}", _0)]
     SitemapParseError(#[from] fpm::sitemap::ParseError),
 

@@ -35,7 +35,11 @@ impl Config {
     }
 
     pub fn cr_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
-        self.root.join("-/").join(cr_number.to_string())
+        self.root.join(fpm::cr::cr_path(cr_number))
+    }
+
+    pub fn path_without_root(&self, path: &camino::Utf8PathBuf) -> fpm::Result<String> {
+        Ok(path.strip_prefix(&self.root)?.to_string())
     }
 
     pub fn cr_deleted_file_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
@@ -46,6 +50,10 @@ impl Config {
         let path_without_root = path.to_string().replace(self.root.to_string().as_str(), "");
         let track_path = format!("{}.track", path_without_root);
         self.track_dir().join(track_path)
+    }
+
+    pub fn cr_track_dir(&self, cr_number: usize) -> camino::Utf8PathBuf {
+        self.track_dir().join(fpm::cr::cr_path(cr_number))
     }
 
     pub fn cr_track_path(
@@ -70,12 +78,12 @@ impl Config {
         self.root.join(".remote-state")
     }
 
-    pub fn server_history_dir(&self) -> camino::Utf8PathBuf {
+    pub fn remote_history_dir(&self) -> camino::Utf8PathBuf {
         self.remote_dir().join("history")
     }
 
     /// location that stores lowest available cr number
-    pub fn server_cr(&self) -> camino::Utf8PathBuf {
+    pub fn remote_cr(&self) -> camino::Utf8PathBuf {
         self.remote_dir().join("cr")
     }
 
@@ -85,7 +93,7 @@ impl Config {
 
     pub(crate) fn history_path(&self, id: &str, version: i32) -> camino::Utf8PathBuf {
         let id_with_timestamp_extension = fpm::utils::snapshot_id(id, &(version as u128));
-        self.server_history_dir().join(id_with_timestamp_extension)
+        self.remote_history_dir().join(id_with_timestamp_extension)
     }
 
     /// history of a fpm package is stored in `.history` folder.
@@ -990,7 +998,7 @@ impl Config {
             return fpm::usage_error("Can be used by remote only".to_string());
         }
         let value = fpm::cache::update(
-            self.server_cr().to_string().as_str(),
+            self.remote_cr().to_string().as_str(),
             number_of_crs_to_reserve,
         )
         .await? as i32;

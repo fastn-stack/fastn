@@ -22,7 +22,7 @@ async fn clone_worker() -> fpm::Result<CloneResponse> {
     let all_files = config
         .get_all_file_path(&config.package, Default::default())?
         .into_iter()
-        .filter(|v| !config.server_cr().eq(v))
+        .filter(|v| !config.remote_cr().eq(v))
         .collect_vec();
     let root = config.get_root_for_package(&config.package);
     let files = futures::future::join_all(

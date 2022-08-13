@@ -121,13 +121,7 @@ async fn mark_resolve(
         .ok_or(fpm::Error::UsageError {
             message: format!("{} is not in conflict", path),
         })?;
-    let mut workspace_map: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> =
-        config
-            .read_workspace()
-            .await?
-            .iter()
-            .map(|v| (v.filename.to_string(), v.clone()))
-            .collect();
+    let mut workspace_map = config.get_workspace_map().await?;
     if delete_it && is_clone_edited_remote_deleted {
         workspace_map.remove(&path);
     } else {

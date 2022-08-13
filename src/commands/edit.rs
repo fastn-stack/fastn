@@ -13,15 +13,7 @@ pub async fn edit(config: &fpm::Config, file: &str, cr: &str) -> fpm::Result<()>
         return fpm::usage_error(format!("{} is already tracked in cr {}", file, cr));
     }
 
-    // create workspace entry
-    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> = config
-        .read_workspace()
-        .await?
-        .into_iter()
-        .map(|v| (v.filename.to_string(), v))
-        .collect();
-
-    let remote_manifest = config.get_remote_manifest().await?;
+    let remote_manifest = config.get_remote_manifest(false).await?;
     let file_edit = if let Some(file_edit) = remote_manifest.get(file) {
         file_edit
     } else {
@@ -33,22 +25,14 @@ pub async fn edit(config: &fpm::Config, file: &str, cr: &str) -> fpm::Result<()>
         });
     };
 
-    workspace.insert(
-        file.to_string(),
-        fpm::workspace::WorkspaceEntry {
-            filename: cr_file_path.to_string(),
-            deleted: None,
-            version: Some(file_edit.version),
-            cr: Some(cr),
-        },
-    );
-
-    config
-        .write_workspace(workspace.into_values().collect_vec().as_slice())
-        .await?;
-
     // copy file to cr directory
-    let file_path = config.root.join(file);
+    let file_path = config.history_path(file, file_edit.version);
+
+    if cr_file_path.exists() {
+        return Err(fpm::Error::UsageError {
+            message: format!("{} is already exists", cr_file_path),
+        });
+    }
 
     if file_path.exists() {
         let content = tokio::fs::read(&file_path).await?;
@@ -60,6 +44,33 @@ pub async fn edit(config: &fpm::Config, file: &str, cr: &str) -> fpm::Result<()>
     // tracks the file
     let tracking_info = fpm::track::TrackingInfo::new(file, file_edit.version, None);
     fpm::track::create_tracking_info(config, &[tracking_info], &cr_file_path).await?;
+
+    // create workspace entry for file and for track
+    let mut workspace = config.get_workspace_map().await?;
+
+    workspace.insert(
+        config.path_without_root(&cr_file_path)?,
+        fpm::workspace::WorkspaceEntry {
+            filename: config.path_without_root(&cr_file_path)?,
+            deleted: None,
+            version: Some(file_edit.version),
+            cr: Some(cr),
+        },
+    );
+
+    workspace.insert(
+        config.path_without_root(&config.track_path(&cr_file_path))?,
+        fpm::workspace::WorkspaceEntry {
+            filename: config.path_without_root(&config.track_path(&cr_file_path))?,
+            deleted: None,
+            version: Some(file_edit.version),
+            cr: None,
+        },
+    );
+
+    config
+        .write_workspace(workspace.into_values().collect_vec().as_slice())
+        .await?;
 
     Ok(())
 }

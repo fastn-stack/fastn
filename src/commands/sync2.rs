@@ -1,12 +1,44 @@
 use itertools::Itertools;
 
-pub async fn sync2(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
-    let file_list = config.read_workspace().await?;
-    let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> =
-        file_list
-            .iter()
-            .map(|v| (v.filename.to_string(), v.clone()))
-            .collect();
+pub async fn sync2(
+    config: &fpm::Config,
+    files: Option<Vec<String>>,
+    // cr_number: Option<&str>,
+) -> fpm::Result<()> {
+    simple_sync(config, files).await
+    /*if let Some(cr_number) = cr_number {
+        let cr_number = cr_number.parse::<usize>()?;
+        cr_sync(config, file, cr_number).await
+    } else {
+        simple_sync(config, files).await
+    }*/
+}
+
+/*async fn cr_sync(
+    config: &fpm::Config,
+    files: Option<Vec<String>>,
+    cr_number: usize,
+) -> fpm::Result<()> {
+    let mut cr_workspace = config.get_cr_workspace(cr_number).await?;
+    let changed_files = {
+        let mut changed_files = config
+            .get_files_status_with_workspace(&mut cr_workspace.workspace)
+            .await?;
+        if let Some(ref files) = files {
+            changed_files = changed_files
+                .into_iter()
+                .filter(|v| files.contains(&v.get_file_path()))
+                .collect();
+        }
+        changed_files
+            .into_iter()
+            .filter_map(|v| v.sync_request())
+            .collect_vec()
+    };
+}*/
+
+async fn simple_sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
+    let mut workspace = config.get_clone_workspace().await?;
     let changed_files = {
         let mut changed_files = config
             .get_files_status_with_workspace(&mut workspace)
@@ -33,7 +65,7 @@ pub async fn sync2(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Res
     update_history(config, &response.dot_history, &response.latest_ftd).await?;
     update_workspace(&response, &mut workspace).await?;
     config
-        .write_workspace(workspace.into_values().collect_vec().as_slice())
+        .update_workspace(workspace.into_values().collect_vec())
         .await?;
     Ok(())
 }
@@ -42,9 +74,9 @@ async fn update_workspace(
     response: &fpm::apis::sync2::SyncResponse,
     workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
 ) -> fpm::Result<()> {
-    let server_history = fpm::history::FileHistory::from_ftd(response.latest_ftd.as_str())?;
+    let remote_history = fpm::history::FileHistory::from_ftd(response.latest_ftd.as_str())?;
     let remote_manifest =
-        fpm::history::FileHistory::get_remote_manifest_with_deleted(server_history.as_slice())?;
+        fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
     let conflicted_files = response
         .files
         .iter()
@@ -81,7 +113,7 @@ async fn update_history(
 ) -> fpm::Result<()> {
     for file in files {
         fpm::utils::update(
-            &config.server_history_dir().join(file.path.as_str()),
+            &config.remote_history_dir().join(file.path.as_str()),
             &file.content,
         )
         .await?;

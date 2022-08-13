@@ -14,6 +14,15 @@ impl TrackingInfo {
             self_version,
         }
     }
+
+    pub(crate) fn into_workspace_entry(self, cr_number: usize) -> fpm::workspace::WorkspaceEntry {
+        fpm::workspace::WorkspaceEntry {
+            filename: format!("{}/{}", fpm::cr::cr_path(cr_number), self.filename),
+            deleted: None,
+            version: Some(self.version),
+            cr: Some(cr_number),
+        }
+    }
 }
 
 pub(crate) async fn get_tracking_info(
@@ -27,6 +36,17 @@ pub(crate) async fn get_tracking_info(
 
     let doc = std::fs::read_to_string(&track_path)?;
     resolve_tracking_info(&doc, path).await
+}
+
+pub(crate) async fn get_tracking_info_(
+    track_path: &camino::Utf8PathBuf,
+) -> fpm::Result<Vec<fpm::track::TrackingInfo>> {
+    if !track_path.exists() {
+        return fpm::usage_error(format!("No tracking found for {}", track_path));
+    }
+
+    let doc = std::fs::read_to_string(&track_path)?;
+    resolve_tracking_info(&doc, track_path).await
 }
 
 pub(crate) async fn resolve_tracking_info(
