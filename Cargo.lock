@@ -1072,7 +1072,7 @@ dependencies = [
 
 [[package]]
 name = "fpm"
-version = "0.1.10"
+version = "0.1.11"
 dependencies = [
  "actix-files",
  "actix-web",
@@ -1087,7 +1087,7 @@ dependencies = [
  "edit",
  "fbt-lib",
  "fluent",
- "ftd 0.1.18 (git+https://github.com/FifthTry/ftd?rev=8cf0214)",
+ "ftd 0.1.18 (git+https://github.com/FifthTry/ftd?rev=f6dfb6)",
  "futures 0.3.21",
  "home",
  "ignore",
@@ -1143,7 +1143,7 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.1.18"
-source = "git+https://github.com/FifthTry/ftd?rev=8cf0214#8cf0214e3bd079a4ff03a784095d98a34c7cbda9"
+source = "git+https://github.com/FifthTry/ftd?rev=f6dfb6#f6dfb6ae399e90605feab477bbab3cc425d6f673"
 dependencies = [
  "comrak",
  "css-color-parser",
