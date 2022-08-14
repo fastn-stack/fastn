@@ -53,7 +53,7 @@ pub async fn edit(config: &fpm::Config, file: &str, cr: &str) -> fpm::Result<()>
         fpm::workspace::WorkspaceEntry {
             filename: config.path_without_root(&cr_file_path)?,
             deleted: None,
-            version: Some(file_edit.version),
+            version: None,
             cr: Some(cr),
         },
     );
@@ -63,7 +63,7 @@ pub async fn edit(config: &fpm::Config, file: &str, cr: &str) -> fpm::Result<()>
         fpm::workspace::WorkspaceEntry {
             filename: config.path_without_root(&config.track_path(&cr_file_path))?,
             deleted: None,
-            version: Some(file_edit.version),
+            version: None,
             cr: None,
         },
     );

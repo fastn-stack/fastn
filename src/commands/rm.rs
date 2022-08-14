@@ -72,8 +72,8 @@ async fn cr_rm(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> {
             config.path_without_root(&deleted_file_path)?,
             fpm::workspace::WorkspaceEntry {
                 filename: config.path_without_root(&deleted_file_path)?,
-                deleted: Some(true),
-                version: Some(file_edit.version),
+                deleted: None,
+                version: None,
                 cr: Some(cr),
             },
         );

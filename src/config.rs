@@ -43,11 +43,11 @@ impl Config {
     }
 
     pub fn cr_deleted_file_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
-        self.cr_path(cr_number).join("-/deleted")
+        self.cr_path(cr_number).join("-/deleted.ftd")
     }
 
     pub fn track_path(&self, path: &camino::Utf8PathBuf) -> camino::Utf8PathBuf {
-        let path_without_root = path.to_string().replace(self.root.to_string().as_str(), "");
+        let path_without_root = self.path_without_root(path).unwrap_or(path.to_string());
         let track_path = format!("{}.track", path_without_root);
         self.track_dir().join(track_path)
     }

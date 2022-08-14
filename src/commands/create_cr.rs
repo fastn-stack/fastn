@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 pub async fn create_cr(config: &fpm::Config) -> fpm::Result<()> {
     let cr_number = config.extract_cr_number().await?;
     let cr_about_content = fpm::cr::generate_cr_about_content(&fpm::cr::CRAbout {
@@ -16,5 +18,20 @@ pub async fn create_cr(config: &fpm::Config) -> fpm::Result<()> {
     )
     .await?;
     fpm::cr::create_cr_about(config, &cr_about_content).await?;
+
+    let mut workspace = config.get_workspace_map().await?;
+    let filename = config.path_without_root(&config.cr_about_path(cr_about_content.cr_number))?;
+    workspace.insert(
+        filename.to_string(),
+        fpm::workspace::WorkspaceEntry {
+            filename,
+            deleted: None,
+            version: None,
+            cr: Some(cr_number as usize),
+        },
+    );
+    config
+        .write_workspace(workspace.into_values().collect_vec().as_slice())
+        .await?;
     Ok(())
 }

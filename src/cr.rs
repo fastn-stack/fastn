@@ -24,7 +24,7 @@ pub(crate) async fn get_cr_about(
 ) -> fpm::Result<fpm::cr::CRAbout> {
     let cr_about_path = config.cr_path(cr_number).join("-/about.ftd");
     if !cr_about_path.exists() {
-        return fpm::usage_error(format!("CR#{} doesn't exists", cr_number));
+        return fpm::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
 
     let doc = std::fs::read_to_string(&cr_about_path)?;
@@ -118,7 +118,7 @@ pub(crate) async fn get_deleted_files(
     config: &fpm::Config,
     cr_number: usize,
 ) -> fpm::Result<Vec<CRDeleted>> {
-    if config.cr_path(cr_number).exists() {
+    if !config.cr_path(cr_number).exists() {
         return fpm::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
     let deleted_files_path = config.cr_deleted_file_path(cr_number);

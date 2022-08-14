@@ -318,6 +318,7 @@ async fn clone_history_files(
 ) -> fpm::Result<Vec<File>> {
     let diff = snapshot_diff(remote_manifest, client_latest);
     let history = ignore::WalkBuilder::new(config.remote_history_dir())
+        .hidden(false)
         .build()
         .into_iter()
         .flatten()

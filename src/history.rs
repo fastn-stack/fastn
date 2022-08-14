@@ -222,7 +222,8 @@ pub(crate) async fn insert_into_history_(
         if !file_op.operation.eq(&FileOperation::Deleted) {
             let new_file_path =
                 remote_state.join(fpm::utils::snapshot_id(file, &(version as u128)));
-            tokio::fs::copy(root.join(file), new_file_path).await?;
+            let content = tokio::fs::read(root.join(file)).await?;
+            fpm::utils::update(&new_file_path, content.as_slice()).await?;
         }
     }
 

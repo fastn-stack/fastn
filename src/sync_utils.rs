@@ -28,7 +28,7 @@ impl Status {
     }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub enum FileStatus {
     Add {
         path: String,
