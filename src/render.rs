@@ -170,7 +170,7 @@ pub fn code_with_theme(
 
     // TODO: handle various params
     Ok(
-        syntect::html::highlighted_html_for_string(code.as_str(), &SS, syntax, theme)
+        syntect::html::highlighted_html_for_string(code.as_str(), &SS, syntax, theme)?
             .replacen('\n', "", 1),
     )
 }

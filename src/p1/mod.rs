@@ -46,6 +46,12 @@ pub enum Error {
         source: serde_json::Error,
     },
 
+    #[error("syntect error: {source}")]
+    Syntect {
+        #[from]
+        source: syntect::Error,
+    },
+
     #[error("{source}")]
     Failure {
         #[from]

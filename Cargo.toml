@@ -13,21 +13,21 @@ repository = "https://github.com/FifthTry/ftd"
 homepage = "https://ftd.dev"
 
 [dependencies]
-css-color-parser = { version = "0.1.2" }
+css-color-parser = { version = "0.1" }
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1" }
 thiserror = "1"
-comrak = { version = "0.7.0" }
-syntect = { version = "4.5.0", default-features = false, features = ["default-fancy"] }
+comrak = { version = "0.7" }
+syntect = { version = "5", default-features = false, features = ["default-fancy"] }
 lazy_static = { version = "1" }
-regex = { version = "1.5.4" }
-format_num = { version = "0.1.0" }
+regex = { version = "1" }
+format_num = { version = "0.1" }
 failure = "0.1"
-slug = { version = "0.1.4" }
-include_dir = "0.7.2"
-indoc = "1.0"
-itertools = "0.10.3"
+slug = { version = "0.1" }
+include_dir = "0.7"
+indoc = "1"
+itertools = "0.10"
 
 [dev-dependencies]
-diffy = "0.2.0"
+diffy = "0.2"
 pretty_assertions = "0.6"
