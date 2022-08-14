@@ -26,7 +26,7 @@ async-recursion = "1"
 camino = "1"
 clap = "2"
 diffy = "0.2"
-ftd = { git = "https://github.com/FifthTry/ftd", rev = "03d832b" }
+ftd = { git = "https://github.com/FifthTry/ftd", rev = "7a3311d" }
 #ftd = { path = "../ftd" }
 futures = "0.3"
 home = "0.5"
@@ -40,9 +40,9 @@ serde = { version = "1", features = ["derive"] }
 serde_derive = "1"
 serde_json = "1"
 thiserror = "1"
-tokio = { version = "1.14", features = ["full"] }
+tokio = { version = "1", features = ["full"] }
 url = "2"
-zip = "0.5"
+zip = "0.6"
 colorize = "0.1"
 chrono = "0.4"
 fluent = "0.16"
@@ -61,7 +61,7 @@ actix-files = "0.6"
 fbt-lib = "0.1.18"
 indoc = "1"
 pretty_assertions = "1"
-rusty-hook = "^0.11.2"
+#rusty-hook = "^0.11.2"
 
 [build-dependencies]
 vergen = "6"
