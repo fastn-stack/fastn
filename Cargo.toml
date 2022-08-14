@@ -29,7 +29,6 @@ diffy = "0.2"
 ftd = { git = "https://github.com/FifthTry/ftd", rev = "7a3311d" }
 #ftd = { path = "../ftd" }
 futures = "0.3"
-home = "0.5"
 ignore = "0.4"
 indoc = "1"
 regex = "1"
