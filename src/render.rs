@@ -17,15 +17,14 @@ lazy_static::lazy_static! {
     pub static ref TS: syntect::highlighting::ThemeSet =
         syntect::highlighting::ThemeSet::load_defaults();
     pub static ref MD: comrak::ComrakOptions = {
-        comrak::ComrakOptions {
-            smart: true,
-            ext_strikethrough: true,
-            ext_table: true, // TODO: implement custom table
-            ext_autolink: true,
-            ext_tasklist: true, // TODO: implement custom todo
-            ext_superscript: true,
-            ..Default::default()
-        }
+        let mut m = comrak::ComrakOptions::default();
+        m.extension.strikethrough = true;
+        m.extension.table = true;
+        m.extension.autolink = true;
+        m.extension.tasklist = true;
+        m.extension.superscript = true;
+        m.parse.smart = true;
+        m
     };
 }
 const MAGIC: &str = "MMMMMMMMMAMMAMSMASMDASMDAMSDMASMDASDMASMDASDMAASD";
@@ -41,8 +40,8 @@ pub fn render(s: &str, auto_links: bool, hard_breaks: bool) -> String {
         comrak::markdown_to_html(s.as_str(), &ftd::render::MD)
     } else {
         let mut md = MD.clone();
-        md.hardbreaks = hard_breaks;
-        md.ext_autolink = auto_links;
+        md.render.hardbreaks = hard_breaks;
+        md.extension.autolink = auto_links;
         comrak::markdown_to_html(s.as_str(), &md)
     };
     o.replace(MAGIC, "![")
