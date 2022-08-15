@@ -202,6 +202,36 @@ impl Config {
         };
     }
 
+    pub(crate) async fn download_fonts(&self) -> fpm::Result<()> {
+        use itertools::Itertools;
+
+        let mut fonts = vec![];
+        for dep in self
+            .package
+            .get_flattened_dependencies()
+            .into_iter()
+            .unique_by(|dep| dep.package.name.clone())
+        {
+            fonts.extend(dep.package.fonts);
+        }
+
+        for package in self.all_packages.borrow().values() {
+            fonts.extend(package.fonts.clone());
+        }
+
+        for font in fonts.iter() {
+            if let Some(url) = font.get_url() {
+                let start = std::time::Instant::now();
+                print!("Processing {} ... ", url);
+                let content = self.get_file_and_resolve(url.as_str()).await?.1;
+                fpm::utils::update(&self.build_dir().join(&url), content.as_slice()).await?;
+                fpm::utils::print_end(format!("Processed {}", url).as_str(), start);
+            }
+        }
+
+        Ok(())
+    }
+
     /// `attach_data_string()` sets the value of extra data in fpm::Config,
     /// provided as `data` paramater of type `&str`
     pub fn attach_data_string(&mut self, data: &str) -> fpm::Result<()> {
@@ -417,6 +447,10 @@ impl Config {
     }
 
     pub(crate) async fn get_file_path_and_resolve(&self, id: &str) -> fpm::Result<String> {
+        Ok(self.get_file_and_resolve(id).await?.0)
+    }
+
+    pub(crate) async fn get_file_and_resolve(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
         let (package_name, package) = self.find_package_by_id(id).await?;
         let package = self.resolve_package(&package).await?;
         self.add_package(&package);
@@ -444,11 +478,9 @@ impl Config {
             id
         };
 
-        Ok(format!(
-            "{}{}",
-            add_packages,
-            package.resolve_by_id(id, None).await?.0
-        ))
+        let (file_name, content) = package.resolve_by_id(id, None).await?;
+
+        Ok((format!("{}{}", add_packages, file_name), content))
     }
 
     /// Return (package name or alias, package)

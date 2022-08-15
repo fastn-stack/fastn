@@ -6,6 +6,10 @@ pub async fn build2(
 ) -> fpm::Result<()> {
     tokio::fs::create_dir_all(config.build_dir()).await?;
     let documents = get_documents_for_current_package(config).await?;
+
+    // No need to build static files when file is passed during fpm build (no-static behaviour)
+    let no_static: bool = file.is_some();
+
     for main in documents.values() {
         if file.is_some() && file != Some(main.get_id().as_str()) {
             continue;
@@ -18,9 +22,6 @@ pub async fn build2(
             config.package.name.as_str(),
             main.get_id()
         );
-
-        // No need to build static files when file is passed during fpm build (no-static behaviour)
-        let no_static: bool = file.is_some();
 
         match main {
             fpm::File::Ftd(doc) => {
@@ -97,6 +98,10 @@ pub async fn build2(
             .as_str(),
             start,
         );
+    }
+
+    if true || !no_static {
+        config.download_fonts().await?;
     }
     Ok(())
 }

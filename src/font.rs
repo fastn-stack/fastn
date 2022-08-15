@@ -29,6 +29,28 @@ fn append_src(kind: &str, value: &Option<String>, collector: &mut Vec<String>) {
 }
 
 impl Font {
+    pub fn get_url(&self) -> Option<String> {
+        if self.woff.is_some() {
+            return self.woff.clone();
+        }
+        if self.woff2.is_some() {
+            return self.woff2.clone();
+        }
+        if self.truetype.is_some() {
+            return self.truetype.clone();
+        }
+        if self.opentype.is_some() {
+            return self.opentype.clone();
+        }
+        if self.embedded_opentype.is_some() {
+            return self.embedded_opentype.clone();
+        }
+        if self.svg.is_some() {
+            return self.svg.clone();
+        }
+        None
+    }
+
     pub fn to_html(&self, package_name: &str) -> String {
         let mut attrs = vec![];
         if let Some(ref ur) = self.unicode_range {
