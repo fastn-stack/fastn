@@ -131,7 +131,7 @@ impl UserGroup {
             let user_group = user_group_by_id(config, group.as_str())?.ok_or_else(|| {
                 fpm::Error::GroupNotFound {
                     id: group.to_string(),
-                    message: format!("group not found while getting identities"),
+                    message: "group not found while getting identities".to_string(),
                 }
             })?;
 
