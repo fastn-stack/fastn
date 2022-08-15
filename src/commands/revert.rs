@@ -24,8 +24,7 @@ pub async fn revert(config: &fpm::Config, path: &str) -> fpm::Result<()> {
 
     if let Some(server_version) = file_status.get_latest_version() {
         let server_path = config.history_path(path, server_version);
-        let content = tokio::fs::read(&server_path).await?;
-        fpm::utils::update(&config.root.join(path), content.as_slice()).await?;
+        fpm::utils::copy(&server_path, &config.root.join(path)).await?;
         if let Some(workspace_entry) = workspace.get_mut(path) {
             workspace_entry.version = Some(server_version);
             workspace_entry.deleted = None;

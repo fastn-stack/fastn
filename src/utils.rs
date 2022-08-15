@@ -476,6 +476,11 @@ pub(crate) async fn update1(
     )
 }
 
+pub(crate) async fn copy(from: &camino::Utf8PathBuf, to: &camino::Utf8PathBuf) -> fpm::Result<()> {
+    let content = tokio::fs::read(from).await?;
+    fpm::utils::update(to, content.as_slice()).await
+}
+
 pub(crate) async fn update(root: &camino::Utf8PathBuf, data: &[u8]) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
 

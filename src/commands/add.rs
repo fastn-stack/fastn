@@ -85,8 +85,7 @@ async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> 
     let cr_file_path = config.cr_path(cr).join(file);
 
     if file_path.exists() {
-        let content = tokio::fs::read(&file_path).await?;
-        fpm::utils::update(&cr_file_path, content.as_slice()).await?;
+        fpm::utils::copy(&file_path, &cr_file_path).await?;
     } else {
         fpm::utils::update(&cr_file_path, vec![].as_slice()).await?;
     }

@@ -218,7 +218,11 @@ impl fpm::Package {
                     .starts_with("image/")
                     && remaining.ends_with("-dark") =>
             {
-                format!("{}.{}", remaining.trim_end_matches("-dark"), ext)
+                format!(
+                    "{}.{}",
+                    remaining.trim_matches('/').trim_end_matches("-dark"),
+                    ext
+                )
             }
             _ => {
                 return Err(fpm::Error::PackageError {
@@ -242,9 +246,10 @@ impl fpm::Package {
                 }
             }
         };
+        let id = id.trim_matches('/');
 
         if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root).await {
-            tokio::fs::copy(root.join(new_id), root.join(id)).await?;
+            fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
             return Ok(response);
         }
 
@@ -253,7 +258,7 @@ impl fpm::Package {
             .await
         {
             Ok(response) => {
-                tokio::fs::copy(root.join(new_id), root.join(id)).await?;
+                fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
                 Ok(response)
             }
             Err(e) => Err(e),
