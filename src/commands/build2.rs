@@ -100,7 +100,7 @@ pub async fn build2(
         );
     }
 
-    if true || !no_static {
+    if !no_static {
         config.download_fonts().await?;
     }
     Ok(())
