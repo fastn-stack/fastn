@@ -215,14 +215,17 @@ impl fpm::Package {
                 if mime_guess::MimeGuess::from_ext(ext)
                     .first_or_octet_stream()
                     .to_string()
-                    .starts_with("image/")
-                    && remaining.ends_with("-dark") =>
+                    .starts_with("image/") =>
             {
-                format!(
-                    "{}.{}",
-                    remaining.trim_matches('/').trim_end_matches("-dark"),
-                    ext
-                )
+                if remaining.ends_with("-dark") {
+                    format!(
+                        "{}.{}",
+                        remaining.trim_matches('/').trim_end_matches("-dark"),
+                        ext
+                    )
+                } else {
+                    format!("{}-dark.{}", remaining.trim_matches('/'), ext)
+                }
             }
             _ => {
                 return Err(fpm::Error::PackageError {
@@ -234,7 +237,7 @@ impl fpm::Package {
             }
         };
 
-        let root = if let Some(package_root) = package_root {
+        /*let root = if let Some(package_root) = package_root {
             package_root.to_owned()
         } else {
             match self.fpm_path.as_ref() {
@@ -246,10 +249,10 @@ impl fpm::Package {
                 }
             }
         };
-        let id = id.trim_matches('/');
+        let id = id.trim_matches('/');*/
 
         if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root).await {
-            fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
+            // fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
             return Ok(response);
         }
 
@@ -258,7 +261,7 @@ impl fpm::Package {
             .await
         {
             Ok(response) => {
-                fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
+                // fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
                 Ok(response)
             }
             Err(e) => Err(e),
