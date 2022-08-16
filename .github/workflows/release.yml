@@ -119,10 +119,6 @@ jobs:
           path: ~/download/fpm_controller_linux_musl
       - uses: actions/download-artifact@v2
         with:
-          name: fpm_debian
-          path: ~/download/linux_musl
-      - uses: actions/download-artifact@v2
-        with:
           name: windows_x64_latest
           path: ~/download/windows
       - name: Rename assets
