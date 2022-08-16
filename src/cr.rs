@@ -191,6 +191,7 @@ impl fpm::Config {
             .to_string())
     }
 
+    #[allow(dead_code)]
     pub(crate) async fn get_cr_tracking_info(
         &self,
         cr_number: usize,

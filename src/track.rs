@@ -15,6 +15,7 @@ impl TrackingInfo {
         }
     }
 
+    #[allow(dead_code)]
     pub(crate) fn into_workspace_entry(self, cr_number: usize) -> fpm::workspace::WorkspaceEntry {
         fpm::workspace::WorkspaceEntry {
             filename: format!("{}/{}", fpm::cr::cr_path(cr_number), self.filename),
@@ -25,6 +26,7 @@ impl TrackingInfo {
     }
 }
 
+#[allow(dead_code)]
 pub(crate) async fn get_tracking_info(
     config: &fpm::Config,
     path: &camino::Utf8PathBuf,

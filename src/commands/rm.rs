@@ -67,11 +67,11 @@ async fn cr_rm(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> {
     // create workspace entry
     let mut workspace = config.get_workspace_map().await?;
     let deleted_file_path = &config.cr_deleted_file_path(cr);
-    if !workspace.contains_key(config.path_without_root(&deleted_file_path)?.as_str()) {
+    if !workspace.contains_key(config.path_without_root(deleted_file_path)?.as_str()) {
         workspace.insert(
-            config.path_without_root(&deleted_file_path)?,
+            config.path_without_root(deleted_file_path)?,
             fpm::workspace::WorkspaceEntry {
-                filename: config.path_without_root(&deleted_file_path)?,
+                filename: config.path_without_root(deleted_file_path)?,
                 deleted: None,
                 version: None,
                 cr: Some(cr),
