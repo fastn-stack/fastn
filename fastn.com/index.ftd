@@ -3,8 +3,8 @@
 
 FPM is a command line tool written in Rust that acts as both package manager for
 [FTD](https://ftd.dev/) programs as well as static site generator that converts
-`.ftd` files to `.html` files you can ship on [Github Pages](/how-to/get-started-github-pages/),
-[Vercel](/how-to/get-started-vercel/) etc.
+`.ftd` files to `.html` files you can ship on [Github Pages](/how-to/github-pages/),
+[Vercel](/how-to/vercel/) etc.
 
 `fpm` is a:
 

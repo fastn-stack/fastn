@@ -1,0 +1,18 @@
+-- import: fpm.dev/assets
+
+-- ft.page: FPM Online Editor
+
+FPM has a built in, online editor. If you are using [fpm server](/server/), you
+can edit your website directly from your site, without needing to download.
+
+-- ft.image: Screenshot of the editor
+src: $assets.files.static.editor-dark.png
+width: fill
+
+The editor is fully integrated with the [fpm version control system](/vcs/), and
+acts as an integrated development environment for ftd projects.
+
+Fun fact: fpm editor is itself [built using
+`ftd`](https://github.com/FifthTry/fpm/blob/main/ftd/editor.ftd).
+
+Learn more about the editor in the [editor manual](/editor/manual/).

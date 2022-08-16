@@ -39,14 +39,14 @@ more-link: /featured/components-library/
 -- grid-view: Color Schemes
 if: $show-grid
 templates: $schemes
-more-link: /featured/color-cs/
+more-link: /featured/cs/
 
 
 -- grid-view: Fonts
 if: $show-grid
 templates: $font
 more-link-text: How to use fonts
-more-link: /featured/how-to-use-fonts/
+more-link: /featured/fonts/
 
 
 

@@ -14,11 +14,15 @@ format as well (as a replacement of JSON/CSV etc).
 files. `fpm` packages can depend on other `fpm` packages, and `fpm` can install
 all the dependencies of a package.
 
+[Learn more](/package-manager/).
+
 -- ft.h1: FPM: Static Site Generator
 
 `fpm` can also convert `ftd` files to static HTML files, so you can use it as
 a static site generator, and publish FTD files on github pages, S3 etc static
 site hosting sites.
+
+[Learn more about FPM as static site generator](/static/).
 
 -- ft.h1: FPM for Remixing/Curating Documentation
 
@@ -29,20 +33,7 @@ present in other packages.
 Learn mode about [remixing packages here](/remixing/).
 
 
-
 -- ft.h1: FPM for Distributing Static Assets
 
 FPM can be used for distributing images, and fonts as packages.
 
-
--- ft.h1: `fpm-repo`: Server Side FPM
-
-`fpm` has a sister project, `fpm-repo` (under development), which can be used
-for package hosting. You can chose if your `fpm` package is hosted on say
-Github or via a `fpm-repo` (your own instance or available as SAAS).
-
-`ftd` has some dynamic features, which an be used when using `fpm-repo`.
-
-`fpm-repo` also plans to offer web based editing experience, with built in
-version control, change request based workflow (equivalent to Github Pull
-Request workflow).

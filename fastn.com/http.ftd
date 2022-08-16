@@ -1,7 +1,17 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
 -- ft.page: `$processor$: http`
 
 This processor is used to initialise some FTD variable with content of JSON fetched
 from HTTP.
+
+-- cbox.warning: Static Vs Dynamic
+
+The http request is made on build time if you are using fpm in [static site
+mode](/static/), and instead if you are using [server mode](/server/) then this
+processor makes http request on every page load.
+
+-- ft.markdown:
 
 Consider this data type:
 

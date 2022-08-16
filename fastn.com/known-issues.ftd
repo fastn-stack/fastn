@@ -3,6 +3,10 @@
 
 -- ft.page: Known Issues
 
+You can find the list of [open issues on
+Github](https://github.com/FifthTry/fpm/issues/).
+
+Here are some other issues that can cause problems with their solutions.
 
 -- ft.h1: Translation Can Not Be Added Unless Original Package Has Been Published
 
@@ -14,7 +18,6 @@ will try to download the translation package, original needs them so original ca
 publish translation-status page).
 
 We know you love it, you are like:
-
 
 -- ft.image:
 src: $assets.files.static.images.fJZOxoN.jpg

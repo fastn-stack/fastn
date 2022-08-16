@@ -12,16 +12,15 @@ lang: ftd
 
 \-- import: fpm
 
-\-- fpm.package: foo.com
+\-- fpm.package: fpm.dev
 zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
+base: https://raw.githubusercontent.com/fifthtry/fpm.dev/main
 
 -- ft.markdown:
 
-We have created a package named `foo.com`. Packages in FPM are named after the
+We have created a package named `fpm.dev`. Packages in FPM are named after the
 domain where they would be published. {ft.highlight: Every FPM package is a
 website.}
-
-Learn more about using FPM as a [package manager](/package-manager/).
 
 
 

@@ -1,0 +1,24 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ft.page: `fpm`: Static Site Generator
+
+`fpm` packages can be converted to static websites that can be hosted by any
+static hosting service like Github, Vercel etc.
+
+-- cbox.warning warning: You Lose Many Dynamic Features In Static Modes
+
+FPM comes with a lot of dynamic features, which are only available when you are
+using [fpm server](/server/) for hosting.
+
+The main feature you will miss when using fpm as static site generator is
+authentication, you can not create private fpm sites, or fpm sites with mixed
+mode, some pages public and some accessible to only few people.
+
+-- warning:
+
+-- ft.h1: Guides
+
+We have written some guides:
+
+- [Publishing Static Site On github pages](/how-to/github-pages/)
+- [Publishing Static Site On Vercel](/how-to/vercel/)

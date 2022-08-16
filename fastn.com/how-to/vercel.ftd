@@ -1,12 +1,13 @@
 -- import: fpm.dev/assets
+-- import: fpm.dev/static
 
--- ft.page: Getting started with Vercel
-
--- ft.markdown: 
+-- ft.page: Publishing Static Site On Vercel
 
 Vercel is an incredibly easy to use tool which helps you build and ship your
 websites with an easy to use interface. You can get started with a fresh
 repository (step 1) or you can deploy your existing repository (step 2).
+
+-- static.warning:
 
 -- ft.h1: Step 1. Choosing the source of your deployment
 

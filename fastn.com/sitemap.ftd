@@ -1,10 +1,10 @@
 -- import: fpm.dev/assets
 
--- ft.page: FPM Sitemap
+-- ft.page: Sitemap
 
-"FPM Sitemap" is the name of a structure we recommend for sites. It is
-optional, you can create any [sitemap](glossary/#sitemap) you want for your sites.
-FPM has built in support for FPM Sitemap.
+"FPM Sitemap" is the structure we recommend for sites. This recommendation is
+optional, you can  create any [sitemap](glossary/#sitemap) you want for your
+site.
 
 -- ft.h1: The Structure
 
@@ -15,22 +15,19 @@ listed in the header of the site.
 src: $assets.files.static.images.sitemap.png
 width: fill
 
-Each section should have one or more sub-sections. Sub-section should be listed
+Each section may have one or more sub-sections. Sub-section should be listed
 as second level navigation in the header of the site. Each sub-section has one
 or more documents organised in a "table of content", and TOC should be shown
 on the left.
 
-In the UI we also have "Section/Sub Section" Nav. It automatically will show the
-section name and sub-section name.
+-- ft.h1: How To Configure Sitemap For Your Site
 
--- ft.h1: Sitemap "Language"
+`FPM.ftd` contains the sitemap of your site.
 
-FPM comes with a variable called "sitemap", which contains the sitemap structure
-and later this structure get parses. The sitemap should be included in FPM.ftd
-file.
+-- ft.code: Sitemap Example (in `FPM.ftd`)
+lang: ftd
 
--- ft.code: Sitemap Example
-lang: txt
+\-- fpm.sitemap:
 
 # Section: /section/url/
 nav-title: Optional Longer Section

@@ -1,0 +1,15 @@
+-- ft.page: FPM Editor Keyboard Shortcuts
+
+FPM Editor comes with keyboard shortcuts to help users more efficiently perform
+editing tasks.
+
+-- ft.h1: Launching Editor: `.`
+
+While you are browsing a FPM package hosted on [fpm server](/server/), you can
+press the `.` to launch the FPM Editor. Editor will be launched with current
+file selected.
+
+-- ft.h1: Existing Editor: `.` and `Ctrl-.`
+
+You can press `.` or `Ctrl-.` to exit the editor if the editor is currently
+open. If the focus is in text entry box, only `Ctrl-.` works.

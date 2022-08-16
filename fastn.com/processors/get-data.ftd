@@ -15,8 +15,6 @@ Assuming `foo: "hello"` is part of "data", the variable `foo` will be get
 "hello" as the value.
 
 
-
-
 -- ft.h1: Key
 
 By default, the name of the variable or list where the data is being store is

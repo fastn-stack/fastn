@@ -9,39 +9,52 @@ Following below practices will help you reduce, build errors and aviod code mess
 `.ftd` files.
 
 
+-- ft.h1: Judiciously Use `caption`
+
+When creating a new component, see if you can use `caption` as the type of one
+of the arguments.
+
+- caption must be a summary like field, eg the heading of a section is a good
+  caption.
+- caption should generally be human readable text, instead of say integers, or
+  boolean.
+- If a component takes only one parameter, other types can also be passed as
+  caption as passing caption means the caller of such component will only have
+  to write one line of text.
+
+
+-- ft.h1: Judiciously Use `body`
+
+When creating a component see if one of the parameters can be of type `body`.
+
+`body` should be used for free form texts, possibly spanning multiple
+paragraphs.
+
+
+
 -- ft.h1: Space after `colon :`
 
 Always keep space after `:` in each declaration. e.g. `-- ftd.text: `
 
+
+
+
 -- ft.h1: 10 lines space between 2 components 
 
- Always keep 10 lines space between two `ftd` components.
+Always keep 10 lines space between two `ftd` components.
 
--- ft.h1: Never repeat attributes
 
-Never repeat attributes in one component declaration. e.g. below:
 
---- code-block: Bad Practice
 
-\-- ftd.text: Some title here
-role: $fpm.type.fine-print
-spacing: 4 <--
-color: $fpm.color.main.text
-spacing: 10 <--
 
---- code-block: Good Practice
-
-\-- ftd.text: Some title here
-role: $fpm.type.fine-print
-color: $fpm.color.main.text
-spacing: 10
 
 
 -- ft.h1: `ftd` variables first
 
 Always declare `ftd` variables first while creating new component. e.g. below
 
--- code-block: 
+-- ft.code:
+lang: ftd
 
 \-- ftd.column my-ftd-component:
 boolean show-bar: false
@@ -53,18 +66,3 @@ background-color: $fpm.color.main.background.base
 
 
 
-
-
-
-
-
-
--- ftd.column code-block:
-optional caption title:
-body body:
-width: fill
-
---- ft.code: $title
-lang: ftd
-
-$body
