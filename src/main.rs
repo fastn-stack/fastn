@@ -389,6 +389,12 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
                         .required(false)
                         .help("Specify the bind address to serve on")
                 )
+                .arg(clap::Arg::with_name("identities")
+                    .long("--identities")
+                    .takes_value(true)
+                    .required(false)
+                    .help("Http request identities, fpm allows these identities to access documents")
+                )
                 .about("Create an http server and serves static files")
                 .version(env!("CARGO_PKG_VERSION")),
         )

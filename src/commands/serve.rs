@@ -1,3 +1,8 @@
+lazy_static! {
+    static ref CLI_IDENTITIES: std::sync::RwLock<Vec<fpm::user_group::UserIdentity>> =
+        std::sync::RwLock::new(vec![]);
+}
+
 async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_web::HttpResponse {
     let path = match path.to_str() {
         Some(s) => s,
@@ -14,6 +19,17 @@ async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_
             return actix_web::HttpResponse::InternalServerError().body(e.to_string());
         }
     };
+
+    if let Some(sitemap) = &config.package.sitemap {
+        let full_document_id = config.doc_id().unwrap_or_else(|| path.to_string());
+        let document_id = format!("/{}/", full_document_id.trim_matches('/'));
+        dbg!(&document_id);
+        let r = sitemap.readers(document_id.as_str(), &config.package.groups);
+        dbg!(&r);
+        let t = fpm::user_group::belongs_to(config, r.as_slice(), &CLI_IDENTITIES.read().unwrap())
+            .unwrap();
+        dbg!(t);
+    }
 
     config.current_document = Some(f.get_id());
     return match f {
@@ -75,6 +91,7 @@ async fn static_file(
         }
     }
 }
+
 async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
     let mut config = fpm::Config::read(None, false).await.unwrap();
@@ -96,12 +113,31 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     response
 }
 
+fn read_cli_identities(identities: Option<String>) {
+    use itertools::Itertools;
+
+    let mut cli_identities = CLI_IDENTITIES.write().unwrap();
+    if let Some(identities) = identities {
+        let identities = identities.split(',').collect_vec();
+        for identity in identities.iter() {
+            if let Some((k, v)) = identity.split_once(':') {
+                cli_identities.push(fpm::user_group::UserIdentity {
+                    key: k.trim().to_string(),
+                    value: v.trim().to_string(),
+                });
+            }
+        }
+    }
+    drop(cli_identities);
+}
+
 #[actix_web::main]
 pub async fn fpm_serve(
     bind_address: &str,
     port: Option<u16>,
-    _identities: Option<String>,
+    identities: Option<String>,
 ) -> std::io::Result<()> {
+    read_cli_identities(identities);
     if cfg!(feature = "controller") {
         // fpm-controller base path and ec2 instance id (hardcoded for now)
         let fpm_controller: String = std::env::var("FPM_CONTROLLER")

@@ -316,7 +316,7 @@ pub fn user_group_by_id(config: &fpm::Config, group_id: &str) -> fpm::Result<Opt
 /// this function will return `true`, else `false`.
 pub fn belongs_to(
     config: &fpm::Config,
-    groups: &[UserGroup],
+    groups: &[&UserGroup],
     identities: &[UserIdentity],
 ) -> fpm::Result<bool> {
     for group in groups.iter() {
