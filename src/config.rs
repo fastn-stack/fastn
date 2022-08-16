@@ -1005,6 +1005,61 @@ impl Config {
             (value - (number_of_crs_to_reserve as i32))..value,
         ))
     }
+
+    pub(crate) fn can_read(
+        &self,
+        req: &actix_web::HttpRequest,
+        document_path: &str,
+    ) -> fpm::Result<bool> {
+        use itertools::Itertools;
+
+        let access_identities = {
+            let req_identities = {
+                let identity_cookie = if let Some(identity) = req.cookie("identity") {
+                    identity.value().to_string()
+                } else {
+                    "".to_string()
+                };
+                parse_identities(identity_cookie.as_str())
+            };
+            if req_identities.is_empty() {
+                vec![] //TODO: cli identities from config
+            } else {
+                req_identities
+            }
+        };
+
+        let document_id = format!(
+            "/{}/",
+            self.doc_id().unwrap_or_else(|| document_path.to_string())
+        );
+
+        let readers = if let Some(sitemap) = &self.package.sitemap {
+            sitemap.readers(document_id.as_str(), &self.package.groups)
+        } else {
+            vec![]
+        };
+
+        fpm::user_group::belongs_to(
+            self,
+            readers.as_slice(),
+            access_identities.iter().collect_vec().as_slice(),
+        )
+    }
+}
+
+/// 'email: abrark.asahi@gmail.com: vec[UId{email: abrark.asahi@gmail.com}]
+fn parse_identities(identities: &str) -> Vec<fpm::user_group::UserIdentity> {
+    use itertools::Itertools;
+    let identities = identities.split(',').collect_vec();
+    identities
+        .into_iter()
+        .flat_map(|id| id.split_once(':'))
+        .map(|(k, v)| fpm::user_group::UserIdentity {
+            key: k.trim().to_string(),
+            value: v.trim().to_string(),
+        })
+        .collect_vec()
 }
 
 /// `find_root_for_file()` starts with the given path, which is the current directory where the

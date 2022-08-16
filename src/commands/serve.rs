@@ -1,3 +1,4 @@
+// Rename it to LOCAL_IDENTITIES, move it to config
 lazy_static! {
     static ref CLI_IDENTITIES: std::sync::RwLock<Vec<fpm::user_group::UserIdentity>> =
         std::sync::RwLock::new(vec![]);
@@ -23,18 +24,30 @@ async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_
     // Auth Stuff
     // If package does not have sitemap, considering all documents are public
     if let Some(sitemap) = &config.package.sitemap {
-        let full_document_id = config.doc_id().unwrap_or_else(|| path.to_string());
-        let document_id = format!("/{}/", full_document_id.trim_matches('/'));
-        let readers = sitemap.readers(document_id.as_str(), &config.package.groups);
-        let has_access = fpm::user_group::belongs_to(
-            config,
-            readers.as_slice(),
-            &CLI_IDENTITIES.read().unwrap(),
-        )
-        .unwrap();
-        if !has_access {
+        // TODO:
+        // Get identities from cookies if any
+        // Get identities from cli
+        // Get identities from remote(sid)
+        // If identities are coming from cli and cookie ignore cookies
+        // fpm ui, add dependency as auto add, 404 page will come from fpm ui
+        // let full_document_id = config.doc_id().unwrap_or_else(|| path.to_string());
+        // let document_id = format!("/{}/", full_document_id.trim_matches('/'));
+        // TODO: This can be buggy if groups are used in sitemap are foreign groups
+        // let readers = sitemap.readers(document_id.as_str(), &config.package.groups);
+        // let has_access = fpm::user_group::belongs_to(
+        //     config,
+        //     readers.as_slice(),
+        //     &CLI_IDENTITIES.read().unwrap(),
+        // )
+        // .unwrap();
+
+        // config.can_read(req, doc_id):  R<bool>
+        // config.can_write(req, doc_id): R<bool>
+        // Images for referer
+
+        if !true {
             return actix_web::HttpResponse::Unauthorized()
-                .body(format!("You are unauthorized to access: {}", document_id));
+                .body(format!("You are unauthorized to access: {}", ""));
         }
     }
 
@@ -135,7 +148,6 @@ fn read_cli_identities(identities: Option<String>) {
             }
         }
     }
-    drop(cli_identities);
 }
 
 #[actix_web::main]

@@ -148,7 +148,7 @@ impl UserGroup {
     pub fn belongs_to(
         &self,
         config: &fpm::Config,
-        identities: &[UserIdentity],
+        identities: &[&UserIdentity],
     ) -> fpm::Result<bool> {
         for group_identity in self.identities.iter() {
             for identity in identities.iter() {
@@ -317,7 +317,7 @@ pub fn user_group_by_id(config: &fpm::Config, group_id: &str) -> fpm::Result<Opt
 pub fn belongs_to(
     config: &fpm::Config,
     groups: &[&UserGroup],
-    identities: &[UserIdentity],
+    identities: &[&UserIdentity],
 ) -> fpm::Result<bool> {
     for group in groups.iter() {
         if group.belongs_to(config, identities)? {

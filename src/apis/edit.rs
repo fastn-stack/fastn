@@ -27,6 +27,7 @@ pub struct EditResponse {
 pub async fn edit(
     req: actix_web::web::Json<EditRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
+    // Get writer and check permission
     match edit_worker(req.0).await {
         Ok(data) => fpm::apis::success(data),
         Err(err) => fpm::apis::error(
