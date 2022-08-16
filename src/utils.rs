@@ -493,7 +493,12 @@ pub(crate) async fn update(root: impl AsRef<std::path::Path>, data: &[u8]) -> fp
             root.as_ref()
                 .file_name()
                 .and_then(std::ffi::OsStr::to_str)
-                .unwrap_or(""),
+                .ok_or_else(|| fpm::Error::UsageError {
+                    message: format!(
+                        "Invalid File Path: Can't find file name `{:?}`",
+                        root.as_ref()
+                    ),
+                })?,
         )
     } else {
         return Err(fpm::Error::UsageError {
