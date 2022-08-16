@@ -50,23 +50,44 @@ async fn simple_sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::R
                 .collect();
         }
         changed_files
-            .into_iter()
-            .filter_map(|v| v.sync_request())
-            .collect_vec()
     };
+    let changed_files = changed_files
+        .into_iter()
+        .filter_map(|v| v.sync_request())
+        .collect_vec();
+
+    sync_(config, changed_files, &mut workspace).await?;
+    config
+        .update_workspace(workspace.into_values().collect_vec())
+        .await
+}
+
+pub(crate) async fn sync(
+    config: &fpm::Config,
+    request_files: Vec<fpm::apis::sync2::SyncRequestFile>,
+) -> fpm::Result<()> {
+    let mut workspace = config.get_workspace_map().await?;
+    sync_(config, request_files, &mut workspace).await?;
+    config
+        .update_workspace(workspace.into_values().collect_vec())
+        .await
+}
+
+pub(crate) async fn sync_(
+    config: &fpm::Config,
+    request_files: Vec<fpm::apis::sync2::SyncRequestFile>,
+    workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
+) -> fpm::Result<()> {
     let history = tokio::fs::read_to_string(config.history_file()).await?;
     let sync_request = fpm::apis::sync2::SyncRequest {
         package_name: config.package.name.to_string(),
-        files: changed_files,
+        files: request_files,
         history,
     };
     let response = send_to_fpm_serve(&sync_request).await?;
     update_current_directory(config, &response).await?;
     update_history(config, &response.dot_history, &response.latest_ftd).await?;
-    update_workspace(&response, &mut workspace).await?;
-    config
-        .update_workspace(workspace.into_values().collect_vec())
-        .await?;
+    update_workspace(&response, workspace).await?;
     Ok(())
 }
 

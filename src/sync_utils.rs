@@ -53,7 +53,7 @@ pub enum FileStatus {
 }
 
 impl FileStatus {
-    fn is_conflicted(&self) -> bool {
+    pub(crate) fn is_conflicted(&self) -> bool {
         let status = match self {
             FileStatus::Add { status, .. }
             | FileStatus::Update { status, .. }
@@ -61,6 +61,15 @@ impl FileStatus {
             FileStatus::Uptodate { .. } => return false,
         };
         status.is_conflicted()
+    }
+
+    pub(crate) fn get_content(&self) -> Option<Vec<u8>> {
+        match self {
+            FileStatus::Add { content, .. } | FileStatus::Update { content, .. } => {
+                Some(content.clone())
+            }
+            FileStatus::Delete { .. } | FileStatus::Uptodate { .. } => None,
+        }
     }
 
     pub(crate) fn get_latest_version(&self) -> Option<i32> {
@@ -132,27 +141,32 @@ impl fpm::Config {
         Ok(changed_files)
     }
 
-    /*pub(crate) async fn get_files_status_with_cr_workspace(
-        &self,
-        cr_workspace: &mut fpm::workspace::CRWorkspace,
-    ) -> fpm::Result<Vec<FileStatus>> {
-        self.update_workspace_using_cr_track(cr_workspace).await?;
-        let mut changed_files = self
-            .get_files_status_wrt_workspace(&mut cr_workspace.workspace)
-            .await?;
-        self.get_files_status_wrt_remote_manifest(&mut changed_files, workspace)
-            .await?;
-        Ok(changed_files)
-    }*/
+    pub(crate) async fn get_cr_status(&self, cr_number: usize) -> fpm::Result<Vec<FileStatus>> {
+        let file_statuses = self.get_files_status().await?;
+        let cr_path_prefix = fpm::cr::cr_path(cr_number);
+        Ok(file_statuses
+            .into_iter()
+            .filter(|v| {
+                v.get_file_path().starts_with(cr_path_prefix.as_str())
+                    || v.get_file_path()
+                        .starts_with(format!(".tracks/{}", cr_path_prefix).as_str())
+            })
+            .collect_vec())
+    }
 
     pub(crate) async fn get_files_status_with_workspace(
         &self,
         workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
     ) -> fpm::Result<Vec<FileStatus>> {
-        let mut changed_files = self.get_files_status_wrt_workspace(workspace).await?;
+        let mut changed_files: std::collections::BTreeMap<String, FileStatus> = self
+            .get_files_status_wrt_workspace(workspace)
+            .await?
+            .into_iter()
+            .map(|v| (v.get_file_path(), v))
+            .collect();
         self.get_files_status_wrt_remote_manifest(&mut changed_files, workspace)
             .await?;
-        Ok(changed_files)
+        Ok(changed_files.into_values().collect_vec())
     }
 
     /*async fn update_workspace_using_cr_track(
@@ -226,9 +240,9 @@ impl fpm::Config {
         Ok(changed_files)
     }
 
-    async fn get_files_status_wrt_remote_manifest(
+    pub(crate) async fn get_files_status_wrt_remote_manifest(
         &self,
-        files: &mut Vec<FileStatus>,
+        files: &mut std::collections::BTreeMap<String, FileStatus>,
         workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
     ) -> fpm::Result<()> {
         let remote_manifest = self.get_remote_manifest(true).await?;
@@ -239,12 +253,12 @@ impl fpm::Config {
 
     async fn get_files_status_wrt_manifest(
         &self,
-        files: &mut Vec<FileStatus>,
+        files: &mut std::collections::BTreeMap<String, FileStatus>,
         workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
         manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
     ) -> fpm::Result<()> {
         let mut remove_files = vec![];
-        for (index, file) in files.iter_mut().enumerate() {
+        for (filename, file) in files.iter_mut() {
             match file {
                 FileStatus::Uptodate { .. } => {
                     continue;
@@ -274,7 +288,7 @@ impl fpm::Config {
                                 cr: None,
                             },
                         );
-                        remove_files.push(index);
+                        remove_files.push(filename.clone());
                     } else {
                         *status = Status::CloneAddedRemoteAdded(server_version);
                     }
@@ -323,7 +337,7 @@ impl fpm::Config {
                         .merge(&ancestor_content, &ours_content, &theirs_content)
                     {
                         Ok(data) => {
-                            tokio::fs::write(path, &data).await?;
+                            fpm::utils::update(self.root.join(filename), data.as_bytes()).await?;
                             *content = data.as_bytes().to_vec();
                             *version = server_file_edit.version;
                         }
@@ -341,12 +355,12 @@ impl fpm::Config {
                     let server_file_edit = if let Some(server_file_edit) = manifest.get(path) {
                         server_file_edit
                     } else {
-                        remove_files.push(index);
+                        remove_files.push(filename.clone());
                         workspace.remove(path);
                         continue;
                     };
                     if server_file_edit.is_deleted() {
-                        remove_files.push(index);
+                        remove_files.push(filename.clone());
                         workspace.remove(path);
                         continue;
                     }
@@ -359,15 +373,14 @@ impl fpm::Config {
         }
         *files = files
             .iter_mut()
-            .enumerate()
             .filter_map(|(k, v)| {
                 if !remove_files.contains(&k) {
-                    Some(v.to_owned())
+                    Some((k.to_owned(), v.to_owned()))
                 } else {
                     None
                 }
             })
-            .collect_vec();
+            .collect();
         Ok(())
     }
 }

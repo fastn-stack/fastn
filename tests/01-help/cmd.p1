@@ -29,6 +29,7 @@ SUBCOMMANDS:
     help                  Prints this message or the help of the given subcommand(s)
     mark-resolve          Marks the conflicted file as resolved
     mark-upto-date        Marks file as up to date.
+    merge                 Merge two manifests together
     resolve-conflict      Show un-synced changes to files in this fpm package
     revert                Reverts the local changes
     rm                    Removes a file in workspace

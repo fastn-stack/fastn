@@ -64,6 +64,17 @@ async fn main() -> fpm::Result<()> {
         return Ok(());
     }
 
+    if let Some(merge) = matches.subcommand_matches("merge") {
+        fpm::merge(
+            &config,
+            merge.value_of("src"),
+            merge.value_of("dest").unwrap(),
+            merge.value_of("file"),
+        )
+        .await?;
+        return Ok(());
+    }
+
     if let Some(build) = matches.subcommand_matches("build") {
         if build.is_present("verbose") {
             println!("{}", fpm::debug_env_vars());
@@ -261,6 +272,16 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 .args(&[
                     clap::Arg::with_name("file").required(true),
                     clap::Arg::with_name("cr").long("--cr").takes_value(true),
+                ])
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("merge")
+                .about("Merge two manifests together")
+                .args(&[
+                    clap::Arg::with_name("src").long("--src").takes_value(true),
+                    clap::Arg::with_name("dest").long("--dest").takes_value(true).required(true),
+                    clap::Arg::with_name("file"),
                 ])
                 .version(env!("CARGO_PKG_VERSION")),
         )

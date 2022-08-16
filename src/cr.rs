@@ -112,6 +112,14 @@ impl CRDeleted {
             version,
         }
     }
+
+    pub(crate) fn into_file_status(self) -> fpm::sync_utils::FileStatus {
+        fpm::sync_utils::FileStatus::Delete {
+            path: self.filename,
+            version: self.version,
+            status: fpm::sync_utils::Status::NoConflict,
+        }
+    }
 }
 
 pub(crate) async fn get_deleted_files(
@@ -178,19 +186,6 @@ pub(crate) fn generate_deleted_files_content(cr_deleted_files: &[CRDeleted]) -> 
 }
 
 impl fpm::Config {
-    pub(crate) fn cr_path_to_file_name(
-        &self,
-        cr_number: usize,
-        cr_file_path: &str,
-    ) -> fpm::Result<String> {
-        let cr_path = self.cr_path(cr_number);
-        let cr_path_without_root = cr_path.strip_prefix(&self.root)?;
-        Ok(cr_file_path
-            .replace(cr_path_without_root.to_string().as_str(), "")
-            .trim_matches('/')
-            .to_string())
-    }
-
     #[allow(dead_code)]
     pub(crate) async fn get_cr_tracking_info(
         &self,
@@ -207,7 +202,7 @@ impl fpm::Config {
 
         for cr_track_path in cr_track_paths {
             let tracked_file = cr_track_path.strip_prefix(self.track_dir())?;
-            let tracked_file_str = self.cr_path_to_file_name(cr_number, tracked_file.as_str())?;
+            let tracked_file_str = fpm::cr::cr_path_to_file_name(cr_number, tracked_file.as_str())?;
             let cr_tracking_infos = fpm::track::get_tracking_info_(&cr_track_path).await?;
             if let Some(tracking_info) = cr_tracking_infos
                 .into_iter()
@@ -222,4 +217,12 @@ impl fpm::Config {
 
 pub(crate) fn cr_path(cr_number: usize) -> String {
     format!("-/{}", cr_number)
+}
+
+pub(crate) fn cr_path_to_file_name(cr_number: usize, cr_file_path: &str) -> fpm::Result<String> {
+    let cr_path = cr_path(cr_number);
+    Ok(cr_file_path
+        .trim_matches('/')
+        .trim_start_matches(cr_path.to_string().as_str())
+        .to_string())
 }
