@@ -1012,43 +1012,36 @@ impl Config {
         document_path: &str,
     ) -> fpm::Result<bool> {
         use itertools::Itertools;
-
         let access_identities = {
-            let req_identities = {
-                let identity_cookie = if let Some(identity) = req.cookie("identity") {
-                    identity.value().to_string()
-                } else {
-                    "".to_string()
-                };
-                parse_identities(identity_cookie.as_str())
-            };
-            if req_identities.is_empty() {
-                vec![] //TODO: cli identities from config
+            if let Some(identity) = req.cookie("identities") {
+                dbg!(&identity.value());
+                parse_identities(identity.value())
             } else {
-                req_identities
+                vec![]
             }
         };
 
         let document_id = format!(
             "/{}/",
-            self.doc_id().unwrap_or_else(|| document_path.to_string())
+            self.doc_id()
+                .unwrap_or_else(|| document_path.to_string())
+                .trim_matches('/')
         );
 
-        let readers = if let Some(sitemap) = &self.package.sitemap {
-            sitemap.readers(document_id.as_str(), &self.package.groups)
-        } else {
-            vec![]
-        };
-
-        fpm::user_group::belongs_to(
-            self,
-            readers.as_slice(),
-            access_identities.iter().collect_vec().as_slice(),
-        )
+        if let Some(sitemap) = &self.package.sitemap {
+            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
+            let path_readers = sitemap.readers(document_id.as_str(), &self.package.groups);
+            return fpm::user_group::belongs_to(
+                self,
+                path_readers.as_slice(),
+                access_identities.iter().collect_vec().as_slice(),
+            );
+        }
+        Ok(true)
     }
 }
 
-/// 'email: abrark.asahi@gmail.com: vec[UId{email: abrark.asahi@gmail.com}]
+/// 'email: abrark.asahi@gmail.com => vec[UId{email: abrark.asahi@gmail.com}]
 fn parse_identities(identities: &str) -> Vec<fpm::user_group::UserIdentity> {
     use itertools::Itertools;
     let identities = identities.split(',').collect_vec();

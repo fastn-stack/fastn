@@ -1300,6 +1300,9 @@ impl Sitemap {
     }
 
     /// This function will return all the readers and readers which are inherited from parent
+
+    // TODO: need to handle special reader: everyone, writer: everyone
+    // readers function should return Vec<UserGroup> or Everyone
     pub fn readers<'a>(
         &self,
         doc_path: &str,

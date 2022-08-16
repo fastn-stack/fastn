@@ -4,7 +4,11 @@ lazy_static! {
         std::sync::RwLock::new(vec![]);
 }
 
-async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_web::HttpResponse {
+async fn serve_files(
+    req: &actix_web::HttpRequest,
+    config: &mut fpm::Config,
+    path: &std::path::Path,
+) -> actix_web::HttpResponse {
     let path = match path.to_str() {
         Some(s) => s,
         None => {
@@ -22,34 +26,31 @@ async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_
     };
 
     // Auth Stuff
-    // If package does not have sitemap, considering all documents are public
-    if let Some(sitemap) = &config.package.sitemap {
-        // TODO:
-        // Get identities from cookies if any
-        // Get identities from cli
-        // Get identities from remote(sid)
-        // If identities are coming from cli and cookie ignore cookies
-        // fpm ui, add dependency as auto add, 404 page will come from fpm ui
-        // let full_document_id = config.doc_id().unwrap_or_else(|| path.to_string());
-        // let document_id = format!("/{}/", full_document_id.trim_matches('/'));
-        // TODO: This can be buggy if groups are used in sitemap are foreign groups
-        // let readers = sitemap.readers(document_id.as_str(), &config.package.groups);
-        // let has_access = fpm::user_group::belongs_to(
-        //     config,
-        //     readers.as_slice(),
-        //     &CLI_IDENTITIES.read().unwrap(),
-        // )
-        // .unwrap();
+    // Note: If package does not have sitemap, considering all documents are public.
 
-        // config.can_read(req, doc_id):  R<bool>
-        // config.can_write(req, doc_id): R<bool>
-        // Images for referer
+    // Note: If package have sitemap but does not have any user groups defined,
+    // all document should be public, by default behaviour
 
-        if !true {
-            return actix_web::HttpResponse::Unauthorized()
-                .body(format!("You are unauthorized to access: {}", ""));
+    // If `f` is static file, considering it public as well, for now.
+
+    if !f.is_static() {
+        match config.can_read(req, path) {
+            Ok(can_read) => {
+                if !can_read {
+                    return actix_web::HttpResponse::Unauthorized()
+                        .body(format!("You are unauthorized to access: {}", path));
+                }
+            }
+            Err(e) => {
+                eprintln!("FPM-Error: can_read error: {}, {:?}", path, e);
+                return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+            }
         }
     }
+
+    // Get identities from remote(sid)
+    // fpm ui, add dependency as auto add, 404 page will come from fpm ui
+    // TODO: for image check referer permission
 
     config.current_document = Some(f.get_id());
     return match f {
@@ -125,9 +126,9 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     } else if path.eq(&std::path::PathBuf::new().join("FPM.ftd")) {
         serve_fpm_file(&config).await
     } else if path.eq(&std::path::PathBuf::new().join("")) {
-        serve_files(&mut config, &path.join("/")).await
+        serve_files(&req, &mut config, &path.join("/")).await
     } else {
-        serve_files(&mut config, &path).await
+        serve_files(&req, &mut config, &path).await
     };
     println!("response time: {:?} for path: {:?}", time.elapsed(), path);
     response

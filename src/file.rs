@@ -55,6 +55,13 @@ impl File {
             Self::Image(ref a) => a.content.clone(),
         }
     }
+
+    pub fn is_static(&self) -> bool {
+        match self {
+            Self::Image(_) | Self::Static(_) | Self::Markdown(_) | Self::Code(_) => true,
+            _ => false,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
