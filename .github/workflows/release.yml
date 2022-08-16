@@ -50,7 +50,7 @@ jobs:
         uses: gmiam/rust-musl-action@9e6a37bf27ecfffb6b92240ea276bea5487fa15d
         continue-on-error: false
         with:
-          args: cargo install cargo-deb && cargo deb --output=target/debian/fpm.deb
+          args: cargo install --version 1.38.2 cargo-deb && cargo deb --output=target/debian/fpm.deb
       - uses: actions/upload-artifact@v2
         with:
           name: fpm_debian
