@@ -476,19 +476,31 @@ pub(crate) async fn update1(
     )
 }
 
-pub(crate) async fn copy(from: &camino::Utf8PathBuf, to: &camino::Utf8PathBuf) -> fpm::Result<()> {
+pub(crate) async fn copy(
+    from: impl AsRef<std::path::Path>,
+    to: impl AsRef<std::path::Path>,
+) -> fpm::Result<()> {
     let content = tokio::fs::read(from).await?;
     fpm::utils::update(to, content.as_slice()).await
 }
 
-pub(crate) async fn update(root: &camino::Utf8PathBuf, data: &[u8]) -> fpm::Result<()> {
+pub(crate) async fn update(root: impl AsRef<std::path::Path>, data: &[u8]) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
 
-    let (file_root, file_name) = if let Some(file_root) = root.parent() {
-        (file_root, root.file_name().unwrap_or(""))
+    let (file_root, file_name) = if let Some(file_root) = root.as_ref().parent() {
+        (
+            file_root,
+            root.as_ref()
+                .file_name()
+                .and_then(std::ffi::OsStr::to_str)
+                .unwrap_or(""),
+        )
     } else {
         return Err(fpm::Error::UsageError {
-            message: format!("Invalid File Path: file path doesn't have parent: {}", root),
+            message: format!(
+                "Invalid File Path: file path doesn't have parent: {:?}",
+                root.as_ref()
+            ),
         });
     };
 
