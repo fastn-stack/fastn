@@ -1286,7 +1286,7 @@ window.ftd.post_init = function () {
     }
 
     function update_dark_mode() {
-        let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
+        let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
 
         switch (current_dark_mode_cookie) {
             case COOKIE_SYSTEM_LIGHT:
