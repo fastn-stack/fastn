@@ -20,15 +20,22 @@ async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_
         }
     };
 
+    // Auth Stuff
+    // If package does not have sitemap, considering all documents are public
     if let Some(sitemap) = &config.package.sitemap {
         let full_document_id = config.doc_id().unwrap_or_else(|| path.to_string());
         let document_id = format!("/{}/", full_document_id.trim_matches('/'));
-        dbg!(&document_id);
-        let r = sitemap.readers(document_id.as_str(), &config.package.groups);
-        dbg!(&r);
-        let t = fpm::user_group::belongs_to(config, r.as_slice(), &CLI_IDENTITIES.read().unwrap())
-            .unwrap();
-        dbg!(t);
+        let readers = sitemap.readers(document_id.as_str(), &config.package.groups);
+        let has_access = fpm::user_group::belongs_to(
+            config,
+            readers.as_slice(),
+            &CLI_IDENTITIES.read().unwrap(),
+        )
+        .unwrap();
+        if !has_access {
+            return actix_web::HttpResponse::Unauthorized()
+                .body(format!("You are unauthorized to access: {}", document_id));
+        }
     }
 
     config.current_document = Some(f.get_id());
