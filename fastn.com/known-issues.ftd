@@ -8,6 +8,23 @@ Github](https://github.com/FifthTry/fpm/issues/).
 
 Here are some other issues that can cause problems with their solutions.
 
+-- ft.h1: Speed in server mode
+
+When using `fpm` in [server mode](/server/), currently it takes about a second
+or so to generate the page. This is much slower than what we intend.
+
+This is a regression, when adding dark mode support, we ended up adding a really
+large record in our dependency tree, which need not be included.
+
+-- ft.h1: HTML Is Too Large
+
+Our current HTML size is too big, this page is about 1.5MB, out of which 1.3MB
+is size of just the HTML. Part of the reason is because of the extra large record
+which we are going to optimize away. Other reason is we currently use inline
+style instead of re-using style using classes.
+
+We are working on optimising the html size.
+
 -- ft.h1: Translation Can Not Be Added Unless Original Package Has Been Published
 
 If you want to start a new project and create its translations right away, you
