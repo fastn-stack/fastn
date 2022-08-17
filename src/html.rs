@@ -1022,55 +1022,47 @@ impl ftd::Code {
 
 impl ftd::Image {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let mut n = Node::from_common("img", &self.common, doc_id, collector);
-        if self.common.link.is_some() {
-            n.node = s("a");
-            let mut img = Node {
-                condition: None,
-                events: vec![],
-                classes: vec![],
-                node: s("img"),
-                attrs: Default::default(),
-                style: Default::default(),
-                children: vec![],
-                external_children: vec![],
-                open_id: None,
-                external_children_container: vec![],
-                children_style: Default::default(),
-                text: None,
-                null: false,
-            };
-            if let Some(ref id) = self.common.data_id {
-                img.attrs.insert(s("data-id"), escape(id));
-                n.attrs
-                    .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
+        return match self.common.link {
+            Some(_) => {
+                let mut n = Node::from_common("a", &self.common, doc_id, collector);
+                if let Some(ref id) = self.common.data_id {
+                    n.attrs
+                        .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
+                }
+                n.children.push(
+                    update_img(self, Node {
+                        node: s("img"),
+                        ..Default::default()
+                    })
+                );
+                n
             }
-            img.style.insert(s("width"), s("100%"));
-            img.style.insert(s("height"), s("100%"));
-            img.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            if let Some(ref description) = self.description {
-                img.attrs.insert(s("alt"), escape(description));
+            None => {
+                update_img(self, Node::from_common("src", &self.common, doc_id, collector))
             }
-            if self.crop {
-                img.style.insert(s("object-fit"), s("cover"));
-                img.style.insert(s("object-position"), s("0 0"));
+        };
+
+        fn update_img(img: &ftd::Image, mut n: ftd::Node) -> ftd::Node {
+            if let Some(ref id) = img.common.data_id {
+                n.attrs.insert(s("data-id"), escape(id));
             }
-            n.children.push(img);
-        } else {
-            n.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            if let Some(ref description) = self.description {
+            n.style.insert(s("width"), s("100%"));
+            n.style.insert(s("height"), s("100%"));
+            n.attrs.insert(s("src"), escape(img.src.light.as_str()));
+            if let Some(ref description) = img.description {
                 n.attrs.insert(s("alt"), escape(description));
             }
-            if self.crop {
+
+            if img.crop {
                 n.style.insert(s("object-fit"), s("cover"));
                 n.style.insert(s("object-position"), s("0 0"));
-                if self.common.width.is_none() {
+                if img.common.width.is_none() {
                     n.style.insert(s("width"), s("100%"));
                 }
             }
-        }
 
-        n
+            n
+        }
     }
 }
 
