@@ -98,6 +98,19 @@ impl Config {
         self.remote_history_dir().join(id_with_timestamp_extension)
     }
 
+    pub(crate) fn document_name_with_default(&self, document_path: &str) -> String {
+        let name = self
+            .doc_id()
+            .unwrap_or_else(|| document_path.to_string())
+            .trim_matches('/')
+            .to_string();
+        if name.is_empty() {
+            "/".to_string()
+        } else {
+            format!("/{}/", name)
+        }
+    }
+
     /// history of a fpm package is stored in `.history` folder.
     ///
     /// Current design is wrong, we should move this helper to `fpm::Package` maybe.
@@ -1020,21 +1033,10 @@ impl Config {
             }
         };
 
-        let id = self
-            .doc_id()
-            .unwrap_or_else(|| document_path.to_string())
-            .trim_matches('/')
-            .to_string();
-
-        let document_id = if id.is_empty() {
-            "/".to_string()
-        } else {
-            format!("/{}/", id)
-        };
-
+        let document_name = self.document_name_with_default(document_path);
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
-            let document_readers = sitemap.readers(document_id.as_str(), &self.package.groups);
+            let document_readers = sitemap.readers(document_name.as_str(), &self.package.groups);
             return fpm::user_group::belongs_to(
                 self,
                 document_readers.as_slice(),
@@ -1050,9 +1052,6 @@ impl Config {
         document_path: &str,
     ) -> fpm::Result<bool> {
         use itertools::Itertools;
-        // get the identities[cookie or cli]
-        // get the user writers from sitemap using document_id
-        // call belongs using identities and writers
         let access_identities = {
             if let Some(identity) = req.cookie("identities") {
                 fpm::user_group::parse_identities(identity.value())
@@ -1061,21 +1060,11 @@ impl Config {
             }
         };
 
-        let id = self
-            .doc_id()
-            .unwrap_or_else(|| document_path.to_string())
-            .trim_matches('/')
-            .to_string();
-
-        let document_id = if id.is_empty() {
-            "/".to_string()
-        } else {
-            format!("/{}/", id)
-        };
+        let document_name = self.document_name_with_default(document_path);
 
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
-            let document_writers = sitemap.writers(document_id.as_str(), &self.package.groups);
+            let document_writers = sitemap.writers(document_name.as_str(), &self.package.groups);
             return fpm::user_group::belongs_to(
                 self,
                 document_writers.as_slice(),
