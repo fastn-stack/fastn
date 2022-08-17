@@ -1,3 +1,5 @@
+use std::borrow::Borrow;
+
 #[derive(Debug, Default)]
 pub struct InterpreterState {
     pub id: String,
@@ -772,12 +774,15 @@ impl ParsedDocument {
 
     fn replace_terms_with_links(
         &mut self,
-        _terms_map: &std::collections::HashMap<String, String>,
+        terms_map: &std::collections::HashMap<String, String>,
     ) -> ftd::p1::Result<()> {
+        use lazy_static::lazy_static;
+        use regex::Regex;
+
         // Term syntax 1 = [term`](term: someTerm)
         // Refer someTerm from linked text <term`>
-        // replacement = \[[term`]\]([document-id]#[slugified(someTerm)])
-        let _pattern_1 = regex::Regex::new(
+        // replacement = [term`]([document-id]#[slugified(someTerm)])
+        let t1: Regex = Regex::new(
             r"(?x) # Enabling Comment Mode
             \[(?P<linked_text>[\sa-zA-Z\d]+)\] # Linked Text Capture Group <linked_text>
             \(\s*term\s*:(?P<actual_term>[\sa-zA-Z\d]+)\) # Referred Term Capture Group <actual_term>"
@@ -786,16 +791,74 @@ impl ParsedDocument {
         // Term syntax 2 = {term: someTerm}
         // Refer someTerm with the same linked text i.e <someTerm>
         // replacement = [someTerm]([document-id]#[slugified(someTerm)])
-        let _pattern_2 = regex::Regex::new(
+        let t2: Regex = Regex::new(
             r"(?x) # Enabling comment mode
-                \{\s*term\s*: # Here Linked Text is same as Referred Term
-                (?P<actual_term>[\sa-zA-Z\d]+)\} # Referred Term Capture Group <actual_term>",
+            \{\s*term\s*: # Here Linked Text is same as Referred Term
+            (?P<actual_term>[\sa-zA-Z\d]+)\} # Referred Term Capture Group <actual_term>",
         )
         .unwrap();
 
         // TODO: Iterate through doc and replace with links
+        for s in self.sections.iter() {
+            // Data available from Header, Caption, Body
+            // Parse markdown components
+            if s.name.contains("markdown") {
+                match s.body {
+                    Some(ref body) => {
+                        println!("{:?}", body);
+                        replace_text(body.1.as_str(), &t1, &t2, terms_map);
+                    }
+                    _ => {}
+                }
+            }
+        }
 
-        Ok(())
+        return Ok(());
+
+        #[allow(dead_code)]
+        fn replace_text(
+            text: &str,
+            t1: &Regex,
+            t2: &Regex,
+            terms_map: &std::collections::HashMap<String, String>,
+        ) -> String {
+            fn capture_group_at<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
+                return capture.get(group_index).map_or("", |c| c.as_str());
+            }
+
+            let mut result = text.to_string();
+
+            // Term syntax 1 = [term`](term: someTerm)
+            for cap in t1.captures_iter(text) {
+                println!("{:?}", cap);
+                println!("{:?}", capture_group_at(&cap, 1));
+                println!("{:?}", capture_group_at(&cap, 2));
+                let replacement = format!(
+                    "[{}]({}#{})",
+                    capture_group_at(&cap, 1).trim(),
+                    &terms_map[capture_group_at(&cap, 2).trim()],
+                    slug::slugify(capture_group_at(&cap, 2))
+                );
+                result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
+                println!("changed: {:?}", result);
+            }
+
+            // Term syntax 2 = {term: someTerm}
+            for cap in t2.captures_iter(text) {
+                println!("{:?}", cap);
+                println!("{:?}", capture_group_at(&cap, 1));
+                let replacement = format!(
+                    "[{}]({}#{})",
+                    capture_group_at(&cap, 1).trim(),
+                    &terms_map[capture_group_at(&cap, 1).trim()],
+                    slug::slugify(capture_group_at(&cap, 1))
+                );
+                result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
+                println!("changed: {:?}", result);
+            }
+
+            return result;
+        }
     }
 
     /// Filters out commented parts from the parsed document.
