@@ -5,15 +5,14 @@ use std::iter::FromIterator;
 
 #[derive(Debug, Clone)]
 pub struct Config {
-    pub package: fpm::Package,
+    pub package: Package,
     pub root: camino::Utf8PathBuf,
     pub packages_root: camino::Utf8PathBuf,
     pub original_directory: camino::Utf8PathBuf,
     pub extra_data: serde_json::Map<String, serde_json::Value>,
     pub current_document: Option<String>,
-    pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fpm::Package>>,
+    pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
-    pub local_identities: Vec<fpm::user_group::UserIdentity>,
 }
 
 impl Config {
@@ -97,10 +96,6 @@ impl Config {
     pub(crate) fn history_path(&self, id: &str, version: i32) -> camino::Utf8PathBuf {
         let id_with_timestamp_extension = fpm::utils::snapshot_id(id, &(version as u128));
         self.remote_history_dir().join(id_with_timestamp_extension)
-    }
-
-    pub(crate) fn set_identities(&mut self, identities: Vec<fpm::user_group::UserIdentity>) {
-        self.local_identities = identities;
     }
 
     /// history of a fpm package is stored in `.history` folder.
@@ -915,7 +910,6 @@ impl Config {
             current_document: None,
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
-            local_identities: vec![],
         };
 
         let asset_documents = config.get_assets("/").await?;
@@ -1022,7 +1016,7 @@ impl Config {
             if let Some(identity) = req.cookie("identities") {
                 fpm::user_group::parse_identities(identity.value())
             } else {
-                self.local_identities.clone()
+                fpm::user_group::parse_cli_identities()
             }
         };
 
@@ -1063,7 +1057,7 @@ impl Config {
             if let Some(identity) = req.cookie("identities") {
                 fpm::user_group::parse_identities(identity.value())
             } else {
-                self.local_identities.clone()
+                fpm::user_group::parse_cli_identities()
             }
         };
 

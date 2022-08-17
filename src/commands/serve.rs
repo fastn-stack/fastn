@@ -1,8 +1,3 @@
-pub struct AppState {
-    // Set from command line to provide access, mostly for dev purpose.
-    pub local_identities: Vec<fpm::user_group::UserIdentity>,
-}
-
 async fn serve_files(
     req: &actix_web::HttpRequest,
     config: &mut fpm::Config,
@@ -110,14 +105,9 @@ async fn static_file(
     }
 }
 
-async fn serve(
-    req: actix_web::HttpRequest,
-    data: actix_web::web::Data<AppState>,
-) -> actix_web::HttpResponse {
+async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
     let mut config = fpm::Config::read(None, false).await.unwrap();
-    config.set_identities(data.local_identities.clone());
-
     let path: std::path::PathBuf = req.match_info().query("path").parse().unwrap();
 
     println!("request for path: {:?}", path);
@@ -137,11 +127,7 @@ async fn serve(
 }
 
 #[actix_web::main]
-pub async fn fpm_serve(
-    bind_address: &str,
-    port: Option<u16>,
-    identities: Option<String>,
-) -> std::io::Result<()> {
+pub async fn fpm_serve(bind_address: &str, port: Option<u16>) -> std::io::Result<()> {
     if cfg!(feature = "controller") {
         // fpm-controller base path and ec2 instance id (hardcoded for now)
         let fpm_controller: String = std::env::var("FPM_CONTROLLER")
@@ -195,13 +181,6 @@ You can try without providing port, it will automatically pick unused port"#,
     };
 
     let app = move || {
-        let local_identities = fpm::user_group::parse_identities(
-            identities
-                .clone()
-                .unwrap_or_else(|| "".to_string())
-                .as_str(),
-        );
-
         {
             if cfg!(feature = "remote") {
                 let json_cfg = actix_web::web::JsonConfig::default()
@@ -210,13 +189,11 @@ You can try without providing port, it will automatically pick unused port"#,
 
                 actix_web::App::new()
                     .app_data(json_cfg)
-                    .app_data(actix_web::web::Data::new(AppState { local_identities }))
                     .route("/-/sync/", actix_web::web::post().to(fpm::apis::sync))
                     .route("/-/sync2/", actix_web::web::post().to(fpm::apis::sync2))
                     .route("/-/clone/", actix_web::web::get().to(fpm::apis::clone))
             } else {
                 actix_web::App::new()
-                    .app_data(actix_web::web::Data::new(AppState { local_identities }))
             }
         }
         .route(

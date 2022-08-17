@@ -341,6 +341,19 @@ pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
         .collect_vec()
 }
 
+pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
+    use itertools::Itertools;
+    let args = std::env::args().collect_vec();
+    let mut index = None;
+    for (idx, arg) in args.iter().enumerate() {
+        if arg.eq("--identities") {
+            index = Some(idx);
+        }
+    }
+    let identities = index.map_or(None, |idx| args.get(idx + 1));
+    parse_identities(identities.map(|x| x.as_str()).unwrap_or_else(|| ""))
+}
+
 pub mod processor {
     use itertools::Itertools;
 

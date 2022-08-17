@@ -27,7 +27,6 @@ pub struct EditResponse {
 pub async fn edit(
     req: actix_web::HttpRequest,
     req_data: actix_web::web::Json<EditRequest>,
-    data: actix_web::web::Data<fpm::commands::serve::AppState>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
     let mut config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
@@ -38,7 +37,6 @@ pub async fn edit(
             )
         }
     };
-    config.set_identities(data.local_identities.clone());
     config.current_document = Some(req_data.path.to_string());
 
     match config.can_write(&req, req_data.path.as_str()) {
