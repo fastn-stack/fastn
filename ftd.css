@@ -1,3 +1,7 @@
+*, :after, :before {
+    box-sizing: inherit;
+}
+
 body, ol ol, ol ul, ul ol, ul ul {
     margin:0
 }
@@ -10,14 +14,9 @@ html {
 }
 
 body {
-    margin: 0;
     height: 100%;
     width: 100%;
     word-wrap: break-word;
-}
-pre,
-table {
-    overflow: auto;
 }
 input, code {
     vertical-align: middle;
@@ -40,14 +39,6 @@ pre code {
     overflow-x: auto;
     display: block;
     padding: 10px !important;
-}
-
-p {
-    margin: 0 0 1em 0;
-}
-
-ul {
-    margin: 0;
 }
 
 .ft_md ul,
