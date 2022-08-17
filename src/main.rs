@@ -369,35 +369,49 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
                 .about("Remove a tracking relation between two files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
-        .subcommand(
-            clap::SubCommand::with_name("serve")
-                .arg(clap::Arg::with_name("port")
-                        .required_unless("positional_port")
-                        .required(false)
-                        .help("Specify the port to serve on")
-                )
-                .arg(clap::Arg::with_name("positional_port")
-                        .long("--port")
-                        .required_unless("bind")
-                        .takes_value(true)
-                        .required(false)
-                        .help("Specify the port to serve on")
-                )
-                .arg(clap::Arg::with_name("bind")
-                        .long("--bind")
-                        .takes_value(true)
-                        .required(false)
-                        .help("Specify the bind address to serve on")
-                )
-                .arg(clap::Arg::with_name("identities")
+        .subcommand(sub_command_serve())
+}
+
+fn sub_command_serve() -> clap::App<'static, 'static> {
+    let serve = clap::SubCommand::with_name("serve")
+        .arg(
+            clap::Arg::with_name("port")
+                .required_unless("positional_port")
+                .required(false)
+                .help("Specify the port to serve on"),
+        )
+        .arg(
+            clap::Arg::with_name("positional_port")
+                .long("--port")
+                .required_unless("bind")
+                .takes_value(true)
+                .required(false)
+                .help("Specify the port to serve on"),
+        )
+        .arg(
+            clap::Arg::with_name("bind")
+                .long("--bind")
+                .takes_value(true)
+                .required(false)
+                .help("Specify the bind address to serve on"),
+        );
+
+    if cfg!(feature = "remote") {
+        serve
+    } else {
+        serve
+            .arg(
+                clap::Arg::with_name("identities")
                     .long("--identities")
                     .takes_value(true)
                     .required(false)
-                    .help("Http request identities, fpm allows these identities to access documents")
-                )
-                .about("Create an http server and serves static files")
-                .version(env!("CARGO_PKG_VERSION")),
-        )
+                    .help(
+                        "Http request identities, fpm allows these identities to access documents",
+                    ),
+            )
+            .about("Create an http server and serves static files")
+            .version(env!("CARGO_PKG_VERSION"))
+    }
 }
 
 pub fn version() -> &'static str {
