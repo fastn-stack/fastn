@@ -2664,6 +2664,7 @@ pub(crate) fn default_arguments() -> std::collections::BTreeMap<String, ftd::p2:
     let mut default_argument: std::collections::BTreeMap<String, ftd::p2::Kind> =
         Default::default();
     default_argument.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
+    default_argument.insert("term".to_string(), ftd::p2::Kind::string().into_optional()); // temporary
     default_argument.insert("top".to_string(), ftd::p2::Kind::integer().into_optional());
     default_argument.insert(
         "bottom".to_string(),

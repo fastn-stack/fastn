@@ -435,6 +435,7 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             ftd::p2::Kind::integer().into_optional(),
         ),
         ("id".to_string(), ftd::p2::Kind::string().into_optional()),
+        ("term".to_string(), ftd::p2::Kind::string().into_optional()), // temporary
         (
             "overflow-x".to_string(),
             ftd::p2::Kind::string().into_optional(),

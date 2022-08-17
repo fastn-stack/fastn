@@ -77,6 +77,14 @@ impl InterpreterState {
             self.document_stack[l].done_processing_imports();
             self.document_stack[l].reorder(&self.bag)?;
         }
+
+        if self.document_stack[l].processing_terms {
+            return Ok(Interpreter::StuckOnTerm {
+                doc_index: l,
+                state: self,
+            });
+        }
+
         let parsed_document = &mut self.document_stack[l];
 
         while let Some(p1) = parsed_document.sections.last_mut() {
@@ -574,6 +582,21 @@ impl InterpreterState {
         self.parsed_libs.insert(module.to_string(), prefix);
     }
 
+    pub fn continue_after_processing_terms(
+        mut self,
+        terms_map: Option<&std::collections::HashMap<String, String>>,
+        doc_index: usize,
+    ) -> ftd::p1::Result<Interpreter> {
+        // Ignore processing terms if terms_map is None
+        match terms_map {
+            Some(map) => self.document_stack[doc_index].replace_terms_with_links(map)?,
+            None => {}
+        }
+
+        self.document_stack[doc_index].done_processing_terms();
+        self.continue_()
+    }
+
     pub fn continue_after_import(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
         self.document_stack.push(ParsedDocument::parse(id, source)?);
         self.continue_()
@@ -718,6 +741,7 @@ pub struct ParsedDocument {
     name: String,
     sections: Vec<ftd::p1::Section>,
     processing_imports: bool,
+    processing_terms: bool,
     doc_aliases: std::collections::BTreeMap<String, String>,
     var_types: Vec<String>,
     foreign_variable_prefix: Vec<String>,
@@ -730,6 +754,7 @@ impl ParsedDocument {
             name: id.to_string(),
             sections: ftd::p1::parse(source, id)?,
             processing_imports: true,
+            processing_terms: true,
             doc_aliases: ftd::p2::interpreter::default_aliases(),
             var_types: Default::default(),
             foreign_variable_prefix: vec![],
@@ -739,6 +764,38 @@ impl ParsedDocument {
 
     fn done_processing_imports(&mut self) {
         self.processing_imports = false;
+    }
+
+    fn done_processing_terms(&mut self) {
+        self.processing_terms = false;
+    }
+
+    fn replace_terms_with_links(
+        &mut self,
+        _terms_map: &std::collections::HashMap<String, String>,
+    ) -> ftd::p1::Result<()> {
+        // Term syntax 1 = [term`](term: someTerm)
+        // Refer someTerm from linked text <term`>
+        // replacement = \[[term`]\]([document-id]#[slugified(someTerm)])
+        let _pattern_1 = regex::Regex::new(
+            r"(?x) # Enabling Comment Mode
+            \[(?P<linked_text>[\sa-zA-Z\d]+)\] # Linked Text Capture Group <linked_text>
+            \(\s*term\s*:(?P<actual_term>[\sa-zA-Z\d]+)\) # Referred Term Capture Group <actual_term>"
+        ).unwrap();
+
+        // Term syntax 2 = {term: someTerm}
+        // Refer someTerm with the same linked text i.e <someTerm>
+        // replacement = [someTerm]([document-id]#[slugified(someTerm)])
+        let _pattern_2 = regex::Regex::new(
+            r"(?x) # Enabling comment mode
+                \{\s*term\s*: # Here Linked Text is same as Referred Term
+                (?P<actual_term>[\sa-zA-Z\d]+)\} # Referred Term Capture Group <actual_term>",
+        )
+        .unwrap();
+
+        // TODO: Iterate through doc and replace with links
+
+        Ok(())
     }
 
     /// Filters out commented parts from the parsed document.
@@ -812,6 +869,10 @@ pub enum Interpreter {
     },
     StuckOnForeignVariable {
         variable: String,
+        state: InterpreterState,
+    },
+    StuckOnTerm {
+        doc_index: usize,
         state: InterpreterState,
     },
     Done {

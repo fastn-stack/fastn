@@ -161,6 +161,13 @@ pub fn interpret_helper(
                     },
                 )?;
             }
+            ftd::Interpreter::StuckOnTerm {
+                doc_index: index,
+                state: st,
+            } => {
+                // No config in ftd::ExampleLibrary ignoring processing terms for now
+                s = st.continue_after_processing_terms(None, index)?;
+            }
         }
     }
     Ok(document)
