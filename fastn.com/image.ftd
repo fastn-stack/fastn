@@ -22,5 +22,11 @@ Image accepts the below attributes as well all the [common attributes ](common/)
 
 Content of `description` is added as `alt` text in HTML.
 
+-- ft.h1: `loading: Optional String`
 
+The value of `loading` can be either `lazy` (default) or `eager`. This field
+[controls lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading).
 
+-- ft.h1: `crop: Boolean, default: False`
+
+If this is specified the image is cropped to fit the container.
