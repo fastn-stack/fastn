@@ -675,6 +675,7 @@ pub fn image_function() -> ftd::Component {
                 ("title".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("align".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("crop".to_string(), ftd::p2::Kind::boolean().into_optional()),
+                ("loading".to_string(), ftd::p2::Kind::string().into_optional()),
             ],
             common_arguments(),
         ]
@@ -713,6 +714,7 @@ pub fn image_from_properties(
             events,
             reference,
         )?,
+        loading: ftd::Loading::from(ftd::p2::utils::string_with_default("loading", "lazy", properties, doc.name, 0)?.as_str(), doc.name)?,
         crop: ftd::p2::utils::bool_with_default("crop", false, properties, doc.name, 0)?,
     })
 }
@@ -852,6 +854,7 @@ pub fn iframe_function() -> ftd::Component {
                     "youtube".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
+                ("loading".to_string(), ftd::p2::Kind::string().into_optional()),
             ],
             common_arguments(),
         ]
@@ -888,6 +891,7 @@ pub fn iframe_from_properties(
 
     Ok(ftd::IFrame {
         src,
+        loading: ftd::Loading::from(ftd::p2::utils::string_with_default("loading", "lazy", properties, doc.name, 0)?.as_str(), doc.name)?,
         common: common_from_properties(
             unresolved_properties,
             doc,

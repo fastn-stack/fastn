@@ -1043,6 +1043,7 @@ impl ftd::Image {
         };
 
         fn update_img(img: &ftd::Image, mut n: ftd::Node) -> ftd::Node {
+            n.attrs.insert(s("loading"), s(img.loading.to_html()));
             if let Some(ref id) = img.common.data_id {
                 n.attrs.insert(s("data-id"), escape(id));
             }

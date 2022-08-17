@@ -2363,12 +2363,45 @@ impl Container {
     }
 }
 
+/// https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[serde(tag = "type")]
+pub enum Loading {
+    Lazy,
+    Eager
+}
+
+impl Default for Loading {
+    fn default() -> Self {
+        Loading::Lazy
+    }
+}
+
+impl Loading {
+    pub fn from(s: &str, doc_id: &str) -> ftd::p1::Result<Loading> {
+        match s {
+            "lazy" => Ok(Loading::Lazy),
+            "eager" => Ok(Loading::Eager),
+            _ => return ftd::e2(format!("{} is not a valid alignment, allowed: lazy, eager", s), doc_id, 0),
+        }
+    }
+
+    pub fn to_html(&self) -> &'static str {
+        match self {
+            Loading::Lazy => "lazy",
+            Loading::Eager => "eager",
+        }
+    }
+}
+
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Image {
     pub src: ImageSrc,
     pub description: Option<String>,
     pub common: Common,
     pub crop: bool,
+    /// images can load lazily.
+    pub loading: Loading,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -2428,7 +2461,7 @@ impl TextAlign {
             Some("left") => ftd::TextAlign::Left,
             Some("right") => ftd::TextAlign::Right,
             Some("justify") => ftd::TextAlign::Justify,
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment", t), doc_id, 0),
+            Some(t) => return ftd::e2(format!("{} is not a valid alignment, allowed: center, left, right, justify", t), doc_id, 0),
             None => return Ok(ftd::TextAlign::Left),
         })
     }
@@ -2451,7 +2484,7 @@ impl FontDisplay {
         Ok(match l.as_deref() {
             Some("swap") => ftd::FontDisplay::Swap,
             Some("block") => ftd::FontDisplay::Block,
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
+            Some(t) => return ftd::e2(format!("{} is not a valid alignment, allowed: swap, block", t), doc_id, 0), // TODO
             None => return Ok(ftd::FontDisplay::Block),
         })
     }
@@ -2793,6 +2826,8 @@ impl TextFormat {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct IFrame {
     pub src: String,
+    /// iframe can load lazily.
+    pub loading: Loading,
     pub common: Common,
 }
 

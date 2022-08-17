@@ -35,7 +35,7 @@ pub use ui::{
     Anchor, AttributeType, Code, Color, ColorValue, Column, Common, ConditionalAttribute,
     ConditionalValue, Container, Element, FontDisplay, GradientDirection, Grid, IFrame, IText,
     Image, ImageSrc, Input, Length, Markup, Markups, NamedFont, Overflow, Position, Region, Row,
-    Scene, Spacing, Style, Text, TextAlign, TextBlock, TextFormat, Type, Weight,
+    Scene, Spacing, Style, Text, TextAlign, TextBlock, TextFormat, Type, Weight, Loading,
 };
 pub use variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
 
