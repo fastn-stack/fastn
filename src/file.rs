@@ -57,10 +57,10 @@ impl File {
     }
 
     pub fn is_static(&self) -> bool {
-        match self {
-            Self::Image(_) | Self::Static(_) | Self::Markdown(_) | Self::Code(_) => true,
-            _ => false,
-        }
+        matches!(
+            self,
+            Self::Image(_) | Self::Static(_) | Self::Markdown(_) | Self::Code(_)
+        )
     }
 }
 

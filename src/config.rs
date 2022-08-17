@@ -13,6 +13,7 @@ pub struct Config {
     pub current_document: Option<String>,
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fpm::Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
+    pub local_identities: Vec<fpm::user_group::UserIdentity>,
 }
 
 impl Config {
@@ -96,6 +97,10 @@ impl Config {
     pub(crate) fn history_path(&self, id: &str, version: i32) -> camino::Utf8PathBuf {
         let id_with_timestamp_extension = fpm::utils::snapshot_id(id, &(version as u128));
         self.remote_history_dir().join(id_with_timestamp_extension)
+    }
+
+    pub(crate) fn set_identities(&mut self, identities: Vec<fpm::user_group::UserIdentity>) {
+        self.local_identities = identities;
     }
 
     /// history of a fpm package is stored in `.history` folder.
@@ -910,6 +915,7 @@ impl Config {
             current_document: None,
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
+            local_identities: vec![],
         };
 
         let asset_documents = config.get_assets("/").await?;
@@ -1014,19 +1020,23 @@ impl Config {
         use itertools::Itertools;
         let access_identities = {
             if let Some(identity) = req.cookie("identities") {
-                parse_identities(identity.value())
+                fpm::user_group::parse_identities(identity.value())
             } else {
-                vec![]
+                self.local_identities.clone()
             }
         };
 
-        let document_id = format!(
-            "/{}/",
-            self.doc_id()
-                .unwrap_or_else(|| document_path.to_string())
-                .trim_matches('/')
-        );
+        let id = self
+            .doc_id()
+            .unwrap_or_else(|| document_path.to_string())
+            .trim_matches('/')
+            .to_string();
 
+        let document_id = if id.is_empty() {
+            "/".to_string()
+        } else {
+            format!("/{}/", id)
+        };
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
             let path_readers = sitemap.readers(document_id.as_str(), &self.package.groups);
@@ -1038,20 +1048,6 @@ impl Config {
         }
         Ok(true)
     }
-}
-
-/// 'email: abrark.asahi@gmail.com => vec[UId{email: abrark.asahi@gmail.com}]
-fn parse_identities(identities: &str) -> Vec<fpm::user_group::UserIdentity> {
-    use itertools::Itertools;
-    let identities = identities.split(',').collect_vec();
-    identities
-        .into_iter()
-        .flat_map(|id| id.split_once(':'))
-        .map(|(k, v)| fpm::user_group::UserIdentity {
-            key: k.trim().to_string(),
-            value: v.trim().to_string(),
-        })
-        .collect_vec()
 }
 
 /// `find_root_for_file()` starts with the given path, which is the current directory where the

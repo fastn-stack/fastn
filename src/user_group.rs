@@ -327,6 +327,20 @@ pub fn belongs_to(
     Ok(false)
 }
 
+/// 'email: abrark.asahi@gmail.com => vec[UId{email: abrark.asahi@gmail.com}]
+pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
+    use itertools::Itertools;
+    let identities = identities.split(',').collect_vec();
+    identities
+        .into_iter()
+        .flat_map(|id| id.split_once(':'))
+        .map(|(k, v)| UserIdentity {
+            key: k.trim().to_string(),
+            value: v.trim().to_string(),
+        })
+        .collect_vec()
+}
+
 pub mod processor {
     use itertools::Itertools;
 
