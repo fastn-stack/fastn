@@ -1037,16 +1037,59 @@ impl Config {
         } else {
             format!("/{}/", id)
         };
+
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
-            let path_readers = sitemap.readers(document_id.as_str(), &self.package.groups);
+            let document_readers = sitemap.readers(document_id.as_str(), &self.package.groups);
             return fpm::user_group::belongs_to(
                 self,
-                path_readers.as_slice(),
+                document_readers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
             );
         }
         Ok(true)
+    }
+
+    pub(crate) fn can_write(
+        &self,
+        req: &actix_web::HttpRequest,
+        document_path: &str,
+    ) -> fpm::Result<bool> {
+        use itertools::Itertools;
+        // get the identities[cookie or cli]
+        // get the user writers from sitemap using document_id
+        // call belongs using identities and writers
+        let access_identities = {
+            if let Some(identity) = req.cookie("identities") {
+                fpm::user_group::parse_identities(identity.value())
+            } else {
+                self.local_identities.clone()
+            }
+        };
+
+        let id = self
+            .doc_id()
+            .unwrap_or_else(|| document_path.to_string())
+            .trim_matches('/')
+            .to_string();
+
+        let document_id = if id.is_empty() {
+            "/".to_string()
+        } else {
+            format!("/{}/", id)
+        };
+
+        if let Some(sitemap) = &self.package.sitemap {
+            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
+            let document_writers = sitemap.writers(document_id.as_str(), &self.package.groups);
+            return fpm::user_group::belongs_to(
+                self,
+                document_writers.as_slice(),
+                access_identities.iter().collect_vec().as_slice(),
+            );
+        }
+
+        Ok(false)
     }
 }
 

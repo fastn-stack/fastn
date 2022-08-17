@@ -1,6 +1,6 @@
-struct AppState {
+pub struct AppState {
     // Set from command line to provide access, mostly for dev purpose.
-    local_identities: Vec<fpm::user_group::UserIdentity>,
+    pub local_identities: Vec<fpm::user_group::UserIdentity>,
 }
 
 async fn serve_files(
