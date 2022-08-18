@@ -34,8 +34,8 @@ pub use rt::RT;
 pub use ui::{
     Anchor, AttributeType, Code, Color, ColorValue, Column, Common, ConditionalAttribute,
     ConditionalValue, Container, Element, FontDisplay, GradientDirection, Grid, IFrame, IText,
-    Image, ImageSrc, Input, Length, Markup, Markups, NamedFont, Overflow, Position, Region, Row,
-    Scene, Spacing, Style, Text, TextAlign, TextBlock, TextFormat, Type, Weight, Loading,
+    Image, ImageSrc, Input, Length, Loading, Markup, Markups, NamedFont, Overflow, Position,
+    Region, Row, Scene, Spacing, Style, Text, TextAlign, TextBlock, TextFormat, Type, Weight,
 };
 pub use variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
 

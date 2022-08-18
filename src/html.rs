@@ -1029,17 +1029,19 @@ impl ftd::Image {
                     n.attrs
                         .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
                 }
-                n.children.push(
-                    update_img(self, Node {
+                n.children.push(update_img(
+                    self,
+                    Node {
                         node: s("img"),
                         ..Default::default()
-                    })
-                );
+                    },
+                ));
                 n
             }
-            None => {
-                update_img(self, Node::from_common("img", &self.common, doc_id, collector))
-            }
+            None => update_img(
+                self,
+                Node::from_common("img", &self.common, doc_id, collector),
+            ),
         };
 
         fn update_img(img: &ftd::Image, mut n: ftd::Node) -> ftd::Node {

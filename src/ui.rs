@@ -2368,7 +2368,7 @@ impl Container {
 #[serde(tag = "type")]
 pub enum Loading {
     Lazy,
-    Eager
+    Eager,
 }
 
 impl Default for Loading {
@@ -2382,7 +2382,13 @@ impl Loading {
         match s {
             "lazy" => Ok(Loading::Lazy),
             "eager" => Ok(Loading::Eager),
-            _ => return ftd::e2(format!("{} is not a valid alignment, allowed: lazy, eager", s), doc_id, 0),
+            _ => {
+                return ftd::e2(
+                    format!("{} is not a valid alignment, allowed: lazy, eager", s),
+                    doc_id,
+                    0,
+                )
+            }
         }
     }
 
@@ -2461,7 +2467,16 @@ impl TextAlign {
             Some("left") => ftd::TextAlign::Left,
             Some("right") => ftd::TextAlign::Right,
             Some("justify") => ftd::TextAlign::Justify,
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment, allowed: center, left, right, justify", t), doc_id, 0),
+            Some(t) => {
+                return ftd::e2(
+                    format!(
+                        "{} is not a valid alignment, allowed: center, left, right, justify",
+                        t
+                    ),
+                    doc_id,
+                    0,
+                )
+            }
             None => return Ok(ftd::TextAlign::Left),
         })
     }
@@ -2484,7 +2499,13 @@ impl FontDisplay {
         Ok(match l.as_deref() {
             Some("swap") => ftd::FontDisplay::Swap,
             Some("block") => ftd::FontDisplay::Block,
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment, allowed: swap, block", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::e2(
+                    format!("{} is not a valid alignment, allowed: swap, block", t),
+                    doc_id,
+                    0,
+                )
+            } // TODO
             None => return Ok(ftd::FontDisplay::Block),
         })
     }

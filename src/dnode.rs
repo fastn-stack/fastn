@@ -68,7 +68,12 @@ impl DNode {
         };
 
         if self.node == "img" {
-            return format!("<img {attrs} {style} {classes}>", attrs = attrs, style = style, classes = classes);
+            return format!(
+                "<img {attrs} {style} {classes}>",
+                attrs = attrs,
+                style = style,
+                classes = classes
+            );
         }
 
         let body = match self.text.as_ref() {
