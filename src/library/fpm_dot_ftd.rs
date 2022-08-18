@@ -214,12 +214,13 @@ fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
         cli_git_commit_hash = if fpm::utils::is_test() {
             "FPM_CLI_GIT_HASH"
         } else {
-            env!("VERGEN_GIT_SHA")
+            option_env!("GITHUB_SHA").unwrap_or("unknown-sha")
         },
         cli_created_on = if fpm::utils::is_test() {
             "FPM_CLI_BUILD_TIMESTAMP"
         } else {
-            env!("VERGEN_BUILD_TIMESTAMP")
+            // TODO: calculate this in github action and pass it, vergen is too heave a dependency
+            option_env!("FPM_CLI_BUILD_TIMESTAMP").unwrap_or("0")
         },
         ftd_version = if fpm::utils::is_test() {
             "FTD_VERSION"
