@@ -23,34 +23,4 @@ on generated DOM.
 
 -- ft.h1: `id: Optional String`
 
-This attribute gives a unique identifier [id](/id/)
-to any component.
-
--- ft.h1: `term: Optional String`
-
-This attribute specifies a unique term to any component which can be used to refer it using
-term linking syntax from within any markdown supporting component.
-
--- ft.code: specifying term on a component
-lang: ftd
-
-\-- ftd.text A:
-optional string name:
-optional integer age:
-
-\-- A:
-name: abc
-age: 22
-term: foo
-
--- ft.markdown:
-
-To refer the above component, one can either use
-
-- `{term: foo}` - This syntax will make the term text `"foo"` serve as a markdown link which will be linked to component `A`.
-
-- `[xyz](term: foo)` - If someone wants to use any other text different from the `term text` as `linking text`
-then one can use this syntax.
-
-Here the linked text will be `"xyz"` which will link to the component `A`
-
+This attribute gives a unique identifier [id](/id/) to any component.
