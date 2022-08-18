@@ -1,5 +1,7 @@
 #[tokio::main]
 async fn main() -> fpm::Result<()> {
+    use colored::Colorize;
+
     let matches = app(authors(), version()).get_matches();
 
     if let Some(project) = matches.subcommand_matches("start-project") {
@@ -15,7 +17,7 @@ async fn main() -> fpm::Result<()> {
         let port = mark.value_of("port").map(|p| match p.parse::<u16>() {
             Ok(v) => v,
             Err(_) => {
-                eprintln!("Provided port {} is not a valid port.", p);
+                eprintln!("Provided port {} is not a valid port.", p.to_string().red());
                 std::process::exit(1);
             }
         });

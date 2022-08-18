@@ -118,6 +118,8 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
 }
 
 pub async fn fpm_serve(bind_address: &str, port: Option<u16>) -> std::io::Result<()> {
+    use colored::Colorize;
+
     if cfg!(feature = "controller") {
         // fpm-controller base path and ec2 instance id (hardcoded for now)
         let fpm_controller: String = std::env::var("FPM_CONTROLLER")
@@ -161,7 +163,7 @@ pub async fn fpm_serve(bind_address: &str, port: Option<u16>) -> std::io::Result
                     r#"Provided port {} is not available.
 
 You can try without providing port, it will automatically pick unused port."#,
-                    x
+                    x.to_string().red()
                 ))
                 .unwrap_or_else(|| {
                     "Tried picking port between port 8000 to 9000, none are available :-("

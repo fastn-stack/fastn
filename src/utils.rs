@@ -1,4 +1,3 @@
-use colorize::AnsiColor;
 use itertools::Itertools;
 
 macro_rules! warning {
@@ -6,11 +5,14 @@ macro_rules! warning {
         warning!($s)
     };
     ($s:expr) => {
+        use colored::Colorize;
         println!("{}", format!("{}", $s).yellow());
     };
 }
 
 pub fn print_end(msg: &str, start: std::time::Instant) {
+    use colored::Colorize;
+
     if fpm::utils::is_test() {
         println!("done in <omitted>");
     } else {
