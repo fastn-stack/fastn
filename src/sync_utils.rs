@@ -246,18 +246,62 @@ impl fpm::Config {
         workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
     ) -> fpm::Result<()> {
         let remote_manifest = self.get_remote_manifest(true).await?;
-        self.get_files_status_wrt_manifest(files, workspace, &remote_manifest)
+        let (already_added_files, already_removed_files) = self
+            .get_files_status_wrt_manifest(files, &remote_manifest)
             .await?;
+        for file_name in already_removed_files {
+            workspace.remove(file_name.as_str());
+        }
+        for workspace_entry in already_added_files {
+            workspace.insert(workspace_entry.filename.to_string(), workspace_entry);
+        }
+        Ok(())
+    }
+
+    pub(crate) async fn get_cr_status_wrt_remote_manifest(
+        &self,
+        cr_number: usize,
+        files: &mut std::collections::BTreeMap<String, FileStatus>,
+    ) -> fpm::Result<()> {
+        let remote_manifest = self.get_remote_manifest(true).await?;
+        let (already_added_files, already_removed_files) = self
+            .get_files_status_wrt_manifest(files, &remote_manifest)
+            .await?;
+
+        let mut deleted_file = fpm::cr::get_deleted_files(self, cr_number).await?;
+        deleted_file = deleted_file
+            .into_iter()
+            .filter(|v| !already_removed_files.contains(&v.filename))
+            .collect_vec();
+        fpm::cr::create_deleted_files(self, cr_number, deleted_file.as_slice()).await?;
+
+        let mut workspace = self.get_workspace_map().await?;
+        for workspace_entry in already_added_files {
+            let cr_file_path = self.cr_path(cr_number).join(workspace_entry.filename);
+            if cr_file_path.exists() {
+                tokio::fs::remove_file(&cr_file_path).await?;
+            }
+            let track_file_path = self.track_path(&cr_file_path);
+            if track_file_path.exists() {
+                tokio::fs::remove_file(&track_file_path).await?;
+            }
+            workspace.remove(self.path_without_root(&cr_file_path)?.as_str());
+            workspace.remove(self.path_without_root(&track_file_path)?.as_str());
+        }
+        self.write_workspace(workspace.into_values().collect_vec().as_slice())
+            .await?;
+
         Ok(())
     }
 
     async fn get_files_status_wrt_manifest(
         &self,
         files: &mut std::collections::BTreeMap<String, FileStatus>,
-        workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
         manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
-    ) -> fpm::Result<()> {
-        let mut remove_files = vec![];
+    ) -> fpm::Result<(Vec<fpm::workspace::WorkspaceEntry>, Vec<String>)> {
+        let mut already_removed_files = vec![];
+        let mut already_added_files = vec![];
+        let mut uptodate_files = vec![];
         for (filename, file) in files.iter_mut() {
             match file {
                 FileStatus::Uptodate { .. } => {
@@ -279,16 +323,13 @@ impl fpm::Config {
                     let history_path = self.history_path(path, server_version);
                     let history_content = tokio::fs::read(history_path).await?;
                     if sha2::Sha256::digest(content).eq(&sha2::Sha256::digest(history_content)) {
-                        workspace.insert(
-                            path.to_string(),
-                            fpm::workspace::WorkspaceEntry {
-                                filename: path.to_string(),
-                                deleted: None,
-                                version: Some(server_version),
-                                cr: None,
-                            },
-                        );
-                        remove_files.push(filename.clone());
+                        already_added_files.push(fpm::workspace::WorkspaceEntry {
+                            filename: path.to_string(),
+                            deleted: None,
+                            version: Some(server_version),
+                            cr: None,
+                        });
+                        uptodate_files.push(filename.clone())
                     } else {
                         *status = Status::CloneAddedRemoteAdded(server_version);
                     }
@@ -355,13 +396,13 @@ impl fpm::Config {
                     let server_file_edit = if let Some(server_file_edit) = manifest.get(path) {
                         server_file_edit
                     } else {
-                        remove_files.push(filename.clone());
-                        workspace.remove(path);
+                        already_removed_files.push(filename.clone());
+                        uptodate_files.push(filename.clone());
                         continue;
                     };
                     if server_file_edit.is_deleted() {
-                        remove_files.push(filename.clone());
-                        workspace.remove(path);
+                        already_removed_files.push(filename.clone());
+                        uptodate_files.push(filename.clone());
                         continue;
                     }
                     if !server_file_edit.version.eq(version) {
@@ -374,13 +415,13 @@ impl fpm::Config {
         *files = files
             .iter_mut()
             .filter_map(|(k, v)| {
-                if !remove_files.contains(&k) {
+                if !uptodate_files.contains(&k) {
                     Some((k.to_owned(), v.to_owned()))
                 } else {
                     None
                 }
             })
             .collect();
-        Ok(())
+        Ok((already_added_files, already_removed_files))
     }
 }

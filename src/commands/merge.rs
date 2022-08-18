@@ -143,7 +143,7 @@ async fn merge_cr_into_main(
     }
 
     config
-        .get_files_status_wrt_remote_manifest(&mut new_file_status, &mut Default::default())
+        .get_cr_status_wrt_remote_manifest(src, &mut new_file_status)
         .await?;
 
     let conflicted_file = new_file_status.values().find(|v| v.is_conflicted());
