@@ -350,7 +350,7 @@ pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
             index = Some(idx);
         }
     }
-    let identities = index.map_or(None, |idx| args.get(idx + 1));
+    let identities = index.and_then(|idx| args.get(idx + 1));
     parse_identities(identities.map(|x| x.as_str()).unwrap_or_else(|| ""))
 }
 
