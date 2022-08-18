@@ -163,7 +163,6 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
         .arg(
             clap::Arg::with_name("verbose")
                 .short('v')
-                .multiple(true)
                 .help("Sets the level of verbosity"),
         )
         .arg(
