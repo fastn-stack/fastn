@@ -171,11 +171,9 @@ impl Config {
                 .parent()
                 .expect("Expect fpm_path parent. Panic!")
                 .to_owned()),
-            _ => {
-                return Err(fpm::Error::UsageError {
-                    message: format!("Unable to find `fpm_path` of the package {}", o.name),
-                })
-            }
+            _ => Err(fpm::Error::UsageError {
+                message: format!("Unable to find `fpm_path` of the package {}", o.name),
+            }),
         }
     }
 
@@ -408,14 +406,13 @@ impl Config {
 
     pub async fn get_file_by_id(&self, id: &str, package: &fpm::Package) -> fpm::Result<fpm::File> {
         let file_name = fpm::Config::get_file_name(&self.root, id)?;
-        return self
-            .get_files(package)
+        self.get_files(package)
             .await?
             .into_iter()
             .find(|v| v.get_id().eq(file_name.as_str()))
             .ok_or_else(|| fpm::Error::UsageError {
                 message: format!("No such file found: {}", id),
-            });
+            })
     }
 
     pub async fn get_file_and_package_by_id(&mut self, id: &str) -> fpm::Result<fpm::File> {
@@ -925,7 +922,7 @@ impl Config {
             .sitemap_temp
             .as_ref();
 
-            let sitemap = match sitemap {
+            match sitemap {
                 Some(sitemap_temp) => {
                     let mut s = fpm::sitemap::Sitemap::parse(
                         sitemap_temp.body.as_str(),
@@ -941,8 +938,7 @@ impl Config {
                     Some(s)
                 }
                 None => None,
-            };
-            sitemap
+            }
         };
 
         config.add_package(&package);

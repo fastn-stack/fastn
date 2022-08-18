@@ -364,7 +364,7 @@ pub enum ParseError {
     },
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 enum ParsingState {
     WaitingForSection,
     ParsingSection,

@@ -63,5 +63,5 @@ pretty_assertions = "1"
 #rusty-hook = "^0.11.2"
 
 [build-dependencies]
-vergen = "6"
+vergen = "7"
 anyhow = "1"

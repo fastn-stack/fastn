@@ -293,6 +293,7 @@ fn file_id_to_names(id: &str) -> Vec<String> {
     ids
 }
 
+#[allow(clippy::await_holding_refcell_ref)]
 pub(crate) async fn read_ftd(
     config: &mut fpm::Config,
     main: &fpm::Document,

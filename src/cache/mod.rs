@@ -62,7 +62,7 @@ pub async fn create_without_lock(path: &str) -> fpm::Result<usize> {
         .await?
         .write_all(content.to_string().as_bytes())
         .await?;
-    Ok(get_without_lock(path).await?)
+    get_without_lock(path).await
 }
 
 pub async fn update_get(path: &str, value: usize) -> fpm::Result<usize> {

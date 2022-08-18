@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq)]
 pub enum SyncStatus {
     Conflict,
     NoConflict,

@@ -213,7 +213,7 @@ fn print_file_status(file_status: &std::collections::BTreeMap<String, FileStatus
     any_modification
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub(crate) enum FileStatus {
     Modified,
     Added,
@@ -225,7 +225,7 @@ pub(crate) enum FileStatus {
     CloneDeletedRemoteEdited,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 enum TrackStatus {
     UptoDate,
     NeverMarked,

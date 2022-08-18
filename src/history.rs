@@ -1,13 +1,13 @@
 use itertools::Itertools;
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq, Clone)]
 pub struct FileHistory {
     pub filename: String,
     #[serde(rename = "file-edit")]
     pub file_edit: Vec<FileEdit>,
 }
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq, Clone)]
 pub struct FileEdit {
     pub message: Option<String>,
     pub timestamp: u128,
@@ -33,7 +33,7 @@ impl FileEdit {
     }
 }
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq, Clone)]
 pub struct FileEditTemp {
     pub message: Option<String>,
     pub author: Option<String>,
@@ -54,7 +54,7 @@ impl FileEditTemp {
     }
 }
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq, Clone)]
 pub enum FileOperation {
     Added,
     Updated,
