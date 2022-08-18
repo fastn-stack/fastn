@@ -98,6 +98,10 @@ impl Config {
         self.remote_history_dir().join(id_with_timestamp_extension)
     }
 
+    /// document_name_with_default("index.ftd") -> /
+    /// document_name_with_default("foo/index.ftd") -> /foo/
+    /// document_name_with_default("foo/abc") -> /foo/abc/
+    /// document_name_with_default("/foo/abc.ftd") -> /foo/abc/
     pub(crate) fn document_name_with_default(&self, document_path: &str) -> String {
         let name = self
             .doc_id()
