@@ -3,7 +3,6 @@
 
 extern crate self as ftd;
 
-
 #[cfg(test)]
 #[macro_use]
 pub(crate) mod test;

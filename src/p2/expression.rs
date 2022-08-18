@@ -109,13 +109,11 @@ impl Boolean {
             match value {
                 ftd::PropertyValue::Variable { name, .. }
                 | ftd::PropertyValue::Reference { name, .. } => Ok(name.to_string()),
-                _ => {
-                    ftd::e2(
-                        format!("{:?} must be variable or local variable", value),
-                        doc.name,
-                        line_number,
-                    )
-                }
+                _ => ftd::e2(
+                    format!("{:?} must be variable or local variable", value),
+                    doc.name,
+                    line_number,
+                ),
             }
         }
     }

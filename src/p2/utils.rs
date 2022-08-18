@@ -99,13 +99,11 @@ pub fn boolean_and_ref(
                 Some(ftd::Value::Boolean { value }) => {
                     Ok((value.to_owned(), complete_reference(reference)))
                 }
-                _ => {
-                    ftd::e2(
-                        format!("expected boolean, found: {:?}", kind),
-                        doc.name,
-                        line_number,
-                    )
-                }
+                _ => ftd::e2(
+                    format!("expected boolean, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                ),
             }
         }
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
@@ -220,13 +218,11 @@ pub fn integer_and_ref(
                 Some(ftd::Value::Integer { value }) => {
                     Ok((value.to_owned(), complete_reference(reference)))
                 }
-                _ => {
-                    ftd::e2(
-                        format!("expected integer, found 10: {:?}", kind),
-                        doc.name,
-                        line_number,
-                    )
-                }
+                _ => ftd::e2(
+                    format!("expected integer, found 10: {:?}", kind),
+                    doc.name,
+                    line_number,
+                ),
             }
         }
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
@@ -341,13 +337,11 @@ pub fn decimal_and_ref(
                 Some(ftd::Value::Decimal { value }) => {
                     Ok((value.to_owned(), complete_reference(reference)))
                 }
-                _ => {
-                    ftd::e2(
-                        format!("expected decimal, found: {:?}", kind),
-                        doc.name,
-                        line_number,
-                    )
-                }
+                _ => ftd::e2(
+                    format!("expected decimal, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                ),
             }
         }
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
@@ -475,13 +469,11 @@ pub fn string_and_source_and_ref(
                     source.to_owned(),
                     complete_reference(reference),
                 )),
-                _ => {
-                    ftd::e2(
-                        format!("expected string, found 3: {:?}", kind),
-                        doc.name,
-                        line_number,
-                    )
-                }
+                _ => ftd::e2(
+                    format!("expected string, found 3: {:?}", kind),
+                    doc.name,
+                    line_number,
+                ),
             }
         }
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
@@ -627,13 +619,11 @@ pub fn record_and_ref(
                 Some(ftd::Value::Record { fields, .. }) => {
                     Ok((fields.to_owned(), complete_reference(reference)))
                 }
-                _ => {
-                    ftd::e2(
-                        format!("expected record, found: {:?}", kind),
-                        doc.name,
-                        line_number,
-                    )
-                }
+                _ => ftd::e2(
+                    format!("expected record, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                ),
             }
         }
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
@@ -1448,13 +1438,11 @@ pub fn structure_header_to_properties(
             &Default::default(),
             false,
         ),
-        t => {
-            ftd::e2(
-                format!("expected component, found: {:?}", t),
-                doc.name,
-                line_number,
-            )
-        }
+        t => ftd::e2(
+            format!("expected component, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
     }
 }
 

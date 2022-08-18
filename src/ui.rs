@@ -2382,13 +2382,11 @@ impl Loading {
         match s {
             "lazy" => Ok(Loading::Lazy),
             "eager" => Ok(Loading::Eager),
-            _ => {
-                ftd::e2(
-                    format!("{} is not a valid alignment, allowed: lazy, eager", s),
-                    doc_id,
-                    0,
-                )
-            }
+            _ => ftd::e2(
+                format!("{} is not a valid alignment, allowed: lazy, eager", s),
+                doc_id,
+                0,
+            ),
         }
     }
 
