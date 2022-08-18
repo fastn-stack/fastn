@@ -2383,7 +2383,7 @@ impl Loading {
             "lazy" => Ok(Loading::Lazy),
             "eager" => Ok(Loading::Eager),
             _ => {
-                return ftd::e2(
+                ftd::e2(
                     format!("{} is not a valid alignment, allowed: lazy, eager", s),
                     doc_id,
                     0,

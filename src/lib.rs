@@ -1,4 +1,8 @@
+#![allow(clippy::derive_partial_eq_without_eq)]
+#![allow(clippy::get_first)]
+
 extern crate self as ftd;
+
 
 #[cfg(test)]
 #[macro_use]

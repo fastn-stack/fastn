@@ -202,7 +202,7 @@ impl EventName {
                     .collect_vec();
                 Ok(Self::OnGlobalKeySeq(keys))
             }
-            t => return ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
+            t => ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }
 }

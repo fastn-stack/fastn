@@ -100,7 +100,7 @@ pub fn boolean_and_ref(
                     Ok((value.to_owned(), complete_reference(reference)))
                 }
                 _ => {
-                    return ftd::e2(
+                    ftd::e2(
                         format!("expected boolean, found: {:?}", kind),
                         doc.name,
                         line_number,
@@ -221,7 +221,7 @@ pub fn integer_and_ref(
                     Ok((value.to_owned(), complete_reference(reference)))
                 }
                 _ => {
-                    return ftd::e2(
+                    ftd::e2(
                         format!("expected integer, found 10: {:?}", kind),
                         doc.name,
                         line_number,
@@ -342,7 +342,7 @@ pub fn decimal_and_ref(
                     Ok((value.to_owned(), complete_reference(reference)))
                 }
                 _ => {
-                    return ftd::e2(
+                    ftd::e2(
                         format!("expected decimal, found: {:?}", kind),
                         doc.name,
                         line_number,
@@ -476,7 +476,7 @@ pub fn string_and_source_and_ref(
                     complete_reference(reference),
                 )),
                 _ => {
-                    return ftd::e2(
+                    ftd::e2(
                         format!("expected string, found 3: {:?}", kind),
                         doc.name,
                         line_number,
@@ -628,7 +628,7 @@ pub fn record_and_ref(
                     Ok((fields.to_owned(), complete_reference(reference)))
                 }
                 _ => {
-                    return ftd::e2(
+                    ftd::e2(
                         format!("expected record, found: {:?}", kind),
                         doc.name,
                         line_number,
@@ -1449,7 +1449,7 @@ pub fn structure_header_to_properties(
             false,
         ),
         t => {
-            return ftd::e2(
+            ftd::e2(
                 format!("expected component, found: {:?}", t),
                 doc.name,
                 line_number,

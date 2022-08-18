@@ -1813,7 +1813,7 @@ impl Component {
 
         let events = p1.header.get_events(p1.line_number, doc, &arguments)?;
 
-        return Ok(Component {
+        Ok(Component {
             full_name: doc.resolve_name(p1.line_number, &name)?,
             properties: read_properties(
                 p1.line_number,
@@ -1837,7 +1837,7 @@ impl Component {
             condition,
             events,
             line_number: p1.line_number,
-        });
+        })
     }
 
     fn call_without_values(
@@ -2422,14 +2422,14 @@ fn check_input_conflicting_values(
             let default_value =
                 get_property_default_value("default-value", properties, doc, line_number)?;
 
-            return Err(ftd::p1::Error::ForbiddenUsage {
+            Err(ftd::p1::Error::ForbiddenUsage {
                 message: format!(
                     "value: \'{}\', default-value: \'{}\' both are used in ftd.input",
                     value, default_value
                 ),
                 doc_id: doc.name.to_string(),
                 line_number,
-            });
+            })
         }
         (_, _) => Ok(()),
     }

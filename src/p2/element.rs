@@ -1196,7 +1196,7 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
                 b: v.b,
                 alpha: v.a,
             })),
-            Err(e) => return ftd::e2(format!("{} is not a valid color: {:?}", v, e), doc_id, 0),
+            Err(e) => ftd::e2(format!("{} is not a valid color: {:?}", v, e), doc_id, 0),
         }
     }
 }

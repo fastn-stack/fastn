@@ -110,11 +110,11 @@ impl Boolean {
                 ftd::PropertyValue::Variable { name, .. }
                 | ftd::PropertyValue::Reference { name, .. } => Ok(name.to_string()),
                 _ => {
-                    return ftd::e2(
+                    ftd::e2(
                         format!("{:?} must be variable or local variable", value),
                         doc.name,
                         line_number,
-                    );
+                    )
                 }
             }
         }
