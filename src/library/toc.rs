@@ -41,7 +41,7 @@ pub struct TocItemCompat {
     pub children: Vec<TocItemCompat>,
 }
 
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Eq, Debug, Default, Clone)]
 pub struct TocItem {
     pub id: Option<String>,
     pub title: Option<String>,
@@ -78,7 +78,7 @@ impl TocItem {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 enum ParsingState {
     WaitingForNextItem,
     WaitingForAttributes,
@@ -401,7 +401,7 @@ impl ToC {
     }
 }
 
-#[derive(PartialEq, Debug, Default, Clone)]
+#[derive(PartialEq, Eq, Debug, Default, Clone)]
 pub struct ToC {
     pub items: Vec<TocItem>,
 }

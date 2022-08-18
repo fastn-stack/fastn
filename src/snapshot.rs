@@ -72,7 +72,7 @@ pub(crate) fn get_new_version(history: &[&fpm::history::FileHistory], file: &str
 }
 
 /// Related to workspace
-#[derive(PartialEq, Debug, serde::Deserialize)]
+#[derive(PartialEq, Eq, Debug, serde::Deserialize)]
 pub enum WorkspaceType {
     AbortMerge,
     Revert,

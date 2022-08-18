@@ -49,20 +49,20 @@ pub fn processor(
     Ok(ftd::Value::Object { values: v })
 }
 
-#[derive(PartialEq, Debug, Default, Clone, serde::Serialize)]
+#[derive(PartialEq, Eq, Debug, Default, Clone, serde::Serialize)]
 pub struct IncludeCode {
     pub extension: String,
     pub body: String,
 }
 
-#[derive(PartialEq, Debug, Clone, serde::Serialize)]
+#[derive(PartialEq, Eq, Debug, Clone, serde::Serialize)]
 enum RangeOrAnchor {
     Range(LineRange),
     Anchor(String),
 }
 
 // A range of lines specified with some include directive.
-#[derive(PartialEq, Debug, Clone, serde::Serialize)]
+#[derive(PartialEq, Eq, Debug, Clone, serde::Serialize)]
 enum LineRange {
     SingleLine(i32),
     Range((i32, i32)),
@@ -71,7 +71,7 @@ enum LineRange {
     RangeFull,
 }
 
-#[derive(PartialEq, Debug, Clone, serde::Serialize)]
+#[derive(PartialEq, Eq, Debug, Clone, serde::Serialize)]
 pub struct IncludeDocument {
     path: String,
     roa: RangeOrAnchor,

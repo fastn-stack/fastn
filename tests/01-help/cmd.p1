@@ -9,12 +9,12 @@ fpm: FTD Package Manager 0.1.11
 Amit Upadhyay, Arpita Jaiswal, Shobhit Sharma, Abrar Khan
 
 USAGE:
-    fpm [FLAGS] [SUBCOMMAND]
+    fpm [OPTIONS] [SUBCOMMAND]
 
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+OPTIONS:
+    -h, --help       Print help information
     -v               Sets the level of verbosity
+    -V, --version    Print version information
 
 SUBCOMMANDS:
     abort-merge           Aborts the remote changes
@@ -26,14 +26,15 @@ SUBCOMMANDS:
     create-cr             Create a Change Request
     diff                  Show un-synced changes to files in this fpm package
     edit                  Edit a file in CR workspace
-    help                  Prints this message or the help of the given subcommand(s)
+    help                  Print this message or the help of the given subcommand(s)
     mark-resolve          Marks the conflicted file as resolved
     mark-upto-date        Marks file as up to date.
     resolve-conflict      Show un-synced changes to files in this fpm package
     revert                Reverts the local changes
     rm                    Removes a file in workspace
     serve                 Create an http server and serves static files
-    start-project         Creates a template ftd project at the target location with the given project name
+    start-project         Creates a template ftd project at the target location with the given
+                              project name
     start-tracking        Add a tracking relation between two files
     status                Show the status of files in this fpm package
     stop-tracking         Remove a tracking relation between two files

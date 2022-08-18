@@ -362,6 +362,7 @@ impl Library2 {
             None
         }
 
+        #[allow(clippy::await_holding_refcell_ref)]
         async fn get_data_from_package(
             name: &str,
             package: &fpm::Package,
@@ -454,10 +455,10 @@ pub struct FPMLibrary {}
 impl FPMLibrary {
     pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         if name == "fpm" {
-            return Some(format!(
+            Some(format!(
                 "{}\n\n-- optional package-data package:\n",
                 fpm::fpm_ftd()
-            ));
+            ))
         } else {
             // Note: currently we do not allow users to import other modules from FPM.ftd
             eprintln!("FPM.ftd can only import `fpm` module");

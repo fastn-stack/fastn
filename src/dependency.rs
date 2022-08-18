@@ -181,7 +181,7 @@ impl fpm::Package {
                     .join(".packages")
                     .join(self.name.as_str())
                     .join(out_path_without_folder);
-                if (&*c_file.name()).ends_with('/') {
+                if c_file.name().ends_with('/') {
                     std::fs::create_dir_all(&file_extract_path)?;
                 } else {
                     if let Some(p) = file_extract_path.parent() {
@@ -451,7 +451,7 @@ impl fpm::Package {
                 file_extract_path = file_extract_path.join(out_path_without_folder);
                 file_extract_path
             };
-            if (&*c_file.name()).ends_with('/') {
+            if (c_file.name()).ends_with('/') {
                 std::fs::create_dir_all(&file_extract_path)?;
             } else {
                 if let Some(p) = file_extract_path.parent() {

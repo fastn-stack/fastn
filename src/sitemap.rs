@@ -364,7 +364,7 @@ pub enum ParseError {
     },
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 enum ParsingState {
     WaitingForSection,
     ParsingSection,
@@ -1300,7 +1300,9 @@ impl Sitemap {
     }
 
     /// This function will return all the readers and readers which are inherited from parent
-    // TODO: All writers are also readers
+
+    // TODO: need to handle special reader: everyone, writer: everyone
+    // readers function should return Vec<UserGroup> or Everyone
     pub fn readers<'a>(
         &self,
         doc_path: &str,
@@ -1316,6 +1318,7 @@ impl Sitemap {
                 .iter()
                 .unique()
                 .filter_map(|g| groups.get(g))
+                .chain(self.writers(doc_path, groups))
                 .collect();
         }
 

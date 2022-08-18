@@ -25,9 +25,40 @@ pub struct EditResponse {
 }
 
 pub async fn edit(
-    req: actix_web::web::Json<EditRequest>,
+    req: actix_web::HttpRequest,
+    req_data: actix_web::web::Json<EditRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
-    match edit_worker(req.0).await {
+    let mut config = match fpm::Config::read(None, false).await {
+        Ok(config) => config,
+        Err(err) => {
+            return fpm::apis::error(
+                err.to_string(),
+                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+            )
+        }
+    };
+    config.current_document = Some(req_data.path.to_string());
+
+    match config.can_write(&req, req_data.path.as_str()) {
+        Ok(can_write) => {
+            if !can_write {
+                return Ok(actix_web::HttpResponse::Unauthorized().body(format!(
+                    "You are unauthorized to access: {}",
+                    req_data.path.as_str()
+                )));
+            }
+        }
+        Err(e) => {
+            eprintln!(
+                "FPM-Error: can_read error: {}, {:?}",
+                req_data.path.as_str(),
+                e
+            );
+            return Ok(actix_web::HttpResponse::InternalServerError().body(e.to_string()));
+        }
+    };
+
+    match edit_worker(config, req_data.0).await {
         Ok(data) => fpm::apis::success(data),
         Err(err) => fpm::apis::error(
             err.to_string(),
@@ -36,9 +67,10 @@ pub async fn edit(
     }
 }
 
-pub(crate) async fn edit_worker(request: EditRequest) -> fpm::Result<EditResponse> {
-    let config = fpm::Config::read(None, false).await?;
-
+pub(crate) async fn edit_worker(
+    config: fpm::Config,
+    request: EditRequest,
+) -> fpm::Result<EditResponse> {
     if request.is_delete() {
         let path = config.root.join(&request.path);
         if path.is_dir() {

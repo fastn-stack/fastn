@@ -7,6 +7,8 @@ on:
      - '**.rs'
      - 'Cargo.*'
      - 'rust-toolchain'
+     - '.github/workflows/rust.yml'
+     - 'tests/**'
   pull_request:
     branches: [ main ]
     paths:

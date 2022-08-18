@@ -5,13 +5,13 @@ use std::iter::FromIterator;
 
 #[derive(Debug, Clone)]
 pub struct Config {
-    pub package: fpm::Package,
+    pub package: Package,
     pub root: camino::Utf8PathBuf,
     pub packages_root: camino::Utf8PathBuf,
     pub original_directory: camino::Utf8PathBuf,
     pub extra_data: serde_json::Map<String, serde_json::Value>,
     pub current_document: Option<String>,
-    pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fpm::Package>>,
+    pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
 }
 
@@ -98,6 +98,23 @@ impl Config {
         self.remote_history_dir().join(id_with_timestamp_extension)
     }
 
+    /// document_name_with_default("index.ftd") -> /
+    /// document_name_with_default("foo/index.ftd") -> /foo/
+    /// document_name_with_default("foo/abc") -> /foo/abc/
+    /// document_name_with_default("/foo/abc.ftd") -> /foo/abc/
+    pub(crate) fn document_name_with_default(&self, document_path: &str) -> String {
+        let name = self
+            .doc_id()
+            .unwrap_or_else(|| document_path.to_string())
+            .trim_matches('/')
+            .to_string();
+        if name.is_empty() {
+            "/".to_string()
+        } else {
+            format!("/{}/", name)
+        }
+    }
+
     /// history of a fpm package is stored in `.history` folder.
     ///
     /// Current design is wrong, we should move this helper to `fpm::Package` maybe.
@@ -125,7 +142,7 @@ impl Config {
         self.fpm_dir().join("conflicted")
     }
 
-    /// every package's `.history` contains a file `.latest.ftd`. It looks a bit linke this:
+    /// every package's `.history` contains a file `.latest.ftd`. It looks a bit link this:
     ///
     /// ```ftd
     /// -- import: fpm
@@ -171,11 +188,9 @@ impl Config {
                 .parent()
                 .expect("Expect fpm_path parent. Panic!")
                 .to_owned()),
-            _ => {
-                return Err(fpm::Error::UsageError {
-                    message: format!("Unable to find `fpm_path` of the package {}", o.name),
-                })
-            }
+            _ => Err(fpm::Error::UsageError {
+                message: format!("Unable to find `fpm_path` of the package {}", o.name),
+            }),
         }
     }
 
@@ -408,14 +423,13 @@ impl Config {
 
     pub async fn get_file_by_id(&self, id: &str, package: &fpm::Package) -> fpm::Result<fpm::File> {
         let file_name = fpm::Config::get_file_name(&self.root, id)?;
-        return self
-            .get_files(package)
+        self.get_files(package)
             .await?
             .into_iter()
             .find(|v| v.get_id().eq(file_name.as_str()))
             .ok_or_else(|| fpm::Error::UsageError {
                 message: format!("No such file found: {}", id),
-            });
+            })
     }
 
     pub async fn get_file_and_package_by_id(&mut self, id: &str) -> fpm::Result<fpm::File> {
@@ -925,7 +939,7 @@ impl Config {
             .sitemap_temp
             .as_ref();
 
-            let sitemap = match sitemap {
+            match sitemap {
                 Some(sitemap_temp) => {
                     let mut s = fpm::sitemap::Sitemap::parse(
                         sitemap_temp.body.as_str(),
@@ -941,8 +955,7 @@ impl Config {
                     Some(s)
                 }
                 None => None,
-            };
-            sitemap
+            }
         };
 
         config.add_package(&package);
@@ -1008,6 +1021,68 @@ impl Config {
         Ok(Vec::from_iter(
             (value - (number_of_crs_to_reserve as i32))..value,
         ))
+    }
+
+    pub(crate) fn can_read(
+        &self,
+        req: &actix_web::HttpRequest,
+        document_path: &str,
+    ) -> fpm::Result<bool> {
+        use itertools::Itertools;
+        // Get identities from remote(sid)
+        let access_identities = {
+            if let Some(identity) = req.cookie("identities") {
+                fpm::user_group::parse_identities(identity.value())
+            } else {
+                fpm::user_group::parse_cli_identities()
+            }
+        };
+
+        let document_name = self.document_name_with_default(document_path);
+        if let Some(sitemap) = &self.package.sitemap {
+            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
+            let document_readers = sitemap.readers(document_name.as_str(), &self.package.groups);
+            if document_readers.is_empty() {
+                return Ok(true);
+            }
+            return fpm::user_group::belongs_to(
+                self,
+                document_readers.as_slice(),
+                access_identities.iter().collect_vec().as_slice(),
+            );
+        }
+        Ok(true)
+    }
+
+    pub(crate) fn can_write(
+        &self,
+        req: &actix_web::HttpRequest,
+        document_path: &str,
+    ) -> fpm::Result<bool> {
+        use itertools::Itertools;
+
+        // Get identities from remote(sid)
+        let access_identities = {
+            if let Some(identity) = req.cookie("identities") {
+                fpm::user_group::parse_identities(identity.value())
+            } else {
+                fpm::user_group::parse_cli_identities()
+            }
+        };
+
+        let document_name = self.document_name_with_default(document_path);
+
+        if let Some(sitemap) = &self.package.sitemap {
+            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
+            let document_writers = sitemap.writers(document_name.as_str(), &self.package.groups);
+            return fpm::user_group::belongs_to(
+                self,
+                document_writers.as_slice(),
+                access_identities.iter().collect_vec().as_slice(),
+            );
+        }
+
+        Ok(false)
     }
 }
 

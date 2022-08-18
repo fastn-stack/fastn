@@ -32,7 +32,7 @@ pub struct SyncResponse {
     pub latest_ftd: String,
 }
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq)]
 pub enum SyncStatus {
     RegularConflict,
     NoConflict,

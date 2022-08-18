@@ -22,11 +22,9 @@ async fn main() -> fpm::Result<()> {
                     .unwrap_or_else(|_| panic!("provided port {} is wrong", p))
             });
 
-        let identities = mark.value_of("identities").map(|x| x.to_string());
-
         let bind = mark.value_of("bind").unwrap_or("127.0.0.1").to_string();
         tokio::task::spawn_blocking(move || {
-            fpm::fpm_serve(bind.as_str(), port, identities).expect("http service error");
+            fpm::fpm_serve(bind.as_str(), port).expect("http service error");
         })
         .await
         .expect("Thread spawn error");
@@ -163,7 +161,6 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
         .arg(
             clap::Arg::with_name("verbose")
                 .short('v')
-                .multiple(true)
                 .help("Sets the level of verbosity"),
         )
         .arg(
@@ -370,38 +367,61 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
                 .about("Remove a tracking relation between two files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
-        .subcommand(
-            clap::SubCommand::with_name("serve")
-                .arg(clap::Arg::with_name("port")
-                        .required_unless("positional_port")
-                        .required(false)
-                        .help("Specify the port to serve on")
-                )
-                .arg(clap::Arg::with_name("positional_port")
-                        .long("--port")
-                        .required_unless("bind")
-                        .takes_value(true)
-                        .required(false)
-                        .help("Specify the port to serve on")
-                )
-                .arg(clap::Arg::with_name("bind")
-                        .long("--bind")
-                        .takes_value(true)
-                        .required(false)
-                        .help("Specify the bind address to serve on")
-                )
-                .about("Create an http server and serves static files")
-                .version(env!("CARGO_PKG_VERSION")),
+        .subcommand(sub_command_serve())
+}
+
+fn sub_command_serve() -> clap::App<'static> {
+    let serve = clap::SubCommand::with_name("serve")
+        .arg(
+            clap::Arg::with_name("port")
+                .required_unless("positional_port")
+                .required(false)
+                .help("Specify the port to serve on"),
         )
+        .arg(
+            clap::Arg::with_name("positional_port")
+                .long("--port")
+                .required_unless("bind")
+                .takes_value(true)
+                .required(false)
+                .help("Specify the port to serve on"),
+        )
+        .arg(
+            clap::Arg::with_name("bind")
+                .long("--bind")
+                .takes_value(true)
+                .required(false)
+                .help("Specify the bind address to serve on"),
+        );
+
+    if cfg!(feature = "remote") {
+        serve
+    } else {
+        serve
+            .arg(
+                clap::Arg::with_name("identities")
+                    .long("--identities")
+                    .takes_value(true)
+                    .required(false)
+                    .help(
+                        "Http request identities, fpm allows these identities to access documents",
+                    ),
+            )
+            .about("Create an http server and serves static files")
+            .version(env!("CARGO_PKG_VERSION"))
+    }
 }
 
 pub fn version() -> &'static str {
     if std::env::args().any(|e| e == "--test") {
         env!("CARGO_PKG_VERSION")
     } else {
-        Box::leak(
-            format!("{} [{}]", env!("CARGO_PKG_VERSION"), env!("VERGEN_GIT_SHA")).into_boxed_str(),
-        )
+        match option_env!("GITHUB_SHA") {
+            Some(sha) => {
+                Box::leak(format!("{} [{}]", env!("CARGO_PKG_VERSION"), sha).into_boxed_str())
+            }
+            None => env!("CARGO_PKG_VERSION"),
+        }
     }
 }
 
