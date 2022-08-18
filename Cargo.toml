@@ -24,7 +24,7 @@ local = []
 edit = "0.1"
 async-recursion = "1"
 camino = "1"
-clap = "2"
+clap = "3"
 diffy = "0.2"
 ftd = { git = "https://github.com/FifthTry/ftd", rev = "7309549" }
 #ftd = { path = "../ftd" }

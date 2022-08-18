@@ -155,14 +155,14 @@ async fn main() -> fpm::Result<()> {
     Ok(())
 }
 
-fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'static> {
+fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
     clap::App::new("fpm: FTD Package Manager")
         .version(version)
         .author(authors)
         .setting(clap::AppSettings::ArgRequiredElseHelp)
         .arg(
             clap::Arg::with_name("verbose")
-                .short("v")
+                .short('v')
                 .multiple(true)
                 .help("Sets the level of verbosity"),
         )
@@ -186,7 +186,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 )
                 .arg(
                     clap::Arg::with_name("package-path")
-                        .short("p")
+                        .short('p')
                         .long("path")
                         .takes_value(true)
                         .help("Package path (relative)")
@@ -213,7 +213,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 .arg(
                     clap::Arg::with_name("verbose")
                         .long("verbose")
-                        .short("v")
+                        .short('v')
                         .takes_value(false)
                         .required(false),
                 )
@@ -313,7 +313,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
             clap::SubCommand::with_name("diff")
                 .args(&[
                     clap::Arg::with_name("source").multiple(true),
-                    clap::Arg::with_name("all").long("--all").short("a"),
+                    clap::Arg::with_name("all").long("--all").short('a'),
                 ])
                 .about("Show un-synced changes to files in this fpm package")
                 .version(env!("CARGO_PKG_VERSION")),
