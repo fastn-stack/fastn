@@ -370,7 +370,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
         .subcommand(sub_command_serve())
 }
 
-fn sub_command_serve() -> clap::App<'static, 'static> {
+fn sub_command_serve() -> clap::App<'static> {
     let serve = clap::SubCommand::with_name("serve")
         .arg(
             clap::Arg::with_name("port")
