@@ -1,3 +1,5 @@
+use crate::user_group::UserIdentity;
+
 /// FPM Controller Support
 /// FPM cli supports communication with fpm controller. This is an optional feature, and is only
 /// available when controller feature is enabled, which is not enabled by default.
@@ -190,4 +192,25 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
         )));
     }
     Ok(())
+}
+
+// This API will be called from can_read and can_write functions
+
+pub fn get_identities(
+    sid: &str, // all request cookies
+    identities: &[fpm::user_group::UserIdentity],
+) -> fpm::Result<Vec<UserIdentity>> {
+    // Pass all the request cookies to API
+    // Pass all the identities in request
+    // Response
+    /*
+    {
+        "user-identities": [
+        { "email": "yo@y.com" },
+        { "github": "foo" }
+        ]
+    }
+     */
+
+    Ok(vec![])
 }
