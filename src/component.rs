@@ -309,8 +309,8 @@ impl ChildComponent {
                     local_container,
                 )?;
                 if let Some(name) = reference_name {
-                    if let Some(common) = element.element.get_mut_common() {
-                        common.reference = Some(name.to_string());
+                    if let Some(common_kernel) = element.element.get_mut_common_kernel() {
+                        common_kernel.reference = Some(name.to_string());
                     }
                 }
                 elements.push(element);
@@ -327,9 +327,9 @@ impl ChildComponent {
                         is_child,
                         local_container,
                     )?;
-                    if let Some(common) = element.element.get_mut_common() {
-                        common.reference = Some(name.to_string());
-                        common.is_dummy = true;
+                    if let Some(common_kernel) = element.element.get_mut_common_kernel() {
+                        common_kernel.reference = Some(name.to_string());
+                        common_kernel.is_dummy = true;
                         elements.push(element);
                     }
                 }
@@ -465,7 +465,7 @@ impl ChildComponent {
             if !is_visible {
                 element.element.set_non_visibility(!is_visible);
             }
-            if let Some(common) = element.element.get_mut_common() {
+            if let Some(common_kernel) = element.element.get_mut_common_kernel() {
                 common.conditional_attribute.extend(conditional_attribute);
             }
             // doc.local_variables.remove(loop_name.as_str());
@@ -3005,7 +3005,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Amit"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#name")),
                     ..Default::default()
                 },

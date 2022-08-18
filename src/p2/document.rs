@@ -334,38 +334,48 @@ impl Document {
             for child in children {
                 let (events, data_id) = match child {
                     ftd::Element::Column(ftd::Column {
-                        common, container, ..
+                        common_kernel,
+                        container,
+                        ..
                     })
                     | ftd::Element::Row(ftd::Row {
-                        common, container, ..
+                        common_kernel,
+                        container,
+                        ..
                     })
                     | ftd::Element::Scene(ftd::Scene {
-                        common, container, ..
+                        common_kernel,
+                        container,
+                        ..
                     })
                     | ftd::Element::Grid(ftd::Grid {
-                        common, container, ..
+                        common_kernel,
+                        container,
+                        ..
                     }) => {
                         body_events_(&container.children, event_string, id);
                         if let Some((_, _, external_children)) = &container.external_children {
                             body_events_(external_children, event_string, id);
                         }
-                        (common.events.as_slice(), &common.data_id)
+                        (common_kernel.events.as_slice(), &common_kernel.data_id)
                     }
                     ftd::Element::Markup(ftd::Markups {
-                        common, children, ..
+                        common_kernel,
+                        children,
+                        ..
                     }) => {
                         markup_body_events_(children, event_string, id);
-                        (common.events.as_slice(), &common.data_id)
+                        (common_kernel.events.as_slice(), &common_kernel.data_id)
                     }
-                    ftd::Element::Image(ftd::Image { common, .. })
-                    | ftd::Element::Text(ftd::Text { common, .. })
-                    | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-                    | ftd::Element::Code(ftd::Code { common, .. })
-                    | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                    | ftd::Element::Input(ftd::Input { common, .. })
-                    | ftd::Element::Integer(ftd::Text { common, .. })
-                    | ftd::Element::Boolean(ftd::Text { common, .. })
-                    | ftd::Element::Decimal(ftd::Text { common, .. }) => {
+                    ftd::Element::Image(ftd::Image { common_kernel, .. })
+                    | ftd::Element::Text(ftd::Text { common_kernel, .. })
+                    | ftd::Element::TextBlock(ftd::TextBlock { common_kernel, .. })
+                    | ftd::Element::Code(ftd::Code { common_kernel, .. })
+                    | ftd::Element::IFrame(ftd::IFrame { common_kernel, .. })
+                    | ftd::Element::Input(ftd::Input { common_kernel, .. })
+                    | ftd::Element::Integer(ftd::Text { common_kernel, .. })
+                    | ftd::Element::Boolean(ftd::Text { common_kernel, .. })
+                    | ftd::Element::Decimal(ftd::Text { common_kernel, .. }) => {
                         (common.events.as_slice(), &common.data_id)
                     }
                     ftd::Element::Null => continue,
@@ -808,8 +818,8 @@ pub fn set_region_id(elements: &mut [ftd::Element]) {
 
     for (idx, element) in elements.iter().enumerate() {
         match element {
-            ftd::Element::Column(ftd::Column { common, .. })
-            | ftd::Element::Row(ftd::Row { common, .. }) => {
+            ftd::Element::Column(ftd::Column { common_kernel, .. })
+            | ftd::Element::Row(ftd::Row { common_kernel, .. }) => {
                 if common.region.as_ref().filter(|v| v.is_heading()).is_some()
                     && common.data_id.is_none()
                 {

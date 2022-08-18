@@ -1,5 +1,5 @@
 #[allow(clippy::too_many_arguments)]
-pub fn common_from_properties(
+pub fn common_kernel_from_properties(
     unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
@@ -69,7 +69,7 @@ pub fn common_from_properties(
         _ => (None, true),
     };
 
-    Ok(ftd::Common {
+    Ok(ftd::CommonKernel {
         title: ftd::p2::utils::string_optional("title", properties, doc.name, 0)?,
         conditional_attribute: Default::default(),
         condition: cond,
@@ -323,7 +323,7 @@ pub fn common_from_properties(
     })
 }
 
-fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
+fn common_kernel_arguments() -> Vec<(String, ftd::p2::Kind)> {
     vec![
         (
             "padding".to_string(),
@@ -675,9 +675,12 @@ pub fn image_function() -> ftd::Component {
                 ("title".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("align".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("crop".to_string(), ftd::p2::Kind::boolean().into_optional()),
-                ("loading".to_string(), ftd::p2::Kind::string().into_optional()),
+                (
+                    "loading".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
             ],
-            common_arguments(),
+            common_kernel_arguments(),
         ]
         .concat()
         .into_iter()
@@ -706,7 +709,7 @@ pub fn image_from_properties(
     Ok(ftd::Image {
         src: src_record,
         description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?,
-        common: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -714,7 +717,11 @@ pub fn image_from_properties(
             events,
             reference,
         )?,
-        loading: ftd::Loading::from(ftd::p2::utils::string_with_default("loading", "lazy", properties, doc.name, 0)?.as_str(), doc.name)?,
+        loading: ftd::Loading::from(
+            ftd::p2::utils::string_with_default("loading", "lazy", properties, doc.name, 0)?
+                .as_str(),
+            doc.name,
+        )?,
         crop: ftd::p2::utils::bool_with_default("crop", false, properties, doc.name, 0)?,
     })
 }
@@ -726,7 +733,7 @@ pub fn row_function() -> ftd::Component {
         root: "ftd.kernel".to_string(),
         arguments: [
             container_arguments(),
-            common_arguments(),
+            common_kernel_arguments(),
             vec![(
                 "spacing".to_string(),
                 ftd::p2::Kind::string().into_optional(),
@@ -754,7 +761,7 @@ pub fn row_from_properties(
 ) -> ftd::p1::Result<ftd::Row> {
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Row {
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -804,7 +811,7 @@ pub fn column_from_properties(
 ) -> ftd::p1::Result<ftd::Column> {
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Column {
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -854,7 +861,10 @@ pub fn iframe_function() -> ftd::Component {
                     "youtube".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                ("loading".to_string(), ftd::p2::Kind::string().into_optional()),
+                (
+                    "loading".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
             ],
             common_arguments(),
         ]
@@ -891,8 +901,12 @@ pub fn iframe_from_properties(
 
     Ok(ftd::IFrame {
         src,
-        loading: ftd::Loading::from(ftd::p2::utils::string_with_default("loading", "lazy", properties, doc.name, 0)?.as_str(), doc.name)?,
-        common: common_from_properties(
+        loading: ftd::Loading::from(
+            ftd::p2::utils::string_with_default("loading", "lazy", properties, doc.name, 0)?
+                .as_str(),
+            doc.name,
+        )?,
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -934,7 +948,7 @@ pub fn text_block_from_properties(
         } else {
             ftd::markdown_line(text.as_str())
         },
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1002,7 +1016,7 @@ pub fn code_from_properties(
             .as_str(),
             doc.name,
         )?,
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1059,7 +1073,7 @@ pub fn integer_from_properties(
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1115,7 +1129,7 @@ pub fn decimal_from_properties(
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1225,7 +1239,7 @@ pub fn boolean_from_properties(
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1636,7 +1650,7 @@ pub fn input_from_properties(
     })?;
 
     Ok(ftd::Input {
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1662,7 +1676,7 @@ pub fn scene_from_properties(
 ) -> ftd::p1::Result<ftd::Scene> {
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Scene {
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1705,7 +1719,7 @@ pub fn grid_from_properties(
             doc.name,
             0,
         )?,
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1746,7 +1760,7 @@ pub fn markup_from_properties(
 
     Ok(ftd::Markups {
         text: ftd::markup_line(value.as_str()),
-        common: common_from_properties(
+        common_kernel: common_from_properties(
             unresolved_properties,
             doc,
             condition,

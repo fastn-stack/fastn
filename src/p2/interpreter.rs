@@ -1218,7 +1218,7 @@ pub fn default_aliases() -> std::collections::BTreeMap<String, String> {
 
 pub fn default_column() -> ftd::Column {
     ftd::Column {
-        common: ftd::Common {
+        common_kernel: ftd::CommonKernel {
             width: Some(ftd::Length::Fill),
             height: Some(ftd::Length::Fill),
             position: Some(ftd::Position::Center),
@@ -1561,7 +1561,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel{
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 255,
@@ -2362,7 +2362,7 @@ mod test {
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 255,
@@ -2390,7 +2390,7 @@ mod test {
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 77,
@@ -2423,7 +2423,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Log"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 color: Some(ftd::Color {
                                     light: ftd::ColorValue {
                                         r: 255,
@@ -2452,7 +2452,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Log"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 color: Some(ftd::Color {
                                     light: ftd::ColorValue {
                                         r: 77,
@@ -2485,7 +2485,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             color: Some(ftd::Color {
                                                 light: ftd::ColorValue {
                                                     r: 255,
@@ -2514,7 +2514,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             color: Some(ftd::Color {
                                                 light: ftd::ColorValue {
                                                     r: 77,
@@ -2543,7 +2543,7 @@ mod test {
                                 open: Some(true),
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 data_id: Some(s("/ChildBuilding/")),
                                 width: Some(ftd::Length::Fill),
                                 ..Default::default()
@@ -2554,7 +2554,7 @@ mod test {
                     open: Some(true),
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("/Building/")),
                     width: Some(ftd::Length::Fill),
                     ..Default::default()
@@ -2568,7 +2568,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Log2"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 color: Some(ftd::Color {
                                     light: ftd::ColorValue {
                                         r: 255,
@@ -2597,7 +2597,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Log2"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 color: Some(ftd::Color {
                                     light: ftd::ColorValue {
                                         r: 77,
@@ -2626,7 +2626,7 @@ mod test {
                     open: Some(true),
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("/Building2/")),
                     width: Some(ftd::Length::Fill),
                     ..Default::default()
@@ -2651,7 +2651,7 @@ mod test {
                                     open: Some(true),
                                     ..Default::default()
                                 },
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     data_id: Some(s("/welcome/")),
                                     width: Some(ftd::Length::Fill),
                                     ..Default::default()
@@ -2659,7 +2659,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("toc_main")),
                             height: Some(ftd::Length::Fill),
                             width: Some(ftd::Length::Px { value: 300 }),
@@ -3444,7 +3444,7 @@ mod test {
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 255,
@@ -3472,7 +3472,7 @@ mod test {
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 77,
@@ -3505,7 +3505,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Log"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 color: Some(ftd::Color {
                                     light: ftd::ColorValue {
                                         r: 255,
@@ -3534,7 +3534,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Log"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 color: Some(ftd::Color {
                                     light: ftd::ColorValue {
                                         r: 77,
@@ -3567,7 +3567,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             color: Some(ftd::Color {
                                                 light: ftd::ColorValue {
                                                     r: 255,
@@ -3596,7 +3596,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             color: Some(ftd::Color {
                                                 light: ftd::ColorValue {
                                                     r: 77,
@@ -3625,7 +3625,7 @@ mod test {
                                 open: Some(true),
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 data_id: Some(s("/ChildBuilding/")),
                                 width: Some(ftd::Length::Fill),
                                 ..Default::default()
@@ -3636,7 +3636,7 @@ mod test {
                     open: Some(true),
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("/Building/")),
                     width: Some(ftd::Length::Fill),
                     ..Default::default()
@@ -3650,7 +3650,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Log2"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 color: Some(ftd::Color {
                                     light: ftd::ColorValue {
                                         r: 255,
@@ -3679,7 +3679,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Log2"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 color: Some(ftd::Color {
                                     light: ftd::ColorValue {
                                         r: 77,
@@ -3709,7 +3709,7 @@ mod test {
                     open: Some(true),
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("/Building2/")),
                     width: Some(ftd::Length::Fill),
                     ..Default::default()
@@ -3734,7 +3734,7 @@ mod test {
                                     open: Some(true),
                                     ..Default::default()
                                 },
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     data_id: Some(s("/welcome/")),
                                     width: Some(ftd::Length::Fill),
                                     ..Default::default()
@@ -3742,7 +3742,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("toc_main")),
                             height: Some(ftd::Length::Fill),
                             width: Some(ftd::Length::Px { value: 300 }),
@@ -3936,7 +3936,7 @@ mod test {
         let title = ftd::Markups {
             text: ftd::markdown_line("John smith"),
             line: true,
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("reference#name")),
                 ..Default::default()
             },
@@ -3948,7 +3948,7 @@ mod test {
             .children
             .push(ftd::Element::Column(ftd::Column {
                 spacing: None,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     width: Some(ftd::Length::Px { value: 200 }),
                     background_color: Some(ftd::Color {
                         light: ftd::ColorValue {
@@ -4104,7 +4104,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#name@0")),
                     ..Default::default()
                 },
@@ -4115,7 +4115,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("world"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#name@1")),
                     ..Default::default()
                 },
@@ -4126,7 +4126,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("yo yo"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#name@2")),
                     ..Default::default()
                 },
@@ -4163,7 +4163,7 @@ mod test {
     fn row() {
         let mut main = super::default_column();
         let mut row = ftd::Row {
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 data_id: Some("the-row".to_string()),
                 id: Some("the-row".to_string()),
                 ..Default::default()
@@ -4616,7 +4616,7 @@ mod test {
         let title = ftd::Markups {
             text: ftd::markup_line("What kind of documentation?"),
             line: true,
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("foo/bar#title@0")),
                 ..Default::default()
@@ -4634,7 +4634,7 @@ mod test {
                 )
                 .trim(),
             ),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#about@0")),
                 ..Default::default()
             },
@@ -4647,7 +4647,7 @@ mod test {
                 "/static/home/document-type-min.png",
                 Some(s("foo/bar#src@0")),
             ),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#src@0")),
                 ..Default::default()
             },
@@ -4659,7 +4659,7 @@ mod test {
             .children
             .push(ftd::Element::Column(ftd::Column {
                 spacing: None,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     padding: Some(30),
                     ..Default::default()
                 },
@@ -4790,7 +4790,7 @@ mod test {
     fn conditional_body() {
         let title = ftd::Markups {
             text: ftd::markup_line("What kind of documentation?"),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("foo/bar#title@0")),
                 ..Default::default()
@@ -4800,7 +4800,7 @@ mod test {
         };
         let second_title = ftd::Markups {
             text: ftd::markup_line("second call"),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("foo/bar#title@1")),
                 ..Default::default()
@@ -4819,7 +4819,7 @@ mod test {
                 )
                 .trim(),
             ),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#about@0")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@0"),
@@ -4832,7 +4832,7 @@ mod test {
         };
         let second_about = ftd::Markups {
             text: ftd::markup_line(""),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#about@1")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@1"),
@@ -4849,7 +4849,7 @@ mod test {
                 "/static/home/document-type-min.png",
                 Some(s("foo/bar#src@0")),
             ),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@0"),
@@ -4861,7 +4861,7 @@ mod test {
         };
         let second_image = ftd::Image {
             src: i("second-image.png", Some(s("foo/bar#src@1"))),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@1"),
@@ -4877,7 +4877,7 @@ mod test {
             .children
             .push(ftd::Element::Column(ftd::Column {
                 spacing: None,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     padding: Some(30),
                     ..Default::default()
                 },
@@ -4894,7 +4894,7 @@ mod test {
             .children
             .push(ftd::Element::Column(ftd::Column {
                 spacing: None,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     padding: Some(30),
                     ..Default::default()
                 },
@@ -5119,7 +5119,7 @@ mod test {
     fn conditional_header() {
         let title = ftd::Markups {
             text: ftd::markup_line("What kind of documentation?"),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("foo/bar#title@0")),
                 ..Default::default()
@@ -5129,7 +5129,7 @@ mod test {
         };
         let second_title = ftd::Markups {
             text: ftd::markup_line("second call"),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("foo/bar#title@1")),
                 ..Default::default()
@@ -5139,7 +5139,7 @@ mod test {
         };
         let third_title = ftd::Markups {
             text: ftd::markup_line("third call"),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("foo/bar#title@2")),
                 ..Default::default()
@@ -5158,7 +5158,7 @@ mod test {
                 )
                 .trim(),
             ),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@0"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
@@ -5171,7 +5171,7 @@ mod test {
         };
         let second_about = ftd::Markups {
             text: ftd::markup_line(""),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@1"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
@@ -5185,7 +5185,7 @@ mod test {
         };
         let third_about = ftd::Markups {
             text: ftd::markup_line(""),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@2"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
@@ -5202,7 +5202,7 @@ mod test {
                 "/static/home/document-type-min.png",
                 Some(s("foo/bar#src@0")),
             ),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@0"),
@@ -5214,7 +5214,7 @@ mod test {
         };
         let second_image = ftd::Image {
             src: i("second-image.png", Some(s("foo/bar#src@1"))),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@1"),
@@ -5226,7 +5226,7 @@ mod test {
         };
         let third_image = ftd::Image {
             src: i("", Some(s("foo/bar#src@2"))),
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#src@2")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@2"),
@@ -5243,7 +5243,7 @@ mod test {
             .children
             .push(ftd::Element::Column(ftd::Column {
                 spacing: None,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     padding: Some(30),
                     ..Default::default()
                 },
@@ -5260,7 +5260,7 @@ mod test {
             .children
             .push(ftd::Element::Column(ftd::Column {
                 spacing: None,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     padding: Some(30),
                     ..Default::default()
                 },
@@ -5277,7 +5277,7 @@ mod test {
             .children
             .push(ftd::Element::Column(ftd::Column {
                 spacing: None,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     padding: Some(30),
                     ..Default::default()
                 },
@@ -5747,7 +5747,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("hello"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#title@0")),
                                 ..Default::default()
                             },
@@ -5756,7 +5756,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("what about the body?"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@0"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
@@ -5780,7 +5780,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("heading without body"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#title@1")),
                                 ..Default::default()
                             },
@@ -5789,7 +5789,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line(""),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@1"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
@@ -6033,7 +6033,7 @@ mod test {
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
                         src: i("foo.png", Some(s("foo/bar#src@0"))),
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#src@0")),
                             ..Default::default()
                         },
@@ -6050,7 +6050,7 @@ mod test {
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
                         src: i("bar.png", Some(s("foo/bar#src@1"))),
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#src@1")),
                             width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
@@ -6499,7 +6499,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("present is true"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: serde_json::Value::Bool(true),
@@ -6514,7 +6514,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("present is false"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: serde_json::Value::Bool(false),
@@ -6530,7 +6530,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("dark-mode is true"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: serde_json::Value::Bool(true),
@@ -6545,7 +6545,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("dark-mode is false"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: serde_json::Value::Bool(false),
@@ -6563,7 +6563,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("inner present false"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: serde_json::Value::Bool(false),
@@ -6580,7 +6580,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("inner present true"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: serde_json::Value::Bool(true),
@@ -6599,7 +6599,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("argument present false"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@5"),
                         value: serde_json::Value::Bool(false),
@@ -6614,7 +6614,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("argument present true"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@5"),
                         value: serde_json::Value::Bool(true),
@@ -6634,7 +6634,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("argument present false"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@6"),
                         value: serde_json::Value::Bool(false),
@@ -6650,7 +6650,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("argument present true"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@6"),
                         value: serde_json::Value::Bool(true),
@@ -6669,7 +6669,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("foo2 dark-mode is true"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: serde_json::Value::Bool(true),
@@ -6685,7 +6685,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("foo2 dark-mode is false"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: serde_json::Value::Bool(false),
@@ -6842,7 +6842,7 @@ mod test {
                             children: vec![
                                 ftd::Element::Row(ftd::Row {
                                     spacing: None,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         data_id: Some(s("r2")),
                                         id: Some(s("foo-1:r2")),
                                         ..Default::default()
@@ -6857,7 +6857,7 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("r1")),
                             id: Some(s("foo-1:r1")),
                             ..Default::default()
@@ -6865,7 +6865,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("foo-1")),
                     id: Some(s("foo-1")),
                     ..Default::default()
@@ -6882,7 +6882,7 @@ mod test {
                         container: ftd::Container {
                             children: vec![ftd::Element::Row(ftd::Row {
                                 spacing: None,
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     data_id: Some(s("r2")),
                                     id: Some(s("foo-2:r2")),
                                     ..Default::default()
@@ -6891,7 +6891,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("r1")),
                             id: Some(s("foo-2:r1")),
                             ..Default::default()
@@ -6899,7 +6899,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("foo-2")),
                     id: Some(s("foo-2")),
                     ..Default::default()
@@ -7002,7 +7002,7 @@ mod test {
                             children: vec![
                                 ftd::Element::Row(ftd::Row {
                                     spacing: None,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         data_id: Some(s("r2")),
                                         id: Some(s("foo-1:r2")),
                                         ..Default::default()
@@ -7017,7 +7017,7 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("r1")),
                             id: Some(s("foo-1:r1")),
                             ..Default::default()
@@ -7025,7 +7025,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("foo-1")),
                     id: Some(s("foo-1")),
                     ..Default::default()
@@ -7042,7 +7042,7 @@ mod test {
                         container: ftd::Container {
                             children: vec![ftd::Element::Row(ftd::Row {
                                 spacing: None,
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     data_id: Some(s("r2")),
                                     id: Some(s("foo-2:r2")),
                                     ..Default::default()
@@ -7051,7 +7051,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("r1")),
                             id: Some(s("foo-2:r1")),
                             ..Default::default()
@@ -7059,7 +7059,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("foo-2")),
                     id: Some(s("foo-2")),
                     ..Default::default()
@@ -7109,7 +7109,7 @@ mod test {
                         container: ftd::Container {
                             children: vec![ftd::Element::Row(ftd::Row {
                                 spacing: None,
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     data_id: Some(s("some-child")),
                                     ..Default::default()
                                 },
@@ -7259,7 +7259,7 @@ mod test {
                                                     ftd::Markups {
                                                         text: ftd::markdown_line("Mobile Display"),
                                                         line: true,
-                                                        common: ftd::Common {
+                                                        common_kernel: ftd::CommonKernel {
                                                             data_id: Some(s("mobile-display")),
                                                             id: Some(s(
                                                                 "foo-id:some-child:mobile-display",
@@ -7271,7 +7271,7 @@ mod test {
                                                 )],
                                                 ..Default::default()
                                             },
-                                            common: ftd::Common {
+                                            common_kernel: ftd::CommonKernel {
                                                 condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: serde_json::Value::Bool(true),
@@ -7293,7 +7293,7 @@ mod test {
                                                 )],
                                                 ..Default::default()
                                             },
-                                            common: ftd::Common {
+                                            common_kernel: ftd::CommonKernel {
                                                 condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: serde_json::Value::Bool(false),
@@ -7314,7 +7314,7 @@ mod test {
                                     append_at: Some(s("some-child")),
                                     ..Default::default()
                                 },
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     id: Some(s("foo-id")),
                                     data_id: Some(s("foo-id")),
                                     ..Default::default()
@@ -7322,7 +7322,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("c2")),
                             id: Some(s("c2")),
                             ..Default::default()
@@ -7330,7 +7330,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("c1")),
                     id: Some(s("c1")),
                     ..Default::default()
@@ -7687,7 +7687,7 @@ mod test {
                                                 children: vec![],
                                                 ..Default::default()
                                             },
-                                            common: ftd::Common {
+                                            common_kernel: ftd::CommonKernel {
                                                 data_id: Some(s("desktop-container")),
                                                 ..Default::default()
                                             },
@@ -7701,7 +7701,7 @@ mod test {
                                         append_at: Some(s("desktop-container")),
                                         ..Default::default()
                                     },
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: serde_json::Value::Bool(false),
@@ -7716,7 +7716,7 @@ mod test {
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
                                             spacing: None,
-                                            common: ftd::Common {
+                                            common_kernel: ftd::CommonKernel {
                                                 data_id: Some(s("mobile-container")),
                                                 ..Default::default()
                                             },
@@ -7731,7 +7731,7 @@ mod test {
                                         append_at: Some(s("mobile-container")),
                                         ..Default::default()
                                     },
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: serde_json::Value::Bool(true),
@@ -7743,7 +7743,7 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("start")),
                             ..Default::default()
                         },
@@ -7840,7 +7840,7 @@ mod test {
                             container: ftd::Container {
                                 children: vec![ftd::Element::Column(ftd::Column {
                                     spacing: None,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         data_id: Some(s("foo")),
                                         ..Default::default()
                                     },
@@ -7848,7 +7848,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: serde_json::Value::Bool(false),
@@ -7863,7 +7863,7 @@ mod test {
                             container: ftd::Container {
                                 children: vec![ftd::Element::Column(ftd::Column {
                                     spacing: None,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         data_id: Some(s("foo")),
                                         ..Default::default()
                                     },
@@ -7871,7 +7871,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: serde_json::Value::Bool(true),
@@ -7964,7 +7964,7 @@ mod test {
                     container: ftd::Container {
                         children: vec![ftd::Element::Column(ftd::Column {
                             spacing: None,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 data_id: Some(s("foo")),
                                 ..Default::default()
                             },
@@ -7972,7 +7972,7 @@ mod test {
                         })],
                         ..Default::default()
                     },
-                    common: ftd::Common {
+                    common_kernel: ftd::CommonKernel {
                         data_id: Some(s("desktop-container")),
                         ..Default::default()
                     },
@@ -8004,7 +8004,7 @@ mod test {
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
                                             spacing: None,
-                                            common: ftd::Common {
+                                            common_kernel: ftd::CommonKernel {
                                                 data_id: Some(s("foo")),
                                                 ..Default::default()
                                             },
@@ -8012,7 +8012,7 @@ mod test {
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         data_id: Some(s("desktop-container")),
                                         ..Default::default()
                                     },
@@ -8026,7 +8026,7 @@ mod test {
                                 append_at: Some(s("desktop-container")),
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: serde_json::Value::Bool(false),
@@ -8044,7 +8044,7 @@ mod test {
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
                                             spacing: None,
-                                            common: ftd::Common {
+                                            common_kernel: ftd::CommonKernel {
                                                 data_id: Some(s("foo")),
                                                 ..Default::default()
                                             },
@@ -8052,7 +8052,7 @@ mod test {
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         data_id: Some(s("mobile-container")),
                                         ..Default::default()
                                     },
@@ -8066,7 +8066,7 @@ mod test {
                                 append_at: Some(s("mobile-container")),
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: serde_json::Value::Bool(true),
@@ -8201,14 +8201,14 @@ mod test {
                                                 children: vec![],
                                                 ..Default::default()
                                             },
-                                            common: ftd::Common {
+                                            common_kernel: ftd::CommonKernel {
                                                 data_id: Some(s("main-container")),
                                                 ..Default::default()
                                             },
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: serde_json::Value::Bool(false),
@@ -8222,7 +8222,7 @@ mod test {
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
                                             spacing: None,
-                                            common: ftd::Common {
+                                            common_kernel: ftd::CommonKernel {
                                                 data_id: Some(s("main-container")),
                                                 ..Default::default()
                                             },
@@ -8230,7 +8230,7 @@ mod test {
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: serde_json::Value::Bool(true),
@@ -8241,7 +8241,7 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("start")),
                             ..Default::default()
                         },
@@ -8312,7 +8312,7 @@ mod test {
         let mut main = self::default_column();
         main.container.children.push(ftd::Element::Row(ftd::Row {
             spacing: None,
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 data_id: Some(s("r1")),
                 id: Some(s("r1")),
                 ..Default::default()
@@ -8334,7 +8334,7 @@ mod test {
                 open: Some(true),
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 data_id: Some(s("r2")),
                 id: Some(s("r2")),
                 ..Default::default()
@@ -8347,7 +8347,7 @@ mod test {
                 open: Some(false),
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 data_id: Some(s("r3")),
                 id: Some(s("r3")),
                 ..Default::default()
@@ -8409,7 +8409,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     submit: Some("https://httpbin.org/post?x=10".to_string()),
                     ..Default::default()
                 },
@@ -8449,7 +8449,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("hello"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@0")),
                             ..Default::default()
                         },
@@ -8458,7 +8458,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("world"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@0")),
                             ..Default::default()
                         },
@@ -8477,7 +8477,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Arpita Jaiswal"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@1")),
                             ..Default::default()
                         },
@@ -8486,7 +8486,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Arpita is developer at Fifthtry"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@1")),
                             ..Default::default()
                         },
@@ -8495,7 +8495,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -8508,7 +8508,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Amit Upadhyay"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@2")),
                             ..Default::default()
                         },
@@ -8517,7 +8517,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Amit is CEO of FifthTry."),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@2")),
                             ..Default::default()
                         },
@@ -8526,7 +8526,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -8897,7 +8897,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Arpita Jaiswal"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@0")),
                             ..Default::default()
                         },
@@ -8906,7 +8906,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Arpita is developer at Fifthtry"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@0")),
                             ..Default::default()
                         },
@@ -8915,7 +8915,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#people")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#$loop$@0.ceo"),
@@ -8934,7 +8934,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Amit Upadhyay"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@1")),
                             ..Default::default()
                         },
@@ -8943,7 +8943,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Amit is CEO of FifthTry."),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@1")),
                             ..Default::default()
                         },
@@ -8952,7 +8952,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#$loop$@1.ceo"),
                     value: serde_json::Value::Bool(true),
@@ -9301,7 +9301,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Arpita"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#people")),
                     ..Default::default()
                 },
@@ -9313,7 +9313,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Asit"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#people")),
                     ..Default::default()
                 },
@@ -9325,7 +9325,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Sourabh"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#people")),
                     ..Default::default()
                 },
@@ -9337,7 +9337,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("$loop$"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#people")),
                     is_dummy: true,
                     ..Default::default()
@@ -9484,7 +9484,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Arpita Jaiswal"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@0,0")),
                             ..Default::default()
                         },
@@ -9493,7 +9493,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Arpita is developer at Fifthtry"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@0,0")),
                             ..Default::default()
                         },
@@ -9502,7 +9502,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -9515,7 +9515,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Amit Upadhyay"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@0,1")),
                             ..Default::default()
                         },
@@ -9524,7 +9524,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Amit is CEO of FifthTry."),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@0,1")),
                             ..Default::default()
                         },
@@ -9533,7 +9533,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -9773,7 +9773,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"0.1.18\""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9828,7 +9828,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"0.1.18\""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9885,7 +9885,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"ftd\""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9897,7 +9897,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"0.1.18\""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9909,7 +9909,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("["),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9921,7 +9921,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"2018\""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9933,7 +9933,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"ftd: FifthTry Document Format\""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9945,7 +9945,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"MIT\""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9957,7 +9957,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"https://github.com/FifthTry/ftd\""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9969,7 +9969,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"https://ftd.dev\""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     ..Default::default()
                 },
@@ -9981,7 +9981,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("$loop$"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#test")),
                     is_dummy: true,
                     ..Default::default()
@@ -10235,7 +10235,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("\"ftd\""),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@0")),
                             ..Default::default()
                         },
@@ -10244,7 +10244,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("name"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@0")),
                             ..Default::default()
                         },
@@ -10253,7 +10253,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -10266,7 +10266,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("\"0.1.18\""),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@1")),
                             ..Default::default()
                         },
@@ -10275,7 +10275,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("version"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@1")),
                             ..Default::default()
                         },
@@ -10284,7 +10284,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -10297,7 +10297,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("["),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@2")),
                             ..Default::default()
                         },
@@ -10306,7 +10306,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("authors"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@2")),
                             ..Default::default()
                         },
@@ -10315,7 +10315,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -10328,7 +10328,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("\"2018\""),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@3")),
                             ..Default::default()
                         },
@@ -10337,7 +10337,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("edition"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@3")),
                             ..Default::default()
                         },
@@ -10346,7 +10346,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -10359,7 +10359,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("\"ftd: FifthTry Document Format\""),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@4")),
                             ..Default::default()
                         },
@@ -10368,7 +10368,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("description"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@4")),
                             ..Default::default()
                         },
@@ -10377,7 +10377,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -10390,7 +10390,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("\"MIT\""),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@5")),
                             ..Default::default()
                         },
@@ -10399,7 +10399,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("license"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@5")),
                             ..Default::default()
                         },
@@ -10408,7 +10408,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -10421,7 +10421,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("\"https://github.com/FifthTry/ftd\""),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@6")),
                             ..Default::default()
                         },
@@ -10430,7 +10430,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("repository"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@6")),
                             ..Default::default()
                         },
@@ -10439,7 +10439,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -10452,7 +10452,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("\"https://ftd.dev\""),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#name@7")),
                             ..Default::default()
                         },
@@ -10461,7 +10461,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("homepage"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#body@7")),
                             ..Default::default()
                         },
@@ -10470,7 +10470,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -10820,7 +10820,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("ab title"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#toc@0.title")),
                             link: Some(s("ab link")),
                             ..Default::default()
@@ -10833,7 +10833,7 @@ mod test {
                             children: vec![ftd::Element::Markup(ftd::Markups {
                                 text: ftd::markdown_line("aa title"),
                                 line: true,
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     reference: Some(s("foo/bar#toc@0,1.title")),
                                     link: Some(s("aa link")),
                                     ..Default::default()
@@ -10850,7 +10850,7 @@ mod test {
                             children: vec![ftd::Element::Markup(ftd::Markups {
                                 text: ftd::markdown_line("aaa title"),
                                 line: true,
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     reference: Some(s("foo/bar#toc@0,2.title")),
                                     link: Some(s("aaa link")),
                                     ..Default::default()
@@ -10864,7 +10864,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#toc")),
                 ..Default::default()
             },
@@ -10877,7 +10877,7 @@ mod test {
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("ab title"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             reference: Some(s("foo/bar#toc@1,0.title")),
                             link: Some(s("ab link")),
                             ..Default::default()
@@ -10890,7 +10890,7 @@ mod test {
                             children: vec![ftd::Element::Markup(ftd::Markups {
                                 text: ftd::markdown_line("aa title"),
                                 line: true,
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     reference: Some(s("foo/bar#toc@1,0,1.title")),
                                     link: Some(s("aa link")),
                                     ..Default::default()
@@ -10907,7 +10907,7 @@ mod test {
                             children: vec![ftd::Element::Markup(ftd::Markups {
                                 text: ftd::markdown_line("aaa title"),
                                 line: true,
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     reference: Some(s("foo/bar#toc@1,0,2.title")),
                                     link: Some(s("aaa link")),
                                     ..Default::default()
@@ -10921,7 +10921,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 reference: Some(s("foo/bar#toc")),
                 ..Default::default()
             },
@@ -11336,7 +11336,7 @@ mod test {
                 children: vec![ftd::Element::Markup(ftd::Markups {
                     text: ftd::markdown_line("Hello World"),
                     line: true,
-                    common: ftd::Common {
+                    common_kernel: ftd::CommonKernel {
                         reference: Some(s("hello-world-variable#hello-world")),
                         ..Default::default()
                     },
@@ -11411,7 +11411,7 @@ mod test {
                 text: ftd::markdown_line("hello world"),
                 line: true,
                 line_clamp: Some(10),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#name@0")),
                     ..Default::default()
                 },
@@ -11424,7 +11424,7 @@ mod test {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 line_clamp: Some(10),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#name@1")),
                     ..Default::default()
                 },
@@ -11437,7 +11437,7 @@ mod test {
                 text: ftd::markdown_line("this is nice"),
                 line: true,
                 line_clamp: Some(20),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#name@2")),
                     ..Default::default()
                 },
@@ -11786,7 +11786,7 @@ mod test {
                 text: ftd::markdown_line("Software developer working at fifthtry."),
                 line: true,
                 line_clamp: Some(20),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#abrar.bio")),
                     ..Default::default()
                 },
@@ -11834,7 +11834,7 @@ mod test {
                     text: ftd::markdown_line("Arpita"),
                     line: true,
                     line_clamp: Some(10),
-                    common: ftd::Common {
+                    common_kernel: ftd::CommonKernel {
                         reference: Some(s("foo/bar#name@0")),
                         ..Default::default()
                     },
@@ -11851,7 +11851,7 @@ mod test {
                     text: ftd::markdown_line("Amit Upadhyay"),
                     line: true,
                     line_clamp: Some(20),
-                    common: ftd::Common {
+                    common_kernel: ftd::CommonKernel {
                         reference: Some(s("foo/bar#name@1")),
                         ..Default::default()
                     },
@@ -12032,7 +12032,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Amit Upadhyay"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#amitu.name")),
                     ..Default::default()
                 },
@@ -12043,7 +12043,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("1000"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#amitu.phone")),
                     ..Default::default()
                 },
@@ -12055,7 +12055,7 @@ mod test {
                 text: ftd::markdown_line("John Doe"),
                 line: true,
                 line_clamp: Some(50),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#acme.contact")),
                     ..Default::default()
                 },
@@ -12285,7 +12285,7 @@ mod test {
                                             })],
                                             ..Default::default()
                                         },
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             data_id: Some(s("display-text-id")),
                                             ..Default::default()
                                         },
@@ -12296,7 +12296,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("inside-page-id")),
                             ..Default::default()
                         },
@@ -12330,7 +12330,7 @@ mod test {
                                                 )],
                                                 ..Default::default()
                                             },
-                                            common: ftd::Common {
+                                            common_kernel: ftd::CommonKernel {
                                                 data_id: Some(s("display-text-id")),
                                                 id: Some(s(
                                                     "page-id:inside-page-id:display-text-id",
@@ -12344,7 +12344,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 data_id: Some(s("inside-page-id")),
                                 id: Some(s("page-id:inside-page-id")),
                                 ..Default::default()
@@ -12352,7 +12352,7 @@ mod test {
                         }),
                         ftd::Element::Row(ftd::Row {
                             spacing: None,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 data_id: Some(s("page-id-row")),
                                 id: Some(s("page-id-row")),
                                 ..Default::default()
@@ -12362,7 +12362,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("page-id")),
                     id: Some(s("page-id")),
                     ..Default::default()
@@ -12430,7 +12430,7 @@ mod test {
                     children: vec![ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Heading 31"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             region: Some(ftd::Region::Title),
                             reference: Some(s("foo/bar#title@0")),
                             ..Default::default()
@@ -12439,7 +12439,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     region: Some(ftd::Region::H3),
                     id: Some(s("heading-31")),
                     ..Default::default()
@@ -12455,7 +12455,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Heading 11"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 region: Some(ftd::Region::Title),
                                 reference: Some(s("foo/bar#title@1")),
                                 ..Default::default()
@@ -12469,7 +12469,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("Heading 21"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             region: Some(ftd::Region::Title),
                                             reference: Some(s("foo/bar#title@2")),
                                             ..Default::default()
@@ -12483,7 +12483,7 @@ mod test {
                                                 ftd::Element::Markup(ftd::Markups {
                                                     text: ftd::markdown_line("Heading 32"),
                                                     line: true,
-                                                    common: ftd::Common {
+                                                    common_kernel: ftd::CommonKernel {
                                                         region: Some(ftd::Region::Title),
                                                         reference: Some(s("foo/bar#title@3")),
                                                         ..Default::default()
@@ -12498,7 +12498,7 @@ mod test {
                                             ],
                                             ..Default::default()
                                         },
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             region: Some(ftd::Region::H3),
                                             id: Some(s("heading-32")),
                                             ..Default::default()
@@ -12507,7 +12507,7 @@ mod test {
                                 ],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 region: Some(ftd::Region::H2),
                                 id: Some(s("heading-21")),
                                 ..Default::default()
@@ -12519,7 +12519,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("Heading 22"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         reference: Some(s("foo/bar#title@5")),
                                         region: Some(ftd::Region::Title),
                                         ..Default::default()
@@ -12528,7 +12528,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 region: Some(ftd::Region::H2),
                                 id: Some(s("heading-22")),
                                 ..Default::default()
@@ -12540,7 +12540,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("Heading 23"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         region: Some(ftd::Region::Title),
                                         reference: Some(s("foo/bar#title@6")),
                                         ..Default::default()
@@ -12549,7 +12549,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 region: Some(ftd::Region::H2),
                                 id: Some(s("heading-23")),
                                 ..Default::default()
@@ -12558,7 +12558,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     region: Some(ftd::Region::H1),
                     id: Some(s("heading-11")),
                     ..Default::default()
@@ -12574,7 +12574,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Heading 12"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#title@7")),
                                 region: Some(ftd::Region::Title),
                                 ..Default::default()
@@ -12587,7 +12587,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("Heading 33"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         reference: Some(s("foo/bar#title@8")),
                                         region: Some(ftd::Region::Title),
                                         ..Default::default()
@@ -12596,7 +12596,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 region: Some(ftd::Region::H3),
                                 id: Some(s("heading-33")),
                                 ..Default::default()
@@ -12608,7 +12608,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("Heading 24"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         reference: Some(s("foo/bar#title@9")),
                                         region: Some(ftd::Region::Title),
                                         ..Default::default()
@@ -12617,7 +12617,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 region: Some(ftd::Region::H2),
                                 id: Some(s("heading-24")),
                                 ..Default::default()
@@ -12626,7 +12626,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     region: Some(ftd::Region::H1),
                     id: Some(s("heading-12")),
                     ..Default::default()
@@ -12705,7 +12705,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Mobile"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#mobile"),
                                     value: serde_json::Value::Bool(true),
@@ -12717,7 +12717,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Desktop"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#mobile"),
                                     value: serde_json::Value::Bool(false),
@@ -12738,7 +12738,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Click Here!"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -12787,7 +12787,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Hello"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#name@0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#open@0"),
@@ -12939,7 +12939,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Click here"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 events: vec![ftd::Event {
                                     name: s("onclick"),
                                     action: ftd::Action {
@@ -12955,7 +12955,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Open True"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(true),
@@ -12967,7 +12967,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Open False"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(false),
@@ -13021,7 +13021,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("ab title"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 events: vec![ftd::Event {
                                     name: s("onclick"),
                                     action: ftd::Action {
@@ -13041,7 +13041,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("aa title"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         events: vec![ftd::Event {
                                             name: s("onclick"),
                                             action: ftd::Action {
@@ -13057,7 +13057,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(true),
@@ -13071,7 +13071,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("aaa title"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         events: vec![ftd::Event {
                                             name: s("onclick"),
                                             action: ftd::Action {
@@ -13087,7 +13087,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(true),
@@ -13098,7 +13098,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#toc")),
                     ..Default::default()
                 },
@@ -13169,7 +13169,7 @@ mod test {
                                             ftd::Element::Markup(ftd::Markups {
                                                 text: ftd::markdown_line("Click here!"),
                                                 line: true,
-                                                common: ftd::Common {
+                                                common_kernel: ftd::CommonKernel {
                                                     events: vec![ftd::Event {
                                                         name: s("onclick"),
                                                         action: ftd::Action {
@@ -13202,7 +13202,7 @@ mod test {
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#open@0"),
                                             value: serde_json::Value::Bool(true),
@@ -13213,7 +13213,7 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("foo-id")),
                             ..Default::default()
                         },
@@ -13268,7 +13268,7 @@ mod test {
             .children
             .push(ftd::Element::Integer(ftd::Text {
                 text: markdown_line("20"),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#bar")),
                     ..Default::default()
                 },
@@ -13306,7 +13306,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: markdown_line("other-foo says hello"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#bar")),
                     ..Default::default()
                 },
@@ -13348,7 +13348,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: markdown_line("hello"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     cursor: Some(s("pointer")),
                     ..Default::default()
                 },
@@ -13387,7 +13387,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("/hello3"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 255,
@@ -13414,7 +13414,7 @@ mod test {
                 children: vec![ftd::Element::Markup(ftd::Markups {
                     text: ftd::markdown_line("hello5"),
                     line: true,
-                    common: ftd::Common {
+                    common_kernel: ftd::CommonKernel {
                         color: Some(ftd::Color {
                             light: ftd::ColorValue {
                                 r: 0,
@@ -13522,7 +13522,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("Bar says hello"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             reference: Some(s("foo/bar#name@0,0")),
                                             ..Default::default()
                                         },
@@ -13531,7 +13531,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("Hello"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             reference: Some(s("foo/bar#greeting")),
                                             ..Default::default()
                                         },
@@ -13550,7 +13550,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Hello"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#greeting")),
                                 ..Default::default()
                             },
@@ -13600,7 +13600,7 @@ mod test {
             .children
             .push(ftd::Element::Integer(ftd::Text {
                 text: ftd::markdown_line("0"),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#count")),
                     ..Default::default()
                 },
@@ -13612,7 +13612,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Hello on 8"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
                         value: serde_json::Value::from(8),
@@ -13628,7 +13628,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("increment counter"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -13647,7 +13647,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("decrement counter"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -13666,7 +13666,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("increment counter"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -13692,7 +13692,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("increment counter by 2 clamp 2 10"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -13733,7 +13733,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("decrement count clamp 2 10"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -13805,7 +13805,7 @@ mod test {
                     children: vec![
                         ftd::Element::Integer(ftd::Text {
                             text: ftd::markdown_line("0"),
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#count@0")),
                                 ..Default::default()
                             },
@@ -13814,7 +13814,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("increment counter"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 events: vec![ftd::Event {
                                     name: s("onclick"),
                                     action: ftd::Action {
@@ -13837,7 +13837,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("decrement counter"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 events: vec![ftd::Event {
                                     name: s("onclick"),
                                     action: ftd::Action {
@@ -13902,7 +13902,7 @@ mod test {
                 children: vec![ftd::Element::Markup(ftd::Markups {
                     text: ftd::markup_line("CTA says Hello"),
                     line: true,
-                    common: ftd::Common {
+                    common_kernel: ftd::CommonKernel {
                         reference: Some(s("foo/bar#cta@0")),
                         ..Default::default()
                     },
@@ -13944,7 +13944,7 @@ mod test {
             .children
             .push(ftd::Element::Image(ftd::Image {
                 src: i("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg", Some(s("foo/bar#src@0"))),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel{
                     condition: Some(
                         ftd::Condition {
                             variable: s("foo/bar#count"),
@@ -13982,7 +13982,7 @@ mod test {
                     "https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png",
                     Some(s("foo/bar#src@1")),
                 ),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
                         value: serde_json::Value::from(1),
@@ -14064,7 +14064,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Arpita"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#$loop$@0,0")),
                                 ..Default::default()
                             },
@@ -14073,7 +14073,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Ayushi"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#$loop$@0,1")),
                                 ..Default::default()
                             },
@@ -14082,7 +14082,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("AmitU"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#$loop$@0,2")),
                                 ..Default::default()
                             },
@@ -14137,7 +14137,7 @@ mod test {
                                 ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("Water"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         events: vec![ftd::Event {
                                             name: s("onclick"),
                                             action: ftd::Action {
@@ -14153,7 +14153,7 @@ mod test {
                                 }),
                                 ftd::Element::Column(ftd::Column {
                                     spacing: None,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#visible@0,0,2"),
                                             value: serde_json::Value::Bool(true),
@@ -14178,7 +14178,7 @@ mod test {
                                 ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("Juice"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         events: vec![ftd::Event {
                                             name: s("onclick"),
                                             action: ftd::Action {
@@ -14194,7 +14194,7 @@ mod test {
                                 }),
                                 ftd::Element::Column(ftd::Column {
                                     spacing: None,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#visible@0,0,3"),
                                             value: serde_json::Value::Bool(true),
@@ -14218,7 +14218,7 @@ mod test {
                                                     ftd::Element::Markup(ftd::Markups {
                                                         text: ftd::markdown_line("Mango Juice"),
                                                         line: true,
-                                                        common: ftd::Common {
+                                                        common_kernel: ftd::CommonKernel {
                                                             events: vec![ftd::Event {
                                                                 name: s("onclick"),
                                                                 action: ftd::Action {
@@ -14238,7 +14238,7 @@ mod test {
                                                     }),
                                                     ftd::Element::Column(ftd::Column {
                                                         spacing: None,
-                                                        common: ftd::Common {
+                                                        common_kernel: ftd::CommonKernel {
                                                             condition: Some(ftd::Condition {
                                                                 variable: s(
                                                                     "foo/bar#visible@0,0,1,2",
@@ -14266,7 +14266,7 @@ mod test {
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         width: Some(ftd::Length::Fill),
                                         height: Some(ftd::Length::Fill),
                                         position: Some(ftd::Position::Center),
@@ -14283,7 +14283,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel {
                 width: Some(ftd::Length::Fill),
                 height: Some(ftd::Length::Fill),
                 position: Some(ftd::Position::Center),
@@ -14303,7 +14303,7 @@ mod test {
                                 ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("Beverage"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         events: vec![ftd::Event {
                                             name: s("onclick"),
                                             action: ftd::Action {
@@ -14319,7 +14319,7 @@ mod test {
                                 }),
                                 ftd::Element::Column(ftd::Column {
                                     spacing: None,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#visible@0,0"),
                                             value: serde_json::Value::Bool(true),
@@ -14340,7 +14340,7 @@ mod test {
                             append_at: Some(s("some-child")),
                             ..Default::default()
                         },
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("beverage")),
                             id: Some(s("beverage")),
                             ..Default::default()
@@ -14414,7 +14414,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("hello"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#hello2@0")),
                                 ..Default::default()
                             },
@@ -14423,7 +14423,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("hello"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#hello")),
                                 ..Default::default()
                             },
@@ -14523,7 +14523,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Heading 00"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 region: Some(ftd::Region::Title),
                                 reference: Some(s("foo/bar#title@0")),
                                 ..Default::default()
@@ -14533,7 +14533,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Heading 00 body"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 id: Some(s("one:markdown-id")),
                                 data_id: Some(s("markdown-id")),
                                 reference: Some(s("foo/bar#body@0,1")),
@@ -14548,7 +14548,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     region: Some(ftd::Region::H0),
                     id: Some(s("one")),
                     data_id: Some(s("one")),
@@ -14565,7 +14565,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Heading 01"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 region: Some(ftd::Region::Title),
                                 reference: Some(s("foo/bar#title@1")),
                                 ..Default::default()
@@ -14575,7 +14575,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Heading 01 body"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 data_id: Some(s("markdown-id")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@1"),
@@ -14589,7 +14589,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     region: Some(ftd::Region::H0),
                     id: Some(s("heading-01")),
                     ..Default::default()
@@ -14646,7 +14646,7 @@ mod test {
                     children: vec![ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("hello"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("hello")),
                             ..Default::default()
                         },
@@ -14665,7 +14665,7 @@ mod test {
                     children: vec![ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("hello"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("hello")),
                             id: Some(s("asd:hello")),
                             ..Default::default()
@@ -14674,7 +14674,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     data_id: Some(s("asd")),
                     id: Some(s("asd")),
                     ..Default::default()
@@ -14809,7 +14809,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -14869,7 +14869,7 @@ mod test {
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
                         spacing: None,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             id: Some(s("foo-id:some-id")),
                             data_id: Some(s("some-id")),
                             ..Default::default()
@@ -14885,7 +14885,7 @@ mod test {
                     append_at: Some(s("some-id")),
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     id: Some(s("foo-id")),
                     data_id: Some(s("foo-id")),
                     ..Default::default()
@@ -14944,7 +14944,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("commit message 1"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         reference: Some(s("foo/bar#commit@0,0.message")),
                                         ..Default::default()
                                     },
@@ -14960,7 +14960,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("commit message 2"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         reference: Some(s("foo/bar#commit@0,1.message")),
                                         ..Default::default()
                                     },
@@ -14976,7 +14976,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("file filename 1"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         reference: Some(s("foo/bar#file@0,2.filename")),
                                         ..Default::default()
                                     },
@@ -14992,7 +14992,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("file filename 2"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         reference: Some(s("foo/bar#file@0,3.filename")),
                                         ..Default::default()
                                     },
@@ -15090,7 +15090,7 @@ mod test {
                     children: vec![ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("Hello"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel{
                             top: Some(0),
                             left: Some(0),
                             ..Default::default()
@@ -15099,7 +15099,7 @@ mod test {
                     }), ftd::Element::Markup(ftd::Markups {
                         text: ftd::markdown_line("World"),
                         line: true,
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel{
                             top: Some(10),
                             right: Some(30),
                             scale: Some(1.5),
@@ -15113,7 +15113,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel{
                     width: Some(
                         ftd::Length::Px {
                             value: 1000,
@@ -15167,7 +15167,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Start..."),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#current"),
                         value: serde_json::Value::String(s("some value")),
@@ -15182,7 +15182,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("some value"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#current")),
                     ..Default::default()
                 },
@@ -15194,7 +15194,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("change message"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -15226,7 +15226,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("change message again"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -15287,7 +15287,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello world"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     anchor: Some(ftd::Anchor::Parent),
                     right: Some(0),
                     top: Some(100),
@@ -15366,7 +15366,7 @@ mod test {
                                     "https://www.nilinswap.com/static/img/dp.jpeg",
                                     Some(s("foo/bar#src0")),
                                 ),
-                                common: ftd::Common {
+                                common_kernel: ftd::CommonKernel {
                                     reference: Some(s("foo/bar#src0")),
                                     ..Default::default()
                                 },
@@ -15433,7 +15433,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Hello World"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel{
                     conditional_attribute: std::iter::IntoIterator::into_iter([(
                         s("color"),
                         ftd::ConditionalAttribute {
@@ -15534,7 +15534,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Hello"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(true),
@@ -15549,7 +15549,7 @@ mod test {
                                 children: vec![ftd::Element::Markup(ftd::Markups {
                                     text: ftd::markdown_line("Hello Again"),
                                     line: true,
-                                    common: ftd::Common {
+                                    common_kernel: ftd::CommonKernel {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#open@0,1"),
                                             value: serde_json::Value::Bool(true),
@@ -15560,7 +15560,7 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 events: vec![
                                     ftd::Event {
                                         name: s("onclick"),
@@ -15585,7 +15585,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -15638,7 +15638,7 @@ mod test {
             container: ftd::Container {
                 children: vec![ftd::Element::Integer(ftd::Text {
                     text: ftd::markdown_line("20"),
-                    common: ftd::Common {
+                    common_kernel: ftd::CommonKernel{
                         conditional_attribute: std::iter::IntoIterator::into_iter([(
                             s("color"),
                             ftd::ConditionalAttribute {
@@ -15678,7 +15678,7 @@ mod test {
                 })],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel{
                 events: vec![
                     ftd::Event {
                         name: s("onclick"),
@@ -15751,7 +15751,7 @@ mod test {
                         children: vec![ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Hello"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#b@0,0"),
                                     value: serde_json::Value::Bool(true),
@@ -15763,7 +15763,7 @@ mod test {
                         })],
                         ..Default::default()
                     },
-                    common: ftd::Common {
+                    common_kernel: ftd::CommonKernel {
                         condition: Some(ftd::Condition {
                             variable: s("foo/bar#b@0"),
                             value: serde_json::Value::Bool(true),
@@ -15816,7 +15816,7 @@ mod test {
                     children: vec![
                         ftd::Element::Integer(ftd::Text {
                             text: ftd::markdown_line("20"),
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel{
                                 conditional_attribute: std::iter::IntoIterator::into_iter([(
                                     s("color"),
                                     ftd::ConditionalAttribute {
@@ -15844,7 +15844,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("whatever"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel{
                                 reference: Some(s("foo/bar#some-text@0")),
                                 ..Default::default()
                             },
@@ -15853,7 +15853,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel{
                     events: vec![
                         ftd::Event {
                             name: s("onclick"),
@@ -15903,7 +15903,7 @@ mod test {
                 children: vec![ftd::Element::Markup(ftd::Markups {
                     text: ftd::markdown_line("hello"),
                     line: true,
-                    common: ftd::Common {
+                    common_kernel: ftd::CommonKernel{
                         conditional_attribute: std::iter::IntoIterator::into_iter([(
                             s("color"),
                             ftd::ConditionalAttribute {
@@ -15929,7 +15929,7 @@ mod test {
                 })],
                 ..Default::default()
             },
-            common: ftd::Common {
+            common_kernel: ftd::CommonKernel{
                 events: vec![ftd::Event {
                     name: s("onclick"),
                     action: ftd::Action {
@@ -15994,7 +15994,7 @@ mod test {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 line_clamp: Some(30),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel{
                     conditional_attribute: std::iter::IntoIterator::into_iter([(
                         s("color"),
                         ftd::ConditionalAttribute {
@@ -16044,7 +16044,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("hello"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#ff@1")),
                                 ..Default::default()
                             },
@@ -16052,7 +16052,7 @@ mod test {
                         }),
                         ftd::Element::Integer(ftd::Text {
                             text: ftd::markdown_line("20"),
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#i@1")),
                                 ..Default::default()
                             },
@@ -16169,7 +16169,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("hello"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 color: Some(ftd::Color {
                                     light: ftd::ColorValue {
                                         r: 255,
@@ -16197,7 +16197,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("hello again"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             reference: Some(s("foo/bar#msg@0,2")),
                                             ..Default::default()
                                         },
@@ -16206,7 +16206,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("hello world!"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             reference: Some(s("foo/bar#other-msg@0,2")),
                                             ..Default::default()
                                         },
@@ -16215,7 +16215,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("hello"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             color: Some(ftd::Color {
                                                 light: ftd::ColorValue {
                                                     r: 255,
@@ -16239,7 +16239,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("hello amitu!"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             color: Some(ftd::Color {
                                                 light: ftd::ColorValue {
                                                     r: 255,
@@ -16263,7 +16263,7 @@ mod test {
                                 ],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 ..Default::default()
                             },
                         }),
@@ -16334,7 +16334,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#active")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active"),
@@ -16349,7 +16349,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Not Active"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active"),
                         value: serde_json::Value::String(s("$IsNull$")),
@@ -16364,7 +16364,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line(""),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#flags")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#flags"),
@@ -16380,7 +16380,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("No Flag Available"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#flags"),
                         value: serde_json::Value::String(s("$IsNull$")),
@@ -16609,7 +16609,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Input(ftd::Input {
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     events: vec![
                         ftd::Event {
                             name: s("onchange"),
@@ -16703,7 +16703,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Arpita"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#bar")),
                     ..Default::default()
                 },
@@ -16713,7 +16713,7 @@ mod test {
             .children
             .push(ftd::Element::Integer(ftd::Text {
                 text: ftd::markdown_line("1"),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#ibar")),
                     ..Default::default()
                 },
@@ -16724,7 +16724,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Arpita"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#lfoo")),
                     ..Default::default()
                 },
@@ -16735,7 +16735,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Arpita"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#lfoo")),
                     ..Default::default()
                 },
@@ -16746,7 +16746,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Ayushi"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#lfoo")),
                     ..Default::default()
                 },
@@ -16757,7 +16757,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("$loop$"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     is_dummy: true,
                     reference: Some(s("foo/bar#lfoo")),
                     ..Default::default()
@@ -16770,7 +16770,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Arpita"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#lbar")),
                     ..Default::default()
                 },
@@ -16781,7 +16781,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Arpita"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#lbar")),
                     ..Default::default()
                 },
@@ -16792,7 +16792,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Ayushi"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#lbar")),
                     ..Default::default()
                 },
@@ -16803,7 +16803,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("$loop$"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     is_dummy: true,
                     reference: Some(s("foo/bar#lbar")),
                     ..Default::default()
@@ -16815,7 +16815,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Arpita"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     reference: Some(s("foo/bar#arpita.name")),
                     ..Default::default()
                 },
@@ -17550,7 +17550,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markup_line("Foo"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#title@0")),
                                 ..Default::default()
                             },
@@ -17559,7 +17559,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markup_line("Foo"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#subtitle@0")),
                                 ..Default::default()
                             },
@@ -17568,7 +17568,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markup_line("Foo"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#bio@0")),
                                 ..Default::default()
                             },
@@ -17576,7 +17576,7 @@ mod test {
                         }),
                         ftd::Element::Boolean(ftd::Text {
                             text: ftd::markup_line("false"),
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#active@0")),
                                 ..Default::default()
                             },
@@ -17584,7 +17584,7 @@ mod test {
                         }),
                         ftd::Element::Integer(ftd::Text {
                             text: ftd::markup_line("1"),
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#gg@0")),
                                 ..Default::default()
                             },
@@ -17596,7 +17596,7 @@ mod test {
                     ..Default::default()
                 },
                 spacing: None,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 0,
@@ -17632,7 +17632,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markup_line("Foo"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#title@1")),
                                 ..Default::default()
                             },
@@ -17641,7 +17641,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markup_line("Foo"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#subtitle@1")),
                                 ..Default::default()
                             },
@@ -17650,7 +17650,7 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markup_line("Foo"),
                             line: true,
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#bio@1")),
                                 ..Default::default()
                             },
@@ -17658,7 +17658,7 @@ mod test {
                         }),
                         ftd::Element::Boolean(ftd::Text {
                             text: ftd::markup_line("false"),
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 reference: Some(s("foo/bar#active@1")),
                                 ..Default::default()
                             },
@@ -17670,7 +17670,7 @@ mod test {
                     ..Default::default()
                 },
                 spacing: None,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 0,
@@ -17764,7 +17764,7 @@ mod test {
             .children
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markup_line("Something"),
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#bar"),
                         value: serde_json::Value::String(s("Something")),
@@ -17835,7 +17835,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markup_line("Hello"),
                 line: true,
-                common: ftd::Common {
+                common_kernel: ftd::CommonKernel {
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 44,
@@ -18036,7 +18036,7 @@ mod test {
             .push(ftd::Element::Column(ftd::Column {
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
-                        common: ftd::Common {
+                        common_kernel: ftd::CommonKernel {
                             data_id: Some(s("col-id")),
                             ..Default::default()
                         },
@@ -18050,7 +18050,7 @@ mod test {
                                 children: vec![
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("First"),
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#current@0"),
                                                 value: serde_json::Value::from(1),
@@ -18087,7 +18087,7 @@ mod test {
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::markdown_line("Second"),
                                         line: true,
-                                        common: ftd::Common {
+                                        common_kernel: ftd::CommonKernel {
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#current@0"),
                                                 value: serde_json::json!(2),
@@ -18124,7 +18124,7 @@ mod test {
                                 ],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
+                            common_kernel: ftd::CommonKernel {
                                 width: Some(ftd::Length::Fill),
                                 height: Some(ftd::Length::Fill),
                                 position: Some(ftd::Position::Center),

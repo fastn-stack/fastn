@@ -21,7 +21,7 @@ pub enum Element {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Markups {
     pub text: ftd::Rendered,
-    pub common: ftd::Common,
+    pub common_kernel: ftd::CommonKernel,
     pub text_align: TextAlign,
     pub line: bool,
     pub style: Style,
@@ -36,7 +36,7 @@ impl Markups {
         Text {
             text: self.text.to_owned(),
             line: self.line,
-            common: self.common.to_owned(),
+            common_kernel: self.common_kernel.to_owned(),
             text_align: self.text_align.to_owned(),
             style: self.style.to_owned(),
             font: self.font.to_owned(),
@@ -68,31 +68,55 @@ impl Element {
         local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
     ) {
         for child in elements.iter_mut() {
-            let (text, common) = match child {
-                Element::Text(ftd::Text { text, common, .. })
-                | Element::Integer(ftd::Text { text, common, .. })
-                | Element::Boolean(ftd::Text { text, common, .. })
-                | Element::Decimal(ftd::Text { text, common, .. }) => (Some(text), common),
+            let (text, common_kernel) = match child {
+                Element::Text(ftd::Text {
+                    text,
+                    common_kernel,
+                    ..
+                })
+                | Element::Integer(ftd::Text {
+                    text,
+                    common_kernel,
+                    ..
+                })
+                | Element::Boolean(ftd::Text {
+                    text,
+                    common_kernel,
+                    ..
+                })
+                | Element::Decimal(ftd::Text {
+                    text,
+                    common_kernel,
+                    ..
+                }) => (Some(text), common_kernel),
                 Self::Markup(ftd::Markups {
                     text,
-                    common,
+                    common_kernel,
                     children,
                     ..
                 }) => {
                     set_markup_children_count_variable(children, local_variables);
-                    (Some(text), common)
+                    (Some(text), common_kernel)
                 }
                 Element::Row(ftd::Row {
-                    container, common, ..
+                    container,
+                    common_kernel,
+                    ..
                 })
                 | Element::Column(ftd::Column {
-                    container, common, ..
+                    container,
+                    common_kernel,
+                    ..
                 })
                 | Element::Scene(ftd::Scene {
-                    container, common, ..
+                    container,
+                    common_kernel,
+                    ..
                 })
                 | Element::Grid(ftd::Grid {
-                    container, common, ..
+                    container,
+                    common_kernel,
+                    ..
                 }) => {
                     ftd::Element::set_children_count_variable(
                         &mut container.children,
@@ -104,12 +128,12 @@ impl Element {
                             local_variables,
                         );
                     }
-                    (None, common)
+                    (None, common_kernel)
                 }
                 _ => continue,
             };
 
-            match &common.reference {
+            match &common_kernel.reference {
                 Some(reference) if reference.contains("CHILDREN-COUNT") => {
                     if let Some(ftd::p2::Thing::Variable(ftd::Variable {
                         value:
@@ -127,7 +151,7 @@ impl Element {
                 _ => {}
             }
 
-            for event in common.events.iter_mut() {
+            for event in common_kernel.events.iter_mut() {
                 for action_value in event.action.parameters.values_mut() {
                     for parameter_data in action_value.iter_mut() {
                         let mut remove_reference = false;
@@ -160,15 +184,15 @@ impl Element {
             local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
         ) {
             for child in elements.iter_mut() {
-                let (common, children, text) = match &mut child.itext {
+                let (common_kernel, children, text) = match &mut child.itext {
                     IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
-                        (&mut t.common, None, &mut t.text)
+                        (&mut t.common_kernel, None, &mut t.text)
                     }
-                    IText::TextBlock(t) => (&mut t.common, None, &mut t.text),
-                    IText::Markup(t) => (&mut t.common, Some(&mut t.children), &mut t.text),
+                    IText::TextBlock(t) => (&mut t.common_kernel, None, &mut t.text),
+                    IText::Markup(t) => (&mut t.common_kernel, Some(&mut t.children), &mut t.text),
                 };
 
-                match &common.reference {
+                match &common_kernel.reference {
                     Some(reference) if reference.contains("CHILDREN-COUNT") => {
                         if let Some(ftd::p2::Thing::Variable(ftd::Variable {
                             value:
@@ -184,7 +208,7 @@ impl Element {
                     _ => {}
                 }
 
-                for event in common.events.iter_mut() {
+                for event in common_kernel.events.iter_mut() {
                     for action_value in event.action.parameters.values_mut() {
                         for parameter_data in action_value.iter_mut() {
                             let mut remove_reference = false;
@@ -222,28 +246,36 @@ impl Element {
         return set_default_locals_(elements);
         fn set_default_locals_(children: &mut [ftd::Element]) {
             for child in children.iter_mut() {
-                let common = match child {
-                    Element::Text(ftd::Text { common, .. })
-                    | Element::TextBlock(ftd::TextBlock { common, .. })
-                    | Element::Code(ftd::Code { common, .. })
-                    | Element::Image(ftd::Image { common, .. })
-                    | Element::IFrame(ftd::IFrame { common, .. })
-                    | Element::Input(ftd::Input { common, .. })
-                    | Element::Integer(ftd::Text { common, .. })
-                    | Element::Boolean(ftd::Text { common, .. })
-                    | Element::Decimal(ftd::Text { common, .. })
-                    | Element::Markup(ftd::Markups { common, .. }) => common,
+                let common_kernel = match child {
+                    Element::Text(ftd::Text { common_kernel, .. })
+                    | Element::TextBlock(ftd::TextBlock { common_kernel, .. })
+                    | Element::Code(ftd::Code { common_kernel, .. })
+                    | Element::Image(ftd::Image { common_kernel, .. })
+                    | Element::IFrame(ftd::IFrame { common_kernel, .. })
+                    | Element::Input(ftd::Input { common_kernel, .. })
+                    | Element::Integer(ftd::Text { common_kernel, .. })
+                    | Element::Boolean(ftd::Text { common_kernel, .. })
+                    | Element::Decimal(ftd::Text { common_kernel, .. })
+                    | Element::Markup(ftd::Markups { common_kernel, .. }) => common_kernel,
                     Element::Row(ftd::Row {
-                        common, container, ..
+                        common_kernel,
+                        container,
+                        ..
                     })
                     | Element::Column(ftd::Column {
-                        common, container, ..
+                        common_kernel,
+                        container,
+                        ..
                     })
                     | Element::Scene(ftd::Scene {
-                        common, container, ..
+                        common_kernel,
+                        container,
+                        ..
                     })
                     | Element::Grid(ftd::Grid {
-                        common, container, ..
+                        common_kernel,
+                        container,
+                        ..
                     }) => {
                         set_default_locals_(&mut container.children);
                         if let Some((_, _, external_children)) = &mut container.external_children {
@@ -259,7 +291,7 @@ impl Element {
                 }
             }
 
-            fn check(common: &mut ftd::Common) -> Option<String> {
+            fn check(common_kernel: &mut ftd::CommonKernel) -> Option<String> {
                 if let Some(ref mut condition) = common.condition {
                     if condition.variable.contains("MOUSE-IN") {
                         return Some(condition.variable.clone());
@@ -286,8 +318,8 @@ impl Element {
         for (idx, child) in children.iter_mut().enumerate() {
             let (id, is_dummy) = match child {
                 Self::Text(ftd::Text {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -295,8 +327,8 @@ impl Element {
                     ..
                 })
                 | Self::TextBlock(ftd::TextBlock {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -304,8 +336,8 @@ impl Element {
                     ..
                 })
                 | Self::Code(ftd::Code {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -313,8 +345,8 @@ impl Element {
                     ..
                 })
                 | Self::Image(ftd::Image {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -322,8 +354,8 @@ impl Element {
                     ..
                 })
                 | Self::IFrame(ftd::IFrame {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -331,8 +363,8 @@ impl Element {
                     ..
                 })
                 | Self::Input(ftd::Input {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -340,8 +372,8 @@ impl Element {
                     ..
                 })
                 | Self::Integer(ftd::Text {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -349,8 +381,8 @@ impl Element {
                     ..
                 })
                 | Self::Boolean(ftd::Text {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -358,8 +390,8 @@ impl Element {
                     ..
                 })
                 | Self::Decimal(ftd::Text {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -367,8 +399,8 @@ impl Element {
                     ..
                 }) => (id, is_dummy),
                 Self::Row(ftd::Row {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -377,8 +409,8 @@ impl Element {
                     ..
                 })
                 | Self::Column(ftd::Column {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -387,8 +419,8 @@ impl Element {
                     ..
                 })
                 | Self::Scene(ftd::Scene {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -397,8 +429,8 @@ impl Element {
                     ..
                 })
                 | Self::Grid(ftd::Grid {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -436,8 +468,8 @@ impl Element {
                     (id, is_dummy)
                 }
                 Self::Markup(ftd::Markups {
-                    common:
-                        ftd::Common {
+                    common_kernel:
+                        ftd::CommonKernel {
                             data_id: id,
                             is_dummy,
                             ..
@@ -560,7 +592,7 @@ impl Element {
         let mut ext_child_condition = None;
         let (id, open_id, children_container, children) = match self {
             Self::Row(ftd::Row {
-                common: ftd::Common { data_id: id, .. },
+                common_kernel: ftd::CommonKernel { data_id: id, .. },
                 container:
                     ftd::Container {
                         external_children,
@@ -570,7 +602,7 @@ impl Element {
                 ..
             })
             | Self::Column(ftd::Column {
-                common: ftd::Common { data_id: id, .. },
+                common_kernel: ftd::CommonKernel { data_id: id, .. },
                 container:
                     ftd::Container {
                         external_children,
@@ -580,7 +612,7 @@ impl Element {
                 ..
             })
             | Self::Scene(ftd::Scene {
-                common: ftd::Common { data_id: id, .. },
+                common_kernel: ftd::CommonKernel { data_id: id, .. },
                 container:
                     ftd::Container {
                         external_children,
@@ -590,7 +622,7 @@ impl Element {
                 ..
             })
             | Self::Grid(ftd::Grid {
-                common: ftd::Common { data_id: id, .. },
+                common_kernel: ftd::CommonKernel { data_id: id, .. },
                 container:
                     ftd::Container {
                         external_children,
@@ -728,16 +760,24 @@ impl Element {
         for child in children {
             let (font, common) = match child {
                 ftd::Element::Column(ftd::Column {
-                    common, container, ..
+                    common_kernel,
+                    container,
+                    ..
                 })
                 | ftd::Element::Row(ftd::Row {
-                    common, container, ..
+                    common_kernel,
+                    container,
+                    ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
-                    common, container, ..
+                    common_kernel,
+                    container,
+                    ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
-                    common, container, ..
+                    common_kernel,
+                    container,
+                    ..
                 }) => {
                     ftd::Element::get_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
@@ -747,26 +787,50 @@ impl Element {
                 }
                 ftd::Element::Markup(ftd::Markups {
                     font,
-                    common,
+                    common_kernel,
                     children,
                     ..
                 }) => {
                     markup_get_event_dependencies(children, data);
                     (font, common)
                 }
-                ftd::Element::Text(ftd::Text { font, common, .. })
-                | ftd::Element::Code(ftd::Code { font, common, .. })
-                | ftd::Element::Integer(ftd::Text { font, common, .. })
-                | ftd::Element::Boolean(ftd::Text { font, common, .. })
-                | ftd::Element::Decimal(ftd::Text { font, common, .. })
-                | ftd::Element::Input(ftd::Input { font, common, .. }) => (font, common),
-                ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-                | ftd::Element::Image(ftd::Image { common, .. }) => (&None, common),
+                ftd::Element::Text(ftd::Text {
+                    font,
+                    common_kernel,
+                    ..
+                })
+                | ftd::Element::Code(ftd::Code {
+                    font,
+                    common_kernel,
+                    ..
+                })
+                | ftd::Element::Integer(ftd::Text {
+                    font,
+                    common_kernel,
+                    ..
+                })
+                | ftd::Element::Boolean(ftd::Text {
+                    font,
+                    common_kernel,
+                    ..
+                })
+                | ftd::Element::Decimal(ftd::Text {
+                    font,
+                    common_kernel,
+                    ..
+                })
+                | ftd::Element::Input(ftd::Input {
+                    font,
+                    common_kernel,
+                    ..
+                }) => (font, common),
+                ftd::Element::IFrame(ftd::IFrame { common_kernel, .. })
+                | ftd::Element::TextBlock(ftd::TextBlock { common_kernel, .. })
+                | ftd::Element::Image(ftd::Image { common_kernel, .. }) => (&None, common),
                 ftd::Element::Null => continue,
             };
             value_condition(&common.reference, &common.data_id, data);
-            color_condition(common, &common.data_id, data);
+            color_condition(common_kernel, &common.data_id, data);
             font_condition(&common.data_id, data, font, &common.conditional_attribute);
             image_condition(&common.data_id, data, &common.background_image);
             style_condition(&common.conditional_attribute, &common.data_id, data);
@@ -791,7 +855,7 @@ impl Element {
                 };
                 markup_get_event_dependencies(&child.children, data);
                 value_condition(&common.reference, &common.data_id, data);
-                color_condition(common, &common.data_id, data);
+                color_condition(common_kernel, &common.data_id, data);
                 font_condition(&common.data_id, data, font, &common.conditional_attribute);
                 image_condition(&common.data_id, data, &common.background_image);
                 style_condition(&common.conditional_attribute, &common.data_id, data);
@@ -831,7 +895,7 @@ impl Element {
         }
 
         fn color_condition(
-            common: &ftd::Common,
+            common_kernel: &ftd::CommonKernel,
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
         ) {
@@ -1626,40 +1690,40 @@ impl Element {
 
     pub fn set_element_id(&mut self, name: Option<String>) {
         match self {
-            ftd::Element::Column(ftd::Column { common, .. })
-            | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
-            | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-            | ftd::Element::Code(ftd::Code { common, .. })
-            | ftd::Element::Image(ftd::Image { common, .. })
-            | ftd::Element::IFrame(ftd::IFrame { common, .. })
-            | ftd::Element::Markup(ftd::Markups { common, .. })
-            | ftd::Element::Input(ftd::Input { common, .. })
-            | ftd::Element::Integer(ftd::Text { common, .. })
-            | ftd::Element::Boolean(ftd::Text { common, .. })
-            | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. })
-            | ftd::Element::Grid(ftd::Grid { common, .. }) => common.id = name,
+            ftd::Element::Column(ftd::Column { common_kernel, .. })
+            | ftd::Element::Row(ftd::Row { common_kernel, .. })
+            | ftd::Element::Text(ftd::Text { common_kernel, .. })
+            | ftd::Element::TextBlock(ftd::TextBlock { common_kernel, .. })
+            | ftd::Element::Code(ftd::Code { common_kernel, .. })
+            | ftd::Element::Image(ftd::Image { common_kernel, .. })
+            | ftd::Element::IFrame(ftd::IFrame { common_kernel, .. })
+            | ftd::Element::Markup(ftd::Markups { common_kernel, .. })
+            | ftd::Element::Input(ftd::Input { common_kernel, .. })
+            | ftd::Element::Integer(ftd::Text { common_kernel, .. })
+            | ftd::Element::Boolean(ftd::Text { common_kernel, .. })
+            | ftd::Element::Decimal(ftd::Text { common_kernel, .. })
+            | ftd::Element::Scene(ftd::Scene { common_kernel, .. })
+            | ftd::Element::Grid(ftd::Grid { common_kernel, .. }) => common.id = name,
             ftd::Element::Null => {}
         }
     }
 
     pub fn set_condition(&mut self, condition: Option<ftd::Condition>) {
         match self {
-            ftd::Element::Column(ftd::Column { common, .. })
-            | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
-            | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-            | ftd::Element::Code(ftd::Code { common, .. })
-            | ftd::Element::Image(ftd::Image { common, .. })
-            | ftd::Element::IFrame(ftd::IFrame { common, .. })
-            | ftd::Element::Markup(ftd::Markups { common, .. })
-            | ftd::Element::Input(ftd::Input { common, .. })
-            | ftd::Element::Integer(ftd::Text { common, .. })
-            | ftd::Element::Boolean(ftd::Text { common, .. })
-            | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. })
-            | ftd::Element::Grid(ftd::Grid { common, .. }) => common,
+            ftd::Element::Column(ftd::Column { common_kernel, .. })
+            | ftd::Element::Row(ftd::Row { common_kernel, .. })
+            | ftd::Element::Text(ftd::Text { common_kernel, .. })
+            | ftd::Element::TextBlock(ftd::TextBlock { common_kernel, .. })
+            | ftd::Element::Code(ftd::Code { common_kernel, .. })
+            | ftd::Element::Image(ftd::Image { common_kernel, .. })
+            | ftd::Element::IFrame(ftd::IFrame { common_kernel, .. })
+            | ftd::Element::Markup(ftd::Markups { common_kernel, .. })
+            | ftd::Element::Input(ftd::Input { common_kernel, .. })
+            | ftd::Element::Integer(ftd::Text { common_kernel, .. })
+            | ftd::Element::Boolean(ftd::Text { common_kernel, .. })
+            | ftd::Element::Decimal(ftd::Text { common_kernel, .. })
+            | ftd::Element::Scene(ftd::Scene { common_kernel, .. })
+            | ftd::Element::Grid(ftd::Grid { common_kernel, .. }) => common_kernel,
             ftd::Element::Null => return,
         }
         .condition = condition;
@@ -1667,20 +1731,20 @@ impl Element {
 
     pub fn set_non_visibility(&mut self, is_not_visible: bool) {
         match self {
-            ftd::Element::Column(ftd::Column { common, .. })
-            | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
-            | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-            | ftd::Element::Code(ftd::Code { common, .. })
-            | ftd::Element::Image(ftd::Image { common, .. })
-            | ftd::Element::IFrame(ftd::IFrame { common, .. })
-            | ftd::Element::Markup(ftd::Markups { common, .. })
-            | ftd::Element::Input(ftd::Input { common, .. })
-            | ftd::Element::Integer(ftd::Text { common, .. })
-            | ftd::Element::Boolean(ftd::Text { common, .. })
-            | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. })
-            | ftd::Element::Grid(ftd::Grid { common, .. }) => common,
+            ftd::Element::Column(ftd::Column { common_kernel, .. })
+            | ftd::Element::Row(ftd::Row { common_kernel, .. })
+            | ftd::Element::Text(ftd::Text { common_kernel, .. })
+            | ftd::Element::TextBlock(ftd::TextBlock { common_kernel, .. })
+            | ftd::Element::Code(ftd::Code { common_kernel, .. })
+            | ftd::Element::Image(ftd::Image { common_kernel, .. })
+            | ftd::Element::IFrame(ftd::IFrame { common_kernel, .. })
+            | ftd::Element::Markup(ftd::Markups { common_kernel, .. })
+            | ftd::Element::Input(ftd::Input { common_kernel, .. })
+            | ftd::Element::Integer(ftd::Text { common_kernel, .. })
+            | ftd::Element::Boolean(ftd::Text { common_kernel, .. })
+            | ftd::Element::Decimal(ftd::Text { common_kernel, .. })
+            | ftd::Element::Scene(ftd::Scene { common_kernel, .. })
+            | ftd::Element::Grid(ftd::Grid { common_kernel, .. }) => common_kernel,
             ftd::Element::Null => return,
         }
         .is_not_visible = is_not_visible;
@@ -1688,20 +1752,20 @@ impl Element {
 
     pub fn set_events(&mut self, events: &mut Vec<ftd::Event>) {
         match self {
-            ftd::Element::Column(ftd::Column { common, .. })
-            | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
-            | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-            | ftd::Element::Code(ftd::Code { common, .. })
-            | ftd::Element::Image(ftd::Image { common, .. })
-            | ftd::Element::IFrame(ftd::IFrame { common, .. })
-            | ftd::Element::Markup(ftd::Markups { common, .. })
-            | ftd::Element::Input(ftd::Input { common, .. })
-            | ftd::Element::Integer(ftd::Text { common, .. })
-            | ftd::Element::Boolean(ftd::Text { common, .. })
-            | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. })
-            | ftd::Element::Grid(ftd::Grid { common, .. }) => common,
+            ftd::Element::Column(ftd::Column { common_kernel, .. })
+            | ftd::Element::Row(ftd::Row { common_kernel, .. })
+            | ftd::Element::Text(ftd::Text { common_kernel, .. })
+            | ftd::Element::TextBlock(ftd::TextBlock { common_kernel, .. })
+            | ftd::Element::Code(ftd::Code { common_kernel, .. })
+            | ftd::Element::Image(ftd::Image { common_kernel, .. })
+            | ftd::Element::IFrame(ftd::IFrame { common_kernel, .. })
+            | ftd::Element::Markup(ftd::Markups { common_kernel, .. })
+            | ftd::Element::Input(ftd::Input { common_kernel, .. })
+            | ftd::Element::Integer(ftd::Text { common_kernel, .. })
+            | ftd::Element::Boolean(ftd::Text { common_kernel, .. })
+            | ftd::Element::Decimal(ftd::Text { common_kernel, .. })
+            | ftd::Element::Scene(ftd::Scene { common_kernel, .. })
+            | ftd::Element::Grid(ftd::Grid { common_kernel, .. }) => common_kernel,
             ftd::Element::Null => return,
         }
         .events
@@ -1716,7 +1780,7 @@ impl Element {
         }
     }
 
-    pub fn get_mut_common(&mut self) -> Option<&mut ftd::Common> {
+    pub fn get_mut_common(&mut self) -> Option<&mut ftd::CommonKernel> {
         match self {
             ftd::Element::Column(e) => Some(&mut e.common),
             ftd::Element::Row(e) => Some(&mut e.common),
@@ -1736,7 +1800,7 @@ impl Element {
         }
     }
 
-    pub fn get_common(&self) -> Option<&ftd::Common> {
+    pub fn get_common(&self) -> Option<&ftd::CommonKernel> {
         match self {
             ftd::Element::Column(e) => Some(&e.common),
             ftd::Element::Row(e) => Some(&e.common),
@@ -1771,8 +1835,8 @@ impl Element {
         let mut insert: Vec<(usize, usize)> = Default::default();
         for (idx, element) in elements.iter().enumerate() {
             match element {
-                ftd::Element::Column(ftd::Column { common, .. })
-                | ftd::Element::Row(ftd::Row { common, .. }) => {
+                ftd::Element::Column(ftd::Column { common_kernel, .. })
+                | ftd::Element::Row(ftd::Row { common_kernel, .. }) => {
                     let r = common.region.as_ref().filter(|v| v.is_heading());
                     if let Some(r) = r {
                         if let Some((place_at, r1)) = region {
@@ -2235,7 +2299,7 @@ pub struct ConditionalValue {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
-pub struct Common {
+pub struct CommonKernel {
     pub conditional_attribute: std::collections::BTreeMap<String, ConditionalAttribute>,
     pub condition: Option<ftd::Condition>,
     pub is_not_visible: bool,
@@ -2368,7 +2432,7 @@ impl Container {
 #[serde(tag = "type")]
 pub enum Loading {
     Lazy,
-    Eager
+    Eager,
 }
 
 impl Default for Loading {
@@ -2382,7 +2446,13 @@ impl Loading {
         match s {
             "lazy" => Ok(Loading::Lazy),
             "eager" => Ok(Loading::Eager),
-            _ => return ftd::e2(format!("{} is not a valid alignment, allowed: lazy, eager", s), doc_id, 0),
+            _ => {
+                return ftd::e2(
+                    format!("{} is not a valid alignment, allowed: lazy, eager", s),
+                    doc_id,
+                    0,
+                )
+            }
         }
     }
 
@@ -2398,7 +2468,7 @@ impl Loading {
 pub struct Image {
     pub src: ImageSrc,
     pub description: Option<String>,
-    pub common: Common,
+    pub common_kernel: CommonKernel,
     pub crop: bool,
     /// images can load lazily.
     pub loading: Loading,
@@ -2408,14 +2478,14 @@ pub struct Image {
 pub struct Row {
     pub container: Container,
     pub spacing: Option<Spacing>,
-    pub common: Common,
+    pub common_kernel: CommonKernel,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Scene {
     pub container: Container,
     pub spacing: Option<Spacing>,
-    pub common: Common,
+    pub common_kernel: CommonKernel,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -2429,14 +2499,14 @@ pub struct Grid {
     pub inline: bool,
     pub auto_flow: Option<String>,
     pub container: Container,
-    pub common: Common,
+    pub common_kernel: CommonKernel,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Column {
     pub container: Container,
     pub spacing: Option<Spacing>,
-    pub common: Common,
+    pub common_kernel: CommonKernel,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
@@ -2461,7 +2531,16 @@ impl TextAlign {
             Some("left") => ftd::TextAlign::Left,
             Some("right") => ftd::TextAlign::Right,
             Some("justify") => ftd::TextAlign::Justify,
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment, allowed: center, left, right, justify", t), doc_id, 0),
+            Some(t) => {
+                return ftd::e2(
+                    format!(
+                        "{} is not a valid alignment, allowed: center, left, right, justify",
+                        t
+                    ),
+                    doc_id,
+                    0,
+                )
+            }
             None => return Ok(ftd::TextAlign::Left),
         })
     }
@@ -2484,7 +2563,13 @@ impl FontDisplay {
         Ok(match l.as_deref() {
             Some("swap") => ftd::FontDisplay::Swap,
             Some("block") => ftd::FontDisplay::Block,
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment, allowed: swap, block", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::e2(
+                    format!("{} is not a valid alignment, allowed: swap, block", t),
+                    doc_id,
+                    0,
+                )
+            } // TODO
             None => return Ok(ftd::FontDisplay::Block),
         })
     }
@@ -2828,14 +2913,14 @@ pub struct IFrame {
     pub src: String,
     /// iframe can load lazily.
     pub loading: Loading,
-    pub common: Common,
+    pub common_kernel: CommonKernel,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Text {
     pub text: ftd::Rendered,
     pub line: bool,
-    pub common: Common,
+    pub common_kernel: CommonKernel,
     pub text_align: TextAlign,
     pub text_indent: Option<Length>,
     pub style: Style,
@@ -2854,7 +2939,7 @@ pub struct Text {
 pub struct TextBlock {
     pub text: ftd::Rendered,
     pub line: bool,
-    pub common: Common,
+    pub common_kernel: CommonKernel,
     pub text_align: TextAlign,
     pub style: Style,
     pub size: Option<i64>,
@@ -2867,7 +2952,7 @@ pub struct TextBlock {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Code {
     pub text: ftd::Rendered,
-    pub common: Common,
+    pub common_kernel: CommonKernel,
     pub text_align: TextAlign,
     pub style: Style,
     pub font: Option<Type>,
@@ -2928,7 +3013,7 @@ pub struct ColorValue {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Input {
-    pub common: Common,
+    pub common_kernel: CommonKernel,
     pub placeholder: Option<String>,
     pub value: Option<String>,
     pub type_: Option<String>,

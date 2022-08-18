@@ -289,45 +289,45 @@ impl ftd::Element {
 }
 
 impl Node {
-    fn from_common(
+    fn from_common_kernel(
         node: &str,
-        common: &ftd::Common,
+        common_kernel: &ftd::CommonKernel,
         doc_id: &str,
         collector: &mut ftd::Collector,
     ) -> Self {
         let mut classes = vec![];
         Node {
-            condition: common.condition.clone(),
+            condition: common_kernel.condition.clone(),
             node: s(node),
-            attrs: common.attrs(),
-            style: common.style(doc_id, collector, &mut classes),
+            attrs: common_kernel.attrs(),
+            style: common_kernel.style(doc_id, collector, &mut classes),
             children: vec![],
             external_children: Default::default(),
             open_id: None,
             external_children_container: vec![],
-            children_style: common.children_style(),
+            children_style: common_kernel.children_style(),
             text: None,
             classes,
-            null: common.is_dummy,
-            events: common.events.clone(),
+            null: common_kernel.is_dummy,
+            events: common_kernel.events.clone(),
         }
     }
 
     fn from_container(
-        common: &ftd::Common,
+        common_kernel: &ftd::CommonKernel,
         container: &ftd::Container,
         doc_id: &str,
         collector: &mut ftd::Collector,
     ) -> Self {
-        let mut attrs = common.attrs();
+        let mut attrs = common_kernel.attrs();
         attrs.extend(container.attrs());
         let mut classes = container.add_class();
-        let mut style = common.style(doc_id, collector, &mut classes);
+        let mut style = common_kernel.style(doc_id, collector, &mut classes);
         style.extend(container.style());
 
-        let mut children_style = common.children_style();
+        let mut children_style = common_kernel.children_style();
         children_style.extend(container.children_style());
-        let node = common.node();
+        let node = common_kernel.node();
 
         let (id, external_children_container, external_children) = {
             if let Some((id, external_children_container, child)) = &container.external_children {
@@ -342,8 +342,8 @@ impl Node {
         };
 
         Node {
-            condition: common.condition.clone(),
-            node: s(node.as_str()), // TODO: use better tags based on common.region
+            condition: common_kernel.condition.clone(),
+            node: s(node.as_str()), // TODO: use better tags based on common_kernel.region
             attrs,
             style,
             classes,
@@ -353,8 +353,8 @@ impl Node {
             external_children,
             open_id: id,
             external_children_container,
-            null: common.is_dummy,
-            events: common.events.clone(),
+            null: common_kernel.is_dummy,
+            events: common_kernel.events.clone(),
         }
     }
 }
@@ -366,7 +366,7 @@ impl ftd::Scene {
                 node: s("div"),
                 ..Default::default()
             };
-            if let Some(ref data_id) = self.common.data_id {
+            if let Some(ref data_id) = self.common_kernel.data_id {
                 node.attrs
                     .insert(s("data-id"), format!("{}:scene", data_id));
             } else {
@@ -375,7 +375,7 @@ impl ftd::Scene {
             node.style.insert(s("position"), s("relative"));
             let children = {
                 let parent = {
-                    let mut node = if let Some(ref img) = self.common.background_image {
+                    let mut node = if let Some(ref img) = self.common_kernel.background_image {
                         let mut n = Node {
                             node: s("img"),
                             ..Default::default()
@@ -390,16 +390,16 @@ impl ftd::Scene {
                         }
                     };
                     node.style.insert(s("width"), s("100%"));
-                    if !self.common.is_not_visible {
+                    if !self.common_kernel.is_not_visible {
                         node.style.insert(s("display"), s("block"));
                     }
-                    if let Some(p) = &self.common.height {
+                    if let Some(p) = &self.common_kernel.height {
                         let (key, value) = length(p, "height");
                         node.style.insert(s(key.as_str()), value);
                     } else {
                         node.style.insert(s("height"), s("auto"));
                     }
-                    if let Some(ref data_id) = self.common.data_id {
+                    if let Some(ref data_id) = self.common_kernel.data_id {
                         node.attrs
                             .insert(s("data-id"), format!("{}:scene-bg", data_id));
                     }
@@ -447,8 +447,8 @@ impl ftd::Scene {
             node
         };
 
-        let mut main_node = Node::from_common("div", &self.common, doc_id, collector);
-        if self.common.width.is_none() {
+        let mut main_node = Node::from_common_kernel("div", &self.common_kernel, doc_id, collector);
+        if self.common_kernel.width.is_none() {
             main_node.style.insert(s("width"), s("1000px"));
         }
         if let Some(ref p) = self.spacing {
@@ -470,7 +470,7 @@ impl ftd::Scene {
 
 impl ftd::Grid {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let mut n = Node::from_container(&self.common, &self.container, doc_id, collector);
+        let mut n = Node::from_container(&self.common_kernel, &self.container, doc_id, collector);
         if self.inline {
             n.style.insert(s("display"), s("inline-grid"));
         } else {
@@ -537,8 +537,8 @@ impl ftd::Grid {
 
 impl ftd::Row {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let mut n = Node::from_container(&self.common, &self.container, doc_id, collector);
-        if !self.common.is_not_visible {
+        let mut n = Node::from_container(&self.common_kernel, &self.container, doc_id, collector);
+        if !self.common_kernel.is_not_visible {
             n.style.insert(s("display"), s("flex"));
         }
         n.style.insert(s("flex-direction"), s("row"));
@@ -599,8 +599,8 @@ impl ftd::Column {
         evaluate_children: bool,
         collector: &mut ftd::Collector,
     ) -> Node {
-        let mut n = Node::from_container(&self.common, &self.container, doc_id, collector);
-        if !self.common.is_not_visible {
+        let mut n = Node::from_container(&self.common_kernel, &self.container, doc_id, collector);
+        if !self.common_kernel.is_not_visible {
             n.style.insert(s("display"), s("flex"));
         }
         n.style.insert(s("flex-direction"), s("column"));
@@ -712,7 +712,7 @@ impl ftd::Collector {
             let (key, value) = style(weight);
             styles.insert(s(key.as_str()), value);
         }
-        // if self.common.conditional_attribute.keys().any(|x| styles.keys().contains(&x)) {
+        // if self.common_kernel.conditional_attribute.keys().any(|x| styles.keys().contains(&x)) {
         //     // todo: then don't make class
         //     // since font is not a conditional attribute this is not yet needed
         // }
@@ -868,11 +868,11 @@ impl ftd::Collector {
 
 impl ftd::Text {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        // TODO: proper tag based on self.common.region
+        // TODO: proper tag based on self.common_kernel.region
         // TODO: if format is not markdown use pre
-        let node = self.common.node();
-        let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
-        n.classes.extend(self.common.add_class());
+        let node = self.common_kernel.node();
+        let mut n = Node::from_common_kernel(node.as_str(), &self.common_kernel, doc_id, collector);
+        n.classes.extend(self.common_kernel.add_class());
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -914,11 +914,11 @@ impl ftd::Text {
 
 impl ftd::TextBlock {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        // TODO: proper tag based on self.common.region
+        // TODO: proper tag based on self.common_kernel.region
         // TODO: if format is not markdown use pre
-        let node = self.common.node();
-        let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
-        n.classes.extend(self.common.add_class());
+        let node = self.common_kernel.node();
+        let mut n = Node::from_common_kernel(node.as_str(), &self.common_kernel, doc_id, collector);
+        n.classes.extend(self.common_kernel.add_class());
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -974,8 +974,8 @@ impl ftd::TextBlock {
 
 impl ftd::Code {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let node = self.common.node();
-        let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
+        let node = self.common_kernel.node();
+        let mut n = Node::from_common_kernel(node.as_str(), &self.common_kernel, doc_id, collector);
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -1022,24 +1022,26 @@ impl ftd::Code {
 
 impl ftd::Image {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        return match self.common.link {
+        return match self.common_kernel.link {
             Some(_) => {
-                let mut n = Node::from_common("a", &self.common, doc_id, collector);
-                if let Some(ref id) = self.common.data_id {
+                let mut n = Node::from_common_kernel("a", &self.common_kernel, doc_id, collector);
+                if let Some(ref id) = self.common_kernel.data_id {
                     n.attrs
                         .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
                 }
-                n.children.push(
-                    update_img(self, Node {
+                n.children.push(update_img(
+                    self,
+                    Node {
                         node: s("img"),
                         ..Default::default()
-                    })
-                );
+                    },
+                ));
                 n
             }
-            None => {
-                update_img(self, Node::from_common("src", &self.common, doc_id, collector))
-            }
+            None => update_img(
+                self,
+                Node::from_common_kernel("src", &self.common_kernel, doc_id, collector),
+            ),
         };
 
         fn update_img(img: &ftd::Image, mut n: ftd::Node) -> ftd::Node {
@@ -1069,7 +1071,7 @@ impl ftd::Image {
 
 impl ftd::IFrame {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let mut n = Node::from_common("iframe", &self.common, doc_id, collector);
+        let mut n = Node::from_common_kernel("iframe", &self.common_kernel, doc_id, collector);
         n.attrs.insert(s("src"), escape(self.src.as_str()));
         n.attrs.insert(s("allow"), s("fullscreen"));
         n.attrs.insert(s("allowfullscreen"), s("allowfullscreen"));
@@ -1079,9 +1081,9 @@ impl ftd::IFrame {
 
 impl ftd::Markups {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let node = self.common.node();
-        let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
-        n.classes.extend(self.common.add_class());
+        let node = self.common_kernel.node();
+        let mut n = Node::from_common_kernel(node.as_str(), &self.common_kernel, doc_id, collector);
+        n.classes.extend(self.common_kernel.add_class());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
 
@@ -1174,13 +1176,13 @@ impl ftd::Input {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         let node = if self.multiline { "textarea" } else { "input" };
 
-        let mut n = Node::from_common(node, &self.common, doc_id, collector);
+        let mut n = Node::from_common_kernel(node, &self.common_kernel, doc_id, collector);
 
         if let Some(ref font) = self.font {
             n.classes.push(collector.insert_class_font(font));
         }
 
-        n.classes.extend(self.common.add_class());
+        n.classes.extend(self.common_kernel.add_class());
         if let Some(ref p) = self.placeholder {
             n.attrs.insert(s("placeholder"), escape(p));
         }
@@ -1202,7 +1204,7 @@ impl ftd::Input {
     }
 }
 
-impl ftd::Common {
+impl ftd::CommonKernel {
     fn node(&self) -> String {
         match &self.link {
             Some(_) => "a",
