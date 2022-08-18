@@ -26,7 +26,7 @@ async-recursion = "1"
 camino = "1"
 clap = "3"
 diffy = "0.2"
-ftd = { git = "https://github.com/FifthTry/ftd", rev = "3b6345e" }
+ftd = { git = "https://github.com/FifthTry/ftd", rev = "9d1d206" }
 #ftd = { path = "../ftd" }
 futures = "0.3"
 ignore = "0.4"
