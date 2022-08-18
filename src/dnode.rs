@@ -68,8 +68,9 @@ impl DNode {
         };
 
         if self.node == "img" {
-            return format!("<img {attrs} {style}>", attrs = attrs, style = style);
+            return format!("<img {attrs} {style} {classes}>", attrs = attrs, style = style, classes = classes);
         }
+
         let body = match self.text.as_ref() {
             Some(v) => v.to_string(),
             None => self
@@ -80,7 +81,8 @@ impl DNode {
                 .join(""),
         };
 
-        // TODO: indent things properly
+        // TODO: the generated tag should be indent properly. the `body` must be indented compared
+        //       to open close tags
         format!(
             "<{node} {attrs} {style} {classes}>{body}</{node}>",
             node = self.node.as_str(),

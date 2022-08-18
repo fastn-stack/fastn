@@ -1038,7 +1038,7 @@ impl ftd::Image {
                 n
             }
             None => {
-                update_img(self, Node::from_common("src", &self.common, doc_id, collector))
+                update_img(self, Node::from_common("img", &self.common, doc_id, collector))
             }
         };
 
