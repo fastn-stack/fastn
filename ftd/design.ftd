@@ -241,7 +241,7 @@ light: #E0E0E0
 dark: #007f9b
 
 -- ftd.color cta-primary-base-:
-light: #2dd4bf
+light: #269b8d
 dark: #2dd4bf
 
 -- ftd.color cta-primary-hover-:
