@@ -117,7 +117,6 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     response
 }
 
-#[actix_web::main]
 pub async fn fpm_serve(bind_address: &str, port: Option<u16>) -> std::io::Result<()> {
     if cfg!(feature = "controller") {
         // fpm-controller base path and ec2 instance id (hardcoded for now)
@@ -159,15 +158,17 @@ pub async fn fpm_serve(bind_address: &str, port: Option<u16>) -> std::io::Result
             eprintln!(
                 "{}",
                 port.map(|x| format!(
-                    r#"provided port {} is not available,
-You can try without providing port, it will automatically pick unused port"#,
+                    r#"Provided port {} is not available.
+
+You can try without providing port, it will automatically pick unused port."#,
                     x
                 ))
                 .unwrap_or_else(|| {
-                    "Tried picking port between port 8000 to 9000, not available -:(".to_string()
+                    "Tried picking port between port 8000 to 9000, none are available :-("
+                        .to_string()
                 })
             );
-            return Ok(());
+            std::process::exit(2);
         }
     };
 
