@@ -81,15 +81,33 @@ impl fpm::Config {
     ) -> fpm::Result<std::collections::BTreeMap<String, fpm::history::FileEdit>> {
         let history_list = self.get_history().await?;
         if with_deleted {
-            fpm::history::FileHistory::get_remote_manifest(history_list.as_slice(), true)
+            fpm::history::FileHistory::get_remote_manifest(history_list.as_slice(), with_deleted)
         } else {
-            Ok(
-                fpm::history::FileHistory::get_remote_manifest(history_list.as_slice(), true)?
-                    .into_iter()
-                    .filter(|(_, v)| !v.is_deleted())
-                    .collect(),
-            )
+            Ok(fpm::history::FileHistory::get_remote_manifest(
+                history_list.as_slice(),
+                with_deleted,
+            )?
+            .into_iter()
+            .filter(|(_, v)| !v.is_deleted())
+            .collect())
         }
+    }
+
+    pub async fn get_cr_manifest(
+        &self,
+        cr_number: usize,
+    ) -> fpm::Result<std::collections::BTreeMap<String, fpm::history::FileEdit>> {
+        let history_list = self.get_history().await?;
+        let cr_path_prefix = fpm::cr::cr_path(cr_number);
+        Ok(
+            fpm::history::FileHistory::get_remote_manifest(history_list.as_slice(), true)?
+                .into_iter()
+                .filter(|(k, v)| {
+                    k.starts_with(cr_path_prefix.as_str())
+                        || k.starts_with(format!(".tracks/{}", cr_path_prefix).as_str())
+                })
+                .collect(),
+        )
     }
 
     pub async fn get_non_deleted_latest_file_paths(

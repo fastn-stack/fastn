@@ -21,7 +21,7 @@ pub async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Res
     Ok(())
 }
 
-fn print_status(file_status: &fpm::sync_utils::FileStatus, print_untracked: bool) {
+pub(crate) fn print_status(file_status: &fpm::sync_utils::FileStatus, print_untracked: bool) {
     let (file_status, path, status) = match file_status {
         fpm::sync_utils::FileStatus::Add { path, status, .. } => ("Added", path, status),
         fpm::sync_utils::FileStatus::Update { path, status, .. } => ("Updated", path, status),
