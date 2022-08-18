@@ -1,7 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
--- ft.page: Common Attributes
+-- ft.page: Common Kernel Attributes
 
 
 -- ftd.column:
@@ -80,16 +80,6 @@ color: $fpm.color.main.text-strong
 background-color: $red
 
 -- container: outer
-
-
-
-
--- ft.h1: `title: Optional String`
-
-This is used to create
-[title attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title)
-on generated DOM.
-
 
 -- ft.h1: `border-width: Integer`
 

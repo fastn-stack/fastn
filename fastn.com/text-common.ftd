@@ -1,7 +1,7 @@
 -- import: fpm
 
 
--- ft.page: Common Text Attributes
+-- ft.page: Common Text Kernel Attributes
 
 -- ftd.column:
 id: outer
