@@ -466,7 +466,9 @@ impl ChildComponent {
                 element.element.set_non_visibility(!is_visible);
             }
             if let Some(common_kernel) = element.element.get_mut_common_kernel() {
-                common.conditional_attribute.extend(conditional_attribute);
+                common_kernel
+                    .conditional_attribute
+                    .extend(conditional_attribute);
             }
             // doc.local_variables.remove(loop_name.as_str());
             Ok(element)
@@ -526,8 +528,10 @@ impl ChildComponent {
             external_children_count,
         )?;
 
-        if let Some(common) = element.element.get_mut_common() {
-            common.conditional_attribute.extend(conditional_attribute);
+        if let Some(common_kernel) = element.element.get_mut_common_kernel() {
+            common_kernel
+                .conditional_attribute
+                .extend(conditional_attribute);
         }
 
         if let ftd::Element::Markup(ref mut markups) = element.element {
@@ -930,7 +934,7 @@ fn reevalute_markup(
                     let mut t = t.clone();
                     if let Some(text) = text {
                         t.text = ftd::markup_line(text);
-                        t.common.reference = None;
+                        t.common_kernel.reference = None;
                     }
                     t
                 };
@@ -941,7 +945,7 @@ fn reevalute_markup(
                     let mut t = t.clone();
                     if let Some(text) = text {
                         t.text = ftd::markup_line(text);
-                        t.common.reference = None;
+                        t.common_kernel.reference = None;
                     }
                     t
                 };
@@ -952,7 +956,7 @@ fn reevalute_markup(
                     let mut t = t.clone();
                     if let Some(text) = text {
                         t.text = ftd::markup_line(text);
-                        t.common.reference = None;
+                        t.common_kernel.reference = None;
                     }
                     t
                 };
@@ -963,7 +967,7 @@ fn reevalute_markup(
                     let mut t = t.clone();
                     if let Some(text) = text {
                         t.text = ftd::markup_line(text);
-                        t.common.reference = None;
+                        t.common_kernel.reference = None;
                     }
                     t
                 };
@@ -974,7 +978,7 @@ fn reevalute_markup(
                     let mut t = t.clone();
                     if let Some(text) = text {
                         t.text = ftd::markup_line(text);
-                        t.common.reference = None;
+                        t.common_kernel.reference = None;
                     }
                     t
                 };
@@ -985,7 +989,7 @@ fn reevalute_markup(
                     let mut t = t.clone();
                     if let Some(text) = text {
                         t.text = ftd::markup_line(text);
-                        t.common.reference = None;
+                        t.common_kernel.reference = None;
                     }
                     t
                 };
@@ -1989,8 +1993,8 @@ impl Component {
 
             if get_condition.is_some() {
                 let mut is_visible = is_visible;
-                if let Some(common) = element.get_common() {
-                    is_visible &= !common.is_not_visible;
+                if let Some(common_kernel) = element.get_common_kernel() {
+                    is_visible &= !common_kernel.is_not_visible;
                 }
                 element.set_condition(get_condition);
                 element.set_non_visibility(!is_visible);
@@ -2058,9 +2062,11 @@ impl Component {
                 }
             }
 
-            if let Some(common) = element.get_mut_common() {
-                common.conditional_attribute.extend(conditional_attribute);
-                common.events.extend(events);
+            if let Some(common_kernel) = element.get_mut_common_kernel() {
+                common_kernel
+                    .conditional_attribute
+                    .extend(conditional_attribute);
+                common_kernel.events.extend(events);
             }
 
             Ok(ElementWithContainer {

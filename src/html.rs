@@ -511,17 +511,17 @@ impl ftd::Grid {
             let mut children = vec![];
             for child in self.container.children.iter() {
                 let mut child_node = child.to_node(doc_id, collector);
-                let common = if let Some(common) = child.get_common() {
-                    common
+                let common_kernel = if let Some(common_kernel) = child.get_common_kernel() {
+                    common_kernel
                 } else {
                     children.push(child_node);
                     continue;
                 };
-                if common.anchor.is_some() {
+                if common_kernel.anchor.is_some() {
                     children.push(child_node);
                     continue;
                 }
-                if let Some(ref position) = common.position {
+                if let Some(ref position) = common_kernel.position {
                     for (key, value) in grid_align(position) {
                         child_node.style.insert(s(key.as_str()), value);
                     }
@@ -568,17 +568,17 @@ impl ftd::Row {
             let mut children = vec![];
             for child in self.container.children.iter() {
                 let mut child_node = child.to_node(doc_id, collector);
-                let common = if let Some(common) = child.get_common() {
-                    common
+                let common_kernel = if let Some(common_kernel) = child.get_common_kernel() {
+                    common_kernel
                 } else {
                     children.push(child_node);
                     continue;
                 };
-                if common.anchor.is_some() {
+                if common_kernel.anchor.is_some() {
                     children.push(child_node);
                     continue;
                 }
-                if let Some(ref position) = common.position {
+                if let Some(ref position) = common_kernel.position {
                     for (key, value) in row_align(position) {
                         child_node.style.insert(s(key.as_str()), value);
                     }
@@ -630,17 +630,17 @@ impl ftd::Column {
                 let mut children = vec![];
                 for child in self.container.children.iter() {
                     let mut child_node = child.to_node(doc_id, collector);
-                    let common = if let Some(common) = child.get_common() {
-                        common
+                    let common_kernel = if let Some(common_kernel) = child.get_common_kernel() {
+                        common_kernel
                     } else {
                         children.push(child_node);
                         continue;
                     };
-                    if common.anchor.is_some() {
+                    if common_kernel.anchor.is_some() {
                         children.push(child_node);
                         continue;
                     }
-                    if let Some(ref position) = common.position {
+                    if let Some(ref position) = common_kernel.position {
                         for (key, value) in column_align(position) {
                             child_node.style.insert(s(key.as_str()), value);
                         }
@@ -1046,7 +1046,7 @@ impl ftd::Image {
 
         fn update_img(img: &ftd::Image, mut n: ftd::Node) -> ftd::Node {
             n.attrs.insert(s("loading"), s(img.loading.to_html()));
-            if let Some(ref id) = img.common.data_id {
+            if let Some(ref id) = img.common_kernel.data_id {
                 n.attrs.insert(s("data-id"), escape(id));
             }
             n.style.insert(s("width"), s("100%"));
@@ -1059,7 +1059,7 @@ impl ftd::Image {
             if img.crop {
                 n.style.insert(s("object-fit"), s("cover"));
                 n.style.insert(s("object-position"), s("0 0"));
-                if img.common.width.is_none() {
+                if img.common_kernel.width.is_none() {
                     n.style.insert(s("width"), s("100%"));
                 }
             }
@@ -1606,8 +1606,8 @@ impl ftd::Container {
                 .iter()
                 .filter(|v| {
                     let mut bool = false;
-                    if let Some(common) = v.get_common() {
-                        if Some(ftd::Anchor::Parent) == common.anchor {
+                    if let Some(common_kernel) = v.get_common_kernel() {
+                        if Some(ftd::Anchor::Parent) == common_kernel.anchor {
                             bool = true;
                         }
                     }

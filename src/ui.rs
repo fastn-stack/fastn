@@ -281,28 +281,30 @@ impl Element {
                         if let Some((_, _, external_children)) = &mut container.external_children {
                             set_default_locals_(external_children);
                         }
-                        common
+                        common_kernel
                     }
                     Element::Null => continue,
                 };
 
-                if let Some(index) = check(common) {
-                    common.events.extend(ftd::p2::Event::mouse_event(&index));
+                if let Some(index) = check(common_kernel) {
+                    common_kernel
+                        .events
+                        .extend(ftd::p2::Event::mouse_event(&index));
                 }
             }
 
             fn check(common_kernel: &mut ftd::CommonKernel) -> Option<String> {
-                if let Some(ref mut condition) = common.condition {
+                if let Some(ref mut condition) = common_kernel.condition {
                     if condition.variable.contains("MOUSE-IN") {
                         return Some(condition.variable.clone());
                     }
                 }
-                if let Some(ref mut reference) = common.reference {
+                if let Some(ref mut reference) = common_kernel.reference {
                     if reference.contains("MOUSE-IN") {
                         return Some(reference.to_string());
                     }
                 }
-                for (_, v) in common.conditional_attribute.iter_mut() {
+                for (_, v) in common_kernel.conditional_attribute.iter_mut() {
                     for (condition, _) in &mut v.conditions_with_value {
                         if condition.variable.contains("MOUSE-IN") {
                             return Some(condition.variable.to_string());
@@ -458,7 +460,7 @@ impl Element {
                                     format!("{}-external:{}", id, index_string)
                                 }
                             });
-                            col.common.data_id = external_id.clone();
+                            col.common_kernel.data_id = external_id.clone();
                             if let Some(val) = container.first_mut() {
                                 index_vec.append(&mut val.to_vec());
                                 Self::set_id(&mut col.container.children, &index_vec, external_id);
@@ -510,12 +512,16 @@ impl Element {
                         IText::Text(t)
                         | IText::Integer(t)
                         | IText::Boolean(t)
-                        | IText::Decimal(t) => (&mut t.common.data_id, None, t.common.is_dummy),
-                        IText::TextBlock(t) => (&mut t.common.data_id, None, t.common.is_dummy),
+                        | IText::Decimal(t) => {
+                            (&mut t.common_kernel.data_id, None, t.common_kernel.is_dummy)
+                        }
+                        IText::TextBlock(t) => {
+                            (&mut t.common_kernel.data_id, None, t.common_kernel.is_dummy)
+                        }
                         IText::Markup(t) => (
-                            &mut t.common.data_id,
+                            &mut t.common_kernel.data_id,
                             Some(&mut t.children),
-                            t.common.is_dummy,
+                            t.common_kernel.is_dummy,
                         ),
                     };
                     let index_string = if is_dummy {
@@ -742,7 +748,7 @@ impl Element {
                             external_children_container,
                         );
                     d.insert(
-                        col.common.data_id.as_ref().expect("").to_string(),
+                        col.common_kernel.data_id.as_ref().expect("").to_string(),
                         external_children_condition,
                     );
                     let all_locals =
@@ -758,7 +764,7 @@ impl Element {
 
     pub fn get_event_dependencies(children: &[ftd::Element], data: &mut ftd::DataDependenciesMap) {
         for child in children {
-            let (font, common) = match child {
+            let (font, common_kernel) = match child {
                 ftd::Element::Column(ftd::Column {
                     common_kernel,
                     container,
@@ -783,7 +789,7 @@ impl Element {
                     if let Some((_, _, external_children)) = &container.external_children {
                         ftd::Element::get_event_dependencies(external_children, data);
                     }
-                    (&None, common)
+                    (&None, common_kernel)
                 }
                 ftd::Element::Markup(ftd::Markups {
                     font,
@@ -792,7 +798,7 @@ impl Element {
                     ..
                 }) => {
                     markup_get_event_dependencies(children, data);
-                    (font, common)
+                    (font, common_kernel)
                 }
                 ftd::Element::Text(ftd::Text {
                     font,
@@ -823,18 +829,31 @@ impl Element {
                     font,
                     common_kernel,
                     ..
-                }) => (font, common),
+                }) => (font, common_kernel),
                 ftd::Element::IFrame(ftd::IFrame { common_kernel, .. })
                 | ftd::Element::TextBlock(ftd::TextBlock { common_kernel, .. })
-                | ftd::Element::Image(ftd::Image { common_kernel, .. }) => (&None, common),
+                | ftd::Element::Image(ftd::Image { common_kernel, .. }) => (&None, common_kernel),
                 ftd::Element::Null => continue,
             };
-            value_condition(&common.reference, &common.data_id, data);
-            color_condition(common_kernel, &common.data_id, data);
-            font_condition(&common.data_id, data, font, &common.conditional_attribute);
-            image_condition(&common.data_id, data, &common.background_image);
-            style_condition(&common.conditional_attribute, &common.data_id, data);
-            visibility_condition(&common.condition, &common.data_id, data);
+            value_condition(&common_kernel.reference, &common_kernel.data_id, data);
+            color_condition(common_kernel, &common_kernel.data_id, data);
+            font_condition(
+                &common_kernel.data_id,
+                data,
+                font,
+                &common_kernel.conditional_attribute,
+            );
+            image_condition(
+                &common_kernel.data_id,
+                data,
+                &common_kernel.background_image,
+            );
+            style_condition(
+                &common_kernel.conditional_attribute,
+                &common_kernel.data_id,
+                data,
+            );
+            visibility_condition(&common_kernel.condition, &common_kernel.data_id, data);
         }
 
         fn markup_get_event_dependencies(
@@ -842,24 +861,37 @@ impl Element {
             data: &mut ftd::DataDependenciesMap,
         ) {
             for child in children {
-                let (font, common) = match child.itext {
+                let (font, common_kernel) = match child.itext {
                     IText::Text(ref t)
                     | IText::Integer(ref t)
                     | IText::Boolean(ref t)
-                    | IText::Decimal(ref t) => (&t.font, &t.common),
-                    IText::TextBlock(ref t) => (&None, &t.common),
+                    | IText::Decimal(ref t) => (&t.font, &t.common_kernel),
+                    IText::TextBlock(ref t) => (&None, &t.common_kernel),
                     IText::Markup(ref t) => {
                         markup_get_event_dependencies(&t.children, data);
-                        (&t.font, &t.common)
+                        (&t.font, &t.common_kernel)
                     }
                 };
                 markup_get_event_dependencies(&child.children, data);
-                value_condition(&common.reference, &common.data_id, data);
-                color_condition(common_kernel, &common.data_id, data);
-                font_condition(&common.data_id, data, font, &common.conditional_attribute);
-                image_condition(&common.data_id, data, &common.background_image);
-                style_condition(&common.conditional_attribute, &common.data_id, data);
-                visibility_condition(&common.condition, &common.data_id, data);
+                value_condition(&common_kernel.reference, &common_kernel.data_id, data);
+                color_condition(common_kernel, &common_kernel.data_id, data);
+                font_condition(
+                    &common_kernel.data_id,
+                    data,
+                    font,
+                    &common_kernel.conditional_attribute,
+                );
+                image_condition(
+                    &common_kernel.data_id,
+                    data,
+                    &common_kernel.background_image,
+                );
+                style_condition(
+                    &common_kernel.conditional_attribute,
+                    &common_kernel.data_id,
+                    data,
+                );
+                visibility_condition(&common_kernel.condition, &common_kernel.data_id, data);
             }
         }
 
@@ -900,67 +932,67 @@ impl Element {
             data: &mut ftd::DataDependenciesMap,
         ) {
             let id = id.clone().expect("universal id should be present");
-            if let Some(ref color) = common.color {
+            if let Some(ref color) = common_kernel.color {
                 color_condition(
                     color,
                     id.as_str(),
                     data,
                     "color",
-                    &common.conditional_attribute,
+                    &common_kernel.conditional_attribute,
                 );
             }
-            if let Some(ref color) = common.background_color {
+            if let Some(ref color) = common_kernel.background_color {
                 color_condition(
                     color,
                     id.as_str(),
                     data,
                     "background-color",
-                    &common.conditional_attribute,
+                    &common_kernel.conditional_attribute,
                 );
             }
-            if let Some(ref color) = common.border_top_color {
+            if let Some(ref color) = common_kernel.border_top_color {
                 color_condition(
                     color,
                     id.as_str(),
                     data,
                     "background-color",
-                    &common.conditional_attribute,
+                    &common_kernel.conditional_attribute,
                 );
             }
-            if let Some(ref color) = common.border_right_color {
+            if let Some(ref color) = common_kernel.border_right_color {
                 color_condition(
                     color,
                     id.as_str(),
                     data,
                     "background-color",
-                    &common.conditional_attribute,
+                    &common_kernel.conditional_attribute,
                 );
             }
-            if let Some(ref color) = common.border_bottom_color {
+            if let Some(ref color) = common_kernel.border_bottom_color {
                 color_condition(
                     color,
                     id.as_str(),
                     data,
                     "background-color",
-                    &common.conditional_attribute,
+                    &common_kernel.conditional_attribute,
                 );
             }
-            if let Some(ref color) = common.border_left_color {
+            if let Some(ref color) = common_kernel.border_left_color {
                 color_condition(
                     color,
                     id.as_str(),
                     data,
                     "background-color",
-                    &common.conditional_attribute,
+                    &common_kernel.conditional_attribute,
                 );
             }
-            if let Some(ref color) = common.border_color {
+            if let Some(ref color) = common_kernel.border_color {
                 color_condition(
                     color,
                     id.as_str(),
                     data,
                     "border-color",
-                    &common.conditional_attribute,
+                    &common_kernel.conditional_attribute,
                 );
             }
 
@@ -1670,20 +1702,20 @@ impl Element {
 
     pub fn container_id(&self) -> Option<String> {
         match self {
-            ftd::Element::Column(e) => e.common.data_id.clone(),
-            ftd::Element::Row(e) => e.common.data_id.clone(),
-            ftd::Element::Scene(e) => e.common.data_id.clone(),
-            ftd::Element::Grid(e) => e.common.data_id.clone(),
+            ftd::Element::Column(e) => e.common_kernel.data_id.clone(),
+            ftd::Element::Row(e) => e.common_kernel.data_id.clone(),
+            ftd::Element::Scene(e) => e.common_kernel.data_id.clone(),
+            ftd::Element::Grid(e) => e.common_kernel.data_id.clone(),
             _ => None,
         }
     }
 
     pub fn set_container_id(&mut self, name: Option<String>) {
         match self {
-            ftd::Element::Column(e) => e.common.data_id = name,
-            ftd::Element::Row(e) => e.common.data_id = name,
-            ftd::Element::Scene(e) => e.common.data_id = name,
-            ftd::Element::Grid(e) => e.common.data_id = name,
+            ftd::Element::Column(e) => e.common_kernel.data_id = name,
+            ftd::Element::Row(e) => e.common_kernel.data_id = name,
+            ftd::Element::Scene(e) => e.common_kernel.data_id = name,
+            ftd::Element::Grid(e) => e.common_kernel.data_id = name,
             _ => {}
         }
     }
@@ -1703,7 +1735,7 @@ impl Element {
             | ftd::Element::Boolean(ftd::Text { common_kernel, .. })
             | ftd::Element::Decimal(ftd::Text { common_kernel, .. })
             | ftd::Element::Scene(ftd::Scene { common_kernel, .. })
-            | ftd::Element::Grid(ftd::Grid { common_kernel, .. }) => common.id = name,
+            | ftd::Element::Grid(ftd::Grid { common_kernel, .. }) => common_kernel.id = name,
             ftd::Element::Null => {}
         }
     }
@@ -1774,48 +1806,48 @@ impl Element {
 
     pub fn get_heading_region(&self) -> Option<&ftd::Region> {
         match self {
-            ftd::Element::Column(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
-            ftd::Element::Row(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
+            ftd::Element::Column(e) => e.common_kernel.region.as_ref().filter(|v| v.is_heading()),
+            ftd::Element::Row(e) => e.common_kernel.region.as_ref().filter(|v| v.is_heading()),
             _ => None,
         }
     }
 
-    pub fn get_mut_common(&mut self) -> Option<&mut ftd::CommonKernel> {
+    pub fn get_mut_common_kernel(&mut self) -> Option<&mut ftd::CommonKernel> {
         match self {
-            ftd::Element::Column(e) => Some(&mut e.common),
-            ftd::Element::Row(e) => Some(&mut e.common),
-            ftd::Element::Text(e) => Some(&mut e.common),
-            ftd::Element::Markup(e) => Some(&mut e.common),
-            ftd::Element::TextBlock(e) => Some(&mut e.common),
-            ftd::Element::Code(e) => Some(&mut e.common),
-            ftd::Element::Image(e) => Some(&mut e.common),
-            ftd::Element::IFrame(e) => Some(&mut e.common),
-            ftd::Element::Input(e) => Some(&mut e.common),
-            ftd::Element::Integer(e) => Some(&mut e.common),
-            ftd::Element::Boolean(e) => Some(&mut e.common),
-            ftd::Element::Decimal(e) => Some(&mut e.common),
-            ftd::Element::Scene(e) => Some(&mut e.common),
-            ftd::Element::Grid(e) => Some(&mut e.common),
+            ftd::Element::Column(e) => Some(&mut e.common_kernel),
+            ftd::Element::Row(e) => Some(&mut e.common_kernel),
+            ftd::Element::Text(e) => Some(&mut e.common_kernel),
+            ftd::Element::Markup(e) => Some(&mut e.common_kernel),
+            ftd::Element::TextBlock(e) => Some(&mut e.common_kernel),
+            ftd::Element::Code(e) => Some(&mut e.common_kernel),
+            ftd::Element::Image(e) => Some(&mut e.common_kernel),
+            ftd::Element::IFrame(e) => Some(&mut e.common_kernel),
+            ftd::Element::Input(e) => Some(&mut e.common_kernel),
+            ftd::Element::Integer(e) => Some(&mut e.common_kernel),
+            ftd::Element::Boolean(e) => Some(&mut e.common_kernel),
+            ftd::Element::Decimal(e) => Some(&mut e.common_kernel),
+            ftd::Element::Scene(e) => Some(&mut e.common_kernel),
+            ftd::Element::Grid(e) => Some(&mut e.common_kernel),
             ftd::Element::Null => None,
         }
     }
 
-    pub fn get_common(&self) -> Option<&ftd::CommonKernel> {
+    pub fn get_common_kernel(&self) -> Option<&ftd::CommonKernel> {
         match self {
-            ftd::Element::Column(e) => Some(&e.common),
-            ftd::Element::Row(e) => Some(&e.common),
-            ftd::Element::Text(e) => Some(&e.common),
-            ftd::Element::Markup(e) => Some(&e.common),
-            ftd::Element::TextBlock(e) => Some(&e.common),
-            ftd::Element::Code(e) => Some(&e.common),
-            ftd::Element::Image(e) => Some(&e.common),
-            ftd::Element::IFrame(e) => Some(&e.common),
-            ftd::Element::Input(e) => Some(&e.common),
-            ftd::Element::Integer(e) => Some(&e.common),
-            ftd::Element::Boolean(e) => Some(&e.common),
-            ftd::Element::Decimal(e) => Some(&e.common),
-            ftd::Element::Scene(e) => Some(&e.common),
-            ftd::Element::Grid(e) => Some(&e.common),
+            ftd::Element::Column(e) => Some(&e.common_kernel),
+            ftd::Element::Row(e) => Some(&e.common_kernel),
+            ftd::Element::Text(e) => Some(&e.common_kernel),
+            ftd::Element::Markup(e) => Some(&e.common_kernel),
+            ftd::Element::TextBlock(e) => Some(&e.common_kernel),
+            ftd::Element::Code(e) => Some(&e.common_kernel),
+            ftd::Element::Image(e) => Some(&e.common_kernel),
+            ftd::Element::IFrame(e) => Some(&e.common_kernel),
+            ftd::Element::Input(e) => Some(&e.common_kernel),
+            ftd::Element::Integer(e) => Some(&e.common_kernel),
+            ftd::Element::Boolean(e) => Some(&e.common_kernel),
+            ftd::Element::Decimal(e) => Some(&e.common_kernel),
+            ftd::Element::Scene(e) => Some(&e.common_kernel),
+            ftd::Element::Grid(e) => Some(&e.common_kernel),
             ftd::Element::Null => None,
         }
     }
@@ -1837,7 +1869,7 @@ impl Element {
             match element {
                 ftd::Element::Column(ftd::Column { common_kernel, .. })
                 | ftd::Element::Row(ftd::Row { common_kernel, .. }) => {
-                    let r = common.region.as_ref().filter(|v| v.is_heading());
+                    let r = common_kernel.region.as_ref().filter(|v| v.is_heading());
                     if let Some(r) = r {
                         if let Some((place_at, r1)) = region {
                             if r.get_lower_priority_heading().contains(r1) || r == r1 {

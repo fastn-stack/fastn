@@ -376,7 +376,7 @@ impl Document {
                     | ftd::Element::Integer(ftd::Text { common_kernel, .. })
                     | ftd::Element::Boolean(ftd::Text { common_kernel, .. })
                     | ftd::Element::Decimal(ftd::Text { common_kernel, .. }) => {
-                        (common.events.as_slice(), &common.data_id)
+                        (common_kernel.events.as_slice(), &common_kernel.data_id)
                     }
                     ftd::Element::Null => continue,
                 };
@@ -394,11 +394,15 @@ impl Document {
                     ftd::IText::Text(ref t)
                     | ftd::IText::Integer(ref t)
                     | ftd::IText::Boolean(ref t)
-                    | ftd::IText::Decimal(ref t) => (t.common.events.as_slice(), &t.common.data_id),
-                    ftd::IText::TextBlock(ref t) => (t.common.events.as_slice(), &t.common.data_id),
+                    | ftd::IText::Decimal(ref t) => {
+                        (t.common_kernel.events.as_slice(), &t.common_kernel.data_id)
+                    }
+                    ftd::IText::TextBlock(ref t) => {
+                        (t.common_kernel.events.as_slice(), &t.common_kernel.data_id)
+                    }
                     ftd::IText::Markup(ref t) => {
                         markup_body_events_(&t.children, event_string, id);
-                        (t.common.events.as_slice(), &t.common.data_id)
+                        (t.common_kernel.events.as_slice(), &t.common_kernel.data_id)
                     }
                 };
                 markup_body_events_(&child.children, event_string, id);
@@ -443,17 +447,17 @@ impl Document {
             let mut children = vec![];
             for child in self.main.container.children.iter() {
                 let mut child_node = child.to_node(doc_id, collector);
-                let common = if let Some(common) = child.get_common() {
-                    common
+                let common_kernel = if let Some(common_kernel) = child.get_common_kernel() {
+                    common_kernel
                 } else {
                     children.push(child_node);
                     continue;
                 };
-                if common.anchor.is_some() {
+                if common_kernel.anchor.is_some() {
                     children.push(child_node);
                     continue;
                 }
-                if let Some(ref position) = common.position {
+                if let Some(ref position) = common_kernel.position {
                     for (key, value) in ftd::html::column_align(position) {
                         child_node.style.insert(key.as_str().to_string(), value);
                     }
@@ -544,7 +548,7 @@ impl Document {
         F: Fn(&ftd::Region) -> bool,
     {
         if let Some(t) = Self::find_text(children, |t| {
-            if t.common.region.as_ref().map(f).unwrap_or(false) {
+            if t.common_kernel.region.as_ref().map(f).unwrap_or(false) {
                 Some(t.text.clone())
             } else {
                 None
@@ -554,14 +558,14 @@ impl Document {
         }
         if let Some(t) = Self::find(children, &|e| match e {
             ftd::Element::Column(t) => {
-                if t.common.region.as_ref().map(f).unwrap_or(false) {
+                if t.common_kernel.region.as_ref().map(f).unwrap_or(false) {
                     Some(t.container.children.clone())
                 } else {
                     None
                 }
             }
             ftd::Element::Row(t) => {
-                if t.common.region.as_ref().map(f).unwrap_or(false) {
+                if t.common_kernel.region.as_ref().map(f).unwrap_or(false) {
                     Some(t.container.children.clone())
                 } else {
                     None
@@ -570,7 +574,7 @@ impl Document {
             _ => None,
         }) {
             if let Some(t) = Self::find_text(&t, |t| {
-                if t.common
+                if t.common_kernel
                     .region
                     .as_ref()
                     .map(|r| r.is_title())
@@ -820,8 +824,12 @@ pub fn set_region_id(elements: &mut [ftd::Element]) {
         match element {
             ftd::Element::Column(ftd::Column { common_kernel, .. })
             | ftd::Element::Row(ftd::Row { common_kernel, .. }) => {
-                if common.region.as_ref().filter(|v| v.is_heading()).is_some()
-                    && common.data_id.is_none()
+                if common_kernel
+                    .region
+                    .as_ref()
+                    .filter(|v| v.is_heading())
+                    .is_some()
+                    && common_kernel.data_id.is_none()
                 {
                     if let Some(h) =
                         ftd::p2::Document::get_heading(vec![element.clone()].as_slice(), &|r| {
@@ -836,7 +844,7 @@ pub fn set_region_id(elements: &mut [ftd::Element]) {
         }
     }
     for (idx, s) in map {
-        elements[idx].get_mut_common().unwrap().id = Some(s);
+        elements[idx].get_mut_common_kernel().unwrap().id = Some(s);
     }
 }
 
@@ -867,12 +875,12 @@ pub fn default_scene_children_position(elements: &mut Vec<ftd::Element>) {
     }
 
     fn check_and_set_default_position(child: &mut ftd::Element) {
-        if let Some(common) = child.get_mut_common() {
-            if common.top.is_none() && common.bottom.is_none() {
-                common.top = Some(0);
+        if let Some(common_kernel) = child.get_mut_common_kernel() {
+            if common_kernel.top.is_none() && common_kernel.bottom.is_none() {
+                common_kernel.top = Some(0);
             }
-            if common.left.is_none() && common.right.is_none() {
-                common.left = Some(0);
+            if common_kernel.left.is_none() && common_kernel.right.is_none() {
+                common_kernel.left = Some(0);
             }
         }
     }

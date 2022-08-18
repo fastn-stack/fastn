@@ -6,7 +6,7 @@ pub fn common_kernel_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     reference: Option<String>,
-) -> ftd::p1::Result<ftd::Common> {
+) -> ftd::p1::Result<ftd::CommonKernel> {
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let submit = ftd::p2::utils::string_optional("submit", properties, doc.name, 0)?;
     let link = ftd::p2::utils::string_optional("link", properties, doc.name, 0)?;
@@ -761,7 +761,7 @@ pub fn row_from_properties(
 ) -> ftd::p1::Result<ftd::Row> {
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Row {
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -784,7 +784,7 @@ pub fn column_function() -> ftd::Component {
         root: "ftd.kernel".to_string(),
         arguments: [
             container_arguments(),
-            common_arguments(),
+            common_kernel_arguments(),
             vec![(
                 "spacing".to_string(),
                 ftd::p2::Kind::string().into_optional(),
@@ -811,7 +811,7 @@ pub fn column_from_properties(
 ) -> ftd::p1::Result<ftd::Column> {
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Column {
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -866,7 +866,7 @@ pub fn iframe_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
             ],
-            common_arguments(),
+            common_kernel_arguments(),
         ]
         .concat()
         .into_iter()
@@ -906,7 +906,7 @@ pub fn iframe_from_properties(
                 .as_str(),
             doc.name,
         )?,
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -948,7 +948,7 @@ pub fn text_block_from_properties(
         } else {
             ftd::markdown_line(text.as_str())
         },
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1016,7 +1016,7 @@ pub fn code_from_properties(
             .as_str(),
             doc.name,
         )?,
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1073,7 +1073,7 @@ pub fn integer_from_properties(
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1129,7 +1129,7 @@ pub fn decimal_from_properties(
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1239,7 +1239,7 @@ pub fn boolean_from_properties(
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1292,7 +1292,7 @@ pub fn text_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
             ],
-            common_arguments(),
+            common_kernel_arguments(),
         ]
         .concat()
         .into_iter()
@@ -1336,7 +1336,7 @@ pub fn code_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
             ],
-            common_arguments(),
+            common_kernel_arguments(),
         ]
         .concat()
         .into_iter()
@@ -1374,7 +1374,7 @@ pub fn integer_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
             ],
-            common_arguments(),
+            common_kernel_arguments(),
         ]
         .concat()
         .into_iter()
@@ -1412,7 +1412,7 @@ pub fn decimal_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
             ],
-            common_arguments(),
+            common_kernel_arguments(),
         ]
         .concat()
         .into_iter()
@@ -1430,7 +1430,7 @@ pub fn scene_function() -> ftd::Component {
     let arguments = {
         let mut arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
             container_arguments(),
-            common_arguments(),
+            common_kernel_arguments(),
             vec![(
                 "spacing".to_string(),
                 ftd::p2::Kind::string().into_optional(),
@@ -1487,7 +1487,7 @@ pub fn markup_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
             ],
-            common_arguments(),
+            common_kernel_arguments(),
         ]
         .concat()
         .into_iter()
@@ -1504,7 +1504,7 @@ pub fn markup_function() -> ftd::Component {
 pub fn grid_function() -> ftd::Component {
     let arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
         container_arguments(),
-        common_arguments(),
+        common_kernel_arguments(),
         vec![
             ("slots".to_string(), ftd::p2::Kind::string()),
             (
@@ -1566,7 +1566,7 @@ pub fn boolean_function() -> ftd::Component {
                 ("true".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("false".to_string(), ftd::p2::Kind::string().into_optional()),
             ],
-            common_arguments(),
+            common_kernel_arguments(),
         ]
         .concat()
         .into_iter()
@@ -1607,7 +1607,7 @@ pub fn input_function() -> ftd::Component {
                 ),
                 ("type".to_string(), ftd::p2::Kind::string().into_optional()),
             ],
-            common_arguments(),
+            common_kernel_arguments(),
         ]
         .concat()
         .into_iter()
@@ -1650,7 +1650,7 @@ pub fn input_from_properties(
     })?;
 
     Ok(ftd::Input {
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1676,7 +1676,7 @@ pub fn scene_from_properties(
 ) -> ftd::p1::Result<ftd::Scene> {
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Scene {
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1719,7 +1719,7 @@ pub fn grid_from_properties(
             doc.name,
             0,
         )?,
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
@@ -1760,7 +1760,7 @@ pub fn markup_from_properties(
 
     Ok(ftd::Markups {
         text: ftd::markup_line(value.as_str()),
-        common_kernel: common_from_properties(
+        common_kernel: common_kernel_from_properties(
             unresolved_properties,
             doc,
             condition,
