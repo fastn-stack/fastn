@@ -20,11 +20,6 @@ async fn serve_files(
     };
 
     // Auth Stuff
-    // Note: If package does not have sitemap, considering all documents are public.
-    // Note: If package have sitemap but does not have any user groups defined,
-    // all document should be public, by default behaviour
-    // If `f` is static file, considering it public as well, for now.
-
     if !f.is_static() {
         match config.can_read(req, path) {
             Ok(can_read) => {
@@ -39,10 +34,6 @@ async fn serve_files(
             }
         }
     }
-
-    // Get identities from remote(sid)
-    // fpm ui, add dependency as auto add, 404 page will come from fpm ui
-    // TODO: for image check referer permission
 
     config.current_document = Some(f.get_id());
     return match f {
