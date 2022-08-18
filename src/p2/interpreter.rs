@@ -1,5 +1,3 @@
-use std::borrow::Borrow;
-
 #[derive(Debug, Default)]
 pub struct InterpreterState {
     pub id: String,
@@ -776,13 +774,13 @@ impl ParsedDocument {
         &mut self,
         terms_map: &std::collections::HashMap<String, String>,
     ) -> ftd::p1::Result<()> {
-        use lazy_static::lazy_static;
-        use regex::Regex;
+        // TODO: avoid repeated compilation of regex and use lazy_static! to compile it only once
+        // TODO: move these regexes inside replace_text()
 
         // Term syntax 1 = [term`](term: someTerm)
         // Refer someTerm from linked text <term`>
         // replacement = [term`]([document-id]#[slugified(someTerm)])
-        let t1: Regex = Regex::new(
+        let t1: regex::Regex = regex::Regex::new(
             r"(?x) # Enabling Comment Mode
             \[(?P<linked_text>[\sa-zA-Z\d]+)\] # Linked Text Capture Group <linked_text>
             \(\s*term\s*:(?P<actual_term>[\sa-zA-Z\d]+)\) # Referred Term Capture Group <actual_term>"
@@ -791,7 +789,7 @@ impl ParsedDocument {
         // Term syntax 2 = {term: someTerm}
         // Refer someTerm with the same linked text i.e <someTerm>
         // replacement = [someTerm]([document-id]#[slugified(someTerm)])
-        let t2: Regex = Regex::new(
+        let t2: regex::Regex = regex::Regex::new(
             r"(?x) # Enabling comment mode
             \{\s*term\s*: # Here Linked Text is same as Referred Term
             (?P<actual_term>[\sa-zA-Z\d]+)\} # Referred Term Capture Group <actual_term>",
@@ -799,14 +797,13 @@ impl ParsedDocument {
         .unwrap();
 
         // TODO: Iterate through doc and replace with links
-        for s in self.sections.iter() {
-            // Data available from Header, Caption, Body
-            // Parse markdown components
+        for s in self.sections.iter_mut() {
+            // Testing on ft.markdown for now (section level only)
             if s.name.contains("markdown") {
                 match s.body {
                     Some(ref body) => {
-                        println!("{:?}", body);
-                        replace_text(body.1.as_str(), &t1, &t2, terms_map);
+                        // dbg!(body);
+                        s.body = Some((body.0, replace_text(body.1.as_str(), &t1, &t2, terms_map)));
                     }
                     _ => {}
                 }
@@ -815,13 +812,13 @@ impl ParsedDocument {
 
         return Ok(());
 
-        #[allow(dead_code)]
         fn replace_text(
             text: &str,
-            t1: &Regex,
-            t2: &Regex,
+            t1: &regex::Regex,
+            t2: &regex::Regex,
             terms_map: &std::collections::HashMap<String, String>,
         ) -> String {
+            /// fetches capture group by group index and returns it as &str
             fn capture_group_at<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
                 return capture.get(group_index).map_or("", |c| c.as_str());
             }
@@ -829,10 +826,11 @@ impl ParsedDocument {
             let mut result = text.to_string();
 
             // Term syntax 1 = [term`](term: someTerm)
+            // G0 = Original capture, G1 = Linked Text, G2 = Actual Term
             for cap in t1.captures_iter(text) {
-                println!("{:?}", cap);
-                println!("{:?}", capture_group_at(&cap, 1));
-                println!("{:?}", capture_group_at(&cap, 2));
+                println!("From T1: {:?}", cap);
+                dbg!(capture_group_at(&cap, 1));
+                dbg!(capture_group_at(&cap, 2));
                 let replacement = format!(
                     "[{}]({}#{})",
                     capture_group_at(&cap, 1).trim(),
@@ -840,13 +838,14 @@ impl ParsedDocument {
                     slug::slugify(capture_group_at(&cap, 2))
                 );
                 result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
-                println!("changed: {:?}", result);
+                println!("replaced Text: {:?}", result);
             }
 
             // Term syntax 2 = {term: someTerm}
+            // G0 = Original capture, G1 = Actual Term
             for cap in t2.captures_iter(text) {
-                println!("{:?}", cap);
-                println!("{:?}", capture_group_at(&cap, 1));
+                println!("From T2: {:?}", cap);
+                dbg!(capture_group_at(&cap, 1));
                 let replacement = format!(
                     "[{}]({}#{})",
                     capture_group_at(&cap, 1).trim(),
@@ -854,7 +853,7 @@ impl ParsedDocument {
                     slug::slugify(capture_group_at(&cap, 1))
                 );
                 result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
-                println!("changed: {:?}", result);
+                println!("replaced Text: {:?}", result);
             }
 
             return result;
