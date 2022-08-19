@@ -125,18 +125,19 @@ pub async fn sync2(
     }
 }
 
-pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
-    // TODO: Need to call at once only
-    let config = fpm::Config::read(None, false).await?;
+pub(crate) async fn do_sync(
+    config: &fpm::Config,
+    files: &[SyncRequestFile],
+) -> fpm::Result<std::collections::HashMap<String, SyncResponseFile>> {
     let mut remote_history = config.get_history().await?;
     let remote_manifest =
         fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), false)?;
     let mut to_be_in_history: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
         Default::default();
     let mut synced_files = std::collections::HashMap::new();
-    for file in request.files {
+    for file in files {
         // TODO: get all data like message, author, src-cr from request
-        match &file {
+        match file {
             SyncRequestFile::Add {
                 path,
                 content,
@@ -304,7 +305,14 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
     }
 
     fpm::history::insert_into_history(&config.root, &to_be_in_history, &mut remote_history).await?;
+    Ok(synced_files)
+}
 
+pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
+    // TODO: Need to call at once only
+    let config = fpm::Config::read(None, false).await?;
+    let mut synced_files = do_sync(&config, request.files.as_slice()).await?;
+    let remote_history = config.get_history().await?;
     let remote_manifest =
         fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
 

@@ -331,6 +331,36 @@ async fn merge_cr_into_main(
             (cr_track_status, cr_file_status)
         },
     );
+    let cr_statuses = {
+        let mut cr_statuses = cr_file_manifest
+            .iter()
+            .filter_map(|(k, v)| {
+                if v.is_deleted() {
+                    None
+                } else {
+                    Some(fpm::sync_utils::FileStatus::Delete {
+                        path: k.to_string(),
+                        version: v.version,
+                        status: fpm::sync_utils::Status::NoConflict,
+                    })
+                }
+            })
+            .collect_vec();
+
+        cr_statuses.extend(cr_track_manifest.iter().filter_map(|(k, v)| {
+            if v.is_deleted() {
+                None
+            } else {
+                Some(fpm::sync_utils::FileStatus::Delete {
+                    path: k.to_string(),
+                    version: v.version,
+                    status: fpm::sync_utils::Status::NoConflict,
+                })
+            }
+        }));
+        cr_statuses
+    };
+
     let mut new_file_status: std::collections::BTreeMap<String, fpm::sync_utils::FileStatus> =
         Default::default();
     let mut conflicted_file_status = vec![];
@@ -532,7 +562,12 @@ async fn merge_cr_into_main(
         .collect_vec();
 
     if conflicted_file_status.is_empty() {
-        //TODO
+        let mut sync_request_files = new_file_status
+            .into_values()
+            .filter_map(|v| v.sync_request(Some(src)))
+            .collect_vec();
+        sync_request_files.extend(cr_statuses.into_iter().filter_map(|v| v.sync_request(None)));
+        fpm::apis::sync2::do_sync(config, sync_request_files.as_slice()).await?;
     }
 
     Ok(())
