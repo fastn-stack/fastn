@@ -85,7 +85,7 @@ zip = "0.6"
 #
 # Once we are closer to release we will stop using this and adopot semver.
 git = "https://github.com/FifthTry/ftd"
-rev = "9d1d206"
+rev = "68fdacb"
 
 # If you are testing fpm against local ftd, you can keep ftd and fpm checked out in
 # same folder and uncomment the next `path` line to use local ftd.
@@ -150,6 +150,10 @@ features = [
 
 
 [dev-dependencies]
-fbt-lib = "0.1.18"
 indoc = "1"
 pretty_assertions = "1"
+
+[dev-dependencies.fbt-lib]
+git = "https://github.com/FifthTry/fbt"
+rev = "3f15b52"
+
