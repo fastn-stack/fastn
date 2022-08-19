@@ -14,3 +14,17 @@ pub fn code_with_theme(
         )?,
     })
 }
+
+pub fn markup(s: &str) -> ftd::Rendered {
+    ftd::Rendered {
+        original: s.to_string(),
+        rendered: ftd::markup::markup(s),
+    }
+}
+
+pub fn markup_line(s: &str) -> ftd::Rendered {
+    ftd::Rendered {
+        original: s.to_string(),
+        rendered: ftd::markup::markup_inline(s),
+    }
+}

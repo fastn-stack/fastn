@@ -785,9 +785,9 @@ fn reevalute_markups(
         for v in markups.text.original.split("\n\n") {
             let itext = ftd::IText::Markup(ftd::Markups {
                 text: if !markups.line {
-                    ftd::markup(v)
+                    ftd::rendered::markup(v)
                 } else {
-                    ftd::markup_line(v)
+                    ftd::rendered::markup_line(v)
                 },
                 ..Default::default()
             });
@@ -840,7 +840,7 @@ fn reevalute_markup(
         if text[idx].eq(&'{') {
             children.push(ftd::Markup {
                 itext: ftd::IText::Text(ftd::Text {
-                    text: ftd::markup_line(traverse_string.as_str()),
+                    text: ftd::rendered::markup_line(traverse_string.as_str()),
                     ..Default::default()
                 }),
                 children: vec![],
@@ -873,7 +873,7 @@ fn reevalute_markup(
     if !traverse_string.is_empty() && !children.is_empty() {
         children.push(ftd::Markup {
             itext: ftd::IText::Text(ftd::Text {
-                text: ftd::markup_line(traverse_string.as_str()),
+                text: ftd::rendered::markup_line(traverse_string.as_str()),
                 ..Default::default()
             }),
             children: vec![],
@@ -929,7 +929,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markup_line(text);
+                        t.text = ftd::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -940,7 +940,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markup_line(text);
+                        t.text = ftd::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -951,7 +951,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markup_line(text);
+                        t.text = ftd::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -962,7 +962,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markup_line(text);
+                        t.text = ftd::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -973,7 +973,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markup_line(text);
+                        t.text = ftd::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -984,7 +984,7 @@ fn reevalute_markup(
                 let mut t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markup_line(text);
+                        t.text = ftd::rendered::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -3003,7 +3003,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Markup(ftd::Markups {
-                text: ftd::markup_line("Amit"),
+                text: ftd::rendered::markup_line("Amit"),
                 line: true,
                 common: ftd::Common {
                     reference: Some(s("foo/bar#name")),
@@ -3086,7 +3086,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Markup(ftd::Markups {
-                text: ftd::markup_line("Abrar Khan"),
+                text: ftd::rendered::markup_line("Abrar Khan"),
                 line: true,
                 ..Default::default()
             }));

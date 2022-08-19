@@ -112,20 +112,6 @@ pub struct ConditionalValueWithDefault {
 }
 
 
-pub fn markup(s: &str) -> ftd::Rendered {
-    ftd::Rendered {
-        original: s.to_string(),
-        rendered: ftd::markup::render(s, true, false),
-    }
-}
-
-pub fn markup_line(s: &str) -> ftd::Rendered {
-    ftd::Rendered {
-        original: s.to_string(),
-        rendered: ftd::markup::markup_inline(s),
-    }
-}
-
 pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::p1::Result<T>
 where
     S1: Into<String>,

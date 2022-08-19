@@ -16,19 +16,6 @@ fn strip_image(s: &str) -> String {
     s.replace("![", MAGIC)
 }
 
-pub fn render(s: &str, auto_links: bool, hard_breaks: bool) -> String {
-    let s = strip_image(s);
-    let o = if auto_links && !hard_breaks {
-        comrak::markdown_to_html(s.as_str(), &ftd::markup::MD)
-    } else {
-        let mut md = MD.clone();
-        md.render.hardbreaks = hard_breaks;
-        md.extension.autolink = auto_links;
-        comrak::markdown_to_html(s.as_str(), &md)
-    };
-    o.replace(MAGIC, "![")
-}
-
 pub fn markup(string: &str) -> String {
     markup_inline(string)
 }

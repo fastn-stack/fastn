@@ -120,7 +120,7 @@ impl Element {
                     })) = local_variables.get(reference)
                     {
                         if let Some(text) = text {
-                            *text = ftd::markup_line(value.to_string().as_str());
+                            *text = ftd::rendered::markup_line(value.to_string().as_str());
                         }
                     }
                 }
@@ -178,7 +178,7 @@ impl Element {
                             ..
                         })) = local_variables.get(reference)
                         {
-                            *text = ftd::markup_line(value.to_string().as_str());
+                            *text = ftd::rendered::markup_line(value.to_string().as_str());
                         }
                     }
                     _ => {}
