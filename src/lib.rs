@@ -110,65 +110,6 @@ pub struct ConditionalValueWithDefault {
     pub default: Option<ConditionalValue>,
 }
 
-pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::p1::Result<T>
-where
-    S1: Into<String>,
-{
-    Err(ftd::p1::Error::ParseError {
-        message: m.into(),
-        doc_id: doc_id.to_string(),
-        line_number,
-    })
-}
 
-pub fn unknown_processor_error<T, S>(m: S, doc_id: String, line_number: usize) -> ftd::p1::Result<T>
-where
-    S: Into<String>,
-{
-    Err(ftd::p1::Error::ParseError {
-        message: m.into(),
-        doc_id,
-        line_number,
-    })
-}
 
-pub fn split_module<'a>(
-    id: &'a str,
-    _doc_id: &str,
-    _line_number: usize,
-) -> ftd::p1::Result<(Option<&'a str>, &'a str, Option<&'a str>)> {
-    match id.split_once('.') {
-        Some((p1, p2)) => match p2.split_once('.') {
-            Some((p21, p22)) => Ok((Some(p1), p21, Some(p22))),
-            None => Ok((Some(p1), p2, None)),
-        },
-        None => Ok((None, id, None)),
-    }
-}
 
-pub struct ExampleLibrary {}
-
-impl ExampleLibrary {
-    pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
-        std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
-    }
-
-    pub fn process(
-        &self,
-        section: &ftd::p1::Section,
-        doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Value> {
-        ftd::unknown_processor_error(
-            format!("unimplemented for section {:?} and doc {:?}", section, doc),
-            doc.name.to_string(),
-            section.line_number,
-        )
-    }
-
-    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
-        match self.get(name, doc) {
-            Some(v) => Ok(v),
-            None => ftd::e2(format!("library not found: {}", name), "", 0),
-        }
-    }
-}

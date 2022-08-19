@@ -1862,7 +1862,7 @@ impl Length {
             let v = ftd::p2::utils::get_name("calc", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Calc { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
 
@@ -1874,34 +1874,34 @@ impl Length {
             let v = ftd::p2::utils::get_name("portion", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Portion { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("percent ") {
             let v = ftd::p2::utils::get_name("percent", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Percent { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("vh ") {
             let v = ftd::p2::utils::get_name("vh", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VH { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("vw ") {
             let v = ftd::p2::utils::get_name("vw", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VW { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
 
         match l.parse() {
             Ok(v) => Ok(Some(Length::Px { value: v })),
-            Err(_) => ftd::e2(format!("{} is not a valid integer", l), doc_id, 0),
+            Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", l), doc_id, 0),
         }
     }
 }
@@ -1938,7 +1938,7 @@ impl Position {
             Some("top-right") => Some(Self::TopRight),
             Some("bottom-left") => Some(Self::BottomLeft),
             Some("bottom-right") => Some(Self::BottomRight),
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
+            Some(t) => return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
             None => None,
         })
     }
@@ -2008,7 +2008,7 @@ impl Region {
             Some("description") => Self::Description,
             Some("announce") => Self::Announce,
             Some("announce-urgently") => Self::AnnounceUrgently,
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
+            Some(t) => return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
             None => return Ok(None),
         }))
     }
@@ -2084,7 +2084,7 @@ impl Overflow {
             Some("visible") => Self::Visible,
             Some("auto") => Self::Auto,
             Some("scroll") => Self::Scroll,
-            Some(t) => return ftd::e2(format!("{} is not a valid property", t), doc_id, 0), // TODO
+            Some(t) => return ftd::p2::utils::e2(format!("{} is not a valid property", t), doc_id, 0), // TODO
             None => return Ok(None),
         }))
     }
@@ -2108,7 +2108,7 @@ impl Anchor {
             "window" => ftd::Anchor::Window,
             "parent" => ftd::Anchor::Parent,
             t => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "invalid value for `absolute` expected `window` or `parent` found: {}",
                         t
@@ -2185,7 +2185,7 @@ impl GradientDirection {
             let v = ftd::p2::utils::get_name("angle", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(GradientDirection::Angle { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0),
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0),
             };
         }
         Ok(None)
@@ -2360,7 +2360,7 @@ impl Loading {
         match s {
             "lazy" => Ok(Loading::Lazy),
             "eager" => Ok(Loading::Eager),
-            _ => ftd::e2(
+            _ => ftd::p2::utils::e2(
                 format!("{} is not a valid alignment, allowed: lazy, eager", s),
                 doc_id,
                 0,
@@ -2444,7 +2444,7 @@ impl TextAlign {
             Some("right") => ftd::TextAlign::Right,
             Some("justify") => ftd::TextAlign::Justify,
             Some(t) => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "{} is not a valid alignment, allowed: center, left, right, justify",
                         t
@@ -2476,7 +2476,7 @@ impl FontDisplay {
             Some("swap") => ftd::FontDisplay::Swap,
             Some("block") => ftd::FontDisplay::Block,
             Some(t) => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("{} is not a valid alignment, allowed: swap, block", t),
                     doc_id,
                     0,
@@ -2746,7 +2746,7 @@ impl Style {
                     s.weight = Some(ftd::Weight::HairLine);
                     add_in_map("hairline", &mut weights);
                 }
-                t => return ftd::e2(format!("{} is not a valid style", t), doc_id, 0),
+                t => return ftd::p2::utils::e2(format!("{} is not a valid style", t), doc_id, 0),
             }
         }
 
@@ -2812,7 +2812,7 @@ impl TextFormat {
                 lang: lang.unwrap_or_else(|| "txt".to_string()),
             },
             Some("text") => ftd::TextFormat::Text,
-            Some(t) => return ftd::e2(format!("{} is not a valid format", t), doc_id, 0), // TODO
+            Some(t) => return ftd::p2::utils::e2(format!("{} is not a valid format", t), doc_id, 0), // TODO
             None => return Ok(ftd::TextFormat::Markdown),
         })
     }

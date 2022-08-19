@@ -98,7 +98,7 @@ impl Kind {
             ftd::p2::Kind::Boolean { .. } => "boolean",
             ftd::p2::Kind::Object { .. } => "object",
             ftd::p2::Kind::List { .. } => "list",
-            _ => return ftd::e2(format!("1 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), doc_id, line_number),
+            _ => return ftd::p2::utils::e2(format!("1 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), doc_id, line_number),
         }.to_string())
     }
 
@@ -107,7 +107,7 @@ impl Kind {
             ftd::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
             ftd::p2::Kind::Integer { default: Some(d), .. } => ftd::Value::Integer { value: match d.parse::<i64>() {
                     Ok(v) => v,
-                    Err(_) => return ftd::e2(format!("{} is not an integer", d), doc_id, line_number),
+                    Err(_) => return ftd::p2::utils::e2(format!("{} is not an integer", d), doc_id, line_number),
                 },
             },
             ftd::p2::Kind::Decimal { default: Some(d), .. } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| ftd::p1::Error::ParseError {
@@ -128,7 +128,7 @@ impl Kind {
                 ftd::Value::Optional {data: Box::new(None), kind: kind.as_ref().to_owned()}
             },
             ftd::p2::Kind::List { kind, .. } => ftd::Value::List { data: vec![], kind: kind.as_ref().to_owned() },
-            _ => return ftd::e2(
+            _ => return ftd::p2::utils::e2(
                 format!("2 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self),
                 doc_id,  line_number),
         })
@@ -464,7 +464,7 @@ impl Kind {
                     | ftd::p2::Kind::Integer { .. }
                     | ftd::p2::Kind::Decimal { .. }
                     | ftd::p2::Kind::Boolean { .. } => false,
-                    t => return ftd::e2(format!("`{}` is {:?}", name, t), doc.name, line_number),
+                    t => return ftd::p2::utils::e2(format!("`{}` is {:?}", name, t), doc.name, line_number),
                 };
 
                 let (caption, body) = if let Kind::String { caption, body, .. } = self.inner() {
@@ -492,7 +492,7 @@ impl Kind {
                 } else if let Some(default) = self.get_default_value_str() {
                     (default, ftd::TextSource::Default)
                 } else {
-                    return ftd::e2(format!("`{}` is required", name), doc.name, line_number);
+                    return ftd::p2::utils::e2(format!("`{}` is required", name), doc.name, line_number);
                 }
             }
         };
@@ -545,7 +545,7 @@ impl Kind {
             Kind::String { .. } => Ok(ftd::PropertyValue::Value {
                 value: ftd::Value::String { text: v, source },
             }),
-            v => ftd::e2(
+            v => ftd::p2::utils::e2(
                 format!("unknown kind found: {:?}", v),
                 doc.name,
                 line_number,

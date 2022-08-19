@@ -23,7 +23,7 @@ impl Event {
                 if let Some(value) = value.to_serde_value() {
                     property_values_string.push(ftd::event::ParameterData { value, reference });
                 } else {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("Can't convert value to string {:?}", value),
                         doc.name,
                         line_number,
@@ -198,7 +198,7 @@ impl EventName {
                     .collect_vec();
                 Ok(Self::OnGlobalKeySeq(keys))
             }
-            t => ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
+            t => ftd::p2::utils::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }
 }
@@ -278,7 +278,7 @@ impl ActionKind {
     //         "stop-propagation" => Ok(Self::StopPropagation),
     //         "prevent-default" => Ok(Self::PreventDefault),
     //         "set-value" => Ok(Self::SetValue),
-    //         t => return ftd::e2(format!("{} is not a valid action kind", t), doc_id),
+    //         t => return ftd::p2::utils::e2(format!("{} is not a valid action kind", t), doc_id),
     //     }
     // }
 
@@ -370,7 +370,7 @@ impl Action {
                 let target = get_target(line_number, value, doc, arguments, None)?;
                 let kind = target.kind();
                 if !kind.is_list() && !kind.is_optional() {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!(
                             "clear should have target of kind: `list` or `optional`, found: {:?}",
                             kind
@@ -435,7 +435,7 @@ impl Action {
                 let value = if let Some(val) = vector.get(1) {
                     val.to_string()
                 } else {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!(
                             "target not found, expected `{} something` found: {}",
                             action_string, a
@@ -460,7 +460,7 @@ impl Action {
                     for parameter in vector[2..].iter() {
                         if let Some(p) = action_kind.parameters().get(*parameter) {
                             if min > idx {
-                                return ftd::e2(
+                                return ftd::p2::utils::e2(
                                     format!(
                                         "minumum number of arguments for {} are {}, found: {}",
                                         current_parameter, min, idx
@@ -477,7 +477,7 @@ impl Action {
                             parameters.insert(current_parameter.to_string(), vec![]);
                         } else if let Some(p) = parameters.get_mut(&current_parameter) {
                             if idx >= max {
-                                return ftd::e2(
+                                return ftd::p2::utils::e2(
                                     format!(
                                         "maximum number of arguments for {} are {}, found: {}",
                                         current_parameter,
@@ -513,7 +513,7 @@ impl Action {
                 let value = if let Some(val) = vector.get(2) {
                     val.to_string()
                 } else {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!(
                             "target not found, expected `insert into <something>` found: {}",
                             a
@@ -527,7 +527,7 @@ impl Action {
                 let expected_value_kind = if let ftd::p2::Kind::List { kind, .. } = kind {
                     kind.as_ref().to_owned()
                 } else {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!(
                             "expected target `{}` kind is list found: `{:?}`",
                             value, kind
@@ -544,7 +544,7 @@ impl Action {
                     for parameter in vector[3..].iter() {
                         if let Some(p) = ActionKind::Insert.parameters().get(*parameter) {
                             if min > idx {
-                                return ftd::e2(
+                                return ftd::p2::utils::e2(
                                     format!(
                                         "minumum number of arguments for {} are {}, found: {}",
                                         current_parameter, min, idx
@@ -561,7 +561,7 @@ impl Action {
                             parameters.insert(current_parameter.to_string(), vec![]);
                         } else if let Some(p) = parameters.get_mut(&current_parameter) {
                             if idx >= max {
-                                return ftd::e2(
+                                return ftd::p2::utils::e2(
                                     format!(
                                         "maximum number of arguments for {} are {}, found: {}",
                                         current_parameter,
@@ -590,7 +590,7 @@ impl Action {
                                 )?
                             };
                             if !value.kind().inner().eq(&expected_value_kind) {
-                                return ftd::e2(
+                                return ftd::p2::utils::e2(
                                     format!(
                                         "expected value kind: `{:?}` found: `{:?}`",
                                         value.kind(),
@@ -673,7 +673,7 @@ impl Action {
                 })
             }
             t => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("{} is not a valid action", t),
                     doc.name,
                     line_number,

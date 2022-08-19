@@ -38,7 +38,7 @@ impl<'a> TDoc<'a> {
                     d.to_owned()
                 } else {
                     //todo
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!(
                             "expected default value for local variable {}: {:?} in {}",
                             k, arg, root
@@ -58,7 +58,7 @@ impl<'a> TDoc<'a> {
                             if let Some(ftd::Value::UI { name, .. }) = value.to_owned().inner() {
                                 name
                             } else {
-                                return ftd::e2(
+                                return ftd::p2::utils::e2(
                                     format!(
                                         "expected UI for local variable {}: {:?} in {}, found: `{:?}`",
                                         k, arg, root, value
@@ -102,7 +102,7 @@ impl<'a> TDoc<'a> {
             } else if let Ok(value) = arg.to_value(0, self.name) {
                 ftd::PropertyValue::Value { value }
             } else {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "expected default value for local variable 2 {}: {:?} in {}",
                         k, arg, root
@@ -389,7 +389,7 @@ impl<'a> TDoc<'a> {
                         }
                         *name = key;
                     } else {
-                        return ftd::e2("PARENT should have variable", doc.name, 0);
+                        return ftd::p2::utils::e2("PARENT should have variable", doc.name, 0);
                     }
                 } else if name.as_str().eq("MOUSE-IN") {
                     let key =
@@ -606,7 +606,7 @@ impl<'a> TDoc<'a> {
             return self.from_json_(section.line_number, &json, kind);
         }
 
-        ftd::e2(
+        ftd::p2::utils::e2(
             "component should be var or list",
             self.name,
             section.line_number,
@@ -666,7 +666,7 @@ impl<'a> TDoc<'a> {
                         let val = match o.get(&key) {
                             Some(v) => v,
                             None => {
-                                return ftd::e2(
+                                return ftd::p2::utils::e2(
                                     format!("key not found: {}", key.as_str()),
                                     self.name,
                                     line_number,
@@ -681,7 +681,7 @@ impl<'a> TDoc<'a> {
                         );
                     }
                 } else {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected object of record type, found: {}", json),
                         self.name,
                         line_number,
@@ -699,7 +699,7 @@ impl<'a> TDoc<'a> {
                         });
                     }
                 } else {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected object of list type, found: {}", json),
                         self.name,
                         line_number,
@@ -741,7 +741,7 @@ impl<'a> TDoc<'a> {
             return from_json_rows_(section.line_number, self, rows, list.value.kind());
         }
 
-        return ftd::e2("component should be list", self.name, section.line_number);
+        return ftd::p2::utils::e2("component should be list", self.name, section.line_number);
 
         fn from_json_rows_(
             line_number: usize,
@@ -786,7 +786,7 @@ impl<'a> TDoc<'a> {
             return self.from_json_row_(section.line_number, row, var.value.kind());
         }
 
-        ftd::e2(
+        ftd::p2::utils::e2(
             "component should be var of record type",
             self.name,
             section.line_number,
@@ -810,7 +810,7 @@ impl<'a> TDoc<'a> {
                         let val = match row.get(idx) {
                             Some(v) => v,
                             None => {
-                                return ftd::e2(
+                                return ftd::p2::utils::e2(
                                     format!("key not found: {}", key.as_str()),
                                     self.name,
                                     line_number,
@@ -824,7 +824,7 @@ impl<'a> TDoc<'a> {
                             },
                         );
                     } else {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("field `{}` not found", key),
                             self.name,
                             line_number,
@@ -892,7 +892,7 @@ impl<'a> TDoc<'a> {
             return Ok(name.to_string());
         }
 
-        Ok(match ftd::split_module(name, self.name, line_number)? {
+        Ok(match ftd::p2::utils::split_module(name, self.name, line_number)? {
             (Some(m), v, None) => match self.aliases.get(m) {
                 Some(m) => format!("{}#{}", m, v),
                 None => {
@@ -925,7 +925,7 @@ impl<'a> TDoc<'a> {
             }
         }
 
-        Ok(match ftd::split_module(name, self.name, line_number)? {
+        Ok(match ftd::p2::utils::split_module(name, self.name, line_number)? {
             (Some(m), v, None) => match self.aliases.get(m) {
                 Some(m) => format!("{}#{}", m, v),
                 None => match available_components.get(m) {
@@ -1086,7 +1086,7 @@ impl<'a> TDoc<'a> {
         f: &str,
         line_number: usize,
     ) -> ftd::p1::Result<T> {
-        ftd::e2(
+        ftd::p2::utils::e2(
             format!("{}: {} ({:?}), f: {}", self.name, msg, ctx, f),
             self.name,
             line_number,
@@ -1116,7 +1116,7 @@ impl<'a> TDoc<'a> {
             }
             return Ok(None);
         }
-        match ftd::split_module(name, self.name, line_number)? {
+        match ftd::p2::utils::split_module(name, self.name, line_number)? {
             (Some(m), _, _) => {
                 if self.aliases.contains_key(m) {
                     Ok(Some(m))
@@ -1220,7 +1220,7 @@ impl<'a> TDoc<'a> {
         let mut variable = if let ftd::p2::Thing::Variable(variable) = initial_thing {
             variable
         } else {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("Expected variable, found: `{:#?}`", initial_thing),
                 self.name,
                 line_number,

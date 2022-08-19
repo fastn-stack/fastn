@@ -36,16 +36,16 @@ impl RT {
     //                 );
     //                 Ok(old)
     //             }
-    //             ref t => ftd::e2(
+    //             ref t => ftd::p2::utils::e2(
     //                 format!("{} is not a boolean", variable),
     //                 format!("{:?}", t).as_str(),
     //             ),
     //         },
-    //         Some(t) => ftd::e2(
+    //         Some(t) => ftd::p2::utils::e2(
     //             format!("{} is not a variable", variable),
     //             format!("{:?}", t).as_str(),
     //         ),
-    //         None => ftd::e2(format!("{} not found", variable), doc_id),
+    //         None => ftd::p2::utils::e2(format!("{} not found", variable), doc_id),
     //     }
     // }
 

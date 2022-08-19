@@ -47,7 +47,7 @@ impl OrType {
             }
         }
 
-        ftd::e2(
+        ftd::p2::utils::e2(
             format!("{} is not a valid variant for {}", variant, self.name),
             doc.name,
             p1.line_number,

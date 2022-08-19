@@ -101,7 +101,7 @@ impl Property {
         name: &str,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<&ftd::PropertyValue> {
-        let mut property_value = ftd::e2(
+        let mut property_value = ftd::p2::utils::e2(
             format!("condition is not complete, name: {}", name),
             doc.name,
             line_number,
@@ -219,7 +219,7 @@ impl ChildComponent {
                 match root_name.as_str() {
                     "ftd#row" | "ftd#column" | "ftd#scene" | "ftd#grid" | "ftd#text" => {}
                     t => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("{} cant have children", t),
                             doc.name,
                             self.line_number,
@@ -229,7 +229,7 @@ impl ChildComponent {
             }
             (ftd::Element::Markup(_), _) => {}
             (t, false) => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("cant have children: {:?}", t),
                     doc.name,
                     self.line_number,
@@ -740,7 +740,7 @@ fn markup_get_named_container(
                     named_container.insert(name.to_string(), container.to_owned());
                 }
                 None => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("cannot find name for container {:?}", container),
                         doc.name,
                         0,
@@ -881,7 +881,7 @@ fn reevalute_markup(
         while !stack.is_empty() {
             *idx += 1;
             if *idx >= text.len() {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "cannot find closing-parenthesis before the string ends: {}",
                         traverse_string
@@ -983,7 +983,7 @@ fn reevalute_markup(
                 ftd::IText::Markup(t)
             }
             t => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "expected type istext, integer, boolean, decimal. found: {:?}",
                         t
@@ -1009,7 +1009,7 @@ fn reevalute_markup(
         } else if let Some(p) = root.properties.get("value") {
             p
         } else {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!(
                     "expected type for ftd.text are text, integer, decimal and boolean, {:?}",
                     root
@@ -1053,7 +1053,7 @@ fn resolve_recursive_property(
             return property_value.resolve(line_number, doc);
         }
     }
-    ftd::e2(
+    ftd::p2::utils::e2(
         format!("$loop$ not found in properties {:?}", self_properties),
         doc.name,
         line_number,
@@ -1333,7 +1333,7 @@ fn get_conditional_attributes(
                     reference,
                 },
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected int, found3: {:?}", v),
                         doc.name,
                         line_number,
@@ -1348,7 +1348,7 @@ fn get_conditional_attributes(
                     reference,
                 },
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected int, found4: {:?}", v),
                         doc.name,
                         line_number,
@@ -1365,7 +1365,7 @@ fn get_conditional_attributes(
                     reference,
                 },
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected string, found 8: {:?}", v),
                         doc.name,
                         line_number,
@@ -1403,7 +1403,7 @@ fn get_conditional_attributes(
                     }
                 }
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected string, found 9: {:?}", v),
                         doc.name,
                         line_number,
@@ -1420,7 +1420,7 @@ fn get_conditional_attributes(
                     reference,
                 },
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected string, found 10: {:?}", v),
                         doc.name,
                         line_number,
@@ -1435,7 +1435,7 @@ fn get_conditional_attributes(
                     reference,
                 },
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected string, found 11: {:?}", v),
                         doc.name,
                         line_number,
@@ -1450,7 +1450,7 @@ fn get_conditional_attributes(
                     reference,
                 },
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected string, found 12: {:?}", v),
                         doc.name,
                         line_number,
@@ -1467,7 +1467,7 @@ fn get_conditional_attributes(
                     reference,
                 },
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected boolean, found: {:?}", v),
                         doc.name,
                         line_number,
@@ -1484,7 +1484,7 @@ fn get_conditional_attributes(
                     reference,
                 },
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected boolean, found: {:?}", v),
                         doc.name,
                         line_number,
@@ -1499,7 +1499,7 @@ fn get_conditional_attributes(
                     reference,
                 },
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected int, found5: {:?}", v),
                         doc.name,
                         line_number,
@@ -1521,7 +1521,7 @@ fn get_conditional_attributes(
                     }
                 }
                 v => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected string, found 13: {:?}", v),
                         doc.name,
                         line_number,
@@ -1529,7 +1529,7 @@ fn get_conditional_attributes(
                 }
             }
         } else {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("unknown style name: `{}` value:`{:?}`", name, value),
                 doc.name,
                 line_number,
@@ -1665,7 +1665,7 @@ impl Component {
                             }
                             _ => {}
                         }
-                        return ftd::e2(format!("{:?}", e), doc.name, line_number);
+                        return ftd::p2::utils::e2(format!("{:?}", e), doc.name, line_number);
                     }
                 }
             }
@@ -1693,7 +1693,7 @@ impl Component {
             vec![].as_slice(),
         )?;
         if var_data.is_variable() {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("expected component, found: {}", p1.name),
                 doc.name,
                 p1.line_number,
@@ -2060,7 +2060,7 @@ pub fn recursive_child_component(
         loop_ref = if let Some(loop_ref) = parts.1.strip_prefix('$') {
             loop_ref.to_string()
         } else {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("loop variable should start with $, found: {}", parts.1),
                 doc.name,
                 sub.line_number,
@@ -2080,7 +2080,7 @@ pub fn recursive_child_component(
     let recursive_kind = if let ftd::p2::Kind::List { kind, .. } = recursive_property_value.kind() {
         kind.as_ref().to_owned()
     } else {
-        return ftd::e2(
+        return ftd::p2::utils::e2(
             format!(
                 "expected list for loop, found: {:?}",
                 recursive_property_value.kind(),
@@ -2316,7 +2316,7 @@ fn assert_no_extra_properties(
         if !(root_arguments.contains_key(key)
             || (is_component(name) && default_arguments().contains_key(key)))
         {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!(
                     "unknown key found: {}, {} has: {}",
                     k,
@@ -2467,7 +2467,7 @@ pub fn read_properties(
                 } else if is_reference {
                     continue;
                 } else {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!(
                             "{} is calling {}, without a required argument 1 `{}`",
                             fn_name, root, name
@@ -2490,7 +2490,7 @@ pub fn read_properties(
                 } else if is_reference {
                     continue;
                 } else {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!(
                             "{} is calling {}, without a required argument `{}`",
                             fn_name, root, name
@@ -2506,7 +2506,7 @@ pub fn read_properties(
         };
         for (idx, value, conditional_attribute, is_referenced) in conditional_vector {
             if kind.is_reference() && !is_referenced {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "{} is calling {}, without a referenced argument `{}`",
                         fn_name, root, value
@@ -2768,7 +2768,7 @@ fn read_arguments(
                     kind.clone().set_default(default)
                 }
                 None => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("'{}' is not an argument of {}", var_data.name, root),
                         doc.name,
                         i.to_owned(),

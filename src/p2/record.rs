@@ -113,10 +113,10 @@ impl Record {
                         }
                     }
                     ftd::p2::Kind::Integer { .. } => {
-                        return ftd::e2("unexpected integer", doc.name, p1.line_number);
+                        return ftd::p2::utils::e2("unexpected integer", doc.name, p1.line_number);
                     }
                     t => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("not yet implemented: {:?}", t),
                             doc.name,
                             p1.line_number,
@@ -198,10 +198,10 @@ impl Record {
                         }
                     }
                     ftd::p2::Kind::Integer { .. } => {
-                        return ftd::e2("unexpected integer", doc.name, p1.line_number);
+                        return ftd::p2::utils::e2("unexpected integer", doc.name, p1.line_number);
                     }
                     t => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("not yet implemented: {:?}", t),
                             doc.name,
                             p1.line_number,
@@ -209,7 +209,7 @@ impl Record {
                     }
                 },
                 (Ok(_), _) => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("'{:?}' ('{}') can not be a sub-section", kind, name),
                         doc.name,
                         p1.line_number,
@@ -319,7 +319,7 @@ impl Record {
         // TODO: handle body
         for (i, k, _) in p1.0.iter() {
             if !self.fields.contains_key(k) && k != "type" && k != "$processor$" {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "unknown key passed: '{}' to '{}', allowed: {:?}",
                         k,
@@ -414,7 +414,7 @@ fn assert_fields_valid(
             if *caption {
                 match &caption_field {
                     Some(c) => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("both {} and {} are caption fields", name, c),
                             doc_id,
                             line_number,
@@ -426,7 +426,7 @@ fn assert_fields_valid(
             if *body {
                 match &body_field {
                     Some(c) => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("both {} and {} are body fields", name, c),
                             doc_id,
                             line_number,

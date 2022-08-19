@@ -20,7 +20,7 @@ fn read_version() -> ftd::p1::Result<ftd::Value> {
         }
     }
 
-    ftd::unknown_processor_error("version not found", "".to_string(), 0)
+    ftd::p2::utils::unknown_processor_error("version not found", "".to_string(), 0)
 }
 
 fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::Value> {
@@ -68,7 +68,7 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
             },
         })
     } else {
-        ftd::unknown_processor_error(
+        ftd::p2::utils::unknown_processor_error(
             format!(
                 "list should have 'string' kind, found {:?}",
                 var.value.kind()
@@ -156,7 +156,7 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
             },
         })
     } else {
-        ftd::unknown_processor_error(
+        ftd::p2::utils::unknown_processor_error(
             format!(
                 "list should have 'string' kind, found {:?}",
                 var.value.kind()
@@ -185,7 +185,7 @@ impl TestLibrary {
             "read_package_from_cargo_toml" => read_package(section, doc),
             "read_package_records_from_cargo_toml" => read_records(section, doc),
             "text-component-processor" => text_component(),
-            t => ftd::e2(
+            t => ftd::p2::utils::e2(
                 format!("unknown processor: {}", t),
                 doc.name,
                 section.line_number.to_owned(),
@@ -196,7 +196,7 @@ impl TestLibrary {
     pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::e2(format!("library not found: {}", name), "", 0),
+            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 }

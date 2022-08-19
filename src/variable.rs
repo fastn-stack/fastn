@@ -92,7 +92,7 @@ impl PropertyValue {
             PropertyType::Variable(arg.to_string())
         } else if let Some(ftd::p2::Kind::UI { .. }) = expected_kind.as_ref().map(|v| v.inner()) {
             if !value.contains(':') {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("expected `:`, found: `{}`", value),
                     doc.name,
                     line_number,
@@ -160,7 +160,7 @@ impl PropertyValue {
                         } else if let Some(ref kind) = expected_kind {
                             kind.clone()
                         } else {
-                            return ftd::e2(
+                            return ftd::p2::utils::e2(
                                 format!("{}.{:?} expected kind for parent variable", part1, part2),
                                 doc.name,
                                 line_number,
@@ -180,7 +180,7 @@ impl PropertyValue {
                             (ftd::p2::Kind::UI { default: None }, true)
                         }
                         e => {
-                            return ftd::e2(
+                            return ftd::p2::utils::e2(
                                 format!("{} is not present in doc, {:?}", part1, e),
                                 doc.name,
                                 line_number,
@@ -207,7 +207,7 @@ impl PropertyValue {
             }
             PropertyType::Value(string) => {
                 if expected_kind.is_none() {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         "expected expected_kind while calling resolve_value",
                         doc.name,
                         line_number,
@@ -255,7 +255,7 @@ impl PropertyValue {
                         },
                     },
                     t => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("can't resolve value {} to expected kind {:?}", string, t),
                             doc.name,
                             line_number,
@@ -333,7 +333,7 @@ impl PropertyValue {
                     }
                     Some(kind) => kind.to_owned(),
                     _ => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("{} is not present in {} of type {:?}", p1, name, fields),
                             doc.name,
                             line_number,
@@ -343,7 +343,7 @@ impl PropertyValue {
             }
             if let Some(e_kind) = expected_kind {
                 if !e_kind.is_same_as(&found_kind) && !matches!(e_kind, ftd::p2::Kind::Element) {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("expected {:?} found {:?}", e_kind, found_kind),
                         doc.name,
                         line_number,
@@ -446,7 +446,7 @@ impl TextSource {
             }
             ftd::p2::Kind::Element => TextSource::Header,
             t => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("expected string kind, found: {:?}", t),
                     doc_id,
                     line_number,
@@ -718,7 +718,7 @@ impl Variable {
             &Default::default(),
         )?;
         if !kind.is_list() {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("Expected list found: {:?}", p1),
                 doc.name,
                 p1.line_number,
@@ -843,7 +843,7 @@ impl Variable {
                     });
             }
             (ftd::p2::Kind::Map { .. }, _) => {
-                return ftd::e2("unexpected map", doc.name, p1.line_number)
+                return ftd::p2::utils::e2("unexpected map", doc.name, p1.line_number)
             }
             (k, _) => self.value = read_value(p1.line_number, k, &p1, doc)?,
         };
@@ -859,7 +859,7 @@ impl Variable {
             vec![].as_slice(),
         )?;
         if !var_data.is_variable() {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("expected variable, found: {}", p1.name),
                 doc.name,
                 p1.line_number,
@@ -902,7 +902,7 @@ impl Variable {
                         e.create(p1, variant, doc)?
                     }
                     t => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("unexpected thing found: {:?}", t),
                             doc.name,
                             p1.line_number,
@@ -956,7 +956,7 @@ impl Variable {
             ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc),
             ftd::p2::Kind::Record { name, .. } => match doc.get_thing(p1.line_number, name)? {
                 ftd::p2::Thing::Record(r) => r.create(p1, doc),
-                t => ftd::e2(
+                t => ftd::p2::utils::e2(
                     format!("expected record type, found: {:?}", t),
                     doc.name,
                     p1.line_number,
@@ -965,14 +965,14 @@ impl Variable {
             ftd::p2::Kind::OrType { name, .. } | ftd::p2::Kind::OrTypeWithVariant { name, .. } => {
                 match doc.get_thing(p1.line_number, name)? {
                     ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc),
-                    t => ftd::e2(
+                    t => ftd::p2::utils::e2(
                         format!("expected or-type type, found: {:?}", t),
                         doc.name,
                         p1.line_number,
                     ),
                 }
             }
-            t => ftd::e2(
+            t => ftd::p2::utils::e2(
                 format!("unexpected type found: {:?}", t),
                 doc.name,
                 p1.line_number,
@@ -1011,7 +1011,7 @@ pub fn guess_type(s: &str, is_body: bool) -> ftd::p1::Result<Value> {
 fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
     let (text, source, line_number) = match (&p1.caption, &p1.body) {
         (Some(c), Some(b)) => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("both caption: `{}` and body: `{}` present", c, b.1),
                 doc.name,
                 p1.line_number,
@@ -1020,7 +1020,7 @@ fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
         (Some(caption), None) => (caption.to_string(), TextSource::Caption, p1.line_number),
         (None, Some(body)) => (body.1.to_string(), TextSource::Body, body.0),
         (None, None) => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 "either body or caption is required for string",
                 doc.name,
                 p1.line_number,
@@ -1060,7 +1060,7 @@ fn read_integer(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
                 value: Value::Integer { value: v },
             });
         }
-        return ftd::e2("not a valid integer", doc.name, p1.line_number);
+        return ftd::p2::utils::e2("not a valid integer", doc.name, p1.line_number);
     })
 }
 
@@ -1080,7 +1080,7 @@ fn read_decimal(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
                 value: Value::Decimal { value: v },
             });
         }
-        return ftd::e2("not a valid float", doc.name, p1.line_number);
+        return ftd::p2::utils::e2("not a valid float", doc.name, p1.line_number);
     })
 }
 
@@ -1100,7 +1100,7 @@ fn read_boolean(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
                 value: Value::Boolean { value: v },
             });
         }
-        return ftd::e2("not a valid bool", doc.name, p1.line_number);
+        return ftd::p2::utils::e2("not a valid bool", doc.name, p1.line_number);
     })
 }
 
@@ -1200,7 +1200,7 @@ impl VariableData {
             || s.starts_with("map ")
             || s == "container"
         {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("invalid declaration, found: `{}`", s),
                 doc.name,
                 line_number,
@@ -1208,7 +1208,7 @@ impl VariableData {
         }
         let expr = s.split_whitespace().collect::<Vec<&str>>();
         if expr.len() > 4 || expr.len() <= 1 {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("invalid declaration, found: `{}`", s),
                 doc.name,
                 line_number,
@@ -1222,7 +1222,7 @@ impl VariableData {
                 kind = Some(expr[..3].join(" "));
                 name = expr.get(3);
             } else {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
                     doc.name,
                     line_number,
@@ -1238,7 +1238,7 @@ impl VariableData {
                 name = expr.get(2);
                 kind = expr.get(1).map(|k| k.to_string());
             } else {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
                     doc.name,
                     line_number,

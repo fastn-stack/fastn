@@ -626,7 +626,7 @@ impl Document {
             return Ok(None);
         }
         if v.len() > 1 {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("more than one instances({}) of {} found", v.len(), record),
                 self.name.as_str(),
                 0,
@@ -656,7 +656,7 @@ impl Document {
                 }
                 serde_json::Value::Array(a)
             }
-            t => return ftd::e2(format!("not a record: {:?}", t), self.name.as_str(), 0),
+            t => return ftd::p2::utils::e2(format!("not a record: {:?}", t), self.name.as_str(), 0),
         };
 
         Ok(serde_json::from_value(json)?)
@@ -730,7 +730,7 @@ impl Document {
                 None => serde_json::Value::Null,
             },
             _ => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("unhandled value found(value_to_json): {:?}", v),
                     self.name.as_str(),
                     0,

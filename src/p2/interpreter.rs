@@ -122,7 +122,7 @@ impl InterpreterState {
                     ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
@@ -134,7 +134,7 @@ impl InterpreterState {
                 let d = ftd::OrType::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
@@ -145,7 +145,7 @@ impl InterpreterState {
                 let d = ftd::Variable::map_from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
@@ -175,7 +175,7 @@ impl InterpreterState {
                 let d = ftd::Component::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("{} is already declared", d.full_name),
                         doc.name,
                         p1.line_number,
@@ -203,7 +203,7 @@ impl InterpreterState {
                 };
                 let name = doc.resolve_name(p1.line_number, &d.name)?;
                 if self.bag.contains_key(name.as_str()) {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
@@ -231,7 +231,7 @@ impl InterpreterState {
                         .str_optional(doc.name, p1.line_number, "if")?
                         .is_some()
                 {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         "Currently not supporting `if` for field value update.",
                         doc.name,
                         p1.line_number,
@@ -274,7 +274,7 @@ impl InterpreterState {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
                     ftd::p2::Thing::Variable(_) => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("variable should have prefix $, found: `{}`", p1.name),
                             doc.name,
                             p1.line_number,
@@ -377,7 +377,7 @@ impl InterpreterState {
                     }
                     ftd::p2::Thing::OrType(_r) => {
                         // do we allow initialization of a record by name? nopes
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("'{}' is an or-type", p1.name.as_str()),
                             doc.name,
                             p1.line_number,
@@ -385,7 +385,7 @@ impl InterpreterState {
                     }
                     ftd::p2::Thing::OrTypeWithVariant { .. } => {
                         // do we allow initialization of a record by name? nopes
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("'{}' is an or-type variant", p1.name.as_str(),),
                             doc.name,
                             p1.line_number,

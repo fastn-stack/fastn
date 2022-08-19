@@ -399,7 +399,7 @@ impl<'a> ExecuteDoc<'a> {
                     if let Some((_, _, ref mut e)) = c.external_children {
                         e.extend(external_children);
                     } else {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("expected external_children data for id: {}", append_at),
                             "",
                             0,
@@ -538,7 +538,7 @@ fn change_container(
     *current_container = match named_containers.get(name) {
         Some(v) => v.get(0).unwrap().to_owned(),
         None => {
-            return ftd::e2("no such container", doc_id, 0);
+            return ftd::p2::utils::e2("no such container", doc_id, 0);
         }
     };
     Ok(())

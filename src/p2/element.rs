@@ -11,7 +11,7 @@ pub fn common_from_properties(
     let submit = ftd::p2::utils::string_optional("submit", properties, doc.name, 0)?;
     let link = ftd::p2::utils::string_optional("link", properties, doc.name, 0)?;
     if let (Some(_), Some(_)) = (&submit, &link) {
-        return ftd::e2("Cannot have both submit and link together", doc.name, 0);
+        return ftd::p2::utils::e2("Cannot have both submit and link together", doc.name, 0);
     }
     let gradient_color_str =
         ftd::p2::utils::string_optional("gradient-colors", properties, doc.name, 0)?;
@@ -895,8 +895,8 @@ pub fn iframe_from_properties(
     ) {
         (Some(src), None) => src,
         (None, Some(id)) => id,
-        (Some(_), Some(_)) => return ftd::e2("both src and youtube id provided", doc.name, 0),
-        (None, None) => return ftd::e2("src or youtube id is required", doc.name, 0),
+        (Some(_), Some(_)) => return ftd::p2::utils::e2("both src and youtube id provided", doc.name, 0),
+        (None, None) => return ftd::p2::utils::e2("src or youtube id is required", doc.name, 0),
     };
 
     Ok(ftd::IFrame {
@@ -1178,7 +1178,7 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
 
         // (7thSigil) unlike original js code, NaN is impossible
         if iv > 0xffffffff {
-            return ftd::e2(format!("{} is not a valid color", v), doc_id, 0);
+            return ftd::p2::utils::e2(format!("{} is not a valid color", v), doc_id, 0);
         }
 
         //Code for accepting 6-digit hexa-color code
@@ -1196,7 +1196,7 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
                 b: v.b,
                 alpha: v.a,
             })),
-            Err(e) => ftd::e2(format!("{} is not a valid color: {:?}", v, e), doc_id, 0),
+            Err(e) => ftd::p2::utils::e2(format!("{} is not a valid color: {:?}", v, e), doc_id, 0),
         }
     }
 }
@@ -1219,7 +1219,7 @@ pub fn boolean_from_properties(
     let reference =
         ftd::p2::utils::boolean_and_ref(0, "value", unresolved_properties, doc, condition)?.1;
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
-    let value = ftd::p2::utils::bool("value", properties, doc.name, 0)?;
+    let value = ftd::p2::utils::bool_("value", properties, doc.name, 0)?;
     let text = if value {
         ftd::p2::utils::string_with_default("true", "true", properties, doc.name, 0)?
     } else {
@@ -1659,7 +1659,7 @@ pub fn input_from_properties(
             reference,
         )?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
-        multiline: ftd::p2::utils::bool("multiline", properties, doc.name, 0)?,
+        multiline: ftd::p2::utils::bool_("multiline", properties, doc.name, 0)?,
         type_: ftd::p2::utils::string_optional("type", properties, doc.name, 0)?,
         value: ftd::p2::utils::string_optional("value", properties, doc.name, 0)?,
         default_value: ftd::p2::utils::string_optional("default-value", properties, doc.name, 0)?,
@@ -1702,7 +1702,7 @@ pub fn grid_from_properties(
     Ok(ftd::Grid {
         slots: match ftd::p2::utils::string_optional("slots", properties, doc.name, 0)? {
             Some(val) => val,
-            None => return ftd::e2("expected slots", doc.name, 0),
+            None => return ftd::p2::utils::e2("expected slots", doc.name, 0),
         },
         slot_widths: ftd::p2::utils::string_optional("slot-widths", properties, doc.name, 0)?,
         slot_heights: ftd::p2::utils::string_optional("slot-heights", properties, doc.name, 0)?,
