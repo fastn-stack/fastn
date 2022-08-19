@@ -1,7 +1,7 @@
 use std::convert::TryInto;
 
 pub async fn clone(source: &str) -> fpm::Result<()> {
-    let clone_response = call_clone_api(source)?;
+    let clone_response = call_clone_api(source).await?;
     let package_name = clone_response.package_name;
     let current_directory: camino::Utf8PathBuf =
         std::env::current_dir()?.canonicalize()?.try_into()?;
@@ -24,7 +24,7 @@ pub async fn clone(source: &str) -> fpm::Result<()> {
     Ok(())
 }
 
-fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResponse> {
+async fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResponse> {
     #[derive(serde::Deserialize, std::fmt::Debug)]
     struct ApiResponse {
         message: Option<String>,
@@ -33,11 +33,12 @@ fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResponse> 
     }
 
     let source_url = format!("{}/-/clone/", source);
-    let mut response = reqwest::Client::new()
+    let response = reqwest::Client::new()
         .get(source_url.as_str())
         .header(reqwest::header::CONTENT_TYPE, "application/json")
-        .send()?;
-    let text = response.text()?;
+        .send()
+        .await?;
+    let text = response.text().await?;
     let response: ApiResponse = serde_json::from_str(text.as_str())?;
 
     if !response.success {

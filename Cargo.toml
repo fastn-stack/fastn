@@ -102,11 +102,13 @@ rev = "9d1d206"
 # latest will cut down number of dependencies from about 425 to 340. We want to fix this
 # issue, but we have not yet been able to spend much time. If you know async, please try
 # fixing it. The issue is that download of dependencies get stuck.
-version = "0.9"
+version = "0.11"
 features = [
     # Check the note on bundling rusqlite later in this file. Without bundling
     # we will have a dependency on libssl.
-    "default-tls-vendored"
+    # "default-tls-vendored"
+    "native-tls-vendored",
+    "json",
 ]
 # latest ones:
 # version = "0.11"
