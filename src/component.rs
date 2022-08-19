@@ -2,14 +2,14 @@
 pub struct Component {
     pub root: String,
     pub full_name: String,
-    pub arguments: std::collections::BTreeMap<String, ftd::p2::Kind>,
-    pub locals: std::collections::BTreeMap<String, ftd::p2::Kind>,
-    pub properties: std::collections::BTreeMap<String, Property>,
+    pub arguments: ftd::Map<ftd::p2::Kind>,
+    pub locals: ftd::Map<ftd::p2::Kind>,
+    pub properties: ftd::Map<Property>,
     pub instructions: Vec<Instruction>,
     pub events: Vec<ftd::p2::Event>,
     pub condition: Option<ftd::p2::Boolean>,
     pub kernel: bool,
-    pub invocations: Vec<std::collections::BTreeMap<String, ftd::Value>>,
+    pub invocations: Vec<ftd::Map<ftd::Value>>,
     pub line_number: usize,
 }
 
@@ -72,8 +72,8 @@ impl Instruction {
 pub struct ChildComponent {
     pub root: String,
     pub condition: Option<ftd::p2::Boolean>,
-    pub properties: std::collections::BTreeMap<String, Property>,
-    pub arguments: std::collections::BTreeMap<String, ftd::p2::Kind>,
+    pub properties: ftd::Map<Property>,
+    pub arguments: ftd::Map<ftd::p2::Kind>,
     pub events: Vec<ftd::p2::Event>,
     pub is_recursive: bool,
     pub line_number: usize,
@@ -84,14 +84,14 @@ pub struct ChildComponent {
 pub struct Property {
     pub default: Option<ftd::PropertyValue>,
     pub conditions: Vec<(ftd::p2::Boolean, ftd::PropertyValue)>,
-    pub nested_properties: std::collections::BTreeMap<String, ftd::component::Property>,
+    pub nested_properties: ftd::Map<ftd::component::Property>,
 }
 
 #[derive(Debug, Clone)]
 pub struct ElementWithContainer {
     pub element: ftd::Element,
     pub children: Vec<ftd::Element>,
-    pub child_container: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>>,
+    pub child_container: Option<ftd::Map<Vec<Vec<usize>>>>,
 }
 
 impl Property {
@@ -118,8 +118,8 @@ impl Property {
     }
 
     pub(crate) fn add_default_properties(
-        reference: &std::collections::BTreeMap<String, Property>,
-        properties: &mut std::collections::BTreeMap<String, Property>,
+        reference: &ftd::Map<Property>,
+        properties: &mut ftd::Map<Property>,
     ) {
         for (key, arg) in reference {
             if default_arguments().contains_key(key) {
@@ -152,10 +152,7 @@ impl ChildComponent {
         &self,
         children: &[Self],
         doc: &mut ftd::p2::TDoc,
-        invocations: &mut std::collections::BTreeMap<
-            String,
-            Vec<std::collections::BTreeMap<String, ftd::Value>>,
-        >,
+        invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
         local_container: &[usize],
         external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<ElementWithContainer> {
@@ -269,10 +266,7 @@ impl ChildComponent {
     pub fn recursive_call(
         &self,
         doc: &mut ftd::p2::TDoc,
-        invocations: &mut std::collections::BTreeMap<
-            String,
-            Vec<std::collections::BTreeMap<String, ftd::Value>>,
-        >,
+        invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
         is_child: bool,
         local_container: &[usize],
     ) -> ftd::p1::Result<Vec<ElementWithContainer>> {
@@ -369,10 +363,7 @@ impl ChildComponent {
             index: usize,
             root: &ftd::Component,
             doc: &mut ftd::p2::TDoc,
-            invocations: &mut std::collections::BTreeMap<
-                String,
-                Vec<std::collections::BTreeMap<String, ftd::Value>>,
-            >,
+            invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
             is_child: bool,
             local_container: &[usize],
         ) -> ftd::p1::Result<ElementWithContainer> {
@@ -476,10 +467,7 @@ impl ChildComponent {
     pub fn call(
         &self,
         doc: &mut ftd::p2::TDoc,
-        invocations: &mut std::collections::BTreeMap<
-            String,
-            Vec<std::collections::BTreeMap<String, ftd::Value>>,
-        >,
+        invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
         is_child: bool,
         local_container: &[usize],
         id: Option<String>,
@@ -555,7 +543,7 @@ impl ChildComponent {
         caption: &Option<String>,
         body: &Option<(usize, String)>,
         doc: &ftd::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         let mut reference = None;
         let root =
@@ -630,10 +618,10 @@ impl ChildComponent {
             name: &str,
             caption: &Option<String>,
             doc: &ftd::p2::TDoc,
-            arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+            arguments: &ftd::Map<ftd::p2::Kind>,
             inherits: Vec<String>,
-        ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
-            let mut properties: std::collections::BTreeMap<String, Property> =
+        ) -> ftd::p1::Result<ftd::Map<Property>> {
+            let mut properties: ftd::Map<Property> =
                 root_properties_from_inherits(line_number, arguments, inherits, doc)?;
             if let Some(caption) = caption {
                 if let Ok(name) = doc.resolve_name(line_number, name) {
@@ -672,12 +660,9 @@ fn markup_get_named_container(
     root: &str,
     line_number: usize,
     doc: &mut ftd::p2::TDoc,
-    invocations: &mut std::collections::BTreeMap<
-        String,
-        Vec<std::collections::BTreeMap<String, ftd::Value>>,
-    >,
+    invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
     local_container: &[usize],
-) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Element>> {
+) -> ftd::p1::Result<ftd::Map<ftd::Element>> {
     let children = {
         let mut children = children.to_vec();
         let root_name = ftd::p2::utils::get_root_component_name(doc, root, line_number)?;
@@ -747,8 +732,8 @@ fn markup_get_named_container(
         container_children: &[ftd::Element],
         elements_name: &[String],
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Element>> {
-        let mut named_container = std::collections::BTreeMap::new();
+    ) -> ftd::p1::Result<ftd::Map<ftd::Element>> {
+        let mut named_container = ftd::Map::new();
         for (idx, container) in container_children.iter().enumerate() {
             match elements_name.get(idx) {
                 Some(name) => {
@@ -772,7 +757,7 @@ fn markup_get_named_container(
 /// container_children copy there properties to the reference in markup text
 fn reevalute_markups(
     markups: &mut ftd::Markups,
-    named_container: std::collections::BTreeMap<String, ftd::Element>,
+    named_container: ftd::Map<ftd::Element>,
     doc: &mut ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
     if !markups.children.is_empty() {
@@ -820,7 +805,7 @@ fn reevalute_markups(
 
 fn reevalute_markup(
     markup: &mut ftd::Markup,
-    named_container: &std::collections::BTreeMap<String, ftd::Element>,
+    named_container: &ftd::Map<ftd::Element>,
     doc: &mut ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
     let text = match &markup.itext {
@@ -922,7 +907,7 @@ fn reevalute_markup(
         doc: &mut ftd::p2::TDoc,
         text: Option<&str>,
         root: &str,
-        named_container: &std::collections::BTreeMap<String, ftd::Element>,
+        named_container: &ftd::Map<ftd::Element>,
     ) -> ftd::p1::Result<ftd::IText> {
         Ok(match element {
             ftd::Element::Text(t) => {
@@ -1064,14 +1049,14 @@ fn reevalute_markup(
                 root.properties.insert("value".to_string(), property);
             }
         }
-        root.arguments = std::collections::BTreeMap::new();
+        root.arguments = Default::default();
         Ok(root.call_without_values(doc)?.element)
     }
 }
 
 fn resolve_recursive_property(
     line_number: usize,
-    self_properties: &std::collections::BTreeMap<String, Property>,
+    self_properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<ftd::Value> {
     if let Some(value) = self_properties.get("$loop$") {
@@ -1088,19 +1073,19 @@ fn resolve_recursive_property(
 
 pub fn resolve_properties(
     line_number: usize,
-    self_properties: &std::collections::BTreeMap<String, Property>,
+    self_properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>> {
+) -> ftd::p1::Result<ftd::Map<ftd::Value>> {
     resolve_properties_by_id(line_number, self_properties, doc, None)
 }
 
 pub fn resolve_properties_by_id(
     line_number: usize,
-    self_properties: &std::collections::BTreeMap<String, Property>,
+    self_properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
     id: Option<String>,
-) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>> {
-    let mut properties: std::collections::BTreeMap<String, ftd::Value> = Default::default();
+) -> ftd::p1::Result<ftd::Map<ftd::Value>> {
+    let mut properties: ftd::Map<ftd::Value> = Default::default();
     for (name, value) in self_properties.iter() {
         if name == "$loop$" {
             continue;
@@ -1119,13 +1104,12 @@ pub fn resolve_properties_by_id(
 
 fn get_conditional_attributes(
     line_number: usize,
-    properties: &std::collections::BTreeMap<String, Property>,
+    properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::ConditionalAttribute>> {
-    let mut conditional_attribute: std::collections::BTreeMap<String, ftd::ConditionalAttribute> =
-        Default::default();
+) -> ftd::p1::Result<ftd::Map<ftd::ConditionalAttribute>> {
+    let mut conditional_attribute: ftd::Map<ftd::ConditionalAttribute> = Default::default();
 
-    let mut dictionary: std::collections::BTreeMap<String, Vec<String>> = Default::default();
+    let mut dictionary: ftd::Map<Vec<String>> = Default::default();
     dictionary.insert(
         "padding-vertical".to_string(),
         vec!["padding-top".to_string(), "padding-bottom".to_string()],
@@ -1405,8 +1389,7 @@ fn get_conditional_attributes(
                     let properties = fields
                         .iter()
                         .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-                        .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>(
-                        )?;
+                        .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
                     let light = if let Some(light) = ftd::p2::element::color_from(
                         ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,
                         doc.name,
@@ -1568,11 +1551,10 @@ fn get_conditional_attributes(
 
 pub(crate) fn resolve_properties_with_ref(
     line_number: usize,
-    self_properties: &std::collections::BTreeMap<String, Property>,
+    self_properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<std::collections::BTreeMap<String, (ftd::Value, Option<String>)>> {
-    let mut properties: std::collections::BTreeMap<String, (ftd::Value, Option<String>)> =
-        Default::default();
+) -> ftd::p1::Result<ftd::Map<(ftd::Value, Option<String>)>> {
+    let mut properties: ftd::Map<(ftd::Value, Option<String>)> = Default::default();
     for (name, value) in self_properties.iter() {
         if name == "$loop$" {
             continue;
@@ -1601,10 +1583,7 @@ impl Component {
     fn call_sub_functions(
         &self,
         doc: &mut ftd::p2::TDoc,
-        invocations: &mut std::collections::BTreeMap<
-            String,
-            Vec<std::collections::BTreeMap<String, ftd::Value>>,
-        >,
+        invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
         call_container: &[usize],
         id: Option<String>,
     ) -> ftd::p1::Result<ElementWithContainer> {
@@ -1860,12 +1839,9 @@ impl Component {
     #[allow(clippy::too_many_arguments)]
     fn call(
         &self,
-        arguments: &std::collections::BTreeMap<String, Property>,
+        arguments: &ftd::Map<Property>,
         doc: &mut ftd::p2::TDoc,
-        invocations: &mut std::collections::BTreeMap<
-            String,
-            Vec<std::collections::BTreeMap<String, ftd::Value>>,
-        >,
+        invocations: &mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
         condition: &Option<ftd::p2::Boolean>,
         is_child: bool,
         events: &[ftd::p2::Event],
@@ -1999,7 +1975,7 @@ impl Component {
             let conditional_attribute =
                 get_conditional_attributes(self.line_number, &self.properties, doc)?;
 
-            let mut containers: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>> = None;
+            let mut containers: Option<ftd::Map<Vec<Vec<usize>>>> = None;
             match &mut element {
                 ftd::Element::Text(_)
                 | ftd::Element::TextBlock(_)
@@ -2084,7 +2060,7 @@ pub fn recursive_child_component(
     loop_data: &str,
     sub: &ftd::p1::SubSection,
     doc: &ftd::p2::TDoc,
-    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    arguments: &ftd::Map<ftd::p2::Kind>,
     name_with_component: Option<(String, ftd::Component)>,
 ) -> ftd::p1::Result<ftd::ChildComponent> {
     let mut loop_ref = "object".to_string();
@@ -2126,7 +2102,7 @@ pub fn recursive_child_component(
         );
     };
 
-    let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
+    let mut properties: ftd::Map<Property> = Default::default();
 
     properties.insert(
         "$loop$".to_string(),
@@ -2268,7 +2244,7 @@ pub fn recursive_child_component(
         doc: &ftd::p2::TDoc,
         reference: String,
     ) -> ftd::p1::Result<Property> {
-        let mut arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
+        let mut arguments: ftd::Map<ftd::p2::Kind> = Default::default();
         arguments.insert("$loop$".to_string(), recursive_kind.to_owned());
         let property = ftd::PropertyValue::resolve_value(
             *line_number,
@@ -2329,7 +2305,7 @@ fn assert_no_extra_properties(
     line_number: usize,
     p1: &ftd::p1::Header,
     root: &str,
-    root_arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    root_arguments: &ftd::Map<ftd::p2::Kind>,
     name: &str,
     doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
@@ -2393,13 +2369,13 @@ fn assert_no_extra_properties(
 /// default-value: d2
 /// ```
 fn check_input_conflicting_values(
-    properties: &std::collections::BTreeMap<String, Property>,
+    properties: &ftd::Map<Property>,
     doc: &ftd::p2::TDoc,
     line_number: usize,
 ) -> ftd::p1::Result<()> {
     fn get_property_default_value(
         property_name: &str,
-        properties: &std::collections::BTreeMap<String, Property>,
+        properties: &ftd::Map<Property>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
     ) -> ftd::p1::Result<String> {
@@ -2443,13 +2419,13 @@ pub fn read_properties(
     body: &Option<(usize, String)>,
     fn_name: &str,
     root: &str,
-    root_arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
-    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    root_arguments: &ftd::Map<ftd::p2::Kind>,
+    arguments: &ftd::Map<ftd::p2::Kind>,
     doc: &ftd::p2::TDoc,
-    root_properties: &std::collections::BTreeMap<String, Property>,
+    root_properties: &ftd::Map<Property>,
     is_reference: bool,
-) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
-    let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
+) -> ftd::p1::Result<ftd::Map<Property>> {
+    let mut properties: ftd::Map<Property> = Default::default();
     let root_arguments = {
         let mut root_arguments = root_arguments.clone();
         let default_argument = default_arguments();
@@ -2653,9 +2629,8 @@ pub fn read_properties(
     Ok(properties)
 }
 
-pub(crate) fn default_arguments() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
-    let mut default_argument: std::collections::BTreeMap<String, ftd::p2::Kind> =
-        Default::default();
+pub(crate) fn default_arguments() -> ftd::Map<ftd::p2::Kind> {
+    let mut default_argument: ftd::Map<ftd::p2::Kind> = Default::default();
     default_argument.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
     default_argument.insert("top".to_string(), ftd::p2::Kind::integer().into_optional());
     default_argument.insert(
@@ -2708,11 +2683,11 @@ pub(crate) fn default_arguments() -> std::collections::BTreeMap<String, ftd::p2:
 
 fn root_properties_from_inherits(
     line_number: usize,
-    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    arguments: &ftd::Map<ftd::p2::Kind>,
     inherits: Vec<String>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
-    let mut root_properties: std::collections::BTreeMap<String, Property> = Default::default();
+) -> ftd::p1::Result<ftd::Map<Property>> {
+    let mut root_properties: ftd::Map<Property> = Default::default();
     for inherit in inherits {
         let pv = ftd::PropertyValue::resolve_value(
             line_number,
@@ -2737,14 +2712,11 @@ fn root_properties_from_inherits(
 fn read_arguments(
     p1: &ftd::p1::Header,
     root: &str,
-    root_arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
-    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    root_arguments: &ftd::Map<ftd::p2::Kind>,
+    arguments: &ftd::Map<ftd::p2::Kind>,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<(
-    std::collections::BTreeMap<String, ftd::p2::Kind>,
-    Vec<String>,
-)> {
-    let mut args: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
+) -> ftd::p1::Result<(ftd::Map<ftd::p2::Kind>, Vec<String>)> {
+    let mut args: ftd::Map<ftd::p2::Kind> = Default::default();
     let mut inherits: Vec<String> = Default::default();
 
     // contains parent arguments and current arguments

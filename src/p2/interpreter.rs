@@ -1,9 +1,9 @@
 #[derive(Debug, Default)]
 pub struct InterpreterState {
     pub id: String,
-    pub bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub bag: ftd::Map<ftd::p2::Thing>,
     pub document_stack: Vec<ParsedDocument>,
-    pub parsed_libs: std::collections::BTreeMap<String, Vec<String>>,
+    pub parsed_libs: ftd::Map<Vec<String>>,
 }
 
 impl InterpreterState {
@@ -17,8 +17,8 @@ impl InterpreterState {
 
     pub fn tdoc<'a>(
         &'a self,
-        local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
-        referenced_local_variables: &'a mut std::collections::BTreeMap<String, String>,
+        local_variables: &'a mut ftd::Map<ftd::p2::Thing>,
+        referenced_local_variables: &'a mut ftd::Map<String>,
     ) -> ftd::p2::TDoc<'a> {
         let l = self.document_stack.len() - 1;
         ftd::p2::TDoc {
@@ -201,7 +201,7 @@ impl InterpreterState {
                     // declare and instantiate a list
                     ftd::Variable::list_from_p1(&p1, &doc)?
                 };
-                let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
+                let name = doc.resolve_name(p1.line_number, &d.name)?;
                 if self.bag.contains_key(name.as_str()) {
                     return ftd::e2(
                         format!("{} is already declared", d.name),
@@ -371,7 +371,7 @@ impl InterpreterState {
                     ftd::p2::Thing::Record(mut r) => {
                         r.add_instance(&p1, &doc)?;
                         thing.push((
-                            doc.resolve_name(p1.line_number, &p1.name.to_string())?,
+                            doc.resolve_name(p1.line_number, &p1.name)?,
                             ftd::p2::Thing::Record(r),
                         ));
                     }
@@ -532,7 +532,7 @@ impl InterpreterState {
 
     fn process_imports(
         top: &mut ParsedDocument,
-        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        bag: &ftd::Map<ftd::p2::Thing>,
     ) -> ftd::p1::Result<Option<String>> {
         let mut iteration_index = 0;
         while iteration_index < top.sections.len() {
@@ -713,7 +713,7 @@ pub struct ParsedDocument {
     name: String,
     sections: Vec<ftd::p1::Section>,
     processing_imports: bool,
-    doc_aliases: std::collections::BTreeMap<String, String>,
+    doc_aliases: ftd::Map<String>,
     var_types: Vec<String>,
     foreign_variable_prefix: Vec<String>,
     instructions: Vec<ftd::Instruction>,
@@ -769,10 +769,7 @@ impl ParsedDocument {
             .collect::<Vec<ftd::p1::Section>>();
     }
 
-    fn reorder(
-        &mut self,
-        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
-    ) -> ftd::p1::Result<()> {
+    fn reorder(&mut self, bag: &ftd::Map<ftd::p2::Thing>) -> ftd::p1::Result<()> {
         let (mut new_p1, var_types) = ftd::p2::utils::reorder(
             &self.sections,
             &ftd::p2::TDoc {
@@ -789,7 +786,7 @@ impl ParsedDocument {
         Ok(())
     }
 
-    pub fn get_doc_aliases(&self) -> std::collections::BTreeMap<String, String> {
+    pub fn get_doc_aliases(&self) -> ftd::Map<String> {
         self.doc_aliases.clone()
     }
 }
@@ -832,7 +829,7 @@ pub enum Thing {
     // Library -> Name of library successfully parsed
 }
 
-pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
+pub fn default_bag() -> ftd::Map<ftd::p2::Thing> {
     let record = |n: &str, r: &str| (n.to_string(), ftd::p2::Kind::record(r));
     let color = |n: &str| record(n, "ftd#color");
     std::iter::IntoIterator::into_iter([
@@ -1212,7 +1209,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
     .collect()
 }
 
-pub fn default_aliases() -> std::collections::BTreeMap<String, String> {
+pub fn default_aliases() -> ftd::Map<String> {
     std::iter::IntoIterator::into_iter([("ftd".to_string(), "ftd".to_string())]).collect()
 }
 

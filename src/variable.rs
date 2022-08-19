@@ -85,7 +85,7 @@ impl PropertyValue {
         value: &str,
         expected_kind: Option<ftd::p2::Kind>,
         doc: &ftd::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
         source: Option<ftd::TextSource>,
     ) -> ftd::p1::Result<ftd::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
@@ -477,16 +477,16 @@ pub enum Value {
         value: bool,
     },
     Object {
-        values: std::collections::BTreeMap<String, PropertyValue>,
+        values: ftd::Map<PropertyValue>,
     },
     Record {
         name: String,
-        fields: std::collections::BTreeMap<String, PropertyValue>,
+        fields: ftd::Map<PropertyValue>,
     },
     OrType {
         name: String,
         variant: String,
-        fields: std::collections::BTreeMap<String, PropertyValue>,
+        fields: ftd::Map<PropertyValue>,
     },
     List {
         data: Vec<PropertyValue>,
@@ -497,13 +497,13 @@ pub enum Value {
         kind: ftd::p2::Kind,
     },
     Map {
-        data: std::collections::BTreeMap<String, Value>,
+        data: ftd::Map<Value>,
         kind: ftd::p2::Kind,
     },
     UI {
         name: String,
         kind: crate::p2::Kind,
-        data: std::collections::BTreeMap<String, ftd::component::Property>,
+        data: ftd::Map<ftd::component::Property>,
     },
 }
 
@@ -634,8 +634,7 @@ impl Value {
             }
             Value::None { .. } => Some(serde_json::Value::Null),
             Value::Object { values } => {
-                let mut new_values: std::collections::BTreeMap<String, serde_json::Value> =
-                    Default::default();
+                let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in values {
                     if let ftd::PropertyValue::Value { value } = v {
                         if let Some(v) = value.to_serde_value() {
@@ -646,8 +645,7 @@ impl Value {
                 serde_json::to_value(&new_values).ok()
             }
             Value::Record { fields, .. } => {
-                let mut new_values: std::collections::BTreeMap<String, serde_json::Value> =
-                    Default::default();
+                let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in fields {
                     if let ftd::PropertyValue::Value { value } = v {
                         if let Some(v) = value.to_serde_value() {
@@ -676,7 +674,7 @@ impl Value {
             }
             Value::None { .. } => Some("".to_string()),
             Value::Object { values } => {
-                let mut new_values: std::collections::BTreeMap<String, String> = Default::default();
+                let mut new_values: ftd::Map<String> = Default::default();
                 for (k, v) in values {
                     if let ftd::PropertyValue::Value { value } = v {
                         if let Some(v) = value.to_string() {
@@ -687,7 +685,7 @@ impl Value {
                 serde_json::to_string(&new_values).ok()
             }
             Value::Record { fields, .. } => {
-                let mut new_values: std::collections::BTreeMap<String, String> = Default::default();
+                let mut new_values: ftd::Map<String> = Default::default();
                 for (k, v) in fields {
                     if let ftd::PropertyValue::Value { value } = v {
                         if let Some(v) = value.to_string() {
@@ -1107,7 +1105,7 @@ fn read_boolean(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
 }
 
 fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
-    let mut values: std::collections::BTreeMap<String, PropertyValue> = Default::default();
+    let mut values: ftd::Map<PropertyValue> = Default::default();
     if let Some(ref caption) = p1.caption {
         if let Some(text) = caption.strip_prefix('$') {
             return Ok(ftd::PropertyValue::Reference {
@@ -1314,8 +1312,8 @@ mod test {
         };
         ($s:expr, $n: expr, $v: expr, $c: expr) => {
             let p1 = ftd::p1::parse(indoc::indoc!($s), "foo").unwrap();
-            let mut bag = std::collections::BTreeMap::new();
-            let aliases = std::collections::BTreeMap::new();
+            let mut bag = ftd::Map::new();
+            let aliases = ftd::Map::new();
             let mut d = ftd::p2::TDoc {
                 name: "foo",
                 bag: &mut bag,

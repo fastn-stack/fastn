@@ -11,13 +11,10 @@ pub struct Event {
 impl Event {
     fn to_value(
         line_number: usize,
-        property: &std::collections::BTreeMap<String, Vec<ftd::PropertyValue>>,
+        property: &ftd::Map<Vec<ftd::PropertyValue>>,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<std::collections::BTreeMap<String, Vec<ftd::event::ParameterData>>> {
-        let mut property_string: std::collections::BTreeMap<
-            String,
-            Vec<ftd::event::ParameterData>,
-        > = Default::default();
+    ) -> ftd::p1::Result<ftd::Map<Vec<ftd::event::ParameterData>>> {
+        let mut property_string: ftd::Map<Vec<ftd::event::ParameterData>> = Default::default();
         for (s, property_values) in property {
             let mut property_values_string = vec![];
             for property_value in property_values {
@@ -49,8 +46,7 @@ impl Event {
                 | ftd::PropertyValue::Variable { name, .. } => {
                     match doc.get_value(line_number, name)? {
                         ftd::Value::Object { values } => {
-                            let mut val: std::collections::BTreeMap<String, String> =
-                                Default::default();
+                            let mut val: ftd::Map<String> = Default::default();
                             for (k, v) in values.iter() {
                                 if let Some(reference) = get_reference(v, doc, line_number)? {
                                     val.insert(k.to_string(), reference);
@@ -213,7 +209,7 @@ impl Event {
         event_name: &str,
         action: &str,
         doc: &ftd::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         let event_name = EventName::from_string(event_name, doc.name)?;
         let action = Action::to_action(line_number, action, doc, arguments)?;
@@ -234,7 +230,7 @@ pub struct Parameter {
 pub struct Action {
     pub action: ActionKind,         // toggle
     pub target: ftd::PropertyValue, // foo
-    pub parameters: std::collections::BTreeMap<String, Vec<ftd::PropertyValue>>,
+    pub parameters: ftd::Map<Vec<ftd::PropertyValue>>,
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Deserialize)]
@@ -286,9 +282,8 @@ impl ActionKind {
     //     }
     // }
 
-    pub fn parameters(&self) -> std::collections::BTreeMap<String, ftd::p2::event::Parameter> {
-        let mut parameters: std::collections::BTreeMap<String, ftd::p2::event::Parameter> =
-            Default::default();
+    pub fn parameters(&self) -> ftd::Map<ftd::p2::event::Parameter> {
+        let mut parameters: ftd::Map<ftd::p2::event::Parameter> = Default::default();
         match self {
             ftd::p2::ActionKind::Toggle
             | ftd::p2::ActionKind::StopPropagation
@@ -351,7 +346,7 @@ impl Action {
         line_number: usize,
         a: &str,
         doc: &ftd::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         let a: String = a.split_whitespace().collect::<Vec<&str>>().join(" ");
         return match a {
@@ -393,10 +388,7 @@ impl Action {
             _ if a.starts_with("message-host") => {
                 let value = a.replace("message-host", "").trim().to_string();
                 let parameters = if value.starts_with('$') {
-                    let mut parameters: std::collections::BTreeMap<
-                        String,
-                        Vec<ftd::PropertyValue>,
-                    > = Default::default();
+                    let mut parameters: ftd::Map<Vec<ftd::PropertyValue>> = Default::default();
                     if let Some(p) = ActionKind::MessageHost.parameters().get("data") {
                         parameters.insert(
                             "data".to_string(),
@@ -461,10 +453,7 @@ impl Action {
                 )?;
 
                 let parameters = {
-                    let mut parameters: std::collections::BTreeMap<
-                        String,
-                        Vec<ftd::PropertyValue>,
-                    > = Default::default();
+                    let mut parameters: ftd::Map<Vec<ftd::PropertyValue>> = Default::default();
                     let mut current_parameter = "".to_string();
                     let (mut min, mut max, mut idx) = (0, 0, 0);
                     let mut pkind = vec![];
@@ -548,10 +537,7 @@ impl Action {
                     );
                 };
                 let parameters = {
-                    let mut parameters: std::collections::BTreeMap<
-                        String,
-                        Vec<ftd::PropertyValue>,
-                    > = Default::default();
+                    let mut parameters: ftd::Map<Vec<ftd::PropertyValue>> = Default::default();
                     let mut current_parameter = "".to_string();
                     let (mut min, mut max, mut idx) = (0, 0, 0);
                     let mut pkind = vec![];
@@ -651,8 +637,7 @@ impl Action {
                 let (part_1, part_2) = ftd::p2::utils::split(a, "=")?;
                 let target = get_target(line_number, part_1, doc, arguments, None)?;
                 let kind = target.kind();
-                let mut parameters: std::collections::BTreeMap<String, Vec<ftd::PropertyValue>> =
-                    Default::default();
+                let mut parameters: ftd::Map<Vec<ftd::PropertyValue>> = Default::default();
 
                 let value = {
                     if part_2.eq("$VALUE") || part_2.eq("$MOUSE-IN") {
@@ -700,7 +685,7 @@ impl Action {
             line_number: usize,
             value: String,
             doc: &ftd::p2::TDoc,
-            arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+            arguments: &ftd::Map<ftd::p2::Kind>,
             kind: Option<ftd::p2::Kind>,
         ) -> ftd::p1::Result<ftd::PropertyValue> {
             ftd::PropertyValue::resolve_value(line_number, &value, kind, doc, arguments, None)

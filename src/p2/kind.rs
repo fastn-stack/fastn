@@ -640,7 +640,7 @@ impl Kind {
         default: Option<String>,
         doc: &ftd::p2::TDoc,
         object_kind: Option<(&str, Self)>,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         let default = {
             // resolve the default value

@@ -1,12 +1,12 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Record {
     pub name: String,
-    pub fields: std::collections::BTreeMap<String, ftd::p2::Kind>,
-    pub instances: std::collections::BTreeMap<String, Vec<Invocation>>,
+    pub fields: ftd::Map<ftd::p2::Kind>,
+    pub instances: ftd::Map<Vec<Invocation>>,
     pub order: Vec<String>,
 }
 
-type Invocation = std::collections::BTreeMap<String, ftd::PropertyValue>;
+type Invocation = ftd::Map<ftd::PropertyValue>;
 
 impl Record {
     pub fn variant_name(&self) -> Option<&str> {
@@ -17,8 +17,8 @@ impl Record {
         &self,
         p1: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::PropertyValue>> {
-        let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> = Default::default();
+    ) -> ftd::p1::Result<ftd::Map<ftd::PropertyValue>> {
+        let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
         self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
         for (name, kind) in self.fields.iter() {
             let subsections = p1.sub_sections_by_name(name);
@@ -296,8 +296,8 @@ impl Record {
         &self,
         p1: &ftd::p1::SubSection,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::PropertyValue>> {
-        let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> = Default::default();
+    ) -> ftd::p1::Result<ftd::Map<ftd::PropertyValue>> {
+        let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
         self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
         for (name, kind) in self.fields.iter() {
             fields.insert(
@@ -342,7 +342,7 @@ impl Record {
     ) -> ftd::p1::Result<Self> {
         let name = ftd::p2::utils::get_name("record", p1_name, doc.name)?;
         let full_name = doc.format_name(name);
-        let mut fields = std::collections::BTreeMap::new();
+        let mut fields = ftd::Map::new();
         let mut order = vec![];
         let object_kind = (
             name,
@@ -404,7 +404,7 @@ impl Record {
 
 fn assert_fields_valid(
     line_number: usize,
-    fields: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    fields: &ftd::Map<ftd::p2::Kind>,
     doc_id: &str,
 ) -> ftd::p1::Result<()> {
     let mut caption_field: Option<String> = None;

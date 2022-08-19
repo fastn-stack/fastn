@@ -2,21 +2,16 @@ use itertools::Itertools;
 
 #[derive(Debug, Default, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct Document {
-    pub data: std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub data: ftd::Map<ftd::p2::Thing>,
     pub name: String,
     pub instructions: Vec<ftd::Instruction>,
     pub main: ftd::Column,
-    pub aliases: std::collections::BTreeMap<String, String>,
+    pub aliases: ftd::Map<String>,
 }
 
 impl Document {
-    fn get_data(
-        &self,
-    ) -> (
-        std::collections::BTreeMap<String, serde_json::Value>,
-        Vec<String>,
-    ) {
-        let mut d: std::collections::BTreeMap<String, serde_json::Value> = Default::default();
+    fn get_data(&self) -> (ftd::Map<serde_json::Value>, Vec<String>) {
+        let mut d: ftd::Map<serde_json::Value> = Default::default();
         let mut always_include = vec![];
         let doc = ftd::p2::TDoc {
             name: self.name.as_str(),
@@ -82,7 +77,7 @@ impl Document {
                 ftd::Value::Integer { value } => serde_json::to_value(value).ok(),
                 ftd::Value::String { text: value, .. } => serde_json::to_value(value).ok(),
                 ftd::Value::Record { fields, name } => {
-                    let mut value_fields = std::collections::BTreeMap::new();
+                    let mut value_fields = ftd::Map::new();
                     if ["ftd#image-src", "ftd#color"].contains(&name.as_str()) {
                         value_fields
                             .insert("$kind$".to_string(), serde_json::to_value("light").unwrap());
@@ -756,10 +751,7 @@ impl Document {
     }
 
     #[cfg(calls)]
-    fn object2_to_json(
-        &self,
-        fields: &std::collections::BTreeMap<String, ftd::Value>,
-    ) -> ftd::p1::Result<serde_json::Value> {
+    fn object2_to_json(&self, fields: &ftd::Map<ftd::Value>) -> ftd::p1::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         for (k, v) in fields.iter() {
             map.insert(k.to_string(), self.value_to_json(v)?);
@@ -770,7 +762,7 @@ impl Document {
     fn object_to_json(
         &self,
         variant: Option<&String>,
-        fields: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        fields: &ftd::Map<ftd::PropertyValue>,
     ) -> ftd::p1::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         if let Some(v) = variant {

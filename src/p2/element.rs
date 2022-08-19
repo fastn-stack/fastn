@@ -1,6 +1,6 @@
 #[allow(clippy::too_many_arguments)]
 pub fn common_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -636,7 +636,7 @@ pub fn null() -> ftd::Component {
 }
 
 pub fn container_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<ftd::Container> {
     Ok(ftd::Container {
@@ -696,7 +696,7 @@ pub fn image_function() -> ftd::Component {
 }
 
 pub fn image_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -753,7 +753,7 @@ pub fn row_function() -> ftd::Component {
 }
 
 pub fn row_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -803,7 +803,7 @@ pub fn column_function() -> ftd::Component {
 }
 
 pub fn column_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -881,7 +881,7 @@ pub fn iframe_function() -> ftd::Component {
 }
 
 pub fn iframe_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -918,7 +918,7 @@ pub fn iframe_from_properties(
 }
 
 pub fn text_block_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -976,7 +976,7 @@ pub fn text_block_from_properties(
 }
 
 pub fn code_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1042,7 +1042,7 @@ pub fn code_from_properties(
 }
 
 pub fn integer_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1099,7 +1099,7 @@ pub fn integer_from_properties(
 }
 
 pub fn decimal_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1210,7 +1210,7 @@ fn round_1p(n: f32) -> f32 {
 }
 
 pub fn boolean_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1428,7 +1428,7 @@ pub fn decimal_function() -> ftd::Component {
 
 pub fn scene_function() -> ftd::Component {
     let arguments = {
-        let mut arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
+        let mut arguments: ftd::Map<ftd::p2::Kind> = [
             container_arguments(),
             common_arguments(),
             vec![(
@@ -1502,7 +1502,7 @@ pub fn markup_function() -> ftd::Component {
 }
 
 pub fn grid_function() -> ftd::Component {
-    let arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
+    let arguments: ftd::Map<ftd::p2::Kind> = [
         container_arguments(),
         common_arguments(),
         vec![
@@ -1622,7 +1622,7 @@ pub fn input_function() -> ftd::Component {
 }
 
 pub fn input_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1668,7 +1668,7 @@ pub fn input_from_properties(
 }
 
 pub fn scene_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1692,7 +1692,7 @@ pub fn scene_from_properties(
 }
 
 pub fn grid_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
@@ -1734,7 +1734,7 @@ pub fn grid_from_properties(
 }
 
 pub fn markup_from_properties(
-    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,

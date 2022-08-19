@@ -19,12 +19,7 @@ lazy_static::lazy_static! {
         syntect::highlighting::ThemeSet::load_defaults();
 }
 
-pub fn code(
-    code: &str,
-    ext: &str,
-    theme: &str,
-    doc_id: &str,
-) -> ftd::p1::Result<String> {
+pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::p1::Result<String> {
     let syntax = SS
         .find_syntax_by_extension(ext)
         .unwrap_or_else(|| SS.find_syntax_plain_text());

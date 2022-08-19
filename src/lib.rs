@@ -7,18 +7,18 @@ extern crate self as ftd;
 #[macro_use]
 pub(crate) mod test;
 
-mod component;
 mod code;
+mod component;
 mod condition;
 mod dnode;
 mod event;
 mod execute_doc;
 mod html;
 pub mod main;
+pub mod markup;
 mod or_type;
 pub mod p1;
 pub mod p2;
-pub mod markup;
 pub(crate) mod rendered;
 mod rt;
 mod ui;
@@ -35,6 +35,7 @@ pub use ftd::{
 };
 pub use html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
 pub use or_type::OrType;
+pub use rendered::Rendered;
 pub use rt::RT;
 pub use ui::{
     Anchor, AttributeType, Code, Color, ColorValue, Column, Common, ConditionalAttribute,
@@ -55,13 +56,11 @@ pub fn html() -> &'static str {
     include_str!("../ftd.html")
 }
 
-pub type Map = std::collections::BTreeMap<String, String>;
+#[cfg(test)]
+pub type Map<T> = std::collections::BTreeMap<String, T>;
 
-#[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
-pub struct Rendered {
-    pub original: String,
-    pub rendered: String,
-}
+#[cfg(not(test))]
+pub type Map<T> = std::collections::HashMap<String, T>;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct Document {
@@ -72,16 +71,15 @@ pub struct Document {
     pub css_collector: String,
 }
 
-pub type DataDependenciesMap = std::collections::BTreeMap<String, Data>;
+pub type DataDependenciesMap = ftd::Map<Data>;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct Data {
     pub value: serde_json::Value,
-    pub dependencies: std::collections::BTreeMap<String, serde_json::Value>,
+    pub dependencies: ftd::Map<serde_json::Value>,
 }
 
-pub type ExternalChildrenDependenciesMap =
-    std::collections::BTreeMap<String, Vec<ExternalChildrenCondition>>;
+pub type ExternalChildrenDependenciesMap = ftd::Map<Vec<ExternalChildrenCondition>>;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct ExternalChildrenCondition {
@@ -101,7 +99,7 @@ pub enum DependencyType {
 pub struct Dependencies {
     pub dependency_type: DependencyType,
     pub condition: Option<serde_json::Value>,
-    pub parameters: std::collections::BTreeMap<String, ConditionalValueWithDefault>,
+    pub parameters: ftd::Map<ConditionalValueWithDefault>,
     pub remaining: Option<String>,
 }
 
@@ -110,7 +108,6 @@ pub struct ConditionalValueWithDefault {
     pub value: ConditionalValue,
     pub default: Option<ConditionalValue>,
 }
-
 
 pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::p1::Result<T>
 where

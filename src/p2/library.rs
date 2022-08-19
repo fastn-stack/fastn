@@ -80,7 +80,7 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
 }
 
 fn text_component() -> ftd::p1::Result<ftd::Value> {
-    let mut v: std::collections::BTreeMap<String, ftd::PropertyValue> = Default::default();
+    let mut v: ftd::Map<ftd::PropertyValue> = Default::default();
     v.insert(
         "$caption$".to_string(),
         ftd::PropertyValue::Value {
@@ -120,8 +120,7 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
                 break;
             }
             if line.contains('=') {
-                let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> =
-                    Default::default();
+                let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
                 let mut parts = line.splitn(2, '=');
                 for (k, v) in &rec.fields {
                     let part = parts.next().unwrap().trim();

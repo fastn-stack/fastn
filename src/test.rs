@@ -1,6 +1,9 @@
 #[test]
 fn get_name() {
-    assert_eq!(ftd::p2::utils::get_name("fn", "fn foo", "test").unwrap(), "foo")
+    assert_eq!(
+        ftd::p2::utils::get_name("fn", "fn foo", "test").unwrap(),
+        "foo"
+    )
 }
 
 pub fn interpret_helper(
@@ -48,10 +51,7 @@ pub fn interpret(
     name: &str,
     source: &str,
     lib: &ftd::p2::TestLibrary,
-) -> ftd::p1::Result<(
-    std::collections::BTreeMap<String, ftd::p2::Thing>,
-    ftd::Column,
-)> {
+) -> ftd::p1::Result<(ftd::Map<ftd::p2::Thing>, ftd::Column)> {
     let doc = ftd::test::interpret_helper(name, source, lib)?;
     Ok((doc.data, doc.main))
 }
@@ -61,7 +61,7 @@ macro_rules! p {
         p!($s, $t)
     };
     ($s:expr, $t: expr) => {
-        let (ebag, ecol): (std::collections::BTreeMap<String, ftd::p2::Thing>, _) = $t;
+        let (ebag, ecol): (ftd::Map<ftd::p2::Thing>, _) = $t;
         let (mut bag, col) =
             ftd::test::interpret("foo/bar", indoc::indoc!($s), &ftd::p2::TestLibrary {})
                 .expect("found error");
@@ -134,7 +134,7 @@ pub fn i(p: &str, reference: Option<String>) -> ftd::ImageSrc {
 
 pub use ftd::p2::interpreter::{default_bag, default_column};
 
-pub fn person_fields() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
+pub fn person_fields() -> ftd::Map<ftd::p2::Kind> {
     std::iter::IntoIterator::into_iter([
         (s("address"), ftd::p2::Kind::string()),
         (s("bio"), ftd::p2::Kind::body()),
@@ -144,7 +144,7 @@ pub fn person_fields() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
     .collect()
 }
 
-pub fn abrar() -> std::collections::BTreeMap<String, ftd::PropertyValue> {
+pub fn abrar() -> ftd::Map<ftd::PropertyValue> {
     std::iter::IntoIterator::into_iter([
         (
             s("name"),
@@ -216,11 +216,7 @@ mod interpreter {
     /// bag\[root_id\] = integer variable
     ///
     /// root_id = \[doc_id\]#\[var_name\]@\[level\]
-    fn insert_integer_by_root(
-        root: &str,
-        val: i64,
-        bag: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
-    ) {
+    fn insert_integer_by_root(root: &str, val: i64, bag: &mut ftd::Map<ftd::p2::Thing>) {
         // root => [doc_id]#[var_name]@[level]
         // root_parts = [ doc_id , var_name, level ]
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
@@ -259,7 +255,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 ..Default::default()
             }),
         );
@@ -298,7 +294,7 @@ mod interpreter {
                     s("name"),
                     ftd::p2::Kind::caption(),
                 )])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("color"),
@@ -375,7 +371,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 ..Default::default()
             }),
         );
@@ -407,7 +403,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -442,7 +438,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -477,7 +473,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -632,7 +628,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             arguments: Default::default(),
                             is_recursive: false,
                             ..Default::default()
@@ -682,7 +678,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -720,7 +716,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -758,7 +754,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -799,7 +795,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -825,7 +821,7 @@ mod interpreter {
                     (s("id"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("id"),
@@ -865,7 +861,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -912,7 +908,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -961,7 +957,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -1020,7 +1016,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![],
                 kernel: false,
                 ..Default::default()
@@ -1036,7 +1032,7 @@ mod interpreter {
                     s("text"),
                     ftd::p2::Kind::caption(),
                 )])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("line-clamp"),
@@ -1060,7 +1056,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 ..Default::default()
             }),
         );
@@ -1272,7 +1268,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -1307,7 +1303,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -1730,7 +1726,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -1778,7 +1774,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -1816,7 +1812,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -1854,7 +1850,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -1895,7 +1891,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -1921,7 +1917,7 @@ mod interpreter {
                     (s("id"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("id"),
@@ -1961,7 +1957,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -2008,7 +2004,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -2057,7 +2053,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -2116,7 +2112,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![],
                 kernel: false,
                 ..Default::default()
@@ -2132,7 +2128,7 @@ mod interpreter {
                     s("text"),
                     ftd::p2::Kind::caption(),
                 )])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -2144,7 +2140,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 ..Default::default()
             }),
         );
@@ -2354,7 +2350,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -2389,7 +2385,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -2752,7 +2748,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -2805,7 +2801,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 ..Default::default()
             }),
         );
@@ -2864,7 +2860,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![ftd::component::Instruction::ChildComponent {
                     child: ftd::component::ChildComponent {
                         is_recursive: false,
@@ -2882,7 +2878,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                         )])
-                            .collect(),
+                        .collect(),
                         ..Default::default()
                     },
                 }],
@@ -2969,7 +2965,7 @@ mod interpreter {
                     s("name"),
                     ftd::p2::Kind::caption_or_body(),
                 )])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -2981,7 +2977,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 invocations: vec![
                     std::iter::IntoIterator::into_iter([(
                         s("name"),
@@ -2990,7 +2986,7 @@ mod interpreter {
                             source: ftd::TextSource::Caption,
                         },
                     )])
-                        .collect(),
+                    .collect(),
                     std::iter::IntoIterator::into_iter([(
                         s("name"),
                         ftd::Value::String {
@@ -2998,7 +2994,7 @@ mod interpreter {
                             source: ftd::TextSource::Header,
                         },
                     )])
-                        .collect(),
+                    .collect(),
                     std::iter::IntoIterator::into_iter([(
                         s("name"),
                         ftd::Value::String {
@@ -3006,7 +3002,7 @@ mod interpreter {
                             source: ftd::TextSource::Body,
                         },
                     )])
-                        .collect(),
+                    .collect(),
                 ],
                 line_number: 1,
                 ..Default::default()
@@ -3110,7 +3106,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
@@ -3273,7 +3269,7 @@ mod interpreter {
                     (s("x"), ftd::p2::Kind::integer()),
                     (s("y"), ftd::p2::Kind::integer()),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("x"), s("y")],
             }),
@@ -3304,7 +3300,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                             ftd::PropertyValue::Value {
@@ -3324,7 +3320,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                         ],
@@ -3412,9 +3408,7 @@ mod interpreter {
         );
     }
 
-    fn white_two_image_bag(
-        about_optional: bool,
-    ) -> std::collections::BTreeMap<String, ftd::p2::Thing> {
+    fn white_two_image_bag(about_optional: bool) -> ftd::Map<ftd::p2::Thing> {
         let mut bag = super::default_bag();
         bag.insert(
             s("foo/bar#white-two-image"),
@@ -3445,7 +3439,7 @@ mod interpreter {
                     }),
                     (s("title"), ftd::p2::Kind::caption()),
                 ])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("padding"),
                     ftd::component::Property {
@@ -3456,7 +3450,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 kernel: false,
                 instructions: vec![
                     ftd::Instruction::ChildComponent {
@@ -3490,7 +3484,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -3519,7 +3513,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -3535,7 +3529,7 @@ mod interpreter {
                                             default: None,
                                             is_reference: false,
                                         }
-                                            .into_optional(),
+                                        .into_optional(),
                                     },
                                 })
                             } else {
@@ -3557,7 +3551,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -3589,7 +3583,7 @@ mod interpreter {
                     makes web or mobile product teams productive.
                     "
                 )
-                    .trim(),
+                .trim(),
             ),
             common: ftd::Common {
                 reference: Some(s("foo/bar#about@0")),
@@ -3673,7 +3667,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -3774,7 +3768,7 @@ mod interpreter {
                     makes web or mobile product teams productive.
                     "
                 )
-                    .trim(),
+                .trim(),
             ),
             common: ftd::Common {
                 reference: Some(s("foo/bar#about@0")),
@@ -3894,7 +3888,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -3928,7 +3922,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -4113,7 +4107,7 @@ mod interpreter {
                     makes web or mobile product teams productive.
                     "
                 )
-                    .trim(),
+                .trim(),
             ),
             common: ftd::Common {
                 condition: Some(ftd::Condition {
@@ -4277,7 +4271,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -4311,7 +4305,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -4523,7 +4517,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 ..Default::default()
             }),
         );
@@ -4562,7 +4556,7 @@ mod interpreter {
                     (s("body"), ftd::p2::Kind::body().into_optional()),
                     (s("title"), ftd::p2::Kind::caption()),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::Instruction::ChildComponent {
                         child: ftd::ChildComponent {
@@ -4580,7 +4574,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -4605,7 +4599,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -4880,7 +4874,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -4915,7 +4909,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -4939,7 +4933,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         events: vec![],
@@ -4973,7 +4967,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                         ..Default::default()
                     },
                 }],
@@ -5088,7 +5082,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -5107,7 +5101,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -5218,7 +5212,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -5237,7 +5231,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -5339,7 +5333,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -5386,7 +5380,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -5756,7 +5750,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -5779,7 +5773,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -5916,7 +5910,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -5939,7 +5933,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -6115,7 +6109,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -6144,7 +6138,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -6214,7 +6208,9 @@ mod interpreter {
                                             container: ftd::Container {
                                                 children: vec![ftd::Element::Markup(
                                                     ftd::Markups {
-                                                        text: ftd::rendered::markup_line("Mobile Display"),
+                                                        text: ftd::rendered::markup_line(
+                                                            "Mobile Display",
+                                                        ),
                                                         line: true,
                                                         common: ftd::Common {
                                                             data_id: Some(s("mobile-display")),
@@ -6243,7 +6239,9 @@ mod interpreter {
                                             container: ftd::Container {
                                                 children: vec![ftd::Element::Markup(
                                                     ftd::Markups {
-                                                        text: ftd::rendered::markup_line("Desktop Display"),
+                                                        text: ftd::rendered::markup_line(
+                                                            "Desktop Display",
+                                                        ),
                                                         line: true,
                                                         ..Default::default()
                                                     },
@@ -6304,7 +6302,7 @@ mod interpreter {
                     s("id"),
                     ftd::p2::Kind::optional(ftd::p2::Kind::string()),
                 )])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::component::Property {
@@ -6319,7 +6317,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 instructions: vec![ftd::component::Instruction::ChildComponent {
                     child: ftd::component::ChildComponent {
                         is_recursive: false,
@@ -6339,7 +6337,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                         )])
-                            .collect(),
+                        .collect(),
                         ..Default::default()
                     },
                 }],
@@ -6377,7 +6375,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -6409,7 +6407,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -6443,7 +6441,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -6473,7 +6471,7 @@ mod interpreter {
                     s("id"),
                     ftd::p2::Kind::optional(ftd::p2::Kind::string()),
                 )])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::component::Property {
@@ -6488,7 +6486,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 instructions: vec![ftd::component::Instruction::ChildComponent {
                     child: ftd::component::ChildComponent {
                         is_recursive: false,
@@ -6523,7 +6521,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                         ..Default::default()
                     },
                 }],
@@ -6763,7 +6761,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -6891,7 +6889,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -7117,7 +7115,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -7259,7 +7257,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -7352,7 +7350,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -7383,7 +7381,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         let mut bag = super::default_bag();
 
@@ -7500,7 +7498,7 @@ mod interpreter {
                     (s("body"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -7519,7 +7517,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -7540,7 +7538,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -7609,7 +7607,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                             ftd::PropertyValue::Value {
@@ -7635,7 +7633,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                         ],
@@ -7676,7 +7674,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -7710,7 +7708,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -7799,7 +7797,7 @@ mod interpreter {
                     (s("bio"), ftd::p2::Kind::body()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("bio")],
             }),
@@ -7931,7 +7929,7 @@ mod interpreter {
                     (s("body"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -7950,7 +7948,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -7971,7 +7969,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -8018,7 +8016,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                             ftd::PropertyValue::Value {
@@ -8050,7 +8048,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                         ],
@@ -8074,7 +8072,7 @@ mod interpreter {
                     (s("name"), ftd::p2::Kind::caption()),
                     (s("ceo"), ftd::p2::Kind::boolean()),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("bio"), s("ceo")],
             }),
@@ -8113,7 +8111,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -8154,7 +8152,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -8422,7 +8420,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -8509,7 +8507,7 @@ mod interpreter {
                     (s("body"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -8528,7 +8526,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -8549,7 +8547,7 @@ mod interpreter {
                                     ..Default::default()
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -8571,7 +8569,7 @@ mod interpreter {
                             },
                         ),
                     ])
-                        .collect(),
+                    .collect(),
                     std::iter::IntoIterator::into_iter([
                         (
                             s("body"),
@@ -8588,7 +8586,7 @@ mod interpreter {
                             },
                         ),
                     ])
-                        .collect(),
+                    .collect(),
                 ],
                 ..Default::default()
             }),
@@ -8626,7 +8624,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                             ftd::PropertyValue::Value {
@@ -8652,7 +8650,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                         ],
@@ -8675,7 +8673,7 @@ mod interpreter {
                     (s("bio"), ftd::p2::Kind::body()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("bio")],
             }),
@@ -8716,7 +8714,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         // pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -8771,7 +8769,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -8828,7 +8826,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -9175,7 +9173,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
@@ -9762,7 +9760,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -9940,7 +9938,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                             ftd::PropertyValue::Value {
@@ -9979,7 +9977,7 @@ mod interpreter {
                                             },
                                         ),
                                     ])
-                                        .collect(),
+                                    .collect(),
                                 },
                             },
                         ],
@@ -10139,7 +10137,7 @@ mod interpreter {
                         is_reference: true,
                     },
                 )])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::Instruction::ChildComponent {
                         child: ftd::ChildComponent {
@@ -10176,7 +10174,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -10218,7 +10216,7 @@ mod interpreter {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -10278,7 +10276,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         // pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
@@ -10326,7 +10324,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                         )])
-                            .collect(),
+                        .collect(),
                         ..Default::default()
                     },
                 }],
@@ -10437,7 +10435,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("line-clamp"),
@@ -10469,7 +10467,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 invocations: vec![
                     std::iter::IntoIterator::into_iter([
                         (
@@ -10481,7 +10479,7 @@ mod interpreter {
                         ),
                         (s("line-clamp"), ftd::Value::Integer { value: 10 }),
                     ])
-                        .collect(),
+                    .collect(),
                     std::iter::IntoIterator::into_iter([
                         (
                             s("name"),
@@ -10492,7 +10490,7 @@ mod interpreter {
                         ),
                         (s("line-clamp"), ftd::Value::Integer { value: 10 }),
                     ])
-                        .collect(),
+                    .collect(),
                     std::iter::IntoIterator::into_iter([
                         (
                             s("name"),
@@ -10503,7 +10501,7 @@ mod interpreter {
                         ),
                         (s("line-clamp"), ftd::Value::Integer { value: 20 }),
                     ])
-                        .collect(),
+                    .collect(),
                 ],
                 line_number: 1,
                 ..Default::default()
@@ -10604,7 +10602,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
@@ -10670,7 +10668,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -10730,7 +10728,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("address"), s("bio"), s("age"), s("size")],
             }),
@@ -10775,7 +10773,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
@@ -10863,7 +10861,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         events: vec![],
@@ -10900,7 +10898,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                         ..Default::default()
                     },
                 }],
@@ -11081,7 +11079,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -11115,7 +11113,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -11150,7 +11148,7 @@ mod interpreter {
                                     .set_default(Some(s("$foo/bar#default-phone"))),
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                         instances: Default::default(),
                         order: vec![s("name"), s("phone")],
                     },
@@ -11168,7 +11166,7 @@ mod interpreter {
                                 ftd::p2::Kind::integer().set_default(Some(s("50"))),
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                         instances: Default::default(),
                         order: vec![s("name"), s("contact"), s("fax"), s("no-of-employees")],
                     },
@@ -11211,7 +11209,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
@@ -11369,7 +11367,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -11645,7 +11643,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -11731,7 +11729,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -11782,7 +11780,7 @@ mod interpreter {
                         ftd::p2::Kind::boolean().set_default(Some(s("true"))),
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -11798,7 +11796,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 instructions: vec![],
                 events: vec![ftd::p2::Event {
                     name: ftd::p2::EventName::OnClick,
@@ -11831,7 +11829,7 @@ mod interpreter {
                     ),
                     (s("open"), ftd::Value::Boolean { value: true }),
                 ])
-                    .collect()],
+                .collect()],
                 line_number: 1,
                 ..Default::default()
             }),
@@ -11878,7 +11876,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
         pretty_assertions::assert_eq!(g_bag, bag);
@@ -11961,7 +11959,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -12102,7 +12100,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -12214,7 +12212,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -12250,7 +12248,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -12292,7 +12290,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -12323,7 +12321,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -12458,7 +12456,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -12545,7 +12543,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -12636,7 +12634,7 @@ mod interpreter {
                                     reference: None,
                                 }],
                             )])
-                                .collect(),
+                            .collect(),
                         },
                     }],
                     ..Default::default()
@@ -12677,7 +12675,7 @@ mod interpreter {
                                     ],
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                         },
                     }],
                     ..Default::default()
@@ -12709,7 +12707,7 @@ mod interpreter {
                                     },
                                 ],
                             )])
-                                .collect(),
+                            .collect(),
                         },
                     }],
                     ..Default::default()
@@ -12747,7 +12745,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -12784,7 +12782,7 @@ mod interpreter {
                                                 reference: Some(s("foo/bar#by@0")),
                                             }],
                                         )])
-                                            .collect(),
+                                        .collect(),
                                     },
                                 }],
                                 ..Default::default()
@@ -12807,7 +12805,7 @@ mod interpreter {
                                                 reference: Some(s("foo/bar#decrement-by")),
                                             }],
                                         )])
-                                            .collect(),
+                                        .collect(),
                                     },
                                 }],
                                 ..Default::default()
@@ -12846,7 +12844,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -12889,7 +12887,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -12963,7 +12961,7 @@ mod interpreter {
                                     },
                                 ],
                             )])
-                                .collect(),
+                            .collect(),
                         },
                     }],
                     reference: Some(s("foo/bar#src@1")),
@@ -13075,7 +13073,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -13173,7 +13171,9 @@ mod interpreter {
                                             container: ftd::Container {
                                                 children: vec![
                                                     ftd::Element::Markup(ftd::Markups {
-                                                        text: ftd::rendered::markup_line("Mango Juice"),
+                                                        text: ftd::rendered::markup_line(
+                                                            "Mango Juice",
+                                                        ),
                                                         line: true,
                                                         common: ftd::Common {
                                                             events: vec![ftd::Event {
@@ -13349,7 +13349,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -13420,7 +13420,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -13463,7 +13463,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -13587,7 +13587,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -13655,7 +13655,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -13746,7 +13746,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -13793,7 +13793,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -13881,7 +13881,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -14032,7 +14032,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -14170,7 +14170,7 @@ mod interpreter {
                                     },
                                 ],
                             )])
-                                .collect(),
+                            .collect(),
                         },
                     }],
                     ..Default::default()
@@ -14202,7 +14202,7 @@ mod interpreter {
                                     },
                                 ],
                             )])
-                                .collect(),
+                            .collect(),
                         },
                     }],
                     ..Default::default()
@@ -14232,7 +14232,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -14265,7 +14265,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -14304,7 +14304,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -14378,7 +14378,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -14475,7 +14475,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -14583,7 +14583,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -14692,7 +14692,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -14758,7 +14758,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -14938,7 +14938,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -15054,7 +15054,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -15084,7 +15084,7 @@ mod interpreter {
                 ftd::code::DEFAULT_THEME,
                 "foo/bar",
             )
-                .unwrap(),
+            .unwrap(),
             ..Default::default()
         }));
 
@@ -15105,7 +15105,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -15279,7 +15279,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -15372,7 +15372,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -15431,7 +15431,7 @@ mod interpreter {
                                 nested_properties: Default::default(),
                             },
                         )])
-                            .collect(),
+                        .collect(),
                         ..Default::default()
                     },
                 }],
@@ -15468,7 +15468,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -15556,7 +15556,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -15566,53 +15566,53 @@ mod interpreter {
         main.container
             .children
             .push(ftd::Element::Input(ftd::Input {
-                common: ftd::Common {
-                    events: vec![
-                        ftd::Event {
-                            name: s("onchange"),
-                            action: ftd::Action {
-                                action: s("set-value"),
-                                target: s("foo/bar#input-data"),
-                                parameters: std::iter::IntoIterator::into_iter([(
-                                    s("value"),
-                                    vec![
-                                        ftd::event::ParameterData {
-                                            value: serde_json::Value::String(s("$VALUE")),
-                                            reference: None,
-                                        },
-                                        ftd::event::ParameterData {
-                                            value: serde_json::Value::String(s("string")),
-                                            reference: None,
-                                        },
-                                    ],
-                                )])
-                                    .collect(),
-                            },
+            common: ftd::Common {
+                events: vec![
+                    ftd::Event {
+                        name: s("onchange"),
+                        action: ftd::Action {
+                            action: s("set-value"),
+                            target: s("foo/bar#input-data"),
+                            parameters: std::iter::IntoIterator::into_iter([(
+                                s("value"),
+                                vec![
+                                    ftd::event::ParameterData {
+                                        value: serde_json::Value::String(s("$VALUE")),
+                                        reference: None,
+                                    },
+                                    ftd::event::ParameterData {
+                                        value: serde_json::Value::String(s("string")),
+                                        reference: None,
+                                    },
+                                ],
+                            )])
+                            .collect(),
                         },
-                        ftd::Event {
-                            name: s("onchange"),
-                            action: ftd::Action {
-                                action: s("message-host"),
-                                target: s("$obj"),
-                                parameters: std::iter::IntoIterator::into_iter([(
-                                    "data".to_string(),
-                                    vec![ftd::event::ParameterData {
-                                        value: serde_json::from_str(
-                                            "{\"function\":\"some-function\",\"value\":\"Nothing\"}",
-                                        )
-                                            .unwrap(),
-                                        reference: Some(s("{\"value\":\"foo/bar#input-data\"}")),
-                                    }],
-                                )])
-                                    .collect(),
-                            },
+                    },
+                    ftd::Event {
+                        name: s("onchange"),
+                        action: ftd::Action {
+                            action: s("message-host"),
+                            target: s("$obj"),
+                            parameters: std::iter::IntoIterator::into_iter([(
+                                "data".to_string(),
+                                vec![ftd::event::ParameterData {
+                                    value: serde_json::from_str(
+                                        "{\"function\":\"some-function\",\"value\":\"Nothing\"}",
+                                    )
+                                    .unwrap(),
+                                    reference: Some(s("{\"value\":\"foo/bar#input-data\"}")),
+                                }],
+                            )])
+                            .collect(),
                         },
-                    ],
-                    ..Default::default()
-                },
-                placeholder: None,
+                    },
+                ],
                 ..Default::default()
-            }));
+            },
+            placeholder: None,
+            ..Default::default()
+        }));
 
         p!(
             "
@@ -15800,7 +15800,7 @@ mod interpreter {
                                 },
                             },
                         )])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -16126,7 +16126,7 @@ mod interpreter {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .expect("found error");
+        .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
         pretty_assertions::assert_eq!(g_bag, bag);
@@ -16189,7 +16189,7 @@ mod interpreter {
                     (s("title"), ftd::p2::Kind::string()),
                     (s("w"), ftd::p2::Kind::integer()),
                 ])
-                    .collect(),
+                .collect(),
                 locals: Default::default(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -16225,7 +16225,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![
                     ftd::Instruction::ChildComponent {
                         child: ftd::ChildComponent {
@@ -16242,7 +16242,7 @@ mod interpreter {
                                     nested_properties: Default::default(),
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -16262,7 +16262,7 @@ mod interpreter {
                                     nested_properties: Default::default(),
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -16282,7 +16282,7 @@ mod interpreter {
                                     nested_properties: Default::default(),
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -16302,7 +16302,7 @@ mod interpreter {
                                     nested_properties: Default::default(),
                                 },
                             )])
-                                .collect(),
+                            .collect(),
                             ..Default::default()
                         },
                     },
@@ -16490,7 +16490,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -16777,7 +16777,7 @@ mod interpreter {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -16851,7 +16851,7 @@ mod interpreter {
                     "current".to_string(),
                     ftd::p2::Kind::integer().set_default(Some(s("1"))),
                 )])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         "append-at".to_string(),
@@ -16875,7 +16875,7 @@ mod interpreter {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         root: s("ftd#column"),
@@ -16891,7 +16891,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                         )])
-                            .collect(),
+                        .collect(),
                         ..Default::default()
                     },
                 }],
@@ -16908,7 +16908,7 @@ mod interpreter {
                     s("title"),
                     ftd::p2::Kind::caption(),
                 )])
-                    .collect(),
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -16919,7 +16919,7 @@ mod interpreter {
                         ..Default::default()
                     },
                 )])
-                    .collect(),
+                .collect(),
                 events: vec![ftd::p2::Event {
                     name: ftd::p2::EventName::OnClick,
                     action: ftd::p2::Action {
@@ -16940,7 +16940,7 @@ mod interpreter {
                                 },
                             ],
                         )])
-                            .collect(),
+                        .collect(),
                     },
                 }],
                 condition: Some(ftd::p2::Boolean::Equal {
@@ -17032,7 +17032,7 @@ mod interpreter {
                                                             ],
                                                         )],
                                                     )
-                                                        .collect(),
+                                                    .collect(),
                                                 },
                                             }],
                                             reference: Some(s("foo/bar#title@0,0")),
@@ -17070,7 +17070,7 @@ mod interpreter {
                                                             ],
                                                         )],
                                                     )
-                                                        .collect(),
+                                                    .collect(),
                                                 },
                                             }],
                                             reference: Some(s("foo/bar#title@0,1")),

@@ -77,4 +77,3 @@ pub fn markup_inline(string: &str) -> String {
         (space_before, space_after)
     }
 }
-

@@ -2,8 +2,8 @@
 pub struct DNode {
     pub classes: Vec<String>,
     pub node: String,
-    pub attrs: ftd::Map,
-    pub style: ftd::Map,
+    pub attrs: ftd::Map<String>,
+    pub style: ftd::Map<String>,
     pub children: Vec<DNode>,
     pub text: Option<String>,
     pub null: bool,

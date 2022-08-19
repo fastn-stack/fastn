@@ -1,3 +1,9 @@
+#[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
+pub struct Rendered {
+    pub original: String,
+    pub rendered: String,
+}
+
 pub fn code_with_theme(
     code: &str,
     ext: &str,

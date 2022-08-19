@@ -61,7 +61,7 @@ pub fn get_name<'a, 'b>(prefix: &'a str, s: &'b str, doc_id: &str) -> ftd::p1::R
 pub fn boolean_and_ref(
     line_number: usize,
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
 ) -> ftd::p1::Result<(bool, Option<String>)> {
@@ -180,7 +180,7 @@ pub fn boolean_and_ref(
 pub fn integer_and_ref(
     line_number: usize,
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
 ) -> ftd::p1::Result<(i64, Option<String>)> {
@@ -299,7 +299,7 @@ pub fn integer_and_ref(
 pub fn decimal_and_ref(
     line_number: usize,
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
 ) -> ftd::p1::Result<(f64, Option<String>)> {
@@ -418,7 +418,7 @@ pub fn decimal_and_ref(
 pub fn string_and_source_and_ref(
     line_number: usize,
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
 ) -> ftd::p1::Result<(String, ftd::TextSource, Option<String>)> {
@@ -574,13 +574,10 @@ pub fn complete_reference(reference: &Option<String>) -> Option<String> {
 pub fn record_and_ref(
     line_number: usize,
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
-) -> ftd::p1::Result<(
-    std::collections::BTreeMap<String, ftd::PropertyValue>,
-    Option<String>,
-)> {
+) -> ftd::p1::Result<(ftd::Map<ftd::PropertyValue>, Option<String>)> {
     let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Record { fields, .. }, reference)) => {
@@ -616,7 +613,7 @@ pub fn record_and_ref(
                             | ftd::PropertyValue::Variable { name, .. } => {
                                 if name.eq(reference) {
                                     return Ok((
-                                        std::collections::BTreeMap::new(),
+                                        Default::default(),
                                         complete_reference(&Some(reference.to_owned())),
                                     ));
                                 }
@@ -629,7 +626,7 @@ pub fn record_and_ref(
                     // Return the empty string
 
                     Ok((
-                        std::collections::BTreeMap::new(),
+                        Default::default(),
                         complete_reference(&Some(reference.to_owned())),
                     ))
                 }
@@ -677,7 +674,7 @@ pub fn record_and_ref(
                             }
                         }) {
                             return Ok((
-                                std::collections::BTreeMap::new(),
+                                Default::default(),
                                 complete_reference(&Some(reference.to_owned())),
                             ));
                         }
@@ -703,13 +700,10 @@ pub fn record_and_ref(
 #[allow(clippy::type_complexity)]
 pub fn record_optional_with_ref(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    properties: &ftd::Map<ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     line_number: usize,
-) -> ftd::p1::Result<(
-    Option<std::collections::BTreeMap<String, ftd::PropertyValue>>,
-    Option<String>,
-)> {
+) -> ftd::p1::Result<(Option<ftd::Map<ftd::PropertyValue>>, Option<String>)> {
     let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Record { fields, .. }, reference)) => {
@@ -750,10 +744,10 @@ pub fn record_optional_with_ref(
 
 pub fn record_optional(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> ftd::p1::Result<Option<std::collections::BTreeMap<String, ftd::PropertyValue>>> {
+) -> ftd::p1::Result<Option<ftd::Map<ftd::PropertyValue>>> {
     match properties.get(name) {
         Some(ftd::Value::Record { fields, .. }) => Ok(Some(fields.to_owned())),
         Some(ftd::Value::None {
@@ -783,7 +777,7 @@ pub fn record_optional(
 
 pub fn string_optional(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<Option<String>> {
@@ -816,7 +810,7 @@ pub fn string_optional(
 
 pub fn string(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<String> {
@@ -844,7 +838,7 @@ pub fn string(
 pub fn string_with_default(
     name: &str,
     def: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<String> {
@@ -865,7 +859,7 @@ pub fn string_with_default(
 
 pub fn int(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<i64> {
@@ -882,7 +876,7 @@ pub fn int(
 
 pub fn int_optional(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<Option<i64>> {
@@ -916,7 +910,7 @@ pub fn int_optional(
 pub fn int_with_default(
     name: &str,
     def: i64,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<i64> {
@@ -937,7 +931,7 @@ pub fn int_with_default(
 
 // pub fn elements(
 //     name: &str,
-//     properties: &std::collections::BTreeMap<String, ftd::Value>,
+//     properties: &ftd::Map<ftd::Value>,
 // ) -> ftd::p1::Result<Vec<ftd::Element>> {
 //     match properties.get(name) {
 //         Some(ftd::Value::Elements(v)) => Ok((*v).clone()),
@@ -949,7 +943,7 @@ pub fn int_with_default(
 pub fn bool_with_default(
     name: &str,
     def: bool,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<bool> {
@@ -970,7 +964,7 @@ pub fn bool_with_default(
 
 pub fn bool(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<bool> {
@@ -987,7 +981,7 @@ pub fn bool(
 
 pub fn bool_optional(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<Option<bool>> {
@@ -1042,7 +1036,7 @@ mod test {
 
 pub fn decimal(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<f64> {
@@ -1059,7 +1053,7 @@ pub fn decimal(
 
 pub fn decimal_optional(
     name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    properties: &ftd::Map<ftd::Value>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<Option<f64>> {
@@ -1118,7 +1112,7 @@ pub(crate) fn resolve_local_variable_name(
     name: &str,
     container: &str,
     doc_name: &str,
-    aliases: &std::collections::BTreeMap<String, String>,
+    aliases: &ftd::Map<String>,
 ) -> ftd::p1::Result<String> {
     if name.contains('@') {
         return Ok(name.to_string());
@@ -1145,7 +1139,7 @@ pub fn resolve_name(
     line_number: usize,
     name: &str,
     doc_name: &str,
-    aliases: &std::collections::BTreeMap<String, String>,
+    aliases: &ftd::Map<String>,
 ) -> ftd::p1::Result<String> {
     if name.contains('#') {
         return Ok(name.to_string());
@@ -1186,7 +1180,7 @@ pub fn reorder(
     }
 
     fn reorder_component(
-        p1_map: &std::collections::BTreeMap<String, ftd::p1::Section>,
+        p1_map: &ftd::Map<ftd::p1::Section>,
         new_p1: &mut Vec<ftd::p1::Section>,
         dependent_p1: Option<String>,
         inserted: &mut Vec<String>,
@@ -1304,7 +1298,7 @@ pub fn reorder(
         Ok(())
     }
 
-    let mut p1_map: std::collections::BTreeMap<String, ftd::p1::Section> = Default::default();
+    let mut p1_map: ftd::Map<ftd::p1::Section> = Default::default();
     let mut inserted_p1 = vec![];
     let mut new_p1 = vec![];
     let mut list_or_var = vec![];
@@ -1405,7 +1399,7 @@ pub(crate) fn get_root_component_name(
 pub(crate) fn get_markup_child(
     sub: &ftd::p1::SubSection,
     doc: &ftd::p2::TDoc,
-    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    arguments: &ftd::Map<ftd::p2::Kind>,
 ) -> ftd::p1::Result<ftd::ChildComponent> {
     let (sub_name, ref_name) = match sub.name.split_once(' ') {
         Some((sub_name, ref_name)) => (sub_name.trim(), ref_name.trim()),
@@ -1431,11 +1425,11 @@ pub(crate) fn get_markup_child(
 
 pub fn structure_header_to_properties(
     s: &str,
-    arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    arguments: &ftd::Map<crate::p2::Kind>,
     doc: &ftd::p2::TDoc,
     line_number: usize,
     p1: &ftd::p1::Header,
-) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::component::Property>> {
+) -> ftd::p1::Result<ftd::Map<ftd::component::Property>> {
     let (name, caption) = ftd::p2::utils::split(s.to_string(), ":")?;
     match doc.get_thing(line_number, &name) {
         Ok(ftd::p2::Thing::Component(c)) => ftd::component::read_properties(
@@ -1467,8 +1461,8 @@ pub fn arguments_on_condition(
     condition: &ftd::p2::Boolean,
     line_number: usize,
     doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<(std::collections::BTreeMap<String, ftd::Value>, bool)> {
-    let mut arguments: std::collections::BTreeMap<String, ftd::Value> = Default::default();
+) -> ftd::p1::Result<(ftd::Map<ftd::Value>, bool)> {
+    let mut arguments: ftd::Map<ftd::Value> = Default::default();
     let mut is_visible = true;
     if let ftd::p2::Boolean::IsNotNull { ref value } = condition {
         match value {

@@ -65,7 +65,7 @@ pub enum IText {
 impl Element {
     pub(crate) fn set_children_count_variable(
         elements: &mut [ftd::Element],
-        local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        local_variables: &ftd::Map<ftd::p2::Thing>,
     ) {
         for child in elements.iter_mut() {
             let (text, common) = match child {
@@ -157,7 +157,7 @@ impl Element {
 
         fn set_markup_children_count_variable(
             elements: &mut [ftd::Markup],
-            local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+            local_variables: &ftd::Map<ftd::p2::Thing>,
         ) {
             for child in elements.iter_mut() {
                 let (common, children, text) = match &mut child.itext {
@@ -905,10 +905,7 @@ impl Element {
                 id: &str,
                 data: &mut ftd::DataDependenciesMap,
                 style: &str,
-                conditional_attribute: &std::collections::BTreeMap<
-                    String,
-                    ftd::ConditionalAttribute,
-                >,
+                conditional_attribute: &ftd::Map<ftd::ConditionalAttribute>,
             ) {
                 let (reference, value) = if let Some(ftd::ConditionalAttribute {
                     default:
@@ -930,7 +927,7 @@ impl Element {
                     return;
                 };
                 let parameters = {
-                    let mut parameters = std::collections::BTreeMap::new();
+                    let mut parameters = ftd::Map::new();
                     parameters.insert(
                         style.to_string(),
                         ftd::ConditionalValueWithDefault {
@@ -994,7 +991,7 @@ impl Element {
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
             font: &Option<Type>,
-            conditions: &std::collections::BTreeMap<String, ConditionalAttribute>,
+            conditions: &ftd::Map<ConditionalAttribute>,
         ) {
             let id = id.clone().expect("universal id should be present");
             if !conditions
@@ -1026,7 +1023,7 @@ impl Element {
                     return;
                 };
                 let parameters = {
-                    let mut parameters = std::collections::BTreeMap::new();
+                    let mut parameters = ftd::Map::new();
                     parameters.insert(
                         "font".to_string(),
                         ftd::ConditionalValueWithDefault {
@@ -1094,7 +1091,7 @@ impl Element {
                 };
 
                 let parameters = {
-                    let mut parameters = std::collections::BTreeMap::new();
+                    let mut parameters = ftd::Map::new();
                     parameters.insert(
                         "background-image".to_string(),
                         ftd::ConditionalValueWithDefault {
@@ -1135,7 +1132,7 @@ impl Element {
         }
 
         fn style_condition(
-            conditional_attributes: &std::collections::BTreeMap<String, ConditionalAttribute>,
+            conditional_attributes: &ftd::Map<ConditionalAttribute>,
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
         ) {
@@ -2236,7 +2233,7 @@ pub struct ConditionalValue {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Common {
-    pub conditional_attribute: std::collections::BTreeMap<String, ConditionalAttribute>,
+    pub conditional_attribute: ftd::Map<ConditionalAttribute>,
     pub condition: Option<ftd::Condition>,
     pub is_not_visible: bool,
     pub is_dummy: bool,
@@ -2518,7 +2515,7 @@ pub struct ImageSrc {
 
 impl ImageSrc {
     pub fn from(
-        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        l: &ftd::Map<ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
@@ -2526,7 +2523,7 @@ impl ImageSrc {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(ImageSrc {
             light: ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?
                 .unwrap_or_else(|| "".to_string()),
@@ -2548,7 +2545,7 @@ pub struct FontSize {
 
 impl FontSize {
     pub fn from(
-        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        l: &ftd::Map<ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
@@ -2556,7 +2553,7 @@ impl FontSize {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(FontSize {
             line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
             size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
@@ -2579,7 +2576,7 @@ pub struct Type {
 
 impl Type {
     pub fn from(
-        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        l: &ftd::Map<ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
@@ -2587,7 +2584,7 @@ impl Type {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
         return Ok(Type {
             font: ftd::p2::utils::string("font", &properties, doc.name, 0)?,
             desktop: get_font_size(l, doc, line_number, "desktop")?,
@@ -2602,7 +2599,7 @@ impl Type {
         });
 
         fn get_font_size(
-            l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+            l: &ftd::Map<ftd::PropertyValue>,
             doc: &ftd::p2::TDoc,
             line_number: usize,
             name: &str,
@@ -2610,7 +2607,7 @@ impl Type {
             let properties = l
                 .iter()
                 .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-                .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+                .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
 
             let property_value = ftd::p2::utils::record_optional(name, &properties, doc.name, 0)?
                 .ok_or_else(|| ftd::p1::Error::ParseError {
@@ -2697,7 +2694,7 @@ pub struct Style {
 
 impl Style {
     pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<ftd::Style> {
-        fn add_in_map(style: &str, map: &mut std::collections::BTreeMap<String, i32>) {
+        fn add_in_map(style: &str, map: &mut ftd::Map<i32>) {
             if !map.contains_key(style) {
                 map.insert(style.to_string(), 1);
                 return;
@@ -2715,10 +2712,8 @@ impl Style {
             Some(v) => v,
             None => return Ok(s),
         };
-        let mut booleans: std::collections::BTreeMap<String, i32> =
-            std::collections::BTreeMap::new();
-        let mut weights: std::collections::BTreeMap<String, i32> =
-            std::collections::BTreeMap::new();
+        let mut booleans: ftd::Map<i32> = Default::default();
+        let mut weights: ftd::Map<i32> = Default::default();
 
         for part in l.split_ascii_whitespace() {
             match part {
@@ -2903,10 +2898,7 @@ pub struct Color {
 
 impl Color {
     pub fn from(
-        l: (
-            Option<std::collections::BTreeMap<String, ftd::PropertyValue>>,
-            Option<String>,
-        ),
+        l: (Option<ftd::Map<ftd::PropertyValue>>, Option<String>),
         doc: &ftd::p2::TDoc,
         line_number: usize,
     ) -> ftd::p1::Result<Option<Color>> {
@@ -2920,7 +2912,7 @@ impl Color {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(Some(Color {
             light: ftd::p2::element::color_from(
                 ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,

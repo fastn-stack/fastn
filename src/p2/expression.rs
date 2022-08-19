@@ -157,7 +157,7 @@ impl Boolean {
     pub fn from_expression(
         expr: &str,
         doc: &ftd::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
         left_right_resolved_property: (Option<ftd::PropertyValue>, Option<ftd::PropertyValue>),
         line_number: usize,
     ) -> ftd::p1::Result<Self> {
@@ -283,7 +283,7 @@ impl Boolean {
             value: &str,
             expected_kind: Option<ftd::p2::Kind>,
             doc: &ftd::p2::TDoc,
-            arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+            arguments: &ftd::Map<ftd::p2::Kind>,
             loop_already_resolved_property: Option<ftd::PropertyValue>,
             line_number: usize,
         ) -> ftd::p1::Result<ftd::PropertyValue> {

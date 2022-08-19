@@ -1,12 +1,12 @@
 #[derive(Debug, PartialEq)]
 pub struct TDoc<'a> {
     pub name: &'a str,
-    pub aliases: &'a std::collections::BTreeMap<String, String>,
-    pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
-    pub local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub aliases: &'a ftd::Map<String>,
+    pub bag: &'a ftd::Map<ftd::p2::Thing>,
+    pub local_variables: &'a mut ftd::Map<ftd::p2::Thing>,
     /// string $msg: $message
     /// then msg is a referenced_variable that is won't become new local_variable
-    pub referenced_local_variables: &'a mut std::collections::BTreeMap<String, String>,
+    pub referenced_local_variables: &'a mut ftd::Map<String>,
 }
 
 impl<'a> TDoc<'a> {
@@ -26,8 +26,8 @@ impl<'a> TDoc<'a> {
     fn insert_local_variable(
         &mut self,
         root: &str,
-        arguments: &mut std::collections::BTreeMap<String, ftd::p2::Kind>,
-        properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+        arguments: &mut ftd::Map<ftd::p2::Kind>,
+        properties: &ftd::Map<ftd::component::Property>,
         string_container: &str,
         local_container: &[usize],
         external_children_count: &Option<usize>,
@@ -204,7 +204,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         current_container: &str,
         parent_container: &str,
-        properties: &mut std::collections::BTreeMap<String, ftd::component::Property>,
+        properties: &mut ftd::Map<ftd::component::Property>,
         reference: &mut Option<(String, ftd::p2::Kind)>,
         condition: &mut Option<ftd::p2::Boolean>,
         events: &mut [ftd::p2::Event],
@@ -443,7 +443,7 @@ impl<'a> TDoc<'a> {
     pub(crate) fn insert_local_from_component(
         &mut self,
         component: &mut ftd::Component,
-        child_component_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+        child_component_properties: &ftd::Map<ftd::component::Property>,
         local_container: &[usize],
         external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
@@ -660,8 +660,7 @@ impl<'a> TDoc<'a> {
             },
             ftd::p2::Kind::Record { name, .. } => {
                 let rec_fields = self.get_record(line_number, &name)?.fields;
-                let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> =
-                    Default::default();
+                let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
                 if let serde_json::Value::Object(o) = json {
                     for (key, kind) in rec_fields {
                         let val = match o.get(&key) {
@@ -805,8 +804,7 @@ impl<'a> TDoc<'a> {
             ftd::p2::Kind::Record { name, .. } => {
                 let rec = self.get_record(line_number, &name)?;
                 let rec_fields = rec.fields;
-                let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> =
-                    Default::default();
+                let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
                 for (idx, key) in rec.order.iter().enumerate() {
                     if let Some(kind) = rec_fields.get(key) {
                         let val = match row.get(idx) {
@@ -920,8 +918,7 @@ impl<'a> TDoc<'a> {
         if name.contains('#') {
             return Ok(name.to_string());
         }
-        let mut available_components: std::collections::BTreeMap<String, String> =
-            std::collections::BTreeMap::new();
+        let mut available_components: ftd::Map<String> = Default::default();
         for instruction in instructions {
             if let Some(text) = instruction.resolve_id() {
                 available_components.insert(text.to_string(), text.to_string());
@@ -966,7 +963,7 @@ impl<'a> TDoc<'a> {
         &self,
         line_number: usize,
         name: &str,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
     ) -> ftd::p1::Result<String> {
         return Ok(if let Some(l) = name.strip_prefix('$') {
             /*let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(l)?;
