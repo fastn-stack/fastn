@@ -6,7 +6,7 @@ authors = [
     "Arpita Jaiswal <arpita@fifthtry.com>",
     "Sourabh Garg <sourabh@fifthtry.com>"
 ]
-edition = "2018"
+edition = "2021"
 description = "ftd: FifthTry Document Format"
 license = "MIT"
 repository = "https://github.com/FifthTry/ftd"
