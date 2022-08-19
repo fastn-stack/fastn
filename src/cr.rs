@@ -223,6 +223,6 @@ pub(crate) fn cr_path_to_file_name(cr_number: usize, cr_file_path: &str) -> fpm:
     let cr_path = cr_path(cr_number);
     Ok(cr_file_path
         .trim_matches('/')
-        .trim_start_matches(cr_path.to_string().as_str())
+        .trim_start_matches(cr_path.as_str())
         .to_string())
 }

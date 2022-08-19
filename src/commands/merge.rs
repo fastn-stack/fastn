@@ -38,6 +38,20 @@ async fn merge_main_into_cr(
     dest: usize,
     _file: Option<&str>,
 ) -> fpm::Result<()> {
+    let cr_status = config
+        .get_cr_status(dest)
+        .await?
+        .into_iter()
+        .filter(|v| v.status().is_some())
+        .collect_vec();
+    if !cr_status.is_empty() {
+        cr_status
+            .iter()
+            .map(|v| fpm::commands::sync_status::print_status(v, false))
+            .collect_vec();
+        return fpm::usage_error("Help: Use `fpm sync`".to_string());
+    }
+
     let remote_manifest: std::collections::BTreeMap<String, fpm::history::FileEdit> = config
         .get_remote_manifest(true)
         .await?

@@ -415,7 +415,7 @@ impl fpm::Config {
         *files = files
             .iter_mut()
             .filter_map(|(k, v)| {
-                if !uptodate_files.contains(&k) {
+                if !uptodate_files.contains(k) {
                     Some((k.to_owned(), v.to_owned()))
                 } else {
                     None
