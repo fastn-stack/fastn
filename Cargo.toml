@@ -12,7 +12,6 @@ description = "fpm: FTD Package Manager"
 license = "MIT"
 repository = "https://github.com/FifthTry/fpm"
 homepage = "https://fpm.dev"
-# build = "build.rs"
 
 [features]
 controller = []
@@ -21,8 +20,18 @@ local = []
 
 
 [dependencies]
-#ftd = { path = "../ftd" }
-#reqwest = { version = "0.11.10", features = ["blocking"] }
+# Please do not specify a dependency more precisely than needed. If version "1" works, do
+# not specify "1.1.42". This reduces the number of total dependencies, as if you specify
+# 1.1.42 and someone else who only needed "1" also specified 1.1.37, we end up having same
+# dependency compined twice.
+#
+# In future we may discover that our code does not indeed work with "1", say it ony works
+# for 1.1 onwards, or 1.1.25 onwards, in which case use >= 1.1.25 etc. Saying our code
+# only works for 1.1.42 and not 1.1.41 nor 1.1.43 is really weird, and most likely wrong.
+#
+# If you are not using the latest version intentionally, please do not list it in this section
+# and create it's own [dependencies.<name>] section, and document it with why are you not
+# using the latest dependency, and what is the plan.
 actix-files = "0.6"
 actix-web = "4"
 antidote = "1"
@@ -34,7 +43,6 @@ colored = "2"
 diffy = "0.2"
 edit = "0.1"
 fluent = "0.16"
-ftd = { git = "https://github.com/FifthTry/ftd", rev = "9d1d206" }
 futures = "0.3"
 ignore = "0.4"
 indoc = "1"
@@ -44,7 +52,6 @@ lazy_static = "1"
 mime_guess = "2"
 realm-lang = "0.1"
 regex = "1"
-rusqlite = { version = "0.28", features = ["bundled"] }
 semver = "1"
 serde = { version = "1", features = ["derive"] }
 serde_derive = "1"
@@ -54,13 +61,40 @@ thiserror = "1"
 url = "2"
 zip = "0.6"
 
+
+[dependencies.ftd]
+# We are currently using the git version of ftd as we are not publishing every change
+# to ftd for now. We are currently in active development, and we are not using proper
+# semantic versioning (https://semver.org), which will force us to increment version
+# numbers based on breaking change, and will force as to go to 1.0, when we are not
+# ready for 1.0 right now.
+#
+# Once we are closer to release we will stop using this and adopot semver.
+git = "https://github.com/FifthTry/ftd"
+rev = "9d1d206"
+
+# If you are testing fpm against local ftd, you can keep ftd and fpm checked out in
+# same folder and uncomment the next `path` line to use local ftd.
+#
+# Note: you do not have to comment out the git/rev above, Cargo uses `path` with
+# higher priority over them if `path` is provided.
+#
+# path = "../ftd"
+
+
+
 [dependencies.reqwest]
-# We are using an older reqwest on purpose, fpm does not work with
-# latest reqwest. Using latest will cut down number of dependencies
-# from about 425 to 340.
+# We are using an older reqwest on purpose, fpm does not work with latest reqwest. Using
+# latest will cut down number of dependencies from about 425 to 340. We want to fix this
+# issue, but we have not yet been able to spend much time. If you know async, please try
+# fixing it. The issue is that download of dependencies get stuck.
 version = "0.9"
-features = ["default-tls-vendored"]
-# latest ones
+features = [
+    # Check the note on bundling rusqlite later in this file. Without bundling
+    # we will have a dependency on libssl.
+    "default-tls-vendored"
+]
+# latest ones:
 # version = "0.11"
 # features = ["native-tls-vendored"]
 
@@ -68,12 +102,38 @@ features = ["default-tls-vendored"]
 [dependencies.tokio]
 version = "1"
 features = [
+    # We are currently using the "heavier" schedule.
+    #
+    # > rt: Enables tokio::spawn, the basic (current thread) scheduler, and non-scheduler utilities.
+    # > rt-multi-thread: Enables the heavier, multi-threaded, work-stealing scheduler.
+    #
+    # Is it justified?
     "rt-multi-thread",
+
+    # https://docs.rs/tokio/1.20.1/tokio/fs/#usage says:
+    #
+    # > Warning: These adapters may create a large number of temporary tasks, especially when reading
+    # > large files. When performing a lot of operations in one batch, it may be significantly faster
+    # > to use spawn_blocking directly.
+    #
+    # We may be suffering from this problem, we do a lot of reads, each read becomes a task.
     "fs",
 ]
+
+[dependencies.rusqlite]
+version = "0.28"
+features = [
+    # We are using bundled version of rusqlite so we do not need sqlitelib, headers as a
+    # dependency. By default, if we do not bundle, our binary will link against system
+    # provided sqlite, which would have been a good thing, if we used system sqlite, our
+    # binary size would be smaller, compile time lesser, but unfortunately we can not assume
+    # sqlite dynamic library is installed on everyone's machine. We can chose to give two
+    # binaries, one with bundled, one without, but it is not worth the tradeoff right now.
+    "bundled",
+]
+
 
 [dev-dependencies]
 fbt-lib = "0.1.18"
 indoc = "1"
 pretty_assertions = "1"
-#rusty-hook = "^0.11.2"
