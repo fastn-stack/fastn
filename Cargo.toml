@@ -44,7 +44,6 @@ lazy_static = "1"
 mime_guess = "2"
 realm-lang = "0.1"
 regex = "1"
-reqwest = { version = "0.9", features = ["default-tls-vendored"] }
 rusqlite = { version = "0.28", features = ["bundled"] }
 semver = "1"
 serde = { version = "1", features = ["derive"] }
@@ -52,9 +51,26 @@ serde_derive = "1"
 serde_json = "1"
 sha2 = "0.10"
 thiserror = "1"
-tokio = { version = "1", features = ["full"] }
 url = "2"
 zip = "0.6"
+
+[dependencies.reqwest]
+# We are using an older reqwest on purpose, fpm does not work with
+# latest reqwest. Using latest will cut down number of dependencies
+# from about 425 to 340.
+version = "0.9"
+features = ["default-tls-vendored"]
+# latest ones
+# version = "0.11"
+# features = ["native-tls-vendored"]
+
+
+[dependencies.tokio]
+version = "1"
+features = [
+    "rt-multi-thread",
+    "fs",
+]
 
 [dev-dependencies]
 fbt-lib = "0.1.18"

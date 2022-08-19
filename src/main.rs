@@ -1,5 +1,12 @@
-#[tokio::main]
-async fn main() -> fpm::Result<()> {
+fn main() -> fpm::Result<()> {
+    tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap()
+        .block_on(async_main())
+}
+
+async fn async_main() -> fpm::Result<()> {
     use colored::Colorize;
 
     let matches = app(authors(), version()).get_matches();
