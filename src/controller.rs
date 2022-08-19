@@ -196,10 +196,47 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
 
 // This API will be called from can_read and can_write functions
 
-pub fn get_identities(
-    sid: &str, // all request cookies
-    identities: &[fpm::user_group::UserIdentity],
+pub async fn get_remote_identities(
+    req: &actix_web::HttpRequest,
+    // cookie: &str, // all request cookies
+    // identities: &[fpm::user_group::UserIdentity],
 ) -> fpm::Result<Vec<UserIdentity>> {
+    let mut headers = reqwest::header::HeaderMap::new();
+
+    let cookies = req
+        .cookies()
+        .unwrap()
+        .iter()
+        .map(|c| format!("{}={}", c.name(), c.value()))
+        .collect::<Vec<_>>()
+        .join(";");
+
+    println!("cookies: {}", cookies);
+    headers.insert(
+        reqwest::header::COOKIE,
+        reqwest::header::HeaderValue::from_bytes(cookies.as_bytes()).unwrap(),
+    );
+
+    #[derive(serde::Deserialize)]
+    struct KeyValue {
+        key: String,
+        value: String,
+    }
+
+    #[derive(serde::Deserialize)]
+    struct UserIdentities {
+        user_identities: Vec<KeyValue>,
+    }
+
+    let resp: ApiResponse<UserIdentities> =
+        fpm::library::http::get_with_type(url::Url::parse("")?, headers).await?;
+
+    if !resp.success {
+        // return error
+    }
+
+    // Map UserIdentities to UserIdentity struct and return
+
     // Pass all the request cookies to API
     // Pass all the identities in request
     // Response
