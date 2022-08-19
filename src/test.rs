@@ -17264,3 +17264,1339 @@ mod interpreter {
         //                 toc: $t
     }*/
 }
+
+
+mod component {
+    use ftd::test::*;
+
+    macro_rules! p2 {
+        ($s:expr, $doc: expr, $t: expr,) => {
+            p2!($s, $doc, $t)
+        };
+        ($s:expr, $doc: expr, $t: expr) => {
+            let p1 = ftd::p1::parse(indoc::indoc!($s), $doc.name).unwrap();
+            pretty_assertions::assert_eq!(ftd::Component::from_p1(&p1[0], &$doc).unwrap(), $t)
+        };
+    }
+
+    fn s(s: &str) -> String {
+        s.to_string()
+    }
+
+    #[test]
+    fn component() {
+        let mut bag = ftd::p2::interpreter::default_bag();
+        let aliases = ftd::p2::interpreter::default_aliases();
+        let d = ftd::p2::TDoc {
+            name: "foo",
+            bag: &mut bag,
+            aliases: &aliases,
+            local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
+        };
+        p2!(
+            "-- ftd.text foo:
+            string foo:
+            optional integer bar:
+            text: hello
+            ",
+            d,
+            ftd::Component {
+                full_name: s("foo#foo"),
+                root: "ftd#text".to_string(),
+                arguments: std::iter::IntoIterator::into_iter([
+                    (s("foo"), ftd::p2::Kind::string()),
+                    (s("bar"), ftd::p2::Kind::optional(ftd::p2::Kind::integer()))
+                ])
+                .collect(),
+                properties: std::iter::IntoIterator::into_iter([(
+                    s("text"),
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
+                                text: s("hello"),
+                                source: ftd::TextSource::Header
+                            }
+                        }),
+                        conditions: vec![],
+                        ..Default::default()
+                    }
+                ),])
+                .collect(),
+                line_number: 1,
+                ..Default::default()
+            }
+        );
+    }
+
+    #[test]
+    fn properties() {
+        let mut bag = ftd::p2::interpreter::default_bag();
+        let aliases = ftd::p2::interpreter::default_aliases();
+        let d = ftd::p2::TDoc {
+            name: "foo",
+            bag: &mut bag,
+            aliases: &aliases,
+            local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
+        };
+        p2!(
+            "-- ftd.text foo:
+            text: hello
+            ",
+            d,
+            ftd::Component {
+                root: "ftd#text".to_string(),
+                full_name: s("foo#foo"),
+                properties: std::iter::IntoIterator::into_iter([(
+                    s("text"),
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
+                                text: s("hello"),
+                                source: ftd::TextSource::Header
+                            }
+                        }),
+                        conditions: vec![],
+                        ..Default::default()
+                    }
+                ),])
+                .collect(),
+                line_number: 1,
+                ..Default::default()
+            }
+        );
+    }
+
+    #[test]
+    fn duplicate_headers() {
+        // Repeated header definition with the same name (forbidden)
+        intf!(
+            "-- ftd.row foo:
+            caption name:
+            string name:
+            ",
+            "forbidden usage: 'name' is already used as header name/identifier !!, line_number: 3, doc: foo"
+        );
+
+        // Value assignment on the same header twice (not allowed)
+        intf!(
+            "-- ftd.text: Hello friends
+            align: center
+            align: left
+            ",
+            "forbidden usage: repeated usage of 'align' not allowed !!, line_number: 3, doc: foo"
+        );
+    }
+
+    #[test]
+    fn referring_variables() {
+        let mut bag = default_bag();
+        bag.insert(
+            "foo/bar#name".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Amit"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        let mut main = default_column();
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::rendered::markup_line("Amit"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#name")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        p!(
+            "
+            -- string name: Amit
+
+            -- ftd.text:
+            text: $name
+            ",
+            (bag.clone(), main.clone()),
+        );
+
+        p!(
+            "
+            -- string name: Amit
+
+            -- ftd.text: $name
+            ",
+            (bag.clone(), main.clone()),
+        );
+
+        p!(
+            "
+            -- string name: Amit
+
+            -- ftd.text:
+
+            $name
+            ",
+            (bag, main),
+        );
+    }
+
+    #[test]
+    #[ignore]
+    fn referring_record_fields() {
+        let mut bag = default_bag();
+        bag.insert(
+            "foo/bar#person".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "foo/bar#person".to_string(),
+                fields: person_fields(),
+                instances: Default::default(),
+                order: vec![s("name"), s("address"), s("bio"), s("age")],
+            }),
+        );
+        bag.insert(
+            "foo/bar#x".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "x".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 20 },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#abrar".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "abrar".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: abrar(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        let mut main = default_column();
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::rendered::markup_line("Abrar Khan"),
+                line: true,
+                ..Default::default()
+            }));
+
+        p!(
+            "
+            -- record person:
+            caption name:
+            string address:
+            body bio:
+            integer age:
+
+            -- integer x: 10
+
+            -- person abrar: Abrar Khan
+            address: Bihar
+            age: $x
+
+            Software developer working at fifthtry.
+
+            -- ftd.text:
+            text: $abrar.name
+            ",
+            (bag.clone(), main.clone()),
+        );
+    }
+}
+
+mod record {
+    use ftd::test::*;
+
+    #[test]
+    fn record() {
+        let sourabh: ftd::p2::record::Invocation = std::iter::IntoIterator::into_iter([
+            (
+                s("name"),
+                ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "Sourabh Garg".to_string(),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+            ),
+            (
+                s("address"),
+                ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "Ranchi".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+            ),
+            (
+                s("bio"),
+                ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "Frontend developer at fifthtry.".to_string(),
+                        source: ftd::TextSource::Body,
+                    },
+                },
+            ),
+            (
+                s("age"),
+                ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 28 },
+                },
+            ),
+        ])
+            .collect();
+
+        let mut bag = ftd::p2::interpreter::default_bag();
+        bag.insert(
+            "foo/bar#abrar".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "abrar".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: abrar(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#person".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "foo/bar#person".to_string(),
+                fields: person_fields(),
+                instances: std::iter::IntoIterator::into_iter([(
+                    s("foo/bar"),
+                    vec![abrar(), sourabh.clone()],
+                )])
+                    .collect(),
+                order: vec![s("name"), s("address"), s("bio"), s("age")],
+            }),
+        );
+        bag.insert(
+            "foo/bar#x".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "x".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 20 },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#employee".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "foo/bar#employee".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    (s("eid"), ftd::p2::Kind::string()),
+                    (
+                        s("who"),
+                        ftd::p2::Kind::Record {
+                            name: s("foo/bar#person"),
+                            default: None,
+                            is_reference: false,
+                        },
+                    ),
+                ])
+                    .collect(),
+                instances: Default::default(),
+                order: vec![s("eid"), s("who")],
+            }),
+        );
+        bag.insert(
+            "foo/bar#abrar_e".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "abrar_e".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#employee".to_string(),
+                        fields: std::iter::IntoIterator::into_iter([
+                            (
+                                s("eid"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "E04".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("who"),
+                                ftd::PropertyValue::Reference {
+                                    name: s("foo/bar#abrar"),
+                                    kind: ftd::p2::Kind::Record {
+                                        name: s("foo/bar#person"),
+                                        default: None,
+                                        is_reference: false,
+                                    },
+                                },
+                            ),
+                        ])
+                            .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#sourabh".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "sourabh".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#employee".to_string(),
+                        fields: std::iter::IntoIterator::into_iter([
+                            (
+                                s("eid"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "E05".to_string(),
+                                        source: ftd::TextSource::Body,
+                                    },
+                                },
+                            ),
+                            (
+                                s("who"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Record {
+                                        name: "foo/bar#person".to_string(),
+                                        fields: sourabh,
+                                    },
+                                },
+                            ),
+                        ])
+                            .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        p!(
+            "
+            -- record person:
+            caption name:
+            string address:
+            body bio:
+            integer age:
+
+            -- integer x: 10
+
+            -- person: Abrar Khan2
+            address: Bihar2
+            age: $x
+
+            Software developer working at fifthtry2.
+
+            -- person: Sourabh Garg
+            address: Ranchi
+            age: 28
+
+            Frontend developer at fifthtry.
+
+            -- person abrar: Abrar Khan
+            address: Bihar
+            age: $x
+
+            Software developer working at fifthtry.
+
+            -- record employee:
+            string eid:
+            person who:
+
+            -- employee abrar_e:
+            eid: E04
+            who: $abrar
+
+            -- employee sourabh:
+
+            --- eid:
+
+            E05
+
+            --- who: Sourabh Garg
+            address: Ranchi
+            age: 28
+
+            Frontend developer at fifthtry.
+
+            -- x: 20
+
+            -- abrar: Abrar Khan2
+            address: Bihar2
+            age: $x
+
+            Software developer working at fifthtry2.
+            ",
+            (bag, ftd::p2::interpreter::default_column()),
+        );
+    }
+
+    #[test]
+    fn list() {
+        let b = |source: ftd::TextSource| {
+            let mut bag = default_bag();
+
+            bag.insert(
+                "foo/bar#person".to_string(),
+                ftd::p2::Thing::Record(ftd::p2::Record {
+                    name: "foo/bar#person".to_string(),
+                    fields: std::iter::IntoIterator::into_iter([
+                        (s("name"), ftd::p2::Kind::caption()),
+                        (
+                            s("friends"),
+                            ftd::p2::Kind::List {
+                                kind: Box::new(ftd::p2::Kind::string()),
+                                default: None,
+                                is_reference: false,
+                            },
+                        ),
+                    ])
+                        .collect(),
+                    instances: Default::default(),
+                    order: vec![s("name"), s("friends")],
+                }),
+            );
+
+            bag.insert(
+                "foo/bar#abrar".to_string(),
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    flags: ftd::VariableFlags::default(),
+                    name: "abrar".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Record {
+                            name: "foo/bar#person".to_string(),
+                            fields: std::iter::IntoIterator::into_iter([
+                                (
+                                    s("name"),
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
+                                            text: "Abrar Khan".to_string(),
+                                            source: ftd::TextSource::Caption,
+                                        },
+                                    },
+                                ),
+                                (
+                                    s("friends"),
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::List {
+                                            kind: ftd::p2::Kind::string(),
+                                            data: vec![
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "Deepak Angrula".to_string(),
+                                                        source: source.clone(),
+                                                    },
+                                                },
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "Amit Upadhyay".to_string(),
+                                                        source: source.clone(),
+                                                    },
+                                                },
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "Saurabh Garg".to_string(),
+                                                        source,
+                                                    },
+                                                },
+                                            ],
+                                        },
+                                    },
+                                ),
+                            ])
+                                .collect(),
+                        },
+                    },
+                    conditions: vec![],
+                }),
+            );
+            bag
+        };
+
+        p!(
+            "
+            -- record person:
+            caption name:
+            string list friends:
+
+            -- person abrar: Abrar Khan
+            friends: Deepak Angrula
+            friends: Amit Upadhyay
+            friends: Saurabh Garg
+            ",
+            (b(ftd::TextSource::Header), default_column()),
+        );
+
+        p!(
+            "
+            -- record person:
+            caption name:
+            string list friends:
+
+            -- person abrar: Abrar Khan
+
+            --- friends: Deepak Angrula
+            --- friends: Amit Upadhyay
+            --- friends: Saurabh Garg
+            ",
+            (b(ftd::TextSource::Caption), default_column()),
+        );
+    }
+
+    #[test]
+    fn list_of_records() {
+        let mut bag = default_bag();
+
+        bag.insert(
+            s("foo/bar#point"),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: s("foo/bar#point"),
+                fields: std::iter::IntoIterator::into_iter([
+                    (s("x"), ftd::p2::Kind::integer()),
+                    (s("y"), ftd::p2::Kind::integer()),
+                ])
+                    .collect(),
+                instances: Default::default(),
+                order: vec![s("x"), s("y")],
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#person".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: s("foo/bar#person"),
+                fields: std::iter::IntoIterator::into_iter([
+                    (s("name"), ftd::p2::Kind::caption()),
+                    (
+                        s("points"),
+                        ftd::p2::Kind::List {
+                            kind: Box::new(ftd::p2::Kind::Record {
+                                name: s("foo/bar#point"),
+                                default: None,
+                                is_reference: false,
+                            }),
+                            default: None,
+                            is_reference: false,
+                        },
+                    ),
+                ])
+                    .collect(),
+                instances: Default::default(),
+                order: vec![s("name"), s("points")],
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#abrar".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "abrar".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: std::iter::IntoIterator::into_iter([
+                            (
+                                s("name"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Abrar Khan".to_string(),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                            (
+                                s("points"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::List {
+                                        kind: ftd::p2::Kind::Record {
+                                            name: s("foo/bar#point"),
+                                            default: None,
+                                            is_reference: false,
+                                        },
+                                        data: vec![
+                                            ftd::PropertyValue::Value {
+                                                value: ftd::Value::Record {
+                                                    name: "foo/bar#point".to_string(),
+                                                    fields: std::iter::IntoIterator::into_iter([
+                                                        (
+                                                            s("x"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 10,
+                                                                },
+                                                            },
+                                                        ),
+                                                        (
+                                                            s("y"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 20,
+                                                                },
+                                                            },
+                                                        ),
+                                                    ])
+                                                        .collect(),
+                                                },
+                                            },
+                                            ftd::PropertyValue::Value {
+                                                value: ftd::Value::Record {
+                                                    name: "foo/bar#point".to_string(),
+                                                    fields: std::iter::IntoIterator::into_iter([
+                                                        (
+                                                            s("x"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 0,
+                                                                },
+                                                            },
+                                                        ),
+                                                        (
+                                                            s("y"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 0,
+                                                                },
+                                                            },
+                                                        ),
+                                                    ])
+                                                        .collect(),
+                                                },
+                                            },
+                                            ftd::PropertyValue::Value {
+                                                value: ftd::Value::Record {
+                                                    name: "foo/bar#point".to_string(),
+                                                    fields: std::iter::IntoIterator::into_iter([
+                                                        (
+                                                            s("x"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 1,
+                                                                },
+                                                            },
+                                                        ),
+                                                        (
+                                                            s("y"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 22,
+                                                                },
+                                                            },
+                                                        ),
+                                                    ])
+                                                        .collect(),
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            ),
+                        ])
+                            .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        p!(
+            "
+            -- record point:
+            integer x:
+            integer y:
+
+            -- record person:
+            caption name:
+            point list points:
+
+            -- person abrar: Abrar Khan
+
+            --- points:
+            x: 10
+            y: 20
+
+            --- points:
+            x: 0
+            y: 0
+
+            --- points:
+            x: 1
+            y: 22
+            ",
+            (bag, default_column()),
+        );
+    }
+
+    #[test]
+    fn list_of_or_types() {
+        let mut bag = default_bag();
+
+        bag.insert(s("foo/bar#entity"), entity());
+        bag.insert(
+            s("foo/bar#sale"),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: s("foo/bar#sale"),
+                fields: std::iter::IntoIterator::into_iter([
+                    (
+                        s("party"),
+                        ftd::p2::Kind::List {
+                            kind: Box::new(ftd::p2::Kind::OrType {
+                                name: s("foo/bar#entity"),
+                                is_reference: false,
+                            }),
+                            default: None,
+                            is_reference: false,
+                        },
+                    ),
+                    (s("value"), ftd::p2::Kind::integer()),
+                ])
+                    .collect(),
+                instances: Default::default(),
+                order: vec![s("party"), s("value")],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#jan"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("jan"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("foo/bar#sale"),
+                        fields: std::iter::IntoIterator::into_iter([
+                            (
+                                s("value"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Integer { value: 2000 },
+                                },
+                            ),
+                            (
+                                s("party"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::List {
+                                        kind: ftd::p2::Kind::OrType {
+                                            name: s("foo/bar#entity"),
+                                            is_reference: false,
+                                        },
+                                        data: vec![
+                                            ftd::PropertyValue::Value {value: ftd::Value::OrType {
+                                                name: s("foo/bar#entity"),
+                                                variant: s("person"),
+                                                fields: std::iter::IntoIterator::into_iter([
+                                                    (
+                                                        s("address"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("123 Lane"),
+                                                                source: ftd::TextSource::Header,
+                                                            },
+                                                        },
+                                                    ),
+                                                    (
+                                                        s("bio"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("Owner of Jack Russo\'s Bar"),
+                                                                source: ftd::TextSource::Body,
+                                                            },
+                                                        },
+                                                    ),
+                                                    (
+                                                        s("name"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("Jack Russo"),
+                                                                source: ftd::TextSource::Caption,
+                                                            },
+                                                        },
+                                                    ),
+                                                    (
+                                                        s("age"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::Integer { value: 24 },
+                                                        },
+                                                    ),
+                                                ])
+                                                    .collect(),
+                                            }},
+                                            ftd::PropertyValue::Value {value: ftd::Value::OrType {
+                                                name: s("foo/bar#entity"),
+                                                variant: s("company"),
+                                                fields: std::iter::IntoIterator::into_iter([
+                                                    (
+                                                        s("industry"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("Widgets"),
+                                                                source: ftd::TextSource::Header,
+                                                            },
+                                                        },
+                                                    ),
+                                                    (
+                                                        s("name"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("Acme Inc"),
+                                                                source: ftd::TextSource::Caption,
+                                                            },
+                                                        },
+                                                    ),
+                                                ])
+                                                    .collect(),
+                                            }},
+                                        ],
+                                    },
+                                },
+                            ),
+                        ])
+                            .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        p!(
+            "
+            -- or-type entity:
+
+            --- person:
+            caption name:
+            string address:
+            body bio:
+            integer age:
+
+            --- company:
+            caption name:
+            string industry:
+
+            -- record sale:
+            entity list party:
+            integer value:
+
+            -- sale jan:
+            value: 2000
+
+            --- party.person: Jack Russo
+            address: 123 Lane
+            age: 24
+
+            Owner of Jack Russo's Bar
+
+            --- party.company: Acme Inc
+            industry: Widgets
+            ",
+            (bag, default_column()),
+        );
+    }
+}
+
+
+mod variable {
+    use ftd::test::*;
+
+    macro_rules! p2 {
+        ($s:expr, $n: expr, $v: expr, $c: expr,) => {
+            p2!($s, $n, $v, $c)
+        };
+        ($s:expr, $n: expr, $v: expr, $c: expr) => {
+            let p1 = ftd::p1::parse(indoc::indoc!($s), "foo").unwrap();
+            let mut bag = ftd::Map::new();
+            let aliases = ftd::Map::new();
+            let mut d = ftd::p2::TDoc {
+                name: "foo",
+                bag: &mut bag,
+                aliases: &aliases,
+                local_variables: &mut Default::default(),
+                referenced_local_variables: &mut Default::default(),
+            };
+            pretty_assertions::assert_eq!(
+                ftd::Variable::from_p1(&p1[0], &mut d).unwrap(),
+                ftd::Variable {
+                    flags: ftd::VariableFlags::default(),
+                    name: $n.to_string(),
+                    value: $v,
+                    conditions: $c
+                }
+            )
+        };
+    }
+
+    #[test]
+    fn int() {
+        use ftd::Value::Integer;
+        p2!(
+            "-- integer x: 10",
+            "x",
+            ftd::PropertyValue::Value {
+                value: Integer { value: 10 }
+            },
+            vec![],
+        );
+    }
+
+    #[test]
+    fn float() {
+        use ftd::Value::Decimal;
+        p2!(
+            "-- decimal x: 10",
+            "x",
+            ftd::PropertyValue::Value {
+                value: Decimal { value: 10.0 }
+            },
+            vec![],
+        );
+    }
+
+    #[test]
+    fn bool() {
+        use ftd::Value::Boolean;
+        p2!(
+            "-- boolean x: true",
+            "x",
+            ftd::PropertyValue::Value {
+                value: Boolean { value: true }
+            },
+            vec![],
+        );
+        p2!(
+            "-- boolean x: false",
+            "x",
+            ftd::PropertyValue::Value {
+                value: Boolean { value: false }
+            },
+            vec![],
+        );
+    }
+
+    #[test]
+    fn str() {
+        use ftd::Value::String;
+        p2!(
+            "-- string x: hello",
+            "x",
+            ftd::PropertyValue::Value {
+                value: String {
+                    text: "hello".to_string(),
+                    source: ftd::TextSource::Caption
+                }
+            },
+            vec![],
+        );
+        p2!(
+            "-- string x:\n\nhello world\nyo!",
+            "x",
+            ftd::PropertyValue::Value {
+                value: String {
+                    text: "hello world\nyo!".to_string(),
+                    source: ftd::TextSource::Body
+                }
+            },
+            vec![],
+        );
+        p2!(
+            "-- string x: 10",
+            "x",
+            ftd::PropertyValue::Value {
+                value: String {
+                    text: "10".to_string(),
+                    source: ftd::TextSource::Caption
+                }
+            },
+            vec![],
+        );
+        p2!(
+            "-- string x: true",
+            "x",
+            ftd::PropertyValue::Value {
+                value: String {
+                    text: "true".to_string(),
+                    source: ftd::TextSource::Caption
+                }
+            },
+            vec![],
+        );
+    }
+
+    #[test]
+    #[ignore]
+    fn list_with_component() {
+        let mut bag = default_bag();
+        bag.insert(
+            s("foo/bar#pull-request"),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: s("foo/bar#pull-request"),
+                fields: std::iter::IntoIterator::into_iter([
+                    (s("title"), ftd::p2::Kind::caption()),
+                    (s("about"), ftd::p2::Kind::body()),
+                ])
+                    .collect(),
+                instances: Default::default(),
+                order: vec![s("title"), s("about")],
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#pr".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "foo/bar#pr".to_string(),
+                flags: ftd::VariableFlags::default(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::List {
+                        data: vec![ftd::PropertyValue::Value {
+                            value: ftd::Value::Record {
+                                name: s("foo/bar#pull-request"),
+                                fields: std::iter::IntoIterator::into_iter([
+                                    (
+                                        s("title"),
+                                        ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
+                                                text: "some pr".to_string(),
+                                                source: ftd::TextSource::Caption,
+                                            },
+                                        },
+                                    ),
+                                    (
+                                        s("about"),
+                                        ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
+                                                text: "yo yo".to_string(),
+                                                source: ftd::TextSource::Body,
+                                            },
+                                        },
+                                    ),
+                                ])
+                                    .collect(),
+                            },
+                        }],
+                        kind: ftd::p2::Kind::Record {
+                            name: s("foo/bar#pull-request"),
+                            default: None,
+                            is_reference: false,
+                        },
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        p!(
+            "
+            -- record pull-request:
+            caption title:
+            body about:
+
+            -- ftd.column pr-view:
+            pull-request pr:
+
+            --- ftd.text:
+            text: $pr.title
+
+            --- ftd.text:
+            text: $pr.about
+
+            -- list pr:
+            type: pull-request
+
+            -- pr: some pr
+
+            yo yo
+            ",
+            (bag, default_column()),
+        );
+    }
+}
+
+mod document {
+    use ftd::test::*;
+
+    #[test]
+    fn variable_from_other_doc() {
+        let bag = ftd::test::interpret_helper(
+            "foo/bar",
+            indoc::indoc!(
+                "
+            -- import: fifthtry/ft
+
+            -- ft.toc:
+
+            foo is the toc
+            "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+            .unwrap();
+
+        pretty_assertions::assert_eq!(
+            bag.get::<String>("fifthtry/ft#toc").unwrap(),
+            "foo is the toc"
+        );
+    }
+
+    #[test]
+    fn meta() {
+        #[derive(Debug, PartialEq, serde::Deserialize)]
+        #[serde(tag = "type")]
+        enum Someone {
+            Username { username: String },
+            Who { who: String },
+        }
+
+        #[derive(Debug, PartialEq, serde::Deserialize)]
+        struct Meta {
+            license: String,
+            reader: Vec<Someone>,
+        }
+
+        let bag = ftd::test::interpret_helper(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- or-type someone:
+
+                --- Username:
+                caption username:
+
+                --- Who:
+                caption who:
+
+                -- record meta_type:
+                string license:
+                someone list reader:
+
+                -- meta_type list meta:
+
+                -- meta:
+                license: BSD
+
+                --- reader.Username: foo
+                --- reader.Who: everyone
+            "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+            .unwrap();
+
+        pretty_assertions::assert_eq!(
+            bag.get::<Vec<Meta>>("meta").unwrap(),
+            vec![Meta {
+                license: s("BSD"),
+                reader: vec![
+                    Someone::Username { username: s("foo") },
+                    Someone::Who { who: s("everyone") }
+                ],
+            }]
+        )
+    }
+
+    #[test]
+    #[cfg(calls)]
+    #[ignore] // TODO: this is buggy
+    fn calls() {
+        #[derive(Debug, PartialEq, serde::Deserialize)]
+        struct PR {
+            number: i64,
+            title: String,
+        }
+
+        let bag = super::Document::from(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- component pr:
+                $number: integer
+                $title: caption
+                component: ftd.text
+                text: ref $title
+
+                -- pr: some pr
+                number: 24
+
+                -- pr: some other pr
+                number: 224
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+            .unwrap();
+
+        pretty_assertions::assert_eq!(
+            bag.instances::<PR>("pr").unwrap(),
+            vec![
+                PR {
+                    number: 24,
+                    title: s("some pr")
+                },
+                PR {
+                    number: 224,
+                    title: s("some other pr")
+                }
+            ]
+        )
+    }
+
+    #[test]
+    fn instances() {
+        #[derive(Debug, PartialEq, serde::Deserialize)]
+        struct PR {
+            number: i64,
+            title: String,
+        }
+
+        let bag = ftd::test::interpret_helper(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- record pr:
+                integer number:
+                caption title:
+
+                -- pr: some pr
+                number: 24
+
+                -- pr: some other pr
+                number: 224
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+            .unwrap();
+
+        pretty_assertions::assert_eq!(
+            bag.instances::<PR>("pr").unwrap(),
+            vec![
+                PR {
+                    number: 24,
+                    title: s("some pr")
+                },
+                PR {
+                    number: 224,
+                    title: s("some other pr")
+                }
+            ]
+        )
+    }
+}
