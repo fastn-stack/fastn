@@ -2319,6 +2319,7 @@ pub struct Common {
     pub border_style: Option<String>,
     pub text_transform: Option<String>,
     pub title: Option<String>,
+    pub term: Option<String>,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
     // TODO: border-{shadow, glow}

@@ -70,6 +70,7 @@ pub fn common_from_properties(
     };
 
     Ok(ftd::Common {
+        term: ftd::p2::utils::string_optional("term", properties, doc.name, 0)?,
         title: ftd::p2::utils::string_optional("title", properties, doc.name, 0)?,
         conditional_attribute: Default::default(),
         condition: cond,
@@ -435,6 +436,7 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             ftd::p2::Kind::integer().into_optional(),
         ),
         ("id".to_string(), ftd::p2::Kind::string().into_optional()),
+        ("term".to_string(), ftd::p2::Kind::string().into_optional()),
         (
             "overflow-x".to_string(),
             ftd::p2::Kind::string().into_optional(),

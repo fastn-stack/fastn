@@ -1566,6 +1566,12 @@ impl ftd::Common {
         if let Some(ref id) = self.id {
             d.insert(s("id"), escape(id));
         }
+        if let Some(ref term) = self.term {
+            println!("Some term found pushed to node!");
+            dbg!(term);
+            d.insert(s("term"), escape(term));
+        }
+
         // TODO(move-to-ftd): the link should be escaped
         if let Some(ref link) = self.link {
             d.insert(s("href"), link.to_string());
