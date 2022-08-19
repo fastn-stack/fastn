@@ -1,4 +1,45 @@
+#[allow(unreachable_code)]
+#[allow(dead_code)]
+fn t() {
+    // The returned nodes are created in the supplied Arena, and are bound by its lifetime.
+    let arena = comrak::Arena::new();
+
+    let root = comrak::parse_document(
+        &arena,
+        "This is my input.\n\n1. Also my input.\n2. Certainly my input.\n",
+        &comrak::ComrakOptions::default(),
+    );
+
+    dbg!(root);
+    return;
+
+    fn iter_nodes<'a, F>(node: &'a comrak::nodes::AstNode<'a>, f: &F)
+    where
+        F: Fn(&'a comrak::nodes::AstNode<'a>),
+    {
+        f(node);
+        for c in node.children() {
+            iter_nodes(c, f);
+        }
+    }
+
+    iter_nodes(root, &|node| {
+        dbg!(root);
+        dbg!(node);
+        // match &mut node.data.borrow_mut().value {
+        //     &mut NodeValue::Text(ref mut text) => {
+        //         let orig = std::mem::replace(text, vec![]);
+        //         *text = String::from_utf8(orig).unwrap().replace("my", "your").as_bytes().to_vec();
+        //     }
+        //     _ => (),
+        // }
+    });
+}
+
 pub fn main() {
+    // t();
+    // return;
+
     let id = std::env::args().nth(1);
 
     let dir = std::path::Path::new("./examples/");

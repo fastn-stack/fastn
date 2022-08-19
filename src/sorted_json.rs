@@ -43,11 +43,13 @@ fn to_json_(v: &serde_json::Value, mut out: String, prefix: &str) -> String {
     match v {
         serde_json::Value::String(s) => escape_json_string(&mut out, s),
         serde_json::Value::Null => out.push_str("null"),
-        serde_json::Value::Bool(b) => if *b {
-            out.push_str("true")
-        } else {
-            out.push_str("false")
-        },
+        serde_json::Value::Bool(b) => {
+            if *b {
+                out.push_str("true")
+            } else {
+                out.push_str("false")
+            }
+        }
         serde_json::Value::Number(n) => out.push_str(n.to_string().as_str()),
         serde_json::Value::Array(a) => {
             let len = a.len();
@@ -109,17 +111,20 @@ mod tests {
             Value::Number(Number::from_f64(-1.0002300e2).unwrap()),
             "-100.023",
         );
-        a(serde_json::json!{"foo"}, "\"foo\"");
-        a(serde_json::json!{r#"hello "world""#}, r#""hello \"world\"""#);
+        a(serde_json::json! {"foo"}, "\"foo\"");
         a(
-            serde_json::json!{[1, 2]},
+            serde_json::json! {r#"hello "world""#},
+            r#""hello \"world\"""#,
+        );
+        a(
+            serde_json::json! {[1, 2]},
             "[
   1,
   2
 ]",
         );
         a(
-            serde_json::json!{[1, 2, []]},
+            serde_json::json! {[1, 2, []]},
             "[
   1,
   2,
@@ -127,7 +132,7 @@ mod tests {
 ]",
         );
         a(
-            serde_json::json!{[1, 2, [1, 2, [1, 2]]]},
+            serde_json::json! {[1, 2, [1, 2, [1, 2]]]},
             "[
   1,
   2,
@@ -142,7 +147,7 @@ mod tests {
 ]",
         );
         a(
-            serde_json::json!{{"yo": 1, "lo": 2, "no": {}}},
+            serde_json::json! {{"yo": 1, "lo": 2, "no": {}}},
             "{
   \"lo\": 2,
   \"no\": {},
@@ -150,7 +155,7 @@ mod tests {
 }",
         );
         a(
-            serde_json::json!{{"yo": 1, "lo": 2, "baz": {"one": 1, "do": 2, "tres": {"x": "x", "y": "y"}}}},
+            serde_json::json! {{"yo": 1, "lo": 2, "baz": {"one": 1, "do": 2, "tres": {"x": "x", "y": "y"}}}},
             "{
   \"baz\": {
     \"do\": 2,
@@ -165,7 +170,7 @@ mod tests {
 }",
         );
         a(
-            serde_json::json!{{"yo": 1, "lo": 2, "baz": {"one": 1, "do": 2, "tres": ["x", "x", "y", "y"]}}},
+            serde_json::json! {{"yo": 1, "lo": 2, "baz": {"one": 1, "do": 2, "tres": ["x", "x", "y", "y"]}}},
             "{
   \"baz\": {
     \"do\": 2,
