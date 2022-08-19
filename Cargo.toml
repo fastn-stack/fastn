@@ -2,10 +2,10 @@
 name = "fpm"
 version = "0.1.11"
 authors = [
+    "Abrar Khan <abrark@fifthtry.com>",
     "Amit Upadhyay <upadhyay@gmail.com>",
     "Arpita Jaiswal <arpita@fifthtry.com>",
     "Shobhit Sharma <shobhit@fifthtry.com>",
-    "Abrar Khan <abrark@fifthtry.com>",
 ]
 edition = "2018"
 description = "fpm: FTD Package Manager"
@@ -14,9 +14,23 @@ repository = "https://github.com/FifthTry/fpm"
 homepage = "https://fpm.dev"
 
 [features]
-controller = []
+
+# FPM comes with some feature to integrate with fpm controller. FPM controller is separate
+# softare, optional. FPM controller is responsible for creating a new fpm package, and
+# deploying it on some server, backing content up and so on. FPM has to speak with FPM
+# controller, when fpm is managed by fpm controller. Enabling the "controller" feature
+# enables that communication.
+controller = ["remote"]
+
+# fpm runs in local mode (to be used on your local laptop, or single use server), and in
+# remote mode (to be used as a shared server for your entire team). The default is
+# local mode.
+#
+# In local mode the editor acts like a local file editor, any changes done directly
+# update the file. In remote mode, only sync can be called, and no direct edits are
+# allowed. In future we will also have workspace mode, in which in remote a workspace
+# is created for every user, and local edits in the workspace is allowed.
 remote = []
-local = []
 
 
 [dependencies]
@@ -32,6 +46,7 @@ local = []
 # If you are not using the latest version intentionally, please do not list it in this section
 # and create it's own [dependencies.<name>] section, and document it with why are you not
 # using the latest dependency, and what is the plan.
+
 actix-files = "0.6"
 actix-web = "4"
 antidote = "1"
@@ -52,7 +67,6 @@ lazy_static = "1"
 mime_guess = "2"
 realm-lang = "0.1"
 regex = "1"
-semver = "1"
 serde = { version = "1", features = ["derive"] }
 serde_derive = "1"
 serde_json = "1"

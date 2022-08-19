@@ -1138,7 +1138,6 @@ dependencies = [
  "regex",
  "reqwest",
  "rusqlite",
- "semver 1.0.13",
  "serde",
  "serde_derive",
  "serde_json",
