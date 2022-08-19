@@ -7,7 +7,7 @@ extern crate self as ftd;
 #[macro_use]
 pub(crate) mod test;
 
-mod code;
+pub mod code;
 mod component;
 mod condition;
 mod dnode;
