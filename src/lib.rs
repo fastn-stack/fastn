@@ -56,11 +56,11 @@ pub fn html() -> &'static str {
     include_str!("../ftd.html")
 }
 
-#[cfg(test)]
+// #[cfg(test)]
 pub type Map<T> = std::collections::BTreeMap<String, T>;
 
-#[cfg(not(test))]
-pub type Map<T> = std::collections::HashMap<String, T>;
+// #[cfg(not(test))]
+// pub type Map<T> = std::collections::HashMap<String, T>;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct Document {
