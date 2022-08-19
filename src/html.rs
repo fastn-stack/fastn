@@ -259,7 +259,6 @@ impl ftd::Element {
             Self::Scene(i) => (i.to_node(doc_id, collector)),
             Self::Grid(i) => (i.to_node(doc_id, collector)),
             Self::Markup(i) => (i.to_node(doc_id, collector)),
-            Self::Text(i) => (i.to_node(doc_id, collector)),
             Self::TextBlock(i) => (i.to_node(doc_id, collector)),
             Self::Code(i) => (i.to_node(doc_id, collector)),
             Self::Image(i) => (i.to_node(doc_id, collector)),

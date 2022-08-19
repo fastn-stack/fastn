@@ -1,7 +1,6 @@
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Element {
-    Text(Text),
     TextBlock(TextBlock),
     Code(Code),
     Image(Image),
@@ -69,8 +68,7 @@ impl Element {
     ) {
         for child in elements.iter_mut() {
             let (text, common) = match child {
-                Element::Text(ftd::Text { text, common, .. })
-                | Element::Integer(ftd::Text { text, common, .. })
+                Element::Integer(ftd::Text { text, common, .. })
                 | Element::Boolean(ftd::Text { text, common, .. })
                 | Element::Decimal(ftd::Text { text, common, .. }) => (Some(text), common),
                 Self::Markup(ftd::Markups {
@@ -223,8 +221,7 @@ impl Element {
         fn set_default_locals_(children: &mut [ftd::Element]) {
             for child in children.iter_mut() {
                 let common = match child {
-                    Element::Text(ftd::Text { common, .. })
-                    | Element::TextBlock(ftd::TextBlock { common, .. })
+                    Element::TextBlock(ftd::TextBlock { common, .. })
                     | Element::Code(ftd::Code { common, .. })
                     | Element::Image(ftd::Image { common, .. })
                     | Element::IFrame(ftd::IFrame { common, .. })
@@ -285,16 +282,7 @@ impl Element {
     pub fn set_id(children: &mut [ftd::Element], index_vec: &[usize], external_id: Option<String>) {
         for (idx, child) in children.iter_mut().enumerate() {
             let (id, is_dummy) = match child {
-                Self::Text(ftd::Text {
-                    common:
-                        ftd::Common {
-                            data_id: id,
-                            is_dummy,
-                            ..
-                        },
-                    ..
-                })
-                | Self::TextBlock(ftd::TextBlock {
+                Self::TextBlock(ftd::TextBlock {
                     common:
                         ftd::Common {
                             data_id: id,
@@ -754,8 +742,7 @@ impl Element {
                     markup_get_event_dependencies(children, data);
                     (font, common)
                 }
-                ftd::Element::Text(ftd::Text { font, common, .. })
-                | ftd::Element::Code(ftd::Code { font, common, .. })
+                ftd::Element::Code(ftd::Code { font, common, .. })
                 | ftd::Element::Integer(ftd::Text { font, common, .. })
                 | ftd::Element::Boolean(ftd::Text { font, common, .. })
                 | ftd::Element::Decimal(ftd::Text { font, common, .. })
@@ -1625,7 +1612,6 @@ impl Element {
         match self {
             ftd::Element::Column(ftd::Column { common, .. })
             | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
             | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
@@ -1645,7 +1631,6 @@ impl Element {
         match self {
             ftd::Element::Column(ftd::Column { common, .. })
             | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
             | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
@@ -1666,7 +1651,6 @@ impl Element {
         match self {
             ftd::Element::Column(ftd::Column { common, .. })
             | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
             | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
@@ -1687,7 +1671,6 @@ impl Element {
         match self {
             ftd::Element::Column(ftd::Column { common, .. })
             | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
             | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
@@ -1717,7 +1700,6 @@ impl Element {
         match self {
             ftd::Element::Column(e) => Some(&mut e.common),
             ftd::Element::Row(e) => Some(&mut e.common),
-            ftd::Element::Text(e) => Some(&mut e.common),
             ftd::Element::Markup(e) => Some(&mut e.common),
             ftd::Element::TextBlock(e) => Some(&mut e.common),
             ftd::Element::Code(e) => Some(&mut e.common),
@@ -1737,7 +1719,6 @@ impl Element {
         match self {
             ftd::Element::Column(e) => Some(&e.common),
             ftd::Element::Row(e) => Some(&e.common),
-            ftd::Element::Text(e) => Some(&e.common),
             ftd::Element::Markup(e) => Some(&e.common),
             ftd::Element::TextBlock(e) => Some(&e.common),
             ftd::Element::Code(e) => Some(&e.common),

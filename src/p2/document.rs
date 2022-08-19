@@ -353,7 +353,6 @@ impl Document {
                         (common.events.as_slice(), &common.data_id)
                     }
                     ftd::Element::Image(ftd::Image { common, .. })
-                    | ftd::Element::Text(ftd::Text { common, .. })
                     | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                     | ftd::Element::Code(ftd::Code { common, .. })
                     | ftd::Element::IFrame(ftd::IFrame { common, .. })
@@ -470,8 +469,7 @@ impl Document {
         {
             for e in elements.iter() {
                 match e {
-                    ftd::Element::Text(_)
-                    | ftd::Element::TextBlock(_)
+                    ftd::Element::TextBlock(_)
                     | ftd::Element::Code(_)
                     | ftd::Element::Input(_)
                     | ftd::Element::Image(_)
@@ -517,7 +515,6 @@ impl Document {
     {
         Self::find(children, &|e: &ftd::Element| -> Option<T> {
             match e {
-                ftd::Element::Text(t) => f(t),
                 ftd::Element::Markup(t) => f(&t.to_owned().to_text()),
                 _ => None,
             }

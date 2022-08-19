@@ -910,17 +910,6 @@ fn reevalute_markup(
         named_container: &ftd::Map<ftd::Element>,
     ) -> ftd::p1::Result<ftd::IText> {
         Ok(match element {
-            ftd::Element::Text(t) => {
-                let t = {
-                    let mut t = t.clone();
-                    if let Some(text) = text {
-                        t.text = ftd::rendered::markup_line(text);
-                        t.common.reference = None;
-                    }
-                    t
-                };
-                ftd::IText::Text(t)
-            }
             ftd::Element::Integer(t) => {
                 let t = {
                     let mut t = t.clone();
@@ -1977,8 +1966,7 @@ impl Component {
 
             let mut containers: Option<ftd::Map<Vec<Vec<usize>>>> = None;
             match &mut element {
-                ftd::Element::Text(_)
-                | ftd::Element::TextBlock(_)
+                ftd::Element::TextBlock(_)
                 | ftd::Element::Code(_)
                 | ftd::Element::Image(_)
                 | ftd::Element::IFrame(_)
