@@ -12,6 +12,7 @@ mod component;
 mod condition;
 mod dnode;
 mod event;
+pub mod sorted_json;
 mod execute_doc;
 mod html;
 pub mod main;
