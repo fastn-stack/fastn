@@ -341,6 +341,7 @@ pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
         .collect_vec()
 }
 
+/// Get identities from cli `--identities`
 pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
     use itertools::Itertools;
     let args = std::env::args().collect_vec();
@@ -353,6 +354,20 @@ pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
     let identities = index.and_then(|idx| args.get(idx + 1));
     parse_identities(identities.map(|x| x.as_str()).unwrap_or_else(|| ""))
 }
+
+/*
+access_identities(req: HttpRequest, document_name: str, rw: bool)
+ if feature remote
+    / get identities by using document_path from sitemap
+    sitemap_identities = get_identities(document_name)
+    remote_identities: pass these identities to fetch_from_remote(cookies[sid and identities])
+    user_groups: UserGroups = sitemap.readers/writers.(document_name, &self.package.groups);
+    user_group::belongs_to(user_groups, remote_identities)
+ if feature is not remote
+    identities: identities-cookie or identities-cli
+    user_groups: UserGroups = sitemap.readers/writers(document_name, &self.package.groups);
+    user_group::belongs_to(user_groups, identities)
+ */
 
 pub mod processor {
     use itertools::Itertools;

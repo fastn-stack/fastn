@@ -237,8 +237,6 @@ pub async fn get_remote_identities(
 
     // Map UserIdentities to UserIdentity struct and return
 
-    // Pass all the request cookies to API
-    // Pass all the identities in request
     // Response
     /*
     {
