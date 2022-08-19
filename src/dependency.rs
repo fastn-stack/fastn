@@ -401,7 +401,6 @@ impl fpm::Package {
     }
 
     pub(crate) async fn _unzip_package(&self) -> fpm::Result<()> {
-        use std::convert::TryInto;
         use std::io::Write;
 
         let download_url = if let Some(ref url) = self.zip {
