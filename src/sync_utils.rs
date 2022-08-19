@@ -63,15 +63,6 @@ impl FileStatus {
         status.is_conflicted()
     }
 
-    pub(crate) fn get_content(&self) -> Option<Vec<u8>> {
-        match self {
-            FileStatus::Add { content, .. } | FileStatus::Update { content, .. } => {
-                Some(content.clone())
-            }
-            FileStatus::Delete { .. } | FileStatus::Uptodate { .. } => None,
-        }
-    }
-
     pub(crate) fn get_latest_version(&self) -> Option<i32> {
         // Either file must be in conflict with latest version, so conflicted version would be
         // latest, or it's version would be latest
@@ -147,19 +138,6 @@ impl fpm::Config {
         self.write_workspace(workspace.into_values().collect_vec().as_slice())
             .await?;
         Ok(changed_files)
-    }
-
-    pub(crate) async fn get_cr_status(&self, cr_number: usize) -> fpm::Result<Vec<FileStatus>> {
-        let file_statuses = self.get_files_status().await?;
-        let cr_path_prefix = fpm::cr::cr_path(cr_number);
-        Ok(file_statuses
-            .into_iter()
-            .filter(|v| {
-                v.get_file_path().starts_with(cr_path_prefix.as_str())
-                    || v.get_file_path()
-                        .starts_with(format!(".tracks/{}", cr_path_prefix).as_str())
-            })
-            .collect_vec())
     }
 
     pub(crate) async fn get_files_status_with_workspace(
@@ -263,42 +241,6 @@ impl fpm::Config {
         for workspace_entry in already_added_files {
             workspace.insert(workspace_entry.filename.to_string(), workspace_entry);
         }
-        Ok(())
-    }
-
-    pub(crate) async fn get_cr_status_wrt_remote_manifest(
-        &self,
-        cr_number: usize,
-        files: &mut std::collections::BTreeMap<String, FileStatus>,
-    ) -> fpm::Result<()> {
-        let remote_manifest = self.get_remote_manifest(true).await?;
-        let (already_added_files, already_removed_files) = self
-            .get_files_status_wrt_manifest(files, &remote_manifest)
-            .await?;
-
-        let mut deleted_file = fpm::cr::get_deleted_files(self, cr_number).await?;
-        deleted_file = deleted_file
-            .into_iter()
-            .filter(|v| !already_removed_files.contains(&v.filename))
-            .collect_vec();
-        fpm::cr::create_deleted_files(self, cr_number, deleted_file.as_slice()).await?;
-
-        let mut workspace = self.get_workspace_map().await?;
-        for workspace_entry in already_added_files {
-            let cr_file_path = self.cr_path(cr_number).join(workspace_entry.filename);
-            if cr_file_path.exists() {
-                tokio::fs::remove_file(&cr_file_path).await?;
-            }
-            let track_file_path = self.track_path(&cr_file_path);
-            if track_file_path.exists() {
-                tokio::fs::remove_file(&track_file_path).await?;
-            }
-            workspace.remove(self.path_without_root(&cr_file_path)?.as_str());
-            workspace.remove(self.path_without_root(&track_file_path)?.as_str());
-        }
-        self.write_workspace(workspace.into_values().collect_vec().as_slice())
-            .await?;
-
         Ok(())
     }
 

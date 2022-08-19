@@ -36,7 +36,7 @@ async fn merge_cr_into_cr(
 async fn merge_main_into_cr(
     config: &fpm::Config,
     dest: usize,
-    _file: Option<&str>,
+    file: Option<&str>,
 ) -> fpm::Result<()> {
     let remote_manifest: std::collections::BTreeMap<String, fpm::history::FileEdit> = config
         .get_remote_manifest(true)
@@ -64,7 +64,14 @@ async fn merge_main_into_cr(
     let deleted_file_str = config.path_without_root(&deleted_files_path)?;
     let mut new_file_status: std::collections::BTreeMap<String, fpm::sync_utils::FileStatus> =
         Default::default();
+
+    // True: if file: Option<&str> has some value and it's processed
+    let mut file_processed = false;
+
     for (cr_file_path, cr_file_edit) in cr_file_manifest.iter() {
+        if file_processed {
+            break;
+        }
         if cr_file_path.eq(&deleted_file_str) {
             let cr_deleted_files = tokio::fs::read_to_string(
                 config.history_path(cr_file_path.as_str(), cr_file_edit.version),
@@ -77,6 +84,16 @@ async fn merge_main_into_cr(
                 .collect::<std::collections::HashMap<String, fpm::cr::CRDeleted>>();
             let mut already_deleted = vec![];
             for (deleted_file_name, cr_deleted) in cr_deleted_list.iter() {
+                if file_processed {
+                    break;
+                }
+                if let Some(file) = file {
+                    if deleted_file_name.ne(file) {
+                        continue;
+                    } else {
+                        file_processed = true;
+                    }
+                }
                 let file_edit =
                     if let Some(file_edit) = remote_manifest.get(deleted_file_name.as_str()) {
                         file_edit
@@ -121,6 +138,13 @@ async fn merge_main_into_cr(
             continue;
         }
         let filename = fpm::cr::cr_path_to_file_name(dest, cr_file_path.as_str())?;
+        if let Some(file) = file {
+            if filename.ne(file) {
+                continue;
+            } else {
+                file_processed = true;
+            }
+        }
         let file_edit = if let Some(file_edit) = remote_manifest.get(filename.as_str()) {
             file_edit
         } else {

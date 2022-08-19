@@ -161,7 +161,7 @@ pub(crate) async fn do_sync(
                     fpm::history::FileEditTemp {
                         message: None,
                         author: None,
-                        src_cr: src_cr.clone(),
+                        src_cr: *src_cr,
                         operation: fpm::history::FileOperation::Added,
                     },
                 );
@@ -181,7 +181,7 @@ pub(crate) async fn do_sync(
                             fpm::history::FileEditTemp {
                                 message: None,
                                 author: None,
-                                src_cr: src_cr.clone(),
+                                src_cr: *src_cr,
                                 operation: fpm::history::FileOperation::Updated,
                             },
                         );
@@ -220,7 +220,7 @@ pub(crate) async fn do_sync(
                                     fpm::history::FileEditTemp {
                                         message: None,
                                         author: None,
-                                        src_cr: src_cr.clone(),
+                                        src_cr: *src_cr,
                                         operation: fpm::history::FileOperation::Updated,
                                     },
                                 );
@@ -295,7 +295,7 @@ pub(crate) async fn do_sync(
                         fpm::history::FileEditTemp {
                             message: None,
                             author: None,
-                            src_cr: src_cr.clone(),
+                            src_cr: *src_cr,
                             operation: fpm::history::FileOperation::Deleted,
                         },
                     );
