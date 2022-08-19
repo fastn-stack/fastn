@@ -24,7 +24,7 @@ pub fn processor(
             }
         }
     };
-    let mut v: std::collections::BTreeMap<String, ftd::PropertyValue> = Default::default();
+    let mut v: ftd::Map<ftd::PropertyValue> = Default::default();
 
     let code_item = IncludeCode::parse(doc_path, config).unwrap();
 
