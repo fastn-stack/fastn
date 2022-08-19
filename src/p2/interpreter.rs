@@ -16124,7 +16124,7 @@ mod test {
             text: ftd::code_with_theme(
                 "This is text",
                 "txt",
-                ftd::render::DEFAULT_THEME,
+                ftd::code::DEFAULT_THEME,
                 "foo/bar",
             )
             .unwrap(),

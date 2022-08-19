@@ -1008,7 +1008,7 @@ pub fn code_from_properties(
                 .as_str(),
             ftd::p2::utils::string_with_default(
                 "theme",
-                ftd::render::DEFAULT_THEME,
+                ftd::code::DEFAULT_THEME,
                 properties,
                 doc.name,
                 0,

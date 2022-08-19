@@ -8,6 +8,7 @@ extern crate self as ftd;
 pub(crate) mod test;
 
 mod component;
+mod code;
 mod condition;
 mod dnode;
 mod event;
@@ -17,7 +18,7 @@ pub mod main;
 mod or_type;
 pub mod p1;
 pub mod p2;
-pub mod render;
+pub mod markup;
 mod rt;
 mod ui;
 mod value_with_default;
@@ -146,19 +147,19 @@ pub fn rst(s: &str) -> ftd::Rendered {
 pub fn markdown(s: &str) -> ftd::Rendered {
     ftd::Rendered {
         original: s.to_string(),
-        rendered: render::render(s, true, false),
+        rendered: ftd::markup::render(s, true, false),
     }
 }
 
 pub fn markdown_extra(s: &str, auto_links: bool, hard_breaks: bool) -> ftd::Rendered {
     ftd::Rendered {
         original: s.to_string(),
-        rendered: render::render(s, auto_links, hard_breaks),
+        rendered: ftd::markup::render(s, auto_links, hard_breaks),
     }
 }
 
 pub fn code(code: &str, ext: &str, doc_id: &str) -> ftd::Rendered {
-    code_with_theme(code, ext, ftd::render::DEFAULT_THEME, doc_id).unwrap()
+    code_with_theme(code, ext, ftd::code::DEFAULT_THEME, doc_id).unwrap()
 }
 
 pub fn code_with_theme(
@@ -169,7 +170,7 @@ pub fn code_with_theme(
 ) -> ftd::p1::Result<ftd::Rendered> {
     Ok(ftd::Rendered {
         original: code.to_string(),
-        rendered: render::code_with_theme(
+        rendered: ftd::code::code(
             code.replace("\n\\-- ", "\n-- ").as_str(),
             ext,
             theme,
@@ -181,14 +182,14 @@ pub fn code_with_theme(
 pub fn markdown_line(s: &str) -> ftd::Rendered {
     ftd::Rendered {
         original: s.to_string(),
-        rendered: render::inline(s),
+        rendered: ftd::markup::inline(s),
     }
 }
 
 pub fn markup_line(s: &str) -> ftd::Rendered {
     ftd::Rendered {
         original: s.to_string(),
-        rendered: render::markup_inline(s),
+        rendered: ftd::markup::markup_inline(s),
     }
 }
 
