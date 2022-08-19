@@ -471,7 +471,7 @@ impl fpm::Package {
     /// `process_fpm()`, together with `process()`, recursively make dependency packages available inside
     /// `.packages` directory
     ///
-    #[async_recursion::async_recursion]
+    #[async_recursion::async_recursion(?Send)]
     async fn process_fpm(
         root: &camino::Utf8PathBuf,
         base_path: &camino::Utf8PathBuf,
@@ -530,7 +530,7 @@ impl fpm::Package {
                 if dep_path.exists() {
                     let dst = base_path.join(".packages").join(dep.package.name.as_str());
                     if !dst.exists() {
-                        futures::executor::block_on(fpm::copy_dir_all(dep_path, dst.clone()))?;
+                        fpm::copy_dir_all(dep_path, dst.clone()).await?;
                     }
                     fpm::Package::process_fpm(
                         &dst,
@@ -566,7 +566,7 @@ impl fpm::Package {
                 if original_path.exists() {
                     let dst = base_path.join(".packages").join(translation.name.as_str());
                     if !dst.exists() {
-                        futures::executor::block_on(fpm::copy_dir_all(original_path, dst.clone()))?;
+                        fpm::copy_dir_all(original_path, dst.clone()).await?;
                     }
                     fpm::Package::process_fpm(
                         &dst,

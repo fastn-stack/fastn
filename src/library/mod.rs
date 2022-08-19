@@ -163,6 +163,7 @@ impl Library {
             .header
             .str(doc.name, section.line_number, "$processor$")?
         {
+            // These processors are implemented both in Rust and Python
             "http" => fpm::library::http::processor(section, doc).await,
             "package-query" => fpm::library::sqlite::processor(section, doc, &self.config).await,
             "fetch-file" => fpm::library::fetch_file::processor(section, doc, &self.config).await,
@@ -185,6 +186,8 @@ impl Library {
     }
 }
 
+/// process_sync implements a bunch of processors that are called from Python. We want sync
+/// API to expose to outside world and async functions do not work so well with them.
 pub fn process_sync<'a>(
     config: &fpm::Config,
     section: &ftd::p1::Section,
