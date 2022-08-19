@@ -105,14 +105,19 @@ impl FileStatus {
         }
     }
 
-    pub(crate) fn sync_request(self) -> Option<fpm::apis::sync2::SyncRequestFile> {
+    pub(crate) fn sync_request(
+        self,
+        src_cr: Option<usize>,
+    ) -> Option<fpm::apis::sync2::SyncRequestFile> {
         if self.is_conflicted() {
             return None;
         }
         Some(match self {
-            FileStatus::Add { path, content, .. } => {
-                fpm::apis::sync2::SyncRequestFile::Add { path, content }
-            }
+            FileStatus::Add { path, content, .. } => fpm::apis::sync2::SyncRequestFile::Add {
+                path,
+                content,
+                src_cr,
+            },
             FileStatus::Update {
                 path,
                 content,
@@ -122,10 +127,13 @@ impl FileStatus {
                 path,
                 content,
                 version,
+                src_cr,
             },
-            FileStatus::Delete { path, version, .. } => {
-                fpm::apis::sync2::SyncRequestFile::Delete { path, version }
-            }
+            FileStatus::Delete { path, version, .. } => fpm::apis::sync2::SyncRequestFile::Delete {
+                path,
+                version,
+                src_cr,
+            },
             FileStatus::Uptodate { .. } => return None,
         })
     }

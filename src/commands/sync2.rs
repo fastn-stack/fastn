@@ -53,7 +53,7 @@ async fn simple_sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::R
     };
     let changed_files = changed_files
         .into_iter()
-        .filter_map(|v| v.sync_request())
+        .filter_map(|v| v.sync_request(None))
         .collect_vec();
 
     sync_(config, changed_files, &mut workspace).await?;

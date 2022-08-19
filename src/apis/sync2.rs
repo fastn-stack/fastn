@@ -6,15 +6,18 @@ pub enum SyncRequestFile {
     Add {
         path: String,
         content: Vec<u8>,
+        src_cr: Option<usize>,
     },
     Update {
         path: String,
         content: Vec<u8>,
         version: i32,
+        src_cr: Option<usize>,
     },
     Delete {
         path: String,
         version: i32,
+        src_cr: Option<usize>,
     },
 }
 
@@ -134,7 +137,11 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
     for file in request.files {
         // TODO: get all data like message, author, src-cr from request
         match &file {
-            SyncRequestFile::Add { path, content } => {
+            SyncRequestFile::Add {
+                path,
+                content,
+                src_cr,
+            } => {
                 if remote_manifest.contains_key(path) {
                     // add-add-conflict
                     synced_files.insert(
@@ -153,7 +160,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                     fpm::history::FileEditTemp {
                         message: None,
                         author: None,
-                        src_cr: None,
+                        src_cr: src_cr.clone(),
                         operation: fpm::history::FileOperation::Added,
                     },
                 );
@@ -162,6 +169,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                 path,
                 content,
                 version,
+                src_cr,
             } => {
                 if let Some(file_edit) = remote_manifest.get(path) {
                     if file_edit.version.eq(version) {
@@ -172,7 +180,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                             fpm::history::FileEditTemp {
                                 message: None,
                                 author: None,
-                                src_cr: None,
+                                src_cr: src_cr.clone(),
                                 operation: fpm::history::FileOperation::Updated,
                             },
                         );
@@ -211,7 +219,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                                     fpm::history::FileEditTemp {
                                         message: None,
                                         author: None,
-                                        src_cr: None,
+                                        src_cr: src_cr.clone(),
                                         operation: fpm::history::FileOperation::Updated,
                                     },
                                 );
@@ -252,7 +260,11 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                     continue;
                 };
             }
-            SyncRequestFile::Delete { path, version } => {
+            SyncRequestFile::Delete {
+                path,
+                version,
+                src_cr,
+            } => {
                 let file_edit = if let Some(file_edit) = remote_manifest.get(path) {
                     file_edit
                 } else {
@@ -282,7 +294,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         fpm::history::FileEditTemp {
                             message: None,
                             author: None,
-                            src_cr: None,
+                            src_cr: src_cr.clone(),
                             operation: fpm::history::FileOperation::Deleted,
                         },
                     );

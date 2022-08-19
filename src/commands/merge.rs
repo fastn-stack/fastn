@@ -293,7 +293,7 @@ async fn merge_main_into_cr(
     if conflicted_file_status.is_empty() {
         let changed_files = new_file_status
             .into_values()
-            .filter_map(|v| v.sync_request())
+            .filter_map(|v| v.sync_request(None))
             .collect_vec();
         let sync_request = fpm::apis::sync2::SyncRequest {
             package_name: config.package.name.to_string(),
