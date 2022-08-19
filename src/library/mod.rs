@@ -43,7 +43,7 @@ impl Library {
     pub async fn get(&self, name: &str, packages: &mut Vec<fpm::Package>) -> Option<String> {
         if name == "fpm" {
             packages.push(packages.last()?.clone());
-            return Some(fpm_dot_ftd::get(self));
+            return Some(fpm_dot_ftd::get(self).await);
         }
         if name == "fpm-lib" {
             packages.push(packages.last()?.clone());
@@ -301,7 +301,7 @@ impl Library2 {
         if name == "fpm" {
             self.packages_under_process
                 .push(self.get_current_package().ok()?.name);
-            return Some(fpm_dot_ftd::get2(self));
+            return Some(fpm_dot_ftd::get2(self).await);
         }
         if name == "fpm-lib" {
             self.packages_under_process
