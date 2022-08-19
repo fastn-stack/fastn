@@ -102,7 +102,7 @@ impl fpm::Config {
         Ok(
             fpm::history::FileHistory::get_remote_manifest(history_list.as_slice(), true)?
                 .into_iter()
-                .filter(|(k, v)| {
+                .filter(|(k, _)| {
                     k.starts_with(cr_path_prefix.as_str())
                         || k.starts_with(format!(".tracks/{}", cr_path_prefix).as_str())
                 })

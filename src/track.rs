@@ -16,6 +16,7 @@ impl TrackingInfo {
     }
 }
 
+#[allow(dead_code)]
 pub(crate) async fn get_tracking_info(
     config: &fpm::Config,
     path: &camino::Utf8PathBuf,

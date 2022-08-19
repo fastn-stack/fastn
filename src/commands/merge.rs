@@ -42,7 +42,7 @@ async fn merge_main_into_cr(
         .get_remote_manifest(true)
         .await?
         .into_iter()
-        .filter(|(k, v)| !(k.starts_with("-/") || k.starts_with(".tracks/")))
+        .filter(|(k, _)| !(k.starts_with("-/") || k.starts_with(".tracks/")))
         .collect();
     let cr_manifest = config.get_cr_manifest(dest).await?;
     let (cr_track_manifest, cr_file_manifest) = cr_manifest.into_iter().fold(
@@ -75,7 +75,7 @@ async fn merge_main_into_cr(
                 .map(|v| (v.filename.to_string(), v))
                 .collect::<std::collections::HashMap<String, fpm::cr::CRDeleted>>();
             let mut already_deleted = vec![];
-            for (deleted_file_name, cr_deleted) in cr_deleted_list {
+            for (deleted_file_name, cr_deleted) in cr_deleted_list.iter() {
                 let file_edit =
                     if let Some(file_edit) = remote_manifest.get(deleted_file_name.as_str()) {
                         file_edit
@@ -84,7 +84,7 @@ async fn merge_main_into_cr(
                         continue;
                     };
                 if file_edit.is_deleted() {
-                    already_deleted.push(deleted_file_name);
+                    already_deleted.push(deleted_file_name.clone());
                     continue;
                 }
                 if !file_edit.version.eq(&cr_deleted.version) {
@@ -99,6 +99,16 @@ async fn merge_main_into_cr(
                     continue;
                 }
             }
+            cr_deleted_list = cr_deleted_list
+                .into_iter()
+                .filter(|(k, _)| !already_deleted.contains(k))
+                .collect();
+            fpm::cr::create_deleted_files(
+                config,
+                dest,
+                cr_deleted_list.into_values().collect_vec().as_slice(),
+            )
+            .await?;
             continue;
         }
         let filename = fpm::cr::cr_path_to_file_name(dest, cr_file_path.as_str())?;
