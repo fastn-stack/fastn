@@ -785,7 +785,7 @@ fn reevalute_markups(
         for v in markups.text.original.split("\n\n") {
             let itext = ftd::IText::Markup(ftd::Markups {
                 text: if !markups.line {
-                    ftd::markdown(v)
+                    ftd::markup(v)
                 } else {
                     ftd::markup_line(v)
                 },
@@ -2377,7 +2377,7 @@ fn assert_no_extra_properties(
 ///
 /// # No error in these cases
 ///
-/// ```markdown
+/// ```markup
 /// -- ftd.input:
 /// value: v1
 ///
@@ -2387,7 +2387,7 @@ fn assert_no_extra_properties(
 ///
 /// # Error in this case
 ///
-/// ```markdown
+/// ```markup
 /// -- ftd.input:
 /// value: v2
 /// default-value: d2
@@ -3003,7 +3003,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Markup(ftd::Markups {
-                text: ftd::markdown_line("Amit"),
+                text: ftd::markup_line("Amit"),
                 line: true,
                 common: ftd::Common {
                     reference: Some(s("foo/bar#name")),
@@ -3086,7 +3086,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Markup(ftd::Markups {
-                text: ftd::markdown_line("Abrar Khan"),
+                text: ftd::markup_line("Abrar Khan"),
                 line: true,
                 ..Default::default()
             }));

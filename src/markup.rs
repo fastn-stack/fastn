@@ -29,6 +29,10 @@ pub fn render(s: &str, auto_links: bool, hard_breaks: bool) -> String {
     o.replace(MAGIC, "![")
 }
 
+pub fn markup(string: &str) -> String {
+    markup_inline(string)
+}
+
 pub fn markup_inline(string: &str) -> String {
     let s = strip_image(string.trim());
     let o = comrak::markdown_to_html(s.as_str(), &MD);
@@ -84,36 +88,6 @@ pub fn markup_inline(string: &str) -> String {
             space_after = i + 1;
         }
         (space_before, space_after)
-    }
-}
-
-pub fn inline(s: &str) -> String {
-    // this assumes the input is a single line of text
-    let s = strip_image(s.trim());
-
-    if s.contains('\n') {
-        eprintln!("render_inline called on an input with newlines: {}", s);
-    }
-    let o = comrak::markdown_to_html(s.as_str(), &MD);
-    let o = o.trim().replace('\n', "");
-    let l1 = o.chars().count();
-    let l2 = "<p></p>".len();
-    let l = if l1 > l2 { l1 - l2 } else { l1 };
-    o.chars()
-        .skip("<p>".len())
-        .take(l)
-        .collect::<String>()
-        .replace(MAGIC, "![")
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn inline() {
-        assert_eq!(super::inline("hello"), "hello");
-        assert_eq!(super::inline("hello *world*"), "hello <em>world</em>");
-        assert_eq!(super::inline("hello's world"), "hello’s world");
-        assert_eq!(super::inline("hello \"s\" world"), "hello “s” world");
     }
 }
 

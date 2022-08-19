@@ -869,7 +869,7 @@ impl ftd::Collector {
 impl ftd::Text {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         // TODO: proper tag based on self.common.region
-        // TODO: if format is not markdown use pre
+        // TODO: if format is not markup use pre
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
         n.classes.extend(self.common.add_class());
@@ -915,7 +915,7 @@ impl ftd::Text {
 impl ftd::TextBlock {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         // TODO: proper tag based on self.common.region
-        // TODO: if format is not markdown use pre
+        // TODO: if format is not markup use pre
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
         n.classes.extend(self.common.add_class());

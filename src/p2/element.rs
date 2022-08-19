@@ -836,10 +836,10 @@ pub fn text_render(
     doc_id: &str,
 ) -> ftd::p1::Result<ftd::Rendered> {
     Ok(match (source, tf) {
-        (ftd::TextSource::Body, ftd::TextFormat::Markdown) => ftd::markdown(text.as_str()),
-        (_, ftd::TextFormat::Markdown) => ftd::markdown_line(text.as_str()),
+        (ftd::TextSource::Body, ftd::TextFormat::Markdown) => ftd::markup(text.as_str()),
+        (_, ftd::TextFormat::Markdown) => ftd::markup_line(text.as_str()),
         (_, ftd::TextFormat::Code { lang }) => {
-            ftd::code_with_theme(text.as_str(), lang.as_str(), theme.as_str(), doc_id)?
+            ftd::rendered::code_with_theme(text.as_str(), lang.as_str(), theme.as_str(), doc_id)?
         }
         (_, ftd::TextFormat::Text) => ftd::Rendered {
             original: text.clone(),
@@ -944,9 +944,9 @@ pub fn text_block_from_properties(
     Ok(ftd::TextBlock {
         line: source != ftd::TextSource::Body,
         text: if source == ftd::TextSource::Body {
-            ftd::markdown(text.as_str())
+            ftd::markup(text.as_str())
         } else {
-            ftd::markdown_line(text.as_str())
+            ftd::markup_line(text.as_str())
         },
         common: common_from_properties(
             unresolved_properties,
@@ -1001,7 +1001,7 @@ pub fn code_from_properties(
     })?;
 
     Ok(ftd::Code {
-        text: ftd::code_with_theme(
+        text: ftd::rendered::code_with_theme(
             text.as_str(),
             ftd::p2::utils::string_optional("lang", properties, doc.name, 0)?
                 .unwrap_or_else(|| "txt".to_string())
@@ -1071,7 +1071,7 @@ pub fn integer_from_properties(
     })?;
 
     Ok(ftd::Text {
-        text: ftd::markdown_line(text.as_str()),
+        text: ftd::markup_line(text.as_str()),
         line: false,
         common: common_from_properties(
             unresolved_properties,
@@ -1127,7 +1127,7 @@ pub fn decimal_from_properties(
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
     })?;
     Ok(ftd::Text {
-        text: ftd::markdown_line(text.as_str()),
+        text: ftd::markup_line(text.as_str()),
         line: false,
         common: common_from_properties(
             unresolved_properties,
@@ -1237,7 +1237,7 @@ pub fn boolean_from_properties(
     })?;
 
     Ok(ftd::Text {
-        text: ftd::markdown_line(text.as_str()),
+        text: ftd::markup_line(text.as_str()),
         line: false,
         common: common_from_properties(
             unresolved_properties,

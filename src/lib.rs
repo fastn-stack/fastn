@@ -19,6 +19,7 @@ mod or_type;
 pub mod p1;
 pub mod p2;
 pub mod markup;
+pub(crate) mod rendered;
 mod rt;
 mod ui;
 mod value_with_default;
@@ -110,62 +111,11 @@ pub struct ConditionalValueWithDefault {
     pub default: Option<ConditionalValue>,
 }
 
-impl From<&str> for Rendered {
-    fn from(item: &str) -> Self {
-        Rendered {
-            original: item.to_string(),
-            rendered: item.to_string(),
-        }
-    }
-}
 
-pub fn rst(s: &str) -> ftd::Rendered {
-    // TODO: use pandoc to render
-    ftd::Rendered {
-        original: s.to_string(),
-        rendered: s.to_string(),
-    }
-}
-
-pub fn markdown(s: &str) -> ftd::Rendered {
+pub fn markup(s: &str) -> ftd::Rendered {
     ftd::Rendered {
         original: s.to_string(),
         rendered: ftd::markup::render(s, true, false),
-    }
-}
-
-pub fn markdown_extra(s: &str, auto_links: bool, hard_breaks: bool) -> ftd::Rendered {
-    ftd::Rendered {
-        original: s.to_string(),
-        rendered: ftd::markup::render(s, auto_links, hard_breaks),
-    }
-}
-
-pub fn code(code: &str, ext: &str, doc_id: &str) -> ftd::Rendered {
-    code_with_theme(code, ext, ftd::code::DEFAULT_THEME, doc_id).unwrap()
-}
-
-pub fn code_with_theme(
-    code: &str,
-    ext: &str,
-    theme: &str,
-    doc_id: &str,
-) -> ftd::p1::Result<ftd::Rendered> {
-    Ok(ftd::Rendered {
-        original: code.to_string(),
-        rendered: ftd::code::code(
-            code.replace("\n\\-- ", "\n-- ").as_str(),
-            ext,
-            theme,
-            doc_id,
-        )?,
-    })
-}
-
-pub fn markdown_line(s: &str) -> ftd::Rendered {
-    ftd::Rendered {
-        original: s.to_string(),
-        rendered: ftd::markup::inline(s),
     }
 }
 

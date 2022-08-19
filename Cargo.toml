@@ -58,7 +58,7 @@ features = [
 ]
 
 [dependencies.comrak]
-# We use comrak for markdown processing.
+# We use comrak for markup processing.
 
 version = "0.14"
 # By default comrak ships with support for syntax highlighting using syntext for "fenced
@@ -66,7 +66,7 @@ version = "0.14"
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6
 # and we are using 5, which means we have two sytnax highlighting libraries.
 #
-# Further, in future we have to manipulate the markdown at AST level, instead of using the
+# Further, in future we have to manipulate the markup at AST level, instead of using the
 # to_string() interface. https://fpm.dev/journal/#markdown-styling. So in the meanwhile
 # we are disabling their conflicting syntect implementation.
 default-features = false
