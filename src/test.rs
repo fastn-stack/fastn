@@ -1,6 +1,6 @@
 #[test]
 fn get_name() {
-    assert_eq!(ftd::get_name("fn", "fn foo", "test").unwrap(), "foo")
+    assert_eq!(ftd::p2::utils::get_name("fn", "fn foo", "test").unwrap(), "foo")
 }
 
 pub fn interpret_helper(

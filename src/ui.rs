@@ -1881,7 +1881,7 @@ impl Length {
         }
 
         if l.starts_with("calc ") {
-            let v = ftd::get_name("calc", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("calc", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Calc { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
@@ -1893,28 +1893,28 @@ impl Length {
         }
 
         if l.starts_with("portion ") {
-            let v = ftd::get_name("portion", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("portion", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Portion { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("percent ") {
-            let v = ftd::get_name("percent", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("percent", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Percent { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("vh ") {
-            let v = ftd::get_name("vh", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("vh", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VH { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("vw ") {
-            let v = ftd::get_name("vw", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("vw", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VW { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
@@ -2204,7 +2204,7 @@ impl GradientDirection {
             return Ok(Some(GradientDirection::Center));
         }
         if l.starts_with("angle ") {
-            let v = ftd::get_name("angle", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("angle", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(GradientDirection::Angle { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0),

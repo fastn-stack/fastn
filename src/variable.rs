@@ -764,7 +764,7 @@ impl Variable {
     pub fn map_from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
         let name = doc.resolve_name(
             p1.line_number,
-            ftd::get_name("map", p1.name.as_str(), doc.name)?,
+            ftd::p2::utils::get_name("map", p1.name.as_str(), doc.name)?,
         )?;
         Ok(Variable {
             name,

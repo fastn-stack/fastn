@@ -340,7 +340,7 @@ impl Record {
         doc: &ftd::p2::TDoc,
         line_number: usize,
     ) -> ftd::p1::Result<Self> {
-        let name = ftd::get_name("record", p1_name, doc.name)?;
+        let name = ftd::p2::utils::get_name("record", p1_name, doc.name)?;
         let full_name = doc.format_name(name);
         let mut fields = std::collections::BTreeMap::new();
         let mut order = vec![];
