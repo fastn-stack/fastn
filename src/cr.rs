@@ -22,12 +22,12 @@ pub(crate) async fn get_cr_about(
     config: &fpm::Config,
     cr_number: usize,
 ) -> fpm::Result<fpm::cr::CRAbout> {
-    let cr_about_path = config.cr_path(cr_number).join("-/about.ftd");
+    let cr_about_path = config.cr_about_path(cr_number);
     if !cr_about_path.exists() {
         return fpm::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
 
-    let doc = std::fs::read_to_string(&cr_about_path)?;
+    let doc = tokio::fs::read_to_string(&cr_about_path).await?;
     resolve_cr_about(&doc, cr_number).await
 }
 

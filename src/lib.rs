@@ -409,9 +409,6 @@ pub enum Error {
     #[error("HttpError: {}", _0)]
     HttpError(#[from] reqwest::Error),
 
-    #[error("APIResponseError: {}", _0)]
-    APIResponseError(String),
-
     #[error("IoError: {}", _0)]
     IoError(#[from] std::io::Error),
 
@@ -423,12 +420,6 @@ pub enum Error {
 
     #[error("FTDError: {}", _0)]
     FTDError(#[from] ftd::p1::Error),
-
-    #[error("PackageError: {message}")]
-    PackageError { message: String },
-
-    #[error("UsageError: {message}")]
-    UsageError { message: String },
 
     #[error("IgnoreError: {}", _0)]
     IgnoreError(#[from] ignore::Error),
@@ -451,11 +442,23 @@ pub enum Error {
     #[error("ParseIntError: {}", _0)]
     ParseIntError(#[from] std::num::ParseIntError),
 
+    #[error("APIResponseError: {}", _0)]
+    APIResponseError(String),
+
+    #[error("PackageError: {message}")]
+    PackageError { message: String },
+
+    #[error("UsageError: {message}")]
+    UsageError { message: String },
+
     #[error("GenericError: {}", _0)]
     GenericError(String),
 
     #[error("GroupNotFound: id: {}, {message}")]
     GroupNotFound { message: String },
+
+    #[error("CRAboutNotFound CR#{cr_number}: {message}")]
+    CRAboutNotFound { message: String, cr_number: usize },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

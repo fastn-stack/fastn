@@ -295,12 +295,7 @@ async fn merge_main_into_cr(
             .into_values()
             .filter_map(|v| v.sync_request(None))
             .collect_vec();
-        let sync_request = fpm::apis::sync2::SyncRequest {
-            package_name: config.package.name.to_string(),
-            files: changed_files,
-            history: tokio::fs::read_to_string(config.history_file()).await?,
-        };
-        fpm::apis::sync2::sync_worker(sync_request).await?;
+        fpm::apis::sync2::do_sync(config, changed_files.as_slice()).await?;
     }
     Ok(())
 }
@@ -308,8 +303,9 @@ async fn merge_main_into_cr(
 async fn merge_cr_into_main(
     config: &fpm::Config,
     src: usize,
-    _file: Option<&str>,
+    file: Option<&str>,
 ) -> fpm::Result<()> {
+    //TODO: check if cr is closed
     let remote_manifest: std::collections::BTreeMap<String, fpm::history::FileEdit> = config
         .get_remote_manifest(true)
         .await?
@@ -337,6 +333,17 @@ async fn merge_cr_into_main(
             .filter_map(|(k, v)| {
                 if v.is_deleted() {
                     None
+                } else if let Some(file) = file {
+                    let cr_file_name = format!("{}/{}", fpm::cr::cr_path(src), file);
+                    if cr_file_name.eq(k) {
+                        Some(fpm::sync_utils::FileStatus::Delete {
+                            path: k.to_string(),
+                            version: v.version,
+                            status: fpm::sync_utils::Status::NoConflict,
+                        })
+                    } else {
+                        None
+                    }
                 } else {
                     Some(fpm::sync_utils::FileStatus::Delete {
                         path: k.to_string(),
@@ -347,17 +354,34 @@ async fn merge_cr_into_main(
             })
             .collect_vec();
 
-        cr_statuses.extend(cr_track_manifest.iter().filter_map(|(k, v)| {
-            if v.is_deleted() {
-                None
-            } else {
-                Some(fpm::sync_utils::FileStatus::Delete {
-                    path: k.to_string(),
-                    version: v.version,
-                    status: fpm::sync_utils::Status::NoConflict,
-                })
-            }
-        }));
+        let cr_track_statuses = cr_track_manifest
+            .iter()
+            .filter_map(|(k, v)| {
+                if v.is_deleted() {
+                    None
+                } else if let Some(file) = file {
+                    let cr_track_file_name = config
+                        .path_without_root(&config.track_path(&config.cr_path(src).join(file)))
+                        .unwrap(); // This is safe
+                    if cr_track_file_name.eq(k) {
+                        Some(fpm::sync_utils::FileStatus::Delete {
+                            path: k.to_string(),
+                            version: v.version,
+                            status: fpm::sync_utils::Status::NoConflict,
+                        })
+                    } else {
+                        None
+                    }
+                } else {
+                    Some(fpm::sync_utils::FileStatus::Delete {
+                        path: k.to_string(),
+                        version: v.version,
+                        status: fpm::sync_utils::Status::NoConflict,
+                    })
+                }
+            })
+            .collect_vec();
+        cr_statuses.extend(cr_track_statuses);
         cr_statuses
     };
 
@@ -366,7 +390,11 @@ async fn merge_cr_into_main(
     let mut conflicted_file_status = vec![];
     let deleted_files_path = config.cr_deleted_file_path(src);
     let deleted_files = config.path_without_root(&deleted_files_path)?;
-    for (cr_file_name, cr_file_edit) in cr_file_manifest {
+    let mut file_processed = false;
+    for (cr_file_name, cr_file_edit) in cr_file_manifest.iter() {
+        if file_processed {
+            break;
+        }
         if cr_file_name.eq(&deleted_files) {
             // status for deleted files
             let cr_deleted_files = tokio::fs::read_to_string(
@@ -377,6 +405,16 @@ async fn merge_cr_into_main(
                 fpm::cr::resolve_cr_deleted(cr_deleted_files.as_str(), src).await?;
 
             for cr_delete in cr_deleted_list {
+                if file_processed {
+                    break;
+                }
+                if let Some(file) = file {
+                    if cr_delete.filename.ne(file) {
+                        continue;
+                    } else {
+                        file_processed = true;
+                    }
+                }
                 let file_edit =
                     if let Some(file_edit) = remote_manifest.get(cr_delete.filename.as_str()) {
                         file_edit
@@ -404,9 +442,18 @@ async fn merge_cr_into_main(
             }
             continue;
         }
+
         let cr_file_path = config.history_path(cr_file_name.as_str(), cr_file_edit.version);
-        let cr_file_content = tokio::fs::read(&cr_file_path).await?;
         let filename = fpm::cr::cr_path_to_file_name(src, cr_file_path.as_str())?;
+        if let Some(file) = file {
+            if filename.ne(file) {
+                continue;
+            } else {
+                file_processed = true;
+            }
+        }
+
+        let cr_file_content = tokio::fs::read(&cr_file_path).await?;
         let file_edit = if let Some(file_edit) = remote_manifest.get(filename.as_str()) {
             file_edit
         } else {
@@ -567,10 +614,47 @@ async fn merge_cr_into_main(
             .filter_map(|v| v.sync_request(Some(src)))
             .collect_vec();
         sync_request_files.extend(cr_statuses.into_iter().filter_map(|v| v.sync_request(None)));
+        if file.is_none() {
+            let about_status = add_close_cr_status(config, src, &cr_file_manifest).await?;
+            if let Some(sync_req) = about_status.sync_request(None) {
+                sync_request_files.push(sync_req);
+            }
+        }
         fpm::apis::sync2::do_sync(config, sync_request_files.as_slice()).await?;
     }
 
     Ok(())
+}
+
+async fn add_close_cr_status(
+    config: &fpm::Config,
+    cr: usize,
+    cr_file_manifest: &std::collections::HashMap<String, fpm::history::FileEdit>,
+) -> fpm::Result<fpm::sync_utils::FileStatus> {
+    let cr_about_path_str = config.path_without_root(&config.cr_about_path(cr))?;
+    let cr_about_file_edit = cr_file_manifest
+        .get(cr_about_path_str.as_str())
+        .ok_or_else(|| fpm::Error::CRAboutNotFound {
+            message: "Missing cr about".to_string(),
+            cr_number: cr,
+        })?;
+    if cr_about_file_edit.is_deleted() {
+        return Err(fpm::Error::CRAboutNotFound {
+            message: "Missing cr about".to_string(),
+            cr_number: cr,
+        });
+    }
+    let cr_about_path = config.history_path(cr_about_path_str.as_str(), cr_about_file_edit.version);
+    let cr_about_content = tokio::fs::read_to_string(cr_about_path).await?;
+    let mut cr_about = fpm::cr::resolve_cr_about(cr_about_content.as_str(), cr).await?;
+    cr_about.open = false;
+    let cr_close_content = fpm::cr::generate_cr_about_content(&cr_about);
+    Ok(fpm::sync_utils::FileStatus::Update {
+        path: cr_about_path_str,
+        content: cr_close_content.into_bytes(),
+        version: cr_about_file_edit.version,
+        status: fpm::sync_utils::Status::NoConflict,
+    })
 }
 
 /*async fn merge_cr_into_main(

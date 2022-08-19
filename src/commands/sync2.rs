@@ -62,17 +62,6 @@ async fn simple_sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::R
         .await
 }
 
-pub(crate) async fn sync(
-    config: &fpm::Config,
-    request_files: Vec<fpm::apis::sync2::SyncRequestFile>,
-) -> fpm::Result<()> {
-    let mut workspace = config.get_workspace_map().await?;
-    sync_(config, request_files, &mut workspace).await?;
-    config
-        .update_workspace(workspace.into_values().collect_vec())
-        .await
-}
-
 pub(crate) async fn sync_(
     config: &fpm::Config,
     request_files: Vec<fpm::apis::sync2::SyncRequestFile>,
