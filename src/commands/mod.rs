@@ -9,6 +9,7 @@ pub(crate) mod diff;
 pub(crate) mod edit;
 pub(crate) mod mark_resolve;
 pub(crate) mod mark_upto_date;
+pub(crate) mod merge;
 pub(crate) mod resolve_conflict;
 pub(crate) mod revert;
 pub(crate) mod rm;
