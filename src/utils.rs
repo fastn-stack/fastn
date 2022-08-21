@@ -19,9 +19,34 @@ pub fn print_end(msg: &str, start: std::time::Instant) {
         println!(
             // TODO: instead of lots of spaces put proper erase current terminal line thing
             "\r{} in {:?}.                          ",
-            msg.to_string().green(),
+            msg.green(),
             start.elapsed()
         );
+    }
+}
+
+pub fn time(msg: &str) -> Timer {
+    Timer {
+        start: std::time::Instant::now(),
+        msg,
+    }
+}
+
+pub struct Timer<'a> {
+    start: std::time::Instant,
+    msg: &'a str,
+}
+
+impl<'a> Timer<'a> {
+    pub fn it<T>(&self, a: T) -> T {
+        use colored::Colorize;
+
+        if !fpm::utils::is_test() {
+            let duration = format!("{:?}", self.start.elapsed());
+            println!("{} in {}", self.msg.green(), duration.red());
+        }
+
+        a
     }
 }
 
@@ -49,8 +74,7 @@ pub(crate) fn language_to_human(language: &str) -> String {
 }
 
 pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {
-    let time = std::time::SystemTime::UNIX_EPOCH + std::time::Duration::from_nanos(*nanos as u64);
-    chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339()
+    nanos.to_string() // TODO
 }
 
 pub(crate) fn history_path(id: &str, base_path: &str, timestamp: &u128) -> camino::Utf8PathBuf {

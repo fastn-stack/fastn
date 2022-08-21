@@ -1,4 +1,4 @@
-async fn serve_files(
+async fn serve_file(
     req: &actix_web::HttpRequest,
     config: &mut fpm::Config,
     path: &std::path::Path,
@@ -98,23 +98,27 @@ async fn static_file(
 
 async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
-    let mut config = fpm::Config::read(None, false).await.unwrap();
+    let r = format!("{} {}", req.method().as_str(), req.path());
+    let t = fpm::time(r.as_str());
+    println!("{r} started");
+
     let path: std::path::PathBuf = req.match_info().query("path").parse().unwrap();
 
-    println!("request for path: {:?}", path);
-    let time = std::time::Instant::now();
     let favicon = std::path::PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
         static_file(&req, favicon).await
-    } else if path.eq(&std::path::PathBuf::new().join("FPM.ftd")) {
+    } else if path.eq(&std::path::PathBuf ::new().join("FPM.ftd")) {
+        let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_fpm_file(&config).await
-    } else if path.eq(&std::path::PathBuf::new().join("")) {
-        serve_files(&req, &mut config, &path.join("/")).await
+    } else if path.eq(&std::path::PathBuf ::new().join("")) {
+        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
+        serve_file(&req, &mut config, &path.join("/")).await
     } else {
-        serve_files(&req, &mut config, &path).await
+        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
+        serve_file(&req, &mut config, &path).await
     };
-    println!("response time: {:?} for path: {:?}", time.elapsed(), path);
-    response
+
+    t.it(response)
 }
 
 pub async fn fpm_serve(bind_address: &str, port: Option<u16>) -> std::io::Result<()> {

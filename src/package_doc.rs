@@ -321,14 +321,14 @@ pub(crate) async fn read_ftd(
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
 
-    let main_ftd_doc = match fpm::doc::parse2(
+    let main_ftd_doc = match fpm::time("parser2").it(fpm::doc::parse2(
         main.id_with_package().as_str(),
         doc_content.as_str(),
         &mut lib,
         base_url,
         download_assets,
     )
-    .await
+    .await)
     {
         Ok(v) => v,
         Err(e) => {
@@ -349,16 +349,16 @@ pub(crate) async fn read_ftd(
         Some(x) => x.original.clone(),
         _ => main.id.as_str().to_string(),
     };
-    let ftd_doc = main_ftd_doc.to_rt("main", &main.id);
+    let ftd_doc = fpm::time("to_rt()").it(main_ftd_doc.to_rt("main", &main.id));
 
-    let file_content = fpm::utils::replace_markers(
+    let file_content = fpm::time("replace_markers").it(fpm::utils::replace_markers(
         fpm::ftd_html(),
         config,
         main.id_to_path().as_str(),
         doc_title.as_str(),
         base_url,
         &ftd_doc,
-    );
+    ));
 
     Ok(file_content.into())
 }
