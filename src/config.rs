@@ -1591,7 +1591,7 @@ impl Package {
 
     pub async fn get_assets_doc(&self) -> fpm::Result<String> {
         // Virtual document that contains the asset information about the package
-        Ok(self.get_font_ftd().unwrap_or_else(|| String::new()))
+        Ok(self.get_font_ftd().unwrap_or_else(String::new))
     }
 
     pub(crate) async fn get_fpm(&self) -> fpm::Result<String> {
