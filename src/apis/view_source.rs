@@ -1,22 +1,14 @@
 pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
     let path = {
-        let mut path: std::path::PathBuf = req.match_info().query("path").parse().unwrap();
-        if path.eq(&std::path::PathBuf::new().join("")) {
+        let mut path: camino::Utf8PathBuf = req.match_info().query("path").parse().unwrap();
+        if path.eq(&camino::Utf8PathBuf::new().join("")) {
             path = path.join("/");
         }
         path
     };
 
-    let path = match path.to_str() {
-        Some(s) => s,
-        None => {
-            println!("handle_ftd: Not able to convert path");
-            return actix_web::HttpResponse::InternalServerError().body("".as_bytes());
-        }
-    };
-
-    match handle_view_source(path).await {
+    match handle_view_source(path.as_str()).await {
         Ok(body) => actix_web::HttpResponse::Ok().body(body),
         Err(e) => {
             println!("new_path: {}, Error: {:?}", path, e);

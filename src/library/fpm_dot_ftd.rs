@@ -231,7 +231,11 @@ fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
         build_created_on = if fpm::utils::is_test() {
             String::from("BUILD_CREATE_TIMESTAMP")
         } else {
-            std::time::SystemTime::now().duration_since(std::time::SystemTime::UNIX_EPOCH).unwrap().as_nanos().to_string()
+            std::time::SystemTime::now()
+                .duration_since(std::time::SystemTime::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+                .to_string()
         }
     )
 }

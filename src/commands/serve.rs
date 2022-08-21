@@ -1,17 +1,9 @@
 async fn serve_file(
     req: &actix_web::HttpRequest,
     config: &mut fpm::Config,
-    path: &std::path::Path,
+    path: &camino::Utf8Path,
 ) -> actix_web::HttpResponse {
-    let path = match path.to_str() {
-        Some(s) => s,
-        None => {
-            eprintln!("handle_ftd: Not able to convert path");
-            return actix_web::HttpResponse::InternalServerError().body("".as_bytes());
-        }
-    };
-
-    let f = match config.get_file_and_package_by_id(path).await {
+    let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
             eprintln!("FPM-Error: path: {}, {:?}", path, e);
@@ -21,7 +13,7 @@ async fn serve_file(
 
     // Auth Stuff
     if !f.is_static() {
-        match config.can_read(req, path) {
+        match config.can_read(req, path.as_str()) {
             Ok(can_read) => {
                 if !can_read {
                     return actix_web::HttpResponse::Unauthorized()
@@ -81,7 +73,7 @@ async fn serve_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
 
 async fn static_file(
     req: &actix_web::HttpRequest,
-    file_path: std::path::PathBuf,
+    file_path: camino::Utf8PathBuf,
 ) -> actix_web::HttpResponse {
     if !file_path.exists() {
         return actix_web::HttpResponse::NotFound().body("".as_bytes());
@@ -102,19 +94,21 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     let t = fpm::time(r.as_str());
     println!("{r} started");
 
-    let path: std::path::PathBuf = req.match_info().query("path").parse().unwrap();
+    let path: camino::Utf8PathBuf = req.match_info().query("path").parse().unwrap();
 
-    let favicon = std::path::PathBuf::new().join("favicon.ico");
+    let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
         static_file(&req, favicon).await
-    } else if path.eq(&std::path::PathBuf ::new().join("FPM.ftd")) {
+    } else if path.eq(&camino::Utf8PathBuf::new().join("FPM.ftd")) {
         let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_fpm_file(&config).await
-    } else if path.eq(&std::path::PathBuf ::new().join("")) {
-        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
+    } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
+        let mut config =
+            fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_file(&req, &mut config, &path.join("/")).await
     } else {
-        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
+        let mut config =
+            fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_file(&req, &mut config, &path).await
     };
 

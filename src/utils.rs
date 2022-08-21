@@ -171,16 +171,35 @@ pub(crate) fn get_package_title(config: &fpm::Config) -> String {
 
 #[async_recursion::async_recursion(?Send)]
 pub async fn copy_dir_all(
-    src: impl AsRef<std::path::Path> + 'static,
-    dst: impl AsRef<std::path::Path> + 'static,
+    src: impl AsRef<camino::Utf8Path> + 'static,
+    dst: impl AsRef<camino::Utf8Path> + 'static,
 ) -> std::io::Result<()> {
-    tokio::fs::create_dir_all(&dst).await?;
-    let mut dir = tokio::fs::read_dir(src).await?;
+    tokio::fs::create_dir_all(dst.as_ref()).await?;
+    let mut dir = tokio::fs::read_dir(src.as_ref()).await?;
     while let Some(child) = dir.next_entry().await? {
         if child.metadata().await?.is_dir() {
-            copy_dir_all(child.path(), dst.as_ref().join(child.file_name())).await?;
+            copy_dir_all(
+                camino::Utf8PathBuf::from_path_buf(child.path())
+                    .expect("we only work with utf8 paths"),
+                dst.as_ref().join(
+                    child
+                        .file_name()
+                        .into_string()
+                        .expect("we only work with utf8 paths"),
+                ),
+            )
+            .await?;
         } else {
-            tokio::fs::copy(child.path(), dst.as_ref().join(child.file_name())).await?;
+            tokio::fs::copy(
+                child.path(),
+                dst.as_ref().join(
+                    child
+                        .file_name()
+                        .into_string()
+                        .expect("we only work with utf8 paths"),
+                ),
+            )
+            .await?;
         }
     }
     Ok(())
@@ -501,14 +520,14 @@ pub(crate) async fn update1(
 }
 
 pub(crate) async fn copy(
-    from: impl AsRef<std::path::Path>,
-    to: impl AsRef<std::path::Path>,
+    from: impl AsRef<camino::Utf8Path>,
+    to: impl AsRef<camino::Utf8Path>,
 ) -> fpm::Result<()> {
-    let content = tokio::fs::read(from).await?;
+    let content = tokio::fs::read(from.as_ref()).await?;
     fpm::utils::update(to, content.as_slice()).await
 }
 
-pub(crate) async fn update(root: impl AsRef<std::path::Path>, data: &[u8]) -> fpm::Result<()> {
+pub(crate) async fn update(root: impl AsRef<camino::Utf8Path>, data: &[u8]) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
 
     let (file_root, file_name) = if let Some(file_root) = root.as_ref().parent() {
@@ -516,7 +535,6 @@ pub(crate) async fn update(root: impl AsRef<std::path::Path>, data: &[u8]) -> fp
             file_root,
             root.as_ref()
                 .file_name()
-                .and_then(std::ffi::OsStr::to_str)
                 .ok_or_else(|| fpm::Error::UsageError {
                     message: format!(
                         "Invalid File Path: Can't find file name `{:?}`",
