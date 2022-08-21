@@ -3,7 +3,7 @@
 #[allow(dead_code)]
 pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Result<String> {
     let file = config.get_file_by_id(id, &config.package).await?;
-    let asset_documents = config.get_assets(base_url).await?;
+    let asset_documents = config.get_assets().await?;
 
     let main = match file {
         fpm::File::Ftd(f) => f,
