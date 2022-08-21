@@ -1,4 +1,3 @@
-use colorize::AnsiColor;
 use itertools::Itertools;
 
 macro_rules! warning {
@@ -6,11 +5,14 @@ macro_rules! warning {
         warning!($s)
     };
     ($s:expr) => {
+        use colored::Colorize;
         println!("{}", format!("{}", $s).yellow());
     };
 }
 
 pub fn print_end(msg: &str, start: std::time::Instant) {
+    use colored::Colorize;
+
     if fpm::utils::is_test() {
         println!("done in <omitted>");
     } else {
@@ -410,18 +412,16 @@ pub(crate) async fn http_get<T: reqwest::IntoUrl + std::fmt::Debug>(
         .default_headers(headers)
         .build()?;
     let url_f = format!("{:?}", url);
-    let mut res = c.get(url).send()?;
+    let res = c.get(url).send().await?;
     if !res.status().eq(&reqwest::StatusCode::OK) {
         return Err(fpm::Error::APIResponseError(format!(
             "url: {}, response_status: {}, response: {:?}",
             url_f,
             res.status(),
-            res.text()
+            res.text().await
         )));
     }
-    let mut buf: Vec<u8> = vec![];
-    res.copy_to(&mut buf)?;
-    Ok(buf)
+    Ok(res.bytes().await?.into())
 }
 
 pub(crate) async fn http_get_str<T: reqwest::IntoUrl + std::fmt::Debug>(

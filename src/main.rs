@@ -1,8 +1,16 @@
-#[tokio::main]
-async fn main() -> fpm::Result<()> {
+fn main() -> fpm::Result<()> {
+    tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap()
+        .block_on(async_main())
+}
+
+async fn async_main() -> fpm::Result<()> {
+    use colored::Colorize;
+
     let matches = app(authors(), version()).get_matches();
 
-    // Block of code to run when start-project subcommand is used
     if let Some(project) = matches.subcommand_matches("start-project") {
         // project-name => required field (any package Url or standard project name)
         let name = project.value_of("package-name").unwrap();
@@ -12,24 +20,17 @@ async fn main() -> fpm::Result<()> {
         return Ok(());
     }
 
-    // Serve block moved up
     if let Some(mark) = matches.subcommand_matches("serve") {
-        let port = mark
-            .value_of("port")
-            .map_or(mark.value_of("positional_port"), Some)
-            .map(|p| {
-                p.parse::<u16>()
-                    .unwrap_or_else(|_| panic!("provided port {} is wrong", p))
-            });
-
-        let identities = mark.value_of("identities").map(|x| x.to_string());
+        let port = mark.value_of("port").map(|p| match p.parse::<u16>() {
+            Ok(v) => v,
+            Err(_) => {
+                eprintln!("Provided port {} is not a valid port.", p.to_string().red());
+                std::process::exit(1);
+            }
+        });
 
         let bind = mark.value_of("bind").unwrap_or("127.0.0.1").to_string();
-        tokio::task::spawn_blocking(move || {
-            fpm::fpm_serve(bind.as_str(), port, identities).expect("http service error");
-        })
-        .await
-        .expect("Thread spawn error");
+        fpm::fpm_serve(bind.as_str(), port).await?;
         return Ok(());
     }
 
@@ -166,15 +167,14 @@ async fn main() -> fpm::Result<()> {
     Ok(())
 }
 
-fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'static> {
+fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
     clap::App::new("fpm: FTD Package Manager")
         .version(version)
         .author(authors)
         .setting(clap::AppSettings::ArgRequiredElseHelp)
         .arg(
             clap::Arg::with_name("verbose")
-                .short("v")
-                .multiple(true)
+                .short('v')
                 .help("Sets the level of verbosity"),
         )
         .arg(
@@ -197,7 +197,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 )
                 .arg(
                     clap::Arg::with_name("package-path")
-                        .short("p")
+                        .short('p')
                         .long("path")
                         .takes_value(true)
                         .help("Package path (relative)")
@@ -224,7 +224,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 .arg(
                     clap::Arg::with_name("verbose")
                         .long("verbose")
-                        .short("v")
+                        .short('v')
                         .takes_value(false)
                         .required(false),
                 )
@@ -334,7 +334,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
             clap::SubCommand::with_name("diff")
                 .args(&[
                     clap::Arg::with_name("source").multiple(true),
-                    clap::Arg::with_name("all").long("--all").short("a"),
+                    clap::Arg::with_name("all").long("--all").short('a'),
                 ])
                 .about("Show un-synced changes to files in this fpm package")
                 .version(env!("CARGO_PKG_VERSION")),
@@ -391,38 +391,51 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 .about("Remove a tracking relation between two files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
-        .subcommand(
-            clap::SubCommand::with_name("serve")
-                .arg(clap::Arg::with_name("port")
-                        .required_unless("positional_port")
-                        .required(false)
-                        .help("Specify the port to serve on")
-                )
-                .arg(clap::Arg::with_name("positional_port")
-                        .long("--port")
-                        .required_unless("bind")
-                        .takes_value(true)
-                        .required(false)
-                        .help("Specify the port to serve on")
-                )
-                .arg(clap::Arg::with_name("bind")
-                        .long("--bind")
-                        .takes_value(true)
-                        .required(false)
-                        .help("Specify the bind address to serve on")
-                )
-                .about("Create an http server and serves static files")
-                .version(env!("CARGO_PKG_VERSION")),
+        .subcommand(sub_command_serve())
+}
+
+fn sub_command_serve() -> clap::App<'static> {
+    let serve = clap::SubCommand::with_name("serve")
+        .arg(
+            clap::Arg::with_name("port")
+                .takes_value(true)
+                .help("Specify the port to serve on"),
         )
+        .arg(
+            clap::Arg::with_name("bind")
+                .long("--bind")
+                .takes_value(true)
+                .help("Specify the bind address to serve on"),
+        );
+
+    if cfg!(feature = "remote") {
+        serve
+    } else {
+        serve
+            .arg(
+                clap::Arg::with_name("identities")
+                    .long("--identities")
+                    .takes_value(true)
+                    .required(false)
+                    .help(
+                        "Http request identities, fpm allows these identities to access documents",
+                    ),
+            )
+            .about("Create an http server and serves static files")
+            .version(env!("CARGO_PKG_VERSION"))
+    }
 }
 
 pub fn version() -> &'static str {
     if std::env::args().any(|e| e == "--test") {
         env!("CARGO_PKG_VERSION")
     } else {
-        Box::leak(
-            format!("{} [{}]", env!("CARGO_PKG_VERSION"), env!("VERGEN_GIT_SHA")).into_boxed_str(),
-        )
+        match option_env!("GITHUB_SHA") {
+            Some(sha) => {
+                Box::leak(format!("{} [{}]", env!("CARGO_PKG_VERSION"), sha).into_boxed_str())
+            }
+            None => env!("CARGO_PKG_VERSION"),
+        }
     }
 }
 

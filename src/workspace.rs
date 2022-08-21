@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq, Clone)]
 pub struct WorkspaceEntry {
     pub filename: String,
     pub deleted: Option<bool>,

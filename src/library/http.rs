@@ -87,7 +87,7 @@ async fn _get(url: url::Url) -> reqwest::Result<String> {
     let c = reqwest::Client::builder()
         .default_headers(headers)
         .build()?;
-    c.get(url.to_string().as_str()).send()?.text()
+    c.get(url.to_string().as_str()).send().await?.text().await
 }
 
 pub async fn get_with_type<T: serde::de::DeserializeOwned>(
@@ -98,14 +98,14 @@ pub async fn get_with_type<T: serde::de::DeserializeOwned>(
         .default_headers(headers)
         .build()?;
 
-    let mut resp = c.get(url.to_string().as_str()).send()?;
+    let resp = c.get(url.to_string().as_str()).send().await?;
     if !resp.status().eq(&reqwest::StatusCode::OK) {
         return Err(fpm::Error::APIResponseError(format!(
             "url: {}, response_status: {}, response: {:?}",
             url,
             resp.status(),
-            resp.text()
+            resp.text().await
         )));
     }
-    Ok(resp.json()?)
+    Ok(resp.json().await?)
 }

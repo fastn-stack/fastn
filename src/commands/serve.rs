@@ -1,4 +1,8 @@
-async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_web::HttpResponse {
+async fn serve_files(
+    req: &actix_web::HttpRequest,
+    config: &mut fpm::Config,
+    path: &std::path::Path,
+) -> actix_web::HttpResponse {
     let path = match path.to_str() {
         Some(s) => s,
         None => {
@@ -14,6 +18,22 @@ async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_
             return actix_web::HttpResponse::InternalServerError().body(e.to_string());
         }
     };
+
+    // Auth Stuff
+    if !f.is_static() {
+        match config.can_read(req, path) {
+            Ok(can_read) => {
+                if !can_read {
+                    return actix_web::HttpResponse::Unauthorized()
+                        .body(format!("You are unauthorized to access: {}", path));
+                }
+            }
+            Err(e) => {
+                eprintln!("FPM-Error: can_read error: {}, {:?}", path, e);
+                return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+            }
+        }
+    }
 
     config.current_document = Some(f.get_id());
     return match f {
@@ -75,6 +95,7 @@ async fn static_file(
         }
     }
 }
+
 async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
     let mut config = fpm::Config::read(None, false).await.unwrap();
@@ -88,20 +109,17 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     } else if path.eq(&std::path::PathBuf::new().join("FPM.ftd")) {
         serve_fpm_file(&config).await
     } else if path.eq(&std::path::PathBuf::new().join("")) {
-        serve_files(&mut config, &path.join("/")).await
+        serve_files(&req, &mut config, &path.join("/")).await
     } else {
-        serve_files(&mut config, &path).await
+        serve_files(&req, &mut config, &path).await
     };
     println!("response time: {:?} for path: {:?}", time.elapsed(), path);
     response
 }
 
-#[actix_web::main]
-pub async fn fpm_serve(
-    bind_address: &str,
-    port: Option<u16>,
-    _identities: Option<String>,
-) -> std::io::Result<()> {
+pub async fn fpm_serve(bind_address: &str, port: Option<u16>) -> std::io::Result<()> {
+    use colored::Colorize;
+
     if cfg!(feature = "controller") {
         // fpm-controller base path and ec2 instance id (hardcoded for now)
         let fpm_controller: String = std::env::var("FPM_CONTROLLER")
@@ -142,19 +160,21 @@ pub async fn fpm_serve(
             eprintln!(
                 "{}",
                 port.map(|x| format!(
-                    r#"provided port {} is not available,
-You can try without providing port, it will automatically pick unused port"#,
-                    x
+                    r#"Provided port {} is not available.
+
+You can try without providing port, it will automatically pick unused port."#,
+                    x.to_string().red()
                 ))
                 .unwrap_or_else(|| {
-                    "Tried picking port between port 8000 to 9000, not available -:(".to_string()
+                    "Tried picking port between port 8000 to 9000, none are available :-("
+                        .to_string()
                 })
             );
-            return Ok(());
+            std::process::exit(2);
         }
     };
 
-    let app = || {
+    let app = move || {
         {
             if cfg!(feature = "remote") {
                 let json_cfg = actix_web::web::JsonConfig::default()

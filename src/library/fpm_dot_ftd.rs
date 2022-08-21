@@ -1,6 +1,6 @@
 use crate::utils::HasElements;
 
-fn i18n_data(lib: &fpm::Library) -> String {
+async fn i18n_data(lib: &fpm::Library) -> String {
     let lang = match lib.config.package.language {
         Some(ref lang) => {
             realm_lang::Language::from_2_letter_code(lang).unwrap_or(realm_lang::Language::English)
@@ -17,9 +17,9 @@ fn i18n_data(lib: &fpm::Library) -> String {
         None => lang,
     };
 
-    let current_document_last_modified_on = futures::executor::block_on(
-        fpm::utils::get_current_document_last_modified_on(&lib.config, lib.document_id.as_str()),
-    );
+    let current_document_last_modified_on =
+        fpm::utils::get_current_document_last_modified_on(&lib.config, lib.document_id.as_str())
+            .await;
 
     format!(
         indoc::indoc! {"
@@ -214,12 +214,13 @@ fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
         cli_git_commit_hash = if fpm::utils::is_test() {
             "FPM_CLI_GIT_HASH"
         } else {
-            env!("VERGEN_GIT_SHA")
+            option_env!("GITHUB_SHA").unwrap_or("unknown-sha")
         },
         cli_created_on = if fpm::utils::is_test() {
             "FPM_CLI_BUILD_TIMESTAMP"
         } else {
-            env!("VERGEN_BUILD_TIMESTAMP")
+            // TODO: calculate this in github action and pass it, vergen is too heave a dependency
+            option_env!("FPM_CLI_BUILD_TIMESTAMP").unwrap_or("0")
         },
         ftd_version = if fpm::utils::is_test() {
             "FTD_VERSION"
@@ -236,7 +237,7 @@ fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
     )
 }
 
-pub(crate) fn get(lib: &fpm::Library) -> String {
+pub(crate) async fn get(lib: &fpm::Library) -> String {
     #[allow(clippy::format_in_format_args)]
     let mut fpm_base = format!(
         indoc::indoc! {"
@@ -257,7 +258,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         fpm_base = fpm::fpm_ftd(),
         design_ftd = fpm::design_ftd(),
         capital_fpm = capital_fpm(lib),
-        i18n_data = i18n_data(lib),
+        i18n_data = i18n_data(lib).await,
         build_info = construct_fpm_cli_variables(lib),
         document_id = lib.document_id,
         title = lib.config.package.name,
@@ -743,7 +744,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     fpm_base
 }
 
-pub(crate) fn get2(lib: &fpm::Library2) -> String {
+pub(crate) async fn get2(lib: &fpm::Library2) -> String {
     let lib = fpm::Library {
         config: lib.config.clone(),
         markdown: lib.markdown.clone(),
@@ -752,7 +753,7 @@ pub(crate) fn get2(lib: &fpm::Library2) -> String {
         asset_documents: Default::default(),
         base_url: lib.base_url.clone(),
     };
-    get(&lib)
+    get(&lib).await
 }
 
 fn capital_fpm(lib: &fpm::Library) -> String {

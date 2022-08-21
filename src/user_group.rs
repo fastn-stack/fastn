@@ -5,6 +5,12 @@ pub struct UserIdentity {
     pub value: String,
 }
 
+impl PartialEq for UserIdentity {
+    fn eq(&self, other: &Self) -> bool {
+        self.key.eq(other.key.as_str()) && self.value.eq(other.value.as_str())
+    }
+}
+
 impl UserIdentity {
     pub fn from(key: &str, value: &str) -> Self {
         Self {
@@ -124,7 +130,8 @@ impl UserGroup {
         for group in self.groups.iter() {
             let user_group = user_group_by_id(config, group.as_str())?.ok_or_else(|| {
                 fpm::Error::GroupNotFound {
-                    message: format!("group: {}, not found in FPM.ftd", group),
+                    id: group.to_string(),
+                    message: "group not found while getting identities".to_string(),
                 }
             })?;
 
@@ -136,12 +143,39 @@ impl UserGroup {
         Ok(identities)
     }
 
-    // TODO:
-    // This function will check whether given identities are part or given groups or not,
-    // It will return true if all are part of provided groups
-    // pub fn belongs_to(_identities: &[&str], _groups: &[UserGroup]) -> fpm::Result<bool> {
-    //     Ok(false)
-    // }
+    /// This function returns `true` if any of given
+    /// identities is part of group else return's `false`
+    pub fn belongs_to(
+        &self,
+        config: &fpm::Config,
+        identities: &[&UserIdentity],
+    ) -> fpm::Result<bool> {
+        for group_identity in self.identities.iter() {
+            for identity in identities.iter() {
+                if group_identity.eq(identity) {
+                    return Ok(true);
+                }
+            }
+        }
+
+        for group_id in self.groups.iter() {
+            let group = user_group_by_id(config, group_id.as_str())?.ok_or_else(|| {
+                fpm::Error::GroupNotFound {
+                    id: group_id.to_string(),
+                    message: format!(
+                        "group not found while checking belongs_to with group: {}",
+                        self.id.as_str()
+                    ),
+                }
+            })?;
+
+            if group.belongs_to(config, identities)? {
+                return Ok(true);
+            }
+        }
+
+        Ok(false)
+    }
 }
 
 impl UserGroupTemp {
@@ -216,6 +250,7 @@ impl UserGroupTemp {
         })
     }
 }
+
 /// `get_identities` for a `doc_path`
 /// This will get the identities from groups defined in sitemap
 pub fn get_identities(
@@ -275,6 +310,48 @@ pub fn user_group_by_id(config: &fpm::Config, group_id: &str) -> fpm::Result<Opt
     Ok(user_groups_by_package(config, package)?
         .into_iter()
         .find(|g| g.id.as_str() == group_id))
+}
+
+/// if any input identity is part of any input group,
+/// this function will return `true`, else `false`.
+pub fn belongs_to(
+    config: &fpm::Config,
+    groups: &[&UserGroup],
+    identities: &[&UserIdentity],
+) -> fpm::Result<bool> {
+    for group in groups.iter() {
+        if group.belongs_to(config, identities)? {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
+/// 'email: abrark.asahi@gmail.com => vec[UId{email: abrark.asahi@gmail.com}]
+pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
+    use itertools::Itertools;
+    let identities = identities.split(',').collect_vec();
+    identities
+        .into_iter()
+        .flat_map(|id| id.split_once(':'))
+        .map(|(k, v)| UserIdentity {
+            key: k.trim().to_string(),
+            value: v.trim().to_string(),
+        })
+        .collect_vec()
+}
+
+pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
+    use itertools::Itertools;
+    let args = std::env::args().collect_vec();
+    let mut index = None;
+    for (idx, arg) in args.iter().enumerate() {
+        if arg.eq("--identities") {
+            index = Some(idx);
+        }
+    }
+    let identities = index.and_then(|idx| args.get(idx + 1));
+    parse_identities(identities.map(|x| x.as_str()).unwrap_or_else(|| ""))
 }
 
 pub mod processor {

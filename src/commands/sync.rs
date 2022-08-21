@@ -209,14 +209,15 @@ async fn send_to_fpm_serve(
     }
 
     let data = serde_json::to_string(&data)?;
-    let mut response = reqwest::Client::new()
+    let response = reqwest::Client::new()
         .post("http://127.0.0.1:8000/-/sync/")
         .header(reqwest::header::CONTENT_TYPE, "application/json")
         .body(data)
-        .send()?;
+        .send()
+        .await?;
     dbg!("send_to_fpm_serve", &response.status());
 
-    let response = response.json::<ApiResponse>()?;
+    let response = response.json::<ApiResponse>().await?;
     if !response.success {
         return Err(fpm::Error::APIResponseError(
             response

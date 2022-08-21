@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use sha2::Digest;
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Eq, Debug)]
 pub enum Status {
     Conflict(i32),
     NoConflict,

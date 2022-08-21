@@ -149,21 +149,19 @@ impl fpm::Package {
             std::io::stdout().flush()?;
             // Download the zip folder
             {
-                let mut response =
+                let response =
                     if download_url[1..].contains("://") || download_url.starts_with("//") {
-                        reqwest::get(download_url.as_str())?
+                        reqwest::get(download_url.as_str()).await?
                     } else if let Ok(response) =
-                        reqwest::get(format!("https://{}", download_url).as_str())
+                        reqwest::get(format!("https://{}", download_url).as_str()).await
                     {
                         response
                     } else {
-                        reqwest::get(format!("http://{}", download_url).as_str())?
+                        reqwest::get(format!("http://{}", download_url).as_str()).await?
                     };
                 let mut file = std::fs::File::create(&path)?;
                 // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
-                let mut buf: Vec<u8> = vec![];
-                response.copy_to(&mut buf)?;
-                file.write_all(&buf)?;
+                file.write_all(&response.bytes().await?)?;
                 // file.write_all(response.text().await?.as_bytes())?;
             }
 
@@ -181,7 +179,7 @@ impl fpm::Package {
                     .join(".packages")
                     .join(self.name.as_str())
                     .join(out_path_without_folder);
-                if (&*c_file.name()).ends_with('/') {
+                if c_file.name().ends_with('/') {
                     std::fs::create_dir_all(&file_extract_path)?;
                 } else {
                     if let Some(p) = file_extract_path.parent() {
@@ -239,7 +237,7 @@ impl fpm::Package {
 
         async fn get_fpm(name: &str) -> fpm::Result<String> {
             let response_fpm = if let Ok(response_fpm) =
-                reqwest::get(format!("https://{}/FPM.ftd", name).as_str())
+                reqwest::get(format!("https://{}/FPM.ftd", name).as_str()).await
             {
                 if response_fpm.status().is_success() {
                     Some(response_fpm)
@@ -247,7 +245,7 @@ impl fpm::Package {
                     None
                 }
             } else if let Ok(response_fpm) =
-                reqwest::get(format!("http://{}/FPM.ftd", name).as_str())
+                reqwest::get(format!("http://{}/FPM.ftd", name).as_str()).await
             {
                 if response_fpm.status().is_success() {
                     Some(response_fpm)
@@ -258,7 +256,7 @@ impl fpm::Package {
                 None
             };
             match response_fpm {
-                Some(mut response_fpm) => Ok(response_fpm.text()?),
+                Some(response_fpm) => Ok(response_fpm.text().await?),
                 None => Err(fpm::Error::UsageError {
                     message: format!(
                         "Unable to find the FPM.ftd for the dependency package: {}",
@@ -370,7 +368,7 @@ impl fpm::Package {
 
         async fn get_fpm(name: &str) -> fpm::Result<String> {
             let response_fpm = if let Ok(response_fpm) =
-                reqwest::get(format!("https://{}/FPM.ftd", name).as_str())
+                reqwest::get(format!("https://{}/FPM.ftd", name).as_str()).await
             {
                 if response_fpm.status().is_success() {
                     Some(response_fpm)
@@ -378,7 +376,7 @@ impl fpm::Package {
                     None
                 }
             } else if let Ok(response_fpm) =
-                reqwest::get(format!("http://{}/FPM.ftd", name).as_str())
+                reqwest::get(format!("http://{}/FPM.ftd", name).as_str()).await
             {
                 if response_fpm.status().is_success() {
                     Some(response_fpm)
@@ -389,7 +387,7 @@ impl fpm::Package {
                 None
             };
             match response_fpm {
-                Some(mut response_fpm) => Ok(response_fpm.text()?),
+                Some(response_fpm) => Ok(response_fpm.text().await?),
                 None => Err(fpm::Error::UsageError {
                     message: format!(
                         "Unable to find the FPM.ftd for the dependency package: {}",
@@ -401,7 +399,6 @@ impl fpm::Package {
     }
 
     pub(crate) async fn _unzip_package(&self) -> fpm::Result<()> {
-        use std::convert::TryInto;
         use std::io::Write;
 
         let download_url = if let Some(ref url) = self.zip {
@@ -417,21 +414,18 @@ impl fpm::Package {
         std::io::stdout().flush()?;
         // Download the zip folder
         {
-            let mut response = if download_url[1..].contains("://")
-                || download_url.starts_with("//")
-            {
-                reqwest::get(download_url.as_str())?
-            } else if let Ok(response) = reqwest::get(format!("https://{}", download_url).as_str())
+            let response = if download_url[1..].contains("://") || download_url.starts_with("//") {
+                reqwest::get(download_url.as_str()).await?
+            } else if let Ok(response) =
+                reqwest::get(format!("https://{}", download_url).as_str()).await
             {
                 response
             } else {
-                reqwest::get(format!("http://{}", download_url).as_str())?
+                reqwest::get(format!("http://{}", download_url).as_str()).await?
             };
             let mut file = std::fs::File::create(&path)?;
             // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
-            let mut buf: Vec<u8> = vec![];
-            response.copy_to(&mut buf)?;
-            file.write_all(&buf)?;
+            file.write_all(&response.bytes().await?)?;
             // file.write_all(response.text().await?.as_bytes())?;
         }
 
@@ -451,7 +445,7 @@ impl fpm::Package {
                 file_extract_path = file_extract_path.join(out_path_without_folder);
                 file_extract_path
             };
-            if (&*c_file.name()).ends_with('/') {
+            if (c_file.name()).ends_with('/') {
                 std::fs::create_dir_all(&file_extract_path)?;
             } else {
                 if let Some(p) = file_extract_path.parent() {
@@ -477,7 +471,7 @@ impl fpm::Package {
     /// `process_fpm()`, together with `process()`, recursively make dependency packages available inside
     /// `.packages` directory
     ///
-    #[async_recursion::async_recursion]
+    #[async_recursion::async_recursion(?Send)]
     async fn process_fpm(
         root: &camino::Utf8PathBuf,
         base_path: &camino::Utf8PathBuf,
@@ -536,7 +530,7 @@ impl fpm::Package {
                 if dep_path.exists() {
                     let dst = base_path.join(".packages").join(dep.package.name.as_str());
                     if !dst.exists() {
-                        futures::executor::block_on(fpm::copy_dir_all(dep_path, dst.clone()))?;
+                        fpm::copy_dir_all(dep_path, dst.clone()).await?;
                     }
                     fpm::Package::process_fpm(
                         &dst,
@@ -572,7 +566,7 @@ impl fpm::Package {
                 if original_path.exists() {
                     let dst = base_path.join(".packages").join(translation.name.as_str());
                     if !dst.exists() {
-                        futures::executor::block_on(fpm::copy_dir_all(original_path, dst.clone()))?;
+                        fpm::copy_dir_all(original_path, dst.clone()).await?;
                     }
                     fpm::Package::process_fpm(
                         &dst,
