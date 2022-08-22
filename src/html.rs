@@ -1027,15 +1027,16 @@ impl ftd::Image {
                     n.attrs
                         .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
                 }
-                n.children.push(update_img(
+                let mut img = update_img(
                     self,
                     Node {
                         node: s("img"),
                         ..Default::default()
                     },
-                ));
-                n.style.insert(s("width"), s("100%"));
-                n.style.insert(s("height"), s("100%"));
+                );
+                img.style.insert(s("width"), s("100%"));
+                img.style.insert(s("height"), s("100%"));
+                n.children.push(img);
                 n
             }
             None => update_img(
