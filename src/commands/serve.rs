@@ -201,11 +201,15 @@ You can try without providing port, it will automatically pick unused port."#,
             "/-/editor-sync/",
             actix_web::web::get().to(fpm::apis::edit::sync),
         )
-        .route("/{path:.*}", actix_web::web::get().to(serve))
         .route(
             "/-/create-cr/",
-            actix_web::web::get().to(fpm::apis::cr::create_cr),
+            actix_web::web::post().to(fpm::apis::cr::create_cr),
         )
+        .route(
+            "/-/create-cr/",
+            actix_web::web::get().to(fpm::apis::cr::create_cr_page),
+        )
+        .route("/{path:.*}", actix_web::web::get().to(serve))
     };
 
     println!("### Server Started ###");

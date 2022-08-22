@@ -1,15 +1,46 @@
 -- import: fpm
 
+-- optional string title:
+$always-include$: true
+
+-- optional string description:
+$always-include$: true
+
 -- object create-cr-obj:
 function: http
-method: get
+method: post
 url: -/create-cr/
+title: $title
+description: $description
+
+
+-- ftd.input:
+width: fill
+placeholder: folder name
+$on-input$: $title=$VALUE
+padding-horizontal: 10
+padding-vertical: $fpm.space.space-2
+background-color: $fpm.color.main.background.step-1
+color: $fpm.color.main.text-strong
+border-width: 0
+cursor: text
+
+-- ftd.input:
+width: fill
+placeholder: folder name
+$on-input$: $description=$VALUE
+padding-horizontal: 10
+padding-vertical: $fpm.space.space-2
+background-color: $fpm.color.main.background.step-1
+color: $fpm.color.main.text-strong
+border-width: 0
+cursor: text
 
 -- ftd.text: Create CR
 padding: 10
 border-radius: 8
 color: $fpm.color.main.cta-secondary.text
 background-color: $fpm.color.main.cta-secondary.base
-$on-click$: message-host $sync-obj
+$on-click$: message-host $create-cr-obj
 
 

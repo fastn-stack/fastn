@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-pub async fn create_cr(config: &fpm::Config) -> fpm::Result<usize> {
+pub async fn create_cr(config: &fpm::Config) -> fpm::Result<()> {
     let cr_number = config.extract_cr_number().await?;
     let cr_about_content = fpm::cr::generate_cr_about_content(&fpm::cr::CRAbout {
         title: format!("CR#{cr_number}"),
@@ -17,6 +17,13 @@ pub async fn create_cr(config: &fpm::Config) -> fpm::Result<usize> {
         cr_number as usize,
     )
     .await?;
+    add_cr_to_workspace(config, &cr_about_content).await
+}
+
+pub(crate) async fn add_cr_to_workspace(
+    config: &fpm::Config,
+    cr_about_content: &fpm::cr::CRAbout,
+) -> fpm::Result<()> {
     fpm::cr::create_cr_about(config, &cr_about_content).await?;
 
     let mut workspace = config.get_workspace_map().await?;
@@ -27,11 +34,11 @@ pub async fn create_cr(config: &fpm::Config) -> fpm::Result<usize> {
             filename,
             deleted: None,
             version: None,
-            cr: Some(cr_number as usize),
+            cr: Some(cr_about_content.cr_number),
         },
     );
     config
         .write_workspace(workspace.into_values().collect_vec().as_slice())
         .await?;
-    Ok(cr_number as usize)
+    Ok(())
 }
