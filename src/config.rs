@@ -866,14 +866,13 @@ impl Config {
                 }
             };
 
-            if package.name != fpm::PACKAGE_INFO_INTERFACE
-                && !deps.iter().any(|dep| {
-                    dep.implements
-                        .contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
-                })
+            if package.name != fpm::FPM_UI_INTERFACE
+                && !deps
+                    .iter()
+                    .any(|dep| dep.implements.contains(&fpm::FPM_UI_INTERFACE.to_string()))
             {
                 deps.push(fpm::Dependency {
-                    package: fpm::Package::new(fpm::PACKAGE_INFO_INTERFACE),
+                    package: fpm::Package::new(fpm::FPM_UI_INTERFACE),
                     version: None,
                     notes: None,
                     alias: None,

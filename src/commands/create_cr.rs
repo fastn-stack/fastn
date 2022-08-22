@@ -17,7 +17,14 @@ pub async fn create_cr(config: &fpm::Config) -> fpm::Result<()> {
         cr_number as usize,
     )
     .await?;
-    fpm::cr::create_cr_about(config, &cr_about_content).await?;
+    add_cr_to_workspace(config, &cr_about_content).await
+}
+
+pub(crate) async fn add_cr_to_workspace(
+    config: &fpm::Config,
+    cr_about_content: &fpm::cr::CRAbout,
+) -> fpm::Result<()> {
+    fpm::cr::create_cr_about(config, cr_about_content).await?;
 
     let mut workspace = config.get_workspace_map().await?;
     let filename = config.path_without_root(&config.cr_about_path(cr_about_content.cr_number))?;
@@ -27,7 +34,7 @@ pub async fn create_cr(config: &fpm::Config) -> fpm::Result<()> {
             filename,
             deleted: None,
             version: None,
-            cr: Some(cr_number as usize),
+            cr: Some(cr_about_content.cr_number),
         },
     );
     config

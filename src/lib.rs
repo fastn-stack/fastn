@@ -58,7 +58,7 @@ pub(crate) use utils::{copy_dir_all, time, timestamp_nanosecond};
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
-pub const PACKAGE_INFO_INTERFACE: &str = "fifthtry.github.io/package-info";
+pub const FPM_UI_INTERFACE: &str = "fifthtry.github.io/fpm-ui";
 pub const PACKAGE_THEME_INTERFACE: &str = "fifthtry.github.io/theme";
 pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
@@ -70,10 +70,6 @@ pub fn ftd_html() -> &'static str {
 
 fn fpm_ftd() -> &'static str {
     include_str!("../ftd/fpm.ftd")
-}
-
-fn editor_ftd() -> &'static str {
-    include_str!("../ftd/editor.ftd")
 }
 
 fn design_ftd() -> &'static str {
@@ -133,14 +129,14 @@ fn package_info_image(
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -165,6 +161,77 @@ fn package_info_image(
     })
 }
 
+fn package_info_editor(
+    config: &fpm::Config,
+    file_name: &str,
+    diff: fpm::Result<Option<String>>,
+) -> fpm::Result<String> {
+    let package_info_package = match config
+        .package
+        .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
+        .or_else(|| {
+            config
+                .package
+                .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+        }) {
+        Some(dep) => dep.package.name.as_str(),
+        None => fpm::FPM_UI_INTERFACE,
+    };
+    let body_prefix = match config.package.generate_prefix_string(false) {
+        Some(bp) => bp,
+        None => String::new(),
+    };
+    let mut editor_ftd = indoc::formatdoc! {"
+            {body_prefix}
+    
+            -- import: {package_info_package}/editor as pi
+
+            -- pi.editor:
+
+            -- pi.source:
+            $processor$: fetch-file
+            path: {file_name}
+
+            -- pi.path: {file_name}
+        ",
+        body_prefix = body_prefix,
+        package_info_package = package_info_package,
+        file_name = file_name
+    };
+    if let Ok(Some(diff)) = diff {
+        editor_ftd = format!("{}\n\n\n-- pi.diff:\n\n{}", editor_ftd, diff);
+    }
+    Ok(editor_ftd)
+}
+
+fn package_info_create_cr(config: &fpm::Config) -> fpm::Result<String> {
+    let package_info_package = match config
+        .package
+        .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
+        .or_else(|| {
+            config
+                .package
+                .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+        }) {
+        Some(dep) => dep.package.name.as_str(),
+        None => fpm::FPM_UI_INTERFACE,
+    };
+    let body_prefix = match config.package.generate_prefix_string(false) {
+        Some(bp) => bp,
+        None => String::new(),
+    };
+    Ok(indoc::formatdoc! {"
+            {body_prefix}
+    
+            -- import: {package_info_package}/create-cr as pi
+
+            -- pi.create-cr:
+        ",
+        body_prefix = body_prefix,
+        package_info_package = package_info_package,
+    })
+}
+
 fn package_info_code(
     config: &fpm::Config,
     file_name: &str,
@@ -177,14 +244,14 @@ fn package_info_code(
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -240,14 +307,14 @@ fn package_info_markdown(
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -299,14 +366,14 @@ fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -330,14 +397,14 @@ fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
