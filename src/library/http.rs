@@ -9,7 +9,7 @@ pub async fn processor<'a>(
             .to_lowercase();
 
         if method != "get" {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("only GET method is allowed, found: {}", method),
                 doc.name,
                 section.line_number,
@@ -23,7 +23,7 @@ pub async fn processor<'a>(
     {
         Some(v) => v,
         None => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 "'url' key is required when using `$processor$: http`",
                 doc.name,
                 section.line_number,
@@ -34,7 +34,7 @@ pub async fn processor<'a>(
     let mut url = match url::Url::parse(url.as_str()) {
         Ok(v) => v,
         Err(e) => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("invalid url: {:?}", e),
                 doc.name,
                 section.line_number,
@@ -61,7 +61,7 @@ pub(crate) async fn get(
     let t = match _get(url).await {
         Ok(v) => v,
         Err(e) => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("failed to fetch data: {:?}", e),
                 doc_id,
                 line_number,

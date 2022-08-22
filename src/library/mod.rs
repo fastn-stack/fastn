@@ -36,7 +36,7 @@ impl Library {
     ) -> ftd::p1::Result<String> {
         match self.get(name, packages).await {
             Some(v) => Ok(v),
-            None => ftd::e2(format!("library not found: {}", name), "", 0),
+            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 
@@ -296,7 +296,7 @@ impl Library2 {
     pub async fn get_with_result(&mut self, name: &str) -> ftd::p1::Result<String> {
         match self.get(name).await {
             Some(v) => Ok(v),
-            None => ftd::e2(format!("library not found: {}", name), "", 0),
+            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 
@@ -474,7 +474,7 @@ impl FPMLibrary {
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<ftd::Value> {
-        ftd::unknown_processor_error(
+        ftd::p2::utils::unknown_processor_error(
             format!("unimplemented for section {:?} and doc {:?}", section, doc),
             doc.name.to_string(),
             section.line_number,
@@ -484,7 +484,7 @@ impl FPMLibrary {
     pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::e2(format!("library not found: {}", name), "", 0),
+            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 }
