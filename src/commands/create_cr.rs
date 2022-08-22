@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-pub async fn create_cr(config: &fpm::Config) -> fpm::Result<()> {
+pub async fn create_cr(config: &fpm::Config) -> fpm::Result<usize> {
     let cr_number = config.extract_cr_number().await?;
     let cr_about_content = fpm::cr::generate_cr_about_content(&fpm::cr::CRAbout {
         title: format!("CR#{cr_number}"),
@@ -33,5 +33,5 @@ pub async fn create_cr(config: &fpm::Config) -> fpm::Result<()> {
     config
         .write_workspace(workspace.into_values().collect_vec().as_slice())
         .await?;
-    Ok(())
+    Ok(cr_number as usize)
 }

@@ -1,0 +1,15 @@
+-- import: fpm
+
+-- object create-cr-obj:
+function: http
+method: get
+url: -/create-cr/
+
+-- ftd.text: Create CR
+padding: 10
+border-radius: 8
+color: $fpm.color.main.cta-secondary.text
+background-color: $fpm.color.main.cta-secondary.base
+$on-click$: message-host $sync-obj
+
+

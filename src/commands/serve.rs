@@ -202,6 +202,10 @@ You can try without providing port, it will automatically pick unused port."#,
             actix_web::web::get().to(fpm::apis::edit::sync),
         )
         .route("/{path:.*}", actix_web::web::get().to(serve))
+        .route(
+            "/-/create-cr/",
+            actix_web::web::get().to(fpm::apis::cr::create_cr),
+        )
     };
 
     println!("### Server Started ###");
