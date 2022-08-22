@@ -895,7 +895,7 @@ dependencies = [
  "edit",
  "fbt-lib",
  "fluent",
- "ftd 0.1.18 (git+https://github.com/FifthTry/ftd?rev=6041ca4)",
+ "ftd 0.1.18 (git+https://github.com/FifthTry/ftd?rev=6d5988a)",
  "futures",
  "ignore",
  "indoc",
@@ -921,7 +921,7 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.1.18"
-source = "git+https://github.com/FifthTry/ftd?rev=6041ca4#6041ca4e4c2be8b9a7eb8730b7441cb54ca661db"
+source = "git+https://github.com/FifthTry/ftd?rev=68fdacb#68fdacb5ce358879f90666089e62a1bc0272be7c"
 dependencies = [
  "comrak",
  "css-color-parser",
@@ -941,7 +941,7 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.1.18"
-source = "git+https://github.com/FifthTry/ftd?rev=68fdacb#68fdacb5ce358879f90666089e62a1bc0272be7c"
+source = "git+https://github.com/FifthTry/ftd?rev=6d5988a#6d5988a6bfb8866e6aa7626de60cc203f8626dce"
 dependencies = [
  "comrak",
  "css-color-parser",
@@ -2019,9 +2019,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.83"
+version = "1.0.85"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38dd04e3c8279e75b31ef29dbdceebfe5ad89f4d0937213c53f7d49d01b3d5a7"
+checksum = "e55a28e3aaef9d5ce0506d0a14dbba8054ddc7e499ef522dd8b26859ec9d4a44"
 dependencies = [
  "itoa",
  "ryu",
