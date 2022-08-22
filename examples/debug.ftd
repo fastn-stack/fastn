@@ -1,0 +1,17 @@
+-- ftd.text uni: $term
+optional string a:
+optional integer b:
+
+-- ftd.text foo: $c
+optional string c:
+optional integer d:
+
+;; This should work
+-- uni:
+term: universal_attribute
+
+;; This works
+-- foo:
+c: xyz
+
+-- ftd.text: end of the line

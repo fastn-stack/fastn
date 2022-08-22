@@ -584,15 +584,26 @@ impl ChildComponent {
             name,
             doc,
         )?;
-        let (local_arguments, inherits) =
+        println!("Child Component --------------------");
+        dbg!(name);
+        dbg!(&root.full_name, &root.root);
+        // dbg!(&root.arguments.keys());
+        // dbg!(&arguments.keys());
+
+        let (mut local_arguments, inherits) =
             read_arguments(p1, name, &root.arguments, arguments, doc)?;
 
+        local_arguments.extend(universal_arguments());
         let mut all_arguments = local_arguments.clone();
         all_arguments.extend(arguments.clone());
+
+        // dbg!(&local_arguments.keys());
+        // dbg!(&root.arguments.keys());
 
         let root_property =
             get_root_property(line_number, name, caption, doc, &all_arguments, inherits)?;
 
+        // dbg!(name, root.full_name.as_str());
         return Ok(Self {
             line_number,
             properties: read_properties(
@@ -1734,13 +1745,24 @@ impl Component {
         let name = var_data.name;
         let root = doc.resolve_name(p1.line_number, var_data.kind.as_str())?;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
-        let (arguments, inherits) = read_arguments(
+
+        println!("Component ---------------");
+        // dbg!(&root, &name);
+        // dbg!(&root_component.full_name);
+        // dbg!(&root_component.root);
+
+        let (mut arguments, inherits) = read_arguments(
             &p1.header,
             root.as_str(),
             &root_component.arguments,
             &Default::default(),
             doc,
         )?;
+
+        arguments.extend(universal_arguments());
+
+        // dbg!(&root_component.arguments.keys());
+        // dbg!(&arguments.keys());
 
         assert_no_extra_properties(
             p1.line_number,
@@ -1812,6 +1834,8 @@ impl Component {
         };
 
         let events = p1.header.get_events(p1.line_number, doc, &arguments)?;
+
+        dbg!(&root, &name);
 
         Ok(Component {
             full_name: doc.resolve_name(p1.line_number, &name)?,
@@ -2750,6 +2774,9 @@ fn read_arguments(
 
     // contains parent arguments and current arguments
     let mut all_args = arguments.clone();
+    println!("inside read arguments ------------------------");
+    println!("all args init:");
+    dbg!(&all_args.keys());
 
     // Set of root arguments which are invoked once
     let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
@@ -2855,6 +2882,10 @@ fn read_arguments(
         args.insert(var_data.name.to_string(), kind.clone());
         all_args.insert(var_data.name.to_string(), kind);
     }
+
+    println!("all args after:");
+    dbg!(&all_args.keys());
+    dbg!(&args.keys());
 
     Ok((args, inherits))
 }
