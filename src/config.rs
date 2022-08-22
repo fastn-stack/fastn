@@ -1031,7 +1031,7 @@ impl Config {
         use itertools::Itertools;
         let document_name = self.document_name_with_default(document_path);
         let access_identities =
-            fpm::user_group::access_identities(&self, req, &document_name, true).await?;
+            fpm::user_group::access_identities(self, req, &document_name, true).await?;
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
             let document_readers = sitemap.readers(document_name.as_str(), &self.package.groups);
@@ -1055,7 +1055,7 @@ impl Config {
         use itertools::Itertools;
         let document_name = self.document_name_with_default(document_path);
         let access_identities =
-            fpm::user_group::access_identities(&self, req, &document_name, false).await?;
+            fpm::user_group::access_identities(self, req, &document_name, false).await?;
 
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
