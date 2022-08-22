@@ -1,0 +1,306 @@
+-- import: fpm.dev/assets
+
+
+-- ft.page: All `FTD` components
+
+-- all:
+packages: $package-list
+
+
+
+
+
+
+
+
+-- ftd.column all:
+package list packages:
+width: fill
+
+--- packages: $obj.title
+$loop$: $package-list as $obj
+package-url: $obj.package-url
+package-name: $obj.package-name
+github-url: $obj.github-url
+package-type: $obj.package-type
+description: $obj.description
+status: $obj.status
+licence-url: $obj.licence-url
+
+
+
+
+
+
+
+
+-- ftd.column packages:
+caption title:
+string package-url:
+string package-name:
+string github-url:
+string package-type:
+string licence-url:
+string status: 
+string description: 
+width: fill
+margin-bottom: $fpm.space.space-8
+spacing: 16
+border-bottom: 1
+border-color: $fpm.color.main.border
+
+--- ftd.row:
+width: fill
+id: title-row
+
+--- ftd.row:
+width: fill
+
+--- ftd.text: $package-name
+role: $fpm.type.copy-large
+color: $fpm.color.main.text
+color if $MOUSE-IN: $fpm.color.main.text-strong
+open-in-new-tab: true
+link: $package-url
+width: fill
+
+--- ftd.row:
+width: percent 20
+align: right
+spacing: 6
+id: icon-row
+
+--- ftd.row:
+border-width: 1
+border-color: $fpm.color.main.border
+border-radius: 100
+width: 36
+height: 34
+
+--- ftd.text: $package-type
+padding: $fpm.space.space-2
+role: $fpm.type.fine-print
+color: $fpm.color.main.text-strong
+text-align: center
+width: 36
+
+--- container: icon-row
+
+--- ftd.row:
+padding: $fpm.space.space-2
+border-width: 1
+border-color: $fpm.color.main.border
+border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+border-radius: 100
+max-width: 46
+max-height: 38
+
+--- ftd.image:
+src: $assets.files.static.mit-icon.svg
+align: center
+width: 16
+height: 16
+open-in-new-tab: true
+link: $licence-url
+
+--- container: icon-row
+
+--- ftd.row:
+padding: $fpm.space.space-2
+border-width: 1
+border-color: $fpm.color.main.border
+border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+border-radius: 100
+max-width: 46
+max-height: 38
+
+--- ftd.image:
+src: $assets.files.static.icon-github.svg
+align: center
+width: 16
+height: 16
+open-in-new-tab: true
+link: $github-url
+
+--- container: ftd.main
+
+--- ftd.text: $description
+role: $fpm.type.copy-tight
+color: $fpm.color.main.text
+
+
+--- container: ftd.main
+
+--- ftd.row:
+align: right
+padding: $fpm.space.space-2
+border-width: 1
+border-color: $fpm.color.main.border
+margin-bottom: -1
+
+--- ftd.text: $status
+role: $fpm.type.copy-tight
+color: $fpm.color.main.text
+color if $MOUSE-IN: $fpm.color.main.text-strong
+open-in-new-tab: true
+link: $package-url
+width: fill
+
+
+
+
+
+
+
+
+
+-- record package:
+caption title:
+string package-url:
+string package-name:
+string github-url:
+string package-type:
+string description: 
+string status:
+string licence-url:
+
+-- package list package-list:
+
+-- package-list: `doc-site` Default Doc Theme
+package-url: https://fifthtry.github.io/doc-site
+package-name: fifthtry.github.io/doc-site
+github-url: https://github.com/FifthTry/doc-site
+package-type: DS
+licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
+status: Documented
+description: `DS` means documentation site. `ds` is ready to use template for your `FTD` web sites, blogs etc.
+
+-- package-list: `dash-dash-ds`
+package-url: https://fifthtry.github.io/dash-dash-ds/sample
+package-name: fifthtry.github.io/dash-dash-ds
+github-url: https://github.com/FifthTry/dash-dash-ds
+package-type: DS
+licence-url: https://github.com/FifthTry/dash-dash-ds/blob/main/LICENSE
+status: Documented
+description: `DS` means documentation site. `ds` is ready to use template for your `FTD` web sites, blogs etc.
+
+-- package-list: `color-doc` `FTD` Default CS
+package-url: https://fifthtry.github.io/color-doc
+package-name: fifthtry.github.io/color-doc
+github-url: https://github.com/FifthTry/color-doc
+package-type: CS
+licence-url: https://github.com/FifthTry/color-doc/blob/main/LICENSE
+status: Documented
+description: `cs` means color scheme. `color-doc` is ready to use color scheme, it our default `cs`. It is in grey colors.
+
+-- package-list: `forest-cs`
+package-url: https://fifthtry.github.io/forest-cs
+package-name: fifthtry.github.io/forest-cs
+github-url: https://github.com/FifthTry/forest-cs
+package-type: CS
+licence-url: https://github.com/FifthTry/forest-cs/blob/main/LICENSE
+status: Documented
+description: `cs` means color scheme. `forest-cs` is ready to use color scheme. It is in forest green colors.
+
+-- package-list: `night-moon-cs`
+package-url: https://fifthtry.github.io/night-moon-cs
+package-name: fifthtry.github.io/night-moon-cs
+github-url: https://github.com/FifthTry/night-moon-cs
+package-type: CS
+licence-url: https://github.com/FifthTry/night-moon-cs/blob/main/LICENSE
+status: Documented
+description: `cs` means color scheme. `night-moon-cs` is ready to use color scheme. It is in night blue colors.
+
+-- package-list: `blue-sapphire-cs`
+package-url: https://fifthtry.github.io/blue-sapphire-cs
+package-name: fifthtry.github.io/blue-sapphire-cs
+github-url: https://github.com/FifthTry/blue-sapphire-cs
+package-type: CS
+licence-url: https://github.com/FifthTry/blue-sapphire-cs/blob/main/LICENSE
+status: Documented
+description: `cs` means color scheme. `blue-sapphire-cs` is ready to use color scheme. It is in blue sapphire colors.
+
+-- package-list: `slides` is a presentation template
+package-url: https://fifthtry.github.io/slides
+package-name: fifthtry.github.io/slides
+github-url: https://github.com/FifthTry/slides
+package-type: S
+licence-url: https://github.com/FifthTry/slides/blob/main/LICENSE
+status: Documented
+description: `S` means slides. `slides` is a presentation template.
+
+-- package-list: `simple-dark-slides` is a presentation theme
+package-url: https://fifthtry.github.io/simple-dark-slides
+package-name: fifthtry.github.io/simple-dark-slides
+github-url: https://github.com/FifthTry/simple-dark-slides
+package-type: S
+licence-url: https://github.com/FifthTry/simple-dark-slides/blob/main/LICENSE
+status: Documented
+description: `S` means slides. `simple-dark-slides` is a presentation theme.
+
+-- package-list: `bling`
+package-url: https://fifthtry.github.io/bling/badge
+package-name: fifthtry.github.io/bling
+github-url: https://github.com/FifthTry/bling/blob/main/badge.ftd
+package-type: BL
+licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
+status: Documented
+description: `BL` means bling library. `bling` is a library of `FTD` components. `BL` has more than `10+` components, which are ready to use for your web packages.
+
+-- package-list: `resume` Default resume template
+package-url: https://fifthtry.github.io/resume
+package-name: fifthtry.github.io/resume
+github-url: https://github.com/FifthTry/resume
+package-type: R
+licence-url: https://github.com/FifthTry/resume/blob/main/LICENSE
+status: Documented
+description: `R` means resume. `resume` is default resume data package.
+
+-- package-list: `resume-paper`
+package-url: https://fifthtry.github.io/resume-paper
+package-name: fifthtry.github.io/resume-paper
+github-url: https://github.com/FifthTry/resume-paper
+package-type: R
+licence-url: https://github.com/FifthTry/resume-paper/blob/main/LICENSE
+status: Documented
+description: `R` means resume. `resume-paper` is a resume theme.
+
+-- package-list: `resume-caffeine`
+package-url: https://fifthtry.github.io/resume-caffeine
+package-name: fifthtry.github.io/resume-caffeine
+github-url: https://github.com/FifthTry/resume-caffeine
+package-type: R
+licence-url: https://github.com/FifthTry/resume-caffeine/blob/main/LICENSE
+status: Documented
+description: `R` means resume. `resume-caffeine` is a resume theme.
+
+-- package-list: `resume-elegant`
+package-url: https://fifthtry.github.io/resume-elegant
+package-name: fifthtry.github.io/resume-elegant
+github-url: https://github.com/FifthTry/resume-elegant
+package-type: R
+licence-url: https://github.com/FifthTry/resume-elegant/blob/main/LICENSE
+status: Documented
+description: `R` means resume. `resume-elegant` is a resume theme.
+
+-- package-list: `resume-onepage`
+package-url: https://fifthtry.github.io/resume-onepage
+package-name: fifthtry.github.io/resume-onepage
+github-url: https://github.com/FifthTry/resume-onepage
+package-type: R
+licence-url: https://github.com/FifthTry/resume-onepage/blob/main/LICENSE
+status: Documented
+description: `R` means resume. `resume-onepage` is a resume theme.
+
+-- package-list: `resume-actual`
+package-url: https://fifthtry.github.io/resume-actual
+package-name: fifthtry.github.io/resume-actual
+github-url: https://github.com/FifthTry/resume-actual
+package-type: R
+licence-url: https://github.com/FifthTry/resume-actual/blob/main/LICENSE
+status: Documented
+description: `R` means resume. `resume-actual` is a resume theme.
+
+
+
+
