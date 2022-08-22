@@ -892,21 +892,23 @@ impl<'a> TDoc<'a> {
             return Ok(name.to_string());
         }
 
-        Ok(match ftd::p2::utils::split_module(name, self.name, line_number)? {
-            (Some(m), v, None) => match self.aliases.get(m) {
-                Some(m) => format!("{}#{}", m, v),
-                None => {
-                    return self.err(
-                        "alias not found",
-                        m,
-                        "resolve_name_without_full_path",
-                        line_number,
-                    )
-                }
+        Ok(
+            match ftd::p2::utils::split_module(name, self.name, line_number)? {
+                (Some(m), v, None) => match self.aliases.get(m) {
+                    Some(m) => format!("{}#{}", m, v),
+                    None => {
+                        return self.err(
+                            "alias not found",
+                            m,
+                            "resolve_name_without_full_path",
+                            line_number,
+                        )
+                    }
+                },
+                (_, _, Some(_)) => unimplemented!(),
+                (None, v, None) => v.to_string(),
             },
-            (_, _, Some(_)) => unimplemented!(),
-            (None, v, None) => v.to_string(),
-        })
+        )
     }
 
     pub fn resolve_name_with_instruction(
@@ -925,38 +927,40 @@ impl<'a> TDoc<'a> {
             }
         }
 
-        Ok(match ftd::p2::utils::split_module(name, self.name, line_number)? {
-            (Some(m), v, None) => match self.aliases.get(m) {
-                Some(m) => format!("{}#{}", m, v),
-                None => match available_components.get(m) {
-                    Some(a) => format!("{}#{}", a, v),
-                    None => {
-                        return self.err(
-                            "alias not found",
-                            m,
-                            "resolve_name_with_instruction",
-                            line_number,
-                        );
-                    }
+        Ok(
+            match ftd::p2::utils::split_module(name, self.name, line_number)? {
+                (Some(m), v, None) => match self.aliases.get(m) {
+                    Some(m) => format!("{}#{}", m, v),
+                    None => match available_components.get(m) {
+                        Some(a) => format!("{}#{}", a, v),
+                        None => {
+                            return self.err(
+                                "alias not found",
+                                m,
+                                "resolve_name_with_instruction",
+                                line_number,
+                            );
+                        }
+                    },
                 },
-            },
-            (Some(m), v, Some(c)) => match self.aliases.get(m) {
-                Some(m) => format!("{}#{}.{}", m, v, c),
-                None => match available_components.get(m) {
-                    Some(a) => format!("{}#{}.{}", a, v, c),
-                    None => {
-                        return self.err(
-                            "alias not found",
-                            m,
-                            "resolve_name_with_instruction",
-                            line_number,
-                        );
-                    }
+                (Some(m), v, Some(c)) => match self.aliases.get(m) {
+                    Some(m) => format!("{}#{}.{}", m, v, c),
+                    None => match available_components.get(m) {
+                        Some(a) => format!("{}#{}.{}", a, v, c),
+                        None => {
+                            return self.err(
+                                "alias not found",
+                                m,
+                                "resolve_name_with_instruction",
+                                line_number,
+                            );
+                        }
+                    },
                 },
+                (None, v, None) => v.to_string(),
+                _ => unimplemented!(),
             },
-            (None, v, None) => v.to_string(),
-            _ => unimplemented!(),
-        })
+        )
     }
 
     pub(crate) fn resolve_reference_name(

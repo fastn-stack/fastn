@@ -1938,7 +1938,9 @@ impl Position {
             Some("top-right") => Some(Self::TopRight),
             Some("bottom-left") => Some(Self::BottomLeft),
             Some("bottom-right") => Some(Self::BottomRight),
-            Some(t) => return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0)
+            } // TODO
             None => None,
         })
     }
@@ -2008,7 +2010,9 @@ impl Region {
             Some("description") => Self::Description,
             Some("announce") => Self::Announce,
             Some("announce-urgently") => Self::AnnounceUrgently,
-            Some(t) => return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0)
+            } // TODO
             None => return Ok(None),
         }))
     }
@@ -2084,7 +2088,9 @@ impl Overflow {
             Some("visible") => Self::Visible,
             Some("auto") => Self::Auto,
             Some("scroll") => Self::Scroll,
-            Some(t) => return ftd::p2::utils::e2(format!("{} is not a valid property", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::p2::utils::e2(format!("{} is not a valid property", t), doc_id, 0)
+            } // TODO
             None => return Ok(None),
         }))
     }
@@ -2812,7 +2818,9 @@ impl TextFormat {
                 lang: lang.unwrap_or_else(|| "txt".to_string()),
             },
             Some("text") => ftd::TextFormat::Text,
-            Some(t) => return ftd::p2::utils::e2(format!("{} is not a valid format", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::p2::utils::e2(format!("{} is not a valid format", t), doc_id, 0)
+            } // TODO
             None => return Ok(ftd::TextFormat::Markdown),
         })
     }

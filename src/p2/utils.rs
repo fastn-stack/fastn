@@ -1144,18 +1144,20 @@ pub fn resolve_name(
     if name.contains('#') {
         return Ok(name.to_string());
     }
-    Ok(match ftd::p2::utils::split_module(name, doc_name, line_number)? {
-        (Some(m), v, None) => match aliases.get(m) {
-            Some(m) => format!("{}#{}", m, v),
-            None => format!("{}#{}.{}", doc_name, m, v),
+    Ok(
+        match ftd::p2::utils::split_module(name, doc_name, line_number)? {
+            (Some(m), v, None) => match aliases.get(m) {
+                Some(m) => format!("{}#{}", m, v),
+                None => format!("{}#{}.{}", doc_name, m, v),
+            },
+            (Some(m), v, Some(c)) => match aliases.get(m) {
+                Some(m) => format!("{}#{}.{}", m, v, c),
+                None => format!("{}#{}.{}.{}", doc_name, m, v, c),
+            },
+            (None, v, None) => format!("{}#{}", doc_name, v),
+            _ => unimplemented!(),
         },
-        (Some(m), v, Some(c)) => match aliases.get(m) {
-            Some(m) => format!("{}#{}.{}", m, v, c),
-            None => format!("{}#{}.{}.{}", doc_name, m, v, c),
-        },
-        (None, v, None) => format!("{}#{}", doc_name, v),
-        _ => unimplemented!(),
-    })
+    )
 }
 
 pub fn split(name: String, split_at: &str) -> ftd::p1::Result<(String, String)> {
@@ -1403,7 +1405,9 @@ pub(crate) fn get_markup_child(
 ) -> ftd::p1::Result<ftd::ChildComponent> {
     let (sub_name, ref_name) = match sub.name.split_once(' ') {
         Some((sub_name, ref_name)) => (sub_name.trim(), ref_name.trim()),
-        _ => return ftd::p2::utils::e2("the component should have name", doc.name, sub.line_number),
+        _ => {
+            return ftd::p2::utils::e2("the component should have name", doc.name, sub.line_number)
+        }
     };
     let sub_caption = if sub.caption.is_none() && sub.body.is_none() {
         Some(ref_name.to_string())
@@ -1537,8 +1541,8 @@ pub fn split_module<'a>(
 }
 
 pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::p1::Result<T>
-    where
-        S1: Into<String>,
+where
+    S1: Into<String>,
 {
     Err(ftd::p1::Error::ParseError {
         message: m.into(),
@@ -1548,8 +1552,8 @@ pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::p1::Result<T>
 }
 
 pub fn unknown_processor_error<T, S>(m: S, doc_id: String, line_number: usize) -> ftd::p1::Result<T>
-    where
-        S: Into<String>,
+where
+    S: Into<String>,
 {
     Err(ftd::p1::Error::ParseError {
         message: m.into(),

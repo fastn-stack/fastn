@@ -17265,7 +17265,6 @@ mod interpreter {
     }*/
 }
 
-
 mod component {
     use ftd::test::*;
 
@@ -17562,7 +17561,7 @@ mod record {
                 },
             ),
         ])
-            .collect();
+        .collect();
 
         let mut bag = ftd::p2::interpreter::default_bag();
         bag.insert(
@@ -17588,7 +17587,7 @@ mod record {
                     s("foo/bar"),
                     vec![abrar(), sourabh.clone()],
                 )])
-                    .collect(),
+                .collect(),
                 order: vec![s("name"), s("address"), s("bio"), s("age")],
             }),
         );
@@ -17618,7 +17617,7 @@ mod record {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("eid"), s("who")],
             }),
@@ -17653,7 +17652,7 @@ mod record {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -17688,7 +17687,7 @@ mod record {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -17775,7 +17774,7 @@ mod record {
                             },
                         ),
                     ])
-                        .collect(),
+                    .collect(),
                     instances: Default::default(),
                     order: vec![s("name"), s("friends")],
                 }),
@@ -17828,7 +17827,7 @@ mod record {
                                     },
                                 ),
                             ])
-                                .collect(),
+                            .collect(),
                         },
                     },
                     conditions: vec![],
@@ -17879,7 +17878,7 @@ mod record {
                     (s("x"), ftd::p2::Kind::integer()),
                     (s("y"), ftd::p2::Kind::integer()),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("x"), s("y")],
             }),
@@ -17904,7 +17903,7 @@ mod record {
                         },
                     ),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("points")],
             }),
@@ -17959,7 +17958,7 @@ mod record {
                                                             },
                                                         ),
                                                     ])
-                                                        .collect(),
+                                                    .collect(),
                                                 },
                                             },
                                             ftd::PropertyValue::Value {
@@ -17983,7 +17982,7 @@ mod record {
                                                             },
                                                         ),
                                                     ])
-                                                        .collect(),
+                                                    .collect(),
                                                 },
                                             },
                                             ftd::PropertyValue::Value {
@@ -18007,7 +18006,7 @@ mod record {
                                                             },
                                                         ),
                                                     ])
-                                                        .collect(),
+                                                    .collect(),
                                                 },
                                             },
                                         ],
@@ -18015,7 +18014,7 @@ mod record {
                                 },
                             ),
                         ])
-                            .collect(),
+                        .collect(),
                     },
                 },
                 conditions: vec![],
@@ -18073,7 +18072,7 @@ mod record {
                     ),
                     (s("value"), ftd::p2::Kind::integer()),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("party"), s("value")],
             }),
@@ -18214,7 +18213,6 @@ mod record {
     }
 }
 
-
 mod variable {
     use ftd::test::*;
 
@@ -18353,7 +18351,7 @@ mod variable {
                     (s("title"), ftd::p2::Kind::caption()),
                     (s("about"), ftd::p2::Kind::body()),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec![s("title"), s("about")],
             }),
@@ -18389,7 +18387,7 @@ mod variable {
                                         },
                                     ),
                                 ])
-                                    .collect(),
+                                .collect(),
                             },
                         }],
                         kind: ftd::p2::Kind::Record {
@@ -18448,7 +18446,7 @@ mod document {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .unwrap();
+        .unwrap();
 
         pretty_assertions::assert_eq!(
             bag.get::<String>("fifthtry/ft#toc").unwrap(),
@@ -18498,7 +18496,7 @@ mod document {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .unwrap();
+        .unwrap();
 
         pretty_assertions::assert_eq!(
             bag.get::<Vec<Meta>>("meta").unwrap(),
@@ -18541,7 +18539,7 @@ mod document {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .unwrap();
+        .unwrap();
 
         pretty_assertions::assert_eq!(
             bag.instances::<PR>("pr").unwrap(),
@@ -18583,7 +18581,7 @@ mod document {
             ),
             &ftd::p2::TestLibrary {},
         )
-            .unwrap();
+        .unwrap();
 
         pretty_assertions::assert_eq!(
             bag.instances::<PR>("pr").unwrap(),

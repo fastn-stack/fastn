@@ -464,7 +464,13 @@ impl Kind {
                     | ftd::p2::Kind::Integer { .. }
                     | ftd::p2::Kind::Decimal { .. }
                     | ftd::p2::Kind::Boolean { .. } => false,
-                    t => return ftd::p2::utils::e2(format!("`{}` is {:?}", name, t), doc.name, line_number),
+                    t => {
+                        return ftd::p2::utils::e2(
+                            format!("`{}` is {:?}", name, t),
+                            doc.name,
+                            line_number,
+                        )
+                    }
                 };
 
                 let (caption, body) = if let Kind::String { caption, body, .. } = self.inner() {
@@ -492,7 +498,11 @@ impl Kind {
                 } else if let Some(default) = self.get_default_value_str() {
                     (default, ftd::TextSource::Default)
                 } else {
-                    return ftd::p2::utils::e2(format!("`{}` is required", name), doc.name, line_number);
+                    return ftd::p2::utils::e2(
+                        format!("`{}` is required", name),
+                        doc.name,
+                        line_number,
+                    );
                 }
             }
         };

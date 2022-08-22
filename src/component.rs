@@ -2817,4 +2817,3 @@ fn read_arguments(
 
     Ok((args, inherits))
 }
-

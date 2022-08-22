@@ -85,7 +85,13 @@ impl Boolean {
                     },
                 )
             }
-            _ => return ftd::p2::utils::e2(format!("{:?} must not happen", self), doc.name, line_number),
+            _ => {
+                return ftd::p2::utils::e2(
+                    format!("{:?} must not happen", self),
+                    doc.name,
+                    line_number,
+                )
+            }
         };
         return match value.to_serde_value() {
             None => {

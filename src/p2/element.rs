@@ -895,7 +895,9 @@ pub fn iframe_from_properties(
     ) {
         (Some(src), None) => src,
         (None, Some(id)) => id,
-        (Some(_), Some(_)) => return ftd::p2::utils::e2("both src and youtube id provided", doc.name, 0),
+        (Some(_), Some(_)) => {
+            return ftd::p2::utils::e2("both src and youtube id provided", doc.name, 0)
+        }
         (None, None) => return ftd::p2::utils::e2("src or youtube id is required", doc.name, 0),
     };
 

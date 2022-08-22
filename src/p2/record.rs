@@ -439,4 +439,3 @@ fn assert_fields_valid(
     }
     Ok(())
 }
-

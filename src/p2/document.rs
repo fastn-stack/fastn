@@ -656,7 +656,9 @@ impl Document {
                 }
                 serde_json::Value::Array(a)
             }
-            t => return ftd::p2::utils::e2(format!("not a record: {:?}", t), self.name.as_str(), 0),
+            t => {
+                return ftd::p2::utils::e2(format!("not a record: {:?}", t), self.name.as_str(), 0)
+            }
         };
 
         Ok(serde_json::from_value(json)?)
@@ -856,4 +858,3 @@ pub fn default_scene_children_position(elements: &mut Vec<ftd::Element>) {
         }
     }
 }
-
