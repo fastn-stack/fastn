@@ -24,7 +24,7 @@ pub(crate) async fn add_cr_to_workspace(
     config: &fpm::Config,
     cr_about_content: &fpm::cr::CRAbout,
 ) -> fpm::Result<()> {
-    fpm::cr::create_cr_about(config, &cr_about_content).await?;
+    fpm::cr::create_cr_about(config, cr_about_content).await?;
 
     let mut workspace = config.get_workspace_map().await?;
     let filename = config.path_without_root(&config.cr_about_path(cr_about_content.cr_number))?;

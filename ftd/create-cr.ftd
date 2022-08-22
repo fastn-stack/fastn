@@ -13,10 +13,13 @@ url: -/create-cr/
 title: $title
 description: $description
 
+-- ftd.column:
+spacing: 40
+padding: 40
 
 -- ftd.input:
 width: fill
-placeholder: folder name
+placeholder: CR title
 $on-input$: $title=$VALUE
 padding-horizontal: 10
 padding-vertical: $fpm.space.space-2
@@ -27,7 +30,7 @@ cursor: text
 
 -- ftd.input:
 width: fill
-placeholder: folder name
+placeholder: CR description
 $on-input$: $description=$VALUE
 padding-horizontal: 10
 padding-vertical: $fpm.space.space-2
@@ -35,6 +38,8 @@ background-color: $fpm.color.main.background.step-1
 color: $fpm.color.main.text-strong
 border-width: 0
 cursor: text
+multiline: true
+height: 100
 
 -- ftd.text: Create CR
 padding: 10

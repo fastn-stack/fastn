@@ -28,7 +28,7 @@ async fn create_cr_worker(cr_request: CreateCRRequest) -> fpm::Result<usize> {
     let cr_number = config.extract_cr_number().await?;
     let default_title = format!("CR#{cr_number}");
     let cr_about = fpm::cr::CRAbout {
-        title: cr_request.title.unwrap_or_else(|| default_title),
+        title: cr_request.title.unwrap_or(default_title),
         description: cr_request.description,
         cr_number: cr_number as usize,
         open: true,
