@@ -49,11 +49,7 @@ pub async fn create_cr_page() -> actix_web::Result<actix_web::HttpResponse> {
 
 async fn create_cr_page_worker() -> fpm::Result<Vec<u8>> {
     let mut config = fpm::Config::read(None, false).await?;
-    let create_cr_ftd = if config.root.join("ccp.ftd").exists() {
-        tokio::fs::read_to_string(config.root.join("ccp.ftd")).await?
-    } else {
-        fpm::create_cr_ftd().to_string()
-    };
+    let create_cr_ftd = fpm::package_info_create_cr(&config)?;
 
     let main_document = fpm::Document {
         id: "create-cr.ftd".to_string(),

@@ -72,10 +72,6 @@ fn fpm_ftd() -> &'static str {
     include_str!("../ftd/fpm.ftd")
 }
 
-fn create_cr_ftd() -> &'static str {
-    include_str!("../ftd/create-cr.ftd")
-}
-
 fn design_ftd() -> &'static str {
     include_str!("../ftd/design.ftd")
 }
@@ -206,6 +202,34 @@ fn package_info_editor(
         editor_ftd = format!("{}\n\n\n-- pi.diff:\n\n{}", editor_ftd, diff);
     }
     Ok(editor_ftd)
+}
+
+fn package_info_create_cr(config: &fpm::Config) -> fpm::Result<String> {
+    let package_info_package = match config
+        .package
+        .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
+        .or_else(|| {
+            config
+                .package
+                .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+        }) {
+        Some(dep) => dep.package.name.as_str(),
+        None => fpm::FPM_UI_INTERFACE,
+    };
+    let body_prefix = match config.package.generate_prefix_string(false) {
+        Some(bp) => bp,
+        None => String::new(),
+    };
+    Ok(indoc::formatdoc! {"
+            {body_prefix}
+    
+            -- import: {package_info_package}/create-cr as pi
+
+            -- pi.create-cr:
+        ",
+        body_prefix = body_prefix,
+        package_info_package = package_info_package,
+    })
 }
 
 fn package_info_code(
