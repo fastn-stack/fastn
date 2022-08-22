@@ -1,0 +1,29 @@
+;; This previously worked when the arguments are locally defined
+-- ftd.text foo: $c
+optional string c:
+optional integer d:
+
+;; This works
+-- foo:
+c: xyz
+
+;; This works now since id and term are now universal arguments
+-- ftd.row t1:
+optional string a:
+optional integer b:
+
+--- ftd.text: $term
+
+--- ftd.text: $id
+
+;; This will also work for all universal arguments
+-- ftd.text t2: $term
+
+;; This works now (shows term and id)
+-- t1:
+term: t1_term
+id: t1_id
+
+;; This also works now
+-- t2:
+term: t2_term
