@@ -379,8 +379,12 @@ pub async fn access_identities(
             .iter()
             .map(|c| (c.name().to_string(), c.value().to_string()))
             .collect();
-        return fpm::controller::get_remote_identities(cookies, sitemap_identities.as_slice())
-            .await;
+        return fpm::controller::get_remote_identities(
+            req.connection_info().host(),
+            cookies,
+            sitemap_identities.as_slice(),
+        )
+        .await;
     }
 
     Ok(if let Some(identity) = req.cookie("identities") {

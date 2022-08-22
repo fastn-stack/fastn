@@ -195,9 +195,12 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
 // This API will be called from can_read and can_write functions
 
 pub async fn get_remote_identities(
+    remote_host: &str,
     cookies: std::collections::HashMap<String, String>,
     _identities: &[String], // TODO:
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    use itertools::Itertools;
+
     let mut headers = reqwest::header::HeaderMap::new();
 
     let cookie = cookies
@@ -214,34 +217,42 @@ pub async fn get_remote_identities(
     );
 
     #[derive(serde::Deserialize)]
-    struct KeyValue {
-        key: String,
-        value: String,
-    }
-
-    #[derive(serde::Deserialize)]
     struct UserIdentities {
-        user_identities: Vec<KeyValue>,
+        success: bool,
+        reason: Option<String>,
+        #[serde(rename = "user-identities")]
+        user_identities: Option<Vec<std::collections::HashMap<String, String>>>,
     }
+    // TODO:
+    let url = format!("https://{}/-/dj/get-identities/", remote_host);
+    println!("remote url: {}", url);
 
-    let resp: ApiResponse<UserIdentities> =
-        fpm::library::http::get_with_type(url::Url::parse("")?, headers).await?;
+    let resp: UserIdentities =
+        fpm::library::http::get_with_type(url::Url::parse(url.as_str())?, headers).await?;
 
     if !resp.success {
-        // return error
+        return Err(fpm::Error::APIResponseError(format!(
+            "url: {}, error while getting controller: get-identities",
+            url,
+        )));
     }
 
-    // Map UserIdentities to UserIdentity struct and return
+    #[allow(clippy::or_fun_call)]
+    let remote_identities = resp.user_identities.ok_or({
+        fpm::Error::APIResponseError(format!(
+            "controller:get-identities api error: {:?}",
+            resp.reason
+        ))
+    })?;
 
-    // Response
-    /*
-    {
-        "user-identities": [
-        { "email": "yo@y.com" },
-        { "github": "foo" }
-        ]
-    }
-     */
+    Ok(remote_identities
+        .into_iter()
+        .flat_map(|identities| {
+            identities
+                .into_iter()
+                .map(|(key, value)| fpm::user_group::UserIdentity { key, value })
+        })
+        .collect_vec())
 
-    Ok(vec![])
+    // Ok(vec![])
 }
