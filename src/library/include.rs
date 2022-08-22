@@ -15,7 +15,7 @@ pub fn processor(
             {
                 Some(v) => v,
                 None => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         "`path` is not specified".to_string(),
                         doc.name,
                         section.line_number,

@@ -17,7 +17,7 @@ pub fn processor_(
     {
         Some(v) => v,
         None => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 "`db` is not specified".to_string(),
                 doc.name,
                 section.line_number,
@@ -34,7 +34,7 @@ pub fn processor_(
                 let original_path = match config.original_path() {
                     Ok(original_path) => original_path,
                     _ => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("Failed to open `{}`: {:?}", db, e),
                             doc.name,
                             section.line_number,
@@ -48,7 +48,7 @@ pub fn processor_(
                 ) {
                     Ok(conn) => conn,
                     Err(e) => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("Failed to open `{}`: {:?}", db_path.as_str(), e),
                             doc.name,
                             section.line_number,
@@ -61,7 +61,7 @@ pub fn processor_(
     let mut stmt = match conn.prepare(query.as_str()) {
         Ok(v) => v,
         Err(e) => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("Failed to prepare query: {:?}", e),
                 doc.name,
                 section.line_number,
@@ -74,7 +74,7 @@ pub fn processor_(
     let mut rows = match stmt.query([]) {
         Ok(v) => v,
         Err(e) => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("Failed to prepare query: {:?}", e),
                 doc.name,
                 section.line_number,
@@ -91,7 +91,7 @@ pub fn processor_(
                     result.push(row_to_json(r, section, doc, count)?);
                 }
                 Err(e) => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("Failed to execute query: {:?}", e),
                         doc.name,
                         section.line_number,
@@ -104,14 +104,14 @@ pub fn processor_(
         let json = match rows.next() {
             Ok(Some(r)) => row_to_json(r, section, doc, count)?,
             Ok(None) => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     "Query returned no result, expected one row".to_string(),
                     doc.name,
                     section.line_number,
                 )
             }
             Err(e) => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("Failed to execute query: {:?}", e),
                     doc.name,
                     section.line_number,
@@ -138,14 +138,14 @@ fn row_to_json(
             )),
             Ok(rusqlite::types::Value::Text(i)) => row.push(serde_json::Value::String(i)),
             Ok(rusqlite::types::Value::Blob(_)) => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("Query returned blob for column: {}", i),
                     doc.name,
                     section.line_number,
                 );
             }
             Err(e) => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("Failed to read response: {:?}", e),
                     doc.name,
                     section.line_number,
