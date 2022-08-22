@@ -2456,15 +2456,6 @@ pub fn read_properties(
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
 
-    // let root_arguments = {
-    //     let mut root_arguments = root_arguments.clone();
-    //     let universal_argument = universal_arguments();
-    //     for (key, arg) in universal_argument {
-    //         root_arguments.entry(key).or_insert(arg);
-    //     }
-    //     root_arguments
-    // };
-
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
             properties.insert(name.to_string(), prop.clone());
