@@ -21,7 +21,7 @@ async fn serve_files(
 
     // Auth Stuff
     if !f.is_static() {
-        match config.can_read(req, path) {
+        match config.can_read(req, path).await {
             Ok(can_read) => {
                 if !can_read {
                     return actix_web::HttpResponse::Unauthorized()

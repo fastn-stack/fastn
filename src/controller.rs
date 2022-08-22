@@ -1,5 +1,3 @@
-use crate::user_group::UserIdentity;
-
 /// FPM Controller Support
 /// FPM cli supports communication with fpm controller. This is an optional feature, and is only
 /// available when controller feature is enabled, which is not enabled by default.
@@ -197,24 +195,22 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
 // This API will be called from can_read and can_write functions
 
 pub async fn get_remote_identities(
-    req: &actix_web::HttpRequest,
-    // cookie: &str, // all request cookies
-    // identities: &[fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<UserIdentity>> {
+    cookies: std::collections::HashMap<String, String>,
+    _identities: &[String], // TODO:
+) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
     let mut headers = reqwest::header::HeaderMap::new();
 
-    let cookies = req
-        .cookies()
-        .unwrap()
+    let cookie = cookies
         .iter()
-        .map(|c| format!("{}={}", c.name(), c.value()))
+        .map(|c| format!("{}={}", c.0, c.1))
         .collect::<Vec<_>>()
         .join(";");
 
-    println!("cookies: {}", cookies);
+    println!("cookies: {}", cookie);
+
     headers.insert(
         reqwest::header::COOKIE,
-        reqwest::header::HeaderValue::from_bytes(cookies.as_bytes()).unwrap(),
+        reqwest::header::HeaderValue::from_bytes(cookie.as_bytes()).unwrap(),
     );
 
     #[derive(serde::Deserialize)]

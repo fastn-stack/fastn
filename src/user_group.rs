@@ -251,20 +251,20 @@ impl UserGroupTemp {
     }
 }
 
-/// `get_identities` for a `doc_path`
+/// `get_identities` for a `document_name`
 /// This will get the identities from groups defined in sitemap
 pub fn get_identities(
     config: &crate::Config,
-    doc_path: &str,
+    document_name: &str,
     is_read: bool,
 ) -> fpm::Result<Vec<String>> {
     // TODO: cookies or cli parameter
 
     let readers_writers = if let Some(sitemap) = &config.package.sitemap {
         if is_read {
-            sitemap.readers(doc_path, &config.package.groups)
+            sitemap.readers(document_name, &config.package.groups)
         } else {
-            sitemap.writers(doc_path, &config.package.groups)
+            sitemap.writers(document_name, &config.package.groups)
         }
     } else {
         vec![]
@@ -361,13 +361,34 @@ access_identities(req: HttpRequest, document_name: str, rw: bool)
     / get identities by using document_path from sitemap
     sitemap_identities = get_identities(document_name)
     remote_identities: pass these identities to fetch_from_remote(cookies[sid and identities])
-    user_groups: UserGroups = sitemap.readers/writers.(document_name, &self.package.groups);
-    user_group::belongs_to(user_groups, remote_identities)
  if feature is not remote
     identities: identities-cookie or identities-cli
-    user_groups: UserGroups = sitemap.readers/writers(document_name, &self.package.groups);
-    user_group::belongs_to(user_groups, identities)
  */
+
+pub async fn access_identities(
+    config: &fpm::Config,
+    req: &actix_web::HttpRequest,
+    document_name: &str,
+    is_read: bool,
+) -> fpm::Result<Vec<UserIdentity>> {
+    if cfg!(feature = "remote") {
+        let sitemap_identities = get_identities(config, document_name, is_read)?;
+        let cookies: std::collections::HashMap<String, String> = req
+            .cookies()
+            .unwrap()
+            .iter()
+            .map(|c| (c.name().to_string(), c.value().to_string()))
+            .collect();
+        return fpm::controller::get_remote_identities(cookies, sitemap_identities.as_slice())
+            .await;
+    }
+
+    Ok(if let Some(identity) = req.cookie("identities") {
+        parse_identities(identity.value())
+    } else {
+        parse_cli_identities()
+    })
+}
 
 pub mod processor {
     use itertools::Itertools;

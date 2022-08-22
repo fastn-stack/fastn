@@ -39,7 +39,7 @@ pub async fn edit(
     };
     config.current_document = Some(req_data.path.to_string());
 
-    match config.can_write(&req, req_data.path.as_str()) {
+    match config.can_write(&req, req_data.path.as_str()).await {
         Ok(can_write) => {
             if !can_write {
                 return Ok(actix_web::HttpResponse::Unauthorized().body(format!(
