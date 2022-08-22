@@ -48,7 +48,7 @@ to download font CSS. Here we are going to use `Lato` font.
 -- ft.h2: Create new `fpm` font package on `GitHub.com`
 
 Create new repository on your GitHub account, here we are creating package for
-`Lato` font so package name should be e.g. `https://github.com/FifthTry/lato`
+`Lato` font so package name should be e.g. `https://github.com/FifthTry/lato-font`
 (replace `FifthTry` with your github account name).
 
 - Once you create new repository named `lato` 
@@ -61,14 +61,14 @@ Create new repository on your GitHub account, here we are creating package for
 -- ft.code: 
 lang: python
 
-package_name = "fifthtry.github.io/inter"
+package_name = "fifthtry.github.io/inter-font"
 name = "inter"
 
 
 -- ft.code: Change above lines with:
 lang: python
 
-package_name = "fifthtry.github.io/lato"
+package_name = "fifthtry.github.io/lato-font"
 name = "lato"
 
 

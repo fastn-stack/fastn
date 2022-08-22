@@ -239,13 +239,148 @@ status: Documented
 description: `S` means slides. `simple-dark-slides` is a presentation theme.
 
 -- package-list: `bling`
-package-url: https://fifthtry.github.io/bling/badge
+package-url: https://fifthtry.github.io/bling
 package-name: fifthtry.github.io/bling
-github-url: https://github.com/FifthTry/bling/blob/main/badge.ftd
+github-url: https://github.com/FifthTry/bling/blob
 package-type: BL
 licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
 status: Documented
 description: `BL` means bling library. `bling` is a library of `FTD` components. `BL` has more than `10+` components, which are ready to use for your web packages.
+
+-- package-list: `fifthtry.github.io/slika-ig`
+package-url: https://fifthtry.github.io/slika-ig
+package-name: fifthtry.github.io/slika-ig
+github-url: https://github.com/FifthTry/slika-ig
+package-type: IG
+licence-url: https://github.com/FifthTry/slika-ig/blob/main/LICENSE
+status: WIP
+description: `IG` means image gallery. `slika-ig` image gallery is ready to use for your `FTD` web packages.
+
+-- package-list: `fifthtry.github.io/imagen-ig`
+package-url: https://fifthtry.github.io/imagen-ig
+package-name: fifthtry.github.io/imagen-ig
+github-url: https://github.com/FifthTry/imagen-ig
+package-type: IG
+licence-url: https://github.com/FifthTry/imagen-ig/blob/main/LICENSE
+status: WIP
+description: `IG` means image gallery. `imagen-ig` image gallery is ready to use for your `FTD` web packages.
+
+-- package-list: `fifthtry.github.io/imago-gallery-ig`
+package-url: https://fifthtry.github.io/imago-gallery-ig
+package-name: fifthtry.github.io/imago-gallery-ig
+github-url: https://github.com/FifthTry/imago-gallery-ig
+package-type: IG
+licence-url: https://github.com/FifthTry/imago-gallery-ig/blob/main/LICENSE
+status: WIP
+description: `IG` means image gallery. `imago-gallery-ig` image gallery is ready to use for your `FTD` web packages.
+
+-- package-list: `fifthtry.github.io/typography`
+package-url: https://fifthtry.github.io/typography
+package-name: fifthtry.github.io/typography
+github-url: https://github.com/FifthTry/typography
+package-type: TF
+licence-url: https://github.com/FifthTry/typography/blob/main/LICENSE
+status: Documented
+description: `TF` means typography. `typography` contains `h0`,`h1`, `h2`, `h3` and `markdown` which can be used on `FTD` web sites as `typography` component.
+
+-- package-list: `fifthtry.github.io/header`
+package-url: https://fifthtry.github.io/header
+package-name: fifthtry.github.io/header
+github-url: https://github.com/FifthTry/header
+package-type: H
+licence-url: https://github.com/FifthTry/header/blob/main/LICENSE
+status: Documented
+description: `H` means header. `header` can be used on `FTD` web sites as `header` component.
+
+-- package-list: `fifthtry.github.io/admonitions`
+package-url: https://fifthtry.github.io/admonitions
+package-name: fifthtry.github.io/admonitions
+github-url: https://github.com/FifthTry/admonitions
+package-type: cbox
+licence-url: https://github.com/FifthTry/admonitions/blob/main/LICENSE
+status: Documented
+description: `cbox` means admonitions. `admonitions` can be used on `FTD` web sites as `admonitions` component.
+
+-- package-list: `fifthtry.github.io/code-block`
+package-url: https://fifthtry.github.io/code-block
+package-name: fifthtry.github.io/code-block
+github-url: https://github.com/FifthTry/code-block
+package-type: CB
+licence-url: https://github.com/FifthTry/code-block/blob/main/LICENSE
+status: Documented
+description: `cb` means code-block. `code-block` can be used on `FTD` web sites as `code-block` component.
+
+-- package-list: `fifthtry.github.io/language-switcher`
+package-url: https://fifthtry.github.io/language-switcher
+package-name: fifthtry.github.io/language-switcher
+github-url: https://github.com/FifthTry/language-switcher
+package-type: LS
+licence-url: https://github.com/FifthTry/language-switcher/blob/main/LICENSE
+status: Documented
+description: `ls` means language switcher. `language-switcher` can be used on `FTD` web sites as `language-switcher` component which translates web page content in available languages.
+
+-- package-list: `fifthtry.github.io/virgil-font`
+package-url: https://fifthtry.github.io/virgil-font
+package-name: fifthtry.github.io/virgil-font
+github-url: https://github.com/FifthTry/virgil-font
+package-type: font
+licence-url: https://github.com/FifthTry/virgil-font/blob/main/LICENSE
+status: Documented
+description: virgil-font is included in `FTD`. `virgil-font` can be used on `FTD` web sites to change font of your web pages. Inspired by `github.com/excalidraw/virgil`.
+
+-- package-list: `fifthtry.github.io/lato-font`
+package-url: https://fifthtry.github.io/lato-font
+package-name: fifthtry.github.io/lato-font
+github-url: https://github.com/FifthTry/lato-font
+package-type: font
+licence-url: https://github.com/FifthTry/lato-font/blob/main/LICENSE
+status: Documented
+description: lato-font is included in `FTD`. `lato-font` can be used on `FTD` web sites to change font of your web pages.
+
+-- package-list: `switcher` is a Product Switcher
+package-url: https://fifthtry.github.io/switcher
+package-name: fifthtry.github.io/switcher
+github-url: https://github.com/FifthTry/switcher
+package-type: PS
+licence-url: https://github.com/FifthTry/switcher/blob/main/LICENSE
+status: Documented
+description: `PS` means product switcher. `switcher` can be used on your web pages as a brand website switcher.
+
+-- package-list: `dark-mode-switcher` is a dark / light mode switcher
+package-url: https://fifthtry.github.io/dark-mode-switcher
+package-name: fifthtry.github.io/dark-mode-switcher
+github-url: https://github.com/FifthTry/dark-mode-switcher
+package-type: DMS
+licence-url: https://github.com/FifthTry/dark-mode-switcher/blob/main/LICENSE
+status: Documented
+description: `DMS` means dark mode switcher. `dark-mode-switcher` can be used on your web pages as a dark and light theme switcher.
+
+-- package-list: `button` is a `FTD` button component.
+package-url: https://fifthtry.github.io/button
+package-name: fifthtry.github.io/button
+github-url: https://github.com/FifthTry/button
+package-type: BT
+licence-url: https://github.com/FifthTry/button/blob/main/LICENSE
+status: Documented
+description: `BT` means button. `button` can be used on your web pages as a button component.
+
+-- package-list: `button` is a `FTD` button component.
+package-url: https://fifthtry.github.io/button
+package-name: fifthtry.github.io/button
+github-url: https://github.com/FifthTry/button
+package-type: BT
+licence-url: https://github.com/FifthTry/button/blob/main/LICENSE
+status: Documented
+description: `BT` means button. `button` can be used on your web pages as a button component.
+
+-- package-list: `octicon` is a `FTD` icons component.
+package-url: https://fifthtry.github.io/octicon
+package-name: fifthtry.github.io/octicon
+github-url: https://github.com/FifthTry/octicon
+package-type: IC
+licence-url: https://github.com/FifthTry/octicon/blob/main/LICENSE
+status: Documented
+description: `IC` means icon. `octicon` can be used on your web pages as a octicons icon component.
 
 -- package-list: `resume` Default resume template
 package-url: https://fifthtry.github.io/resume
