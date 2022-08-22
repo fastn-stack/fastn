@@ -584,21 +584,22 @@ impl ChildComponent {
             name,
             doc,
         )?;
-        println!("Child Component --------------------");
-        dbg!(name);
-        dbg!(&root.full_name, &root.root);
+        // println!("Child Component --------------------");
+        // dbg!(name);
+        // dbg!(&root.full_name, &root.root);
         // dbg!(&root.arguments.keys());
         // dbg!(&arguments.keys());
 
         let (mut local_arguments, inherits) =
             read_arguments(p1, name, &root.arguments, arguments, doc)?;
 
-        local_arguments.extend(universal_arguments());
+        // local_arguments.extend(universal_arguments());
         let mut all_arguments = local_arguments.clone();
         all_arguments.extend(arguments.clone());
 
         // dbg!(&local_arguments.keys());
-        // dbg!(&root.arguments.keys());
+        // dbg!(&arguments.keys());
+        // dbg!(&all_arguments.keys());
 
         let root_property =
             get_root_property(line_number, name, caption, doc, &all_arguments, inherits)?;
@@ -1746,7 +1747,7 @@ impl Component {
         let root = doc.resolve_name(p1.line_number, var_data.kind.as_str())?;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
 
-        println!("Component ---------------");
+        // println!("Component ---------------");
         // dbg!(&root, &name);
         // dbg!(&root_component.full_name);
         // dbg!(&root_component.root);
@@ -1759,6 +1760,7 @@ impl Component {
             doc,
         )?;
 
+        // Extending the arguments map with the universal arguments
         arguments.extend(universal_arguments());
 
         // dbg!(&root_component.arguments.keys());
@@ -2474,14 +2476,15 @@ pub fn read_properties(
     is_reference: bool,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
-    let root_arguments = {
-        let mut root_arguments = root_arguments.clone();
-        let universal_argument = universal_arguments();
-        for (key, arg) in universal_argument {
-            root_arguments.entry(key).or_insert(arg);
-        }
-        root_arguments
-    };
+
+    // let root_arguments = {
+    //     let mut root_arguments = root_arguments.clone();
+    //     let universal_argument = universal_arguments();
+    //     for (key, arg) in universal_argument {
+    //         root_arguments.entry(key).or_insert(arg);
+    //     }
+    //     root_arguments
+    // };
 
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
@@ -2774,9 +2777,9 @@ fn read_arguments(
 
     // contains parent arguments and current arguments
     let mut all_args = arguments.clone();
-    println!("inside read arguments ------------------------");
-    println!("all args init:");
-    dbg!(&all_args.keys());
+    // println!("inside read arguments ------------------------");
+    // println!("all args init:");
+    // dbg!(&all_args.keys());
 
     // Set of root arguments which are invoked once
     let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
@@ -2883,9 +2886,9 @@ fn read_arguments(
         all_args.insert(var_data.name.to_string(), kind);
     }
 
-    println!("all args after:");
-    dbg!(&all_args.keys());
-    dbg!(&args.keys());
+    // println!("all args after:");
+    // dbg!(&all_args.keys());
+    // dbg!(&args.keys());
 
     Ok((args, inherits))
 }
