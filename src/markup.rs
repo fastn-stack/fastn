@@ -14,6 +14,7 @@ lazy_static::lazy_static! {
 
 pub fn markup(i: &str) -> String {
     comrak::markdown_to_html(i.replace("![", MAGIC).trim(), &MD)
+        .trim()
         .replace(MAGIC, "![")
         .replace('\n', " ")
 }

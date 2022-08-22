@@ -1047,8 +1047,12 @@ impl ftd::Image {
             if let Some(ref id) = img.common.data_id {
                 n.attrs.insert(s("data-id"), escape(id));
             }
-            n.style.insert(s("width"), s("100%"));
-            n.style.insert(s("height"), s("100%"));
+            if img.common.width.is_none() {
+                n.style.insert(s("width"), s("100%"));
+            }
+            if img.common.height.is_none() {
+                n.style.insert(s("height"), s("100%"));
+            }
             n.attrs.insert(s("src"), escape(img.src.light.as_str()));
             if let Some(ref description) = img.description {
                 n.attrs.insert(s("alt"), escape(description));
