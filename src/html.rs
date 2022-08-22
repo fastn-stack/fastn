@@ -1567,8 +1567,6 @@ impl ftd::Common {
             d.insert(s("id"), escape(id));
         }
         if let Some(ref term) = self.term {
-            println!("Some term found pushed to node!");
-            dbg!(term);
             d.insert(s("term"), escape(term));
         }
 
