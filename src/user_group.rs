@@ -379,8 +379,9 @@ pub async fn access_identities(
             .iter()
             .map(|c| (c.name().to_string(), c.value().to_string()))
             .collect();
+        let host = req.connection_info().host().to_string();
         return fpm::controller::get_remote_identities(
-            req.connection_info().host(),
+            host.as_str(),
             cookies,
             sitemap_identities.as_slice(),
         )
