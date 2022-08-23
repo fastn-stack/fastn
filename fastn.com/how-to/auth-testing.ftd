@@ -1,0 +1,83 @@
+-- ft.page: Auth Testing
+
+In this article, I am using [abrark.com](https://github.com/abrarnitk/abrark/)
+package for `remote` and `local` testing.
+
+-- ft.h1: Local Testing with CLI Parameter `--identities`
+
+-- ft.h2: Define User Group in `FPM.ftd`
+
+For authorization purpose we have to define [user groups](/dev/user-group/)
+in `FPM.ftd`. In the below group using `email` as identity.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.user-group: abrark-readers
+email: abrark.asahi@gmail.com
+
+-- ft.h2: Use User Group in Sitemap
+
+Use `abrark-readers` in Sitemap with `readers` key.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Home: /
+readers: abrark-readers
+
+-- ft.h2: Build `fpm` Binary
+
+Clone [`FifthTry/fpm`](https://) and build it.
+
+-- ft.code:
+lang: sh
+
+cargo install --path=.
+
+
+-- ft.h2: Run `fpm` with CLI Parameter
+
+By setting `--identities` as `email: abrark.asahi@gmail.com` we are saying that
+at every http request this `email` is the user identity and check the permission
+against this user identity.
+
+Run `fpm` with cli parameter `--identities` in your package.
+
+-- ft.code:
+lang: sh
+
+fpm serve --port 8000 --identities 'email: abrark.asahi@gmail.com'
+
+
+
+
+-- ft.markdown:
+
+Open `/` in the browser, It will let access to `/` page. If you will change
+`email` identity in `FPM.ftd` to other email and reload page again, so it will
+show unauthorized access.
+
+
+-- ft.h1: cookie --identities
+
+- Define user groups FPM.ftd
+- use them as `reader` or `writer` in sitemap
+- Build `fpm` without remote feature `cargo install --path=.`
+- Run fpm with --identities cli parameter
+- Open in browser
+
+
+-- ft.h1: GitHub Local Testing with `sid` cookie
+
+- Define user groups FPM.ftd
+- use them as `reader` or `writer` in sitemap
+- OAuth with login with github `https://abrark.com/-/dj/login/github/`
+- After login check URL https://abrark.com/-/dj/get-identities/ is working or
+Its response will be like `{"success": true, "user-identities": [{"github": "AbrarNitk"}]}`
+- If you are testing in local
+    - copy `abrark.com`'s `sid` cookie to local
+    - change remote_host to `abrark.com` in `fpm` code controller::get_remote_identities,
+- Build `fpm` with remote feature `cargo install --path=. features=remote`
