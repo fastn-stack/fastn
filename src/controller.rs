@@ -224,7 +224,6 @@ pub async fn get_remote_identities(
         #[serde(rename = "user-identities")]
         user_identities: Option<Vec<std::collections::HashMap<String, String>>>,
     }
-    let remote_host = "abrark.com";
     let url = format!("https://{}/-/dj/get-identities/", remote_host);
     println!("remote url: {}", url);
 
@@ -255,6 +254,4 @@ pub async fn get_remote_identities(
                 .map(|(key, value)| fpm::user_group::UserIdentity { key, value })
         })
         .collect_vec())
-
-    // Ok(vec![])
 }
