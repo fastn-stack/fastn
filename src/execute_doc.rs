@@ -1,14 +1,11 @@
 #[derive(Debug, PartialEq)]
 pub struct ExecuteDoc<'a> {
     pub name: &'a str,
-    pub aliases: &'a std::collections::BTreeMap<String, String>,
-    pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
-    pub local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub aliases: &'a ftd::Map<String>,
+    pub bag: &'a ftd::Map<ftd::p2::Thing>,
+    pub local_variables: &'a mut ftd::Map<ftd::p2::Thing>,
     pub instructions: &'a [ftd::Instruction],
-    pub invocations: &'a mut std::collections::BTreeMap<
-        String,
-        Vec<std::collections::BTreeMap<String, ftd::Value>>,
-    >,
+    pub invocations: &'a mut ftd::Map<Vec<ftd::Map<ftd::Value>>>,
 }
 
 impl<'a> ExecuteDoc<'a> {
@@ -16,7 +13,7 @@ impl<'a> ExecuteDoc<'a> {
         &mut self,
         parent_container: &[usize],
         id: Option<String>,
-        referenced_local_variables: &mut std::collections::BTreeMap<String, String>,
+        referenced_local_variables: &mut ftd::Map<String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
         let mut index = 0;
         self.execute_(
@@ -39,11 +36,10 @@ impl<'a> ExecuteDoc<'a> {
         parent_children_length: usize, // in case of open container send the current length
         parent_id: Option<String>,
         id: Option<String>,
-        referenced_local_variables: &mut std::collections::BTreeMap<String, String>,
+        referenced_local_variables: &mut ftd::Map<String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
         let mut current_container: Vec<usize> = Default::default();
-        let mut named_containers: std::collections::BTreeMap<String, Vec<Vec<usize>>> =
-            Default::default();
+        let mut named_containers: ftd::Map<Vec<Vec<usize>>> = Default::default();
         let mut children: Vec<ftd::Element> = vec![];
         let mut external_children_count = if is_external { Some(0_usize) } else { None };
 
@@ -262,14 +258,14 @@ impl<'a> ExecuteDoc<'a> {
         &mut self,
         mut main: Vec<ftd::Element>,
         current_container: &mut Vec<usize>,
-        named_containers: &mut std::collections::BTreeMap<String, Vec<Vec<usize>>>,
+        named_containers: &mut ftd::Map<Vec<Vec<usize>>>,
         e: ftd::Element,
-        container: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>>,
+        container: Option<ftd::Map<Vec<Vec<usize>>>>,
         index: &mut usize,
         parent_container: &[usize],
         id: Option<String>,
         container_children: Vec<ftd::Element>,
-        referenced_local_variables: &mut std::collections::BTreeMap<String, String>,
+        referenced_local_variables: &mut ftd::Map<String>,
         parent_children_length: usize,
     ) -> ftd::p1::Result<Vec<ftd::Element>> {
         let mut current = &mut main;
@@ -403,7 +399,7 @@ impl<'a> ExecuteDoc<'a> {
                     if let Some((_, _, ref mut e)) = c.external_children {
                         e.extend(external_children);
                     } else {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("expected external_children data for id: {}", append_at),
                             "",
                             0,
@@ -531,7 +527,7 @@ fn match_parent_id(c: &str, parent_id: &Option<String>) -> bool {
 fn change_container(
     name: &str,
     current_container: &mut Vec<usize>,
-    named_containers: &mut std::collections::BTreeMap<String, Vec<Vec<usize>>>,
+    named_containers: &mut ftd::Map<Vec<Vec<usize>>>,
     parent_id: &Option<String>,
     doc_id: &str,
 ) -> ftd::p1::Result<()> {
@@ -542,7 +538,7 @@ fn change_container(
     *current_container = match named_containers.get(name) {
         Some(v) => v.get(0).unwrap().to_owned(),
         None => {
-            return ftd::e2("no such container", doc_id, 0);
+            return ftd::p2::utils::e2("no such container", doc_id, 0);
         }
     };
     Ok(())
@@ -550,8 +546,8 @@ fn change_container(
 
 fn update_named_container(
     current_container: &[usize],
-    named_containers: &mut std::collections::BTreeMap<String, Vec<Vec<usize>>>,
-    child_container: &std::collections::BTreeMap<String, Vec<Vec<usize>>>,
+    named_containers: &mut ftd::Map<Vec<Vec<usize>>>,
+    child_container: &ftd::Map<Vec<Vec<usize>>>,
     container_id: Option<String>,
     key_with_container: bool,
 ) {

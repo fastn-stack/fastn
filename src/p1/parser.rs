@@ -720,7 +720,7 @@ mod test {
             --- realm.rr.step.body:
 
             {
-              "body": "-- h0: Hello World\n\n-- markdown:\n\ndemo cr 1\n",
+              "body": "-- h0: Hello World\n\n-- markup:\n\ndemo cr 1\n",
               "kind": "content",
               "track": "amitu/index",
               "version": "2020-11-16T04:13:14.642892+00:00"
@@ -732,7 +732,7 @@ mod test {
                     &indoc!(
                         r#"
                         {
-                          "body": "-- h0: Hello World\n\n-- markdown:\n\ndemo cr 1\n",
+                          "body": "-- h0: Hello World\n\n-- markup:\n\ndemo cr 1\n",
                           "kind": "content",
                           "track": "amitu/index",
                           "version": "2020-11-16T04:13:14.642892+00:00"
@@ -748,7 +748,7 @@ mod test {
         p!(
             &indoc!(
                 "
-                 -- markdown:
+                 -- markup:
 
                  hello world is
 
@@ -757,7 +757,7 @@ mod test {
                      lol
             "
             ),
-            super::Section::with_name("markdown")
+            super::Section::with_name("markup")
                 .and_body("hello world is\n\n    not enough\n\n    lol")
                 .list(),
         );
