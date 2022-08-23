@@ -222,6 +222,7 @@ pub fn entity() -> ftd::p2::Thing {
 
 mod interpreter {
     use ftd::test::*;
+    use std::fmt::Display;
 
     /// inserts mapping of root_id -> integer variable (thing) in the bag
     ///
@@ -306,19 +307,49 @@ mod interpreter {
         bag.insert(root.to_string(), optional_decimal_thing);
     }
 
-    /// insert all universal arguments in the bag by count
+    /// generates root bag entry and returns it as String
+    ///
+    /// root_id = \[doc_id\]#\[var_name\]@\[level\]
+    fn make_root<T: Display>(var_name: &str, doc_id: &str, count: T) -> String {
+        format!("{}#{}@{}", doc_id, var_name, count)
+    }
+
+    fn insert_universal_variables_by_levels(
+        levels: Vec<String>,
+        doc_id: &str,
+        bag: &mut ftd::Map<ftd::p2::Thing>,
+    ) {
+        let universal_arguments_vec = universal_arguments_as_vec();
+
+        for (arg, kind) in universal_arguments_vec.iter() {
+            for level in levels.iter() {
+                if kind.is_optional() {
+                    if kind.inner().is_string() {
+                        insert_optional_string_by_root(make_root(arg, doc_id, level).as_str(), bag);
+                    }
+                    if kind.inner().is_integer() {
+                        insert_optional_integer_by_root(
+                            make_root(arg, doc_id, level).as_str(),
+                            bag,
+                        );
+                    }
+                    if kind.inner().is_decimal() {
+                        insert_optional_decimal_by_root(
+                            make_root(arg, doc_id, level).as_str(),
+                            bag,
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    /// insert all universal arguments in the bag by count at 1st level
     fn insert_universal_variables_by_count(
         lim: i32,
         doc_id: &str,
         bag: &mut ftd::Map<ftd::p2::Thing>,
     ) {
-        /// generates root bag entry and returns it as String
-        ///
-        /// root_id = \[doc_id\]#\[var_name\]@\[level\]
-        fn make_root(var_name: &str, doc_id: &str, count: i32) -> String {
-            format!("{}#{}@{}", doc_id, var_name, count)
-        }
-
         let mut count: i32 = 0;
         let universal_arguments_vec = universal_arguments_as_vec();
 
@@ -724,7 +755,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#ft_toc".to_string(),
-                arguments: Default::default(),
+                arguments: universal_arguments_as_map(),
                 properties: Default::default(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -927,17 +958,21 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#parent".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (
-                        s("active"),
-                        ftd::p2::Kind::Optional {
-                            kind: Box::new(ftd::p2::Kind::boolean()),
-                            is_reference: false,
-                        },
-                    ),
-                    (s("id"), ftd::p2::Kind::string()),
-                    (s("name"), ftd::p2::Kind::caption()),
-                ])
+                arguments: [
+                    vec![
+                        (
+                            s("active"),
+                            ftd::p2::Kind::Optional {
+                                kind: Box::new(ftd::p2::Kind::boolean()),
+                                is_reference: false,
+                            },
+                        ),
+                        (s("name"), ftd::p2::Kind::caption()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -1089,8 +1124,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#table-of-content".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(s("id"), ftd::p2::Kind::string())])
-                    .collect(),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("height"),
@@ -1145,10 +1179,12 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "foo/bar#toc-heading".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("text"),
-                    ftd::p2::Kind::caption(),
-                )])
+                arguments: [
+                    vec![(s("text"), ftd::p2::Kind::caption())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -1225,76 +1261,6 @@ mod interpreter {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
                         kind: ftd::p2::Kind::boolean(),
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("toc_main"),
-                        source: ftd::TextSource::Header,
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/welcome/"),
-                        source: ftd::TextSource::Header,
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/Building/"),
-                        source: ftd::TextSource::Header,
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/ChildBuilding/"),
-                        source: ftd::TextSource::Header,
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0,0,3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/Building2/"),
-                        source: ftd::TextSource::Header,
                     },
                 },
                 conditions: vec![],
@@ -1427,6 +1393,16 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        // let levels: Vec<String> = vec![
+        //     s("0"),
+        //     s("0,0"),
+        //     s("0,0,0"),
+        //     s("0,0,0,0,2"),
+        //     s("0,0,0,2"),
+        //     s("0,0,0,3"),
+        // ];
+        // insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
 
         let children = vec![
             ftd::Element::Markup(ftd::Markups {
@@ -1756,14 +1732,16 @@ mod interpreter {
 
 
             -- ftd.column table-of-content:
-            string id:
+            ;; id is universal argument now no repeated initialization of id allowed
+            /string id:
             id: $id
             width: 300
             height: fill
 
 
             -- ftd.column parent:
-            string id:
+            ;; id is universal argument now no repeated initialization of id allowed
+            /string id:
             caption name:
             optional boolean active:
             id: $id
@@ -2905,8 +2883,13 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "fifthtry/ft#markdown".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(s("body"), ftd::p2::Kind::body())])
-                    .collect(),
+                arguments: [
+                    vec![(s("body"), ftd::p2::Kind::body())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -2943,7 +2926,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "reference#test-component".to_string(),
-                arguments: Default::default(),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("background-color"),
@@ -3003,6 +2986,9 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
+
         let title = ftd::Markups {
             text: ftd::rendered::markup_line("John smith"),
             line: true,
@@ -3073,15 +3059,19 @@ mod interpreter {
         insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
         insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
+        insert_universal_variables_by_count(3, "foo/bar", &mut bag);
+
         bag.insert(
             "foo/bar#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#text".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("name"),
-                    ftd::p2::Kind::caption_or_body(),
-                )])
+                arguments: [
+                    vec![(s("name"), ftd::p2::Kind::caption_or_body())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
@@ -4633,8 +4623,13 @@ mod interpreter {
                 invocations: Default::default(),
                 full_name: "fifthtry/ft#markdown".to_string(),
                 root: s("ftd#text"),
-                arguments: std::iter::IntoIterator::into_iter([(s("body"), ftd::p2::Kind::body())])
-                    .collect(),
+                arguments: [
+                    vec![(s("body"), ftd::p2::Kind::body())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -4681,10 +4676,15 @@ mod interpreter {
                 invocations: Default::default(),
                 full_name: "foo/bar#h0".to_string(),
                 root: s("ftd#column"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("body"), ftd::p2::Kind::body().into_optional()),
-                    (s("title"), ftd::p2::Kind::caption()),
-                ])
+                arguments: [
+                    vec![
+                        (s("body"), ftd::p2::Kind::body().into_optional()),
+                        (s("title"), ftd::p2::Kind::caption()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 instructions: vec![
                     ftd::Instruction::ChildComponent {
@@ -4816,6 +4816,9 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        let levels: Vec<String> = vec![s("0"), s("0,1"), s("1"), s("1,1")];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         main.container
@@ -5051,17 +5054,22 @@ mod interpreter {
                 invocations: Default::default(),
                 full_name: "foo/bar#image".to_string(),
                 root: s("ftd#column"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("width"), ftd::p2::Kind::string().into_optional()),
-                    (
-                        s("src"),
-                        ftd::p2::Kind::Record {
-                            name: s("ftd#image-src"),
-                            default: None,
-                            is_reference: false,
-                        },
-                    ),
-                ])
+                arguments: [
+                    vec![
+                        (s("width"), ftd::p2::Kind::string().into_optional()),
+                        (
+                            s("src"),
+                            ftd::p2::Kind::Record {
+                                name: s("ftd#image-src"),
+                                default: None,
+                                is_reference: false,
+                            },
+                        ),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
@@ -5103,6 +5111,8 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
 
@@ -5235,8 +5245,13 @@ mod interpreter {
                         },
                     },
                 ],
-                arguments: std::iter::IntoIterator::into_iter([(s("x"), ftd::p2::Kind::integer())])
-                    .collect(),
+                arguments: [
+                    vec![(s("x"), ftd::p2::Kind::integer())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 ..Default::default()
             }),
         );
@@ -5251,6 +5266,8 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         let mut row: ftd::Row = Default::default();
@@ -5365,11 +5382,18 @@ mod interpreter {
                         },
                     },
                 ],
-                arguments: std::iter::IntoIterator::into_iter([(s("x"), ftd::p2::Kind::integer())])
-                    .collect(),
+                arguments: [
+                    vec![(s("x"), ftd::p2::Kind::integer())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         let mut row: ftd::Row = Default::default();
@@ -5866,6 +5890,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#foo".to_string(),
+                arguments: universal_arguments_as_map(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -5917,6 +5942,9 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+
         let mut main = super::default_column();
         main.container
             .children
@@ -6026,6 +6054,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "inner_container#foo".to_string(),
+                arguments: universal_arguments_as_map(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -6077,6 +6106,9 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+
         let mut main = super::default_column();
         main.container
             .children
@@ -6220,6 +6252,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("append-at"),
@@ -6282,6 +6315,8 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         p!(
             "
@@ -6434,11 +6469,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#desktop-display"),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("id"),
-                    ftd::p2::Kind::optional(ftd::p2::Kind::string()),
-                )])
-                .collect(),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::component::Property {
@@ -6486,6 +6517,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("append-at"),
@@ -6552,6 +6584,7 @@ mod interpreter {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#desktop-display".to_string(),
+                            arguments: universal_arguments_as_map(),
                             condition: Some(ftd::p2::Boolean::Equal {
                                 left: ftd::PropertyValue::Reference {
                                     name: s("foo/bar#mobile"),
@@ -6603,11 +6636,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#mobile-display"),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("id"),
-                    ftd::p2::Kind::optional(ftd::p2::Kind::string()),
-                )])
-                .collect(),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::component::Property {
@@ -6671,9 +6700,12 @@ mod interpreter {
                 flags: ftd::VariableFlags::default(),
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
-                    value: ftd::variable::Value::String {
-                        text: s("some-child"),
-                        source: ftd::TextSource::Header,
+                    value: ftd::Value::Optional {
+                        data: Box::new(Some(ftd::Value::String {
+                            text: s("some-child"),
+                            source: ftd::TextSource::Header,
+                        })),
+                        kind: ftd::p2::Kind::string(),
                     },
                 },
                 conditions: vec![],
@@ -6686,26 +6718,34 @@ mod interpreter {
                 flags: ftd::VariableFlags::default(),
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
-                    value: ftd::variable::Value::String {
-                        text: s("some-child"),
-                        source: ftd::TextSource::Header,
+                    value: ftd::Value::Optional {
+                        data: Box::new(Some(ftd::Value::String {
+                            text: s("some-child"),
+                            source: ftd::TextSource::Header,
+                        })),
+                        kind: ftd::p2::Kind::string(),
                     },
                 },
                 conditions: vec![],
             }),
         );
 
+        let levels = vec![s("1,0,0"), s("1,0,0,0"), s("1,0,0,1")];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
+
         p!(
             "
             -- ftd.column mobile-display:
-            optional string id:
+            ;; id is now univeral no need to declare it again 
+            /optional string id:
             id: $id
 
             --- ftd.text: Mobile Display
             id: mobile-display
 
             -- ftd.column desktop-display:
-            optional string id:
+            ;; redundant declaration of id 
+            /optional string id:
             id: $id
 
             --- ftd.text: Desktop Display
@@ -6988,15 +7028,16 @@ mod interpreter {
             "foo/bar",
             indoc::indoc!(
                 "
+                ;; id is universal argument now no need to declare it 
                 -- ftd.column desktop:
-                optional string id:
+                /optional string id:
                 id: $id
 
                 --- ftd.column:
                 id: foo
 
                 -- ftd.column mobile:
-                optional string id:
+                /optional string id:
                 id: $id
 
                 --- ftd.column:
@@ -7185,18 +7226,18 @@ mod interpreter {
             indoc::indoc!(
                 "
                 -- ftd.column ft_container:
-                optional string id:
+                /optional string id:
                 id: $id
 
                 -- ftd.column ft_container_mobile:
-                optional string id:
+                /optional string id:
                 id: $id
 
 
                 -- ftd.column desktop:
                 open: true
                 append-at: desktop-container
-                optional string id:
+                /optional string id:
                 id: $id
 
                 --- ftd.row:
@@ -7210,7 +7251,7 @@ mod interpreter {
                 -- ftd.column mobile:
                 open: true
                 append-at: mobile-container
-                optional string id:
+                /optional string id:
                 id: $id
 
                 --- ftd.row:
@@ -10458,6 +10499,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#row"),
                 full_name: s("hello-world#foo"),
+                arguments: universal_arguments_as_map(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         events: vec![],
@@ -10496,6 +10538,8 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         p!(
             "
@@ -11005,19 +11049,24 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#row"),
                 full_name: s("foo/bar#foo"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (
-                        s("name"),
-                        ftd::p2::Kind::string().set_default(Some(s("$foo/bar#default-name"))),
-                    ),
-                    (
-                        s("text-size"),
-                        ftd::p2::Kind::Integer {
-                            default: Some(s("$foo/bar#default-size")),
-                            is_reference: false,
-                        },
-                    ),
-                ])
+                arguments: [
+                    vec![
+                        (
+                            s("name"),
+                            ftd::p2::Kind::string().set_default(Some(s("$foo/bar#default-name"))),
+                        ),
+                        (
+                            s("text-size"),
+                            ftd::p2::Kind::Integer {
+                                default: Some(s("$foo/bar#default-size")),
+                                is_reference: false,
+                            },
+                        ),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
@@ -11112,6 +11161,8 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
 
         p!(
             "
@@ -11930,13 +11981,18 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "foo/bar#foo".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("name"), ftd::p2::Kind::caption()),
-                    (
-                        s("open"),
-                        ftd::p2::Kind::boolean().set_default(Some(s("true"))),
-                    ),
-                ])
+                arguments: [
+                    vec![
+                        (s("name"), ftd::p2::Kind::caption()),
+                        (
+                            s("open"),
+                            ftd::p2::Kind::boolean().set_default(Some(s("true"))),
+                        ),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
@@ -12016,6 +12072,8 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -15570,8 +15628,13 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#foo"),
-                arguments: std::iter::IntoIterator::into_iter([(s("o"), ftd::p2::Kind::object())])
-                    .collect(),
+                arguments: [
+                    vec![(s("o"), ftd::p2::Kind::object())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         root: s("ftd#text"),
@@ -15643,6 +15706,8 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         p!(
             "
@@ -16330,22 +16395,27 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#bar"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (
-                        s("active"),
-                        ftd::p2::Kind::boolean().set_default(Some(s("false"))),
-                    ),
-                    (
-                        s("bio"),
-                        ftd::p2::Kind::string().set_default(Some(s("$subtitle"))),
-                    ),
-                    (
-                        s("subtitle"),
-                        ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
-                    ),
-                    (s("title"), ftd::p2::Kind::string()),
-                    (s("w"), ftd::p2::Kind::integer()),
-                ])
+                arguments: [
+                    vec![
+                        (
+                            s("active"),
+                            ftd::p2::Kind::boolean().set_default(Some(s("false"))),
+                        ),
+                        (
+                            s("bio"),
+                            ftd::p2::Kind::string().set_default(Some(s("$subtitle"))),
+                        ),
+                        (
+                            s("subtitle"),
+                            ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                        ),
+                        (s("title"), ftd::p2::Kind::string()),
+                        (s("w"), ftd::p2::Kind::integer()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 locals: Default::default(),
                 properties: std::iter::IntoIterator::into_iter([
@@ -16476,7 +16546,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#bar1"),
-                arguments: Default::default(),
+                arguments: universal_arguments_as_map(),
                 locals: Default::default(),
                 properties: Default::default(),
                 instructions: vec![],
@@ -16654,6 +16724,8 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         main.container
@@ -17004,10 +17076,15 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#presentation"),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    "current".to_string(),
-                    ftd::p2::Kind::integer().set_default(Some(s("1"))),
-                )])
+                arguments: [
+                    vec![(
+                        "current".to_string(),
+                        ftd::p2::Kind::integer().set_default(Some(s("1"))),
+                    )],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -17061,10 +17138,12 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#text"),
                 full_name: s("foo/bar#slide"),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("title"),
-                    ftd::p2::Kind::caption(),
-                )])
+                arguments: [
+                    vec![(s("title"), ftd::p2::Kind::caption())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
@@ -17143,6 +17222,9 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        let levels = vec![s("0"), s("0,0"), s("0,1")];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         main.container
