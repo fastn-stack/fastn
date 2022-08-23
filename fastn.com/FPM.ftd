@@ -84,6 +84,7 @@ email: arpita@fifthtry.com
 - Use Favicon: /favicon/
 - Custom Fonts: /how-to/custom-fonts/
 - Create Font Package: /how-to/create-font-package/
+- Auth Testing: /how-to/auth-testing/
 
 ## Editor Manual: /editor/manual/
 
@@ -182,6 +183,8 @@ email: arpita@fifthtry.com
   - `FPM.ftd`: /fpm-ftd-file/
 - What Is `user-identity`?: /dev/user-identity/
 - What Is `user-group`?: /dev/user-group/
+- Remote Identity: /dev/remote-identity/
+- Local Identity: /dev/local-identity/
 - Day To Day:
   - How To Run Tests: /day-to-day/how-to-run-tests/
   - How To Update Failing Snapshot Tests: /day-to-day/how-to-fix-tests/

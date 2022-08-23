@@ -34,7 +34,7 @@ readers: abrark-readers
 
 -- ft.h2: Build `fpm` Binary
 
-Clone [`FifthTry/fpm`](https://) and build it.
+Clone [`FifthTry/fpm`](https://github.com/fifthtry/fpm) and build it.
 
 -- ft.code:
 lang: sh
@@ -90,7 +90,7 @@ readers: abrark-readers
 
 -- ft.h2: Build `fpm` Binary
 
-Clone [`FifthTry/fpm`](https://) and build it.
+Clone [`FifthTry/fpm`](https://github.com/fifthtry/fpm) and build it.
 
 -- ft.code:
 lang: sh
