@@ -32,14 +32,8 @@ async fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResp
         success: bool,
     }
 
-    let source_url = format!("{}/-/clone/", source);
-    let response = reqwest::Client::new()
-        .get(source_url.as_str())
-        .header(reqwest::header::CONTENT_TYPE, "application/json")
-        .send()
-        .await?;
-    let text = response.text().await?;
-    let response: ApiResponse = serde_json::from_str(text.as_str())?;
+    let response: ApiResponse =
+        fpm::utils::get_json(format!("{}/-/clone/", source).as_str()).await?;
 
     if !response.success {
         return Err(fpm::Error::APIResponseError(

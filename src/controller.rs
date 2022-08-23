@@ -111,16 +111,7 @@ async fn get_package(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<Pa
         fpm_controller, fpm_instance
     );
 
-    let url = url::Url::parse(controller_api.as_str())?;
-
-    let mut headers = reqwest::header::HeaderMap::new();
-    headers.insert(
-        reqwest::header::USER_AGENT,
-        reqwest::header::HeaderValue::from_static("fpm"),
-    );
-
-    let resp: ApiResponse<PackageResult> = fpm::library::http::get_with_type(url, headers).await?;
-
+    let resp: ApiResponse<PackageResult> = fpm::utils::get_json(controller_api.as_str()).await?;
     if !resp.success {
         return Err(fpm::Error::APIResponseError(format!(
             "get_package api error: {:?}",
@@ -170,19 +161,10 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
         latest_commit()?
     );
 
-    let url = url::Url::parse(controller_api.as_str())?;
-
-    // This request should be put request for fpm_ready API to update the instance status to ready
-    // Using http::_get() function to make request to this API for now
-    let mut headers = reqwest::header::HeaderMap::new();
-    headers.insert(
-        reqwest::header::USER_AGENT,
-        reqwest::header::HeaderValue::from_static("fpm"),
-    );
-
     // TODO: here Map is wrong,
     let resp: ApiResponse<std::collections::HashMap<String, String>> =
-        fpm::library::http::get_with_type(url, headers).await?;
+        fpm::utils::get_json(controller_api.as_str()).await?;
+
     if !resp.success {
         return Err(fpm::Error::APIResponseError(format!(
             "fpm_ready api error: {:?}",

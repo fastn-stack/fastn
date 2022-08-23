@@ -151,17 +151,17 @@ impl fpm::Package {
             {
                 let response =
                     if download_url[1..].contains("://") || download_url.starts_with("//") {
-                        reqwest::get(download_url.as_str()).await?
+                        fpm::utils::http_get(download_url.as_str()).await?
                     } else if let Ok(response) =
-                        reqwest::get(format!("https://{}", download_url).as_str()).await
+                        fpm::utils::http_get(format!("https://{}", download_url).as_str()).await
                     {
                         response
                     } else {
-                        reqwest::get(format!("http://{}", download_url).as_str()).await?
+                        fpm::utils::http_get(format!("http://{}", download_url).as_str()).await?
                     };
                 let mut file = std::fs::File::create(&path)?;
                 // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
-                file.write_all(&response.bytes().await?)?;
+                file.write_all(&response)?;
                 // file.write_all(response.text().await?.as_bytes())?;
             }
 
@@ -236,33 +236,21 @@ impl fpm::Package {
         .await;
 
         async fn get_fpm(name: &str) -> fpm::Result<String> {
-            let response_fpm = if let Ok(response_fpm) =
-                reqwest::get(format!("https://{}/FPM.ftd", name).as_str()).await
+            if let Ok(response_fpm) =
+                fpm::utils::http_get_str(format!("https://{}/FPM.ftd", name).as_str()).await
             {
-                if response_fpm.status().is_success() {
-                    Some(response_fpm)
-                } else {
-                    None
-                }
+                Ok(response_fpm)
             } else if let Ok(response_fpm) =
-                reqwest::get(format!("http://{}/FPM.ftd", name).as_str()).await
+                fpm::utils::http_get_str(format!("http://{}/FPM.ftd", name).as_str()).await
             {
-                if response_fpm.status().is_success() {
-                    Some(response_fpm)
-                } else {
-                    None
-                }
+                Ok(response_fpm)
             } else {
-                None
-            };
-            match response_fpm {
-                Some(response_fpm) => Ok(response_fpm.text().await?),
-                None => Err(fpm::Error::UsageError {
+                Err(fpm::Error::UsageError {
                     message: format!(
                         "Unable to find the FPM.ftd for the dependency package: {}",
                         name
                     ),
-                }),
+                })
             }
         }
     }
@@ -367,33 +355,21 @@ impl fpm::Package {
         .await;
 
         async fn get_fpm(name: &str) -> fpm::Result<String> {
-            let response_fpm = if let Ok(response_fpm) =
-                reqwest::get(format!("https://{}/FPM.ftd", name).as_str()).await
+            if let Ok(response_fpm) =
+                fpm::utils::http_get_str(format!("https://{}/FPM.ftd", name).as_str()).await
             {
-                if response_fpm.status().is_success() {
-                    Some(response_fpm)
-                } else {
-                    None
-                }
+                Ok(response_fpm)
             } else if let Ok(response_fpm) =
-                reqwest::get(format!("http://{}/FPM.ftd", name).as_str()).await
+                fpm::utils::http_get_str(format!("http://{}/FPM.ftd", name).as_str()).await
             {
-                if response_fpm.status().is_success() {
-                    Some(response_fpm)
-                } else {
-                    None
-                }
+                Ok(response_fpm)
             } else {
-                None
-            };
-            match response_fpm {
-                Some(response_fpm) => Ok(response_fpm.text().await?),
-                None => Err(fpm::Error::UsageError {
+                Err(fpm::Error::UsageError {
                     message: format!(
                         "Unable to find the FPM.ftd for the dependency package: {}",
                         name
                     ),
-                }),
+                })
             }
         }
     }
@@ -415,17 +391,17 @@ impl fpm::Package {
         // Download the zip folder
         {
             let response = if download_url[1..].contains("://") || download_url.starts_with("//") {
-                reqwest::get(download_url.as_str()).await?
+                fpm::utils::http_get(download_url.as_str()).await?
             } else if let Ok(response) =
-                reqwest::get(format!("https://{}", download_url).as_str()).await
+                fpm::utils::http_get(format!("https://{}", download_url).as_str()).await
             {
                 response
             } else {
-                reqwest::get(format!("http://{}", download_url).as_str()).await?
+                fpm::utils::http_get(format!("http://{}", download_url).as_str()).await?
             };
             let mut file = std::fs::File::create(&path)?;
             // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
-            file.write_all(&response.bytes().await?)?;
+            file.write_all(&response)?;
             // file.write_all(response.text().await?.as_bytes())?;
         }
 

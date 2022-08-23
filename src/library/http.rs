@@ -49,63 +49,15 @@ pub async fn processor<'a>(
         url.query_pairs_mut().append_pair(k, v);
     }
 
-    let json = get(url, doc.name, section.line_number).await?;
-    doc.from_json(&json, section)
-}
-
-pub(crate) async fn get(
-    url: url::Url,
-    doc_id: &str,
-    line_number: usize,
-) -> ftd::p1::Result<serde_json::Value> {
-    let t = match _get(url).await {
+    let json = match fpm::utils::http_get(url.as_str()).await {
         Ok(v) => v,
         Err(e) => {
             return ftd::p2::utils::e2(
-                format!("failed to fetch data: {:?}", e),
-                doc_id,
-                line_number,
+                format!("HTTP::get failed: {:?}", e),
+                doc.name,
+                section.line_number,
             )
         }
     };
-
-    match serde_json::from_str(t.as_str()) {
-        Ok(v) => Ok(v),
-        Err(e) => {
-            eprintln!("failed to parse JSON: {}", t);
-            Err(e.into())
-        }
-    }
-}
-
-async fn _get(url: url::Url) -> reqwest::Result<String> {
-    let mut headers = reqwest::header::HeaderMap::new();
-    headers.insert(
-        reqwest::header::USER_AGENT,
-        reqwest::header::HeaderValue::from_static("fpm"),
-    );
-    let c = reqwest::Client::builder()
-        .default_headers(headers)
-        .build()?;
-    c.get(url.to_string().as_str()).send().await?.text().await
-}
-
-pub async fn get_with_type<T: serde::de::DeserializeOwned>(
-    url: url::Url,
-    headers: reqwest::header::HeaderMap,
-) -> fpm::Result<T> {
-    let c = reqwest::Client::builder()
-        .default_headers(headers)
-        .build()?;
-
-    let resp = c.get(url.to_string().as_str()).send().await?;
-    if !resp.status().eq(&reqwest::StatusCode::OK) {
-        return Err(fpm::Error::APIResponseError(format!(
-            "url: {}, response_status: {}, response: {:?}",
-            url,
-            resp.status(),
-            resp.text().await
-        )));
-    }
-    Ok(resp.json().await?)
+    doc.from_json(&json, section)
 }
