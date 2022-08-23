@@ -1,3 +1,5 @@
+-- import: fpm.dev/assets
+
 -- ft.page: Auth Testing
 
 In this article, I am using [abrark.com](https://github.com/abrarnitk/abrark/)
@@ -5,10 +7,12 @@ package for `remote` and `local` testing.
 
 -- ft.h1: Local Testing with CLI Parameter `--identities`
 
+For authorization purpose we have to define [user groups](/dev/user-group/)
+in `FPM.ftd`.
+
 -- ft.h2: Define User Group in `FPM.ftd`
 
-For authorization purpose we have to define [user groups](/dev/user-group/)
-in `FPM.ftd`. In the below group using `email` as identity.
+In the below group using `email` as identity.
 
 -- ft.code: FPM.ftd
 lang: ftd
@@ -38,7 +42,7 @@ lang: sh
 cargo install --path=.
 
 
--- ft.h2: Run `fpm` with CLI Parameter
+-- ft.h2: Run `fpm` with CLI Parameter `--identities`
 
 By setting `--identities` as `email: abrark.asahi@gmail.com` we are saying that
 at every http request this `email` is the user identity and check the permission
@@ -52,8 +56,6 @@ lang: sh
 fpm serve --port 8000 --identities 'email: abrark.asahi@gmail.com'
 
 
-
-
 -- ft.markdown:
 
 Open `/` in the browser, It will let access to `/` page. If you will change
@@ -61,13 +63,64 @@ Open `/` in the browser, It will let access to `/` page. If you will change
 show unauthorized access.
 
 
--- ft.h1: cookie --identities
+-- ft.h1: Local Testing with Cookie `identities`
 
-- Define user groups FPM.ftd
-- use them as `reader` or `writer` in sitemap
-- Build `fpm` without remote feature `cargo install --path=.`
-- Run fpm with --identities cli parameter
-- Open in browser
+-- ft.h2: Define User Group in `FPM.ftd`
+
+In the below group using `email` as identity.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.user-group: abrark-readers
+email: abrark.asahi@gmail.com
+
+-- ft.h2: Use User Group in Sitemap
+
+Use `abrark-readers` in Sitemap with `readers` key.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Home: /
+readers: abrark-readers
+
+
+-- ft.h2: Build `fpm` Binary
+
+Clone [`FifthTry/fpm`](https://) and build it.
+
+-- ft.code:
+lang: sh
+
+cargo install --path=.
+
+
+-- ft.h2: Run `fpm`
+
+Run `fpm` binary in your package.
+
+-- ft.code:
+lang: sh
+
+fpm serve --port 8000
+
+
+-- ft.h2: Set Cookie `identities`
+
+Open browser window with `/` and right click to open `inspect` elements. Go to
+`Application` and set cookies for `http://127.0.0.1:8000` to `identities` as
+`email: abrark.asahi@gmail.com`. For more than one identities use comma
+separated values E.g. `email: abrark.asahi@gmail.com, github: abrarnitk`.
+
+Reload the window after setting the cookie, it will let access the document.
+
+-- ft.image:
+src: $assets.files.static.images.auth.identities-cookie.png
+scale: 1
+width: fill
 
 
 -- ft.h1: GitHub Local Testing with `sid` cookie
