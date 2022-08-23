@@ -2707,6 +2707,7 @@ fn read_arguments(
 
     // contains parent arguments and current arguments
     let mut all_args = arguments.clone();
+    let universal_arguments_set: ftd::Set<String> = universal_arguments().keys().cloned().collect();
 
     // Set of root arguments which are invoked once
     let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
@@ -2802,6 +2803,17 @@ fn read_arguments(
             return Err(ftd::p1::Error::ForbiddenUsage {
                 message: format!(
                     "\'{}\' is already used as header name/identifier !!",
+                    &var_data.name
+                ),
+                doc_id: doc.name.to_string(),
+                line_number: *i,
+            });
+        }
+
+        if universal_arguments_set.contains(&var_data.name) {
+            return Err(ftd::p1::Error::ForbiddenUsage {
+                message: format!(
+                    "redundant declaration of universal argument \'{}\' !!",
                     &var_data.name
                 ),
                 doc_id: doc.name.to_string(),
