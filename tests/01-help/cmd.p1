@@ -6,7 +6,7 @@ Will have to be updated every time version changes.
 -- stdout:
 
 fpm: FTD Package Manager 0.1.11
-Amit Upadhyay, Arpita Jaiswal, Shobhit Sharma, Abrar Khan
+Abrar Khan, Amit Upadhyay, Arpita Jaiswal, Shobhit Sharma
 
 USAGE:
     fpm [OPTIONS] [SUBCOMMAND]
@@ -29,6 +29,7 @@ SUBCOMMANDS:
     help                  Print this message or the help of the given subcommand(s)
     mark-resolve          Marks the conflicted file as resolved
     mark-upto-date        Marks file as up to date.
+    merge                 Merge two manifests together
     resolve-conflict      Show un-synced changes to files in this fpm package
     revert                Reverts the local changes
     rm                    Removes a file in workspace

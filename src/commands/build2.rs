@@ -109,8 +109,6 @@ pub async fn build2(
 async fn get_documents_for_current_package(
     config: &mut fpm::Config,
 ) -> fpm::Result<std::collections::BTreeMap<String, fpm::File>> {
-    use std::iter::FromIterator;
-
     let mut documents = std::collections::BTreeMap::from_iter(
         config
             .get_files(&config.package)
@@ -273,13 +271,15 @@ async fn process_markdown(
         doc: &fpm::Document,
     ) -> fpm::Result<Option<fpm::Document>> {
         let doc_id = if doc.id == "README.md"
-            && !(std::path::Path::new(format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str())
+            && !(camino::Utf8Path::new(format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str())
                 .exists()
-                || std::path::Path::new(format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str())
-                    .exists())
+                || camino::Utf8Path::new(
+                    format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str(),
+                )
+                .exists())
         {
             "index.md".to_string()
-        } else if !std::path::Path::new(
+        } else if !camino::Utf8Path::new(
             format!(
                 ".{}{}",
                 std::path::MAIN_SEPARATOR,

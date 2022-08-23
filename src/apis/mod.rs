@@ -1,4 +1,5 @@
 pub(crate) mod clone;
+pub(crate) mod cr;
 pub(crate) mod edit;
 pub(crate) mod response;
 pub(crate) mod sync;

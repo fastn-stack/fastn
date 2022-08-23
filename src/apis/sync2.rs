@@ -6,15 +6,18 @@ pub enum SyncRequestFile {
     Add {
         path: String,
         content: Vec<u8>,
+        src_cr: Option<usize>,
     },
     Update {
         path: String,
         content: Vec<u8>,
         version: i32,
+        src_cr: Option<usize>,
     },
     Delete {
         path: String,
         version: i32,
+        src_cr: Option<usize>,
     },
 }
 
@@ -122,19 +125,24 @@ pub async fn sync2(
     }
 }
 
-pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
-    // TODO: Need to call at once only
-    let config = fpm::Config::read(None, false).await?;
+pub(crate) async fn do_sync(
+    config: &fpm::Config,
+    files: &[SyncRequestFile],
+) -> fpm::Result<std::collections::HashMap<String, SyncResponseFile>> {
     let mut remote_history = config.get_history().await?;
     let remote_manifest =
         fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), false)?;
     let mut to_be_in_history: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
         Default::default();
     let mut synced_files = std::collections::HashMap::new();
-    for file in request.files {
+    for file in files {
         // TODO: get all data like message, author, src-cr from request
-        match &file {
-            SyncRequestFile::Add { path, content } => {
+        match file {
+            SyncRequestFile::Add {
+                path,
+                content,
+                src_cr,
+            } => {
                 if remote_manifest.contains_key(path) {
                     // add-add-conflict
                     synced_files.insert(
@@ -153,7 +161,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                     fpm::history::FileEditTemp {
                         message: None,
                         author: None,
-                        src_cr: None,
+                        src_cr: *src_cr,
                         operation: fpm::history::FileOperation::Added,
                     },
                 );
@@ -162,6 +170,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                 path,
                 content,
                 version,
+                src_cr,
             } => {
                 if let Some(file_edit) = remote_manifest.get(path) {
                     if file_edit.version.eq(version) {
@@ -172,7 +181,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                             fpm::history::FileEditTemp {
                                 message: None,
                                 author: None,
-                                src_cr: None,
+                                src_cr: *src_cr,
                                 operation: fpm::history::FileOperation::Updated,
                             },
                         );
@@ -211,7 +220,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                                     fpm::history::FileEditTemp {
                                         message: None,
                                         author: None,
-                                        src_cr: None,
+                                        src_cr: *src_cr,
                                         operation: fpm::history::FileOperation::Updated,
                                     },
                                 );
@@ -252,7 +261,11 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                     continue;
                 };
             }
-            SyncRequestFile::Delete { path, version } => {
+            SyncRequestFile::Delete {
+                path,
+                version,
+                src_cr,
+            } => {
                 let file_edit = if let Some(file_edit) = remote_manifest.get(path) {
                     file_edit
                 } else {
@@ -282,7 +295,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         fpm::history::FileEditTemp {
                             message: None,
                             author: None,
-                            src_cr: None,
+                            src_cr: *src_cr,
                             operation: fpm::history::FileOperation::Deleted,
                         },
                     );
@@ -292,7 +305,14 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
     }
 
     fpm::history::insert_into_history(&config.root, &to_be_in_history, &mut remote_history).await?;
+    Ok(synced_files)
+}
 
+pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
+    // TODO: Need to call at once only
+    let config = fpm::Config::read(None, false).await?;
+    let mut synced_files = do_sync(&config, request.files.as_slice()).await?;
+    let remote_history = config.get_history().await?;
     let remote_manifest =
         fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
 

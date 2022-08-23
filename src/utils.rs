@@ -1,4 +1,3 @@
-use colorize::AnsiColor;
 use itertools::Itertools;
 
 macro_rules! warning {
@@ -6,20 +5,48 @@ macro_rules! warning {
         warning!($s)
     };
     ($s:expr) => {
+        use colored::Colorize;
         println!("{}", format!("{}", $s).yellow());
     };
 }
 
 pub fn print_end(msg: &str, start: std::time::Instant) {
+    use colored::Colorize;
+
     if fpm::utils::is_test() {
         println!("done in <omitted>");
     } else {
         println!(
             // TODO: instead of lots of spaces put proper erase current terminal line thing
             "\r{} in {:?}.                          ",
-            msg.to_string().green(),
+            msg.green(),
             start.elapsed()
         );
+    }
+}
+
+pub fn time(msg: &str) -> Timer {
+    Timer {
+        start: std::time::Instant::now(),
+        msg,
+    }
+}
+
+pub struct Timer<'a> {
+    start: std::time::Instant,
+    msg: &'a str,
+}
+
+impl<'a> Timer<'a> {
+    pub fn it<T>(&self, a: T) -> T {
+        use colored::Colorize;
+
+        if !fpm::utils::is_test() {
+            let duration = format!("{:?}", self.start.elapsed());
+            println!("{} in {}", self.msg.green(), duration.red());
+        }
+
+        a
     }
 }
 
@@ -47,8 +74,7 @@ pub(crate) fn language_to_human(language: &str) -> String {
 }
 
 pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {
-    let time = std::time::SystemTime::UNIX_EPOCH + std::time::Duration::from_nanos(*nanos as u64);
-    chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339()
+    nanos.to_string() // TODO
 }
 
 pub(crate) fn history_path(id: &str, base_path: &str, timestamp: &u128) -> camino::Utf8PathBuf {
@@ -145,16 +171,35 @@ pub(crate) fn get_package_title(config: &fpm::Config) -> String {
 
 #[async_recursion::async_recursion(?Send)]
 pub async fn copy_dir_all(
-    src: impl AsRef<std::path::Path> + 'static,
-    dst: impl AsRef<std::path::Path> + 'static,
+    src: impl AsRef<camino::Utf8Path> + 'static,
+    dst: impl AsRef<camino::Utf8Path> + 'static,
 ) -> std::io::Result<()> {
-    tokio::fs::create_dir_all(&dst).await?;
-    let mut dir = tokio::fs::read_dir(src).await?;
+    tokio::fs::create_dir_all(dst.as_ref()).await?;
+    let mut dir = tokio::fs::read_dir(src.as_ref()).await?;
     while let Some(child) = dir.next_entry().await? {
         if child.metadata().await?.is_dir() {
-            copy_dir_all(child.path(), dst.as_ref().join(child.file_name())).await?;
+            copy_dir_all(
+                camino::Utf8PathBuf::from_path_buf(child.path())
+                    .expect("we only work with utf8 paths"),
+                dst.as_ref().join(
+                    child
+                        .file_name()
+                        .into_string()
+                        .expect("we only work with utf8 paths"),
+                ),
+            )
+            .await?;
         } else {
-            tokio::fs::copy(child.path(), dst.as_ref().join(child.file_name())).await?;
+            tokio::fs::copy(
+                child.path(),
+                dst.as_ref().join(
+                    child
+                        .file_name()
+                        .into_string()
+                        .expect("we only work with utf8 paths"),
+                ),
+            )
+            .await?;
         }
     }
     Ok(())
@@ -398,9 +443,33 @@ where
     }
 }
 
-pub(crate) async fn http_get<T: reqwest::IntoUrl + std::fmt::Debug>(
-    url: T,
-) -> fpm::Result<Vec<u8>> {
+pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fpm::Result<T> {
+    Ok(reqwest::Client::new()
+        .get(url)
+        .header(reqwest::header::CONTENT_TYPE, "application/json")
+        .header(reqwest::header::USER_AGENT, "fpm")
+        .send()
+        .await?
+        .json::<T>()
+        .await?)
+}
+
+pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
+    url: &str,
+    body: B,
+) -> fpm::Result<T> {
+    Ok(reqwest::Client::new()
+        .get(url)
+        .header(reqwest::header::CONTENT_TYPE, "application/json")
+        .header(reqwest::header::USER_AGENT, "fpm")
+        .body(body)
+        .send()
+        .await?
+        .json()
+        .await?)
+}
+
+pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert(
         reqwest::header::USER_AGENT,
@@ -410,23 +479,40 @@ pub(crate) async fn http_get<T: reqwest::IntoUrl + std::fmt::Debug>(
         .default_headers(headers)
         .build()?;
     let url_f = format!("{:?}", url);
-    let mut res = c.get(url).send()?;
+    let res = c.get(url).send().await?;
     if !res.status().eq(&reqwest::StatusCode::OK) {
         return Err(fpm::Error::APIResponseError(format!(
             "url: {}, response_status: {}, response: {:?}",
             url_f,
             res.status(),
-            res.text()
+            res.text().await
         )));
     }
-    let mut buf: Vec<u8> = vec![];
-    res.copy_to(&mut buf)?;
-    Ok(buf)
+    Ok(res.bytes().await?.into())
 }
 
-pub(crate) async fn http_get_str<T: reqwest::IntoUrl + std::fmt::Debug>(
-    url: T,
-) -> fpm::Result<String> {
+pub async fn http_get_with_type<T: serde::de::DeserializeOwned>(
+    url: url::Url,
+    headers: reqwest::header::HeaderMap,
+    query: &[(String, String)],
+) -> fpm::Result<T> {
+    let c = reqwest::Client::builder()
+        .default_headers(headers)
+        .build()?;
+
+    let resp = c.get(url.to_string().as_str()).query(query).send().await?;
+    if !resp.status().eq(&reqwest::StatusCode::OK) {
+        return Err(fpm::Error::APIResponseError(format!(
+            "url: {}, response_status: {}, response: {:?}",
+            url,
+            resp.status(),
+            resp.text().await
+        )));
+    }
+    Ok(resp.json::<T>().await?)
+}
+
+pub(crate) async fn http_get_str(url: &str) -> fpm::Result<String> {
     let url_f = format!("{:?}", url);
     match http_get(url).await {
         Ok(bytes) => String::from_utf8(bytes).map_err(|e| fpm::Error::UsageError {
@@ -477,14 +563,14 @@ pub(crate) async fn update1(
 }
 
 pub(crate) async fn copy(
-    from: impl AsRef<std::path::Path>,
-    to: impl AsRef<std::path::Path>,
+    from: impl AsRef<camino::Utf8Path>,
+    to: impl AsRef<camino::Utf8Path>,
 ) -> fpm::Result<()> {
-    let content = tokio::fs::read(from).await?;
+    let content = tokio::fs::read(from.as_ref()).await?;
     fpm::utils::update(to, content.as_slice()).await
 }
 
-pub(crate) async fn update(root: impl AsRef<std::path::Path>, data: &[u8]) -> fpm::Result<()> {
+pub(crate) async fn update(root: impl AsRef<camino::Utf8Path>, data: &[u8]) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
 
     let (file_root, file_name) = if let Some(file_root) = root.as_ref().parent() {
@@ -492,7 +578,6 @@ pub(crate) async fn update(root: impl AsRef<std::path::Path>, data: &[u8]) -> fp
             file_root,
             root.as_ref()
                 .file_name()
-                .and_then(std::ffi::OsStr::to_str)
                 .ok_or_else(|| fpm::Error::UsageError {
                     message: format!(
                         "Invalid File Path: Can't find file name `{:?}`",

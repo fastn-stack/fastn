@@ -43,7 +43,7 @@ pub async fn increment(path: &str) -> fpm::Result<usize> {
 }
 
 pub async fn create_or_inc(path: &str) -> fpm::Result<usize> {
-    if std::path::Path::new(path).exists() {
+    if camino::Utf8Path::new(path).exists() {
         increment(path).await
     } else {
         create(path).await
@@ -88,7 +88,7 @@ pub async fn update_create(path: &str, value: usize) -> fpm::Result<usize> {
 }
 
 pub async fn update(path: &str, value: usize) -> fpm::Result<usize> {
-    if std::path::Path::new(path).exists() {
+    if camino::Utf8Path::new(path).exists() {
         update_get(path, value).await
     } else {
         update_create(path, value).await

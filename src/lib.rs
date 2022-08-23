@@ -38,10 +38,10 @@ pub(crate) use commands::build::process_file;
 pub use commands::{
     abort_merge::abort_merge, add::add, build::build, build2::build2, clone::clone,
     close_cr::close_cr, create_cr::create_cr, diff::diff, edit::edit, mark_resolve::mark_resolve,
-    mark_upto_date::mark_upto_date, resolve_conflict::resolve_conflict, revert::revert, rm::rm,
-    serve::fpm_serve, start_project::start_project, start_tracking::start_tracking, status::status,
-    stop_tracking::stop_tracking, sync::sync, sync2::sync2, sync_status::sync_status,
-    translation_status::translation_status, update::update,
+    mark_upto_date::mark_upto_date, merge::merge, resolve_conflict::resolve_conflict,
+    revert::revert, rm::rm, serve::fpm_serve, start_project::start_project,
+    start_tracking::start_tracking, status::status, stop_tracking::stop_tracking, sync::sync,
+    sync2::sync2, sync_status::sync_status, translation_status::translation_status, update::update,
 };
 pub use config::Config;
 pub(crate) use config::Package;
@@ -54,11 +54,11 @@ pub use render::render;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
-pub(crate) use utils::{copy_dir_all, timestamp_nanosecond};
+pub(crate) use utils::{copy_dir_all, time, timestamp_nanosecond};
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
-pub const PACKAGE_INFO_INTERFACE: &str = "fifthtry.github.io/package-info";
+pub const FPM_UI_INTERFACE: &str = "fifthtry.github.io/fpm-ui";
 pub const PACKAGE_THEME_INTERFACE: &str = "fifthtry.github.io/theme";
 pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
@@ -70,10 +70,6 @@ pub fn ftd_html() -> &'static str {
 
 fn fpm_ftd() -> &'static str {
     include_str!("../ftd/fpm.ftd")
-}
-
-fn editor_ftd() -> &'static str {
-    include_str!("../ftd/editor.ftd")
 }
 
 fn design_ftd() -> &'static str {
@@ -133,14 +129,14 @@ fn package_info_image(
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -165,6 +161,77 @@ fn package_info_image(
     })
 }
 
+fn package_info_editor(
+    config: &fpm::Config,
+    file_name: &str,
+    diff: fpm::Result<Option<String>>,
+) -> fpm::Result<String> {
+    let package_info_package = match config
+        .package
+        .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
+        .or_else(|| {
+            config
+                .package
+                .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+        }) {
+        Some(dep) => dep.package.name.as_str(),
+        None => fpm::FPM_UI_INTERFACE,
+    };
+    let body_prefix = match config.package.generate_prefix_string(false) {
+        Some(bp) => bp,
+        None => String::new(),
+    };
+    let mut editor_ftd = indoc::formatdoc! {"
+            {body_prefix}
+    
+            -- import: {package_info_package}/editor as pi
+
+            -- pi.editor:
+
+            -- pi.source:
+            $processor$: fetch-file
+            path: {file_name}
+
+            -- pi.path: {file_name}
+        ",
+        body_prefix = body_prefix,
+        package_info_package = package_info_package,
+        file_name = file_name
+    };
+    if let Ok(Some(diff)) = diff {
+        editor_ftd = format!("{}\n\n\n-- pi.diff:\n\n{}", editor_ftd, diff);
+    }
+    Ok(editor_ftd)
+}
+
+fn package_info_create_cr(config: &fpm::Config) -> fpm::Result<String> {
+    let package_info_package = match config
+        .package
+        .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
+        .or_else(|| {
+            config
+                .package
+                .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+        }) {
+        Some(dep) => dep.package.name.as_str(),
+        None => fpm::FPM_UI_INTERFACE,
+    };
+    let body_prefix = match config.package.generate_prefix_string(false) {
+        Some(bp) => bp,
+        None => String::new(),
+    };
+    Ok(indoc::formatdoc! {"
+            {body_prefix}
+    
+            -- import: {package_info_package}/create-cr as pi
+
+            -- pi.create-cr:
+        ",
+        body_prefix = body_prefix,
+        package_info_package = package_info_package,
+    })
+}
+
 fn package_info_code(
     config: &fpm::Config,
     file_name: &str,
@@ -177,14 +244,14 @@ fn package_info_code(
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -240,14 +307,14 @@ fn package_info_markdown(
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -299,14 +366,14 @@ fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -330,14 +397,14 @@ fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
     } else {
         let package_info_package = match config
             .package
-            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
             .or_else(|| {
                 config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::PACKAGE_INFO_INTERFACE,
+            None => fpm::FPM_UI_INTERFACE,
         };
         let body_prefix = match config.package.generate_prefix_string(false) {
             Some(bp) => bp,
@@ -409,9 +476,6 @@ pub enum Error {
     #[error("HttpError: {}", _0)]
     HttpError(#[from] reqwest::Error),
 
-    #[error("APIResponseError: {}", _0)]
-    APIResponseError(String),
-
     #[error("IoError: {}", _0)]
     IoError(#[from] std::io::Error),
 
@@ -423,12 +487,6 @@ pub enum Error {
 
     #[error("FTDError: {}", _0)]
     FTDError(#[from] ftd::p1::Error),
-
-    #[error("PackageError: {message}")]
-    PackageError { message: String },
-
-    #[error("UsageError: {message}")]
-    UsageError { message: String },
 
     #[error("IgnoreError: {}", _0)]
     IgnoreError(#[from] ignore::Error),
@@ -451,11 +509,23 @@ pub enum Error {
     #[error("ParseIntError: {}", _0)]
     ParseIntError(#[from] std::num::ParseIntError),
 
+    #[error("APIResponseError: {}", _0)]
+    APIResponseError(String),
+
+    #[error("PackageError: {message}")]
+    PackageError { message: String },
+
+    #[error("UsageError: {message}")]
+    UsageError { message: String },
+
     #[error("GenericError: {}", _0)]
     GenericError(String),
 
     #[error("GroupNotFound: id: {id}, {message}")]
     GroupNotFound { id: String, message: String },
+
+    #[error("CRAboutNotFound CR#{cr_number}: {message}")]
+    CRAboutNotFound { message: String, cr_number: usize },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

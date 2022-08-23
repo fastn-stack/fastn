@@ -80,7 +80,7 @@ pub fn processor(
     }
 
     if let Ok(path) = section.header.str(doc.name, section.line_number, "file") {
-        match std::path::Path::new(path).extension() {
+        match camino::Utf8Path::new(path).extension() {
             Some(extension) => {
                 if !extension.eq("json") {
                     return Err(ftd::p1::Error::ParseError {

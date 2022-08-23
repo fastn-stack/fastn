@@ -211,7 +211,7 @@ pub(crate) async fn get_file(
                 base_path: base_path.to_path_buf(),
             })
         }
-        Some((_, ext)) if ftd::render::KNOWN_EXTENSIONS.contains(ext) => File::Code(Document {
+        Some((_, ext)) if ftd::code::KNOWN_EXTENSIONS.contains(ext) => File::Code(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
             content: tokio::fs::read_to_string(&doc_path).await?,

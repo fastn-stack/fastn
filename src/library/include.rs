@@ -15,7 +15,7 @@ pub fn processor(
             {
                 Some(v) => v,
                 None => {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         "`path` is not specified".to_string(),
                         doc.name,
                         section.line_number,
@@ -24,7 +24,7 @@ pub fn processor(
             }
         }
     };
-    let mut v: std::collections::BTreeMap<String, ftd::PropertyValue> = Default::default();
+    let mut v: ftd::Map<ftd::PropertyValue> = Default::default();
 
     let code_item = IncludeCode::parse(doc_path, config).unwrap();
 

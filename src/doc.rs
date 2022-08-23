@@ -241,7 +241,7 @@ pub async fn resolve_foreign_variable2(
         }
     }
 
-    return ftd::e2(format!("{} not found 2", variable).as_str(), doc_name, 0);
+    return ftd::p2::utils::e2(format!("{} not found 2", variable).as_str(), doc_name, 0);
 
     async fn get_assets_value(
         package: &fpm::Package,
@@ -448,7 +448,7 @@ fn resolve_foreign_variable(
         }
     }
 
-    return ftd::e2(format!("{} not found 1", variable).as_str(), doc_name, 0);
+    return ftd::p2::utils::e2(format!("{} not found 1", variable).as_str(), doc_name, 0);
 
     fn get_assets_value(
         package: &fpm::Package,
@@ -561,7 +561,7 @@ fn resolve_foreign_variable(
                 text: format!("/-/{}/{}", package.name, files),
                 source: ftd::TextSource::Header,
             }),
-            _ => ftd::e2(format!("{} not found 2", files).as_str(), doc_name, 0),
+            _ => ftd::p2::utils::e2(format!("{} not found 2", files).as_str(), doc_name, 0),
         }
     }
 }
@@ -617,6 +617,6 @@ fn resolve_ftd_foreign_variable(variable: &str, doc_name: &str) -> ftd::p1::Resu
             .to_string(),
             source: ftd::TextSource::Header,
         }),
-        _ => ftd::e2(format!("{} not found 3", variable).as_str(), doc_name, 0),
+        _ => ftd::p2::utils::e2(format!("{} not found 3", variable).as_str(), doc_name, 0),
     }
 }

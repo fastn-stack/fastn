@@ -37,12 +37,12 @@ pub async fn build(
     let mut asset_documents = std::collections::HashMap::new();
     asset_documents.insert(
         config.package.name.clone(),
-        config.package.get_assets_doc(config, base_url).await?,
+        config.package.get_assets_doc().await?,
     );
     for dep in &dependencies {
         asset_documents.insert(
             dep.package.name.clone(),
-            dep.package.get_assets_doc(config, base_url).await?,
+            dep.package.get_assets_doc().await?,
         );
     }
 
@@ -886,13 +886,15 @@ async fn process_markdown(
         doc: &fpm::Document,
     ) -> fpm::Result<Option<fpm::Document>> {
         let doc_id = if doc.id == "README.md"
-            && !(std::path::Path::new(format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str())
+            && !(camino::Utf8Path::new(format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str())
                 .exists()
-                || std::path::Path::new(format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str())
-                    .exists())
+                || camino::Utf8Path::new(
+                    format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str(),
+                )
+                .exists())
         {
             "index.md".to_string()
-        } else if !std::path::Path::new(
+        } else if !camino::Utf8Path::new(
             format!(
                 ".{}{}",
                 std::path::MAIN_SEPARATOR,
@@ -1010,14 +1012,14 @@ pub(crate) async fn process_ftd(
             } else {
                 let package_info_package = match config
                     .package
-                    .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+                    .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
                     .or_else(|| {
                         config
                             .package
                             .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
                     }) {
                     Some(dep) => dep.package.name.as_str(),
-                    None => fpm::PACKAGE_INFO_INTERFACE,
+                    None => fpm::FPM_UI_INTERFACE,
                 };
                 config.package.get_prefixed_body(
                     format!(
