@@ -328,21 +328,21 @@ it's working demo and usage.
 -- template list resumes:
 
 -- resumes: Caffeine
-template-url: http://fifthtry.github.io/resume-caffeine/
+template-url: http://fifthtry.github.io/caffeine-resume/
 screenshot: $assets.files.static.caffiene.png
-licence-url: https://github.com/FifthTry/resume-caffeine/blob/main/LICENSE
-github-url: https://github.com/FifthTry/resume-caffeine/
+licence-url: https://github.com/FifthTry/caffeine-resume/blob/main/LICENSE
+github-url: https://github.com/FifthTry/caffeine-resume/
 
-`fifthtry.github.io/resume-caffeine` is resume theme based on our grey color scheme
+`fifthtry.github.io/caffeine-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`
 
 -- resumes: Paper
-template-url: http://fifthtry.github.io/resume-paper/
+template-url: http://fifthtry.github.io/paper-resume/
 screenshot: $assets.files.static.paper.png
-licence-url: https://github.com/FifthTry/resume-paper/blob/main/LICENSE
-github-url: https://github.com/FifthTry/resume-paper/
+licence-url: https://github.com/FifthTry/paper-resume/blob/main/LICENSE
+github-url: https://github.com/FifthTry/paper-resume/
 
-`fifthtry.github.io/resume-paper` is resume theme based on our grey color scheme
+`fifthtry.github.io/paper-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`
 
 
@@ -395,13 +395,13 @@ github-url: https://github.com/FifthTry/bling/
 `fifthtry.github.io/bling` is develoed and designed with various components which 
 can be used inside `FTD` web packages.
 
--- bling: Slideshow
-template-url: https://fifthtry.github.io/slideshow/
+-- bling: Image Gallery
+template-url: https://fifthtry.github.io/imago-gallery-ig/
 screenshot: $assets.files.static.slideshow-demo.png
-licence-url: https://github.com/FifthTry/slideshow/blob/main/LICENSE
-github-url: https://github.com/FifthTry/slideshow/
+licence-url: https://github.com/FifthTry/imago-gallery-ig/blob/main/LICENSE
+github-url: https://github.com/FifthTry/imago-gallery-ig/
 
-`fifthtry.github.io/slideshow` is a image gallery component which can be used 
+`fifthtry.github.io/imago-gallery-ig` is a image gallery component which can be used 
 inside `FTD` web packages.
 
 

@@ -23,34 +23,34 @@ templates: $resumes
 -- ft-ui.template list resumes:
 
 -- resumes: Caffeine
-template-url: http://fifthtry.github.io/resume-caffeine/
+template-url: http://fifthtry.github.io/caffeine-resume/
 screenshot: $assets.files.static.caffiene.png
-licence-url: https://github.com/FifthTry/resume-caffeine/blob/main/LICENSE
-github-url: https://github.com/FifthTry/resume-caffeine/
+licence-url: https://github.com/FifthTry/caffeine-resume/blob/main/LICENSE
+github-url: https://github.com/FifthTry/caffeine-resume/
 
-`fifthtry.github.io/resume-caffeine` is resume theme based on our grey color scheme
+`fifthtry.github.io/caffeine-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`. You can change color-scheme OR site theme using
 it. ex. [Site themes](/featured/doc-site/), [Color Schemes](/featured/color-cs).
 
 
 -- resumes: Paper
-template-url: http://fifthtry.github.io/resume-paper/
+template-url: http://fifthtry.github.io/paper-resume/
 screenshot: $assets.files.static.paper.png
-licence-url: https://github.com/FifthTry/resume-paper/blob/main/LICENSE
-github-url: https://github.com/FifthTry/resume-paper/
+licence-url: https://github.com/FifthTry/paper-resume/blob/main/LICENSE
+github-url: https://github.com/FifthTry/paper-resume/
 
-`fifthtry.github.io/resume-paper` is resume theme based on our grey color scheme
+`fifthtry.github.io/paper-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`. You can change color-scheme OR site theme using
 it. ex. [Site themes](/featured/doc-site/), [Color Schemes](/featured/color-cs).
 
 
 -- resumes: Elegant
-template-url: http://fifthtry.github.io/resume-elegant/
+template-url: http://fifthtry.github.io/elegant-resume/
 screenshot: $assets.files.static.elegant.png
-licence-url: https://github.com/FifthTry/resume-elegant/blob/main/LICENSE
-github-url: https://github.com/FifthTry/resume-elegant/
+licence-url: https://github.com/FifthTry/elegant-resume/blob/main/LICENSE
+github-url: https://github.com/FifthTry/elegant-resume/
 is-last: true
 
-`fifthtry.github.io/resume-elegant` is resume theme based on our grey color scheme
+`fifthtry.github.io/elegant-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`. You can change color-scheme OR site theme using
 it. ex. [Site themes](/featured/doc-site/), [Color Schemes](/featured/color-cs).

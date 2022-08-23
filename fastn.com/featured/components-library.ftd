@@ -33,13 +33,13 @@ github-url: https://github.com/FifthTry/bling/
 `fifthtry.github.io/bling` is develoed and designed with various components which 
 can be used inside `FTD` web packages.
 
--- bling: Slideshow
-template-url: https://fifthtry.github.io/slideshow/
+-- bling: Image Gallery
+template-url: https://fifthtry.github.io/imago-gallery-ig/
 screenshot: $assets.files.static.slideshow-demo.png
-licence-url: https://github.com/FifthTry/slideshow/blob/main/LICENSE
-github-url: https://github.com/FifthTry/slideshow/
+licence-url: https://github.com/FifthTry/imago-gallery-ig/blob/main/LICENSE
+github-url: https://github.com/FifthTry/imago-gallery-ig/
 
-`fifthtry.github.io/slideshow` is a image gallery component which can be used 
+`fifthtry.github.io/imago-gallery-ig` is a image gallery component which can be used 
 inside `FTD` web packages.
 
 -- bling: Images
