@@ -7,7 +7,13 @@ pub struct UserIdentity {
 
 impl PartialEq for UserIdentity {
     fn eq(&self, other: &Self) -> bool {
-        self.key.eq(other.key.as_str()) && self.value.eq(other.value.as_str())
+        self.key
+            .to_lowercase()
+            .eq(other.key.to_lowercase().as_str())
+            && self
+                .value
+                .to_lowercase()
+                .eq(other.value.to_lowercase().as_str())
     }
 }
 
@@ -71,6 +77,8 @@ pub struct UserGroupTemp {
     pub github: Vec<String>,
     #[serde(rename = "-github")]
     pub excluded_github: Vec<String>,
+    #[serde(rename = "github-like")]
+    pub github_like: Vec<String>,
     #[serde(rename = "github-team")]
     pub github_team: Vec<String>,
     #[serde(rename = "-github-team")]
@@ -234,6 +242,7 @@ impl UserGroupTemp {
         excluded_identities.extend(to_user_identity("-telegram", self.excluded_telegram));
         identities.extend(to_user_identity("github", self.github));
         excluded_identities.extend(to_user_identity("-github", self.excluded_github));
+        identities.extend(to_user_identity("github-like", self.github_like));
         identities.extend(to_user_identity("github-team", self.github_team));
         excluded_identities.extend(to_user_identity("-github-team", self.excluded_github_team));
         identities.extend(to_user_identity("discord", self.discord));

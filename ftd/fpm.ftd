@@ -329,6 +329,7 @@ string list telegram:
 string list -telegram:
 string list github:
 string list -github:
+string list github-like:
 string list github-team:
 string list -github-team:
 string list discord:
