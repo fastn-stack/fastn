@@ -49,6 +49,7 @@ pub enum FileStatus {
     Uptodate {
         path: String,
         version: i32,
+        content: Vec<u8>,
     },
 }
 
@@ -213,6 +214,7 @@ impl fpm::Config {
                 changed_files.push(FileStatus::Uptodate {
                     path: workspace_entry.filename.to_string(),
                     version,
+                    content,
                 });
                 continue;
             }

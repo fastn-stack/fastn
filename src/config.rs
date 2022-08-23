@@ -432,6 +432,16 @@ impl Config {
             })
     }
 
+    pub(crate) async fn get_file_and_package_by_cr_id(
+        &mut self,
+        id: &str,
+        cr_number: usize,
+    ) -> fpm::Result<fpm::File> {
+        let id_without_cr_prefix = fpm::cr::get_id_from_cr_id(id, cr_number)?;
+
+        unimplemented!()
+    }
+
     pub async fn get_file_and_package_by_id(&mut self, id: &str) -> fpm::Result<fpm::File> {
         let file_name = self.get_file_path_and_resolve(id).await?;
         let package = self.find_package_by_id(id).await?.1;
@@ -525,6 +535,58 @@ impl Config {
             }
             id
         };
+
+        let (file_name, content) = package.resolve_by_id(id, None).await?;
+
+        Ok((format!("{}{}", add_packages, file_name), content))
+    }
+
+    pub(crate) async fn get_cr_file_and_resolve(
+        &self,
+        id: &str,
+        cr_number: usize,
+    ) -> fpm::Result<(String, Vec<u8>)> {
+        let id_without_cr_prefix = fpm::cr::get_id_from_cr_id(id, cr_number)?;
+        let (package_name, package) = self
+            .find_package_by_id(id_without_cr_prefix.as_str())
+            .await?;
+        let package = self.resolve_package(&package).await?;
+        self.add_package(&package);
+        let mut new_id = id_without_cr_prefix.to_string();
+        let mut add_packages = "".to_string();
+        if let Some(id) = new_id.strip_prefix("-/") {
+            // Check if the id is alias for index.ftd. eg: `/-/bar/`
+            if id.starts_with(&package_name) || !package.name.eq(self.package.name.as_str()) {
+                new_id = id.to_string();
+            }
+            if !package.name.eq(self.package.name.as_str()) {
+                add_packages = format!(".packages/{}/", package.name);
+            }
+        }
+        let id = {
+            let mut id = new_id
+                .split_once("-/")
+                .map(|(id, _)| id)
+                .unwrap_or_else(|| new_id.as_str())
+                .trim()
+                .trim_start_matches(package_name.as_str());
+            if id.is_empty() {
+                id = "/";
+            }
+            id
+        };
+
+        if package.name.eq(self.package.name.as_str()) {
+            let remote_manifest = self.get_remote_manifest(false).await?;
+            let cr_path = fpm::cr::cr_path(cr_number);
+            let id_with_cr = format!("{}/{}", cr_path, id);
+            if let Ok(response) = package.fs_fetch_by_id(id_with_cr.as_str(), None).await {
+                return Ok(response);
+            }
+            if let Some(file_edit) = remote_manifest.get(id) {
+                if file_edit.is_deleted() {}
+            }
+        }
 
         let (file_name, content) = package.resolve_by_id(id, None).await?;
 

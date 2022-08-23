@@ -226,3 +226,196 @@ pub(crate) fn cr_path_to_file_name(cr_number: usize, cr_file_path: &str) -> fpm:
         .trim_start_matches(cr_path.as_str())
         .to_string())
 }
+
+pub(crate) fn get_cr_path_from_url(path: &str) -> Option<usize> {
+    let mut cr_number = None;
+    if let Some(path) = path.strip_prefix("-/") {
+        if let Some((cr, _)) = path.split_once('/') {
+            if let Ok(cr) = cr.parse::<usize>() {
+                cr_number = Some(cr);
+            }
+        }
+    }
+    cr_number
+}
+
+pub(crate) fn get_id_from_cr_id(id: &str, cr_number: usize) -> fpm::Result<String> {
+    let cr_path = cr_path(cr_number);
+    if let Some(id) = id.trim_start_matches('/').strip_prefix(cr_path.as_str()) {
+        return Ok(if !id.ends_with('/') {
+            format!("{}/", id)
+        } else {
+            id.to_string()
+        });
+    }
+    fpm::usage_error(format!("`{}` is not a cr id", id))
+}
+
+pub(crate) struct FileInfo {
+    pub path: String,
+    pub content: Vec<u8>,
+    pub src_cr: Option<usize>,
+}
+
+pub(crate) async fn cr_clone_file_info(
+    config: &fpm::Config,
+    cr_number: usize,
+) -> fpm::Result<std::collections::HashMap<String, FileInfo>> {
+    use itertools::Itertools;
+
+    let mut file_info = std::collections::HashMap::new();
+
+    let remote_manifest: std::collections::BTreeMap<String, fpm::history::FileEdit> = config
+        .get_remote_manifest(true)
+        .await?
+        .into_iter()
+        .filter(|(k, _)| !(k.starts_with("-/") || k.starts_with(".tracks/")))
+        .collect();
+
+    for (filename, file_edit) in remote_manifest {
+        if file_edit.is_deleted() {
+            continue;
+        }
+        let file_path = config.history_path(filename.as_str(), file_edit.version);
+        let content = tokio::fs::read(&file_path).await?;
+
+        let path = config.path_without_root(&file_path)?;
+
+        file_info.insert(
+            filename,
+            FileInfo {
+                path: path.to_string(),
+                content,
+                src_cr: None,
+            },
+        );
+    }
+
+    let cr_path = fpm::cr::cr_path(cr_number);
+
+    let cr_workspace = config
+        .get_clone_workspace()
+        .await?
+        .into_iter()
+        .filter_map(|(k, v)| {
+            k.strip_prefix(cr_path.as_str())
+                .map(|path| (path.to_string(), v))
+        })
+        .collect::<std::collections::HashMap<String, fpm::workspace::WorkspaceEntry>>();
+
+    let deleted_files_path = config.cr_deleted_file_path(cr_number);
+    let deleted_file_str = config.path_without_root(&deleted_files_path)?;
+    for (filename, workspace_entry) in cr_workspace {
+        if workspace_entry.deleted.unwrap_or(false) {
+            continue;
+        }
+        if workspace_entry.filename.eq(&deleted_file_str) {
+            let cr_deleted_path = if let Some(version) = workspace_entry.version {
+                config.history_path(workspace_entry.filename.as_str(), version)
+            } else {
+                config.root.join(workspace_entry.filename)
+            };
+            let cr_deleted_files = tokio::fs::read_to_string(cr_deleted_path).await?;
+            fpm::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
+                .await?
+                .into_iter()
+                .map(|v| {
+                    file_info.remove(v.filename.as_str());
+                })
+                .collect_vec();
+            continue;
+        }
+        let content = tokio::fs::read(config.root.join(workspace_entry.filename.as_str())).await?;
+
+        file_info.insert(
+            filename,
+            FileInfo {
+                path: workspace_entry.filename.to_string(),
+                content,
+                src_cr: Some(cr_number),
+            },
+        );
+    }
+
+    Ok(file_info)
+}
+
+pub(crate) async fn cr_remote_file_info(
+    config: &fpm::Config,
+    cr_number: usize,
+) -> fpm::Result<std::collections::HashMap<String, FileInfo>> {
+    use itertools::Itertools;
+
+    let mut file_info = std::collections::HashMap::new();
+
+    let remote_manifest: std::collections::HashMap<String, fpm::history::FileEdit> = config
+        .get_remote_manifest(true)
+        .await?
+        .into_iter()
+        .filter(|(k, _)| !(k.starts_with("-/") || k.starts_with(".tracks/")))
+        .collect();
+
+    for (filename, file_edit) in remote_manifest {
+        if file_edit.is_deleted() {
+            continue;
+        }
+        let file_path = config.history_path(filename.as_str(), file_edit.version);
+        let content = tokio::fs::read(&file_path).await?;
+
+        let path = config.path_without_root(&file_path)?;
+
+        file_info.insert(
+            filename,
+            FileInfo {
+                path: path.to_string(),
+                content,
+                src_cr: None,
+            },
+        );
+    }
+
+    let cr_manifest: std::collections::HashMap<String, fpm::history::FileEdit> = config
+        .get_cr_manifest(cr_number)
+        .await?
+        .into_iter()
+        .filter(|(k, _)| !k.starts_with(".tracks/"))
+        .collect();
+
+    let deleted_files_path = config.cr_deleted_file_path(cr_number);
+    let deleted_file_str = config.path_without_root(&deleted_files_path)?;
+    let cr_path = fpm::cr::cr_path(cr_number);
+    for (filename, file_edit) in cr_manifest {
+        if file_edit.is_deleted() {
+            continue;
+        }
+
+        if filename.eq(&deleted_file_str) {
+            let cr_deleted_path = config.history_path(filename.as_str(), file_edit.version);
+            let cr_deleted_files = tokio::fs::read_to_string(cr_deleted_path).await?;
+            fpm::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
+                .await?
+                .into_iter()
+                .map(|v| {
+                    file_info.remove(v.filename.as_str());
+                })
+                .collect_vec();
+            continue;
+        }
+
+        let file_path = config.history_path(filename.as_str(), file_edit.version);
+        let content = tokio::fs::read(&file_path).await?;
+
+        let path = config.path_without_root(&file_path)?;
+
+        file_info.insert(
+            filename.trim_start_matches(cr_path.as_str()).to_string(),
+            FileInfo {
+                path: path.to_string(),
+                content,
+                src_cr: None,
+            },
+        );
+    }
+
+    Ok(file_info)
+}

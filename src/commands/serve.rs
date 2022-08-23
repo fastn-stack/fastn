@@ -53,6 +53,65 @@ async fn serve_file(
     };
 }
 
+async fn serve_cr_file(
+    req: &actix_web::HttpRequest,
+    config: &mut fpm::Config,
+    path: &camino::Utf8Path,
+    cr_number: usize,
+) -> actix_web::HttpResponse {
+    let f = match config
+        .get_file_and_package_by_cr_id(path.as_str(), cr_number)
+        .await
+    {
+        Ok(f) => f,
+        Err(e) => {
+            eprintln!("FPM-Error: path: {}, {:?}", path, e);
+            return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+        }
+    };
+
+    // Auth Stuff
+    if !f.is_static() {
+        match config.can_read(req, path.as_str()) {
+            Ok(can_read) => {
+                if !can_read {
+                    return actix_web::HttpResponse::Unauthorized()
+                        .body(format!("You are unauthorized to access: {}", path));
+                }
+            }
+            Err(e) => {
+                eprintln!("FPM-Error: can_read error: {}, {:?}", path, e);
+                return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+            }
+        }
+    }
+
+    config.current_document = Some(f.get_id());
+    return match f {
+        fpm::File::Ftd(main_document) => {
+            return match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
+                Ok(r) => actix_web::HttpResponse::Ok().body(r),
+                Err(e) => {
+                    eprintln!("FPM-Error: path: {}, {:?}", path, e);
+                    actix_web::HttpResponse::InternalServerError().body(e.to_string())
+                }
+            };
+        }
+        fpm::File::Image(image) => {
+            return actix_web::HttpResponse::Ok()
+                .content_type(guess_mime_type(image.id.as_str()))
+                .body(image.content);
+        }
+        fpm::File::Static(s) => {
+            return actix_web::HttpResponse::Ok().body(s.content);
+        }
+        _ => {
+            eprintln!("FPM unknown handler");
+            actix_web::HttpResponse::InternalServerError().body("".as_bytes())
+        }
+    };
+}
+
 fn guess_mime_type(path: &str) -> mime_guess::Mime {
     mime_guess::from_path(path).first_or_octet_stream()
 }
@@ -106,6 +165,10 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
         let mut config =
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_file(&req, &mut config, &path.join("/")).await
+    } else if let Some(cr_number) = fpm::cr::get_cr_path_from_url(path.as_str()) {
+        let mut config =
+            fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
+        serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
         let mut config =
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
