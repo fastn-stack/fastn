@@ -123,14 +123,101 @@ scale: 1
 width: fill
 
 
--- ft.h1: GitHub Local Testing with `sid` cookie
+-- ft.h1: Local Testing with GitHub `sid` Cookie
 
-- Define user groups FPM.ftd
-- use them as `reader` or `writer` in sitemap
-- OAuth with login with github `https://abrark.com/-/dj/login/github/`
-- After login check URL https://abrark.com/-/dj/get-identities/ is working or
-Its response will be like `{"success": true, "user-identities": [{"github": "AbrarNitk"}]}`
-- If you are testing in local
-    - copy `abrark.com`'s `sid` cookie to local
-    - change remote_host to `abrark.com` in `fpm` code controller::get_remote_identities,
-- Build `fpm` with remote feature `cargo install --path=. features=remote`
+For testing purpose, I am using [abrark.com](https://github.com/abrarnitk/abrark/)
+package. So if you starred [AbrarNitk/abrark](https://github.com/abrarnitk/abrark/)
+repository so it should let you access the document otherwise give unauthorized
+access.
+
+-- ft.h2: Define User Group in `FPM.ftd`
+
+In the below group using `github-like` as identity.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.user-group: abrark-readers
+github-like: AbrarNitk/abrark
+
+-- ft.h2: Use User Group in Sitemap
+
+Use `abrark-readers` in Sitemap with `readers` key.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Home: /
+readers: abrark-readers
+
+-- ft.h2: OAuth Login with GitHub
+
+Open link `https://abrark.com/-/dj/login/github/` in browser and complete the
+OAuth login flow and provide permissions to FifthTry to access your GitHub APIs.
+
+It will redirect to GitHub login page.
+
+-- ft.image: GitHub Login
+src: $assets.files.static.images.auth.github-login.png
+scale: 1
+width: fill
+
+Click on `Sign in`, and complete Two-factor if any.
+
+It will redirect to authorize page.
+
+-- ft.image: GitHub Authorize 5thtry
+src: $assets.files.static.images.auth.github-authorized-5thtry.png
+scale: 1
+width: fill
+
+
+Click on `Authorize FifthTry`, after that you will be redirected to `abrark.com`.
+
+Check GET API `https://abrark.com/-/dj/get-identities/`, It will give below
+response.
+
+-- ft.code:
+lang: json
+
+{
+    "success": true,
+    "user-identities": [{"github": "AbrarNitk"}]
+}
+
+
+
+-- ft.markdown:
+
+Now copy `sid` cookie from `https://abrark.com/` and paste it in
+`http://127.0.0.1:8000` cookie with `sid` key.
+
+Note: Go to `fpm::controller::get_remote_identities` and change `remote_host` in
+`fpm`, to `abrark.com`.
+
+
+-- ft.h2: Build `fpm` with Remote Feature
+
+-- ft.code:
+lang: sh
+
+cargo install --path=. --features remote
+
+-- ft.h2: Run `fpm`
+
+Run `fpm` binary in your package.
+
+-- ft.code:
+lang: sh
+
+fpm serve --port 8000
+
+-- ft.markdown:
+
+Now go to [AbrarNitk/abrark](https://github.com/abrarnitk/abrark/) repository
+and give a star, you should be able access `/` document. If you undo star and
+access it again it will give unauthorized access.
+
+Yay!!! Such a magic it is. 💫
