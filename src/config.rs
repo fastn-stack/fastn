@@ -1021,22 +1021,15 @@ impl Config {
         ))
     }
 
-    pub(crate) fn can_read(
+    pub(crate) async fn can_read(
         &self,
         req: &actix_web::HttpRequest,
         document_path: &str,
     ) -> fpm::Result<bool> {
         use itertools::Itertools;
-        // Get identities from remote(sid)
-        let access_identities = {
-            if let Some(identity) = req.cookie("identities") {
-                fpm::user_group::parse_identities(identity.value())
-            } else {
-                fpm::user_group::parse_cli_identities()
-            }
-        };
-
         let document_name = self.document_name_with_default(document_path);
+        let access_identities =
+            fpm::user_group::access_identities(self, req, &document_name, true).await?;
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
             let document_readers = sitemap.readers(document_name.as_str(), &self.package.groups);
@@ -1052,23 +1045,15 @@ impl Config {
         Ok(true)
     }
 
-    pub(crate) fn can_write(
+    pub(crate) async fn can_write(
         &self,
         req: &actix_web::HttpRequest,
         document_path: &str,
     ) -> fpm::Result<bool> {
         use itertools::Itertools;
-
-        // Get identities from remote(sid)
-        let access_identities = {
-            if let Some(identity) = req.cookie("identities") {
-                fpm::user_group::parse_identities(identity.value())
-            } else {
-                fpm::user_group::parse_cli_identities()
-            }
-        };
-
         let document_name = self.document_name_with_default(document_path);
+        let access_identities =
+            fpm::user_group::access_identities(self, req, &document_name, false).await?;
 
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups

@@ -7,7 +7,13 @@ pub struct UserIdentity {
 
 impl PartialEq for UserIdentity {
     fn eq(&self, other: &Self) -> bool {
-        self.key.eq(other.key.as_str()) && self.value.eq(other.value.as_str())
+        self.key
+            .to_lowercase()
+            .eq(other.key.to_lowercase().as_str())
+            && self
+                .value
+                .to_lowercase()
+                .eq(other.value.to_lowercase().as_str())
     }
 }
 
@@ -59,26 +65,50 @@ pub struct UserGroupTemp {
     pub email: Vec<String>,
     #[serde(rename = "-email")]
     pub excluded_email: Vec<String>,
-    #[serde(rename = "domain")]
-    pub domain: Vec<String>,
-    #[serde(rename = "-domain")]
-    pub excluded_domain: Vec<String>,
-    #[serde(rename = "telegram")]
-    pub telegram: Vec<String>,
-    #[serde(rename = "-telegram")]
-    pub excluded_telegram: Vec<String>,
+    #[serde(rename = "telegram-admin")]
+    pub telegram_admin: Vec<String>,
+    #[serde(rename = "-telegram-admin")]
+    pub excluded_telegram_admin: Vec<String>,
+    #[serde(rename = "telegram-group")]
+    pub telegram_group: Vec<String>,
+    #[serde(rename = "-telegram-group")]
+    pub excluded_telegram_group: Vec<String>,
     #[serde(rename = "github")]
     pub github: Vec<String>,
     #[serde(rename = "-github")]
     pub excluded_github: Vec<String>,
+    #[serde(rename = "github-like")]
+    pub github_like: Vec<String>,
+    #[serde(rename = "-github-like")]
+    pub excluded_github_like: Vec<String>,
     #[serde(rename = "github-team")]
     pub github_team: Vec<String>,
     #[serde(rename = "-github-team")]
     pub excluded_github_team: Vec<String>,
-    #[serde(rename = "discord")]
-    pub discord: Vec<String>,
-    #[serde(rename = "-discord")]
-    pub excluded_discord: Vec<String>,
+    #[serde(rename = "github-contributor")]
+    pub github_contributor: Vec<String>,
+    #[serde(rename = "-github-contributor")]
+    pub excluded_github_contributor: Vec<String>,
+    #[serde(rename = "github-watch")]
+    pub github_watch: Vec<String>,
+    #[serde(rename = "-github-watch")]
+    pub excluded_github_watch: Vec<String>,
+    #[serde(rename = "github-follows")]
+    pub github_follows: Vec<String>,
+    #[serde(rename = "-github-follows")]
+    pub excluded_github_follows: Vec<String>,
+    #[serde(rename = "github-sponsors")]
+    pub github_sponsors: Vec<String>,
+    #[serde(rename = "-github-sponsors")]
+    pub excluded_github_sponsors: Vec<String>,
+    #[serde(rename = "discord-server")]
+    pub discord_server: Vec<String>,
+    #[serde(rename = "-discord-server")]
+    pub excluded_discord_server: Vec<String>,
+    #[serde(rename = "discord-role")]
+    pub discord_role: Vec<String>,
+    #[serde(rename = "-discord-role")]
+    pub excluded_discord_role: Vec<String>,
 }
 
 #[derive(Debug, serde::Serialize)]
@@ -228,16 +258,55 @@ impl UserGroupTemp {
 
         identities.extend(to_user_identity("email", self.email));
         excluded_identities.extend(to_user_identity("-email", self.excluded_email));
-        identities.extend(to_user_identity("domain", self.domain));
-        excluded_identities.extend(to_user_identity("-domain", self.excluded_domain));
-        identities.extend(to_user_identity("domain", self.telegram));
-        excluded_identities.extend(to_user_identity("-telegram", self.excluded_telegram));
+        identities.extend(to_user_identity("telegram-admin", self.telegram_admin));
+        excluded_identities.extend(to_user_identity(
+            "-telegram-admin",
+            self.excluded_telegram_admin,
+        ));
+        identities.extend(to_user_identity("telegram-group", self.telegram_group));
+        excluded_identities.extend(to_user_identity(
+            "-telegram-group",
+            self.excluded_telegram_group,
+        ));
         identities.extend(to_user_identity("github", self.github));
         excluded_identities.extend(to_user_identity("-github", self.excluded_github));
+        identities.extend(to_user_identity("github-like", self.github_like));
+        excluded_identities.extend(to_user_identity("-github-like", self.excluded_github_like));
         identities.extend(to_user_identity("github-team", self.github_team));
         excluded_identities.extend(to_user_identity("-github-team", self.excluded_github_team));
-        identities.extend(to_user_identity("discord", self.discord));
-        excluded_identities.extend(to_user_identity("-discord", self.excluded_discord));
+        identities.extend(to_user_identity(
+            "github-contributor",
+            self.github_contributor,
+        ));
+        excluded_identities.extend(to_user_identity(
+            "-github-contributor",
+            self.excluded_github_contributor,
+        ));
+        identities.extend(to_user_identity("github-watch", self.github_watch));
+        excluded_identities.extend(to_user_identity(
+            "-github-watch",
+            self.excluded_github_watch,
+        ));
+        identities.extend(to_user_identity("github-follows", self.github_follows));
+        excluded_identities.extend(to_user_identity(
+            "-github-follows",
+            self.excluded_github_follows,
+        ));
+        identities.extend(to_user_identity("github-sponsors", self.github_sponsors));
+        excluded_identities.extend(to_user_identity(
+            "-github-sponsors",
+            self.excluded_github_sponsors,
+        ));
+        identities.extend(to_user_identity("discord-server", self.discord_server));
+        excluded_identities.extend(to_user_identity(
+            "-discord-server",
+            self.excluded_discord_server,
+        ));
+        identities.extend(to_user_identity("discord-role", self.discord_role));
+        excluded_identities.extend(to_user_identity(
+            "-discord-role",
+            self.excluded_discord_role,
+        ));
 
         Ok(UserGroup {
             id: self.id,
@@ -251,20 +320,20 @@ impl UserGroupTemp {
     }
 }
 
-/// `get_identities` for a `doc_path`
+/// `get_identities` for a `document_name`
 /// This will get the identities from groups defined in sitemap
 pub fn get_identities(
     config: &crate::Config,
-    doc_path: &str,
+    document_name: &str,
     is_read: bool,
-) -> fpm::Result<Vec<String>> {
+) -> fpm::Result<Vec<UserIdentity>> {
     // TODO: cookies or cli parameter
 
     let readers_writers = if let Some(sitemap) = &config.package.sitemap {
         if is_read {
-            sitemap.readers(doc_path, &config.package.groups)
+            sitemap.readers(document_name, &config.package.groups)
         } else {
-            sitemap.writers(doc_path, &config.package.groups)
+            sitemap.writers(document_name, &config.package.groups)
         }
     } else {
         vec![]
@@ -278,7 +347,6 @@ pub fn get_identities(
     let identities = identities?
         .into_iter()
         .flat_map(|x| x.into_iter())
-        .map(|identity| identity.to_string())
         .collect();
 
     Ok(identities)
@@ -341,6 +409,7 @@ pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
         .collect_vec()
 }
 
+/// Get identities from cli `--identities`
 pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
     use itertools::Itertools;
     let args = std::env::args().collect_vec();
@@ -352,6 +421,51 @@ pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
     }
     let identities = index.and_then(|idx| args.get(idx + 1));
     parse_identities(identities.map(|x| x.as_str()).unwrap_or_else(|| ""))
+}
+
+/*
+access_identities(req: HttpRequest, document_name: str, rw: bool)
+ if feature remote
+    / get identities by using document_path from sitemap
+    sitemap_identities = get_identities(document_name)
+    remote_identities: pass these identities to fetch_from_remote(cookies[sid and identities])
+ if feature is not remote
+    identities: identities-cookie or identities-cli
+ */
+
+pub async fn access_identities(
+    config: &fpm::Config,
+    req: &actix_web::HttpRequest,
+    document_name: &str,
+    is_read: bool,
+) -> fpm::Result<Vec<UserIdentity>> {
+    use itertools::Itertools;
+    if cfg!(feature = "remote") {
+        let sitemap_identities = get_identities(config, document_name, is_read)?;
+        let cookies: std::collections::HashMap<String, String> = req
+            .cookies()
+            .unwrap()
+            .iter()
+            .map(|c| (c.name().to_string(), c.value().to_string()))
+            .collect();
+        let host = req.connection_info().host().to_string();
+        return fpm::controller::get_remote_identities(
+            host.as_str(),
+            cookies,
+            sitemap_identities
+                .into_iter()
+                .map(|x| (x.key, x.value))
+                .collect_vec()
+                .as_slice(),
+        )
+        .await;
+    }
+
+    Ok(if let Some(identity) = req.cookie("identities") {
+        parse_identities(identity.value())
+    } else {
+        parse_cli_identities()
+    })
 }
 
 pub mod processor {
@@ -409,7 +523,7 @@ pub mod processor {
                 .into_iter()
                 .map(|i| ftd::PropertyValue::Value {
                     value: ftd::Value::String {
-                        text: i,
+                        text: i.to_string(),
                         source: ftd::TextSource::Default,
                     },
                 })

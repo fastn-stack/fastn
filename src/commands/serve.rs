@@ -13,7 +13,7 @@ async fn serve_file(
 
     // Auth Stuff
     if !f.is_static() {
-        match config.can_read(req, path.as_str()) {
+        match config.can_read(req, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
                     return actix_web::HttpResponse::Unauthorized()

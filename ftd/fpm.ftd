@@ -321,20 +321,32 @@ key-value-data list group-members:
 caption id:
 optional caption title:
 optional body description:
-string list email:
-string list -email:
-string list domain:
-string list -domain:
-string list telegram:
-string list -telegram:
-string list github:
-string list -github:
-string list github-team:
-string list -github-team:
-string list discord:
-string list -discord:
 string list group:
 string list -group:
+string list email:
+string list -email:
+string list telegram-admin:
+string list -telegram-admin:
+string list telegram-group:
+string list -telegram-group:
+string list github:
+string list -github:
+string list github-like:
+string list -github-like:
+string list github-team:
+string list -github-team:
+string list github-contributor:
+string list -github-contributor:
+string list github-watch:
+string list -github-watch:
+string list github-follows:
+string list -github-follows:
+string list github-sponsors:
+string list -github-sponsors:
+string list discord-server:
+string list -discord-server:
+string list discord-role:
+string list -discord-role:
 
 -- user-group-data list user-group:
 
