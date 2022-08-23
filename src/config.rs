@@ -543,10 +543,10 @@ impl Config {
 
     pub(crate) async fn get_cr_file_and_resolve(
         &self,
-        id: &str,
+        cr_id: &str,
         cr_number: usize,
     ) -> fpm::Result<(String, Vec<u8>)> {
-        let id_without_cr_prefix = fpm::cr::get_id_from_cr_id(id, cr_number)?;
+        let id_without_cr_prefix = fpm::cr::get_id_from_cr_id(cr_id, cr_number)?;
         let (package_name, package) = self
             .find_package_by_id(id_without_cr_prefix.as_str())
             .await?;
@@ -564,31 +564,41 @@ impl Config {
             }
         }
         let id = {
-            let mut id = new_id
-                .split_once("-/")
-                .map(|(id, _)| id)
-                .unwrap_or_else(|| new_id.as_str())
-                .trim()
-                .trim_start_matches(package_name.as_str());
+            let mut id = match new_id.split_once("-/") {
+                Some((p1, p2))
+                    if !(package_name.eq(self.package.name.as_str())
+                        && fpm::utils::ids_matches(p2, "about")) =>
+                // full id in case of about page as it's a special page
+                {
+                    p1.to_string()
+                }
+                _ => new_id,
+            }
+            .trim()
+            .trim_start_matches(package_name.as_str())
+            .to_string();
             if id.is_empty() {
-                id = "/";
+                id = "/".to_string();
             }
             id
         };
 
         if package.name.eq(self.package.name.as_str()) {
-            let remote_manifest = self.get_remote_manifest(false).await?;
-            let cr_path = fpm::cr::cr_path(cr_number);
-            let id_with_cr = format!("{}/{}", cr_path, id);
-            if let Ok(response) = package.fs_fetch_by_id(id_with_cr.as_str(), None).await {
-                return Ok(response);
-            }
-            if let Some(file_edit) = remote_manifest.get(id) {
-                if file_edit.is_deleted() {}
-            }
+            let file_info_map = fpm::cr::cr_clone_file_info(self, cr_number).await?;
+            let file_info = fpm::package_doc::file_id_to_names(id.as_str())
+                .into_iter()
+                .find_map(|id| file_info_map.get(&id))
+                .ok_or_else(|| fpm::Error::UsageError {
+                    message: format!("{} is not found", cr_id),
+                })?;
+
+            return Ok((
+                format!("{}{}", add_packages, file_info.path),
+                file_info.content.to_owned(),
+            ));
         }
 
-        let (file_name, content) = package.resolve_by_id(id, None).await?;
+        let (file_name, content) = package.resolve_by_id(id.as_str(), None).await?;
 
         Ok((format!("{}{}", add_packages, file_name), content))
     }

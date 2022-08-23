@@ -269,7 +269,7 @@ impl fpm::Package {
     }
 }
 
-fn file_id_to_names(id: &str) -> Vec<String> {
+pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
     let id = id.replace("/index.html", "/").replace("index.html", "/");
     if id.eq("/") {
         return vec![

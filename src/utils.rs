@@ -603,3 +603,18 @@ pub(crate) async fn update(root: impl AsRef<camino::Utf8Path>, data: &[u8]) -> f
         .write_all(data)
         .await?)
 }
+
+pub(crate) fn ids_matches(id1: &str, id2: &str) -> bool {
+    return strip_id(id1).eq(&strip_id(id2));
+
+    fn strip_id(id: &str) -> String {
+        let id = id
+            .trim()
+            .replace("/index.html", "/")
+            .replace("index.html", "/");
+        if id.eq("/") {
+            return id;
+        }
+        id.trim_matches('/').to_string()
+    }
+}
