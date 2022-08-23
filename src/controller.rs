@@ -119,7 +119,8 @@ async fn get_package(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<Pa
         reqwest::header::HeaderValue::from_static("fpm"),
     );
 
-    let resp: ApiResponse<PackageResult> = fpm::library::http::get_with_type(url, headers).await?;
+    let resp: ApiResponse<PackageResult> =
+        fpm::library::http::get_with_type(url, headers, vec![].as_slice()).await?;
 
     if !resp.success {
         return Err(fpm::Error::APIResponseError(format!(
@@ -182,7 +183,7 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
 
     // TODO: here Map is wrong,
     let resp: ApiResponse<std::collections::HashMap<String, String>> =
-        fpm::library::http::get_with_type(url, headers).await?;
+        fpm::library::http::get_with_type(url, headers, vec![].as_slice()).await?;
     if !resp.success {
         return Err(fpm::Error::APIResponseError(format!(
             "fpm_ready api error: {:?}",
@@ -197,7 +198,7 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
 pub async fn get_remote_identities(
     remote_host: &str,
     cookies: std::collections::HashMap<String, String>,
-    _identities: &[String], // TODO:
+    identities: &[(String, String)],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
     use itertools::Itertools;
 
@@ -223,12 +224,13 @@ pub async fn get_remote_identities(
         #[serde(rename = "user-identities")]
         user_identities: Option<Vec<std::collections::HashMap<String, String>>>,
     }
-    // TODO:
+    let remote_host = "abrark.com";
     let url = format!("https://{}/-/dj/get-identities/", remote_host);
     println!("remote url: {}", url);
 
     let resp: UserIdentities =
-        fpm::library::http::get_with_type(url::Url::parse(url.as_str())?, headers).await?;
+        fpm::library::http::get_with_type(url::Url::parse(url.as_str())?, headers, identities)
+            .await?;
 
     if !resp.success {
         return Err(fpm::Error::APIResponseError(format!(

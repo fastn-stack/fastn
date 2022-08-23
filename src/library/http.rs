@@ -93,12 +93,13 @@ async fn _get(url: url::Url) -> reqwest::Result<String> {
 pub async fn get_with_type<T: serde::de::DeserializeOwned>(
     url: url::Url,
     headers: reqwest::header::HeaderMap,
+    query: &[(String, String)],
 ) -> fpm::Result<T> {
     let c = reqwest::Client::builder()
         .default_headers(headers)
         .build()?;
 
-    let mut resp = c.get(url.to_string().as_str()).send()?;
+    let mut resp = c.get(url.to_string().as_str()).query(query).send()?;
     if !resp.status().eq(&reqwest::StatusCode::OK) {
         return Err(fpm::Error::APIResponseError(format!(
             "url: {}, response_status: {}, response: {:?}",

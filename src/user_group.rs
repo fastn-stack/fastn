@@ -257,7 +257,7 @@ pub fn get_identities(
     config: &crate::Config,
     document_name: &str,
     is_read: bool,
-) -> fpm::Result<Vec<String>> {
+) -> fpm::Result<Vec<UserIdentity>> {
     // TODO: cookies or cli parameter
 
     let readers_writers = if let Some(sitemap) = &config.package.sitemap {
@@ -278,7 +278,6 @@ pub fn get_identities(
     let identities = identities?
         .into_iter()
         .flat_map(|x| x.into_iter())
-        .map(|identity| identity.to_string())
         .collect();
 
     Ok(identities)
@@ -371,6 +370,7 @@ pub async fn access_identities(
     document_name: &str,
     is_read: bool,
 ) -> fpm::Result<Vec<UserIdentity>> {
+    use itertools::Itertools;
     if cfg!(feature = "remote") {
         let sitemap_identities = get_identities(config, document_name, is_read)?;
         let cookies: std::collections::HashMap<String, String> = req
@@ -383,7 +383,11 @@ pub async fn access_identities(
         return fpm::controller::get_remote_identities(
             host.as_str(),
             cookies,
-            sitemap_identities.as_slice(),
+            sitemap_identities
+                .into_iter()
+                .map(|x| (x.key, x.value))
+                .collect_vec()
+                .as_slice(),
         )
         .await;
     }
@@ -450,7 +454,7 @@ pub mod processor {
                 .into_iter()
                 .map(|i| ftd::PropertyValue::Value {
                     value: ftd::Value::String {
-                        text: i,
+                        text: i.to_string(),
                         source: ftd::TextSource::Default,
                     },
                 })
