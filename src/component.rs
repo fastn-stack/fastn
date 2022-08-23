@@ -2710,7 +2710,7 @@ fn read_arguments(
     let universal_arguments_set: ftd::Set<String> = universal_arguments().keys().cloned().collect();
 
     // Set of root arguments which are invoked once
-    let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
+    let mut root_args_set: ftd::Set<String> = std::collections::HashSet::new();
     for (idx, (i, k, v)) in p1.0.iter().enumerate() {
         if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('>') {
             // event and loop matches

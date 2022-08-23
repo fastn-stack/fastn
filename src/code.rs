@@ -13,7 +13,7 @@ lazy_static::lazy_static! {
         }
         builder.build()
     };
-    pub static ref KNOWN_EXTENSIONS: std::collections::HashSet<String> =
+    pub static ref KNOWN_EXTENSIONS: ftd::Set<String> =
         SS.syntaxes().iter().flat_map(|v| v.file_extensions.to_vec()).collect();
     pub static ref TS: syntect::highlighting::ThemeSet =
         syntect::highlighting::ThemeSet::load_defaults();
