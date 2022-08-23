@@ -106,7 +106,7 @@ mod tests {
     fn to_json() {
         a(serde_json::json! {null}, "null");
         a(serde_json::json! {1}, "1");
-        a(Value::Number(Number::from_f64(1.0).unwrap()), "1.0");
+        a(Value::Number(Number::from_f64(1.0).unwrap()), "1");
         a(
             Value::Number(Number::from_f64(-1.0002300e2).unwrap()),
             "-100.023",
