@@ -17,7 +17,9 @@ pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpR
     }
 }
 
-pub(crate) async fn _view_source_h(_req: hyper::Request<hyper::Body>) -> hyper::Response<hyper::Body> {
+pub(crate) async fn _view_source_h(
+    _req: hyper::Request<hyper::Body>,
+) -> hyper::Response<hyper::Body> {
     // TODO: Need to remove unwrap
     let path: String = {
         // let mut path: camino::Utf8PathBuf = req.match_info().query("path").parse().unwrap();
@@ -36,7 +38,6 @@ pub(crate) async fn _view_source_h(_req: hyper::Request<hyper::Body>) -> hyper::
         }
     }
 }
-
 
 async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
     let mut config = fpm::Config::read(None, false).await?;

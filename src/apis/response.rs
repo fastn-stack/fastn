@@ -22,7 +22,7 @@ pub(crate) fn _access_h(_data: impl serde::Serialize) -> hyper::Response<hyper::
 
 pub(crate) fn _error_h<T: Into<String>>(
     _message: T,
-    _status: hyper::StatusCode
+    _status: hyper::StatusCode,
 ) -> hyper::Response<hyper::Body> {
     todo!()
 }
