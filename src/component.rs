@@ -122,7 +122,7 @@ impl Property {
         properties: &mut ftd::Map<Property>,
     ) {
         for (key, arg) in reference {
-            if default_arguments().contains_key(key) {
+            if universal_arguments().contains_key(key) {
                 properties
                     .entry(key.to_string())
                     .or_insert_with(|| arg.to_owned());
@@ -2314,7 +2314,7 @@ fn assert_no_extra_properties(
         };
 
         if !(root_arguments.contains_key(key)
-            || (is_component(name) && default_arguments().contains_key(key)))
+            || (is_component(name) && universal_arguments().contains_key(key)))
         {
             return ftd::p2::utils::e2(
                 format!(
@@ -2416,8 +2416,8 @@ pub fn read_properties(
     let mut properties: ftd::Map<Property> = Default::default();
     let root_arguments = {
         let mut root_arguments = root_arguments.clone();
-        let default_argument = default_arguments();
-        for (key, arg) in default_argument {
+        let universal_argument = universal_arguments();
+        for (key, arg) in universal_argument {
             root_arguments.entry(key).or_insert(arg);
         }
         root_arguments
@@ -2617,56 +2617,56 @@ pub fn read_properties(
     Ok(properties)
 }
 
-pub(crate) fn default_arguments() -> ftd::Map<ftd::p2::Kind> {
-    let mut default_argument: ftd::Map<ftd::p2::Kind> = Default::default();
-    default_argument.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
-    default_argument.insert("top".to_string(), ftd::p2::Kind::integer().into_optional());
-    default_argument.insert(
+pub(crate) fn universal_arguments() -> ftd::Map<ftd::p2::Kind> {
+    let mut universal_arguments: ftd::Map<ftd::p2::Kind> = Default::default();
+    universal_arguments.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
+    universal_arguments.insert("top".to_string(), ftd::p2::Kind::integer().into_optional());
+    universal_arguments.insert(
         "bottom".to_string(),
         ftd::p2::Kind::integer().into_optional(),
     );
-    default_argument.insert("left".to_string(), ftd::p2::Kind::integer().into_optional());
-    default_argument.insert(
+    universal_arguments.insert("left".to_string(), ftd::p2::Kind::integer().into_optional());
+    universal_arguments.insert(
         "move-up".to_string(),
         ftd::p2::Kind::integer().into_optional(),
     );
-    default_argument.insert(
+    universal_arguments.insert(
         "move-down".to_string(),
         ftd::p2::Kind::integer().into_optional(),
     );
-    default_argument.insert(
+    universal_arguments.insert(
         "move-left".to_string(),
         ftd::p2::Kind::integer().into_optional(),
     );
-    default_argument.insert(
+    universal_arguments.insert(
         "move-right".to_string(),
         ftd::p2::Kind::integer().into_optional(),
     );
-    default_argument.insert(
+    universal_arguments.insert(
         "right".to_string(),
         ftd::p2::Kind::integer().into_optional(),
     );
 
-    default_argument.insert("align".to_string(), ftd::p2::Kind::string().into_optional());
-    default_argument.insert(
+    universal_arguments.insert("align".to_string(), ftd::p2::Kind::string().into_optional());
+    universal_arguments.insert(
         "scale".to_string(),
         ftd::p2::Kind::decimal().into_optional(),
     );
-    default_argument.insert(
+    universal_arguments.insert(
         "rotate".to_string(),
         ftd::p2::Kind::integer().into_optional(),
     );
-    default_argument.insert(
+    universal_arguments.insert(
         "scale-x".to_string(),
         ftd::p2::Kind::decimal().into_optional(),
     );
-    default_argument.insert(
+    universal_arguments.insert(
         "scale-y".to_string(),
         ftd::p2::Kind::decimal().into_optional(),
     );
-    default_argument.insert("slot".to_string(), ftd::p2::Kind::string().into_optional());
+    universal_arguments.insert("slot".to_string(), ftd::p2::Kind::string().into_optional());
 
-    default_argument
+    universal_arguments
 }
 
 fn root_properties_from_inherits(
