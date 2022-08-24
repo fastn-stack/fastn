@@ -352,13 +352,12 @@ string list -discord-role:
 
 
 
--- record cr-about-data:
+-- record cr-meta-data:
 caption title:
 optional boolean open:
-optional body description:
 
 
--- optional cr-about-data cr-about:
+-- optional cr-meta-data cr-meta:
 
 
 -- record cr-deleted-data:

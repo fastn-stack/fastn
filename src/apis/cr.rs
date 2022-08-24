@@ -1,7 +1,6 @@
 #[derive(serde::Deserialize, serde::Serialize, std::fmt::Debug)]
 pub struct CreateCRRequest {
     pub title: Option<String>,
-    pub description: Option<String>,
 }
 
 pub async fn create_cr(
@@ -27,13 +26,12 @@ async fn create_cr_worker(cr_request: CreateCRRequest) -> fpm::Result<usize> {
     let config = fpm::Config::read(None, false).await?;
     let cr_number = config.extract_cr_number().await?;
     let default_title = format!("CR#{cr_number}");
-    let cr_about = fpm::cr::CRAbout {
+    let cr_meta = fpm::cr::CRMeta {
         title: cr_request.title.unwrap_or(default_title),
-        description: cr_request.description,
         cr_number: cr_number as usize,
         open: true,
     };
-    fpm::commands::create_cr::add_cr_to_workspace(&config, &cr_about).await?;
+    fpm::commands::create_cr::add_cr_to_workspace(&config, &cr_meta).await?;
     Ok(cr_number as usize)
 }
 

@@ -655,7 +655,7 @@ async fn add_close_cr_status(
     cr: usize,
     cr_file_manifest: &std::collections::HashMap<String, fpm::history::FileEdit>,
 ) -> fpm::Result<fpm::sync_utils::FileStatus> {
-    let cr_about_path_str = config.path_without_root(&config.cr_about_path(cr))?;
+    let cr_about_path_str = config.path_without_root(&config.cr_meta_path(cr))?;
     let cr_about_file_edit = cr_file_manifest
         .get(cr_about_path_str.as_str())
         .ok_or_else(|| fpm::Error::CRAboutNotFound {
@@ -669,10 +669,10 @@ async fn add_close_cr_status(
         });
     }
     let cr_about_path = config.history_path(cr_about_path_str.as_str(), cr_about_file_edit.version);
-    let cr_about_content = tokio::fs::read_to_string(cr_about_path).await?;
-    let mut cr_about = fpm::cr::resolve_cr_about(cr_about_content.as_str(), cr).await?;
+    let cr_meta_content = tokio::fs::read_to_string(cr_about_path).await?;
+    let mut cr_about = fpm::cr::resolve_cr_meta(cr_meta_content.as_str(), cr).await?;
     cr_about.open = false;
-    let cr_close_content = fpm::cr::generate_cr_about_content(&cr_about);
+    let cr_close_content = fpm::cr::generate_cr_meta_content(&cr_about);
     Ok(fpm::sync_utils::FileStatus::Update {
         path: cr_about_path_str,
         content: cr_close_content.into_bytes(),

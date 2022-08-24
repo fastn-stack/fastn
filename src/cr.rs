@@ -1,52 +1,48 @@
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default)]
-pub struct CRAbout {
+pub struct CRMeta {
     pub title: String, // relative file name with respect to package root
-    pub description: Option<String>,
     #[serde(rename = "cr-number")]
     pub cr_number: usize,
     pub open: bool,
 }
 
-impl CRAbout {
-    pub(crate) fn unset_open(self) -> CRAbout {
-        CRAbout {
+impl CRMeta {
+    pub(crate) fn unset_open(self) -> CRMeta {
+        CRMeta {
             title: self.title,
-            description: self.description,
             cr_number: self.cr_number,
             open: false,
         }
     }
 }
 
-pub(crate) async fn get_cr_about(
+pub(crate) async fn get_cr_meta(
     config: &fpm::Config,
     cr_number: usize,
-) -> fpm::Result<fpm::cr::CRAbout> {
-    let cr_about_path = config.cr_about_path(cr_number);
-    if !cr_about_path.exists() {
+) -> fpm::Result<fpm::cr::CRMeta> {
+    let cr_meta_path = config.cr_meta_path(cr_number);
+    if !cr_meta_path.exists() {
         return fpm::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
 
-    let doc = tokio::fs::read_to_string(&cr_about_path).await?;
-    resolve_cr_about(&doc, cr_number).await
+    let doc = tokio::fs::read_to_string(&cr_meta_path).await?;
+    resolve_cr_meta(&doc, cr_number).await
 }
 
-pub(crate) async fn resolve_cr_about(
+pub(crate) async fn resolve_cr_meta(
     content: &str,
     cr_number: usize,
-) -> fpm::Result<fpm::cr::CRAbout> {
+) -> fpm::Result<fpm::cr::CRMeta> {
     #[derive(serde::Deserialize)]
-    struct CRAboutTemp {
+    struct CRMetaTemp {
         pub title: String,
-        pub description: Option<String>,
         pub open: Option<bool>,
     }
 
-    impl CRAboutTemp {
-        fn into_cr_about(self, cr_number: usize) -> CRAbout {
-            CRAbout {
+    impl CRMetaTemp {
+        fn into_cr_meta(self, cr_number: usize) -> CRMeta {
+            CRMeta {
                 title: self.title,
-                description: self.description,
                 cr_number,
                 open: self.open.unwrap_or(true),
             }
@@ -67,36 +63,45 @@ pub(crate) async fn resolve_cr_about(
         }
     };
 
-    Ok(b.get::<CRAboutTemp>("fpm#cr-about")?
-        .into_cr_about(cr_number))
+    Ok(b.get::<CRMetaTemp>("fpm#cr-meta")?.into_cr_meta(cr_number))
 }
 
 pub(crate) async fn create_cr_about(
     config: &fpm::Config,
-    cr_about: &fpm::cr::CRAbout,
+    cr_meta: &fpm::cr::CRMeta,
 ) -> fpm::Result<()> {
-    let about_content = generate_cr_about_content(cr_about);
+    let default_cr_about_content = fpm::package_info_about(config, cr_meta)?;
     fpm::utils::update(
-        &config.cr_about_path(cr_about.cr_number),
-        about_content.as_bytes(),
+        &config.cr_about_path(cr_meta.cr_number),
+        default_cr_about_content.as_bytes(),
     )
     .await?;
     Ok(())
 }
 
-pub(crate) fn generate_cr_about_content(cr_about: &fpm::cr::CRAbout) -> String {
-    let mut about_content = format!("-- import: fpm\n\n\n-- fpm.cr-about: {}", cr_about.title,);
-    if !cr_about.open {
-        about_content = format!("{}\n{}", about_content, cr_about.open);
+pub(crate) async fn create_cr_meta(
+    config: &fpm::Config,
+    cr_meta: &fpm::cr::CRMeta,
+) -> fpm::Result<()> {
+    let meta_content = generate_cr_meta_content(cr_meta);
+    fpm::utils::update(
+        &config.cr_meta_path(cr_meta.cr_number),
+        meta_content.as_bytes(),
+    )
+    .await?;
+    Ok(())
+}
+
+pub(crate) fn generate_cr_meta_content(cr_meta: &fpm::cr::CRMeta) -> String {
+    let mut meta_content = format!("-- import: fpm\n\n\n-- fpm.cr-meta: {}", cr_meta.title,);
+    if !cr_meta.open {
+        meta_content = format!("{}\n{}", meta_content, cr_meta.open);
     }
-    if let Some(ref description) = cr_about.description {
-        about_content = format!("{}\n\n{}", about_content, description);
-    }
-    format!("{about_content}\n")
+    format!("{meta_content}\n")
 }
 
 pub(crate) async fn is_open_cr_exists(config: &fpm::Config, cr_number: usize) -> fpm::Result<bool> {
-    get_cr_about(config, cr_number).await.map(|v| v.open)
+    get_cr_meta(config, cr_number).await.map(|v| v.open)
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Debug, Default)]

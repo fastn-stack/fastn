@@ -161,6 +161,59 @@ fn package_info_image(
     })
 }
 
+fn package_info_about(config: &fpm::Config, cr_meta: &fpm::cr::CRMeta) -> fpm::Result<String> {
+    let path = config.root.join("FPM").join("default-cr-about.ftd");
+    Ok(if path.is_file() {
+        let mut content = std::fs::read_to_string(path)?;
+        content = indoc::formatdoc! {"
+                {content}
+
+                -- import: fpm
+    
+                -- fpm.cr-meta: {title}
+                open: {open}
+            ",
+            content = content,
+            title = cr_meta.title,
+            open = cr_meta.open,
+        };
+        content
+    } else {
+        let package_info_package = match config
+            .package
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
+            .or_else(|| {
+                config
+                    .package
+                    .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+            }) {
+            Some(dep) => dep.package.name.as_str(),
+            None => fpm::FPM_UI_INTERFACE,
+        };
+        let body_prefix = match config.package.generate_prefix_string(false) {
+            Some(bp) => bp,
+            None => String::new(),
+        };
+        indoc::formatdoc! {"
+            {body_prefix}
+    
+            -- import: {package_info_package}/default-cr-about as pi 
+            -- import: fpm
+
+            -- fpm.cr-meta-data cr-meta: {title}
+            open: {open}
+    
+            -- pi.page:
+            cr-meta: $cr-meta
+        ",
+        body_prefix = body_prefix,
+        package_info_package = package_info_package,
+        title = cr_meta.title,
+        open = cr_meta.open,
+        }
+    })
+}
+
 fn package_info_editor(
     config: &fpm::Config,
     file_name: &str,

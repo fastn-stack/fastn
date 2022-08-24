@@ -76,6 +76,10 @@ impl Config {
         self.cr_path(cr_number).join("-/about.ftd")
     }
 
+    pub fn cr_meta_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
+        self.cr_path(cr_number).join("-/meta.ftd")
+    }
+
     pub fn remote_dir(&self) -> camino::Utf8PathBuf {
         self.root.join(".remote-state")
     }

@@ -114,8 +114,9 @@ async fn async_main() -> fpm::Result<()> {
         let source = status.value_of("source");
         fpm::sync_status(&config, source).await?;
     }
-    if matches.subcommand_matches("create-cr").is_some() {
-        fpm::create_cr(&config).await?;
+    if let Some(create_cr) = matches.subcommand_matches("create-cr") {
+        let title = create_cr.value_of("title");
+        fpm::create_cr(&config, title).await?;
     }
     if let Some(close_cr) = matches.subcommand_matches("close-cr") {
         let cr = close_cr.value_of("cr").unwrap();
@@ -316,6 +317,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
         )
         .subcommand(
             clap::SubCommand::with_name("create-cr")
+                .arg(clap::Arg::with_name("title"))
                 .about("Create a Change Request")
                 .version(env!("CARGO_PKG_VERSION")),
         )
