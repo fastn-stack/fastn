@@ -267,6 +267,62 @@ mod interpreter {
         bag.insert(root.to_string(), optional_string_thing);
     }
 
+    fn insert_update_decimal_by_root(root: &str, value: f64, bag: &mut ftd::Map<ftd::p2::Thing>) {
+        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let var_name = root_parts[1];
+
+        let decimal_thing = ftd::p2::Thing::Variable(ftd::Variable {
+            name: format!("{}", var_name),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::Decimal { value },
+            },
+            conditions: vec![],
+            flags: Default::default(),
+        });
+
+        if bag.contains_key(root) {
+            bag.entry(root.to_string())
+                .and_modify(|e| *e = decimal_thing);
+        } else {
+            bag.insert(root.to_string(), decimal_thing);
+        }
+    }
+
+    fn insert_update_string_by_root(
+        root: &str,
+        val: &str,
+        source_type: &str,
+        bag: &mut ftd::Map<ftd::p2::Thing>,
+    ) {
+        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let var_name = root_parts[1];
+
+        let string_thing = ftd::p2::Thing::Variable(ftd::Variable {
+            name: format!("{}", var_name),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::String {
+                    text: val.to_string(),
+                    source: match source_type.to_ascii_lowercase().as_str() {
+                        "header" => ftd::TextSource::Header,
+                        "caption" => ftd::TextSource::Caption,
+                        "body" => ftd::TextSource::Body,
+                        "default" => ftd::TextSource::Default,
+                        _ => panic!("invalid text source provided"),
+                    },
+                },
+            },
+            conditions: vec![],
+            flags: Default::default(),
+        });
+
+        if bag.contains_key(root) {
+            bag.entry(root.to_string())
+                .and_modify(|e| *e = string_thing);
+        } else {
+            bag.insert(root.to_string(), string_thing);
+        }
+    }
+
     /// inserts mapping of root_id -> optional integer variable (thing) in the bag
     fn insert_optional_integer_by_root(root: &str, bag: &mut ftd::Map<ftd::p2::Thing>) {
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
@@ -1394,15 +1450,25 @@ mod interpreter {
             }),
         );
 
-        // let levels: Vec<String> = vec![
-        //     s("0"),
-        //     s("0,0"),
-        //     s("0,0,0"),
-        //     s("0,0,0,0,2"),
-        //     s("0,0,0,2"),
-        //     s("0,0,0,3"),
-        // ];
-        // insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
+        let levels: Vec<String> = vec![
+            s("0"),
+            s("0,0"),
+            s("0,0,0"),
+            s("0,0,0,0,2"),
+            s("0,0,0,2"),
+            s("0,0,0,3"),
+        ];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0", "toc_main", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0", "/welcome/", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0,2", "/Building/", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0,3", "/Building2/", "header", &mut bag);
+        insert_update_string_by_root(
+            "foo/bar#id@0,0,0,0,2",
+            "/ChildBuilding/",
+            "header",
+            &mut bag,
+        );
 
         let children = vec![
             ftd::Element::Markup(ftd::Markups {
@@ -1799,7 +1865,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#ft_toc".to_string(),
-                arguments: Default::default(),
+                arguments: universal_arguments_as_map(),
                 properties: Default::default(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -2001,17 +2067,22 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#parent".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (
-                        s("active"),
-                        ftd::p2::Kind::Optional {
-                            kind: Box::new(ftd::p2::Kind::boolean()),
-                            is_reference: false,
-                        },
-                    ),
-                    (s("id"), ftd::p2::Kind::string()),
-                    (s("name"), ftd::p2::Kind::caption()),
-                ])
+                arguments: [
+                    vec![
+                        (
+                            s("active"),
+                            ftd::p2::Kind::Optional {
+                                kind: Box::new(ftd::p2::Kind::boolean()),
+                                is_reference: false,
+                            },
+                        ),
+                        (s("id"), ftd::p2::Kind::string()),
+                        (s("name"), ftd::p2::Kind::caption()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -2163,8 +2234,13 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#table-of-content".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(s("id"), ftd::p2::Kind::string())])
-                    .collect(),
+                arguments: [
+                    vec![(s("id"), ftd::p2::Kind::string())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("height"),
@@ -2219,10 +2295,12 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "creating-a-tree#toc-heading".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("text"),
-                    ftd::p2::Kind::caption(),
-                )])
+                arguments: [
+                    vec![(s("text"), ftd::p2::Kind::caption())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
@@ -2486,6 +2564,26 @@ mod interpreter {
                 conditions: vec![],
                 flags: Default::default(),
             }),
+        );
+
+        let levels = vec![
+            s("0"),
+            s("0,0"),
+            s("0,0,0"),
+            s("0,0,0,2"),
+            s("0,0,0,3"),
+            s("0,0,0,0,2"),
+        ];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0", "toc_main", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0", "/welcome/", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0,2", "/Building/", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0,3", "/Building2/", "header", &mut bag);
+        insert_update_string_by_root(
+            "foo/bar#id@0,0,0,0,2",
+            "/ChildBuilding/",
+            "header",
+            &mut bag,
         );
 
         let children = vec![
@@ -5944,6 +6042,8 @@ mod interpreter {
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0", "foo-1", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1", "foo-2", "header", &mut bag);
 
         let mut main = super::default_column();
         main.container
@@ -6108,6 +6208,8 @@ mod interpreter {
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0", "foo-1", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1", "foo-2", "header", &mut bag);
 
         let mut main = super::default_column();
         main.container
@@ -6584,7 +6686,6 @@ mod interpreter {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#desktop-display".to_string(),
-                            arguments: universal_arguments_as_map(),
                             condition: Some(ftd::p2::Boolean::Equal {
                                 left: ftd::PropertyValue::Reference {
                                     name: s("foo/bar#mobile"),
@@ -6732,6 +6833,9 @@ mod interpreter {
 
         let levels = vec![s("1,0,0"), s("1,0,0,0"), s("1,0,0,1")];
         insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1,0,0", "foo-id", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1,0,0,0", "some-child", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1,0,0,1", "some-child", "header", &mut bag);
 
         p!(
             "
@@ -16726,6 +16830,8 @@ mod interpreter {
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0", "bar-id", "header", &mut bag);
+        insert_update_decimal_by_root("foo/bar#scale@0", 1.2, &mut bag);
 
         let mut main = super::default_column();
         main.container
