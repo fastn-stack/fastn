@@ -16,6 +16,17 @@ pub(crate) fn success(data: impl serde::Serialize) -> actix_web::Result<actix_we
         .body(data))
 }
 
+pub(crate) fn _access_h(_data: impl serde::Serialize) -> hyper::Response<hyper::Body> {
+    todo!()
+}
+
+pub(crate) fn _error_h<T: Into<String>>(
+    _message: T,
+    _status: hyper::StatusCode
+) -> hyper::Response<hyper::Body> {
+    todo!()
+}
+
 pub(crate) fn error<T: Into<String>>(
     message: T,
     status: actix_web::http::StatusCode,

@@ -75,6 +75,12 @@ url = "2"
 zip = "0.6"
 
 
+[dependencies.hyper]
+version = "0.14"
+default-features = false
+features = ["http1", "server"]
+
+
 [dependencies.ftd]
 # We are currently using the git version of ftd as we are not publishing every change
 # to ftd for now. We are currently in active development, and we are not using proper
@@ -97,6 +103,8 @@ rev = "0f70856"
 
 
 [dependencies.reqwest]
+# We considered removing dependency from `reqwest`, and only use `hyper`. But `reqwest`
+# does too much (bundled) tls for example, that we can not.
 version = "0.11"
 features = [
     # Check the note on bundling rusqlite later in this file. Without bundling

@@ -897,6 +897,7 @@ dependencies = [
  "fluent",
  "ftd 0.1.18 (git+https://github.com/FifthTry/ftd?rev=0f70856)",
  "futures",
+ "hyper",
  "ignore",
  "indoc",
  "intl-memoizer",
