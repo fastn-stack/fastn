@@ -1,0 +1,7 @@
+-- fbt:
+cmd: $FBT_CWD/target/debug/fpm --test sync-status && $FBT_CWD/target/debug/fpm --test resolve-conflict --use-theirs index.ftd
+output: .clone-state
+
+-- stdout:
+
+Conflicted: index.ftd

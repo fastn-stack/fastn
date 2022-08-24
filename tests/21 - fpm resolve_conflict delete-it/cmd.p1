@@ -1,0 +1,8 @@
+-- fbt:
+cmd: $FBT_CWD/target/debug/fpm --test sync-status && $FBT_CWD/target/debug/fpm --test resolve-conflict --delete-it index.ftd
+output: .clone-state
+
+-- stdout:
+
+CloneEditedRemoteDeleted: index.ftd
+
