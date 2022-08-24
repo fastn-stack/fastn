@@ -459,7 +459,7 @@ pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::B
     body: B,
 ) -> fpm::Result<T> {
     Ok(reqwest::Client::new()
-        .get(url)
+        .post(url)
         .header(reqwest::header::CONTENT_TYPE, "application/json")
         .header(reqwest::header::USER_AGENT, "fpm")
         .body(body)
