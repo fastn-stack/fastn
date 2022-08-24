@@ -15,6 +15,8 @@ on:
      - '**.rs'
      - 'Cargo.*'
      - 'rust-toolchain'
+     - '.github/workflows/rust.yml'
+     - 'tests/**'
 jobs:
   everything:
     name: Rust Checks
