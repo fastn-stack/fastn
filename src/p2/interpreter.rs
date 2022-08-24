@@ -893,6 +893,40 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             ftd::p2::Thing::Component(ftd::p2::element::null()),
         ),
         (
+            "ftd#link-code".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#link-code".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "ftd#color".to_string(),
+                        fields: std::iter::IntoIterator::into_iter([
+                            (
+                                "dark".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "green".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                "light".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "red".to_string(),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        ),
+        (
             "ftd#dark-mode".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "ftd#dark-mode".to_string(),

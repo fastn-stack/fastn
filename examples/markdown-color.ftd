@@ -1,0 +1,13 @@
+-- boolean flag: true
+
+
+-- ftd.link-code:
+if: $flag
+light: purple
+dark: orange
+
+
+
+-- ftd.text: $name
+color: $ftd.link-code
+$on-click$: toggle $flag

@@ -984,7 +984,9 @@ window.ftd = (function () {
     exports.get_value = function (id, variable) {
         let data = ftd_data[id];
 
-        if (!data[variable]) {
+        let var_name = ftd_utils.get_name_and_remaining(variable)[0];
+
+        if (!data[var_name]) {
             console_log(variable, "is not in data, ignoring");
             return;
         }
@@ -1116,23 +1118,24 @@ window.ftd.post_init = function () {
         console_log("last_device", last_device);
     }
 
-    function update_markdown_colors() {
-        // remove all colors from ftd.css: copy every deleted stuff in this function
-        var sheet = document.createElement('style')
-        sheet.innerHTML = """
-         .ft_md a:visited code {
-            color: window.ftd.get_value("main", FTD_LIGHT_A_VISITED_CODE);
-        }
-            body.fpm-dark .ft_md a:visited code {
-                    color: window.ftd.get_value("main", FTD_DARK_A_VISITED_CODE);
-                }
-
-                body.fpm-dark .ft_md code {
-                    color: window.ftd.get_value("main", FTD_DARK_A__CODE);;
-                }
-        """;
-        document.body.appendChild(sheet);
-    }
+    // function update_markdown_colors() {
+    //     // ftd#link-code.dark
+    //     // remove all colors from ftd.css: copy every deleted stuff in this function
+    //     var sheet = document.createElement('style')
+    //     sheet.innerHTML = """
+    //      .ft_md a:visited code {
+    //         color: window.ftd.get_value("main", "ftd#link-code.light");
+    //     }
+    //         body.fpm-dark .ft_md a:visited code {
+    //                 color: window.ftd.get_value("main", "ftd#link-code.dark");
+    //             }
+    //
+    //             body.fpm-dark .ft_md code {
+    //                 color: window.ftd.get_value("main", FTD_DARK_A__CODE);;
+    //             }
+    //     """;
+    //     document.body.appendChild(sheet);
+    // }
 
     function get_device() {
         // not at all sure about this functions logic.
