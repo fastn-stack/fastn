@@ -190,23 +190,23 @@ blockquote: $blockquote
 
 
 -- ftd.color base-:
-light: #FFFFFF
+light: #18181b
 dark: #18181b
 
 -- ftd.color step-1-:
-light: #E0E0E0
+light: #141414
 dark: #141414
 
 -- ftd.color step-2-:
-light: #BDBDBD
+light: #585656
 dark: #585656
 
 -- ftd.color overlay-:
-light: rgba(242, 242, 242, 0.8)
+light: rgba(0, 0, 0, 0.8)
 dark: rgba(0, 0, 0, 0.8)
 
 -- ftd.color code-:
-light: #f6f8fa
+light: #2B303B
 dark: #2B303B
 
 -- ftd.background-colors background-:
@@ -217,35 +217,35 @@ overlay: $overlay-
 code: $code-
 
 -- ftd.color border-:
-light: #828282
+light: #434547
 dark: #434547
 
 -- ftd.color border-strong-:
-light: #4F4F4F
+light: #919192
 dark: #919192
 
 -- ftd.color text-:
-light: #1c1e21
+light: #a8a29e
 dark: #a8a29e
 
 -- ftd.color text-strong-:
-light: #000000
+light: #ffffff
 dark: #ffffff
 
 -- ftd.color shadow-:
-light: #E0E0E0
+light: #007f9b
 dark: #007f9b
 
 -- ftd.color scrim-:
-light: #E0E0E0
+light: #007f9b
 dark: #007f9b
 
 -- ftd.color cta-primary-base-:
-light: #269b8d
+light: #2dd4bf
 dark: #2dd4bf
 
 -- ftd.color cta-primary-hover-:
-light: #2cc9b5
+light: #2c9f90
 dark: #2c9f90
 
 -- ftd.color cta-primary-pressed-:
@@ -253,7 +253,7 @@ light: #2cc9b5
 dark: #2cc9b5
 
 -- ftd.color cta-primary-disabled-:
-light: rgba(224, 224, 224, 0.1)
+light: rgba(44, 201, 181, 0.1)
 dark: rgba(44, 201, 181, 0.1)
 
 -- ftd.color cta-primary-focused-:
@@ -290,7 +290,7 @@ light: #4fb2df
 dark: #4fb2df
 
 -- ftd.color cta-secondary-disabled-:
-light: rgba(224, 224, 224, 0.1)
+light: rgba(79, 178, 223, 0.1)
 dark: rgba(79, 178, 223, 0.1)
 
 -- ftd.color cta-secondary-focused-:
@@ -352,31 +352,31 @@ border: $cta-tertiary-border-
 text: $cta-tertiary-text-
 
 -- ftd.color cta-danger-base-:
-light: #FFFBFE
+light: #1C1B1F
 dark: #1C1B1F
 
 -- ftd.color cta-danger-hover-:
-light: #FFFBFE
+light: #1C1B1F
 dark: #1C1B1F
 
 -- ftd.color cta-danger-pressed-:
-light: #FFFBFE
+light: #1C1B1F
 dark: #1C1B1F
 
 -- ftd.color cta-danger-disabled-:
-light: #FFFBFE
+light: #1C1B1F
 dark: #1C1B1F
 
 -- ftd.color cta-danger-focused-:
-light: #FFFBFE
+light: #1C1B1F
 dark: #1C1B1F
 
 -- ftd.color cta-danger-border-:
-light: #FFFBFE
+light: #1C1B1F
 dark: #1C1B1F
 
 -- ftd.color cta-danger-text-:
-light: #FFFBFE
+light: #1C1B1F
 dark: #1C1B1F
 
 -- ftd.cta-colors cta-danger-:
