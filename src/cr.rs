@@ -70,7 +70,7 @@ pub(crate) async fn create_cr_about(
     config: &fpm::Config,
     cr_meta: &fpm::cr::CRMeta,
 ) -> fpm::Result<()> {
-    let default_cr_about_content = fpm::package_info_about(config, cr_meta)?;
+    let default_cr_about_content = fpm::package_info_about(config)?;
     fpm::utils::update(
         &config.cr_about_path(cr_meta.cr_number),
         default_cr_about_content.as_bytes(),
@@ -260,7 +260,6 @@ pub(crate) fn get_id_from_cr_id(id: &str, cr_number: usize) -> fpm::Result<Strin
 pub(crate) struct FileInfo {
     pub path: String,
     pub content: Vec<u8>,
-    pub src_cr: Option<usize>,
 }
 
 pub(crate) async fn cr_clone_file_info(
@@ -292,7 +291,6 @@ pub(crate) async fn cr_clone_file_info(
             FileInfo {
                 path: path.to_string(),
                 content,
-                src_cr: None,
             },
         );
     }
@@ -338,7 +336,6 @@ pub(crate) async fn cr_clone_file_info(
             FileInfo {
                 path: workspace_entry.filename.to_string(),
                 content,
-                src_cr: Some(cr_number),
             },
         );
     }
@@ -346,6 +343,7 @@ pub(crate) async fn cr_clone_file_info(
     Ok(file_info)
 }
 
+#[allow(dead_code)]
 pub(crate) async fn cr_remote_file_info(
     config: &fpm::Config,
     cr_number: usize,
@@ -375,7 +373,6 @@ pub(crate) async fn cr_remote_file_info(
             FileInfo {
                 path: path.to_string(),
                 content,
-                src_cr: None,
             },
         );
     }
@@ -418,7 +415,6 @@ pub(crate) async fn cr_remote_file_info(
             FileInfo {
                 path: path.to_string(),
                 content,
-                src_cr: None,
             },
         );
     }

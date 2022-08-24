@@ -455,7 +455,7 @@ impl Config {
         )
         .await?;
 
-        if id_without_cr_prefix.contains("-/") {
+        if id_without_cr_prefix.contains("-/") && !id_without_cr_prefix.contains("-/about") {
             let url = id_without_cr_prefix
                 .trim_end_matches("/index.html")
                 .trim_matches('/');

@@ -1,3 +1,4 @@
+mod cr_meta;
 pub(crate) mod document;
 mod fetch_file;
 mod fpm_dot_ftd;
@@ -443,6 +444,7 @@ impl Library2 {
                 )
                 .await
             }
+            "cr-meta" => fpm::library::cr_meta::processor(section, doc, &self.config).await,
             t => Err(ftd::p1::Error::NotFound {
                 doc_id: self.document_id.to_string(),
                 line_number: section.line_number,
