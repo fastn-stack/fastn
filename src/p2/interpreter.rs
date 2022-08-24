@@ -974,6 +974,22 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             }),
         ),
         (
+            "ftd#dark-link-code".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#dark-link-code".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "#25c19f".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
             "ftd#image-src".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#image-src".to_string(),

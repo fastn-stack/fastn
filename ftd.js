@@ -1095,6 +1095,7 @@ window.ftd.post_init = function () {
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
     const FTD_THEME_COLOR = "ftd#theme-color";
     const THEME_COLOR_META = "theme-color";
+    const DARK_LINK_CODE = "ftd#dark-link-code";
 
     let last_device;
 
@@ -1113,6 +1114,24 @@ window.ftd.post_init = function () {
         window.ftd.set_string_for_all(FTD_DEVICE, current);
         last_device = current;
         console_log("last_device", last_device);
+    }
+
+    function update_markdown_colors() {
+        // remove all colors from ftd.css: copy every deleted stuff in this function
+        var sheet = document.createElement('style')
+        sheet.innerHTML = """
+         .ft_md a:visited code {
+            color: window.ftd.get_value("main", FTD_LIGHT_A_VISITED_CODE);
+        }
+            body.fpm-dark .ft_md a:visited code {
+                    color: window.ftd.get_value("main", FTD_DARK_A_VISITED_CODE);
+                }
+
+                body.fpm-dark .ft_md code {
+                    color: window.ftd.get_value("main", FTD_DARK_A__CODE);;
+                }
+        """;
+        document.body.appendChild(sheet);
     }
 
     function get_device() {
