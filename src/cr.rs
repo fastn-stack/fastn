@@ -251,6 +251,7 @@ pub(crate) fn get_id_from_cr_id(id: &str, cr_number: usize) -> fpm::Result<Strin
     fpm::usage_error(format!("`{}` is not a cr id", id))
 }
 
+#[derive(Debug)]
 pub(crate) struct FileInfo {
     pub path: String,
     pub content: Vec<u8>,
@@ -299,7 +300,7 @@ pub(crate) async fn cr_clone_file_info(
         .into_iter()
         .filter_map(|(k, v)| {
             k.strip_prefix(cr_path.as_str())
-                .map(|path| (path.to_string(), v))
+                .map(|path| (path.trim_start_matches('/').to_string(), v))
         })
         .collect::<std::collections::HashMap<String, fpm::workspace::WorkspaceEntry>>();
 

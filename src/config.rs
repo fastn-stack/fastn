@@ -437,9 +437,34 @@ impl Config {
         id: &str,
         cr_number: usize,
     ) -> fpm::Result<fpm::File> {
+        let file_name = self.get_cr_file_and_resolve(id, cr_number).await?.0;
         let id_without_cr_prefix = fpm::cr::get_id_from_cr_id(id, cr_number)?;
+        let package = self
+            .find_package_by_id(id_without_cr_prefix.as_str())
+            .await?
+            .1;
 
-        unimplemented!()
+        let mut file = fpm::get_file(
+            package.name.to_string(),
+            &self.root.join(file_name),
+            &self.get_root_for_package(&package),
+        )
+        .await?;
+
+        if id_without_cr_prefix.contains("-/") {
+            let url = id_without_cr_prefix
+                .trim_end_matches("/index.html")
+                .trim_matches('/');
+            let extension = if matches!(file, fpm::File::Markdown(_)) {
+                "/index.md".to_string()
+            } else if matches!(file, fpm::File::Ftd(_)) {
+                "/index.ftd".to_string()
+            } else {
+                "".to_string()
+            };
+            file.set_id(format!("{}{}", url, extension).as_str());
+        }
+        Ok(file)
     }
 
     pub async fn get_file_and_package_by_id(&mut self, id: &str) -> fpm::Result<fpm::File> {
