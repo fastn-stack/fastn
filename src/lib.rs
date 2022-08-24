@@ -59,6 +59,7 @@ pub fn html() -> &'static str {
 
 // #[cfg(test)]
 pub type Map<T> = std::collections::BTreeMap<String, T>;
+pub type Set<T> = std::collections::HashSet<T>;
 
 // #[cfg(not(test))]
 // pub type Map<T> = std::collections::HashMap<String, T>;

@@ -2711,7 +2711,7 @@ fn read_arguments(
     let mut all_args = arguments.clone();
 
     // Set of root arguments which are invoked once
-    let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
+    let mut root_args_set: ftd::Set<String> = ftd::Set::new();
     for (idx, (i, k, v)) in p1.0.iter().enumerate() {
         if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('>') {
             // event and loop matches
