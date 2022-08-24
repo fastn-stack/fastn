@@ -78,6 +78,22 @@ impl Kind {
         }
     }
 
+    pub fn is_string(&self) -> bool {
+        matches!(self, Kind::String { .. })
+    }
+
+    pub fn is_decimal(&self) -> bool {
+        matches!(self, Kind::Decimal { .. })
+    }
+
+    pub fn is_integer(&self) -> bool {
+        matches!(self, Kind::Integer { .. })
+    }
+
+    pub fn is_boolean(&self) -> bool {
+        matches!(self, Kind::Boolean { .. })
+    }
+
     pub fn is_optional(&self) -> bool {
         matches!(self, Kind::Optional { .. })
     }
@@ -395,10 +411,6 @@ impl Kind {
             kind: Box::new(self),
             is_reference: false,
         }
-    }
-
-    pub fn is_boolean(&self) -> bool {
-        matches!(self, Kind::Boolean { .. })
     }
 
     pub fn inner(&self) -> &Self {
