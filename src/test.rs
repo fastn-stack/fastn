@@ -222,14 +222,9 @@ pub fn entity() -> ftd::p2::Thing {
 
 mod interpreter {
     use ftd::test::*;
-    use std::fmt::Display;
 
-    /// inserts mapping of root_id -> integer variable (thing) in the bag
-    ///
-    /// bag\[root_id\] = integer variable
-    ///
-    /// root_id = \[doc_id\]#\[var_name\]@\[level\]
-    fn insert_integer_by_root(root: &str, val: i64, bag: &mut ftd::Map<ftd::p2::Thing>) {
+    /// inserts integer variable with the given value in the bag
+    fn insert_update_integer_by_root(root: &str, val: i64, bag: &mut ftd::Map<ftd::p2::Thing>) {
         // root => [doc_id]#[var_name]@[level]
         // root_parts = [ doc_id , var_name, level ]
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
@@ -244,7 +239,12 @@ mod interpreter {
             flags: Default::default(),
         });
 
-        bag.insert(root.to_string(), integer_thing);
+        if bag.contains_key(root) {
+            bag.entry(root.to_string())
+                .and_modify(|e| *e = integer_thing);
+        } else {
+            bag.insert(root.to_string(), integer_thing);
+        }
     }
 
     /// inserts an optional variable in the bag having the
@@ -274,6 +274,7 @@ mod interpreter {
         }
     }
 
+    /// inserts decimal variable with the given value in the bag
     fn insert_update_decimal_by_root(root: &str, value: f64, bag: &mut ftd::Map<ftd::p2::Thing>) {
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
         let var_name = root_parts[1];
@@ -295,6 +296,7 @@ mod interpreter {
         }
     }
 
+    /// inserts string variable with the given value in the bag
     fn insert_update_string_by_root(
         root: &str,
         val: &str,
@@ -333,7 +335,7 @@ mod interpreter {
     /// generates root bag entry and returns it as String
     ///
     /// root_id = \[doc_id\]#\[var_name\]@\[level\]
-    fn make_root<T: Display>(var_name: &str, doc_id: &str, count: T) -> String {
+    fn make_root<T: std::fmt::Display>(var_name: &str, doc_id: &str, count: T) -> String {
         format!("{}#{}@{}", doc_id, var_name, count)
     }
 
@@ -374,7 +376,7 @@ mod interpreter {
         }
     }
 
-    /// insert all universal arguments in the bag by count at 1st level
+    /// insert all universal arguments in the bag by count at top level
     fn insert_universal_variables_by_count(
         lim: i32,
         doc_id: &str,
@@ -3121,21 +3123,21 @@ mod interpreter {
     fn text() {
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         insert_universal_variables_by_count(3, "foo/bar", &mut bag);
 
@@ -7572,23 +7574,23 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1,0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1,0", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1,0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1,0", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -7646,10 +7648,10 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
@@ -8634,15 +8636,15 @@ mod interpreter {
             }),
         );
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
 
         bag.insert(
             "foo/bar#people".to_string(),
@@ -9012,10 +9014,10 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             "foo/bar#test".to_string(),
@@ -9067,10 +9069,10 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             "foo/bar#test".to_string(),
@@ -9415,25 +9417,25 @@ mod interpreter {
             }),
         );
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -10679,21 +10681,21 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         insert_universal_variables_by_count(3, "foo/bar", &mut bag);
 
@@ -10897,10 +10899,10 @@ mod interpreter {
     fn record_with_default_value() {
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             s("foo/bar#abrar"),
@@ -11311,21 +11313,21 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         bag.insert(
             s("foo/bar#acme"),
@@ -12055,10 +12057,10 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             s("foo/bar#foo"),
@@ -16358,37 +16360,37 @@ mod interpreter {
             }),
         );
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@9", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@10", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@9", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@10", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@9", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@10", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@9", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@10", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@10", 10, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@10", 10, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@10", 11, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@10", 11, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
