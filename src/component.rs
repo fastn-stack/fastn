@@ -1702,13 +1702,16 @@ impl Component {
         let name = var_data.name;
         let root = doc.resolve_name(p1.line_number, var_data.kind.as_str())?;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
-        let (arguments, inherits) = read_arguments(
+        let (mut arguments, inherits) = read_arguments(
             &p1.header,
             root.as_str(),
             &root_component.arguments,
             &Default::default(),
             doc,
         )?;
+
+        // Extend the local arguments with universal arguments
+        arguments.extend(universal_arguments());
 
         assert_no_extra_properties(
             p1.line_number,
