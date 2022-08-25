@@ -10,14 +10,14 @@ text: $text
 
 
 -- ftd.column table-of-content:
-string id:
+/string id:
 id: $id
 width: 300
 height: fill
 
 
 -- ftd.column parent:
-string id:
+/string id:
 caption name:
 optional boolean active:
 id: $id
