@@ -1108,8 +1108,8 @@ window.ftd.post_init = function () {
     const LIGHT_LINK_VISITED = "ftd#link-visited.light";
     const DARK_LINK_VISITED = "ftd#link-visited.dark";
 
-    const LIGHT_LINK_CODE = "ftd#link-code.light";
-    const DARK_LINK_CODE = "ftd#link-code.dark";
+    const LIGHT_LINK_CODE = "ftd#markdown-colors.link-code.light";
+    const DARK_LINK_CODE = "ftd#markdown-colors.link-code.dark";
 
     const DARK_LINK_VISITED_CODE = "ftd#link-visited-code.light";
     const LIGHT_LINK_VISITED_CODE = "ftd#link-visited-code.dark";
