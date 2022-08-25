@@ -6,6 +6,18 @@ fn get_name() {
     )
 }
 
+/// returns the universal arguments map from component.rs as vector
+fn universal_arguments_as_vec() -> Vec<(String, ftd::p2::Kind)> {
+    ftd::component::universal_arguments()
+        .into_iter()
+        .collect::<Vec<(String, ftd::p2::Kind)>>()
+}
+
+/// returns the universal argumnts map from component.rs
+fn universal_arguments_as_map() -> ftd::Map<ftd::p2::Kind> {
+    ftd::component::universal_arguments()
+}
+
 pub fn interpret_helper(
     name: &str,
     source: &str,
@@ -211,12 +223,8 @@ pub fn entity() -> ftd::p2::Thing {
 mod interpreter {
     use ftd::test::*;
 
-    /// inserts mapping of root_id -> integer variable (thing) in the bag
-    ///
-    /// bag\[root_id\] = integer variable
-    ///
-    /// root_id = \[doc_id\]#\[var_name\]@\[level\]
-    fn insert_integer_by_root(root: &str, val: i64, bag: &mut ftd::Map<ftd::p2::Thing>) {
+    /// inserts integer variable with the given value in the bag
+    fn insert_update_integer_by_root(root: &str, val: i64, bag: &mut ftd::Map<ftd::p2::Thing>) {
         // root => [doc_id]#[var_name]@[level]
         // root_parts = [ doc_id , var_name, level ]
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
@@ -231,7 +239,180 @@ mod interpreter {
             flags: Default::default(),
         });
 
-        bag.insert(root.to_string(), integer_thing);
+        if bag.contains_key(root) {
+            bag.entry(root.to_string())
+                .and_modify(|e| *e = integer_thing);
+        } else {
+            bag.insert(root.to_string(), integer_thing);
+        }
+    }
+
+    /// inserts an optional variable in the bag having the
+    /// given kind with default value = None
+    fn insert_update_default_optional_type_by_root(
+        root: &str,
+        kind: ftd::p2::Kind,
+        bag: &mut ftd::Map<ftd::p2::Thing>,
+    ) {
+        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let var_name = root_parts[1];
+
+        let value = ftd::Value::default_optional_value_from_kind(kind);
+
+        let optional_thing = ftd::p2::Thing::Variable(ftd::Variable {
+            name: format!("{}", var_name),
+            value: ftd::PropertyValue::Value { value },
+            conditions: vec![],
+            flags: Default::default(),
+        });
+
+        if bag.contains_key(root) {
+            bag.entry(root.to_string())
+                .and_modify(|e| *e = optional_thing);
+        } else {
+            bag.insert(root.to_string(), optional_thing);
+        }
+    }
+
+    /// inserts decimal variable with the given value in the bag
+    fn insert_update_decimal_by_root(root: &str, value: f64, bag: &mut ftd::Map<ftd::p2::Thing>) {
+        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let var_name = root_parts[1];
+
+        let decimal_thing = ftd::p2::Thing::Variable(ftd::Variable {
+            name: format!("{}", var_name),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::Decimal { value },
+            },
+            conditions: vec![],
+            flags: Default::default(),
+        });
+
+        if bag.contains_key(root) {
+            bag.entry(root.to_string())
+                .and_modify(|e| *e = decimal_thing);
+        } else {
+            bag.insert(root.to_string(), decimal_thing);
+        }
+    }
+
+    /// inserts string variable with the given value in the bag
+    fn insert_update_string_by_root(
+        root: &str,
+        val: &str,
+        source_type: &str,
+        bag: &mut ftd::Map<ftd::p2::Thing>,
+    ) {
+        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let var_name = root_parts[1];
+
+        let string_thing = ftd::p2::Thing::Variable(ftd::Variable {
+            name: format!("{}", var_name),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::String {
+                    text: val.to_string(),
+                    source: match source_type.to_ascii_lowercase().as_str() {
+                        "header" => ftd::TextSource::Header,
+                        "caption" => ftd::TextSource::Caption,
+                        "body" => ftd::TextSource::Body,
+                        "default" => ftd::TextSource::Default,
+                        _ => panic!("invalid text source provided"),
+                    },
+                },
+            },
+            conditions: vec![],
+            flags: Default::default(),
+        });
+
+        if bag.contains_key(root) {
+            bag.entry(root.to_string())
+                .and_modify(|e| *e = string_thing);
+        } else {
+            bag.insert(root.to_string(), string_thing);
+        }
+    }
+
+    /// generates root bag entry and returns it as String
+    ///
+    /// root_id = \[doc_id\]#\[var_name\]@\[level\]
+    fn make_root<T: std::fmt::Display>(var_name: &str, doc_id: &str, count: T) -> String {
+        format!("{}#{}@{}", doc_id, var_name, count)
+    }
+
+    /// inserts all default universal arguments in the bag at the mentioned levels
+    fn insert_universal_variables_by_levels(
+        levels: Vec<String>,
+        doc_id: &str,
+        bag: &mut ftd::Map<ftd::p2::Thing>,
+    ) {
+        let universal_arguments_vec = universal_arguments_as_vec();
+
+        for (arg, kind) in universal_arguments_vec.iter() {
+            for level in levels.iter() {
+                if kind.is_optional() {
+                    if kind.inner().is_string() {
+                        insert_update_default_optional_type_by_root(
+                            make_root(arg, doc_id, level).as_str(),
+                            ftd::p2::Kind::string(),
+                            bag,
+                        );
+                    }
+                    if kind.inner().is_integer() {
+                        insert_update_default_optional_type_by_root(
+                            make_root(arg, doc_id, level).as_str(),
+                            ftd::p2::Kind::integer(),
+                            bag,
+                        );
+                    }
+                    if kind.inner().is_decimal() {
+                        insert_update_default_optional_type_by_root(
+                            make_root(arg, doc_id, level).as_str(),
+                            ftd::p2::Kind::decimal(),
+                            bag,
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    /// insert all universal arguments in the bag by count at top level
+    fn insert_universal_variables_by_count(
+        lim: i32,
+        doc_id: &str,
+        bag: &mut ftd::Map<ftd::p2::Thing>,
+    ) {
+        let mut count: i32 = 0;
+        let universal_arguments_vec = universal_arguments_as_vec();
+
+        while count < lim {
+            for (arg, kind) in universal_arguments_vec.iter() {
+                if kind.is_optional() {
+                    if kind.inner().is_string() {
+                        insert_update_default_optional_type_by_root(
+                            make_root(arg, doc_id, count).as_str(),
+                            ftd::p2::Kind::string(),
+                            bag,
+                        );
+                    }
+                    if kind.inner().is_integer() {
+                        insert_update_default_optional_type_by_root(
+                            make_root(arg, doc_id, count).as_str(),
+                            ftd::p2::Kind::integer(),
+                            bag,
+                        );
+                    }
+                    if kind.inner().is_decimal() {
+                        insert_update_default_optional_type_by_root(
+                            make_root(arg, doc_id, count).as_str(),
+                            ftd::p2::Kind::decimal(),
+                            bag,
+                        );
+                    }
+                }
+            }
+            count += 1
+        }
     }
 
     #[test]
@@ -242,6 +423,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: s("foo/bar#foo"),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -290,10 +472,12 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#text".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("name"),
-                    ftd::p2::Kind::caption(),
-                )])
+                arguments: [
+                    vec![(s("name"), ftd::p2::Kind::caption())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -508,6 +692,8 @@ mod interpreter {
             }),
         );
 
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
+
         let mut main = super::default_column();
         main.container
             .children
@@ -607,7 +793,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#ft_toc".to_string(),
-                arguments: Default::default(),
+                arguments: universal_arguments_as_map(),
                 properties: Default::default(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -810,17 +996,21 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#parent".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (
-                        s("active"),
-                        ftd::p2::Kind::Optional {
-                            kind: Box::new(ftd::p2::Kind::boolean()),
-                            is_reference: false,
-                        },
-                    ),
-                    (s("id"), ftd::p2::Kind::string()),
-                    (s("name"), ftd::p2::Kind::caption()),
-                ])
+                arguments: [
+                    vec![
+                        (
+                            s("active"),
+                            ftd::p2::Kind::Optional {
+                                kind: Box::new(ftd::p2::Kind::boolean()),
+                                is_reference: false,
+                            },
+                        ),
+                        (s("name"), ftd::p2::Kind::caption()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -972,8 +1162,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#table-of-content".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(s("id"), ftd::p2::Kind::string())])
-                    .collect(),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("height"),
@@ -1028,10 +1217,12 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "foo/bar#toc-heading".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("text"),
-                    ftd::p2::Kind::caption(),
-                )])
+                arguments: [
+                    vec![(s("text"), ftd::p2::Kind::caption())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -1108,76 +1299,6 @@ mod interpreter {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
                         kind: ftd::p2::Kind::boolean(),
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("toc_main"),
-                        source: ftd::TextSource::Header,
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/welcome/"),
-                        source: ftd::TextSource::Header,
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/Building/"),
-                        source: ftd::TextSource::Header,
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0,0,0,2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/ChildBuilding/"),
-                        source: ftd::TextSource::Header,
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-        bag.insert(
-            s("foo/bar#id@0,0,0,3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("id"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/Building2/"),
-                        source: ftd::TextSource::Header,
                     },
                 },
                 conditions: vec![],
@@ -1309,6 +1430,26 @@ mod interpreter {
                 conditions: vec![],
                 flags: Default::default(),
             }),
+        );
+
+        let levels: Vec<String> = vec![
+            s("0"),
+            s("0,0"),
+            s("0,0,0"),
+            s("0,0,0,0,2"),
+            s("0,0,0,2"),
+            s("0,0,0,3"),
+        ];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0", "toc_main", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0", "/welcome/", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0,2", "/Building/", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0,3", "/Building2/", "header", &mut bag);
+        insert_update_string_by_root(
+            "foo/bar#id@0,0,0,0,2",
+            "/ChildBuilding/",
+            "header",
+            &mut bag,
         );
 
         let children = vec![
@@ -1639,14 +1780,16 @@ mod interpreter {
 
 
             -- ftd.column table-of-content:
-            string id:
+            ;; id is universal argument now no repeated initialization of id allowed
+            /string id:
             id: $id
             width: 300
             height: fill
 
 
             -- ftd.column parent:
-            string id:
+            ;; id is universal argument now no repeated initialization of id allowed
+            /string id:
             caption name:
             optional boolean active:
             id: $id
@@ -1704,7 +1847,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#ft_toc".to_string(),
-                arguments: Default::default(),
+                arguments: universal_arguments_as_map(),
                 properties: Default::default(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -1906,17 +2049,22 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#parent".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (
-                        s("active"),
-                        ftd::p2::Kind::Optional {
-                            kind: Box::new(ftd::p2::Kind::boolean()),
-                            is_reference: false,
-                        },
-                    ),
-                    (s("id"), ftd::p2::Kind::string()),
-                    (s("name"), ftd::p2::Kind::caption()),
-                ])
+                arguments: [
+                    vec![
+                        (
+                            s("active"),
+                            ftd::p2::Kind::Optional {
+                                kind: Box::new(ftd::p2::Kind::boolean()),
+                                is_reference: false,
+                            },
+                        ),
+                        (s("id"), ftd::p2::Kind::string()),
+                        (s("name"), ftd::p2::Kind::caption()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -2068,8 +2216,13 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#table-of-content".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(s("id"), ftd::p2::Kind::string())])
-                    .collect(),
+                arguments: [
+                    vec![(s("id"), ftd::p2::Kind::string())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("height"),
@@ -2124,10 +2277,12 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "creating-a-tree#toc-heading".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("text"),
-                    ftd::p2::Kind::caption(),
-                )])
+                arguments: [
+                    vec![(s("text"), ftd::p2::Kind::caption())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
@@ -2391,6 +2546,26 @@ mod interpreter {
                 conditions: vec![],
                 flags: Default::default(),
             }),
+        );
+
+        let levels = vec![
+            s("0"),
+            s("0,0"),
+            s("0,0,0"),
+            s("0,0,0,2"),
+            s("0,0,0,3"),
+            s("0,0,0,0,2"),
+        ];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0", "toc_main", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0", "/welcome/", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0,2", "/Building/", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0,0,0,3", "/Building2/", "header", &mut bag);
+        insert_update_string_by_root(
+            "foo/bar#id@0,0,0,0,2",
+            "/ChildBuilding/",
+            "header",
+            &mut bag,
         );
 
         let children = vec![
@@ -2788,8 +2963,13 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "fifthtry/ft#markdown".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(s("body"), ftd::p2::Kind::body())])
-                    .collect(),
+                arguments: [
+                    vec![(s("body"), ftd::p2::Kind::body())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -2826,7 +3006,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "reference#test-component".to_string(),
-                arguments: Default::default(),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("background-color"),
@@ -2886,6 +3066,9 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
+
         let title = ftd::Markups {
             text: ftd::rendered::markup_line("John smith"),
             line: true,
@@ -2940,31 +3123,35 @@ mod interpreter {
     fn text() {
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+
+        insert_universal_variables_by_count(3, "foo/bar", &mut bag);
 
         bag.insert(
             "foo/bar#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#text".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("name"),
-                    ftd::p2::Kind::caption_or_body(),
-                )])
+                arguments: [
+                    vec![(s("name"), ftd::p2::Kind::caption_or_body())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
@@ -3416,29 +3603,34 @@ mod interpreter {
                 invocations: Default::default(),
                 full_name: "foo/bar#white-two-image".to_string(),
                 root: s("ftd#column"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("about"), {
-                        let s = ftd::p2::Kind::body();
-                        if about_optional {
-                            s.into_optional()
-                        } else {
-                            s
-                        }
-                    }),
-                    (s("src"), {
-                        let s = ftd::p2::Kind::Record {
-                            name: s("ftd#image-src"),
-                            default: None,
-                            is_reference: false,
-                        };
-                        if about_optional {
-                            s.into_optional()
-                        } else {
-                            s
-                        }
-                    }),
-                    (s("title"), ftd::p2::Kind::caption()),
-                ])
+                arguments: [
+                    vec![
+                        (s("about"), {
+                            let s = ftd::p2::Kind::body();
+                            if about_optional {
+                                s.into_optional()
+                            } else {
+                                s
+                            }
+                        }),
+                        (s("src"), {
+                            let s = ftd::p2::Kind::Record {
+                                name: s("ftd#image-src"),
+                                default: None,
+                                is_reference: false,
+                            };
+                            if about_optional {
+                                s.into_optional()
+                            } else {
+                                s
+                            }
+                        }),
+                        (s("title"), ftd::p2::Kind::caption()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("padding"),
@@ -3703,6 +3895,8 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         p!(
             "
@@ -4023,6 +4217,8 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
 
         p!(
             "
@@ -4451,6 +4647,9 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        insert_universal_variables_by_count(3, "foo/bar", &mut bag);
+
         p!(
             "
             -- ftd.image-src src0:
@@ -4504,8 +4703,13 @@ mod interpreter {
                 invocations: Default::default(),
                 full_name: "fifthtry/ft#markdown".to_string(),
                 root: s("ftd#text"),
-                arguments: std::iter::IntoIterator::into_iter([(s("body"), ftd::p2::Kind::body())])
-                    .collect(),
+                arguments: [
+                    vec![(s("body"), ftd::p2::Kind::body())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -4552,10 +4756,15 @@ mod interpreter {
                 invocations: Default::default(),
                 full_name: "foo/bar#h0".to_string(),
                 root: s("ftd#column"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("body"), ftd::p2::Kind::body().into_optional()),
-                    (s("title"), ftd::p2::Kind::caption()),
-                ])
+                arguments: [
+                    vec![
+                        (s("body"), ftd::p2::Kind::body().into_optional()),
+                        (s("title"), ftd::p2::Kind::caption()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 instructions: vec![
                     ftd::Instruction::ChildComponent {
@@ -4687,6 +4896,9 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        let levels: Vec<String> = vec![s("0"), s("0,1"), s("1"), s("1,1")];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         main.container
@@ -4922,17 +5134,22 @@ mod interpreter {
                 invocations: Default::default(),
                 full_name: "foo/bar#image".to_string(),
                 root: s("ftd#column"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("width"), ftd::p2::Kind::string().into_optional()),
-                    (
-                        s("src"),
-                        ftd::p2::Kind::Record {
-                            name: s("ftd#image-src"),
-                            default: None,
-                            is_reference: false,
-                        },
-                    ),
-                ])
+                arguments: [
+                    vec![
+                        (s("width"), ftd::p2::Kind::string().into_optional()),
+                        (
+                            s("src"),
+                            ftd::p2::Kind::Record {
+                                name: s("ftd#image-src"),
+                                default: None,
+                                is_reference: false,
+                            },
+                        ),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
@@ -4974,6 +5191,8 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
 
@@ -5106,8 +5325,13 @@ mod interpreter {
                         },
                     },
                 ],
-                arguments: std::iter::IntoIterator::into_iter([(s("x"), ftd::p2::Kind::integer())])
-                    .collect(),
+                arguments: [
+                    vec![(s("x"), ftd::p2::Kind::integer())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 ..Default::default()
             }),
         );
@@ -5122,6 +5346,8 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         let mut row: ftd::Row = Default::default();
@@ -5236,11 +5462,18 @@ mod interpreter {
                         },
                     },
                 ],
-                arguments: std::iter::IntoIterator::into_iter([(s("x"), ftd::p2::Kind::integer())])
-                    .collect(),
+                arguments: [
+                    vec![(s("x"), ftd::p2::Kind::integer())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         let mut row: ftd::Row = Default::default();
@@ -5385,8 +5618,13 @@ mod interpreter {
                         },
                     },
                 ],
-                arguments: std::iter::IntoIterator::into_iter([(s("x"), ftd::p2::Kind::integer())])
-                    .collect(),
+                arguments: [
+                    vec![(s("x"), ftd::p2::Kind::integer())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 ..Default::default()
             }),
         );
@@ -5401,6 +5639,8 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         let mut row: ftd::Row = Default::default();
@@ -5730,6 +5970,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#foo".to_string(),
+                arguments: universal_arguments_as_map(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -5781,6 +6022,11 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0", "foo-1", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1", "foo-2", "header", &mut bag);
+
         let mut main = super::default_column();
         main.container
             .children
@@ -5890,6 +6136,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "inner_container#foo".to_string(),
+                arguments: universal_arguments_as_map(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
                         child: ftd::component::ChildComponent {
@@ -5941,6 +6188,11 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0", "foo-1", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1", "foo-2", "header", &mut bag);
+
         let mut main = super::default_column();
         main.container
             .children
@@ -6084,6 +6336,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("append-at"),
@@ -6146,6 +6399,8 @@ mod interpreter {
                 ..Default::default()
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         p!(
             "
@@ -6298,11 +6553,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#desktop-display"),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("id"),
-                    ftd::p2::Kind::optional(ftd::p2::Kind::string()),
-                )])
-                .collect(),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::component::Property {
@@ -6350,6 +6601,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("append-at"),
@@ -6467,11 +6719,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#mobile-display"),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("id"),
-                    ftd::p2::Kind::optional(ftd::p2::Kind::string()),
-                )])
-                .collect(),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::component::Property {
@@ -6535,9 +6783,12 @@ mod interpreter {
                 flags: ftd::VariableFlags::default(),
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
-                    value: ftd::variable::Value::String {
-                        text: s("some-child"),
-                        source: ftd::TextSource::Header,
+                    value: ftd::Value::Optional {
+                        data: Box::new(Some(ftd::Value::String {
+                            text: s("some-child"),
+                            source: ftd::TextSource::Header,
+                        })),
+                        kind: ftd::p2::Kind::string(),
                     },
                 },
                 conditions: vec![],
@@ -6550,26 +6801,37 @@ mod interpreter {
                 flags: ftd::VariableFlags::default(),
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
-                    value: ftd::variable::Value::String {
-                        text: s("some-child"),
-                        source: ftd::TextSource::Header,
+                    value: ftd::Value::Optional {
+                        data: Box::new(Some(ftd::Value::String {
+                            text: s("some-child"),
+                            source: ftd::TextSource::Header,
+                        })),
+                        kind: ftd::p2::Kind::string(),
                     },
                 },
                 conditions: vec![],
             }),
         );
 
+        let levels = vec![s("1,0,0"), s("1,0,0,0"), s("1,0,0,1")];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1,0,0", "foo-id", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1,0,0,0", "some-child", "header", &mut bag);
+        insert_update_string_by_root("foo/bar#id@1,0,0,1", "some-child", "header", &mut bag);
+
         p!(
             "
             -- ftd.column mobile-display:
-            optional string id:
+            ;; id is now univeral no need to declare it again
+            /optional string id:
             id: $id
 
             --- ftd.text: Mobile Display
             id: mobile-display
 
             -- ftd.column desktop-display:
-            optional string id:
+            ;; redundant declaration of id
+            /optional string id:
             id: $id
 
             --- ftd.text: Desktop Display
@@ -6852,15 +7114,16 @@ mod interpreter {
             "foo/bar",
             indoc::indoc!(
                 "
+                ;; id is universal argument now no need to declare it
                 -- ftd.column desktop:
-                optional string id:
+                /optional string id:
                 id: $id
 
                 --- ftd.column:
                 id: foo
 
                 -- ftd.column mobile:
-                optional string id:
+                /optional string id:
                 id: $id
 
                 --- ftd.column:
@@ -7049,18 +7312,18 @@ mod interpreter {
             indoc::indoc!(
                 "
                 -- ftd.column ft_container:
-                optional string id:
+                /optional string id:
                 id: $id
 
                 -- ftd.column ft_container_mobile:
-                optional string id:
+                /optional string id:
                 id: $id
 
 
                 -- ftd.column desktop:
                 open: true
                 append-at: desktop-container
-                optional string id:
+                /optional string id:
                 id: $id
 
                 --- ftd.row:
@@ -7074,7 +7337,7 @@ mod interpreter {
                 -- ftd.column mobile:
                 open: true
                 append-at: mobile-container
-                optional string id:
+                /optional string id:
                 id: $id
 
                 --- ftd.row:
@@ -7311,23 +7574,23 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1,0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1,0", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1,0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1,0", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -7385,10 +7648,10 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
@@ -7494,10 +7757,15 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#row".to_string(),
                 full_name: s("foo/bar#foo"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("body"), ftd::p2::Kind::string()),
-                    (s("name"), ftd::p2::Kind::caption()),
-                ])
+                arguments: [
+                    vec![
+                        (s("body"), ftd::p2::Kind::string()),
+                        (s("name"), ftd::p2::Kind::caption()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -7803,6 +8071,8 @@ mod interpreter {
             }),
         );
 
+        insert_universal_variables_by_count(3, "foo/bar", &mut bag);
+
         p!(
             "
             -- ftd.row foo:
@@ -7925,10 +8195,15 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#row".to_string(),
                 full_name: s("foo/bar#foo"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("body"), ftd::p2::Kind::string()),
-                    (s("name"), ftd::p2::Kind::caption()),
-                ])
+                arguments: [
+                    vec![
+                        (s("body"), ftd::p2::Kind::string()),
+                        (s("name"), ftd::p2::Kind::caption()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -8212,6 +8487,8 @@ mod interpreter {
             }),
         );
 
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+
         p!(
             "
             -- ftd.row foo:
@@ -8359,15 +8636,15 @@ mod interpreter {
             }),
         );
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
 
         bag.insert(
             "foo/bar#people".to_string(),
@@ -8737,10 +9014,10 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             "foo/bar#test".to_string(),
@@ -8792,10 +9069,10 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             "foo/bar#test".to_string(),
@@ -9140,25 +9417,25 @@ mod interpreter {
             }),
         );
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -10308,6 +10585,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#row"),
                 full_name: s("hello-world#foo"),
+                arguments: universal_arguments_as_map(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         events: vec![],
@@ -10346,6 +10624,8 @@ mod interpreter {
                 conditions: vec![],
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         p!(
             "
@@ -10401,40 +10681,47 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+
+        insert_universal_variables_by_count(3, "foo/bar", &mut bag);
 
         bag.insert(
             s("foo/bar#foo"),
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#text"),
                 full_name: s("foo/bar#foo"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (
-                        s("name"),
-                        ftd::p2::Kind::caption().set_default(Some(s("hello world"))),
-                    ),
-                    (
-                        s("line-clamp"),
-                        ftd::p2::Kind::Integer {
-                            default: Some(s("10")),
-                            is_reference: false,
-                        },
-                    ),
-                ])
+                arguments: [
+                    vec![
+                        (
+                            s("name"),
+                            ftd::p2::Kind::caption().set_default(Some(s("hello world"))),
+                        ),
+                        (
+                            s("line-clamp"),
+                            ftd::p2::Kind::Integer {
+                                default: Some(s("10")),
+                                is_reference: false,
+                            },
+                        ),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -10612,10 +10899,10 @@ mod interpreter {
     fn record_with_default_value() {
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             s("foo/bar#abrar"),
@@ -10848,19 +11135,24 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#row"),
                 full_name: s("foo/bar#foo"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (
-                        s("name"),
-                        ftd::p2::Kind::string().set_default(Some(s("$foo/bar#default-name"))),
-                    ),
-                    (
-                        s("text-size"),
-                        ftd::p2::Kind::Integer {
-                            default: Some(s("$foo/bar#default-size")),
-                            is_reference: false,
-                        },
-                    ),
-                ])
+                arguments: [
+                    vec![
+                        (
+                            s("name"),
+                            ftd::p2::Kind::string().set_default(Some(s("$foo/bar#default-name"))),
+                        ),
+                        (
+                            s("text-size"),
+                            ftd::p2::Kind::Integer {
+                                default: Some(s("$foo/bar#default-size")),
+                                is_reference: false,
+                            },
+                        ),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
@@ -10956,6 +11248,8 @@ mod interpreter {
             }),
         );
 
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+
         p!(
             "
             -- string default-name: Arpita
@@ -11019,21 +11313,21 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         bag.insert(
             s("foo/bar#acme"),
@@ -11763,23 +12057,28 @@ mod interpreter {
 
         let mut bag = super::default_bag();
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             s("foo/bar#foo"),
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "foo/bar#foo".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("name"), ftd::p2::Kind::caption()),
-                    (
-                        s("open"),
-                        ftd::p2::Kind::boolean().set_default(Some(s("true"))),
-                    ),
-                ])
+                arguments: [
+                    vec![
+                        (s("name"), ftd::p2::Kind::caption()),
+                        (
+                            s("open"),
+                            ftd::p2::Kind::boolean().set_default(Some(s("true"))),
+                        ),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
@@ -11859,6 +12158,8 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -15413,8 +15714,13 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#foo"),
-                arguments: std::iter::IntoIterator::into_iter([(s("o"), ftd::p2::Kind::object())])
-                    .collect(),
+                arguments: [
+                    vec![(s("o"), ftd::p2::Kind::object())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
+                .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         root: s("ftd#text"),
@@ -15486,6 +15792,8 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        insert_universal_variables_by_count(1, "foo/bar", &mut bag);
 
         p!(
             "
@@ -16052,37 +16360,37 @@ mod interpreter {
             }),
         );
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@9", -1, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@10", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@9", -1, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@10", -1, &mut bag);
 
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@9", 0, &mut bag);
-        insert_integer_by_root("foo/bar#CHILDREN-COUNT@10", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@9", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#CHILDREN-COUNT@10", 0, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@10", 10, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX-0@10", 10, &mut bag);
 
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
-        insert_integer_by_root("foo/bar#SIBLING-INDEX@10", 11, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_update_integer_by_root("foo/bar#SIBLING-INDEX@10", 11, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -16173,22 +16481,27 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#bar"),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (
-                        s("active"),
-                        ftd::p2::Kind::boolean().set_default(Some(s("false"))),
-                    ),
-                    (
-                        s("bio"),
-                        ftd::p2::Kind::string().set_default(Some(s("$subtitle"))),
-                    ),
-                    (
-                        s("subtitle"),
-                        ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
-                    ),
-                    (s("title"), ftd::p2::Kind::string()),
-                    (s("w"), ftd::p2::Kind::integer()),
-                ])
+                arguments: [
+                    vec![
+                        (
+                            s("active"),
+                            ftd::p2::Kind::boolean().set_default(Some(s("false"))),
+                        ),
+                        (
+                            s("bio"),
+                            ftd::p2::Kind::string().set_default(Some(s("$subtitle"))),
+                        ),
+                        (
+                            s("subtitle"),
+                            ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                        ),
+                        (s("title"), ftd::p2::Kind::string()),
+                        (s("w"), ftd::p2::Kind::integer()),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 locals: Default::default(),
                 properties: std::iter::IntoIterator::into_iter([
@@ -16319,7 +16632,7 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#bar1"),
-                arguments: Default::default(),
+                arguments: universal_arguments_as_map(),
                 locals: Default::default(),
                 properties: Default::default(),
                 instructions: vec![],
@@ -16497,6 +16810,10 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        insert_universal_variables_by_count(2, "foo/bar", &mut bag);
+        insert_update_string_by_root("foo/bar#id@0", "bar-id", "header", &mut bag);
+        insert_update_decimal_by_root("foo/bar#scale@0", 1.2, &mut bag);
 
         let mut main = super::default_column();
         main.container
@@ -16847,10 +17164,15 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#presentation"),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    "current".to_string(),
-                    ftd::p2::Kind::integer().set_default(Some(s("1"))),
-                )])
+                arguments: [
+                    vec![(
+                        "current".to_string(),
+                        ftd::p2::Kind::integer().set_default(Some(s("1"))),
+                    )],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
@@ -16904,10 +17226,12 @@ mod interpreter {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#text"),
                 full_name: s("foo/bar#slide"),
-                arguments: std::iter::IntoIterator::into_iter([(
-                    s("title"),
-                    ftd::p2::Kind::caption(),
-                )])
+                arguments: [
+                    vec![(s("title"), ftd::p2::Kind::caption())],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
@@ -16986,6 +17310,9 @@ mod interpreter {
                 flags: Default::default(),
             }),
         );
+
+        let levels = vec![s("0"), s("0,0"), s("0,1")];
+        insert_universal_variables_by_levels(levels, "foo/bar", &mut bag);
 
         let mut main = super::default_column();
         main.container
@@ -17303,10 +17630,15 @@ mod component {
             ftd::Component {
                 full_name: s("foo#foo"),
                 root: "ftd#text".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([
-                    (s("foo"), ftd::p2::Kind::string()),
-                    (s("bar"), ftd::p2::Kind::optional(ftd::p2::Kind::integer()))
-                ])
+                arguments: [
+                    vec![
+                        (s("foo"), ftd::p2::Kind::string()),
+                        (s("bar"), ftd::p2::Kind::optional(ftd::p2::Kind::integer())),
+                    ],
+                    universal_arguments_as_vec(),
+                ]
+                .concat()
+                .into_iter()
                 .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
@@ -17347,6 +17679,7 @@ mod component {
             ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: s("foo#foo"),
+                arguments: universal_arguments_as_map(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
