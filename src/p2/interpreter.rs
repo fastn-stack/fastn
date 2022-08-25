@@ -1270,12 +1270,24 @@ fn markdown_color() -> Thing {
         }
     }
 
+    fn link(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("link".to_string(), color(light, dark))
+    }
+
+    fn code(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("code".to_string(), color(light, dark))
+    }
+
+    fn link_visited(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("link-visited".to_string(), color(light, dark))
+    }
+
     fn link_code(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
         ("link-code".to_string(), color(light, dark))
     }
 
-    fn link(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
-        ("link".to_string(), color(light, dark))
+    fn link_visited_code(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("link-visited-code".to_string(), color(light, dark))
     }
 
     Thing::Variable(ftd::Variable {
@@ -1285,7 +1297,10 @@ fn markdown_color() -> Thing {
                 name: "ftd#markdown-color-data".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     link("TODO:", "TODO:"),
+                    code("TODO:", "TODO:"),
+                    link_visited("TODO:", "TODO:"),
                     link_code("TODO:", "TODO:"),
+                    link_visited_code("TODO:", "TODO:"),
                 ])
                 .collect(),
             },
