@@ -508,6 +508,14 @@ pub enum Value {
 }
 
 impl Value {
+    /// returns a default optional value from given kind
+    pub fn default_optional_value_from_kind(kind: ftd::p2::Kind) -> Self {
+        Value::Optional {
+            data: Box::new(None),
+            kind,
+        }
+    }
+
     pub fn inner_with_none(self) -> Self {
         match self {
             ftd::Value::Optional { data, kind } => data
