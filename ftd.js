@@ -1125,14 +1125,34 @@ window.ftd.post_init = function () {
 
         markdown_style_sheet.innerHTML = `
         
+        .ft_md a {
+            color: #136351;
+        }
+        
+        .ft_md a:visited {
+            color: #7b3ee8;
+        }
+        
+        body.fpm-dark .ft_md a {
+            color: #25c19f;
+        }
+        
+        body.fpm-dark .ft_md a:visited {
+            color: #0f5750;
+        }
+
+        body.fpm-dark .ft_md a code {
+            color: #25c19f;
+        }
+        
         .ft_md a:visited code {
             color: window.ftd.get_value("main", ${LIGHT_LINK_CODE});
         }
-        
+
         body.fpm-dark .ft_md a:visited code {
             color: window.ftd.get_value("main", ${DARK_LINK_CODE});
         }
-
+                        
         body.fpm-dark .ft_md code {
             color: window.ftd.get_value("main", FTD_DARK_A__CODE);;
         }
