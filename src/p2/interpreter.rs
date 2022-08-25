@@ -971,9 +971,9 @@ pub fn default_bag() -> ftd::Map<ftd::p2::Thing> {
             }),
         ),
         (
-            "ftd#markdown-colors-data".to_string(),
+            "ftd#markdown-color-data".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
-                name: "ftd#markdown-colors-data".to_string(),
+                name: "ftd#markdown-color-data".to_string(),
                 fields: std::iter::IntoIterator::into_iter([(
                     "link-code".to_string(),
                     ftd::p2::Kind::record("ftd#color"),
@@ -984,12 +984,12 @@ pub fn default_bag() -> ftd::Map<ftd::p2::Thing> {
             }),
         ),
         (
-            "ftd#markdown-colors".to_string(),
+            "ftd#markdown-color".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
-                name: "ftd#markdown-colors".to_string(),
+                name: "ftd#markdown-color".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
-                        name: "ftd#markdown-colors-data".to_string(),
+                        name: "ftd#markdown-color-data".to_string(),
                         fields: std::iter::IntoIterator::into_iter([
                             (
                                 "link-code".to_string(),
