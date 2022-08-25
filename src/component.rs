@@ -2417,14 +2417,6 @@ pub fn read_properties(
     is_reference: bool,
 ) -> ftd::p1::Result<ftd::Map<Property>> {
     let mut properties: ftd::Map<Property> = Default::default();
-    let root_arguments = {
-        let mut root_arguments = root_arguments.clone();
-        let universal_argument = universal_arguments();
-        for (key, arg) in universal_argument {
-            root_arguments.entry(key).or_insert(arg);
-        }
-        root_arguments
-    };
 
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
@@ -2532,7 +2524,7 @@ pub fn read_properties(
                     value.as_str(),
                     Some(kind.to_owned()),
                     doc,
-                    &root_arguments,
+                    root_arguments,
                     Some(source.clone()),
                 )?,
                 Err(e) => return Err(e),
@@ -2713,6 +2705,10 @@ fn read_arguments(
     // contains parent arguments and current arguments
     let mut all_args = arguments.clone();
 
+    // Set of all universal arguments available to all components
+    let universal_arguments_set: std::collections::HashSet<String> =
+        universal_arguments().keys().cloned().collect();
+
     // Set of root arguments which are invoked once
     let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
     for (idx, (i, k, v)) in p1.0.iter().enumerate() {
@@ -2807,6 +2803,18 @@ fn read_arguments(
             return Err(ftd::p1::Error::ForbiddenUsage {
                 message: format!(
                     "\'{}\' is already used as header name/identifier !!",
+                    &var_data.name
+                ),
+                doc_id: doc.name.to_string(),
+                line_number: *i,
+            });
+        }
+
+        // checking if any universal argument is declared by the user (forbidden)
+        if universal_arguments_set.contains(&var_data.name) {
+            return Err(ftd::p1::Error::ForbiddenUsage {
+                message: format!(
+                    "redundant declaration of universal argument \'{}\' !!",
                     &var_data.name
                 ),
                 doc_id: doc.name.to_string(),
