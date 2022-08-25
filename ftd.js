@@ -1097,6 +1097,14 @@ window.ftd.post_init = function () {
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
     const FTD_THEME_COLOR = "ftd#theme-color";
     const THEME_COLOR_META = "theme-color";
+
+    // markdown colors
+    const LIGHT_LINK = "ftd#link.light";
+    const DARK_LINK = "ftd#link.dark";
+
+    const LIGHT_LINK_VISITED = "ftd#link-visited.light";
+    const DARK_LINK_VISITED = "ftd#link-visited.dark";
+
     const DARK_LINK_CODE = "ftd#link-code.dark";
     const LIGHT_LINK_CODE = "ftd#link-code.light";
 
@@ -1124,37 +1132,40 @@ window.ftd.post_init = function () {
         let markdown_style_sheet = document.createElement('style');
 
         markdown_style_sheet.innerHTML = `
-        
         .ft_md a {
-            color: #136351;
-        }
-        
-        .ft_md a:visited {
-            color: #7b3ee8;
+            color: window.ftd.get_value("main", ${LIGHT_LINK});
         }
         
         body.fpm-dark .ft_md a {
-            color: #25c19f;
+            color: window.ftd.get_value("main", ${DARK_LINK});
         }
         
+        .ft_md a:visited {
+            color: window.ftd.get_value("main", ${LIGHT_LINK_VISITED});
+        }
+               
         body.fpm-dark .ft_md a:visited {
-            color: #0f5750;
+            color: window.ftd.get_value("main", ${DARK_LINK_VISITED});
+        }
+
+        .ft_md a code {
+            color: window.ftd.get_value("main", ${LIGHT_LINK_CODE});
+        }
+
+        .ft_md a:visited code {
+            color: window.ftd.get_value("main", ${LIGHT_LINK_CODE});
         }
 
         body.fpm-dark .ft_md a code {
             color: #25c19f;
         }
         
-        .ft_md a:visited code {
-            color: window.ftd.get_value("main", ${LIGHT_LINK_CODE});
-        }
-
         body.fpm-dark .ft_md a:visited code {
             color: window.ftd.get_value("main", ${DARK_LINK_CODE});
         }
                         
         body.fpm-dark .ft_md code {
-            color: window.ftd.get_value("main", FTD_DARK_A__CODE);;
+            color: window.ftd.get_value("main", "FTD_DARK_A__CODE");
         }
         `;
 
