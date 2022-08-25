@@ -1,13 +1,11 @@
 -- boolean flag: true
 
 
--- ftd.link-code:
-if: $flag
+-- ftd.markdown-colors.link-code:
 light: purple
 dark: orange
 
 
 
--- ftd.text: $name
-color: $ftd.link-code
-$on-click$: toggle $flag
+-- ftd.text: AbrarK
+color: $ftd.markdown-colors.link-code

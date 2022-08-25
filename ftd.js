@@ -1097,11 +1097,7 @@ window.ftd.post_init = function () {
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
     const FTD_THEME_COLOR = "ftd#theme-color";
     const THEME_COLOR_META = "theme-color";
-
-    // markdown colors
-
     const MARKDOWN_COLORS = "ftd#markdown-colors";
-
     let last_device;
 
     function initialise_device() {
