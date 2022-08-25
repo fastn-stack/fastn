@@ -1097,7 +1097,8 @@ window.ftd.post_init = function () {
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
     const FTD_THEME_COLOR = "ftd#theme-color";
     const THEME_COLOR_META = "theme-color";
-    const DARK_LINK_CODE = "ftd#dark-link-code";
+    const DARK_LINK_CODE = "ftd#link-code.dark";
+    const LIGHT_LINK_CODE = "ftd#link-code.light";
 
     let last_device;
 
@@ -1118,24 +1119,27 @@ window.ftd.post_init = function () {
         console_log("last_device", last_device);
     }
 
-    // function update_markdown_colors() {
-    //     // ftd#link-code.dark
-    //     // remove all colors from ftd.css: copy every deleted stuff in this function
-    //     var sheet = document.createElement('style')
-    //     sheet.innerHTML = """
-    //      .ft_md a:visited code {
-    //         color: window.ftd.get_value("main", "ftd#link-code.light");
-    //     }
-    //         body.fpm-dark .ft_md a:visited code {
-    //                 color: window.ftd.get_value("main", "ftd#link-code.dark");
-    //             }
-    //
-    //             body.fpm-dark .ft_md code {
-    //                 color: window.ftd.get_value("main", FTD_DARK_A__CODE);;
-    //             }
-    //     """;
-    //     document.body.appendChild(sheet);
-    // }
+    function update_markdown_colors() {
+        // remove all colors from ftd.css: copy every deleted stuff in this function
+        let markdown_style_sheet = document.createElement('style');
+
+        markdown_style_sheet.innerHTML = `
+        
+        .ft_md a:visited code {
+            color: window.ftd.get_value("main", ${LIGHT_LINK_CODE});
+        }
+        
+        body.fpm-dark .ft_md a:visited code {
+            color: window.ftd.get_value("main", ${DARK_LINK_CODE});
+        }
+
+        body.fpm-dark .ft_md code {
+            color: window.ftd.get_value("main", FTD_DARK_A__CODE);;
+        }
+        `;
+
+        document.getElementsByTagName('head')[0].appendChild(markdown_style_sheet);
+    }
 
     function get_device() {
         // not at all sure about this functions logic.
