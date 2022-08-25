@@ -6,7 +6,7 @@ pub struct OrType {
 
 impl OrType {
     pub fn from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
-        let or_type_name = ftd::get_name("or-type", p1.name.as_str(), doc.name)?;
+        let or_type_name = ftd::p2::utils::get_name("or-type", p1.name.as_str(), doc.name)?;
         let name = doc.format_name(or_type_name);
         let mut variants: Vec<ftd::p2::Record> = Default::default();
         for s in p1.sub_sections.0.iter() {
@@ -47,7 +47,7 @@ impl OrType {
             }
         }
 
-        ftd::e2(
+        ftd::p2::utils::e2(
             format!("{} is not a valid variant for {}", variant, self.name),
             doc.name,
             p1.line_number,

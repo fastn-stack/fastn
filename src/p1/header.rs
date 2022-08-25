@@ -212,7 +212,7 @@ impl Header {
         &self,
         line_number: usize,
         doc: &ftd::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
     ) -> ftd::p1::Result<Vec<ftd::p2::Event>> {
         let events = {
             let mut events = vec![];
@@ -257,7 +257,7 @@ impl Header {
         doc: &ftd::p2::TDoc,
         line_number: usize,
         name: &str,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
     ) -> Result<Vec<(usize, String, Option<String>, bool)>> {
         let mut conditional_vector = vec![];
         for (idx, (_, k, v)) in self.0.iter().enumerate() {

@@ -1,7 +1,6 @@
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Element {
-    Text(Text),
     TextBlock(TextBlock),
     Code(Code),
     Image(Image),
@@ -65,12 +64,11 @@ pub enum IText {
 impl Element {
     pub(crate) fn set_children_count_variable(
         elements: &mut [ftd::Element],
-        local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        local_variables: &ftd::Map<ftd::p2::Thing>,
     ) {
         for child in elements.iter_mut() {
             let (text, common) = match child {
-                Element::Text(ftd::Text { text, common, .. })
-                | Element::Integer(ftd::Text { text, common, .. })
+                Element::Integer(ftd::Text { text, common, .. })
                 | Element::Boolean(ftd::Text { text, common, .. })
                 | Element::Decimal(ftd::Text { text, common, .. }) => (Some(text), common),
                 Self::Markup(ftd::Markups {
@@ -120,7 +118,7 @@ impl Element {
                     })) = local_variables.get(reference)
                     {
                         if let Some(text) = text {
-                            *text = ftd::markup_line(value.to_string().as_str());
+                            *text = ftd::rendered::markup_line(value.to_string().as_str());
                         }
                     }
                 }
@@ -157,7 +155,7 @@ impl Element {
 
         fn set_markup_children_count_variable(
             elements: &mut [ftd::Markup],
-            local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+            local_variables: &ftd::Map<ftd::p2::Thing>,
         ) {
             for child in elements.iter_mut() {
                 let (common, children, text) = match &mut child.itext {
@@ -178,7 +176,7 @@ impl Element {
                             ..
                         })) = local_variables.get(reference)
                         {
-                            *text = ftd::markup_line(value.to_string().as_str());
+                            *text = ftd::rendered::markup_line(value.to_string().as_str());
                         }
                     }
                     _ => {}
@@ -223,8 +221,7 @@ impl Element {
         fn set_default_locals_(children: &mut [ftd::Element]) {
             for child in children.iter_mut() {
                 let common = match child {
-                    Element::Text(ftd::Text { common, .. })
-                    | Element::TextBlock(ftd::TextBlock { common, .. })
+                    Element::TextBlock(ftd::TextBlock { common, .. })
                     | Element::Code(ftd::Code { common, .. })
                     | Element::Image(ftd::Image { common, .. })
                     | Element::IFrame(ftd::IFrame { common, .. })
@@ -285,16 +282,7 @@ impl Element {
     pub fn set_id(children: &mut [ftd::Element], index_vec: &[usize], external_id: Option<String>) {
         for (idx, child) in children.iter_mut().enumerate() {
             let (id, is_dummy) = match child {
-                Self::Text(ftd::Text {
-                    common:
-                        ftd::Common {
-                            data_id: id,
-                            is_dummy,
-                            ..
-                        },
-                    ..
-                })
-                | Self::TextBlock(ftd::TextBlock {
+                Self::TextBlock(ftd::TextBlock {
                     common:
                         ftd::Common {
                             data_id: id,
@@ -754,8 +742,7 @@ impl Element {
                     markup_get_event_dependencies(children, data);
                     (font, common)
                 }
-                ftd::Element::Text(ftd::Text { font, common, .. })
-                | ftd::Element::Code(ftd::Code { font, common, .. })
+                ftd::Element::Code(ftd::Code { font, common, .. })
                 | ftd::Element::Integer(ftd::Text { font, common, .. })
                 | ftd::Element::Boolean(ftd::Text { font, common, .. })
                 | ftd::Element::Decimal(ftd::Text { font, common, .. })
@@ -905,10 +892,7 @@ impl Element {
                 id: &str,
                 data: &mut ftd::DataDependenciesMap,
                 style: &str,
-                conditional_attribute: &std::collections::BTreeMap<
-                    String,
-                    ftd::ConditionalAttribute,
-                >,
+                conditional_attribute: &ftd::Map<ftd::ConditionalAttribute>,
             ) {
                 let (reference, value) = if let Some(ftd::ConditionalAttribute {
                     default:
@@ -930,7 +914,7 @@ impl Element {
                     return;
                 };
                 let parameters = {
-                    let mut parameters = std::collections::BTreeMap::new();
+                    let mut parameters = ftd::Map::new();
                     parameters.insert(
                         style.to_string(),
                         ftd::ConditionalValueWithDefault {
@@ -994,7 +978,7 @@ impl Element {
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
             font: &Option<Type>,
-            conditions: &std::collections::BTreeMap<String, ConditionalAttribute>,
+            conditions: &ftd::Map<ConditionalAttribute>,
         ) {
             let id = id.clone().expect("universal id should be present");
             if !conditions
@@ -1026,7 +1010,7 @@ impl Element {
                     return;
                 };
                 let parameters = {
-                    let mut parameters = std::collections::BTreeMap::new();
+                    let mut parameters = ftd::Map::new();
                     parameters.insert(
                         "font".to_string(),
                         ftd::ConditionalValueWithDefault {
@@ -1094,7 +1078,7 @@ impl Element {
                 };
 
                 let parameters = {
-                    let mut parameters = std::collections::BTreeMap::new();
+                    let mut parameters = ftd::Map::new();
                     parameters.insert(
                         "background-image".to_string(),
                         ftd::ConditionalValueWithDefault {
@@ -1135,7 +1119,7 @@ impl Element {
         }
 
         fn style_condition(
-            conditional_attributes: &std::collections::BTreeMap<String, ConditionalAttribute>,
+            conditional_attributes: &ftd::Map<ConditionalAttribute>,
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
         ) {
@@ -1628,7 +1612,6 @@ impl Element {
         match self {
             ftd::Element::Column(ftd::Column { common, .. })
             | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
             | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
@@ -1648,7 +1631,6 @@ impl Element {
         match self {
             ftd::Element::Column(ftd::Column { common, .. })
             | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
             | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
@@ -1669,7 +1651,6 @@ impl Element {
         match self {
             ftd::Element::Column(ftd::Column { common, .. })
             | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
             | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
@@ -1690,7 +1671,6 @@ impl Element {
         match self {
             ftd::Element::Column(ftd::Column { common, .. })
             | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
             | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
@@ -1720,7 +1700,6 @@ impl Element {
         match self {
             ftd::Element::Column(e) => Some(&mut e.common),
             ftd::Element::Row(e) => Some(&mut e.common),
-            ftd::Element::Text(e) => Some(&mut e.common),
             ftd::Element::Markup(e) => Some(&mut e.common),
             ftd::Element::TextBlock(e) => Some(&mut e.common),
             ftd::Element::Code(e) => Some(&mut e.common),
@@ -1740,7 +1719,6 @@ impl Element {
         match self {
             ftd::Element::Column(e) => Some(&e.common),
             ftd::Element::Row(e) => Some(&e.common),
-            ftd::Element::Text(e) => Some(&e.common),
             ftd::Element::Markup(e) => Some(&e.common),
             ftd::Element::TextBlock(e) => Some(&e.common),
             ftd::Element::Code(e) => Some(&e.common),
@@ -1881,10 +1859,10 @@ impl Length {
         }
 
         if l.starts_with("calc ") {
-            let v = ftd::get_name("calc", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("calc", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Calc { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
 
@@ -1893,37 +1871,37 @@ impl Length {
         }
 
         if l.starts_with("portion ") {
-            let v = ftd::get_name("portion", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("portion", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Portion { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("percent ") {
-            let v = ftd::get_name("percent", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("percent", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Percent { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("vh ") {
-            let v = ftd::get_name("vh", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("vh", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VH { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("vw ") {
-            let v = ftd::get_name("vw", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("vw", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VW { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
 
         match l.parse() {
             Ok(v) => Ok(Some(Length::Px { value: v })),
-            Err(_) => ftd::e2(format!("{} is not a valid integer", l), doc_id, 0),
+            Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", l), doc_id, 0),
         }
     }
 }
@@ -1960,7 +1938,9 @@ impl Position {
             Some("top-right") => Some(Self::TopRight),
             Some("bottom-left") => Some(Self::BottomLeft),
             Some("bottom-right") => Some(Self::BottomRight),
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0)
+            } // TODO
             None => None,
         })
     }
@@ -2030,7 +2010,9 @@ impl Region {
             Some("description") => Self::Description,
             Some("announce") => Self::Announce,
             Some("announce-urgently") => Self::AnnounceUrgently,
-            Some(t) => return ftd::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::p2::utils::e2(format!("{} is not a valid alignment", t), doc_id, 0)
+            } // TODO
             None => return Ok(None),
         }))
     }
@@ -2106,7 +2088,9 @@ impl Overflow {
             Some("visible") => Self::Visible,
             Some("auto") => Self::Auto,
             Some("scroll") => Self::Scroll,
-            Some(t) => return ftd::e2(format!("{} is not a valid property", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::p2::utils::e2(format!("{} is not a valid property", t), doc_id, 0)
+            } // TODO
             None => return Ok(None),
         }))
     }
@@ -2130,7 +2114,7 @@ impl Anchor {
             "window" => ftd::Anchor::Window,
             "parent" => ftd::Anchor::Parent,
             t => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "invalid value for `absolute` expected `window` or `parent` found: {}",
                         t
@@ -2204,10 +2188,10 @@ impl GradientDirection {
             return Ok(Some(GradientDirection::Center));
         }
         if l.starts_with("angle ") {
-            let v = ftd::get_name("angle", l.as_str(), doc_id)?;
+            let v = ftd::p2::utils::get_name("angle", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(GradientDirection::Angle { value: v })),
-                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0),
+                Err(_) => ftd::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0),
             };
         }
         Ok(None)
@@ -2236,7 +2220,7 @@ pub struct ConditionalValue {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Common {
-    pub conditional_attribute: std::collections::BTreeMap<String, ConditionalAttribute>,
+    pub conditional_attribute: ftd::Map<ConditionalAttribute>,
     pub condition: Option<ftd::Condition>,
     pub is_not_visible: bool,
     pub is_dummy: bool,
@@ -2382,13 +2366,11 @@ impl Loading {
         match s {
             "lazy" => Ok(Loading::Lazy),
             "eager" => Ok(Loading::Eager),
-            _ => {
-                return ftd::e2(
-                    format!("{} is not a valid alignment, allowed: lazy, eager", s),
-                    doc_id,
-                    0,
-                )
-            }
+            _ => ftd::p2::utils::e2(
+                format!("{} is not a valid alignment, allowed: lazy, eager", s),
+                doc_id,
+                0,
+            ),
         }
     }
 
@@ -2468,7 +2450,7 @@ impl TextAlign {
             Some("right") => ftd::TextAlign::Right,
             Some("justify") => ftd::TextAlign::Justify,
             Some(t) => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "{} is not a valid alignment, allowed: center, left, right, justify",
                         t
@@ -2500,7 +2482,7 @@ impl FontDisplay {
             Some("swap") => ftd::FontDisplay::Swap,
             Some("block") => ftd::FontDisplay::Block,
             Some(t) => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("{} is not a valid alignment, allowed: swap, block", t),
                     doc_id,
                     0,
@@ -2520,7 +2502,7 @@ pub struct ImageSrc {
 
 impl ImageSrc {
     pub fn from(
-        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        l: &ftd::Map<ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
@@ -2528,7 +2510,7 @@ impl ImageSrc {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(ImageSrc {
             light: ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?
                 .unwrap_or_else(|| "".to_string()),
@@ -2550,7 +2532,7 @@ pub struct FontSize {
 
 impl FontSize {
     pub fn from(
-        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        l: &ftd::Map<ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
@@ -2558,7 +2540,7 @@ impl FontSize {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(FontSize {
             line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
             size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
@@ -2581,7 +2563,7 @@ pub struct Type {
 
 impl Type {
     pub fn from(
-        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        l: &ftd::Map<ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
         reference: Option<String>,
@@ -2589,7 +2571,7 @@ impl Type {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
         return Ok(Type {
             font: ftd::p2::utils::string("font", &properties, doc.name, 0)?,
             desktop: get_font_size(l, doc, line_number, "desktop")?,
@@ -2604,7 +2586,7 @@ impl Type {
         });
 
         fn get_font_size(
-            l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+            l: &ftd::Map<ftd::PropertyValue>,
             doc: &ftd::p2::TDoc,
             line_number: usize,
             name: &str,
@@ -2612,7 +2594,7 @@ impl Type {
             let properties = l
                 .iter()
                 .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-                .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+                .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
 
             let property_value = ftd::p2::utils::record_optional(name, &properties, doc.name, 0)?
                 .ok_or_else(|| ftd::p1::Error::ParseError {
@@ -2699,7 +2681,7 @@ pub struct Style {
 
 impl Style {
     pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<ftd::Style> {
-        fn add_in_map(style: &str, map: &mut std::collections::BTreeMap<String, i32>) {
+        fn add_in_map(style: &str, map: &mut ftd::Map<i32>) {
             if !map.contains_key(style) {
                 map.insert(style.to_string(), 1);
                 return;
@@ -2717,10 +2699,8 @@ impl Style {
             Some(v) => v,
             None => return Ok(s),
         };
-        let mut booleans: std::collections::BTreeMap<String, i32> =
-            std::collections::BTreeMap::new();
-        let mut weights: std::collections::BTreeMap<String, i32> =
-            std::collections::BTreeMap::new();
+        let mut booleans: ftd::Map<i32> = Default::default();
+        let mut weights: ftd::Map<i32> = Default::default();
 
         for part in l.split_ascii_whitespace() {
             match part {
@@ -2772,7 +2752,7 @@ impl Style {
                     s.weight = Some(ftd::Weight::HairLine);
                     add_in_map("hairline", &mut weights);
                 }
-                t => return ftd::e2(format!("{} is not a valid style", t), doc_id, 0),
+                t => return ftd::p2::utils::e2(format!("{} is not a valid style", t), doc_id, 0),
             }
         }
 
@@ -2833,12 +2813,14 @@ impl TextFormat {
         doc_id: &str,
     ) -> ftd::p1::Result<ftd::TextFormat> {
         Ok(match l.as_deref() {
-            Some("markdown") => ftd::TextFormat::Markdown,
+            Some("markup") => ftd::TextFormat::Markdown,
             Some("code") => ftd::TextFormat::Code {
                 lang: lang.unwrap_or_else(|| "txt".to_string()),
             },
             Some("text") => ftd::TextFormat::Text,
-            Some(t) => return ftd::e2(format!("{} is not a valid format", t), doc_id, 0), // TODO
+            Some(t) => {
+                return ftd::p2::utils::e2(format!("{} is not a valid format", t), doc_id, 0)
+            } // TODO
             None => return Ok(ftd::TextFormat::Markdown),
         })
     }
@@ -2905,10 +2887,7 @@ pub struct Color {
 
 impl Color {
     pub fn from(
-        l: (
-            Option<std::collections::BTreeMap<String, ftd::PropertyValue>>,
-            Option<String>,
-        ),
+        l: (Option<ftd::Map<ftd::PropertyValue>>, Option<String>),
         doc: &ftd::p2::TDoc,
         line_number: usize,
     ) -> ftd::p1::Result<Option<Color>> {
@@ -2922,7 +2901,7 @@ impl Color {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
-            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+            .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(Some(Color {
             light: ftd::p2::element::color_from(
                 ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,

@@ -51,12 +51,6 @@ pub enum Error {
         #[from]
         source: syntect::Error,
     },
-
-    #[error("{source}")]
-    Failure {
-        #[from]
-        source: failure::Compat<failure::Error>,
-    },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

@@ -2,21 +2,16 @@ use itertools::Itertools;
 
 #[derive(Debug, Default, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct Document {
-    pub data: std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub data: ftd::Map<ftd::p2::Thing>,
     pub name: String,
     pub instructions: Vec<ftd::Instruction>,
     pub main: ftd::Column,
-    pub aliases: std::collections::BTreeMap<String, String>,
+    pub aliases: ftd::Map<String>,
 }
 
 impl Document {
-    fn get_data(
-        &self,
-    ) -> (
-        std::collections::BTreeMap<String, serde_json::Value>,
-        Vec<String>,
-    ) {
-        let mut d: std::collections::BTreeMap<String, serde_json::Value> = Default::default();
+    fn get_data(&self) -> (ftd::Map<serde_json::Value>, Vec<String>) {
+        let mut d: ftd::Map<serde_json::Value> = Default::default();
         let mut always_include = vec![];
         let doc = ftd::p2::TDoc {
             name: self.name.as_str(),
@@ -82,7 +77,7 @@ impl Document {
                 ftd::Value::Integer { value } => serde_json::to_value(value).ok(),
                 ftd::Value::String { text: value, .. } => serde_json::to_value(value).ok(),
                 ftd::Value::Record { fields, name } => {
-                    let mut value_fields = std::collections::BTreeMap::new();
+                    let mut value_fields = ftd::Map::new();
                     if ["ftd#image-src", "ftd#color"].contains(&name.as_str()) {
                         value_fields
                             .insert("$kind$".to_string(), serde_json::to_value("light").unwrap());
@@ -358,7 +353,6 @@ impl Document {
                         (common.events.as_slice(), &common.data_id)
                     }
                     ftd::Element::Image(ftd::Image { common, .. })
-                    | ftd::Element::Text(ftd::Text { common, .. })
                     | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                     | ftd::Element::Code(ftd::Code { common, .. })
                     | ftd::Element::IFrame(ftd::IFrame { common, .. })
@@ -475,8 +469,7 @@ impl Document {
         {
             for e in elements.iter() {
                 match e {
-                    ftd::Element::Text(_)
-                    | ftd::Element::TextBlock(_)
+                    ftd::Element::TextBlock(_)
                     | ftd::Element::Code(_)
                     | ftd::Element::Input(_)
                     | ftd::Element::Image(_)
@@ -522,7 +515,6 @@ impl Document {
     {
         Self::find(children, &|e: &ftd::Element| -> Option<T> {
             match e {
-                ftd::Element::Text(t) => f(t),
                 ftd::Element::Markup(t) => f(&t.to_owned().to_text()),
                 _ => None,
             }
@@ -634,7 +626,7 @@ impl Document {
             return Ok(None);
         }
         if v.len() > 1 {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 format!("more than one instances({}) of {} found", v.len(), record),
                 self.name.as_str(),
                 0,
@@ -664,7 +656,9 @@ impl Document {
                 }
                 serde_json::Value::Array(a)
             }
-            t => return ftd::e2(format!("not a record: {:?}", t), self.name.as_str(), 0),
+            t => {
+                return ftd::p2::utils::e2(format!("not a record: {:?}", t), self.name.as_str(), 0)
+            }
         };
 
         Ok(serde_json::from_value(json)?)
@@ -738,7 +732,7 @@ impl Document {
                 None => serde_json::Value::Null,
             },
             _ => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("unhandled value found(value_to_json): {:?}", v),
                     self.name.as_str(),
                     0,
@@ -756,10 +750,7 @@ impl Document {
     }
 
     #[cfg(calls)]
-    fn object2_to_json(
-        &self,
-        fields: &std::collections::BTreeMap<String, ftd::Value>,
-    ) -> ftd::p1::Result<serde_json::Value> {
+    fn object2_to_json(&self, fields: &ftd::Map<ftd::Value>) -> ftd::p1::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         for (k, v) in fields.iter() {
             map.insert(k.to_string(), self.value_to_json(v)?);
@@ -770,7 +761,7 @@ impl Document {
     fn object_to_json(
         &self,
         variant: Option<&String>,
-        fields: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        fields: &ftd::Map<ftd::PropertyValue>,
     ) -> ftd::p1::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         if let Some(v) = variant {
@@ -865,177 +856,5 @@ pub fn default_scene_children_position(elements: &mut Vec<ftd::Element>) {
                 common.left = Some(0);
             }
         }
-    }
-}
-
-#[cfg(test)]
-mod test {
-    use ftd::test::*;
-
-    #[test]
-    fn variable_from_other_doc() {
-        let bag = ftd::test::interpret_helper(
-            "foo/bar",
-            indoc::indoc!(
-                "
-            -- import: fifthtry/ft
-
-            -- ft.toc:
-
-            foo is the toc
-            "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .unwrap();
-
-        pretty_assertions::assert_eq!(
-            bag.get::<String>("fifthtry/ft#toc").unwrap(),
-            "foo is the toc"
-        );
-    }
-
-    #[test]
-    fn meta() {
-        #[derive(Debug, PartialEq, serde::Deserialize)]
-        #[serde(tag = "type")]
-        enum Someone {
-            Username { username: String },
-            Who { who: String },
-        }
-
-        #[derive(Debug, PartialEq, serde::Deserialize)]
-        struct Meta {
-            license: String,
-            reader: Vec<Someone>,
-        }
-
-        let bag = ftd::test::interpret_helper(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- or-type someone:
-
-                --- Username:
-                caption username:
-
-                --- Who:
-                caption who:
-
-                -- record meta_type:
-                string license:
-                someone list reader:
-
-                -- meta_type list meta:
-
-                -- meta:
-                license: BSD
-
-                --- reader.Username: foo
-                --- reader.Who: everyone
-            "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .unwrap();
-
-        pretty_assertions::assert_eq!(
-            bag.get::<Vec<Meta>>("meta").unwrap(),
-            vec![Meta {
-                license: s("BSD"),
-                reader: vec![
-                    Someone::Username { username: s("foo") },
-                    Someone::Who { who: s("everyone") }
-                ],
-            }]
-        )
-    }
-
-    #[test]
-    #[cfg(calls)]
-    #[ignore] // TODO: this is buggy
-    fn calls() {
-        #[derive(Debug, PartialEq, serde::Deserialize)]
-        struct PR {
-            number: i64,
-            title: String,
-        }
-
-        let bag = super::Document::from(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- component pr:
-                $number: integer
-                $title: caption
-                component: ftd.text
-                text: ref $title
-
-                -- pr: some pr
-                number: 24
-
-                -- pr: some other pr
-                number: 224
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .unwrap();
-
-        pretty_assertions::assert_eq!(
-            bag.instances::<PR>("pr").unwrap(),
-            vec![
-                PR {
-                    number: 24,
-                    title: s("some pr")
-                },
-                PR {
-                    number: 224,
-                    title: s("some other pr")
-                }
-            ]
-        )
-    }
-
-    #[test]
-    fn instances() {
-        #[derive(Debug, PartialEq, serde::Deserialize)]
-        struct PR {
-            number: i64,
-            title: String,
-        }
-
-        let bag = ftd::test::interpret_helper(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- record pr:
-                integer number:
-                caption title:
-
-                -- pr: some pr
-                number: 24
-
-                -- pr: some other pr
-                number: 224
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .unwrap();
-
-        pretty_assertions::assert_eq!(
-            bag.instances::<PR>("pr").unwrap(),
-            vec![
-                PR {
-                    number: 24,
-                    title: s("some pr")
-                },
-                PR {
-                    number: 224,
-                    title: s("some other pr")
-                }
-            ]
-        )
     }
 }

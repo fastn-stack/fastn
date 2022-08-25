@@ -1,4 +1,45 @@
+#[allow(unreachable_code)]
+#[allow(dead_code)]
+fn t() {
+    // The returned nodes are created in the supplied Arena, and are bound by its lifetime.
+    let arena = comrak::Arena::new();
+
+    let root = comrak::parse_document(
+        &arena,
+        "This is my input.\n\n1. Also my input.\n2. Certainly my input.\n",
+        &comrak::ComrakOptions::default(),
+    );
+
+    dbg!(root);
+    return;
+
+    fn iter_nodes<'a, F>(node: &'a comrak::nodes::AstNode<'a>, f: &F)
+    where
+        F: Fn(&'a comrak::nodes::AstNode<'a>),
+    {
+        f(node);
+        for c in node.children() {
+            iter_nodes(c, f);
+        }
+    }
+
+    iter_nodes(root, &|node| {
+        dbg!(root);
+        dbg!(node);
+        // match &mut node.data.borrow_mut().value {
+        //     &mut NodeValue::Text(ref mut text) => {
+        //         let orig = std::mem::replace(text, vec![]);
+        //         *text = String::from_utf8(orig).unwrap().replace("my", "your").as_bytes().to_vec();
+        //     }
+        //     _ => (),
+        // }
+    });
+}
+
 pub fn main() {
+    // t();
+    // return;
+
     let id = std::env::args().nth(1);
 
     let dir = std::path::Path::new("./examples/");
@@ -70,7 +111,7 @@ fn write(id: &str, doc: String) {
     use std::io::Write;
     let start = std::time::Instant::now();
     print!("Processing: {} ... ", id);
-    let lib = ftd::ExampleLibrary {};
+    let lib = ExampleLibrary {};
 
     let b = match interpret_helper(id, &*doc, &lib) {
         Ok(v) => v,
@@ -123,7 +164,7 @@ fn write(id: &str, doc: String) {
 pub fn interpret_helper(
     name: &str,
     source: &str,
-    lib: &ftd::ExampleLibrary,
+    lib: &ExampleLibrary,
 ) -> ftd::p1::Result<ftd::p2::Document> {
     let mut s = ftd::interpret(name, source)?;
     let document;
@@ -164,4 +205,31 @@ pub fn interpret_helper(
         }
     }
     Ok(document)
+}
+
+pub struct ExampleLibrary {}
+
+impl ExampleLibrary {
+    pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
+        std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
+    }
+
+    pub fn process(
+        &self,
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<ftd::Value> {
+        ftd::p2::utils::unknown_processor_error(
+            format!("unimplemented for section {:?} and doc {:?}", section, doc),
+            doc.name.to_string(),
+            section.line_number,
+        )
+    }
+
+    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
+        match self.get(name, doc) {
+            Some(v) => Ok(v),
+            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
+        }
+    }
 }
