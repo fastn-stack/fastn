@@ -247,24 +247,31 @@ mod interpreter {
         bag.insert(root.to_string(), integer_thing);
     }
 
-    /// inserts mapping of root_id -> optional string variable (thing) in the bag
-    fn insert_optional_string_by_root(root: &str, bag: &mut ftd::Map<ftd::p2::Thing>) {
+    /// inserts an optional variable in the bag having the
+    /// given kind with default value = None
+    fn insert_update_default_optional_type_by_root(
+        root: &str,
+        kind: ftd::p2::Kind,
+        bag: &mut ftd::Map<ftd::p2::Thing>,
+    ) {
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
         let var_name = root_parts[1];
 
-        let optional_string_thing = ftd::p2::Thing::Variable(ftd::Variable {
+        let value = ftd::Value::default_optional_value_from_kind(kind);
+
+        let optional_thing = ftd::p2::Thing::Variable(ftd::Variable {
             name: format!("{}", var_name),
-            value: ftd::PropertyValue::Value {
-                value: ftd::Value::Optional {
-                    data: Box::new(None),
-                    kind: ftd::p2::Kind::string(),
-                },
-            },
+            value: ftd::PropertyValue::Value { value },
             conditions: vec![],
             flags: Default::default(),
         });
 
-        bag.insert(root.to_string(), optional_string_thing);
+        if bag.contains_key(root) {
+            bag.entry(root.to_string())
+                .and_modify(|e| *e = optional_thing);
+        } else {
+            bag.insert(root.to_string(), optional_thing);
+        }
     }
 
     fn insert_update_decimal_by_root(root: &str, value: f64, bag: &mut ftd::Map<ftd::p2::Thing>) {
@@ -323,46 +330,6 @@ mod interpreter {
         }
     }
 
-    /// inserts mapping of root_id -> optional integer variable (thing) in the bag
-    fn insert_optional_integer_by_root(root: &str, bag: &mut ftd::Map<ftd::p2::Thing>) {
-        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
-        let var_name = root_parts[1];
-
-        let optional_integer_thing = ftd::p2::Thing::Variable(ftd::Variable {
-            name: format!("{}", var_name),
-            value: ftd::PropertyValue::Value {
-                value: ftd::Value::Optional {
-                    data: Box::new(None),
-                    kind: ftd::p2::Kind::integer(),
-                },
-            },
-            conditions: vec![],
-            flags: Default::default(),
-        });
-
-        bag.insert(root.to_string(), optional_integer_thing);
-    }
-
-    /// inserts mapping of root_id -> optional integer variable (thing) in the bag
-    fn insert_optional_decimal_by_root(root: &str, bag: &mut ftd::Map<ftd::p2::Thing>) {
-        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
-        let var_name = root_parts[1];
-
-        let optional_decimal_thing = ftd::p2::Thing::Variable(ftd::Variable {
-            name: format!("{}", var_name),
-            value: ftd::PropertyValue::Value {
-                value: ftd::Value::Optional {
-                    data: Box::new(None),
-                    kind: ftd::p2::Kind::decimal(),
-                },
-            },
-            conditions: vec![],
-            flags: Default::default(),
-        });
-
-        bag.insert(root.to_string(), optional_decimal_thing);
-    }
-
     /// generates root bag entry and returns it as String
     ///
     /// root_id = \[doc_id\]#\[var_name\]@\[level\]
@@ -370,6 +337,7 @@ mod interpreter {
         format!("{}#{}@{}", doc_id, var_name, count)
     }
 
+    /// inserts all default universal arguments in the bag at the mentioned levels
     fn insert_universal_variables_by_levels(
         levels: Vec<String>,
         doc_id: &str,
@@ -381,17 +349,23 @@ mod interpreter {
             for level in levels.iter() {
                 if kind.is_optional() {
                     if kind.inner().is_string() {
-                        insert_optional_string_by_root(make_root(arg, doc_id, level).as_str(), bag);
+                        insert_update_default_optional_type_by_root(
+                            make_root(arg, doc_id, level).as_str(),
+                            ftd::p2::Kind::string(),
+                            bag,
+                        );
                     }
                     if kind.inner().is_integer() {
-                        insert_optional_integer_by_root(
+                        insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, level).as_str(),
+                            ftd::p2::Kind::integer(),
                             bag,
                         );
                     }
                     if kind.inner().is_decimal() {
-                        insert_optional_decimal_by_root(
+                        insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, level).as_str(),
+                            ftd::p2::Kind::decimal(),
                             bag,
                         );
                     }
@@ -413,17 +387,23 @@ mod interpreter {
             for (arg, kind) in universal_arguments_vec.iter() {
                 if kind.is_optional() {
                     if kind.inner().is_string() {
-                        insert_optional_string_by_root(make_root(arg, doc_id, count).as_str(), bag);
+                        insert_update_default_optional_type_by_root(
+                            make_root(arg, doc_id, count).as_str(),
+                            ftd::p2::Kind::string(),
+                            bag,
+                        );
                     }
                     if kind.inner().is_integer() {
-                        insert_optional_integer_by_root(
+                        insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, count).as_str(),
+                            ftd::p2::Kind::integer(),
                             bag,
                         );
                     }
                     if kind.inner().is_decimal() {
-                        insert_optional_decimal_by_root(
+                        insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, count).as_str(),
+                            ftd::p2::Kind::decimal(),
                             bag,
                         );
                     }
