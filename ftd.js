@@ -1150,8 +1150,11 @@ window.ftd.post_init = function () {
             color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.link-visited-code.dark);
         }
         
+        .ft_md code {
+            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.code.light);
+        }
         body.fpm-dark .ft_md code {
-            color: window.ftd.get_value("main", "FTD_DARK_A__CODE");
+            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.code.dark);
         }
         `;
 

@@ -990,35 +990,66 @@ pub fn default_bag() -> ftd::Map<ftd::p2::Thing> {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "ftd#markdown-colors-data".to_string(),
-                        fields: std::iter::IntoIterator::into_iter([(
-                            "link-code".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::Record {
-                                    name: "ftd#color".to_string(),
-                                    fields: std::iter::IntoIterator::into_iter([
-                                        (
-                                            "dark".to_string(),
-                                            ftd::PropertyValue::Value {
-                                                value: ftd::Value::String {
-                                                    text: "green".to_string(),
-                                                    source: ftd::TextSource::Header,
+                        fields: std::iter::IntoIterator::into_iter([
+                            (
+                                "link-code".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Record {
+                                        name: "ftd#color".to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "dark".to_string(),
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "green".to_string(),
+                                                        source: ftd::TextSource::Header,
+                                                    },
                                                 },
-                                            },
-                                        ),
-                                        (
-                                            "light".to_string(),
-                                            ftd::PropertyValue::Value {
-                                                value: ftd::Value::String {
-                                                    text: "red".to_string(),
-                                                    source: ftd::TextSource::Caption,
+                                            ),
+                                            (
+                                                "light".to_string(),
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "red".to_string(),
+                                                        source: ftd::TextSource::Caption,
+                                                    },
                                                 },
-                                            },
-                                        ),
-                                    ])
-                                    .collect(),
+                                            ),
+                                        ])
+                                        .collect(),
+                                    },
                                 },
-                            },
-                        )])
+                            ),
+                            (
+                                "link-code".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Record {
+                                        name: "ftd#color".to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "dark".to_string(),
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "green".to_string(),
+                                                        source: ftd::TextSource::Header,
+                                                    },
+                                                },
+                                            ),
+                                            (
+                                                "light".to_string(),
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "red".to_string(),
+                                                        source: ftd::TextSource::Caption,
+                                                    },
+                                                },
+                                            ),
+                                        ])
+                                        .collect(),
+                                    },
+                                },
+                            ),
+                        ])
                         .collect(),
                     },
                 },
