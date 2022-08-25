@@ -1296,11 +1296,11 @@ fn markdown_color() -> Thing {
             value: ftd::Value::Record {
                 name: "ftd#markdown-color-data".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
-                    link("TODO:", "TODO:"),
-                    code("TODO:", "TODO:"),
-                    link_visited("TODO:", "TODO:"),
-                    link_code("TODO:", "TODO:"),
-                    link_visited_code("TODO:", "TODO:"),
+                    link("#136351", "#25c19f"),
+                    code("TODO:", "#25c19f"), // TODO: Light theme color name
+                    link_visited("#7b3ee8", "#0f5750"),
+                    link_code("#136351", "#25c19f"),
+                    link_visited_code("#136351", "#0f5750"),
                 ])
                 .collect(),
             },
