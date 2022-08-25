@@ -1097,7 +1097,7 @@ window.ftd.post_init = function () {
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
     const FTD_THEME_COLOR = "ftd#theme-color";
     const THEME_COLOR_META = "theme-color";
-    const MARKDOWN_COLORS = "ftd#markdown-colors";
+    const MARKDOWN_COLOR = "ftd#markdown-color";
     let last_device;
 
     function initialise_device() {
@@ -1123,38 +1123,38 @@ window.ftd.post_init = function () {
 
         markdown_style_sheet.innerHTML = `
         .ft_md a {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.link.light);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link.light);
         }
         body.fpm-dark .ft_md a {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.link.dark);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link.dark);
         }
                 
         .ft_md a:visited {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.link-visited.light);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-visited.light);
         }      
         body.fpm-dark .ft_md a:visited {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.link-visited.dark);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-visited.dark);
         }
             
         .ft_md a code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.link-code.light);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-code.light);
         }
         body.fpm-dark .ft_md a code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.link-code.dark);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-code.dark);
         }
                 
         .ft_md a:visited code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.link-visited-code.light);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-visited-code.light);
         }
         body.fpm-dark .ft_md a:visited code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.link-visited-code.dark);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-visited-code.dark);
         }
         
         .ft_md code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.code.light);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.code.light);
         }
         body.fpm-dark .ft_md code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLORS}.code.dark);
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.code.dark);
         }
         `;
 
