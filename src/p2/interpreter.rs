@@ -1241,68 +1241,41 @@ pub fn default_column() -> ftd::Column {
 }
 
 fn markdown_color() -> Thing {
-    fn link() -> (String, ftd::PropertyValue) {
-        (
-            "link".to_string(),
-            ftd::PropertyValue::Value {
-                value: ftd::Value::Record {
-                    name: "ftd#color".to_string(),
-                    fields: std::iter::IntoIterator::into_iter([
-                        (
-                            "dark".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "green".to_string(),
-                                    source: ftd::TextSource::Header,
-                                },
+    fn color(light: &str, dark: &str) -> ftd::PropertyValue {
+        ftd::PropertyValue::Value {
+            value: ftd::Value::Record {
+                name: "ftd#color".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    (
+                        "light".to_string(),
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
+                                text: light.to_string(),
+                                source: ftd::TextSource::Caption,
                             },
-                        ),
-                        (
-                            "light".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "red".to_string(),
-                                    source: ftd::TextSource::Caption,
-                                },
+                        },
+                    ),
+                    (
+                        "dark".to_string(),
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
+                                text: dark.to_string(),
+                                source: ftd::TextSource::Header,
                             },
-                        ),
-                    ])
-                    .collect(),
-                },
+                        },
+                    ),
+                ])
+                .collect(),
             },
-        )
+        }
     }
 
-    fn link_code() -> (String, ftd::PropertyValue) {
-        (
-            "link-code".to_string(),
-            ftd::PropertyValue::Value {
-                value: ftd::Value::Record {
-                    name: "ftd#color".to_string(),
-                    fields: std::iter::IntoIterator::into_iter([
-                        (
-                            "dark".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "green".to_string(),
-                                    source: ftd::TextSource::Header,
-                                },
-                            },
-                        ),
-                        (
-                            "light".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "red".to_string(),
-                                    source: ftd::TextSource::Caption,
-                                },
-                            },
-                        ),
-                    ])
-                    .collect(),
-                },
-            },
-        )
+    fn link_code(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("link-code".to_string(), color(light, dark))
+    }
+
+    fn link(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("link".to_string(), color(light, dark))
     }
 
     Thing::Variable(ftd::Variable {
@@ -1310,7 +1283,11 @@ fn markdown_color() -> Thing {
         value: ftd::PropertyValue::Value {
             value: ftd::Value::Record {
                 name: "ftd#markdown-color-data".to_string(),
-                fields: std::iter::IntoIterator::into_iter([link_code(), link()]).collect(),
+                fields: std::iter::IntoIterator::into_iter([
+                    link("TODO:", "TODO:"),
+                    link_code("TODO:", "TODO:"),
+                ])
+                .collect(),
             },
         },
         conditions: vec![],
