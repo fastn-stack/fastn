@@ -51,9 +51,8 @@ region: h1
 
 --- ftd.text:
 text: $title
-caption $title:
+caption title:
 region: title
-text: $title
 color: $color-black
 /style: bold
 padding-bottom: 12

@@ -55,7 +55,7 @@ impl Boolean {
                     ftd::PropertyValue::Value { value } => value.to_owned(),
                     ftd::PropertyValue::Variable { name, .. } => doc.get_value(0, name)?,
                     _ => {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("{:?} must be value or argument", right),
                             doc.name,
                             line_number,
@@ -85,11 +85,17 @@ impl Boolean {
                     },
                 )
             }
-            _ => return ftd::e2(format!("{:?} must not happen", self), doc.name, line_number),
+            _ => {
+                return ftd::p2::utils::e2(
+                    format!("{:?} must not happen", self),
+                    doc.name,
+                    line_number,
+                )
+            }
         };
         return match value.to_serde_value() {
             None => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!(
                         "expected value of type String, Integer, Decimal or Boolean, found: {:?}",
                         value
@@ -109,13 +115,11 @@ impl Boolean {
             match value {
                 ftd::PropertyValue::Variable { name, .. }
                 | ftd::PropertyValue::Reference { name, .. } => Ok(name.to_string()),
-                _ => {
-                    return ftd::e2(
-                        format!("{:?} must be variable or local variable", value),
-                        doc.name,
-                        line_number,
-                    );
-                }
+                _ => ftd::p2::utils::e2(
+                    format!("{:?} must be variable or local variable", value),
+                    doc.name,
+                    line_number,
+                ),
             }
         }
     }
@@ -147,7 +151,7 @@ impl Boolean {
                 Some(rest.replace("==", "").trim().to_string()),
             ),
             _ => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("'{}' is not valid condition", rest),
                     doc_id,
                     line_number,
@@ -159,7 +163,7 @@ impl Boolean {
     pub fn from_expression(
         expr: &str,
         doc: &ftd::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        arguments: &ftd::Map<ftd::p2::Kind>,
         left_right_resolved_property: (Option<ftd::PropertyValue>, Option<ftd::PropertyValue>),
         line_number: usize,
     ) -> ftd::p1::Result<Self> {
@@ -184,7 +188,7 @@ impl Boolean {
                         line_number,
                     )?;
                     if !value.kind().is_optional() {
-                        return ftd::e2(
+                        return ftd::p2::utils::e2(
                             format!("'{}' is not to an optional", left),
                             doc.name,
                             line_number,
@@ -221,7 +225,7 @@ impl Boolean {
                     line_number,
                 )?;
                 if !value.kind().is_list() {
-                    return ftd::e2(
+                    return ftd::p2::utils::e2(
                         format!("'{}' is not to a list", left),
                         doc.name,
                         line_number,
@@ -273,7 +277,7 @@ impl Boolean {
                 }
             }
             _ => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("'{}' is not valid condition", expr),
                     doc.name,
                     line_number,
@@ -285,7 +289,7 @@ impl Boolean {
             value: &str,
             expected_kind: Option<ftd::p2::Kind>,
             doc: &ftd::p2::TDoc,
-            arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+            arguments: &ftd::Map<ftd::p2::Kind>,
             loop_already_resolved_property: Option<ftd::PropertyValue>,
             line_number: usize,
         ) -> ftd::p1::Result<ftd::PropertyValue> {
@@ -405,7 +409,7 @@ impl Boolean {
                 .resolve(line_number, doc)?
                 .is_equal(&right.resolve(line_number, doc)?),
             _ => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("unknown Boolean found: {:?}", self),
                     doc.name,
                     line_number,
@@ -428,7 +432,7 @@ impl Boolean {
             },
             Self::IsNotNull { .. } | Self::IsNull { .. } => false,
             _ => {
-                return ftd::e2(
+                return ftd::p2::utils::e2(
                     format!("unimplemented for type: {:?}", self),
                     doc_id,
                     line_number,

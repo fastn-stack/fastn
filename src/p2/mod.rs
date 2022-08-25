@@ -7,7 +7,7 @@ pub(crate) mod kind;
 pub(crate) mod library;
 pub(crate) mod record;
 pub(crate) mod tdoc;
-pub(crate) mod utils;
+pub mod utils;
 
 pub use document::Document;
 pub use event::{Action, ActionKind, Event, EventName};

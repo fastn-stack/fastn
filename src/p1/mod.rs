@@ -60,10 +60,10 @@ pub enum Error {
         source: serde_json::Error,
     },
 
-    #[error("{source}")]
-    Failure {
+    #[error("syntect error: {source}")]
+    Syntect {
         #[from]
-        source: failure::Compat<failure::Error>,
+        source: syntect::Error,
     },
 }
 

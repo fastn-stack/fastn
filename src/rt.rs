@@ -1,16 +1,16 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct RT {
     pub name: String,
-    pub aliases: std::collections::BTreeMap<String, String>,
-    pub bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub aliases: ftd::Map<String>,
+    pub bag: ftd::Map<ftd::p2::Thing>,
     pub instructions: Vec<ftd::Instruction>,
 }
 
 impl RT {
     pub fn from(
         name: &str,
-        aliases: std::collections::BTreeMap<String, String>,
-        bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
+        aliases: ftd::Map<String>,
+        bag: ftd::Map<ftd::p2::Thing>,
         instructions: Vec<ftd::Instruction>,
     ) -> Self {
         Self {
@@ -36,16 +36,16 @@ impl RT {
     //                 );
     //                 Ok(old)
     //             }
-    //             ref t => ftd::e2(
+    //             ref t => ftd::p2::utils::e2(
     //                 format!("{} is not a boolean", variable),
     //                 format!("{:?}", t).as_str(),
     //             ),
     //         },
-    //         Some(t) => ftd::e2(
+    //         Some(t) => ftd::p2::utils::e2(
     //             format!("{} is not a variable", variable),
     //             format!("{:?}", t).as_str(),
     //         ),
-    //         None => ftd::e2(format!("{} not found", variable), doc_id),
+    //         None => ftd::p2::utils::e2(format!("{} not found", variable), doc_id),
     //     }
     // }
 
@@ -86,12 +86,9 @@ impl RT {
 }
 
 pub(crate) fn store_invocations(
-    bag: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
-    local_variables: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
-    invocations: std::collections::BTreeMap<
-        String,
-        Vec<std::collections::BTreeMap<String, ftd::Value>>,
-    >,
+    bag: &mut ftd::Map<ftd::p2::Thing>,
+    local_variables: &mut ftd::Map<ftd::p2::Thing>,
+    invocations: ftd::Map<Vec<ftd::Map<ftd::Value>>>,
 ) {
     for (k, v) in invocations.into_iter() {
         if let Some(c) = bag.get_mut(k.as_str()) {

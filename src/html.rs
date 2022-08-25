@@ -6,21 +6,21 @@ pub struct Node {
     pub events: Vec<ftd::Event>,
     pub classes: Vec<String>,
     pub node: String,
-    pub attrs: ftd::Map,
-    pub style: ftd::Map,
+    pub attrs: ftd::Map<String>,
+    pub style: ftd::Map<String>,
     pub children: Vec<Node>,
     pub external_children: Vec<Node>,
     pub open_id: Option<String>,
     pub external_children_container: Vec<Vec<usize>>,
-    pub children_style: ftd::Map,
+    pub children_style: ftd::Map<String>,
     pub text: Option<String>,
     pub null: bool,
 }
 
 impl Node {
-    pub fn fixed_children_style(&self, index: usize) -> ftd::Map {
+    pub fn fixed_children_style(&self, index: usize) -> ftd::Map<String> {
         if index == 1 {
-            let mut list: ftd::Map = Default::default();
+            let mut list: ftd::Map<String> = Default::default();
             for (key, value) in self.children_style.iter() {
                 if key == "margin-left" || key == "margin-top" {
                     continue;
@@ -47,7 +47,7 @@ impl Node {
     #[allow(clippy::too_many_arguments)]
     pub fn to_dnode(
         &self,
-        style: &ftd::Map,
+        style: &ftd::Map<String>,
         data: &ftd::DataDependenciesMap,
         external_children: &mut Option<Vec<Self>>,
         external_open_id: &Option<String>,
@@ -233,7 +233,12 @@ impl Node {
         }
     }
 
-    pub fn to_html(&self, style: &ftd::Map, data: &ftd::DataDependenciesMap, id: &str) -> String {
+    pub fn to_html(
+        &self,
+        style: &ftd::Map<String>,
+        data: &ftd::DataDependenciesMap,
+        id: &str,
+    ) -> String {
         self.to_dnode(style, data, &mut None, &None, &[], true, id, false)
             .to_html(id)
     }
@@ -254,7 +259,6 @@ impl ftd::Element {
             Self::Scene(i) => (i.to_node(doc_id, collector)),
             Self::Grid(i) => (i.to_node(doc_id, collector)),
             Self::Markup(i) => (i.to_node(doc_id, collector)),
-            Self::Text(i) => (i.to_node(doc_id, collector)),
             Self::TextBlock(i) => (i.to_node(doc_id, collector)),
             Self::Code(i) => (i.to_node(doc_id, collector)),
             Self::Image(i) => (i.to_node(doc_id, collector)),
@@ -662,14 +666,14 @@ impl ftd::Column {
 #[derive(Debug, PartialEq, Clone, Default)]
 pub struct Collector {
     /// this stores all the classes in the document
-    pub classes: std::collections::BTreeMap<String, StyleSpec>,
+    pub classes: ftd::Map<StyleSpec>,
     pub key: i32,
 }
 
 #[derive(Debug, PartialEq, Clone, Default)]
 pub struct StyleSpec {
     pub prefix: Option<String>,
-    pub styles: std::collections::BTreeMap<String, String>,
+    pub styles: ftd::Map<String>,
 }
 
 impl ftd::Collector {
@@ -680,7 +684,7 @@ impl ftd::Collector {
         }
     }
 
-    fn get_classes(&mut self, styles: std::collections::BTreeMap<String, String>) -> Vec<String> {
+    fn get_classes(&mut self, styles: ftd::Map<String>) -> Vec<String> {
         self.classes
             .iter()
             .filter(|(_, values)| values.styles.eq(&styles))
@@ -689,7 +693,7 @@ impl ftd::Collector {
     }
 
     fn insert_class_font(&mut self, font: &ftd::Type) -> String {
-        let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+        let mut styles: ftd::Map<String> = Default::default();
         styles.insert(s("font-family"), font.font.to_string());
         styles.insert(s("line-height"), format!("{}px", font.desktop.line_height));
         styles.insert(
@@ -760,7 +764,7 @@ impl ftd::Collector {
     }
 
     fn insert_class_color(&mut self, col: &ftd::Color, key: &str) -> String {
-        let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+        let mut styles: ftd::Map<String> = Default::default();
         styles.insert(s(key), color(&col.light));
         let light_style = styles.clone();
 
@@ -786,11 +790,7 @@ impl ftd::Collector {
         class
     }
 
-    fn insert_class(
-        &mut self,
-        styles: std::collections::BTreeMap<String, String>,
-        prefix: Option<String>,
-    ) -> String {
+    fn insert_class(&mut self, styles: ftd::Map<String>, prefix: Option<String>) -> String {
         if let Some(ref prefix) = prefix {
             if self.classes.get(prefix).is_some() {
                 return prefix.to_owned();
@@ -810,10 +810,7 @@ impl ftd::Collector {
             .insert(class_name.to_string(), ftd::StyleSpec { prefix, styles });
         return class_name;
 
-        fn get_full_class_name(
-            key: &i32,
-            styles: &std::collections::BTreeMap<String, String>,
-        ) -> String {
+        fn get_full_class_name(key: &i32, styles: &ftd::Map<String>) -> String {
             let styles = styles
                 .keys()
                 .filter_map(|v| v.get(0..1))
@@ -869,10 +866,11 @@ impl ftd::Collector {
 impl ftd::Text {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         // TODO: proper tag based on self.common.region
-        // TODO: if format is not markdown use pre
+        // TODO: if format is not markup use pre
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
         n.classes.extend(self.common.add_class());
+        n.classes.push("ft_md".to_string());
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -915,7 +913,7 @@ impl ftd::Text {
 impl ftd::TextBlock {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         // TODO: proper tag based on self.common.region
-        // TODO: if format is not markdown use pre
+        // TODO: if format is not markup use pre
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
         n.classes.extend(self.common.add_class());
@@ -1022,55 +1020,51 @@ impl ftd::Code {
 
 impl ftd::Image {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let mut n = Node::from_common("img", &self.common, doc_id, collector);
-        if self.common.link.is_some() {
-            n.node = s("a");
-            let mut img = Node {
-                condition: None,
-                events: vec![],
-                classes: vec![],
-                node: s("img"),
-                attrs: Default::default(),
-                style: Default::default(),
-                children: vec![],
-                external_children: vec![],
-                open_id: None,
-                external_children_container: vec![],
-                children_style: Default::default(),
-                text: None,
-                null: false,
-            };
-            if let Some(ref id) = self.common.data_id {
-                img.attrs.insert(s("data-id"), escape(id));
-                n.attrs
-                    .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
+        return match self.common.link {
+            Some(_) => {
+                let mut n = Node::from_common("a", &self.common, doc_id, collector);
+                if let Some(ref id) = self.common.data_id {
+                    n.attrs
+                        .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
+                }
+                let mut img = update_img(
+                    self,
+                    Node {
+                        node: s("img"),
+                        ..Default::default()
+                    },
+                );
+                img.style.insert(s("width"), s("100%"));
+                img.style.insert(s("height"), s("100%"));
+                n.children.push(img);
+                n
             }
-            img.style.insert(s("width"), s("100%"));
-            img.style.insert(s("height"), s("100%"));
-            img.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            if let Some(ref description) = self.description {
-                img.attrs.insert(s("alt"), escape(description));
+            None => update_img(
+                self,
+                Node::from_common("img", &self.common, doc_id, collector),
+            ),
+        };
+
+        fn update_img(img: &ftd::Image, mut n: ftd::Node) -> ftd::Node {
+            n.attrs.insert(s("loading"), s(img.loading.to_html()));
+            if let Some(ref id) = img.common.data_id {
+                n.attrs.insert(s("data-id"), escape(id));
             }
-            if self.crop {
-                img.style.insert(s("object-fit"), s("cover"));
-                img.style.insert(s("object-position"), s("0 0"));
-            }
-            n.children.push(img);
-        } else {
-            n.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            if let Some(ref description) = self.description {
+            n.attrs.insert(s("src"), escape(img.src.light.as_str()));
+            if let Some(ref description) = img.description {
                 n.attrs.insert(s("alt"), escape(description));
             }
-            if self.crop {
+
+            if img.crop {
                 n.style.insert(s("object-fit"), s("cover"));
                 n.style.insert(s("object-position"), s("0 0"));
-                if self.common.width.is_none() {
+                if img.common.width.is_none() {
                     n.style.insert(s("width"), s("100%"));
                 }
             }
-        }
 
-        n
+            n
+        }
     }
 }
 
@@ -1229,13 +1223,13 @@ impl ftd::Common {
         }
         .to_string()
     }
+
     fn add_class(&self) -> Vec<String> {
-        let d: Vec<String> = vec![s("ft_md")];
-        d
+        Default::default()
     }
-    fn children_style(&self) -> ftd::Map {
-        let d: ftd::Map = Default::default();
-        d
+
+    fn children_style(&self) -> ftd::Map<String> {
+        Default::default()
     }
 
     fn style(
@@ -1243,8 +1237,8 @@ impl ftd::Common {
         doc_id: &str,
         collector: &mut ftd::Collector,
         classes: &mut Vec<String>,
-    ) -> ftd::Map {
-        let mut d: ftd::Map = Default::default();
+    ) -> ftd::Map<String> {
+        let mut d: ftd::Map<String> = Default::default();
 
         d.insert(s("text-decoration"), s("none"));
         if !self.events.is_empty() && self.cursor.is_none() {
@@ -1563,8 +1557,8 @@ impl ftd::Common {
         d
     }
 
-    fn attrs(&self) -> ftd::Map {
-        let mut d: ftd::Map = Default::default();
+    fn attrs(&self) -> ftd::Map<String> {
+        let mut d: ftd::Map<String> = Default::default();
         if let Some(ref id) = self.data_id {
             d.insert(s("data-id"), escape(id));
         }
@@ -1595,8 +1589,8 @@ impl ftd::Common {
     }
 }
 impl ftd::Container {
-    fn style(&self) -> ftd::Map {
-        let mut d: ftd::Map = Default::default();
+    fn style(&self) -> ftd::Map<String> {
+        let mut d: ftd::Map<String> = Default::default();
         let mut count = count_children_with_absolute_parent(&self.children);
         if let Some((_, _, ref ext_children)) = self.external_children {
             count += count_children_with_absolute_parent(ext_children);
@@ -1621,13 +1615,13 @@ impl ftd::Container {
                 .count()
         }
     }
-    fn children_style(&self) -> ftd::Map {
-        let d: ftd::Map = Default::default();
+    fn children_style(&self) -> ftd::Map<String> {
+        let d: ftd::Map<String> = Default::default();
         d
     }
 
-    fn attrs(&self) -> ftd::Map {
-        let d: ftd::Map = Default::default();
+    fn attrs(&self) -> ftd::Map<String> {
+        let d: ftd::Map<String> = Default::default();
         d
     }
     fn add_class(&self) -> Vec<String> {
@@ -1976,14 +1970,14 @@ fn get_translate(
 ) -> ftd::p1::Result<Option<String>> {
     let mut translate = match (left, right, up, down) {
         (Some(_), Some(_), Some(_), Some(_)) => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 "move-up, move-down, move-left and move-right all 4 can't be used at once!",
                 doc_id,
                 0, // TODO
             );
         }
         (Some(_), Some(_), _, _) => {
-            return ftd::e2(
+            return ftd::p2::utils::e2(
                 "move-left, move-right both can't be used at once!",
                 doc_id,
                 0, // TODO
@@ -1991,7 +1985,7 @@ fn get_translate(
         }
         (_, _, Some(_), Some(_)) => {
             // TODO
-            return ftd::e2("move-up, move-down both can't be used at once!", doc_id, 0);
+            return ftd::p2::utils::e2("move-up, move-down both can't be used at once!", doc_id, 0);
         }
         (Some(l), None, None, None) => Some(format!("translateX(-{}px) ", l)),
         (Some(l), None, Some(u), None) => Some(format!("translate(-{}px, -{}px) ", l, u)),

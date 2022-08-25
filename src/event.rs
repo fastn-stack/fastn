@@ -28,7 +28,7 @@ pub(crate) fn group_by_js_event(evts: &[Event]) -> std::collections::HashMap<Str
 pub struct Action {
     pub action: String, // toggle
     pub target: String, // foo
-    pub parameters: std::collections::BTreeMap<String, Vec<ParameterData>>,
+    pub parameters: ftd::Map<Vec<ParameterData>>,
 }
 
 #[derive(serde::Deserialize, Clone, Debug, serde::Serialize, PartialEq, Default)]
