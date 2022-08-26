@@ -974,13 +974,33 @@ pub fn default_bag() -> ftd::Map<ftd::p2::Thing> {
             "ftd#markdown-color-data".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#markdown-color-data".to_string(),
-                fields: std::iter::IntoIterator::into_iter([(
-                    "link-code".to_string(),
-                    ftd::p2::Kind::record("ftd#color"),
-                )])
+                fields: std::iter::IntoIterator::into_iter([
+                    ("link".to_string(), ftd::p2::Kind::record("ftd#color")),
+                    ("code".to_string(), ftd::p2::Kind::record("ftd#color")),
+                    ("link-code".to_string(), ftd::p2::Kind::record("ftd#color")),
+                    (
+                        "link-visited".to_string(),
+                        ftd::p2::Kind::record("ftd#color"),
+                    ),
+                    (
+                        "link-visited-code".to_string(),
+                        ftd::p2::Kind::record("ftd#color"),
+                    ),
+                    (
+                        "ul-ol-li-before".to_string(),
+                        ftd::p2::Kind::record("ftd#color"),
+                    ),
+                ])
                 .collect(),
                 instances: Default::default(),
-                order: vec!["link-code".to_string()],
+                order: vec![
+                    "link".to_string(),
+                    "code".to_string(),
+                    "link-code".to_string(),
+                    "link-visited".to_string(),
+                    "link-visited-code".to_string(),
+                    "ul-ol-li-before".to_string(),
+                ],
             }),
         ),
         ("ftd#markdown-color".to_string(), markdown_color()),
@@ -1301,7 +1321,7 @@ fn markdown_color() -> Thing {
                 name: "ftd#markdown-color-data".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     link("#136351", "#25c19f"),
-                    code("TODO:", "#25c19f"), // TODO: Light theme color name
+                    code("#000000", "#25c19f"),
                     link_visited("#7b3ee8", "#0f5750"),
                     link_code("#136351", "#25c19f"),
                     link_visited_code("#136351", "#0f5750"),

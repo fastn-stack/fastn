@@ -77,7 +77,6 @@ pre code {
 .ft_md ul ol li:before {
     content: counter(item);
     counter-increment: item;
-    background-color: #e4e9eb;
     font-size: 11px;
     line-height: 10px;
     text-align: center;

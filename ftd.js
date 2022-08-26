@@ -1159,6 +1159,7 @@ window.ftd.post_init = function () {
         
         .ft_md ul ol li:before {
             color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.ul-ol-li-before.light);
+            background-color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.ul-ol-li-before.light);
         }     
         body.fpm-dark .ft_md ul ol li:before {
             color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.ul-ol-li-before.dark);

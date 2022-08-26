@@ -1,11 +1,27 @@
 -- boolean flag: true
 
 
--- ftd.markdown-colors.link-code:
+/-- ftd.markdown-color.link-code:
 light: purple
 dark: orange
 
 
 
--- ftd.text: AbrarK
-color: $ftd.markdown-colors.link-code
+-- ftd.text: Link
+color: $ftd.markdown-color.link
+
+-- ftd.text: Code
+color: $ftd.markdown-color.code
+
+-- ftd.text: Link Code
+color: $ftd.markdown-color.link-code
+
+-- ftd.text: Link Visited
+color: $ftd.markdown-color.link-visited
+
+-- ftd.text: Link Visited Code
+color: $ftd.markdown-color.link-visited-code
+
+-- ftd.text: ul ol li: before
+color: $ftd.markdown-color.ul-ol-li-before
+
