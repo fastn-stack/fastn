@@ -5,8 +5,6 @@
 light: purple
 dark: orange
 
-
-
 -- ftd.text: Link
 color: $ftd.markdown-color.link
 
@@ -24,9 +22,6 @@ color: $ftd.markdown-color.link-visited-code
 
 -- ftd.text: ul ol li: before
 color: $ftd.markdown-color.ul-ol-li-before
-
-
-
 
 
 -- ftd.text: Link
