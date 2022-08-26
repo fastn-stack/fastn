@@ -1155,7 +1155,14 @@ window.ftd.post_init = function () {
         }
         body.fpm-dark .ft_md a:visited code {
             color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-visited-code.dark);
-        }        
+        }
+        
+        .ft_md ul ol li:before {
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.ul-ol-li-before.light);
+        }     
+        body.fpm-dark .ft_md ul ol li:before {
+            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.ul-ol-li-before.dark);
+        }     
         `;
 
         document.getElementsByTagName('head')[0].appendChild(markdown_style_sheet);

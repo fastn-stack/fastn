@@ -78,7 +78,6 @@ pre code {
     content: counter(item);
     counter-increment: item;
     background-color: #e4e9eb;
-    color: #000000;
     font-size: 11px;
     line-height: 10px;
     text-align: center;

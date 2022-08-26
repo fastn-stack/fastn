@@ -1290,6 +1290,10 @@ fn markdown_color() -> Thing {
         ("link-visited-code".to_string(), color(light, dark))
     }
 
+    fn ul_ol_li_before(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("ul-ol-li-before".to_string(), color(light, dark))
+    }
+
     Thing::Variable(ftd::Variable {
         name: "ftd#markdown-color".to_string(),
         value: ftd::PropertyValue::Value {
@@ -1301,6 +1305,7 @@ fn markdown_color() -> Thing {
                     link_visited("#7b3ee8", "#0f5750"),
                     link_code("#136351", "#25c19f"),
                     link_visited_code("#136351", "#0f5750"),
+                    ul_ol_li_before("#000000", "#ffffff"),
                 ])
                 .collect(),
             },
