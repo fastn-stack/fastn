@@ -1351,6 +1351,10 @@ pub mod markdown {
         ("ul-ol-li-before".to_string(), theme_color(light, dark))
     }
 
+    fn blockquote(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("blockquote".to_string(), theme_color(light, dark))
+    }
+
     pub fn color() -> ftd::p2::Thing {
         ftd::p2::Thing::Variable(ftd::Variable {
             name: "ftd#markdown-color".to_string(),
@@ -1381,11 +1385,12 @@ pub mod markdown {
                     name: "ftd#markdown-background-color-data".to_string(),
                     fields: std::iter::IntoIterator::into_iter([
                         link("#136351", "#25c19f"),
-                        code("#000000", "#25c19f"),
+                        code("#f6f7f8", "#ffffff"),
                         link_visited("#7b3ee8", "#0f5750"),
                         link_code("#136351", "#25c19f"),
                         link_visited_code("#136351", "#0f5750"),
                         ul_ol_li_before("#000000", "#ffffff"),
+                        blockquote("#f6f7f8", "#f0f0f0"),
                     ])
                     .collect(),
                 },
