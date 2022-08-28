@@ -2670,7 +2670,7 @@ fn assert_caption_body_checks(
     let mut properties = None;
     let mut header_list: Option<&ftd::p1::Header> = Some(p1);
 
-    let mut thing = get_thing(root, doc.bag, doc.name, line_number)?;
+    let mut thing = doc.get_thing(line_number, root)?;
     loop {
         // Either the component is kernel or variable/derived component
         if let ftd::p2::Thing::Component(c) = thing {
@@ -2693,8 +2693,8 @@ fn assert_caption_body_checks(
             }
 
             // get the parent component and do the same checks
-            thing = get_thing(&c.root, doc.bag, doc.name, line_number)?;
-            properties = Some(&c.properties);
+            thing = doc.get_thing(line_number, &c.root)?;
+            properties = Some(c.properties.clone());
 
             // These things are only available to the lowest level component
             has_caption = false;
@@ -2710,30 +2710,13 @@ fn assert_caption_body_checks(
         root.eq("ftd#ui")
     }
 
-    /// fetches the thing from the bag
-    fn get_thing<'t>(
-        bag_entry: &str,
-        bag: &'t std::collections::BTreeMap<String, ftd::p2::Thing>,
-        doc_id: &str,
-        line_number: usize,
-    ) -> ftd::p1::Result<&'t ftd::p2::Thing> {
-        if bag.contains_key(bag_entry) {
-            return Ok(&bag[bag_entry]);
-        }
-        Err(ftd::p1::Error::NotFound {
-            doc_id: doc_id.to_string(),
-            line_number,
-            key: bag_entry.to_string(),
-        })
-    }
-
     /// checks for body and caption conflicts using the given header list,
     /// arguments and properties map of the component
     #[allow(clippy::too_many_arguments)]
     fn check_caption_body_conflicts(
         full_name: &str,
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
-        properties: Option<&std::collections::BTreeMap<String, Property>>,
+        properties: Option<std::collections::BTreeMap<String, Property>>,
         p1: Option<&ftd::p1::Header>,
         doc: &ftd::p2::TDoc,
         has_caption: bool,
@@ -2773,7 +2756,7 @@ fn assert_caption_body_checks(
         /// checks if the argument has been passed down as property
         fn has_property_value(
             argument: &str,
-            properties: Option<&std::collections::BTreeMap<String, Property>>,
+            properties: &Option<std::collections::BTreeMap<String, Property>>,
         ) -> bool {
             if let Some(p) = properties {
                 p.contains_key(argument)
@@ -2791,7 +2774,7 @@ fn assert_caption_body_checks(
             let inner_kind = kind.inner();
 
             let has_value = has_header_value(arg, Some(&header_set));
-            let has_property = has_property_value(arg, properties);
+            let has_property = has_property_value(arg, &properties);
 
             match inner_kind {
                 ftd::p2::Kind::String {
