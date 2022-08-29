@@ -202,6 +202,13 @@ pub fn interpret_helper(
                     },
                 )?;
             }
+            ftd::Interpreter::CheckID {
+                doc_index: index,
+                state: st,
+            } => {
+                // No config in ftd::ExampleLibrary ignoring processing terms for now
+                s = st.continue_after_checking_id(Some(&lib.dummy_global_ids_map()), index)?;
+            }
         }
     }
     Ok(document)
@@ -210,6 +217,16 @@ pub fn interpret_helper(
 pub struct ExampleLibrary {}
 
 impl ExampleLibrary {
+    pub fn dummy_global_ids_map(&self) -> std::collections::HashMap<String, String> {
+        let mut global_ids: std::collections::HashMap<String, String> =
+            std::collections::HashMap::new();
+
+        global_ids.insert("foo".to_string(), "foo/bar.ftd".to_string());
+        global_ids.insert("hello there".to_string(), "/hello/there.txt".to_string());
+
+        global_ids
+    }
+
     pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }

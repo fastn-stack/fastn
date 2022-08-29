@@ -77,6 +77,17 @@ impl InterpreterState {
             self.document_stack[l].done_processing_imports();
             self.document_stack[l].reorder(&self.bag)?;
         }
+
+        if self.document_stack[l].checking_ids {
+            return Ok(Interpreter::CheckID {
+                doc_index: l,
+                state: self,
+            });
+        }
+
+        // Debugging doc
+        self.document_stack[l].show_document();
+
         let parsed_document = &mut self.document_stack[l];
 
         while let Some(p1) = parsed_document.sections.last_mut() {
@@ -569,6 +580,23 @@ impl InterpreterState {
         self.parsed_libs.insert(module.to_string(), prefix);
     }
 
+    pub fn continue_after_checking_id(
+        mut self,
+        global_ids: Option<&std::collections::HashMap<String, String>>,
+        doc_index: usize,
+    ) -> ftd::p1::Result<Interpreter> {
+        // Ignore processing terms if global_ids is None
+        match global_ids {
+            Some(id_map) => {
+                self.document_stack[doc_index].replace_linking_syntax_with_links(id_map)?
+            }
+            None => {}
+        }
+
+        self.document_stack[doc_index].done_processing_terms();
+        self.continue_()
+    }
+
     pub fn continue_after_import(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
         self.document_stack.push(ParsedDocument::parse(id, source)?);
         self.continue_()
@@ -713,6 +741,7 @@ pub struct ParsedDocument {
     name: String,
     sections: Vec<ftd::p1::Section>,
     processing_imports: bool,
+    checking_ids: bool,
     doc_aliases: ftd::Map<String>,
     var_types: Vec<String>,
     foreign_variable_prefix: Vec<String>,
@@ -725,6 +754,7 @@ impl ParsedDocument {
             name: id.to_string(),
             sections: ftd::p1::parse(source, id)?,
             processing_imports: true,
+            checking_ids: true,
             doc_aliases: ftd::p2::interpreter::default_aliases(),
             var_types: Default::default(),
             foreign_variable_prefix: vec![],
@@ -734,6 +764,127 @@ impl ParsedDocument {
 
     fn done_processing_imports(&mut self) {
         self.processing_imports = false;
+    }
+
+    fn done_processing_terms(&mut self) {
+        self.checking_ids = false;
+    }
+
+    /// replaces linking syntax with the actual links
+    ///
+    /// Syntax 1: `[<linked-text>]`(id: <id-to-link>)
+    ///
+    /// Syntax 2: {id: <id-to-link>}
+    ///
+    /// In case 2, the linked text will be same as the id
+    fn replace_linking_syntax_with_links(
+        &mut self,
+        global_ids: &std::collections::HashMap<String, String>,
+    ) -> ftd::p1::Result<()> {
+
+        // TODO: Iterate through doc and replace with links
+        for s in self.sections.iter_mut() {
+            // Testing on ft.markdown for now (section level only)
+            if s.name.contains("markdown") {
+                if let Some(ref body) = s.body {
+                    // dbg!(body);
+                    s.body = Some((body.0, replace_text(body.1.as_str(), global_ids)));
+                }
+            }
+        }
+
+        return Ok(());
+
+        fn replace_text(
+            text: &str,
+            global_ids: &std::collections::HashMap<String, String>,
+        ) -> String {
+            // Syntax 1 = [id`](id: someId)
+            // Refer someId from linked text <id`>
+            // replaced link = [id`]([document-id]#[slugified(someId)])
+            const SYNTAX_1_PATTERN: &str = r"(?x) # Enabling Comment Mode
+            \[(?P<linked_text>[\sa-zA-Z\d]+)\] # Linked Text Capture Group <linked_text>
+            \(\s*id\s*:(?P<actual_id>[\sa-zA-Z\d]+)\) # Referred Id Capture Group <actual_id>";
+
+            // Syntax 2 = {id: someId}
+            // Refer someId with the same linked text i.e <someId>
+            // replaced link = [someId]([document-id]#[slugified(someId)])
+            const SYNTAX_2_PATTERN: &str = r"(?x) # Enabling comment mode
+            \{\s*id\s*: # Here Linked Text is same as Referred Id
+            (?P<actual_id>[\sa-zA-Z\d]+)\} # Referred Id Capture Group <actual_id>";
+
+            lazy_static::lazy_static!(
+                static ref S1: regex::Regex = regex::Regex::new(SYNTAX_1_PATTERN).unwrap();
+                static ref S2: regex::Regex = regex::Regex::new(SYNTAX_2_PATTERN).unwrap();
+            );
+
+            /// fetches capture group by group index and returns it as &str
+            fn capture_group_at<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
+                return capture.get(group_index).map_or("", |c| c.as_str());
+            }
+
+            let mut result = text.to_string();
+
+            // Syntax 1 = [id`](id: someId)
+            // G0 = Original capture, G1 = Linked Text, G2 = Actual Id
+            for cap in S1.captures_iter(text) {
+                println!("From S1: {:?}", cap);
+                dbg!(capture_group_at(&cap, 1));
+                dbg!(capture_group_at(&cap, 2));
+                let replacement = format!(
+                    "[{}]({}#{})",
+                    capture_group_at(&cap, 1).trim(),
+                    &global_ids[capture_group_at(&cap, 2).trim()],
+                    slug::slugify(capture_group_at(&cap, 2).trim())
+                );
+                result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
+                println!("replaced Text: {:?}", result);
+            }
+
+            // Syntax 2 = {id: someId}
+            // G0 = Original capture, G1 = Actual Id
+            for cap in S2.captures_iter(text) {
+                println!("From S2: {:?}", cap);
+                dbg!(capture_group_at(&cap, 1));
+                let replacement = format!(
+                    "[{}]({}#{})",
+                    capture_group_at(&cap, 1).trim(),
+                    &global_ids[capture_group_at(&cap, 1).trim()],
+                    slug::slugify(capture_group_at(&cap, 1))
+                );
+                result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
+                println!("replaced Text: {:?}", result);
+            }
+
+            result
+        }
+    }
+
+    /// prints the parsed document (for debugging purposes)
+    #[allow(dead_code)]
+    fn show_document(&self) {
+        for section in self.sections.iter() {
+            dbg!(&section.name, &section.caption, section.is_commented);
+
+            for (_ln, key, value) in section.header.0.iter() {
+                dbg!(key, value);
+            }
+
+            dbg!(&section.body);
+            for subsection in section.sub_sections.0.iter() {
+                dbg!(
+                    &subsection.name,
+                    &subsection.caption,
+                    &subsection.is_commented
+                );
+
+                for (_ln, key, value) in subsection.header.0.iter() {
+                    dbg!(key, value);
+                }
+
+                dbg!(&subsection.body);
+            }
+        }
     }
 
     /// Filters out commented parts from the parsed document.
@@ -804,6 +955,10 @@ pub enum Interpreter {
     },
     StuckOnForeignVariable {
         variable: String,
+        state: InterpreterState,
+    },
+    CheckID {
+        doc_index: usize,
         state: InterpreterState,
     },
     Done {
