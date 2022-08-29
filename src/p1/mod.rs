@@ -19,6 +19,20 @@ pub enum Error {
         line_number: usize,
     },
 
+    #[error("unknown data: {message}, line_number: {line_number}, doc: {doc_id}")]
+    UnknownData {
+        message: String,
+        doc_id: String,
+        line_number: usize,
+    },
+
+    #[error("missing data: {message}, line_number: {line_number}, doc: {doc_id}")]
+    MissingData {
+        message: String,
+        doc_id: String,
+        line_number: usize,
+    },
+
     #[error("forbidden usage: {message}, line_number: {line_number}, doc: {doc_id}")]
     ForbiddenUsage {
         message: String,

@@ -17368,6 +17368,110 @@ mod component {
     }
 
     #[test]
+    fn caption_body_conflicts() {
+        // Caption and Header Value conflict
+        intf!(
+             "-- ftd.row A: 
+            caption message: Default message
+            
+            -- A: Im the message here 
+            message: No, I'm the chosen one
+            ",
+            "forbidden usage: pass either caption or header_value for header 'message', line_number: 4, doc: foo"
+        );
+
+        // Caption and Body conflict
+        intf!(
+             "-- ftd.row A: 
+            caption or body msg: 
+            
+            -- A: Caption will say hello
+
+            No, body will say hello
+
+            ",
+            "forbidden usage: pass either body or caption or header_value, ambiguity in 'msg', line_number: 4, doc: foo"
+        );
+
+        // Body and Header value conflict
+        intf!(
+            "-- ftd.row A: 
+            body msg: 
+            
+            -- A: 
+            msg: Finally I can occupy msg 
+
+            Heh, like you can, Im still here 
+            ",
+            "forbidden usage: pass either body or header_value for header 'msg', line_number: 4, doc: foo"
+        );
+
+        // Caption, Body and Header value conflict
+        intf!(
+            "-- ftd.text: Im going to catch text first !!
+            text: Who knows I might catch it first. 
+
+            Are you sure about that ?
+            ",
+            "forbidden usage: pass either body or caption or header_value, ambiguity in 'text', line_number: 1, doc: foo"
+        );
+
+        // No body accepting header
+        intf!(
+            "-- ftd.row A:
+            caption name:
+
+            -- A: 
+            name: Anonymous
+
+            Did I forgot to add some header ?
+            Hopefully not             
+
+            ",
+            "unknown data: body passed with no header accepting it !!, line_number: 4, doc: foo"
+        );
+
+        // No caption accepting header
+        intf!(
+            "-- ftd.row A:
+            body content:
+
+            -- A: There is no victory without sacrifice
+
+            Caption is right but is there any header who will accept it ?
+
+            ",
+            "unknown data: caption passed with no header accepting it !!, line_number: 4, doc: foo"
+        );
+
+        // No data passed for body
+        intf!(
+            "-- ftd.row A:
+            body content:
+
+            ;; Body not passed here maybe someone mistakenly missed it 
+            ;; Or maybe someone out there is testing the fate of this code
+            -- A:
+
+            ",
+            "missing data: body or header_value, none of them are passed for 'content', line_number: 6, doc: foo"
+        );
+
+        // No data passed for caption
+        intf!(
+            "-- ftd.row A:
+            caption title:
+
+            ;; Caption not passed here 
+            ;; Maybe someone keeps on forgetting to write necessary stuff
+            -- A:
+
+            ",
+            "missing data: caption or header_value, none of them are passed for 'title', line_number: 6, doc: foo"
+        );
+    }
+
+    #[test]
     fn duplicate_headers() {
         // Repeated header definition with the same name (forbidden)
         intf!(

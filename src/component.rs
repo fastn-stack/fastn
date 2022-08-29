@@ -581,6 +581,8 @@ impl ChildComponent {
         let root_property =
             get_root_property(line_number, name, caption, doc, &all_arguments, inherits)?;
 
+        assert_caption_body_checks(&root.full_name, p1, doc, caption, body, line_number)?;
+
         return Ok(Self {
             line_number,
             properties: read_properties(
@@ -1781,6 +1783,15 @@ impl Component {
 
         let events = p1.header.get_events(p1.line_number, doc, &arguments)?;
 
+        assert_caption_body_checks(
+            &root,
+            &p1.header,
+            doc,
+            &p1.caption,
+            &p1.body,
+            p1.line_number,
+        )?;
+
         Ok(Component {
             full_name: doc.resolve_name(p1.line_number, &name)?,
             properties: read_properties(
@@ -2191,6 +2202,15 @@ pub fn recursive_child_component(
             new_caption = None;
         }
     }
+
+    assert_caption_body_checks(
+        full_name.as_str(),
+        &sub.header,
+        doc,
+        &sub.caption,
+        &sub.body,
+        sub.line_number,
+    )?;
 
     properties.extend(read_properties(
         sub.line_number,
@@ -2615,6 +2635,359 @@ pub fn read_properties(
     }
 
     Ok(properties)
+}
+
+/// asserts caption-body checks on components.
+///
+/// It includes
+///
+/// # Caption/Body/Header_value conflicts
+/// - This happens if any argument accepts data from more than one way
+/// and the user doesn't pass this data in exactly one way
+///
+/// # Missing data checks
+/// - This happens if any (required) argument doesn't get the data from any way it takes
+///
+/// # Unknown data checks
+/// - This happens when there is no argument to accept the data passed from caption/body
+///
+fn assert_caption_body_checks(
+    root: &str,
+    p1: &ftd::p1::Header,
+    doc: &ftd::p2::TDoc,
+    caption: &Option<String>,
+    body: &Option<(usize, String)>,
+    line_number: usize,
+) -> ftd::p1::Result<()> {
+    // No checks on ftd#ui
+    if is_it_ui(root) {
+        return Ok(());
+    }
+
+    let mut has_caption = caption.is_some();
+    let mut has_body = body.is_some();
+
+    let mut properties = None;
+    let mut header_list: Option<&ftd::p1::Header> = Some(p1);
+
+    let mut thing = doc.get_thing(line_number, root)?;
+    loop {
+        // Either the component is kernel or variable/derived component
+        if let ftd::p2::Thing::Component(c) = thing {
+            let local_arguments = &c.arguments;
+
+            check_caption_body_conflicts(
+                &c.full_name,
+                local_arguments,
+                properties,
+                header_list,
+                doc,
+                has_caption,
+                has_body,
+                line_number,
+            )?;
+
+            // stop checking once you hit the top-most kernel component or ftd#ui component
+            if c.kernel || is_it_ui(&c.root) {
+                break;
+            }
+
+            // get the parent component and do the same checks
+            thing = doc.get_thing(line_number, &c.root)?;
+            properties = Some(c.properties.clone());
+
+            // These things are only available to the lowest level component
+            has_caption = false;
+            has_body = false;
+            header_list = None;
+        }
+    }
+
+    return Ok(());
+
+    /// checks if the root == ftd#ui
+    fn is_it_ui(root: &str) -> bool {
+        root.eq("ftd#ui")
+    }
+
+    /// checks for body and caption conflicts using the given header list,
+    /// arguments and properties map of the component
+    #[allow(clippy::too_many_arguments)]
+    fn check_caption_body_conflicts(
+        full_name: &str,
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        properties: Option<std::collections::BTreeMap<String, Property>>,
+        p1: Option<&ftd::p1::Header>,
+        doc: &ftd::p2::TDoc,
+        has_caption: bool,
+        has_body: bool,
+        line_number: usize,
+    ) -> ftd::p1::Result<()> {
+        /// returns a hashset`<key>` of header keys which have non-empty values
+        fn get_header_set_with_values(
+            p1: Option<&ftd::p1::Header>,
+        ) -> std::collections::HashSet<String> {
+            let mut header_set = std::collections::HashSet::new();
+
+            // For Some(header = p1) we need to make a set of headers with values
+            if let Some(header) = p1 {
+                for (_ln, k, v) in header.0.iter() {
+                    if !v.is_empty() {
+                        header_set.insert(k.to_string());
+                    }
+                }
+            }
+
+            header_set
+        }
+
+        /// checks if the hashset of headers has this particular argument or not
+        fn has_header_value(
+            argument: &str,
+            header_set: Option<&std::collections::HashSet<String>>,
+        ) -> bool {
+            if let Some(s) = header_set {
+                s.contains(argument)
+            } else {
+                false
+            }
+        }
+
+        /// checks if the argument has been passed down as property
+        fn has_property_value(
+            argument: &str,
+            properties: &Option<std::collections::BTreeMap<String, Property>>,
+        ) -> bool {
+            if let Some(p) = properties {
+                p.contains_key(argument)
+            } else {
+                false
+            }
+        }
+
+        let mut caption_pass = false;
+        let mut body_pass = false;
+        let header_set = get_header_set_with_values(p1);
+
+        for (arg, kind) in arguments.iter() {
+            // in case the kind is optional
+            let inner_kind = kind.inner();
+
+            let has_value = has_header_value(arg, Some(&header_set));
+            let has_property = has_property_value(arg, &properties);
+
+            match inner_kind {
+                ftd::p2::Kind::String {
+                    caption,
+                    body,
+                    default,
+                    ..
+                } => {
+                    let has_default = default.is_some();
+                    match (caption, body) {
+                        (true, true) => {
+                            // accepts data from either body or caption or header_value
+                            // if passed by 2 or more ways then throw error
+                            if ((has_property || has_body || has_caption && has_value)
+                                && (has_caption || has_value))
+                                || (has_property && has_body)
+                            {
+                                return Err(ftd::p1::Error::ForbiddenUsage {
+                                    message: format!(
+                                        "pass either body or caption or header_value, ambiguity in \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            // check if data is available in exactly one way
+                            // also avoid throwing error when argument is optional kind or has default value
+                            // and no data is passed in any way
+                            if !(has_caption
+                                || has_body
+                                || has_value
+                                || has_property
+                                || has_default
+                                || kind.is_optional())
+                            {
+                                return Err(ftd::p1::Error::MissingData {
+                                    message: format!(
+                                        "body or caption or header_value, none of them are passed for \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            // check if caption is utilized if passed
+                            if has_caption {
+                                caption_pass = true;
+                            }
+
+                            // check if body is utilized if passed
+                            if has_body {
+                                body_pass = true;
+                            }
+                        }
+                        (true, false) => {
+                            // check if the component has caption or header_value (not both)
+                            // if data conflicts from any 2 ways
+                            if ((has_property || has_value) && has_caption)
+                                || (has_value && has_property)
+                            {
+                                return Err(ftd::p1::Error::ForbiddenUsage {
+                                    message: format!(
+                                        "pass either caption or header_value for header \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            // check if data is available from either caption/header_value
+                            // also avoid throwing error when argument is optional kind or has default value
+                            // and no data is passed in any way
+                            if !(has_caption
+                                || has_value
+                                || has_property
+                                || has_default
+                                || kind.is_optional())
+                            {
+                                return Err(ftd::p1::Error::MissingData {
+                                    message: format!(
+                                        "caption or header_value, none of them are passed for \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            // check if caption is utilized if passed
+                            if has_caption {
+                                caption_pass = true;
+                            }
+                        }
+                        (false, true) => {
+                            // check if the component has body or not
+                            // if body is not passed throw error
+                            if ((has_property || has_value) && has_body)
+                                || (has_property && has_value)
+                            {
+                                return Err(ftd::p1::Error::ForbiddenUsage {
+                                    message: format!(
+                                        "pass either body or header_value for header \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            // check if data is available from either body/header_value
+                            // also avoid throwing error when argument is optional kind or has default value
+                            // and no data is passed in any way
+                            if !(has_body
+                                || has_value
+                                || has_property
+                                || has_default
+                                || kind.is_optional())
+                            {
+                                return Err(ftd::p1::Error::MissingData {
+                                    message: format!(
+                                        "body or header_value, none of them are passed for \'{}\'",
+                                        arg
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                });
+                            }
+
+                            // check if body is utilized if passed
+                            if has_body {
+                                body_pass = true;
+                            }
+                        }
+                        (false, false) => continue,
+                    }
+                }
+                ftd::p2::Kind::Integer { default, .. }
+                | ftd::p2::Kind::Decimal { default, .. }
+                | ftd::p2::Kind::Boolean { default, .. }
+                    if arg.eq("value")
+                        && matches!(full_name, "ftd#integer" | "ftd#boolean" | "ftd#decimal") =>
+                {
+                    // checks on ftd.integer, ftd.decimal, ftd.boolean
+                    // these components take data from either caption or
+                    // header_value when invoked or when data is passed to it
+                    // from any variable component
+                    let has_default = default.is_some();
+
+                    // check if data conflicts from any 2 two ways
+                    if ((has_property || has_value) && has_caption) || (has_value && has_property) {
+                        return Err(ftd::p1::Error::ForbiddenUsage {
+                            message: format!(
+                                "pass either caption or header_value for header \'{}\'",
+                                arg
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        });
+                    }
+
+                    // check if data is available in exactly one way
+                    if !(has_caption
+                        || has_value
+                        || has_property
+                        || has_default
+                        || kind.is_optional())
+                    {
+                        return Err(ftd::p1::Error::MissingData {
+                            message: format!(
+                                "caption or header_value, none of them are passed for \'{}\'",
+                                arg
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        });
+                    }
+
+                    // check if caption is utilized if passed
+                    if has_caption {
+                        caption_pass = true;
+                    }
+                }
+                _ => continue,
+            }
+        }
+
+        // check if both caption and body is utilized
+        if !(caption_pass && body_pass) {
+            // if caption is passed and caption not utilized then throw error
+            if !caption_pass && has_caption {
+                return Err(ftd::p1::Error::UnknownData {
+                    message: "caption passed with no header accepting it !!".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                });
+            }
+
+            // if body is passed and body not utilized then throw error
+            if !body_pass && has_body {
+                return Err(ftd::p1::Error::UnknownData {
+                    message: "body passed with no header accepting it !!".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                });
+            }
+        }
+
+        Ok(())
+    }
 }
 
 pub(crate) fn universal_arguments() -> ftd::Map<ftd::p2::Kind> {
