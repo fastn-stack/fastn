@@ -781,7 +781,6 @@ impl ParsedDocument {
         &mut self,
         global_ids: &std::collections::HashMap<String, String>,
     ) -> ftd::p1::Result<()> {
-
         // TODO: Iterate through doc and replace with links
         for s in self.sections.iter_mut() {
             // Testing on ft.markdown for now (section level only)
