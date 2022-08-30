@@ -112,15 +112,14 @@ impl State {
     }
 
     fn clean_content(&mut self) -> String {
-        let mut valid_line_number = 0;
+        let mut valid_line_number = None;
         let new_line_content = self.content.split('\n');
         for (line_number, line) in new_line_content.enumerate() {
             self.line_number += 1;
-            if !valid_line(line) {
-                continue;
+            if valid_line(line) {
+                valid_line_number = Some(line_number);
+                break;
             }
-            valid_line_number = line_number;
-            break;
         }
         content_index(self.content.as_str(), valid_line_number)
     }
@@ -250,11 +249,11 @@ impl State {
         self.content = self.clean_content();
         if let Err(ftd::p11::Error::SectionNotFound { .. }) = self.reading_section() {
             let mut value = vec![];
-            let mut new_line_number = 0;
+            let mut new_line_number = None;
             let split_content = self.content.as_str().split('\n');
             for (line_number, line) in split_content.enumerate() {
-                new_line_number = line_number;
                 if line.starts_with("-- ") || line.starts_with("/-- ") {
+                    new_line_number = Some(line_number);
                     break;
                 }
                 value.push(line.to_string());
@@ -283,11 +282,11 @@ impl State {
     fn reading_caption_value(&mut self) -> ftd::p11::Result<()> {
         self.content = self.clean_content();
         let mut value = vec![];
-        let mut new_line_number = 0;
+        let mut new_line_number = None;
         let split_content = self.content.as_str().split('\n');
         for (line_number, line) in split_content.enumerate() {
-            new_line_number = line_number;
             if line.starts_with("-- ") || line.starts_with("/-- ") {
+                new_line_number = Some(line_number);
                 break;
             }
             value.push(line.to_string());
@@ -313,11 +312,11 @@ impl State {
     fn reading_body_value(&mut self) -> ftd::p11::Result<()> {
         self.content = self.clean_content();
         let mut value = vec![];
-        let mut new_line_number = 0;
+        let mut new_line_number = None;
         let split_content = self.content.as_str().split('\n');
         for (line_number, line) in split_content.enumerate() {
-            new_line_number = line_number;
             if line.starts_with("-- ") || line.starts_with("/-- ") {
+                new_line_number = Some(line_number);
                 break;
             }
             value.push(line.to_string());
@@ -343,10 +342,10 @@ impl State {
 
     fn reading_inline_headers(&mut self) -> ftd::p11::Result<()> {
         let mut headers = vec![];
-        let mut new_line_number = 0;
+        let mut new_line_number = None;
         for (line_number, line) in self.content.split('\n').enumerate() {
-            new_line_number = line_number;
             if line.trim().is_empty() || line.starts_with("-- ") || line.starts_with("/-- ") {
+                new_line_number = Some(line_number);
                 break;
             }
             self.line_number += 1;
@@ -365,6 +364,7 @@ impl State {
                     caption,
                 ));
             } else {
+                new_line_number = Some(line_number);
                 break;
             }
         }
@@ -498,10 +498,13 @@ fn new_line_split(s: &str) -> (String, String) {
     }
 }
 
-fn content_index(content: &str, line_number: usize) -> String {
+fn content_index(content: &str, line_number: Option<usize>) -> String {
     let new_line_content = content.split('\n');
     let content = new_line_content.collect_vec();
-    content[line_number..].join("\n")
+    match line_number {
+        Some(line_number) if content.len() > line_number => content[line_number..].join("\n"),
+        _ => "".to_string(),
+    }
 }
 
 #[cfg(test)]
@@ -580,11 +583,11 @@ mod test {
                 .list()
         );
 
-        /*p!(
-            "-- foo:\n\nhello world\n--- bar:",
-            super::Section::with_name("foo")
+        p!(
+            "-- foo:\n\nhello world\n-- bar:\n\n-- end: foo",
+            ftd::p11::Section::with_name("foo")
                 .and_body("hello world")
-                .add_sub_section(super::SubSection::with_name("bar"))
+                .add_sub_section(ftd::p11::Section::with_name("bar"))
                 .list()
         );
 
@@ -594,21 +597,26 @@ mod test {
             -- foo:
 
             body ho
-            --- dodo:
+
+            -- dodo:
+
+            -- end: foo
+
+
             -- bar:
 
             bar body
             "
             ),
             vec![
-                super::Section::with_name("foo")
+                ftd::p11::Section::with_name("foo")
                     .and_body("body ho")
-                    .add_sub_section(super::SubSection::with_name("dodo")),
-                super::Section::with_name("bar").and_body("bar body")
+                    .add_sub_section(ftd::p11::Section::with_name("dodo")),
+                ftd::p11::Section::with_name("bar").and_body("bar body")
             ],
         );
 
-        p!(
+        /*p!(
             indoc!(
                 "
             -- foo:

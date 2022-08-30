@@ -78,6 +78,11 @@ impl Section {
             .push(ftd::p11::Header::kv(0, key, None, Some(value.to_string())));
         self
     }
+
+    pub fn and_body(mut self, body: &str) -> Self {
+        self.body = Some(ftd::p11::Body::body(0, body));
+        self
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -90,7 +95,7 @@ impl Body {
     pub(crate) fn body(line_number: usize, value: &str) -> Body {
         Body {
             line_number,
-            value: value.to_string(),
+            value: value.trim().to_string(),
         }
     }
     pub fn without_line_number(&self) -> Self {
