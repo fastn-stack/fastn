@@ -86,7 +86,7 @@ impl InterpreterState {
         }
 
         // Debugging doc
-        self.document_stack[l].show_document();
+        // self.document_stack[l].show_document();
 
         let parsed_document = &mut self.document_stack[l];
 
@@ -785,9 +785,7 @@ impl ParsedDocument {
             // Testing on ft.markdown for now (section level only)
             if s.name.contains("markdown") {
                 if let Some(ref body) = s.body {
-                    // dbg!(body);
                     s.body = Some((body.0, replace_text(body.1.as_str(), global_ids)));
-                    // dbg!(&s.body);
                 }
             }
         }
