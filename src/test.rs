@@ -42,6 +42,13 @@ pub fn interpret_helper(
                     },
                 )?;
             }
+            ftd::Interpreter::CheckID {
+                doc_index: index,
+                state: st,
+            } => {
+                // No config in TestLibrary ignoring processing terms for now
+                s = st.continue_after_checking_id(None, index)?;
+            }
         }
     }
     Ok(document)

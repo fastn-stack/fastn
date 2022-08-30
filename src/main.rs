@@ -207,6 +207,7 @@ pub fn interpret_helper(
                 state: st,
             } => {
                 // No config in ftd::ExampleLibrary ignoring processing terms for now
+                // using dummy id map for debugging
                 s = st.continue_after_checking_id(Some(&lib.dummy_global_ids_map()), index)?;
             }
         }
@@ -221,8 +222,9 @@ impl ExampleLibrary {
         let mut global_ids: std::collections::HashMap<String, String> =
             std::collections::HashMap::new();
 
-        global_ids.insert("foo".to_string(), "foo/bar.ftd".to_string());
-        global_ids.insert("hello there".to_string(), "/hello/there.txt".to_string());
+        global_ids.insert("foo".to_string(), "/foo/bar/".to_string());
+        global_ids.insert("hello".to_string(), "/hello/there/".to_string());
+        global_ids.insert("some id".to_string(), "/some/id/".to_string());
 
         global_ids
     }

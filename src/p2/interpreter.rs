@@ -774,21 +774,20 @@ impl ParsedDocument {
     ///
     /// Syntax 1: `[<linked-text>]`(id: <id-to-link>)
     ///
-    /// Syntax 2: {id: <id-to-link>}
+    /// Syntax 2: {<id-to-link>}
     ///
     /// In case 2, the linked text will be same as the id
     fn replace_linking_syntax_with_links(
         &mut self,
         global_ids: &std::collections::HashMap<String, String>,
     ) -> ftd::p1::Result<()> {
-
-        // TODO: Iterate through doc and replace with links
         for s in self.sections.iter_mut() {
             // Testing on ft.markdown for now (section level only)
             if s.name.contains("markdown") {
                 if let Some(ref body) = s.body {
                     // dbg!(body);
                     s.body = Some((body.0, replace_text(body.1.as_str(), global_ids)));
+                    // dbg!(&s.body);
                 }
             }
         }
@@ -810,7 +809,7 @@ impl ParsedDocument {
             // Refer someId with the same linked text i.e <someId>
             // replaced link = [someId]([document-id]#[slugified(someId)])
             const SYNTAX_2_PATTERN: &str = r"(?x) # Enabling comment mode
-            \{\s*id\s*: # Here Linked Text is same as Referred Id
+            \{\s* # Here Linked Text is same as Referred Id
             (?P<actual_id>[\sa-zA-Z\d]+)\} # Referred Id Capture Group <actual_id>";
 
             lazy_static::lazy_static!(
@@ -828,9 +827,6 @@ impl ParsedDocument {
             // Syntax 1 = [id`](id: someId)
             // G0 = Original capture, G1 = Linked Text, G2 = Actual Id
             for cap in S1.captures_iter(text) {
-                println!("From S1: {:?}", cap);
-                dbg!(capture_group_at(&cap, 1));
-                dbg!(capture_group_at(&cap, 2));
                 let replacement = format!(
                     "[{}]({}#{})",
                     capture_group_at(&cap, 1).trim(),
@@ -838,14 +834,11 @@ impl ParsedDocument {
                     slug::slugify(capture_group_at(&cap, 2).trim())
                 );
                 result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
-                println!("replaced Text: {:?}", result);
             }
 
             // Syntax 2 = {id: someId}
             // G0 = Original capture, G1 = Actual Id
             for cap in S2.captures_iter(text) {
-                println!("From S2: {:?}", cap);
-                dbg!(capture_group_at(&cap, 1));
                 let replacement = format!(
                     "[{}]({}#{})",
                     capture_group_at(&cap, 1).trim(),
@@ -853,7 +846,6 @@ impl ParsedDocument {
                     slug::slugify(capture_group_at(&cap, 1))
                 );
                 result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
-                println!("replaced Text: {:?}", result);
             }
 
             result
