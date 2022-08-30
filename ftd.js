@@ -1129,53 +1129,53 @@ window.ftd.post_init = function () {
             background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link.light")};
         }
         body.fpm-dark .ft_md a {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link.dark);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.link.dark);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link.dark")};
         }
         
         .ft_md code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.code.light);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.code.light);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".code.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".code.light")};
         }
         body.fpm-dark .ft_md code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.code.dark);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.code.dark);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".code.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".code.dark")};
         }        
                 
         .ft_md a:visited {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-visited.light);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.link-visited.light);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited.light")};
         }      
         body.fpm-dark .ft_md a:visited {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-visited.dark);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.link-visited.dark);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited.dark")};
         }
             
         .ft_md a code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-code.light);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.link-code.light);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-code.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-code.light")};
         }
         body.fpm-dark .ft_md a code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-code.dark);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.link-code.dark);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-code.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-code.dark")};
         }
                 
         .ft_md a:visited code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-visited-code.light);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.link-visited-code.light);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited-code.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited-code.light")};
         }
         body.fpm-dark .ft_md a:visited code {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link-visited-code.dark);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.link-visited-code.dark);            
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited-code.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited-code.dark")};            
         }
         
         .ft_md ul ol li:before {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.ul-ol-li-before.light);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.ul-ol-li-before.light);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".ul-ol-li-before.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".ul-ol-li-before.light")};
         }     
         body.fpm-dark .ft_md ul ol li:before {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.ul-ol-li-before.dark);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.ul-ol-li-before.dark);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".ul-ol-li-before.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".ul-ol-li-before.dark")};
         }     
         `;
 
