@@ -19,16 +19,8 @@ pub struct State {
 }
 
 impl State {
-    fn parse_(&mut self) -> ftd::p11::Result<()> {
-        self.content = self.clean_content();
-        while self.content.is_empty() {
-            self.reading_section()?;
-            self.content = self.clean_content();
-        }
-        Ok(())
-    }
-
     fn next(&mut self) -> ftd::p11::Result<()> {
+        self.end()?;
         self.content = self.clean_content();
         if self.content.trim().is_empty() {
             let sections = self.state.iter().map(|(v, _)| v.clone()).collect_vec();
@@ -37,7 +29,6 @@ impl State {
 
             return Ok(());
         }
-        self.end()?;
 
         if let Some((_, state)) = self.get_latest_state() {
             match state.clone() {
@@ -64,7 +55,8 @@ impl State {
     }
 
     fn end(&mut self) -> ftd::p11::Result<()> {
-        let (start_line, reset_lines) = new_line_split(self.content.as_str());
+        self.content = self.clean_content();
+        let (start_line, rest_lines) = new_line_split(self.content.as_str());
         if !start_line.starts_with("-- ") {
             return Ok(());
         }
@@ -113,7 +105,7 @@ impl State {
                     _ => {}
                 }
             }
-            self.content = reset_lines;
+            self.content = rest_lines;
         }
 
         Ok(())
@@ -175,8 +167,8 @@ impl State {
     }
 
     fn reading_block_headers(&mut self) -> ftd::p11::Result<()> {
-        self.content = self.clean_content();
         self.end()?;
+        self.content = self.clean_content();
         let (section, parsing_states) =
             self.state
                 .last_mut()
@@ -198,8 +190,6 @@ impl State {
             return self.next();
         }
 
-        self.line_number += 1;
-        self.content = rest_lines;
         let is_commented = start_line.starts_with("/-- ");
         let line = if is_commented {
             &start_line[3..]
@@ -218,6 +208,8 @@ impl State {
             return self.next();
         };
 
+        self.line_number += 1;
+        self.content = rest_lines;
         section.block_body = true;
 
         if is_caption(key) && kind.is_none() {
@@ -341,14 +333,20 @@ impl State {
                 line_number,
             })?
             .0;
-        section.body = Some(ftd::p11::Body::body(line_number, &value.join("\n")));
+        if !value.is_empty() {
+            section.body = Some(ftd::p11::Body::body(line_number, &value.join("\n")));
+        }
+        let (_, parsing_state) = self.state.last_mut().unwrap();
+        parsing_state.push(ParsingState::ReadingSubsection);
         self.next()
     }
 
     fn reading_inline_headers(&mut self) -> ftd::p11::Result<()> {
-        self.content = self.clean_content();
         let mut headers = vec![];
         for (line_number, line) in self.content.split('\n').enumerate() {
+            if line.trim().is_empty() || line.starts_with("-- ") || line.starts_with("/-- ") {
+                return Ok(());
+            }
             self.line_number += 1;
             if !valid_line(line) {
                 continue;
@@ -428,7 +426,7 @@ pub fn parse(content: &str, doc_id: &str) -> ftd::p11::Result<Vec<ftd::p11::Sect
     let mut state = State::default();
     state.content = content.to_string();
     state.doc_id = doc_id.to_string();
-    state.parse_()?;
+    state.next()?;
     Ok(state.sections)
 }
 
@@ -500,8 +498,659 @@ fn new_line_split(s: &str) -> (String, String) {
 fn content_index(content: &str, line_number: usize) -> String {
     let new_line_content = content.split('\n');
     let content = new_line_content.collect_vec();
-    if content.len().eq(&(line_number + 1)) {
-        return "".to_string();
-    }
     content[line_number..].join("\n")
+}
+
+#[cfg(test)]
+mod test {
+    use {indoc::indoc, pretty_assertions::assert_eq}; // macro
+
+    // these are macros instead of functions so stack trace top points to actual
+    // invocation of these, instead of inside these, so jumping to failing test
+    // is easier.
+    macro_rules! p {
+        ($s:expr, $t: expr,) => {
+            p!($s, $t)
+        };
+        ($s:expr, $t: expr) => {
+            assert_eq!(
+                super::parse($s, "foo")
+                    .unwrap_or_else(|e| panic!("{}", e))
+                    .iter()
+                    .map(|v| v.without_line_number())
+                    .collect::<Vec<ftd::p11::Section>>(),
+                $t
+            )
+        };
+    }
+
+    macro_rules! f {
+        ($s:expr, $m: expr,) => {
+            f!($s, $m)
+        };
+        ($s:expr, $m: expr) => {
+            match super::parse($s, "foo") {
+                Ok(r) => panic!("expected failure, found: {:?}", r),
+                Err(e) => {
+                    let expected = $m.trim();
+                    let f2 = e.to_string();
+                    let found = f2.trim();
+                    if expected != found {
+                        let patch = diffy::create_patch(expected, found);
+                        let f = diffy::PatchFormatter::new().with_color();
+                        print!(
+                            "{}",
+                            f.fmt_patch(&patch)
+                                .to_string()
+                                .replace("\\ No newline at end of file", "")
+                        );
+                        println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                        panic!("test failed")
+                    }
+                }
+            }
+        };
+    }
+
+    #[test]
+    fn sub_section() {
+        p!(
+            "-- foo:\n\n-- bar:\n\n-- end: foo",
+            ftd::p11::Section::with_name("foo")
+                .add_sub_section(ftd::p11::Section::with_name("bar"))
+                .list()
+        );
+
+        p!(
+            "-- foo: hello\n-- bar:\n\n-- end: foo",
+            ftd::p11::Section::with_name("foo")
+                .and_caption("hello")
+                .add_sub_section(ftd::p11::Section::with_name("bar"))
+                .list()
+        );
+
+        /*p!(
+            "-- foo:\nk:v\n--- bar:",
+            super::Section::with_name("foo")
+                .add_header("k", "v")
+                .add_sub_section(super::SubSection::with_name("bar"))
+                .list()
+        );
+
+        p!(
+            "-- foo:\n\nhello world\n--- bar:",
+            super::Section::with_name("foo")
+                .and_body("hello world")
+                .add_sub_section(super::SubSection::with_name("bar"))
+                .list()
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            body ho
+            --- dodo:
+            -- bar:
+
+            bar body
+            "
+            ),
+            vec![
+                super::Section::with_name("foo")
+                    .and_body("body ho")
+                    .add_sub_section(super::SubSection::with_name("dodo")),
+                super::Section::with_name("bar").and_body("bar body")
+            ],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            body ho
+            -- bar:
+
+            bar body
+            --- dodo:
+            "
+            ),
+            vec![
+                super::Section::with_name("foo").and_body("body ho"),
+                super::Section::with_name("bar")
+                    .and_body("bar body")
+                    .add_sub_section(super::SubSection::with_name("dodo"))
+            ],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            body ho
+            -- bar:
+
+            bar body
+            --- dodo:
+            --- rat:
+            "
+            ),
+            vec![
+                super::Section::with_name("foo").and_body("body ho"),
+                super::Section::with_name("bar")
+                    .and_body("bar body")
+                    .add_sub_section(super::SubSection::with_name("dodo"))
+                    .add_sub_section(super::SubSection::with_name("rat"))
+            ],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            body ho
+
+            -- bar:
+
+            bar body
+
+            --- dodo:
+            --- rat:
+            "
+            ),
+            vec![
+                super::Section::with_name("foo").and_body("body ho"),
+                super::Section::with_name("bar")
+                    .and_body("bar body")
+                    .add_sub_section(super::SubSection::with_name("dodo"))
+                    .add_sub_section(super::SubSection::with_name("rat"))
+            ],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            body ho
+
+            -- bar:
+
+            bar body
+
+            --- dodo:
+
+            --- rat:
+
+
+            "
+            ),
+            vec![
+                super::Section::with_name("foo").and_body("body ho"),
+                super::Section::with_name("bar")
+                    .and_body("bar body")
+                    .add_sub_section(super::SubSection::with_name("dodo"))
+                    .add_sub_section(super::SubSection::with_name("rat"))
+            ],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            body ho
+            -- bar:
+
+            bar body
+            --- dodo:
+
+            hello
+            "
+            ),
+            vec![
+                super::Section::with_name("foo").and_body("body ho"),
+                super::Section::with_name("bar")
+                    .and_body("bar body")
+                    .add_sub_section(super::SubSection::with_name("dodo").and_body("hello"))
+            ],
+        );
+
+        p!(
+            "-- foo:\n\nhello world\n--- bar:",
+            super::Section::with_name("foo")
+                .and_body("hello world")
+                .add_sub_section(super::SubSection::with_name("bar"))
+                .list()
+        );
+
+        p!(
+            "-- foo:\n\nhello world\n--- bar: foo",
+            super::Section::with_name("foo")
+                .and_body("hello world")
+                .add_sub_section(super::SubSection::with_name("bar").and_caption("foo"))
+                .list()
+        );*/
+    }
+
+    /* #[test]
+    fn activity() {
+        p!(
+            indoc!(
+                "
+            -- step:
+            method: GET
+
+            --- realm.rr.activity:
+            okind:
+            oid:
+            ekind:
+
+            null
+
+        "
+            ),
+            vec![super::Section::with_name("step")
+                .add_header("method", "GET")
+                .add_sub_section(
+                    super::SubSection::with_name("realm.rr.activity")
+                        .add_header("okind", "")
+                        .add_header("oid", "")
+                        .add_header("ekind", "")
+                        .and_body("null")
+                )]
+        )
+    }
+
+    #[test]
+    fn escaping() {
+        p!(
+            indoc!(
+                "
+            -- hello:
+
+            \\-- yo: whats up?
+            \\--- foo: bar
+        "
+            ),
+            super::Section::with_name("hello")
+                .and_body("-- yo: whats up?\n--- foo: bar")
+                .list()
+        )
+    }
+
+    #[test]
+    fn comments() {
+        p!(
+            indoc!(
+                "
+            ; yo
+            -- foo:
+            ; yo
+            key: value
+
+            body ho
+            ; yo
+
+            -- bar:
+            ; yo
+            b: ba
+            ; yo
+
+            bar body
+            ; yo
+            --- dodo:
+            ; yo
+            k: v
+            ; yo
+
+            hello
+            ; yo
+            "
+            ),
+            vec![
+                super::Section::with_name("foo")
+                    .and_body("body ho")
+                    .add_header("key", "value"),
+                super::Section::with_name("bar")
+                    .and_body("bar body")
+                    .add_header("b", "ba")
+                    .add_sub_section(
+                        super::SubSection::with_name("dodo")
+                            .add_header("k", "v")
+                            .and_body("hello")
+                    )
+            ],
+        );
+    }
+
+    #[test]
+    fn two() {
+        p!(
+            indoc!(
+                "
+            -- foo:
+            key: value
+
+            body ho
+
+            -- bar:
+            b: ba
+
+            bar body
+            --- dodo:
+            k: v
+
+            hello
+            "
+            ),
+            vec![
+                super::Section::with_name("foo")
+                    .and_body("body ho")
+                    .add_header("key", "value"),
+                super::Section::with_name("bar")
+                    .and_body("bar body")
+                    .add_header("b", "ba")
+                    .add_sub_section(
+                        super::SubSection::with_name("dodo")
+                            .add_header("k", "v")
+                            .and_body("hello")
+                    )
+            ],
+        );
+    }
+
+    #[test]
+    fn empty_key() {
+        p!(
+            "-- foo:\nkey: \n",
+            super::Section::with_name("foo")
+                .add_header("key", "")
+                .list()
+        );
+
+        p!(
+            "-- foo:\n--- bar:\nkey:\n",
+            super::Section::with_name("foo")
+                .add_sub_section(super::SubSection::with_name("bar").add_header("key", ""))
+                .list()
+        )
+    }
+
+    #[test]
+    fn with_dash_dash() {
+        p!(
+            indoc!(
+                r#"
+            -- hello:
+
+            hello -- world: yo
+        "#
+            ),
+            super::Section::with_name("hello")
+                .and_body("hello -- world: yo")
+                .list()
+        );
+
+        p!(
+            indoc!(
+                r#"
+            -- hello:
+
+            --- realm.rr.step.body:
+
+            {
+              "body": "-- h0: Hello World\n\n-- markup:\n\ndemo cr 1\n",
+              "kind": "content",
+              "track": "amitu/index",
+              "version": "2020-11-16T04:13:14.642892+00:00"
+            }
+        "#
+            ),
+            super::Section::with_name("hello")
+                .add_sub_section(super::SubSection::with_name("realm.rr.step.body").and_body(
+                    &indoc!(
+                        r#"
+                        {
+                          "body": "-- h0: Hello World\n\n-- markup:\n\ndemo cr 1\n",
+                          "kind": "content",
+                          "track": "amitu/index",
+                          "version": "2020-11-16T04:13:14.642892+00:00"
+                        }"#
+                    )
+                ))
+                .list()
+        );
+    }
+
+    #[test]
+    fn indented_body() {
+        p!(
+            &indoc!(
+                "
+                 -- markup:
+
+                 hello world is
+
+                     not enough
+
+                     lol
+            "
+            ),
+            super::Section::with_name("markup")
+                .and_body("hello world is\n\n    not enough\n\n    lol")
+                .list(),
+        );
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+              body ho
+
+            yo
+
+            -- bar:
+
+                bar body
+
+            "
+            ),
+            vec![
+                super::Section::with_name("foo").and_body("  body ho\n\nyo"),
+                super::Section::with_name("bar").and_body("    bar body")
+            ],
+        );
+    }
+
+    #[test]
+    fn body_with_empty_lines() {
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+
+
+
+
+            hello
+
+
+
+
+
+
+
+
+
+            "
+            ),
+            vec![super::Section::with_name("foo").and_body("hello"),],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+            --- bar:
+
+
+
+
+            hello
+
+
+
+
+
+
+
+
+
+            "
+            ),
+            vec![super::Section::with_name("foo")
+                .add_sub_section(super::SubSection::with_name("bar").and_body("hello"))],
+        );
+    }
+
+    #[test]
+    fn basic() {
+        p!(
+            "-- foo: bar",
+            super::Section::with_name("foo").and_caption("bar").list()
+        );
+
+        p!("-- foo:", super::Section::with_name("foo").list());
+
+        p!("-- foo: ", super::Section::with_name("foo").list());
+
+        p!(
+            "-- foo:\nkey: value",
+            super::Section::with_name("foo")
+                .add_header("key", "value")
+                .list()
+        );
+
+        p!(
+            "-- foo:\nkey: value\nk2:v2",
+            super::Section::with_name("foo")
+                .add_header("key", "value")
+                .add_header("k2", "v2")
+                .list()
+        );
+
+        p!(
+            "-- foo:\n\nbody ho",
+            super::Section::with_name("foo").and_body("body ho").list()
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            body ho
+            -- bar:
+
+            bar body
+            "
+            ),
+            vec![
+                super::Section::with_name("foo").and_body("body ho"),
+                super::Section::with_name("bar").and_body("bar body")
+            ],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            body ho
+
+            yo
+
+            -- bar:
+
+            bar body
+
+            "
+            ),
+            vec![
+                super::Section::with_name("foo").and_body("body ho\n\nyo"),
+                super::Section::with_name("bar").and_body("bar body")
+            ],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            hello
+            "
+            ),
+            vec![super::Section::with_name("foo").and_body("hello"),],
+        );
+
+        f!("invalid", "foo:1 -> Expecting -- , found: invalid")
+    }
+
+    #[test]
+    fn strict_body() {
+        // section body without headers
+        f!(
+            indoc!(
+                "-- some-section:
+                This is body
+                "
+            ),
+            "foo:2 -> start section body 'This is body' after a newline!!"
+        );
+
+        // section body with headers
+        f!(
+            indoc!(
+                "-- some-section:
+                h1: v1
+                This is body
+                "
+            ),
+            "foo:3 -> start section body 'This is body' after a newline!!"
+        );
+
+        // subsection body without headers
+        f!(
+            indoc!(
+                "-- some-section:
+                h1: val
+
+                --- some-sub-section:
+                This is body
+                "
+            ),
+            "foo:5 -> start sub-section body 'This is body' after a newline!!"
+        );
+
+        // subsection body with headers
+        f!(
+            indoc!(
+                "-- some-section:
+                h1: val
+
+                --- some-sub-section:
+                h2: val
+                h3: val
+                This is body
+                "
+            ),
+            "foo:7 -> start sub-section body 'This is body' after a newline!!"
+        );
+    }*/
 }

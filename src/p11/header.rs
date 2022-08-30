@@ -60,4 +60,31 @@ impl Header {
             section,
         }
     }
+
+    pub fn without_line_number(&self) -> Self {
+        match self {
+            Header::KV {
+                line_number: _,
+                key,
+                kind,
+                value,
+            } => Header::KV {
+                line_number: 0,
+                key: key.to_owned(),
+                kind: kind.to_owned(),
+                value: value.to_owned(),
+            },
+            Header::Section {
+                line_number: _,
+                key,
+                kind,
+                section,
+            } => Header::Section {
+                line_number: 0,
+                key: key.to_owned(),
+                kind: kind.to_owned(),
+                section: section.to_owned(),
+            },
+        }
+    }
 }
