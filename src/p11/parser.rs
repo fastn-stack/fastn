@@ -88,12 +88,14 @@ impl State {
                 };
                 match state {
                     ParsingState::ReadingSection if caption.eq(section.name.as_str()) => {
+                        sections.reverse();
                         section.sub_sections.extend(sections);
                         break;
                     }
                     ParsingState::ReadingHeader { key, kind }
                         if caption.eq(format!("{}.{}", section.name, key).as_str()) =>
                     {
+                        sections.reverse();
                         section.headers.push(ftd::p11::Header::section(
                             line_number,
                             key.as_str(),
@@ -233,12 +235,12 @@ impl State {
                 ParsingState::ReadingBody
             } else {
                 ParsingState::ReadingHeader {
-                    key: "".to_string(),
+                    key: key.to_string(),
                     kind,
                 }
             });
         }
-        Ok(())
+        self.next()
     }
 
     fn reading_header_value(
@@ -273,7 +275,7 @@ impl State {
                 line_number,
                 header_key,
                 header_kind,
-                Some(value.join("\n")),
+                Some(value.join("\n").trim().to_string()),
             ));
         }
         self.next()
@@ -616,45 +618,28 @@ mod test {
             ],
         );
 
-        /*p!(
-            indoc!(
-                "
-            -- foo:
-
-            body ho
-            -- bar:
-
-            bar body
-            --- dodo:
-            "
-            ),
-            vec![
-                super::Section::with_name("foo").and_body("body ho"),
-                super::Section::with_name("bar")
-                    .and_body("bar body")
-                    .add_sub_section(super::SubSection::with_name("dodo"))
-            ],
-        );
-
         p!(
             indoc!(
                 "
             -- foo:
 
             body ho
+
+
             -- bar:
 
             bar body
-            --- dodo:
-            --- rat:
+
+            -- dodo:
+
+            -- end: bar
             "
             ),
             vec![
-                super::Section::with_name("foo").and_body("body ho"),
-                super::Section::with_name("bar")
+                ftd::p11::Section::with_name("foo").and_body("body ho"),
+                ftd::p11::Section::with_name("bar")
                     .and_body("bar body")
-                    .add_sub_section(super::SubSection::with_name("dodo"))
-                    .add_sub_section(super::SubSection::with_name("rat"))
+                    .add_sub_section(ftd::p11::Section::with_name("dodo"))
             ],
         );
 
@@ -665,20 +650,52 @@ mod test {
 
             body ho
 
+
             -- bar:
 
             bar body
 
-            --- dodo:
-            --- rat:
+            -- dodo:
+            -- rat:
+
+            -- end: bar
             "
             ),
             vec![
-                super::Section::with_name("foo").and_body("body ho"),
-                super::Section::with_name("bar")
+                ftd::p11::Section::with_name("foo").and_body("body ho"),
+                ftd::p11::Section::with_name("bar")
                     .and_body("bar body")
-                    .add_sub_section(super::SubSection::with_name("dodo"))
-                    .add_sub_section(super::SubSection::with_name("rat"))
+                    .add_sub_section(ftd::p11::Section::with_name("dodo"))
+                    .add_sub_section(ftd::p11::Section::with_name("rat"))
+            ],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            body ho
+
+
+            -- bar:
+
+            -- bar.cat:
+
+            bar body
+
+            -- dodo:
+            -- rat:
+
+            -- end: bar
+            "
+            ),
+            vec![
+                ftd::p11::Section::with_name("foo").and_body("body ho"),
+                ftd::p11::Section::with_name("bar")
+                    .add_header_str("cat", "bar body")
+                    .add_sub_section(ftd::p11::Section::with_name("dodo"))
+                    .add_sub_section(ftd::p11::Section::with_name("rat"))
             ],
         );
 
@@ -693,59 +710,36 @@ mod test {
 
             bar body
 
-            --- dodo:
-
-            --- rat:
-
-
-            "
-            ),
-            vec![
-                super::Section::with_name("foo").and_body("body ho"),
-                super::Section::with_name("bar")
-                    .and_body("bar body")
-                    .add_sub_section(super::SubSection::with_name("dodo"))
-                    .add_sub_section(super::SubSection::with_name("rat"))
-            ],
-        );
-
-        p!(
-            indoc!(
-                "
-            -- foo:
-
-            body ho
-            -- bar:
-
-            bar body
-            --- dodo:
+            -- dodo:
 
             hello
+
+            -- end: bar
             "
             ),
             vec![
-                super::Section::with_name("foo").and_body("body ho"),
-                super::Section::with_name("bar")
+                ftd::p11::Section::with_name("foo").and_body("body ho"),
+                ftd::p11::Section::with_name("bar")
                     .and_body("bar body")
-                    .add_sub_section(super::SubSection::with_name("dodo").and_body("hello"))
+                    .add_sub_section(ftd::p11::Section::with_name("dodo").and_body("hello"))
             ],
         );
 
         p!(
-            "-- foo:\n\nhello world\n--- bar:",
-            super::Section::with_name("foo")
+            "-- foo:\n\nhello world\n-- bar:\n\n-- end: foo",
+            ftd::p11::Section::with_name("foo")
                 .and_body("hello world")
-                .add_sub_section(super::SubSection::with_name("bar"))
+                .add_sub_section(ftd::p11::Section::with_name("bar"))
                 .list()
         );
 
         p!(
-            "-- foo:\n\nhello world\n--- bar: foo",
-            super::Section::with_name("foo")
+            "-- foo:\n\nhello world\n-- bar: foo\n\n-- end: foo",
+            ftd::p11::Section::with_name("foo")
                 .and_body("hello world")
-                .add_sub_section(super::SubSection::with_name("bar").and_caption("foo"))
+                .add_sub_section(ftd::p11::Section::with_name("bar").and_caption("foo"))
                 .list()
-        );*/
+        );
     }
 
     /* #[test]
