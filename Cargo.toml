@@ -74,3 +74,6 @@ default-features = false
 [dev-dependencies]
 diffy = "0.2"
 pretty_assertions = "1.2"
+
+#[dev-dependencies.rusty-hook]
+# We have intentionally decide not to use it.
