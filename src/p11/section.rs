@@ -72,6 +72,12 @@ impl Section {
     pub(crate) fn list(self) -> Vec<Self> {
         vec![self]
     }
+
+    pub fn add_header_str(mut self, key: &str, value: &str) -> Self {
+        self.headers
+            .push(ftd::p11::Header::kv(0, key, None, Some(value.to_string())));
+        self
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]

@@ -343,9 +343,11 @@ impl State {
 
     fn reading_inline_headers(&mut self) -> ftd::p11::Result<()> {
         let mut headers = vec![];
+        let mut new_line_number = 0;
         for (line_number, line) in self.content.split('\n').enumerate() {
+            new_line_number = line_number;
             if line.trim().is_empty() || line.starts_with("-- ") || line.starts_with("/-- ") {
-                return Ok(());
+                break;
             }
             self.line_number += 1;
             if !valid_line(line) {
@@ -366,6 +368,7 @@ impl State {
                 break;
             }
         }
+        self.content = content_index(self.content.as_str(), new_line_number);
 
         let doc_id = self.doc_id.to_string();
         let line_number = self.line_number;
@@ -569,15 +572,15 @@ mod test {
                 .list()
         );
 
-        /*p!(
-            "-- foo:\nk:v\n--- bar:",
-            super::Section::with_name("foo")
-                .add_header("k", "v")
-                .add_sub_section(super::SubSection::with_name("bar"))
+        p!(
+            "-- foo:\nk:v\n-- bar:\n\n-- end: foo",
+            ftd::p11::Section::with_name("foo")
+                .add_header_str("k", "v")
+                .add_sub_section(ftd::p11::Section::with_name("bar"))
                 .list()
         );
 
-        p!(
+        /*p!(
             "-- foo:\n\nhello world\n--- bar:",
             super::Section::with_name("foo")
                 .and_body("hello world")
