@@ -1,8 +1,8 @@
 -- boolean flag: true
 
 
-/-- ftd.markdown-color.link-code:
-light: purple
+-- ftd.markdown-color.link:
+light: yellow
 dark: orange
 
 -- ftd.text: Link
@@ -41,4 +41,8 @@ color: $ftd.markdown-background-color.link-visited-code
 
 -- ftd.text: ul ol li: before
 color: $ftd.markdown-background-color.ul-ol-li-before
+
+-- ftd.text:
+
+[abrar](/foo/)
 

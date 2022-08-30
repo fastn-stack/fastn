@@ -1122,10 +1122,11 @@ window.ftd.post_init = function () {
         // remove all colors from ftd.css: copy every deleted stuff in this function
         let markdown_style_sheet = document.createElement('style');
 
+
         markdown_style_sheet.innerHTML = `
         .ft_md a {
-            color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link.light);
-            background-color: window.ftd.get_value("main", ${MARKDOWN_BACKGROUND_COLOR}.link.light);
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link.light")};
         }
         body.fpm-dark .ft_md a {
             color: window.ftd.get_value("main", ${MARKDOWN_COLOR}.link.dark);
@@ -1378,4 +1379,5 @@ window.ftd.post_init = function () {
     }
     initialise_dark_mode();
     initialise_device();
+    update_markdown_colors();
 };

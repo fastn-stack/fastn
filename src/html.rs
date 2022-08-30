@@ -1083,6 +1083,7 @@ impl ftd::Markups {
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
         n.classes.extend(self.common.add_class());
+        n.classes.push("ft_md".to_string());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
 

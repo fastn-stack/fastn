@@ -1373,7 +1373,9 @@ pub mod markdown {
                 },
             },
             conditions: vec![],
-            flags: Default::default(),
+            flags: ftd::VariableFlags {
+                always_include: Some(true),
+            },
         })
     }
 
@@ -1396,7 +1398,9 @@ pub mod markdown {
                 },
             },
             conditions: vec![],
-            flags: Default::default(),
+            flags: ftd::VariableFlags {
+                always_include: Some(true),
+            },
         })
     }
 }
