@@ -1,0 +1,15 @@
+;; This previously worked when the arguments are locally defined
+-- ftd.text foo: $c
+optional string c:
+optional integer d:
+
+;; This works
+-- foo:
+c: xyz
+
+;; This works now since id is now a universal argument
+-- ftd.text t1: $id
+
+;; This works now (shows term and id)
+-- t1:
+id: some-id
