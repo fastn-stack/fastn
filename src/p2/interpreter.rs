@@ -779,7 +779,6 @@ impl ParsedDocument {
         global_ids: &std::collections::HashMap<String, String>,
     ) -> ftd::p1::Result<()> {
         for s in self.sections.iter_mut() {
-
             // Replacing linking syntax with links in
             // markdown section bodies (if any)
             if s.name.contains("markdown") {
@@ -793,12 +792,11 @@ impl ParsedDocument {
                             s.line_number,
                         )?,
                     ));
-                    dbg!(&s.body);
                 }
             }
 
             // Doing the same for subsection markdown bodies (if any)
-            for sub in s.sub_sections.0.iter_mut(){
+            for sub in s.sub_sections.0.iter_mut() {
                 if sub.name.contains("markdown") {
                     if let Some(ref body) = sub.body {
                         sub.body = Some((
@@ -811,10 +809,8 @@ impl ParsedDocument {
                             )?,
                         ));
                     }
-                    dbg!(&sub.body);
                 }
             }
-
         }
 
         return Ok(());
