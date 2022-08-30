@@ -971,6 +971,77 @@ pub fn default_bag() -> ftd::Map<ftd::p2::Thing> {
             }),
         ),
         (
+            "ftd#markdown-color-data".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#markdown-color-data".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ("link".to_string(), ftd::p2::Kind::record("ftd#color")),
+                    ("code".to_string(), ftd::p2::Kind::record("ftd#color")),
+                    ("link-code".to_string(), ftd::p2::Kind::record("ftd#color")),
+                    (
+                        "link-visited".to_string(),
+                        ftd::p2::Kind::record("ftd#color"),
+                    ),
+                    (
+                        "link-visited-code".to_string(),
+                        ftd::p2::Kind::record("ftd#color"),
+                    ),
+                    (
+                        "ul-ol-li-before".to_string(),
+                        ftd::p2::Kind::record("ftd#color"),
+                    ),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "link".to_string(),
+                    "code".to_string(),
+                    "link-code".to_string(),
+                    "link-visited".to_string(),
+                    "link-visited-code".to_string(),
+                    "ul-ol-li-before".to_string(),
+                ],
+            }),
+        ),
+        ("ftd#markdown-color".to_string(), markdown::color()),
+        (
+            "ftd#markdown-background-color-data".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#markdown-background-color-data".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ("link".to_string(), ftd::p2::Kind::record("ftd#color")),
+                    ("code".to_string(), ftd::p2::Kind::record("ftd#color")),
+                    ("link-code".to_string(), ftd::p2::Kind::record("ftd#color")),
+                    (
+                        "link-visited".to_string(),
+                        ftd::p2::Kind::record("ftd#color"),
+                    ),
+                    (
+                        "link-visited-code".to_string(),
+                        ftd::p2::Kind::record("ftd#color"),
+                    ),
+                    (
+                        "ul-ol-li-before".to_string(),
+                        ftd::p2::Kind::record("ftd#color"),
+                    ),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "link".to_string(),
+                    "code".to_string(),
+                    "link-code".to_string(),
+                    "link-visited".to_string(),
+                    "link-visited-code".to_string(),
+                    "ul-ol-li-before".to_string(),
+                ],
+            }),
+        ),
+        (
+            "ftd#markdown-background-color".to_string(),
+            markdown::background_color(),
+        ),
+        (
             "ftd#image-src".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#image-src".to_string(),
@@ -1223,6 +1294,114 @@ pub fn default_column() -> ftd::Column {
         },
         spacing: None,
         ..Default::default()
+    }
+}
+
+pub mod markdown {
+    fn theme_color(light: &str, dark: &str) -> ftd::PropertyValue {
+        ftd::PropertyValue::Value {
+            value: ftd::Value::Record {
+                name: "ftd#color".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    (
+                        "light".to_string(),
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
+                                text: light.to_string(),
+                                source: ftd::TextSource::Caption,
+                            },
+                        },
+                    ),
+                    (
+                        "dark".to_string(),
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
+                                text: dark.to_string(),
+                                source: ftd::TextSource::Header,
+                            },
+                        },
+                    ),
+                ])
+                .collect(),
+            },
+        }
+    }
+
+    fn link(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("link".to_string(), theme_color(light, dark))
+    }
+
+    fn code(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("code".to_string(), theme_color(light, dark))
+    }
+
+    fn link_visited(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("link-visited".to_string(), theme_color(light, dark))
+    }
+
+    fn link_code(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("link-code".to_string(), theme_color(light, dark))
+    }
+
+    fn link_visited_code(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("link-visited-code".to_string(), theme_color(light, dark))
+    }
+
+    fn ul_ol_li_before(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("ul-ol-li-before".to_string(), theme_color(light, dark))
+    }
+
+    fn blockquote(light: &str, dark: &str) -> (String, ftd::PropertyValue) {
+        ("blockquote".to_string(), theme_color(light, dark))
+    }
+
+    pub fn color() -> ftd::p2::Thing {
+        ftd::p2::Thing::Variable(ftd::Variable {
+            name: "ftd#markdown-color".to_string(),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::Record {
+                    name: "ftd#markdown-color-data".to_string(),
+                    fields: std::iter::IntoIterator::into_iter([
+                        link("#136351", "#25c19f"),
+                        code("#000000", "#25c19f"),
+                        link_visited("#7b3ee8", "#0f5750"),
+                        link_code("#136351", "#25c19f"),
+                        link_visited_code("#136351", "#0f5750"),
+                        ul_ol_li_before("#000000", "#ffffff"),
+                    ])
+                    .collect(),
+                },
+            },
+            conditions: vec![],
+            flags: ftd::VariableFlags {
+                always_include: Some(true),
+            },
+        })
+    }
+
+    pub fn background_color() -> ftd::p2::Thing {
+        ftd::p2::Thing::Variable(ftd::Variable {
+            name: "ftd#markdown-background-color".to_string(),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::Record {
+                    name: "ftd#markdown-background-color-data".to_string(),
+                    fields: std::iter::IntoIterator::into_iter([
+                        link("#136351", "#25c19f"),
+                        code("#f6f7f8", "#ffffff"),
+                        link_visited("#7b3ee8", "#0f5750"),
+                        link_code("#136351", "#25c19f"),
+                        link_visited_code("#136351", "#0f5750"),
+                        ul_ol_li_before("#000000", "#ffffff"),
+                        blockquote("#f6f7f8", "#f0f0f0"),
+                    ])
+                    .collect(),
+                },
+            },
+            conditions: vec![],
+            flags: ftd::VariableFlags {
+                always_include: Some(true),
+            },
+        })
     }
 }
 

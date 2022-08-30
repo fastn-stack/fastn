@@ -984,7 +984,9 @@ window.ftd = (function () {
     exports.get_value = function (id, variable) {
         let data = ftd_data[id];
 
-        if (!data[variable]) {
+        let var_name = ftd_utils.get_name_and_remaining(variable)[0];
+
+        if (!data[var_name]) {
             console_log(variable, "is not in data, ignoring");
             return;
         }
@@ -1095,7 +1097,8 @@ window.ftd.post_init = function () {
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
     const FTD_THEME_COLOR = "ftd#theme-color";
     const THEME_COLOR_META = "theme-color";
-
+    const MARKDOWN_COLOR = "ftd#markdown-color";
+    const MARKDOWN_BACKGROUND_COLOR = "ftd#markdown-background-color";
     let last_device;
 
     function initialise_device() {
@@ -1113,6 +1116,70 @@ window.ftd.post_init = function () {
         window.ftd.set_string_for_all(FTD_DEVICE, current);
         last_device = current;
         console_log("last_device", last_device);
+    }
+
+    function update_markdown_colors() {
+        // remove all colors from ftd.css: copy every deleted stuff in this function
+        let markdown_style_sheet = document.createElement('style');
+
+
+        markdown_style_sheet.innerHTML = `
+        .ft_md a {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link.light")};
+        }
+        body.fpm-dark .ft_md a {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link.dark")};
+        }
+        
+        .ft_md code {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".code.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".code.light")};
+        }
+        body.fpm-dark .ft_md code {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".code.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".code.dark")};
+        }        
+                
+        .ft_md a:visited {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited.light")};
+        }      
+        body.fpm-dark .ft_md a:visited {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited.dark")};
+        }
+            
+        .ft_md a code {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-code.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-code.light")};
+        }
+        body.fpm-dark .ft_md a code {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-code.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-code.dark")};
+        }
+                
+        .ft_md a:visited code {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited-code.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited-code.light")};
+        }
+        body.fpm-dark .ft_md a:visited code {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited-code.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited-code.dark")};            
+        }
+        
+        .ft_md ul ol li:before {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".ul-ol-li-before.light")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".ul-ol-li-before.light")};
+        }     
+        body.fpm-dark .ft_md ul ol li:before {
+            color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".ul-ol-li-before.dark")};
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".ul-ol-li-before.dark")};
+        }     
+        `;
+
+        document.getElementsByTagName('head')[0].appendChild(markdown_style_sheet);
     }
 
     function get_device() {
@@ -1312,4 +1379,5 @@ window.ftd.post_init = function () {
     }
     initialise_dark_mode();
     initialise_device();
+    update_markdown_colors();
 };
