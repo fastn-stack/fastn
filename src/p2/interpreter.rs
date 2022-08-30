@@ -85,9 +85,6 @@ impl InterpreterState {
             });
         }
 
-        // Debugging doc
-        // self.document_stack[l].show_document();
-
         let parsed_document = &mut self.document_stack[l];
 
         while let Some(p1) = parsed_document.sections.last_mut() {
@@ -785,7 +782,15 @@ impl ParsedDocument {
             // Testing on ft.markdown for now (section level only)
             if s.name.contains("markdown") {
                 if let Some(ref body) = s.body {
-                    s.body = Some((body.0, replace_text(body.1.as_str(), global_ids)));
+                    s.body = Some((
+                        body.0,
+                        replace_text(
+                            body.1.as_str(),
+                            global_ids,
+                            self.name.as_str(),
+                            s.line_number,
+                        )?,
+                    ));
                 }
             }
         }
@@ -795,7 +800,9 @@ impl ParsedDocument {
         fn replace_text(
             text: &str,
             global_ids: &std::collections::HashMap<String, String>,
-        ) -> String {
+            doc_id: &str,
+            line_number: usize,
+        ) -> ftd::p1::Result<String> {
             // Syntax 1 = [id`](id: someId)
             // Refer someId from linked text <id`>
             // replaced link = [id`]([document-id]#[slugified(someId)])
@@ -822,58 +829,43 @@ impl ParsedDocument {
 
             let mut result = text.to_string();
 
-            // Syntax 1 = [id`](id: someId)
+            // Syntax 1 = [id`](id: <id-to-link>)
             // G0 = Original capture, G1 = Linked Text, G2 = Actual Id
             for cap in S1.captures_iter(text) {
-                let replacement = format!(
-                    "[{}]({}#{})",
-                    capture_group_at(&cap, 1).trim(),
-                    &global_ids[capture_group_at(&cap, 2).trim()],
-                    slug::slugify(capture_group_at(&cap, 2).trim())
-                );
+                let linked_text = capture_group_at(&cap, 1).trim();
+                let captured_id = capture_group_at(&cap, 2);
+                let document_id = global_ids.get(captured_id.trim()).ok_or_else(|| {
+                    ftd::p1::Error::ForbiddenUsage {
+                        message: format!("id: {} not found while linking", captured_id),
+                        doc_id: doc_id.to_string(),
+                        line_number,
+                    }
+                })?;
+                let slugified_id = slug::slugify(captured_id.trim());
+
+                let replacement = format!("[{}]({}#{})", linked_text, document_id, slugified_id);
                 result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
             }
 
-            // Syntax 2 = {id: someId}
+            // Syntax 2 = {<id-to-link>}
             // G0 = Original capture, G1 = Actual Id
             for cap in S2.captures_iter(text) {
-                let replacement = format!(
-                    "[{}]({}#{})",
-                    capture_group_at(&cap, 1).trim(),
-                    &global_ids[capture_group_at(&cap, 1).trim()],
-                    slug::slugify(capture_group_at(&cap, 1))
-                );
+                let captured_id = capture_group_at(&cap, 1);
+                let linked_text = captured_id.trim();
+                let document_id = global_ids.get(captured_id.trim()).ok_or_else(|| {
+                    ftd::p1::Error::ForbiddenUsage {
+                        message: format!("id: {} not found while linking", captured_id),
+                        doc_id: doc_id.to_string(),
+                        line_number,
+                    }
+                })?;
+                let slugified_id = slug::slugify(captured_id.trim());
+
+                let replacement = format!("[{}]({}#{})", linked_text, document_id, slugified_id);
                 result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
             }
 
-            result
-        }
-    }
-
-    /// prints the parsed document (for debugging purposes)
-    #[allow(dead_code)]
-    fn show_document(&self) {
-        for section in self.sections.iter() {
-            dbg!(&section.name, &section.caption, section.is_commented);
-
-            for (_ln, key, value) in section.header.0.iter() {
-                dbg!(key, value);
-            }
-
-            dbg!(&section.body);
-            for subsection in section.sub_sections.0.iter() {
-                dbg!(
-                    &subsection.name,
-                    &subsection.caption,
-                    &subsection.is_commented
-                );
-
-                for (_ln, key, value) in subsection.header.0.iter() {
-                    dbg!(key, value);
-                }
-
-                dbg!(&subsection.body);
-            }
+            Ok(result)
         }
     }
 
