@@ -779,7 +779,9 @@ impl ParsedDocument {
         global_ids: &std::collections::HashMap<String, String>,
     ) -> ftd::p1::Result<()> {
         for s in self.sections.iter_mut() {
-            // Testing on ft.markdown for now (section level only)
+
+            // Replacing linking syntax with links in
+            // markdown section bodies (if any)
             if s.name.contains("markdown") {
                 if let Some(ref body) = s.body {
                     s.body = Some((
@@ -791,8 +793,28 @@ impl ParsedDocument {
                             s.line_number,
                         )?,
                     ));
+                    dbg!(&s.body);
                 }
             }
+
+            // Doing the same for subsection markdown bodies (if any)
+            for sub in s.sub_sections.0.iter_mut(){
+                if sub.name.contains("markdown") {
+                    if let Some(ref body) = sub.body {
+                        sub.body = Some((
+                            body.0,
+                            replace_text(
+                                body.1.as_str(),
+                                global_ids,
+                                self.name.as_str(),
+                                sub.line_number,
+                            )?,
+                        ));
+                    }
+                    dbg!(&sub.body);
+                }
+            }
+
         }
 
         return Ok(());
@@ -834,16 +856,15 @@ impl ParsedDocument {
             for cap in S1.captures_iter(text) {
                 let linked_text = capture_group_at(&cap, 1).trim();
                 let captured_id = capture_group_at(&cap, 2);
-                let document_id = global_ids.get(captured_id.trim()).ok_or_else(|| {
+                let link = global_ids.get(captured_id.trim()).ok_or_else(|| {
                     ftd::p1::Error::ForbiddenUsage {
                         message: format!("id: {} not found while linking", captured_id),
                         doc_id: doc_id.to_string(),
                         line_number,
                     }
                 })?;
-                let slugified_id = slug::slugify(captured_id.trim());
 
-                let replacement = format!("[{}]({}#{})", linked_text, document_id, slugified_id);
+                let replacement = format!("[{}]({})", linked_text, link);
                 result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
             }
 
@@ -852,16 +873,15 @@ impl ParsedDocument {
             for cap in S2.captures_iter(text) {
                 let captured_id = capture_group_at(&cap, 1);
                 let linked_text = captured_id.trim();
-                let document_id = global_ids.get(captured_id.trim()).ok_or_else(|| {
+                let link = global_ids.get(captured_id.trim()).ok_or_else(|| {
                     ftd::p1::Error::ForbiddenUsage {
                         message: format!("id: {} not found while linking", captured_id),
                         doc_id: doc_id.to_string(),
                         line_number,
                     }
                 })?;
-                let slugified_id = slug::slugify(captured_id.trim());
 
-                let replacement = format!("[{}]({}#{})", linked_text, document_id, slugified_id);
+                let replacement = format!("[{}]({})", linked_text, link);
                 result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
             }
 

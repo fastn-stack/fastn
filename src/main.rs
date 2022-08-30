@@ -222,9 +222,9 @@ impl ExampleLibrary {
         let mut global_ids: std::collections::HashMap<String, String> =
             std::collections::HashMap::new();
 
-        global_ids.insert("foo".to_string(), "/foo/bar/".to_string());
-        global_ids.insert("hello".to_string(), "/hello/there/".to_string());
-        global_ids.insert("some id".to_string(), "/some/id/".to_string());
+        global_ids.insert("foo".to_string(), "/foo/bar/#foo".to_string());
+        global_ids.insert("hello".to_string(), "/hello/there/#hello".to_string());
+        global_ids.insert("some id".to_string(), "/some/id/#some-id".to_string());
 
         global_ids
     }
