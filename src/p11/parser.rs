@@ -109,6 +109,7 @@ impl State {
             }
             self.line_number += scan_line_number + 1;
             self.content = rest_lines;
+            return self.end();
         }
 
         Ok(())
@@ -383,8 +384,10 @@ impl State {
         if !value.is_empty() {
             section.body = Some(ftd::p11::Body::body(line_number, value.as_str()));
         }
-        let (_, parsing_state) = self.state.last_mut().unwrap();
-        parsing_state.push(ParsingState::ReadingSubsection);
+        let (section, parsing_state) = self.state.last_mut().unwrap();
+        if !section.block_body {
+            parsing_state.push(ParsingState::ReadingSubsection);
+        }
         self.next()
     }
 
@@ -512,7 +515,7 @@ fn colon_separated_values(
 }
 
 fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
-    if let Some((name, kind)) = name_with_kind.rsplit_once(' ') {
+    if let Some((kind, name)) = name_with_kind.rsplit_once(' ') {
         return (name.to_string(), Some(kind.to_string()));
     }
 
@@ -1252,10 +1255,70 @@ mod test {
                 .and_body("bar body")
                 .add_header_section(
                     "bar",
+                    None,
                     ftd::p11::Section::with_name("section")
                         .add_header_str("k1", "v1")
                         .add_header_str("k2", "This is value of section k2")
                         .list()
+                )
+                .list(),
+        );
+    }
+
+    #[test]
+    fn kind() {
+        p!(
+            indoc!(
+                "
+            -- moo foo:
+
+            -- too foo.bar:
+
+            -- section:
+            k1: v1
+
+            -- section.k2:
+
+            This is value of section k2
+
+            -- end: foo.bar
+
+            -- foo.body:
+
+            bar body
+
+            -- foo.caption:
+
+            bar caption
+
+            -- subsection:
+
+            -- sub-subsection:
+            
+            This is sub-subsection
+
+            -- end: subsection
+
+            -- end: foo
+            "
+            ),
+            ftd::p11::Section::with_name("foo")
+                .kind("moo")
+                .and_body("bar body")
+                .and_caption("bar caption")
+                .add_header_section(
+                    "bar",
+                    Some("too".to_string()),
+                    ftd::p11::Section::with_name("section")
+                        .add_header_str("k1", "v1")
+                        .add_header_str("k2", "This is value of section k2")
+                        .list()
+                )
+                .add_sub_section(
+                    ftd::p11::Section::with_name("subsection").add_sub_section(
+                        ftd::p11::Section::with_name("sub-subsection")
+                            .and_body("This is sub-subsection")
+                    )
                 )
                 .list(),
         );
