@@ -1167,7 +1167,7 @@ mod test {
     #[test]
     fn strict_body() {
         // section body without headers
-        /*f!(
+        f!(
             indoc!(
                 "-- some-section:
                 This is body
@@ -1185,7 +1185,7 @@ mod test {
                 "
             ),
             "foo:3 -> start section body 'This is body' after a newline!!"
-        );*/
+        );
 
         // subsection body without headers
         f!(
@@ -1202,7 +1202,7 @@ mod test {
             "foo:5 -> start section body 'This is body' after a newline!!"
         );
 
-        /*// subsection body with headers
+        // subsection body with headers
         f!(
             indoc!(
                 "-- some-section:
@@ -1217,6 +1217,6 @@ mod test {
                 "
             ),
             "foo:7 -> start section body 'This is body' after a newline!!"
-        );*/
+        );
     }
 }
