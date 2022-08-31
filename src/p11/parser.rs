@@ -1,10 +1,10 @@
 #[derive(Debug, Clone)]
-enum ParsingState {
-    ReadingSection,
-    ReadingHeader { key: String, kind: Option<String> },
-    ReadingCaption,
-    ReadingBody,
-    ReadingSubsection,
+enum ParsingStateReading {
+    Section,
+    Header { key: String, kind: Option<String> },
+    Caption,
+    Body,
+    Subsection,
 }
 
 #[derive(Debug)]
@@ -13,7 +13,7 @@ pub struct State {
     sections: Vec<ftd::p11::Section>,
     content: String,
     doc_id: String,
-    state: Vec<(ftd::p11::Section, Vec<ParsingState>)>,
+    state: Vec<(ftd::p11::Section, Vec<ParsingStateReading>)>,
 }
 
 impl State {
@@ -32,19 +32,19 @@ impl State {
 
         if let Some((_, state)) = self.get_latest_state() {
             match state.clone() {
-                ParsingState::ReadingSection => {
+                ParsingStateReading::Section => {
                     self.reading_block_headers()?;
                 }
-                ParsingState::ReadingHeader { key, kind } => {
-                    self.reading_header_value(key.as_str(), kind.to_owned())?;
+                ParsingStateReading::Header { key, kind } => {
+                    self.reading_header_value(key.as_str(), kind)?;
                 }
-                ParsingState::ReadingCaption => {
+                ParsingStateReading::Caption => {
                     self.reading_caption_value()?;
                 }
-                ParsingState::ReadingBody => {
+                ParsingStateReading::Body => {
                     self.reading_body_value()?;
                 }
-                ParsingState::ReadingSubsection => {
+                ParsingStateReading::Subsection => {
                     self.reading_section()?;
                 }
             }
@@ -87,12 +87,12 @@ impl State {
                     continue;
                 };
                 match state {
-                    ParsingState::ReadingSection if caption.eq(section.name.as_str()) => {
+                    ParsingStateReading::Section if caption.eq(section.name.as_str()) => {
                         sections.reverse();
                         section.sub_sections.extend(sections);
                         break;
                     }
-                    ParsingState::ReadingHeader { key, kind }
+                    ParsingStateReading::Header { key, kind }
                         if caption.eq(format!("{}.{}", section.name, key).as_str()) =>
                     {
                         sections.reverse();
@@ -166,7 +166,7 @@ impl State {
         };
 
         self.state
-            .push((section, vec![ParsingState::ReadingSection]));
+            .push((section, vec![ParsingStateReading::Section]));
         self.content = rest_lines;
         self.line_number += scan_line_number + 1;
         self.reading_inline_headers()?;
@@ -185,9 +185,9 @@ impl State {
                 })?;
 
         let header_not_found_next_state = if !section.block_body {
-            ParsingState::ReadingBody
+            ParsingStateReading::Body
         } else {
-            ParsingState::ReadingSubsection
+            ParsingStateReading::Subsection
         };
 
         let (start_line, rest_lines) = new_line_split(content.as_str());
@@ -219,13 +219,11 @@ impl State {
         self.content = rest_lines;
         section.block_body = true;
 
-        if is_caption(key) && kind.is_none() {
-            if section.caption.is_some() {
-                return Err(ftd::p11::Error::MoreThanOneCaption {
-                    doc_id: self.doc_id.to_string(),
-                    line_number: section.line_number,
-                });
-            }
+        if is_caption(key) && kind.is_none() && section.caption.is_some() {
+            return Err(ftd::p11::Error::MoreThanOneCaption {
+                doc_id: self.doc_id.to_string(),
+                line_number: section.line_number,
+            });
         }
         if let Some(value) = value {
             section.headers.push(ftd::p11::Header::kv(
@@ -236,11 +234,11 @@ impl State {
             ))
         } else {
             parsing_states.push(if is_caption(key) {
-                ParsingState::ReadingCaption
+                ParsingStateReading::Caption
             } else if is_body(key) {
-                ParsingState::ReadingBody
+                ParsingStateReading::Body
             } else {
-                ParsingState::ReadingHeader {
+                ParsingStateReading::Header {
                     key: key.to_string(),
                     kind,
                 }
@@ -285,7 +283,7 @@ impl State {
             let line_number = self.line_number;
             let section = self
                 .remove_latest_state()
-                .ok_or_else(|| ftd::p11::Error::SectionNotFound {
+                .ok_or(ftd::p11::Error::SectionNotFound {
                     doc_id,
                     line_number,
                 })?
@@ -332,7 +330,7 @@ impl State {
         let line_number = self.line_number;
         let section = self
             .remove_latest_state()
-            .ok_or_else(|| ftd::p11::Error::SectionNotFound {
+            .ok_or(ftd::p11::Error::SectionNotFound {
                 doc_id,
                 line_number,
             })?
@@ -375,18 +373,18 @@ impl State {
         let line_number = self.line_number;
         let section = self
             .remove_latest_state()
-            .ok_or_else(|| ftd::p11::Error::SectionNotFound {
+            .ok_or(ftd::p11::Error::SectionNotFound {
                 doc_id,
                 line_number,
             })?
             .0;
         let value = value.join("\n").trim().to_string();
         if !value.is_empty() {
-            section.body = Some(ftd::p11::Body::body(line_number, value.as_str()));
+            section.body = Some(ftd::p11::Body::new(line_number, value.as_str()));
         }
         let (section, parsing_state) = self.state.last_mut().unwrap();
         if !section.block_body {
-            parsing_state.push(ParsingState::ReadingSubsection);
+            parsing_state.push(ParsingStateReading::Subsection);
         }
         self.next()
     }
@@ -426,7 +424,7 @@ impl State {
 
         let section = self
             .mut_latest_state()
-            .ok_or_else(|| ftd::p11::Error::SectionNotFound {
+            .ok_or(ftd::p11::Error::SectionNotFound {
                 doc_id,
                 line_number,
             })?
@@ -435,7 +433,7 @@ impl State {
         Ok(())
     }
 
-    fn mut_latest_state(&mut self) -> Option<(&mut ftd::p11::Section, &mut ParsingState)> {
+    fn mut_latest_state(&mut self) -> Option<(&mut ftd::p11::Section, &mut ParsingStateReading)> {
         if let Some((section, state)) = self.state.last_mut() {
             if let Some(state) = state.last_mut() {
                 return Some((section, state));
@@ -444,7 +442,7 @@ impl State {
         None
     }
 
-    fn get_latest_state(&self) -> Option<(&ftd::p11::Section, &ParsingState)> {
+    fn get_latest_state(&self) -> Option<(&ftd::p11::Section, &ParsingStateReading)> {
         if let Some((section, state)) = self.state.last() {
             if let Some(state) = state.last() {
                 return Some((section, state));
@@ -466,7 +464,7 @@ impl State {
         Ok(self.state.pop().map(|v| v.0))
     }
 
-    fn remove_latest_state(&mut self) -> Option<(&mut ftd::p11::Section, ParsingState)> {
+    fn remove_latest_state(&mut self) -> Option<(&mut ftd::p11::Section, ParsingStateReading)> {
         if let Some((section, state)) = self.state.last_mut() {
             if let Some(state) = state.pop() {
                 return Some((section, state));

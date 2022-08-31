@@ -37,21 +37,13 @@ impl Section {
         Self {
             name: self.name.to_string(),
             kind: self.kind.to_owned(),
-            caption: self
-                .caption
-                .as_ref()
-                .map(|v| v.without_line_number())
-                .to_owned(),
+            caption: self.caption.as_ref().map(|v| v.without_line_number()),
             headers: self
                 .headers
                 .iter()
                 .map(|v| v.without_line_number())
                 .collect_vec(),
-            body: self
-                .body
-                .as_ref()
-                .map(|v| v.without_line_number())
-                .to_owned(),
+            body: self.body.as_ref().map(|v| v.without_line_number()),
             sub_sections: self
                 .sub_sections
                 .iter()
@@ -99,7 +91,7 @@ impl Section {
     }
 
     pub fn and_body(mut self, body: &str) -> Self {
-        self.body = Some(ftd::p11::Body::body(0, body));
+        self.body = Some(ftd::p11::Body::new(0, body));
         self
     }
 
@@ -116,7 +108,7 @@ pub struct Body {
 }
 
 impl Body {
-    pub(crate) fn body(line_number: usize, value: &str) -> Body {
+    pub(crate) fn new(line_number: usize, value: &str) -> Body {
         Body {
             line_number,
             value: value.trim().to_string(),
