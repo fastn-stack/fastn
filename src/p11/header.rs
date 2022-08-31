@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Header {
     KV {
@@ -83,7 +85,10 @@ impl Header {
                 line_number: 0,
                 key: key.to_owned(),
                 kind: kind.to_owned(),
-                section: section.to_owned(),
+                section: section
+                    .iter()
+                    .map(|v| v.without_line_number())
+                    .collect_vec(),
             },
         }
     }

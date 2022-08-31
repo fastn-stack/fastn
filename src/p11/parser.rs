@@ -1219,4 +1219,40 @@ mod test {
             "foo:7 -> start section body 'This is body' after a newline!!"
         );
     }
+
+    #[test]
+    fn header_section() {
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            -- foo.bar:
+
+            -- section:
+            k1: v1
+
+            -- section.k2:
+
+            This is value of section k2
+
+            -- end: foo.bar
+
+            -- foo.body:
+
+            bar body
+            "
+            ),
+            ftd::p11::Section::with_name("foo")
+                .and_body("bar body")
+                .add_header_section(
+                    "bar",
+                    ftd::p11::Section::with_name("section")
+                        .add_header_str("k1", "v1")
+                        .add_header_str("k2", "This is value of section k2")
+                        .list()
+                )
+                .list(),
+        );
+    }
 }

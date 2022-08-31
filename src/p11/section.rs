@@ -87,6 +87,12 @@ impl Section {
         self
     }
 
+    pub fn add_header_section(mut self, key: &str, section: Vec<ftd::p11::Section>) -> Self {
+        self.headers
+            .push(ftd::p11::Header::section(0, key, None, section));
+        self
+    }
+
     pub fn and_body(mut self, body: &str) -> Self {
         self.body = Some(ftd::p11::Body::body(0, body));
         self
