@@ -267,10 +267,7 @@ impl State {
                 if first_line {
                     if !line.trim().is_empty() {
                         return Err(ftd::p11::Error::ParseError {
-                            message: format!(
-                                "start section header '{}' after a newline!!",
-                                self.content
-                            ),
+                            message: format!("start section header '{}' after a newline!!", line),
                             doc_id: self.doc_id.to_string(),
                             line_number: self.line_number,
                         });
@@ -318,10 +315,7 @@ impl State {
             if first_line {
                 if !line.trim().is_empty() {
                     return Err(ftd::p11::Error::ParseError {
-                        message: format!(
-                            "start section caption '{}' after a newline!!",
-                            self.content
-                        ),
+                        message: format!("start section caption '{}' after a newline!!", line),
                         doc_id: self.doc_id.to_string(),
                         line_number: self.line_number,
                     });
@@ -363,7 +357,7 @@ impl State {
             if first_line {
                 if !line.trim().is_empty() {
                     return Err(ftd::p11::Error::ParseError {
-                        message: format!("start section body '{}' after a newline!!", self.content),
+                        message: format!("start section body '{}' after a newline!!", line),
                         doc_id: self.doc_id.to_string(),
                         line_number: self.line_number,
                     });
@@ -1179,7 +1173,6 @@ mod test {
             "foo:2 -> start section body 'This is body' after a newline!!"
         );
 
-        /*
         // section body with headers
         f!(
             indoc!(
@@ -1203,7 +1196,7 @@ mod test {
                 -- end: some-section
                 "
             ),
-            "foo:5 -> start sub-section body 'This is body' after a newline!!"
+            "foo:5 -> start section body 'This is body' after a newline!!"
         );
 
         // subsection body with headers
@@ -1220,7 +1213,7 @@ mod test {
                 -- end: some-section
                 "
             ),
-            "foo:7 -> start sub-section body 'This is body' after a newline!!"
-        );*/
+            "foo:7 -> start section body 'This is body' after a newline!!"
+        );
     }
 }
