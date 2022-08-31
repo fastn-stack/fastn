@@ -21,7 +21,6 @@ pub struct State {
 impl State {
     fn next(&mut self) -> ftd::p11::Result<()> {
         self.end()?;
-        self.content = self.clean_content();
         if self.content.trim().is_empty() {
             let sections = self.state.iter().map(|(v, _)| v.clone()).collect_vec();
             self.state = vec![];
@@ -55,8 +54,8 @@ impl State {
     }
 
     fn end(&mut self) -> ftd::p11::Result<()> {
-        self.content = self.clean_content();
-        let (start_line, rest_lines) = new_line_split(self.content.as_str());
+        let content = self.clean_content();
+        let (start_line, rest_lines) = new_line_split(content.as_str());
         if !start_line.starts_with("-- ") {
             return Ok(());
         }
@@ -117,11 +116,11 @@ impl State {
         let mut valid_line_number = None;
         let new_line_content = self.content.split('\n');
         for (line_number, line) in new_line_content.enumerate() {
-            self.line_number += 1;
-            if valid_line(line) {
+            if valid_line(line) && !line.trim().is_empty() {
                 valid_line_number = Some(line_number);
                 break;
             }
+            self.line_number += 1;
         }
         content_index(self.content.as_str(), valid_line_number)
     }
@@ -129,13 +128,12 @@ impl State {
     fn reading_section(&mut self) -> ftd::p11::Result<()> {
         self.content = self.clean_content();
         let (start_line, rest_lines) = new_line_split(self.content.as_str());
-        self.line_number += 1;
 
         if !start_line.starts_with("-- ") && !start_line.starts_with("/-- ") {
             return Err(ftd::p11::Error::SectionNotFound {
                 // TODO: context should be a few lines before and after the input
                 doc_id: self.doc_id.to_string(),
-                line_number: self.line_number,
+                line_number: self.line_number + 1,
             });
         }
 
@@ -163,13 +161,14 @@ impl State {
         self.state
             .push((section, vec![ParsingState::ReadingSection]));
         self.content = rest_lines;
+        self.line_number += 1;
         self.reading_inline_headers()?;
         self.next()
     }
 
     fn reading_block_headers(&mut self) -> ftd::p11::Result<()> {
         self.end()?;
-        self.content = self.clean_content();
+        let content = self.clean_content();
         let (section, parsing_states) =
             self.state
                 .last_mut()
@@ -184,7 +183,7 @@ impl State {
             ParsingState::ReadingSubsection
         };
 
-        let (start_line, rest_lines) = new_line_split(self.content.as_str());
+        let (start_line, rest_lines) = new_line_split(content.as_str());
 
         if !start_line.starts_with("-- ") && !start_line.starts_with("/-- ") {
             parsing_states.push(header_not_found_next_state);
@@ -258,8 +257,11 @@ impl State {
                     new_line_number = Some(line_number);
                     break;
                 }
-                value.push(line.to_string());
                 self.line_number += 1;
+                if !valid_line(line) {
+                    continue;
+                }
+                value.push(clean_line(line));
             }
             self.content = content_index(self.content.as_str(), new_line_number);
             let doc_id = self.doc_id.to_string();
@@ -291,8 +293,11 @@ impl State {
                 new_line_number = Some(line_number);
                 break;
             }
-            value.push(line.to_string());
             self.line_number += 1;
+            if !valid_line(line) {
+                continue;
+            }
+            value.push(clean_line(line));
         }
         self.content = content_index(self.content.as_str(), new_line_number);
         let doc_id = self.doc_id.to_string();
@@ -321,8 +326,11 @@ impl State {
                 new_line_number = Some(line_number);
                 break;
             }
-            value.push(line.to_string());
             self.line_number += 1;
+            if !valid_line(line) {
+                continue;
+            }
+            value.push(clean_line(line));
         }
         self.content = content_index(self.content.as_str(), new_line_number);
         let doc_id = self.doc_id.to_string();
@@ -350,8 +358,8 @@ impl State {
                 new_line_number = Some(line_number);
                 break;
             }
-            self.line_number += 1;
             if !valid_line(line) {
+                self.line_number += 1;
                 continue;
             }
             let line = clean_line(line);
@@ -369,6 +377,7 @@ impl State {
                 new_line_number = Some(line_number);
                 break;
             }
+            self.line_number += 1;
         }
         self.content = content_index(self.content.as_str(), new_line_number);
 
@@ -470,14 +479,14 @@ fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
 }
 
 fn clean_line(line: &str) -> String {
-    if line.starts_with("\\;;") {
+    if line.starts_with("\\;;") || line.starts_with("\\-- ") {
         return line[1..].to_string();
     }
     line.to_string()
 }
 
 fn valid_line(line: &str) -> bool {
-    !(line.starts_with(";;") || line.trim().is_empty())
+    !line.starts_with(";;")
 }
 
 fn is_caption(s: &str) -> bool {
@@ -742,7 +751,7 @@ mod test {
         );
     }
 
-    /* #[test]
+    #[test]
     fn activity() {
         p!(
             indoc!(
@@ -750,22 +759,24 @@ mod test {
             -- step:
             method: GET
 
-            --- realm.rr.activity:
+            -- realm.rr.activity:
             okind:
             oid:
             ekind:
 
             null
 
+            -- end: step
+
         "
             ),
-            vec![super::Section::with_name("step")
-                .add_header("method", "GET")
+            vec![ftd::p11::Section::with_name("step")
+                .add_header_str("method", "GET")
                 .add_sub_section(
-                    super::SubSection::with_name("realm.rr.activity")
-                        .add_header("okind", "")
-                        .add_header("oid", "")
-                        .add_header("ekind", "")
+                    ftd::p11::Section::with_name("realm.rr.activity")
+                        .add_header_str("okind", "")
+                        .add_header_str("oid", "")
+                        .add_header_str("ekind", "")
                         .and_body("null")
                 )]
         )
@@ -779,11 +790,11 @@ mod test {
             -- hello:
 
             \\-- yo: whats up?
-            \\--- foo: bar
+            \\-- foo: bar
         "
             ),
-            super::Section::with_name("hello")
-                .and_body("-- yo: whats up?\n--- foo: bar")
+            ftd::p11::Section::with_name("hello")
+                .and_body("-- yo: whats up?\n-- foo: bar")
                 .list()
         )
     }
@@ -793,46 +804,46 @@ mod test {
         p!(
             indoc!(
                 "
-            ; yo
+            ;; yo
             -- foo:
-            ; yo
+            ;; yo
             key: value
 
             body ho
-            ; yo
+            ;; yo
 
             -- bar:
-            ; yo
+            ;; yo
             b: ba
-            ; yo
+            ;; yo
 
             bar body
-            ; yo
-            --- dodo:
-            ; yo
+            ;; yo
+            -- dodo:
+            ;; yo
             k: v
-            ; yo
+            ;; yo
 
             hello
-            ; yo
+            ;; yo
+            -- end: bar
             "
             ),
             vec![
-                super::Section::with_name("foo")
+                ftd::p11::Section::with_name("foo")
                     .and_body("body ho")
-                    .add_header("key", "value"),
-                super::Section::with_name("bar")
+                    .add_header_str("key", "value"),
+                ftd::p11::Section::with_name("bar")
                     .and_body("bar body")
-                    .add_header("b", "ba")
+                    .add_header_str("b", "ba")
                     .add_sub_section(
-                        super::SubSection::with_name("dodo")
-                            .add_header("k", "v")
+                        ftd::p11::Section::with_name("dodo")
+                            .add_header_str("k", "v")
                             .and_body("hello")
                     )
             ],
         );
     }
-
     #[test]
     fn two() {
         p!(
@@ -847,22 +858,23 @@ mod test {
             b: ba
 
             bar body
-            --- dodo:
+            -- dodo:
             k: v
 
             hello
+            -- end: bar
             "
             ),
             vec![
-                super::Section::with_name("foo")
+                ftd::p11::Section::with_name("foo")
                     .and_body("body ho")
-                    .add_header("key", "value"),
-                super::Section::with_name("bar")
+                    .add_header_str("key", "value"),
+                ftd::p11::Section::with_name("bar")
                     .and_body("bar body")
-                    .add_header("b", "ba")
+                    .add_header_str("b", "ba")
                     .add_sub_section(
-                        super::SubSection::with_name("dodo")
-                            .add_header("k", "v")
+                        ftd::p11::Section::with_name("dodo")
+                            .add_header_str("k", "v")
                             .and_body("hello")
                     )
             ],
@@ -873,15 +885,15 @@ mod test {
     fn empty_key() {
         p!(
             "-- foo:\nkey: \n",
-            super::Section::with_name("foo")
-                .add_header("key", "")
+            ftd::p11::Section::with_name("foo")
+                .add_header_str("key", "")
                 .list()
         );
 
         p!(
-            "-- foo:\n--- bar:\nkey:\n",
-            super::Section::with_name("foo")
-                .add_sub_section(super::SubSection::with_name("bar").add_header("key", ""))
+            "-- foo:\n-- bar:\nkey:\n\n\n-- end: foo",
+            ftd::p11::Section::with_name("foo")
+                .add_sub_section(ftd::p11::Section::with_name("bar").add_header_str("key", ""))
                 .list()
         )
     }
@@ -896,7 +908,7 @@ mod test {
             hello -- world: yo
         "#
             ),
-            super::Section::with_name("hello")
+            ftd::p11::Section::with_name("hello")
                 .and_body("hello -- world: yo")
                 .list()
         );
@@ -906,7 +918,7 @@ mod test {
                 r#"
             -- hello:
 
-            --- realm.rr.step.body:
+            -- realm.rr.step.body:
 
             {
               "body": "-- h0: Hello World\n\n-- markup:\n\ndemo cr 1\n",
@@ -914,10 +926,12 @@ mod test {
               "track": "amitu/index",
               "version": "2020-11-16T04:13:14.642892+00:00"
             }
+            
+            -- end: hello
         "#
             ),
-            super::Section::with_name("hello")
-                .add_sub_section(super::SubSection::with_name("realm.rr.step.body").and_body(
+            ftd::p11::Section::with_name("hello")
+                .add_sub_section(ftd::p11::Section::with_name("realm.rr.step.body").and_body(
                     &indoc!(
                         r#"
                         {
@@ -946,7 +960,7 @@ mod test {
                      lol
             "
             ),
-            super::Section::with_name("markup")
+            ftd::p11::Section::with_name("markup")
                 .and_body("hello world is\n\n    not enough\n\n    lol")
                 .list(),
         );
@@ -966,8 +980,8 @@ mod test {
             "
             ),
             vec![
-                super::Section::with_name("foo").and_body("  body ho\n\nyo"),
-                super::Section::with_name("bar").and_body("    bar body")
+                ftd::p11::Section::with_name("foo").and_body("  body ho\n\nyo"),
+                ftd::p11::Section::with_name("bar").and_body("    bar body")
             ],
         );
     }
@@ -995,14 +1009,14 @@ mod test {
 
             "
             ),
-            vec![super::Section::with_name("foo").and_body("hello"),],
+            vec![ftd::p11::Section::with_name("foo").and_body("hello"),],
         );
 
         p!(
             indoc!(
                 "
             -- foo:
-            --- bar:
+            -- bar:
 
 
 
@@ -1017,10 +1031,11 @@ mod test {
 
 
 
+            -- end: foo
             "
             ),
-            vec![super::Section::with_name("foo")
-                .add_sub_section(super::SubSection::with_name("bar").and_body("hello"))],
+            vec![ftd::p11::Section::with_name("foo")
+                .add_sub_section(ftd::p11::Section::with_name("bar").and_body("hello"))],
         );
     }
 
@@ -1028,31 +1043,35 @@ mod test {
     fn basic() {
         p!(
             "-- foo: bar",
-            super::Section::with_name("foo").and_caption("bar").list()
+            ftd::p11::Section::with_name("foo")
+                .and_caption("bar")
+                .list()
         );
 
-        p!("-- foo:", super::Section::with_name("foo").list());
+        p!("-- foo:", ftd::p11::Section::with_name("foo").list());
 
-        p!("-- foo: ", super::Section::with_name("foo").list());
+        p!("-- foo: ", ftd::p11::Section::with_name("foo").list());
 
         p!(
             "-- foo:\nkey: value",
-            super::Section::with_name("foo")
-                .add_header("key", "value")
+            ftd::p11::Section::with_name("foo")
+                .add_header_str("key", "value")
                 .list()
         );
 
         p!(
             "-- foo:\nkey: value\nk2:v2",
-            super::Section::with_name("foo")
-                .add_header("key", "value")
-                .add_header("k2", "v2")
+            ftd::p11::Section::with_name("foo")
+                .add_header_str("key", "value")
+                .add_header_str("k2", "v2")
                 .list()
         );
 
         p!(
             "-- foo:\n\nbody ho",
-            super::Section::with_name("foo").and_body("body ho").list()
+            ftd::p11::Section::with_name("foo")
+                .and_body("body ho")
+                .list()
         );
 
         p!(
@@ -1067,8 +1086,8 @@ mod test {
             "
             ),
             vec![
-                super::Section::with_name("foo").and_body("body ho"),
-                super::Section::with_name("bar").and_body("bar body")
+                ftd::p11::Section::with_name("foo").and_body("body ho"),
+                ftd::p11::Section::with_name("bar").and_body("bar body")
             ],
         );
 
@@ -1088,8 +1107,8 @@ mod test {
             "
             ),
             vec![
-                super::Section::with_name("foo").and_body("body ho\n\nyo"),
-                super::Section::with_name("bar").and_body("bar body")
+                ftd::p11::Section::with_name("foo").and_body("body ho\n\nyo"),
+                ftd::p11::Section::with_name("bar").and_body("bar body")
             ],
         );
 
@@ -1101,10 +1120,10 @@ mod test {
             hello
             "
             ),
-            vec![super::Section::with_name("foo").and_body("hello"),],
+            vec![ftd::p11::Section::with_name("foo").and_body("hello"),],
         );
 
-        f!("invalid", "foo:1 -> Expecting -- , found: invalid")
+        f!("invalid", "foo:1 -> SectionNotFound")
     }
 
     #[test]
@@ -1119,6 +1138,7 @@ mod test {
             "foo:2 -> start section body 'This is body' after a newline!!"
         );
 
+        /*
         // section body with headers
         f!(
             indoc!(
@@ -1136,8 +1156,10 @@ mod test {
                 "-- some-section:
                 h1: val
 
-                --- some-sub-section:
+                -- some-sub-section:
                 This is body
+
+                -- end: some-section
                 "
             ),
             "foo:5 -> start sub-section body 'This is body' after a newline!!"
@@ -1149,13 +1171,15 @@ mod test {
                 "-- some-section:
                 h1: val
 
-                --- some-sub-section:
+                -- some-sub-section:
                 h2: val
                 h3: val
                 This is body
+
+                -- end: some-section
                 "
             ),
             "foo:7 -> start sub-section body 'This is body' after a newline!!"
-        );
-    }*/
+        );*/
+    }
 }

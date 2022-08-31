@@ -74,8 +74,16 @@ impl Section {
     }
 
     pub fn add_header_str(mut self, key: &str, value: &str) -> Self {
-        self.headers
-            .push(ftd::p11::Header::kv(0, key, None, Some(value.to_string())));
+        self.headers.push(ftd::p11::Header::kv(
+            0,
+            key,
+            None,
+            if value.trim().is_empty() {
+                None
+            } else {
+                Some(value.to_string())
+            },
+        ));
         self
     }
 
