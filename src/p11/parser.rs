@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(Debug, Clone)]
 enum ParsingState {
     ReadingSection,
@@ -9,7 +7,7 @@ enum ParsingState {
     ReadingSubsection,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct State {
     line_number: usize,
     sections: Vec<ftd::p11::Section>,
@@ -20,7 +18,10 @@ pub struct State {
 
 impl State {
     fn next(&mut self) -> ftd::p11::Result<()> {
+        use itertools::Itertools;
+
         self.end()?;
+
         if self.content.trim().is_empty() {
             let sections = self.state.iter().map(|(v, _)| v.clone()).collect_vec();
             self.state = vec![];
@@ -29,10 +30,7 @@ impl State {
             return Ok(());
         }
 
-        // dbg!(&self);
-
         if let Some((_, state)) = self.get_latest_state() {
-            // dbg!(&state);
             match state.clone() {
                 ParsingState::ReadingSection => {
                     self.reading_block_headers()?;
@@ -53,6 +51,7 @@ impl State {
         } else {
             self.reading_section()?;
         }
+
         Ok(())
     }
 
@@ -475,9 +474,13 @@ impl State {
 }
 
 pub fn parse(content: &str, doc_id: &str) -> ftd::p11::Result<Vec<ftd::p11::Section>> {
-    let mut state = State::default();
-    state.content = content.to_string();
-    state.doc_id = doc_id.to_string();
+    let mut state = State {
+        content: content.to_string(),
+        doc_id: doc_id.to_string(),
+        line_number: 0,
+        sections: Default::default(),
+        state: Default::default(),
+    };
     state.next()?;
     Ok(state.sections)
 }
@@ -548,6 +551,8 @@ fn new_line_split(s: &str) -> (String, String) {
 }
 
 fn content_index(content: &str, line_number: Option<usize>) -> String {
+    use itertools::Itertools;
+
     let new_line_content = content.split('\n');
     let content = new_line_content.collect_vec();
     match line_number {
