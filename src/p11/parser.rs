@@ -29,7 +29,10 @@ impl State {
             return Ok(());
         }
 
+        // dbg!(&self);
+
         if let Some((_, state)) = self.get_latest_state() {
+            // dbg!(&state);
             match state.clone() {
                 ParsingState::ReadingSection => {
                     self.reading_block_headers()?;
@@ -126,8 +129,8 @@ impl State {
     }
 
     fn reading_section(&mut self) -> ftd::p11::Result<()> {
-        self.content = self.clean_content();
-        let (start_line, rest_lines) = new_line_split(self.content.as_str());
+        let content = self.clean_content();
+        let (start_line, rest_lines) = new_line_split(content.as_str());
 
         if !start_line.starts_with("-- ") && !start_line.starts_with("/-- ") {
             return Err(ftd::p11::Error::SectionNotFound {
@@ -247,10 +250,10 @@ impl State {
         header_key: &str,
         header_kind: Option<String>,
     ) -> ftd::p11::Result<()> {
-        self.content = self.clean_content();
         if let Err(ftd::p11::Error::SectionNotFound { .. }) = self.reading_section() {
             let mut value = vec![];
             let mut new_line_number = None;
+            let mut first_line = true;
             let split_content = self.content.as_str().split('\n');
             for (line_number, line) in split_content.enumerate() {
                 if line.starts_with("-- ") || line.starts_with("/-- ") {
@@ -260,6 +263,19 @@ impl State {
                 self.line_number += 1;
                 if !valid_line(line) {
                     continue;
+                }
+                if first_line {
+                    if !line.trim().is_empty() {
+                        return Err(ftd::p11::Error::ParseError {
+                            message: format!(
+                                "start section header '{}' after a newline!!",
+                                self.content
+                            ),
+                            doc_id: self.doc_id.to_string(),
+                            line_number: self.line_number,
+                        });
+                    }
+                    first_line = false;
                 }
                 value.push(clean_line(line));
             }
@@ -273,21 +289,23 @@ impl State {
                     line_number,
                 })?
                 .0;
+            let value = value.join("\n").trim().to_string();
             section.headers.push(ftd::p11::Header::kv(
                 line_number,
                 header_key,
                 header_kind,
-                Some(value.join("\n").trim().to_string()),
+                if value.is_empty() { None } else { Some(value) },
             ));
         }
         self.next()
     }
 
     fn reading_caption_value(&mut self) -> ftd::p11::Result<()> {
-        self.content = self.clean_content();
+        let content = self.clean_content();
         let mut value = vec![];
         let mut new_line_number = None;
-        let split_content = self.content.as_str().split('\n');
+        let mut first_line = true;
+        let split_content = content.as_str().split('\n');
         for (line_number, line) in split_content.enumerate() {
             if line.starts_with("-- ") || line.starts_with("/-- ") {
                 new_line_number = Some(line_number);
@@ -296,6 +314,19 @@ impl State {
             self.line_number += 1;
             if !valid_line(line) {
                 continue;
+            }
+            if first_line {
+                if !line.trim().is_empty() {
+                    return Err(ftd::p11::Error::ParseError {
+                        message: format!(
+                            "start section caption '{}' after a newline!!",
+                            self.content
+                        ),
+                        doc_id: self.doc_id.to_string(),
+                        line_number: self.line_number,
+                    });
+                }
+                first_line = false;
             }
             value.push(clean_line(line));
         }
@@ -309,17 +340,16 @@ impl State {
                 line_number,
             })?
             .0;
-        section.caption = Some(ftd::p11::Header::from_caption(
-            &value.join("\n"),
-            line_number,
-        ));
+
+        let value = value.join("\n").trim().to_string();
+        section.caption = Some(ftd::p11::Header::from_caption(value.as_str(), line_number));
         self.next()
     }
 
     fn reading_body_value(&mut self) -> ftd::p11::Result<()> {
-        self.content = self.clean_content();
         let mut value = vec![];
         let mut new_line_number = None;
+        let mut first_line = true;
         let split_content = self.content.as_str().split('\n');
         for (line_number, line) in split_content.enumerate() {
             if line.starts_with("-- ") || line.starts_with("/-- ") {
@@ -330,6 +360,17 @@ impl State {
             if !valid_line(line) {
                 continue;
             }
+            if first_line {
+                if !line.trim().is_empty() {
+                    return Err(ftd::p11::Error::ParseError {
+                        message: format!("start section body '{}' after a newline!!", self.content),
+                        doc_id: self.doc_id.to_string(),
+                        line_number: self.line_number,
+                    });
+                }
+                first_line = false;
+            }
+
             value.push(clean_line(line));
         }
         self.content = content_index(self.content.as_str(), new_line_number);
@@ -342,8 +383,9 @@ impl State {
                 line_number,
             })?
             .0;
+        let value = value.join("\n").trim().to_string();
         if !value.is_empty() {
-            section.body = Some(ftd::p11::Body::body(line_number, &value.join("\n")));
+            section.body = Some(ftd::p11::Body::body(line_number, value.as_str()));
         }
         let (_, parsing_state) = self.state.last_mut().unwrap();
         parsing_state.push(ParsingState::ReadingSubsection);
@@ -380,7 +422,6 @@ impl State {
             self.line_number += 1;
         }
         self.content = content_index(self.content.as_str(), new_line_number);
-
         let doc_id = self.doc_id.to_string();
         let line_number = self.line_number;
 
