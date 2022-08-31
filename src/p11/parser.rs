@@ -1322,5 +1322,118 @@ mod test {
                 )
                 .list(),
         );
+
+        p!(
+            indoc!(
+                "
+            -- moo foo:
+
+            -- foo.caption:
+
+            bar caption
+
+            -- too foo.bar:
+
+            -- section:
+            k1: v1
+
+            -- section.k2:
+
+            This is value of section k2
+
+            -- end: foo.bar
+
+            -- foo.body:
+
+            bar body
+
+            -- subsection:
+
+            -- sub-subsection:
+            
+            This is sub-subsection
+
+            -- end: subsection
+
+            -- end: foo
+            "
+            ),
+            ftd::p11::Section::with_name("foo")
+                .kind("moo")
+                .and_body("bar body")
+                .and_caption("bar caption")
+                .add_header_section(
+                    "bar",
+                    Some("too".to_string()),
+                    ftd::p11::Section::with_name("section")
+                        .add_header_str("k1", "v1")
+                        .add_header_str("k2", "This is value of section k2")
+                        .list()
+                )
+                .add_sub_section(
+                    ftd::p11::Section::with_name("subsection").add_sub_section(
+                        ftd::p11::Section::with_name("sub-subsection")
+                            .and_body("This is sub-subsection")
+                    )
+                )
+                .list(),
+        );
+
+        p!(
+            indoc!(
+                "
+            -- moo foo:
+
+            -- foo.caption:
+
+            bar caption
+
+            -- foo.body:
+
+            bar body
+
+            -- too foo.bar:
+
+            -- section:
+            k1: v1
+
+            -- section.k2:
+
+            This is value of section k2
+
+            -- end: foo.bar
+
+
+            -- subsection:
+
+            -- sub-subsection:
+            
+            This is sub-subsection
+
+            -- end: subsection
+
+            -- end: foo
+            "
+            ),
+            ftd::p11::Section::with_name("foo")
+                .kind("moo")
+                .and_body("bar body")
+                .and_caption("bar caption")
+                .add_header_section(
+                    "bar",
+                    Some("too".to_string()),
+                    ftd::p11::Section::with_name("section")
+                        .add_header_str("k1", "v1")
+                        .add_header_str("k2", "This is value of section k2")
+                        .list()
+                )
+                .add_sub_section(
+                    ftd::p11::Section::with_name("subsection").add_sub_section(
+                        ftd::p11::Section::with_name("sub-subsection")
+                            .and_body("This is sub-subsection")
+                    )
+                )
+                .list(),
+        );
     }
 }
