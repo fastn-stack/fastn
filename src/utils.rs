@@ -619,9 +619,9 @@ pub(crate) fn ids_matches(id1: &str, id2: &str) -> bool {
     }
 }
 
-// Parse argument from CLI
-// If CLI command: fpm serve --identities a@foo.com,foo
-// key: --identities -> output: a@foo.com,foo
+/// Parse argument from CLI
+/// If CLI command: fpm serve --identities a@foo.com,foo
+/// key: --identities -> output: a@foo.com,foo
 pub fn parse_from_cli(key: &str) -> Option<String> {
     use itertools::Itertools;
     let args = std::env::args().collect_vec();

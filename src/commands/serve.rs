@@ -170,9 +170,9 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     t.it(response)
 }
 
-async fn download_init_package(url: Option<&str>) -> std::io::Result<()> {
+pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
     let mut package = fpm::Package::new("unknown-package");
-    package.download_base_url = url.map(ToString::to_string);
+    package.download_base_url = url;
     package
         .http_download_by_id(
             "FPM.ftd",
@@ -189,7 +189,7 @@ async fn download_init_package(url: Option<&str>) -> std::io::Result<()> {
 pub async fn fpm_serve(
     bind_address: &str,
     port: Option<u16>,
-    package_download_base_url: Option<&str>,
+    package_download_base_url: Option<String>,
 ) -> std::io::Result<()> {
     use colored::Colorize;
 
@@ -287,6 +287,10 @@ You can try without providing port, it will automatically pick unused port."#,
         .route(
             "/-/create-cr/",
             actix_web::web::get().to(fpm::apis::cr::create_cr_page),
+        )
+        .route(
+            "/-/clear-cache/",
+            actix_web::web::get().to(fpm::apis::cache::clear),
         )
         .route("/{path:.*}", actix_web::web::get().to(serve))
     };
