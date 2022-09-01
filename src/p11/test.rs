@@ -1,33 +1,23 @@
 use {indoc::indoc, pretty_assertions::assert_eq}; // macro
 
-// these are macros instead of functions so stack trace top points to actual
-// invocation of these, instead of inside these, so jumping to failing test
-// is easier.
-macro_rules! p {
-    ($s:expr, $t: expr,) => {
-        p!($s, $t)
-    };
-    ($s:expr, $t: expr) => {
+#[track_caller]
+fn p(s: &str, t: Vec<ftd::p11::Section>) {
         assert_eq!(
-            super::parse($s, "foo")
-                .unwrap_or_else(|e| panic!("{}", e))
+            super::parse(s, "foo")
+                .unwrap_or_else(|e| panic!("{:?}", e))
                 .iter()
                 .map(|v| v.without_line_number())
                 .collect::<Vec<ftd::p11::Section>>(),
-            $t
+            t
         )
-    };
 }
 
-macro_rules! f {
-    ($s:expr, $m: expr,) => {
-        f!($s, $m)
-    };
-    ($s:expr, $m: expr) => {
-        match super::parse($s, "foo") {
+#[track_caller]
+fn f(s: &str, m: &str) {
+        match super::parse(s, "foo") {
             Ok(r) => panic!("expected failure, found: {:?}", r),
             Err(e) => {
-                let expected = $m.trim();
+                let expected = m.trim();
                 let f2 = e.to_string();
                 let found = f2.trim();
                 if expected != found {
@@ -44,19 +34,18 @@ macro_rules! f {
                 }
             }
         }
-    };
-}
+    }
 
 #[test]
 fn sub_section() {
-    p!(
+    p(
         "-- foo:\n\n-- bar:\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
             .add_sub_section(ftd::p11::Section::with_name("bar"))
             .list()
     );
 
-    p!(
+    p(
         "-- foo: hello\n-- bar:\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
             .and_caption("hello")
@@ -64,7 +53,7 @@ fn sub_section() {
             .list()
     );
 
-    p!(
+    p(
         "-- foo:\nk:v\n-- bar:\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
             .add_header_str("k", "v")
@@ -72,7 +61,7 @@ fn sub_section() {
             .list()
     );
 
-    p!(
+    p(
         "-- foo:\n\nhello world\n-- bar:\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
             .and_body("hello world")
@@ -80,7 +69,7 @@ fn sub_section() {
             .list()
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -105,7 +94,7 @@ fn sub_section() {
         ],
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -130,7 +119,7 @@ fn sub_section() {
         ],
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -157,7 +146,7 @@ fn sub_section() {
         ],
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -186,7 +175,7 @@ fn sub_section() {
         ],
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -212,7 +201,7 @@ fn sub_section() {
         ],
     );
 
-    p!(
+    p(
         "-- foo:\n\nhello world\n-- bar:\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
             .and_body("hello world")
@@ -220,7 +209,7 @@ fn sub_section() {
             .list()
     );
 
-    p!(
+    p(
         "-- foo:\n\nhello world\n-- bar: foo\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
             .and_body("hello world")
@@ -231,7 +220,7 @@ fn sub_section() {
 
 #[test]
 fn activity() {
-    p!(
+    p(
         indoc!(
             "
             -- step:
@@ -262,7 +251,7 @@ fn activity() {
 
 #[test]
 fn escaping() {
-    p!(
+    p(
         indoc!(
             "
             -- hello:
@@ -279,7 +268,7 @@ fn escaping() {
 
 #[test]
 fn comments() {
-    p!(
+    p(
         indoc!(
             "
             ;; yo
@@ -324,7 +313,7 @@ fn comments() {
 }
 #[test]
 fn two() {
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -361,14 +350,14 @@ fn two() {
 
 #[test]
 fn empty_key() {
-    p!(
+    p(
         "-- foo:\nkey: \n",
         ftd::p11::Section::with_name("foo")
             .add_header_str("key", "")
             .list()
     );
 
-    p!(
+    p(
         "-- foo:\n-- bar:\nkey:\n\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
             .add_sub_section(ftd::p11::Section::with_name("bar").add_header_str("key", ""))
@@ -378,7 +367,7 @@ fn empty_key() {
 
 #[test]
 fn with_dash_dash() {
-    p!(
+    p(
         indoc!(
             r#"
             -- hello:
@@ -391,7 +380,7 @@ fn with_dash_dash() {
             .list()
     );
 
-    p!(
+    p(
         indoc!(
             r#"
             -- hello:
@@ -426,7 +415,7 @@ fn with_dash_dash() {
 
 #[test]
 fn indented_body() {
-    p!(
+    p(
         &indoc!(
             "
                  -- markup:
@@ -442,7 +431,7 @@ fn indented_body() {
             .and_body("hello world is\n\n    not enough\n\n    lol")
             .list(),
     );
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -466,7 +455,7 @@ fn indented_body() {
 
 #[test]
 fn body_with_empty_lines() {
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -490,7 +479,7 @@ fn body_with_empty_lines() {
         vec![ftd::p11::Section::with_name("foo").and_body("hello"),],
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -519,25 +508,25 @@ fn body_with_empty_lines() {
 
 #[test]
 fn basic() {
-    p!(
+    p(
         "-- foo: bar",
         ftd::p11::Section::with_name("foo")
             .and_caption("bar")
             .list()
     );
 
-    p!("-- foo:", ftd::p11::Section::with_name("foo").list());
+    p("-- foo:", ftd::p11::Section::with_name("foo").list());
 
-    p!("-- foo: ", ftd::p11::Section::with_name("foo").list());
+    p("-- foo: ", ftd::p11::Section::with_name("foo").list());
 
-    p!(
+    p(
         "-- foo:\nkey: value",
         ftd::p11::Section::with_name("foo")
             .add_header_str("key", "value")
             .list()
     );
 
-    p!(
+    p(
         "-- foo:\nkey: value\nk2:v2",
         ftd::p11::Section::with_name("foo")
             .add_header_str("key", "value")
@@ -545,14 +534,14 @@ fn basic() {
             .list()
     );
 
-    p!(
+    p(
         "-- foo:\n\nbody ho",
         ftd::p11::Section::with_name("foo")
             .and_body("body ho")
             .list()
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -569,7 +558,7 @@ fn basic() {
         ],
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -590,7 +579,7 @@ fn basic() {
         ],
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -601,13 +590,13 @@ fn basic() {
         vec![ftd::p11::Section::with_name("foo").and_body("hello"),],
     );
 
-    f!("invalid", "foo:1 -> SectionNotFound")
+    f("invalid", "foo:1 -> SectionNotFound")
 }
 
 #[test]
 fn strict_body() {
     // section body without headers
-    f!(
+    f(
         indoc!(
             "-- some-section:
                 This is body
@@ -617,7 +606,7 @@ fn strict_body() {
     );
 
     // section body with headers
-    f!(
+    f(
         indoc!(
             "-- some-section:
                 h1: v1
@@ -628,7 +617,7 @@ fn strict_body() {
     );
 
     // subsection body without headers
-    f!(
+    f(
         indoc!(
             "-- some-section:
                 h1: val
@@ -643,7 +632,7 @@ fn strict_body() {
     );
 
     // subsection body with headers
-    f!(
+    f(
         indoc!(
             "-- some-section:
                 h1: val
@@ -662,7 +651,7 @@ fn strict_body() {
 
 #[test]
 fn header_section() {
-    p!(
+    p(
         indoc!(
             "
             -- foo:
@@ -699,7 +688,7 @@ fn header_section() {
 
 #[test]
 fn kind() {
-    p!(
+    p(
         indoc!(
             "
             -- moo foo:
@@ -752,7 +741,7 @@ fn kind() {
             .list(),
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- moo foo:
@@ -805,7 +794,7 @@ fn kind() {
             .list(),
     );
 
-    p!(
+    p(
         indoc!(
             "
             -- moo foo:
