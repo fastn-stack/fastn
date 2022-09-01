@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 macro_rules! warning {
     ($s:expr,) => {
         warning!($s)
@@ -257,6 +255,8 @@ pub(crate) fn validate_base_url(package: &fpm::Package) -> fpm::Result<()> {
 
 #[allow(dead_code)]
 pub fn escape_ftd(file: &str) -> String {
+    use itertools::Itertools;
+
     file.split('\n')
         .map(|v| {
             if v.starts_with("-- ") || v.starts_with("--- ") {
@@ -617,4 +617,21 @@ pub(crate) fn ids_matches(id1: &str, id2: &str) -> bool {
         }
         id.trim_matches('/').to_string()
     }
+}
+
+// Parse argument from CLI
+// If CLI command: fpm serve --identities a@foo.com,foo
+// key: --identities -> output: a@foo.com,foo
+pub fn parse_from_cli(key: &str) -> Option<String> {
+    use itertools::Itertools;
+    let args = std::env::args().collect_vec();
+    let mut index = None;
+    for (idx, arg) in args.iter().enumerate() {
+        if arg.eq(key) {
+            index = Some(idx);
+        }
+    }
+    index
+        .and_then(|idx| args.get(idx + 1))
+        .map(String::to_string)
 }

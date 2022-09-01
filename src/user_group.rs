@@ -411,16 +411,8 @@ pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
 
 /// Get identities from cli `--identities`
 pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
-    use itertools::Itertools;
-    let args = std::env::args().collect_vec();
-    let mut index = None;
-    for (idx, arg) in args.iter().enumerate() {
-        if arg.eq("--identities") {
-            index = Some(idx);
-        }
-    }
-    let identities = index.and_then(|idx| args.get(idx + 1));
-    parse_identities(identities.map(|x| x.as_str()).unwrap_or_else(|| ""))
+    let identities = fpm::utils::parse_from_cli("--identities");
+    parse_identities(&identities.map(|x| x).unwrap_or_else(|| "".to_string()))
 }
 
 /*

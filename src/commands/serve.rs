@@ -83,29 +83,25 @@ async fn serve_cr_file(
     }
 
     config.current_document = Some(f.get_id());
-    return match f {
+    match f {
         fpm::File::Ftd(main_document) => {
-            return match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
+            match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
                 Ok(r) => actix_web::HttpResponse::Ok().body(r),
                 Err(e) => {
                     eprintln!("FPM-Error: path: {}, {:?}", path, e);
                     actix_web::HttpResponse::InternalServerError().body(e.to_string())
                 }
-            };
+            }
         }
-        fpm::File::Image(image) => {
-            return actix_web::HttpResponse::Ok()
-                .content_type(guess_mime_type(image.id.as_str()))
-                .body(image.content);
-        }
-        fpm::File::Static(s) => {
-            return actix_web::HttpResponse::Ok().body(s.content);
-        }
+        fpm::File::Image(image) => actix_web::HttpResponse::Ok()
+            .content_type(guess_mime_type(image.id.as_str()))
+            .body(image.content),
+        fpm::File::Static(s) => actix_web::HttpResponse::Ok().body(s.content),
         _ => {
             eprintln!("FPM unknown handler");
             actix_web::HttpResponse::InternalServerError().body("".as_bytes())
         }
-    };
+    }
 }
 
 fn guess_mime_type(path: &str) -> mime_guess::Mime {
