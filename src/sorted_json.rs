@@ -98,6 +98,7 @@ fn to_json_(v: &serde_json::Value, mut out: String, prefix: &str) -> String {
 mod tests {
     use serde_json::{value::Number, Value};
 
+    #[track_caller]
     fn a(v: Value, out: &'static str) {
         assert_eq!(super::to_json(&v), out);
     }
@@ -107,6 +108,7 @@ mod tests {
         a(serde_json::json! {null}, "null");
         a(serde_json::json! {1}, "1");
         a(Value::Number(Number::from_f64(1.0).unwrap()), "1");
+        a(Value::Number(Number::from_f64(1.1).unwrap()), "1.1");
         a(
             Value::Number(Number::from_f64(-1.0002300e2).unwrap()),
             "-100.023",
@@ -118,18 +120,24 @@ mod tests {
         );
         a(
             serde_json::json! {[1, 2]},
-            "[
-  1,
-  2
-]",
+            indoc::indoc!(
+                "
+                    [
+                      1,
+                      2
+                    ]"
+            ),
         );
         a(
             serde_json::json! {[1, 2, []]},
-            "[
-  1,
-  2,
-  []
-]",
+            indoc::indoc!(
+                "
+                    [
+                      1,
+                      2,
+                      []
+                    ]"
+            ),
         );
         a(
             serde_json::json! {[1, 2, [1, 2, [1, 2]]]},
