@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-#[derive(Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Section {
     pub name: String,
     pub kind: Option<String>,
@@ -101,7 +101,7 @@ impl Section {
     }
 }
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Body {
     pub line_number: usize,
     pub value: String,
