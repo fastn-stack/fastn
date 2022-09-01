@@ -2,39 +2,39 @@ use {indoc::indoc, pretty_assertions::assert_eq}; // macro
 
 #[track_caller]
 fn p(s: &str, t: Vec<ftd::p11::Section>) {
-        assert_eq!(
-            super::parse(s, "foo")
-                .unwrap_or_else(|e| panic!("{:?}", e))
-                .iter()
-                .map(|v| v.without_line_number())
-                .collect::<Vec<ftd::p11::Section>>(),
-            t
-        )
+    assert_eq!(
+        super::parse(s, "foo")
+            .unwrap_or_else(|e| panic!("{:?}", e))
+            .iter()
+            .map(|v| v.without_line_number())
+            .collect::<Vec<ftd::p11::Section>>(),
+        t
+    )
 }
 
 #[track_caller]
 fn f(s: &str, m: &str) {
-        match super::parse(s, "foo") {
-            Ok(r) => panic!("expected failure, found: {:?}", r),
-            Err(e) => {
-                let expected = m.trim();
-                let f2 = e.to_string();
-                let found = f2.trim();
-                if expected != found {
-                    let patch = diffy::create_patch(expected, found);
-                    let f = diffy::PatchFormatter::new().with_color();
-                    print!(
-                        "{}",
-                        f.fmt_patch(&patch)
-                            .to_string()
-                            .replace("\\ No newline at end of file", "")
-                    );
-                    println!("expected:\n{}\nfound:\n{}\n", expected, f2);
-                    panic!("test failed")
-                }
+    match super::parse(s, "foo") {
+        Ok(r) => panic!("expected failure, found: {:?}", r),
+        Err(e) => {
+            let expected = m.trim();
+            let f2 = e.to_string();
+            let found = f2.trim();
+            if expected != found {
+                let patch = diffy::create_patch(expected, found);
+                let f = diffy::PatchFormatter::new().with_color();
+                print!(
+                    "{}",
+                    f.fmt_patch(&patch)
+                        .to_string()
+                        .replace("\\ No newline at end of file", "")
+                );
+                println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                panic!("test failed")
             }
         }
     }
+}
 
 #[test]
 fn sub_section() {
@@ -42,7 +42,7 @@ fn sub_section() {
         "-- foo:\n\n-- bar:\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
             .add_sub_section(ftd::p11::Section::with_name("bar"))
-            .list()
+            .list(),
     );
 
     p(
@@ -50,7 +50,7 @@ fn sub_section() {
         ftd::p11::Section::with_name("foo")
             .and_caption("hello")
             .add_sub_section(ftd::p11::Section::with_name("bar"))
-            .list()
+            .list(),
     );
 
     p(
@@ -58,7 +58,7 @@ fn sub_section() {
         ftd::p11::Section::with_name("foo")
             .add_header_str("k", "v")
             .add_sub_section(ftd::p11::Section::with_name("bar"))
-            .list()
+            .list(),
     );
 
     p(
@@ -66,7 +66,7 @@ fn sub_section() {
         ftd::p11::Section::with_name("foo")
             .and_body("hello world")
             .add_sub_section(ftd::p11::Section::with_name("bar"))
-            .list()
+            .list(),
     );
 
     p(
@@ -90,7 +90,7 @@ fn sub_section() {
             ftd::p11::Section::with_name("foo")
                 .and_body("body ho")
                 .add_sub_section(ftd::p11::Section::with_name("dodo")),
-            ftd::p11::Section::with_name("bar").and_body("bar body")
+            ftd::p11::Section::with_name("bar").and_body("bar body"),
         ],
     );
 
@@ -115,7 +115,7 @@ fn sub_section() {
             ftd::p11::Section::with_name("foo").and_body("body ho"),
             ftd::p11::Section::with_name("bar")
                 .and_body("bar body")
-                .add_sub_section(ftd::p11::Section::with_name("dodo"))
+                .add_sub_section(ftd::p11::Section::with_name("dodo")),
         ],
     );
 
@@ -142,7 +142,7 @@ fn sub_section() {
             ftd::p11::Section::with_name("bar")
                 .and_body("bar body")
                 .add_sub_section(ftd::p11::Section::with_name("dodo"))
-                .add_sub_section(ftd::p11::Section::with_name("rat"))
+                .add_sub_section(ftd::p11::Section::with_name("rat")),
         ],
     );
 
@@ -171,7 +171,7 @@ fn sub_section() {
             ftd::p11::Section::with_name("bar")
                 .add_header_str("cat", "bar body")
                 .add_sub_section(ftd::p11::Section::with_name("dodo"))
-                .add_sub_section(ftd::p11::Section::with_name("rat"))
+                .add_sub_section(ftd::p11::Section::with_name("rat")),
         ],
     );
 
@@ -197,7 +197,7 @@ fn sub_section() {
             ftd::p11::Section::with_name("foo").and_body("body ho"),
             ftd::p11::Section::with_name("bar")
                 .and_body("bar body")
-                .add_sub_section(ftd::p11::Section::with_name("dodo").and_body("hello"))
+                .add_sub_section(ftd::p11::Section::with_name("dodo").and_body("hello")),
         ],
     );
 
@@ -206,7 +206,7 @@ fn sub_section() {
         ftd::p11::Section::with_name("foo")
             .and_body("hello world")
             .add_sub_section(ftd::p11::Section::with_name("bar"))
-            .list()
+            .list(),
     );
 
     p(
@@ -214,7 +214,7 @@ fn sub_section() {
         ftd::p11::Section::with_name("foo")
             .and_body("hello world")
             .add_sub_section(ftd::p11::Section::with_name("bar").and_caption("foo"))
-            .list()
+            .list(),
     );
 }
 
@@ -244,8 +244,8 @@ fn activity() {
                     .add_header_str("okind", "")
                     .add_header_str("oid", "")
                     .add_header_str("ekind", "")
-                    .and_body("null")
-            )]
+                    .and_body("null"),
+            )],
     )
 }
 
@@ -262,7 +262,7 @@ fn escaping() {
         ),
         ftd::p11::Section::with_name("hello")
             .and_body("-- yo: whats up?\n-- foo: bar")
-            .list()
+            .list(),
     )
 }
 
@@ -306,8 +306,8 @@ fn comments() {
                 .add_sub_section(
                     ftd::p11::Section::with_name("dodo")
                         .add_header_str("k", "v")
-                        .and_body("hello")
-                )
+                        .and_body("hello"),
+                ),
         ],
     );
 }
@@ -342,8 +342,8 @@ fn two() {
                 .add_sub_section(
                     ftd::p11::Section::with_name("dodo")
                         .add_header_str("k", "v")
-                        .and_body("hello")
-                )
+                        .and_body("hello"),
+                ),
         ],
     );
 }
@@ -354,14 +354,14 @@ fn empty_key() {
         "-- foo:\nkey: \n",
         ftd::p11::Section::with_name("foo")
             .add_header_str("key", "")
-            .list()
+            .list(),
     );
 
     p(
         "-- foo:\n-- bar:\nkey:\n\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
             .add_sub_section(ftd::p11::Section::with_name("bar").add_header_str("key", ""))
-            .list()
+            .list(),
     )
 }
 
@@ -377,7 +377,7 @@ fn with_dash_dash() {
         ),
         ftd::p11::Section::with_name("hello")
             .and_body("hello -- world: yo")
-            .list()
+            .list(),
     );
 
     p(
@@ -407,9 +407,9 @@ fn with_dash_dash() {
                           "track": "amitu/index",
                           "version": "2020-11-16T04:13:14.642892+00:00"
                         }"#
-                ))
+                )),
             )
-            .list()
+            .list(),
     );
 }
 
@@ -448,7 +448,7 @@ fn indented_body() {
         ),
         vec![
             ftd::p11::Section::with_name("foo").and_body("  body ho\n\nyo"),
-            ftd::p11::Section::with_name("bar").and_body("    bar body")
+            ftd::p11::Section::with_name("bar").and_body("    bar body"),
         ],
     );
 }
@@ -476,7 +476,7 @@ fn body_with_empty_lines() {
 
             "
         ),
-        vec![ftd::p11::Section::with_name("foo").and_body("hello"),],
+        vec![ftd::p11::Section::with_name("foo").and_body("hello")],
     );
 
     p(
@@ -512,7 +512,7 @@ fn basic() {
         "-- foo: bar",
         ftd::p11::Section::with_name("foo")
             .and_caption("bar")
-            .list()
+            .list(),
     );
 
     p("-- foo:", ftd::p11::Section::with_name("foo").list());
@@ -523,7 +523,7 @@ fn basic() {
         "-- foo:\nkey: value",
         ftd::p11::Section::with_name("foo")
             .add_header_str("key", "value")
-            .list()
+            .list(),
     );
 
     p(
@@ -531,14 +531,14 @@ fn basic() {
         ftd::p11::Section::with_name("foo")
             .add_header_str("key", "value")
             .add_header_str("k2", "v2")
-            .list()
+            .list(),
     );
 
     p(
         "-- foo:\n\nbody ho",
         ftd::p11::Section::with_name("foo")
             .and_body("body ho")
-            .list()
+            .list(),
     );
 
     p(
@@ -554,7 +554,7 @@ fn basic() {
         ),
         vec![
             ftd::p11::Section::with_name("foo").and_body("body ho"),
-            ftd::p11::Section::with_name("bar").and_body("bar body")
+            ftd::p11::Section::with_name("bar").and_body("bar body"),
         ],
     );
 
@@ -575,7 +575,7 @@ fn basic() {
         ),
         vec![
             ftd::p11::Section::with_name("foo").and_body("body ho\n\nyo"),
-            ftd::p11::Section::with_name("bar").and_body("bar body")
+            ftd::p11::Section::with_name("bar").and_body("bar body"),
         ],
     );
 
@@ -587,7 +587,7 @@ fn basic() {
             hello
             "
         ),
-        vec![ftd::p11::Section::with_name("foo").and_body("hello"),],
+        vec![ftd::p11::Section::with_name("foo").and_body("hello")],
     );
 
     f("invalid", "foo:1 -> SectionNotFound")
@@ -602,7 +602,7 @@ fn strict_body() {
                 This is body
                 "
         ),
-        "foo:2 -> start section body 'This is body' after a newline!!"
+        "foo:2 -> start section body 'This is body' after a newline!!",
     );
 
     // section body with headers
@@ -613,7 +613,7 @@ fn strict_body() {
                 This is body
                 "
         ),
-        "foo:3 -> start section body 'This is body' after a newline!!"
+        "foo:3 -> start section body 'This is body' after a newline!!",
     );
 
     // subsection body without headers
@@ -628,7 +628,7 @@ fn strict_body() {
                 -- end: some-section
                 "
         ),
-        "foo:5 -> start section body 'This is body' after a newline!!"
+        "foo:5 -> start section body 'This is body' after a newline!!",
     );
 
     // subsection body with headers
@@ -645,7 +645,7 @@ fn strict_body() {
                 -- end: some-section
                 "
         ),
-        "foo:7 -> start section body 'This is body' after a newline!!"
+        "foo:7 -> start section body 'This is body' after a newline!!",
     );
 }
 
@@ -680,7 +680,7 @@ fn header_section() {
                 ftd::p11::Section::with_name("section")
                     .add_header_str("k1", "v1")
                     .add_header_str("k2", "This is value of section k2")
-                    .list()
+                    .list(),
             )
             .list(),
     );
@@ -733,10 +733,10 @@ fn kind() {
                 ftd::p11::Section::with_name("section")
                     .add_header_str("k1", "v1")
                     .add_header_str("k2", "This is value of section k2")
-                    .list()
+                    .list(),
             )
             .add_sub_section(ftd::p11::Section::with_name("subsection").add_sub_section(
-                ftd::p11::Section::with_name("sub-subsection").and_body("This is sub-subsection")
+                ftd::p11::Section::with_name("sub-subsection").and_body("This is sub-subsection"),
             ))
             .list(),
     );
@@ -786,10 +786,10 @@ fn kind() {
                 ftd::p11::Section::with_name("section")
                     .add_header_str("k1", "v1")
                     .add_header_str("k2", "This is value of section k2")
-                    .list()
+                    .list(),
             )
             .add_sub_section(ftd::p11::Section::with_name("subsection").add_sub_section(
-                ftd::p11::Section::with_name("sub-subsection").and_body("This is sub-subsection")
+                ftd::p11::Section::with_name("sub-subsection").and_body("This is sub-subsection"),
             ))
             .list(),
     );
@@ -840,10 +840,10 @@ fn kind() {
                 ftd::p11::Section::with_name("section")
                     .add_header_str("k1", "v1")
                     .add_header_str("k2", "This is value of section k2")
-                    .list()
+                    .list(),
             )
             .add_sub_section(ftd::p11::Section::with_name("subsection").add_sub_section(
-                ftd::p11::Section::with_name("sub-subsection").and_body("This is sub-subsection")
+                ftd::p11::Section::with_name("sub-subsection").and_body("This is sub-subsection"),
             ))
             .list(),
     );
