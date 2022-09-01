@@ -135,8 +135,9 @@ impl State {
     fn reading_section(&mut self) -> ftd::p11::Result<()> {
         let (scan_line_number, content) = self.clean_content();
         let (start_line, rest_lines) = new_line_split(content.as_str());
+        let start_line = start_line.trim();
 
-        if !start_line.trim().starts_with("-- ") && !start_line.trim().starts_with("/-- ") {
+        if !start_line.starts_with("-- ") && !start_line.starts_with("/-- ") {
             return Err(ftd::p11::Error::SectionNotFound {
                 // TODO: context should be a few lines before and after the input
                 doc_id: self.doc_id.to_string(),
@@ -144,7 +145,7 @@ impl State {
             });
         }
 
-        let start_line = clean_line(start_line.as_str());
+        let start_line = clean_line(start_line);
 
         let is_commented = start_line.starts_with("/-- ");
         let line = if is_commented {
@@ -196,6 +197,8 @@ impl State {
         };
 
         let (start_line, rest_lines) = new_line_split(content.as_str());
+
+        let start_line = start_line.trim();
 
         if !start_line.starts_with("-- ") && !start_line.starts_with("/-- ") {
             parsing_states.push(header_not_found_next_state);
@@ -527,7 +530,6 @@ fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
 }
 
 fn clean_line(line: &str) -> String {
-    let line = line.trim();
     if line.starts_with("\\;;") || line.starts_with("\\-- ") {
         return line[1..].to_string();
     }
