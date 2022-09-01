@@ -2,7 +2,7 @@
 #[macro_use]
 mod test;
 
-mod header;
+pub mod header;
 mod parser;
 mod section;
 

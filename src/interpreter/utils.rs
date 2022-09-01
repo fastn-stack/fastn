@@ -57,3 +57,46 @@ pub fn split(name: String, split_at: &str) -> ftd::p11::Result<(String, String)>
     let part_2 = part.next().unwrap().trim();
     Ok((part_1.to_string(), part_2.to_string()))
 }
+
+pub fn parse_import(
+    c: &Option<ftd::p11::Header>,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::p11::Result<(String, String)> {
+    let v = match c {
+        Some(ftd::p11::Header::KV(ftd::p11::header::KV { value: Some(v), .. })) => v,
+        _ => {
+            return ftd::interpreter::utils::e2(
+                "Unknown caption passed import statement",
+                doc_id,
+                line_number,
+            )
+        }
+    };
+
+    if v.contains(" as ") {
+        let mut parts = v.splitn(2, " as ");
+        return match (parts.next(), parts.next()) {
+            (Some(n), Some(a)) => Ok((n.to_string(), a.to_string())),
+            _ => ftd::interpreter::utils::e2(
+                "invalid use of keyword as in import statement",
+                doc_id,
+                line_number,
+            ),
+        };
+    }
+
+    if v.contains('/') {
+        let mut parts = v.rsplitn(2, '/');
+        return match (parts.next(), parts.next()) {
+            (Some(t), Some(_)) => Ok((v.to_string(), t.to_string())),
+            _ => ftd::interpreter::utils::e2("doc id must contain /", doc_id, line_number),
+        };
+    }
+
+    if let Some((t, _)) = v.split_once('.') {
+        return Ok((v.to_string(), t.to_string()));
+    }
+
+    Ok((v.to_string(), v.to_string()))
+}
