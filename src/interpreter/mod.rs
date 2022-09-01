@@ -6,6 +6,7 @@ pub(crate) mod utils;
 
 pub use document::Document;
 pub use tdoc::TDoc;
+pub use thing::component;
 pub use thing::component::ChildComponent;
 pub use thing::component::Property;
 pub use thing::default_bag;

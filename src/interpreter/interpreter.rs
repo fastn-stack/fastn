@@ -10,8 +10,33 @@ impl InterpreterState {
     fn new(id: String) -> InterpreterState {
         InterpreterState {
             id,
-            bag: ftd::interpreter::default_bag(),
+            bag: ftd::interpreter::interpreter::default_bag(),
             ..Default::default()
+        }
+    }
+
+    pub fn tdoc<'a>(
+        &'a self,
+        local_variables: &'a mut ftd::Map<ftd::interpreter::Thing>,
+        referenced_local_variables: &'a mut ftd::Map<String>,
+    ) -> ftd::interpreter::TDoc<'a> {
+        let l = self.document_stack.len() - 1;
+        ftd::interpreter::TDoc {
+            name: &self.document_stack[l].name,
+            aliases: &self.document_stack[l].doc_aliases,
+            bag: &self.bag,
+            local_variables,
+            referenced_local_variables,
+        }
+    }
+
+    fn library_in_the_bag(&self, name: &str) -> bool {
+        self.parsed_libs.contains_key(name)
+    }
+
+    fn add_library_to_bag(&mut self, name: &str) {
+        if !self.library_in_the_bag(name) {
+            self.parsed_libs.insert(name.to_string(), vec![]);
         }
     }
 
@@ -95,7 +120,7 @@ impl InterpreterState {
                 // declare a record
                 let d = ftd::interpreter::Record::from_p1(
                     p1.name.as_str(),
-                    p1.headers.as_slice(),
+                    &p1.header,
                     &doc,
                     p1.line_number,
                 )?;
@@ -142,11 +167,11 @@ impl InterpreterState {
                         name: doc.resolve_name_with_instruction(
                             p1.line_number,
                             p1.caption(p1.line_number, doc.name)?.as_str(),
-                            parsed_document.instructions.as_slice(),
+                            &parsed_document.instructions,
                         )?,
                     });
-            } else if let Ok(ftd::variable::VariableData {
-                type_: ftd::variable::Type::Component,
+            } else if let Ok(ftd::interpreter::variable::VariableData {
+                type_: ftd::interpreter::variable::Type::Component,
                 ..
             }) = var_data
             {
@@ -276,16 +301,13 @@ impl InterpreterState {
                             });
                         }
                         if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
-                            let section_to_subsection = ftd::p11::Section {
+                            let section_to_subsection = ftd::p11::SubSection {
                                 name: p1.name.to_string(),
-                                kind: p1.kind.to_owned(),
                                 caption: p1.caption.to_owned(),
-                                headers: p1.headers.to_owned(),
+                                header: p1.header.to_owned(),
                                 body: p1.body.to_owned(),
-                                sub_sections: p1.sub_sections.to_owned(),
                                 is_commented: p1.is_commented,
                                 line_number: p1.line_number,
-                                block_body: p1.block_body,
                             };
                             parsed_document.instructions.push(
                                 ftd::interpreter::Instruction::RecursiveChildComponent {
@@ -412,12 +434,306 @@ impl InterpreterState {
 
         Ok(Interpreter::Done { document: d })
     }
+
+    fn resolve_foreign_variable_name(name: &str) -> String {
+        name.replace('.', "-")
+    }
+
+    fn resolve_foreign_variable(
+        section: &mut ftd::p11::Section,
+        foreign_variables: &[String],
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::p11::Result<Option<String>> {
+        if let Some(variable) = resolve_all_properties(
+            &mut section.caption,
+            &mut section.header,
+            &mut section.body,
+            section.line_number,
+            foreign_variables,
+            doc,
+        )? {
+            return Ok(Some(variable));
+        }
+
+        for subsection in section.sub_sections.0.iter_mut() {
+            if let Some(variable) = resolve_all_properties(
+                &mut subsection.caption,
+                &mut subsection.header,
+                &mut subsection.body,
+                subsection.line_number,
+                foreign_variables,
+                doc,
+            )? {
+                return Ok(Some(variable));
+            }
+        }
+
+        return Ok(None);
+
+        fn resolve_all_properties(
+            caption: &mut Option<ftd::p11::Header>,
+            header: &mut [ftd::p11::Header],
+            body: &mut Option<ftd::p11::Body>,
+            line_number: usize,
+            foreign_variables: &[String],
+            doc: &ftd::interpreter::TDoc,
+        ) -> ftd::p11::Result<Option<String>> {
+            if let Some(ref mut caption) = caption {
+                if let Some(cap) =
+                    process_foreign_variables(caption, foreign_variables, doc, line_number)?
+                {
+                    return Ok(Some(cap));
+                }
+            }
+
+            for (line_number, _, header) in header.0.iter_mut() {
+                if let Some(h) =
+                    process_foreign_variables(header, foreign_variables, doc, *line_number)?
+                {
+                    return Ok(Some(h));
+                }
+            }
+
+            if let Some((line_number, ref mut body)) = body {
+                if let Some(b) =
+                    process_foreign_variables(body, foreign_variables, doc, *line_number)?
+                {
+                    return Ok(Some(b));
+                }
+            }
+
+            Ok(None)
+        }
+
+        fn process_foreign_variables(
+            value: &mut String,
+            foreign_variables: &[String],
+            doc: &ftd::interpreter::TDoc,
+            line_number: usize,
+        ) -> ftd::p11::Result<Option<String>> {
+            if value.contains('#') {
+                return Ok(None);
+            }
+            if let Some(val) = value.clone().strip_prefix('$') {
+                if is_foreign_variable(val, foreign_variables, doc, line_number)? {
+                    let val = doc.resolve_name(line_number, val)?;
+                    *value = InterpreterState::resolve_foreign_variable_name(
+                        format!("${}", val.as_str()).as_str(),
+                    );
+                    return Ok(Some(val));
+                }
+            }
+            Ok(None)
+        }
+
+        fn is_foreign_variable(
+            variable: &str,
+            foreign_variables: &[String],
+            doc: &ftd::interpreter::TDoc,
+            line_number: usize,
+        ) -> ftd::p11::Result<bool> {
+            let var_name = doc.resolve_name(line_number, variable)?;
+
+            if foreign_variables.iter().any(|v| var_name.starts_with(v)) {
+                return Ok(true);
+            }
+            Ok(false)
+        }
+    }
+
+    fn process_imports(
+        top: &mut ParsedDocument,
+        bag: &ftd::Map<ftd::interpreter::Thing>,
+    ) -> ftd::p11::Result<Option<String>> {
+        let mut iteration_index = 0;
+        while iteration_index < top.sections.len() {
+            if top.sections[iteration_index].name != "import" {
+                iteration_index += 1;
+                continue;
+            }
+            let (library_name, alias) = ftd::interpreter::utils::parse_import(
+                &top.sections[iteration_index].caption,
+                top.name.as_str(),
+                top.sections[iteration_index].line_number,
+            )?;
+
+            top.doc_aliases.insert(alias, library_name.clone());
+
+            if bag.contains_key(library_name.as_str()) {
+                iteration_index += 1;
+                continue;
+            }
+
+            top.sections.remove(iteration_index);
+            return Ok(Some(library_name));
+        }
+
+        Ok(None)
+    }
+
+    pub fn add_foreign_variable_prefix(&mut self, module: &str, prefix: Vec<String>) {
+        if let Some(document) = self.document_stack.last_mut() {
+            document
+                .foreign_variable_prefix
+                .extend_from_slice(prefix.as_slice());
+        }
+        self.parsed_libs.insert(module.to_string(), prefix);
+    }
+
+    pub fn continue_after_import(
+        mut self,
+        id: &str,
+        source: &str,
+    ) -> ftd::p11::Result<Interpreter> {
+        self.document_stack.push(ParsedDocument::parse(id, source)?);
+        self.continue_()
+        // interpret then
+        // handle top / start_from
+    }
+
+    pub fn continue_after_variable(
+        mut self,
+        variable: &str,
+        value: ftd::interpreter::Value,
+    ) -> ftd::p11::Result<Interpreter> {
+        let l = self.document_stack.len() - 1;
+        let doc = ftd::interpreter::TDoc {
+            name: &self.document_stack[l].name,
+            aliases: &self.document_stack[l].doc_aliases,
+            bag: &self.bag,
+            local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
+        };
+        let var_name = InterpreterState::resolve_foreign_variable_name(
+            doc.resolve_name(0, variable)?.as_str(),
+        );
+        self.bag.insert(
+            var_name.clone(),
+            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: var_name,
+                value: ftd::interpreter::PropertyValue::Value { value },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        self.continue_()
+    }
+
+    pub fn continue_after_pop(mut self) -> ftd::p11::Result<Interpreter> {
+        self.document_stack.pop();
+        self.continue_()
+        // interpret then
+        // handle top / start_from
+    }
+
+    pub fn continue_after_processor(
+        mut self,
+        p1: &ftd::p11::Section,
+        value: ftd::interpreter::Value,
+    ) -> ftd::p11::Result<Interpreter> {
+        let l = self.document_stack.len() - 1;
+        let parsed_document = &mut self.document_stack[l];
+
+        let doc = ftd::interpreter::TDoc {
+            name: &parsed_document.name,
+            aliases: &parsed_document.doc_aliases,
+            bag: &self.bag,
+            local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
+        };
+
+        let var_data = ftd::interpreter::variable::VariableData::get_name_kind(
+            &p1.name,
+            &doc,
+            p1.line_number,
+            &parsed_document.var_types,
+        );
+
+        if let Ok(ftd::interpreter::variable::VariableData {
+            type_: ftd::interpreter::variable::Type::Variable,
+            name,
+            ..
+        }) = var_data
+        {
+            let name = doc.resolve_name(p1.line_number, &name)?;
+            let variable = ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                name: name.clone(),
+                value: ftd::interpreter::PropertyValue::Value { value },
+                conditions: vec![],
+                flags: ftd::interpreter::variable::VariableFlags::from_p1(
+                    &p1.header,
+                    doc.name,
+                    p1.line_number,
+                )?,
+            });
+            self.bag.insert(name, variable);
+            return self.continue_();
+        }
+
+        match doc.get_thing(p1.line_number, p1.name.as_str())? {
+            ftd::interpreter::Thing::Variable(mut v) => {
+                // for case: 2
+                let doc_name = ftd::interpreter::utils::get_doc_name_and_remaining(
+                    doc.resolve_name(p1.line_number, p1.name.as_str())?.as_str(),
+                )?
+                .0;
+                v.value = ftd::interpreter::PropertyValue::Value { value };
+                let key = doc.resolve_name(p1.line_number, doc_name.as_str())?;
+                let variable = ftd::interpreter::Thing::Variable(doc.set_value(
+                    p1.line_number,
+                    p1.name.as_str(),
+                    v,
+                )?);
+                self.bag.insert(key, variable);
+            }
+            ftd::interpreter::Thing::Component(_) => {
+                // for case: 3
+                let mut p1 = p1.clone();
+                Self::p1_from_processor(&mut p1, value);
+                parsed_document.sections.push(p1.to_owned());
+            }
+            _ => todo!(), // throw error
+        }
+        self.continue_()
+        // interpret then
+        // handle top / start_from
+    }
+
+    pub(crate) fn p1_from_processor(p1: &mut ftd::p11::Section, value: ftd::interpreter::Value) {
+        for (idx, (_, k, _)) in p1.header.0.iter().enumerate() {
+            if k.eq("$processor$") {
+                p1.header.0.remove(idx);
+                break;
+            }
+        }
+        if let ftd::interpreter::Value::Object { values } = value {
+            for (k, v) in values {
+                let v = if let ftd::interpreter::PropertyValue::Value { value } = v {
+                    if let Some(v) = value.to_string() {
+                        v
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                };
+
+                if k.eq("$body$") {
+                    p1.body = Some(ftd::p11::Body::new(p1.line_number, v.as_str()));
+                } else if k.eq("$caption$") {
+                    p1.caption = Some(ftd::p11::Header::from_caption(v.as_str(), p1.line_number));
+                } else {
+                    p1.header.0.push((p1.line_number, k, v));
+                }
+            }
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct ParsedDocument {
     name: String,
-    sections: Vec<ftd::p11::Section>,
+    sections: Vec<ftd::p111::Section>,
     processing_imports: bool,
     doc_aliases: ftd::Map<String>,
     var_types: Vec<String>,
@@ -434,7 +750,7 @@ pub enum Interpreter {
     },
     StuckOnProcessor {
         state: InterpreterState,
-        section: ftd::p11::Section,
+        section: ftd::p111::Section,
     },
     StuckOnForeignVariable {
         variable: String,
@@ -446,10 +762,10 @@ pub enum Interpreter {
 }
 
 impl ParsedDocument {
-    fn parse(id: &str, source: &str) -> ftd::p11::Result<ParsedDocument> {
+    fn parse(id: &str, source: &str) -> ftd::p111::Result<ParsedDocument> {
         Ok(ParsedDocument {
             name: id.to_string(),
-            sections: ftd::p11::parse(source, id)?,
+            sections: ftd::p111::parse(source, id)?,
             processing_imports: true,
             doc_aliases: ftd::interpreter::interpreter::default_aliases(),
             var_types: Default::default(),
@@ -459,7 +775,7 @@ impl ParsedDocument {
     }
 }
 
-pub fn interpret(id: &str, source: &str) -> ftd::p11::Result<Interpreter> {
+pub fn interpret(id: &str, source: &str) -> ftd::p111::Result<Interpreter> {
     let mut s = InterpreterState::new(id.to_string());
     s.document_stack.push(ParsedDocument::parse(id, source)?);
     s.continue_()
