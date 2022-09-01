@@ -1,4 +1,5 @@
 pub mod component;
+pub mod expression;
 mod kind;
 mod or_type;
 mod record;

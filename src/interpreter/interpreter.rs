@@ -124,13 +124,13 @@ impl InterpreterState {
                 let d = ftd::interpreter::Variable::map_from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return ftd::p2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
                     );
                 }
-                thing.push((name, ftd::p2::Thing::Variable(d)));
+                thing.push((name, ftd::interpreter::Thing::Variable(d)));
                 // } else if_two_words(p1.name.as_str() {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
                 //         Not sure if its a good idea tho.
@@ -138,11 +138,11 @@ impl InterpreterState {
             } else if p1.name == "container" {
                 parsed_document
                     .instructions
-                    .push(ftd::Instruction::ChangeContainer {
+                    .push(ftd::interpreter::Instruction::ChangeContainer {
                         name: doc.resolve_name_with_instruction(
                             p1.line_number,
                             p1.caption(p1.line_number, doc.name)?.as_str(),
-                            &parsed_document.instructions,
+                            parsed_document.instructions.as_slice(),
                         )?,
                     });
             } else if let Ok(ftd::variable::VariableData {
@@ -151,16 +151,16 @@ impl InterpreterState {
             }) = var_data
             {
                 // declare a function
-                let d = ftd::Component::from_p1(&p1, &doc)?;
+                let d = ftd::interpreter::Component::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
-                    return ftd::p2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         format!("{} is already declared", d.full_name),
                         doc.name,
                         p1.line_number,
                     );
                 }
-                thing.push((name, ftd::p2::Thing::Component(d)));
+                thing.push((name, ftd::interpreter::Thing::Component(d)));
                 // processed_p1.push(p1.name.to_string());
             } else if let Ok(ref var_data) = var_data {
                 let d = if p1
@@ -175,21 +175,21 @@ impl InterpreterState {
                     });
                 } else if var_data.is_none() || var_data.is_optional() {
                     // declare and instantiate a variable
-                    ftd::Variable::from_p1(&p1, &doc)?
+                    ftd::interpreter::Variable::from_p1(&p1, &doc)?
                 } else {
                     // declare and instantiate a list
-                    ftd::Variable::list_from_p1(&p1, &doc)?
+                    ftd::interpreter::Variable::list_from_p1(&p1, &doc)?
                 };
                 let name = doc.resolve_name(p1.line_number, &d.name)?;
                 if self.bag.contains_key(name.as_str()) {
-                    return ftd::p2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         format!("{} is already declared", d.name),
                         doc.name,
                         p1.line_number,
                     );
                 }
-                thing.push((name, ftd::p2::Thing::Variable(d)));
-            } else if let ftd::p2::Thing::Variable(mut v) =
+                thing.push((name, ftd::interpreter::Thing::Variable(d)));
+            } else if let ftd::interpreter::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
                 assert!(
@@ -201,7 +201,7 @@ impl InterpreterState {
                             .str_optional(doc.name, p1.line_number, "$processor$")?
                             .is_some())
                 );
-                let (doc_name, remaining) = ftd::p2::utils::get_doc_name_and_remaining(
+                let (doc_name, remaining) = ftd::interpreter::utils::get_doc_name_and_remaining(
                     doc.resolve_name(p1.line_number, p1.name.as_str())?.as_str(),
                 )?;
                 if remaining.is_some()
@@ -210,7 +210,7 @@ impl InterpreterState {
                         .str_optional(doc.name, p1.line_number, "if")?
                         .is_some()
                 {
-                    return ftd::p2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         "Currently not supporting `if` for field value update.",
                         doc.name,
                         p1.line_number,
@@ -219,7 +219,7 @@ impl InterpreterState {
                 if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
                     let val = v.get_value(&p1, &doc)?;
                     v.conditions.push((
-                        ftd::p2::Boolean::from_expression(
+                        ftd::interpreter::Boolean::from_expression(
                             expr,
                             &doc,
                             &Default::default(),
@@ -241,25 +241,29 @@ impl InterpreterState {
                     // let start = std::time::Instant::now();
                     // let value = self.lib.process(p1, &doc)?;
                     // *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                    // v.value = ftd::PropertyValue::Value { value };
+                    // v.value = ftd::interpreter::PropertyValue::Value { value };
                 } else {
                     v.update_from_p1(&p1, &doc)?;
                 }
                 thing.push((
                     doc.resolve_name(p1.line_number, doc_name.as_str())?,
-                    ftd::p2::Thing::Variable(doc.set_value(p1.line_number, p1.name.as_str(), v)?),
+                    ftd::interpreter::Thing::Variable(doc.set_value(
+                        p1.line_number,
+                        p1.name.as_str(),
+                        v,
+                    )?),
                 ));
             } else {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
-                    ftd::p2::Thing::Variable(_) => {
-                        return ftd::p2::utils::e2(
+                    ftd::interpreter::Thing::Variable(_) => {
+                        return ftd::interpreter::utils::e2(
                             format!("variable should have prefix $, found: `{}`", p1.name),
                             doc.name,
                             p1.line_number,
                         );
                     }
-                    ftd::p2::Thing::Component(_) => {
+                    ftd::interpreter::Thing::Component(_) => {
                         if p1
                             .header
                             .str_optional(doc.name, p1.line_number, "$processor$")?
@@ -272,17 +276,20 @@ impl InterpreterState {
                             });
                         }
                         if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
-                            let section_to_subsection = ftd::p1::SubSection {
+                            let section_to_subsection = ftd::p11::Section {
                                 name: p1.name.to_string(),
+                                kind: p1.kind.to_owned(),
                                 caption: p1.caption.to_owned(),
-                                header: p1.header.to_owned(),
+                                headers: p1.headers.to_owned(),
                                 body: p1.body.to_owned(),
+                                sub_sections: p1.sub_sections.to_owned(),
                                 is_commented: p1.is_commented,
                                 line_number: p1.line_number,
+                                block_body: p1.block_body,
                             };
                             parsed_document.instructions.push(
-                                ftd::Instruction::RecursiveChildComponent {
-                                    child: ftd::component::recursive_child_component(
+                                ftd::interpreter::Instruction::RecursiveChildComponent {
+                                    child: ftd::interpreter::component::recursive_child_component(
                                         loop_data,
                                         &section_to_subsection,
                                         &doc,
@@ -292,7 +299,7 @@ impl InterpreterState {
                                 },
                             );
                         } else {
-                            let parent = ftd::ChildComponent::from_p1(
+                            let parent = ftd::interpreter::ChildComponent::from_p1(
                                 p1.line_number,
                                 p1.name.as_str(),
                                 &p1.header,
@@ -308,27 +315,30 @@ impl InterpreterState {
                                 if let Ok(loop_data) =
                                     sub.header.str(doc.name, p1.line_number, "$loop$")
                                 {
-                                    children.push(ftd::component::recursive_child_component(
-                                        loop_data,
-                                        sub,
-                                        &doc,
-                                        &parent.arguments,
-                                        None,
-                                    )?);
+                                    children.push(
+                                        ftd::interpreter::component::recursive_child_component(
+                                            loop_data,
+                                            sub,
+                                            &doc,
+                                            &parent.arguments,
+                                            None,
+                                        )?,
+                                    );
                                 } else {
-                                    let root_name = ftd::p2::utils::get_root_component_name(
-                                        &doc,
-                                        parent.root.as_str(),
-                                        sub.line_number,
-                                    )?;
+                                    let root_name =
+                                        ftd::interpreter::utils::get_root_component_name(
+                                            &doc,
+                                            parent.root.as_str(),
+                                            sub.line_number,
+                                        )?;
                                     let child = if root_name.eq("ftd#text") {
-                                        ftd::p2::utils::get_markup_child(
+                                        ftd::interpreter::utils::get_markup_child(
                                             sub,
                                             &doc,
                                             &parent.arguments,
                                         )?
                                     } else {
-                                        ftd::ChildComponent::from_p1(
+                                        ftd::interpreter::ChildComponent::from_p1(
                                             sub.line_number,
                                             sub.name.as_str(),
                                             &sub.header,
@@ -344,27 +354,27 @@ impl InterpreterState {
 
                             parsed_document
                                 .instructions
-                                .push(ftd::Instruction::Component { children, parent })
+                                .push(ftd::interpreter::Instruction::Component { children, parent })
                         }
                     }
-                    ftd::p2::Thing::Record(mut r) => {
+                    ftd::interpreter::Thing::Record(mut r) => {
                         r.add_instance(&p1, &doc)?;
                         thing.push((
                             doc.resolve_name(p1.line_number, &p1.name)?,
-                            ftd::p2::Thing::Record(r),
+                            ftd::interpreter::Thing::Record(r),
                         ));
                     }
-                    ftd::p2::Thing::OrType(_r) => {
+                    ftd::interpreter::Thing::OrType(_r) => {
                         // do we allow initialization of a record by name? nopes
-                        return ftd::p2::utils::e2(
+                        return ftd::interpreter::utils::e2(
                             format!("'{}' is an or-type", p1.name.as_str()),
                             doc.name,
                             p1.line_number,
                         );
                     }
-                    ftd::p2::Thing::OrTypeWithVariant { .. } => {
+                    ftd::interpreter::Thing::OrTypeWithVariant { .. } => {
                         // do we allow initialization of a record by name? nopes
-                        return ftd::p2::utils::e2(
+                        return ftd::interpreter::utils::e2(
                             format!("'{}' is an or-type variant", p1.name.as_str(),),
                             doc.name,
                             p1.line_number,
@@ -379,7 +389,7 @@ impl InterpreterState {
             return self.continue_after_pop();
         }
 
-        let mut rt = ftd::RT::from(
+        let mut rt = ftd::executer::RT::from(
             &self.id,
             self.document_stack[0].get_doc_aliases(),
             self.bag,
@@ -392,7 +402,7 @@ impl InterpreterState {
             rt.render()?
         };
 
-        let d = ftd::p2::document::Document {
+        let d = ftd::interpreter::document::Document {
             main,
             name: rt.name,
             data: rt.bag.clone(),
@@ -436,12 +446,12 @@ pub enum Interpreter {
 }
 
 impl ParsedDocument {
-    fn parse(id: &str, source: &str) -> ftd::p1::Result<ParsedDocument> {
+    fn parse(id: &str, source: &str) -> ftd::p11::Result<ParsedDocument> {
         Ok(ParsedDocument {
             name: id.to_string(),
             sections: ftd::p11::parse(source, id)?,
             processing_imports: true,
-            doc_aliases: ftd::p2::interpreter::default_aliases(),
+            doc_aliases: ftd::interpreter::interpreter::default_aliases(),
             var_types: Default::default(),
             foreign_variable_prefix: vec![],
             instructions: vec![],
@@ -449,7 +459,7 @@ impl ParsedDocument {
     }
 }
 
-pub fn interpret(id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
+pub fn interpret(id: &str, source: &str) -> ftd::p11::Result<Interpreter> {
     let mut s = InterpreterState::new(id.to_string());
     s.document_stack.push(ParsedDocument::parse(id, source)?);
     s.continue_()

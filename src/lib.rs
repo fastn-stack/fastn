@@ -13,6 +13,7 @@ mod condition;
 mod dnode;
 mod event;
 mod execute_doc;
+mod executer;
 mod html;
 pub mod interpreter;
 pub mod main;

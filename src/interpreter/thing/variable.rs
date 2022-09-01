@@ -1,8 +1,8 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Variable {
     pub name: String,
-    pub value: ftd::PropertyValue,
-    pub conditions: Vec<(ftd::p2::Boolean, ftd::PropertyValue)>,
+    pub value: ftd::interpreter::PropertyValue,
+    pub conditions: Vec<(ftd::interpreter::Boolean, ftd::interpreter::PropertyValue)>,
     pub flags: VariableFlags,
 }
 
@@ -26,16 +26,24 @@ impl VariableFlags {
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type")]
 pub enum PropertyValue {
-    Value { value: ftd::Value },
-    Reference { name: String, kind: ftd::p2::Kind },
-    Variable { name: String, kind: ftd::p2::Kind },
+    Value {
+        value: ftd::interpreter::Value,
+    },
+    Reference {
+        name: String,
+        kind: ftd::interpreter::Kind,
+    },
+    Variable {
+        name: String,
+        kind: ftd::interpreter::Kind,
+    },
 }
 
 impl PropertyValue {
     pub fn get_passed_by_variable(&self) -> Option<String> {
         match self {
-            ftd::PropertyValue::Reference { name, kind }
-            | ftd::PropertyValue::Variable { name, kind } => {
+            ftd::interpreter::PropertyValue::Reference { name, kind }
+            | ftd::interpreter::PropertyValue::Variable { name, kind } => {
                 if kind.is_reference() {
                     Some(name.to_string())
                 } else {
@@ -48,8 +56,8 @@ impl PropertyValue {
 
     pub fn set_reference(&mut self) {
         match self {
-            ftd::PropertyValue::Reference { kind, .. }
-            | ftd::PropertyValue::Variable { kind, .. } => {
+            ftd::interpreter::PropertyValue::Reference { kind, .. }
+            | ftd::interpreter::PropertyValue::Variable { kind, .. } => {
                 *kind = kind.clone().set_reference(true);
             }
             _ => {}
@@ -58,8 +66,8 @@ impl PropertyValue {
 
     pub fn get_reference(&self) -> Option<String> {
         match self {
-            ftd::PropertyValue::Reference { name, .. } => Some(name.to_string()),
-            ftd::PropertyValue::Variable { name, .. } => Some(name.to_string()),
+            ftd::interpreter::PropertyValue::Reference { name, .. } => Some(name.to_string()),
+            ftd::interpreter::PropertyValue::Variable { name, .. } => Some(name.to_string()),
             _ => None,
         }
     }
@@ -71,7 +79,7 @@ impl PropertyValue {
                 *value = value.clone().into_optional();
             }
             PropertyValue::Reference { kind, .. } | PropertyValue::Variable { kind, .. } => {
-                *kind = ftd::p2::Kind::Optional {
+                *kind = ftd::interpreter::Kind::Optional {
                     kind: Box::new(kind.clone()),
                     is_reference: false,
                 };
@@ -83,22 +91,24 @@ impl PropertyValue {
     pub fn resolve_value(
         line_number: usize,
         value: &str,
-        expected_kind: Option<ftd::p2::Kind>,
-        doc: &ftd::p2::TDoc,
-        arguments: &ftd::Map<ftd::p2::Kind>,
-        source: Option<ftd::TextSource>,
-    ) -> ftd::p1::Result<ftd::PropertyValue> {
+        expected_kind: Option<ftd::interpreter::Kind>,
+        doc: &ftd::interpreter::TDoc,
+        arguments: &ftd::Map<ftd::interpreter::Kind>,
+        source: Option<TextSource>,
+    ) -> ftd::p11::Result<ftd::interpreter::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
             PropertyType::Variable(arg.to_string())
-        } else if let Some(ftd::p2::Kind::UI { .. }) = expected_kind.as_ref().map(|v| v.inner()) {
+        } else if let Some(ftd::interpreter::Kind::UI { .. }) =
+            expected_kind.as_ref().map(|v| v.inner())
+        {
             if !value.contains(':') {
-                return ftd::p2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!("expected `:`, found: `{}`", value),
                     doc.name,
                     line_number,
                 );
             }
-            let name = ftd::p2::utils::split(value.to_string(), ":")?.0;
+            let name = ftd::interpreter::utils::split(value.to_string(), ":")?.0;
             PropertyType::Component { name }
         } else {
             let value = if let Some(value) = value.strip_prefix('\\') {
@@ -110,7 +120,7 @@ impl PropertyValue {
         };
 
         let (part1, mut part2) =
-            ftd::p2::utils::get_doc_name_and_remaining(&property_type.string())?;
+            ftd::interpreter::utils::get_doc_name_and_remaining(&property_type.string())?;
 
         return Ok(match property_type {
             PropertyType::Variable(ref string)
@@ -119,28 +129,28 @@ impl PropertyValue {
             } => {
                 let (kind, is_doc) = match arguments.get(&part1) {
                     _ if part1.eq("MOUSE-IN") => (
-                        ftd::p2::Kind::Boolean {
+                        ftd::interpreter::Kind::Boolean {
                             default: Some("false".to_string()),
                             is_reference: false,
                         },
                         false,
                     ),
                     _ if part1.eq("SIBLING-INDEX") || part1.eq("SIBLING-INDEX-0") => (
-                        ftd::p2::Kind::Integer {
+                        ftd::interpreter::Kind::Integer {
                             default: None,
                             is_reference: false,
                         },
                         false,
                     ),
                     _ if part1.eq("CHILDREN-COUNT") => (
-                        ftd::p2::Kind::Integer {
+                        ftd::interpreter::Kind::Integer {
                             default: Some("0".to_string()),
                             is_reference: false,
                         },
                         false,
                     ),
                     _ if part1.eq("CHILDREN-COUNT-MINUS-ONE") => (
-                        ftd::p2::Kind::Integer {
+                        ftd::interpreter::Kind::Integer {
                             default: Some("-1".to_string()),
                             is_reference: false,
                         },
@@ -148,19 +158,19 @@ impl PropertyValue {
                     ),
                     _ if part1.eq("PARENT") => {
                         let kind = if part2.eq(&Some("CHILDREN-COUNT".to_string())) {
-                            ftd::p2::Kind::Integer {
+                            ftd::interpreter::Kind::Integer {
                                 default: Some("0".to_string()),
                                 is_reference: false,
                             }
                         } else if part2.eq(&Some("CHILDREN-COUNT-MINUS-ONE".to_string())) {
-                            ftd::p2::Kind::Integer {
+                            ftd::interpreter::Kind::Integer {
                                 default: Some("-1".to_string()),
                                 is_reference: false,
                             }
                         } else if let Some(ref kind) = expected_kind {
                             kind.clone()
                         } else {
-                            return ftd::p2::utils::e2(
+                            return ftd::interpreter::utils::e2(
                                 format!("{}.{:?} expected kind for parent variable", part1, part2),
                                 doc.name,
                                 line_number,
@@ -171,16 +181,16 @@ impl PropertyValue {
                         (kind, false)
                     }
                     None => match doc.get_initial_thing(line_number, string) {
-                        Ok((ftd::p2::Thing::Variable(v), name)) => {
+                        Ok((ftd::interpreter::Thing::Variable(v), name)) => {
                             part2 = name;
                             (v.value.kind(), true)
                         }
-                        Ok((ftd::p2::Thing::Component(_), name)) => {
+                        Ok((ftd::interpreter::Thing::Component(_), name)) => {
                             part2 = name;
-                            (ftd::p2::Kind::UI { default: None }, true)
+                            (ftd::interpreter::Kind::UI { default: None }, true)
                         }
                         e => {
-                            return ftd::p2::utils::e2(
+                            return ftd::interpreter::utils::e2(
                                 format!("{} is not present in doc, {:?}", part1, e),
                                 doc.name,
                                 line_number,
@@ -207,7 +217,7 @@ impl PropertyValue {
             }
             PropertyType::Value(string) => {
                 if expected_kind.is_none() {
-                    return ftd::p2::utils::e2(
+                    return ftd::interpreter::utils::e2(
                         "expected expected_kind while calling resolve_value",
                         doc.name,
                         line_number,
@@ -215,47 +225,55 @@ impl PropertyValue {
                 }
                 let expected_kind = expected_kind.unwrap();
                 match expected_kind.inner() {
-                    ftd::p2::Kind::Integer { .. } => ftd::PropertyValue::Value {
-                        value: ftd::Value::Integer {
-                            value: string.parse::<i64>().map_err(|e| {
-                                ftd::p1::Error::ParseError {
-                                    message: e.to_string(),
-                                    doc_id: doc.name.to_string(),
-                                    line_number,
-                                }
-                            })?,
-                        },
-                    },
-                    ftd::p2::Kind::Decimal { .. } => ftd::PropertyValue::Value {
-                        value: ftd::Value::Decimal {
-                            value: string.parse::<f64>().map_err(|e| {
-                                ftd::p1::Error::ParseError {
-                                    message: e.to_string(),
-                                    doc_id: doc.name.to_string(),
-                                    line_number,
-                                }
-                            })?,
-                        },
-                    },
-                    ftd::p2::Kind::Boolean { .. } => ftd::PropertyValue::Value {
-                        value: ftd::Value::Boolean {
-                            value: string.parse::<bool>().map_err(|e| {
-                                ftd::p1::Error::ParseError {
-                                    message: e.to_string(),
-                                    doc_id: doc.name.to_string(),
-                                    line_number,
-                                }
-                            })?,
-                        },
-                    },
-                    ftd::p2::Kind::String { .. } => ftd::PropertyValue::Value {
-                        value: ftd::Value::String {
-                            text: string,
-                            source: source.unwrap_or(ftd::TextSource::Header),
-                        },
-                    },
+                    ftd::interpreter::Kind::Integer { .. } => {
+                        ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Integer {
+                                value: string.parse::<i64>().map_err(|e| {
+                                    ftd::p11::Error::ParseError {
+                                        message: e.to_string(),
+                                        doc_id: doc.name.to_string(),
+                                        line_number,
+                                    }
+                                })?,
+                            },
+                        }
+                    }
+                    ftd::interpreter::Kind::Decimal { .. } => {
+                        ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Decimal {
+                                value: string.parse::<f64>().map_err(|e| {
+                                    ftd::p11::Error::ParseError {
+                                        message: e.to_string(),
+                                        doc_id: doc.name.to_string(),
+                                        line_number,
+                                    }
+                                })?,
+                            },
+                        }
+                    }
+                    ftd::interpreter::Kind::Boolean { .. } => {
+                        ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Boolean {
+                                value: string.parse::<bool>().map_err(|e| {
+                                    ftd::p11::Error::ParseError {
+                                        message: e.to_string(),
+                                        doc_id: doc.name.to_string(),
+                                        line_number,
+                                    }
+                                })?,
+                            },
+                        }
+                    }
+                    ftd::interpreter::Kind::String { .. } => {
+                        ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::String {
+                                text: string,
+                                source: source.unwrap_or(TextSource::Header),
+                            },
+                        }
+                    }
                     t => {
-                        return ftd::p2::utils::e2(
+                        return ftd::interpreter::utils::e2(
                             format!("can't resolve value {} to expected kind {:?}", string, t),
                             doc.name,
                             line_number,
@@ -284,20 +302,20 @@ impl PropertyValue {
 
         fn get_kind(
             line_number: usize,
-            kind: &ftd::p2::Kind,
+            kind: &ftd::interpreter::Kind,
             p2: Option<String>,
-            doc: &ftd::p2::TDoc,
-            expected_kind: &Option<ftd::p2::Kind>,
-        ) -> ftd::p1::Result<ftd::p2::Kind> {
+            doc: &ftd::interpreter::TDoc,
+            expected_kind: &Option<ftd::interpreter::Kind>,
+        ) -> ftd::p11::Result<ftd::interpreter::Kind> {
             let mut found_kind = kind.to_owned();
             if let Some(ref p2) = p2 {
                 let (name, fields) = match kind.inner() {
-                    ftd::p2::Kind::Record { ref name, .. } => (
+                    ftd::interpreter::Kind::Record { ref name, .. } => (
                         name.to_string(),
                         doc.get_record(line_number, &doc.resolve_name(line_number, name)?)?
                             .fields,
                     ),
-                    ftd::p2::Kind::OrTypeWithVariant {
+                    ftd::interpreter::Kind::OrTypeWithVariant {
                         ref name, variant, ..
                     } => {
                         let name = doc.resolve_name(line_number, name)?;
@@ -307,7 +325,7 @@ impl PropertyValue {
                                 .variants
                                 .into_iter()
                                 .find(|v| v.name.eq(&format!("{}.{}", name, variant)))
-                                .ok_or_else(|| ftd::p1::Error::ParseError {
+                                .ok_or_else(|| ftd::p11::Error::ParseError {
                                     message: format!(
                                         "expected variant `{}` in or_type `{}`",
                                         variant, name
@@ -323,7 +341,7 @@ impl PropertyValue {
                 let mut p1 = p2.to_string();
                 let mut p2 = None;
                 if p1.contains('.') {
-                    let split_txt = ftd::p2::utils::split(p1.to_string(), ".")?;
+                    let split_txt = ftd::interpreter::utils::split(p1.to_string(), ".")?;
                     p1 = split_txt.0;
                     p2 = Some(split_txt.1);
                 }
@@ -333,7 +351,7 @@ impl PropertyValue {
                     }
                     Some(kind) => kind.to_owned(),
                     _ => {
-                        return ftd::p2::utils::e2(
+                        return ftd::interpreter::utils::e2(
                             format!("{} is not present in {} of type {:?}", p1, name, fields),
                             doc.name,
                             line_number,
@@ -342,8 +360,10 @@ impl PropertyValue {
                 };
             }
             if let Some(e_kind) = expected_kind {
-                if !e_kind.is_same_as(&found_kind) && !matches!(e_kind, ftd::p2::Kind::Element) {
-                    return ftd::p2::utils::e2(
+                if !e_kind.is_same_as(&found_kind)
+                    && !matches!(e_kind, ftd::interpreter::Kind::Element)
+                {
+                    return ftd::interpreter::utils::e2(
                         format!("expected {:?} found {:?}", e_kind, found_kind),
                         doc.name,
                         line_number,
@@ -361,7 +381,7 @@ impl PropertyValue {
         }
     }
 
-    pub fn kind(&self) -> ftd::p2::Kind {
+    pub fn kind(&self) -> ftd::interpreter::Kind {
         match self {
             Self::Value { value: v } => v.kind(),
             Self::Reference { kind, .. } => kind.to_owned(),
@@ -370,12 +390,16 @@ impl PropertyValue {
     }
 
     /// resolves all the internal fields too
-    pub fn resolve(&self, line_number: usize, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Value> {
+    pub fn resolve(
+        &self,
+        line_number: usize,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::p11::Result<Value> {
         let mut value = self.partial_resolve(line_number, doc)?;
         // In case of Object resolve all the values
-        if let ftd::Value::Object { values } = &mut value {
+        if let ftd::interpreter::Value::Object { values } = &mut value {
             for (_, v) in values.iter_mut() {
-                *v = ftd::PropertyValue::Value {
+                *v = ftd::interpreter::PropertyValue::Value {
                     value: v.partial_resolve(line_number, doc)?,
                 };
             }
@@ -386,15 +410,15 @@ impl PropertyValue {
     pub fn partial_resolve(
         &self,
         line_number: usize,
-        doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<Value> {
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::p11::Result<Value> {
         Ok(match self {
-            ftd::PropertyValue::Value { value: v } => v.to_owned(),
-            ftd::PropertyValue::Variable {
+            ftd::interpreter::PropertyValue::Value { value: v } => v.to_owned(),
+            ftd::interpreter::PropertyValue::Variable {
                 name: reference_name,
                 kind: reference_kind,
             }
-            | ftd::PropertyValue::Reference {
+            | ftd::interpreter::PropertyValue::Reference {
                 name: reference_name,
                 kind: reference_kind,
             } => {
@@ -430,12 +454,12 @@ pub enum TextSource {
 
 impl TextSource {
     pub fn from_kind(
-        kind: &ftd::p2::Kind,
+        kind: &ftd::interpreter::Kind,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::p1::Result<Self> {
+    ) -> ftd::p11::Result<Self> {
         Ok(match kind {
-            ftd::p2::Kind::String { caption, body, .. } => {
+            ftd::interpreter::Kind::String { caption, body, .. } => {
                 if *caption {
                     TextSource::Caption
                 } else if *body {
@@ -444,9 +468,9 @@ impl TextSource {
                     TextSource::Header
                 }
             }
-            ftd::p2::Kind::Element => TextSource::Header,
+            ftd::interpreter::Kind::Element => TextSource::Header,
             t => {
-                return ftd::p2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!("expected string kind, found: {:?}", t),
                     doc_id,
                     line_number,
@@ -461,11 +485,11 @@ impl TextSource {
 #[allow(clippy::large_enum_variant)]
 pub enum Value {
     None {
-        kind: ftd::p2::Kind,
+        kind: ftd::interpreter::Kind,
     },
     String {
         text: String,
-        source: ftd::TextSource,
+        source: TextSource,
     },
     Integer {
         value: i64,
@@ -490,26 +514,26 @@ pub enum Value {
     },
     List {
         data: Vec<PropertyValue>,
-        kind: ftd::p2::Kind,
+        kind: ftd::interpreter::Kind,
     },
     Optional {
         data: Box<Option<Value>>,
-        kind: ftd::p2::Kind,
+        kind: ftd::interpreter::Kind,
     },
     Map {
         data: ftd::Map<Value>,
-        kind: ftd::p2::Kind,
+        kind: ftd::interpreter::Kind,
     },
     UI {
         name: String,
-        kind: crate::p2::Kind,
-        data: ftd::Map<ftd::component::Property>,
+        kind: ftd::interpreter::Kind,
+        data: ftd::Map<ftd::interpreter::Property>,
     },
 }
 
 impl Value {
     /// returns a default optional value from given kind
-    pub fn default_optional_value_from_kind(kind: ftd::p2::Kind) -> Self {
+    pub fn default_optional_value_from_kind(kind: ftd::interpreter::Kind) -> Self {
         Value::Optional {
             data: Box::new(None),
             kind,
@@ -518,24 +542,26 @@ impl Value {
 
     pub fn inner_with_none(self) -> Self {
         match self {
-            ftd::Value::Optional { data, kind } => data
+            ftd::interpreter::Value::Optional { data, kind } => data
                 .as_ref()
                 .as_ref()
                 .map(|d| d.to_owned())
-                .unwrap_or(ftd::Value::None { kind }),
+                .unwrap_or(ftd::interpreter::Value::None { kind }),
             _ => self,
         }
     }
 
     pub fn inner(self) -> Option<Self> {
         match self {
-            ftd::Value::Optional { data, .. } => data.as_ref().as_ref().map(|d| d.to_owned()),
+            ftd::interpreter::Value::Optional { data, .. } => {
+                data.as_ref().as_ref().map(|d| d.to_owned())
+            }
             _ => Some(self),
         }
     }
 
-    pub fn into_optional(self) -> ftd::Value {
-        ftd::Value::Optional {
+    pub fn into_optional(self) -> ftd::interpreter::Value {
+        ftd::interpreter::Value::Optional {
             kind: self.kind(),
             data: Box::new(Some(self)),
         }
@@ -548,7 +574,7 @@ impl Value {
             return text.is_empty();
         }
         if let Self::Optional { data, .. } = self {
-            let value = if let Some(ftd::Value::String { text, .. }) = data.as_ref() {
+            let value = if let Some(ftd::interpreter::Value::String { text, .. }) = data.as_ref() {
                 text.is_empty()
             } else {
                 false
@@ -576,41 +602,41 @@ impl Value {
         false
     }
 
-    pub fn kind(&self) -> ftd::p2::Kind {
+    pub fn kind(&self) -> ftd::interpreter::Kind {
         match self {
             Value::None { kind: k } => k.to_owned(),
-            Value::String { source, .. } => ftd::p2::Kind::String {
+            Value::String { source, .. } => ftd::interpreter::Kind::String {
                 caption: *source == TextSource::Caption,
                 body: *source == TextSource::Body,
                 default: None,
                 is_reference: false,
             },
-            Value::Integer { .. } => ftd::p2::Kind::integer(),
-            Value::Decimal { .. } => ftd::p2::Kind::decimal(),
-            Value::Boolean { .. } => ftd::p2::Kind::boolean(),
-            Value::Object { .. } => ftd::p2::Kind::object(),
-            Value::Record { name: id, .. } => ftd::p2::Kind::Record {
+            Value::Integer { .. } => ftd::interpreter::Kind::integer(),
+            Value::Decimal { .. } => ftd::interpreter::Kind::decimal(),
+            Value::Boolean { .. } => ftd::interpreter::Kind::boolean(),
+            Value::Object { .. } => ftd::interpreter::Kind::object(),
+            Value::Record { name: id, .. } => ftd::interpreter::Kind::Record {
                 name: id.to_string(),
                 default: None,
                 is_reference: false,
             },
             Value::OrType {
                 name: id, variant, ..
-            } => ftd::p2::Kind::OrTypeWithVariant {
+            } => ftd::interpreter::Kind::OrTypeWithVariant {
                 name: id.to_string(),
                 variant: variant.to_string(),
                 is_reference: false,
             },
-            Value::List { kind, .. } => ftd::p2::Kind::List {
+            Value::List { kind, .. } => ftd::interpreter::Kind::List {
                 kind: Box::new(kind.to_owned()),
                 default: None,
                 is_reference: false,
             },
-            Value::Optional { kind, .. } => ftd::p2::Kind::Optional {
+            Value::Optional { kind, .. } => ftd::interpreter::Kind::Optional {
                 kind: Box::new(kind.to_owned()),
                 is_reference: false,
             },
-            Value::Map { kind, .. } => ftd::p2::Kind::Map {
+            Value::Map { kind, .. } => ftd::interpreter::Kind::Map {
                 kind: Box::new(kind.to_owned()),
                 is_reference: false,
             },
@@ -644,7 +670,7 @@ impl Value {
             Value::Object { values } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in values {
-                    if let ftd::PropertyValue::Value { value } = v {
+                    if let ftd::interpreter::PropertyValue::Value { value } = v {
                         if let Some(v) = value.to_serde_value() {
                             new_values.insert(k.to_owned(), v);
                         }
@@ -655,7 +681,7 @@ impl Value {
             Value::Record { fields, .. } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in fields {
-                    if let ftd::PropertyValue::Value { value } = v {
+                    if let ftd::interpreter::PropertyValue::Value { value } = v {
                         if let Some(v) = value.to_serde_value() {
                             new_values.insert(k.to_owned(), v);
                         }
@@ -684,7 +710,7 @@ impl Value {
             Value::Object { values } => {
                 let mut new_values: ftd::Map<String> = Default::default();
                 for (k, v) in values {
-                    if let ftd::PropertyValue::Value { value } = v {
+                    if let ftd::interpreter::PropertyValue::Value { value } = v {
                         if let Some(v) = value.to_string() {
                             new_values.insert(k.to_owned(), v);
                         }
@@ -695,7 +721,7 @@ impl Value {
             Value::Record { fields, .. } => {
                 let mut new_values: ftd::Map<String> = Default::default();
                 for (k, v) in fields {
-                    if let ftd::PropertyValue::Value { value } = v {
+                    if let ftd::interpreter::PropertyValue::Value { value } = v {
                         if let Some(v) = value.to_string() {
                             new_values.insert(k.to_owned(), v);
                         }
@@ -709,15 +735,18 @@ impl Value {
 }
 
 impl Variable {
-    pub fn list_from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
-        let var_data = ftd::variable::VariableData::get_name_kind(
+    pub fn list_from_p1(
+        p1: &ftd::p11::Section,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::p11::Result<Self> {
+        let var_data = ftd::interpreter::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
             p1.line_number,
             vec![].as_slice(),
         )?;
         let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-        let kind = ftd::p2::Kind::for_variable(
+        let kind = ftd::interpreter::Kind::for_variable(
             p1.line_number,
             &p1.name,
             None,
@@ -726,7 +755,7 @@ impl Variable {
             &Default::default(),
         )?;
         if !kind.is_list() {
-            return ftd::p2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!("Expected list found: {:?}", p1),
                 doc.name,
                 p1.line_number,
@@ -736,16 +765,16 @@ impl Variable {
             if let Some(text) = caption.strip_prefix('$') {
                 return Ok(Variable {
                     name,
-                    value: ftd::PropertyValue::Reference {
+                    value: ftd::interpreter::PropertyValue::Reference {
                         name: doc.resolve_name(p1.line_number, text)?,
-                        kind: ftd::p2::Kind::List {
+                        kind: ftd::interpreter::Kind::List {
                             kind: Box::new(kind.list_kind().to_owned()),
                             default: None,
                             is_reference: false,
                         },
                     },
                     conditions: vec![],
-                    flags: ftd::variable::VariableFlags::from_p1(
+                    flags: ftd::interpreter::variable::VariableFlags::from_p1(
                         &p1.header,
                         doc.name,
                         p1.line_number,
@@ -756,14 +785,18 @@ impl Variable {
 
         Ok(Variable {
             name,
-            value: ftd::PropertyValue::Value {
+            value: ftd::interpreter::PropertyValue::Value {
                 value: Value::List {
                     data: Default::default(),
                     kind: kind.list_kind().to_owned(),
                 },
             },
             conditions: vec![],
-            flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+            flags: ftd::interpreter::variable::VariableFlags::from_p1(
+                &p1.header,
+                doc.name,
+                p1.line_number,
+            )?,
         })
     }
 
@@ -773,14 +806,14 @@ impl Variable {
     ) -> ftd::p11::Result<Self> {
         let name = doc.resolve_name(
             p1.line_number,
-            ftd::p2::utils::get_name("map", p1.name.as_str(), doc.name)?,
+            ftd::interpreter::utils::get_name("map", p1.name.as_str(), doc.name)?,
         )?;
         Ok(Variable {
             name,
-            value: ftd::PropertyValue::Value {
+            value: ftd::interpreter::PropertyValue::Value {
                 value: Value::Map {
                     data: Default::default(),
-                    kind: ftd::p2::Kind::from(
+                    kind: ftd::interpreter::Kind::from(
                         p1.line_number,
                         p1.header.str(doc.name, p1.line_number, "type")?,
                         doc,
@@ -799,21 +832,21 @@ impl Variable {
 
     pub fn update_from_p1(
         &mut self,
-        p1: &ftd::p1::Section,
-        doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<()> {
+        p1: &ftd::p11::Section,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::p11::Result<()> {
         fn read_value(
             line_number: usize,
-            kind: &ftd::p2::Kind,
-            p1: &ftd::p1::Section,
-            doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<ftd::PropertyValue> {
+            kind: &ftd::interpreter::Kind,
+            p1: &ftd::p11::Section,
+            doc: &ftd::interpreter::TDoc,
+        ) -> ftd::p11::Result<ftd::interpreter::PropertyValue> {
             Ok(match kind {
-                ftd::p2::Kind::Integer { .. } => read_integer(p1, doc)?,
-                ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc)?,
-                ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc)?,
-                ftd::p2::Kind::String { .. } => read_string(p1, doc)?,
-                ftd::p2::Kind::Record { name, .. } => {
+                ftd::interpreter::Kind::Integer { .. } => read_integer(p1, doc)?,
+                ftd::interpreter::Kind::Decimal { .. } => read_decimal(p1, doc)?,
+                ftd::interpreter::Kind::Boolean { .. } => read_boolean(p1, doc)?,
+                ftd::interpreter::Kind::String { .. } => read_string(p1, doc)?,
+                ftd::interpreter::Kind::Record { name, .. } => {
                     doc.get_record(line_number, name)?.create(p1, doc)?
                 }
                 _ => unimplemented!("{:?}", kind),
@@ -834,31 +867,37 @@ impl Variable {
             &self.value.kind(),
             &self.value.resolve(p1.line_number, doc)?,
         ) {
-            (ftd::p2::Kind::Record { name, .. }, _) => {
+            (ftd::interpreter::Kind::Record { name, .. }, _) => {
                 self.value = doc.get_record(p1.line_number, name)?.create(&p1, doc)?
             }
-            (ftd::p2::Kind::List { kind, .. }, ftd::Value::List { data, .. }) => {
+            (
+                ftd::interpreter::Kind::List { kind, .. },
+                ftd::interpreter::Value::List { data, .. },
+            ) => {
                 let mut data = data.clone();
                 data.push(read_value(p1.line_number, kind, &p1, doc)?);
-                self.value = ftd::PropertyValue::Value {
-                    value: ftd::Value::List {
+                self.value = ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::List {
                         data,
                         kind: kind.as_ref().clone(),
                     },
                 };
             }
-            (ftd::p2::Kind::Optional { kind, .. }, ftd::Value::Optional { .. }) => {
+            (
+                ftd::interpreter::Kind::Optional { kind, .. },
+                ftd::interpreter::Value::Optional { .. },
+            ) => {
                 self.value = read_value(p1.line_number, kind, &p1, doc)
                     .map(|v| v.into_optional())
-                    .unwrap_or(ftd::PropertyValue::Value {
-                        value: ftd::Value::Optional {
+                    .unwrap_or(ftd::interpreter::PropertyValue::Value {
+                        value: ftd::interpreter::Value::Optional {
                             data: Box::new(None),
                             kind: kind.as_ref().inner().clone(),
                         },
                     });
             }
-            (ftd::p2::Kind::Map { .. }, _) => {
-                return ftd::p2::utils::e2("unexpected map", doc.name, p1.line_number)
+            (ftd::interpreter::Kind::Map { .. }, _) => {
+                return ftd::interpreter::utils::e2("unexpected map", doc.name, p1.line_number)
             }
             (k, _) => self.value = read_value(p1.line_number, k, &p1, doc)?,
         };
@@ -866,15 +905,15 @@ impl Variable {
         Ok(())
     }
 
-    pub fn from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
-        let var_data = ftd::variable::VariableData::get_name_kind(
+    pub fn from_p1(p1: &ftd::p11::Section, doc: &ftd::interpreter::TDoc) -> ftd::p11::Result<Self> {
+        let var_data = ftd::interpreter::variable::VariableData::get_name_kind(
             &p1.name,
             doc,
             p1.line_number,
             vec![].as_slice(),
         )?;
         if !var_data.is_variable() {
-            return ftd::p2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!("expected variable, found: {}", p1.name),
                 doc.name,
                 p1.line_number,
@@ -883,7 +922,7 @@ impl Variable {
         let name = var_data.name.clone();
 
         if var_data.is_optional() && p1.caption.is_none() && p1.body.is_none() {
-            let kind = ftd::p2::Kind::for_variable(
+            let kind = ftd::interpreter::Kind::for_variable(
                 p1.line_number,
                 &p1.name,
                 None,
@@ -893,14 +932,18 @@ impl Variable {
             )?;
             return Ok(Variable {
                 name,
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Optional {
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::Optional {
                         data: Box::new(None),
                         kind: kind.inner().to_owned(),
                     },
                 },
                 conditions: vec![],
-                flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+                flags: ftd::interpreter::variable::VariableFlags::from_p1(
+                    &p1.header,
+                    doc.name,
+                    p1.line_number,
+                )?,
             });
         }
 
@@ -912,12 +955,12 @@ impl Variable {
                 "boolean" => read_boolean(p1, doc)?,
                 "object" => read_object(p1, doc)?,
                 t => match doc.get_thing(p1.line_number, t)? {
-                    ftd::p2::Thing::Record(r) => r.create(p1, doc)?,
-                    ftd::p2::Thing::OrTypeWithVariant { e, variant } => {
+                    ftd::interpreter::Thing::Record(r) => r.create(p1, doc)?,
+                    ftd::interpreter::Thing::OrTypeWithVariant { e, variant } => {
                         e.create(p1, variant, doc)?
                     }
                     t => {
-                        return ftd::p2::utils::e2(
+                        return ftd::interpreter::utils::e2(
                             format!("unexpected thing found: {:?}", t),
                             doc.name,
                             p1.line_number,
@@ -926,7 +969,7 @@ impl Variable {
                 },
             };
             if var_data.is_optional() {
-                let kind = ftd::p2::Kind::for_variable(
+                let kind = ftd::interpreter::Kind::for_variable(
                     p1.line_number,
                     &p1.name,
                     None,
@@ -937,7 +980,7 @@ impl Variable {
                 //todo: use into_optional
                 match &mut value {
                     PropertyValue::Value { value } => {
-                        *value = ftd::Value::Optional {
+                        *value = ftd::interpreter::Value::Optional {
                             data: Box::new(Some(value.clone())),
                             kind: kind.inner().to_owned(),
                         };
@@ -955,39 +998,48 @@ impl Variable {
             name,
             value,
             conditions: vec![],
-            flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+            flags: ftd::interpreter::variable::VariableFlags::from_p1(
+                &p1.header,
+                doc.name,
+                p1.line_number,
+            )?,
         })
     }
 
     pub fn get_value(
         &self,
-        p1: &ftd::p1::Section,
-        doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::PropertyValue> {
+        p1: &ftd::p11::Section,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::p11::Result<ftd::interpreter::PropertyValue> {
         match self.value.kind().inner() {
-            ftd::p2::Kind::String { .. } => read_string(p1, doc),
-            ftd::p2::Kind::Integer { .. } => read_integer(p1, doc),
-            ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc),
-            ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc),
-            ftd::p2::Kind::Record { name, .. } => match doc.get_thing(p1.line_number, name)? {
-                ftd::p2::Thing::Record(r) => r.create(p1, doc),
-                t => ftd::p2::utils::e2(
-                    format!("expected record type, found: {:?}", t),
-                    doc.name,
-                    p1.line_number,
-                ),
-            },
-            ftd::p2::Kind::OrType { name, .. } | ftd::p2::Kind::OrTypeWithVariant { name, .. } => {
+            ftd::interpreter::Kind::String { .. } => read_string(p1, doc),
+            ftd::interpreter::Kind::Integer { .. } => read_integer(p1, doc),
+            ftd::interpreter::Kind::Decimal { .. } => read_decimal(p1, doc),
+            ftd::interpreter::Kind::Boolean { .. } => read_boolean(p1, doc),
+            ftd::interpreter::Kind::Record { name, .. } => {
                 match doc.get_thing(p1.line_number, name)? {
-                    ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc),
-                    t => ftd::p2::utils::e2(
+                    ftd::interpreter::Thing::Record(r) => r.create(p1, doc),
+                    t => ftd::interpreter::utils::e2(
+                        format!("expected record type, found: {:?}", t),
+                        doc.name,
+                        p1.line_number,
+                    ),
+                }
+            }
+            ftd::interpreter::Kind::OrType { name, .. }
+            | ftd::interpreter::Kind::OrTypeWithVariant { name, .. } => {
+                match doc.get_thing(p1.line_number, name)? {
+                    ftd::interpreter::Thing::OrTypeWithVariant { e, variant } => {
+                        e.create(p1, variant, doc)
+                    }
+                    t => ftd::interpreter::utils::e2(
                         format!("expected or-type type, found: {:?}", t),
                         doc.name,
                         p1.line_number,
                     ),
                 }
             }
-            t => ftd::p2::utils::e2(
+            t => ftd::interpreter::utils::e2(
                 format!("unexpected type found: {:?}", t),
                 doc.name,
                 p1.line_number,
@@ -996,7 +1048,7 @@ impl Variable {
     }
 }
 
-pub fn guess_type(s: &str, is_body: bool) -> ftd::p1::Result<Value> {
+pub fn guess_type(s: &str, is_body: bool) -> ftd::p11::Result<Value> {
     if is_body {
         return Ok(Value::String {
             text: s.to_string(),
@@ -1023,11 +1075,14 @@ pub fn guess_type(s: &str, is_body: bool) -> ftd::p1::Result<Value> {
     })
 }
 
-fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_string(
+    p1: &ftd::p11::Section,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::p11::Result<ftd::interpreter::PropertyValue> {
     let (text, source, line_number) = match (&p1.caption, &p1.body) {
         (Some(c), Some(b)) => {
-            return ftd::p2::utils::e2(
-                format!("both caption: `{}` and body: `{}` present", c, b.1),
+            return ftd::interpreter::utils::e2(
+                format!("both caption: `{:?}` and body: `{}` present", c, b.1),
                 doc.name,
                 p1.line_number,
             )
@@ -1035,7 +1090,7 @@ fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
         (Some(caption), None) => (caption.to_string(), TextSource::Caption, p1.line_number),
         (None, Some(body)) => (body.1.to_string(), TextSource::Body, body.0),
         (None, None) => {
-            return ftd::p2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 "either body or caption is required for string",
                 doc.name,
                 p1.line_number,
@@ -1043,89 +1098,101 @@ fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
         }
     };
     Ok(if let Some(text) = text.strip_prefix('$') {
-        ftd::PropertyValue::Reference {
+        ftd::interpreter::PropertyValue::Reference {
             name: doc.resolve_name(line_number, text)?,
-            kind: ftd::p2::Kind::String {
-                caption: source.eq(&ftd::TextSource::Caption),
-                body: source.eq(&ftd::TextSource::Body),
+            kind: ftd::interpreter::Kind::String {
+                caption: source.eq(&TextSource::Caption),
+                body: source.eq(&TextSource::Body),
                 default: None,
                 is_reference: false,
             },
         }
     } else {
-        ftd::PropertyValue::Value {
+        ftd::interpreter::PropertyValue::Value {
             value: Value::String { text, source },
         }
     })
 }
 
-fn read_integer(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_integer(
+    p1: &ftd::p11::Section,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::p11::Result<ftd::interpreter::PropertyValue> {
     let caption = p1.caption(p1.line_number, doc.name)?;
     Ok(if let Some(text) = caption.strip_prefix('$') {
-        ftd::PropertyValue::Reference {
+        ftd::interpreter::PropertyValue::Reference {
             name: doc.resolve_name(p1.line_number, text)?,
-            kind: ftd::p2::Kind::Integer {
+            kind: ftd::interpreter::Kind::Integer {
                 default: None,
                 is_reference: false,
             },
         }
     } else {
         if let Ok(v) = caption.parse::<i64>() {
-            return Ok(ftd::PropertyValue::Value {
+            return Ok(ftd::interpreter::PropertyValue::Value {
                 value: Value::Integer { value: v },
             });
         }
-        return ftd::p2::utils::e2("not a valid integer", doc.name, p1.line_number);
+        return ftd::interpreter::utils::e2("not a valid integer", doc.name, p1.line_number);
     })
 }
 
-fn read_decimal(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_decimal(
+    p1: &ftd::p11::Section,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::p11::Result<ftd::interpreter::PropertyValue> {
     let caption = p1.caption(p1.line_number, doc.name)?;
     Ok(if let Some(text) = caption.strip_prefix('$') {
-        ftd::PropertyValue::Reference {
+        ftd::interpreter::PropertyValue::Reference {
             name: doc.resolve_name(p1.line_number, text)?,
-            kind: ftd::p2::Kind::Integer {
+            kind: ftd::interpreter::Kind::Integer {
                 default: None,
                 is_reference: false,
             },
         }
     } else {
         if let Ok(v) = caption.parse::<f64>() {
-            return Ok(ftd::PropertyValue::Value {
+            return Ok(ftd::interpreter::PropertyValue::Value {
                 value: Value::Decimal { value: v },
             });
         }
-        return ftd::p2::utils::e2("not a valid float", doc.name, p1.line_number);
+        return ftd::interpreter::utils::e2("not a valid float", doc.name, p1.line_number);
     })
 }
 
-fn read_boolean(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_boolean(
+    p1: &ftd::p11::Section,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::p11::Result<ftd::interpreter::PropertyValue> {
     let caption = p1.caption(p1.line_number, doc.name)?;
     Ok(if let Some(text) = caption.strip_prefix('$') {
-        ftd::PropertyValue::Reference {
+        ftd::interpreter::PropertyValue::Reference {
             name: doc.resolve_name(p1.line_number, text)?,
-            kind: ftd::p2::Kind::Integer {
+            kind: ftd::interpreter::Kind::Integer {
                 default: None,
                 is_reference: false,
             },
         }
     } else {
         if let Ok(v) = caption.parse::<bool>() {
-            return Ok(ftd::PropertyValue::Value {
+            return Ok(ftd::interpreter::PropertyValue::Value {
                 value: Value::Boolean { value: v },
             });
         }
-        return ftd::p2::utils::e2("not a valid bool", doc.name, p1.line_number);
+        return ftd::interpreter::utils::e2("not a valid bool", doc.name, p1.line_number);
     })
 }
 
-fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+fn read_object(
+    p1: &ftd::p11::Section,
+    doc: &ftd::interpreter::TDoc,
+) -> ftd::p11::Result<ftd::interpreter::PropertyValue> {
     let mut values: ftd::Map<PropertyValue> = Default::default();
     if let Some(ref caption) = p1.caption {
         if let Some(text) = caption.strip_prefix('$') {
-            return Ok(ftd::PropertyValue::Reference {
+            return Ok(ftd::interpreter::PropertyValue::Reference {
                 name: doc.resolve_name(p1.line_number, text)?,
-                kind: ftd::p2::Kind::Object {
+                kind: ftd::interpreter::Kind::Object {
                     default: None,
                     is_reference: false,
                 },
@@ -1135,39 +1202,46 @@ fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
     for (line_number, k, v) in p1.header.0.iter() {
         let line_number = line_number.to_owned();
         let value = if v.trim().starts_with('$') {
-            ftd::PropertyValue::resolve_value(line_number, v, None, doc, &Default::default(), None)?
-        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+            ftd::interpreter::PropertyValue::resolve_value(
+                line_number,
+                v,
+                None,
+                doc,
+                &Default::default(),
+                None,
+            )?
+        } else if let Ok(v) = ftd::interpreter::PropertyValue::resolve_value(
             line_number,
             v,
-            Some(ftd::p2::Kind::decimal()),
+            Some(ftd::interpreter::Kind::decimal()),
             doc,
             &Default::default(),
             None,
         ) {
             v
-        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+        } else if let Ok(v) = ftd::interpreter::PropertyValue::resolve_value(
             line_number,
             v,
-            Some(ftd::p2::Kind::boolean()),
+            Some(ftd::interpreter::Kind::boolean()),
             doc,
             &Default::default(),
             None,
         ) {
             v
-        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+        } else if let Ok(v) = ftd::interpreter::PropertyValue::resolve_value(
             line_number,
             v,
-            Some(ftd::p2::Kind::integer()),
+            Some(ftd::interpreter::Kind::integer()),
             doc,
             &Default::default(),
             None,
         ) {
             v
         } else {
-            ftd::PropertyValue::resolve_value(
+            ftd::interpreter::PropertyValue::resolve_value(
                 line_number,
                 v,
-                Some(ftd::p2::Kind::string()),
+                Some(ftd::interpreter::Kind::string()),
                 doc,
                 &Default::default(),
                 None,
@@ -1176,7 +1250,7 @@ fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
         values.insert(k.to_string(), value);
     }
 
-    Ok(ftd::PropertyValue::Value {
+    Ok(ftd::interpreter::PropertyValue::Value {
         value: Value::Object { values },
     })
 }
@@ -1209,13 +1283,13 @@ impl VariableData {
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
         var_types: &[String],
-    ) -> ftd::p1::Result<VariableData> {
+    ) -> ftd::p11::Result<VariableData> {
         if s.starts_with("record ")
             || s.starts_with("or-type ")
             || s.starts_with("map ")
             || s == "container"
         {
-            return ftd::p2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!("invalid declaration, found: `{}`", s),
                 doc.name,
                 line_number,
@@ -1223,7 +1297,7 @@ impl VariableData {
         }
         let expr = s.split_whitespace().collect::<Vec<&str>>();
         if expr.len() > 4 || expr.len() <= 1 {
-            return ftd::p2::utils::e2(
+            return ftd::interpreter::utils::e2(
                 format!("invalid declaration, found: `{}`", s),
                 doc.name,
                 line_number,
@@ -1237,7 +1311,7 @@ impl VariableData {
                 kind = Some(expr[..3].join(" "));
                 name = expr.get(3);
             } else {
-                return ftd::p2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
                     doc.name,
                     line_number,
@@ -1253,7 +1327,7 @@ impl VariableData {
                 name = expr.get(2);
                 kind = expr.get(1).map(|k| k.to_string());
             } else {
-                return ftd::p2::utils::e2(
+                return ftd::interpreter::utils::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
                     doc.name,
                     line_number,
@@ -1261,7 +1335,7 @@ impl VariableData {
             }
         }
 
-        let var_kind = kind.ok_or(ftd::p1::Error::ParseError {
+        let var_kind = kind.ok_or(ftd::p11::Error::ParseError {
             message: format!("kind not found `{}`", s),
             doc_id: doc.name.to_string(),
             line_number,
@@ -1280,7 +1354,7 @@ impl VariableData {
             _ => Type::Component,
         };
 
-        let name = name.ok_or(ftd::p1::Error::ParseError {
+        let name = name.ok_or(ftd::p11::Error::ParseError {
             message: format!("name not found `{}`", s),
             doc_id: doc.name.to_string(),
             line_number,
