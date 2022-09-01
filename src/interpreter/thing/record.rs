@@ -369,7 +369,7 @@ impl Record {
                 is_reference: false,
             },
         );
-        for (i, k, v) in p1_header.0.iter() {
+        for (i, k, v) in p1_header.iter() {
             let var_data = match ftd::variable::VariableData::get_name_kind(
                 k,
                 doc,

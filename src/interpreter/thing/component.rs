@@ -732,6 +732,7 @@ impl Component {
     ) -> ftd::p11::Result<Self> {
         let var_data = ftd::interpreter::variable::VariableData::get_name_kind(
             &p1.name,
+            &p1.kind,
             doc,
             p1.line_number,
             vec![].as_slice(),
@@ -1920,44 +1921,51 @@ fn read_arguments(
 
     // Set of root arguments which are invoked once
     let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
-    for (idx, (i, k, v)) in p1.0.iter().enumerate() {
-        if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('>') {
-            // event and loop matches
-            continue;
-        }
+    for (idx, header) in p1.iter().enumerate() {
+        let (line_number, key, kind, value) = match header {
+            ftd::p11::Header::KV(ftd::p11::header::KV {
+                line_number,
+                key,
+
+                kind,
+                value,
+                ..
+            }) if !(key.starts_with('$') && key.ends_with('$')) => (line_number, key, kind, value),
+            _ => continue,
+        };
+
+        // if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('>') {
+        //     // event and loop matches
+        //     continue;
+        // }
 
         let var_data = match ftd::interpreter::variable::VariableData::get_name_kind(
-            k,
+            key,
+            kind,
             doc,
-            i.to_owned(),
+            line_number.to_owned(),
             vec![].as_slice(),
         ) {
             Ok(v) => v,
             _ => {
                 // Duplicate header usage check
-                if root_args_set.contains(k) {
-                    if let Some(kind) = root_arguments.get(k) {
+                if root_args_set.contains(key) {
+                    if let Some(kind) = root_arguments.get(key) {
                         if kind.inner().is_list() {
                             continue;
                         }
                         return Err(ftd::p11::Error::ForbiddenUsage {
-                            message: format!("repeated usage of \'{}\' not allowed !!", k),
+                            message: format!("repeated usage of \'{}\' not allowed !!", key),
                             doc_id: doc.name.to_string(),
-                            line_number: *i,
+                            line_number: *line_number,
                         });
                     }
                 } else {
-                    root_args_set.insert(k.to_string());
+                    root_args_set.insert(key.to_string());
                 }
 
                 continue;
             }
-        };
-
-        let option_v = if v.is_empty() {
-            None
-        } else {
-            Some(v.to_string())
         };
 
         let mut kind = if var_data.kind.eq("inherit") {
@@ -1966,10 +1974,13 @@ fn read_arguments(
                     inherits.push(var_data.name.to_string());
                     let default = {
                         // resolve the default value
-                        let mut default = option_v;
+                        let mut default = value.to_owned();
                         if let Some(ref v) = default {
-                            default =
-                                Some(doc.resolve_reference_name(i.to_owned(), v, &all_args)?);
+                            default = Some(doc.resolve_reference_name(
+                                line_number.to_owned(),
+                                v,
+                                &all_args,
+                            )?);
                         }
                         default
                     };
@@ -1979,12 +1990,20 @@ fn read_arguments(
                     return ftd::interpreter::utils::e2(
                         format!("'{}' is not an argument of {}", var_data.name, root),
                         doc.name,
-                        i.to_owned(),
+                        line_number.to_owned(),
                     )
                 }
             }
         } else {
-            ftd::interpreter::Kind::for_variable(i.to_owned(), k, option_v, doc, None, &all_args)?
+            ftd::interpreter::Kind::for_variable(
+                line_number.to_owned(),
+                key,
+                kind,
+                value.to_owned(),
+                doc,
+                None,
+                &all_args,
+            )?
         };
         if let ftd::interpreter::Kind::UI {
             default: Some((ui_id, h)),
@@ -1992,7 +2011,7 @@ fn read_arguments(
         {
             let headers = {
                 let mut headers = vec![];
-                let p1 = &p1.0;
+                let p1 = &p1;
                 for i in idx + 1..p1.len() {
                     let p1 = p1.get(i).unwrap();
                     if let Some(k) = p1.1.strip_prefix('>') {
@@ -2004,7 +2023,7 @@ fn read_arguments(
                 ftd::p11::Header(headers)
             };
             *h = headers;
-            *ui_id = doc.resolve_name(*i, ui_id.as_str())?;
+            *ui_id = doc.resolve_name(*line_number, ui_id.as_str())?;
         }
 
         // Duplicate header definition check
@@ -2015,7 +2034,7 @@ fn read_arguments(
                     &var_data.name
                 ),
                 doc_id: doc.name.to_string(),
-                line_number: *i,
+                line_number: *line_number,
             });
         }
 
@@ -2027,7 +2046,7 @@ fn read_arguments(
                     &var_data.name
                 ),
                 doc_id: doc.name.to_string(),
-                line_number: *i,
+                line_number: *line_number,
             });
         }
 

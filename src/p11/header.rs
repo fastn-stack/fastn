@@ -26,6 +26,18 @@ pub struct Section {
 }
 
 impl Header {
+    pub(crate) fn is_section(&self) -> bool {
+        matches!(self, Header::Section(_))
+    }
+
+    pub(crate) fn get_key(&self) -> String {
+        match self {
+            Header::KV(KV { key, .. }) => key,
+            Header::Section(Section { key, .. }) => key,
+        }
+        .to_string()
+    }
+
     pub(crate) fn from_string(
         key: &str,
         kind: Option<String>,

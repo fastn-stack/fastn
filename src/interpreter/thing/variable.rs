@@ -1279,67 +1279,66 @@ pub enum Type {
 
 impl VariableData {
     pub fn get_name_kind(
-        s: &str,
+        name: &str,
+        kind: &Option<String>,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
         var_types: &[String],
     ) -> ftd::p11::Result<VariableData> {
-        if s.starts_with("record ")
-            || s.starts_with("or-type ")
-            || s.starts_with("map ")
-            || s == "container"
-        {
-            return ftd::interpreter::utils::e2(
-                format!("invalid declaration, found: `{}`", s),
-                doc.name,
-                line_number,
-            );
-        }
-        let expr = s.split_whitespace().collect::<Vec<&str>>();
-        if expr.len() > 4 || expr.len() <= 1 {
-            return ftd::interpreter::utils::e2(
-                format!("invalid declaration, found: `{}`", s),
-                doc.name,
-                line_number,
-            );
-        }
-        let mut name = expr.get(1);
-        let mut kind = expr.get(0).map(|k| k.to_string());
-        let mut modifier = VariableModifier::None;
-        if expr.len() == 4 {
-            if expr.get(1).unwrap().eq(&"or") {
-                kind = Some(expr[..3].join(" "));
-                name = expr.get(3);
-            } else {
-                return ftd::interpreter::utils::e2(
-                    format!("invalid variable or list declaration, found: `{}`", s),
-                    doc.name,
-                    line_number,
-                );
-            }
-        } else if expr.len() == 3 {
-            if expr.get(1).unwrap().eq(&"list") {
-                modifier = VariableModifier::List;
-                name = expr.get(2);
-                kind = expr.get(0).map(|k| k.to_string());
-            } else if expr.get(0).unwrap().eq(&"optional") {
-                modifier = VariableModifier::Optional;
-                name = expr.get(2);
-                kind = expr.get(1).map(|k| k.to_string());
-            } else {
-                return ftd::interpreter::utils::e2(
-                    format!("invalid variable or list declaration, found: `{}`", s),
-                    doc.name,
-                    line_number,
-                );
-            }
-        }
-
-        let var_kind = kind.ok_or(ftd::p11::Error::ParseError {
-            message: format!("kind not found `{}`", s),
+        let mut var_kind = kind.ok_or(ftd::p11::Error::ParseError {
+            message: format!("kind not found `{}`", name),
             doc_id: doc.name.to_string(),
             line_number,
         })?;
+        if var_kind.starts_with("record")
+            || var_kind.starts_with("or-type")
+            || var_kind.starts_with("map")
+        {
+            return ftd::interpreter::utils::e2(
+                format!("invalid declaration, found: `{} {}`", var_kind, name),
+                doc.name,
+                line_number,
+            );
+        }
+        let expr = var_kind.split_whitespace().collect::<Vec<&str>>();
+        if expr.len() > 3 || expr.len() < 1 {
+            return ftd::interpreter::utils::e2(
+                format!("invalid declaration, found: `{}`", var_kind),
+                doc.name,
+                line_number,
+            );
+        }
+
+        let mut modifier = VariableModifier::None;
+        if expr.len() == 3 {
+            if !expr.get(1).unwrap().eq(&"or") {
+                return ftd::interpreter::utils::e2(
+                    format!(
+                        "invalid variable or list declaration, found: `{} {}`",
+                        var_kind, name
+                    ),
+                    doc.name,
+                    line_number,
+                );
+            }
+        } else if expr.len() == 2 {
+            if expr.get(1).unwrap().eq(&"list") {
+                modifier = VariableModifier::List;
+                var_kind = expr.get(0).unwrap().map(ToString::to_string);
+            } else if expr.get(0).unwrap().eq(&"optional") {
+                modifier = VariableModifier::Optional;
+                var_kind = expr.get(1).unwrap().map(ToString::to_string);
+            } else {
+                return ftd::interpreter::utils::e2(
+                    format!(
+                        "invalid variable or list declaration, found: `{} {}`",
+                        var_kind, name
+                    ),
+                    doc.name,
+                    line_number,
+                );
+            }
+        }
 
         let type_ = match var_kind.as_str() {
             "string" | "caption" | "body" | "body or caption" | "caption or body" | "integer"
@@ -1353,12 +1352,6 @@ impl VariableData {
             }
             _ => Type::Component,
         };
-
-        let name = name.ok_or(ftd::p11::Error::ParseError {
-            message: format!("name not found `{}`", s),
-            doc_id: doc.name.to_string(),
-            line_number,
-        })?;
 
         let (name, is_reference) = if let Some(name) = name.strip_prefix('$') {
             (name.to_string(), true)

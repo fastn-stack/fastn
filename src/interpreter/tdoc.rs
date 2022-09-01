@@ -447,6 +447,7 @@ impl<'a> TDoc<'a> {
         ftd::interpreter::Kind::for_variable(
             section.line_number,
             &section.name,
+            &section.kind,
             None,
             self,
             None,
@@ -480,6 +481,7 @@ impl<'a> TDoc<'a> {
         if let Ok(kind) = ftd::interpreter::Kind::for_variable(
             section.line_number,
             &section.name,
+            &section.kind,
             None,
             self,
             None,

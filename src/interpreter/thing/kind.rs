@@ -666,6 +666,7 @@ impl Kind {
     pub fn for_variable(
         line_number: usize,
         s: &str,
+        kind: &Option<String>,
         default: Option<String>,
         doc: &ftd::interpreter::TDoc,
         object_kind: Option<(&str, Self)>,
@@ -680,8 +681,12 @@ impl Kind {
             default
         };
 
-        let var_data =
-            ftd::variable::VariableData::get_name_kind(s, doc, line_number, vec![].as_slice())?;
+        let var_data = ftd::interpreter::variable::VariableData::get_name_kind(
+            s,
+            doc,
+            line_number,
+            vec![].as_slice(),
+        )?;
 
         let k = match object_kind {
             Some(object_kind) if var_data.kind.eq(object_kind.0) => object_kind.1,
@@ -718,7 +723,7 @@ impl Kind {
                             line_number,
                             doc.name.to_string()
                         ),
-                        Some(ref d) => ftd::variable::guess_type(d, false)?.kind(),
+                        Some(ref d) => ftd::interpreter::variable::guess_type(d, false)?.kind(),
                     },
                 },
             },

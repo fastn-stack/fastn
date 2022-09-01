@@ -109,6 +109,7 @@ impl InterpreterState {
 
             let var_data = ftd::interpreter::variable::VariableData::get_name_kind(
                 &p1.name,
+                &p1.kind,
                 &doc,
                 p1.line_number,
                 &parsed_document.var_types,
@@ -116,7 +117,7 @@ impl InterpreterState {
 
             let mut thing = vec![];
 
-            if p1.name.starts_with("record ") {
+            if ftd::interpreter::utils::is_record(&p1.kind) {
                 // declare a record
                 let d = ftd::interpreter::Record::from_p1(
                     p1.name.as_str(),
@@ -644,6 +645,7 @@ impl InterpreterState {
 
         let var_data = ftd::interpreter::variable::VariableData::get_name_kind(
             &p1.name,
+            &p1.kind,
             &doc,
             p1.line_number,
             &parsed_document.var_types,
