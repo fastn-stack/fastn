@@ -13,10 +13,10 @@ pub struct VariableFlags {
 
 impl VariableFlags {
     pub(crate) fn from_p1(
-        p1: &ftd::p1::Header,
+        p1: &[ftd::p11::Header],
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::p1::Result<Self> {
+    ) -> ftd::p11::Result<Self> {
         Ok(VariableFlags {
             always_include: p1.bool_optional(doc_id, line_number, "$always-include$")?,
         })
@@ -767,7 +767,10 @@ impl Variable {
         })
     }
 
-    pub fn map_from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
+    pub fn map_from_p1(
+        p1: &ftd::p11::Section,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::p11::Result<Self> {
         let name = doc.resolve_name(
             p1.line_number,
             ftd::p2::utils::get_name("map", p1.name.as_str(), doc.name)?,
@@ -786,7 +789,11 @@ impl Variable {
                 },
             },
             conditions: vec![],
-            flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+            flags: ftd::interpreter::variable::VariableFlags::from_p1(
+                &p1.headers,
+                doc.name,
+                p1.line_number,
+            )?,
         })
     }
 
