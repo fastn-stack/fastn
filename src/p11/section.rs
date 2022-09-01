@@ -100,6 +100,74 @@ impl Section {
         self.kind = Some(kind.to_string());
         self
     }
+
+    /// returns a copy of Section after processing comments
+    ///
+    /// ## NOTE: This function is only called by [`ParsedDocument::ignore_comments()`]
+    ///
+    /// [`ParsedDocument::ignore_comments()`]: ftd::p2::interpreter::ParsedDocument::ignore_comments
+    pub fn remove_comments(&self) -> Section {
+        /// returns body after processing comments "/" and escape "\\/" (if any)
+        pub fn body_without_comment(body: &Option<ftd::p11::Body>) -> Option<ftd::p11::Body> {
+            match body {
+                Some(ref b) if b.value.trim().is_empty() => None,
+                // If body is commented, ignore body
+                // Some(ref b) if b.1.trim().starts_with('/') => None,
+                // To allow '/content' as section body, we need to use "\/content"
+                // while stripping out the initial '\' from this body
+                // Some(ref b) if b.1.trim().starts_with(r"\/") => {
+                //     Some((b.0, b.1.trim().replacen('\\', "", 1)))
+                // }
+                Some(ref b) => Some(ftd::p11::Body::new(b.line_number, b.value.trim_end())),
+                None => None,
+            }
+        }
+
+        /// returns caption after processing comments "/" and escape "\\/" (if any)
+        pub fn caption_without_comment(
+            caption: &Option<ftd::p11::Header>,
+        ) -> Option<ftd::p11::Header> {
+            match caption {
+                Some(ftd::p11::Header::KV(ftd::p11::header::KV {
+                    value: Some(ref c), ..
+                })) if c.trim().is_empty() => None,
+                // If caption is commented, ignore it
+                // Some(ref c) if c.trim().starts_with('/') => None,
+                // To allow '/caption' as section caption, we need to use "\/caption"
+                // while stripping out the initial '\' from this caption
+                // Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen('\\', "", 1)),
+                Some(ftd::p11::Header::KV(ftd::p11::header::KV {
+                    line_number,
+                    key,
+                    kind,
+                    value: Some(ref c),
+                })) => Some(ftd::p11::Header::kv(
+                    *line_number,
+                    key,
+                    kind.to_owned(),
+                    Some(c.trim().to_string()),
+                )),
+                t => t.to_owned(),
+            }
+        }
+
+        Section {
+            name: self.name.to_string(),
+            kind: self.kind.to_owned(),
+            caption: caption_without_comment(&self.caption),
+            headers: self.headers.uncommented_headers(),
+            body: body_without_comment(&self.body),
+            sub_sections: self
+                .sub_sections
+                .iter()
+                .filter(|s| !s.is_commented)
+                .map(|s| s.remove_comments())
+                .collect::<Vec<Section>>(),
+            is_commented: false,
+            line_number: self.line_number,
+            block_body: self.block_body,
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]

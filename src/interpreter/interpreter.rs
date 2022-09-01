@@ -773,6 +773,64 @@ impl ParsedDocument {
             instructions: vec![],
         })
     }
+
+    fn done_processing_imports(&mut self) {
+        self.processing_imports = false;
+    }
+
+    /// Filters out commented parts from the parsed document.
+    ///
+    /// # Comments are ignored for
+    /// 1.  /-- section: caption
+    ///
+    /// 2.  /section-header: value
+    ///
+    /// 3.  /body
+    ///
+    /// 4.  /--- subsection: caption
+    ///
+    /// 5.  /sub-section-header: value
+    ///
+    /// ## Note: To allow ["/content"] inside body, use ["\\/content"].
+    ///
+    /// Only '/' comments are ignored here.
+    /// ';' comments are ignored inside the [`parser`] itself.
+    ///
+    /// uses [`Section::remove_comments()`] and [`Subsection::remove_comments()`] to remove comments
+    /// in sections and subsections accordingly.
+    ///
+    /// [`parser`]: ftd::p1::parser::parse
+    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+    /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+    fn ignore_comments(&mut self) {
+        self.sections = self
+            .sections
+            .iter()
+            .filter(|s| !s.is_commented)
+            .map(|s| s.remove_comments())
+            .collect::<Vec<ftd::p11::Section>>();
+    }
+
+    fn reorder(&mut self, bag: &ftd::Map<ftd::interpreter::Thing>) -> ftd::p1::Result<()> {
+        let (mut new_p1, var_types) = ftd::interpreter::utils::reorder(
+            &self.sections,
+            &ftd::interpreter::TDoc {
+                name: &self.name,
+                aliases: &self.doc_aliases,
+                bag,
+                local_variables: &mut Default::default(),
+                referenced_local_variables: &mut Default::default(),
+            },
+        )?;
+        new_p1.reverse();
+        self.sections = new_p1;
+        self.var_types = var_types;
+        Ok(())
+    }
+
+    pub fn get_doc_aliases(&self) -> ftd::Map<String> {
+        self.doc_aliases.clone()
+    }
 }
 
 pub fn interpret(id: &str, source: &str) -> ftd::p11::Result<Interpreter> {
