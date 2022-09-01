@@ -28,29 +28,25 @@ async fn serve_file(
     }
 
     config.current_document = Some(f.get_id());
-    return match f {
+    match f {
         fpm::File::Ftd(main_document) => {
-            return match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
+            match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
                 Ok(r) => actix_web::HttpResponse::Ok().body(r),
                 Err(e) => {
                     eprintln!("FPM-Error: path: {}, {:?}", path, e);
                     actix_web::HttpResponse::InternalServerError().body(e.to_string())
                 }
-            };
+            }
         }
-        fpm::File::Image(image) => {
-            return actix_web::HttpResponse::Ok()
-                .content_type(guess_mime_type(image.id.as_str()))
-                .body(image.content);
-        }
-        fpm::File::Static(s) => {
-            return actix_web::HttpResponse::Ok().body(s.content);
-        }
+        fpm::File::Image(image) => actix_web::HttpResponse::Ok()
+            .content_type(guess_mime_type(image.id.as_str()))
+            .body(image.content),
+        fpm::File::Static(s) => actix_web::HttpResponse::Ok().body(s.content),
         _ => {
             eprintln!("FPM unknown handler");
             actix_web::HttpResponse::InternalServerError().body("".as_bytes())
         }
-    };
+    }
 }
 
 async fn serve_cr_file(
@@ -178,8 +174,32 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     t.it(response)
 }
 
-pub async fn fpm_serve(bind_address: &str, port: Option<u16>) -> std::io::Result<()> {
+async fn download_init_package(url: Option<&str>) -> std::io::Result<()> {
+    let mut package = fpm::Package::new("unknown-package");
+    package.download_base_url = url.map(ToString::to_string);
+    package
+        .http_download_by_id(
+            "FPM.ftd",
+            Some(
+                &camino::Utf8PathBuf::from_path_buf(std::env::current_dir()?)
+                    .expect("FPM-Error: Unable to change path"),
+            ),
+        )
+        .await
+        .expect("Unable to find FPM.ftd file");
+    Ok(())
+}
+
+pub async fn fpm_serve(
+    bind_address: &str,
+    port: Option<u16>,
+    package_download_base_url: Option<&str>,
+) -> std::io::Result<()> {
     use colored::Colorize;
+
+    if package_download_base_url.is_some() {
+        download_init_package(package_download_base_url).await?;
+    }
 
     if cfg!(feature = "controller") {
         // fpm-controller base path and ec2 instance id (hardcoded for now)

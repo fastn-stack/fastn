@@ -1,4 +1,4 @@
 -- import: fpm
 
 -- fpm.package: www.amitu.com
-base: amitu
+download-base-url: amitu

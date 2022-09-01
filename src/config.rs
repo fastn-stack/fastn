@@ -676,7 +676,7 @@ impl Config {
         let id = id.trim_start_matches(package.name.as_str());
 
         let base = package
-            .base
+            .download_base_url
             .clone()
             .ok_or_else(|| fpm::Error::PackageError {
                 message: "package base not found".to_string(),
@@ -1202,7 +1202,8 @@ pub(crate) struct PackageTemp {
     pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
-    pub base: Option<String>,
+    #[serde(rename = "download-base-url")]
+    pub download_base_url: Option<String>,
     #[serde(rename = "canonical-url")]
     pub canonical_url: Option<String>,
     #[serde(rename = "inherit-auto-imports-from-original")]
@@ -1232,7 +1233,7 @@ impl PackageTemp {
             language: self.language,
             about: self.about,
             zip: self.zip,
-            base: self.base,
+            download_base_url: self.download_base_url,
             translation_status_summary: None,
             canonical_url: self.canonical_url,
             dependencies: vec![],
@@ -1259,7 +1260,7 @@ pub struct Package {
     pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
-    pub base: Option<String>,
+    pub download_base_url: Option<String>,
     pub translation_status_summary: Option<fpm::translation::TranslationStatusSummary>,
     pub canonical_url: Option<String>,
     /// `dependencies` keeps track of direct dependencies of a given package. This too should be
@@ -1305,7 +1306,7 @@ impl Package {
             language: None,
             about: None,
             zip: None,
-            base: None,
+            download_base_url: None,
             translation_status_summary: None,
             canonical_url: None,
             dependencies: vec![],
@@ -1365,7 +1366,7 @@ impl Package {
     }
 
     pub fn with_base(mut self, base: String) -> fpm::Package {
-        self.base = Some(base);
+        self.download_base_url = Some(base);
         self
     }
 

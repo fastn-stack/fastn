@@ -1,6 +1,6 @@
 -- import: fpm
 
 -- fpm.package: amitu
-base: amitu
+download-base-url: amitu
 
 -- fpm.dependency: shobhit.dev

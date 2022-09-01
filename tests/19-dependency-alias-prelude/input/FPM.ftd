@@ -1,7 +1,7 @@
 -- import: fpm
 
 -- fpm.package: fifthtry.github.io/amitu
-base: github.com/fifthtry/amitu/archive/refs/heads/main.zip
+download-base-url: github.com/fifthtry/amitu/archive/refs/heads/main.zip
 
 -- fpm.dependency: theme
 

@@ -30,7 +30,9 @@ async fn async_main() -> fpm::Result<()> {
         });
 
         let bind = mark.value_of("bind").unwrap_or("127.0.0.1").to_string();
-        fpm::fpm_serve(bind.as_str(), port).await?;
+        let download_base_url = mark.value_of("download-base-url");
+
+        fpm::fpm_serve(bind.as_str(), port, download_base_url).await?;
         return Ok(());
     }
 
@@ -393,38 +395,46 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static> {
                 .about("Remove a tracking relation between two files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
-        .subcommand(sub_command_serve())
+        .subcommand(sub_command::serve())
 }
 
-fn sub_command_serve() -> clap::App<'static> {
-    let serve = clap::SubCommand::with_name("serve")
-        .arg(
-            clap::Arg::with_name("port")
-                .takes_value(true)
-                .help("Specify the port to serve on"),
-        )
-        .arg(
-            clap::Arg::with_name("bind")
-                .long("--bind")
-                .takes_value(true)
-                .help("Specify the bind address to serve on"),
-        );
-
-    if cfg!(feature = "remote") {
-        serve
-    } else {
-        serve
+mod sub_command {
+    pub fn serve() -> clap::App<'static> {
+        let serve = clap::SubCommand::with_name("serve")
             .arg(
-                clap::Arg::with_name("identities")
-                    .long("--identities")
+                clap::Arg::with_name("port")
                     .takes_value(true)
-                    .required(false)
-                    .help(
-                        "Http request identities, fpm allows these identities to access documents",
-                    ),
+                    .help("Specify the port to serve on"),
             )
-            .about("Create an http server and serves static files")
-            .version(env!("CARGO_PKG_VERSION"))
+            .arg(
+                clap::Arg::with_name("bind")
+                    .long("--bind")
+                    .takes_value(true)
+                    .help("Specify the bind address to serve on"),
+            )
+            .arg(
+                clap::Arg::with_name("download-base-url")
+                    .long("--download-base-url")
+                    .takes_value(true)
+                    .help("URL of Package to download documents, where it is stored."),
+            );
+
+        if cfg!(feature = "remote") {
+            serve
+        } else {
+            serve
+                .arg(
+                    clap::Arg::with_name("identities")
+                        .long("--identities")
+                        .takes_value(true)
+                        .required(false)
+                        .help(
+                            "Http request identities, fpm allows these identities to access documents",
+                        ),
+                )
+                .about("Create an http server and serves static files")
+                .version(env!("CARGO_PKG_VERSION"))
+        }
     }
 }
 

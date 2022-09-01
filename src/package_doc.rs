@@ -41,7 +41,7 @@ impl fpm::Package {
     }
 
     async fn http_fetch_by_file_name(&self, name: &str) -> fpm::Result<Vec<u8>> {
-        let base = self.base.as_ref().ok_or_else(|| {
+        let base = self.download_base_url.as_ref().ok_or_else(|| {
             let message = format!(
                 "package base not found. Package: {}, File: {}",
                 &self.name, name

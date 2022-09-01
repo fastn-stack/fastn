@@ -1,7 +1,7 @@
 -- import: fpm
 
 -- fpm.package: fpm-sitemap
-base: github.com/fifthtry/fpm-sitemap/archive/refs/heads/main.zip
+download-base-url: github.com/fifthtry/fpm-sitemap/archive/refs/heads/main.zip
 
 -- fpm.dependency: other-package
 
