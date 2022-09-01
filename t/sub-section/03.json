@@ -1,0 +1,17 @@
+[
+  {
+    "name": "foo",
+    "headers": [
+      {
+        "type": "KV",
+        "key": "k",
+        "value": "v"
+      }
+    ],
+    "sub_sections": [
+      {
+        "name": "bar"
+      }
+    ]
+  }
+]
