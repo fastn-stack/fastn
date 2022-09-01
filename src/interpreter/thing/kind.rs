@@ -683,6 +683,7 @@ impl Kind {
 
         let var_data = ftd::interpreter::variable::VariableData::get_name_kind(
             s,
+            kind,
             doc,
             line_number,
             vec![].as_slice(),

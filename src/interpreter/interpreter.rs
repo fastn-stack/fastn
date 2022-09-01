@@ -447,7 +447,7 @@ impl InterpreterState {
     ) -> ftd::p11::Result<Option<String>> {
         if let Some(variable) = resolve_all_properties(
             &mut section.caption,
-            &mut section.header,
+            &mut section.headers,
             &mut section.body,
             section.line_number,
             foreign_variables,
@@ -456,15 +456,10 @@ impl InterpreterState {
             return Ok(Some(variable));
         }
 
-        for subsection in section.sub_sections.0.iter_mut() {
-            if let Some(variable) = resolve_all_properties(
-                &mut subsection.caption,
-                &mut subsection.header,
-                &mut subsection.body,
-                subsection.line_number,
-                foreign_variables,
-                doc,
-            )? {
+        for subsection in section.sub_sections.iter_mut() {
+            if let Some(variable) =
+                Self::resolve_foreign_variable(subsection, foreign_variables, doc)?
+            {
                 return Ok(Some(variable));
             }
         }
@@ -479,7 +474,11 @@ impl InterpreterState {
             foreign_variables: &[String],
             doc: &ftd::interpreter::TDoc,
         ) -> ftd::p11::Result<Option<String>> {
-            if let Some(ref mut caption) = caption {
+            if let Some(ftd::p11::Header::KV(ftd::p11::header::KV {
+                value: Some(ref mut caption),
+                ..
+            })) = caption
+            {
                 if let Some(cap) =
                     process_foreign_variables(caption, foreign_variables, doc, line_number)?
                 {
@@ -487,7 +486,17 @@ impl InterpreterState {
                 }
             }
 
-            for (line_number, _, header) in header.0.iter_mut() {
+            for header in header.iter_mut() {
+                let (line_number, header) = if let ftd::p11::Header::KV(ftd::p11::header::KV {
+                    value: Some(ref mut header),
+                    line_number,
+                    ..
+                }) = header
+                {
+                    (line_number, header)
+                } else {
+                    continue;
+                };
                 if let Some(h) =
                     process_foreign_variables(header, foreign_variables, doc, *line_number)?
                 {
@@ -495,7 +504,11 @@ impl InterpreterState {
                 }
             }
 
-            if let Some((line_number, ref mut body)) = body {
+            if let Some(ftd::p11::Body {
+                line_number,
+                value: ref mut body,
+            }) = body
+            {
                 if let Some(b) =
                     process_foreign_variables(body, foreign_variables, doc, *line_number)?
                 {

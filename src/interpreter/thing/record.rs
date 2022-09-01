@@ -357,12 +357,11 @@ impl Record {
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::p11::Result<Self> {
-        let name = ftd::interpreter::utils::get_name("record", p1_name, doc.name)?;
-        let full_name = doc.format_name(name);
+        let full_name = doc.format_name(p1_name);
         let mut fields = ftd::Map::new();
         let mut order = vec![];
         let object_kind = (
-            name,
+            p1_name,
             ftd::interpreter::Kind::Record {
                 name: full_name.clone(),
                 default: None,
