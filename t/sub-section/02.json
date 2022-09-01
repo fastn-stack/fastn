@@ -1,0 +1,17 @@
+[
+  {
+    "name": "foo",
+    "caption": {
+      "type": "KV",
+      "line_number": 0,
+      "key": "$caption$",
+      "kind": null,
+      "value": "hello"
+    },
+    "sub_sections": [
+      {
+        "name": "bar"
+      }
+    ]
+  }
+]

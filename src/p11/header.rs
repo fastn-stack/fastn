@@ -1,6 +1,7 @@
 use itertools::Itertools;
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
+#[serde(tag = "type")]
 pub enum Header {
     KV {
         line_number: usize,

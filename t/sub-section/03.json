@@ -1,0 +1,20 @@
+[
+  {
+    "name": "foo",
+    "caption": null,
+    "headers": [
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "k",
+        "kind": null,
+        "value": "v"
+      }
+    ],
+    "sub_sections": [
+      {
+        "name": "bar"
+      }
+    ]
+  }
+]

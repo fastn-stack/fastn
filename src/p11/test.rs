@@ -3,12 +3,12 @@ use {indoc::indoc, pretty_assertions::assert_eq}; // macro
 #[track_caller]
 fn p(s: &str, t: Vec<ftd::p11::Section>) {
     assert_eq!(
+        t,
         super::parse(s, "foo")
             .unwrap_or_else(|e| panic!("{:?}", e))
             .iter()
             .map(|v| v.without_line_number())
             .collect::<Vec<ftd::p11::Section>>(),
-        t
     )
 }
 
@@ -44,6 +44,8 @@ fn replace_extension(path: &std::path::Path, new_extension: &str) -> std::path::
 
 #[test]
 fn test_all() {
+    // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
+    // re-compiles the crate and we don't want to recompile the crate for every test
     for path in find_all_files_matching_extension_recursively("t", "ftd") {
         println!("testing: {}", path.display());
         let s = std::fs::read_to_string(&path).unwrap();
@@ -55,14 +57,15 @@ fn test_all() {
 fn find_all_files_matching_extension_recursively(
     dir: impl AsRef<std::path::Path>,
     extension: &str,
-) -> Vec<std::path::PathBuf>
-{
+) -> Vec<std::path::PathBuf> {
     let mut files = vec![];
     for entry in std::fs::read_dir(dir).unwrap() {
         let entry = entry.unwrap();
         let path = entry.path();
         if path.is_dir() {
-            files.extend(find_all_files_matching_extension_recursively(&path, extension));
+            files.extend(find_all_files_matching_extension_recursively(
+                &path, extension,
+            ));
         } else {
             match path.extension() {
                 Some(ext) if ext == extension => files.push(path),
@@ -75,22 +78,6 @@ fn find_all_files_matching_extension_recursively(
 
 #[test]
 fn sub_section() {
-    p(
-        "-- foo: hello\n-- bar:\n\n-- end: foo",
-        ftd::p11::Section::with_name("foo")
-            .and_caption("hello")
-            .add_sub_section(ftd::p11::Section::with_name("bar"))
-            .list(),
-    );
-
-    p(
-        "-- foo:\nk:v\n-- bar:\n\n-- end: foo",
-        ftd::p11::Section::with_name("foo")
-            .add_header_str("k", "v")
-            .add_sub_section(ftd::p11::Section::with_name("bar"))
-            .list(),
-    );
-
     p(
         "-- foo:\n\nhello world\n-- bar:\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")
