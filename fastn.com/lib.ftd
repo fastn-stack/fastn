@@ -103,8 +103,6 @@ spacing: 40
 -- ftd.column hero-mobile:
 caption title:
 ftd.image-src image:
-optional string id:
-id: $id
 width: fill
 background-color: $fpm.color.main.background.base
 padding-horizontal: 20

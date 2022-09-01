@@ -496,8 +496,6 @@ spacing: 40
 -- ftd.column hero-mobile:
 caption title:
 ftd.image-src image:
-optional string id:
-id: $id
 width: fill
 background-color: $fpm.color.main.background.base
 padding-horizontal: 20
@@ -1085,7 +1083,6 @@ margin-bottom: 34
 
 
 -- ftd.iframe youtube:
-string id:
 youtube: $id
 height: 400
 width: fill
@@ -1100,8 +1097,6 @@ margin-bottom: 34
 
 
 -- ftd.column container:
-optional string id:
-id: $id
 max-width: 800
 width: fill
 padding-top: 15
@@ -1160,7 +1155,6 @@ ftd.image-src src:
 optional caption caption:
 optional body body:
 optional string link:
-optional string align:
 optional string width:
 optional string height:
 width: fill
