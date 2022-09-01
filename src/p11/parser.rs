@@ -135,6 +135,7 @@ impl State {
     fn reading_section(&mut self) -> ftd::p11::Result<()> {
         let (scan_line_number, content) = self.clean_content();
         let (start_line, rest_lines) = new_line_split(content.as_str());
+        let start_line = start_line.trim();
 
         if !start_line.starts_with("-- ") && !start_line.starts_with("/-- ") {
             return Err(ftd::p11::Error::SectionNotFound {
@@ -144,13 +145,19 @@ impl State {
             });
         }
 
+        let start_line = clean_line(start_line);
+
         let is_commented = start_line.starts_with("/-- ");
         let line = if is_commented {
             &start_line[3..]
         } else {
             &start_line[2..]
         };
+
+        self.line_number += scan_line_number + 1;
+
         let (name_with_kind, caption) =
+        //  section-kind section-name: caption
             colon_separated_values(self.line_number, line, self.doc_id.as_str())?;
         let (section_name, kind) = get_name_and_kind(name_with_kind.as_str());
         let section = ftd::p11::Section {
@@ -168,7 +175,6 @@ impl State {
         self.state
             .push((section, vec![ParsingStateReading::Section]));
         self.content = rest_lines;
-        self.line_number += scan_line_number + 1;
         self.reading_inline_headers()?;
         self.next()
     }
@@ -191,6 +197,8 @@ impl State {
         };
 
         let (start_line, rest_lines) = new_line_split(content.as_str());
+
+        let start_line = start_line.trim();
 
         if !start_line.starts_with("-- ") && !start_line.starts_with("/-- ") {
             parsing_states.push(header_not_found_next_state);
@@ -389,6 +397,7 @@ impl State {
         self.next()
     }
 
+    // There should not be no new line in the headers
     fn reading_inline_headers(&mut self) -> ftd::p11::Result<()> {
         let mut headers = vec![];
         let mut new_line_number = None;
