@@ -4,7 +4,7 @@ use itertools::Itertools;
 #[serde(tag = "type")]
 pub enum Header {
     KV(ftd::p11::header::KV),
-    Section(ftd::p11::header::Section)
+    Section(ftd::p11::header::Section),
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
@@ -78,16 +78,17 @@ impl Header {
                 let mut kv = (*kv).clone();
                 kv.line_number = 0;
                 Header::KV(kv)
-            },
+            }
             Header::Section(s) => {
                 let mut s = (*s).clone();
                 s.line_number = 0;
-                s.section = s.section
+                s.section = s
+                    .section
                     .iter()
                     .map(|v| v.without_line_number())
                     .collect_vec();
                 Header::Section(s)
-            },
+            }
         }
     }
 }
