@@ -36,15 +36,45 @@ fn f(s: &str, m: &str) {
     }
 }
 
+fn replace_extension(path: &std::path::Path, new_extension: &str) -> std::path::PathBuf {
+    let mut new_path = path.to_path_buf();
+    new_path.set_extension(new_extension);
+    new_path
+}
+
+#[test]
+fn test_all() {
+    for path in find_all_files_matching_extension_recursively("t", "ftd") {
+        println!("testing: {}", path.display());
+        let s = std::fs::read_to_string(&path).unwrap();
+        let t = std::fs::read_to_string(replace_extension(&path, "json")).unwrap();
+        p(&s, serde_json::from_str(&t).unwrap());
+    }
+}
+
+fn find_all_files_matching_extension_recursively(
+    dir: impl AsRef<std::path::Path>,
+    extension: &str,
+) -> Vec<std::path::PathBuf>
+{
+    let mut files = vec![];
+    for entry in std::fs::read_dir(dir).unwrap() {
+        let entry = entry.unwrap();
+        let path = entry.path();
+        if path.is_dir() {
+            files.extend(find_all_files_matching_extension_recursively(&path, extension));
+        } else {
+            match path.extension() {
+                Some(ext) if ext == extension => files.push(path),
+                _ => continue,
+            }
+        }
+    }
+    files
+}
+
 #[test]
 fn sub_section() {
-    p(
-        "-- foo:\n\n-- bar:\n\n-- end: foo",
-        ftd::p11::Section::with_name("foo")
-            .add_sub_section(ftd::p11::Section::with_name("bar"))
-            .list(),
-    );
-
     p(
         "-- foo: hello\n-- bar:\n\n-- end: foo",
         ftd::p11::Section::with_name("foo")

@@ -1,0 +1,10 @@
+[
+  {
+    "name": "foo",
+    "sub_sections": [
+      {
+        "name": "bar"
+      }
+    ]
+  }
+]

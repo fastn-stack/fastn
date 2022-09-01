@@ -1,6 +1,7 @@
 use itertools::Itertools;
 
-#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
+#[serde(default)]
 pub struct Section {
     pub name: String,
     pub kind: Option<String>,
