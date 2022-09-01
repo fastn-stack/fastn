@@ -2,7 +2,7 @@
 
 -- fpm.package: fpm.dev
 zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
-base: https://raw.githubusercontent.com/fifthtry/fpm.dev/main
+download-base-url: https://raw.githubusercontent.com/fifthtry/fpm.dev/main
 language: English
 translation: hi.fpm.dev
 

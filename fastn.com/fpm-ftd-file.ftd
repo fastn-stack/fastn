@@ -44,6 +44,11 @@ specific version from Git repo, you can locate its corresponding `.zip` file and
 store it here.
 
 
+-- ft.h2: `download-base-url`
+
+`download-base-url` is the base url of package where it is actually stored.
+
+
 -- ft.h1: `fpm.dependency`
 
 A package can depend on another package.

@@ -16,7 +16,7 @@ pub struct Package {
     pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
-    pub base: Option<String>,
+    pub download_base_url: Option<String>,
     pub translation_status_summary: Option<fpm::translation::TranslationStatusSummary>,
     pub canonical_url: Option<String>,
     pub dependencies: Vec<fpm::Dependency>,
@@ -93,6 +93,12 @@ specified in FPM.ftd, that file will be used.
 
 If more than one favicon.* file is present, we will use them
 in following priority: .ico > .svg > .png > .jpg
+
+-- ft.h2: `download_base_url`
+
+`download_base_url` is base url from where package data has to download. We have
+to pass it also as command line parameter `--download-base-url` for main package,
+if `FPM.ftd` does not exists.
 
 
 -- ft.h1: Package Functions
