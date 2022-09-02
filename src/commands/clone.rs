@@ -33,7 +33,7 @@ async fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResp
     }
 
     let response: ApiResponse =
-        fpm::utils::get_json(format!("{}/-/clone/", source).as_str()).await?;
+        crate::http::get_json(format!("{}/-/clone/", source).as_str()).await?;
 
     if !response.success {
         return Err(fpm::Error::APIResponseError(

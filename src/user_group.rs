@@ -439,6 +439,15 @@ pub async fn access_identities(
     document_name: &str,
     is_read: bool,
 ) -> fpm::Result<Vec<UserIdentity>> {
+    access_identities_(config, req, document_name, is_read).await
+}
+
+async fn access_identities_(
+    config: &fpm::Config,
+    req: &actix_web::HttpRequest,
+    document_name: &str,
+    is_read: bool,
+) -> fpm::Result<Vec<UserIdentity>> {
     use itertools::Itertools;
     if cfg!(feature = "remote") {
         let sitemap_identities = get_identities(config, document_name, is_read)?;

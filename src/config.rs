@@ -683,7 +683,7 @@ impl Config {
             })?;
 
         if id.eq("/") {
-            if let Ok(string) = fpm::utils::http_get_str(
+            if let Ok(string) = crate::http::http_get_str(
                 format!("{}/index.ftd", base.trim_end_matches('/')).as_str(),
             )
             .await
@@ -696,7 +696,7 @@ impl Config {
                     .await?;
                 return Ok(format!(".packages/{}/index.ftd", package.name));
             }
-            if let Ok(string) = fpm::utils::http_get_str(
+            if let Ok(string) = crate::http::http_get_str(
                 format!("{}/README.md", base.trim_end_matches('/')).as_str(),
             )
             .await
@@ -716,7 +716,7 @@ impl Config {
 
         let id = id.trim_matches('/').to_string();
         if let Ok(string) =
-            fpm::utils::http_get_str(format!("{}/{}.ftd", base.trim_end_matches('/'), id).as_str())
+            crate::http::http_get_str(format!("{}/{}.ftd", base.trim_end_matches('/'), id).as_str())
                 .await
         {
             let (prefix, id) = match id.rsplit_once('/') {
@@ -734,7 +734,7 @@ impl Config {
                 .await?;
             return Ok(file_path.to_string());
         }
-        if let Ok(string) = fpm::utils::http_get_str(
+        if let Ok(string) = crate::http::http_get_str(
             format!("{}/{}/index.ftd", base.trim_end_matches('/'), id).as_str(),
         )
         .await
@@ -749,7 +749,7 @@ impl Config {
             return Ok(file_path.to_string());
         }
         if let Ok(string) =
-            fpm::utils::http_get_str(format!("{}/{}.md", base.trim_end_matches('/'), id).as_str())
+            crate::http::http_get_str(format!("{}/{}.md", base.trim_end_matches('/'), id).as_str())
                 .await
         {
             let base = root.join(".packages").join(package.name.as_str());
@@ -760,7 +760,7 @@ impl Config {
                 .await?;
             return Ok(format!(".packages/{}/{}.md", package.name, id));
         }
-        if let Ok(string) = fpm::utils::http_get_str(
+        if let Ok(string) = crate::http::http_get_str(
             format!("{}/{}/README.md", base.trim_end_matches('/'), id).as_str(),
         )
         .await
@@ -1123,6 +1123,14 @@ impl Config {
     }
 
     pub(crate) async fn can_read(
+        &self,
+        req: &actix_web::HttpRequest,
+        document_path: &str,
+    ) -> fpm::Result<bool> {
+        self.can_read_(req, document_path).await
+    }
+
+    async fn can_read_(
         &self,
         req: &actix_web::HttpRequest,
         document_path: &str,
@@ -1681,7 +1689,7 @@ impl Package {
     }
 
     pub(crate) async fn get_fpm(&self) -> fpm::Result<String> {
-        fpm::utils::construct_url_and_get_str(format!("{}/FPM.ftd", self.name).as_str()).await
+        crate::http::construct_url_and_get_str(format!("{}/FPM.ftd", self.name).as_str()).await
     }
 
     pub(crate) async fn resolve(&mut self, fpm_path: &camino::Utf8PathBuf) -> fpm::Result<()> {

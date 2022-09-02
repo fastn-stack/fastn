@@ -49,7 +49,7 @@ pub async fn processor<'a>(
         url.query_pairs_mut().append_pair(k, v);
     }
 
-    let json = match fpm::utils::http_get(url.as_str()).await {
+    let json = match crate::http::http_get(url.as_str()).await {
         Ok(v) => v,
         Err(e) => {
             return ftd::p2::utils::e2(

@@ -55,6 +55,15 @@ async fn serve_cr_file(
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> actix_web::HttpResponse {
+    serve_cr_file_(req, config, path, cr_number).await
+}
+
+async fn serve_cr_file_(
+    req: &actix_web::HttpRequest,
+    config: &mut fpm::Config,
+    path: &camino::Utf8Path,
+    cr_number: usize,
+) -> actix_web::HttpResponse {
     let f = match config
         .get_file_and_package_by_cr_id(path.as_str(), cr_number)
         .await

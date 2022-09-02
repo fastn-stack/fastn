@@ -1,7 +1,3 @@
-// use itertools::Itertools;
-// use std::cmp::Ordering;
-// use std::io::Write;
-
 #[derive(Clone, Eq, PartialEq, Hash, Debug)]
 pub struct Version {
     pub major: u64,

@@ -151,13 +151,13 @@ impl fpm::Package {
             {
                 let response =
                     if download_url[1..].contains("://") || download_url.starts_with("//") {
-                        fpm::utils::http_get(download_url.as_str()).await?
+                        crate::http::http_get(download_url.as_str()).await?
                     } else if let Ok(response) =
-                        fpm::utils::http_get(format!("https://{}", download_url).as_str()).await
+                        crate::http::http_get(format!("https://{}", download_url).as_str()).await
                     {
                         response
                     } else {
-                        fpm::utils::http_get(format!("http://{}", download_url).as_str()).await?
+                        crate::http::http_get(format!("http://{}", download_url).as_str()).await?
                     };
                 let mut file = std::fs::File::create(&path)?;
                 // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
@@ -237,11 +237,11 @@ impl fpm::Package {
 
         async fn get_fpm(name: &str) -> fpm::Result<String> {
             if let Ok(response_fpm) =
-                fpm::utils::http_get_str(format!("https://{}/FPM.ftd", name).as_str()).await
+                crate::http::http_get_str(format!("https://{}/FPM.ftd", name).as_str()).await
             {
                 Ok(response_fpm)
             } else if let Ok(response_fpm) =
-                fpm::utils::http_get_str(format!("http://{}/FPM.ftd", name).as_str()).await
+                crate::http::http_get_str(format!("http://{}/FPM.ftd", name).as_str()).await
             {
                 Ok(response_fpm)
             } else {
@@ -356,11 +356,11 @@ impl fpm::Package {
 
         async fn get_fpm(name: &str) -> fpm::Result<String> {
             if let Ok(response_fpm) =
-                fpm::utils::http_get_str(format!("https://{}/FPM.ftd", name).as_str()).await
+                crate::http::http_get_str(format!("https://{}/FPM.ftd", name).as_str()).await
             {
                 Ok(response_fpm)
             } else if let Ok(response_fpm) =
-                fpm::utils::http_get_str(format!("http://{}/FPM.ftd", name).as_str()).await
+                crate::http::http_get_str(format!("http://{}/FPM.ftd", name).as_str()).await
             {
                 Ok(response_fpm)
             } else {
@@ -391,13 +391,13 @@ impl fpm::Package {
         // Download the zip folder
         {
             let response = if download_url[1..].contains("://") || download_url.starts_with("//") {
-                fpm::utils::http_get(download_url.as_str()).await?
+                crate::http::http_get(download_url.as_str()).await?
             } else if let Ok(response) =
-                fpm::utils::http_get(format!("https://{}", download_url).as_str()).await
+                crate::http::http_get(format!("https://{}", download_url).as_str()).await
             {
                 response
             } else {
-                fpm::utils::http_get(format!("http://{}", download_url).as_str()).await?
+                crate::http::http_get(format!("http://{}", download_url).as_str()).await?
             };
             let mut file = std::fs::File::create(&path)?;
             // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
