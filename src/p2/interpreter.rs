@@ -1362,11 +1362,11 @@ pub mod markdown {
                 value: ftd::Value::Record {
                     name: "ftd#markdown-color-data".to_string(),
                     fields: std::iter::IntoIterator::into_iter([
-                        link("#136351", "#25c19f"),
-                        code("#000000", "#25c19f"),
-                        link_visited("#7b3ee8", "#0f5750"),
-                        link_code("#136351", "#25c19f"),
-                        link_visited_code("#136351", "#0f5750"),
+                        link("#6a89b8", "#58a6ff"),
+                        code("#f6f7f8", "#f6f7f8"),
+                        link_visited("#9475cb", "#a27de7"),
+                        link_code("#6a89b8", "#58a6ff"),
+                        link_visited_code("#6a89b8", "#a27de7"),
                         ul_ol_li_before("#000000", "#ffffff"),
                     ])
                     .collect(),
@@ -1386,13 +1386,13 @@ pub mod markdown {
                 value: ftd::Value::Record {
                     name: "ftd#markdown-background-color-data".to_string(),
                     fields: std::iter::IntoIterator::into_iter([
-                        link("#136351", "#25c19f"),
-                        code("#f6f7f8", "#ffffff"),
-                        link_visited("#7b3ee8", "#0f5750"),
-                        link_code("#136351", "#25c19f"),
-                        link_visited_code("#136351", "#0f5750"),
-                        ul_ol_li_before("#000000", "#ffffff"),
-                        blockquote("#f6f7f8", "#f0f0f0"),
+                        link("#18181b", "#18181b"),
+                        code("#9f9b9b45", "#9f9b9b45"),
+                        link_visited("#18181b", "#18181b"),
+                        link_code("#9f9b9b45", "#9f9b9b45"),
+                        link_visited_code("#18181b", "#18181b"),
+                        ul_ol_li_before("#18181b", "#18181b"),
+                        blockquote("#f0f0f0", "#f0f0f0"),
                     ])
                     .collect(),
                 },
