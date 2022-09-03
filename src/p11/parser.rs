@@ -1,7 +1,11 @@
 #[derive(Debug, Clone)]
 enum ParsingStateReading {
     Section,
-    Header { key: String, kind: Option<String> },
+    Header {
+        key: String,
+        kind: Option<String>,
+        condition: Option<String>,
+    },
     Caption,
     Body,
     Subsection,
@@ -35,8 +39,12 @@ impl State {
                 ParsingStateReading::Section => {
                     self.reading_block_headers()?;
                 }
-                ParsingStateReading::Header { key, kind } => {
-                    self.reading_header_value(key.as_str(), kind)?;
+                ParsingStateReading::Header {
+                    key,
+                    kind,
+                    condition,
+                } => {
+                    self.reading_header_value(key.as_str(), kind, condition)?;
                 }
                 ParsingStateReading::Caption => {
                     self.reading_caption_value()?;
@@ -92,15 +100,18 @@ impl State {
                         section.sub_sections.extend(sections);
                         break;
                     }
-                    ParsingStateReading::Header { key, kind }
-                        if caption.eq(format!("{}.{}", section.name, key).as_str()) =>
-                    {
+                    ParsingStateReading::Header {
+                        key,
+                        kind,
+                        condition,
+                    } if caption.eq(format!("{}.{}", section.name, key).as_str()) => {
                         sections.reverse();
                         section.headers.push(ftd::p11::Header::section(
                             line_number,
                             key.as_str(),
                             kind,
                             sections,
+                            condition,
                         ));
                         break;
                     }
@@ -214,7 +225,7 @@ impl State {
 
         let (name_with_kind, value) =
             colon_separated_values(self.line_number, line, self.doc_id.as_str())?;
-        let (key, kind) = get_name_and_kind(name_with_kind.as_str());
+        let (key, kind, condition) = get_name_kind_and_condition(name_with_kind.as_str());
 
         let key = if let Some(key) = key.strip_prefix(format!("{}.", section.name).as_str()) {
             key
@@ -239,6 +250,7 @@ impl State {
                 key,
                 kind,
                 Some(value),
+                condition,
             ))
         } else {
             parsing_states.push(if is_caption(key) {
@@ -249,6 +261,7 @@ impl State {
                 ParsingStateReading::Header {
                     key: key.to_string(),
                     kind,
+                    condition,
                 }
             });
         }
@@ -259,6 +272,7 @@ impl State {
         &mut self,
         header_key: &str,
         header_kind: Option<String>,
+        condition: Option<String>,
     ) -> ftd::p11::Result<()> {
         if let Err(ftd::p11::Error::SectionNotFound { .. }) = self.reading_section() {
             let mut value = vec![];
@@ -302,6 +316,7 @@ impl State {
                 header_key,
                 header_kind,
                 if value.is_empty() { None } else { Some(value) },
+                condition,
             ));
         }
         self.next()
@@ -414,12 +429,14 @@ impl State {
             if let Ok((name_with_kind, caption)) =
                 colon_separated_values(self.line_number, line.as_str(), self.doc_id.as_str())
             {
-                let (header_key, kind) = get_name_and_kind(name_with_kind.as_str());
+                let (header_key, kind, condition) =
+                    get_name_kind_and_condition(name_with_kind.as_str());
                 headers.push(ftd::p11::Header::kv(
                     line_number,
                     header_key.as_str(),
                     kind,
                     caption,
+                    condition,
                 ));
             } else {
                 new_line_number = Some(line_number);
@@ -522,14 +539,25 @@ fn colon_separated_values(
 }
 
 fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
-    if name_with_kind.contains(" if ") {
-        return (name_with_kind.to_string(), None);
-    }
     if let Some((kind, name)) = name_with_kind.rsplit_once(' ') {
         return (name.to_string(), Some(kind.to_string()));
     }
 
     (name_with_kind.to_string(), None)
+}
+
+fn get_name_kind_and_condition(s: &str) -> (String, Option<String>, Option<String>) {
+    let (name_with_kind, condition) =
+        if let Some((name_with_kind, condition)) = s.split_once(" if ") {
+            (name_with_kind.trim(), Some(condition.trim().to_string()))
+        } else {
+            (s, None)
+        };
+
+    if let Some((kind, name)) = name_with_kind.rsplit_once(' ') {
+        return (name.to_string(), Some(kind.to_string()), condition);
+    }
+    (name_with_kind.to_string(), None, condition)
 }
 
 fn clean_line(line: &str) -> String {

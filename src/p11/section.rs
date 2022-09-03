@@ -76,6 +76,7 @@ impl Section {
             } else {
                 Some(value.to_string())
             },
+            None,
         ));
         self
     }
@@ -87,7 +88,7 @@ impl Section {
         section: Vec<ftd::p11::Section>,
     ) -> Self {
         self.headers
-            .push(ftd::p11::Header::section(0, key, kind, section));
+            .push(ftd::p11::Header::section(0, key, kind, section, None));
         self
     }
 
@@ -141,11 +142,13 @@ impl Section {
                     key,
                     kind,
                     value: Some(ref c),
+                    condition,
                 })) => Some(ftd::p11::Header::kv(
                     *line_number,
                     key,
                     kind.to_owned(),
                     Some(c.trim().to_string()),
+                    condition.to_owned(),
                 )),
                 t => t.to_owned(),
             }
