@@ -13,7 +13,7 @@ pub struct VariableFlags {
 
 impl VariableFlags {
     pub(crate) fn from_p1(
-        p1: &[ftd::p11::Header],
+        p1: &ftd::p11::Headers,
         doc_id: &str,
         line_number: usize,
     ) -> ftd::p11::Result<Self> {
@@ -94,7 +94,7 @@ impl PropertyValue {
         expected_kind: Option<ftd::interpreter::Kind>,
         doc: &ftd::interpreter::TDoc,
         arguments: &ftd::Map<ftd::interpreter::Kind>,
-        source: Option<TextSource>,
+        source: Option<ftd::interpreter::TextSource>,
     ) -> ftd::p11::Result<ftd::interpreter::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
             PropertyType::Variable(arg.to_string())
@@ -804,10 +804,7 @@ impl Variable {
         p1: &ftd::p11::Section,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::p11::Result<Self> {
-        let name = doc.resolve_name(
-            p1.line_number,
-            ftd::interpreter::utils::get_name("map", p1.name.as_str(), doc.name)?,
-        )?;
+        let name = doc.resolve_name(p1.line_number, p1.name.as_str())?;
         Ok(Variable {
             name,
             value: ftd::interpreter::PropertyValue::Value {
@@ -815,7 +812,9 @@ impl Variable {
                     data: Default::default(),
                     kind: ftd::interpreter::Kind::from(
                         p1.line_number,
-                        p1.header.str(doc.name, p1.line_number, "type")?,
+                        p1.headers
+                            .str(doc.name, p1.line_number, "type")?
+                            .map_or("", String::as_str),
                         doc,
                         None,
                     )?,

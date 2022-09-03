@@ -6,7 +6,7 @@ pub struct Section {
     pub name: String,
     pub kind: Option<String>,
     pub caption: Option<ftd::p11::Header>,
-    pub headers: Vec<ftd::p11::Header>,
+    pub headers: ftd::p11::Headers,
     pub body: Option<Body>,
     pub sub_sections: Vec<Section>,
     pub is_commented: bool,
@@ -24,7 +24,7 @@ impl Section {
             sub_sections: vec![],
             is_commented: false,
             line_number: 0,
-            headers: vec![],
+            headers: ftd::p11::Headers(vec![]),
             block_body: false,
         }
     }

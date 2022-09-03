@@ -578,14 +578,11 @@ impl Kind {
     pub fn from(
         line_number: usize,
         s: &str,
-        doc: &ftd::interpreter::TDoc,
+        doc: &ftd::p2::TDoc,
         object_kind: Option<(&str, Self)>,
     ) -> ftd::p11::Result<Self> {
         let (optional, k) = if s.starts_with("optional ") {
-            (
-                true,
-                ftd::interpreter::utils::get_name("optional", s, doc.name)?,
-            )
+            (true, ftd::p2::utils::get_name("optional", s, doc.name)?)
         } else {
             (false, s)
         };
@@ -636,12 +633,12 @@ impl Kind {
             "int-message" => Kind::IntMessage,
             "ftd.ui" => Kind::UI { default: None },
             _ => match doc.get_thing(line_number, k)? {
-                ftd::interpreter::Thing::Record(r) => Kind::Record {
+                ftd::p2::Thing::Record(r) => Kind::Record {
                     name: r.name,
                     default: None,
                     is_reference: false,
                 },
-                ftd::interpreter::Thing::OrType(e) => Kind::OrType {
+                ftd::p2::Thing::OrType(e) => Kind::OrType {
                     name: e.name,
                     is_reference: false,
                 },

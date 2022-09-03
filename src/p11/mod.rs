@@ -6,7 +6,7 @@ pub mod header;
 mod parser;
 mod section;
 
-pub use header::Header;
+pub use header::{Header, Headers};
 pub use parser::parse;
 pub use section::Body;
 pub use section::Section;

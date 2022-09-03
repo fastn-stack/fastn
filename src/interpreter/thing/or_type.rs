@@ -6,16 +6,14 @@ pub struct OrType {
 
 impl OrType {
     pub fn from_p1(p1: &ftd::p11::Section, doc: &ftd::interpreter::TDoc) -> ftd::p11::Result<Self> {
-        let or_type_name =
-            ftd::interpreter::utils::get_name("or-type", p1.name.as_str(), doc.name)?;
-        let name = doc.format_name(or_type_name);
+        let name = doc.format_name(p1.name.as_str());
         let mut variants: Vec<ftd::interpreter::Record> = Default::default();
         for s in p1.sub_sections.iter() {
             if s.is_commented {
                 continue;
             }
             variants.push(ftd::interpreter::Record::from_p1(
-                format!("record {}.{}", or_type_name, s.name.as_str()).as_str(),
+                format!("record {}.{}", p1.name, s.name.as_str()).as_str(),
                 &s.headers,
                 doc,
                 p1.line_number,

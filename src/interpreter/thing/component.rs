@@ -726,10 +726,7 @@ impl Component {
         new_caption_title
     }
 
-    pub fn from_p1(
-        p1: &ftd::interpreter::Section,
-        doc: &ftd::interpreter::TDoc,
-    ) -> ftd::p11::Result<Self> {
+    pub fn from_p1(p1: &ftd::p11::Section, doc: &ftd::interpreter::TDoc) -> ftd::p11::Result<Self> {
         let var_data = ftd::interpreter::variable::VariableData::get_name_kind(
             &p1.name,
             &p1.kind,
@@ -748,7 +745,7 @@ impl Component {
         let root = doc.resolve_name(p1.line_number, var_data.kind.as_str())?;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
         let (mut arguments, inherits) = read_arguments(
-            &p1.header,
+            &p1.headers,
             root.as_str(),
             &root_component.arguments,
             &Default::default(),
@@ -760,7 +757,8 @@ impl Component {
 
         assert_no_extra_properties(
             p1.line_number,
-            &p1.header,
+            &p1.headers,
+            &p1.kind,
             root.as_str(),
             &root_component.arguments,
             &p1.name,
@@ -768,14 +766,19 @@ impl Component {
         )?;
         let mut instructions: Vec<Instruction> = Default::default();
 
-        for sub in p1.sub_sections.0.iter() {
+        for sub in p1.sub_sections.iter() {
             if sub.is_commented {
                 continue;
             }
-            if let Ok(loop_data) = sub.header.str(doc.name, p1.line_number, "$loop$") {
+            if let Ok(loop_data) = sub.headers.str(doc.name, p1.line_number, "$loop$") {
+                let loop_data = loop_data.ok_or(|| ftd::p11::Error::ParseError {
+                    message: format!("Expected value for $loop$"),
+                    doc_id: doc.name.to_string(),
+                    line_number: sub.line_number,
+                })?;
                 instructions.push(Instruction::RecursiveChildComponent {
                     child: recursive_child_component(
-                        loop_data,
+                        loop_data.as_str(),
                         sub,
                         doc,
                         &arguments,
@@ -901,7 +904,7 @@ pub fn recursive_child_component(
         };
     }
 
-    let recursive_property_value = ftd::interpreter::Property::resolve_value(
+    let recursive_property_value = ftd::interpreter::PropertyValue::resolve_value(
         sub.line_number,
         &loop_on_component,
         None,
@@ -935,17 +938,27 @@ pub fn recursive_child_component(
         },
     );
 
-    let mut new_header = ftd::p11::Header(vec![]);
+    let mut new_header = ftd::p11::Headers(vec![]);
     let (mut left_boolean, mut right_boolean) = (None, None);
-    for (i, k, v) in &sub.headers.0 {
+    for header in &sub.headers.0 {
+        if header.is_section() {
+            continue;
+        }
+        let i = header.get_line_number();
+        let k = header.get_key();
+        let v = if let Some(value) = header.get_value(doc.name)? {
+            value
+        } else {
+            new_header.push(header.to_owned());
+            continue;
+        };
         if k == "$loop$" {
             continue;
         }
 
-        if k == "if" && contains_loop_ref(&loop_ref, v) {
+        if k == "if" && contains_loop_ref(&loop_ref, v.as_str()) {
             let v = v.replace(&format!("${}", loop_ref), "$loop$");
-            let (_, left, right) =
-                ftd::interpreter::Boolean::boolean_left_right(i.to_owned(), &v, doc.name)?;
+            let (_, left, right) = ftd::interpreter::Boolean::boolean_left_right(i, &v, doc.name)?;
             if left.contains("$loop$") {
                 left_boolean = resolve_loop_reference(i, &recursive_kind, doc, left)?.default;
             }
@@ -956,12 +969,12 @@ pub fn recursive_child_component(
             }
         }
 
-        if contains_loop_ref(&loop_ref, v) && v.starts_with(&format!("${}", loop_ref)) {
+        if contains_loop_ref(&loop_ref, v.as_str()) && v.starts_with(&format!("${}", loop_ref)) {
             let reference = v.to_string().replace(&format!("${}", loop_ref), "$loop$");
             let value = resolve_loop_reference(i, &recursive_kind, doc, reference)?;
             properties.insert(k.to_string(), value);
         } else {
-            new_header.add(i, k, v);
+            new_header.push(header.to_owned());
         }
     }
 
@@ -1003,6 +1016,7 @@ pub fn recursive_child_component(
             assert_no_extra_properties(
                 sub.line_number,
                 &new_header,
+                &Some(root.full_name),
                 root.full_name.as_str(),
                 &root_arguments,
                 sub.name.as_str(),
@@ -1018,9 +1032,10 @@ pub fn recursive_child_component(
 
     let mut new_caption = sub.caption.clone();
     if let (Some(caption), Some(caption_arg)) = (sub.caption.clone(), caption) {
-        if contains_loop_ref(&loop_ref, &caption) {
-            let reference = caption.replace(&format!("${}", loop_ref), "$loop$");
-            let value = resolve_loop_reference(&sub.line_number, &recursive_kind, doc, reference)?;
+        let caption_value = caption.get_value(doc.name)?.unwrap(); //TODO: throw error
+        if contains_loop_ref(&loop_ref, caption_value.as_str()) {
+            let reference = caption_value.replace(&format!("${}", loop_ref), "$loop$");
+            let value = resolve_loop_reference(sub.line_number, &recursive_kind, doc, reference)?;
             properties.insert(caption_arg, value);
             new_caption = None;
         }
@@ -1070,7 +1085,7 @@ pub fn recursive_child_component(
     });
 
     fn resolve_loop_reference(
-        line_number: &usize,
+        line_number: usize,
         recursive_kind: &ftd::interpreter::Kind,
         doc: &ftd::interpreter::TDoc,
         reference: String,
@@ -1078,7 +1093,7 @@ pub fn recursive_child_component(
         let mut arguments: ftd::Map<ftd::interpreter::Kind> = Default::default();
         arguments.insert("$loop$".to_string(), recursive_kind.to_owned());
         let property = ftd::interpreter::Property::resolve_value(
-            *line_number,
+            line_number,
             &format!("${}", reference),
             None,
             doc,
@@ -1092,7 +1107,7 @@ pub fn recursive_child_component(
         })
     }
 
-    fn contains_loop_ref(loop_ref: &str, pattern: &ftd::p11::Header) -> bool {
+    fn contains_loop_ref(loop_ref: &str, pattern: &str) -> bool {
         let ref1 = format!("${}.", loop_ref);
         let pattern_vec: Vec<&str> = pattern.split(' ').collect();
         let partern_bool = pattern_vec
@@ -1109,12 +1124,12 @@ pub fn recursive_child_component(
 }
 
 fn is_component(name: &str) -> bool {
-    !(name.starts_with("component ")
-        || name.starts_with("var ")
-        || name.starts_with("record ")
+    !(name.starts_with("component")
+        || name.starts_with("var")
+        || name.starts_with("record")
         || name.starts_with("or-type")
-        || name.starts_with("list ")
-        || name.starts_with("map ")
+        || name.starts_with("list")
+        || name.starts_with("map")
         || (name == "container")
         || (name == "ftd.text")
         || (name == "ftd.text-block")
@@ -1134,18 +1149,25 @@ fn is_component(name: &str) -> bool {
 
 fn assert_no_extra_properties(
     line_number: usize,
-    p1: &[ftd::p11::Header],
+    p1: &ftd::p11::Headers,
+    kind: &Option<String>,
     root: &str,
     root_arguments: &ftd::Map<ftd::interpreter::Kind>,
     name: &str,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::p11::Result<()> {
-    for (i, k, _) in p1.0.iter() {
-        if k == "component"
-            || k.starts_with('$')
-            || k == "if"
-            || ftd::variable::VariableData::get_name_kind(k, doc, line_number, vec![].as_slice())
-                .is_ok()
+    for header in p1.0.iter() {
+        let i = header.get_line_number();
+        let k = header.get_key();
+        if (k.starts_with('$') && k.ends_with('$'))
+            || k.eq("if")
+            || ftd::variable::VariableData::get_name_kind(
+                k.as_str(),
+                doc,
+                line_number,
+                vec![].as_slice(),
+            )
+            .is_ok()
         {
             continue;
         }
@@ -1157,7 +1179,7 @@ fn assert_no_extra_properties(
         };
 
         if !(root_arguments.contains_key(key)
-            || (is_component(name) && universal_arguments().contains_key(key)))
+            || (kind.map_or(false, is_component) && universal_arguments().contains_key(key)))
         {
             return ftd::interpreter::utils::e2(
                 format!(
@@ -1245,7 +1267,7 @@ fn check_input_conflicting_values(
 #[allow(clippy::too_many_arguments)]
 pub fn read_properties(
     line_number: usize,
-    p1: &[ftd::p11::Header],
+    p1: &ftd::p11::Headers,
     caption: &Option<ftd::p11::Header>,
     body: &Option<ftd::p11::Body>,
     fn_name: &str,
@@ -1350,7 +1372,7 @@ pub fn read_properties(
                     line_number,
                 );
             }
-            let mut property_value = match ftd::interpreter::Property::resolve_value(
+            let mut property_value = match ftd::interpreter::PropertyValue::resolve_value(
                 line_number,
                 value.as_str(),
                 Some(kind.to_owned()),
@@ -1903,7 +1925,7 @@ fn root_properties_from_inherits(
 }
 
 fn read_arguments(
-    p1: &[ftd::p11::Header],
+    p1: &ftd::p11::Headers,
     root: &str,
     root_arguments: &ftd::Map<ftd::interpreter::Kind>,
     arguments: &ftd::Map<ftd::interpreter::Kind>,
@@ -1921,16 +1943,22 @@ fn read_arguments(
 
     // Set of root arguments which are invoked once
     let mut root_args_set: std::collections::HashSet<String> = std::collections::HashSet::new();
-    for (idx, header) in p1.iter().enumerate() {
+    for header in p1.0.iter() {
         let (line_number, key, kind, value) = match header {
             ftd::p11::Header::KV(ftd::p11::header::KV {
                 line_number,
                 key,
-
                 kind,
                 value,
+            }) if !(key.starts_with('$') && key.ends_with('$')) => {
+                (line_number, key, kind, value.to_owned())
+            }
+            ftd::p11::Header::Section(ftd::p11::header::Section {
+                line_number,
+                key,
+                kind,
                 ..
-            }) if !(key.starts_with('$') && key.ends_with('$')) => (line_number, key, kind, value),
+            }) => (line_number, key, kind, None),
             _ => continue,
         };
 
@@ -2009,20 +2037,20 @@ fn read_arguments(
             default: Some((ui_id, h)),
         } = &mut kind.mut_inner()
         {
-            let headers = {
-                let mut headers = vec![];
-                let p1 = &p1;
-                for i in idx + 1..p1.len() {
-                    let p1 = p1.get(i).unwrap();
-                    if let Some(k) = p1.1.strip_prefix('>') {
-                        headers.push((p1.0, k.trim().to_string(), p1.2.to_string()));
-                    } else {
-                        break;
-                    }
-                }
-                ftd::p11::Header(headers)
+            let headers = if header.is_section() {
+                header
+            } else {
+                return ftd::interpreter::utils::e2(
+                    format!(
+                        "'{}' header is not a section type {}",
+                        header.get_key(),
+                        root
+                    ),
+                    doc.name,
+                    line_number.to_owned(),
+                );
             };
-            *h = headers;
+            *h = headers.to_owned();
             *ui_id = doc.resolve_name(*line_number, ui_id.as_str())?;
         }
 

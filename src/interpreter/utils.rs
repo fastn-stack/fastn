@@ -249,7 +249,7 @@ pub fn reorder(
                 continue;
             }
             for sub_section in v.sub_sections.iter() {
-                for header in sub_section.headers.iter() {
+                for header in sub_section.headers.0.iter() {
                     let name = if header.is_section() {
                         header.get_key()
                     } else {
@@ -279,7 +279,7 @@ pub fn reorder(
                     var_types,
                 )?;
             }
-            for header in v.headers.iter() {
+            for header in v.headers.0.iter() {
                 let name = if header.is_section() {
                     header.get_key()
                 } else {
@@ -355,4 +355,63 @@ pub(crate) fn get_doc_name_and_remaining(s: &str) -> ftd::p1::Result<(String, Op
     } else {
         (s.to_string(), None)
     })
+}
+
+pub fn resolve_name(
+    line_number: usize,
+    name: &str,
+    doc_name: &str,
+    aliases: &ftd::Map<String>,
+) -> ftd::p11::Result<String> {
+    if name.contains('#') {
+        return Ok(name.to_string());
+    }
+    Ok(
+        match ftd::interpreter::utils::split_module(name, doc_name, line_number)? {
+            (Some(m), v, None) => match aliases.get(m) {
+                Some(m) => format!("{}#{}", m, v),
+                None => format!("{}#{}.{}", doc_name, m, v),
+            },
+            (Some(m), v, Some(c)) => match aliases.get(m) {
+                Some(m) => format!("{}#{}.{}", m, v, c),
+                None => format!("{}#{}.{}.{}", doc_name, m, v, c),
+            },
+            (None, v, None) => format!("{}#{}", doc_name, v),
+            _ => unimplemented!(),
+        },
+    )
+}
+
+pub fn structure_header_to_properties(
+    s: &str,
+    arguments: &ftd::Map<crate::p2::Kind>,
+    doc: &ftd::p2::TDoc,
+    line_number: usize,
+    p1: &ftd::p1::Header,
+) -> ftd::p1::Result<ftd::Map<ftd::component::Property>> {
+    let (name, caption) = ftd::p2::utils::split(s.to_string(), ":")?;
+    match doc.get_thing(line_number, &name) {
+        Ok(ftd::p2::Thing::Component(c)) => ftd::component::read_properties(
+            line_number,
+            p1,
+            &if caption.is_empty() {
+                None
+            } else {
+                Some(caption)
+            },
+            &None,
+            "",
+            "",
+            &c.arguments,
+            arguments,
+            doc,
+            &Default::default(),
+            false,
+        ),
+        t => ftd::p2::utils::e2(
+            format!("expected component, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
 }

@@ -86,7 +86,7 @@ impl Record {
                             kind: list_kind.inner().to_owned(),
                             data: vec![],
                         };
-                        for (i, k, v) in p1.headers.iter() {
+                        for (i, k, v) in p1.headers.0.iter() {
                             if *k != *name {
                                 continue;
                             }
@@ -353,7 +353,7 @@ impl Record {
 
     pub fn from_p1(
         p1_name: &str,
-        p1_header: &[ftd::p11::Header],
+        p1_header: &ftd::p11::Headers,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::p11::Result<Self> {
@@ -368,29 +368,40 @@ impl Record {
                 is_reference: false,
             },
         );
-        for (i, k, v) in p1_header.iter() {
-            let var_data = match ftd::variable::VariableData::get_name_kind(
-                k,
+        for header in p1_header.0.iter() {
+            let (line_number, key, kind, value) = match header {
+                ftd::p11::Header::KV(ftd::p11::header::KV {
+                    line_number,
+                    key,
+                    kind,
+                    value,
+                    ..
+                }) => (line_number, key, kind, value.to_owned()),
+                ftd::p11::Header::Section(ftd::p11::header::Section {
+                    line_number,
+                    key,
+                    kind,
+                    ..
+                }) => (line_number, key, kind, None),
+            };
+            let var_data = match ftd::interpreter::variable::VariableData::get_name_kind(
+                key,
+                kind,
                 doc,
-                i.to_owned(),
+                line_number.to_owned(),
                 vec![].as_slice(),
             ) {
                 Ok(v) => v,
                 _ => continue,
             };
-            let v = normalise_value(v)?;
-            validate_key(k)?;
-            let v = if v.is_empty() {
-                None
-            } else {
-                Some(v.to_string())
-            };
+            validate_key(key)?;
             fields.insert(
                 var_data.name.to_string(),
                 ftd::interpreter::Kind::for_variable(
-                    i.to_owned(),
-                    k,
-                    v,
+                    line_number.to_owned(),
+                    key,
+                    kind,
+                    value,
                     doc,
                     Some(object_kind.clone()),
                     &Default::default(),

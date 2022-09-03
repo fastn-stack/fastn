@@ -56,7 +56,8 @@ pub enum Kind {
         is_reference: bool,
     },
     UI {
-        default: Option<(String, ftd::p11::Header)>,
+        // TODO: Option<ftd::p11::Header>
+        default: Vec<ftd::p11::Header>,
     },
 }
 
@@ -453,7 +454,7 @@ impl Kind {
     pub fn read_section(
         &self,
         line_number: usize,
-        p1: &[ftd::p11::Header],
+        p1: ftd::p11::Headers,
         p1_caption: &Option<ftd::p11::Header>,
         p1_body: &Option<ftd::p11::Body>,
         name: &str,
@@ -667,7 +668,7 @@ impl Kind {
         line_number: usize,
         s: &str,
         kind: &Option<String>,
-        default: Option<String>,
+        default: Option<String>, // TODO: default to take section
         doc: &ftd::interpreter::TDoc,
         object_kind: Option<(&str, Self)>,
         arguments: &ftd::Map<ftd::interpreter::Kind>,

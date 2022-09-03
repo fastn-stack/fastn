@@ -121,7 +121,7 @@ impl InterpreterState {
                 // declare a record
                 let d = ftd::interpreter::Record::from_p1(
                     p1.name.as_str(),
-                    &p1.header,
+                    &p1.headers,
                     &doc,
                     p1.line_number,
                 )?;
@@ -134,7 +134,7 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::interpreter::Thing::Record(d)));
-            } else if p1.name.starts_with("or-type ") {
+            } else if ftd::interpreter::utils::is_or_type(&p1.kind) {
                 // declare a record
                 let d = ftd::interpreter::OrType::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
@@ -146,7 +146,7 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::interpreter::Thing::OrType(d)));
-            } else if p1.name.starts_with("map ") {
+            } else if ftd::interpreter::utils::is_map(&p1.kind) {
                 let d = ftd::interpreter::Variable::map_from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
@@ -468,7 +468,7 @@ impl InterpreterState {
 
         fn resolve_all_properties(
             caption: &mut Option<ftd::p11::Header>,
-            header: &mut [ftd::p11::Header],
+            header: &mut ftd::p11::Headers,
             body: &mut Option<ftd::p11::Body>,
             line_number: usize,
             foreign_variables: &[String],
@@ -486,7 +486,7 @@ impl InterpreterState {
                 }
             }
 
-            for header in header.iter_mut() {
+            for header in header.0.iter_mut() {
                 let (line_number, header) = if let ftd::p11::Header::KV(ftd::p11::header::KV {
                     value: Some(ref mut header),
                     line_number,

@@ -522,6 +522,9 @@ fn colon_separated_values(
 }
 
 fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
+    if name_with_kind.contains(" if ") {
+        return (name_with_kind.to_string(), None);
+    }
     if let Some((kind, name)) = name_with_kind.rsplit_once(' ') {
         return (name.to_string(), Some(kind.to_string()));
     }
