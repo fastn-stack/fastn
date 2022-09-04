@@ -1,7 +1,18 @@
-// For now all
+// TODO: Ideally we should remove files carefully, there may be some configuration files as well
+// We should only remove files which are present in sitemap + FPM.ftd + .packages
+
+// Note: If any read request in the system, It should not delete files.
+// In this case need to show the error, can't remove the files.
+
 pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::HttpResponse> {
-    // Ideally we should remove files carefully, there may be some configuration files as well
-    // We should only remove files which are present in sitemap + FPM.ftd + .packages
+    // Handle options
+    // 1. files=<file-path>
+    // 2. packages
+    //  - main
+    //  - all: remove main + .packages
+    //  - packages: will remove all packages
+    //  - name of the packages like: fpm.dev,foo,c, only name of the packages, entries from .packages folder
+    //  - can remove individual packages files, <package-name>/<file path>
 
     // First let's say clear all
 
@@ -40,19 +51,3 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::
     // std::fs::remove_file()
     Ok(actix_web::HttpResponse::Ok().body("Done".to_string()))
 }
-
-/*
-
-files=a,c,...
-all default
-.packages/a
-.packages/a/b
-.packages
-
-clear=all
-clear=dependencies
-documents=a,c...
-packages=a,b
-
-download-base-url: FPM.ftd
-*/
