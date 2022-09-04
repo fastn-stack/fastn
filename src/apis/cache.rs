@@ -4,6 +4,8 @@
 // Note: If any read request in the system, It should not delete files.
 // In this case need to show the error, can't remove the files.
 
+use itertools::Itertools;
+
 pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::HttpResponse> {
     // Handle options
     // 1. files=<file-path>
@@ -23,12 +25,33 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::
             .body("Cannot delete anything because I cannot download it again".to_string()));
     }
 
-    // #[derive(serde::Deserialize)]
-    // pub struct QueryParams {
-    //     clear: Option<String>, // all, dep, main
-    // }
-    //
-    // let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?;
+    #[derive(serde::Deserialize)]
+    pub struct QueryParams {
+        files: Option<String>,
+        packages: Option<String>,
+    }
+
+    let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?;
+
+    let files = {
+        if let Some(files) = query.files.as_ref() {
+            files.split(',').collect_vec()
+        } else {
+            vec![]
+        }
+    };
+
+    for file in files {
+        let file_path = config.root.join(file);
+        if !file_path.exists() {
+            continue;
+        }
+        if file_path.is_file() {
+            tokio::fs::remove_file(file_path).await.unwrap();
+        } else if file_path.is_dir() {
+            tokio::fs::remove_dir_all(file_path).await.unwrap()
+        }
+    }
 
     let mut all = tokio::fs::read_dir(&config.root).await.unwrap();
 
