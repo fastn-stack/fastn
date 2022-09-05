@@ -1,0 +1,264 @@
+#[derive(Debug, Clone, PartialEq)]
+pub enum Kind {
+    String,
+    Object,
+    Integer,
+    Decimal,
+    Boolean,
+    Record { name: String }, // the full name of the record (full document name.record name)
+    OrType { name: String }, // the full name of the or-type
+    OrTypeWithVariant { name: String, variant: String },
+    Map { kind: Box<Kind> }, // map of String to Kind
+    List { kind: Box<Kind> },
+    Optional { kind: Box<Kind> },
+    UI,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct KindData {
+    pub kind: Kind,
+    pub caption: bool,
+    pub body: bool,
+}
+
+impl KindData {
+    pub(crate) fn from_p1_kind(
+        s: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<KindData> {
+        use itertools::Itertools;
+
+        let mut s = s.split_whitespace().join(" ");
+        if s.is_empty() {
+            return Err(invalid_kind_error(s, doc_id, line_number));
+        }
+
+        let optional = check_for_optional(&mut s);
+
+        if s.is_empty() {
+            return Err(invalid_kind_error(s, doc_id, line_number));
+        }
+
+        let (caption, body) = check_for_caption_and_body(&mut s);
+
+        if s.is_empty() {
+            let mut kind_data = KindData {
+                kind: Kind::String,
+                caption,
+                body,
+            };
+            if optional {
+                kind_data = kind_data.to_optional();
+            }
+            return Ok(kind_data);
+        }
+
+        let kind = match check_for_kind(&mut s) {
+            Some(kind) => kind,
+            _ if caption || body => Kind::String,
+            _ => return Err(invalid_kind_error(s, doc_id, line_number)),
+        };
+
+        let list = check_for_list(&mut s);
+
+        let mut kind_data = KindData {
+            kind,
+            caption,
+            body,
+        };
+
+        if optional {
+            kind_data = kind_data.to_optional();
+        }
+
+        if list {
+            kind_data = kind_data.to_list();
+        }
+
+        Ok(kind_data)
+    }
+
+    fn to_optional(self) -> KindData {
+        KindData {
+            kind: Kind::Optional {
+                kind: Box::new(self.kind),
+            },
+            caption: self.caption,
+            body: self.body,
+        }
+    }
+
+    fn to_list(self) -> KindData {
+        KindData {
+            kind: Kind::List {
+                kind: Box::new(self.kind),
+            },
+            caption: self.caption,
+            body: self.body,
+        }
+    }
+
+    fn integer() -> KindData {
+        KindData {
+            kind: Kind::Integer,
+            caption: false,
+            body: false,
+        }
+    }
+}
+
+pub fn check_for_optional(s: &mut String) -> bool {
+    use itertools::Itertools;
+
+    let mut expr = s.split_whitespace().collect_vec();
+
+    if expr.is_empty() {
+        return false;
+    }
+
+    if is_optional(expr[0]) {
+        *s = expr[1..].join(" ");
+        return true;
+    }
+
+    false
+}
+
+pub(crate) fn is_optional(s: &str) -> bool {
+    s.eq("optional")
+}
+
+pub fn check_for_caption_and_body(s: &mut String) -> (bool, bool) {
+    use itertools::Itertools;
+
+    let mut caption = false;
+    let mut body = false;
+
+    let mut expr = s.split_whitespace().collect_vec();
+
+    if expr.is_empty() {
+        return (caption, body);
+    }
+
+    if is_caption_or_body(expr.as_slice()) {
+        caption = true;
+        body = true;
+        expr = expr[3..].to_vec();
+    } else if is_caption(expr[0]) {
+        caption = true;
+        expr = expr[1..].to_vec();
+    } else if is_body(expr[0]) {
+        body = true;
+        expr = expr[1..].to_vec();
+    }
+
+    *s = expr.join(" ");
+
+    (caption, body)
+}
+
+pub(crate) fn is_caption_or_body(expr: &[&str]) -> bool {
+    if expr.len() < 3 {
+        return false;
+    }
+    if is_caption(expr[0]) && expr[1].eq("or") && is_body(expr[2]) {
+        return true;
+    }
+
+    if is_body(expr[0]) && expr[1].eq("or") && is_caption(expr[2]) {
+        return true;
+    }
+
+    false
+}
+
+pub(crate) fn is_caption(s: &str) -> bool {
+    s.eq("caption")
+}
+
+pub fn is_body(s: &str) -> bool {
+    s.eq("body")
+}
+
+pub fn check_for_kind(s: &mut String) -> Option<Kind> {
+    use itertools::Itertools;
+
+    let mut expr = s.split_whitespace().collect_vec();
+
+    if expr.is_empty() {
+        return None;
+    }
+
+    let kind = match expr[0] {
+        "string" => Some(Kind::String),
+        "integer" => Some(Kind::Integer),
+        "decimal" => Some(Kind::Decimal),
+        "object" => Some(Kind::Object),
+        "boolean" => Some(Kind::Boolean),
+        "ftd.ui" => Some(Kind::UI),
+        _ => return None,
+    };
+
+    *s = expr[1..].join(" ");
+
+    kind
+}
+
+pub fn check_for_list(s: &mut String) -> bool {
+    use itertools::Itertools;
+
+    let mut expr = s.split_whitespace().collect_vec();
+
+    if expr.is_empty() {
+        return false;
+    }
+
+    if is_list(expr[0]) {
+        *s = expr[1..].join(" ");
+        return true;
+    }
+
+    false
+}
+
+pub(crate) fn is_list(s: &str) -> bool {
+    s.eq("list")
+}
+
+pub(crate) fn invalid_kind_error<S>(
+    message: S,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::interpreter::Error
+where
+    S: Into<String>,
+{
+    ftd::interpreter::Error::InvalidKind {
+        message: message.into(),
+        doc_id: doc_id.to_string(),
+        line_number,
+    }
+}
+
+#[cfg(test)]
+mod test {
+
+    macro_rules! p {
+        ($s:expr, $t: expr,) => {
+            p!($s, $t)
+        };
+        ($s:expr, $t: expr) => {
+            assert_eq!(
+                super::KindData::from_p1_kind(indoc::indoc!($s), "foo", 0)
+                    .unwrap_or_else(|e| panic!("{}", e)),
+                $t
+            )
+        };
+    }
+
+    #[test]
+    fn integer() {
+        p!("integer", super::KindData::integer())
+    }
+}

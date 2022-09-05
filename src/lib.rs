@@ -14,6 +14,7 @@ mod dnode;
 mod event;
 mod execute_doc;
 mod html;
+pub mod interpreter;
 pub mod main;
 pub mod markup;
 mod or_type;

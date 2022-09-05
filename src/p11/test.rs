@@ -44,7 +44,7 @@ fn test_all() {
         let t: Vec<ftd::p11::Section> =
             serde_json::from_str(std::fs::read_to_string(json).unwrap().as_str()).unwrap();
         for f in files {
-            let s = std::fs::read_to_string(f).unwrap();
+            let s = std::fs::read_to_string(&f).unwrap();
             println!("testing {}", f.display());
             p(&s, &t);
         }
