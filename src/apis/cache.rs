@@ -33,25 +33,36 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::
 
     let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?;
 
-    let files = {
-        if let Some(files) = query.files.as_ref() {
-            files.split(',').collect_vec()
-        } else {
-            vec![]
-        }
-    };
+    // let file_paths = {
+    //     let files = {
+    //         if let Some(files) = query.files.as_ref() {
+    //             files.split(',').collect_vec()
+    //         } else {
+    //             vec![]
+    //         }
+    //     };
+    //     let packages = {
+    //         if let Some(packages) = query.packages.as_ref() {
+    //             // files.split(',').collect_vec()
+    //             vec![]
+    //         } else {
+    //             vec![]
+    //         }
+    //     };
+    //     vec![]
+    // };
 
-    for file in files {
-        let file_path = config.root.join(file);
-        if !file_path.exists() {
-            continue;
-        }
-        if file_path.is_file() {
-            tokio::fs::remove_file(file_path).await.unwrap();
-        } else if file_path.is_dir() {
-            tokio::fs::remove_dir_all(file_path).await.unwrap()
-        }
-    }
+    // for file in files {
+    //     let file_path = config.root.join(file);
+    //     if !file_path.exists() {
+    //         continue;
+    //     }
+    //     if file_path.is_file() {
+    //         tokio::fs::remove_file(file_path).await.unwrap();
+    //     } else if file_path.is_dir() {
+    //         tokio::fs::remove_dir_all(file_path).await.unwrap()
+    //     }
+    // }
 
     let mut all = tokio::fs::read_dir(&config.root).await.unwrap();
 
