@@ -14,7 +14,7 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::
     //  - all: remove main + .packages
     //  - packages: will remove all packages
     //  - name of the packages like: fpm.dev,foo,c, only name of the packages, entries from .packages folder
-    //  - can remove individual packages files, <package-name>/<file path>
+    //  - todo: can remove individual packages files, <package-name>/<file path>
 
     // First let's say clear all
 
@@ -33,46 +33,60 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::
 
     let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?;
 
-    // let file_paths = {
-    //     let files = {
-    //         if let Some(files) = query.files.as_ref() {
-    //             files.split(',').collect_vec()
-    //         } else {
-    //             vec![]
-    //         }
-    //     };
-    //     let packages = {
-    //         if let Some(packages) = query.packages.as_ref() {
-    //             // files.split(',').collect_vec()
-    //             vec![]
-    //         } else {
-    //             vec![]
-    //         }
-    //     };
-    //     vec![]
-    // };
+    // 1. files=<file-path>
+    let files = {
+        if let Some(files) = query.files.as_ref() {
+            files.split(',').collect_vec()
+        } else {
+            vec![]
+        }
+    };
 
-    // for file in files {
-    //     let file_path = config.root.join(file);
-    //     if !file_path.exists() {
-    //         continue;
-    //     }
-    //     if file_path.is_file() {
-    //         tokio::fs::remove_file(file_path).await.unwrap();
-    //     } else if file_path.is_dir() {
-    //         tokio::fs::remove_dir_all(file_path).await.unwrap()
-    //     }
-    // }
+    for file in files {
+        let file_path = config.root.join(file);
+        if !file_path.exists() {
+            continue;
+        }
+        if file_path.is_file() {
+            tokio::fs::remove_file(file_path).await.unwrap();
+        } else if file_path.is_dir() {
+            tokio::fs::remove_dir_all(file_path).await.unwrap()
+        }
+    }
 
-    let mut all = tokio::fs::read_dir(&config.root).await.unwrap();
+    // 2. packages
+    let packages = {
+        if let Some(packages) = query.packages.as_ref() {
+            packages.split(',').collect_vec()
+        } else {
+            vec![]
+        }
+    };
 
-    while let Some(file) = all.next_entry().await.unwrap() {
-        if file.metadata().await.unwrap().is_dir() {
-            tokio::fs::remove_dir_all(file.path()).await.unwrap();
-        } else if file.metadata().await.unwrap().is_file() {
-            tokio::fs::remove_file(file.path()).await.unwrap();
-        } else if file.metadata().await.unwrap().is_symlink() {
-            // tokio::fs::don't know the function name(file.path()).await.unwrap();
+    for package in packages {
+        // package: all, main, packages, package-name
+
+        if package.trim().to_lowercase().eq("all") {
+            let mut all = tokio::fs::read_dir(&config.root).await.unwrap();
+            while let Some(file) = all.next_entry().await.unwrap() {
+                if file.metadata().await.unwrap().is_dir() {
+                    tokio::fs::remove_dir_all(file.path()).await.unwrap();
+                } else if file.metadata().await.unwrap().is_file() {
+                    tokio::fs::remove_file(file.path()).await.unwrap();
+                } else if file.metadata().await.unwrap().is_symlink() {
+                    // tokio::fs::don't know the function name(file.path()).await.unwrap();
+                }
+            }
+        }
+
+        if package.trim().to_lowercase().eq("main") {
+            // remove only main package content
+        }
+
+        if package.trim().to_lowercase().eq("packages") {
+            tokio::fs::remove_dir_all(&config.packages_root)
+                .await
+                .unwrap();
         }
     }
 
@@ -82,6 +96,5 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::
             .unwrap();
     }
 
-    // std::fs::remove_file()
     Ok(actix_web::HttpResponse::Ok().body("Done".to_string()))
 }
