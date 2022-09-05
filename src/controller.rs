@@ -211,7 +211,8 @@ pub async fn get_remote_identities(
     )]);
 
     let resp: UserIdentities =
-        crate::http::http_get_with_type(url::Url::parse(url.as_str())?, headers, identities).await?;
+        crate::http::http_get_with_type(url::Url::parse(url.as_str())?, headers, identities)
+            .await?;
 
     if !resp.success {
         return Err(fpm::Error::APIResponseError(format!(

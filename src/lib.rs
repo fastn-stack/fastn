@@ -8,7 +8,6 @@ pub mod utils;
 
 // Temp comment
 mod apis;
-mod http;
 mod auto_import;
 mod cache;
 mod commands;
@@ -20,6 +19,7 @@ mod doc;
 mod file;
 mod font;
 mod history;
+mod http;
 mod i18n;
 pub mod library;
 mod package_doc;
