@@ -6,6 +6,20 @@
 
 use itertools::Itertools;
 
+/// Remove path:
+async fn remove_file(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
+    if path.is_file() {
+        tokio::fs::remove_file(path).await?;
+    } else if path.is_dir() {
+        tokio::fs::remove_dir_all(path).await?
+    } else if path.is_symlink() {
+        // TODO:
+        // It can be a directory or a file
+    }
+
+    Ok(())
+}
+
 pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::HttpResponse> {
     // Handle options
     // 1. files=<file-path>
@@ -44,14 +58,7 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::
 
     for file in files {
         let file_path = config.root.join(file);
-        if !file_path.exists() {
-            continue;
-        }
-        if file_path.is_file() {
-            tokio::fs::remove_file(file_path).await.unwrap();
-        } else if file_path.is_dir() {
-            tokio::fs::remove_dir_all(file_path).await.unwrap()
-        }
+        remove_file(&file_path).await.unwrap();
     }
 
     // 2. packages
@@ -65,7 +72,6 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::
 
     for package in packages {
         // package: all, main, packages, package-name
-
         if package.trim().to_lowercase().eq("all") {
             let mut all = tokio::fs::read_dir(&config.root).await.unwrap();
             while let Some(file) = all.next_entry().await.unwrap() {
@@ -73,20 +79,16 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::
                     tokio::fs::remove_dir_all(file.path()).await.unwrap();
                 } else if file.metadata().await.unwrap().is_file() {
                     tokio::fs::remove_file(file.path()).await.unwrap();
-                } else if file.metadata().await.unwrap().is_symlink() {
-                    // tokio::fs::don't know the function name(file.path()).await.unwrap();
                 }
             }
-        }
-
-        if package.trim().to_lowercase().eq("main") {
+        } else if package.trim().to_lowercase().eq("main") {
             // remove only main package content
-        }
-
-        if package.trim().to_lowercase().eq("packages") {
+        } else if package.trim().to_lowercase().eq("packages") {
             tokio::fs::remove_dir_all(&config.packages_root)
                 .await
                 .unwrap();
+        } else {
+            remove_file(&config.packages_root.join(package)).await?;
         }
     }
 
