@@ -43,6 +43,51 @@ pub struct QueryParams {
     packages: Option<String>,
 }
 
+#[derive(Default)]
+pub struct QueryParamsT {
+    file: Vec<String>,
+    package: Vec<String>,
+    all_dependencies: bool,
+}
+
+/// http://example.com/?a=1&b=2&c=3 => vec[(a, 1), (b, 2), (c, 3)]
+/// TODO: convert it into test case
+fn query(uri: &str) -> fpm::Result<Vec<(String, String)>> {
+    Ok(url::Url::parse(uri)?
+        .query_pairs()
+        .into_owned()
+        .collect_vec())
+}
+
+fn clear_cache_query(uri: &str) -> fpm::Result<QueryParamsT> {
+    let query = query(uri)?;
+    Ok(QueryParamsT {
+        file: query
+            .iter()
+            .filter_map(|(key, value)| {
+                if key.eq("file") {
+                    Some(value.to_string())
+                } else {
+                    None
+                }
+            })
+            .collect_vec(),
+        package: query
+            .iter()
+            .filter_map(|(key, value)| {
+                if key.eq("package") {
+                    Some(value.to_string())
+                } else {
+                    None
+                }
+            })
+            .collect_vec(),
+        all_dependencies: query
+            .iter()
+            .any(|(key, value)| key.eq("all-dependencies") && (value.eq("true") || value.eq("t"))),
+    })
+}
+
 pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::HttpResponse> {
     let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?;
     clear_(query.0).await.unwrap(); // TODO: Remove unwrap
