@@ -1,7 +1,7 @@
 // TODO: Ideally we should remove files carefully, there may be some configuration files as well
 // We should only remove files which are present in sitemap + FPM.ftd + .packages
 
-// Note: If any read request is there, It should not delete files.
+// Note: If any read request is there concurrently in the system, It should not delete those files.
 // In this case need to show the error, can't remove the files.
 
 use itertools::Itertools;
