@@ -21,10 +21,7 @@ async fn remove_file(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
 
 /// Remove content from root except provided values
 async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Result<()> {
-    let except = except
-        .into_iter()
-        .map(|x| std::path::PathBuf::from(x))
-        .collect_vec();
+    let except = except.iter().map(std::path::PathBuf::from).collect_vec();
 
     let mut all = tokio::fs::read_dir(root).await?;
     while let Some(file) = all.next_entry().await? {
