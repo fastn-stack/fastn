@@ -1,7 +1,7 @@
 // TODO: Ideally we should remove files carefully, there may be some configuration files as well
 // We should only remove files which are present in sitemap + FPM.ftd + .packages
 
-// Note: If any read request in the system, It should not delete files.
+// Note: If any read request is there, It should not delete files.
 // In this case need to show the error, can't remove the files.
 
 use itertools::Itertools;
@@ -62,8 +62,6 @@ pub async fn clear_(query: QueryParams) -> fpm::Result<()> {
     //  - name of the packages like: fpm.dev,foo,c, only name of the packages, entries from .packages folder
     //  - can remove individual packages files, <package-name>/<file path>
 
-    // First let's say clear all
-
     let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await?);
     if config.package.download_base_url.is_none() {
         // If this is present, so `fpm` will not be able to serve after removing the content
@@ -110,9 +108,7 @@ pub async fn clear_(query: QueryParams) -> fpm::Result<()> {
 
     // Download FPM.ftd again after removing all the content
     if !config.root.join("FPM.ftd").exists() {
-        fpm::commands::serve::download_init_package(config.package.download_base_url)
-            .await
-            .unwrap();
+        fpm::commands::serve::download_init_package(config.package.download_base_url).await?;
     }
 
     Ok(())
