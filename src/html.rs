@@ -132,7 +132,7 @@ impl Node {
                 let (external_container, is_last) = {
                     let mut external_container = vec![];
                     while index < external_children_container.len() {
-                        if let Some(container) = external_children_container[index].get(0) {
+                        if let Some(container) = external_children_container[index].first() {
                             if container < &i {
                                 index += 1;
                                 continue;
@@ -218,7 +218,7 @@ impl Node {
                 .iter()
                 .skip(ext_child_container_index)
             {
-                if let Some(container) = external_child_container.get(0) {
+                if let Some(container) = external_child_container.first() {
                     if container < &index {
                         continue;
                     }
