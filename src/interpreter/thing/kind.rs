@@ -1,26 +1,28 @@
+use crate::p11::HeaderValue;
+
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type")]
 pub enum Kind {
     String {
         caption: bool,
         body: bool,
-        default: Option<String>,
+        default: ftd::p11::HeaderValue,
         is_reference: bool,
     },
     Object {
-        default: Option<String>,
+        default: ftd::p11::HeaderValue,
         is_reference: bool,
     },
     Integer {
-        default: Option<String>,
+        default: ftd::p11::HeaderValue,
         is_reference: bool,
     },
     Decimal {
-        default: Option<String>,
+        default: ftd::p11::HeaderValue,
         is_reference: bool,
     },
     Boolean {
-        default: Option<String>,
+        default: ftd::p11::HeaderValue,
         is_reference: bool,
     },
     Element,
@@ -30,7 +32,7 @@ pub enum Kind {
     IntMessage,    // message that takes an int
     Record {
         name: String,
-        default: Option<String>,
+        default: ftd::p11::HeaderValue,
         is_reference: bool,
     }, // the full name of the record (full document name.record name)
     OrType {
@@ -48,7 +50,7 @@ pub enum Kind {
     }, // map of String to Kind
     List {
         kind: Box<Kind>,
-        default: Option<String>,
+        default: ftd::p11::HeaderValue,
         is_reference: bool,
     },
     Optional {
@@ -57,7 +59,7 @@ pub enum Kind {
     },
     UI {
         // TODO: Option<ftd::p11::Header>
-        default: Vec<ftd::p11::Header>,
+        default: ftd::p11::HeaderValue,
     },
 }
 
@@ -272,7 +274,7 @@ impl Kind {
         }
     }
 
-    pub fn set_default(self, default: Option<String>) -> Self {
+    pub fn set_default(self, default: ftd::p11::HeaderValue) -> Self {
         match self {
             Kind::String {
                 caption,
@@ -292,9 +294,7 @@ impl Kind {
                 default,
                 is_reference,
             },
-            Kind::UI { .. } => Kind::UI {
-                default: default.map(|v| (v, Default::default())),
-            },
+            Kind::UI { .. } => Kind::UI { default },
             Kind::Integer { is_reference, .. } => Kind::Integer {
                 default,
                 is_reference,
@@ -668,7 +668,7 @@ impl Kind {
         line_number: usize,
         s: &str,
         kind: &Option<String>,
-        default: Option<String>, // TODO: default to take section
+        default: ftd::p11::HeaderValue, // TODO: default to take section
         doc: &ftd::interpreter::TDoc,
         object_kind: Option<(&str, Self)>,
         arguments: &ftd::Map<ftd::interpreter::Kind>,
@@ -676,8 +676,8 @@ impl Kind {
         let default = {
             // resolve the default value
             let mut default = default;
-            if let Some(ref v) = default {
-                default = Some(doc.resolve_reference_name(line_number, v, arguments)?);
+            if let HeaderValue::KV(Some(ref mut value)) = default {
+                *value = doc.resolve_reference_name(line_number, v, arguments)?;
             }
             default
         };

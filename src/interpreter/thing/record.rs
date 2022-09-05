@@ -369,24 +369,13 @@ impl Record {
             },
         );
         for header in p1_header.0.iter() {
-            let (line_number, key, kind, value) = match header {
-                ftd::p11::Header::KV(ftd::p11::header::KV {
-                    line_number,
-                    key,
-                    kind,
-                    value,
-                    ..
-                }) => (line_number, key, kind, value.to_owned()),
-                ftd::p11::Header::Section(ftd::p11::header::Section {
-                    line_number,
-                    key,
-                    kind,
-                    ..
-                }) => (line_number, key, kind, None),
-            };
+            let line_number = header.get_line_number();
+            let key = header.get_key();
+            let kind = header.get_kind();
+            let value = header.get_header_value();
             let var_data = match ftd::interpreter::variable::VariableData::get_name_kind(
-                key,
-                kind,
+                key.as_str(),
+                &kind,
                 doc,
                 line_number.to_owned(),
                 vec![].as_slice(),
@@ -394,14 +383,14 @@ impl Record {
                 Ok(v) => v,
                 _ => continue,
             };
-            validate_key(key)?;
+            validate_key(key.as_str())?;
             fields.insert(
                 var_data.name.to_string(),
                 ftd::interpreter::Kind::for_variable(
                     line_number.to_owned(),
-                    key,
-                    kind,
-                    value,
+                    key.as_str(),
+                    &kind,
+                    &value,
                     doc,
                     Some(object_kind.clone()),
                     &Default::default(),

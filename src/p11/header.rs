@@ -27,12 +27,17 @@ pub struct Section {
     condition: Option<String>,
 }
 
+pub enum HeaderValue {
+    KV(Option<String>),
+    Section(Vec<ftd::p11::Section>),
+}
+
 impl Header {
-    pub(crate) fn is_section(&self) -> bool {
+    pub fn is_section(&self) -> bool {
         matches!(self, Header::Section(_))
     }
 
-    pub(crate) fn get_key(&self) -> String {
+    pub fn get_key(&self) -> String {
         match self {
             Header::KV(KV { key, .. }) => key,
             Header::Section(Section { key, .. }) => key,
@@ -40,14 +45,14 @@ impl Header {
         .to_string()
     }
 
-    pub(crate) fn get_line_number(&self) -> usize {
+    pub fn get_line_number(&self) -> usize {
         match self {
             Header::KV(KV { line_number, .. }) => *line_number,
             Header::Section(Section { line_number, .. }) => *line_number,
         }
     }
 
-    pub(crate) fn get_value(&self, doc_id: &str) -> ftd::p11::Result<Option<String>> {
+    pub fn get_value(&self, doc_id: &str) -> ftd::p11::Result<Option<String>> {
         match self {
             Header::KV(KV { value, .. }) => Ok(value.to_owned()),
             t => {
@@ -129,6 +134,21 @@ impl Header {
                 Header::Section(s)
             }
         }
+    }
+
+    pub fn get_header_value(&self) -> HeaderValue {
+        match self {
+            Header::KV(KV { value, .. }) => HeaderValue::KV(value.to_owned()),
+            Header::Section(Section { section, .. }) => HeaderValue::Section(section.to_owned()),
+        }
+    }
+
+    pub fn get_kind(&self) -> Option<String> {
+        match self {
+            Header::KV(KV { kind, .. }) => kind,
+            Header::Section(Section { kind, .. }) => kind,
+        }
+        .to_owned()
     }
 }
 
