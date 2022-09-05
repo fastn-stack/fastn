@@ -1,10 +1,10 @@
 use {indoc::indoc, pretty_assertions::assert_eq}; // macro
 
 #[track_caller]
-fn p(s: &str, t: Vec<ftd::p11::Section>) {
+fn p(s: &str, t: &Vec<ftd::p11::Section>) {
     assert_eq!(
         t,
-        super::parse(s, "foo")
+        &super::parse(s, "foo")
             .unwrap_or_else(|e| panic!("{:?}", e))
             .iter()
             .map(|v| v.without_line_number())
@@ -36,21 +36,18 @@ fn f(s: &str, m: &str) {
     }
 }
 
-fn replace_extension(path: &std::path::Path, new_extension: &str) -> std::path::PathBuf {
-    let mut new_path = path.to_path_buf();
-    new_path.set_extension(new_extension);
-    new_path
-}
-
 #[test]
 fn test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test
-    for path in find_all_files_matching_extension_recursively("t", "ftd") {
-        println!("testing: {}", path.display());
-        let s = std::fs::read_to_string(&path).unwrap();
-        let t = std::fs::read_to_string(replace_extension(&path, "json")).unwrap();
-        p(&s, serde_json::from_str(&t).unwrap());
+    for (files, json) in find_file_groups() {
+        let t: Vec<ftd::p11::Section> =
+            serde_json::from_str(std::fs::read_to_string(json).unwrap().as_str()).unwrap();
+        for f in files {
+            let s = std::fs::read_to_string(f).unwrap();
+            println!("testing {}", f.display());
+            p(&s, &t);
+        }
     }
 }
 
@@ -76,11 +73,45 @@ fn find_all_files_matching_extension_recursively(
     files
 }
 
+fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
+    let files = {
+        let mut f = find_all_files_matching_extension_recursively("t", "ftd");
+        f.sort();
+        f
+    };
+
+    let mut o: Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> = vec![];
+
+    for f in files {
+        let json = filename_with_second_last_extension_replaced_with_json(&f);
+        match o.last_mut() {
+            Some((v, j)) if j == &json => v.push(f),
+            _ => o.push((vec![f], json)),
+        }
+    }
+
+    o
+}
+
+fn filename_with_second_last_extension_replaced_with_json(
+    path: &std::path::Path,
+) -> std::path::PathBuf {
+    let stem = path.file_stem().unwrap().to_str().unwrap();
+
+    path.with_file_name(format!(
+        "{}.json",
+        match stem.split_once('.') {
+            Some((b, _)) => b,
+            None => stem,
+        }
+    ))
+}
+
 #[test]
 fn sub_section() {
     p(
         "-- foo:\n\nhello world\n-- bar:\n\n-- end: foo",
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .and_body("hello world")
             .add_sub_section(ftd::p11::Section::with_name("bar"))
             .list(),
@@ -103,7 +134,7 @@ fn sub_section() {
             bar body
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo")
                 .and_body("body ho")
                 .add_sub_section(ftd::p11::Section::with_name("dodo")),
@@ -128,7 +159,7 @@ fn sub_section() {
             -- end: bar
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo").and_body("body ho"),
             ftd::p11::Section::with_name("bar")
                 .and_body("bar body")
@@ -154,7 +185,7 @@ fn sub_section() {
             -- end: bar
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo").and_body("body ho"),
             ftd::p11::Section::with_name("bar")
                 .and_body("bar body")
@@ -183,7 +214,7 @@ fn sub_section() {
             -- end: bar
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo").and_body("body ho"),
             ftd::p11::Section::with_name("bar")
                 .add_header_str("cat", "bar body")
@@ -210,7 +241,7 @@ fn sub_section() {
             -- end: bar
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo").and_body("body ho"),
             ftd::p11::Section::with_name("bar")
                 .and_body("bar body")
@@ -220,7 +251,7 @@ fn sub_section() {
 
     p(
         "-- foo:\n\nhello world\n-- bar:\n\n-- end: foo",
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .and_body("hello world")
             .add_sub_section(ftd::p11::Section::with_name("bar"))
             .list(),
@@ -228,7 +259,7 @@ fn sub_section() {
 
     p(
         "-- foo:\n\nhello world\n-- bar: foo\n\n-- end: foo",
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .and_body("hello world")
             .add_sub_section(ftd::p11::Section::with_name("bar").and_caption("foo"))
             .list(),
@@ -254,7 +285,7 @@ fn activity() {
 
         "
         ),
-        vec![ftd::p11::Section::with_name("step")
+        &vec![ftd::p11::Section::with_name("step")
             .add_header_str("method", "GET")
             .add_sub_section(
                 ftd::p11::Section::with_name("realm.rr.activity")
@@ -277,7 +308,7 @@ fn escaping() {
             \\-- foo: bar
         "
         ),
-        ftd::p11::Section::with_name("hello")
+        &ftd::p11::Section::with_name("hello")
             .and_body("-- yo: whats up?\n-- foo: bar")
             .list(),
     )
@@ -313,7 +344,7 @@ fn comments() {
             -- end: bar
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo")
                 .and_body("body ho")
                 .add_header_str("key", "value"),
@@ -349,7 +380,7 @@ fn two() {
             -- end: bar
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo")
                 .and_body("body ho")
                 .add_header_str("key", "value"),
@@ -369,14 +400,14 @@ fn two() {
 fn empty_key() {
     p(
         "-- foo:\nkey: \n",
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .add_header_str("key", "")
             .list(),
     );
 
     p(
         "-- foo:\n-- bar:\nkey:\n\n\n-- end: foo",
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .add_sub_section(ftd::p11::Section::with_name("bar").add_header_str("key", ""))
             .list(),
     )
@@ -392,7 +423,7 @@ fn with_dash_dash() {
             hello -- world: yo
         "#
         ),
-        ftd::p11::Section::with_name("hello")
+        &ftd::p11::Section::with_name("hello")
             .and_body("hello -- world: yo")
             .list(),
     );
@@ -414,7 +445,7 @@ fn with_dash_dash() {
             -- end: hello
         "#
         ),
-        ftd::p11::Section::with_name("hello")
+        &ftd::p11::Section::with_name("hello")
             .add_sub_section(
                 ftd::p11::Section::with_name("realm.rr.step.body").and_body(&indoc!(
                     r#"
@@ -444,7 +475,7 @@ fn indented_body() {
                      lol
             "
         ),
-        ftd::p11::Section::with_name("markup")
+        &ftd::p11::Section::with_name("markup")
             .and_body("hello world is\n\n    not enough\n\n    lol")
             .list(),
     );
@@ -463,7 +494,7 @@ fn indented_body() {
 
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo").and_body("  body ho\n\nyo"),
             ftd::p11::Section::with_name("bar").and_body("    bar body"),
         ],
@@ -493,7 +524,7 @@ fn body_with_empty_lines() {
 
             "
         ),
-        vec![ftd::p11::Section::with_name("foo").and_body("hello")],
+        &vec![ftd::p11::Section::with_name("foo").and_body("hello")],
     );
 
     p(
@@ -518,7 +549,7 @@ fn body_with_empty_lines() {
             -- end: foo
             "
         ),
-        vec![ftd::p11::Section::with_name("foo")
+        &vec![ftd::p11::Section::with_name("foo")
             .add_sub_section(ftd::p11::Section::with_name("bar").and_body("hello"))],
     );
 }
@@ -527,25 +558,25 @@ fn body_with_empty_lines() {
 fn basic() {
     p(
         "-- foo: bar",
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .and_caption("bar")
             .list(),
     );
 
-    p("-- foo:", ftd::p11::Section::with_name("foo").list());
+    p("-- foo:", &ftd::p11::Section::with_name("foo").list());
 
-    p("-- foo: ", ftd::p11::Section::with_name("foo").list());
+    p("-- foo: ", &ftd::p11::Section::with_name("foo").list());
 
     p(
         "-- foo:\nkey: value",
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .add_header_str("key", "value")
             .list(),
     );
 
     p(
         "-- foo:\nkey: value\nk2:v2",
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .add_header_str("key", "value")
             .add_header_str("k2", "v2")
             .list(),
@@ -553,7 +584,7 @@ fn basic() {
 
     p(
         "-- foo:\n\nbody ho",
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .and_body("body ho")
             .list(),
     );
@@ -569,7 +600,7 @@ fn basic() {
             bar body
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo").and_body("body ho"),
             ftd::p11::Section::with_name("bar").and_body("bar body"),
         ],
@@ -590,7 +621,7 @@ fn basic() {
 
             "
         ),
-        vec![
+        &vec![
             ftd::p11::Section::with_name("foo").and_body("body ho\n\nyo"),
             ftd::p11::Section::with_name("bar").and_body("bar body"),
         ],
@@ -604,7 +635,7 @@ fn basic() {
             hello
             "
         ),
-        vec![ftd::p11::Section::with_name("foo").and_body("hello")],
+        &vec![ftd::p11::Section::with_name("foo").and_body("hello")],
     );
 
     f("invalid", "foo:1 -> SectionNotFound")
@@ -689,7 +720,7 @@ fn header_section() {
             bar body
             "
         ),
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .and_body("bar body")
             .add_header_section(
                 "bar",
@@ -740,7 +771,7 @@ fn kind() {
             -- end: foo
             "
         ),
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .kind("moo")
             .and_body("bar body")
             .and_caption("bar caption")
@@ -793,7 +824,7 @@ fn kind() {
             -- end: foo
             "
         ),
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .kind("moo")
             .and_body("bar body")
             .and_caption("bar caption")
@@ -847,7 +878,7 @@ fn kind() {
             -- end: foo
             "
         ),
-        ftd::p11::Section::with_name("foo")
+        &ftd::p11::Section::with_name("foo")
             .kind("moo")
             .and_body("bar body")
             .and_caption("bar caption")
