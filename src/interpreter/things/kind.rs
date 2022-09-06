@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum Kind {
     String,
@@ -271,112 +273,104 @@ where
 
 #[cfg(test)]
 mod test {
-    macro_rules! p {
-        ($s:expr, $t: expr,) => {
-            p!($s, $t)
-        };
-        ($s:expr, $t: expr) => {
-            assert_eq!(
-                super::KindData::from_p1_kind(indoc::indoc!($s), "foo", 0)
-                    .unwrap_or_else(|e| panic!("{}", e)),
-                $t
-            )
-        };
+    #[track_caller]
+    fn p(s: &str, t: super::KindData) {
+        assert_eq!(
+            super::KindData::from_p1_kind(s, "foo", 0)
+                .unwrap_or_else(|e| panic!("{:?}", e)),
+            t
+        )
     }
 
-    macro_rules! f {
-        ($s:expr, $m: expr,) => {
-            f!($s, $m)
-        };
-        ($s:expr, $m: expr) => {
-            match super::KindData::from_p1_kind(indoc::indoc!($s), "foo", 0) {
-                Ok(r) => panic!("expected failure, found: {:?}", r),
-                Err(e) => {
-                    let expected = $m.trim();
-                    let f2 = e.to_string();
-                    let found = f2.trim();
-                    if expected != found {
-                        let patch = diffy::create_patch(expected, found);
-                        let f = diffy::PatchFormatter::new().with_color();
-                        print!(
-                            "{}",
-                            f.fmt_patch(&patch)
-                                .to_string()
-                                .replace("\\ No newline at end of file", "")
-                        );
-                        println!("expected:\n{}\nfound:\n{}\n", expected, f2);
-                        panic!("test failed")
-                    }
+    #[track_caller]
+    fn f(s: &str, m: &str) {
+        match super::KindData::from_p1_kind(s, "foo", 0) {
+            Ok(r) => panic!("expected failure, found: {:?}", r),
+            Err(e) => {
+                let expected = m.trim();
+                let f2 = e.to_string();
+                let found = f2.trim();
+                if expected != found {
+                    let patch = diffy::create_patch(expected, found);
+                    let f = diffy::PatchFormatter::new().with_color();
+                    print!(
+                        "{}",
+                        f.fmt_patch(&patch)
+                            .to_string()
+                            .replace("\\ No newline at end of file", "")
+                    );
+                    println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                    panic!("test failed")
                 }
             }
-        };
+        }
     }
 
     #[test]
     fn integer() {
-        p!("integer", super::KindData::integer())
+        p("integer", super::KindData::integer())
     }
 
     #[test]
     fn caption_integer() {
-        p!("caption integer", super::KindData::integer().caption())
+        p("caption integer", super::KindData::integer().caption())
     }
 
     #[test]
     fn caption_or_body_integer() {
-        p!(
+        p(
             "caption or body integer",
-            super::KindData::integer().caption().body()
+            super::KindData::integer().caption().body(),
         );
 
-        p!(
+        p(
             "body or caption integer",
-            super::KindData::integer().caption().body()
+            super::KindData::integer().caption().body(),
         );
     }
 
     #[test]
     fn integer_list() {
-        p!("integer list", super::KindData::integer().list())
+        p("integer list", super::KindData::integer().list())
     }
 
     #[test]
     fn optional_integer() {
-        p!("optional integer", super::KindData::integer().optional())
+        p("optional integer", super::KindData::integer().optional())
     }
 
     #[test]
     fn optional_failure() {
-        f!("optional", "InvalidKind: foo:0 -> optional");
+        f("optional", "InvalidKind: foo:0 -> optional");
     }
 
     #[test]
     fn caption() {
-        p!("caption", super::KindData::string().caption());
+        p("caption", super::KindData::string().caption());
 
-        p!("caption string", super::KindData::string().caption());
+        p("caption string", super::KindData::string().caption());
     }
 
     #[test]
     fn caption_or_body() {
-        p!(
+        p(
             "caption or body",
-            super::KindData::string().caption().body()
+            super::KindData::string().caption().body(),
         );
 
-        p!(
+        p(
             "body or caption",
-            super::KindData::string().caption().body()
+            super::KindData::string().caption().body(),
         );
 
-        p!(
+        p(
             "caption or body string",
-            super::KindData::string().caption().body()
+            super::KindData::string().caption().body(),
         );
 
-        p!(
+        p(
             "body or caption string",
-            super::KindData::string().caption().body()
+            super::KindData::string().caption().body(),
         );
     }
 }
