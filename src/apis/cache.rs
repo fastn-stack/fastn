@@ -1,8 +1,6 @@
 // Discussion: https://github.com/FifthTry/fpm/discussions/475
 // Docs: TODO
 
-use itertools::Itertools;
-
 /// Remove path: It can be directory or file
 async fn remove(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
     if path.is_file() {
@@ -18,6 +16,7 @@ async fn remove(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
 
 /// Remove from provided `root` except given list
 async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Result<()> {
+    use itertools::Itertools;
     let except = except
         .into_iter()
         .map(|x| root.join(x))
@@ -49,6 +48,7 @@ pub struct QueryParams {
 /// /api/?a=1&b=2&c=3 => vec[(a, 1), (b, 2), (c, 3)]
 /// TODO: convert it into test case
 fn query(uri: &str) -> fpm::Result<Vec<(String, String)>> {
+    use itertools::Itertools;
     Ok(
         url::Url::parse(format!("https://fifthtry.com/{}", uri).as_str())?
             .query_pairs()
@@ -58,6 +58,7 @@ fn query(uri: &str) -> fpm::Result<Vec<(String, String)>> {
 }
 
 fn clear_cache_query(uri: &str) -> fpm::Result<QueryParams> {
+    use itertools::Itertools;
     let query = query(uri)?;
     Ok(QueryParams {
         file: query
