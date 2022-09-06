@@ -7,7 +7,7 @@
 use itertools::Itertools;
 
 /// Remove path: It can be directory or file
-async fn remove_file(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
+async fn remove(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
     if path.is_file() {
         tokio::fs::remove_file(path).await?;
     } else if path.is_dir() {
@@ -19,10 +19,9 @@ async fn remove_file(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
     Ok(())
 }
 
-/// Remove content from root except provided values
+/// Remove from provided `root` except given list
 async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Result<()> {
     let except = except.iter().map(std::path::PathBuf::from).collect_vec();
-
     let mut all = tokio::fs::read_dir(root).await?;
     while let Some(file) = all.next_entry().await? {
         if except.contains(&file.path()) {
@@ -37,14 +36,8 @@ async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Resu
     Ok(())
 }
 
-#[derive(serde::Deserialize)]
-pub struct QueryParams {
-    files: Option<String>,
-    packages: Option<String>,
-}
-
 #[derive(Default)]
-pub struct QueryParamsT {
+pub struct QueryParams {
     file: Vec<String>,
     package: Vec<String>,
     all_dependencies: bool,
@@ -59,9 +52,9 @@ fn query(uri: &str) -> fpm::Result<Vec<(String, String)>> {
         .collect_vec())
 }
 
-fn clear_cache_query(uri: &str) -> fpm::Result<QueryParamsT> {
+fn clear_cache_query(uri: &str) -> fpm::Result<QueryParams> {
     let query = query(uri)?;
-    Ok(QueryParamsT {
+    Ok(QueryParams {
         file: query
             .iter()
             .filter_map(|(key, value)| {
@@ -89,63 +82,39 @@ fn clear_cache_query(uri: &str) -> fpm::Result<QueryParamsT> {
 }
 
 pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::HttpResponse> {
-    let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?;
-    clear_(query.0).await.unwrap(); // TODO: Remove unwrap
+    let query = clear_cache_query(req.uri().to_string().as_str()).unwrap();
+    clear_(query).await.unwrap(); // TODO: Remove unwrap
     Ok(actix_web::HttpResponse::Ok().body("Done".to_string()))
 }
 
 pub async fn clear_(query: QueryParams) -> fpm::Result<()> {
-    // Handle options
-    // 1. files=<file-path>
-    // 2. packages
-    //  - main
-    //  - all: remove main + .packages
-    //  - packages: will remove all packages
-    //  - name of the packages like: fpm.dev,foo,c, only name of the packages, entries from .packages folder
-    //  - can remove individual packages files, <package-name>/<file path>
-
     let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await?);
-    if config.package.download_base_url.is_none() {
-        // If this is present, so `fpm` will not be able to serve after removing the content
-        // Only in case of main package, in case of dependencies we can delete
-        // return Ok(actix_web::HttpResponse::Ok()
-        //     .body("Cannot delete anything because I cannot download it again".to_string()));
+    if config.package.download_base_url.is_none() {}
+
+    for file in query.file {
+        let main_file_path = config.root.join(file.as_str());
+        let package_file_path = config.packages_root.join(file.as_str());
+        if main_file_path.exists() {
+            remove(&main_file_path).await?;
+        } else if package_file_path.exists() {
+            remove(&package_file_path).await?;
+        } else {
+            println!("Not able to remove file from cache: {}", file);
+        }
     }
 
-    // 1. files=<file-path>
-    let files = {
-        if let Some(files) = query.files.as_ref() {
-            files.split(',').collect_vec()
-        } else {
-            vec![]
-        }
-    };
-
-    for file in files {
-        let file_path = config.root.join(file);
-        remove_file(&file_path).await.unwrap();
-    }
-
-    // 2. packages
-    let packages = {
-        if let Some(packages) = query.packages.as_ref() {
-            packages.split(',').collect_vec()
-        } else {
-            vec![]
-        }
-    };
-
-    for package in packages {
-        // package value: all, main, packages, <package-name>, <package-file-path>
-        if package.trim().to_lowercase().eq("all") {
-            remove_except(&config.root, &[]).await?;
-        } else if package.trim().to_lowercase().eq("main") {
+    // package value: main, <package-name>
+    for package in query.package {
+        if package.eq("main") {
+            // TODO: List directories and files other than main
             remove_except(&config.root, &[".packages", ".build"]).await?;
-        } else if package.trim().to_lowercase().eq("packages") {
-            tokio::fs::remove_dir_all(&config.packages_root).await?;
         } else {
-            remove_file(&config.packages_root.join(package)).await?;
+            remove(&config.packages_root.join(package)).await?;
         }
+    }
+
+    if query.all_dependencies {
+        remove_except(&config.packages_root, &[]).await?;
     }
 
     // Download FPM.ftd again after removing all the content
