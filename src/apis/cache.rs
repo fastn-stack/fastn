@@ -40,13 +40,16 @@ pub struct QueryParams {
     all_dependencies: bool,
 }
 
-/// http://example.com/?a=1&b=2&c=3 => vec[(a, 1), (b, 2), (c, 3)]
+/// /api/?a=1&b=2&c=3 => vec[(a, 1), (b, 2), (c, 3)]
 /// TODO: convert it into test case
 fn query(uri: &str) -> fpm::Result<Vec<(String, String)>> {
-    Ok(url::Url::parse(uri)?
-        .query_pairs()
-        .into_owned()
-        .collect_vec())
+    println!("{}", uri);
+    Ok(
+        url::Url::parse(format!("https://fifthtry.com/{}", uri).as_str())?
+            .query_pairs()
+            .into_owned()
+            .collect_vec(),
+    )
 }
 
 fn clear_cache_query(uri: &str) -> fpm::Result<QueryParams> {
@@ -111,7 +114,7 @@ pub async fn clear_(query: QueryParams) -> fpm::Result<()> {
     }
 
     if query.all_dependencies {
-        remove_except(&config.packages_root, &[]).await?;
+        tokio::fs::remove_dir_all(&config.packages_root).await?;
     }
 
     // Download FPM.ftd again after removing all the content
