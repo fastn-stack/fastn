@@ -27,6 +27,7 @@ impl PropertyValue {
         let kind_data = KindData::from_p1_kind(kind.as_str(), doc_id, s.line_number)?;
         PropertyValue::from_p1_section_with_kind(s, doc_id, &kind_data)
     }
+
     pub(crate) fn from_p1_section_with_kind(
         s: &ftd::p11::Section,
         doc_id: &str,
@@ -38,12 +39,17 @@ impl PropertyValue {
             | ftd::interpreter::Kind::Decimal
             | ftd::interpreter::Kind::Boolean
             | ftd::interpreter::Kind::List { .. } => {
-                let value = section_value_from_caption_or_body(s, doc_id)?;
-                if let Some(reference) = get_reference(value.as_str()) {
-                    PropertyValue::reference(reference.to_string(), kind_data.to_owned())
-                } else {
-                    let value = Value::to_value(s, doc_id, &kind_data)?;
-                    PropertyValue::value(value)
+                match section_value_from_caption_or_body(s, doc_id) {
+                    Ok(value) if get_reference(value.as_str()).is_some() => {
+                        PropertyValue::reference(
+                            get_reference(value.as_str()).unwrap().to_string(),
+                            kind_data.to_owned(),
+                        )
+                    }
+                    _ => {
+                        let value = Value::to_value(s, doc_id, &kind_data)?;
+                        PropertyValue::value(value)
+                    }
                 }
             }
             _ => unimplemented!(),
@@ -239,6 +245,42 @@ mod test {
             "-- integer age: 40",
             super::PropertyValue::Value {
                 value: super::Value::Integer { value: 40 },
+            },
+        )
+    }
+
+    #[test]
+    fn integer_list() {
+        p(
+            indoc::indoc!(
+                "
+            -- integer list ages: 
+            
+            -- integer: 40
+
+            -- integer: 50
+
+            -- end: ages
+            "
+            ),
+            super::PropertyValue::Value {
+                value: super::Value::List {
+                    data: vec![
+                        ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Integer { value: 40 },
+                        },
+                        ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Integer { value: 50 },
+                        },
+                    ],
+                    kind: ftd::interpreter::KindData {
+                        kind: ftd::interpreter::Kind::List {
+                            kind: Box::new(ftd::interpreter::Kind::Integer),
+                        },
+                        caption: false,
+                        body: false,
+                    },
+                },
             },
         )
     }
