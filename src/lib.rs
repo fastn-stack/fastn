@@ -1,3 +1,5 @@
+#![allow(clippy::derive_partial_eq_without_eq, clippy::get_first)]
+
 extern crate self as ftd;
 
 #[cfg(test)]
@@ -11,6 +13,7 @@ mod dnode;
 mod event;
 mod execute_doc;
 mod html;
+pub mod interpreter;
 pub mod main;
 pub mod markup;
 mod or_type;
