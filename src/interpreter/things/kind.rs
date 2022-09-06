@@ -276,8 +276,7 @@ mod test {
     #[track_caller]
     fn p(s: &str, t: super::KindData) {
         assert_eq!(
-            super::KindData::from_p1_kind(s, "foo", 0)
-                .unwrap_or_else(|e| panic!("{:?}", e)),
+            super::KindData::from_p1_kind(s, "foo", 0).unwrap_or_else(|e| panic!("{:?}", e)),
             t
         )
     }
