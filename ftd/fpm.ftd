@@ -13,7 +13,6 @@ boolean inherit-auto-imports-from-original: true
 
 
 
-
 -- record dependency-data:
 caption name:
 optional string version:

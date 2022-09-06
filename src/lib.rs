@@ -19,6 +19,7 @@ mod doc;
 mod file;
 mod font;
 mod history;
+mod http;
 mod i18n;
 pub mod library;
 mod package_doc;
@@ -34,14 +35,13 @@ mod version;
 mod workspace;
 
 pub(crate) use auto_import::AutoImport;
-pub(crate) use commands::build::process_file;
 pub use commands::{
-    abort_merge::abort_merge, add::add, build::build, build2::build2, clone::clone,
-    close_cr::close_cr, create_cr::create_cr, diff::diff, edit::edit, mark_resolve::mark_resolve,
+    abort_merge::abort_merge, add::add, build::build, clone::clone, close_cr::close_cr,
+    create_cr::create_cr, diff::diff, edit::edit, mark_resolve::mark_resolve,
     mark_upto_date::mark_upto_date, merge::merge, resolve_conflict::resolve_conflict,
     revert::revert, rm::rm, serve::fpm_serve, start_project::start_project,
-    start_tracking::start_tracking, status::status, stop_tracking::stop_tracking, sync::sync,
-    sync2::sync2, sync_status::sync_status, translation_status::translation_status, update::update,
+    start_tracking::start_tracking, status::status, stop_tracking::stop_tracking, sync2::sync2,
+    sync_status::sync_status, translation_status::translation_status, update::update,
 };
 pub use config::Config;
 pub(crate) use config::Package;
@@ -101,14 +101,12 @@ fn fpm_lib_ftd() -> &'static str {
     include_str!("../ftd/fpm-lib.ftd")
 }
 
-fn with_fallback() -> &'static str {
-    include_str!("../with-fallback.html")
-}
-
+#[allow(dead_code)]
 fn with_message() -> &'static str {
     include_str!("../with-message.html")
 }
 
+#[allow(dead_code)]
 fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
     let path = config.root.join("FPM/translation/available-languages.ftd");
     Ok(if path.is_file() {
@@ -388,6 +386,7 @@ fn package_info_markdown(
     })
 }
 
+#[allow(dead_code)]
 fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
     let path = config
         .root
@@ -419,6 +418,7 @@ fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
     })
 }
 
+#[allow(dead_code)]
 fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
     let path = config
         .root

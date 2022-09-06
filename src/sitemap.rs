@@ -499,7 +499,7 @@ impl SitemapParser {
                     }
                     _ => {
                         // The URL can have its own colons. So match the URL first
-                        let url_regex = fpm::utils::url_regex();
+                        let url_regex = crate::http::url_regex();
                         if let Some(regex_match) = url_regex.find(current_title.as_str()) {
                             let curr_title = current_title.as_str();
                             (
@@ -667,7 +667,7 @@ impl Sitemap {
                     Some(config.root.join(file_name.as_str())),
                     Some(config.root.join(file_name.as_str())),
                 )
-            } else if fpm::utils::url_regex().find(section.id.as_str()).is_some() {
+            } else if crate::http::url_regex().find(section.id.as_str()).is_some() {
                 (None, None)
             } else {
                 match fpm::Config::get_file_name(current_package_root, section.id.as_str()) {
@@ -729,7 +729,7 @@ impl Sitemap {
                         Some(config.root.join(file_name.as_str())),
                         Some(config.root.join(file_name.as_str())),
                     )
-                } else if fpm::utils::url_regex().find(id.as_str()).is_some() {
+                } else if crate::http::url_regex().find(id.as_str()).is_some() {
                     (None, None)
                 } else {
                     match fpm::Config::get_file_name(current_package_root, id.as_str()) {
@@ -792,7 +792,7 @@ impl Sitemap {
                         Some(config.root.join(file_name.as_str())),
                     )
                 } else if toc.id.trim().is_empty()
-                    || fpm::utils::url_regex().find(toc.id.as_str()).is_some()
+                    || crate::http::url_regex().find(toc.id.as_str()).is_some()
                 {
                     (None, None)
                 } else {

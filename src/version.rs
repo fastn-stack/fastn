@@ -1,7 +1,3 @@
-use itertools::Itertools;
-use std::cmp::Ordering;
-use std::io::Write;
-
 #[derive(Clone, Eq, PartialEq, Hash, Debug)]
 pub struct Version {
     pub major: u64,
@@ -48,8 +44,8 @@ impl Version {
 }
 
 impl PartialOrd for Version {
-    fn partial_cmp(&self, rhs: &Self) -> Option<Ordering> {
-        Some(Ord::cmp(self, rhs))
+    fn partial_cmp(&self, rhs: &Self) -> Option<std::cmp::Ordering> {
+        Some(std::cmp::Ord::cmp(self, rhs))
     }
 }
 
@@ -64,13 +60,17 @@ impl Ord for Version {
     }
 }
 
+#[allow(dead_code)]
 pub(crate) async fn build_version(
     config: &fpm::Config,
     _file: Option<&str>,
     base_url: &str,
-    skip_failed: bool,
-    asset_documents: &std::collections::HashMap<String, String>,
+    _skip_failed: bool,
+    _asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+    use std::io::Write;
+
     let versioned_documents = config.get_versions(&config.package).await?;
     let mut documents = std::collections::BTreeMap::new();
     for key in versioned_documents.keys().sorted() {
@@ -125,38 +125,42 @@ pub(crate) async fn build_version(
                 }
             }
             doc.set_id(new_id.as_str());
-            fpm::process_file(
-                config,
-                &config.package,
-                &doc,
-                None,
-                None,
-                Default::default(),
-                format!("{}{}/", base_url, key.original).as_str(),
-                skip_failed,
-                asset_documents,
-                Some(id),
-                false,
-            )
-            .await?;
+
+            todo!()
+
+            // fpm::process_file(
+            //     config,
+            //     &config.package,
+            //     &doc,
+            //     None,
+            //     None,
+            //     Default::default(),
+            //     format!("{}{}/", base_url, key.original).as_str(),
+            //     skip_failed,
+            //     asset_documents,
+            //     Some(id),
+            //     false,
+            // )
+            // .await?;
         }
     }
 
-    for (_, doc) in documents.values() {
-        fpm::process_file(
-            config,
-            &config.package,
-            doc,
-            None,
-            None,
-            Default::default(),
-            base_url,
-            skip_failed,
-            asset_documents,
-            None,
-            false,
-        )
-        .await?;
-    }
-    Ok(())
+    todo!()
+    // for (_, doc) in documents.values() {
+    //     fpm::process_file(
+    //         config,
+    //         &config.package,
+    //         doc,
+    //         None,
+    //         None,
+    //         Default::default(),
+    //         base_url,
+    //         skip_failed,
+    //         asset_documents,
+    //         None,
+    //         false,
+    //     )
+    //     .await?;
+    // }
+    // Ok(())
 }

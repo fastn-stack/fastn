@@ -88,7 +88,7 @@ async fn async_main() -> fpm::Result<()> {
             println!("{}", fpm::debug_env_vars());
         }
 
-        fpm::build2(
+        fpm::build(
             &mut config,
             build.value_of("file"),
             build.value_of("base").unwrap(), // unwrap okay because base is required

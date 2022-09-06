@@ -111,7 +111,7 @@ async fn get_package(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<Pa
         fpm_controller, fpm_instance
     );
 
-    let resp: ApiResponse<PackageResult> = fpm::utils::get_json(controller_api.as_str()).await?;
+    let resp: ApiResponse<PackageResult> = crate::http::get_json(controller_api.as_str()).await?;
     if !resp.success {
         return Err(fpm::Error::APIResponseError(format!(
             "get_package api error: {:?}",
@@ -167,7 +167,7 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
     // Using http::_get() function to make request to this API for now
     // TODO: here Map is wrong,
     let resp: ApiResponse<std::collections::HashMap<String, String>> =
-        fpm::utils::get_json(url.as_str()).await?;
+        crate::http::get_json(url.as_str()).await?;
 
     if !resp.success {
         return Err(fpm::Error::APIResponseError(format!(
@@ -211,7 +211,8 @@ pub async fn get_remote_identities(
     )]);
 
     let resp: UserIdentities =
-        fpm::utils::http_get_with_type(url::Url::parse(url.as_str())?, headers, identities).await?;
+        crate::http::http_get_with_type(url::Url::parse(url.as_str())?, headers, identities)
+            .await?;
 
     if !resp.success {
         return Err(fpm::Error::APIResponseError(format!(

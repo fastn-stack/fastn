@@ -50,7 +50,7 @@ impl fpm::Package {
             fpm::Error::PackageError { message }
         })?;
 
-        fpm::utils::construct_url_and_get(
+        crate::http::construct_url_and_get(
             format!("{}/{}", base.trim_end_matches('/'), name).as_str(),
         )
         .await

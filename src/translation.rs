@@ -1,3 +1,5 @@
+#![allow(dead_code, unused, unused_variables)]
+
 #[derive(Debug)]
 pub(crate) enum TranslatedDocument {
     Missing {
@@ -44,14 +46,14 @@ impl TranslatedDocument {
     pub async fn html(
         &self,
         config: &fpm::Config,
-        base_url: &str,
-        skip_failed: bool,
-        asset_documents: &std::collections::HashMap<String, String>,
+        _base_url: &str,
+        _skip_failed: bool,
+        _asset_documents: &std::collections::HashMap<String, String>,
     ) -> fpm::Result<()> {
         // handle the message
         // render with-fallback or with-message
-        let message = fpm::get_messages(self, config)?;
-        let (main, fallback, translated_data) = match self {
+        let _message = fpm::get_messages(self, config)?;
+        let (_main, _fallback, _translated_data) = match self {
             TranslatedDocument::Missing { original } => {
                 (original, None, TranslationData::new("Missing"))
             }
@@ -86,21 +88,23 @@ impl TranslatedDocument {
                 (translated, None, TranslationData::new("UptoDate"))
             }
         };
-        fpm::process_file(
-            config,
-            &config.package,
-            main,
-            fallback,
-            Some(message.as_str()),
-            translated_data,
-            base_url,
-            skip_failed,
-            asset_documents,
-            None,
-            false,
-        )
-        .await?;
-        return Ok(());
+
+        todo!();
+        // fpm::process_file(
+        //     config,
+        //     &config.package,
+        //     main,
+        //     fallback,
+        //     Some(message.as_str()),
+        //     translated_data,
+        //     base_url,
+        //     skip_failed,
+        //     asset_documents,
+        //     None,
+        //     false,
+        // )
+        // .await?;
+        // return Ok(());
 
         /// Gets the diff on original file between last_marked_on and original_latest timestamp
         async fn get_diff(
