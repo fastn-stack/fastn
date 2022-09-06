@@ -139,7 +139,7 @@ impl KindData {
 pub fn check_for_optional(s: &mut String) -> bool {
     use itertools::Itertools;
 
-    let mut expr = s.split_whitespace().collect_vec();
+    let expr = s.split_whitespace().collect_vec();
 
     if expr.is_empty() {
         return false;
@@ -212,7 +212,7 @@ pub fn is_body(s: &str) -> bool {
 pub fn check_for_kind(s: &mut String) -> Option<Kind> {
     use itertools::Itertools;
 
-    let mut expr = s.split_whitespace().collect_vec();
+    let expr = s.split_whitespace().collect_vec();
 
     if expr.is_empty() {
         return None;
@@ -236,7 +236,7 @@ pub fn check_for_kind(s: &mut String) -> Option<Kind> {
 pub fn check_for_list(s: &mut String) -> bool {
     use itertools::Itertools;
 
-    let mut expr = s.split_whitespace().collect_vec();
+    let expr = s.split_whitespace().collect_vec();
 
     if expr.is_empty() {
         return false;
