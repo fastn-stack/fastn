@@ -1,3 +1,5 @@
+use crate::interpreter::KindData;
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum PropertyValue {
     Value {
@@ -10,7 +12,22 @@ pub enum PropertyValue {
 }
 
 impl PropertyValue {
-    pub(crate) fn to_property_value(
+    pub(crate) fn from_p1_section(
+        s: &ftd::p11::Section,
+        doc_id: &str,
+    ) -> ftd::interpreter::Result<PropertyValue> {
+        let kind = s
+            .kind
+            .as_ref()
+            .ok_or(ftd::interpreter::Error::InvalidKind {
+                doc_id: doc_id.to_string(),
+                line_number: s.line_number,
+                message: format!("Kind not found for section: {}", s.name),
+            })?;
+        let kind_data = KindData::from_p1_kind(kind.as_str(), doc_id, s.line_number)?;
+        PropertyValue::from_p1_section_with_kind(s, doc_id, &kind_data)
+    }
+    pub(crate) fn from_p1_section_with_kind(
         s: &ftd::p11::Section,
         doc_id: &str,
         kind_data: &ftd::interpreter::KindData,
@@ -107,7 +124,7 @@ impl Value {
             ftd::interpreter::Kind::List { kind } => {
                 let mut data = vec![];
                 for subsection in s.sub_sections.iter() {
-                    data.push(PropertyValue::to_property_value(
+                    data.push(PropertyValue::from_p1_section_with_kind(
                         subsection,
                         doc_id,
                         &kind
@@ -171,7 +188,58 @@ pub(crate) fn get_reference(s: &str) -> Option<&str> {
     s.trim().strip_prefix('$')
 }
 
-// #[cfg(test)]
-// mod test {
-//     fn
-// }
+#[cfg(test)]
+mod test {
+    #[track_caller]
+    fn p(s: &str, t: ftd::interpreter::PropertyValue) {
+        let section = ftd::p11::parse(s, "foo")
+            .unwrap_or_else(|e| panic!("{:?}", e))
+            .first()
+            .unwrap()
+            .to_owned();
+        assert_eq!(
+            super::PropertyValue::from_p1_section(&section, "foo")
+                .unwrap_or_else(|e| panic!("{:?}", e)),
+            t
+        )
+    }
+
+    #[track_caller]
+    fn f(s: &str, m: &str) {
+        let section = ftd::p11::parse(s, "foo")
+            .unwrap_or_else(|e| panic!("{:?}", e))
+            .first()
+            .unwrap()
+            .to_owned();
+        match super::PropertyValue::from_p1_section(&section, "foo") {
+            Ok(r) => panic!("expected failure, found: {:?}", r),
+            Err(e) => {
+                let expected = m.trim();
+                let f2 = e.to_string();
+                let found = f2.trim();
+                if expected != found {
+                    let patch = diffy::create_patch(expected, found);
+                    let f = diffy::PatchFormatter::new().with_color();
+                    print!(
+                        "{}",
+                        f.fmt_patch(&patch)
+                            .to_string()
+                            .replace("\\ No newline at end of file", "")
+                    );
+                    println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                    panic!("test failed")
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn integer() {
+        p(
+            "-- integer age: 40",
+            super::PropertyValue::Value {
+                value: super::Value::Integer { value: 40 },
+            },
+        )
+    }
+}

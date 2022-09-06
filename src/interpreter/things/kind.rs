@@ -35,28 +35,28 @@ pub struct KindData {
 
 impl KindData {
     pub(crate) fn from_p1_kind(
-        input: &str,
+        str_kind: &str,
         doc_id: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<KindData> {
         use itertools::Itertools;
 
-        let mut s = input.split_whitespace().join(" ");
+        let mut s = str_kind.split_whitespace().join(" ");
         if s.is_empty() {
-            return Err(invalid_kind_error(input, doc_id, line_number));
+            return Err(invalid_kind_error(str_kind, doc_id, line_number));
         }
 
         let optional = check_for_optional(&mut s);
 
         if s.is_empty() {
-            return Err(invalid_kind_error(input, doc_id, line_number));
+            return Err(invalid_kind_error(str_kind, doc_id, line_number));
         }
 
         let (caption, body) = check_for_caption_and_body(&mut s);
 
         if s.is_empty() {
             if !(caption || body) {
-                return Err(invalid_kind_error(input, doc_id, line_number));
+                return Err(invalid_kind_error(str_kind, doc_id, line_number));
             }
 
             let mut kind_data = KindData {
@@ -73,7 +73,7 @@ impl KindData {
         let kind = match check_for_kind(&mut s) {
             Some(kind) => kind,
             _ if caption || body => Kind::String,
-            _ => return Err(invalid_kind_error(input, doc_id, line_number)),
+            _ => return Err(invalid_kind_error(str_kind, doc_id, line_number)),
         };
 
         let list = check_for_list(&mut s);
