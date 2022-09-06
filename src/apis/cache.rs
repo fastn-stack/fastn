@@ -18,9 +18,15 @@ async fn remove(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
 
 /// Remove from provided `root` except given list
 async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Result<()> {
-    let except = except.iter().map(std::path::PathBuf::from).collect_vec();
+    let except = except
+        .into_iter()
+        .map(|x| root.join(x))
+        .map(|x| x.into_std_path_buf())
+        .collect_vec();
+    dbg!(&except);
     let mut all = tokio::fs::read_dir(root).await?;
     while let Some(file) = all.next_entry().await? {
+        dbg!(&file.path());
         if except.contains(&file.path()) {
             continue;
         }
@@ -43,7 +49,6 @@ pub struct QueryParams {
 /// /api/?a=1&b=2&c=3 => vec[(a, 1), (b, 2), (c, 3)]
 /// TODO: convert it into test case
 fn query(uri: &str) -> fpm::Result<Vec<(String, String)>> {
-    println!("{}", uri);
     Ok(
         url::Url::parse(format!("https://fifthtry.com/{}", uri).as_str())?
             .query_pairs()
@@ -91,6 +96,7 @@ pub async fn clear_(query: QueryParams) -> fpm::Result<()> {
     let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await?);
     if config.package.download_base_url.is_none() {}
 
+    // file: file path can be from main package or .packages folder
     for file in query.file {
         let main_file_path = config.root.join(file.as_str());
         let package_file_path = config.packages_root.join(file.as_str());
