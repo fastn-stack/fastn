@@ -22,10 +22,8 @@ async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Resu
         .map(|x| root.join(x))
         .map(|x| x.into_std_path_buf())
         .collect_vec();
-    dbg!(&except);
     let mut all = tokio::fs::read_dir(root).await?;
     while let Some(file) = all.next_entry().await? {
-        dbg!(&file.path());
         if except.contains(&file.path()) {
             continue;
         }
@@ -46,7 +44,6 @@ pub struct QueryParams {
 }
 
 /// /api/?a=1&b=2&c=3 => vec[(a, 1), (b, 2), (c, 3)]
-/// TODO: convert it into test case
 fn query(uri: &str) -> fpm::Result<Vec<(String, String)>> {
     use itertools::Itertools;
     Ok(
@@ -130,4 +127,19 @@ pub async fn clear_(query: QueryParams) -> fpm::Result<()> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn query() {
+        assert_eq!(
+            super::query("/api/?a=1&b=2&c=3").unwrap(),
+            vec![
+                ("a".to_string(), "1".to_string()),
+                ("b".to_string(), "2".to_string()),
+                ("c".to_string(), "3".to_string())
+            ]
+        )
+    }
 }
