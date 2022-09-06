@@ -8,7 +8,7 @@ pub struct QueryParams {
     all_dependencies: bool,
 }
 
-fn clear_cache_query(uri: &str) -> fpm::Result<QueryParams> {
+fn query(uri: &str) -> fpm::Result<QueryParams> {
     use itertools::Itertools;
     let query = fpm::utils::query(uri)?;
     Ok(QueryParams {
@@ -39,7 +39,7 @@ fn clear_cache_query(uri: &str) -> fpm::Result<QueryParams> {
 }
 
 pub async fn clear(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    let query = match clear_cache_query(req.uri().to_string().as_str()) {
+    let query = match query(req.uri().to_string().as_str()) {
         Ok(q) => q,
         Err(err) => {
             eprintln!(
