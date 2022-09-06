@@ -18,7 +18,7 @@ async fn remove(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
 async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Result<()> {
     use itertools::Itertools;
     let except = except
-        .into_iter()
+        .iter()
         .map(|x| root.join(x))
         .map(|x| x.into_std_path_buf())
         .collect_vec();
@@ -36,7 +36,7 @@ async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Resu
     Ok(())
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct QueryParams {
     file: Vec<String>,
     package: Vec<String>,
@@ -84,18 +84,36 @@ fn clear_cache_query(uri: &str) -> fpm::Result<QueryParams> {
     })
 }
 
-pub async fn clear(req: actix_web::HttpRequest) -> actix_web::Result<actix_web::HttpResponse> {
-    let query = clear_cache_query(req.uri().to_string().as_str()).unwrap();
-    clear_(query).await.unwrap(); // TODO: Remove unwrap
-    Ok(actix_web::HttpResponse::Ok().body("Done".to_string()))
+pub async fn clear(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    let query = match clear_cache_query(req.uri().to_string().as_str()) {
+        Ok(q) => q,
+        Err(err) => {
+            eprintln!(
+                "FPM-Error: /-/clear-cache/, uri: {:?}, error: {:?}",
+                req.uri(),
+                err
+            );
+            return actix_web::HttpResponse::InternalServerError().body(err.to_string());
+        }
+    };
+
+    if let Err(err) = clear_(&query).await {
+        eprintln!(
+            "FPM-Error: /-/clear-cache/, query: {:?}, error: {:?}",
+            query, err
+        );
+        return actix_web::HttpResponse::InternalServerError().body(err.to_string());
+    }
+
+    actix_web::HttpResponse::Ok().body("Done".to_string())
 }
 
-pub async fn clear_(query: QueryParams) -> fpm::Result<()> {
+pub async fn clear_(query: &QueryParams) -> fpm::Result<()> {
     let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await?);
     if config.package.download_base_url.is_none() {}
 
     // file: file path can be from main package or .packages folder
-    for file in query.file {
+    for file in query.file.iter() {
         let main_file_path = config.root.join(file.as_str());
         let package_file_path = config.packages_root.join(file.as_str());
         if main_file_path.exists() {
@@ -108,7 +126,7 @@ pub async fn clear_(query: QueryParams) -> fpm::Result<()> {
     }
 
     // package value: main, <package-name>
-    for package in query.package {
+    for package in query.package.iter() {
         if package.eq("main") {
             // TODO: List directories and files other than main
             remove_except(&config.root, &[".packages", ".build"]).await?;
