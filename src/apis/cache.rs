@@ -64,7 +64,11 @@ pub async fn clear(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
 
 pub async fn clear_(query: &QueryParams) -> fpm::Result<()> {
     let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await?);
-    if config.package.download_base_url.is_none() {}
+    if config.package.download_base_url.is_none() {
+        return Err(fpm::Error::APIResponseError(format!(
+            "cannot remove anything, package does not have `download_base_url`"
+        )));
+    }
 
     // file: file path can be from main package or .packages folder
     for file in query.file.iter() {

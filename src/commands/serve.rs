@@ -299,7 +299,7 @@ You can try without providing port, it will automatically pick unused port."#,
         )
         .route(
             "/-/clear-cache/",
-            actix_web::web::post().to(fpm::apis::cache::clear),
+            actix_web::web::get().to(fpm::apis::cache::clear),
         )
         .route("/{path:.*}", actix_web::web::get().to(serve))
     };

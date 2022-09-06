@@ -518,7 +518,7 @@ pub fn parse_from_cli(key: &str) -> Option<String> {
 }
 
 /// Remove path: It can be directory or file
-pub async fn remove(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
+pub async fn remove(path: &camino::Utf8Path) -> std::io::Result<()> {
     if path.is_file() {
         tokio::fs::remove_file(path).await?;
     } else if path.is_dir() {
@@ -531,7 +531,7 @@ pub async fn remove(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
 }
 
 /// Remove from provided `root` except given list
-pub async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Result<()> {
+pub async fn remove_except(root: &camino::Utf8Path, except: &[&str]) -> fpm::Result<()> {
     use itertools::Itertools;
     let except = except
         .iter()
