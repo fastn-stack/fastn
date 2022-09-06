@@ -16,6 +16,16 @@ pub enum Kind {
     UI,
 }
 
+impl Kind {
+    pub(crate) fn into_kind_data(self, caption: bool, body: bool) -> KindData {
+        KindData {
+            kind: self,
+            caption,
+            body,
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct KindData {
     pub kind: Kind,

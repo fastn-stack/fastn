@@ -91,4 +91,29 @@ impl Header {
             }
         }
     }
+
+    pub(crate) fn get_key(&self) -> String {
+        match self {
+            Header::KV(ftd::p11::header::KV { key, .. })
+            | Header::Section(ftd::p11::header::Section { key, .. }) => key.to_string(),
+        }
+    }
+
+    pub(crate) fn get_value(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::p11::Result<Option<String>> {
+        match self {
+            Header::KV(ftd::p11::header::KV { value, .. }) => Ok(value.to_owned()),
+            Header::Section(_) => Err(ftd::p11::Error::ParseError {
+                message: format!(
+                    "Expected Header of type: KV, found: Section {}",
+                    self.get_key()
+                ),
+                doc_id: doc_id.to_string(),
+                line_number,
+            }),
+        }
+    }
 }
