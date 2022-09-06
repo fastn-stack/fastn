@@ -1587,7 +1587,7 @@ impl Package {
                     format!("-- import: {}", &import_content)
                 } else {
                     // No change in line push as it is
-                    line_string.to_string()
+                    line.to_string()
                 }
             };
 
