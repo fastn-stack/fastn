@@ -53,7 +53,7 @@ impl KindData {
                 body,
             };
             if optional {
-                kind_data = kind_data.to_optional();
+                kind_data = kind_data.optional();
             }
             return Ok(kind_data);
         }
@@ -73,17 +73,17 @@ impl KindData {
         };
 
         if optional {
-            kind_data = kind_data.to_optional();
+            kind_data = kind_data.optional();
         }
 
         if list {
-            kind_data = kind_data.to_list();
+            kind_data = kind_data.list();
         }
 
         Ok(kind_data)
     }
 
-    fn to_optional(self) -> KindData {
+    fn optional(self) -> KindData {
         KindData {
             kind: Kind::Optional {
                 kind: Box::new(self.kind),
@@ -93,7 +93,7 @@ impl KindData {
         }
     }
 
-    fn to_list(self) -> KindData {
+    fn list(self) -> KindData {
         KindData {
             kind: Kind::List {
                 kind: Box::new(self.kind),
@@ -337,12 +337,12 @@ mod test {
 
     #[test]
     fn integer_list() {
-        p!("integer list", super::KindData::integer().to_list())
+        p!("integer list", super::KindData::integer().list())
     }
 
     #[test]
     fn optional_integer() {
-        p!("optional integer", super::KindData::integer().to_optional())
+        p!("optional integer", super::KindData::integer().optional())
     }
 
     #[test]
