@@ -23,26 +23,30 @@ pub struct KindData {
 
 impl KindData {
     pub(crate) fn from_p1_kind(
-        s: &str,
+        input: &str,
         doc_id: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<KindData> {
         use itertools::Itertools;
 
-        let mut s = s.split_whitespace().join(" ");
+        let mut s = input.split_whitespace().join(" ");
         if s.is_empty() {
-            return Err(invalid_kind_error(s, doc_id, line_number));
+            return Err(invalid_kind_error(input, doc_id, line_number));
         }
 
         let optional = check_for_optional(&mut s);
 
         if s.is_empty() {
-            return Err(invalid_kind_error(s, doc_id, line_number));
+            return Err(invalid_kind_error(input, doc_id, line_number));
         }
 
         let (caption, body) = check_for_caption_and_body(&mut s);
 
         if s.is_empty() {
+            if !(caption || body) {
+                return Err(invalid_kind_error(input, doc_id, line_number));
+            }
+
             let mut kind_data = KindData {
                 kind: Kind::String,
                 caption,
@@ -57,7 +61,7 @@ impl KindData {
         let kind = match check_for_kind(&mut s) {
             Some(kind) => kind,
             _ if caption || body => Kind::String,
-            _ => return Err(invalid_kind_error(s, doc_id, line_number)),
+            _ => return Err(invalid_kind_error(input, doc_id, line_number)),
         };
 
         let list = check_for_list(&mut s);
@@ -104,6 +108,30 @@ impl KindData {
             kind: Kind::Integer,
             caption: false,
             body: false,
+        }
+    }
+
+    fn string() -> KindData {
+        KindData {
+            kind: Kind::String,
+            caption: false,
+            body: false,
+        }
+    }
+
+    fn caption(self) -> KindData {
+        KindData {
+            kind: self.kind,
+            caption: true,
+            body: self.body,
+        }
+    }
+
+    fn body(self) -> KindData {
+        KindData {
+            kind: self.kind,
+            caption: self.caption,
+            body: true,
         }
     }
 }
@@ -243,7 +271,6 @@ where
 
 #[cfg(test)]
 mod test {
-
     macro_rules! p {
         ($s:expr, $t: expr,) => {
             p!($s, $t)
@@ -257,8 +284,99 @@ mod test {
         };
     }
 
+    macro_rules! f {
+        ($s:expr, $m: expr,) => {
+            f!($s, $m)
+        };
+        ($s:expr, $m: expr) => {
+            match super::KindData::from_p1_kind(indoc::indoc!($s), "foo", 0) {
+                Ok(r) => panic!("expected failure, found: {:?}", r),
+                Err(e) => {
+                    let expected = $m.trim();
+                    let f2 = e.to_string();
+                    let found = f2.trim();
+                    if expected != found {
+                        let patch = diffy::create_patch(expected, found);
+                        let f = diffy::PatchFormatter::new().with_color();
+                        print!(
+                            "{}",
+                            f.fmt_patch(&patch)
+                                .to_string()
+                                .replace("\\ No newline at end of file", "")
+                        );
+                        println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                        panic!("test failed")
+                    }
+                }
+            }
+        };
+    }
+
     #[test]
     fn integer() {
         p!("integer", super::KindData::integer())
+    }
+
+    #[test]
+    fn caption_integer() {
+        p!("caption integer", super::KindData::integer().caption())
+    }
+
+    #[test]
+    fn caption_or_body_integer() {
+        p!(
+            "caption or body integer",
+            super::KindData::integer().caption().body()
+        );
+
+        p!(
+            "body or caption integer",
+            super::KindData::integer().caption().body()
+        );
+    }
+
+    #[test]
+    fn integer_list() {
+        p!("integer list", super::KindData::integer().to_list())
+    }
+
+    #[test]
+    fn optional_integer() {
+        p!("optional integer", super::KindData::integer().to_optional())
+    }
+
+    #[test]
+    fn optional_failure() {
+        f!("optional", "InvalidKind: foo:0 -> optional");
+    }
+
+    #[test]
+    fn caption() {
+        p!("caption", super::KindData::string().caption());
+
+        p!("caption string", super::KindData::string().caption());
+    }
+
+    #[test]
+    fn caption_or_body() {
+        p!(
+            "caption or body",
+            super::KindData::string().caption().body()
+        );
+
+        p!(
+            "body or caption",
+            super::KindData::string().caption().body()
+        );
+
+        p!(
+            "caption or body string",
+            super::KindData::string().caption().body()
+        );
+
+        p!(
+            "body or caption string",
+            super::KindData::string().caption().body()
+        );
     }
 }
