@@ -15,6 +15,7 @@ border-width: 2
 border-radius: 5
 width: fill
 margin-bottom: 20
+background-color: $fpm.color.main.background.step-2
 
 --- ftd.text: the heading (click to toggle)
 $on-click$: toggle $open
