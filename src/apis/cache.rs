@@ -75,9 +75,15 @@ pub async fn clear_(query: &QueryParams) -> fpm::Result<()> {
         let main_file_path = config.root.join(file.as_str());
         let package_file_path = config.packages_root.join(file.as_str());
         if main_file_path.exists() {
-            fpm::utils::remove(&main_file_path).await?;
+            let path = tokio::fs::canonicalize(main_file_path).await?;
+            if path.starts_with(&config.root) {
+                fpm::utils::remove(path.as_path()).await?;
+            }
         } else if package_file_path.exists() {
-            fpm::utils::remove(&package_file_path).await?;
+            let path = tokio::fs::canonicalize(package_file_path).await?;
+            if path.starts_with(&config.root) {
+                fpm::utils::remove(path.as_path()).await?;
+            }
         } else {
             println!("Not able to remove file from cache: {}", file);
         }
@@ -89,7 +95,10 @@ pub async fn clear_(query: &QueryParams) -> fpm::Result<()> {
             // TODO: List directories and files other than main
             fpm::utils::remove_except(&config.root, &[".packages", ".build"]).await?;
         } else {
-            fpm::utils::remove(&config.packages_root.join(package)).await?;
+            let path = tokio::fs::canonicalize(config.packages_root.join(package)).await?;
+            if path.starts_with(&config.packages_root) {
+                fpm::utils::remove(path.as_path()).await?;
+            }
         }
     }
 

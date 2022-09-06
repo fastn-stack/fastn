@@ -518,7 +518,7 @@ pub fn parse_from_cli(key: &str) -> Option<String> {
 }
 
 /// Remove path: It can be directory or file
-pub async fn remove(path: &camino::Utf8Path) -> std::io::Result<()> {
+pub async fn remove(path: &std::path::Path) -> std::io::Result<()> {
     if path.is_file() {
         tokio::fs::remove_file(path).await?;
     } else if path.is_dir() {
