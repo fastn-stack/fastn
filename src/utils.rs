@@ -516,3 +516,64 @@ pub fn parse_from_cli(key: &str) -> Option<String> {
         .and_then(|idx| args.get(idx + 1))
         .map(String::to_string)
 }
+
+/// Remove path: It can be directory or file
+pub async fn remove(path: &camino::Utf8PathBuf) -> std::io::Result<()> {
+    if path.is_file() {
+        tokio::fs::remove_file(path).await?;
+    } else if path.is_dir() {
+        tokio::fs::remove_dir_all(path).await?
+    } else if path.is_symlink() {
+        // TODO:
+        // It can be a directory or a file
+    }
+    Ok(())
+}
+
+/// Remove from provided `root` except given list
+pub async fn remove_except(root: &camino::Utf8PathBuf, except: &[&str]) -> fpm::Result<()> {
+    use itertools::Itertools;
+    let except = except
+        .iter()
+        .map(|x| root.join(x))
+        .map(|x| x.into_std_path_buf())
+        .collect_vec();
+    let mut all = tokio::fs::read_dir(root).await?;
+    while let Some(file) = all.next_entry().await? {
+        if except.contains(&file.path()) {
+            continue;
+        }
+        if file.metadata().await?.is_dir() {
+            tokio::fs::remove_dir_all(file.path()).await?;
+        } else if file.metadata().await?.is_file() {
+            tokio::fs::remove_file(file.path()).await?;
+        }
+    }
+    Ok(())
+}
+
+/// /api/?a=1&b=2&c=3 => vec[(a, 1), (b, 2), (c, 3)]
+pub fn query(uri: &str) -> fpm::Result<Vec<(String, String)>> {
+    use itertools::Itertools;
+    Ok(
+        url::Url::parse(format!("https://fifthtry.com/{}", uri).as_str())?
+            .query_pairs()
+            .into_owned()
+            .collect_vec(),
+    )
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn query() {
+        assert_eq!(
+            super::query("/api/?a=1&b=2&c=3").unwrap(),
+            vec![
+                ("a".to_string(), "1".to_string()),
+                ("b".to_string(), "2".to_string()),
+                ("c".to_string(), "3".to_string())
+            ]
+        )
+    }
+}
