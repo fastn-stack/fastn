@@ -152,6 +152,14 @@ impl KindData {
         }
     }
 
+    pub(crate) fn boolean() -> KindData {
+        KindData {
+            kind: Kind::Boolean,
+            caption: false,
+            body: false,
+        }
+    }
+
     fn integer() -> KindData {
         KindData {
             kind: Kind::Integer,

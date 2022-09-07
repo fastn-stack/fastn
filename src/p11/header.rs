@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type")]
 pub enum Header {
@@ -73,6 +71,8 @@ impl Header {
     }
 
     pub fn without_line_number(&self) -> Self {
+        use itertools::Itertools;
+
         match self {
             Header::KV(kv) => {
                 let mut kv = (*kv).clone();
@@ -99,11 +99,7 @@ impl Header {
         }
     }
 
-    pub(crate) fn get_value(
-        &self,
-        doc_id: &str,
-        line_number: usize,
-    ) -> ftd::p11::Result<Option<String>> {
+    pub(crate) fn get_value(&self, doc_id: &str) -> ftd::p11::Result<Option<String>> {
         match self {
             Header::KV(ftd::p11::header::KV { value, .. }) => Ok(value.to_owned()),
             Header::Section(_) => Err(ftd::p11::Error::ParseError {
@@ -112,8 +108,80 @@ impl Header {
                     self.get_key()
                 ),
                 doc_id: doc_id.to_string(),
-                line_number,
+                line_number: self.get_line_number(),
             }),
         }
+    }
+
+    pub(crate) fn get_sections(&self, doc_id: &str) -> ftd::p11::Result<&Vec<ftd::p11::Section>> {
+        match self {
+            Header::KV(_) => Err(ftd::p11::Error::ParseError {
+                message: format!(
+                    "Expected Header of type: Sections, found: KV {}",
+                    self.get_key()
+                ),
+                doc_id: doc_id.to_string(),
+                line_number: self.get_line_number(),
+            }),
+            Header::Section(ftd::p11::header::Section { section, .. }) => Ok(section),
+        }
+    }
+
+    pub(crate) fn get_line_number(&self) -> usize {
+        match self {
+            Header::KV(ftd::p11::header::KV { line_number, .. })
+            | Header::Section(ftd::p11::header::Section { line_number, .. }) => *line_number,
+        }
+    }
+
+    pub(crate) fn get_kind(&self) -> Option<String> {
+        match self {
+            Header::KV(ftd::p11::header::KV { kind, .. })
+            | Header::Section(ftd::p11::header::Section { kind, .. }) => kind.to_owned(),
+        }
+    }
+
+    pub(crate) fn is_empty(&self) -> bool {
+        match self {
+            Header::KV(ftd::p11::header::KV { value, .. }) => value.is_none(),
+            Header::Section(ftd::p11::header::Section { section, .. }) => section.is_empty(),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct Headers(pub Vec<Header>);
+
+impl Headers {
+    pub fn find(&self, key: &str) -> Vec<&ftd::p11::Header> {
+        use itertools::Itertools;
+
+        self.0.iter().filter(|v| v.get_key().eq(key)).collect_vec()
+    }
+
+    pub fn find_once(
+        &self,
+        key: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::p11::Result<&ftd::p11::Header> {
+        let headers = self.find(key);
+        let header = headers.first().ok_or(ftd::p11::Error::HeaderNotFound {
+            key: key.to_string(),
+            doc_id: doc_id.to_string(),
+            line_number,
+        })?;
+        if headers.len() > 1 {
+            return Err(ftd::p11::Error::MoreThanOneHeader {
+                key: key.to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: header.get_line_number(),
+            });
+        }
+        Ok(header)
+    }
+
+    pub fn push(&mut self, item: ftd::p11::Header) {
+        self.0.push(item)
     }
 }

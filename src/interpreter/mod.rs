@@ -34,6 +34,13 @@ pub enum Error {
 
     #[error("ParseBoolError: {}", _0)]
     ParseBoolError(#[from] std::str::ParseBoolError),
+
+    #[error("{doc_id}:{line_number} -> {message}")]
+    ParseError {
+        message: String,
+        doc_id: String,
+        line_number: usize,
+    },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
