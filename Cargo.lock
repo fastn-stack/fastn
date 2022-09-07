@@ -913,6 +913,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "sha2",
+ "slug",
  "thiserror",
  "tokio",
  "url",
@@ -942,7 +943,7 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.2.0"
-source = "git+https://github.com/FifthTry/ftd?rev=1ac7eba#1ac7ebae50d704a31d755e20d9872f517b9b26d4"
+source = "git+https://github.com/FifthTry/ftd?rev=3b8c818#3b8c818da48dc946e08afa04ed1e883d0e62c482"
 dependencies = [
  "comrak",
  "css-color-parser",

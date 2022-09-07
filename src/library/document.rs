@@ -8,6 +8,46 @@ document id
 /x/y/ - suffix
 */
 
+/// converts the document_name/document-full-id to document_id
+/// and returns it as String
+///
+///
+/// ## Examples
+/// ```rust
+/// # use fpm::library::convert_to_document_id;
+///assert_eq!(convert_to_document_id("/bar/index.ftd/"), "/bar/");
+///assert_eq!(convert_to_document_id("index.ftd"), "/");
+///assert_eq!(convert_to_document_id("/foo/-/x/"), "/foo/");
+///assert_eq!(convert_to_document_id("/fpm.dev/doc.txt"), "/fpm.dev/doc/");
+///assert_eq!(convert_to_document_id("foo.png/"), "/foo/");
+///assert_eq!(convert_to_document_id("README.md"), "/README/");
+/// ```
+pub fn convert_to_document_id(doc_name: &str) -> String {
+    const FILE_EXTENSION: &str = r"[.][a-z\d]+[/]?$";
+    lazy_static::lazy_static!(
+        static ref EXT: regex::Regex = regex::Regex::new(FILE_EXTENSION).unwrap();
+    );
+
+    let doc_name = EXT.replace_all(doc_name, "");
+
+    // Discard document suffix if there
+    // Also discard trailing index
+    let document_id = doc_name
+        .split_once("/-/")
+        .map(|x| x.0)
+        .unwrap_or_else(|| doc_name.as_ref())
+        .trim_end_matches("index")
+        .trim_matches('/');
+
+    // In case if doc_id = index.ftd
+    if document_id.is_empty() {
+        return "/".to_string();
+    }
+
+    // Attach /{doc_id}/ before returning
+    format!("/{}/", document_id)
+}
+
 pub fn document_full_id<'a>(
     config: &fpm::Config,
     doc: &ftd::p2::TDoc<'a>,
