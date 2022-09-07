@@ -24,6 +24,25 @@ impl Kind {
             body,
         }
     }
+
+    pub(crate) fn get_kind(s: &str) -> Option<Kind> {
+        match s {
+            "string" => Some(Kind::String),
+            "integer" => Some(Kind::Integer),
+            "decimal" => Some(Kind::Decimal),
+            "object" => Some(Kind::Object),
+            "boolean" => Some(Kind::Boolean),
+            "ftd.ui" => Some(Kind::UI),
+            _ => None,
+        }
+    }
+
+    pub(crate) fn inner(&self) -> &Self {
+        match self {
+            Kind::Optional { kind, .. } => kind,
+            _ => self,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -43,20 +62,32 @@ impl KindData {
 
         let mut s = str_kind.split_whitespace().join(" ");
         if s.is_empty() {
-            return Err(invalid_kind_error(str_kind, doc_id, line_number));
+            return Err(ftd::interpreter::utils::invalid_kind_error(
+                str_kind,
+                doc_id,
+                line_number,
+            ));
         }
 
         let optional = check_for_optional(&mut s);
 
         if s.is_empty() {
-            return Err(invalid_kind_error(str_kind, doc_id, line_number));
+            return Err(ftd::interpreter::utils::invalid_kind_error(
+                str_kind,
+                doc_id,
+                line_number,
+            ));
         }
 
         let (caption, body) = check_for_caption_and_body(&mut s);
 
         if s.is_empty() {
             if !(caption || body) {
-                return Err(invalid_kind_error(str_kind, doc_id, line_number));
+                return Err(ftd::interpreter::utils::invalid_kind_error(
+                    str_kind,
+                    doc_id,
+                    line_number,
+                ));
             }
 
             let mut kind_data = KindData {
@@ -73,7 +104,13 @@ impl KindData {
         let kind = match check_for_kind(&mut s) {
             Some(kind) => kind,
             _ if caption || body => Kind::String,
-            _ => return Err(invalid_kind_error(str_kind, doc_id, line_number)),
+            _ => {
+                return Err(ftd::interpreter::utils::invalid_kind_error(
+                    str_kind,
+                    doc_id,
+                    line_number,
+                ))
+            }
         };
 
         let list = check_for_list(&mut s);
@@ -230,19 +267,11 @@ pub fn check_for_kind(s: &mut String) -> Option<Kind> {
         return None;
     }
 
-    let kind = match expr[0] {
-        "string" => Some(Kind::String),
-        "integer" => Some(Kind::Integer),
-        "decimal" => Some(Kind::Decimal),
-        "object" => Some(Kind::Object),
-        "boolean" => Some(Kind::Boolean),
-        "ftd.ui" => Some(Kind::UI),
-        _ => return None,
-    };
+    let kind = Kind::get_kind(expr[0])?;
 
     *s = expr[1..].join(" ");
 
-    kind
+    Some(kind)
 }
 
 pub fn check_for_list(s: &mut String) -> bool {
@@ -264,21 +293,6 @@ pub fn check_for_list(s: &mut String) -> bool {
 
 pub(crate) fn is_list(s: &str) -> bool {
     s.eq("list")
-}
-
-pub(crate) fn invalid_kind_error<S>(
-    message: S,
-    doc_id: &str,
-    line_number: usize,
-) -> ftd::interpreter::Error
-where
-    S: Into<String>,
-{
-    ftd::interpreter::Error::InvalidKind {
-        message: message.into(),
-        doc_id: doc_id.to_string(),
-        line_number,
-    }
 }
 
 #[cfg(test)]

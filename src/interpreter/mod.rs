@@ -1,4 +1,5 @@
 mod things;
+pub(crate) mod utils;
 
 pub use things::expression::Boolean;
 pub use things::kind::{Kind, KindData};
