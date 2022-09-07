@@ -226,6 +226,45 @@ pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
     fpm::apis::clone().await
 }
 
+pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    LOCK.read().await;
+    fpm::apis::view_source(req).await
+}
+
+pub async fn edit(
+    req: actix_web::HttpRequest,
+    req_data: actix_web::web::Json<fpm::apis::edit::EditRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    LOCK.read().await;
+    fpm::apis::edit(req, req_data).await
+}
+
+pub async fn revert(
+    req: actix_web::web::Json<fpm::apis::edit::RevertRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    LOCK.read().await;
+    fpm::apis::edit::revert(req).await
+}
+
+pub async fn editor_sync() -> actix_web::Result<actix_web::HttpResponse> {
+    LOCK.read().await;
+    fpm::apis::edit::sync().await
+}
+
+pub async fn create_cr(
+    req: actix_web::web::Json<fpm::apis::cr::CreateCRRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    // TODO: Need to ask from Arpita about read or write
+    LOCK.read().await;
+    fpm::apis::cr::create_cr(req).await
+}
+
+pub async fn create_cr_page() -> actix_web::Result<actix_web::HttpResponse> {
+    // TODO: Need to ask from Arpita about read or write
+    LOCK.read().await;
+    fpm::apis::cr::create_cr_page().await
+}
+
 pub async fn fpm_serve(
     bind_address: &str,
     port: Option<u16>,
@@ -309,25 +348,13 @@ You can try without providing port, it will automatically pick unused port."#,
         }
         .route(
             "/-/view-src/{path:.*}",
-            actix_web::web::get().to(fpm::apis::view_source),
+            actix_web::web::get().to(view_source),
         )
-        .route("/-/edit/", actix_web::web::post().to(fpm::apis::edit))
-        .route(
-            "/-/revert/",
-            actix_web::web::post().to(fpm::apis::edit::revert),
-        )
-        .route(
-            "/-/editor-sync/",
-            actix_web::web::get().to(fpm::apis::edit::sync),
-        )
-        .route(
-            "/-/create-cr/",
-            actix_web::web::post().to(fpm::apis::cr::create_cr),
-        )
-        .route(
-            "/-/create-cr/",
-            actix_web::web::get().to(fpm::apis::cr::create_cr_page),
-        )
+        .route("/-/edit/", actix_web::web::post().to(edit))
+        .route("/-/revert/", actix_web::web::post().to(revert))
+        .route("/-/editor-sync/", actix_web::web::get().to(editor_sync))
+        .route("/-/create-cr/", actix_web::web::post().to(create_cr))
+        .route("/-/create-cr/", actix_web::web::get().to(create_cr_page))
         .route("/-/clear-cache/", actix_web::web::post().to(clear_cache))
         .route("/{path:.*}", actix_web::web::get().to(serve))
     };
