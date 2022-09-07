@@ -1,8 +1,14 @@
+// lazy_static!() {
+//     lock = rwlock::new()
+// }
+
 async fn serve_file(
     req: &actix_web::HttpRequest,
     config: &mut fpm::Config,
     path: &camino::Utf8Path,
 ) -> actix_web::HttpResponse {
+    // let l_ = lock.read();
+
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
@@ -195,6 +201,10 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
     Ok(())
 }
 
+pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    fpm::apis::cache::clear(&req).await
+}
+
 pub async fn fpm_serve(
     bind_address: &str,
     port: Option<u16>,
@@ -297,10 +307,7 @@ You can try without providing port, it will automatically pick unused port."#,
             "/-/create-cr/",
             actix_web::web::get().to(fpm::apis::cr::create_cr_page),
         )
-        .route(
-            "/-/clear-cache/",
-            actix_web::web::get().to(fpm::apis::cache::clear),
-        )
+        .route("/-/clear-cache/", actix_web::web::post().to(clear_cache))
         .route("/{path:.*}", actix_web::web::get().to(serve))
     };
 

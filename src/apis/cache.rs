@@ -38,7 +38,7 @@ fn query(uri: &str) -> fpm::Result<QueryParams> {
     })
 }
 
-pub async fn clear(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub async fn clear(req: &actix_web::HttpRequest) -> actix_web::HttpResponse {
     let query = match query(req.uri().to_string().as_str()) {
         Ok(q) => q,
         Err(err) => {
