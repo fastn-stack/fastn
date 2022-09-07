@@ -438,7 +438,7 @@ impl State {
                 line_number,
             })?
             .0;
-        section.headers.extend(headers);
+        section.headers.0.extend(headers);
         Ok(())
     }
 

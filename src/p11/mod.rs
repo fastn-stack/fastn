@@ -6,7 +6,7 @@ mod header;
 mod parser;
 mod section;
 
-pub use header::Header;
+pub use header::{Header, Headers};
 pub use parser::parse;
 pub use section::Body;
 pub use section::Section;
@@ -22,6 +22,20 @@ pub enum Error {
     #[error("{doc_id}:{line_number} -> {message}")]
     ParseError {
         message: String,
+        doc_id: String,
+        line_number: usize,
+    },
+
+    #[error("{doc_id}:{line_number} -> MoreThanOneHeader for key {key}")]
+    MoreThanOneHeader {
+        key: String,
+        doc_id: String,
+        line_number: usize,
+    },
+
+    #[error("{doc_id}:{line_number} -> HeaderNotFound for key {key}")]
+    HeaderNotFound {
+        key: String,
         doc_id: String,
         line_number: usize,
     },

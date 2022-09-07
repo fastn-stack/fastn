@@ -29,32 +29,65 @@ impl PropertyValue {
         PropertyValue::from_p1_section_with_kind(s, doc_id, &kind_data)
     }
 
+    pub(crate) fn for_header(
+        s: &ftd::p11::Section,
+        doc_id: &str,
+        key: &str,
+    ) -> ftd::interpreter::Result<PropertyValue> {
+        let header = s.headers.find_once(key, doc_id, s.line_number)?;
+        let kind = header
+            .get_kind()
+            .ok_or(ftd::interpreter::Error::InvalidKind {
+                doc_id: doc_id.to_string(),
+                line_number: s.line_number,
+                message: format!("Kind not found for section: {}", s.name),
+            })?;
+        let kind_data =
+            ftd::interpreter::KindData::from_p1_kind(kind.as_str(), doc_id, s.line_number)?;
+        PropertyValue::from_header_with_kind(header, doc_id, &kind_data)
+    }
+
+    pub(crate) fn for_header_with_kind(
+        s: &ftd::p11::Section,
+        doc_id: &str,
+        key: &str,
+        kind_data: &ftd::interpreter::KindData,
+    ) -> ftd::interpreter::Result<PropertyValue> {
+        let header = s.headers.find_once(key, doc_id, s.line_number)?;
+        PropertyValue::from_header_with_kind(header, doc_id, &kind_data)
+    }
+
+    pub(crate) fn from_header_with_kind(
+        header: &ftd::p11::Header,
+        doc_id: &str,
+        kind_data: &ftd::interpreter::KindData,
+    ) -> ftd::interpreter::Result<PropertyValue> {
+        Ok(match header.get_value(doc_id) {
+            Ok(Some(value)) if get_reference(value.as_str()).is_some() => PropertyValue::reference(
+                get_reference(value.as_str()).unwrap().to_string(),
+                kind_data.to_owned(),
+            ),
+            _ => {
+                let value = Value::from_p1_header(header, doc_id, kind_data)?;
+                PropertyValue::value(value)
+            }
+        })
+    }
+
     pub(crate) fn from_p1_section_with_kind(
         s: &ftd::p11::Section,
         doc_id: &str,
         kind_data: &ftd::interpreter::KindData,
     ) -> ftd::interpreter::Result<PropertyValue> {
-        Ok(match &kind_data.kind {
-            ftd::interpreter::Kind::String
-            | ftd::interpreter::Kind::Integer
-            | ftd::interpreter::Kind::Decimal
-            | ftd::interpreter::Kind::Boolean
-            | ftd::interpreter::Kind::List { .. }
-            | ftd::interpreter::Kind::Optional { .. } => {
-                match section_value_from_caption_or_body(s, doc_id) {
-                    Ok(value) if get_reference(value.as_str()).is_some() => {
-                        PropertyValue::reference(
-                            get_reference(value.as_str()).unwrap().to_string(),
-                            kind_data.to_owned(),
-                        )
-                    }
-                    _ => {
-                        let value = Value::to_value(s, doc_id, kind_data)?;
-                        PropertyValue::value(value)
-                    }
-                }
+        Ok(match section_value_from_caption_or_body(s, doc_id) {
+            Ok(value) if get_reference(value.as_str()).is_some() => PropertyValue::reference(
+                get_reference(value.as_str()).unwrap().to_string(),
+                kind_data.to_owned(),
+            ),
+            _ => {
+                let value = Value::from_p1_section(s, doc_id, kind_data)?;
+                PropertyValue::value(value)
             }
-            _ => unimplemented!(),
         })
     }
 
@@ -69,9 +102,6 @@ impl PropertyValue {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Value {
-    None {
-        kind: ftd::interpreter::KindData,
-    },
     String {
         text: String,
     },
@@ -116,7 +146,86 @@ pub enum Value {
 }
 
 impl Value {
-    pub(crate) fn to_value(
+    pub(crate) fn from_p1_header(
+        s: &ftd::p11::Header,
+        doc_id: &str,
+        kind_data: &ftd::interpreter::KindData,
+    ) -> ftd::interpreter::Result<Value> {
+        match &kind_data.kind {
+            ftd::interpreter::Kind::String
+            | ftd::interpreter::Kind::Integer
+            | ftd::interpreter::Kind::Decimal
+            | ftd::interpreter::Kind::Boolean => {
+                let value = s
+                    .get_value(doc_id)?
+                    .ok_or(ftd::interpreter::Error::ValueNotFound {
+                        doc_id: doc_id.to_string(),
+                        line_number: s.get_line_number(),
+                        message: format!("Can't find value for key: `{}`", s.get_key()),
+                    })?;
+                Value::to_value_for_basic_kind(value.as_str(), &kind_data.kind)
+            }
+            ftd::interpreter::Kind::Optional { kind } => {
+                let kind_data = kind
+                    .to_owned()
+                    .into_kind_data(kind_data.caption, kind_data.body);
+                if s.is_empty() {
+                    Ok(Value::Optional {
+                        data: Box::new(None),
+                        kind: kind_data,
+                    })
+                } else {
+                    let value = Value::from_p1_header(s, doc_id, &kind_data)?;
+                    Ok(Value::Optional {
+                        data: Box::new(Some(value)),
+                        kind: kind_data,
+                    })
+                }
+            }
+            ftd::interpreter::Kind::List { kind } => {
+                let mut data = vec![];
+                let sections = if let Ok(sections) = s.get_sections(doc_id) {
+                    sections
+                } else {
+                    return Ok(Value::List {
+                        data,
+                        kind: kind_data.to_owned(),
+                    });
+                };
+                for subsection in sections.iter() {
+                    let found_kind = ftd::interpreter::KindData::from_p1_kind(
+                        &subsection.name,
+                        doc_id,
+                        subsection.line_number,
+                    )?;
+
+                    if found_kind.kind.ne(kind) {
+                        return Err(ftd::interpreter::utils::invalid_kind_error(
+                            format!(
+                                "List kind mismatch, expected kind `{:?}`, found kind `{:?}`",
+                                kind, found_kind.kind
+                            ),
+                            doc_id,
+                            subsection.line_number,
+                        ));
+                    }
+                    data.push(PropertyValue::from_p1_section_with_kind(
+                        subsection,
+                        doc_id,
+                        &kind
+                            .to_owned()
+                            .into_kind_data(kind_data.caption, kind_data.body),
+                    )?);
+                }
+                Ok(Value::List {
+                    data,
+                    kind: kind_data.to_owned(),
+                })
+            }
+            _ => unimplemented!(),
+        }
+    }
+    pub(crate) fn from_p1_section(
         s: &ftd::p11::Section,
         doc_id: &str,
         kind_data: &ftd::interpreter::KindData,
@@ -139,7 +248,7 @@ impl Value {
                         kind: kind_data,
                     })
                 } else {
-                    let value = Value::to_value(s, doc_id, &kind_data)?;
+                    let value = Value::from_p1_section(s, doc_id, &kind_data)?;
                     Ok(Value::Optional {
                         data: Box::new(Some(value)),
                         kind: kind_data,
@@ -209,7 +318,7 @@ fn section_value_from_caption_or_body(
     doc_id: &str,
 ) -> ftd::interpreter::Result<String> {
     if let Some(ref header) = section.caption {
-        if let Some(value) = header.get_value(doc_id, section.line_number)? {
+        if let Some(value) = header.get_value(doc_id)? {
             return Ok(value);
         }
     }

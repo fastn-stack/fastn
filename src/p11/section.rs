@@ -6,7 +6,7 @@ pub struct Section {
     pub name: String,
     pub kind: Option<String>,
     pub caption: Option<ftd::p11::Header>,
-    pub headers: Vec<ftd::p11::Header>,
+    pub headers: ftd::p11::Headers,
     pub body: Option<Body>,
     pub sub_sections: Vec<Section>,
     pub is_commented: bool,
@@ -24,7 +24,7 @@ impl Section {
             sub_sections: vec![],
             is_commented: false,
             line_number: 0,
-            headers: vec![],
+            headers: ftd::p11::Headers(vec![]),
             block_body: false,
         }
     }
@@ -39,11 +39,13 @@ impl Section {
             name: self.name.to_string(),
             kind: self.kind.to_owned(),
             caption: self.caption.as_ref().map(|v| v.without_line_number()),
-            headers: self
-                .headers
-                .iter()
-                .map(|v| v.without_line_number())
-                .collect_vec(),
+            headers: ftd::p11::Headers(
+                self.headers
+                    .0
+                    .iter()
+                    .map(|v| v.without_line_number())
+                    .collect_vec(),
+            ),
             body: self.body.as_ref().map(|v| v.without_line_number()),
             sub_sections: self
                 .sub_sections
