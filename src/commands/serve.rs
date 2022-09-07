@@ -206,6 +206,26 @@ pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse
     fpm::apis::cache::clear(&req).await
 }
 
+// TODO: Move them to routes folder
+async fn sync(
+    req: actix_web::web::Json<fpm::apis::sync::SyncRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    LOCK.write().await;
+    fpm::apis::sync(req).await
+}
+
+async fn sync2(
+    req: actix_web::web::Json<fpm::apis::sync2::SyncRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    LOCK.write().await;
+    fpm::apis::sync2(req).await
+}
+
+pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
+    LOCK.read().await;
+    fpm::apis::clone().await
+}
+
 pub async fn fpm_serve(
     bind_address: &str,
     port: Option<u16>,
@@ -280,9 +300,9 @@ You can try without providing port, it will automatically pick unused port."#,
 
                 actix_web::App::new()
                     .app_data(json_cfg)
-                    .route("/-/sync/", actix_web::web::post().to(fpm::apis::sync))
-                    .route("/-/sync2/", actix_web::web::post().to(fpm::apis::sync2))
-                    .route("/-/clone/", actix_web::web::get().to(fpm::apis::clone))
+                    .route("/-/sync/", actix_web::web::post().to(sync))
+                    .route("/-/sync2/", actix_web::web::post().to(sync2))
+                    .route("/-/clone/", actix_web::web::get().to(clone))
             } else {
                 actix_web::App::new()
             }
