@@ -12,6 +12,7 @@ mod sitemap;
 mod sqlite;
 mod toc;
 
+pub use document::convert_to_document_id;
 pub use full_sitemap::KeyValueData;
 
 #[derive(Debug)]

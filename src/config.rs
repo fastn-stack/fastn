@@ -13,6 +13,7 @@ pub struct Config {
     pub current_document: Option<String>,
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
+    pub global_ids: std::collections::HashMap<String, String>,
 }
 
 impl Config {
@@ -306,6 +307,102 @@ impl Config {
         Ok(())
     }
 
+    /// update the config.global_ids map from the contents of a file
+    /// in case the user defines the id for any component in the document
+    pub async fn update_global_ids_from_file(
+        &mut self,
+        doc_id: &str,
+        data: &str,
+    ) -> fpm::Result<()> {
+        /// returns header key and value
+        /// given header string
+        fn segregate_key_value(
+            header: &str,
+            doc_id: &str,
+            line_number: usize,
+        ) -> ftd::p1::Result<(String, String)> {
+            if !header.contains(':') {
+                return Err(ftd::p1::Error::ParseError {
+                    message: format!(": is missing in: {}", header),
+                    doc_id: doc_id.to_string(),
+                    line_number,
+                });
+            }
+
+            let mut parts = header.splitn(2, ':');
+            match (parts.next(), parts.next()) {
+                (Some(name), Some(value)) => {
+                    // some header and some non-empty value
+                    Ok((name.trim().to_string(), value.trim().to_string()))
+                }
+                (Some(name), None) => Err(ftd::p1::Error::ParseError {
+                    message: format!("Unknown header value for header \'{}\'", name),
+                    doc_id: doc_id.to_string(),
+                    line_number,
+                }),
+                _ => Err(ftd::p1::Error::ParseError {
+                    message: format!("Unknown header found \'{}\'", header),
+                    doc_id: doc_id.to_string(),
+                    line_number,
+                }),
+            }
+        }
+
+        /// updates the config.global_ids map
+        ///
+        /// mapping from [id -> link]
+        ///
+        /// link: <document-id>#<slugified-id>
+        fn update_id_map(
+            global_ids: &mut std::collections::HashMap<String, String>,
+            id_string: &str,
+            doc_name: &str,
+            line_number: usize,
+        ) -> fpm::Result<()> {
+            let (_header, id) = segregate_key_value(id_string, doc_name, line_number)?;
+            let document_id = fpm::library::convert_to_document_id(doc_name);
+
+            // check if the current id already exists in the map
+            // if it exists then throw error
+            if global_ids.contains_key(&id) {
+                return Err(fpm::Error::UsageError {
+                    message: format!(
+                        "id: \'{}\' already used in doc: \'{}\'",
+                        id, global_ids[&id]
+                    ),
+                });
+            }
+
+            // mapping id -> <document-id>#<slugified-id>
+            let link = format!("{}#{}", document_id, slug::slugify(&id));
+            global_ids.insert(id, link);
+            Ok(())
+        }
+
+        const ID_HEADER_PATTERN: &str = r"(?m)^\s*id\s*:[\sA-Za-z\d]*$";
+        lazy_static::lazy_static!(
+            static ref ID: regex::Regex = regex::Regex::new(ID_HEADER_PATTERN).unwrap();
+        );
+
+        // grep all lines where user defined `id` for the sections
+        // and update the global_ids map
+        for (ln, line) in itertools::enumerate(data.lines()) {
+            if ID.is_match(line) {
+                update_id_map(&mut self.global_ids, line, doc_id, ln)?;
+            }
+
+            // In case if we want to
+            // Avoid using regex here to reduce complexity as the pattern
+            // to search itself is not that complex
+            // ^id: <some-alphanumeric-string>$
+            // if line.trim_start().starts_with("term") && line.contains(':'){
+            //     update_terms(&mut self.global_ids, line.trim_start(), doc_id, ln)?;
+            // }
+        }
+
+        Ok(())
+    }
+
     pub(crate) async fn get_versions(
         &self,
         package: &fpm::Package,
@@ -389,6 +486,22 @@ impl Config {
         documents.sort_by_key(|v| v.get_id());
 
         Ok(documents)
+    }
+
+    /// updates the terms map from the files of the current package
+    async fn update_ids_from_package(&mut self) -> fpm::Result<()> {
+        let path = self.get_root_for_package(&self.package);
+        let all_files_path = self.get_all_file_paths1(&self.package, true)?;
+
+        let documents =
+            fpm::paths_to_files(self.package.name.as_str(), all_files_path, &path).await?;
+        for document in documents.iter() {
+            if let fpm::File::Ftd(doc) = document {
+                self.update_global_ids_from_file(&doc.id, &doc.content)
+                    .await?;
+            }
+        }
+        Ok(())
     }
 
     pub(crate) fn get_all_file_paths1(
@@ -1026,6 +1139,7 @@ impl Config {
             current_document: None,
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
+            global_ids: Default::default(),
         };
 
         let asset_documents = config.get_assets().await?;
@@ -1058,6 +1172,9 @@ impl Config {
         };
 
         config.add_package(&package);
+
+        // Update terms map from the current package files
+        config.update_ids_from_package().await?;
 
         Ok(config)
     }
@@ -1587,7 +1704,7 @@ impl Package {
                     format!("-- import: {}", &import_content)
                 } else {
                     // No change in line push as it is
-                    line_string.to_string()
+                    line.to_string()
                 }
             };
 

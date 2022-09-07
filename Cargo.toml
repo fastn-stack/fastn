@@ -69,6 +69,7 @@ regex = "1"
 serde = { version = "1", features = ["derive"] }
 serde_derive = "1"
 serde_json = "1"
+slug = { version = "0.1" }
 sha2 = "0.10"
 thiserror = "1"
 url = "2"
@@ -90,7 +91,7 @@ features = ["http1", "server"]
 #
 # Once we are closer to release we will stop using this and adopot semver.
 git = "https://github.com/FifthTry/ftd"
-rev = "1ac7eba"
+rev = "3b8c818"
 
 # If you are testing fpm against local ftd, you can keep ftd and fpm checked out in
 # same folder and uncomment the next `path` line to use local ftd.
