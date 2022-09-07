@@ -127,7 +127,6 @@ bg-color: $yellow
 -- ftd.text text: $value
 caption value:
 ftd.color bg-color:
-string slot:
 slot: $slot
 background-color: $bg-color
 text-align: center
