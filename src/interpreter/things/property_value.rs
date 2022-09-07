@@ -1,4 +1,4 @@
-use crate::interpreter::KindData;
+#![allow(dead_code)]
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum PropertyValue {
@@ -24,7 +24,8 @@ impl PropertyValue {
                 line_number: s.line_number,
                 message: format!("Kind not found for section: {}", s.name),
             })?;
-        let kind_data = KindData::from_p1_kind(kind.as_str(), doc_id, s.line_number)?;
+        let kind_data =
+            ftd::interpreter::KindData::from_p1_kind(kind.as_str(), doc_id, s.line_number)?;
         PropertyValue::from_p1_section_with_kind(s, doc_id, &kind_data)
     }
 
@@ -38,7 +39,8 @@ impl PropertyValue {
             | ftd::interpreter::Kind::Integer
             | ftd::interpreter::Kind::Decimal
             | ftd::interpreter::Kind::Boolean
-            | ftd::interpreter::Kind::List { .. } => {
+            | ftd::interpreter::Kind::List { .. }
+            | ftd::interpreter::Kind::Optional { .. } => {
                 match section_value_from_caption_or_body(s, doc_id) {
                     Ok(value) if get_reference(value.as_str()).is_some() => {
                         PropertyValue::reference(
@@ -47,7 +49,7 @@ impl PropertyValue {
                         )
                     }
                     _ => {
-                        let value = Value::to_value(s, doc_id, &kind_data)?;
+                        let value = Value::to_value(s, doc_id, kind_data)?;
                         PropertyValue::value(value)
                     }
                 }
@@ -127,9 +129,42 @@ impl Value {
                 let value = section_value_from_caption_or_body(s, doc_id)?;
                 Value::to_value_for_basic_kind(value.as_str(), &kind_data.kind)
             }
+            ftd::interpreter::Kind::Optional { kind } => {
+                let kind_data = kind
+                    .to_owned()
+                    .into_kind_data(kind_data.caption, kind_data.body);
+                if section_value_from_caption_or_body(s, doc_id).is_err() {
+                    Ok(Value::Optional {
+                        data: Box::new(None),
+                        kind: kind_data,
+                    })
+                } else {
+                    let value = Value::to_value(s, doc_id, &kind_data)?;
+                    Ok(Value::Optional {
+                        data: Box::new(Some(value)),
+                        kind: kind_data,
+                    })
+                }
+            }
             ftd::interpreter::Kind::List { kind } => {
                 let mut data = vec![];
                 for subsection in s.sub_sections.iter() {
+                    let found_kind = ftd::interpreter::KindData::from_p1_kind(
+                        &subsection.name,
+                        doc_id,
+                        subsection.line_number,
+                    )?;
+
+                    if found_kind.kind.ne(kind) {
+                        return Err(ftd::interpreter::utils::invalid_kind_error(
+                            format!(
+                                "List kind mismatch, expected kind `{:?}`, found kind `{:?}`",
+                                kind, found_kind.kind
+                            ),
+                            doc_id,
+                            subsection.line_number,
+                        ));
+                    }
                     data.push(PropertyValue::from_p1_section_with_kind(
                         subsection,
                         doc_id,
@@ -277,6 +312,51 @@ mod test {
                         kind: ftd::interpreter::Kind::List {
                             kind: Box::new(ftd::interpreter::Kind::Integer),
                         },
+                        caption: false,
+                        body: false,
+                    },
+                },
+            },
+        );
+
+        f(indoc::indoc!(
+            "
+            -- integer list ages: 
+            
+            -- integer: 40
+
+            -- string: 50
+
+            -- end: ages
+            "
+            ),
+          "InvalidKind: foo:5 -> List kind mismatch, expected kind `Integer`, found kind `String`"
+        )
+    }
+
+    #[test]
+    fn optional() {
+        p(
+            "-- optional integer age: 40",
+            super::PropertyValue::Value {
+                value: super::Value::Optional {
+                    data: Box::new(Some(super::Value::Integer { value: 40 })),
+                    kind: ftd::interpreter::KindData {
+                        kind: ftd::interpreter::Kind::Integer,
+                        caption: false,
+                        body: false,
+                    },
+                },
+            },
+        );
+
+        p(
+            "-- optional integer age: ",
+            super::PropertyValue::Value {
+                value: super::Value::Optional {
+                    data: Box::new(None),
+                    kind: ftd::interpreter::KindData {
+                        kind: ftd::interpreter::Kind::Integer,
                         caption: false,
                         body: false,
                     },
