@@ -147,6 +147,8 @@ features = [
     "bundled",
 ]
 
+[dependencies.async-lock]
+version = "2.5.0"
 
 [dev-dependencies]
 indoc = "1"

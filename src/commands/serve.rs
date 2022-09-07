@@ -1,14 +1,12 @@
-// lazy_static!() {
-//     lock = rwlock::new()
-// }
+lazy_static! {
+    static ref LOCK: async_lock::RwLock<()> = async_lock::RwLock::new(());
+}
 
 async fn serve_file(
     req: &actix_web::HttpRequest,
     config: &mut fpm::Config,
     path: &camino::Utf8Path,
 ) -> actix_web::HttpResponse {
-    // let l_ = lock.read();
-
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
@@ -61,6 +59,7 @@ async fn serve_cr_file(
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> actix_web::HttpResponse {
+    LOCK.read().await;
     serve_cr_file_(req, config, path, cr_number).await
 }
 
@@ -156,6 +155,7 @@ async fn static_file(
 
 async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
+    LOCK.read().await;
     let r = format!("{} {}", req.method().as_str(), req.path());
     let t = fpm::time(r.as_str());
     println!("{r} started");
@@ -202,6 +202,7 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
 }
 
 pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    LOCK.write().await;
     fpm::apis::cache::clear(&req).await
 }
 
