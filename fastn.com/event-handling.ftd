@@ -17,11 +17,16 @@ width: fill
 margin-bottom: 20
 background-color: $fpm.color.main.background.step-2
 
---- ftd.text: the heading (click to toggle)
+--- ftd.text: The heading (click to toggle)
 $on-click$: toggle $open
+color: $fpm.color.main.text
+role: $fpm.type.copy-tight
 
 --- ftd.text:
 if: $open
+color: $fpm.color.main.text
+role: $fpm.type.copy-tight
+margin-top: $fpm.space.space-2
 
 This is some **markdown text**.
 
@@ -49,9 +54,14 @@ margin-bottom: 20
 
 \--- ftd.text: the heading (click to toggle)
 $on-click$: toggle $open
+color: $fpm.color.main.text
+role: $fpm.type.copy-tight
 
 \--- ftd.text:
 if: $open
+color: $fpm.color.main.text
+role: $fpm.type.copy-tight
+margin-top: $fpm.space.space-2
 
 This is some **markdown text**.
 
