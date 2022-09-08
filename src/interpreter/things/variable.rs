@@ -6,7 +6,6 @@ pub struct Variable {
     pub value: ftd::interpreter::PropertyValue,
     pub conditions: Vec<ConditionalValue>,
     pub flags: VariableFlags,
-    pub source: TextSource,
 }
 
 impl Variable {
@@ -31,7 +30,6 @@ impl Variable {
             value,
             conditions: vec![],
             flags,
-            source: TextSource::Header,
         })
     }
 
@@ -56,13 +54,11 @@ impl Variable {
                 always_include: Some(value),
             }),
             ftd::interpreter::PropertyValue::Reference { .. } => unimplemented!(),
-            t => {
-                return Err(ftd::p11::Error::ParseError {
-                    message: format!("Expected boolean found: {:?}", t),
-                    doc_id: doc_id.to_string(),
-                    line_number: s.line_number,
-                })
-            }
+            t => Err(ftd::p11::Error::ParseError {
+                message: format!("Expected boolean found: {:?}", t),
+                doc_id: doc_id.to_string(),
+                line_number: s.line_number,
+            }),
         }
     }
 }
@@ -80,10 +76,158 @@ pub struct VariableFlags {
 
 pub const ALWAYS_INCLUDE: &str = "$always-include$";
 
-#[derive(Debug, PartialEq, Clone)]
-pub enum TextSource {
-    Header,
-    Caption,
-    Body,
-    Default,
+#[cfg(test)]
+mod test {
+    #[track_caller]
+    fn p(s: &str, t: ftd::interpreter::Variable) {
+        let section = ftd::p11::parse(s, "foo")
+            .unwrap_or_else(|e| panic!("{:?}", e))
+            .first()
+            .unwrap()
+            .to_owned();
+        assert_eq!(
+            super::Variable::from_p1_section(&section, "foo").unwrap_or_else(|e| panic!("{:?}", e)),
+            t
+        )
+    }
+
+    #[track_caller]
+    fn f(s: &str, m: &str) {
+        let section = ftd::p11::parse(s, "foo")
+            .unwrap_or_else(|e| panic!("{:?}", e))
+            .first()
+            .unwrap()
+            .to_owned();
+        match super::Variable::from_p1_section(&section, "foo") {
+            Ok(r) => panic!("expected failure, found: {:?}", r),
+            Err(e) => {
+                let expected = m.trim();
+                let f2 = e.to_string();
+                let found = f2.trim();
+                if expected != found {
+                    let patch = diffy::create_patch(expected, found);
+                    let f = diffy::PatchFormatter::new().with_color();
+                    print!(
+                        "{}",
+                        f.fmt_patch(&patch)
+                            .to_string()
+                            .replace("\\ No newline at end of file", "")
+                    );
+                    println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                    panic!("test failed")
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn integer() {
+        p(
+            "-- integer age: 40",
+            super::Variable {
+                name: "age".to_string(),
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::Integer { value: 40 },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            },
+        )
+    }
+
+    #[test]
+    fn integer_list() {
+        p(
+            indoc::indoc!(
+                "
+            -- integer list ages: 
+            
+            -- integer: 40
+
+            -- integer: 50
+
+            -- end: ages
+            "
+            ),
+            super::Variable {
+                name: "ages".to_string(),
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::List {
+                        data: vec![
+                            ftd::interpreter::PropertyValue::Value {
+                                value: ftd::interpreter::Value::Integer { value: 40 },
+                            },
+                            ftd::interpreter::PropertyValue::Value {
+                                value: ftd::interpreter::Value::Integer { value: 50 },
+                            },
+                        ],
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::List {
+                                kind: Box::new(ftd::interpreter::Kind::Integer),
+                            },
+                            caption: false,
+                            body: false,
+                        },
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            },
+        );
+
+        f(indoc::indoc!(
+            "
+            -- integer list ages: 
+            
+            -- integer: 40
+
+            -- string: 50
+
+            -- end: ages
+            "
+            ),
+          "InvalidKind: foo:5 -> List kind mismatch, expected kind `Integer`, found kind `String`"
+        )
+    }
+
+    #[test]
+    fn optional() {
+        p(
+            "-- optional integer age: 40",
+            super::Variable {
+                name: "age".to_string(),
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::Optional {
+                        data: Box::new(Some(ftd::interpreter::Value::Integer { value: 40 })),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::Integer,
+                            caption: false,
+                            body: false,
+                        },
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            },
+        );
+
+        p(
+            "-- optional integer age: ",
+            super::Variable {
+                name: "age".to_string(),
+                value: ftd::interpreter::PropertyValue::Value {
+                    value: ftd::interpreter::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::Integer,
+                            caption: false,
+                            body: false,
+                        },
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            },
+        )
+    }
 }

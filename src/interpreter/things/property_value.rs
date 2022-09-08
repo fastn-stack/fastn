@@ -54,7 +54,7 @@ impl PropertyValue {
         kind_data: &ftd::interpreter::KindData,
     ) -> ftd::interpreter::Result<PropertyValue> {
         let header = s.headers.find_once(key, doc_id, s.line_number)?;
-        PropertyValue::from_header_with_kind(header, doc_id, &kind_data)
+        PropertyValue::from_header_with_kind(header, doc_id, kind_data)
     }
 
     pub(crate) fn from_header_with_kind(
