@@ -14,7 +14,7 @@
 -- ftd.row image:
 width: 800
 integer index: 0
-id: parent
+id: parent-2
 
 --- ftd.image:
 if: $index == 0

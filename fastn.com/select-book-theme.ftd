@@ -690,7 +690,7 @@ width: fill
 region: h0
 padding-bottom: 12
 boolean open: true
-append-at: inner
+append-at: inner-1
 
 --- ftd.text:
 text: $title
@@ -703,7 +703,7 @@ padding-top: 8
 $on-click$ if $open: toggle $open
 
 --- ftd.column:
-id: inner
+id: inner-1
 if: $open
 width: fill
 
@@ -724,7 +724,7 @@ body: $body
 caption title:
 optional body body:
 boolean open: true
-append-at: inner
+append-at: inner-2
 width: fill
 region: h1
 padding-left: 20
@@ -760,7 +760,7 @@ move-up: 2
 --- container: ftd.main
 
 --- ftd.column:
-id: inner
+id: inner-2
 if: $open
 width: fill
 $on-click$: stop-propagation
@@ -787,7 +787,7 @@ width: fill
 region: h2
 padding-bottom: 12
 boolean open: true
-append-at: inner
+append-at: inner-3
 
 --- ftd.text:
 caption $title:
@@ -800,7 +800,7 @@ padding-top: 16
 $on-click$: toggle $open
 
 --- ftd.column:
-id: inner
+id: inner-3
 if: $open
 width: fill
 
@@ -824,7 +824,7 @@ width: fill
 region: h3
 padding-bottom: 12
 boolean open: true
-append-at: inner
+append-at: inner-4
 
 --- ftd.text:
 caption $title:
@@ -837,7 +837,7 @@ padding-top: 16
 $on-click$: toggle $open
 
 --- ftd.column:
-id: inner
+id: inner-4
 if: $open
 width: fill
 

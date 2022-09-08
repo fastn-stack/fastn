@@ -1,7 +1,7 @@
 -- ft.page: FPM Typography
 
 -- ftd.column:
-id: outer
+id: outer-2
 
 -- ft.markdown: 
 
@@ -30,7 +30,7 @@ role: $fpm.type.heading-large
 role: $fpm.type.heading-large
 color: $fpm.color.main.text
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.heading-medium`
 
@@ -57,7 +57,7 @@ color: $fpm.color.main.text
 
 
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.heading-small`
 
@@ -84,7 +84,7 @@ color: $fpm.color.main.text
 
 
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.heading-hero`
 
@@ -112,7 +112,7 @@ color: $fpm.color.main.text
 
 
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.copy-tight`
 
@@ -139,7 +139,7 @@ color: $fpm.color.main.text
 
 
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.copy-relaxed`
 
@@ -165,7 +165,7 @@ color: $fpm.color.main.text
 
 
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.copy-large`
 
@@ -190,7 +190,7 @@ color: $fpm.color.main.text
 
 
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.label-big`
 
@@ -216,7 +216,7 @@ color: $fpm.color.main.text
 
 
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.label-small`
 
@@ -241,7 +241,7 @@ color: $fpm.color.main.text
 
 
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.fine-print`
 
@@ -266,7 +266,7 @@ color: $fpm.color.main.text
 
 
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `fpm.type.blockquote`
 
