@@ -5,7 +5,7 @@
 
 -- ftd.column:
 width: fill
-id: outer
+id: outer-11
 
 
 -- ftd.row:
@@ -67,7 +67,7 @@ padding-top: 10
 role: $fpm.type.copy-large
 
 
--- container: outer
+-- container: outer-11
 
 
 -- ftd.row:

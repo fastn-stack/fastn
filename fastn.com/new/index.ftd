@@ -9,7 +9,7 @@ toc: $config.empty-toc
 
 
 -- ftd.column:
-id: outer
+id: outer-9
 
 
 -- ftd.text: hello
@@ -30,7 +30,7 @@ padding: 100
 /--- lib.ftd-footer:
 
 
--- container: outer
+-- container: outer-9
 
 
 -- ftd.row:
@@ -43,7 +43,7 @@ id: hero-text
 
 -- ftd.column:
 width: 600
-id: middle-left
+id: middle-left-2
 
 
 -- ftd.text:
@@ -56,7 +56,7 @@ role: $fpm.type.heading-large
 Create amazing sites quickly & store data as well
 
 
--- container: middle-left
+-- container: middle-left-2
 
 
 -- ftd.row:
@@ -88,7 +88,7 @@ src: $assets.files.images.IwSE554.png
 width: 660
 
 
--- container: outer
+-- container: outer-9
 
 
 -- ftd.column:

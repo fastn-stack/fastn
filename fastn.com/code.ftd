@@ -2,7 +2,7 @@
 
 -- ftd.column:
 width: fill
-id: outer
+id: outer-4
 
 -- ft.markdown:
 
@@ -21,7 +21,7 @@ print("hello world")
 
 print("hello world")
 
--- container: outer
+-- container: outer-4
 
 -- ft.markdown:
 
@@ -45,7 +45,7 @@ text: print("hello world")
 -- ftd.code:
 text: print("hello world")
 
--- container: outer
+-- container: outer-4
 
 
 -- ft.h1: `lang: String`
@@ -71,7 +71,7 @@ lang: py
 value = "hello world"
 print(value)
 
--- container: outer
+-- container: outer-4
 
 
 -- ft.h1: `theme: String`
@@ -111,7 +111,7 @@ theme: Solarized (dark)
 value = "hello world"
 print(value)
 
--- container: outer
+-- container: outer-4
 
 
 -- ft.h1: `role: ftd.type`
@@ -162,7 +162,7 @@ role: $font-type
 value = "hello world"
 print(value)
 
--- container: outer
+-- container: outer-4
 
 
 
@@ -190,7 +190,7 @@ line-clamp: 1
 value = "hello world"
 print(value)
 
--- container: outer
+-- container: outer-4
 
 
 -- ft.h1: `text-align: String`
@@ -229,7 +229,7 @@ text-align: center
 value = "hello world"
 print(value)
 
--- container: outer
+-- container: outer-4
 
 -- ft.h2: `left`
 
@@ -257,7 +257,7 @@ text-align: left
 value = "hello world"
 print(value)
 
--- container: outer
+-- container: outer-4
 
 
 -- ft.h2: `right`
@@ -286,7 +286,7 @@ text-align: right
 value = "hello world"
 print(value)
 
--- container: outer
+-- container: outer-4
 
 -- ft.h2: `justify`
 
@@ -316,4 +316,4 @@ text-align: justify
 value = "hello world"
 print(value)
 
--- container: outer
+-- container: outer-4

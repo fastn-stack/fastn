@@ -8,7 +8,7 @@
 
 
 -- ftd.column:
-id: foo
+id: foo-4
 
 
 -- ft.markdown: 
@@ -243,7 +243,7 @@ value: Amit Upadhyay
 value: Banglore, India
 
 
--- container: foo
+-- container: foo-4
 
 
 -- ft.h2: Container Management

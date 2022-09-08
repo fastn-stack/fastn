@@ -41,14 +41,14 @@ padding-right: 100
 padding-top: 20
 padding-bottom: 20
 background-color: $fpm.color.main.background.base
-id: nav-bar
+id: nav-bar-2
 
 --- ftd.image:
 src: $assets.files.images.fpm-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
 width: 130
 
-/--- container: nav-bar
+/--- container: nav-bar-2
 
 --- ftd.row:
 spacing: 50

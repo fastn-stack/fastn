@@ -3,7 +3,7 @@ toc: $ft.toc
 
 
 -- ftd.column:
-id: foo
+id: foo-3
 
 
 -- ft.markdown: 
@@ -150,7 +150,7 @@ Which gets rendered into:
 -- ftd.column:
 border-width: 1
 width: fill
-id: outer
+id: outer-15
 margin-bottom: 20
 
 -- ftd.row:
@@ -174,7 +174,7 @@ align: right
 color: $fpm.color.main.text
 
 
--- container: outer
+-- container: outer-15
 
 
 -- ftd.row:
@@ -191,7 +191,7 @@ color if $ftd.dark-mode: $fpm.color.main.text
 
 We support **markdown** as well.
 
--- container: foo
+-- container: foo-3
 
 
 -- ft.markdown:

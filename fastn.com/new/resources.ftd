@@ -5,7 +5,7 @@
 
 -- ftd.column:
 width: fill
-id: outer
+id: outer-7
 
 
 -- ftd.row:
@@ -15,7 +15,7 @@ padding-bottom: 20
 padding-left: 100
 padding-right: 100
 background-color: $fpm.color.main.background.base
-id: nav-bar
+id: nav-bar-6
 
 -- ftd.image:
 src: $assets.files.images.fpm-logo-1.png
@@ -23,7 +23,7 @@ link: https://www.fifthtry.com/ftd/new/
 width: 130
 
 
--- container: nav-bar
+-- container: nav-bar-6
 
 
 -- ftd.row:
@@ -66,14 +66,14 @@ role: $fpm.type.copy-large
 padding-top: 10
 
 
--- container: outer
+-- container: outer-7
 
 
 -- ftd.row:
 width: fill
 padding-top: 20
 padding-left: 350
-id: subject
+id: subject-3
 
 
 -- ftd.column:

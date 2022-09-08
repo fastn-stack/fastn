@@ -4,7 +4,7 @@
 -- ft.page: Common Text Kernel Attributes
 
 -- ftd.column:
-id: outer
+id: outer-2
 
 -- ft.markdown:
 
@@ -33,7 +33,7 @@ width: 400
 text-align: center
 color: $fpm.color.main.text-strong
 
--- container: outer
+-- container: outer-2
 
 -- ft.code: specifying alignment of text
 lang: ftd
@@ -52,7 +52,7 @@ width: 400
 text-align: left
 color: $fpm.color.main.text-strong
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `style: string`
 
@@ -92,7 +92,7 @@ This will render like this:
 style: underline
 color: $fpm.color.main.text-strong
 
--- container: outer
+-- container: outer-2
 
 -- ft.code: specifying style (strike)
 lang: ftd
@@ -110,7 +110,7 @@ This will render like this:
 style: strike
 color: $fpm.color.main.text-strong
 
--- container: outer
+-- container: outer-2
 
 -- ft.code: specifying multiple styles
 lang: ftd
@@ -128,7 +128,7 @@ This will render like this:
 style: italic heavy underline
 color: $fpm.color.main.text-strong
 
--- container: outer
+-- container: outer-2
 
 -- ft.h1: `line-clamp:`
 

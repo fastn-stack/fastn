@@ -2,7 +2,7 @@
 
     
 -- ftd.column:
-id: outer
+id: outer-3
 
 
 -- ft.markdown:
@@ -77,7 +77,7 @@ height: 50
 border-width: 1
 border-style: dashed
 
--- container: outer
+-- container: outer-3
 
 
 -- ft.h1: `open: boolean`

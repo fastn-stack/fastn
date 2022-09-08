@@ -2,7 +2,7 @@
 
 -- ftd.column:
 width: fill
-id: outer
+id: outer-13
 
 -- ft.markdown:
 
@@ -133,7 +133,7 @@ text-align: center
 height: fill
 padding: 20
 
--- container: outer
+-- container: outer-13
 
 
 -- ft.h1: `slot-widths: String`
@@ -185,7 +185,7 @@ bg-color: $green
 slot: main
 bg-color: $yellow
 
--- container: outer
+-- container: outer-13
 
 
 -- ft.h1: `slot-heights: String`
@@ -239,7 +239,7 @@ bg-color: $green
 slot: main
 bg-color: $yellow
 
--- container: outer
+-- container: outer-13
 
 -- ft.h1: `spacing: Integer`
 
@@ -290,6 +290,6 @@ bg-color: $green
 slot: main
 bg-color: $yellow
 
--- container: outer
+-- container: outer-13
 
 

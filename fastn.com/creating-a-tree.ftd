@@ -2,7 +2,7 @@
 -- import: fpm
 
 -- ft.page: How to create a tree using `ftd`?
-id: main
+id: main-2
 
 
 -- ft.markdown: 
@@ -314,7 +314,7 @@ name: Juice
 name: Mango Juice
 
 
--- container: main
+-- container: main-2
 
 
 -- ft.h1: Adding Events
@@ -511,14 +511,14 @@ id: some-child
 
 -- display-item1:
 name: Beverage
-id: beverage
+id: beverage-2
 
 
 -- display-item1:
 name: Water
 
 
--- container: beverage
+-- container: beverage-2
 
 
 -- display-item1:

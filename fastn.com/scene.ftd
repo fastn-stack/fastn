@@ -2,7 +2,7 @@
 
 -- ftd.column:
 width: fill
-id: outer
+id: outer-5
 
 -- ft.markdown:
 
@@ -84,7 +84,7 @@ caption title:
 padding: 40
 border-width: 2
 
--- container: outer
+-- container: outer-5
 
 -- ft.markdown:
 

@@ -5,7 +5,7 @@
 
 
 -- ftd.column:
-id: page
+id: page-2
 
 
 -- ft.markdown: 
@@ -51,7 +51,7 @@ role: $fpm.type.copy-large
 Output:
 
 
--- container: page
+-- container: page-2
 
 
 -- ftd.row:
@@ -75,7 +75,7 @@ text: $name
 -- foo1: hello
 
 
--- container: page
+-- container: page-2
 
 
 -- ft.markdown:
@@ -111,7 +111,7 @@ role: $fpm.type.copy-large
 Output:
 
 
--- container: page
+-- container: page-2
 
 
 -- ftd.row:
@@ -131,7 +131,7 @@ text: $name
 -- foo2: hello
 
 
--- container: page
+-- container: page-2
 
 
 -- ft.markdown:
@@ -164,7 +164,7 @@ role: $fpm.type.copy-large
 Output:
 
 
--- container: page
+-- container: page-2
 
 
 -- ftd.row:
@@ -186,7 +186,7 @@ text: $name
 yes: world
 
 
--- container: page
+-- container: page-2
 
 
 -- ft.markdown:
@@ -224,7 +224,7 @@ role: $fpm.type.copy-large
 Output:
 
 
--- container: page
+-- container: page-2
 
 
 -- ftd.row:
@@ -248,7 +248,7 @@ text: $name
 yes: world
 
 
--- container: page
+-- container: page-2
 
 
 -- ft.markdown:

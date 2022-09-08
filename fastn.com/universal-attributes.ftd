@@ -11,7 +11,7 @@ dark: red
 -- ft.page: Universal Attributes
 
 -- ftd.column:
-id: outer
+id: outer-12
 
 -- ft.markdown:
 
@@ -98,7 +98,7 @@ move-up: 20
 background-color: $yellow
 padding: 5
 
--- container: outer
+-- container: outer-12
 
 -- ft.h1: `move-down: Optional Integer`
 
@@ -122,7 +122,7 @@ move-down: 20
 background-color: $yellow
 padding: 5
 
--- container: outer
+-- container: outer-12
 
 -- ft.h1: `move-left: Optional Integer`
 
@@ -146,7 +146,7 @@ move-left: 20
 background-color: $yellow
 padding: 5
 
--- container: outer
+-- container: outer-12
 
 -- ft.h1: `move-right: Optional Integer`
 
@@ -170,7 +170,7 @@ move-right: 20
 background-color: $yellow
 padding: 5
 
--- container: outer
+-- container: outer-12
 
 -- ft.h1: `align: Optional String`
 
@@ -527,7 +527,7 @@ position: right
 background-color: $orange
 open: false
 
--- container: outer
+-- container: outer-12
 
 
 -- ft.h1: `scale: Optional Decimal`
@@ -553,7 +553,7 @@ scale: 1.5
 background-color: $yellow
 padding: 5
 
--- container: outer
+-- container: outer-12
 
 
 -- ft.h1: `scale-x: Optional Decimal`
@@ -579,7 +579,7 @@ scale-x: 0.5
 background-color: $yellow
 padding: 5
 
--- container: outer
+-- container: outer-12
 
 -- ft.h1: `scale-y: Optional Decimal`
 
@@ -604,7 +604,7 @@ scale-y: 2
 background-color: $yellow
 padding: 5
 
--- container: outer
+-- container: outer-12
 
 
 -- ft.h1: `rotate: Optional Integer`
@@ -630,7 +630,7 @@ rotate: 20
 background-color: $yellow
 padding: 5
 
--- container: outer
+-- container: outer-12
 
 -- ft.h1: `slot: Optional String`
 

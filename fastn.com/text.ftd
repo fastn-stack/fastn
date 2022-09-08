@@ -2,7 +2,7 @@
 
 
 -- ftd.column:
-id: main
+id: main-3
 
 
 -- ft.markdown: 
@@ -126,7 +126,7 @@ color: $fpm.color.main.text-strong
 this is **text-align: justify** text. or not. whatever works. I mean maybe it matters.
 
 
--- container: main
+-- container: main-3
 
 
 -- ft.code:
@@ -400,4 +400,4 @@ color: $fpm.color.main.text-strong
 $on-click$: toggle $show-theme-demos
 
 
--- container: main
+-- container: main-3
