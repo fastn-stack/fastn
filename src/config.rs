@@ -359,6 +359,18 @@ impl Config {
             doc_name: &str,
             line_number: usize,
         ) -> fpm::Result<()> {
+            // returns doc-id from link as String
+            fn fetch_doc_id_from_link(link: &str) -> fpm::Result<String> {
+                // link = <document-id>#<slugified-id>
+                let doc_id = link.split_once('#').map(|s| s.0);
+                match doc_id {
+                    Some(id) => Ok(id.to_string()),
+                    None => Err(fpm::Error::PackageError {
+                        message: format!("Invalid link format {}", link),
+                    }),
+                }
+            }
+
             let (_header, id) = segregate_key_value(id_string, doc_name, line_number)?;
             let document_id = fpm::library::convert_to_document_id(doc_name);
 
@@ -367,8 +379,10 @@ impl Config {
             if global_ids.contains_key(&id) {
                 return Err(fpm::Error::UsageError {
                     message: format!(
-                        "id: \'{}\' already used in doc: \'{}\'",
-                        id, global_ids[&id]
+                        "conflicting id: \'{}\' used in doc: \'{}\' and doc: \'{}\'",
+                        id,
+                        fetch_doc_id_from_link(&global_ids[&id])?,
+                        document_id
                     ),
                 });
             }
