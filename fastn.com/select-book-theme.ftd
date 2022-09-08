@@ -16,7 +16,7 @@
 -- integer max-width: 1000
 -- string github: NA
 -- string site-name: NA
--- optional ftd.image-src site-icon: 
+-- optional ftd.image-src site-icon:
 -- string site-url: NA
 
 
@@ -724,7 +724,7 @@ body: $body
 caption title:
 optional body body:
 boolean open: true
-append-at: inner-2
+append-at: inner
 width: fill
 region: h1
 padding-left: 20
@@ -760,7 +760,7 @@ move-up: 2
 --- container: ftd.main
 
 --- ftd.column:
-id: inner-2
+id: inner
 if: $open
 width: fill
 $on-click$: stop-propagation
@@ -787,7 +787,7 @@ width: fill
 region: h2
 padding-bottom: 12
 boolean open: true
-append-at: inner-3
+append-at: inner
 
 --- ftd.text:
 caption $title:
@@ -800,7 +800,7 @@ padding-top: 16
 $on-click$: toggle $open
 
 --- ftd.column:
-id: inner-3
+id: inner
 if: $open
 width: fill
 
@@ -824,7 +824,7 @@ width: fill
 region: h3
 padding-bottom: 12
 boolean open: true
-append-at: inner-4
+append-at: inner
 
 --- ftd.text:
 caption $title:
@@ -837,7 +837,7 @@ padding-top: 16
 $on-click$: toggle $open
 
 --- ftd.column:
-id: inner-4
+id: inner
 if: $open
 width: fill
 
@@ -1068,7 +1068,7 @@ role: $fpm.type.heading-medium
 
 
 -- ftd.iframe iframe:
-string src: 
+string src:
 src: $src
 height: 400
 width: fill
