@@ -11,7 +11,6 @@ toc: $config.empty-toc
 
 
 FTD is an open source programming language for writing prose.
-{outer-14}
 
 -- ft.code: `ftd` Hello World!
 lang: ftd
