@@ -690,7 +690,7 @@ width: fill
 region: h0
 padding-bottom: 12
 boolean open: true
-append-at: inner-1
+append-at: inner
 
 --- ftd.text:
 text: $title
@@ -703,7 +703,7 @@ padding-top: 8
 $on-click$ if $open: toggle $open
 
 --- ftd.column:
-id: inner-1
+id: inner
 if: $open
 width: fill
 
