@@ -27,6 +27,7 @@ mod ui;
 mod value_with_default;
 pub(crate) mod variable;
 mod youtube_id;
+mod constants;
 
 pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
@@ -46,6 +47,7 @@ pub use ui::{
     Region, Row, Scene, Spacing, Style, Text, TextAlign, TextBlock, TextFormat, Type, Weight,
 };
 pub use variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
+pub use constants::{character, identifier, regex_consts};
 
 pub fn js() -> String {
     include_str!("../ftd.js").replace("if (true) { // false", "if (false) { // false")
