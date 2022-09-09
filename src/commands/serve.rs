@@ -259,7 +259,6 @@ pub async fn create_cr(
 }
 
 pub async fn create_cr_page() -> actix_web::Result<actix_web::HttpResponse> {
-    // TODO: Need to ask from Arpita about read or write
     _ = LOCK.read().await;
     fpm::apis::cr::create_cr_page().await
 }
