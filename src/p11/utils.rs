@@ -6,7 +6,7 @@ pub(crate) fn remove_value_comment(value: &mut Option<String>) {
         }
 
         if v.starts_with(r"\/") {
-            *v = v.trim_start_matches(r"\").to_string();
+            *v = v.trim_start_matches('\\').to_string();
         }
     }
 }

@@ -78,7 +78,7 @@ pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> S
     }
 }
 
-pub fn split_module<'a>(id: &'a str) -> (Option<&'a str>, &'a str, Option<&'a str>) {
+pub fn split_module(id: &str) -> (Option<&str>, &str, Option<&str>) {
     match id.split_once('.') {
         Some((p1, p2)) => match p2.split_once('.') {
             Some((p21, p22)) => (Some(p1), p21, Some(p22)),

@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub fn interpret_helper(
     name: &str,
     source: &str,

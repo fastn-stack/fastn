@@ -165,7 +165,7 @@ impl Header {
         }
 
         if key.starts_with(r"\/") {
-            header.set_key(key.trim_start_matches(r"\"));
+            header.set_key(key.trim_start_matches('\\'));
         }
 
         match &mut header {
@@ -174,7 +174,7 @@ impl Header {
             }
             Header::Section(ftd::p11::header::Section { section, .. }) => {
                 *section = section
-                    .into_iter()
+                    .iter_mut()
                     .filter_map(|s| s.remove_comments())
                     .collect();
             }

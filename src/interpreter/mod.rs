@@ -1,10 +1,10 @@
-mod interpreter;
+mod main;
 mod tdoc;
 mod test;
 mod things;
 pub(crate) mod utils;
 
-pub use interpreter::{interpret, Document, Interpreter};
+pub use main::{interpret, Document, Interpreter};
 pub(crate) use tdoc::TDoc;
 pub use things::expression::Boolean;
 pub use things::kind::{Kind, KindData};

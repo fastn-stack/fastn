@@ -68,7 +68,7 @@ impl InterpreterState {
 
             let p1 = parsed_document.sections.pop().unwrap();
 
-            let variable = ftd::interpreter::Variable::from_p1_section(&p1, &doc.name)?;
+            let variable = ftd::interpreter::Variable::from_p1_section(&p1, doc.name)?;
             let variable_name = doc.resolve_name(variable.name.as_str());
             self.bag
                 .insert(variable_name, ftd::interpreter::Thing::Variable(variable));
@@ -162,7 +162,6 @@ pub struct ParsedDocument {
     sections: Vec<ftd::p11::Section>,
     processing_imports: bool,
     doc_aliases: ftd::Map<String>,
-    var_types: Vec<String>,
     foreign_variable_prefix: Vec<String>,
     instructions: Vec<ftd::Instruction>,
 }
@@ -174,7 +173,6 @@ impl ParsedDocument {
             sections: ftd::p11::parse(source, id)?,
             processing_imports: true,
             doc_aliases: default_aliases(),
-            var_types: Default::default(),
             foreign_variable_prefix: vec![],
             instructions: vec![],
         })

@@ -153,13 +153,9 @@ impl Body {
     pub(crate) fn remove_comments(&self) -> Option<Self> {
         let mut value = Some(self.value.to_owned());
         ftd::p11::utils::remove_value_comment(&mut value);
-        if let Some(value) = value {
-            Some(Body {
-                line_number: self.line_number,
-                value,
-            })
-        } else {
-            None
-        }
+        value.map(|value| Body {
+            line_number: self.line_number,
+            value,
+        })
     }
 }
