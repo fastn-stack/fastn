@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 #[derive(Debug, PartialEq, Clone)]
 pub struct Variable {
     pub name: String,

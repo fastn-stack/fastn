@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 #[derive(Debug, Clone, PartialEq)]
 pub enum PropertyValue {
     Value {
@@ -29,6 +27,7 @@ impl PropertyValue {
         PropertyValue::from_p1_section_with_kind(s, doc_id, &kind_data)
     }
 
+    #[allow(dead_code)]
     pub(crate) fn for_header(
         s: &ftd::p11::Section,
         doc_id: &str,

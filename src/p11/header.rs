@@ -99,6 +99,15 @@ impl Header {
         }
     }
 
+    pub(crate) fn set_key(&mut self, value: &str) {
+        match self {
+            Header::KV(ftd::p11::header::KV { key, .. })
+            | Header::Section(ftd::p11::header::Section { key, .. }) => {
+                *key = value.to_string();
+            }
+        }
+    }
+
     pub(crate) fn get_value(&self, doc_id: &str) -> ftd::p11::Result<Option<String>> {
         match self {
             Header::KV(ftd::p11::header::KV { value, .. }) => Ok(value.to_owned()),
@@ -147,6 +156,31 @@ impl Header {
             Header::Section(ftd::p11::header::Section { section, .. }) => section.is_empty(),
         }
     }
+
+    pub fn remove_comments(&self) -> Option<Header> {
+        let mut header = self.clone();
+        let key = header.get_key().trim().to_string();
+        if key.starts_with('/') {
+            return None;
+        }
+
+        if key.starts_with(r"\/") {
+            header.set_key(key.trim_start_matches('\\'));
+        }
+
+        match &mut header {
+            Header::KV(ftd::p11::header::KV { value, .. }) => {
+                ftd::p11::utils::remove_value_comment(value)
+            }
+            Header::Section(ftd::p11::header::Section { section, .. }) => {
+                *section = section
+                    .iter_mut()
+                    .filter_map(|s| s.remove_comments())
+                    .collect();
+            }
+        }
+        Some(header)
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
@@ -183,5 +217,22 @@ impl Headers {
 
     pub fn push(&mut self, item: ftd::p11::Header) {
         self.0.push(item)
+    }
+
+    /// returns a copy of Header after processing comments "/" and escape "\\/" (if any)
+    ///
+    /// only used by [`Section::remove_comments()`] and [`SubSection::remove_comments()`]
+    ///
+    /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+    pub fn remove_comments(self) -> Headers {
+        use itertools::Itertools;
+
+        Headers(
+            self.0
+                .into_iter()
+                .filter_map(|h| h.remove_comments())
+                .collect_vec(),
+        )
     }
 }
