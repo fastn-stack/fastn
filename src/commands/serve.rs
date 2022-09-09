@@ -59,7 +59,7 @@ async fn serve_cr_file(
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> actix_web::HttpResponse {
-    LOCK.read().await;
+    _ = LOCK.read().await;
     serve_cr_file_(req, config, path, cr_number).await
 }
 
@@ -155,7 +155,7 @@ async fn static_file(
 
 async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
-    LOCK.read().await;
+    _ = LOCK.read().await;
     let r = format!("{} {}", req.method().as_str(), req.path());
     let t = fpm::time(r.as_str());
     println!("{r} started");
@@ -202,7 +202,7 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
 }
 
 pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    LOCK.write().await;
+    _ = LOCK.write().await;
     fpm::apis::cache::clear(&req).await
 }
 
@@ -210,24 +210,24 @@ pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse
 async fn sync(
     req: actix_web::web::Json<fpm::apis::sync::SyncRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
-    LOCK.write().await;
+    _ = LOCK.write().await;
     fpm::apis::sync(req).await
 }
 
 async fn sync2(
     req: actix_web::web::Json<fpm::apis::sync2::SyncRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
-    LOCK.write().await;
+    _ = LOCK.write().await;
     fpm::apis::sync2(req).await
 }
 
 pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
-    LOCK.read().await;
+    _ = LOCK.read().await;
     fpm::apis::clone().await
 }
 
 pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    LOCK.read().await;
+    _ = LOCK.read().await;
     fpm::apis::view_source(req).await
 }
 
@@ -235,33 +235,32 @@ pub async fn edit(
     req: actix_web::HttpRequest,
     req_data: actix_web::web::Json<fpm::apis::edit::EditRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
-    LOCK.read().await;
+    _ = LOCK.write().await;
     fpm::apis::edit(req, req_data).await
 }
 
 pub async fn revert(
     req: actix_web::web::Json<fpm::apis::edit::RevertRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
-    LOCK.read().await;
+    _ = LOCK.write().await;
     fpm::apis::edit::revert(req).await
 }
 
 pub async fn editor_sync() -> actix_web::Result<actix_web::HttpResponse> {
-    LOCK.read().await;
+    _ = LOCK.write().await;
     fpm::apis::edit::sync().await
 }
 
 pub async fn create_cr(
     req: actix_web::web::Json<fpm::apis::cr::CreateCRRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
-    // TODO: Need to ask from Arpita about read or write
-    LOCK.read().await;
+    _ = LOCK.write().await;
     fpm::apis::cr::create_cr(req).await
 }
 
 pub async fn create_cr_page() -> actix_web::Result<actix_web::HttpResponse> {
     // TODO: Need to ask from Arpita about read or write
-    LOCK.read().await;
+    _ = LOCK.read().await;
     fpm::apis::cr::create_cr_page().await
 }
 
