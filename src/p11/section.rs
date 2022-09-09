@@ -102,6 +102,32 @@ impl Section {
         self.kind = Some(kind.to_string());
         self
     }
+
+    /// returns a copy of Section after processing comments
+    ///
+    /// ## NOTE: This function is only called by [`ParsedDocument::ignore_comments()`]
+    ///
+    /// [`ParsedDocument::ignore_comments()`]: ftd::p2::interpreter::ParsedDocument::ignore_comments
+    pub fn remove_comments(&self) -> Option<Section> {
+        if self.is_commented {
+            return None;
+        }
+        Some(Section {
+            name: self.name.to_string(),
+            kind: self.kind.to_owned(),
+            caption: self.caption.as_ref().and_then(|v| v.remove_comments()),
+            headers: self.headers.clone().remove_comments(),
+            body: self.body.as_ref().and_then(|v| v.remove_comments()),
+            sub_sections: self
+                .sub_sections
+                .iter()
+                .filter_map(|s| s.remove_comments())
+                .collect::<Vec<ftd::p11::Section>>(),
+            is_commented: false,
+            line_number: self.line_number,
+            block_body: self.block_body,
+        })
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
@@ -121,6 +147,19 @@ impl Body {
         Body {
             line_number: 0,
             value: self.value.to_string(),
+        }
+    }
+
+    pub(crate) fn remove_comments(&self) -> Option<Self> {
+        let mut value = Some(self.value.to_owned());
+        ftd::p11::utils::remove_value_comment(&mut value);
+        if let Some(value) = value {
+            Some(Body {
+                line_number: self.line_number,
+                value,
+            })
+        } else {
+            None
         }
     }
 }

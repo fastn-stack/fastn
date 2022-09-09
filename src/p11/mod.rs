@@ -5,6 +5,7 @@ mod test;
 mod header;
 mod parser;
 mod section;
+mod utils;
 
 pub use header::{Header, Headers};
 pub use parser::parse;
