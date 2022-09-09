@@ -9,6 +9,7 @@ pub(crate) mod test;
 pub mod code;
 mod component;
 mod condition;
+mod constants;
 mod dnode;
 mod event;
 mod execute_doc;
@@ -27,10 +28,10 @@ mod ui;
 mod value_with_default;
 pub(crate) mod variable;
 mod youtube_id;
-mod constants;
 
 pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
+pub use constants::{character, identifier, regex_consts};
 pub use event::{Action, Event};
 pub use ftd::{
     ftd::p2::interpreter::{interpret, Interpreter, InterpreterState, ParsedDocument},
@@ -47,7 +48,6 @@ pub use ui::{
     Region, Row, Scene, Spacing, Style, Text, TextAlign, TextBlock, TextFormat, Type, Weight,
 };
 pub use variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
-pub use constants::{character, identifier, regex_consts};
 
 pub fn js() -> String {
     include_str!("../ftd.js").replace("if (true) { // false", "if (false) { // false")
