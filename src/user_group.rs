@@ -380,8 +380,7 @@ pub fn user_group_by_id(config: &fpm::Config, group_id: &str) -> fpm::Result<Opt
         .find(|g| g.id.as_str() == group_id))
 }
 
-/// if any input identity is part of any input group,
-/// this function will return `true`, else `false`.
+/// return true if: any input identity is match with any input group's identity.
 pub fn belongs_to(
     config: &fpm::Config,
     groups: &[&UserGroup],
@@ -411,16 +410,8 @@ pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
 
 /// Get identities from cli `--identities`
 pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
-    use itertools::Itertools;
-    let args = std::env::args().collect_vec();
-    let mut index = None;
-    for (idx, arg) in args.iter().enumerate() {
-        if arg.eq("--identities") {
-            index = Some(idx);
-        }
-    }
-    let identities = index.and_then(|idx| args.get(idx + 1));
-    parse_identities(identities.map(|x| x.as_str()).unwrap_or_else(|| ""))
+    let identities = fpm::utils::parse_from_cli("--identities");
+    parse_identities(&identities.unwrap_or_else(|| "".to_string()))
 }
 
 /*

@@ -1,3 +1,7 @@
+lazy_static! {
+    static ref LOCK: async_lock::RwLock<()> = async_lock::RwLock::new(());
+}
+
 async fn serve_file(
     req: &actix_web::HttpRequest,
     config: &mut fpm::Config,
@@ -55,6 +59,7 @@ async fn serve_cr_file(
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> actix_web::HttpResponse {
+    _ = LOCK.read().await;
     serve_cr_file_(req, config, path, cr_number).await
 }
 
@@ -92,29 +97,25 @@ async fn serve_cr_file_(
     }
 
     config.current_document = Some(f.get_id());
-    return match f {
+    match f {
         fpm::File::Ftd(main_document) => {
-            return match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
+            match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
                 Ok(r) => actix_web::HttpResponse::Ok().body(r),
                 Err(e) => {
                     eprintln!("FPM-Error: path: {}, {:?}", path, e);
                     actix_web::HttpResponse::InternalServerError().body(e.to_string())
                 }
-            };
+            }
         }
-        fpm::File::Image(image) => {
-            return actix_web::HttpResponse::Ok()
-                .content_type(guess_mime_type(image.id.as_str()))
-                .body(image.content);
-        }
-        fpm::File::Static(s) => {
-            return actix_web::HttpResponse::Ok().body(s.content);
-        }
+        fpm::File::Image(image) => actix_web::HttpResponse::Ok()
+            .content_type(guess_mime_type(image.id.as_str()))
+            .body(image.content),
+        fpm::File::Static(s) => actix_web::HttpResponse::Ok().body(s.content),
         _ => {
             eprintln!("FPM unknown handler");
             actix_web::HttpResponse::InternalServerError().body("".as_bytes())
         }
-    };
+    }
 }
 
 fn guess_mime_type(path: &str) -> mime_guess::Mime {
@@ -154,6 +155,7 @@ async fn static_file(
 
 async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
+    _ = LOCK.read().await;
     let r = format!("{} {}", req.method().as_str(), req.path());
     let t = fpm::time(r.as_str());
     println!("{r} started");
@@ -183,9 +185,9 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     t.it(response)
 }
 
-async fn download_init_package(url: Option<&str>) -> std::io::Result<()> {
+pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
     let mut package = fpm::Package::new("unknown-package");
-    package.download_base_url = url.map(ToString::to_string);
+    package.download_base_url = url;
     package
         .http_download_by_id(
             "FPM.ftd",
@@ -199,10 +201,72 @@ async fn download_init_package(url: Option<&str>) -> std::io::Result<()> {
     Ok(())
 }
 
+pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    _ = LOCK.write().await;
+    fpm::apis::cache::clear(&req).await
+}
+
+// TODO: Move them to routes folder
+async fn sync(
+    req: actix_web::web::Json<fpm::apis::sync::SyncRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    _ = LOCK.write().await;
+    fpm::apis::sync(req).await
+}
+
+async fn sync2(
+    req: actix_web::web::Json<fpm::apis::sync2::SyncRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    _ = LOCK.write().await;
+    fpm::apis::sync2(req).await
+}
+
+pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
+    _ = LOCK.read().await;
+    fpm::apis::clone().await
+}
+
+pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    _ = LOCK.read().await;
+    fpm::apis::view_source(req).await
+}
+
+pub async fn edit(
+    req: actix_web::HttpRequest,
+    req_data: actix_web::web::Json<fpm::apis::edit::EditRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    _ = LOCK.write().await;
+    fpm::apis::edit(req, req_data).await
+}
+
+pub async fn revert(
+    req: actix_web::web::Json<fpm::apis::edit::RevertRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    _ = LOCK.write().await;
+    fpm::apis::edit::revert(req).await
+}
+
+pub async fn editor_sync() -> actix_web::Result<actix_web::HttpResponse> {
+    _ = LOCK.write().await;
+    fpm::apis::edit::sync().await
+}
+
+pub async fn create_cr(
+    req: actix_web::web::Json<fpm::apis::cr::CreateCRRequest>,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    _ = LOCK.write().await;
+    fpm::apis::cr::create_cr(req).await
+}
+
+pub async fn create_cr_page() -> actix_web::Result<actix_web::HttpResponse> {
+    _ = LOCK.read().await;
+    fpm::apis::cr::create_cr_page().await
+}
+
 pub async fn fpm_serve(
     bind_address: &str,
     port: Option<u16>,
-    package_download_base_url: Option<&str>,
+    package_download_base_url: Option<String>,
 ) -> std::io::Result<()> {
     use colored::Colorize;
 
@@ -273,34 +337,23 @@ You can try without providing port, it will automatically pick unused port."#,
 
                 actix_web::App::new()
                     .app_data(json_cfg)
-                    .route("/-/sync/", actix_web::web::post().to(fpm::apis::sync))
-                    .route("/-/sync2/", actix_web::web::post().to(fpm::apis::sync2))
-                    .route("/-/clone/", actix_web::web::get().to(fpm::apis::clone))
+                    .route("/-/sync/", actix_web::web::post().to(sync))
+                    .route("/-/sync2/", actix_web::web::post().to(sync2))
+                    .route("/-/clone/", actix_web::web::get().to(clone))
             } else {
                 actix_web::App::new()
             }
         }
         .route(
             "/-/view-src/{path:.*}",
-            actix_web::web::get().to(fpm::apis::view_source),
+            actix_web::web::get().to(view_source),
         )
-        .route("/-/edit/", actix_web::web::post().to(fpm::apis::edit))
-        .route(
-            "/-/revert/",
-            actix_web::web::post().to(fpm::apis::edit::revert),
-        )
-        .route(
-            "/-/editor-sync/",
-            actix_web::web::get().to(fpm::apis::edit::sync),
-        )
-        .route(
-            "/-/create-cr/",
-            actix_web::web::post().to(fpm::apis::cr::create_cr),
-        )
-        .route(
-            "/-/create-cr/",
-            actix_web::web::get().to(fpm::apis::cr::create_cr_page),
-        )
+        .route("/-/edit/", actix_web::web::post().to(edit))
+        .route("/-/revert/", actix_web::web::post().to(revert))
+        .route("/-/editor-sync/", actix_web::web::get().to(editor_sync))
+        .route("/-/create-cr/", actix_web::web::post().to(create_cr))
+        .route("/-/create-cr/", actix_web::web::get().to(create_cr_page))
+        .route("/-/clear-cache/", actix_web::web::post().to(clear_cache))
         .route("/{path:.*}", actix_web::web::get().to(serve))
     };
 
