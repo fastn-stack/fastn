@@ -30,10 +30,9 @@ impl Import {
             );
         }
         match &section.caption {
-            Some(header)
-                if header.get_value(doc_id).is_ok() && header.get_value(doc_id)?.is_some() =>
-            {
-                let value = header.get_value(doc_id)?.unwrap();
+            Some(ftd::p11::Header::KV(ftd::p11::header::KV {
+                value: Some(value), ..
+            })) => {
                 let (module, alias) = ftd::ast::utils::split_at(value.as_str(), "as");
                 Ok(Import { module, alias })
             }

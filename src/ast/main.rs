@@ -3,6 +3,7 @@
 #[derive(Debug, PartialEq)]
 pub enum Ast {
     Import(ftd::ast::Import),
+    Record(ftd::ast::Record),
 }
 
 impl Ast {
@@ -11,6 +12,8 @@ impl Ast {
         for section in sections {
             if ftd::ast::Import::is_import(section) {
                 ast_vec.push(Ast::Import(ftd::ast::Import::from_p1(section, doc_id)?));
+            } else if ftd::ast::Record::is_record(section) {
+                ast_vec.push(Ast::Record(ftd::ast::Record::from_p1(section, doc_id)?));
             } else {
                 unimplemented!()
             }

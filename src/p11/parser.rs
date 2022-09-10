@@ -415,8 +415,9 @@ impl State {
                 colon_separated_values(self.line_number, line.as_str(), self.doc_id.as_str())
             {
                 let (header_key, kind) = get_name_and_kind(name_with_kind.as_str());
+                self.line_number += 1;
                 headers.push(ftd::p11::Header::kv(
-                    line_number,
+                    self.line_number,
                     header_key.as_str(),
                     kind,
                     caption,
@@ -425,7 +426,6 @@ impl State {
                 new_line_number = Some(line_number);
                 break;
             }
-            self.line_number += 1;
         }
         self.content = content_index(self.content.as_str(), new_line_number);
         let doc_id = self.doc_id.to_string();

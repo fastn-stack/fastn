@@ -76,3 +76,64 @@ fn ast_import() {
         line_number: 1, block_body: false }`",
     )
 }
+
+#[test]
+fn ast_record() {
+    p(
+        indoc!(
+            "
+            -- record foo:
+            string name:
+            integer age: 40
+            "
+        ),
+        &vec![ftd::ast::Ast::Record(
+            ftd::ast::Record::new("foo")
+                .add_field("name", "string", None)
+                .add_field("age", "integer", Some(s("40"))),
+        )],
+    );
+
+    p(
+        indoc!(
+            "
+            -- record foo:
+            integer age:
+
+            -- string foo.details:
+
+            This contains details for record `foo`.
+            This is default text for the field details.
+            It can be overridden by the variable of this type.
+            "
+        ),
+        &vec![ftd::ast::Ast::Record(
+            ftd::ast::Record::new("foo")
+                .add_field("age", "integer", None)
+                .add_field(
+                    "details",
+                    "string",
+                    Some(s(indoc!(
+                        "This contains details for record `foo`.
+                        This is default text for the field details.
+                        It can be overridden by the variable of this type."
+                    ))),
+                ),
+        )],
+    );
+
+    f(
+        indoc!(
+            "
+            -- record foo:
+            string name:
+            age:
+            "
+        ),
+        "ASTParseError: foo:3 -> Can't find kind for record field: `\"age\"`",
+    );
+}
+
+fn s(s: &str) -> String {
+    s.to_string()
+}

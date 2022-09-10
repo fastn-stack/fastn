@@ -8,10 +8,10 @@ pub enum Header {
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
 #[serde(default)]
 pub struct KV {
-    line_number: usize,
-    key: String,
-    kind: Option<String>,
-    value: Option<String>,
+    pub line_number: usize,
+    pub key: String,
+    pub kind: Option<String>,
+    pub value: Option<String>,
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]

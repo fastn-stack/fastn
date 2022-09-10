@@ -4,10 +4,12 @@ mod test;
 
 mod import;
 mod main;
+mod record;
 mod utils;
 
 pub use ftd::ast::import::Import;
 pub use ftd::ast::main::Ast;
+pub use ftd::ast::record::Record;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

@@ -2,7 +2,7 @@
 #[macro_use]
 mod test;
 
-mod header;
+pub(crate) mod header;
 mod parser;
 mod section;
 mod utils;
