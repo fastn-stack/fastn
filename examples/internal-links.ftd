@@ -1,0 +1,5 @@
+-- ftd.text:
+
+The \[foo url](id: foo) gives [foo url](id: foo)
+
+The \{foo} gives {foo}

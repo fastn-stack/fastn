@@ -778,49 +778,58 @@ impl ParsedDocument {
         &mut self,
         global_ids: &std::collections::HashMap<String, String>,
     ) -> ftd::p1::Result<()> {
-        for s in self.sections.iter_mut() {
-            // Replacing linking syntax with links in
-            // markdown section bodies (if any)
-            if s.name.contains("markdown") {
-                if let Some(ref body) = s.body {
-                    s.body = Some((
-                        body.0,
-                        replace_text(
-                            body.1.as_str(),
-                            global_ids,
-                            self.name.as_str(),
-                            s.line_number,
-                        )?,
-                    ));
-                }
-            }
+        for section in self.sections.iter_mut() {
+            resolve_global_ids(
+                &mut section.caption,
+                &mut section.header,
+                &mut section.body,
+                self.name.as_str(),
+                section.line_number,
+                global_ids,
+            )?;
 
-            // Doing the same for subsection markdown bodies (if any)
-            for sub in s.sub_sections.0.iter_mut() {
-                if sub.name.contains("markdown") {
-                    if let Some(ref body) = sub.body {
-                        sub.body = Some((
-                            body.0,
-                            replace_text(
-                                body.1.as_str(),
-                                global_ids,
-                                self.name.as_str(),
-                                sub.line_number,
-                            )?,
-                        ));
-                    }
-                }
+            for subsection in section.sub_sections.0.iter_mut() {
+                resolve_global_ids(
+                    &mut subsection.caption,
+                    &mut subsection.header,
+                    &mut subsection.body,
+                    self.name.as_str(),
+                    subsection.line_number,
+                    global_ids,
+                )?;
             }
         }
-
         return Ok(());
 
+        fn resolve_global_ids(
+            caption: &mut Option<String>,
+            header: &mut ftd::p1::Header,
+            body: &mut Option<(usize, String)>,
+            doc_id: &str,
+            line_number: usize,
+            global_ids: &std::collections::HashMap<String, String>,
+        ) -> ftd::p1::Result<()> {
+            if let Some(ref mut caption) = caption {
+                replace_text(caption, global_ids, doc_id, line_number)?;
+            }
+
+            for (line_number, _, header) in header.0.iter_mut() {
+                replace_text(header, global_ids, doc_id, *line_number)?;
+            }
+
+            if let Some((line_number, ref mut body)) = body {
+                replace_text(body, global_ids, doc_id, *line_number)?;
+            }
+
+            Ok(())
+        }
+
         fn replace_text(
-            text: &str,
+            text: &mut String,
             global_ids: &std::collections::HashMap<String, String>,
             doc_id: &str,
             line_number: usize,
-        ) -> ftd::p1::Result<String> {
+        ) -> ftd::p1::Result<()> {
             // Syntax 1 = [id`](id: someId)
             // Refer someId from linked text <id`>
             // replaced link = [id`]([document-id]#[slugified(someId)])
@@ -840,18 +849,31 @@ impl ParsedDocument {
                 static ref S2: regex::Regex = regex::Regex::new(SYNTAX_2_PATTERN).unwrap();
             );
 
-            /// fetches capture group by group index and returns it as &str
-            fn capture_group_at<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
-                return capture.get(group_index).map_or("", |c| c.as_str());
-            }
+            replace_text_for_s1_pattern(text, global_ids, doc_id, line_number, &S1)?;
+            replace_text_for_s2_pattern(text, global_ids, doc_id, line_number, &S2)?;
 
-            let mut result = text.to_string();
+            Ok(())
+        }
 
+        /// fetches capture group by group index and returns it as &str
+        fn capture_group_at<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
+            return capture.get(group_index).map_or("", |c| c.as_str());
+        }
+
+        fn replace_text_for_s1_pattern(
+            text: &mut String,
+            global_ids: &std::collections::HashMap<String, String>,
+            doc_id: &str,
+            line_number: usize,
+            s1: &regex::Regex,
+        ) -> ftd::p1::Result<()> {
             // Syntax 1 = [id`](id: <id-to-link>)
             // G0 = Original capture, G1 = Linked Text, G2 = Actual Id
-            for cap in S1.captures_iter(text) {
+            let mut pattern_with_replacement = vec![];
+            for cap in s1.captures_iter(text) {
                 let linked_text = capture_group_at(&cap, 1).trim();
                 let captured_id = capture_group_at(&cap, 2);
+                let match_pattern = capture_group_at(&cap, 0);
                 let link = global_ids.get(captured_id.trim()).ok_or_else(|| {
                     ftd::p1::Error::ForbiddenUsage {
                         message: format!("id: {} not found while linking", captured_id),
@@ -859,16 +881,51 @@ impl ParsedDocument {
                         line_number,
                     }
                 })?;
+                let pattern_start_index = cap.get(0).unwrap().start();
+                if pattern_start_index > 0
+                    && text.chars().nth(pattern_start_index - 1).unwrap() == '\\'
+                {
+                    pattern_with_replacement.push((
+                        pattern_start_index - 1,
+                        match_pattern.len() + 1,
+                        match_pattern.to_string(),
+                    ));
+                    continue;
+                }
 
                 let replacement = format!("[{}]({})", linked_text, link);
-                result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
+                pattern_with_replacement.push((
+                    pattern_start_index,
+                    match_pattern.len(),
+                    replacement,
+                ));
             }
 
+            while let Some((index, length, replacement)) = pattern_with_replacement.pop() {
+                *text = format!(
+                    "{}{}{}",
+                    &text[..index],
+                    replacement,
+                    &text[index + length..]
+                );
+            }
+            Ok(())
+        }
+
+        fn replace_text_for_s2_pattern(
+            text: &mut String,
+            global_ids: &std::collections::HashMap<String, String>,
+            doc_id: &str,
+            line_number: usize,
+            s2: &regex::Regex,
+        ) -> ftd::p1::Result<()> {
             // Syntax 2 = {<id-to-link>}
             // G0 = Original capture, G1 = Actual Id
-            for cap in S2.captures_iter(text) {
+            let mut pattern_with_replacement = vec![];
+            for cap in s2.captures_iter(text) {
                 let captured_id = capture_group_at(&cap, 1);
                 let linked_text = captured_id.trim();
+                let match_pattern = capture_group_at(&cap, 0);
                 let link = global_ids.get(captured_id.trim()).ok_or_else(|| {
                     ftd::p1::Error::ForbiddenUsage {
                         message: format!("id: {} not found while linking", captured_id),
@@ -876,12 +933,37 @@ impl ParsedDocument {
                         line_number,
                     }
                 })?;
+                let pattern_start_index = cap.get(0).unwrap().start();
+                if pattern_start_index > 0
+                    && text.chars().nth(pattern_start_index - 1).unwrap() == '\\'
+                {
+                    pattern_with_replacement.push((
+                        pattern_start_index - 1,
+                        match_pattern.len() + 1,
+                        match_pattern.to_string(),
+                    ));
+                    continue;
+                }
 
                 let replacement = format!("[{}]({})", linked_text, link);
-                result = result.replacen(capture_group_at(&cap, 0), &replacement, 1);
+                pattern_with_replacement.push((
+                    pattern_start_index,
+                    match_pattern.len(),
+                    replacement,
+                ));
+
+                // result = result.replacen(match_pattern, &replacement, 1);
             }
 
-            Ok(result)
+            while let Some((index, length, replacement)) = pattern_with_replacement.pop() {
+                *text = format!(
+                    "{}{}{}",
+                    &text[..index],
+                    replacement,
+                    &text[index + length..]
+                );
+            }
+            Ok(())
         }
     }
 
