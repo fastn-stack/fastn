@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>hello "{world}" {world} {world}.</title>
+    <title>internal-links.ftd</title>
     <script type="ftd" id="ftd-data">
         {
   "ftd#dark-mode": {
@@ -277,37 +277,37 @@
       "blockquote": {
         "$kind$": "light",
         "dark": "#f0f0f0",
-        "light": "#f6f7f8"
+        "light": "#f0f0f0"
       },
       "code": {
         "$kind$": "light",
-        "dark": "#ffffff",
-        "light": "#f6f7f8"
+        "dark": "#9f9b9b45",
+        "light": "#9f9b9b45"
       },
       "link": {
         "$kind$": "light",
-        "dark": "#25c19f",
-        "light": "#136351"
+        "dark": "#18181b",
+        "light": "#18181b"
       },
       "link-code": {
         "$kind$": "light",
-        "dark": "#25c19f",
-        "light": "#136351"
+        "dark": "#9f9b9b45",
+        "light": "#9f9b9b45"
       },
       "link-visited": {
         "$kind$": "light",
-        "dark": "#0f5750",
-        "light": "#7b3ee8"
+        "dark": "#18181b",
+        "light": "#18181b"
       },
       "link-visited-code": {
         "$kind$": "light",
-        "dark": "#0f5750",
-        "light": "#136351"
+        "dark": "#18181b",
+        "light": "#18181b"
       },
       "ul-ol-li-before": {
         "$kind$": "light",
-        "dark": "#ffffff",
-        "light": "#000000"
+        "dark": "#18181b",
+        "light": "#18181b"
       }
     },
     "dependencies": {}
@@ -316,28 +316,28 @@
     "value": {
       "code": {
         "$kind$": "light",
-        "dark": "#25c19f",
-        "light": "#000000"
+        "dark": "#f6f7f8",
+        "light": "#f6f7f8"
       },
       "link": {
         "$kind$": "light",
-        "dark": "#25c19f",
-        "light": "#136351"
+        "dark": "#58a6ff",
+        "light": "#6a89b8"
       },
       "link-code": {
         "$kind$": "light",
-        "dark": "#25c19f",
-        "light": "#136351"
+        "dark": "#58a6ff",
+        "light": "#6a89b8"
       },
       "link-visited": {
         "$kind$": "light",
-        "dark": "#0f5750",
-        "light": "#7b3ee8"
+        "dark": "#a27de7",
+        "light": "#9475cb"
       },
       "link-visited-code": {
         "$kind$": "light",
-        "dark": "#0f5750",
-        "light": "#136351"
+        "dark": "#a27de7",
+        "light": "#6a89b8"
       },
       "ul-ol-li-before": {
         "$kind$": "light",
@@ -496,24 +496,12 @@ body.fpm-dark .ft_md a {
     text-decoration: none;
 }
         
-
-body.fpm-dark .c_0 {
-    color: rgba(0,128,0,1)
-}
-
-
-
-.c_0 {
-    color: rgba(0,128,0,1)
-}
-
-
     </style>
 
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello “</span><span data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">World</span><span data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">“ </span><span data-id="0,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">World</span><span data-id="0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> </span><span data-id="0,5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">World</span><span data-id="0,6:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">.</span></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The [foo url](id: foo) gives <a href="/foo/bar/#foo">foo url</a></p> <p>The {foo} gives <a href="/foo/bar/#foo">foo</a></div></div>
 
 
     <script>
