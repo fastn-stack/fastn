@@ -6,12 +6,16 @@ pub mod identifier {
     pub const COMMENTED_SUBSECTION: &'static str = "/--- ";
     pub const ESCAPED_SECTION: &'static str = r"\-- ";
     pub const ESCAPED_SUBSECTION: &'static str = r"\--- ";
+    pub const KV_SEPERATOR: &'static str = ":";
 
     pub fn is_section(line: &str) -> bool {
         line.starts_with(SECTION)
     }
     pub fn is_subsection(line: &str) -> bool {
         line.starts_with(SUBSECTION)
+    }
+    pub fn is_section_or_subsection(line: &str) -> bool {
+        is_section(line) || is_subsection(line)
     }
 
     pub fn is_commented_section(line: &str) -> bool {
@@ -33,20 +37,53 @@ pub mod identifier {
     pub fn is_section_subsection_escaped(line: &str) -> bool {
         is_section_escaped(line) || is_subsection_escaped(line)
     }
-}
 
-// Character constants
-pub mod character {
-    pub const EMPTY: &'static str = "";
-    pub const WHITESPACE: char = ' ';
-    pub const TWO_SPACE: &'static str = "  ";
-    pub const TAB_SPACE: &'static str = "   ";
-    pub const COLON: char = ':';
-    pub const SEMICOLON: char = ';';
+    /// will trim any normal, commented or
+    /// escaped section/subsection identifier from the beginning
+    pub fn trim_section_subsection_identifier(line: &str) -> &str {
+        line.trim_start_matches(|c| c == '/' || c == '\\' || c == '-' || c == ' ')
+    }
+
+    /// returns key/value pair seperated by ':'
+    pub fn segregate_key_value(
+        line: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::p1::Result<(String, Option<String>)> {
+
+        if !line.contains(KV_SEPERATOR) {
+            return Err(ftd::p1::Error::ParseError {
+                message: format!(": is missing in: {}", line),
+                doc_id: doc_id.to_string(),
+                line_number,
+            });
+        }
+
+        // Trim any section/subsection identifier fron the beginning of the line
+        let line = trim_section_subsection_identifier(line);
+
+        let mut parts = line.splitn(2, KV_SEPERATOR);
+        match (parts.next(), parts.next()) {
+            (Some(name), Some(value)) => {
+                // some key and some non-empty value
+                Ok((name.to_string(), Some(value.trim().to_string())))
+            }
+            (Some(name), None) => {
+                // some key with no value
+                Ok((name.to_string(), None))
+            },
+            _ => Err(ftd::p1::Error::ParseError {
+                message: format!("Unknown KV line found \'{}\'", line),
+                doc_id: doc_id.to_string(),
+                line_number,
+            }),
+        }
+    }
 }
 
 // Regex pattern constants
 pub mod regex_consts {
+
     /// Linking Syntax 1: `[<linked-text>]`(id: <some-id>)
     pub const LINK_SYNTAX_1: &str = r"(?x) # Enabling Comment Mode
     \[(?P<linked_text>[\sa-zA-Z\d]+)\] # Linked Text Capture Group <linked_text>
