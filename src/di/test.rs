@@ -197,6 +197,24 @@ fn di_component_definition() {
         )
         .list(),
     );
+
+    p(
+        indoc!(
+            "
+            -- ftd.text markdown:
+            
+            -- caption or body markdown.text:
+            
+            -- markdown.text: $text
+            "
+        ),
+        &ftd::di::DI::Definition(
+            ftd::di::Definition::new("markdown", "ftd.text")
+                .add_value_property("text", Some(s("caption or body")), None)
+                .add_value_property("text", None, Some(s("$text"))),
+        )
+        .list(),
+    );
 }
 
 fn s(s: &str) -> String {

@@ -141,7 +141,7 @@ impl State {
             return Err(ftd::p11::Error::SectionNotFound {
                 // TODO: context should be a few lines before and after the input
                 doc_id: self.doc_id.to_string(),
-                line_number: self.line_number + 1,
+                line_number: self.line_number + scan_line_number + 1,
             });
         }
 
@@ -154,12 +154,22 @@ impl State {
             &start_line[2..]
         };
 
-        self.line_number += scan_line_number + 1;
-
         let (name_with_kind, caption) =
         //  section-kind section-name: caption
             colon_separated_values(self.line_number, line, self.doc_id.as_str())?;
         let (section_name, kind) = get_name_and_kind(name_with_kind.as_str());
+        let last_section = self.get_latest_state().map(|v| v.0);
+        match last_section {
+            Some(section) if section_name.starts_with(format!("{}.", section.name).as_str()) => {
+                return Err(ftd::p11::Error::SectionNotFound {
+                    doc_id: self.doc_id.to_string(),
+                    line_number: self.line_number + scan_line_number + 1,
+                });
+            }
+            _ => {}
+        }
+
+        self.line_number += scan_line_number + 1;
         let section = ftd::p11::Section {
             name: section_name,
             kind,
