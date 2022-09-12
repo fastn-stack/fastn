@@ -1,10 +1,8 @@
-use crate::p11::Header;
-
 #[derive(Debug, PartialEq)]
 pub struct Definition {
     name: String,
     kind: String,
-    properties: Vec<Property>,
+    properties: Vec<ftd::di::Property>,
     children: Vec<ftd::di::DI>,
 }
 
@@ -28,7 +26,7 @@ impl Definition {
             );
         }
 
-        let properties = Property::from_p1(section, doc_id)?;
+        let properties = ftd::di::Property::from_p1(section, doc_id)?;
         let children = ftd::di::DI::from_sections(section.sub_sections.as_slice(), doc_id)?;
 
         let kind = if let Some(ref kind) = section.kind {
@@ -65,7 +63,7 @@ impl Definition {
     #[cfg(test)]
     pub(crate) fn add_body(self, s: &str) -> Definition {
         let mut definition = self;
-        definition.properties.push(Property::from_body(s));
+        definition.properties.push(ftd::di::Property::from_body(s));
         definition
     }
 
@@ -77,9 +75,26 @@ impl Definition {
         value: Option<String>,
     ) -> Definition {
         let mut definition = self;
-        definition.properties.push(Property::from_kv(
+        definition.properties.push(ftd::di::Property::from_kv(
             &ftd::p11::header::KV::new(key, kind, value, 0),
-            Source::Header,
+            ftd::di::Source::Header,
+        ));
+        definition
+    }
+
+    #[cfg(test)]
+    pub(crate) fn add_di_property(
+        self,
+        key: &str,
+        kind: Option<String>,
+        di: Vec<ftd::di::DI>,
+    ) -> Definition {
+        let mut definition = self;
+        definition.properties.push(ftd::di::Property::from_di_list(
+            key,
+            kind,
+            di,
+            ftd::di::Source::Header,
         ));
         definition
     }
@@ -87,101 +102,16 @@ impl Definition {
     #[cfg(test)]
     pub(crate) fn add_caption_str(self, s: &str) -> Definition {
         let mut definition = self;
-        definition.properties.push(Property::from_caption_str(s));
         definition
-    }
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Property {
-    name: String,
-    kind: Option<String>,
-    value: PropertyValue,
-    source: Source,
-}
-
-impl Property {
-    pub(crate) fn from_p1(
-        section: &ftd::p11::Section,
-        doc_id: &str,
-    ) -> ftd::di::Result<Vec<Property>> {
-        let mut properties = vec![];
-        for header in section.headers.0.iter() {
-            properties.push(Property::from_header(header, doc_id, Source::Header)?)
-        }
-        if let Some(ref caption) = section.caption {
-            properties.push(Property::from_header(caption, doc_id, Source::Caption)?)
-        }
-        if let Some(ref body) = section.body {
-            properties.push(Property::from_body(body.value.as_str()))
-        }
-
-        Ok(properties)
-    }
-
-    pub(crate) fn from_header(
-        header: &ftd::p11::Header,
-        doc_id: &str,
-        source: Source,
-    ) -> ftd::di::Result<Property> {
-        match header {
-            Header::KV(kv) => Ok(Property::from_kv(kv, source)),
-            Header::Section(section) => Property::from_section(section, doc_id, source),
-        }
-    }
-
-    pub(crate) fn from_kv(kv: &ftd::p11::header::KV, source: Source) -> Property {
-        Property {
-            name: kv.key.to_string(),
-            kind: kv.kind.clone(),
-            value: PropertyValue::Value(kv.value.clone()),
-            source,
-        }
-    }
-
-    pub(crate) fn from_body(body: &str) -> Property {
-        Property {
-            name: ftd::di::utils::BODY.to_string(),
-            kind: None,
-            value: PropertyValue::Value(Some(body.to_string())),
-            source: Source::Body,
-        }
+            .properties
+            .push(ftd::di::Property::from_caption_str(s));
+        definition
     }
 
     #[cfg(test)]
-    pub(crate) fn from_caption_str(caption: &str) -> Property {
-        Property {
-            name: ftd::di::utils::CAPTION.to_string(),
-            kind: None,
-            value: PropertyValue::Value(Some(caption.to_string())),
-            source: Source::Caption,
-        }
+    pub(crate) fn add_child(self, di: ftd::di::DI) -> Definition {
+        let mut definition = self;
+        definition.children.push(di);
+        definition
     }
-
-    pub(crate) fn from_section(
-        section: &ftd::p11::header::Section,
-        doc_id: &str,
-        source: Source,
-    ) -> ftd::di::Result<Property> {
-        let di = ftd::di::DI::from_sections(section.section.as_slice(), doc_id)?;
-        Ok(Property {
-            name: section.key.to_string(),
-            kind: section.kind.clone(),
-            value: PropertyValue::DI(di),
-            source,
-        })
-    }
-}
-
-#[derive(Debug, PartialEq)]
-pub enum PropertyValue {
-    Value(Option<String>),
-    DI(Vec<ftd::di::DI>),
-}
-
-#[derive(Debug, PartialEq)]
-pub enum Source {
-    Header,
-    Caption,
-    Body,
 }

@@ -4,13 +4,17 @@ mod test;
 
 mod definition;
 mod import;
+mod invocation;
 mod main;
+mod property;
 mod record;
 mod utils;
 
 pub use ftd::di::definition::Definition;
 pub use ftd::di::import::Import;
+pub use ftd::di::invocation::Invocation;
 pub use ftd::di::main::DI;
+pub use ftd::di::property::{Property, PropertyValue, Source};
 pub use ftd::di::record::Record;
 
 #[derive(thiserror::Error, Debug)]

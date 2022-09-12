@@ -202,9 +202,9 @@ fn di_component_definition() {
         indoc!(
             "
             -- ftd.text markdown:
-            
+    
             -- caption or body markdown.text:
-            
+    
             -- markdown.text: $text
             "
         ),
@@ -212,6 +212,149 @@ fn di_component_definition() {
             ftd::di::Definition::new("markdown", "ftd.text")
                 .add_value_property("text", Some(s("caption or body")), None)
                 .add_value_property("text", None, Some(s("$text"))),
+        )
+        .list(),
+    );
+
+    p(
+        indoc!(
+            "
+            -- ftd.column foo:
+            
+            -- ftd.ui foo.bar:
+
+            -- ftd.text: Hello there
+
+            -- end: foo.bar
+            
+            -- bar:
+
+            -- end: foo
+            "
+        ),
+        &ftd::di::DI::Definition(
+            ftd::di::Definition::new("foo", "ftd.column")
+                .add_di_property(
+                    "bar",
+                    Some(s("ftd.ui")),
+                    ftd::di::DI::Invocation(
+                        ftd::di::Invocation::new("ftd.text").add_caption_str("Hello there"),
+                    )
+                    .list(),
+                )
+                .add_child(ftd::di::DI::Invocation(ftd::di::Invocation::new("bar"))),
+        )
+        .list(),
+    );
+}
+
+#[test]
+fn di_variable_invocation() {
+    p(
+        indoc!(
+            "
+            -- about-us:
+
+            FifthTry is Open Source
+
+            Our suite of products are open source and available on Github. You are free to download 
+            install and customize them to your needs.
+
+            We’d love to hear your feedback and suggestions, and collectively make Documentation 
+            easier and better for everyone.
+            "
+        ),
+        &ftd::di::DI::Invocation(
+            ftd::di::Invocation::new("about-us")
+                .add_body(indoc!(
+                "FifthTry is Open Source
+
+                Our suite of products are open source and available on Github. You are free to download 
+                install and customize them to your needs.
+    
+                We’d love to hear your feedback and suggestions, and collectively make Documentation 
+                easier and better for everyone."
+            )),
+        ).list(),
+    );
+
+    p(
+        "-- about-us: FifthTry is Open Source",
+        &ftd::di::DI::Invocation(
+            ftd::di::Invocation::new("about-us").add_caption_str("FifthTry is Open Source"),
+        )
+        .list(),
+    );
+
+    p(
+        "-- names:",
+        &ftd::di::DI::Invocation(ftd::di::Invocation::new("names")).list(),
+    );
+}
+
+#[test]
+fn di_component_invocation() {
+    p(
+        indoc!(
+            "
+            -- markdown:
+            caption or body text:
+            text: $text
+            "
+        ),
+        &ftd::di::DI::Invocation(
+            ftd::di::Invocation::new("markdown")
+                .add_value_property("text", Some(s("caption or body")), None)
+                .add_value_property("text", None, Some(s("$text"))),
+        )
+        .list(),
+    );
+
+    p(
+        indoc!(
+            "
+            -- markdown:
+    
+            -- caption or body markdown.text:
+    
+            -- markdown.text: $text
+            "
+        ),
+        &ftd::di::DI::Invocation(
+            ftd::di::Invocation::new("markdown")
+                .add_value_property("text", Some(s("caption or body")), None)
+                .add_value_property("text", None, Some(s("$text"))),
+        )
+        .list(),
+    );
+
+    p(
+        indoc!(
+            "
+            -- foo:
+            
+            -- foo.bar:
+
+            -- ftd.text: Hello there
+
+            -- end: foo.bar
+            
+            -- bar:
+
+            -- end: foo
+            "
+        ),
+        &ftd::di::DI::Invocation(
+            ftd::di::Invocation::new("foo")
+                .add_di_property(
+                    "bar",
+                    None,
+                    ftd::di::DI::Invocation(
+                        ftd::di::Invocation::new("ftd.text").add_caption_str("Hello there"),
+                    )
+                    .list(),
+                )
+                .add_child(ftd::di::DI::Invocation(ftd::di::Invocation::new("bar"))),
         )
         .list(),
     );

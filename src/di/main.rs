@@ -5,6 +5,7 @@ pub enum DI {
     Import(ftd::di::Import),
     Record(ftd::di::Record),
     Definition(ftd::di::Definition),
+    Invocation(ftd::di::Invocation),
 }
 
 impl DI {
@@ -23,8 +24,14 @@ impl DI {
             DI::Record(ftd::di::Record::from_p1(section, doc_id)?)
         } else if ftd::di::Definition::is_definition(section) {
             DI::Definition(ftd::di::Definition::from_p1(section, doc_id)?)
+        } else if ftd::di::Invocation::is_invocation(section) {
+            DI::Invocation(ftd::di::Invocation::from_p1(section, doc_id)?)
         } else {
-            unimplemented!()
+            return Err(ftd::di::Error::ParseError {
+                message: format!("Invalid DI, found: `{:?}`", section),
+                doc_id: doc_id.to_string(),
+                line_number: section.line_number,
+            });
         })
     }
 
