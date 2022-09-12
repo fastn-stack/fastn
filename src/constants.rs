@@ -1,12 +1,12 @@
 // Identifier constants
 pub mod identifier {
-    pub const SECTION: &'static str = "-- ";
-    pub const SUBSECTION: &'static str = "--- ";
-    pub const COMMENTED_SECTION: &'static str = "/-- ";
-    pub const COMMENTED_SUBSECTION: &'static str = "/--- ";
-    pub const ESCAPED_SECTION: &'static str = r"\-- ";
-    pub const ESCAPED_SUBSECTION: &'static str = r"\--- ";
-    pub const KV_SEPERATOR: &'static str = ":";
+    pub const SECTION: &str = "-- ";
+    pub const SUBSECTION: &str = "--- ";
+    pub const COMMENTED_SECTION: &str = "/-- ";
+    pub const COMMENTED_SUBSECTION: &str = "/--- ";
+    pub const ESCAPED_SECTION: &str = r"\-- ";
+    pub const ESCAPED_SUBSECTION: &str = r"\--- ";
+    pub const KV_SEPERATOR: &str = ":";
 
     pub fn is_section(line: &str) -> bool {
         line.starts_with(SECTION)
@@ -50,7 +50,6 @@ pub mod identifier {
         doc_id: &str,
         line_number: usize,
     ) -> ftd::p1::Result<(String, Option<String>)> {
-
         if !line.contains(KV_SEPERATOR) {
             return Err(ftd::p1::Error::ParseError {
                 message: format!(": is missing in: {}", line),
@@ -71,7 +70,7 @@ pub mod identifier {
             (Some(name), None) => {
                 // some key with no value
                 Ok((name.to_string(), None))
-            },
+            }
             _ => Err(ftd::p1::Error::ParseError {
                 message: format!("Unknown KV line found \'{}\'", line),
                 doc_id: doc_id.to_string(),
@@ -95,5 +94,5 @@ pub mod regex_consts {
     (?P<actual_id>[\sa-zA-Z\d]+)\} # Referred Id Capture Group <actual_id>";
 
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
-    pub const ID_HEADER: &'static str = r"(?m)^\s*id\s*:[-_\sA-Za-z\d]*$";
+    pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-_\sA-Za-z\d]*$";
 }
