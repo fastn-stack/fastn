@@ -1083,7 +1083,8 @@ margin-bottom: 34
 
 
 -- ftd.iframe youtube:
-youtube: $id
+caption v:
+youtube: $v
 height: 400
 width: fill
 margin-bottom: 34
