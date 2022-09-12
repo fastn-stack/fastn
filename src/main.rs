@@ -203,12 +203,17 @@ pub fn interpret_helper(
                 )?;
             }
             ftd::Interpreter::CheckID {
-                doc_index: index,
+                id,
+                source,
                 state: st,
             } => {
                 // No config in ftd::ExampleLibrary ignoring processing terms for now
                 // using dummy id map for debugging
-                s = st.continue_after_checking_id(Some(&lib.dummy_global_ids_map()), index)?;
+                let url = lib
+                    .dummy_global_ids_map()
+                    .get(id.as_str())
+                    .map(ToString::to_string);
+                s = st.continue_after_checking_id(id.as_str(), &source, url, index)?;
             }
         }
     }

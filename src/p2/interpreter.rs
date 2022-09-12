@@ -108,6 +108,18 @@ impl InterpreterState {
                 });
             }
 
+            if let Some((id, source)) = Self::resolve_global_ids(
+                p1,
+                parsed_document.foreign_variable_prefix.as_slice(),
+                &doc,
+            )? {
+                return Ok(Interpreter::CheckID {
+                    id,
+                    source,
+                    state: self,
+                });
+            }
+
             // Once the foreign_variables are resolved for the section, then pop and evaluate it.
             // This ensures that a section is evaluated once only.
             let p1 = parsed_document.sections.pop().unwrap();
@@ -538,6 +550,16 @@ impl InterpreterState {
         }
     }
 
+    // Regex check and find id
+    // return ftd::p1::Result<Option<(id: String, source: Body,caption, header)>>
+    fn resolve_global_ids(
+        section: &mut ftd::p1::Section,
+        foreign_variables: &[String],
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<Option<(String, ftd::TextSource)>> {
+        unimplemented!()
+    }
+
     fn process_imports(
         top: &mut ParsedDocument,
         bag: &ftd::Map<ftd::p2::Thing>,
@@ -579,7 +601,9 @@ impl InterpreterState {
 
     pub fn continue_after_checking_id(
         mut self,
-        global_ids: Option<&std::collections::HashMap<String, String>>,
+        id: &str,
+        source: &ftd::TextSource,
+        url: Option<String>,
         doc_index: usize,
     ) -> ftd::p1::Result<Interpreter> {
         // Ignore processing terms if global_ids is None
@@ -589,6 +613,9 @@ impl InterpreterState {
             }
             None => {}
         }
+
+        let doc = self.document_stack.last_mut().unwrap();
+        let section = doc.sections.last_mut().unwrap();
 
         self.document_stack[doc_index].done_processing_terms();
         self.continue_()
@@ -1038,7 +1065,8 @@ pub enum Interpreter {
         state: InterpreterState,
     },
     CheckID {
-        doc_index: usize,
+        id: String,
+        source: ftd::TextSource,
         state: InterpreterState,
     },
     Done {
