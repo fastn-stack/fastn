@@ -2,14 +2,16 @@
 #[macro_use]
 mod test;
 
+mod definition;
 mod import;
 mod main;
 mod record;
 mod utils;
 
-pub use ftd::ast::import::Import;
-pub use ftd::ast::main::Ast;
-pub use ftd::ast::record::Record;
+pub use ftd::di::definition::Definition;
+pub use ftd::di::import::Import;
+pub use ftd::di::main::DI;
+pub use ftd::di::record::Record;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
@@ -26,7 +28,7 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub fn parse_error<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::ast::Result<T>
+pub fn parse_error<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::di::Result<T>
 where
     S1: Into<String>,
 {

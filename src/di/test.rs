@@ -1,17 +1,17 @@
 use {indoc::indoc, pretty_assertions::assert_eq}; // macro
 
 #[track_caller]
-fn p(s: &str, t: &Vec<ftd::ast::Ast>) {
+fn p(s: &str, t: &Vec<ftd::di::DI>) {
     let sections = ftd::p11::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
-    let ast =
-        ftd::ast::Ast::from_p1(sections.as_slice(), "foo").unwrap_or_else(|e| panic!("{:?}", e));
+    let ast = ftd::di::DI::from_sections(sections.as_slice(), "foo")
+        .unwrap_or_else(|e| panic!("{:?}", e));
     assert_eq!(t, &ast,)
 }
 
 #[track_caller]
 fn f(s: &str, m: &str) {
     let sections = ftd::p11::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
-    let ast = ftd::ast::Ast::from_p1(sections.as_slice(), "foo");
+    let ast = ftd::di::DI::from_sections(sections.as_slice(), "foo");
     match ast {
         Ok(r) => panic!("expected failure, found: {:?}", r),
         Err(e) => {
@@ -35,10 +35,10 @@ fn f(s: &str, m: &str) {
 }
 
 #[test]
-fn ast_import() {
+fn di_import() {
     p(
         "-- import: foo",
-        &vec![ftd::ast::Ast::Import(ftd::ast::Import {
+        &vec![ftd::di::DI::Import(ftd::di::Import {
             module: "foo".to_string(),
             alias: None,
         })],
@@ -46,7 +46,7 @@ fn ast_import() {
 
     p(
         "-- import: foo as f",
-        &vec![ftd::ast::Ast::Import(ftd::ast::Import {
+        &vec![ftd::di::DI::Import(ftd::di::Import {
             module: "foo".to_string(),
             alias: Some("f".to_string()),
         })],
@@ -78,7 +78,7 @@ fn ast_import() {
 }
 
 #[test]
-fn ast_record() {
+fn di_record() {
     p(
         indoc!(
             "
@@ -87,8 +87,8 @@ fn ast_record() {
             integer age: 40
             "
         ),
-        &vec![ftd::ast::Ast::Record(
-            ftd::ast::Record::new("foo")
+        &vec![ftd::di::DI::Record(
+            ftd::di::Record::new("foo")
                 .add_field("name", "string", None)
                 .add_field("age", "integer", Some(s("40"))),
         )],
@@ -107,8 +107,8 @@ fn ast_record() {
             It can be overridden by the variable of this type.
             "
         ),
-        &vec![ftd::ast::Ast::Record(
-            ftd::ast::Record::new("foo")
+        &ftd::di::DI::Record(
+            ftd::di::Record::new("foo")
                 .add_field("age", "integer", None)
                 .add_field(
                     "details",
@@ -119,7 +119,8 @@ fn ast_record() {
                         It can be overridden by the variable of this type."
                     ))),
                 ),
-        )],
+        )
+        .list(),
     );
 
     f(
@@ -131,6 +132,70 @@ fn ast_record() {
             "
         ),
         "ASTParseError: foo:3 -> Can't find kind for record field: `\"age\"`",
+    );
+}
+
+#[test]
+fn di_variable_definition() {
+    p(
+        indoc!(
+            "
+            -- string about-us:
+
+            FifthTry is Open Source
+
+            Our suite of products are open source and available on Github. You are free to download 
+            install and customize them to your needs.
+
+            We’d love to hear your feedback and suggestions, and collectively make Documentation 
+            easier and better for everyone.
+            "
+        ),
+        &ftd::di::DI::Definition(
+            ftd::di::Definition::new("about-us", "string")
+            .add_body(indoc!(
+                "FifthTry is Open Source
+
+                Our suite of products are open source and available on Github. You are free to download 
+                install and customize them to your needs.
+    
+                We’d love to hear your feedback and suggestions, and collectively make Documentation 
+                easier and better for everyone."
+            )),
+        ).list(),
+    );
+
+    p(
+        "-- string about-us: FifthTry is Open Source",
+        &ftd::di::DI::Definition(
+            ftd::di::Definition::new("about-us", "string")
+                .add_caption_str("FifthTry is Open Source"),
+        )
+        .list(),
+    );
+
+    p(
+        "-- string list names:",
+        &ftd::di::DI::Definition(ftd::di::Definition::new("names", "string list")).list(),
+    );
+}
+
+#[test]
+fn di_component_definition() {
+    p(
+        indoc!(
+            "
+            -- ftd.text markdown:
+            caption or body text:
+            text: $text
+            "
+        ),
+        &ftd::di::DI::Definition(
+            ftd::di::Definition::new("markdown", "ftd.text")
+                .add_value_property("text", Some(s("caption or body")), None)
+                .add_value_property("text", None, Some(s("$text"))),
+        )
+        .list(),
     );
 }
 

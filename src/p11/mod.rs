@@ -5,7 +5,7 @@ mod test;
 pub(crate) mod header;
 mod parser;
 mod section;
-mod utils;
+pub mod utils;
 
 pub use header::{Header, Headers, Section as HSection, KV};
 pub use parser::parse;

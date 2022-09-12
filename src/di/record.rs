@@ -11,9 +11,9 @@ impl Record {
         section.kind.as_ref().map_or(false, |s| s.eq(RECORD))
     }
 
-    pub(crate) fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> ftd::ast::Result<Record> {
+    pub(crate) fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> ftd::di::Result<Record> {
         if !Self::is_record(section) {
-            return ftd::ast::parse_error(
+            return ftd::di::parse_error(
                 format!("Section is not record section, found `{:?}`", section),
                 doc_id,
                 section.line_number,
@@ -50,7 +50,7 @@ pub struct Field {
 }
 
 impl Field {
-    pub(crate) fn from_header(header: &ftd::p11::Header, doc_id: &str) -> ftd::ast::Result<Field> {
+    pub(crate) fn from_header(header: &ftd::p11::Header, doc_id: &str) -> ftd::di::Result<Field> {
         match header {
             ftd::p11::Header::KV(ftd::p11::header::KV {
                 line_number,
@@ -65,7 +65,7 @@ impl Field {
                         value: value.to_owned(),
                     })
                 } else {
-                    ftd::ast::parse_error(
+                    ftd::di::parse_error(
                         format!("Can't find kind for record field: `{:?}`", key),
                         doc_id,
                         *line_number,
@@ -89,7 +89,7 @@ impl Field {
 pub(crate) fn get_fields_from_headers(
     headers: &ftd::p11::Headers,
     doc_id: &str,
-) -> ftd::ast::Result<Vec<Field>> {
+) -> ftd::di::Result<Vec<Field>> {
     let mut fields: Vec<Field> = Default::default();
     for header in headers.0.iter() {
         fields.push(Field::from_header(header, doc_id)?);
