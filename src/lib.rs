@@ -6,10 +6,11 @@ extern crate self as ftd;
 #[macro_use]
 pub(crate) mod test;
 
-mod ast;
 pub mod code;
 mod component;
 mod condition;
+mod constants;
+mod di;
 mod dnode;
 mod event;
 mod execute_doc;
@@ -31,6 +32,7 @@ mod youtube_id;
 
 pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
+pub use constants::{identifier, regex_consts};
 pub use event::{Action, Event};
 pub use ftd::{
     ftd::p2::interpreter::{interpret, Interpreter, InterpreterState, ParsedDocument},

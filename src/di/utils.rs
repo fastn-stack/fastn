@@ -5,3 +5,7 @@ pub fn split_at(text: &str, at: &str) -> (String, Option<String>) {
         (text.to_string(), None)
     }
 }
+
+#[cfg(test)]
+pub const CAPTION: &str = ftd::p11::utils::CAPTION;
+pub const BODY: &str = "$body$";

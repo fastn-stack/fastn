@@ -14,32 +14,34 @@ pub struct KV {
     pub value: Option<String>,
 }
 
-#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
-#[serde(default)]
-pub struct Section {
-    line_number: usize,
-    key: String,
-    kind: Option<String>,
-    section: Vec<ftd::p11::Section>,
-}
-
-impl Header {
-    pub(crate) fn from_string(
-        key: &str,
-        kind: Option<String>,
-        value: &str,
-        line_number: usize,
-    ) -> Header {
-        Header::KV(KV {
+impl KV {
+    pub fn new(key: &str, kind: Option<String>, value: Option<String>, line_number: usize) -> KV {
+        KV {
             line_number,
             key: key.to_string(),
             kind,
-            value: Some(value.to_string()),
-        })
+            value,
+        }
     }
+}
 
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
+#[serde(default)]
+pub struct Section {
+    pub line_number: usize,
+    pub key: String,
+    pub kind: Option<String>,
+    pub section: Vec<ftd::p11::Section>,
+}
+
+impl Header {
     pub(crate) fn from_caption(value: &str, line_number: usize) -> Header {
-        Header::from_string("$caption$", None, value, line_number)
+        Header::kv(
+            line_number,
+            ftd::p11::utils::CAPTION,
+            None,
+            Some(value.to_string()),
+        )
     }
 
     pub(crate) fn kv(
@@ -48,12 +50,7 @@ impl Header {
         kind: Option<String>,
         value: Option<String>,
     ) -> Header {
-        Header::KV(KV {
-            line_number,
-            key: key.to_string(),
-            kind,
-            value,
-        })
+        Header::KV(KV::new(key, kind, value, line_number))
     }
 
     pub(crate) fn section(

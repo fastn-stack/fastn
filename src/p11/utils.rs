@@ -10,3 +10,5 @@ pub(crate) fn remove_value_comment(value: &mut Option<String>) {
         }
     }
 }
+
+pub const CAPTION: &str = "$caption$";
