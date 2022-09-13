@@ -203,17 +203,25 @@ pub fn interpret_helper(
                 )?;
             }
             ftd::Interpreter::CheckID {
-                id,
+                id: captured_id,
                 source,
                 state: st,
             } => {
                 // No config in ftd::ExampleLibrary ignoring processing terms for now
                 // using dummy id map for debugging
-                let url = lib
+
+                let link = lib
                     .dummy_global_ids_map()
-                    .get(id.as_str())
-                    .map(ToString::to_string);
-                s = st.continue_after_checking_id(id.as_str(), &source, url)?;
+                    .get(captured_id.as_str())
+                    .ok_or_else(|| {
+                        ftd::p1::Error::ForbiddenUsage {
+                            message: format!("id: {} not found while linking", captured_id),
+                            doc_id: st.id.clone(),
+                            line_number: 0,
+                        }
+                    })?.to_string();
+
+                s = st.continue_after_checking_id(captured_id.as_str(), &source, link)?;
             }
         }
     }
