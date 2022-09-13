@@ -1,0 +1,34 @@
+;; foo  -->   "/foo/bar/#foo"
+;; hello  -->   "/hello/there/#hello"
+;; some id  -->   "/some/id/#some-id"
+
+;; // To debug for section
+;; scp -> "/foo/bar/#scp"
+;; sh -> "/hello/there/#sh"
+;; sb -> "/some/id/#sb"
+
+;; // To debug for subsection
+;; sscp  ->  "/foo/bar/#sscp"
+;; ssh  ->  "/hello/there/#ssh"
+;; ssb  ->  "/some/id/#ssb"
+
+;; Check id -> [capture-id, link, textSource, is_from_section: bool]
+
+-- ftd.text A:
+caption cap:
+string header:
+body body:
+text: $header
+
+-- ftd.row:
+padding-vertical: 10
+
+--- A: \[from subsection caption](id: sscp)
+header: [from subsection header](id: ssh)
+
+[from subsection body](id: ssb)
+
+-- A: [from section caption](id: scp)
+header: [from section header](id: sh)
+
+[from section body](id: sb)
