@@ -214,15 +214,19 @@ pub fn interpret_helper(
                 let link = lib
                     .dummy_global_ids_map()
                     .get(captured_id.as_str())
-                    .ok_or_else(|| {
-                        ftd::p1::Error::ForbiddenUsage {
-                            message: format!("id: {} not found while linking", captured_id),
-                            doc_id: st.id.clone(),
-                            line_number: 0,
-                        }
-                    })?.to_string();
+                    .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
+                        message: format!("id: {} not found while linking", captured_id),
+                        doc_id: st.id.clone(),
+                        line_number: 0,
+                    })?
+                    .to_string();
 
-                s = st.continue_after_checking_id(captured_id.as_str(), &source, is_from_section,link)?;
+                s = st.continue_after_checking_id(
+                    captured_id.as_str(),
+                    &source,
+                    is_from_section,
+                    link,
+                )?;
             }
         }
     }

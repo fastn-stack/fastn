@@ -96,7 +96,7 @@ pub mod regex {
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
     pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-_\sA-Za-z\d]*$";
 
-    lazy_static::lazy_static!{
+    lazy_static::lazy_static! {
         pub static ref ID: regex::Regex = regex::Regex::new(ID_HEADER).unwrap();
         pub static ref S1: regex::Regex = regex::Regex::new(LINK_SYNTAX_1).unwrap();
         pub static ref S2: regex::Regex = regex::Regex::new(LINK_SYNTAX_2).unwrap();
