@@ -78,12 +78,13 @@ impl InterpreterState {
             self.document_stack[l].reorder(&self.bag)?;
         }
 
-        if self.document_stack[l].checking_ids {
-            return Ok(Interpreter::CheckID {
-                doc_index: l,
-                state: self,
-            });
-        }
+        // This will be removed later
+        // if self.document_stack[l].checking_ids {
+        //     return Ok(Interpreter::CheckID {
+        //         doc_index: l,
+        //         state: self,
+        //     });
+        // }
 
         let parsed_document = &mut self.document_stack[l];
 
@@ -110,7 +111,6 @@ impl InterpreterState {
 
             if let Some((id, source)) = Self::resolve_global_ids(
                 p1,
-                parsed_document.foreign_variable_prefix.as_slice(),
                 &doc,
             )? {
                 return Ok(Interpreter::CheckID {
@@ -552,12 +552,80 @@ impl InterpreterState {
 
     // Regex check and find id
     // return ftd::p1::Result<Option<(id: String, source: Body,caption, header)>>
+    // TODO: Need to avoid double usage of regex while resolving and replacing for links
     fn resolve_global_ids(
         section: &mut ftd::p1::Section,
-        foreign_variables: &[String],
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Option<(String, ftd::TextSource)>> {
-        unimplemented!()
+
+        if let Some((id, textSource)) = resolve_id_from_all_sources(
+            &mut section.caption,
+            &mut section.header,
+            &mut section.body,
+            section.line_number,
+            doc,
+        )? {
+            return Ok(Some((id, textSource)));
+        }
+
+        for subsection in section.sub_sections.0.iter_mut() {
+            if let Some((id, textSource)) = resolve_id_from_all_sources(
+                &mut subsection.caption,
+                &mut subsection.header,
+                &mut subsection.body,
+                subsection.line_number,
+                doc,
+            )? {
+                return Ok(Some((id, textSource)));
+            }
+        }
+
+        return Ok(None);
+
+        /// will return id of the captured link and its textSource (if any)
+        /// regex will be used to get id associated with the link
+        fn resolve_id_from_all_sources(
+            caption: &mut Option<String>,
+            header: &mut ftd::p1::Header,
+            body: &mut Option<(usize, String)>,
+            line_number: usize,
+            doc: &ftd::p2::TDoc,
+        ) -> ftd::p1::Result<Option<(String, ftd::TextSource)>>{
+            if let Some(ref mut caption) = caption {
+                if let Some(captured_id) =
+                find_referenced_links(caption, doc, line_number)?
+                {
+                    return Ok(Some((captured_id, ftd::TextSource::Caption)));
+                }
+            }
+
+            for (line_number, _, header) in header.0.iter_mut() {
+                if let Some(captured_id) =
+                find_referenced_links(header, doc, *line_number)?
+                {
+                    return Ok(Some((captured_id, ftd::TextSource::Header)));
+                }
+            }
+
+            if let Some((line_number, ref mut body)) = body {
+                if let Some(captured_id) =
+                find_referenced_links(body, doc, *line_number)?
+                {
+                    return Ok(Some((captured_id,  ftd::TextSource::Body)));
+                }
+            }
+
+            Ok(None)
+
+        }
+
+        fn find_referenced_links(
+            value: &mut String,
+            doc: &ftd::p2::TDoc,
+            line_number: usize,
+        ) -> ftd::p1::Result<Option<String>> {
+            unimplemented!()
+        }
     }
 
     fn process_imports(
