@@ -213,7 +213,7 @@ pub fn interpret_helper(
                     .dummy_global_ids_map()
                     .get(id.as_str())
                     .map(ToString::to_string);
-                s = st.continue_after_checking_id(id.as_str(), &source, url, index)?;
+                s = st.continue_after_checking_id(id.as_str(), &source, url)?;
             }
         }
     }

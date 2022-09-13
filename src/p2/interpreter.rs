@@ -558,25 +558,25 @@ impl InterpreterState {
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Option<(String, ftd::TextSource)>> {
 
-        if let Some((id, textSource)) = resolve_id_from_all_sources(
+        if let Some((id, text_source)) = resolve_id_from_all_sources(
             &mut section.caption,
             &mut section.header,
             &mut section.body,
             section.line_number,
             doc,
         )? {
-            return Ok(Some((id, textSource)));
+            return Ok(Some((id, text_source)));
         }
 
         for subsection in section.sub_sections.0.iter_mut() {
-            if let Some((id, textSource)) = resolve_id_from_all_sources(
+            if let Some((id, text_source)) = resolve_id_from_all_sources(
                 &mut subsection.caption,
                 &mut subsection.header,
                 &mut subsection.body,
                 subsection.line_number,
                 doc,
             )? {
-                return Ok(Some((id, textSource)));
+                return Ok(Some((id, text_source)));
             }
         }
 
@@ -619,12 +619,75 @@ impl InterpreterState {
 
         }
 
+        /// fetches the id of the captured link
+        /// from the given text if matches
+        /// from any of the 2 syntax patterns
+        /// if no such links found returns None
         fn find_referenced_links(
             value: &mut String,
             doc: &ftd::p2::TDoc,
             line_number: usize,
         ) -> ftd::p1::Result<Option<String>> {
-            unimplemented!()
+
+            // Try to find any link based on S1 link pattern
+            if let Some(id) = find_link_from_s1(value){
+                return Ok(Some(id));
+            }
+
+            // Try to find any link based on S2 link pattern
+            if let Some(id) = find_link_from_s2(value){
+                return Ok(Some(id));
+            }
+
+            Ok(None)
+        }
+
+        /// fetches capture group by group index and returns it as &str
+        fn capture_group_at<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
+            return capture.get(group_index).map_or("", |c| c.as_str());
+        }
+
+        /// finds link matches from s1 pattern and returns the id associated with the link
+        /// Syntax 1 = [id`](id: someId)
+        fn find_link_from_s1(value: &mut String) -> Option<String> {
+
+            const SYNTAX_1_PATTERN: &str = r"(?x) # Enabling Comment Mode
+            \[(?P<linked_text>[\sa-zA-Z\d]+)\] # Linked Text Capture Group <linked_text>
+            \(\s*id\s*:(?P<actual_id>[\sa-zA-Z\d]+)\) # Referred Id Capture Group <actual_id>";
+
+            lazy_static::lazy_static!(
+                static ref S1: regex::Regex = regex::Regex::new(SYNTAX_1_PATTERN).unwrap();
+            );
+
+            // Syntax 1 = [id`](id: <id-to-link>)
+            // G0 = Original capture, G1 = Linked Text, G2 = Actual Id
+            for cap in S1.captures_iter(value) {
+                let captured_id = capture_group_at(&cap, 2).trim();
+                return Some(captured_id.to_string());
+            }
+
+            return None;
+        }
+
+        /// finds link matches from s2 pattern and returns the id associated with the link
+        /// Syntax 2 = {id: someId}
+        fn find_link_from_s2(value: &mut String) -> Option<String> {
+
+            const SYNTAX_2_PATTERN: &str = r"(?x) # Enabling comment mode
+            \{\s* # Here Linked Text is same as Referred Id
+            (?P<actual_id>[\sa-zA-Z\d]+)\} # Referred Id Capture Group <actual_id>";
+
+            lazy_static::lazy_static!(
+                static ref S2: regex::Regex = regex::Regex::new(SYNTAX_2_PATTERN).unwrap();
+            );
+
+            // Syntax 2 = {<id-to-link>}];
+            for cap in S2.captures_iter(value) {
+                let captured_id = capture_group_at(&cap, 1).trim();
+                return Some(captured_id.to_string());
+            }
+
+            return None;
         }
     }
 
@@ -672,18 +735,28 @@ impl InterpreterState {
         id: &str,
         source: &ftd::TextSource,
         url: Option<String>,
-        doc_index: usize,
     ) -> ftd::p1::Result<Interpreter> {
+
+        // DEBUGGING
+        dbg!(id);
+        dbg!(source);
+        dbg!(&url);
+
+        let global_ids = None;
+        let doc_index = self.document_stack.len() - 1;
+
         // Ignore processing terms if global_ids is None
         match global_ids {
             Some(id_map) => {
                 self.document_stack[doc_index].replace_linking_syntax_with_links(id_map)?
             }
             None => {}
-        }
+        };
 
-        let doc = self.document_stack.last_mut().unwrap();
-        let section = doc.sections.last_mut().unwrap();
+        // TODO: Check in the last section from the topmost document in the document stack
+        // which isn't popped out yet and replace links based on the captured id
+        // from the received text source which need to run regex again to find link syntax
+        // match for the given id and replace it with the url received
 
         self.document_stack[doc_index].done_processing_terms();
         self.continue_()
