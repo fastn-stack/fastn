@@ -1,6 +1,22 @@
-// pub(crate) struct Request {
-//     req: actix_web::HttpRequest
-// }
+pub(crate) struct Request<'a> {
+    req: &'a actix_web::HttpRequest,
+    // method, uri, etc
+}
+
+pub(crate) struct Response {}
+
+pub(crate) struct ResponseBuilder {
+    headers: std::collections::HashMap<String, String>,
+    code: u16,
+    // remaining
+}
+
+// We will no do stream, data is going to less from services
+impl ResponseBuilder {
+    // chain implementation
+    // .build
+    // response from string, json, bytes etc
+}
 
 pub(crate) fn url_regex() -> regex::Regex {
     regex::Regex::new(

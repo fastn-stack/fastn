@@ -177,10 +177,18 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
+        // url is present in config or not
+        // If not present than proxy pass it
         let mut config =
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_file(&req, &mut config, &path).await
+
+        // if true: serve_file
+        // else: proxy_pass
     };
+
+    // if 404 than: pass proxy
+    // traces the fpm config and than, if not present than proxy pass
 
     t.it(response)
 }
