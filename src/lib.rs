@@ -32,7 +32,7 @@ mod youtube_id;
 
 pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
-pub use constants::{identifier, regex_consts};
+pub use constants::{identifier, regex};
 pub use event::{Action, Event};
 pub use ftd::{
     ftd::p2::interpreter::{interpret, Interpreter, InterpreterState, ParsedDocument},

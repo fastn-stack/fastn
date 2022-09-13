@@ -81,7 +81,7 @@ pub mod identifier {
 }
 
 // Regex pattern constants
-pub mod regex_consts {
+pub mod regex {
 
     /// Linking Syntax 1: `[<linked-text>]`(id: <some-id>)
     pub const LINK_SYNTAX_1: &str = r"(?x) # Enabling Comment Mode
@@ -95,4 +95,15 @@ pub mod regex_consts {
 
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
     pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-_\sA-Za-z\d]*$";
+
+    lazy_static::lazy_static!{
+        pub static ref ID: regex::Regex = regex::Regex::new(ID_HEADER).unwrap();
+        pub static ref S1: regex::Regex = regex::Regex::new(LINK_SYNTAX_1).unwrap();
+        pub static ref S2: regex::Regex = regex::Regex::new(LINK_SYNTAX_2).unwrap();
+    }
+
+    /// fetches capture group by group index and returns it as &str
+    pub fn capture_group_by_index<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
+        return capture.get(group_index).map_or("", |c| c.as_str());
+    }
 }
