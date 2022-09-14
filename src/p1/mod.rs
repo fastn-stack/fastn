@@ -5,7 +5,7 @@ mod sub_section;
 mod to_string;
 
 pub use header::Header;
-pub use parser::parse;
+pub use parser::{parse, parse_file_for_global_ids};
 pub use section::Section;
 pub use sub_section::{SubSection, SubSections};
 pub use to_string::to_string;
