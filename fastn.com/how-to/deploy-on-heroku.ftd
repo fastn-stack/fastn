@@ -1,0 +1,5 @@
+-- ds.page: Deploy FPM package on heroku
+
+- Heroku app setup
+- use `fpm-template` github template for fpm package which id to be deployed
+- Heroku push using `fpm-heroku` repo as github template
