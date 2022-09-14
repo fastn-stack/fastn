@@ -1,74 +1,91 @@
 -- import: fpm.dev/assets
 
--- ft.page: How to create new fpm project using template `fpm-template` on github?
+-- ft.page: How to create new fpm project using `fpm-template` on GitHub?
 
-We can create a new fpm project on github. This can be done by creating a github
-repository using [`fpm-template`](https://github.com/FifthTry/fpm-template)
+Let's understand `fpm` project creation in just 5 minutes by playing! 
 
-Follow the following steps to achieve this
+With this we are also going to create our new `FTD` website by following the very 
+short embedded tutorial.
 
+Do you have GitHub account?
 
--- ft.h1: Create a new github repository
+Log-in with [GitHub.com](https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2Fsign-in) into your `GitHub` account.
 
-Go to [this url](https://github.com/FifthTry/fpm-template/generate) and create a new repository.
+Or
 
+Create your GitHub account by following simple steps by [GitHub sign-up process](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home).
 
+Now as you signed into your GitHub account, lets start creating our first `fpm` 
+website project on GitHub.
 
+To start with it, create a repository using `fpm-template` - [Click here](https://github.com/FifthTry/fpm-template/generate)
 
+--- ft.image: How to create new repository using `fpm-template`
+src: $assets.files.static.docs.create-new-repository.png
+width: fill
 
--- ft.h1: Rewrite file
+Click on Public to make your `FTD` website visible to public. You can click on 
+Private in-case you want to keep it private. We recomment to keep Public selected.
 
-In the FPM.ftd file, rewrite the package name and zip
+You can also add description of your `FTD` website(optional). 
 
--- ft.code:
-lang: ftd
+Once you click on `Create repository from template` your first ever `FTD` web 
+repository is ready.
 
-\-- fpm.package: <package-name>
-zip: <url-where-repo-is-available>
+--- ft.image: Creating GitHub repository using `fpm-template`
+src: $assets.files.static.docs.example-ftd-website-repository.png
+width: fill
 
+Follow below steps to make your first `FTD` web-site live.
 
--- ft.markdown:
+- Click on `Actions` tab and check for green tick, if `initial-commit` workflow 
+ran successfully.
 
-As this is github repo, the `<package-name>` should be
-`<github organisation/username>.github.io/<repository name>`. In case if the organisation/user
-name is `Fifthtry` and repository is `forest-cs`, then the `<package-name>` would be
-`fifthtry.github.io/forest-cs`.
+--- ft.image: `initial-commit` workflow should run successfully
+src: $assets.files.static.docs.action-tab-initial-commit-ticked.png
+width: fill
 
-The `<url-where-repo-is-available>` should be `github.com/fifthtry/forest-cs/archive/refs/heads/main.zip`
+- Click on `Settings` tab and follow `Step-1` to `Step-5` shown in below image:
 
+--- ft.image: On `Settings` tab follow `Step-1` to `Step-5` ⚙️
+src: $assets.files.static.docs.settings-pages-branch-gh-pages.png
+width: fill
 
--- ft.h1: Push Changes and Github Workflow
+- Click on `Actions` tab and check for green tick, if `pages build and deployment` 
+workflow ran successfully.
 
-Now, push these changes in the github repository. The pushing would run the github
-workflow.
-
--- ft.image: Running github workflow
-src: $assets.files.static.images.author.workflow-running.png
+--- ft.image: `pages build and deployment` workflow should run successfully
+src: $assets.files.static.docs.action-tab-pages-build-and-deployment.png
 width: fill
 
 
-On successful execution of workflow, the `gh-pages` branch would be created.
+Once `pages build and deployment` ran successfully. Your first `FTD` website is live.
 
--- ft.image: Successful github workflow
-src: $assets.files.static.images.author.successful-workflow.png
+To see your live website click on `Settings` tab and follow below steps:
+
+--- ft.image: `Settings`, `Pages` - click on `Visit site` button
+src: $assets.files.static.docs.settings-pages-website-live.png
 width: fill
 
--- ft.image: Branch `gh-pages`
-src: $assets.files.static.images.author.gh-pages.png
+
+In above example `FTD` website name is `https://gsalunke.github.io/my-ftd-blog/`.
+Copy your website url `https://gsalunke.github.io/my-ftd-blog/` and follow below 
+steps from `Part-1` and `Part-2`
+
+--- ft.image: Going with public live - Part - 1 
+src: $assets.files.static.docs.about-settings-website-url.png
 width: fill
 
 
--- ft.h1: Publish Site (Github Pages)
+--- ft.image: Going with public live - Part - 2
+src: $assets.files.static.docs.going-public-live-about-settings.png
+width: fill
 
-In github, Go to the `Settings` and then in TOC, go to `Pages`
 
-In the `Source`, select the `gh-pages` branch and then select the `/(root)`
-and then click on `Save`.
+Done! now you can share your `FTD` website url which is now live publicly.
 
-This publish the site `https://fifthtry.github.io/forest-cs/`
-
--- ft.image: Publish site
-src: $assets.files.static.images.author.publish-site.png
+--- ft.image: Click on website URL to see it in action
+src: $assets.files.static.docs.about-gone-live-with-url.png
 width: fill
 
 
