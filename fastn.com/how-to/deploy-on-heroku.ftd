@@ -1,11 +1,13 @@
+-- import: fpm.dev/assets
+
 -- ft.page: Deploy FPM package on heroku
 
--- ft.h1: Create Heroku APP
+-- ft.h1: 1️⃣ Create Heroku APP
 
-First login to https://www.heroku.com/ and create a new account if you do not
-have it already. Then create a heroku APP.
+Login to https://www.heroku.com/ if you already have an account else create a
+new account.
 
--- ft.h2: Install `heroku` CLI
+-- ft.h2: ▶️ Install `heroku` CLI
 
 According to your platform install `heroku` CLI.
 
@@ -17,11 +19,11 @@ already installed [brew](https://brew.sh).
 -- ft.code:
 lang: sh
 
-`brew tap heroku/brew && brew install heroku`
+brew tap heroku/brew && brew install heroku
 
--- markdown:
+-- ft.markdown:
 
-For more [click](https://devcenter.heroku.com/articles/heroku-cli).
+For more details: Visit [Install the Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli).
 
 /-- ft.h3: Install `heroku` CLI on Ubuntu
 
@@ -31,16 +33,39 @@ TODO:
 
 TODO:
 
--- ft.h2: Verify Your Heroku Installation
+-- ft.h2: ▶️ Verify Your Heroku Installation
 
 -- ft.code:
 lang: sh
 
-heroku --version
-// heroku/7.0.0 (darwin-x64) node-v8.0.0
+\$ heroku --version
+heroku/7.0.0 (darwin-x64) node-v8.0.0
 
 
--- ft.h2: Create Heroku APP Using `heroku` CLI
+-- ft.h2: ▶️ Get Started with the Heroku CLI
+
+After you install the CLI, run the `heroku login` command. Enter any key to go to
+your web browser to complete login. The CLI then logs you in automatically.
+
+-- ft.code:
+lang: console
+
+\$ heroku login
+heroku: Press any key to open up the browser to login or q to exit
+ ›   Warning: If browser does not open, visit
+ ›   https://cli-auth.heroku.com/auth/browser/***
+heroku: Waiting for login...
+Logging in... done
+Logged in as me@example.com
+
+-- ft.markdown:
+
+If you’d prefer to stay in the CLI to enter your credentials, run
+`heroku login -i`.
+
+For more details: Visit [Get Started with the Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#get-started-with-the-heroku-cli)
+
+-- ft.h2: ▶️ Create Heroku APP Using `heroku` CLI
 
 In the below example, I have used `abrark-app` as heroku `app-name`. You can
 use any name but it should be unique to heroku apps.
@@ -50,9 +75,91 @@ For the below example it will create domain like `http://abrark-app.herokuapp.co
 -- ft.code:
 lang: sh
 
-heroku create -a abrark-app
+\$ heroku create -a abrark-app
+Creating ⬢ abrark-app... done
+https://abrark-app.herokuapp.com/ | https://git.heroku.com/abrark-app.git
 
--- markdown:
+-- ft.markdown:
+
+The command’s output shows that the app will be available at
+`http://abrark-app.herokuapp.com`. The second URL,
+`https://git.heroku.com/abrark-app.git`, is the remote git repository URL;
+by default, the heroku create command automatically adds a git remote named
+“heroku” pointing at this URL.
+
+For more details: Visit [Creating Apps from the CLI](https://devcenter.heroku.com/articles/creating-apps)
+
+-- ft.h2: ▶️ Retrieving the API token for Heroku Platform APIs
+
+You can display the token via the CLI:
+
+Use `heroku authorizations:create` for production apps or use` heroku auth:token`
+for development.
+
+-- ft.code:
+lang: sh
+
+\$ heroku auth:token
+c4cd94da15ea0544802c2cfd5ec4ead324327430
+
+-- ft.markdown:
+
+Save this token for later use.
+
+For more details: Visit [How should I generate an API key that allows me to use
+the Heroku Platform API?](https://help.heroku.com/PBGP6IDE/how-should-i-generate-an-api-key-that-allows-me-to-use-the-heroku-platform-api)
+
+-- ft.h1: 2️⃣ Create FPM package repository using github template
+
+-- ft.h2: ▶️ Creating a repository from a template
+
+- On GitHub.com, navigate to the main page of the [fpm-template repository](https://github.com/FifthTry/fpm-template/).
+- Above the file list, click `Use this template`.
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-1.png
+width: fill
+
+- Do the appropriate fill outs in github page and then click `Create repository
+from template.`
+
+For more details: Visit [Creating a repository from a template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template)
+
+-- ft.h2: ▶️ Update github workflow
+
+- In repository, Go to [`.github/workflows/refresh-content-on-heroku.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/refresh-content-on-heroku.yml#L16-L18)
+file and replace `<heroku-app-name>` with heroku app name. In our case it's
+`<heroku-app-name>` get replaced with `abrark-app`.
+
+-- ft.code: `refresh-content-on-heroku.yml`
+lang: diff
+
+- run: |
+-   curl --location --request POST \
+-   --url 'https://<heroku-app-name>.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
++ run: |
++   curl --location --request POST \
++   --url 'https://abrark-app.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
+
+-- ft.markdown:
+
+- Same as above, Go to [`.github/workflows/update-fpm-binary.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/update-fpm-binary.yml#L25)
+file and replace `<heroku-app-name>` with heroku app name. In our case it's
+`<heroku-app-name>` get replaced with `abrark-app`.
+
+-- ft.code: `update-fpm-binary.yml`
+lang: diff
+
+-  --url 'https://<heroku-app-name>.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
++  --url 'https://abrark-app.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
+
+
+-- ft.h1: 3️⃣ Deploy on Heroku using github
+
+
+
+
+/-- markdown:
 
 - login to heroku
 - install heroku cli on mac/ubuntu
