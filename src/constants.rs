@@ -7,34 +7,41 @@ pub mod identifier {
     pub const ESCAPED_SECTION: &str = r"\-- ";
     pub const ESCAPED_SUBSECTION: &str = r"\--- ";
     pub const KV_SEPERATOR: &str = ":";
+    pub const WHITESPACE: &str = " ";
 
     pub fn is_section(line: &str) -> bool {
         line.starts_with(SECTION)
     }
+    pub fn is_section_commented(line: &str) -> bool {
+        line.starts_with(COMMENTED_SECTION)
+    }
+    pub fn is_section_escaped(line: &str) -> bool {
+        line.starts_with(ESCAPED_SECTION)
+    }
+    pub fn is_section_commented_or_escaped(line: &str) -> bool {
+        is_section_commented(line) || is_section_escaped(line)
+    }
+
     pub fn is_subsection(line: &str) -> bool {
         line.starts_with(SUBSECTION)
     }
-    pub fn is_section_or_subsection(line: &str) -> bool {
-        is_section(line) || is_subsection(line)
-    }
-
-    pub fn is_commented_section(line: &str) -> bool {
-        line.starts_with(COMMENTED_SECTION)
-    }
-    pub fn is_commented_subsection(line: &str) -> bool {
+    pub fn is_subsection_commented(line: &str) -> bool {
         line.starts_with(COMMENTED_SUBSECTION)
-    }
-    pub fn is_commented_section_or_subsection(line: &str) -> bool {
-        is_commented_section(line) || is_commented_subsection(line)
-    }
-
-    pub fn is_section_escaped(line: &str) -> bool {
-        line.starts_with(ESCAPED_SECTION)
     }
     pub fn is_subsection_escaped(line: &str) -> bool {
         line.starts_with(ESCAPED_SUBSECTION)
     }
-    pub fn is_section_subsection_escaped(line: &str) -> bool {
+    pub fn is_subsection_commented_or_escaped(line: &str) -> bool {
+        is_subsection_commented(line) || is_subsection_escaped(line)
+    }
+
+    pub fn is_section_or_subsection(line: &str) -> bool {
+        is_section(line) || is_subsection(line)
+    }
+    pub fn is_commented_section_or_subsection(line: &str) -> bool {
+        is_section_commented(line) || is_subsection_commented(line)
+    }
+    pub fn is_escaped_section_or_subsection(line: &str) -> bool {
         is_section_escaped(line) || is_subsection_escaped(line)
     }
 
@@ -44,38 +51,36 @@ pub mod identifier {
         line.trim_start_matches(|c| c == '/' || c == '\\' || c == '-' || c == ' ')
     }
 
-    /// returns key/value pair seperated by ':'
+    /// returns key/value pair seperated by KV_SEPERATOR
     pub fn segregate_key_value(
         line: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::p1::Result<(String, Option<String>)> {
+    ) -> ftd::p1::Result<(Option<String>, Option<String>)> {
+        // Trim any section/subsection identifier fron the beginning of the line
+        let line = trim_section_subsection_identifier(line);
+
         if !line.contains(KV_SEPERATOR) {
             return Err(ftd::p1::Error::ParseError {
-                message: format!(": is missing in: {}", line),
+                message: format!("\':\' is missing in: {}", line),
                 doc_id: doc_id.to_string(),
                 line_number,
             });
         }
 
-        // Trim any section/subsection identifier fron the beginning of the line
-        let line = trim_section_subsection_identifier(line);
+        let (before_kv_delimiter, after_kv_delimiter) =
+            line.split_once(KV_SEPERATOR)
+                .ok_or_else(|| ftd::p1::Error::NotFound {
+                    doc_id: doc_id.to_string(),
+                    line_number,
+                    key: format!("\':\' not found while segregating kv in {}", line),
+                })?;
 
-        let mut parts = line.splitn(2, KV_SEPERATOR);
-        match (parts.next(), parts.next()) {
-            (Some(name), Some(value)) => {
-                // some key and some non-empty value
-                Ok((name.to_string(), Some(value.trim().to_string())))
-            }
-            (Some(name), None) => {
-                // some key with no value
-                Ok((name.to_string(), None))
-            }
-            _ => Err(ftd::p1::Error::ParseError {
-                message: format!("Unknown KV line found \'{}\'", line),
-                doc_id: doc_id.to_string(),
-                line_number,
-            }),
+        match (before_kv_delimiter, after_kv_delimiter) {
+            (k, v) if k.trim().is_empty() && v.trim().is_empty() => Ok((None, None)),
+            (k, v) if k.trim().is_empty() => Ok((None, Some(v.to_string()))),
+            (k, v) if v.trim().is_empty() => Ok((Some(k.to_string()), None)),
+            (k, v) => Ok((Some(k.to_string()), Some(v.to_string()))),
         }
     }
 }
@@ -96,10 +101,16 @@ pub mod regex {
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
     pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-_\sA-Za-z\d]*$";
 
+    /// file extension: \[.\]<alphanumeric string>$
+    /// to cover all file extensions with file names
+    /// ending with .ftd, .md, .jpg ... etc
+    pub const FILE_EXTENSION: &str = r"[.][a-z\d]+[/]?$";
+
     lazy_static::lazy_static! {
         pub static ref ID: regex::Regex = regex::Regex::new(ID_HEADER).unwrap();
         pub static ref S1: regex::Regex = regex::Regex::new(LINK_SYNTAX_1).unwrap();
         pub static ref S2: regex::Regex = regex::Regex::new(LINK_SYNTAX_2).unwrap();
+        pub static ref EXT: regex::Regex = regex::Regex::new(FILE_EXTENSION).unwrap();
     }
 
     /// fetches capture group by group index and returns it as &str
