@@ -151,6 +151,17 @@ lang: diff
 -  --url 'https://<heroku-app-name>.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
 +  --url 'https://abrark-app.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
 
+-- ft.h2: Setup Heroku Token GitHub Repository
+
+Copy the above token which you get after running command `heroku auth:token`,
+and set it to your GitHub repository environment variable `HEROKU_TOKEN`.
+
+For more details: Visit [Creating encrypted secrets for a repository](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-2.png
+width: fill
+
 
 -- ft.h1: 3️⃣ Deploy on Heroku Using Github
 
@@ -184,7 +195,12 @@ lang: diff
 - https://raw.githubusercontent.com/<repo-owner>/<repo-name>/<branch-name>/
 + https://raw.githubusercontent.com/AbrarNitk/abrark/main/
 
+-- ft.h2: Deploy On Heroku
+
+
 - Run the heroku commands
+- Setup Heroku Token to your GitHub repository
+
 
 
 /-- markdown:
