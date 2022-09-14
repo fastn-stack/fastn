@@ -317,6 +317,89 @@ pub fn parse(s: &str, doc_id: &str) -> Result<Vec<Section>> {
     Ok(state.finalize())
 }
 
+pub fn parse_file_for_global_ids(data: &str) -> Vec<(String, usize)> {
+    let mut captured_ids: Vec<(String, usize)> = vec![];
+
+    // Flags to ignore grepping for id under certain cases
+    let mut ignore_id: bool = true;
+    let mut register_id_for_last_section: bool = false;
+
+    // grep all lines where user defined `id` for the sections/ subsecions
+    // and update the global_ids map
+    for (ln, line) in itertools::enumerate(data.lines()) {
+        // Trim leading whitespaces if any
+        let line = line.trim_start();
+
+        // Ignore for commented out section/subsection
+        // and for ftd code passed down as body to ft.code
+        if ftd::identifier::is_commented_section_or_subsection(line)
+            || ftd::identifier::is_escaped_section_or_subsection(line)
+        {
+            if ftd::identifier::is_section_commented_or_escaped(line) {
+                register_id_for_last_section = false;
+            }
+            ignore_id = true;
+        }
+
+        // section could be component definition
+        // in that case ignore relevant id's defined under its definition
+        // including the ids defined on its subsections
+        if ftd::identifier::is_section(line) {
+            ignore_id = ignore_next_id(line);
+            register_id_for_last_section = !ignore_id;
+        }
+
+        // In cases, when there are uncommented subsections
+        // under commented section then ignore their id's
+        if ftd::identifier::is_subsection(line) && register_id_for_last_section {
+            ignore_id = ignore_next_id(line);
+        }
+
+        // match for id and update the id map (if found)
+        // id: <some-id>
+        // <some-id> could be any string using this character set
+        // character set = [A-Z, a-z, 0-9, whitespace, '_' , '-' ]
+        // leading and trailing whitespace characters are ignored
+        if !ignore_id && ftd::regex::ID.is_match(line) {
+            captured_ids.push((line.to_string(), ln));
+        }
+
+        // In case if we want to
+        // Avoid using regex here to reduce complexity as the pattern
+        // to search itself is not that complex
+        // ^id: <some-alphanumeric-string>$
+        // if line.trim_start().starts_with("term") && line.contains(':') && !ignore_id{
+        //     update_terms(&mut self.global_ids, line.trim_start(), doc_id, ln)?;
+        // }
+    }
+
+    return captured_ids;
+
+    /// returns true when the next occurrence of id header needs to be ignored
+    /// for cases when the section-line refers to a component definition
+    /// in any other case returns false
+    fn ignore_next_id(section_line: &str) -> bool {
+        // Strip out initial '-- ' or '--- '
+        let section_line = ftd::identifier::trim_section_subsection_identifier(section_line);
+
+        let before_caption = section_line
+            .split_once(ftd::identifier::KV_SEPERATOR)
+            .map(|s| s.0);
+        if let Some(section) = before_caption {
+            let mut parts = section.splitn(2, ftd::identifier::WHITESPACE);
+
+            // in case of component definition, section-kind will be mandatory
+            // -- <optional: section-kind> section-name: <section-caption>
+            return match (parts.next(), parts.next()) {
+                (Some(_kind), Some(_name)) => true,
+                (_, _) => false,
+            };
+        }
+
+        false
+    }
+}
+
 #[cfg(test)]
 mod test {
     use {indoc::indoc, pretty_assertions::assert_eq}; // macro

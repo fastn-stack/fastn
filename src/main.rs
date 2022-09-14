@@ -203,12 +203,30 @@ pub fn interpret_helper(
                 )?;
             }
             ftd::Interpreter::CheckID {
-                doc_index: index,
+                id: captured_id,
+                source,
+                is_from_section,
                 state: st,
             } => {
                 // No config in ftd::ExampleLibrary ignoring processing terms for now
                 // using dummy id map for debugging
-                s = st.continue_after_checking_id(Some(&lib.dummy_global_ids_map()), index)?;
+
+                let link = lib
+                    .dummy_global_ids_map()
+                    .get(captured_id.as_str())
+                    .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
+                        message: format!("id: {} not found while linking", captured_id),
+                        doc_id: st.id.clone(),
+                        line_number: 0,
+                    })?
+                    .to_string();
+
+                s = st.continue_after_checking_id(
+                    captured_id.as_str(),
+                    &source,
+                    is_from_section,
+                    link,
+                )?;
             }
         }
     }
@@ -225,6 +243,16 @@ impl ExampleLibrary {
         global_ids.insert("foo".to_string(), "/foo/bar/#foo".to_string());
         global_ids.insert("hello".to_string(), "/hello/there/#hello".to_string());
         global_ids.insert("some id".to_string(), "/some/id/#some-id".to_string());
+
+        // To debug for section
+        global_ids.insert("scp".to_string(), "/foo/bar/#scp".to_string());
+        global_ids.insert("sh".to_string(), "/hello/there/#sh".to_string());
+        global_ids.insert("sb".to_string(), "/some/id/#sb".to_string());
+
+        // To debug for subsection
+        global_ids.insert("sscp".to_string(), "/foo/bar/#sscp".to_string());
+        global_ids.insert("ssh".to_string(), "/hello/there/#ssh".to_string());
+        global_ids.insert("ssb".to_string(), "/some/id/#ssb".to_string());
 
         global_ids
     }
