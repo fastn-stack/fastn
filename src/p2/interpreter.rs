@@ -559,20 +559,20 @@ impl InterpreterState {
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Option<(String, ftd::TextSource, bool)>> {
         if let Some((id, text_source)) = resolve_id_from_all_sources(
-            &mut section.caption,
-            &mut section.header,
-            &mut section.body,
+            &section.caption,
+            &section.header,
+            &section.body,
             section.line_number,
             doc,
         )? {
             return Ok(Some((id, text_source, true)));
         }
 
-        for subsection in section.sub_sections.0.iter_mut() {
+        for subsection in section.sub_sections.0.iter() {
             if let Some((id, text_source)) = resolve_id_from_all_sources(
-                &mut subsection.caption,
-                &mut subsection.header,
-                &mut subsection.body,
+                &subsection.caption,
+                &subsection.header,
+                &subsection.body,
                 subsection.line_number,
                 doc,
             )? {
@@ -585,25 +585,25 @@ impl InterpreterState {
         /// will return id of the captured link and its textSource (if any)
         /// regex will be used to get id associated with the link
         fn resolve_id_from_all_sources(
-            caption: &mut Option<String>,
-            header: &mut ftd::p1::Header,
-            body: &mut Option<(usize, String)>,
+            caption: &Option<String>,
+            header: &ftd::p1::Header,
+            body: &Option<(usize, String)>,
             line_number: usize,
             doc: &ftd::p2::TDoc,
         ) -> ftd::p1::Result<Option<(String, ftd::TextSource)>> {
-            if let Some(ref mut caption) = caption {
+            if let Some(ref caption) = caption {
                 if let Some(captured_id) = find_referenced_links(caption, doc, line_number)? {
                     return Ok(Some((captured_id, ftd::TextSource::Caption)));
                 }
             }
 
-            for (line_number, _, header) in header.0.iter_mut() {
+            for (line_number, _, header) in header.0.iter() {
                 if let Some(captured_id) = find_referenced_links(header, doc, *line_number)? {
                     return Ok(Some((captured_id, ftd::TextSource::Header)));
                 }
             }
 
-            if let Some((line_number, ref mut body)) = body {
+            if let Some((line_number, ref body)) = body {
                 if let Some(captured_id) = find_referenced_links(body, doc, *line_number)? {
                     return Ok(Some((captured_id, ftd::TextSource::Body)));
                 }
@@ -617,7 +617,7 @@ impl InterpreterState {
         /// from any of the 2 syntax patterns
         /// if no such links found returns None
         fn find_referenced_links(
-            value: &mut String,
+            value: &str,
             _doc: &ftd::p2::TDoc,
             _line_number: usize,
         ) -> ftd::p1::Result<Option<String>> {
@@ -634,30 +634,30 @@ impl InterpreterState {
             Ok(None)
         }
 
-        /// finds link matches from s1 pattern and returns the id associated with the link
+        /// finds the first link match from s1 pattern and returns the id associated with the link
         ///
         /// Syntax 1 = `[<some-link-text>]`(id: <some-id>)
-        fn find_link_from_s1(value: &mut String) -> Option<String> {
+        fn find_link_from_s1(value: &str) -> Option<String> {
             // Syntax 1 = [id`](id: <id-to-link>)
-            for cap in ftd::regex::S1.captures_iter(value) {
-                let captured_id = ftd::regex::capture_group_by_index(&cap, 2).trim();
+            if let Some(capture) = ftd::regex::S1.captures_iter(value).next() {
+                let captured_id = ftd::regex::capture_group_by_index(&capture, 2).trim();
                 return Some(captured_id.to_string());
             }
 
-            return None;
+            None
         }
 
-        /// finds link matches from s2 pattern and returns the id associated with the link
+        /// finds the first link match from s2 pattern and returns the id associated with the link
         ///
         /// Syntax 2 = {id: <some-id>}
-        fn find_link_from_s2(value: &mut String) -> Option<String> {
+        fn find_link_from_s2(value: &str) -> Option<String> {
             // Syntax 2 = {<id-to-link>}];
-            for cap in ftd::regex::S2.captures_iter(value) {
-                let captured_id = ftd::regex::capture_group_by_index(&cap, 1).trim();
+            if let Some(capture) = ftd::regex::S2.captures_iter(value).next() {
+                let captured_id = ftd::regex::capture_group_by_index(&capture, 1).trim();
                 return Some(captured_id.to_string());
             }
 
-            return None;
+            None
         }
     }
 
@@ -747,7 +747,7 @@ impl InterpreterState {
                         ftd::TextSource::Body => {
                             if let Some(ref mut body) = current_processing_section.body {
                                 let (replace_status, replaced_text): (bool, Option<String>) =
-                                    replace_single_link(&mut body.1, id, &link);
+                                    replace_single_link(&body.1, id, &link);
                                 if replace_status {
                                     if let Some(replaced_body) = replaced_text {
                                         body.1 = replaced_body;
@@ -795,7 +795,7 @@ impl InterpreterState {
                                         let (replace_status, replaced_text): (
                                             bool,
                                             Option<String>,
-                                        ) = replace_single_link(&mut body.1, id, &link);
+                                        ) = replace_single_link(&body.1, id, &link);
                                         if replace_status {
                                             if let Some(replaced_body) = replaced_text {
                                                 body.1 = replaced_body;
@@ -827,11 +827,7 @@ impl InterpreterState {
         /// replaces single instance of link syntax with the actual link
         /// given its associated id and returns (true, Some(replaced-value))
         /// if no such link found returns (false, None)
-        fn replace_single_link(
-            value: &mut String,
-            target_id: &str,
-            link: &str,
-        ) -> (bool, Option<String>) {
+        fn replace_single_link(value: &str, target_id: &str, link: &str) -> (bool, Option<String>) {
             if let Some(val) = find_and_replace_single_s1_instance(value, target_id, link) {
                 return (true, Some(val));
             }
@@ -843,7 +839,7 @@ impl InterpreterState {
             return (false, None);
 
             fn find_and_replace_single_s1_instance(
-                value: &mut String,
+                value: &str,
                 target_id: &str,
                 link: &str,
             ) -> Option<String> {
@@ -864,7 +860,7 @@ impl InterpreterState {
             }
 
             fn find_and_replace_single_s2_instance(
-                value: &mut String,
+                value: &str,
                 target_id: &str,
                 link: &str,
             ) -> Option<String> {
@@ -1133,27 +1129,8 @@ impl ParsedDocument {
             doc_id: &str,
             line_number: usize,
         ) -> ftd::p1::Result<()> {
-            // Syntax 1 = [id`](id: someId)
-            // Refer someId from linked text <id`>
-            // replaced link = [id`]([document-id]#[slugified(someId)])
-            const SYNTAX_1_PATTERN: &str = r"(?x) # Enabling Comment Mode
-            \[(?P<linked_text>[\sa-zA-Z\d]+)\] # Linked Text Capture Group <linked_text>
-            \(\s*id\s*:(?P<actual_id>[\sa-zA-Z\d]+)\) # Referred Id Capture Group <actual_id>";
-
-            // Syntax 2 = {id: someId}
-            // Refer someId with the same linked text i.e <someId>
-            // replaced link = [someId]([document-id]#[slugified(someId)])
-            const SYNTAX_2_PATTERN: &str = r"(?x) # Enabling comment mode
-            \{\s* # Here Linked Text is same as Referred Id
-            (?P<actual_id>[\sa-zA-Z\d]+)\} # Referred Id Capture Group <actual_id>";
-
-            lazy_static::lazy_static!(
-                static ref S1: regex::Regex = regex::Regex::new(SYNTAX_1_PATTERN).unwrap();
-                static ref S2: regex::Regex = regex::Regex::new(SYNTAX_2_PATTERN).unwrap();
-            );
-
-            replace_text_for_s1_pattern(text, global_ids, doc_id, line_number, &S1)?;
-            replace_text_for_s2_pattern(text, global_ids, doc_id, line_number, &S2)?;
+            replace_text_for_s1_pattern(text, global_ids, doc_id, line_number)?;
+            replace_text_for_s2_pattern(text, global_ids, doc_id, line_number)?;
 
             Ok(())
         }
@@ -1170,12 +1147,11 @@ impl ParsedDocument {
             global_ids: &std::collections::HashMap<String, String>,
             doc_id: &str,
             line_number: usize,
-            s1: &regex::Regex,
         ) -> ftd::p1::Result<()> {
             // Syntax 1 = [id`](id: <id-to-link>)
             // G0 = Original capture, G1 = Linked Text, G2 = Actual Id
             let mut pattern_with_replacement = vec![];
-            for cap in s1.captures_iter(text) {
+            for cap in ftd::regex::S1.captures_iter(text) {
                 let linked_text = capture_group_at(&cap, 1).trim();
                 let captured_id = capture_group_at(&cap, 2);
                 let match_pattern = capture_group_at(&cap, 0);
@@ -1223,12 +1199,11 @@ impl ParsedDocument {
             global_ids: &std::collections::HashMap<String, String>,
             doc_id: &str,
             line_number: usize,
-            s2: &regex::Regex,
         ) -> ftd::p1::Result<()> {
             // Syntax 2 = {<id-to-link>}
             // G0 = Original capture, G1 = Actual Id
             let mut pattern_with_replacement = vec![];
-            for cap in s2.captures_iter(text) {
+            for cap in ftd::regex::S2.captures_iter(text) {
                 let captured_id = capture_group_at(&cap, 1);
                 let linked_text = captured_id.trim();
                 let match_pattern = capture_group_at(&cap, 0);
