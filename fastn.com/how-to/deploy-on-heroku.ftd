@@ -1,6 +1,6 @@
 -- import: fpm.dev/assets
 
--- ft.page: Deploy FPM package on heroku
+-- ft.page: Deploy FPM Package On Heroku
 
 -- ft.h1: 1️⃣ Create Heroku APP
 
@@ -9,7 +9,7 @@ new account.
 
 -- ft.h2: ▶️ Install `heroku` CLI
 
-According to your platform install `heroku` CLI.
+According to your platform(MacOS, Debian, Linux, etc..) install `heroku` CLI.
 
 -- ft.h3: Install `heroku` CLI on MacOS
 
@@ -42,7 +42,7 @@ lang: sh
 heroku/7.0.0 (darwin-x64) node-v8.0.0
 
 
--- ft.h2: ▶️ Get Started with the Heroku CLI
+-- ft.h2: ▶️ Heroku CLI Login
 
 After you install the CLI, run the `heroku login` command. Enter any key to go to
 your web browser to complete login. The CLI then logs you in automatically.
@@ -69,8 +69,6 @@ For more details: Visit [Get Started with the Heroku CLI](https://devcenter.hero
 
 In the below example, I have used `abrark-app` as heroku `app-name`. You can
 use any name but it should be unique to heroku apps.
-
-For the below example it will create domain like `http://abrark-app.herokuapp.com`
 
 -- ft.code:
 lang: sh
@@ -109,7 +107,7 @@ Save this token for later use.
 For more details: Visit [How should I generate an API key that allows me to use
 the Heroku Platform API?](https://help.heroku.com/PBGP6IDE/how-should-i-generate-an-api-key-that-allows-me-to-use-the-heroku-platform-api)
 
--- ft.h1: 2️⃣ Create FPM package repository using github template
+-- ft.h1: 2️⃣ Create FPM Package Repository Using Github Template
 
 -- ft.h2: ▶️ Creating a repository from a template
 
@@ -125,10 +123,10 @@ from template.`
 
 For more details: Visit [Creating a repository from a template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template)
 
--- ft.h2: ▶️ Update github workflow
+-- ft.h2: ▶️ Update GitHub Workflow
 
 - In repository, Go to [`.github/workflows/refresh-content-on-heroku.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/refresh-content-on-heroku.yml#L16-L18)
-file and replace `<heroku-app-name>` with heroku app name. In our case it's
+file and replace `<heroku-app-name>` with heroku app name. In our case,
 `<heroku-app-name>` get replaced with `abrark-app`.
 
 -- ft.code: `refresh-content-on-heroku.yml`
@@ -144,7 +142,7 @@ lang: diff
 -- ft.markdown:
 
 - Same as above, Go to [`.github/workflows/update-fpm-binary.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/update-fpm-binary.yml#L25)
-file and replace `<heroku-app-name>` with heroku app name. In our case it's
+file and replace `<heroku-app-name>` with heroku app name. In our case,
 `<heroku-app-name>` get replaced with `abrark-app`.
 
 -- ft.code: `update-fpm-binary.yml`
