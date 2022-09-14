@@ -349,9 +349,7 @@ pub fn parse_file_for_global_ids(data: &str) -> Vec<(String, usize)> {
             register_id_for_last_section = !ignore_id;
         }
 
-        // In cases, where youtube component is used
-        // within an invoked section/ container as a subsection
-        // or when there are uncommented subsections
+        // In cases, when there are uncommented subsections
         // under commented section then ignore their id's
         if ftd::identifier::is_subsection(line) && register_id_for_last_section {
             ignore_id = ignore_next_id(line);
@@ -388,7 +386,7 @@ pub fn parse_file_for_global_ids(data: &str) -> Vec<(String, usize)> {
             .split_once(ftd::identifier::KV_SEPERATOR)
             .map(|s| s.0);
         if let Some(section) = before_caption {
-            let mut parts = section.splitn(2, ' ');
+            let mut parts = section.splitn(2, ftd::identifier::WHITESPACE);
 
             // in case of component definition, section-kind will be mandatory
             // -- <optional: section-kind> section-name: <section-caption>
