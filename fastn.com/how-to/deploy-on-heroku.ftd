@@ -1,4 +1,63 @@
--- ds.page: Deploy FPM package on heroku
+-- ft.page: Deploy FPM package on heroku
+
+-- ft.h1: Create Heroku APP
+
+First login to https://www.heroku.com/ and create a new account if you do not
+have it already. Then create a heroku APP.
+
+-- ft.h2: Install `heroku` CLI
+
+According to your platform install `heroku` CLI.
+
+-- ft.h3: Install `heroku` CLI on MacOS
+
+Run the below command to install heroku cli on your machine, make sure you have
+already installed [brew](https://brew.sh).
+
+-- ft.code:
+lang: sh
+
+`brew tap heroku/brew && brew install heroku`
+
+-- markdown:
+
+For more [click](https://devcenter.heroku.com/articles/heroku-cli).
+
+/-- ft.h3: Install `heroku` CLI on Ubuntu
+
+TODO:
+
+/-- ft.h3: Install `heroku` CLI on Windows
+
+TODO:
+
+-- ft.h2: Verify Your Heroku Installation
+
+-- ft.code:
+lang: sh
+
+heroku --version
+// heroku/7.0.0 (darwin-x64) node-v8.0.0
+
+
+-- ft.h2: Create Heroku APP Using `heroku` CLI
+
+In the below example, I have used `abrark-app` as heroku `app-name`. You can
+use any name but it should be unique to heroku apps.
+
+For the below example it will create domain like `http://abrark-app.herokuapp.com`
+
+-- ft.code:
+lang: sh
+
+heroku create -a abrark-app
+
+-- markdown:
+
+- login to heroku
+- install heroku cli on mac/ubuntu
+- creating heroku app on heroku.com
+
 
 - Heroku app setup
 - use `fpm-template` github template for fpm package which id to be deployed
