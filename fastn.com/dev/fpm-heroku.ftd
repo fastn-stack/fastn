@@ -1,5 +1,15 @@
 -- ft.page: Deploy FPM on Heroku
 
+## Steps:
+- Setup Heroku `abrark-app` with `fpm-heroku`
+- FPM Template
+    - Added Workflows
+      - Update FPM binary on Heroku
+      - Update ftd content on Heroku
+- What to in these templates
+- Setup HEROKU_TOKEN in your github repositories secret key
+- How to run GitHub actions
+
 For Public:
 - Deploy Rust Binary On Heroku
 - Deploy FPM on Heroku
