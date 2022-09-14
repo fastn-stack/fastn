@@ -93,7 +93,7 @@ features = ["http1", "server"]
 #
 # Once we are closer to release we will stop using this and adopot semver.
 git = "https://github.com/FifthTry/ftd"
-rev = "ccbe863"
+rev = "7c702f9"
 
 # If you are testing fpm against local ftd, you can keep ftd and fpm checked out in
 # same folder and uncomment the next `path` line to use local ftd.
@@ -101,7 +101,7 @@ rev = "ccbe863"
 # Note: you do not have to comment out the git/rev above, Cargo uses `path` with
 # higher priority over them if `path` is provided.
 #
-# path = "../ftd"
+# path = "../ftd#2"
 
 
 
