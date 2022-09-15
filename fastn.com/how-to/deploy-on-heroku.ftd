@@ -27,5 +27,31 @@ width: fill
 -- ft.h1: Deploy on Heroku
 
 The above repository that you have created using `fpm-template`, it should
-contain `Deploy to Heroku` button in the project `README` file.
+contain `Deploy to Heroku` button in the project `README` file. By clicking on
+this button, you should be landed to `heroku.com`.
 
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-6.png
+width: fill
+
+
+-- ft.markdown:
+
+After click on the `Deploy on Heroku` button you will be landed to below page.
+Fill the `App name` which should be unique to heroku apps and click on
+`Deploy app`. I have used `fpm-heroku-app` as `App name`.
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-7.png
+width: fill
+
+After filling the `App name` and clicking on the `Deploy app`, you should see
+the below output(build logs) and `Your app was successfully deployed`.
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-8.png
+width: fill
+
+Now click on `View` button, and your FPM App is ready with heroku.
+
+Yay!!! 💃
