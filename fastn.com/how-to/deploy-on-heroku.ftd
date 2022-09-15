@@ -52,6 +52,17 @@ the below output(build logs) and `Your app was successfully deployed`.
 src: $assets.files.static.deploy-on-heroku-8.png
 width: fill
 
-Now click on `View` button, and your FPM App is ready with heroku.
+Now click on `View` button, and your FPM App is ready with Heroku.
 
 Yay!!! 💃
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-9.png
+width: fill
+
+-- ft.h1: Contact Us
+
+If you are getting any issue while deploying or with the above process, feel
+free to contact us on [Discord](https://discord.gg/CPNtd3TF).
+
+If you think it worked well, Please starred [FPM](https://github.com/FifthTry/fpm).
