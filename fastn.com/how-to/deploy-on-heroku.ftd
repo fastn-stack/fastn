@@ -24,3 +24,8 @@ Note: Wait till the `Rename the project from template` workflow executed success
 src: $assets.files.static.deploy-on-heroku-3.png
 width: fill
 
+-- ft.h1: Deploy on Heroku
+
+The above repository that you have created using `fpm-template`, it should
+contain `Deploy to Heroku` button in the project `README` file.
+
