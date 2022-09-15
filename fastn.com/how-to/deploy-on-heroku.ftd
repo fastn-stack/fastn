@@ -130,7 +130,33 @@ lang: diff
 Before doing that make sure you have setup the Heroku Auth token as described
 above.
 
+Now open your GitHub Repository, click to `Actions`, click on
+`Update Content On Heroku`, click on `Run workflow` dropdown, and then click on
+`Run workflow` button as in the below image. By doing this `fpm` will
+automatically fetch your new content from your GitHub repository.
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-13.png
+width: fill
+
+
 -- ft.h2: How to Update `fpm` Binary on Heroku
+
+Before doing that make sure you have setup the Heroku Auth token as described
+above.
+
+Now open your GitHub Repository, click to `Actions`, click on
+`Deploy FPM on Heroku`, click on `Run workflow` dropdown, and then click on
+`Run Workflow` button as in the below image. By doing this `fpm` will
+automatically updated on Heroku.
+
+Note: You may have to check Heroku `dyno-id`, this you can check with in your
+Heroku application, by default it uses `web.1` if you have not changed it.
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-14.png
+width: fill
+
 
 -- ft.h1: Contact Us
 
