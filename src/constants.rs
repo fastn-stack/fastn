@@ -57,7 +57,7 @@ pub mod identifier {
         doc_id: &str,
         line_number: usize,
     ) -> ftd::p1::Result<(Option<String>, Option<String>)> {
-        // Trim any section/subsection identifier fron the beginning of the line
+        // Trim any section/subsection identifier from the beginning of the line
         let line = trim_section_subsection_identifier(line);
 
         if !line.contains(KV_SEPERATOR) {
@@ -88,10 +88,10 @@ pub mod identifier {
 // Regex pattern constants
 pub mod regex {
 
-    // Backreferences and arbitrary lookahead/lookbehind assertions
+    // Back references and arbitrary lookahead/lookbehind assertions
     // are not provided by rust regex so avoid using them,
     // instead do post process the matches to discard all unnecessary matches
-    // or maybe reformulate the regex to avoid any arbitary
+    // or reformulate the regex to avoid any arbitrary
     // lookahead/lookbehind assertions
     // Refer issue - https://github.com/rust-lang/regex/issues/127
 
@@ -129,7 +129,7 @@ pub mod regex {
         return capture.get(group_index).map_or("", |c| c.as_str());
     }
 
-    /// fetches the capture graup by group name and returns it as &str
+    /// fetches the capture group by group name and returns it as &str
     pub fn capture_group_by_name<'a>(capture: &'a regex::Captures, group_name: &str) -> &'a str {
         return capture.name(group_name).map_or("", |c| c.as_str());
     }
