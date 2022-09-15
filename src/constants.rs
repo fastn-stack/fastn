@@ -88,19 +88,26 @@ pub mod identifier {
 // Regex pattern constants
 pub mod regex {
 
+    // Backreferences and arbitrary lookahead/lookbehind assertions
+    // are not provided by rust regex so avoid using them,
+    // instead do post process the matches to discard all unnecessary matches
+    // or maybe reformulate the regex to avoid any arbitary
+    // lookahead/lookbehind assertions
+    // Refer issue - https://github.com/rust-lang/regex/issues/127
+
     /// Linking Syntax 1: `[<linked-text>]`(id: `<id>`)
-    pub const LINK_SYNTAX_1: &str = r"(?x) # Enabling Comment Mode
-    (?<!\\) # Negative lookbehind for any '\'
-    \[(?P<linked_text>[-\s\w]+)\] # Linked Text Capture Group <linked_text>
-    \(\s*id\s*:(?P<actual_id>[-\s\w]+)\) # Referred Id Capture Group <actual_id>";
+    pub const LINK_SYNTAX_1: &str = r"(?x) # Enabling Comment Mode {GROUP 0 = entire match}
+    (?P<prefix>.?) # Character Prefix Group <prefix> {GROUP 1}
+    \[(?P<linked_text>[-\s\w]+)\] # Linked Text Capture Group <linked_text> {GROUP 2}
+    \(\s*id\s*:(?P<actual_id>[-\s\w]+)\) # Referred Id Capture Group <actual_id> {GROUP 3}";
 
     /// Linking Syntax 2: `[<id>]`
     ///
     /// Linked text is same as `<id>` in this case
-    pub const LINK_SYNTAX_2: &str = r"(?x) # Enabling comment mode
-    (?<!\\) # Negative lookbehind for any '\'
-    \[(?P<actual_id>[-\s\w]+)\] # Referred Id Capture Group <actual_id>
-    (?!(\(.+\#.+\))) # Negatve lookahead for any already existing internal link";
+    pub const LINK_SYNTAX_2: &str = r"(?x) # Enabling comment mode {GROUP 0 = entire match}
+    (?P<prefix>.?) # Character Prefix Group <prefix> {GROUP 1}
+    \[(?P<actual_id>[-\s\w]+)\] # Referred Id Capture Group <actual_id> {GROUP 2}
+    (?P<ahead>(\(.+\))?) # Bracket Group <ahead> if any {GROUP 3}";
 
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
     pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-\s\w]*$";
@@ -118,7 +125,17 @@ pub mod regex {
     }
 
     /// fetches capture group by group index and returns it as &str
+    /// if no match for the specified group index is found then it returns None
     pub fn capture_group_by_index<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
         return capture.get(group_index).map_or("", |c| c.as_str());
+    }
+
+    /// fetches the capture graup by group name and returns it as &str
+    /// if no match for the specified group name is found then it returns None
+    pub fn capture_group_by_name<'a>(
+        capture: &'a regex::Captures,
+        group_name: &str,
+    ) -> Option<&'a str> {
+        return capture.name(group_name).map_or(None, |c| Some(c.as_str()));
     }
 }

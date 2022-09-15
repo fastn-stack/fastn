@@ -552,8 +552,8 @@ impl InterpreterState {
     // return ftd::p1::Result<Option<(id: String, source: Body,caption, header)>>
     // TODO: Need to avoid double usage of regex while resolving and replacing for links
 
-    /// returns id of the first occurence of linked syntax if found from any text source
-    /// text-source inclues caption, header, body of the section
+    /// returns id of the first occurrence of linked syntax if found from any text source
+    /// text-source includes caption, header, body of the section
     fn resolve_global_ids(
         section: &mut ftd::p1::Section,
         doc: &ftd::p2::TDoc,
@@ -636,11 +636,25 @@ impl InterpreterState {
 
         /// finds the first link match from s1 pattern and returns the id associated with the link
         ///
-        /// Syntax 1 = `[<some-link-text>]`(id: <some-id>)
+        /// Syntax 1 = `[<linked-text>]`(id: <id>)
         fn find_link_from_s1(value: &str) -> Option<String> {
-            // Syntax 1 = [id`](id: <id-to-link>)
-            if let Some(capture) = ftd::regex::S1.captures_iter(value).next() {
-                let captured_id = ftd::regex::capture_group_by_index(&capture, 2).trim();
+            // Syntax 1 = [<linked-text>](id: <id>)
+            // Character Prefix Group <prefix> {GROUP 1}
+            // Linked Text Capture Group <linked_text> {GROUP 2}
+            // Referred Id Capture Group <actual_id> {GROUP 3}
+            for capture in ftd::regex::S1.captures_iter(value) {
+                // check if link is escaped ignore if true
+                println!("S1 match 1");
+                if let Some(prefix) = ftd::regex::capture_group_by_name(&capture, "prefix") {
+                    dbg!(prefix);
+                    if prefix.eq(r"\") {
+                        println!("Ignored !!");
+                        continue;
+                    }
+                }
+
+                let captured_id = ftd::regex::capture_group_by_index(&capture, 3).trim();
+                dbg!(captured_id);
                 return Some(captured_id.to_string());
             }
 
@@ -649,11 +663,32 @@ impl InterpreterState {
 
         /// finds the first link match from s2 pattern and returns the id associated with the link
         ///
-        /// Syntax 2 = {id: <some-id>}
+        /// Syntax 2 = `[id: <id>]`
         fn find_link_from_s2(value: &str) -> Option<String> {
-            // Syntax 2 = {<id-to-link>}];
-            if let Some(capture) = ftd::regex::S2.captures_iter(value).next() {
-                let captured_id = ftd::regex::capture_group_by_index(&capture, 1).trim();
+            // Syntax 2 = [<id>];
+            // Character Prefix Group <prefix> {GROUP 1}
+            // Referred Id Capture Group <actual_id> {GROUP 2}
+            // Bracket Group <ahead> if any {GROUP 3}
+            for capture in ftd::regex::S2.captures_iter(value) {
+                // check if link is escaped ignore if true
+                println!("S2 match 1");
+                if let Some(prefix) = ftd::regex::capture_group_by_name(&capture, "prefix") {
+                    dbg!(prefix);
+                    if prefix.eq(r"\") {
+                        println!("Ignored !!");
+                        continue;
+                    }
+                }
+                // check if internal link exists ahead in the form (<document-id>#<slugified-id>)
+                if let Some(ahead) = ftd::regex::capture_group_by_name(&capture, "ahead") {
+                    dbg!(ahead);
+                    if ahead.contains("#") {
+                        println!("Ignored !!");
+                        continue;
+                    }
+                }
+                let captured_id = ftd::regex::capture_group_by_index(&capture, 2).trim();
+                dbg!(captured_id);
                 return Some(captured_id.to_string());
             }
 
@@ -843,14 +878,35 @@ impl InterpreterState {
                 target_id: &str,
                 link: &str,
             ) -> Option<String> {
-                // Syntax 1 = [id`](id: <id-to-link>)
+                // Syntax 1 = [<linked-text>](id: <id>)
+                // Character Prefix Group <prefix> {GROUP 1}
+                // Linked Text Capture Group <linked_text> {GROUP 2}
+                // Referred Id Capture Group <actual_id> {GROUP 3}
                 for cap in ftd::regex::S1.captures_iter(value) {
-                    let linked_text = ftd::regex::capture_group_by_index(&cap, 1);
-                    let captured_id = ftd::regex::capture_group_by_index(&cap, 2).trim();
+                    // check if link is escaped ignore link if true
+                    println!("S1 match while replacing");
+                    if let Some(prefix) = ftd::regex::capture_group_by_name(&cap, "prefix") {
+                        dbg!(prefix);
+                        if prefix.eq(r"\") {
+                            println!("ignored!!");
+                            continue;
+                        }
+                    }
+
+                    let linked_text = ftd::regex::capture_group_by_index(&cap, 2);
+                    let captured_id = ftd::regex::capture_group_by_index(&cap, 3).trim();
+                    dbg!(captured_id);
                     let match_pattern = ftd::regex::capture_group_by_index(&cap, 0);
 
                     if captured_id.eq(target_id) {
-                        let replacement = format!("[{}]({})", linked_text, link);
+                        println!("Target Match found!!");
+                        let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
+                        let mut replacement = format!("[{}]({})", linked_text, link);
+                        if let Some(pre) = prefix {
+                            replacement = format!("{}{}", pre, replacement);
+                        }
+                        dbg!(&replacement);
+                        dbg!(match_pattern);
                         let replaced_text = value.replacen(match_pattern, replacement.as_str(), 1);
                         return Some(replaced_text);
                     }
@@ -865,12 +921,41 @@ impl InterpreterState {
                 link: &str,
             ) -> Option<String> {
                 // Syntax 2 = {<id-to-link>}
+                // Character Prefix Group <prefix> {GROUP 1}
+                // Referred Id Capture Group <actual_id> {GROUP 2}
+                // Bracket Group <ahead> if any {GROUP 3}
                 for cap in ftd::regex::S2.captures_iter(value) {
-                    let captured_id = ftd::regex::capture_group_by_index(&cap, 1).trim();
+                    // check if link is escaped ignore if true
+                    println!("S2 match while replacing");
+                    if let Some(prefix) = ftd::regex::capture_group_by_name(&cap, "prefix") {
+                        dbg!(prefix);
+                        if prefix.eq(r"\") {
+                            println!("ignored!!");
+                            continue;
+                        }
+                    }
+
+                    // check if internal link exists ahead in the form (<document-id>#<slugified-id>)
+                    if let Some(ahead) = ftd::regex::capture_group_by_name(&cap, "ahead") {
+                        dbg!(ahead);
+                        if ahead.contains("#") {
+                            continue;
+                        }
+                    }
+
+                    let captured_id = ftd::regex::capture_group_by_index(&cap, 2).trim();
+                    dbg!(captured_id);
                     let match_pattern = ftd::regex::capture_group_by_index(&cap, 0);
 
                     if captured_id.eq(target_id) {
-                        let replacement = format!("[{}]({})", target_id, link);
+                        println!("Target Match found!!");
+                        let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
+                        let mut replacement = format!("[{}]({})", target_id, link);
+                        if let Some(pre) = prefix {
+                            replacement = format!("{}{}", pre, replacement);
+                        }
+                        dbg!(&replacement);
+                        dbg!(match_pattern);
                         let replaced_text = value.replacen(match_pattern, replacement.as_str(), 1);
                         return Some(replaced_text);
                     }

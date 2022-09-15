@@ -14,21 +14,67 @@
 
 ;; Check id -> [capture-id, link, textSource, is_from_section: bool]
 
+-- ftd.text cap:
+caption from-caption:
+text: $from-caption
+padding-vertical: 5
+
+-- ftd.text header:
+string header:
+text: $header
+padding-vertical: 5
+
+-- ftd.text body:
+body body:
+text: $body
+padding-vertical: 5
+
 -- ftd.text A:
 caption cap:
 string header:
 body body:
-text: $header
+text: $cap
 
 -- ftd.row:
 padding-vertical: 10
 
---- A: \[from subsection caption](id: sscp)
+--- A: [sscp]
 header: [from subsection header](id: ssh)
 
 [from subsection body](id: ssb)
 
--- A: [from section caption](id: scp)
-header: [from section header](id: sh)
+--- cap: [link ssc](id: sscp)
 
-[from section body](id: sb)
+--- header:
+header: [link ssh](id: ssh)
+
+--- body:
+
+[link ssb](id: ssb)
+
+--- ftd.text:
+
+Multiple links check for subsection text source
+
+Link type 1: [link a](id: a)
+Link type 2: [b]
+Link type 1 escaped: \[link c](id: c)
+Link type 2 escaped: \[d]
+
+-- cap: [link sc](id: scp)
+
+-- header:
+header: [link sh](id: sh)
+
+-- body:
+
+[link a](id: a)
+
+-- ftd.text:
+
+Multiple links check for subsection text source
+
+Link type 1: [link a](id: a)
+Link type 2: [b]
+Link type 1 escaped: \[link c](id: c)
+Link type 2 escaped: \[d]
