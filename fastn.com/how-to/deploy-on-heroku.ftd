@@ -73,17 +73,29 @@ provided token to GitHub repository.
 -- ft.h2: Generate Auth Token On Heroku
 
 To generate Auth token go to Heroku [Account Settings](https://dashboard.heroku.com/account),
-scroll down and click on `Regenerate API Key`.
+scroll down and click on `Regenerate API Key`. After clicking on this it will
+give a token.
 
 -- ft.image:
 src: $assets.files.static.deploy-on-heroku-10.png
 width: fill
 
 
--- ft.h2: Set Heroku Auth Token to GitHub
+-- ft.h2: Set Heroku Auth Token to GitHub Repository
 
-Copy the provided key and open the your GitHub Repository settings and set it with
-HEROKU_TOKEN.
+Copy the Heroku provided token, open the your GitHub repository settings click
+on `Secrets` on the left, then click on `Actions`, then click on
+`New Repository secret`, set the `HEROKU_TOKEN` as `Secret Name` and paste
+Heroku Auth token in the `Secret` and click on the `Add secret` button.
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-11.png
+width: fill
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-12.png
+width: fill
+
 
 -- ft.h2: How To Refresh Content On Heroku
 
