@@ -88,18 +88,22 @@ pub mod identifier {
 // Regex pattern constants
 pub mod regex {
 
-    /// Linking Syntax 1: `[<linked-text>]`(id: <some-id>)
+    /// Linking Syntax 1: `[<linked-text>]`(id: `<id>`)
     pub const LINK_SYNTAX_1: &str = r"(?x) # Enabling Comment Mode
-    \[(?P<linked_text>[\sa-zA-Z\d]+)\] # Linked Text Capture Group <linked_text>
-    \(\s*id\s*:(?P<actual_id>[\sa-zA-Z\d]+)\) # Referred Id Capture Group <actual_id>";
+    (?<!\\) # Negative lookbehind for any '\'
+    \[(?P<linked_text>[-\s\w]+)\] # Linked Text Capture Group <linked_text>
+    \(\s*id\s*:(?P<actual_id>[-\s\w]+)\) # Referred Id Capture Group <actual_id>";
 
-    /// Linking Syntax 2: {<some-id>}
+    /// Linking Syntax 2: `[<id>]`
+    ///
+    /// Linked text is same as `<id>` in this case
     pub const LINK_SYNTAX_2: &str = r"(?x) # Enabling comment mode
-    \{\s* # Here Linked Text is same as Referred Id
-    (?P<actual_id>[\sa-zA-Z\d]+)\} # Referred Id Capture Group <actual_id>";
+    (?<!\\) # Negative lookbehind for any '\'
+    \[(?P<actual_id>[-\s\w]+)\] # Referred Id Capture Group <actual_id>
+    (?!(\(.+\#.+\))) # Negatve lookahead for any already existing internal link";
 
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
-    pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-_\sA-Za-z\d]*$";
+    pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-\s\w]*$";
 
     /// file extension: \[.\]<alphanumeric string>$
     /// to cover all file extensions with file names
