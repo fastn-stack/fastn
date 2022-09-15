@@ -738,9 +738,7 @@ impl InterpreterState {
         // match for the given id and replace it with the url received
 
         // TODO: need to do code refactor
-        // possible refactor would be replaced in-place
-        // within the replace_single_link() by passing mut
-        // reference of all caption, body, header.
+        // possible future refactor - unknown
         if let Some(current_processing_document) = self.document_stack.last_mut() {
             if let Some(current_processing_section) =
                 current_processing_document.get_last_mut_section()
@@ -749,34 +747,17 @@ impl InterpreterState {
                     true => match source {
                         ftd::TextSource::Caption => {
                             if let Some(ref mut cap) = current_processing_section.caption {
-                                let (replace_status, replaced_caption): (bool, Option<String>) =
-                                    replace_single_link(cap, id, &link);
-                                if replace_status {
-                                    current_processing_section.caption = replaced_caption;
-                                }
+                                replace_single_link(cap, id, &link);
                             }
                         }
                         ftd::TextSource::Header => {
                             for (_, _, v) in current_processing_section.header.0.iter_mut() {
-                                let (replace_status, replaced_text): (bool, Option<String>) =
-                                    replace_single_link(v, id, &link);
-                                if replace_status {
-                                    if let Some(replaced_header_value) = replaced_text {
-                                        *v = replaced_header_value;
-                                        break;
-                                    }
-                                }
+                                replace_single_link(v, id, &link);
                             }
                         }
                         ftd::TextSource::Body => {
                             if let Some(ref mut body) = current_processing_section.body {
-                                let (replace_status, replaced_text): (bool, Option<String>) =
-                                    replace_single_link(&mut body.1, id, &link);
-                                if replace_status {
-                                    if let Some(replaced_body) = replaced_text {
-                                        body.1 = replaced_body;
-                                    }
-                                }
+                                replace_single_link(&mut body.1, id, &link);
                             }
                         }
                         _ => {
@@ -789,43 +770,17 @@ impl InterpreterState {
                             match source {
                                 ftd::TextSource::Caption => {
                                     if let Some(ref mut cap) = subsection.caption {
-                                        let (replace_status, replaced_caption): (
-                                            bool,
-                                            Option<String>,
-                                        ) = replace_single_link(cap, id, &link);
-                                        if replace_status {
-                                            subsection.caption = replaced_caption;
-                                            is_replaced = true;
-                                        }
+                                        replace_single_link(cap, id, &link);
                                     }
                                 }
                                 ftd::TextSource::Header => {
                                     for (_, _, v) in subsection.header.0.iter_mut() {
-                                        let (replace_status, replaced_text): (
-                                            bool,
-                                            Option<String>,
-                                        ) = replace_single_link(v, id, &link);
-                                        if replace_status {
-                                            if let Some(replaced_header_value) = replaced_text {
-                                                *v = replaced_header_value;
-                                                is_replaced = true;
-                                                break;
-                                            }
-                                        }
+                                        replace_single_link(v, id, &link);
                                     }
                                 }
                                 ftd::TextSource::Body => {
                                     if let Some(ref mut body) = subsection.body {
-                                        let (replace_status, replaced_text): (
-                                            bool,
-                                            Option<String>,
-                                        ) = replace_single_link(&mut body.1, id, &link);
-                                        if replace_status {
-                                            if let Some(replaced_body) = replaced_text {
-                                                body.1 = replaced_body;
-                                                is_replaced = true;
-                                            }
-                                        }
+                                        replace_single_link(&mut body.1, id, &link);
                                     }
                                 }
                                 _ => {
@@ -845,32 +800,19 @@ impl InterpreterState {
             }
         }
 
-        // self.document_stack[doc_index].done_processing_terms();
         return self.continue_();
 
         /// replaces single instance of link syntax with the actual link
-        /// given its associated id and returns (true, Some(replaced-value))
-        /// if no such link found returns (false, None)
-        fn replace_single_link(
-            value: &mut String,
-            target_id: &str,
-            link: &str,
-        ) -> (bool, Option<String>) {
-            if let Some(val) = find_and_replace_single_s1_instance(value, target_id, link) {
-                return (true, Some(val));
-            }
-
-            if let Some(val) = find_and_replace_single_s2_instance(value, target_id, link) {
-                return (true, Some(val));
-            }
-
-            return (false, None);
+        /// given its associated id
+        fn replace_single_link(value: &mut String, target_id: &str, link: &str) {
+            find_and_replace_single_s1_instance(value, target_id, link);
+            find_and_replace_single_s2_instance(value, target_id, link);
 
             fn find_and_replace_single_s1_instance(
                 value: &mut String,
                 target_id: &str,
                 link: &str,
-            ) -> Option<String> {
+            ) {
                 // Syntax 1 = [<linked-text>](id: <id>)
                 // Character Prefix Group <prefix> {GROUP 1}
                 // Linked Text Capture Group <linked_text> {GROUP 2}
@@ -896,24 +838,21 @@ impl InterpreterState {
                         let match_start_index = cap.get(0).unwrap().start();
                         let match_length = matched_pattern.len();
 
-                        let replaced_text = format!(
+                        *value = format!(
                             "{}{}{}",
                             &value[..match_start_index],
                             replacement,
                             &value[match_start_index + match_length..]
                         );
-                        return Some(replaced_text);
                     }
                 }
-
-                None
             }
 
             fn find_and_replace_single_s2_instance(
-                value: &str,
+                value: &mut String,
                 target_id: &str,
                 link: &str,
-            ) -> Option<String> {
+            ) {
                 // Syntax 2 = {<id-to-link>}
                 // Character Prefix Group <prefix> {GROUP 1}
                 // Referred Id Capture Group <actual_id> {GROUP 2}
@@ -946,18 +885,14 @@ impl InterpreterState {
                         let match_start_index = cap.get(0).unwrap().start();
                         let match_length = matched_pattern.len();
 
-                        let replaced_text = format!(
+                        *value = format!(
                             "{}{}{}",
                             &value[..match_start_index],
                             replacement,
                             &value[match_start_index + match_length..]
                         );
-                        // let replaced_text = value.replacen(match_pattern, replacement.as_str(), 1);
-                        return Some(replaced_text);
                     }
                 }
-
-                None
             }
         }
     }
