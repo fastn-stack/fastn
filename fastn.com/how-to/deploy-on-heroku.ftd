@@ -60,6 +60,35 @@ Yay!!! 💃
 src: $assets.files.static.deploy-on-heroku-9.png
 width: fill
 
+
+-- ft.h1: How To Redeploy FPM Package
+
+Till now we have seen, How to deploy FPM application on Heroku. In this part
+I will show you how to update content on Heroku.
+
+So now we have to update content on Heroku, to accomplish we are using GitHub
+actions. So to call Heroku APIs, it provides auth token. We have to set Heroku
+provided token to GitHub repository.
+
+-- ft.h2: Generate Auth Token On Heroku
+
+To generate Auth token go to Heroku [Account Settings](https://dashboard.heroku.com/account),
+scroll down and click on `Regenerate API Key`.
+
+-- ft.image:
+src: $assets.files.static.deploy-on-heroku-10.png
+width: fill
+
+
+-- ft.h2: Set Heroku Auth Token to GitHub
+
+Copy the provided key and open the your GitHub Repository settings and set it with
+HEROKU_TOKEN.
+
+-- ft.h2: How To Refresh Content On Heroku
+
+-- ft.h2: How to Update `fpm` Binary on Heroku
+
 -- ft.h1: Contact Us
 
 If you are getting any issue while deploying or with the above process, feel
