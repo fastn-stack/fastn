@@ -770,17 +770,17 @@ impl InterpreterState {
                             match source {
                                 ftd::TextSource::Caption => {
                                     if let Some(ref mut cap) = subsection.caption {
-                                        replace_single_link(cap, id, &link);
+                                        is_replaced = replace_single_link(cap, id, &link);
                                     }
                                 }
                                 ftd::TextSource::Header => {
                                     for (_, _, v) in subsection.header.0.iter_mut() {
-                                        replace_single_link(v, id, &link);
+                                        is_replaced = replace_single_link(v, id, &link);
                                     }
                                 }
                                 ftd::TextSource::Body => {
                                     if let Some(ref mut body) = subsection.body {
-                                        replace_single_link(&mut body.1, id, &link);
+                                        is_replaced = replace_single_link(&mut body.1, id, &link);
                                     }
                                 }
                                 _ => {
@@ -804,20 +804,26 @@ impl InterpreterState {
 
         /// replaces single instance of link syntax with the actual link
         /// given its associated id
-        fn replace_single_link(value: &mut String, target_id: &str, link: &str) {
-            find_and_replace_single_s1_instance(value, target_id, link);
-            find_and_replace_single_s2_instance(value, target_id, link);
+        /// returns false in case no match found else true
+        fn replace_single_link(value: &mut String, target_id: &str, link: &str) -> bool {
+            return match find_and_replace_single_s1_instance(value, target_id, link) {
+                true => true,
+                false => match find_and_replace_single_s2_instance(value, target_id, link) {
+                    true => true,
+                    false => false,
+                },
+            };
 
             fn find_and_replace_single_s1_instance(
                 value: &mut String,
                 target_id: &str,
                 link: &str,
-            ) {
+            ) -> bool {
                 // Syntax 1 = [<linked-text>](id: <id>)
                 // Character Prefix Group <prefix> {GROUP 1}
                 // Linked Text Capture Group <linked_text> {GROUP 2}
                 // Referred Id Capture Group <actual_id> {GROUP 3}
-                for cap in ftd::regex::S1.captures_iter(value) {
+                for cap in ftd::regex::S1.captures_iter(value.as_ref()) {
                     // check if link is escaped ignore link if true
                     let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
                     if !prefix.is_empty() && prefix.eq(r"\") {
@@ -844,20 +850,22 @@ impl InterpreterState {
                             replacement,
                             &value[match_start_index + match_length..]
                         );
+                        return true;
                     }
                 }
+                false
             }
 
             fn find_and_replace_single_s2_instance(
                 value: &mut String,
                 target_id: &str,
                 link: &str,
-            ) {
+            ) -> bool {
                 // Syntax 2 = {<id-to-link>}
                 // Character Prefix Group <prefix> {GROUP 1}
                 // Referred Id Capture Group <actual_id> {GROUP 2}
                 // Bracket Group <ahead> if any {GROUP 3}
-                for cap in ftd::regex::S2.captures_iter(value) {
+                for cap in ftd::regex::S2.captures_iter(value.as_ref()) {
                     // check if link is escaped ignore if true
                     let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
                     if !prefix.is_empty() && prefix.eq(r"\") {
@@ -891,8 +899,10 @@ impl InterpreterState {
                             replacement,
                             &value[match_start_index + match_length..]
                         );
+                        return true;
                     }
                 }
+                false
             }
         }
     }
