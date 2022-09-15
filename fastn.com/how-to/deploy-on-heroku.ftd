@@ -96,8 +96,39 @@ width: fill
 src: $assets.files.static.deploy-on-heroku-12.png
 width: fill
 
+-- ft.h2: Update GitHub Workflow Actions
+
+In your GitHub repository, open file [`.github/workflows/refresh-content-on-heroku.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/refresh-content-on-heroku.yml#L16-L18)
+and replace `<heroku-app-name>` with your heroku app name. In my case, `<heroku-app-name>`
+get replaced with `fpm-heroku-app`.
+
+-- ft.code: `refresh-content-on-heroku.yml`
+lang: diff
+
+- run: |
+-   curl --location --request POST \
+-   --url 'https://<heroku-app-name>.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
++ run: |
++   curl --location --request POST \
++   --url 'https://fpm-heroku-app.herokuapp.com/-/clear-cache/?package=main&all-dependencies=true'
+
+-- ft.markdown:
+
+Same as above, open file [`.github/workflows/update-fpm-binary.yml`](https://github.com/FifthTry/fpm-template/blob/main/.github/workflows/update-fpm-binary.yml#L25)
+and replace `<heroku-app-name>` with your heroku app name. In my case,
+`<heroku-app-name>` get replaced with `fpm-heroku-app`.
+
+-- ft.code: `update-fpm-binary.yml`
+lang: diff
+
+-  --url https://api.heroku.com/apps/<heroku-app-name>/dynos/${{ github.event.inputs.dynoNumber }}
++  --url https://api.heroku.com/apps/fpm-heroku-app/dynos/${{ github.event.inputs.dynoNumber }}
+
 
 -- ft.h2: How To Refresh Content On Heroku
+
+Before doing that make sure you have setup the Heroku Auth token as described
+above.
 
 -- ft.h2: How to Update `fpm` Binary on Heroku
 
