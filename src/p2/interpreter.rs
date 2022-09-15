@@ -644,10 +644,9 @@ impl InterpreterState {
             // Referred Id Capture Group <actual_id> {GROUP 3}
             for capture in ftd::regex::S1.captures_iter(value) {
                 // check if link is escaped ignore if true
-                if let Some(prefix) = ftd::regex::capture_group_by_name(&capture, "prefix") {
-                    if prefix.eq(r"\") {
-                        continue;
-                    }
+                let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
+                if !prefix.is_empty() && prefix.eq(r"\") {
+                    continue;
                 }
 
                 let captured_id = ftd::regex::capture_group_by_index(&capture, 3).trim();
@@ -667,17 +666,17 @@ impl InterpreterState {
             // Bracket Group <ahead> if any {GROUP 3}
             for capture in ftd::regex::S2.captures_iter(value) {
                 // check if link is escaped ignore if true
-                if let Some(prefix) = ftd::regex::capture_group_by_name(&capture, "prefix") {
-                    if prefix.eq(r"\") {
-                        continue;
-                    }
+                let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
+                if !prefix.is_empty() && prefix.eq(r"\") {
+                    continue;
                 }
+
                 // check if internal link exists ahead in the form (<document-id>#<slugified-id>)
-                if let Some(ahead) = ftd::regex::capture_group_by_name(&capture, "ahead") {
-                    if ahead.contains("#") {
-                        continue;
-                    }
+                let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
+                if !ahead.is_empty() && ahead.contains('#') {
+                    continue;
                 }
+
                 let captured_id = ftd::regex::capture_group_by_index(&capture, 2).trim();
                 return Some(captured_id.to_string());
             }
@@ -772,7 +771,7 @@ impl InterpreterState {
                         ftd::TextSource::Body => {
                             if let Some(ref mut body) = current_processing_section.body {
                                 let (replace_status, replaced_text): (bool, Option<String>) =
-                                    replace_single_link(&body.1, id, &link);
+                                    replace_single_link(&mut body.1, id, &link);
                                 if replace_status {
                                     if let Some(replaced_body) = replaced_text {
                                         body.1 = replaced_body;
@@ -820,7 +819,7 @@ impl InterpreterState {
                                         let (replace_status, replaced_text): (
                                             bool,
                                             Option<String>,
-                                        ) = replace_single_link(&body.1, id, &link);
+                                        ) = replace_single_link(&mut body.1, id, &link);
                                         if replace_status {
                                             if let Some(replaced_body) = replaced_text {
                                                 body.1 = replaced_body;
@@ -852,7 +851,11 @@ impl InterpreterState {
         /// replaces single instance of link syntax with the actual link
         /// given its associated id and returns (true, Some(replaced-value))
         /// if no such link found returns (false, None)
-        fn replace_single_link(value: &str, target_id: &str, link: &str) -> (bool, Option<String>) {
+        fn replace_single_link(
+            value: &mut String,
+            target_id: &str,
+            link: &str,
+        ) -> (bool, Option<String>) {
             if let Some(val) = find_and_replace_single_s1_instance(value, target_id, link) {
                 return (true, Some(val));
             }
@@ -864,7 +867,7 @@ impl InterpreterState {
             return (false, None);
 
             fn find_and_replace_single_s1_instance(
-                value: &str,
+                value: &mut String,
                 target_id: &str,
                 link: &str,
             ) -> Option<String> {
@@ -874,23 +877,31 @@ impl InterpreterState {
                 // Referred Id Capture Group <actual_id> {GROUP 3}
                 for cap in ftd::regex::S1.captures_iter(value) {
                     // check if link is escaped ignore link if true
-                    if let Some(prefix) = ftd::regex::capture_group_by_name(&cap, "prefix") {
-                        if prefix.eq(r"\") {
-                            continue;
-                        }
+                    let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
+                    if !prefix.is_empty() && prefix.eq(r"\") {
+                        continue;
                     }
 
                     let linked_text = ftd::regex::capture_group_by_index(&cap, 2);
                     let captured_id = ftd::regex::capture_group_by_index(&cap, 3).trim();
-                    let match_pattern = ftd::regex::capture_group_by_index(&cap, 0);
 
                     if captured_id.eq(target_id) {
                         let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
                         let mut replacement = format!("[{}]({})", linked_text, link);
-                        if let Some(pre) = prefix {
-                            replacement = format!("{}{}", pre, replacement);
+                        if !prefix.is_empty() {
+                            replacement = format!("{}{}", prefix, replacement);
                         }
-                        let replaced_text = value.replacen(match_pattern, replacement.as_str(), 1);
+
+                        let matched_pattern = ftd::regex::capture_group_by_index(&cap, 0);
+                        let match_start_index = cap.get(0).unwrap().start();
+                        let match_length = matched_pattern.len();
+
+                        let replaced_text = format!(
+                            "{}{}{}",
+                            &value[..match_start_index],
+                            replacement,
+                            &value[match_start_index + match_length..]
+                        );
                         return Some(replaced_text);
                     }
                 }
@@ -909,29 +920,39 @@ impl InterpreterState {
                 // Bracket Group <ahead> if any {GROUP 3}
                 for cap in ftd::regex::S2.captures_iter(value) {
                     // check if link is escaped ignore if true
-                    if let Some(prefix) = ftd::regex::capture_group_by_name(&cap, "prefix") {
-                        if prefix.eq(r"\") {
-                            continue;
-                        }
+                    let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
+                    if !prefix.is_empty() && prefix.eq(r"\") {
+                        continue;
                     }
 
                     // check if internal link exists ahead in the form (<document-id>#<slugified-id>)
-                    if let Some(ahead) = ftd::regex::capture_group_by_name(&cap, "ahead") {
-                        if ahead.contains("#") {
-                            continue;
-                        }
+                    let ahead = ftd::regex::capture_group_by_name(&cap, "ahead");
+                    if !ahead.is_empty() && ahead.contains('#') {
+                        continue;
                     }
 
                     let captured_id = ftd::regex::capture_group_by_index(&cap, 2).trim();
-                    let match_pattern = ftd::regex::capture_group_by_index(&cap, 0);
 
                     if captured_id.eq(target_id) {
-                        let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
                         let mut replacement = format!("[{}]({})", target_id, link);
-                        if let Some(pre) = prefix {
-                            replacement = format!("{}{}", pre, replacement);
+                        if !prefix.is_empty() {
+                            replacement = format!("{}{}", prefix, replacement);
                         }
-                        let replaced_text = value.replacen(match_pattern, replacement.as_str(), 1);
+                        if !ahead.is_empty() {
+                            replacement = format!("{}{}", replacement, ahead);
+                        }
+
+                        let matched_pattern = ftd::regex::capture_group_by_index(&cap, 0);
+                        let match_start_index = cap.get(0).unwrap().start();
+                        let match_length = matched_pattern.len();
+
+                        let replaced_text = format!(
+                            "{}{}{}",
+                            &value[..match_start_index],
+                            replacement,
+                            &value[match_start_index + match_length..]
+                        );
+                        // let replaced_text = value.replacen(match_pattern, replacement.as_str(), 1);
                         return Some(replaced_text);
                     }
                 }

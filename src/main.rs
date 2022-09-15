@@ -255,10 +255,10 @@ impl ExampleLibrary {
         global_ids.insert("ssb".to_string(), "/some/id/#ssb".to_string());
 
         // More dummy instances for debugging purposes
-        global_ids.insert("a".to_string(), "/some/id/#a".to_string());
-        global_ids.insert("b".to_string(), "/some/id/#b".to_string());
-        global_ids.insert("c".to_string(), "/some/id/#c".to_string());
-        global_ids.insert("d".to_string(), "/some/id/#d".to_string());
+        global_ids.insert("a".to_string(), "/some/#a".to_string());
+        global_ids.insert("b".to_string(), "/some/#b".to_string());
+        global_ids.insert("c".to_string(), "/some/#c".to_string());
+        global_ids.insert("d".to_string(), "/some/#d".to_string());
 
         global_ids
     }
