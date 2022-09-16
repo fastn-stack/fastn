@@ -82,3 +82,87 @@ The rendered HTML is used here.
 -- ft.h2: `__base_url__`
 
 This is the base URL.
+
+
+-- ft.h1: `parse_from_cli`
+
+This function is for parse an argument for command line.
+
+-- ft.code:
+lang: rs
+
+fn parse_from_cli(key: &str) -> Option<String>
+
+-- ft.markdown:
+
+E.g.:
+
+Let's say if cli command is `fpm serve --identities a@foo.com,foo`, if
+you passed `--identities` to this function so it will return
+`Some("a@foo.com,foo")`.
+
+-- ft.h1: `remove`
+
+This function is to remove file, symlink or directory from given path.
+
+-- ft.code:
+lang: rs
+
+async fn remove(path: &camino::Utf8Path) -> std::io::Result<()>
+
+-- ft.markdown:
+
+E.g.:
+
+`remove("foo/abc.ftd")` will remove the file.
+
+`remove("foo/")` will remove the whole directory, first it will remove it's
+content and then delete the directory.
+
+
+
+-- ft.h1: `remove_except`
+
+This function is to remove file from `root` except provided files.
+
+-- ft.code:
+lang: rs
+
+async fn remove_except(root: &camino::Utf8Path, except: &[&str]) -> fpm::Result<()>
+
+-- ft.markdown:
+
+E.g.:
+
+`remove_except("/Users/wilderbit/github/abrark", ["abc.ftd"])`, It will remove
+everything from `abrark` directory except `abc.ftd`.
+
+
+-- ft.h1: `query`
+
+This function accept `uri` and returns the parsed query parameter.
+
+-- ft.code:
+lang: rs
+
+fn query(uri: &str) -> fpm::Result<Vec<(String, String)>>
+
+-- ft.markdown:
+
+E.g.:
+
+-- ft.code:
+lang: rs
+
+fn query() {
+    assert_eq!(
+        super::query("/api/?a=1&b=2&c=3&a=4").unwrap(),
+        vec![
+            ("a".to_string(), "1".to_string()),
+            ("b".to_string(), "2".to_string()),
+            ("c".to_string(), "3".to_string()),
+            ("a".to_string(), "4".to_string())
+        ]
+    )
+}
+

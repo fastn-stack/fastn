@@ -200,6 +200,7 @@ email: arpita@fifthtry.com
   - `edit` API: /sitemap/edit/
   - `editor-sync` API: /sitemap/editor-sync/
   - `clone` API: /sitemap/clone/
+  - `clear-cache` API: /sitemap/clear-cache/
 - Glossary:
   - syncglossary: /glossary/
 
