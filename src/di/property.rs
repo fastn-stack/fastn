@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
     name: String,
     kind: Option<String>,
@@ -94,13 +94,15 @@ impl Property {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[serde(tag = "pv", content = "value")]
 pub enum PropertyValue {
     Value(Option<String>),
     DI(Vec<ftd::di::DI>),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[serde(tag = "source")]
 pub enum Source {
     Header,
     Caption,

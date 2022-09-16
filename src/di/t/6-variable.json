@@ -1,0 +1,22 @@
+[
+  {
+    "Definition": {
+      "name": "about-us",
+      "kind": "string",
+      "properties": [
+        {
+          "name": "$caption$",
+          "kind": null,
+          "value": {
+            "pv": "Value",
+            "value": "FifthTry is Open Source"
+          },
+          "source": {
+            "source": "Caption"
+          }
+        }
+      ],
+      "children": []
+    }
+  }
+]

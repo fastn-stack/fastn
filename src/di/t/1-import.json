@@ -1,0 +1,8 @@
+[
+  {
+    "Import": {
+      "module": "foo",
+      "alias": null
+    }
+  }
+]

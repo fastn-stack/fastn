@@ -1,0 +1,33 @@
+[
+  {
+    "Definition": {
+      "name": "markdown",
+      "kind": "ftd.text",
+      "properties": [
+        {
+          "name": "text",
+          "kind": "caption or body",
+          "value": {
+            "pv": "Value",
+            "value": null
+          },
+          "source": {
+            "source": "Header"
+          }
+        },
+        {
+          "name": "text",
+          "kind": null,
+          "value": {
+            "pv": "Value",
+            "value": "$text"
+          },
+          "source": {
+            "source": "Header"
+          }
+        }
+      ],
+      "children": []
+    }
+  }
+]

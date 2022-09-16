@@ -1,0 +1,22 @@
+[
+  {
+    "Definition": {
+      "name": "about-us",
+      "kind": "string",
+      "properties": [
+        {
+          "name": "$body$",
+          "kind": null,
+          "value": {
+            "pv": "Value",
+            "value": "FifthTry is Open Source\n\nOur suite of products are open source and available on Github. You are free to download\ninstall and customize them to your needs.\n\nWe’d love to hear your feedback and suggestions, and collectively make Documentation\neasier and better for everyone."
+          },
+          "source": {
+            "source": "Body"
+          }
+        }
+      ],
+      "children": []
+    }
+  }
+]

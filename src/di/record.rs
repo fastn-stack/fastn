@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Record {
     name: String,
     fields: Vec<Field>,
@@ -42,7 +42,8 @@ impl Record {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[serde(tag = "field")]
 pub struct Field {
     name: String,
     kind: String,

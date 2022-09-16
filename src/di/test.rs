@@ -35,13 +35,85 @@ fn f(s: &str, m: &str) {
 }
 
 #[test]
+fn test_all() {
+    // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
+    // re-compiles the crate and we don't want to recompile the crate for every test
+    for (files, json) in find_file_groups() {
+        let t: Vec<ftd::di::DI> =
+            serde_json::from_str(std::fs::read_to_string(json).unwrap().as_str()).unwrap();
+        for f in files {
+            let s = std::fs::read_to_string(&f).unwrap();
+            println!("testing {}", f.display());
+            p(&s, &t);
+        }
+    }
+}
+
+fn find_all_files_matching_extension_recursively(
+    dir: impl AsRef<std::path::Path>,
+    extension: &str,
+) -> Vec<std::path::PathBuf> {
+    let mut files = vec![];
+    for entry in std::fs::read_dir(dir).unwrap() {
+        let entry = entry.unwrap();
+        let path = entry.path();
+        if path.is_dir() {
+            files.extend(find_all_files_matching_extension_recursively(
+                &path, extension,
+            ));
+        } else {
+            match path.extension() {
+                Some(ext) if ext == extension => files.push(path),
+                _ => continue,
+            }
+        }
+    }
+    files
+}
+
+fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
+    let files = {
+        let mut f = find_all_files_matching_extension_recursively("src/di/t", "ftd");
+        f.sort();
+        f
+    };
+
+    let mut o: Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> = vec![];
+
+    for f in files {
+        let json = filename_with_second_last_extension_replaced_with_json(&f);
+        match o.last_mut() {
+            Some((v, j)) if j == &json => v.push(f),
+            _ => o.push((vec![f], json)),
+        }
+    }
+
+    o
+}
+
+fn filename_with_second_last_extension_replaced_with_json(
+    path: &std::path::Path,
+) -> std::path::PathBuf {
+    let stem = path.file_stem().unwrap().to_str().unwrap();
+
+    path.with_file_name(format!(
+        "{}.json",
+        match stem.split_once('.') {
+            Some((b, _)) => b,
+            None => stem,
+        }
+    ))
+}
+
+#[test]
 fn di_import() {
     p(
         "-- import: foo",
-        &vec![ftd::di::DI::Import(ftd::di::Import {
+        &ftd::di::DI::Import(ftd::di::Import {
             module: "foo".to_string(),
             alias: None,
-        })],
+        })
+        .list(),
     );
 
     p(
@@ -87,11 +159,12 @@ fn di_record() {
             integer age: 40
             "
         ),
-        &vec![ftd::di::DI::Record(
+        &ftd::di::DI::Record(
             ftd::di::Record::new("foo")
                 .add_field("name", "string", None)
                 .add_field("age", "integer", Some(s("40"))),
-        )],
+        )
+        .list(),
     );
 
     p(
@@ -182,6 +255,13 @@ fn di_variable_definition() {
 
 #[test]
 fn di_component_definition() {
+    let v = ftd::di::DI::Definition(
+        ftd::di::Definition::new("markdown", "ftd.text")
+            .add_value_property("text", Some(s("caption or body")), None)
+            .add_value_property("text", None, Some(s("$text"))),
+    )
+    .list();
+    dbg!(serde_json::to_string(&v));
     p(
         indoc!(
             "
