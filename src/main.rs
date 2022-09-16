@@ -203,29 +203,34 @@ pub fn interpret_helper(
                 )?;
             }
             ftd::Interpreter::CheckID {
-                id: captured_id,
+                id: captured_ids,
                 source,
-                is_from_section,
+                location,
                 state: st,
             } => {
+
+                println!("ID LIST RT");
+
                 // No config in ftd::ExampleLibrary ignoring processing terms for now
                 // using dummy id map for debugging
-
-                let link = lib
-                    .dummy_global_ids_map()
-                    .get(captured_id.as_str())
-                    .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
-                        message: format!("id: {} not found while linking", captured_id),
-                        doc_id: st.id.clone(),
-                        line_number: 0,
-                    })?
-                    .to_string();
+                let mut id_map: std::collections::HashMap<String, String> = std::collections::HashMap::new();
+                for id in captured_ids{
+                    let link = lib
+                        .dummy_global_ids_map()
+                        .get(id.as_str())
+                        .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
+                            message: format!("id: {} not found while linking", id),
+                            doc_id: st.id.clone(),
+                            line_number: 0,
+                        })?
+                        .to_string();
+                    id_map.insert(id, link);
+                }
 
                 s = st.continue_after_checking_id(
-                    captured_id.as_str(),
+                    &id_map,
                     &source,
-                    is_from_section,
-                    link,
+                    location,
                 )?;
             }
         }

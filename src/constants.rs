@@ -56,17 +56,9 @@ pub mod identifier {
         line: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::p1::Result<(Option<String>, Option<String>)> {
+    ) -> ftd::p1::Result<(String, Option<String>)> {
         // Trim any section/subsection identifier from the beginning of the line
         let line = trim_section_subsection_identifier(line);
-
-        if !line.contains(KV_SEPERATOR) {
-            return Err(ftd::p1::Error::ParseError {
-                message: format!("\':\' is missing in: {}", line),
-                doc_id: doc_id.to_string(),
-                line_number,
-            });
-        }
 
         let (before_kv_delimiter, after_kv_delimiter) =
             line.split_once(KV_SEPERATOR)
@@ -77,10 +69,8 @@ pub mod identifier {
                 })?;
 
         match (before_kv_delimiter, after_kv_delimiter) {
-            (k, v) if k.trim().is_empty() && v.trim().is_empty() => Ok((None, None)),
-            (k, v) if k.trim().is_empty() => Ok((None, Some(v.to_string()))),
-            (k, v) if v.trim().is_empty() => Ok((Some(k.to_string()), None)),
-            (k, v) => Ok((Some(k.to_string()), Some(v.to_string()))),
+            (before, after) if after.trim().is_empty() => Ok((before.trim().to_string(), None)),
+            (before, after) => Ok((before.trim().to_string(), Some(after.trim().to_string())))
         }
     }
 }
@@ -95,6 +85,12 @@ pub mod regex {
     // lookahead/lookbehind assertions
     // Refer issue - https://github.com/rust-lang/regex/issues/127
 
+    /// Linking syntax: `<prefix>[<id_or_text>](<type1><id>)?`
+    pub const LINK_SYNTAX: &str = r"(?x) # Enabling comment mode {GROUP 0 = entire match}
+    (?P<prefix>.?) # Character Prefix Group <prefix>
+    \[(?P<id_or_text>[-\s\w]+)\] # Referred Id Capture Group <id_or_text>
+    (\(((?P<type1>\s*id\s*:(?P<id>.+))|(?P<ahead>.+\#.+))\))? # <type1> group and <ahead> group for any possible link";
+
     /// Linking Syntax 1: `[<linked-text>]`(id: `<id>`)
     pub const LINK_SYNTAX_1: &str = r"(?x) # Enabling Comment Mode {GROUP 0 = entire match}
     (?P<prefix>.?) # Character Prefix Group <prefix> {GROUP 1}
@@ -107,7 +103,7 @@ pub mod regex {
     pub const LINK_SYNTAX_2: &str = r"(?x) # Enabling comment mode {GROUP 0 = entire match}
     (?P<prefix>.?) # Character Prefix Group <prefix> {GROUP 1}
     \[(?P<actual_id>[-\s\w]+)\] # Referred Id Capture Group <actual_id> {GROUP 2}
-    (?P<ahead>(\(.+\))?) # Bracket Group <ahead> if any {GROUP 3}";
+    (?P<ahead>(\(.+\#.+\))?) # Bracket Group <ahead> if any {GROUP 3}";
 
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
     pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-\s\w]*$";
@@ -119,6 +115,7 @@ pub mod regex {
 
     lazy_static::lazy_static! {
         pub static ref ID: regex::Regex = regex::Regex::new(ID_HEADER).unwrap();
+        pub static ref S: regex::Regex = regex::Regex::new(LINK_SYNTAX).unwrap();
         pub static ref S1: regex::Regex = regex::Regex::new(LINK_SYNTAX_1).unwrap();
         pub static ref S2: regex::Regex = regex::Regex::new(LINK_SYNTAX_2).unwrap();
         pub static ref EXT: regex::Regex = regex::Regex::new(FILE_EXTENSION).unwrap();
