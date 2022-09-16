@@ -208,9 +208,6 @@ pub fn interpret_helper(
                 location,
                 state: st,
             } => {
-
-                println!("ID LIST RT");
-
                 // No config in ftd::ExampleLibrary ignoring processing terms for now
                 // using dummy id map for debugging
                 let mut id_map: std::collections::HashMap<String, String> = std::collections::HashMap::new();

@@ -627,10 +627,6 @@ impl InterpreterState {
             // Character Prefix Group <prefix>
             // Referred Id Capture Group <id_or_text>
             // <type1> group and <ahead> group for any possible link
-            println!("FETCHING LINK IDS");
-            for line in value.lines(){
-                dbg!(line);
-            }
             for capture in ftd::regex::S.captures_iter(value){
 
                 // check if link is escaped ignore if true
@@ -646,30 +642,20 @@ impl InterpreterState {
                         // id = <id_or_text> group = <id>
                         // Linked text = id
 
-                        println!("Type 2 syntax");
                         let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
-                        dbg!(ahead);
                         if !ahead.is_empty() {
                             continue;
                         }
 
 
-                        dbg!(capture.get(0).unwrap().as_str());
-                        dbg!(type1);
                         let captured_id = ftd::regex::capture_group_by_name(&capture, "id_or_text").trim();
-                        dbg!(captured_id);
                         captured_ids.insert(captured_id.to_string());
                     },
                     false => {
                         // Type 1 syntax [<link_text>](<type1>)
                         // Linked text = <id_or_text> = <link_text>
                         // id = <id>
-
-                        println!("Type 1 syntax");
-                        dbg!(capture.get(0).unwrap().as_str());
-                        dbg!(type1);
                         let captured_id = ftd::regex::capture_group_by_name(&capture, "id").trim();
-                        dbg!(captured_id);
                         captured_ids.insert(captured_id.to_string());
                     }
                 }
@@ -806,8 +792,6 @@ impl InterpreterState {
                         ftd::TextSource::Body => {
                             if let Some(ref mut body) = current_processing_section.body {
                                 replace_all_links(&mut body.1, id);
-                                println!("After replacing");
-                                dbg!(body);
                             }
                         }
                         _ => {
@@ -861,7 +845,6 @@ impl InterpreterState {
 
             let mut is_replaced = false;
             let mut matches_with_replacements: Vec<(String, usize, usize)> = vec![];
-            dbg!(&value);
             // Character Prefix Group <prefix>
             // Referred Id Capture Group <id_or_text>
             // <type1> Group and <id> Group for id from type 1 syntax";
@@ -887,25 +870,14 @@ impl InterpreterState {
                         }
 
                         let link = &id_map[captured_id];
-
-                        dbg!(captured_id);
-                        dbg!(linked_text);
-                        dbg!(link);
-
                         let mut replacement = format!("[{}]({})", linked_text, link);
                         if !prefix.is_empty() {
                             replacement = format!("{}{}", prefix, replacement);
                         }
 
-                        dbg!(&replacement);
-
                         let matched_pattern = ftd::regex::capture_group_by_index(&capture, 0);
                         let match_length = matched_pattern.len();
                         let match_start_index = capture.get(0).unwrap().start();
-
-                        dbg!(matched_pattern);
-                        dbg!(match_length);
-                        dbg!(match_start_index);
 
                         matches_with_replacements.push((replacement, match_start_index, match_length));
                     },
@@ -936,9 +908,6 @@ impl InterpreterState {
                 *value = format!("{}{}{}", &value[..match_start_index], replacement, &value[match_start_index + match_length..]);
                 is_replaced = true;
             }
-
-            println!("After replacement");
-            dbg!(&value);
 
             is_replaced
         }
