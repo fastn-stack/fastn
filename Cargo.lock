@@ -265,15 +265,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ansi_term"
-version = "0.12.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d52a9bb7ec0cf484c551830a7ce27bd20d67eac647e1befb56b0be4ee39a55d2"
-dependencies = [
- "winapi",
-]
-
-[[package]]
 name = "antidote"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -657,15 +648,6 @@ checksum = "56254986775e3233ffa9c4d7d3faaf6d36a2c09d30b20687e9f88bc8bafc16c8"
 
 [[package]]
 name = "diffy"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c27ec7cef89a63c063e06570bb861b7d35e406d6885551b346d77c459b34d3db"
-dependencies = [
- "ansi_term",
-]
-
-[[package]]
-name = "diffy"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e616e59155c92257e84970156f506287853355f58cd4a6eb167385722c32b790"
@@ -795,10 +777,10 @@ dependencies = [
 [[package]]
 name = "fbt-lib"
 version = "0.1.18"
-source = "git+https://github.com/FifthTry/fbt?rev=3f15b52#3f15b524b2d7497c724fe06a90f2f8242134dcd8"
+source = "git+https://github.com/FifthTry/fbt?rev=1a346ff#1a346ff97b86985c05d6de1c83a1f78619158a6a"
 dependencies = [
  "colored",
- "diffy 0.2.2",
+ "diffy",
  "ftd 0.1.18",
  "rand",
  "sha2",
@@ -916,7 +898,7 @@ dependencies = [
  "camino",
  "clap",
  "colored",
- "diffy 0.3.0",
+ "diffy",
  "edit",
  "fbt-lib",
  "fluent",
