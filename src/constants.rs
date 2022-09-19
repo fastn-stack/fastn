@@ -70,7 +70,7 @@ pub mod identifier {
 
         match (before_kv_delimiter, after_kv_delimiter) {
             (before, after) if after.trim().is_empty() => Ok((before.trim().to_string(), None)),
-            (before, after) => Ok((before.trim().to_string(), Some(after.trim().to_string())))
+            (before, after) => Ok((before.trim().to_string(), Some(after.trim().to_string()))),
         }
     }
 }
@@ -85,11 +85,30 @@ pub mod regex {
     // lookahead/lookbehind assertions
     // Refer issue - https://github.com/rust-lang/regex/issues/127
 
+    /// Urls could be of any one of these two types:
+    ///
+    /// ## External urls (Type-1)
+    ///
+    /// * https://github.com/FifthTry/ftd,
+    /// * www.fifthtry.com etc.
+    ///
+    /// ## Relative urls (Type-2)
+    ///
+    /// * `/editor/manual/` - relative file path,
+    /// * `/featured/doc-sites/#header` - component with a given id within a relative file
+    pub const URL_PATTERN: &str = r"(?x)
+    ^(?P<external_link>((http[s]?://)(www\.)?|(www\.)) # <external_link> group (Type-1 URL)
+    (?P<before_domain>[\-\w@:%\.\+~\#=]+) # <before_domain> group
+    (?P<domain_name>\.[\w]{1,6}) # <domain_name> group for .com/.org/.edu etc.
+    (?P<after_domain>[\-\w()@:%\+\.~\#\?\&/=]*))| # <after_domain> group
+    (?P<relative_link>/([\-\w@:%\.\+~\#=]+/)+ # <relative_link> group (Type-2 URL)
+    (\#(?P<relative_id>[\-\w@:%\.\+~\#=]+)|($))) # relative link id of component (optional)";
+
     /// Linking syntax: `<prefix>[<id_or_text>](<type1><id>)?`
     pub const LINK_SYNTAX: &str = r"(?x) # Enabling comment mode {GROUP 0 = entire match}
     (?P<prefix>.?) # Character Prefix Group <prefix>
-    \[(?P<id_or_text>[-\s\w]+)\] # Referred Id Capture Group <id_or_text>
-    (\(((?P<type1>\s*id\s*:(?P<id>.+))|(?P<ahead>.+\#.+))\))? # <type1> group and <ahead> group for any possible link";
+    \[(?P<id_or_text>.+)\] # Referred Id Capture Group <id_or_text>
+    (\(((?P<type1>\s*id\s*:(?P<id>.+))|(?P<ahead>.+))\))? # <type1> group and <ahead> group for any possible link";
 
     /// Linking Syntax 1: `[<linked-text>]`(id: `<id>`)
     pub const LINK_SYNTAX_1: &str = r"(?x) # Enabling Comment Mode {GROUP 0 = entire match}
@@ -119,6 +138,7 @@ pub mod regex {
         pub static ref S1: regex::Regex = regex::Regex::new(LINK_SYNTAX_1).unwrap();
         pub static ref S2: regex::Regex = regex::Regex::new(LINK_SYNTAX_2).unwrap();
         pub static ref EXT: regex::Regex = regex::Regex::new(FILE_EXTENSION).unwrap();
+        pub static ref URL: regex::Regex = regex::Regex::new(URL_PATTERN).unwrap();
     }
 
     /// fetches capture group by group index and returns it as &str
