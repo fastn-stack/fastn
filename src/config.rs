@@ -314,40 +314,6 @@ impl Config {
         doc_id: &str,
         data: &str,
     ) -> fpm::Result<()> {
-        /// returns header key and value
-        /// given header string
-        fn segregate_key_value(
-            header: &str,
-            doc_id: &str,
-            line_number: usize,
-        ) -> ftd::p1::Result<(String, String)> {
-            if !header.contains(':') {
-                return Err(ftd::p1::Error::ParseError {
-                    message: format!(": is missing in: {}", header),
-                    doc_id: doc_id.to_string(),
-                    line_number,
-                });
-            }
-
-            let mut parts = header.splitn(2, ':');
-            match (parts.next(), parts.next()) {
-                (Some(name), Some(value)) => {
-                    // some header and some non-empty value
-                    Ok((name.trim().to_string(), value.trim().to_string()))
-                }
-                (Some(name), None) => Err(ftd::p1::Error::ParseError {
-                    message: format!("Unknown header value for header \'{}\'", name),
-                    doc_id: doc_id.to_string(),
-                    line_number,
-                }),
-                _ => Err(ftd::p1::Error::ParseError {
-                    message: format!("Unknown header found \'{}\'", header),
-                    doc_id: doc_id.to_string(),
-                    line_number,
-                }),
-            }
-        }
-
         /// updates the config.global_ids map
         ///
         /// mapping from [id -> link]
@@ -371,47 +337,36 @@ impl Config {
                 }
             }
 
-            let (_header, id) = segregate_key_value(id_string, doc_name, line_number)?;
+            let (_header, value) =
+                ftd::identifier::segregate_key_value(id_string, doc_name, line_number)?;
             let document_id = fpm::library::convert_to_document_id(doc_name);
 
-            // check if the current id already exists in the map
-            // if it exists then throw error
-            if global_ids.contains_key(&id) {
-                return Err(fpm::Error::UsageError {
-                    message: format!(
-                        "conflicting id: \'{}\' used in doc: \'{}\' and doc: \'{}\'",
-                        id,
-                        fetch_doc_id_from_link(&global_ids[&id])?,
-                        document_id
-                    ),
-                });
+            if let Some(id) = value {
+                // check if the current id already exists in the map
+                // if it exists then throw error
+                if global_ids.contains_key(&id) {
+                    return Err(fpm::Error::UsageError {
+                        message: format!(
+                            "conflicting id: \'{}\' used in doc: \'{}\' and doc: \'{}\'",
+                            id,
+                            fetch_doc_id_from_link(&global_ids[&id])?,
+                            document_id
+                        ),
+                    });
+                }
+
+                // mapping id -> <document-id>#<slugified-id>
+                let link = format!("{}#{}", document_id, slug::slugify(&id));
+                global_ids.insert(id, link);
             }
 
-            // mapping id -> <document-id>#<slugified-id>
-            let link = format!("{}#{}", document_id, slug::slugify(&id));
-            global_ids.insert(id, link);
             Ok(())
         }
 
-        const ID_HEADER_PATTERN: &str = r"(?m)^\s*id\s*:[\sA-Za-z\d]*$";
-        lazy_static::lazy_static!(
-            static ref ID: regex::Regex = regex::Regex::new(ID_HEADER_PATTERN).unwrap();
-        );
-
-        // grep all lines where user defined `id` for the sections
-        // and update the global_ids map
-        for (ln, line) in itertools::enumerate(data.lines()) {
-            if ID.is_match(line) {
-                update_id_map(&mut self.global_ids, line, doc_id, ln)?;
-            }
-
-            // In case if we want to
-            // Avoid using regex here to reduce complexity as the pattern
-            // to search itself is not that complex
-            // ^id: <some-alphanumeric-string>$
-            // if line.trim_start().starts_with("term") && line.contains(':'){
-            //     update_terms(&mut self.global_ids, line.trim_start(), doc_id, ln)?;
-            // }
+        // Vec<captured_id, line_number>
+        let captured_global_ids: Vec<(String, usize)> = ftd::p1::parse_file_for_global_ids(data);
+        for (captured_id, ln) in captured_global_ids.iter() {
+            update_id_map(&mut self.global_ids, captured_id.as_str(), doc_id, *ln)?;
         }
 
         Ok(())

@@ -48,13 +48,13 @@ remote = []
 # using the latest dependency, and what is the plan.
 
 actix-files = "0.6"
-actix-web = "4"
+actix-web = "4.2.1"
 antidote = "1"
 async-recursion = "1"
 camino = "1"
 clap = "3"
 colored = "2"
-diffy = "0.2"
+diffy = "0.3"
 edit = "0.1"
 fluent = "0.16"
 futures = "0.3"
@@ -73,7 +73,9 @@ slug = { version = "0.1" }
 sha2 = "0.10"
 thiserror = "1"
 url = "2"
-zip = "0.6"
+
+# becasue they havent crated a release yet which fixes incompatibility with latest actix-http
+zip = { git = "https://github.com/zip-rs/zip" }
 
 
 [dependencies.hyper]
@@ -91,7 +93,7 @@ features = ["http1", "server"]
 #
 # Once we are closer to release we will stop using this and adopot semver.
 git = "https://github.com/FifthTry/ftd"
-rev = "3b8c818"
+rev = "7c702f9"
 
 # If you are testing fpm against local ftd, you can keep ftd and fpm checked out in
 # same folder and uncomment the next `path` line to use local ftd.
@@ -99,7 +101,7 @@ rev = "3b8c818"
 # Note: you do not have to comment out the git/rev above, Cargo uses `path` with
 # higher priority over them if `path` is provided.
 #
-# path = "../ftd"
+# path = "../ftd#2"
 
 
 

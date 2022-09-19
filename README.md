@@ -1,3 +1,11 @@
+<br/>
+
+<div align="center">
+
+![Contributors](https://img.shields.io/github/contributors/fifthtry/fpm?color=dark-green) ![Issues](https://img.shields.io/github/issues/fifthtry/fpm) ![License](https://img.shields.io/github/license/fifthtry/fpm)
+
+</div>
+
 # `fpm`: FTD Package Manager
 
 [`ftd`](https://ftd.dev) is a language to create web pages or documents for 

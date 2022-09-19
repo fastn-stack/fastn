@@ -108,15 +108,12 @@ pub async fn parse<'a>(
                 )?;
                 s = state.continue_after_variable(variable.as_str(), value)?
             }
-            ftd::Interpreter::CheckID {
-                doc_index: _index,
-                state: _st,
-            } => {
+            ftd::Interpreter::CheckID { .. } => {
                 // This function was used in build.rs
                 // Not using build.rs anymore (build2.rs is used currently)
                 // so ignoring processing terms here
                 // s = st.continue_after_checking_id(None, index)?;
-                unreachable!();
+                unimplemented!();
             }
         }
     }
@@ -168,11 +165,31 @@ pub async fn parse2<'a>(
                 s = state.continue_after_variable(variable.as_str(), value)?
             }
             ftd::Interpreter::CheckID {
-                doc_index: index,
+                id: captured_id,
+                source,
+                is_from_section,
                 state: st,
             } => {
-                // Using actual global id map
-                s = st.continue_after_checking_id(Some(&lib.config.global_ids), index)?;
+                // No config in ftd::ExampleLibrary ignoring processing terms for now
+                // using dummy id map for debugging
+
+                let link = lib
+                    .config
+                    .global_ids
+                    .get(captured_id.as_str())
+                    .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
+                        message: format!("id: {} not found while linking", captured_id),
+                        doc_id: st.id.clone(),
+                        line_number: 0,
+                    })?
+                    .to_string();
+
+                s = st.continue_after_checking_id(
+                    captured_id.as_str(),
+                    &source,
+                    is_from_section,
+                    link,
+                )?;
             }
         }
     }
@@ -615,12 +632,9 @@ pub fn parse_ftd(
                 let value = resolve_ftd_foreign_variable(variable.as_str(), name)?;
                 s = state.continue_after_variable(variable.as_str(), value)?
             }
-            ftd::Interpreter::CheckID {
-                doc_index: index,
-                state: st,
-            } => {
+            ftd::Interpreter::CheckID { .. } => {
                 // No config in fpm::FPMLibrary ignoring processing terms here
-                s = st.continue_after_checking_id(None, index)?;
+                unimplemented!()
             }
         }
     }

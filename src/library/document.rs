@@ -23,12 +23,7 @@ document id
 ///assert_eq!(convert_to_document_id("README.md"), "/README/");
 /// ```
 pub fn convert_to_document_id(doc_name: &str) -> String {
-    const FILE_EXTENSION: &str = r"[.][a-z\d]+[/]?$";
-    lazy_static::lazy_static!(
-        static ref EXT: regex::Regex = regex::Regex::new(FILE_EXTENSION).unwrap();
-    );
-
-    let doc_name = EXT.replace_all(doc_name, "");
+    let doc_name = ftd::regex::EXT.replace_all(doc_name, "");
 
     // Discard document suffix if there
     // Also discard trailing index
