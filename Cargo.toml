@@ -159,5 +159,5 @@ pretty_assertions = "1"
 
 [dev-dependencies.fbt-lib]
 git = "https://github.com/FifthTry/fbt"
-rev = "3f15b52"
+rev = "1a346ff"
 
