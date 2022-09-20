@@ -26,6 +26,24 @@ impl ResponseBuilder {
     // chain implementation
     // .build
     // response from string, json, bytes etc
+
+    pub async fn from_actix(response: reqwest::Response) -> actix_web::HttpResponse {
+        let status = response.status();
+        let content = match response.bytes().await {
+            Ok(b) => b,
+            Err(e) => {
+                return actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
+                    fpm::Error::HttpError(e),
+                ))
+            }
+        };
+
+        // actix_web::HttpResponse::build(status).body(content);
+
+        actix_web::HttpResponse::Ok()
+            .content_type("text/html")
+            .body(content)
+    }
 }
 
 pub(crate) fn url_regex() -> regex::Regex {
