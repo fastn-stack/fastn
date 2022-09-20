@@ -78,14 +78,6 @@ impl InterpreterState {
             self.document_stack[l].reorder(&self.bag)?;
         }
 
-        // This will be removed later
-        // if self.document_stack[l].checking_ids {
-        //     return Ok(Interpreter::CheckID {
-        //         doc_index: l,
-        //         state: self,
-        //     });
-        // }
-
         let parsed_document = &mut self.document_stack[l];
 
         while let Some(p1) = parsed_document.sections.last_mut() {
@@ -672,58 +664,6 @@ impl InterpreterState {
 
             Some(captured_ids)
         }
-
-        /// finds the first link match from s1 pattern and returns the id associated with the link
-        ///
-        /// Syntax 1 = `[<linked-text>]`(id: <id>)
-        #[allow(dead_code)]
-        fn fetch_id_from_s1_link(value: &str) -> Option<String> {
-            // Syntax 1 = [<linked-text>](id: <id>)
-            // Character Prefix Group <prefix> {GROUP 1}
-            // Linked Text Capture Group <linked_text> {GROUP 2}
-            // Referred Id Capture Group <actual_id> {GROUP 3}
-            for capture in ftd::regex::S1.captures_iter(value) {
-                // check if link is escaped ignore if true
-                let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
-                if !prefix.is_empty() && prefix.eq(r"\") {
-                    continue;
-                }
-
-                let captured_id = ftd::regex::capture_group_by_index(&capture, 3).trim();
-                return Some(captured_id.to_string());
-            }
-
-            None
-        }
-
-        /// finds the first link match from s2 pattern and returns the id associated with the link
-        ///
-        /// Syntax 2 = `[<id>]`
-        #[allow(dead_code)]
-        fn fetch_id_from_s2_link(value: &str) -> Option<String> {
-            // Syntax 2 = [<id>];
-            // Character Prefix Group <prefix> {GROUP 1}
-            // Referred Id Capture Group <actual_id> {GROUP 2}
-            // Bracket Group <ahead> if any {GROUP 3}
-            for capture in ftd::regex::S2.captures_iter(value) {
-                // check if link is escaped ignore if true
-                let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
-                if !prefix.is_empty() && prefix.eq(r"\") {
-                    continue;
-                }
-
-                // check if internal link exists ahead in the form (<document-id>#<slugified-id>)
-                let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
-                if !ahead.is_empty() && ahead.contains('#') {
-                    continue;
-                }
-
-                let captured_id = ftd::regex::capture_group_by_index(&capture, 2).trim();
-                return Some(captured_id.to_string());
-            }
-
-            None
-        }
     }
 
     fn process_imports(
@@ -934,111 +874,6 @@ impl InterpreterState {
             }
 
             is_replaced
-        }
-
-        /// replaces single instance of link syntax with the actual link
-        /// given its associated id
-        /// returns false in case no match found else true
-        #[allow(dead_code)]
-        fn replace_single_link(value: &mut String, target_id: &str, link: &str) -> bool {
-            return match find_and_replace_single_s1_instance(value, target_id, link) {
-                true => true,
-                false => match find_and_replace_single_s2_instance(value, target_id, link) {
-                    true => true,
-                    false => false,
-                },
-            };
-
-            fn find_and_replace_single_s1_instance(
-                value: &mut String,
-                target_id: &str,
-                link: &str,
-            ) -> bool {
-                // Syntax 1 = [<linked-text>](id: <id>)
-                // Character Prefix Group <prefix> {GROUP 1}
-                // Linked Text Capture Group <linked_text> {GROUP 2}
-                // Referred Id Capture Group <actual_id> {GROUP 3}
-                for cap in ftd::regex::S1.captures_iter(value.as_ref()) {
-                    // check if link is escaped ignore link if true
-                    let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
-                    if !prefix.is_empty() && prefix.eq(r"\") {
-                        continue;
-                    }
-
-                    let linked_text = ftd::regex::capture_group_by_index(&cap, 2);
-                    let captured_id = ftd::regex::capture_group_by_index(&cap, 3).trim();
-
-                    if captured_id.eq(target_id) {
-                        let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
-                        let mut replacement = format!("[{}]({})", linked_text, link);
-                        if !prefix.is_empty() {
-                            replacement = format!("{}{}", prefix, replacement);
-                        }
-
-                        let matched_pattern = ftd::regex::capture_group_by_index(&cap, 0);
-                        let match_start_index = cap.get(0).unwrap().start();
-                        let match_length = matched_pattern.len();
-
-                        *value = format!(
-                            "{}{}{}",
-                            &value[..match_start_index],
-                            replacement,
-                            &value[match_start_index + match_length..]
-                        );
-                        return true;
-                    }
-                }
-                false
-            }
-
-            fn find_and_replace_single_s2_instance(
-                value: &mut String,
-                target_id: &str,
-                link: &str,
-            ) -> bool {
-                // Syntax 2 = {<id-to-link>}
-                // Character Prefix Group <prefix> {GROUP 1}
-                // Referred Id Capture Group <actual_id> {GROUP 2}
-                // Bracket Group <ahead> if any {GROUP 3}
-                for cap in ftd::regex::S2.captures_iter(value.as_ref()) {
-                    // check if link is escaped ignore if true
-                    let prefix = ftd::regex::capture_group_by_name(&cap, "prefix");
-                    let captured_id = ftd::regex::capture_group_by_index(&cap, 2).trim();
-                    let ahead = ftd::regex::capture_group_by_name(&cap, "ahead");
-
-                    if !prefix.is_empty() && prefix.eq(r"\") {
-                        continue;
-                    }
-
-                    // check if internal link exists ahead in the form (<document-id>#<slugified-id>)
-                    if !ahead.is_empty() && ahead.contains('#') {
-                        continue;
-                    }
-
-                    if captured_id.eq(target_id) {
-                        let mut replacement = format!("[{}]({})", target_id, link);
-                        if !prefix.is_empty() {
-                            replacement = format!("{}{}", prefix, replacement);
-                        }
-                        if !ahead.is_empty() {
-                            replacement = format!("{}{}", replacement, ahead);
-                        }
-
-                        let matched_pattern = ftd::regex::capture_group_by_index(&cap, 0);
-                        let match_start_index = cap.get(0).unwrap().start();
-                        let match_length = matched_pattern.len();
-
-                        *value = format!(
-                            "{}{}{}",
-                            &value[..match_start_index],
-                            replacement,
-                            &value[match_start_index + match_length..]
-                        );
-                        return true;
-                    }
-                }
-                false
-            }
         }
     }
 

@@ -87,20 +87,6 @@ pub mod regex {
     \[(?P<id_or_text>.+)\] # Referred Id Capture Group <id_or_text>
     (\(((?P<type1>\s*id\s*:(?P<id>.+))|(?P<ahead>.+))\))? # <type1> group and <ahead> group for any possible link";
 
-    /// Linking Syntax 1: `[<linked-text>]`(id: `<id>`)
-    pub const LINK_SYNTAX_1: &str = r"(?x) # Enabling Comment Mode {GROUP 0 = entire match}
-    (?P<prefix>.?) # Character Prefix Group <prefix> {GROUP 1}
-    \[(?P<linked_text>[-\s\w]+)\] # Linked Text Capture Group <linked_text> {GROUP 2}
-    \(\s*id\s*:(?P<actual_id>[-\s\w]+)\) # Referred Id Capture Group <actual_id> {GROUP 3}";
-
-    /// Linking Syntax 2: `[<id>]`
-    ///
-    /// Linked text is same as `<id>` in this case
-    pub const LINK_SYNTAX_2: &str = r"(?x) # Enabling comment mode {GROUP 0 = entire match}
-    (?P<prefix>.?) # Character Prefix Group <prefix> {GROUP 1}
-    \[(?P<actual_id>[-\s\w]+)\] # Referred Id Capture Group <actual_id> {GROUP 2}
-    (?P<ahead>(\(.+\#.+\))?) # Bracket Group <ahead> if any {GROUP 3}";
-
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
     pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-\s\w]*$";
 
@@ -112,8 +98,6 @@ pub mod regex {
     lazy_static::lazy_static! {
         pub static ref ID: regex::Regex = regex::Regex::new(ID_HEADER).unwrap();
         pub static ref S: regex::Regex = regex::Regex::new(LINK_SYNTAX).unwrap();
-        pub static ref S1: regex::Regex = regex::Regex::new(LINK_SYNTAX_1).unwrap();
-        pub static ref S2: regex::Regex = regex::Regex::new(LINK_SYNTAX_2).unwrap();
         pub static ref EXT: regex::Regex = regex::Regex::new(FILE_EXTENSION).unwrap();
         pub static ref URL: regex::Regex = regex::Regex::new(URL_PATTERN).unwrap();
     }
