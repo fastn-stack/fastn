@@ -1,12 +1,12 @@
 // This method will connect client request to out of the world
-pub(crate) async fn get_out(req: fpm::http::Request<'_>) {
+pub(crate) async fn get_out(host: &str, req: fpm::http::Request<'_>) -> actix_web::HttpResponse {
     let headers = req.headers();
     // TODO: It should be part of fpm::Request
     let path = &req.req.uri().to_string()[1..];
 
     let mut proxy_request = reqwest::Request::new(
         req.req.method().clone(),
-        reqwest::Url::parse(format!("http://127.0.0.1:8000/{}", path).as_str()).unwrap(),
+        reqwest::Url::parse(format!("{}/{}", host, path).as_str()).unwrap(),
     );
 
     *proxy_request.headers_mut() = headers;
@@ -22,8 +22,10 @@ pub(crate) async fn get_out(req: fpm::http::Request<'_>) {
         .build()
         .unwrap();
 
-    // match client.execute(proxy_request).await {
-    //     Ok(reponse) => fpm::http::ResponseBuilder::from(),
-    //     Err(e) => actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError()),
-    // }
+    match client.execute(proxy_request).await {
+        Ok(response) => fpm::http::ResponseBuilder::from_reqwest(response).await,
+        Err(e) => actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
+            fpm::Error::HttpError(e),
+        )),
+    }
 }
