@@ -153,7 +153,19 @@ async fn static_file(
     }
 }
 
-async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+async fn serve(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from body only :(
+) -> actix_web::HttpResponse {
+    if true {
+        return fpm::proxy::get_out(
+            "http://127.0.0.1:8001",
+            fpm::http::Request::from_actix(&req),
+            body,
+        )
+        .await;
+    }
+
     // TODO: Need to remove unwrap
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method().as_str(), req.path());
@@ -362,7 +374,7 @@ You can try without providing port, it will automatically pick unused port."#,
         .route("/-/create-cr/", actix_web::web::post().to(create_cr))
         .route("/-/create-cr/", actix_web::web::get().to(create_cr_page))
         .route("/-/clear-cache/", actix_web::web::post().to(clear_cache))
-        .route("/{path:.*}", actix_web::web::get().to(serve))
+        .route("/{path:.*}", actix_web::web::route().to(serve))
     };
 
     println!("### Server Started ###");
