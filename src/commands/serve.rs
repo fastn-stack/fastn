@@ -155,7 +155,7 @@ async fn static_file(
 
 async fn serve(
     req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from body only :(
+    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
 ) -> actix_web::HttpResponse {
     if true {
         return fpm::proxy::get_out(

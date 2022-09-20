@@ -19,7 +19,7 @@ lazy_static! {
 pub(crate) async fn get_out(
     host: &str,
     req: fpm::http::Request<'_>,
-    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from body only
+    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only
 ) -> actix_web::HttpResponse {
     let headers = req.headers();
     // TODO: It should be part of fpm::Request::uri()
