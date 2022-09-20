@@ -544,7 +544,7 @@ impl InterpreterState {
 
     // TODO: Need to avoid double usage of regex while resolving and replacing for links
 
-    /// returns id of the first occurrence of linked syntax if found from any text source
+    /// returns id set from the captured links along with its textSource
     /// text-source includes caption, header, body of the section
     fn resolve_global_ids(
         section: &mut ftd::p1::Section,
@@ -583,8 +583,8 @@ impl InterpreterState {
 
         return (None, None, None);
 
-        /// will return id of the captured link and its textSource (if any)
-        /// regex will be used to get id associated with the link
+        /// returns an id set from the captured links along with its textSource (if any)
+        /// in case no id is captured returns None
         fn resolve_id_from_all_sources(
             caption: &Option<String>,
             header: &ftd::p1::Header,
@@ -612,7 +612,7 @@ impl InterpreterState {
             None
         }
 
-        /// fetches the id of the captured link
+        /// fetches the id's of captured links
         /// from the given text if matches
         /// from any of the 2 syntax patterns
         /// if no such links found returns None
@@ -633,14 +633,12 @@ impl InterpreterState {
                 let type1 = ftd::regex::capture_group_by_name(&capture, "type1").trim();
                 match type1.is_empty() {
                     true => {
-                        // Type 2 syntax: [<id>](<ahead>)?
+                        // Type 2 syntax: [<id>]
                         // id = <id_or_text> group = <id>
                         // Linked text = id
 
-                        let id_or_text = ftd::regex::capture_group_by_name(&capture, "id_or_text");
                         let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
                         if !ahead.is_empty() && ftd::regex::URL.is_match(ahead) {
-                            println!("{} -> {} match", id_or_text, ahead);
                             continue;
                         }
 
@@ -649,8 +647,8 @@ impl InterpreterState {
                         captured_ids.insert(captured_id.to_string());
                     }
                     false => {
-                        // Type 1 syntax [<link_text>](<type1>)
-                        // Linked text = <id_or_text> = <link_text>
+                        // Type 1 syntax [<link_text>](<type1><id>)
+                        // Linked text = <id_or_text>
                         // id = <id>
                         let captured_id = ftd::regex::capture_group_by_name(&capture, "id").trim();
                         captured_ids.insert(captured_id.to_string());
@@ -712,8 +710,8 @@ impl InterpreterState {
         location: (bool, usize),
     ) -> ftd::p1::Result<Interpreter> {
         // Checking in the last section from the topmost document in the document stack
-        // which isn't popped out yet and replace links based on the captured id
-        // in the received text source
+        // which isn't popped out yet and replace links based on the captured id set
+        // it received from the specified text source
         // NOTE: need to run regex again to find link syntax
         // match for the given id and replace it with the url received
 
@@ -786,6 +784,8 @@ impl InterpreterState {
 
         return self.continue_();
 
+        /// replaces all links in a single textSource based on the specified captured-ids set
+        /// returns true if any replacement took place else false
         fn replace_all_links(
             value: &mut String,
             id_map: &std::collections::HashMap<String, String>,

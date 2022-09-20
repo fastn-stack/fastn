@@ -79,13 +79,13 @@ pub mod regex {
     (?P<domain_name>\.[\w]{1,6}) # <domain_name> group for .com/.org/.edu etc.
     (?P<after_domain>[\-\w()@:%\+\.~\#\?\&/=]*))| # <after_domain> group
     (?P<relative_link>/([\-\w@:%\.\+~\#=]+/)+ # <relative_link> group (Type-2 URL)
-    (\#(?P<relative_id>[\-\w@:%\.\+~\#=]+)|($))) # relative link id of component (optional)";
+    (\#(?P<relative_id>[-\w]+)|($))) # relative link id of component (optional)";
 
     /// Linking syntax: `<prefix>[<id_or_text>](<type1><id>)?`
     pub const LINK_SYNTAX: &str = r"(?x) # Enabling comment mode {GROUP 0 = entire match}
     (?P<prefix>.?) # Character Prefix Group <prefix>
-    \[(?P<id_or_text>.+)\] # Referred Id Capture Group <id_or_text>
-    (\(((?P<type1>\s*id\s*:(?P<id>.+))|(?P<ahead>.+))\))? # <type1> group and <ahead> group for any possible link";
+    \[(?P<id_or_text>[-\w\s]+)\] # Referred Id Capture Group <id_or_text>
+    (\(((?P<type1>\s*id\s*:(?P<id>[-\w\s]+))|(?P<ahead>[\-\w@:%\.\+~\#/=]+))\))? # <type1> group and <ahead> group";
 
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
     pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-\s\w]*$";
