@@ -56,9 +56,7 @@ impl ResponseBuilder {
                 ))
             }
         };
-
         println!("Response {:?}", String::from_utf8(content.to_vec()));
-
         response_builder.body(content)
     }
 }
