@@ -1,3 +1,30 @@
+/// returns key/value pair separated by the KV_SEPERATOR
+pub fn split_once(
+    line: &str,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::p1::Result<(String, Option<String>)> {
+    // Trim any section/subsection identifier from the beginning of the line
+    let line = ftd::identifier::trim_section_subsection_identifier(line);
+
+    let (before_kv_delimiter, after_kv_delimiter) = line
+        .split_once(ftd::identifier::KV_SEPERATOR)
+        .ok_or_else(|| ftd::p1::Error::NotFound {
+            doc_id: doc_id.to_string(),
+            line_number,
+            key: format!(
+                "\'{}\' not found while segregating kv in {}",
+                ftd::identifier::KV_SEPERATOR,
+                line
+            ),
+        })?;
+
+    match (before_kv_delimiter, after_kv_delimiter) {
+        (before, after) if after.trim().is_empty() => Ok((before.trim().to_string(), None)),
+        (before, after) => Ok((before.trim().to_string(), Some(after.trim().to_string()))),
+    }
+}
+
 pub fn parse_import(
     c: &Option<String>,
     doc_id: &str,

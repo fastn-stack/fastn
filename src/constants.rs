@@ -50,29 +50,6 @@ pub mod identifier {
     pub fn trim_section_subsection_identifier(line: &str) -> &str {
         line.trim_start_matches(|c| c == '/' || c == '\\' || c == '-' || c == ' ')
     }
-
-    /// returns key/value pair seperated by KV_SEPERATOR
-    pub fn segregate_key_value(
-        line: &str,
-        doc_id: &str,
-        line_number: usize,
-    ) -> ftd::p1::Result<(String, Option<String>)> {
-        // Trim any section/subsection identifier from the beginning of the line
-        let line = trim_section_subsection_identifier(line);
-
-        let (before_kv_delimiter, after_kv_delimiter) =
-            line.split_once(KV_SEPERATOR)
-                .ok_or_else(|| ftd::p1::Error::NotFound {
-                    doc_id: doc_id.to_string(),
-                    line_number,
-                    key: format!("\':\' not found while segregating kv in {}", line),
-                })?;
-
-        match (before_kv_delimiter, after_kv_delimiter) {
-            (before, after) if after.trim().is_empty() => Ok((before.trim().to_string(), None)),
-            (before, after) => Ok((before.trim().to_string(), Some(after.trim().to_string()))),
-        }
-    }
 }
 
 // Regex pattern constants
