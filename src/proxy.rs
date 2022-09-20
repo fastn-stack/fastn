@@ -29,7 +29,6 @@ pub(crate) async fn get_out(
     *proxy_request.headers_mut() = headers;
     *proxy_request.body_mut() = Some(body.to_vec().into());
 
-    // TODO: Problem no way to pass headers in reqwest with ClientBuilder with execute method
     // TODO: Connection Pool, It by default holds the connection pool internally
     let client = reqwest::ClientBuilder::new()
         .http2_adaptive_window(true)

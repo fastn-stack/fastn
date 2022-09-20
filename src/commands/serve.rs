@@ -166,12 +166,12 @@ async fn serve(
         .await;
     }
 
-    // TODO: Need to remove unwrap
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method().as_str(), req.path());
     let t = fpm::time(r.as_str());
     println!("{r} started");
 
+    // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.match_info().query("path").parse().unwrap();
 
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
