@@ -1,6 +1,16 @@
 pub(crate) struct Request<'a> {
-    req: &'a actix_web::HttpRequest,
+    pub req: &'a actix_web::HttpRequest,
     // method, uri, etc
+}
+
+impl<'a> Request<'a> {
+    pub fn headers(&self) -> reqwest::header::HeaderMap {
+        let mut headers = reqwest::header::HeaderMap::new();
+        for (key, value) in self.req.headers() {
+            headers.insert(key.clone(), value.clone());
+        }
+        headers
+    }
 }
 
 pub(crate) struct Response {}
