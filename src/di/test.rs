@@ -255,13 +255,13 @@ fn di_variable_definition() {
 
 #[test]
 fn di_component_definition() {
-    let v = ftd::di::DI::Definition(
-        ftd::di::Definition::new("markdown", "ftd.text")
-            .add_value_property("text", Some(s("caption or body")), None)
-            .add_value_property("text", None, Some(s("$text"))),
-    )
-    .list();
-    dbg!(serde_json::to_string(&v));
+    // let v = ftd::di::DI::Definition(
+    //     ftd::di::Definition::new("markdown", "ftd.text")
+    //         .add_value_property("text", Some(s("caption or body")), None)
+    //         .add_value_property("text", None, Some(s("$text"))),
+    // )
+    // .list();
+    // dbg!(serde_json::to_string(&v));
     p(
         indoc!(
             "

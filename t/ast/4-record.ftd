@@ -1,0 +1,8 @@
+-- record foo:
+integer age:
+
+-- string foo.details:
+
+This contains details for record `foo`.
+This is default text for the field details.
+It can be overridden by the variable of this type.

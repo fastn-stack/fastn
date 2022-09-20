@@ -1,0 +1,21 @@
+[
+  {
+    "Record": {
+      "name": "foo",
+      "fields": [
+        {
+          "field": "Field",
+          "name": "name",
+          "kind": "string",
+          "value": null
+        },
+        {
+          "field": "Field",
+          "name": "age",
+          "kind": "integer",
+          "value": "40"
+        }
+      ]
+    }
+  }
+]
