@@ -27,8 +27,16 @@ impl ResponseBuilder {
     // .build
     // response from string, json, bytes etc
 
-    pub async fn from_actix(response: reqwest::Response) -> actix_web::HttpResponse {
+    pub async fn from_reqwest(response: reqwest::Response) -> actix_web::HttpResponse {
         let status = response.status();
+
+        let mut response_builder = actix_web::HttpResponse::build(status);
+        // TODO
+        // *resp.extensions_mut() = response.extensions().clone();
+        for header in response.headers() {
+            response_builder.insert_header(header);
+        }
+
         let content = match response.bytes().await {
             Ok(b) => b,
             Err(e) => {
@@ -38,11 +46,7 @@ impl ResponseBuilder {
             }
         };
 
-        // actix_web::HttpResponse::build(status).body(content);
-
-        actix_web::HttpResponse::Ok()
-            .content_type("text/html")
-            .body(content)
+        response_builder.body(content)
     }
 }
 
