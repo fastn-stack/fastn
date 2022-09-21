@@ -80,6 +80,9 @@ pub struct Document {
 pub type TextSourceLocation = (bool, usize);
 pub type TextSourceWithLocation = (ftd::TextSource, TextSourceLocation);
 
+// is used to locate the areas where link replacement needs to happen
+pub type ReplaceLinkBlock<T> = (T, ftd::TextSourceWithLocation, usize);
+
 pub type DataDependenciesMap = ftd::Map<Data>;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]

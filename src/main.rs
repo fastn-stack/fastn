@@ -203,28 +203,34 @@ pub fn interpret_helper(
                 )?;
             }
             ftd::Interpreter::CheckID {
-                captured_ids,
-                source,
-                line_number,
+                replace_blocks,
                 state: st,
             } => {
                 // No config in ftd::ExampleLibrary using dummy global_ids map for debugging
-                let mut id_map: std::collections::HashMap<String, String> =
-                    std::collections::HashMap::new();
-                for id in captured_ids {
-                    let link = lib
-                        .dummy_global_ids_map()
-                        .get(id.as_str())
-                        .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
-                            message: format!("id: {} not found while linking", id),
-                            doc_id: st.id.clone(),
-                            line_number,
-                        })?
-                        .to_string();
-                    id_map.insert(id, link);
+                // let mut captured_ids_map: std::collections::HashMap<String, String> = std::collections::HashMap::new();
+                let mut mapped_replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashMap<String, String>>> = vec![];
+
+                for (captured_id_set, source, ln) in replace_blocks.iter(){
+                    let mut id_map: std::collections::HashMap<String, String> =
+                        std::collections::HashMap::new();
+                    for id in captured_id_set {
+                        if !captured_ids_map.contains_key(id){
+                            let link = lib
+                                .dummy_global_ids_map()
+                                .get(id)
+                                .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
+                                    message: format!("id: {} not found while linking", id),
+                                    doc_id: st.id.clone(),
+                                    line_number: *ln,
+                                })?
+                                .to_string();
+                            id_map.insert(id.to_string(), link);
+                        }
+                    }
+                    mapped_replace_blocks.push((id_map, source.to_owned(), ln.to_owned()));
                 }
 
-                s = st.continue_after_checking_id(&id_map, &source.0, source.1)?;
+                s = st.continue_after_checking_id(mapped_replace_blocks)?;
             }
         }
     }

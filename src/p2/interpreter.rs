@@ -102,13 +102,11 @@ impl InterpreterState {
             }
 
             // resolve for links
-            if let (Some(captured_ids), Some(source), Some(line_number)) =
+            if let Some(replace_blocks) =
                 Self::resolve_global_ids(p1, &doc, &parsed_document.var_types)?
             {
                 return Ok(Interpreter::CheckID {
-                    captured_ids,
-                    source,
-                    line_number,
+                    replace_blocks,
                     state: self,
                 });
             }
@@ -552,11 +550,12 @@ impl InterpreterState {
         section: &mut ftd::p1::Section,
         doc: &ftd::p2::TDoc,
         var_types: &[String],
-    ) -> ftd::p1::Result<(
-        Option<std::collections::HashSet<String>>,
-        Option<ftd::TextSourceWithLocation>,
-        Option<usize>,
-    )> {
+    ) -> ftd::p1::Result<Option<Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>>>
+    {
+        // will contain all replace blocks where link replacement need to happen
+        let mut replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> =
+            vec![];
+
         if ftd::p2::utils::is_section_subsection_component(
             section.name.as_str(),
             doc,
@@ -573,20 +572,14 @@ impl InterpreterState {
                     c.full_name.as_str(),
                     section.line_number,
                 ) {
-                    if let Some((captured_ids, text_source, line_number)) =
-                        resolve_id_from_all_sources(
-                            &section.caption,
-                            &section.header,
-                            &section.body,
-                            section.line_number,
-                        )
-                    {
-                        return Ok((
-                            Some(captured_ids),
-                            Some((text_source, (true, 0))),
-                            Some(line_number),
-                        ));
-                    }
+                    replace_blocks.extend(resolve_id_from_all_sources(
+                        &section.caption,
+                        &section.header,
+                        &section.body,
+                        section.line_number,
+                        true,
+                        0,
+                    ));
                 }
             }
         }
@@ -608,26 +601,24 @@ impl InterpreterState {
                         c.full_name.as_str(),
                         subsection.line_number,
                     ) {
-                        if let Some((captured_ids, text_source, line_number)) =
-                            resolve_id_from_all_sources(
-                                &subsection.caption,
-                                &subsection.header,
-                                &subsection.body,
-                                subsection.line_number,
-                            )
-                        {
-                            return Ok((
-                                Some(captured_ids),
-                                Some((text_source, (false, subsection_index))),
-                                Some(line_number),
-                            ));
-                        }
+                        replace_blocks.extend(resolve_id_from_all_sources(
+                            &subsection.caption,
+                            &subsection.header,
+                            &subsection.body,
+                            subsection.line_number,
+                            false,
+                            subsection_index,
+                        ));
                     }
                 }
             }
         }
 
-        return Ok((None, None, None));
+        if replace_blocks.is_empty() {
+            return Ok(None);
+        }
+
+        return Ok(Some(replace_blocks));
 
         /// returns an id set from the captured links along with its textSource (if any)
         /// in case no id is captured returns None
@@ -636,26 +627,46 @@ impl InterpreterState {
             header: &ftd::p1::Header,
             body: &Option<(usize, String)>,
             line_number: usize,
-        ) -> Option<(std::collections::HashSet<String>, ftd::TextSource, usize)> {
+            is_from_section: bool,
+            index: usize,
+        ) -> Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> {
+            let mut replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> =
+                vec![];
+
             if let Some(ref caption) = caption {
                 if let Some(captured_ids) = find_referenced_links(caption) {
-                    return Some((captured_ids, ftd::TextSource::Caption, line_number));
+                    // return Some((captured_ids, ftd::TextSource::Caption, line_number));
+                    replace_blocks.push((
+                        captured_ids,
+                        (ftd::TextSource::Caption, (is_from_section, index)),
+                        line_number,
+                    ));
                 }
             }
 
             for (ln, _, header) in header.0.iter() {
                 if let Some(captured_ids) = find_referenced_links(header) {
-                    return Some((captured_ids, ftd::TextSource::Header, *ln));
+                    // return Some((captured_ids, ftd::TextSource::Header, *ln));
+                    replace_blocks.push((
+                        captured_ids,
+                        (ftd::TextSource::Header, (is_from_section, index)),
+                        *ln,
+                    ));
                 }
             }
 
             if let Some((ln, ref body)) = body {
                 if let Some(captured_ids) = find_referenced_links(body) {
-                    return Some((captured_ids, ftd::TextSource::Body, *ln));
+                    // return Some((captured_ids, ftd::TextSource::Body, *ln));
+                    replace_blocks.push((
+                        captured_ids,
+                        (ftd::TextSource::Body, (is_from_section, index)),
+                        *ln,
+                    ));
                 }
             }
 
-            None
+            replace_blocks
         }
 
         /// fetches the id's of captured links
@@ -855,7 +866,7 @@ impl InterpreterState {
 
         /// replaces all links in a single textSource based on the specified captured-ids set
         /// returns true if any replacement took place else false
-        fn replace_all_links(
+        fn replace_all_links_in_section(
             value: &mut String,
             id_map: &std::collections::HashMap<String, String>,
         ) -> bool {
@@ -1226,9 +1237,7 @@ pub enum Interpreter {
         state: InterpreterState,
     },
     CheckID {
-        captured_ids: std::collections::HashSet<String>,
-        source: (ftd::TextSource, (bool, usize)),
-        line_number: usize,
+        replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>,
         state: InterpreterState,
     },
     Done {
