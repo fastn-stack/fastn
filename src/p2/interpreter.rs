@@ -101,9 +101,21 @@ impl InterpreterState {
                 });
             }
 
+            // resolve for links
+            if let (Some(captured_ids), Some(source), Some(line_number)) =
+                Self::resolve_global_ids(p1, &doc, &parsed_document.var_types)?
+            {
+                return Ok(Interpreter::CheckID {
+                    captured_ids,
+                    source,
+                    line_number,
+                    state: self,
+                });
+            }
+
             // Once the foreign_variables are resolved for the section, then pop and evaluate it.
             // This ensures that a section is evaluated once only.
-            let mut p1 = parsed_document.sections.pop().unwrap();
+            let p1 = parsed_document.sections.pop().unwrap();
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
@@ -130,7 +142,8 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::p2::Thing::Record(d)));
-            } else if p1.name.starts_with("or-type ") {
+            }
+            else if p1.name.starts_with("or-type ") {
                 // declare a record
                 let d = ftd::OrType::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
@@ -142,7 +155,8 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::p2::Thing::OrType(d)));
-            } else if p1.name.starts_with("map ") {
+            }
+            else if p1.name.starts_with("map ") {
                 let d = ftd::Variable::map_from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
@@ -157,7 +171,8 @@ impl InterpreterState {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
                 //         Not sure if its a good idea tho.
                 // }
-            } else if p1.name == "container" {
+            }
+            else if p1.name == "container" {
                 parsed_document
                     .instructions
                     .push(ftd::Instruction::ChangeContainer {
@@ -167,7 +182,8 @@ impl InterpreterState {
                             &parsed_document.instructions,
                         )?,
                     });
-            } else if let Ok(ftd::variable::VariableData {
+            }
+            else if let Ok(ftd::variable::VariableData {
                 type_: ftd::variable::Type::Component,
                 ..
             }) = var_data
@@ -211,7 +227,8 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::p2::Thing::Variable(d)));
-            } else if let ftd::p2::Thing::Variable(mut v) =
+            }
+            else if let ftd::p2::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
                 assert!(
@@ -281,26 +298,7 @@ impl InterpreterState {
                             p1.line_number,
                         );
                     }
-                    ftd::p2::Thing::Component(c) => {
-                        if ftd::p2::utils::is_markdown_component(
-                            &doc,
-                            c.full_name.as_str(),
-                            p1.line_number,
-                        )? {
-                            if let (Some(captured_ids), Some(source), Some(line_number)) =
-                                Self::resolve_global_ids(&mut p1)
-                            {
-                                // Push back p1 since it needs to be processed for links
-                                parsed_document.sections.push(p1);
-                                return Ok(Interpreter::CheckID {
-                                    captured_ids,
-                                    source,
-                                    line_number,
-                                    state: self,
-                                });
-                            }
-                        }
-
+                    ftd::p2::Thing::Component(_) => {
                         if p1
                             .header
                             .str_optional(doc.name, p1.line_number, "$processor$")?
@@ -554,42 +552,92 @@ impl InterpreterState {
 
     /// returns id set from the captured links along with its textSource
     /// text-source includes caption, header, body of the section
+    #[allow(clippy::type_complexity)]
     fn resolve_global_ids(
         section: &mut ftd::p1::Section,
-    ) -> (
+        doc: &ftd::p2::TDoc,
+        var_types: &[String],
+    ) -> ftd::p1::Result<(
         Option<std::collections::HashSet<String>>,
         Option<ftd::TextSourceWithLocation>,
         Option<usize>,
-    ) {
-        if let Some((captured_ids, text_source, line_number)) = resolve_id_from_all_sources(
-            &section.caption,
-            &section.header,
-            &section.body,
-            section.line_number,
-        ) {
-            return (
-                Some(captured_ids),
-                Some((text_source, (true, 0))),
-                Some(line_number),
+    )> {
+
+        /// return true if the section is an invoked component not a variable component
+        /// otherwise returns false
+        fn is_section_component(name: &str, doc: &ftd::p2::TDoc, var_types: &[String], line_number) -> ftd::p1::Result<bool> {
+
+            let var_data = ftd::variable::VariableData::get_name_kind(
+                name,
+                doc,
+                line_number,
+                var_types,
             );
+
+            if name.starts_with("record ") || name.starts_with("or-type ") || name.starts_with("map ") || name.starts_with("container"){
+                return Ok(false);
+            }
+
+            if let Ok(_) = var_data{
+                return Ok(false);
+            }
+
+            if let ftd::p2::Thing::Component(c) = doc.get_thing(line_number, name)?{
+                return true;
+            }
+
+            Ok(false)
         }
 
-        for (subsection_index, subsection) in itertools::enumerate(section.sub_sections.0.iter()) {
-            if let Some((captured_ids, text_source, line_number)) = resolve_id_from_all_sources(
-                &subsection.caption,
-                &subsection.header,
-                &subsection.body,
-                subsection.line_number,
-            ) {
-                return (
-                    Some(captured_ids),
-                    Some((text_source, (false, subsection_index))),
-                    Some(line_number),
-                );
+        if is_section_component(section.name.as_str(), doc, var_types, section.line_number) {
+            if let ftd::p2::Thing::Component(c) = doc.get_thing(section.line_number, section.name.as_str())? {
+                if ftd::p2::utils::is_markdown_component(doc, c.full_name.as_str(), section.line_number)? {
+                    if let Some((captured_ids, text_source, line_number)) = resolve_id_from_all_sources(
+                        &section.caption,
+                        &section.header,
+                        &section.body,
+                        section.line_number,
+                    ) {
+                        return Ok((
+                            Some(captured_ids),
+                            Some((text_source, (true, 0))),
+                            Some(line_number),
+                        ));
+                    }
+                }
             }
         }
 
-        return (None, None, None);
+        for (subsection_index, subsection) in itertools::enumerate(section.sub_sections.0.iter()) {
+            if is_section_component(subsection.name.as_str(), doc, var_types, subsection.line_number) {
+                if let ftd::p2::Thing::Component(c) =
+                doc.get_thing(subsection.line_number, subsection.name.as_str())?
+                {
+                    if ftd::p2::utils::is_markdown_component(
+                        doc,
+                        c.full_name.as_str(),
+                        subsection.line_number,
+                    )? {
+                        if let Some((captured_ids, text_source, line_number)) =
+                        resolve_id_from_all_sources(
+                            &subsection.caption,
+                            &subsection.header,
+                            &subsection.body,
+                            subsection.line_number,
+                        )
+                        {
+                            return Ok((
+                                Some(captured_ids),
+                                Some((text_source, (false, subsection_index))),
+                                Some(line_number),
+                            ));
+                        }
+                    }
+                }
+            }
+        }
+
+        return Ok((None, None, None));
 
         /// returns an id set from the captured links along with its textSource (if any)
         /// in case no id is captured returns None
