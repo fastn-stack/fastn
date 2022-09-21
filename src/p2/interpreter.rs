@@ -101,20 +101,9 @@ impl InterpreterState {
                 });
             }
 
-            if let (Some(captured_ids), Some(source), Some(line_number)) =
-                Self::resolve_global_ids(p1)
-            {
-                return Ok(Interpreter::CheckID {
-                    captured_ids,
-                    source,
-                    line_number,
-                    state: self,
-                });
-            }
-
             // Once the foreign_variables are resolved for the section, then pop and evaluate it.
             // This ensures that a section is evaluated once only.
-            let p1 = parsed_document.sections.pop().unwrap();
+            let mut p1 = parsed_document.sections.pop().unwrap();
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
@@ -292,7 +281,26 @@ impl InterpreterState {
                             p1.line_number,
                         );
                     }
-                    ftd::p2::Thing::Component(_) => {
+                    ftd::p2::Thing::Component(c) => {
+                        if ftd::p2::utils::is_markdown_component(
+                            &doc,
+                            c.full_name.as_str(),
+                            p1.line_number,
+                        )? {
+                            if let (Some(captured_ids), Some(source), Some(line_number)) =
+                                Self::resolve_global_ids(&mut p1)
+                            {
+                                // Push back p1 since it needs to be processed for links
+                                parsed_document.sections.push(p1);
+                                return Ok(Interpreter::CheckID {
+                                    captured_ids,
+                                    source,
+                                    line_number,
+                                    state: self,
+                                });
+                            }
+                        }
+
                         if p1
                             .header
                             .str_optional(doc.name, p1.line_number, "$processor$")?
@@ -624,8 +632,9 @@ impl InterpreterState {
             // Referred Id Capture Group <id_or_text>
             // <type1> group and <ahead> group for any possible link
             for capture in ftd::regex::S.captures_iter(value) {
-                // check if link is escaped ignore if true
                 let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
+
+                // check if link is escaped ignore if true
                 if !prefix.is_empty() && prefix.eq(r"\") {
                     continue;
                 }
@@ -638,12 +647,28 @@ impl InterpreterState {
                         // Linked text = id
 
                         let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
+
+                        // ignore if a resolved link already exists
                         if !ahead.is_empty() && ftd::regex::URL.is_match(ahead) {
                             continue;
                         }
 
                         let captured_id =
                             ftd::regex::capture_group_by_name(&capture, "id_or_text").trim();
+
+                        // In case user doesn't provide any id
+                        match captured_id.is_empty() {
+                            true => continue,
+                            false => {
+                                // In case user uses [] as checkboxes instead of links ignore them
+                                // - [ ] item1
+                                // - [x] item2
+                                if matches!(captured_id, "x" | "X") {
+                                    continue;
+                                }
+                            }
+                        }
+
                         captured_ids.insert(captured_id.to_string());
                     }
                     false => {
@@ -651,6 +676,12 @@ impl InterpreterState {
                         // Linked text = <id_or_text>
                         // id = <id>
                         let captured_id = ftd::regex::capture_group_by_name(&capture, "id").trim();
+
+                        // In case user doesn't provide any id
+                        if captured_id.is_empty() {
+                            continue;
+                        }
+
                         captured_ids.insert(captured_id.to_string());
                     }
                 }
@@ -798,24 +829,52 @@ impl InterpreterState {
             for capture in ftd::regex::S.captures_iter(value.as_ref()) {
                 // check if link is escaped ignore link if true
                 let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
-                if !prefix.is_empty() && prefix.eq(r"\") {
-                    continue;
-                }
+                let type1 = ftd::regex::capture_group_by_name(&capture, "type1");
 
-                let type1 = ftd::regex::capture_group_by_name(&capture, "type1").trim();
-                match type1.is_empty() {
+                match type1.trim().is_empty() {
                     true => {
-                        // Type 2 syntax: [<id>](<ahead>)?
+                        // Type 2 syntax: [<id>]
+                        // Match <prefix>?[<id_or_text>](<ahead>)?
                         // id = <id_or_text> group = <id>
                         // Linked text = id
-                        let captured_id =
-                            ftd::regex::capture_group_by_name(&capture, "id_or_text").trim();
-                        let linked_text = captured_id.trim();
-                        let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
 
-                        if !ahead.is_empty() && ftd::regex::URL.is_match(ahead) {
-                            println!("{} match", ahead);
+                        let matched_pattern = ftd::regex::capture_group_by_index(&capture, 0);
+                        let match_length = matched_pattern.len();
+                        let match_start_index = capture.get(0).unwrap().start();
+
+                        let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
+                        let linked_text = ftd::regex::capture_group_by_name(&capture, "id_or_text");
+                        let captured_id = linked_text.trim();
+
+                        // In case, the link is escaped, ignore it
+                        if !prefix.is_empty() && prefix.eq(r"\") {
+                            let match_without_prefix = match ahead.is_empty() {
+                                true => format!("[{}]({})", linked_text, ahead),
+                                false => format!("[{}]", linked_text),
+                            };
+                            matches_with_replacements.push((
+                                match_without_prefix,
+                                match_start_index,
+                                match_length,
+                            ));
                             continue;
+                        }
+
+                        // in case resolved link already exists
+                        if !ahead.is_empty() && ftd::regex::URL.is_match(ahead) {
+                            continue;
+                        }
+
+                        // In case the user doesn't provide any id
+                        // like this - [ ] consider this as an empty checkbox
+                        match captured_id.is_empty() {
+                            true => continue,
+                            false => {
+                                // In case user uses [x] or [X] as checkboxes instead of links ignore them
+                                if matches!(captured_id, "x" | "X") {
+                                    continue;
+                                }
+                            }
                         }
 
                         let link = &id_map[captured_id];
@@ -823,10 +882,6 @@ impl InterpreterState {
                         if !prefix.is_empty() {
                             replacement = format!("{}{}", prefix, replacement);
                         }
-
-                        let matched_pattern = ftd::regex::capture_group_by_index(&capture, 0);
-                        let match_length = matched_pattern.len();
-                        let match_start_index = capture.get(0).unwrap().start();
 
                         matches_with_replacements.push((
                             replacement,
@@ -836,21 +891,39 @@ impl InterpreterState {
                     }
                     false => {
                         // Type 1 syntax: [<link-text>](id: <id>)
+                        // Match <prefix>?[<id_or_text>](<type1>)
                         // Linked text = <id_or_text> = <link_text>
                         // id = <id_or_ahead>
 
                         let captured_id = ftd::regex::capture_group_by_name(&capture, "id").trim();
                         let linked_text = ftd::regex::capture_group_by_name(&capture, "id_or_text");
+
+                        let matched_pattern = ftd::regex::capture_group_by_index(&capture, 0);
+                        let match_start_index = capture.get(0).unwrap().start();
+                        let match_length = matched_pattern.len();
+
+                        // In case, the link is escaped, ignore it
+                        if !prefix.is_empty() && prefix.eq(r"\") {
+                            let match_without_prefix = format!("[{}]({})", linked_text, type1);
+                            matches_with_replacements.push((
+                                match_without_prefix,
+                                match_start_index,
+                                match_length,
+                            ));
+                            continue;
+                        }
+
+                        // In case the user doesn't provide any id
+                        if captured_id.is_empty() {
+                            continue;
+                        }
+
                         let link = &id_map[captured_id];
 
                         let mut replacement = format!("[{}]({})", linked_text, link);
                         if !prefix.is_empty() {
                             replacement = format!("{}{}", prefix, replacement);
                         }
-
-                        let matched_pattern = ftd::regex::capture_group_by_index(&capture, 0);
-                        let match_start_index = capture.get(0).unwrap().start();
-                        let match_length = matched_pattern.len();
 
                         matches_with_replacements.push((
                             replacement,

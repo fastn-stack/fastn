@@ -1588,3 +1588,23 @@ where
         line_number,
     })
 }
+
+/// return true if the component with the given name is a markdown component
+/// otherwise returns false
+pub fn is_markdown_component(
+    doc: &ftd::p2::TDoc,
+    name: &str,
+    line_number: usize,
+) -> ftd::p1::Result<bool> {
+    let mut name = name.to_string();
+
+    // check if the component is derived from ftd#text
+    while !name.eq("ftd.kernel") {
+        let component = doc.get_component(line_number, name.as_str())?;
+        if name.eq("ftd#text") {
+            return Ok(true);
+        }
+        name = component.root;
+    }
+    Ok(false)
+}

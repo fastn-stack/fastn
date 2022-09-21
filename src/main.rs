@@ -258,6 +258,10 @@ impl ExampleLibrary {
         global_ids.insert("c".to_string(), "/some/#c".to_string());
         global_ids.insert("d".to_string(), "/some/#d".to_string());
 
+        // to debug in case of checkboxes
+        global_ids.insert("x".to_string(), "/some/#x".to_string());
+        global_ids.insert("X".to_string(), "/some/#X".to_string());
+
         global_ids
     }
 
