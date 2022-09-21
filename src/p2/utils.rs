@@ -1591,20 +1591,64 @@ where
 
 /// return true if the component with the given name is a markdown component
 /// otherwise returns false
-pub fn is_markdown_component(
-    doc: &ftd::p2::TDoc,
-    name: &str,
-    line_number: usize,
-) -> ftd::p1::Result<bool> {
+pub fn is_markdown_component(doc: &ftd::p2::TDoc, name: &str, line_number: usize) -> bool {
     let mut name = name.to_string();
-
     // check if the component is derived from ftd#text
     while !name.eq("ftd.kernel") {
-        let component = doc.get_component(line_number, name.as_str())?;
-        if name.eq("ftd#text") {
-            return Ok(true);
+        match get_thing_ignore_fail(name.as_str(), line_number, doc) {
+            Some(ftd::p2::Thing::Component(component)) => {
+                if name.eq("ftd#text") {
+                    return true;
+                }
+                name = component.root;
+            }
+            Some(_) => return false,
+            None => return false,
         }
-        name = component.root;
     }
+    false
+}
+
+/// fetches the thing from the bag and returns it.
+/// in case of an error while fetching the thing, it returns None
+/// to avoid scenarios when section/subsection don't have a thing in the bag
+/// for eg. in case of ftd#ui
+pub fn get_thing_ignore_fail(
+    name: &str,
+    line_number: usize,
+    doc: &ftd::p2::TDoc,
+) -> Option<ftd::p2::Thing> {
+    match doc.get_thing(line_number, name) {
+        Ok(thing) => Some(thing),
+        Err(_) => None,
+    }
+}
+
+/// return true if the section is an invoked component not a variable component
+/// otherwise returns false
+pub fn is_section_subsection_component(
+    name: &str,
+    doc: &ftd::p2::TDoc,
+    var_types: &[String],
+    line_number: usize,
+) -> ftd::p1::Result<bool> {
+    let var_data = ftd::variable::VariableData::get_name_kind(name, doc, line_number, var_types);
+
+    if name.starts_with("record ")
+        || name.starts_with("or-type ")
+        || name.starts_with("map ")
+        || name.starts_with("container")
+    {
+        return Ok(false);
+    }
+
+    if let Ok(_) = var_data {
+        return Ok(false);
+    }
+
+    if let Some(ftd::p2::Thing::Component(_)) = get_thing_ignore_fail(name, line_number, doc) {
+        return Ok(true);
+    }
+
     Ok(false)
 }
