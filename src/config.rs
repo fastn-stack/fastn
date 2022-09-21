@@ -1304,6 +1304,8 @@ pub(crate) struct PackageTemp {
     pub import_auto_imports_from_original: bool,
     #[serde(rename = "favicon")]
     pub favicon: Option<String>,
+    #[serde(rename = "endpoint")]
+    pub endpoint: Option<String>,
 }
 
 impl PackageTemp {
@@ -1340,7 +1342,7 @@ impl PackageTemp {
             sitemap: None,
             sitemap_temp: None,
             favicon: self.favicon,
-            endpoint: None,
+            endpoint: self.endpoint,
         }
     }
 }

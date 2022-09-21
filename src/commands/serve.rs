@@ -185,13 +185,24 @@ async fn serve(
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
 
         // If path is not present in sitemap then pass it to proxy
-        if let Some(sitemap) = config.package.sitemap.as_ref() {
-            if !sitemap.path_exists(path.as_str()) {
-                return if let Some(endpoint) = config.package.endpoint.as_ref() {
-                    fpm::proxy::get_out(endpoint, fpm::http::Request::from_actix(&req), body).await
-                } else {
-                    actix_web::HttpResponse::NotFound().body(format!("{path} not found"))
-                };
+        // TODO: Need to handle other package URL as well, and that will start from `-`
+        // and all the static files starts with `-`
+        // So task is how to handle proxy urls which are starting with `-/<package-name>/<proxy-path>`
+        // In that case need to check whether that url is present in sitemap or not and than proxy
+        // pass the url if the file is not static
+        // So final check would be file is not static and path is not present in the package's sitemap
+        if !path.starts_with("-/") {
+            if let Some(sitemap) = config.package.sitemap.as_ref() {
+                if !sitemap.path_exists(path.as_str()) {
+                    if let Some(endpoint) = config.package.endpoint.as_ref() {
+                        return fpm::proxy::get_out(
+                            endpoint,
+                            fpm::http::Request::from_actix(&req),
+                            body,
+                        )
+                        .await;
+                    };
+                }
             }
         }
         serve_file(&req, &mut config, &path).await
