@@ -158,7 +158,7 @@ async fn serve(
     body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
 ) -> actix_web::HttpResponse {
     // TODO:
-    if false {
+    if true {
         return fpm::proxy::get_out(
             "http://127.0.0.1:8001", // TODO: read it from FPM.ftd
             fpm::http::Request::from_actix(&req),
