@@ -183,13 +183,12 @@ async fn serve(
         let mut config =
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
 
-        // url is present in config or not
-        // If not present than proxy pass it
+        // If path is not present in sitemap then pass it to proxy
         if !config
             .package
             .sitemap
             .as_ref()
-            .map_or(false, |sitemap| sitemap.path_exists(path.as_str()))
+            .map_or(true, |sitemap| sitemap.path_exists(path.as_str()))
         {
             return fpm::proxy::get_out(
                 "http://127.0.0.1:8001", // TODO: read it from FPM.ftd
@@ -198,13 +197,8 @@ async fn serve(
             )
             .await;
         }
-
         serve_file(&req, &mut config, &path).await
     };
-
-    // if 404 than: pass proxy
-    // traces the fpm config and than, if not present than proxy pass
-
     t.it(response)
 }
 
