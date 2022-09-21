@@ -2,14 +2,18 @@
 #[macro_use]
 mod test;
 
+mod component;
 mod import;
 mod main;
 mod record;
 mod utils;
+mod variable;
 
+pub use component::Component;
 pub use import::Import;
 pub use main::AST;
 pub use record::Record;
+pub use variable::VariableDefinition;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

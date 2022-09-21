@@ -4,6 +4,7 @@
 pub enum AST {
     Import(ftd::ast::Import),
     Record(ftd::ast::Record),
+    VariableDefinition(ftd::ast::VariableDefinition),
 }
 
 impl AST {
@@ -23,6 +24,8 @@ impl AST {
             AST::Import(ftd::ast::Import::from_p1(section, doc_id)?)
         } else if ftd::ast::Record::is_record(section) {
             AST::Record(ftd::ast::Record::from_p1(section, doc_id)?)
+        } else if ftd::ast::VariableDefinition::is_variable_definition(section) {
+            AST::VariableDefinition(ftd::ast::VariableDefinition::from_p1(section, doc_id)?)
         } else {
             return Err(ftd::ast::Error::ParseError {
                 message: format!("Invalid AST, found: `{:?}`", section),

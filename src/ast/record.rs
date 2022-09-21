@@ -43,7 +43,6 @@ impl Record {
 }
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
-#[serde(tag = "field")]
 pub struct Field {
     name: String,
     kind: String,
