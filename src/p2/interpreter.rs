@@ -142,8 +142,7 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::p2::Thing::Record(d)));
-            }
-            else if p1.name.starts_with("or-type ") {
+            } else if p1.name.starts_with("or-type ") {
                 // declare a record
                 let d = ftd::OrType::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
@@ -155,8 +154,7 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::p2::Thing::OrType(d)));
-            }
-            else if p1.name.starts_with("map ") {
+            } else if p1.name.starts_with("map ") {
                 let d = ftd::Variable::map_from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
@@ -171,8 +169,7 @@ impl InterpreterState {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
                 //         Not sure if its a good idea tho.
                 // }
-            }
-            else if p1.name == "container" {
+            } else if p1.name == "container" {
                 parsed_document
                     .instructions
                     .push(ftd::Instruction::ChangeContainer {
@@ -182,8 +179,7 @@ impl InterpreterState {
                             &parsed_document.instructions,
                         )?,
                     });
-            }
-            else if let Ok(ftd::variable::VariableData {
+            } else if let Ok(ftd::variable::VariableData {
                 type_: ftd::variable::Type::Component,
                 ..
             }) = var_data
@@ -227,8 +223,7 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::p2::Thing::Variable(d)));
-            }
-            else if let ftd::p2::Thing::Variable(mut v) =
+            } else if let ftd::p2::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
                 assert!(
@@ -562,42 +557,30 @@ impl InterpreterState {
         Option<ftd::TextSourceWithLocation>,
         Option<usize>,
     )> {
-
-        /// return true if the section is an invoked component not a variable component
-        /// otherwise returns false
-        fn is_section_component(name: &str, doc: &ftd::p2::TDoc, var_types: &[String], line_number) -> ftd::p1::Result<bool> {
-
-            let var_data = ftd::variable::VariableData::get_name_kind(
-                name,
+        if ftd::p2::utils::is_section_subsection_component(
+            section.name.as_str(),
+            doc,
+            var_types,
+            section.line_number,
+        )? {
+            if let Some(ftd::p2::Thing::Component(c)) = ftd::p2::utils::get_thing_ignore_fail(
+                section.name.as_str(),
+                section.line_number,
                 doc,
-                line_number,
-                var_types,
-            );
-
-            if name.starts_with("record ") || name.starts_with("or-type ") || name.starts_with("map ") || name.starts_with("container"){
-                return Ok(false);
-            }
-
-            if let Ok(_) = var_data{
-                return Ok(false);
-            }
-
-            if let ftd::p2::Thing::Component(c) = doc.get_thing(line_number, name)?{
-                return true;
-            }
-
-            Ok(false)
-        }
-
-        if is_section_component(section.name.as_str(), doc, var_types, section.line_number) {
-            if let ftd::p2::Thing::Component(c) = doc.get_thing(section.line_number, section.name.as_str())? {
-                if ftd::p2::utils::is_markdown_component(doc, c.full_name.as_str(), section.line_number)? {
-                    if let Some((captured_ids, text_source, line_number)) = resolve_id_from_all_sources(
-                        &section.caption,
-                        &section.header,
-                        &section.body,
-                        section.line_number,
-                    ) {
+            ) {
+                if ftd::p2::utils::is_markdown_component(
+                    doc,
+                    c.full_name.as_str(),
+                    section.line_number,
+                ) {
+                    if let Some((captured_ids, text_source, line_number)) =
+                        resolve_id_from_all_sources(
+                            &section.caption,
+                            &section.header,
+                            &section.body,
+                            section.line_number,
+                        )
+                    {
                         return Ok((
                             Some(captured_ids),
                             Some((text_source, (true, 0))),
@@ -609,22 +592,29 @@ impl InterpreterState {
         }
 
         for (subsection_index, subsection) in itertools::enumerate(section.sub_sections.0.iter()) {
-            if is_section_component(subsection.name.as_str(), doc, var_types, subsection.line_number) {
-                if let ftd::p2::Thing::Component(c) =
-                doc.get_thing(subsection.line_number, subsection.name.as_str())?
-                {
+            if ftd::p2::utils::is_section_subsection_component(
+                subsection.name.as_str(),
+                doc,
+                var_types,
+                subsection.line_number,
+            )? {
+                if let Some(ftd::p2::Thing::Component(c)) = ftd::p2::utils::get_thing_ignore_fail(
+                    subsection.name.as_str(),
+                    subsection.line_number,
+                    doc,
+                ) {
                     if ftd::p2::utils::is_markdown_component(
                         doc,
                         c.full_name.as_str(),
                         subsection.line_number,
-                    )? {
+                    ) {
                         if let Some((captured_ids, text_source, line_number)) =
-                        resolve_id_from_all_sources(
-                            &subsection.caption,
-                            &subsection.header,
-                            &subsection.body,
-                            subsection.line_number,
-                        )
+                            resolve_id_from_all_sources(
+                                &subsection.caption,
+                                &subsection.header,
+                                &subsection.body,
+                                subsection.line_number,
+                            )
                         {
                             return Ok((
                                 Some(captured_ids),
@@ -896,15 +886,6 @@ impl InterpreterState {
 
                         // In case, the link is escaped, ignore it
                         if !prefix.is_empty() && prefix.eq(r"\") {
-                            let match_without_prefix = match ahead.is_empty() {
-                                true => format!("[{}]({})", linked_text, ahead),
-                                false => format!("[{}]", linked_text),
-                            };
-                            matches_with_replacements.push((
-                                match_without_prefix,
-                                match_start_index,
-                                match_length,
-                            ));
                             continue;
                         }
 
@@ -952,12 +933,6 @@ impl InterpreterState {
 
                         // In case, the link is escaped, ignore it
                         if !prefix.is_empty() && prefix.eq(r"\") {
-                            let match_without_prefix = format!("[{}]({})", linked_text, type1);
-                            matches_with_replacements.push((
-                                match_without_prefix,
-                                match_start_index,
-                                match_length,
-                            ));
                             continue;
                         }
 
