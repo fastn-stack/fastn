@@ -1,6 +1,65 @@
-// pub(crate) struct Request {
-//     req: actix_web::HttpRequest
-// }
+pub(crate) struct Request<'a> {
+    pub req: &'a actix_web::HttpRequest,
+    // method, uri, etc
+}
+
+impl<'a> Request<'a> {
+    pub fn from_actix(req: &'a actix_web::HttpRequest) -> Self {
+        Request { req }
+    }
+
+    pub fn headers(&self) -> reqwest::header::HeaderMap {
+        let mut headers = reqwest::header::HeaderMap::new();
+        for (key, value) in self.req.headers() {
+            headers.insert(key.clone(), value.clone());
+        }
+        headers
+    }
+}
+
+// pub(crate) struct Response {}
+
+pub(crate) struct ResponseBuilder {
+    // headers: std::collections::HashMap<String, String>,
+    // code: u16,
+    // remaining
+}
+
+// We will no do stream, data is going to less from services
+impl ResponseBuilder {
+    // chain implementation
+    // .build
+    // response from string, json, bytes etc
+
+    pub async fn from_reqwest(response: reqwest::Response) -> actix_web::HttpResponse {
+        let status = response.status();
+
+        let mut response_builder = actix_web::HttpResponse::build(status);
+        // TODO
+        // *resp.extensions_mut() = response.extensions().clone();
+
+        // Remove `Connection` as per
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection#Directives
+        for header in response
+            .headers()
+            .iter()
+            .filter(|(h, _)| *h != "connection")
+        {
+            response_builder.insert_header(header);
+        }
+
+        let content = match response.bytes().await {
+            Ok(b) => b,
+            Err(e) => {
+                return actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
+                    fpm::Error::HttpError(e),
+                ))
+            }
+        };
+        println!("Response {:?}", String::from_utf8(content.to_vec()));
+        response_builder.body(content)
+    }
+}
 
 pub(crate) fn url_regex() -> regex::Regex {
     regex::Regex::new(

@@ -23,6 +23,7 @@ mod http;
 mod i18n;
 pub mod library;
 mod package_doc;
+mod proxy;
 mod render;
 mod sitemap;
 mod snapshot;

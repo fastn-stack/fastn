@@ -153,13 +153,26 @@ async fn static_file(
     }
 }
 
-async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    // TODO: Need to remove unwrap
+async fn serve(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
+) -> actix_web::HttpResponse {
+    // TODO:
+    if false {
+        return fpm::proxy::get_out(
+            "http://127.0.0.1:8001", // TODO: read it from FPM.ftd
+            fpm::http::Request::from_actix(&req),
+            body,
+        )
+        .await;
+    }
+
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method().as_str(), req.path());
     let t = fpm::time(r.as_str());
     println!("{r} started");
 
+    // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.match_info().query("path").parse().unwrap();
 
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
@@ -177,10 +190,18 @@ async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
+        // url is present in config or not
+        // If not present than proxy pass it
         let mut config =
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_file(&req, &mut config, &path).await
+
+        // if true: serve_file
+        // else: proxy_pass
     };
+
+    // if 404 than: pass proxy
+    // traces the fpm config and than, if not present than proxy pass
 
     t.it(response)
 }
@@ -354,7 +375,7 @@ You can try without providing port, it will automatically pick unused port."#,
         .route("/-/create-cr/", actix_web::web::post().to(create_cr))
         .route("/-/create-cr/", actix_web::web::get().to(create_cr_page))
         .route("/-/clear-cache/", actix_web::web::post().to(clear_cache))
-        .route("/{path:.*}", actix_web::web::get().to(serve))
+        .route("/{path:.*}", actix_web::web::route().to(serve))
     };
 
     println!("### Server Started ###");
