@@ -10,6 +10,7 @@ optional string translation-of:
 string list translation:
 optional string canonical-url:
 boolean inherit-auto-imports-from-original: true
+optional string endpoint:
 
 
 

@@ -1,4 +1,5 @@
 lazy_static! {
+    // read write lock for APIs
     static ref LOCK: async_lock::RwLock<()> = async_lock::RwLock::new(());
 }
 
@@ -184,18 +185,14 @@ async fn serve(
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
 
         // If path is not present in sitemap then pass it to proxy
-        if !config
-            .package
-            .sitemap
-            .as_ref()
-            .map_or(true, |sitemap| sitemap.path_exists(path.as_str()))
-        {
-            return fpm::proxy::get_out(
-                "http://127.0.0.1:8001", // TODO: read it from FPM.ftd
-                fpm::http::Request::from_actix(&req),
-                body,
-            )
-            .await;
+        if let Some(sitemap) = config.package.sitemap.as_ref() {
+            if !sitemap.path_exists(path.as_str()) {
+                return if let Some(endpoint) = config.package.endpoint.as_ref() {
+                    fpm::proxy::get_out(endpoint, fpm::http::Request::from_actix(&req), body).await
+                } else {
+                    actix_web::HttpResponse::NotFound().body(format!("{path} not found"))
+                };
+            }
         }
         serve_file(&req, &mut config, &path).await
     };

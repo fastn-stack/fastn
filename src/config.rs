@@ -1340,6 +1340,7 @@ impl PackageTemp {
             sitemap: None,
             sitemap_temp: None,
             favicon: self.favicon,
+            endpoint: None,
         }
     }
 }
@@ -1388,6 +1389,9 @@ pub struct Package {
     /// If more than one favicon.* file is present, we will use them
     /// in following priority: .ico > .svg > .png > .jpg.
     pub favicon: Option<String>,
+
+    /// endpoint for proxy service
+    pub endpoint: Option<String>,
 }
 
 impl Package {
@@ -1413,6 +1417,7 @@ impl Package {
             sitemap_temp: None,
             sitemap: None,
             favicon: None,
+            endpoint: None,
         }
     }
 
