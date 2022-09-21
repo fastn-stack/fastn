@@ -1591,37 +1591,28 @@ where
 
 /// return true if the component with the given name is a markdown component
 /// otherwise returns false
-pub fn is_markdown_component(doc: &ftd::p2::TDoc, name: &str, line_number: usize) -> bool {
+pub fn is_markdown_component(
+    doc: &ftd::p2::TDoc,
+    name: &str,
+    line_number: usize,
+) -> ftd::p1::Result<bool> {
     let mut name = name.to_string();
     // check if the component is derived from ftd#text
     while !name.eq("ftd.kernel") {
-        match get_thing_ignore_fail(name.as_str(), line_number, doc) {
-            Some(ftd::p2::Thing::Component(component)) => {
+        if !doc.get_thing(line_number, name.as_str()).is_ok() {
+            return Ok(false);
+        }
+        match doc.get_thing(line_number, name.as_str())? {
+            ftd::p2::Thing::Component(component) => {
                 if name.eq("ftd#text") {
-                    return true;
+                    return Ok(true);
                 }
                 name = component.root;
             }
-            Some(_) => return false,
-            None => return false,
+            _ => return Ok(false),
         }
     }
-    false
-}
-
-/// fetches the thing from the bag and returns it.
-/// in case of an error while fetching the thing, it returns None
-/// to avoid scenarios when section/subsection don't have a thing in the bag
-/// for eg. in case of ftd#ui
-pub fn get_thing_ignore_fail(
-    name: &str,
-    line_number: usize,
-    doc: &ftd::p2::TDoc,
-) -> Option<ftd::p2::Thing> {
-    match doc.get_thing(line_number, name) {
-        Ok(thing) => Some(thing),
-        Err(_) => None,
-    }
+    Ok(false)
 }
 
 /// return true if the section is an invoked component not a variable component
@@ -1646,8 +1637,10 @@ pub fn is_section_subsection_component(
         return Ok(false);
     }
 
-    if let Some(ftd::p2::Thing::Component(_)) = get_thing_ignore_fail(name, line_number, doc) {
-        return Ok(true);
+    if doc.get_thing(line_number, name).is_ok() {
+        if let ftd::p2::Thing::Component(_) = doc.get_thing(line_number, name)? {
+            return Ok(true);
+        }
     }
 
     Ok(false)

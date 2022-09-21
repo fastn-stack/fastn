@@ -88,6 +88,7 @@ impl State {
             body: None,
             sub_sections: Default::default(),
             is_commented,
+            is_processed_for_links: false,
             line_number,
         });
 

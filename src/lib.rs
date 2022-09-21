@@ -80,8 +80,11 @@ pub struct Document {
 pub type TextSourceLocation = (bool, usize);
 pub type TextSourceWithLocation = (ftd::TextSource, TextSourceLocation);
 
-// is used to locate the areas where link replacement needs to happen
+// ReplaceLinkBlock = (Id, TextSourceWithLocation, Line number)
+// contains relevant id data associated with links along with its source
+// from where those were captured and where link replacement needs to happen
 pub type ReplaceLinkBlock<T> = (T, ftd::TextSourceWithLocation, usize);
+pub type ReplaceLinkBlockVector<T> = Vec<ReplaceLinkBlock<T>>;
 
 pub type DataDependenciesMap = ftd::Map<Data>;
 
