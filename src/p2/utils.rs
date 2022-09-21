@@ -1642,7 +1642,7 @@ pub fn is_section_subsection_component(
         return Ok(false);
     }
 
-    if let Ok(_) = var_data {
+    if var_data.is_ok() {
         return Ok(false);
     }
 
