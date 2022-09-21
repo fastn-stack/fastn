@@ -157,16 +157,6 @@ async fn serve(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
 ) -> actix_web::HttpResponse {
-    // TODO:
-    if true {
-        return fpm::proxy::get_out(
-            "http://127.0.0.1:8001", // TODO: read it from FPM.ftd
-            fpm::http::Request::from_actix(&req),
-            body,
-        )
-        .await;
-    }
-
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method().as_str(), req.path());
     let t = fpm::time(r.as_str());
@@ -190,14 +180,26 @@ async fn serve(
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
-        // url is present in config or not
-        // If not present than proxy pass it
         let mut config =
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
-        serve_file(&req, &mut config, &path).await
 
-        // if true: serve_file
-        // else: proxy_pass
+        // url is present in config or not
+        // If not present than proxy pass it
+        if !config
+            .package
+            .sitemap
+            .as_ref()
+            .map_or(false, |sitemap| sitemap.path_exists(path.as_str()))
+        {
+            return fpm::proxy::get_out(
+                "http://127.0.0.1:8001", // TODO: read it from FPM.ftd
+                fpm::http::Request::from_actix(&req),
+                body,
+            )
+            .await;
+        }
+
+        serve_file(&req, &mut config, &path).await
     };
 
     // if 404 than: pass proxy

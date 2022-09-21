@@ -15,7 +15,7 @@ lazy_static! {
     static ref CLIENT: std::sync::Arc<reqwest::Client> = std::sync::Arc::new(client_builder());
 }
 
-// This method will connect client request to out of the world
+// This method will connect client request to the out of the world
 pub(crate) async fn get_out(
     host: &str,
     req: fpm::http::Request<'_>,
