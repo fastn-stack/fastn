@@ -128,6 +128,21 @@ pub struct Section {
     pub writers: Vec<String>,
 }
 
+impl Section {
+    pub fn path_exists(&self, path: &str) -> fpm::Result<bool> {
+        if fpm::utils::ids_matches(self.id.as_str(), path) {
+            return Ok(true);
+        }
+
+        for subsection in self.subsections.iter() {
+            if subsection.path_exists(path)? {
+                return Ok(true);
+            }
+        }
+        Ok(false)
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Subsection {
     pub id: Option<String>,
@@ -163,6 +178,26 @@ impl Default for Subsection {
     }
 }
 
+impl Subsection {
+    /// path: /foo/demo/
+    /// path: /
+    fn path_exists(&self, path: &str) -> fpm::Result<bool> {
+        if let Some(id) = self.id.as_ref() {
+            if fpm::utils::ids_matches(path, id.as_str()) {
+                return Ok(true);
+            }
+        }
+
+        for toc in self.toc.iter() {
+            if toc.path_exists(path)? {
+                return Ok(true);
+            }
+        }
+
+        Ok(false)
+    }
+}
+
 #[derive(Debug, Clone, Default)]
 pub struct TocItem {
     pub id: String,
@@ -176,6 +211,24 @@ pub struct TocItem {
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+}
+
+impl TocItem {
+    /// path: /foo/demo/
+    /// path: /
+    pub fn path_exists(&self, path: &str) -> fpm::Result<bool> {
+        if fpm::utils::ids_matches(self.id.as_str(), path) {
+            return Ok(true);
+        }
+
+        for child in self.children.iter() {
+            if child.path_exists(path)? {
+                return Ok(true);
+            }
+        }
+
+        Ok(false)
+    }
 }
 
 #[derive(Debug, Default, serde::Serialize)]
@@ -1447,6 +1500,18 @@ impl Sitemap {
             }
             vec![]
         }
+    }
+
+    /// path: /foo/demo/
+    /// path: /
+    pub fn path_exists(&self, path: &str) -> fpm::Result<bool> {
+        for section in self.sections.iter() {
+            if section.path_exists(path)? {
+                return Ok(true);
+            }
+        }
+
+        Ok(false)
     }
 }
 
