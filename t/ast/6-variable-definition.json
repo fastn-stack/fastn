@@ -1,0 +1,11 @@
+[
+  {
+    "VariableDefinition": {
+      "kind": {
+        "modifier": "List",
+        "kind": "integer"
+      },
+      "name": "scores"
+    }
+  }
+]

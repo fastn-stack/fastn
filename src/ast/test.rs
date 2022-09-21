@@ -5,7 +5,8 @@ fn p(s: &str, t: &Vec<ftd::ast::AST>) {
     let sections = ftd::p11::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
     let ast = ftd::ast::AST::from_sections(sections.as_slice(), "foo")
         .unwrap_or_else(|e| panic!("{:?}", e));
-    assert_eq!(t, &ast,)
+    let expected_json = serde_json::to_string_pretty(&ast).unwrap();
+    assert_eq!(t, &ast, "Expected JSON: {}", expected_json)
 }
 
 /*#[track_caller]
