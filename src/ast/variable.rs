@@ -1,15 +1,22 @@
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct VariableDefinition {
-    pub kind: VariableKind,
     pub name: String,
+    pub kind: VariableKind,
+    pub mutable: bool,
     pub value: VariableValue,
 }
 
 impl VariableDefinition {
-    fn new(name: &str, kind: VariableKind, value: VariableValue) -> VariableDefinition {
+    fn new(
+        name: &str,
+        kind: VariableKind,
+        mutable: bool,
+        value: VariableValue,
+    ) -> VariableDefinition {
         VariableDefinition {
             kind,
             name: name.to_string(),
+            mutable,
             value,
         }
     }
@@ -44,8 +51,17 @@ impl VariableDefinition {
 
         let value = VariableValue::from_p1_with_modifier(section, doc_id, &kind.modifier)?;
 
-        Ok(VariableDefinition::new(section.name.as_str(), kind, value))
+        Ok(VariableDefinition::new(
+            section.name.trim_start_matches(REFERENCE),
+            kind,
+            is_variable_mutable(section.name.as_str()),
+            value,
+        ))
     }
+}
+
+fn is_variable_mutable(name: &str) -> bool {
+    name.starts_with(REFERENCE)
 }
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -83,7 +99,10 @@ impl VariableInvocation {
 
         let value = VariableValue::from_p1(section, doc_id);
 
-        Ok(VariableInvocation::new(section.name.as_str(), value))
+        Ok(VariableInvocation::new(
+            section.name.trim_start_matches(REFERENCE),
+            value,
+        ))
     }
 }
 
@@ -172,7 +191,7 @@ impl VariableKind {
 pub enum VariableValue {
     Optional(Box<Option<VariableValue>>),
     List(Vec<VariableValue>),
-    Regular {
+    Record {
         name: String,
         caption: Box<Option<VariableValue>>,
         headers: Vec<(String, VariableValue)>,
@@ -271,7 +290,7 @@ impl VariableValue {
             };
         }
 
-        VariableValue::Regular {
+        VariableValue::Record {
             name: section.name.to_string(),
             caption: Box::new(caption),
             headers,

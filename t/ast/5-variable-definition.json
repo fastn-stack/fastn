@@ -8,7 +8,8 @@
       "name": "score",
       "value": {
         "String": "40"
-      }
+      },
+      "mutable": false
     }
   }
 ]

@@ -1,7 +1,7 @@
 [
   {
     "VariableInvocation": {
-      "name": "$scores",
+      "name": "scores",
       "value": {
         "List": [
           {

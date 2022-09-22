@@ -22,11 +22,11 @@
         "modifier": "List",
         "kind": "person"
       },
-      "name": "$people",
+      "name": "people",
       "value": {
         "List": [
           {
-            "Regular": {
+            "Record": {
               "name": "person",
               "caption": null,
               "headers": [
@@ -47,16 +47,17 @@
             }
           }
         ]
-      }
+      },
+      "mutable": true
     }
   },
   {
     "VariableInvocation": {
-      "name": "$people",
+      "name": "people",
       "value": {
         "List": [
           {
-            "Regular": {
+            "Record": {
               "name": "person",
               "caption": null,
               "headers": [

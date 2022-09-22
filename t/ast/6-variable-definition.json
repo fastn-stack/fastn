@@ -24,7 +24,8 @@
             "String": "50"
           }
         ]
-      }
+      },
+      "mutable": false
     }
   }
 ]

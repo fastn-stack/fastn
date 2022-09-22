@@ -1,7 +1,7 @@
 [
   {
     "VariableInvocation": {
-      "name": "$score",
+      "name": "score",
       "value": {
         "String": "40"
       }
