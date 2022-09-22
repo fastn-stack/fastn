@@ -191,17 +191,30 @@ async fn serve(
         // In that case need to check whether that url is present in sitemap or not and than proxy
         // pass the url if the file is not static
         // So final check would be file is not static and path is not present in the package's sitemap
-        if !path.starts_with("-/") {
-            if let Some(sitemap) = config.package.sitemap.as_ref() {
-                if !sitemap.path_exists(path.as_str()) {
-                    if let Some(endpoint) = config.package.endpoint.as_ref() {
+
+        let package = config.find_package_by_id(path.as_str()).await.unwrap().1;
+        if let Some(sitemap) = package.sitemap.as_ref() {
+            if !sitemap.path_exists(path.as_str()) {
+                match (config.package.endpoint.as_ref(), config.package.backend) {
+                    (Some(endpoint), false) => {
                         return fpm::proxy::get_out(
                             endpoint,
                             fpm::http::Request::from_actix(&req),
                             body,
                         )
                         .await;
-                    };
+                    }
+                    (None, true) => {
+                        // Expect the backend.wasm file to exist here
+                        let wasm_module =
+                            config.get_root_for_package(&package).join("backend.wasm");
+                        if let Ok(resp) = fpm::wasm::handle_wasm(&req, wasm_module).await {
+                            return resp;
+                        }
+                    }
+                    (_, _) => {
+                        // Pass
+                    }
                 }
             }
         }

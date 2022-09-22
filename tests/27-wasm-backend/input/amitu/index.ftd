@@ -1,0 +1,26 @@
+-- import: fpm
+
+-- ftd.text: hello
+
+-- ftd.font-size body-large-size:
+line-height: 25
+size: 16
+
+-- ftd.type body-large: sans-serif
+desktop: $body-large-size
+mobile: $body-large-size
+xl: $body-large-size
+weight: 400
+
+-- ftd.text: hello_h2
+region: h2
+role: $body-large
+
+-- ftd.text: hello_h1
+region: h1
+role: $fpm.type.copy-relaxed
+color: $fpm.color.main.text
+
+-- ftd.text: hello_h0
+region: h0
+role: $fpm.type.copy-tight
