@@ -80,12 +80,15 @@ impl Component {
         }
     }
 
-    fn is_component_definition(section: &ftd::p11::Section) -> bool {
+    pub(crate) fn is_component(section: &ftd::p11::Section) -> bool {
         section.kind.is_none() && !section.name.starts_with(ftd::ast::utils::REFERENCE)
     }
 
-    fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> ftd::ast::Result<Component> {
-        if !Self::is_component_definition(section) {
+    pub(crate) fn from_p1(
+        section: &ftd::p11::Section,
+        doc_id: &str,
+    ) -> ftd::ast::Result<Component> {
+        if !Self::is_component(section) {
             return ftd::ast::parse_error(
                 format!("Section is not ComponentDefinition, found `{:?}`", section),
                 doc_id,

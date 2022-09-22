@@ -7,6 +7,7 @@ pub enum AST {
     VariableDefinition(ftd::ast::VariableDefinition),
     VariableInvocation(ftd::ast::VariableInvocation),
     ComponentDefinition(ftd::ast::ComponentDefinition),
+    ComponentInvocation(ftd::ast::Component),
 }
 
 impl AST {
@@ -32,6 +33,8 @@ impl AST {
             AST::VariableInvocation(ftd::ast::VariableInvocation::from_p1(section, doc_id)?)
         } else if ftd::ast::ComponentDefinition::is_component_definition(section) {
             AST::ComponentDefinition(ftd::ast::ComponentDefinition::from_p1(section, doc_id)?)
+        } else if ftd::ast::Component::is_component(section) {
+            AST::ComponentInvocation(ftd::ast::Component::from_p1(section, doc_id)?)
         } else {
             return Err(ftd::ast::Error::ParseError {
                 message: format!("Invalid AST, found: `{:?}`", section),

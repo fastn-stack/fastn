@@ -125,7 +125,7 @@ impl VariableValue {
         modifier: &Option<VariableModifier>,
     ) -> ftd::ast::Result<VariableValue> {
         let value = VariableValue::from_p1(section, doc_id);
-        value.from_modifier(doc_id, section.line_number, modifier)
+        value.into_modifier(doc_id, section.line_number, modifier)
     }
 
     pub(crate) fn from_header_with_modifier(
@@ -134,10 +134,10 @@ impl VariableValue {
         modifier: &Option<VariableModifier>,
     ) -> ftd::ast::Result<VariableValue> {
         let value = VariableValue::from_p1_header(header, doc_id);
-        value.from_modifier(doc_id, header.get_line_number(), modifier)
+        value.into_modifier(doc_id, header.get_line_number(), modifier)
     }
 
-    pub(crate) fn from_modifier(
+    pub(crate) fn into_modifier(
         self,
         doc_id: &str,
         line_number: usize,
@@ -187,7 +187,7 @@ impl VariableValue {
             .map(|header| {
                 (
                     header.get_key(),
-                    VariableValue::from_p1_header(&header, doc_id),
+                    VariableValue::from_p1_header(header, doc_id),
                 )
             })
             .collect_vec();

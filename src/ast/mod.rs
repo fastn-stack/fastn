@@ -10,7 +10,7 @@ mod record;
 mod utils;
 mod variable;
 
-pub use component::ComponentDefinition;
+pub use component::{Component, ComponentDefinition};
 pub use import::Import;
 pub use kind::{VariableKind, VariableValue};
 pub use main::AST;
