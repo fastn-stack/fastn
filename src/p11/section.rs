@@ -158,4 +158,8 @@ impl Body {
             value,
         })
     }
+
+    pub fn get_value(&self) -> String {
+        self.value.to_string()
+    }
 }

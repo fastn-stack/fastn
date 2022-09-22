@@ -1,10 +1,13 @@
 [
   {
     "VariableDefinition": {
-      "name": "score",
       "kind": {
         "modifier": null,
         "kind": "integer"
+      },
+      "name": "score",
+      "value": {
+        "String": "40"
       }
     }
   }
