@@ -1,0 +1,52 @@
+[
+  {
+    "Record": {
+      "name": "person",
+      "fields": [
+        {
+          "name": "name",
+          "kind": "string",
+          "value": null
+        },
+        {
+          "name": "age",
+          "kind": "integer",
+          "value": null
+        }
+      ]
+    }
+  },
+  {
+    "VariableDefinition": {
+      "kind": {
+        "modifier": "List",
+        "kind": "person"
+      },
+      "name": "people",
+      "value": {
+        "List": [
+          {
+            "Regular": {
+              "caption": null,
+              "headers": [
+                [
+                  "name",
+                  {
+                    "String": "Arpita"
+                  }
+                ],
+                [
+                  "age",
+                  {
+                    "String": "10"
+                  }
+                ]
+              ],
+              "body": null
+            }
+          }
+        ]
+      }
+    }
+  }
+]
