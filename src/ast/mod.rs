@@ -13,7 +13,7 @@ pub use component::Component;
 pub use import::Import;
 pub use main::AST;
 pub use record::Record;
-pub use variable::VariableDefinition;
+pub use variable::{VariableDefinition, VariableInvocation};
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

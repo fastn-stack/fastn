@@ -22,7 +22,7 @@
         "modifier": "List",
         "kind": "person"
       },
-      "name": "people",
+      "name": "$people",
       "value": {
         "List": [
           {
@@ -40,6 +40,36 @@
                   "age",
                   {
                     "String": "10"
+                  }
+                ]
+              ],
+              "body": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "VariableInvocation": {
+      "name": "$people",
+      "value": {
+        "List": [
+          {
+            "Regular": {
+              "name": "person",
+              "caption": null,
+              "headers": [
+                [
+                  "name",
+                  {
+                    "String": "Ayushi"
+                  }
+                ],
+                [
+                  "age",
+                  {
+                    "String": "9"
                   }
                 ]
               ],

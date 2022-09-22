@@ -27,7 +27,10 @@ impl VariableDefinition {
     ) -> ftd::ast::Result<VariableDefinition> {
         if !Self::is_variable_definition(section) {
             return ftd::ast::parse_error(
-                format!("Section is not variable section, found `{:?}`", section),
+                format!(
+                    "Section is not variable definition section, found `{:?}`",
+                    section
+                ),
                 doc_id,
                 section.line_number,
             );
@@ -42,6 +45,45 @@ impl VariableDefinition {
         let value = VariableValue::from_p1_with_modifier(section, doc_id, &kind.modifier)?;
 
         Ok(VariableDefinition::new(section.name.as_str(), kind, value))
+    }
+}
+
+#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct VariableInvocation {
+    pub name: String,
+    pub value: VariableValue,
+}
+
+impl VariableInvocation {
+    fn new(name: &str, value: VariableValue) -> VariableInvocation {
+        VariableInvocation {
+            name: name.to_string(),
+            value,
+        }
+    }
+
+    pub fn is_variable_invocation(section: &ftd::p11::Section) -> bool {
+        section.kind.is_none() && section.name.starts_with(REFERENCE)
+    }
+
+    pub(crate) fn from_p1(
+        section: &ftd::p11::Section,
+        doc_id: &str,
+    ) -> ftd::ast::Result<VariableInvocation> {
+        if !Self::is_variable_invocation(section) {
+            return ftd::ast::parse_error(
+                format!(
+                    "Section is not variable invocation section, found `{:?}`",
+                    section
+                ),
+                doc_id,
+                section.line_number,
+            );
+        }
+
+        let value = VariableValue::from_p1(section, doc_id);
+
+        Ok(VariableInvocation::new(section.name.as_str(), value))
     }
 }
 
@@ -131,6 +173,7 @@ pub enum VariableValue {
     Optional(Box<Option<VariableValue>>),
     List(Vec<VariableValue>),
     Regular {
+        name: String,
         caption: Box<Option<VariableValue>>,
         headers: Vec<(String, VariableValue)>,
         body: Option<String>,
@@ -229,6 +272,7 @@ impl VariableValue {
         }
 
         VariableValue::Regular {
+            name: section.name.to_string(),
             caption: Box::new(caption),
             headers,
             body,
@@ -256,3 +300,4 @@ impl VariableValue {
 }
 
 pub const NULL: &str = "NULL";
+pub const REFERENCE: &str = "$";

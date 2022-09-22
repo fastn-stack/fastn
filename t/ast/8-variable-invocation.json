@@ -1,0 +1,10 @@
+[
+  {
+    "VariableInvocation": {
+      "name": "$score",
+      "value": {
+        "String": "40"
+      }
+    }
+  }
+]

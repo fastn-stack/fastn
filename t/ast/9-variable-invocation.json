@@ -1,0 +1,26 @@
+[
+  {
+    "VariableInvocation": {
+      "name": "$scores",
+      "value": {
+        "List": [
+          {
+            "String": "10"
+          },
+          {
+            "String": "20"
+          },
+          {
+            "String": "30"
+          },
+          {
+            "String": "40"
+          },
+          {
+            "String": "50"
+          }
+        ]
+      }
+    }
+  }
+]
