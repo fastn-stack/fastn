@@ -77,6 +77,16 @@ pub struct Document {
     pub css_collector: String,
 }
 
+// TextSource location = (is_from_section = T/F, subsection_index if is_from_section = F else 0)
+pub type TextSourceLocation = (bool, usize);
+pub type TextSourceWithLocation = (ftd::TextSource, TextSourceLocation);
+
+// ReplaceLinkBlock = (Id, TextSourceWithLocation, Line number)
+// contains relevant id data associated with links along with its source
+// from where those were captured and where link replacement or escaped links
+// needs to be resolved
+pub type ReplaceLinkBlock<T> = (T, ftd::TextSourceWithLocation, usize);
+
 pub type DataDependenciesMap = ftd::Map<Data>;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]

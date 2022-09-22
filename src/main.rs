@@ -203,30 +203,33 @@ pub fn interpret_helper(
                 )?;
             }
             ftd::Interpreter::CheckID {
-                id: captured_id,
-                source,
-                is_from_section,
+                replace_blocks,
                 state: st,
             } => {
-                // No config in ftd::ExampleLibrary ignoring processing terms for now
-                // using dummy id map for debugging
+                // No config in ftd::ExampleLibrary using dummy global_ids map for debugging
+                let mut mapped_replace_blocks: Vec<
+                    ftd::ReplaceLinkBlock<std::collections::HashMap<String, String>>,
+                > = vec![];
 
-                let link = lib
-                    .dummy_global_ids_map()
-                    .get(captured_id.as_str())
-                    .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
-                        message: format!("id: {} not found while linking", captured_id),
-                        doc_id: st.id.clone(),
-                        line_number: 0,
-                    })?
-                    .to_string();
+                for (captured_id_set, source, ln) in replace_blocks.iter() {
+                    let mut id_map: std::collections::HashMap<String, String> =
+                        std::collections::HashMap::new();
+                    for id in captured_id_set {
+                        let link = lib
+                            .dummy_global_ids_map()
+                            .get(id)
+                            .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
+                                message: format!("id: {} not found while linking", id),
+                                doc_id: st.id.clone(),
+                                line_number: *ln,
+                            })?
+                            .to_string();
+                        id_map.insert(id.to_string(), link);
+                    }
+                    mapped_replace_blocks.push((id_map, source.to_owned(), ln.to_owned()));
+                }
 
-                s = st.continue_after_checking_id(
-                    captured_id.as_str(),
-                    &source,
-                    is_from_section,
-                    link,
-                )?;
+                s = st.continue_after_checking_id(mapped_replace_blocks)?;
             }
         }
     }
@@ -253,6 +256,16 @@ impl ExampleLibrary {
         global_ids.insert("sscp".to_string(), "/foo/bar/#sscp".to_string());
         global_ids.insert("ssh".to_string(), "/hello/there/#ssh".to_string());
         global_ids.insert("ssb".to_string(), "/some/id/#ssb".to_string());
+
+        // More dummy instances for debugging purposes
+        global_ids.insert("a".to_string(), "/some/#a".to_string());
+        global_ids.insert("b".to_string(), "/some/#b".to_string());
+        global_ids.insert("c".to_string(), "/some/#c".to_string());
+        global_ids.insert("d".to_string(), "/some/#d".to_string());
+
+        // to debug in case of checkboxes
+        global_ids.insert("x".to_string(), "/some/#x".to_string());
+        global_ids.insert("X".to_string(), "/some/#X".to_string());
 
         global_ids
     }

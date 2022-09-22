@@ -8,6 +8,7 @@ pub struct Section {
     pub body: Option<(usize, String)>,
     pub sub_sections: SubSections,
     pub is_commented: bool,
+    pub is_processed_for_links: bool,
     pub line_number: usize,
 }
 
@@ -62,8 +63,13 @@ impl Section {
                     .collect::<Vec<SubSection>>(),
             ),
             is_commented: false,
+            is_processed_for_links: self.is_processed_for_links,
             line_number: self.line_number,
         }
+    }
+
+    pub fn done_processing_links(&mut self) {
+        self.is_processed_for_links = true;
     }
 
     pub fn caption(&self, line_number: usize, doc_id: &str) -> Result<String> {
@@ -112,6 +118,7 @@ impl Section {
             body: None,
             sub_sections: SubSections::default(),
             is_commented: false,
+            is_processed_for_links: false,
             line_number: 0,
         }
     }
@@ -124,6 +131,7 @@ impl Section {
             body: self.body.to_owned().map(|v| (0, v.1)),
             sub_sections: self.sub_sections.without_line_number(),
             is_commented: self.is_commented.to_owned(),
+            is_processed_for_links: self.is_processed_for_links,
             line_number: 0,
         }
     }

@@ -1,3 +1,30 @@
+/// returns key/value pair separated by the KV_SEPERATOR
+pub fn split_once(
+    line: &str,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::p1::Result<(String, Option<String>)> {
+    // Trim any section/subsection identifier from the beginning of the line
+    let line = ftd::identifier::trim_section_subsection_identifier(line);
+
+    let (before_kv_delimiter, after_kv_delimiter) = line
+        .split_once(ftd::identifier::KV_SEPERATOR)
+        .ok_or_else(|| ftd::p1::Error::NotFound {
+            doc_id: doc_id.to_string(),
+            line_number,
+            key: format!(
+                "\'{}\' not found while segregating kv in {}",
+                ftd::identifier::KV_SEPERATOR,
+                line
+            ),
+        })?;
+
+    match (before_kv_delimiter, after_kv_delimiter) {
+        (before, after) if after.trim().is_empty() => Ok((before.trim().to_string(), None)),
+        (before, after) => Ok((before.trim().to_string(), Some(after.trim().to_string()))),
+    }
+}
+
 pub fn parse_import(
     c: &Option<String>,
     doc_id: &str,
@@ -1560,4 +1587,61 @@ where
         doc_id,
         line_number,
     })
+}
+
+/// return true if the component with the given name is a markdown component
+/// otherwise returns false
+pub fn is_markdown_component(
+    doc: &ftd::p2::TDoc,
+    name: &str,
+    line_number: usize,
+) -> ftd::p1::Result<bool> {
+    let mut name = name.to_string();
+    // check if the component is derived from ftd#text
+    while !name.eq("ftd.kernel") {
+        if doc.get_thing(line_number, name.as_str()).is_err() {
+            return Ok(false);
+        }
+        match doc.get_thing(line_number, name.as_str())? {
+            ftd::p2::Thing::Component(component) => {
+                if name.eq("ftd#text") {
+                    return Ok(true);
+                }
+                name = component.root;
+            }
+            _ => return Ok(false),
+        }
+    }
+    Ok(false)
+}
+
+/// return true if the section is an invoked component not a variable component
+/// otherwise returns false
+pub fn is_section_subsection_component(
+    name: &str,
+    doc: &ftd::p2::TDoc,
+    var_types: &[String],
+    line_number: usize,
+) -> ftd::p1::Result<bool> {
+    let var_data = ftd::variable::VariableData::get_name_kind(name, doc, line_number, var_types);
+
+    if name.starts_with("record ")
+        || name.starts_with("or-type ")
+        || name.starts_with("map ")
+        || name.starts_with("container")
+    {
+        return Ok(false);
+    }
+
+    if var_data.is_ok() {
+        return Ok(false);
+    }
+
+    if doc.get_thing(line_number, name).is_ok() {
+        if let ftd::p2::Thing::Component(_) = doc.get_thing(line_number, name)? {
+            return Ok(true);
+        }
+    }
+
+    Ok(false)
 }

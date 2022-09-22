@@ -50,56 +50,47 @@ pub mod identifier {
     pub fn trim_section_subsection_identifier(line: &str) -> &str {
         line.trim_start_matches(|c| c == '/' || c == '\\' || c == '-' || c == ' ')
     }
-
-    /// returns key/value pair seperated by KV_SEPERATOR
-    pub fn segregate_key_value(
-        line: &str,
-        doc_id: &str,
-        line_number: usize,
-    ) -> ftd::p1::Result<(Option<String>, Option<String>)> {
-        // Trim any section/subsection identifier fron the beginning of the line
-        let line = trim_section_subsection_identifier(line);
-
-        if !line.contains(KV_SEPERATOR) {
-            return Err(ftd::p1::Error::ParseError {
-                message: format!("\':\' is missing in: {}", line),
-                doc_id: doc_id.to_string(),
-                line_number,
-            });
-        }
-
-        let (before_kv_delimiter, after_kv_delimiter) =
-            line.split_once(KV_SEPERATOR)
-                .ok_or_else(|| ftd::p1::Error::NotFound {
-                    doc_id: doc_id.to_string(),
-                    line_number,
-                    key: format!("\':\' not found while segregating kv in {}", line),
-                })?;
-
-        match (before_kv_delimiter, after_kv_delimiter) {
-            (k, v) if k.trim().is_empty() && v.trim().is_empty() => Ok((None, None)),
-            (k, v) if k.trim().is_empty() => Ok((None, Some(v.to_string()))),
-            (k, v) if v.trim().is_empty() => Ok((Some(k.to_string()), None)),
-            (k, v) => Ok((Some(k.to_string()), Some(v.to_string()))),
-        }
-    }
 }
 
 // Regex pattern constants
 pub mod regex {
 
-    /// Linking Syntax 1: `[<linked-text>]`(id: <some-id>)
-    pub const LINK_SYNTAX_1: &str = r"(?x) # Enabling Comment Mode
-    \[(?P<linked_text>[\sa-zA-Z\d]+)\] # Linked Text Capture Group <linked_text>
-    \(\s*id\s*:(?P<actual_id>[\sa-zA-Z\d]+)\) # Referred Id Capture Group <actual_id>";
+    // Back references and arbitrary lookahead/lookbehind assertions
+    // are not provided by rust regex so avoid using them,
+    // instead do post process the matches to discard all unnecessary matches
+    // or reformulate the regex to avoid any arbitrary
+    // lookahead/lookbehind assertions
+    // Refer issue - https://github.com/rust-lang/regex/issues/127
 
-    /// Linking Syntax 2: {<some-id>}
-    pub const LINK_SYNTAX_2: &str = r"(?x) # Enabling comment mode
-    \{\s* # Here Linked Text is same as Referred Id
-    (?P<actual_id>[\sa-zA-Z\d]+)\} # Referred Id Capture Group <actual_id>";
+    /// Urls could be of any one of these two types:
+    ///
+    /// ## External urls (Type-1)
+    ///
+    /// * https://github.com/FifthTry/ftd,
+    /// * www.fifthtry.com etc.
+    ///
+    /// ## Relative urls (Type-2)
+    ///
+    /// * `/editor/manual/` - relative file path,
+    /// * `/featured/doc-sites/#header` - component with a given id within a relative file
+    pub const URL_PATTERN: &str = r"(?x)
+    ^(?P<external_link>((http[s]?://)(www\.)?|(www\.)) # <external_link> group (Type-1 URL)
+    (?P<before_domain>[\-\w@:%\.\+~\#=]+) # <before_domain> group
+    (?P<domain_name>\.[\w]{1,6}) # <domain_name> group for .com/.org/.edu etc.
+    (?P<after_domain>[\-\w()@:%\+\.~\#\?\&/=]*))| # <after_domain> group
+    (?P<relative_link>/?([\-\w@:%\.\+\?~\#=]+/?)+ # <relative_link> group (Type-2 URL)
+    (\#(?P<relative_id>[-\w]+)| # relative link id of component (optional)
+    (\s*(\x22(?P<hover_text>[\-\s\w@:%\.\+\?~\#/=]+)\x22)?\s*)))$ # <hover-text> group (optional)";
+
+    /// Linking syntax: `<prefix>[<id_or_text>](<type1><id>)?`
+    pub const LINK_SYNTAX: &str = r"(?x) # Enabling comment mode {GROUP 0 = entire match}
+    (?P<prefix>.?) # Character Prefix Group <prefix>
+    \[(?P<id_or_text>[-\w\s]+)\] # Referred Id Capture Group <id_or_text>
+    (\(((?P<type1>\s*id\s*:(?P<id>[-\w\s]+))|(?P<ahead>[\-\s\w@:%\.\+\?~\#/=]+\s* # <type1> group and <ahead> group
+    (\x22(?P<hover_text>[\-\s\w@:%\.\+\?~\#/=]+)\x22)?\s*))\))? # <hover_text> group";
 
     /// id: `<alphanumeric string>` (with -, _, whitespace allowed)
-    pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-_\sA-Za-z\d]*$";
+    pub const ID_HEADER: &str = r"(?m)^\s*id\s*:[-\s\w]*$";
 
     /// file extension: \[.\]<alphanumeric string>$
     /// to cover all file extensions with file names
@@ -108,13 +99,18 @@ pub mod regex {
 
     lazy_static::lazy_static! {
         pub static ref ID: regex::Regex = regex::Regex::new(ID_HEADER).unwrap();
-        pub static ref S1: regex::Regex = regex::Regex::new(LINK_SYNTAX_1).unwrap();
-        pub static ref S2: regex::Regex = regex::Regex::new(LINK_SYNTAX_2).unwrap();
+        pub static ref S: regex::Regex = regex::Regex::new(LINK_SYNTAX).unwrap();
         pub static ref EXT: regex::Regex = regex::Regex::new(FILE_EXTENSION).unwrap();
+        pub static ref URL: regex::Regex = regex::Regex::new(URL_PATTERN).unwrap();
     }
 
     /// fetches capture group by group index and returns it as &str
     pub fn capture_group_by_index<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
         return capture.get(group_index).map_or("", |c| c.as_str());
+    }
+
+    /// fetches the capture group by group name and returns it as &str
+    pub fn capture_group_by_name<'a>(capture: &'a regex::Captures, group_name: &str) -> &'a str {
+        return capture.name(group_name).map_or("", |c| c.as_str());
     }
 }

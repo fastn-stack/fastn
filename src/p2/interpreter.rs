@@ -78,14 +78,6 @@ impl InterpreterState {
             self.document_stack[l].reorder(&self.bag)?;
         }
 
-        // This will be removed later
-        // if self.document_stack[l].checking_ids {
-        //     return Ok(Interpreter::CheckID {
-        //         doc_index: l,
-        //         state: self,
-        //     });
-        // }
-
         let parsed_document = &mut self.document_stack[l];
 
         while let Some(p1) = parsed_document.sections.last_mut() {
@@ -109,13 +101,19 @@ impl InterpreterState {
                 });
             }
 
-            if let Some((id, source, is_from_section)) = Self::resolve_global_ids(p1, &doc)? {
-                return Ok(Interpreter::CheckID {
-                    id,
-                    source,
-                    is_from_section,
-                    state: self,
-                });
+            // resolve for links before popping out the section
+            if !p1.is_processed_for_links {
+                let replace_blocks =
+                    Self::resolve_global_ids(p1, &doc, &parsed_document.var_types)?;
+
+                if !replace_blocks.is_empty() {
+                    return Ok(Interpreter::CheckID {
+                        replace_blocks,
+                        state: self,
+                    });
+                }
+
+                p1.done_processing_links();
             }
 
             // Once the foreign_variables are resolved for the section, then pop and evaluate it.
@@ -548,116 +546,199 @@ impl InterpreterState {
         }
     }
 
-    // Regex check and find first id associated
-    // return ftd::p1::Result<Option<(id: String, source: Body,caption, header)>>
     // TODO: Need to avoid double usage of regex while resolving and replacing for links
 
-    /// returns id of the first occurence of linked syntax if found from any text source
-    /// text-source inclues caption, header, body of the section
+    /// returns a vector of replace blocks where link replacement or escaped links needs to be resolved
+    /// along with the target textSource where these changes needs to happen
+    ///
+    /// text-source includes caption, header, body of the section
+    #[allow(clippy::type_complexity)]
     fn resolve_global_ids(
         section: &mut ftd::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<Option<(String, ftd::TextSource, bool)>> {
-        if let Some((id, text_source)) = resolve_id_from_all_sources(
-            &section.caption,
-            &section.header,
-            &section.body,
-            section.line_number,
-            doc,
-        )? {
-            return Ok(Some((id, text_source, true)));
-        }
+        var_types: &[String],
+    ) -> ftd::p1::Result<Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>> {
+        // will contain all replace blocks for section and its subsections
+        // where link replacement or escape links need to be resolved
+        let mut replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> =
+            vec![];
 
-        for subsection in section.sub_sections.0.iter() {
-            if let Some((id, text_source)) = resolve_id_from_all_sources(
-                &subsection.caption,
-                &subsection.header,
-                &subsection.body,
-                subsection.line_number,
-                doc,
-            )? {
-                return Ok(Some((id, text_source, false)));
+        if ftd::p2::utils::is_section_subsection_component(
+            section.name.as_str(),
+            doc,
+            var_types,
+            section.line_number,
+        )? {
+            if let ftd::p2::Thing::Component(c) =
+                doc.get_thing(section.line_number, section.name.as_str())?
+            {
+                if ftd::p2::utils::is_markdown_component(
+                    doc,
+                    c.full_name.as_str(),
+                    section.line_number,
+                )? {
+                    replace_blocks.extend(resolve_id_from_all_sources(
+                        &section.caption,
+                        &section.header,
+                        &section.body,
+                        section.line_number,
+                        true,
+                        0,
+                    ));
+                }
             }
         }
 
-        return Ok(None);
+        for (subsection_index, subsection) in itertools::enumerate(section.sub_sections.0.iter()) {
+            if ftd::p2::utils::is_section_subsection_component(
+                subsection.name.as_str(),
+                doc,
+                var_types,
+                subsection.line_number,
+            )? {
+                if let ftd::p2::Thing::Component(c) =
+                    doc.get_thing(subsection.line_number, subsection.name.as_str())?
+                {
+                    if ftd::p2::utils::is_markdown_component(
+                        doc,
+                        c.full_name.as_str(),
+                        subsection.line_number,
+                    )? {
+                        replace_blocks.extend(resolve_id_from_all_sources(
+                            &subsection.caption,
+                            &subsection.header,
+                            &subsection.body,
+                            subsection.line_number,
+                            false,
+                            subsection_index,
+                        ));
+                    }
+                }
+            }
+        }
 
-        /// will return id of the captured link and its textSource (if any)
-        /// regex will be used to get id associated with the link
+        return Ok(replace_blocks);
+
+        /// returns a vector of replace blocks for every text-source where link replacement or
+        /// escaped links resolution needs to happen for a single section/ subsection
         fn resolve_id_from_all_sources(
             caption: &Option<String>,
             header: &ftd::p1::Header,
             body: &Option<(usize, String)>,
             line_number: usize,
-            doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<Option<(String, ftd::TextSource)>> {
+            is_from_section: bool,
+            index: usize,
+        ) -> Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> {
+            let mut replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> =
+                vec![];
+
             if let Some(ref caption) = caption {
-                if let Some(captured_id) = find_referenced_links(caption, doc, line_number)? {
-                    return Ok(Some((captured_id, ftd::TextSource::Caption)));
+                let (captured_ids, process_for_escaped_links) = find_referenced_links(caption);
+                if !captured_ids.is_empty() || process_for_escaped_links {
+                    replace_blocks.push((
+                        captured_ids,
+                        (ftd::TextSource::Caption, (is_from_section, index)),
+                        line_number,
+                    ));
                 }
             }
 
-            for (line_number, _, header) in header.0.iter() {
-                if let Some(captured_id) = find_referenced_links(header, doc, *line_number)? {
-                    return Ok(Some((captured_id, ftd::TextSource::Header)));
+            for (ln, _, header) in header.0.iter() {
+                let (captured_ids, process_for_escaped_links) = find_referenced_links(header);
+                if !captured_ids.is_empty() || process_for_escaped_links {
+                    replace_blocks.push((
+                        captured_ids,
+                        (ftd::TextSource::Header, (is_from_section, index)),
+                        *ln,
+                    ));
                 }
             }
 
-            if let Some((line_number, ref body)) = body {
-                if let Some(captured_id) = find_referenced_links(body, doc, *line_number)? {
-                    return Ok(Some((captured_id, ftd::TextSource::Body)));
+            if let Some((ln, ref body)) = body {
+                let (captured_ids, process_for_escaped_links) = find_referenced_links(body);
+                if !captured_ids.is_empty() || process_for_escaped_links {
+                    replace_blocks.push((
+                        captured_ids,
+                        (ftd::TextSource::Body, (is_from_section, index)),
+                        *ln,
+                    ));
                 }
             }
 
-            Ok(None)
+            replace_blocks
         }
 
-        /// fetches the id of the captured link
-        /// from the given text if matches
-        /// from any of the 2 syntax patterns
-        /// if no such links found returns None
-        fn find_referenced_links(
-            value: &str,
-            _doc: &ftd::p2::TDoc,
-            _line_number: usize,
-        ) -> ftd::p1::Result<Option<String>> {
-            // Try to find any link based on S1 link pattern
-            if let Some(id) = find_link_from_s1(value) {
-                return Ok(Some(id));
-            }
-
-            // Try to find any link based on S2 link pattern
-            if let Some(id) = find_link_from_s2(value) {
-                return Ok(Some(id));
-            }
-
-            Ok(None)
-        }
-
-        /// finds the first link match from s1 pattern and returns the id associated with the link
+        /// returns (captured_ids, process_for_escaped_links) for the given text
         ///
-        /// Syntax 1 = `[<some-link-text>]`(id: <some-id>)
-        fn find_link_from_s1(value: &str) -> Option<String> {
-            // Syntax 1 = [id`](id: <id-to-link>)
-            if let Some(capture) = ftd::regex::S1.captures_iter(value).next() {
-                let captured_id = ftd::regex::capture_group_by_index(&capture, 2).trim();
-                return Some(captured_id.to_string());
-            }
-
-            None
-        }
-
-        /// finds the first link match from s2 pattern and returns the id associated with the link
+        /// captured_ids = set of captured ids associated with the links present in the given text
+        /// which needs to be resolved
         ///
-        /// Syntax 2 = {id: <some-id>}
-        fn find_link_from_s2(value: &str) -> Option<String> {
-            // Syntax 2 = {<id-to-link>}];
-            if let Some(capture) = ftd::regex::S2.captures_iter(value).next() {
-                let captured_id = ftd::regex::capture_group_by_index(&capture, 1).trim();
-                return Some(captured_id.to_string());
+        /// process_for_escaped_links = boolean if escaped links needs to be resolved
+        fn find_referenced_links(value: &str) -> (std::collections::HashSet<String>, bool) {
+            let mut process_for_escaped_links = false;
+            let mut captured_ids: std::collections::HashSet<String> =
+                std::collections::HashSet::new();
+
+            // Character Prefix Group <prefix>
+            // Referred Id Capture Group <id_or_text>
+            // <type1> group and <ahead> group for any possible link
+            for capture in ftd::regex::S.captures_iter(value) {
+                let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
+
+                // check if link is escaped ignore if true
+                if !prefix.is_empty() && prefix.eq(r"\") {
+                    process_for_escaped_links = true;
+                    continue;
+                }
+
+                let type1 = ftd::regex::capture_group_by_name(&capture, "type1").trim();
+                match type1.is_empty() {
+                    true => {
+                        // Type 2 syntax: [<id>]
+                        // id = <id_or_text> group = <id>
+                        // Linked text = id
+
+                        let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
+                        // ignore if a resolved link already exists
+                        if !ahead.is_empty() && ftd::regex::URL.is_match(ahead) {
+                            continue;
+                        }
+
+                        let captured_id =
+                            ftd::regex::capture_group_by_name(&capture, "id_or_text").trim();
+
+                        // In case user doesn't provide any id
+                        match captured_id.is_empty() {
+                            true => continue,
+                            false => {
+                                // In case user uses [] as checkboxes instead of links ignore them
+                                // - [ ] item1
+                                // - [x] item2
+                                if matches!(captured_id, "x" | "X") {
+                                    continue;
+                                }
+                            }
+                        }
+
+                        captured_ids.insert(captured_id.to_string());
+                    }
+                    false => {
+                        // Type 1 syntax [<link_text>](<type1><id>)
+                        // Linked text = <id_or_text>
+                        // id = <id>
+                        let captured_id = ftd::regex::capture_group_by_name(&capture, "id").trim();
+
+                        // In case user doesn't provide any id
+                        if captured_id.is_empty() {
+                            continue;
+                        }
+
+                        captured_ids.insert(captured_id.to_string());
+                    }
+                }
             }
 
-            None
+            (captured_ids, process_for_escaped_links)
         }
     }
 
@@ -702,182 +783,250 @@ impl InterpreterState {
 
     pub fn continue_after_checking_id(
         mut self,
-        id: &str,
-        source: &ftd::TextSource,
-        is_from_section: bool,
-        link: String,
+        replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashMap<String, String>>>,
     ) -> ftd::p1::Result<Interpreter> {
         // Checking in the last section from the topmost document in the document stack
-        // which isn't popped out yet and replace links based on the captured id
-        // in the received text source
+        // which isn't popped out yet and replace links based on the captured id set
+        // it received from the current processing section
         // NOTE: need to run regex again to find link syntax
         // match for the given id and replace it with the url received
-
-        // TODO: need to do code refactor
-        // possible refactor would be replaced in-place
-        // within the replace_single_link() by passing mut
-        // reference of all caption, body, header.
         if let Some(current_processing_document) = self.document_stack.last_mut() {
             if let Some(current_processing_section) =
                 current_processing_document.get_last_mut_section()
             {
-                match is_from_section {
-                    true => match source {
-                        ftd::TextSource::Caption => {
-                            if let Some(ref mut cap) = current_processing_section.caption {
-                                let (replace_status, replaced_caption): (bool, Option<String>) =
-                                    replace_single_link(cap, id, &link);
-                                if replace_status {
-                                    current_processing_section.caption = replaced_caption;
+                for (id_map, source, ln) in replace_blocks.iter() {
+                    let is_from_section = source.1 .0;
+                    let target_text_source = &source.0;
+
+                    match is_from_section {
+                        true => match target_text_source {
+                            ftd::TextSource::Caption => {
+                                if let Some(ref mut cap) = current_processing_section.caption {
+                                    replace_all_links(cap, id_map, self.id.clone(), *ln)?;
                                 }
                             }
-                        }
-                        ftd::TextSource::Header => {
-                            for (_, _, v) in current_processing_section.header.0.iter_mut() {
-                                let (replace_status, replaced_text): (bool, Option<String>) =
-                                    replace_single_link(v, id, &link);
-                                if replace_status {
-                                    if let Some(replaced_header_value) = replaced_text {
-                                        *v = replaced_header_value;
-                                        break;
-                                    }
+                            ftd::TextSource::Header => {
+                                for (_, _, v) in current_processing_section.header.0.iter_mut() {
+                                    replace_all_links(v, id_map, self.id.clone(), *ln)?;
                                 }
                             }
-                        }
-                        ftd::TextSource::Body => {
-                            if let Some(ref mut body) = current_processing_section.body {
-                                let (replace_status, replaced_text): (bool, Option<String>) =
-                                    replace_single_link(&body.1, id, &link);
-                                if replace_status {
-                                    if let Some(replaced_body) = replaced_text {
-                                        body.1 = replaced_body;
-                                    }
+                            ftd::TextSource::Body => {
+                                if let Some(ref mut body) = current_processing_section.body {
+                                    replace_all_links(&mut body.1, id_map, self.id.clone(), *ln)?;
                                 }
                             }
-                        }
-                        _ => {
-                            unimplemented!()
-                        }
-                    },
-                    false => {
-                        let mut is_replaced: bool = false;
-                        for subsection in current_processing_section.sub_sections.0.iter_mut() {
-                            match source {
+                            _ => {
+                                unimplemented!()
+                            }
+                        },
+                        false => {
+                            let target_subsection_index = source.1 .1;
+                            let subsections = &mut current_processing_section.sub_sections.0;
+
+                            let current_processing_subsection = subsections
+                                .get_mut(target_subsection_index)
+                                .ok_or_else(|| ftd::p1::Error::UnknownData {
+                                    message: format!(
+                                        "No subsection present at index {} in subsections",
+                                        target_subsection_index
+                                    ),
+                                    doc_id: self.id.clone(),
+                                    line_number: *ln,
+                                })?;
+
+                            match target_text_source {
                                 ftd::TextSource::Caption => {
-                                    if let Some(ref mut cap) = subsection.caption {
-                                        let (replace_status, replaced_caption): (
-                                            bool,
-                                            Option<String>,
-                                        ) = replace_single_link(cap, id, &link);
-                                        if replace_status {
-                                            subsection.caption = replaced_caption;
-                                            is_replaced = true;
-                                        }
+                                    if let Some(ref mut cap) = current_processing_subsection.caption
+                                    {
+                                        replace_all_links(cap, id_map, self.id.clone(), *ln)?;
                                     }
                                 }
                                 ftd::TextSource::Header => {
-                                    for (_, _, v) in subsection.header.0.iter_mut() {
-                                        let (replace_status, replaced_text): (
-                                            bool,
-                                            Option<String>,
-                                        ) = replace_single_link(v, id, &link);
-                                        if replace_status {
-                                            if let Some(replaced_header_value) = replaced_text {
-                                                *v = replaced_header_value;
-                                                is_replaced = true;
-                                                break;
-                                            }
-                                        }
+                                    for (_, _, v) in
+                                        current_processing_subsection.header.0.iter_mut()
+                                    {
+                                        replace_all_links(v, id_map, self.id.clone(), *ln)?;
                                     }
                                 }
                                 ftd::TextSource::Body => {
-                                    if let Some(ref mut body) = subsection.body {
-                                        let (replace_status, replaced_text): (
-                                            bool,
-                                            Option<String>,
-                                        ) = replace_single_link(&body.1, id, &link);
-                                        if replace_status {
-                                            if let Some(replaced_body) = replaced_text {
-                                                body.1 = replaced_body;
-                                                is_replaced = true;
-                                            }
-                                        }
+                                    if let Some(ref mut body) = current_processing_subsection.body {
+                                        replace_all_links(
+                                            &mut body.1,
+                                            id_map,
+                                            self.id.clone(),
+                                            *ln,
+                                        )?;
                                     }
                                 }
                                 _ => {
                                     unimplemented!()
                                 }
                             }
-
-                            // No need to check other subsections if single instance of the
-                            // linking syntax is already replaced above,
-                            // break out if already replaced once
-                            if is_replaced {
-                                break;
-                            }
                         }
                     }
                 }
+                current_processing_section.done_processing_links();
             }
         }
 
-        // self.document_stack[doc_index].done_processing_terms();
         return self.continue_();
 
-        /// replaces single instance of link syntax with the actual link
-        /// given its associated id and returns (true, Some(replaced-value))
-        /// if no such link found returns (false, None)
-        fn replace_single_link(value: &str, target_id: &str, link: &str) -> (bool, Option<String>) {
-            if let Some(val) = find_and_replace_single_s1_instance(value, target_id, link) {
-                return (true, Some(val));
-            }
+        /// replaces all links present in any textsource from a single section and its subsections,
+        /// also resolves any escaped links if present.
+        /// returns true if any replacement took place else false
+        fn replace_all_links(
+            value: &mut String,
+            id_map: &std::collections::HashMap<String, String>,
+            doc_id: String,
+            line_number: usize,
+        ) -> ftd::p1::Result<bool> {
+            let mut is_replaced = false;
+            let mut matches_with_replacements: Vec<(String, usize, usize)> = vec![];
+            // Character Prefix Group <prefix>
+            // Referred Id Capture Group <id_or_text>
+            // <type1> Group and <id> Group for id from type 1 syntax";
+            for capture in ftd::regex::S.captures_iter(value.as_ref()) {
+                let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
+                let type1 = ftd::regex::capture_group_by_name(&capture, "type1");
 
-            if let Some(val) = find_and_replace_single_s2_instance(value, target_id, link) {
-                return (true, Some(val));
-            }
+                match type1.trim().is_empty() {
+                    true => {
+                        // Type 2 syntax: [<id>]
+                        // Match <prefix>?[<id_or_text>](<ahead>)?
+                        // id = <id_or_text> group = <id>
+                        // Linked text = id
 
-            return (false, None);
+                        let matched_pattern = ftd::regex::capture_group_by_index(&capture, 0);
+                        let match_length = matched_pattern.len();
+                        let match_start_index = capture.get(0).unwrap().start();
 
-            fn find_and_replace_single_s1_instance(
-                value: &str,
-                target_id: &str,
-                link: &str,
-            ) -> Option<String> {
-                // Syntax 1 = [id`](id: <id-to-link>)
-                for cap in ftd::regex::S1.captures_iter(value) {
-                    let linked_text = ftd::regex::capture_group_by_index(&cap, 1);
-                    let captured_id = ftd::regex::capture_group_by_index(&cap, 2).trim();
-                    let match_pattern = ftd::regex::capture_group_by_index(&cap, 0);
+                        let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
+                        let linked_text = ftd::regex::capture_group_by_name(&capture, "id_or_text");
+                        let captured_id = linked_text.trim();
 
-                    if captured_id.eq(target_id) {
-                        let replacement = format!("[{}]({})", linked_text, link);
-                        let replaced_text = value.replacen(match_pattern, replacement.as_str(), 1);
-                        return Some(replaced_text);
+                        // In case, the link is escaped, ignore it
+                        if !prefix.is_empty() && prefix.eq(r"\") {
+                            let match_without_prefix = match ahead.is_empty() {
+                                true => format!("[{}]", linked_text),
+                                false => format!("[{}]({})", linked_text, ahead),
+                            };
+                            matches_with_replacements.push((
+                                match_without_prefix,
+                                match_start_index,
+                                match_length,
+                            ));
+                            continue;
+                        }
+
+                        // in case resolved link already exists
+                        if !ahead.is_empty() && ftd::regex::URL.is_match(ahead) {
+                            continue;
+                        }
+
+                        // In case the user doesn't provide any id
+                        // like this - [ ] consider this as an empty checkbox
+                        match captured_id.is_empty() {
+                            true => continue,
+                            false => {
+                                // In case user uses [x] or [X] as checkboxes instead of links ignore them
+                                if matches!(captured_id, "x" | "X") {
+                                    continue;
+                                }
+                            }
+                        }
+
+                        let link =
+                            id_map
+                                .get(captured_id)
+                                .ok_or_else(|| ftd::p1::Error::NotFound {
+                                    doc_id: doc_id.clone(),
+                                    line_number,
+                                    key: format!(
+                                        "{} not found in id_map while replacing for links",
+                                        captured_id
+                                    ),
+                                })?;
+
+                        let mut replacement = format!("[{}]({})", linked_text, link);
+                        if !prefix.is_empty() {
+                            replacement = format!("{}{}", prefix, replacement);
+                        }
+
+                        matches_with_replacements.push((
+                            replacement,
+                            match_start_index,
+                            match_length,
+                        ));
+                    }
+                    false => {
+                        // Type 1 syntax: [<link-text>](id: <id>)
+                        // Match <prefix>?[<id_or_text>](<type1>)
+                        // Linked text = <id_or_text> = <link_text>
+                        // id = <id_or_ahead>
+
+                        let captured_id = ftd::regex::capture_group_by_name(&capture, "id").trim();
+                        let linked_text = ftd::regex::capture_group_by_name(&capture, "id_or_text");
+
+                        let matched_pattern = ftd::regex::capture_group_by_index(&capture, 0);
+                        let match_start_index = capture.get(0).unwrap().start();
+                        let match_length = matched_pattern.len();
+
+                        // In case, the link is escaped, ignore it
+                        if !prefix.is_empty() && prefix.eq(r"\") {
+                            let match_without_prefix = format!("[{}]({})", linked_text, type1);
+                            matches_with_replacements.push((
+                                match_without_prefix,
+                                match_start_index,
+                                match_length,
+                            ));
+                            continue;
+                        }
+
+                        // In case the user doesn't provide any id
+                        if captured_id.is_empty() {
+                            continue;
+                        }
+
+                        let link =
+                            id_map
+                                .get(captured_id)
+                                .ok_or_else(|| ftd::p1::Error::NotFound {
+                                    doc_id: doc_id.clone(),
+                                    line_number,
+                                    key: format!(
+                                        "{} not found in id_map while replacing for links",
+                                        captured_id
+                                    ),
+                                })?;
+
+                        let mut replacement = format!("[{}]({})", linked_text, link);
+                        if !prefix.is_empty() {
+                            replacement = format!("{}{}", prefix, replacement);
+                        }
+
+                        matches_with_replacements.push((
+                            replacement,
+                            match_start_index,
+                            match_length,
+                        ));
                     }
                 }
-
-                None
             }
 
-            fn find_and_replace_single_s2_instance(
-                value: &str,
-                target_id: &str,
-                link: &str,
-            ) -> Option<String> {
-                // Syntax 2 = {<id-to-link>}
-                for cap in ftd::regex::S2.captures_iter(value) {
-                    let captured_id = ftd::regex::capture_group_by_index(&cap, 1).trim();
-                    let match_pattern = ftd::regex::capture_group_by_index(&cap, 0);
-
-                    if captured_id.eq(target_id) {
-                        let replacement = format!("[{}]({})", target_id, link);
-                        let replaced_text = value.replacen(match_pattern, replacement.as_str(), 1);
-                        return Some(replaced_text);
-                    }
-                }
-
-                None
+            // replace all link syntax with actual links, also fix the escaped links
+            while let Some((replacement, match_start_index, match_length)) =
+                matches_with_replacements.pop()
+            {
+                *value = format!(
+                    "{}{}{}",
+                    &value[..match_start_index],
+                    replacement,
+                    &value[match_start_index + match_length..]
+                );
+                is_replaced = true;
             }
+
+            Ok(is_replaced)
         }
     }
 
@@ -1063,191 +1212,6 @@ impl ParsedDocument {
         self.sections.last_mut()
     }
 
-    /// replaces linking syntax with the actual links
-    ///
-    /// Syntax 1: `[<linked-text>]`(id: <id-to-link>)
-    ///
-    /// Syntax 2: {<id-to-link>}
-    ///
-    /// In case 2, the linked text will be same as the id
-    #[allow(dead_code)]
-    fn replace_linking_syntax_with_links(
-        &mut self,
-        global_ids: &std::collections::HashMap<String, String>,
-    ) -> ftd::p1::Result<()> {
-        for section in self.sections.iter_mut() {
-            resolve_global_ids(
-                &mut section.caption,
-                &mut section.header,
-                &mut section.body,
-                self.name.as_str(),
-                section.line_number,
-                global_ids,
-            )?;
-
-            for subsection in section.sub_sections.0.iter_mut() {
-                resolve_global_ids(
-                    &mut subsection.caption,
-                    &mut subsection.header,
-                    &mut subsection.body,
-                    self.name.as_str(),
-                    subsection.line_number,
-                    global_ids,
-                )?;
-            }
-        }
-        return Ok(());
-
-        #[allow(dead_code)]
-        fn resolve_global_ids(
-            caption: &mut Option<String>,
-            header: &mut ftd::p1::Header,
-            body: &mut Option<(usize, String)>,
-            doc_id: &str,
-            line_number: usize,
-            global_ids: &std::collections::HashMap<String, String>,
-        ) -> ftd::p1::Result<()> {
-            if let Some(ref mut caption) = caption {
-                replace_text(caption, global_ids, doc_id, line_number)?;
-            }
-
-            for (line_number, _, header) in header.0.iter_mut() {
-                replace_text(header, global_ids, doc_id, *line_number)?;
-            }
-
-            if let Some((line_number, ref mut body)) = body {
-                replace_text(body, global_ids, doc_id, *line_number)?;
-            }
-
-            Ok(())
-        }
-
-        #[allow(dead_code)]
-        fn replace_text(
-            text: &mut String,
-            global_ids: &std::collections::HashMap<String, String>,
-            doc_id: &str,
-            line_number: usize,
-        ) -> ftd::p1::Result<()> {
-            replace_text_for_s1_pattern(text, global_ids, doc_id, line_number)?;
-            replace_text_for_s2_pattern(text, global_ids, doc_id, line_number)?;
-
-            Ok(())
-        }
-
-        /// fetches capture group by group index and returns it as &str
-        #[allow(dead_code)]
-        fn capture_group_at<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
-            return capture.get(group_index).map_or("", |c| c.as_str());
-        }
-
-        #[allow(dead_code)]
-        fn replace_text_for_s1_pattern(
-            text: &mut String,
-            global_ids: &std::collections::HashMap<String, String>,
-            doc_id: &str,
-            line_number: usize,
-        ) -> ftd::p1::Result<()> {
-            // Syntax 1 = [id`](id: <id-to-link>)
-            // G0 = Original capture, G1 = Linked Text, G2 = Actual Id
-            let mut pattern_with_replacement = vec![];
-            for cap in ftd::regex::S1.captures_iter(text) {
-                let linked_text = capture_group_at(&cap, 1).trim();
-                let captured_id = capture_group_at(&cap, 2);
-                let match_pattern = capture_group_at(&cap, 0);
-                let link = global_ids.get(captured_id.trim()).ok_or_else(|| {
-                    ftd::p1::Error::ForbiddenUsage {
-                        message: format!("id: {} not found while linking", captured_id),
-                        doc_id: doc_id.to_string(),
-                        line_number,
-                    }
-                })?;
-                let pattern_start_index = cap.get(0).unwrap().start();
-                if pattern_start_index > 0
-                    && text.chars().nth(pattern_start_index - 1).unwrap() == '\\'
-                {
-                    pattern_with_replacement.push((
-                        pattern_start_index - 1,
-                        match_pattern.len() + 1,
-                        match_pattern.to_string(),
-                    ));
-                    continue;
-                }
-
-                let replacement = format!("[{}]({})", linked_text, link);
-                pattern_with_replacement.push((
-                    pattern_start_index,
-                    match_pattern.len(),
-                    replacement,
-                ));
-            }
-
-            while let Some((index, length, replacement)) = pattern_with_replacement.pop() {
-                *text = format!(
-                    "{}{}{}",
-                    &text[..index],
-                    replacement,
-                    &text[index + length..]
-                );
-            }
-            Ok(())
-        }
-
-        #[allow(dead_code)]
-        fn replace_text_for_s2_pattern(
-            text: &mut String,
-            global_ids: &std::collections::HashMap<String, String>,
-            doc_id: &str,
-            line_number: usize,
-        ) -> ftd::p1::Result<()> {
-            // Syntax 2 = {<id-to-link>}
-            // G0 = Original capture, G1 = Actual Id
-            let mut pattern_with_replacement = vec![];
-            for cap in ftd::regex::S2.captures_iter(text) {
-                let captured_id = capture_group_at(&cap, 1);
-                let linked_text = captured_id.trim();
-                let match_pattern = capture_group_at(&cap, 0);
-                let link = global_ids.get(captured_id.trim()).ok_or_else(|| {
-                    ftd::p1::Error::ForbiddenUsage {
-                        message: format!("id: {} not found while linking", captured_id),
-                        doc_id: doc_id.to_string(),
-                        line_number,
-                    }
-                })?;
-                let pattern_start_index = cap.get(0).unwrap().start();
-                if pattern_start_index > 0
-                    && text.chars().nth(pattern_start_index - 1).unwrap() == '\\'
-                {
-                    pattern_with_replacement.push((
-                        pattern_start_index - 1,
-                        match_pattern.len() + 1,
-                        match_pattern.to_string(),
-                    ));
-                    continue;
-                }
-
-                let replacement = format!("[{}]({})", linked_text, link);
-                pattern_with_replacement.push((
-                    pattern_start_index,
-                    match_pattern.len(),
-                    replacement,
-                ));
-
-                // result = result.replacen(match_pattern, &replacement, 1);
-            }
-
-            while let Some((index, length, replacement)) = pattern_with_replacement.pop() {
-                *text = format!(
-                    "{}{}{}",
-                    &text[..index],
-                    replacement,
-                    &text[index + length..]
-                );
-            }
-            Ok(())
-        }
-    }
-
     /// Filters out commented parts from the parsed document.
     ///
     /// # Comments are ignored for
@@ -1319,9 +1283,7 @@ pub enum Interpreter {
         state: InterpreterState,
     },
     CheckID {
-        id: String,
-        source: ftd::TextSource,
-        is_from_section: bool,
+        replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>,
         state: InterpreterState,
     },
     Done {
