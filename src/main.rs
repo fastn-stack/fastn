@@ -207,11 +207,11 @@ pub fn interpret_helper(
                 state: st,
             } => {
                 // No config in ftd::ExampleLibrary using dummy global_ids map for debugging
-                // let mut captured_ids_map: std::collections::HashMap<String, String> = std::collections::HashMap::new();
-                println!("Checkpoint gathering ids from global_ids map");
-                let mut mapped_replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashMap<String, String>>> = vec![];
+                let mut mapped_replace_blocks: Vec<
+                    ftd::ReplaceLinkBlock<std::collections::HashMap<String, String>>,
+                > = vec![];
 
-                for (captured_id_set, source, ln) in replace_blocks.iter(){
+                for (captured_id_set, source, ln) in replace_blocks.iter() {
                     let mut id_map: std::collections::HashMap<String, String> =
                         std::collections::HashMap::new();
                     for id in captured_id_set {
@@ -229,7 +229,6 @@ pub fn interpret_helper(
                     mapped_replace_blocks.push((id_map, source.to_owned(), ln.to_owned()));
                 }
 
-                println!("checkpoint passed!!");
                 s = st.continue_after_checking_id(mapped_replace_blocks)?;
             }
         }

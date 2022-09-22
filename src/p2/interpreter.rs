@@ -101,19 +101,18 @@ impl InterpreterState {
                 });
             }
 
-            // resolve for links
-            // dbg!(&p1);
+            // resolve for links before popping out the section
             if !p1.is_processed_for_links {
-                if let Some(replace_blocks) =
-                    Self::resolve_global_ids(p1, &doc, &parsed_document.var_types)?
-                {
-                    // println!("Phase 1 ended!!");
-                    // dbg!(&replace_blocks);
+                let replace_blocks =
+                    Self::resolve_global_ids(p1, &doc, &parsed_document.var_types)?;
+
+                if !replace_blocks.is_empty() {
                     return Ok(Interpreter::CheckID {
                         replace_blocks,
                         state: self,
                     });
                 }
+
                 p1.done_processing_links();
             }
 
@@ -549,18 +548,18 @@ impl InterpreterState {
 
     // TODO: Need to avoid double usage of regex while resolving and replacing for links
 
-    /// returns id set from the captured links along with its textSource
+    /// returns a vector of replace blocks where link replacement or escaped links needs to be resolved
+    /// along with the target textSource where these changes needs to happen
+    ///
     /// text-source includes caption, header, body of the section
     #[allow(clippy::type_complexity)]
     fn resolve_global_ids(
         section: &mut ftd::p1::Section,
         doc: &ftd::p2::TDoc,
         var_types: &[String],
-    ) -> ftd::p1::Result<Option<Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>>>
-    {
-        println!("Phase 1 started!!");
+    ) -> ftd::p1::Result<Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>>> {
         // will contain all replace blocks for section and its subsections
-        // where link replacement need to happen
+        // where link replacement or escape links need to be resolved
         let mut replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> =
             vec![];
 
@@ -618,14 +617,10 @@ impl InterpreterState {
             }
         }
 
-        if replace_blocks.is_empty() {
-            return Ok(None);
-        }
+        return Ok(replace_blocks);
 
-        return Ok(Some(replace_blocks));
-
-        /// returns an id set from the captured links along with its textSource (if any)
-        /// in case no id is captured returns None
+        /// returns a vector of replace blocks for every text-source where link replacement or
+        /// escaped links resolution needs to happen for a single section/ subsection
         fn resolve_id_from_all_sources(
             caption: &Option<String>,
             header: &ftd::p1::Header,
@@ -638,8 +633,8 @@ impl InterpreterState {
                 vec![];
 
             if let Some(ref caption) = caption {
-                if let Some(captured_ids) = find_referenced_links(caption) {
-                    // return Some((captured_ids, ftd::TextSource::Caption, line_number));
+                let (captured_ids, process_for_escaped_links) = find_referenced_links(caption);
+                if !captured_ids.is_empty() || process_for_escaped_links {
                     replace_blocks.push((
                         captured_ids,
                         (ftd::TextSource::Caption, (is_from_section, index)),
@@ -649,8 +644,8 @@ impl InterpreterState {
             }
 
             for (ln, _, header) in header.0.iter() {
-                if let Some(captured_ids) = find_referenced_links(header) {
-                    // return Some((captured_ids, ftd::TextSource::Header, *ln));
+                let (captured_ids, process_for_escaped_links) = find_referenced_links(header);
+                if !captured_ids.is_empty() || process_for_escaped_links {
                     replace_blocks.push((
                         captured_ids,
                         (ftd::TextSource::Header, (is_from_section, index)),
@@ -660,8 +655,8 @@ impl InterpreterState {
             }
 
             if let Some((ln, ref body)) = body {
-                if let Some(captured_ids) = find_referenced_links(body) {
-                    // return Some((captured_ids, ftd::TextSource::Body, *ln));
+                let (captured_ids, process_for_escaped_links) = find_referenced_links(body);
+                if !captured_ids.is_empty() || process_for_escaped_links {
                     replace_blocks.push((
                         captured_ids,
                         (ftd::TextSource::Body, (is_from_section, index)),
@@ -673,33 +668,26 @@ impl InterpreterState {
             replace_blocks
         }
 
-        /// fetches the id's of captured links
-        /// from the given text if matches
-        /// from any of the 2 syntax patterns
-        /// if no such links found returns None
-        fn find_referenced_links(value: &str) -> Option<std::collections::HashSet<String>> {
+        /// returns (captured_ids, process_for_escaped_links) for the given text
+        ///
+        /// captured_ids = set of captured ids associated with the links present in the given text
+        /// which needs to be resolved
+        ///
+        /// process_for_escaped_links = boolean if escaped links needs to be resolved
+        fn find_referenced_links(value: &str) -> (std::collections::HashSet<String>, bool) {
+            let mut process_for_escaped_links = false;
             let mut captured_ids: std::collections::HashSet<String> =
                 std::collections::HashSet::new();
 
             // Character Prefix Group <prefix>
             // Referred Id Capture Group <id_or_text>
             // <type1> group and <ahead> group for any possible link
-            // println!("From phase 1:");
-            // dbg!(value);
             for capture in ftd::regex::S.captures_iter(value) {
-                let match_pattern = capture.get(0).unwrap().as_str();
-                let match_start_index = capture.get(0).unwrap().start();
-                let match_length = match_pattern.len();
-
-                // dbg!(match_pattern);
-                // dbg!(&match_start_index);
-                // dbg!(&match_length);
-
                 let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
-                // dbg!(prefix);
 
                 // check if link is escaped ignore if true
                 if !prefix.is_empty() && prefix.eq(r"\") {
+                    process_for_escaped_links = true;
                     continue;
                 }
 
@@ -711,7 +699,6 @@ impl InterpreterState {
                         // Linked text = id
 
                         let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
-
                         // ignore if a resolved link already exists
                         if !ahead.is_empty() && ftd::regex::URL.is_match(ahead) {
                             continue;
@@ -751,11 +738,7 @@ impl InterpreterState {
                 }
             }
 
-            if captured_ids.is_empty() {
-                return None;
-            }
-
-            Some(captured_ids)
+            (captured_ids, process_for_escaped_links)
         }
     }
 
@@ -802,7 +785,6 @@ impl InterpreterState {
         mut self,
         replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashMap<String, String>>>,
     ) -> ftd::p1::Result<Interpreter> {
-        println!("Phase 2 started!!");
         // Checking in the last section from the topmost document in the document stack
         // which isn't popped out yet and replace links based on the captured id set
         // it received from the current processing section
@@ -887,10 +869,10 @@ impl InterpreterState {
             }
         }
 
-        println!("Phase 2 ended!!");
         return self.continue_();
 
-        /// replaces all links in a single textSource based on the specified captured-ids
+        /// replaces all links present in any textsource from a single section and its subsections,
+        /// also resolves any escaped links if present.
         /// returns true if any replacement took place else false
         fn replace_all_links(
             value: &mut String,
@@ -903,9 +885,7 @@ impl InterpreterState {
             // Character Prefix Group <prefix>
             // Referred Id Capture Group <id_or_text>
             // <type1> Group and <id> Group for id from type 1 syntax";
-            // dbg!(&value);
             for capture in ftd::regex::S.captures_iter(value.as_ref()) {
-                // check if link is escaped ignore link if true
                 let prefix = ftd::regex::capture_group_by_name(&capture, "prefix");
                 let type1 = ftd::regex::capture_group_by_name(&capture, "type1");
 
@@ -919,9 +899,6 @@ impl InterpreterState {
                         let matched_pattern = ftd::regex::capture_group_by_index(&capture, 0);
                         let match_length = matched_pattern.len();
                         let match_start_index = capture.get(0).unwrap().start();
-                        // dbg!(matched_pattern);
-                        // dbg!(&match_start_index);
-                        // dbg!(&match_length);
 
                         let ahead = ftd::regex::capture_group_by_name(&capture, "ahead");
                         let linked_text = ftd::regex::capture_group_by_name(&capture, "id_or_text");
@@ -994,10 +971,6 @@ impl InterpreterState {
                         let match_start_index = capture.get(0).unwrap().start();
                         let match_length = matched_pattern.len();
 
-                        // dbg!(matched_pattern);
-                        // dbg!(&match_start_index);
-                        // dbg!(&match_length);
-
                         // In case, the link is escaped, ignore it
                         if !prefix.is_empty() && prefix.eq(r"\") {
                             let match_without_prefix = format!("[{}]({})", linked_text, type1);
@@ -1040,6 +1013,7 @@ impl InterpreterState {
                 }
             }
 
+            // replace all link syntax with actual links, also fix the escaped links
             while let Some((replacement, match_start_index, match_length)) =
                 matches_with_replacements.pop()
             {
