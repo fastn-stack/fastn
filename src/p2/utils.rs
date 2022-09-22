@@ -1599,7 +1599,7 @@ pub fn is_markdown_component(
     let mut name = name.to_string();
     // check if the component is derived from ftd#text
     while !name.eq("ftd.kernel") {
-        if !doc.get_thing(line_number, name.as_str()).is_ok() {
+        if doc.get_thing(line_number, name.as_str()).is_err() {
             return Ok(false);
         }
         match doc.get_thing(line_number, name.as_str())? {
