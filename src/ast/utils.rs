@@ -5,3 +5,9 @@ pub fn split_at(text: &str, at: &str) -> (String, Option<String>) {
         (text.to_string(), None)
     }
 }
+
+pub(crate) fn is_variable_mutable(name: &str) -> bool {
+    name.starts_with(REFERENCE)
+}
+
+pub const REFERENCE: &str = "$";

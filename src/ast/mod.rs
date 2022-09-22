@@ -4,13 +4,15 @@ mod test;
 
 mod component;
 mod import;
+mod kind;
 mod main;
 mod record;
 mod utils;
 mod variable;
 
-pub use component::Component;
+pub use component::ComponentDefinition;
 pub use import::Import;
+pub use kind::{VariableKind, VariableValue};
 pub use main::AST;
 pub use record::Record;
 pub use variable::{VariableDefinition, VariableInvocation};
