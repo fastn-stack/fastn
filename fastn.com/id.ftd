@@ -5,6 +5,7 @@
 
 
 -- ft.h1: What is `id`?
+id: id-page
 
 `id` is the attribute to an element to apply styling or interactivity to that 
 specific element.

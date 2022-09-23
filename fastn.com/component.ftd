@@ -5,7 +5,7 @@
 
 
 -- ft.page: `component`
-
+id: component
 
 -- ftd.column:
 id: foo-4

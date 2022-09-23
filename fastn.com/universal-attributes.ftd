@@ -9,6 +9,7 @@ light: red
 dark: red
 
 -- ft.page: Universal Attributes
+id: universal-attributes
 
 -- ftd.column:
 id: outer-12
