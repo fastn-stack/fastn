@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>hello {world: This is text  {foo: Green Text}} {ca.foo: Text using ca {foo: foo}}.</title>
+    <title>Click Here!</title>
     <script type="ftd" id="ftd-data">
         {
-  "conditional-attributes#6b223a": {
+  "conditional-attributes.ftd#6b223a": {
     "value": {
       "$kind$": "light",
       "dark": "#6b223a",
@@ -24,8 +24,8 @@
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$node$": "0,3",
-                  "$variable$": "conditional-attributes#present"
+                  "$node$": "0",
+                  "$variable$": "conditional-attributes.ftd#present"
                 }
               }
             }
@@ -35,10 +35,52 @@
       ]
     }
   },
-  "conditional-attributes#present": {
+  "conditional-attributes.ftd#green": {
+    "value": {
+      "$kind$": "light",
+      "dark": "green",
+      "light": "green"
+    },
+    "dependencies": {
+      "$style$": [
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "2,0",
+                  "$variable$": "conditional-attributes.ftd#present@2"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "conditional-attributes.ftd#name@0": {
+    "value": "hello\n\nscroll down\n\nscroll down\n\nmore down\n\nmore down\n\nmore down\n\ndown\n\ndahown\n\n😴",
+    "dependencies": {
+      "0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "conditional-attributes.ftd#present": {
     "value": false,
     "dependencies": {
-      "0,3": [
+      "0": [
         {
           "condition": true,
           "dependency_type": "Style",
@@ -62,7 +104,7 @@
               "default": null,
               "value": {
                 "important": false,
-                "reference": "conditional-attributes#yellow",
+                "reference": "conditional-attributes.ftd#yellow",
                 "value": {
                   "$kind$": "light",
                   "dark": "rgba(255,255,0,1)",
@@ -141,7 +183,7 @@
               "default": null,
               "value": {
                 "important": false,
-                "reference": "conditional-attributes#red",
+                "reference": "conditional-attributes.ftd#red",
                 "value": {
                   "$kind$": "light",
                   "dark": "rgba(255,0,0,1)",
@@ -268,7 +310,7 @@
             "shadow-color": {
               "default": {
                 "important": false,
-                "reference": "conditional-attributes#green",
+                "reference": "conditional-attributes.ftd#green",
                 "value": {
                   "$kind$": "light",
                   "dark": "rgba(0,128,0,1)",
@@ -277,7 +319,7 @@
               },
               "value": {
                 "important": false,
-                "reference": "conditional-attributes#6b223a",
+                "reference": "conditional-attributes.ftd#6b223a",
                 "value": {
                   "$kind$": "light",
                   "dark": "rgba(107,34,58,1)",
@@ -336,7 +378,115 @@
       ]
     }
   },
-  "conditional-attributes#red": {
+  "conditional-attributes.ftd#present@2": {
+    "value": true,
+    "dependencies": {
+      "2": [
+        {
+          "condition": false,
+          "dependency_type": "Style",
+          "parameters": {
+            "align": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "center"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "align": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "top-right"
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "2,0": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "conditional-attributes.ftd#white",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,255,255,1)",
+                  "light": "rgba(255,255,255,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "conditional-attributes.ftd#green",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,128,0,1)",
+                  "light": "rgba(0,128,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": false,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "conditional-attributes.ftd#white",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,255,255,1)",
+                  "light": "rgba(255,255,255,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "conditional-attributes.ftd#red",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,0,0,1)",
+                  "light": "rgba(255,0,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "padding": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "5px"
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "conditional-attributes.ftd#red": {
     "value": {
       "$kind$": "light",
       "dark": "red",
@@ -354,8 +504,26 @@
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$node$": "0,3",
-                  "$variable$": "conditional-attributes#present"
+                  "$node$": "0",
+                  "$variable$": "conditional-attributes.ftd#present"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "2,0",
+                  "$variable$": "conditional-attributes.ftd#present@2"
                 }
               }
             }
@@ -365,14 +533,14 @@
       ]
     }
   },
-  "conditional-attributes#src": {
+  "conditional-attributes.ftd#src": {
     "value": {
       "$kind$": "light",
       "dark": "https://www.w3schools.com/cssref/img_tree.gif",
       "light": "https://www.w3schools.com/cssref/img_tree.gif"
     },
     "dependencies": {
-      "0,3": [
+      "0": [
         {
           "condition": null,
           "dependency_type": "Style",
@@ -395,7 +563,48 @@
       ]
     }
   },
-  "conditional-attributes#yellow": {
+  "conditional-attributes.ftd#white": {
+    "value": {
+      "$kind$": "light",
+      "dark": "white",
+      "light": "white"
+    },
+    "dependencies": {
+      "2,0": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,255,255,1)",
+                  "light": "rgba(255,255,255,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "conditional-attributes.ftd#present@2",
+                  "conditional-attributes.ftd#present@2"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "conditional-attributes.ftd#yellow": {
     "value": {
       "$kind$": "light",
       "dark": "yellow",
@@ -413,8 +622,8 @@
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$node$": "0,3",
-                  "$variable$": "conditional-attributes#present"
+                  "$node$": "0",
+                  "$variable$": "conditional-attributes.ftd#present"
                 }
               }
             }
@@ -432,7 +641,7 @@
           "condition": true,
           "dependency_type": "Variable",
           "parameters": {
-            "conditional-attributes#6b223a": {
+            "conditional-attributes.ftd#6b223a": {
               "default": {
                 "important": false,
                 "reference": null,
@@ -451,7 +660,7 @@
           "condition": true,
           "dependency_type": "Variable",
           "parameters": {
-            "conditional-attributes#red": {
+            "conditional-attributes.ftd#green": {
               "default": {
                 "important": false,
                 "reference": null,
@@ -470,7 +679,7 @@
           "condition": true,
           "dependency_type": "Variable",
           "parameters": {
-            "conditional-attributes#src": {
+            "conditional-attributes.ftd#red": {
               "default": {
                 "important": false,
                 "reference": null,
@@ -489,7 +698,45 @@
           "condition": true,
           "dependency_type": "Variable",
           "parameters": {
-            "conditional-attributes#yellow": {
+            "conditional-attributes.ftd#src": {
+              "default": {
+                "important": false,
+                "reference": null,
+                "value": "light"
+              },
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "dark"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Variable",
+          "parameters": {
+            "conditional-attributes.ftd#white": {
+              "default": {
+                "important": false,
+                "reference": null,
+                "value": "light"
+              },
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "dark"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Variable",
+          "parameters": {
+            "conditional-attributes.ftd#yellow": {
               "default": {
                 "important": false,
                 "reference": null,
@@ -750,63 +997,6 @@
             }
           },
           "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "markup-line.ftd#red": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "markup-line.ftd#src": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "markup-line.ftd#yellow": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
         }
       ]
     }
@@ -905,160 +1095,6 @@
   "ftd#system-dark-mode": {
     "value": false,
     "dependencies": {}
-  },
-  "markup-line.ftd#flag": {
-    "value": true,
-    "dependencies": {
-      "0,1": [
-        {
-          "condition": true,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-color": {
-              "default": {
-                "important": false,
-                "reference": "markup-line.ftd#yellow",
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,255,0,1)",
-                  "light": "rgba(255,255,0,1)"
-                }
-              },
-              "value": {
-                "important": false,
-                "reference": "markup-line.ftd#red",
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,0,0,1)",
-                  "light": "rgba(255,0,0,1)"
-                }
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "markup-line.ftd#red": {
-    "value": {
-      "$kind$": "light",
-      "dark": "red",
-      "light": "red"
-    },
-    "dependencies": {
-      "$style$": [
-        {
-          "condition": null,
-          "dependency_type": "Variable",
-          "parameters": {
-            "background-color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$node$": "0,1",
-                  "$variable$": "markup-line.ftd#flag"
-                }
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "markup-line.ftd#src": {
-    "value": {
-      "$kind$": "light",
-      "dark": "https://www.w3schools.com/cssref/img_tree.gif",
-      "light": "https://www.w3schools.com/cssref/img_tree.gif"
-    },
-    "dependencies": {
-      "0,1,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-image": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "url(https://www.w3schools.com/cssref/img_tree.gif)",
-                  "light": "url(https://www.w3schools.com/cssref/img_tree.gif)"
-                }
-              }
-            }
-          },
-          "remaining": null
-        }
-      ],
-      "0,3,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-image": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "url(https://www.w3schools.com/cssref/img_tree.gif)",
-                  "light": "url(https://www.w3schools.com/cssref/img_tree.gif)"
-                }
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "markup-line.ftd#yellow": {
-    "value": {
-      "$kind$": "light",
-      "dark": "yellow",
-      "light": "yellow"
-    },
-    "dependencies": {
-      "0,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,255,0,1)",
-                  "light": "rgba(255,255,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": [
-                  "markup-line.ftd#flag"
-                ]
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
   }
 }
     </script>
@@ -1201,24 +1237,12 @@ body.fpm-dark .ft_md a {
     text-decoration: none;
 }
         
-
-body.fpm-dark .c_0 {
-    color: rgba(0,128,0,1)
-}
-
-
-
-.c_0 {
-    color: rgba(0,128,0,1)
-}
-
-
     </style>
 
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding: 20px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello </span><span data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;markup-line.ftd#flag&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(255,0,0,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> This is text  </span><span data-id="0,1,1:main" style="background-image: url(https://www.w3schools.com/cssref/img_tree.gif); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md"> Green Text</span></span><span data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> </span><span data-id="0,3:main" style="background-image: url(https://www.w3schools.com/cssref/img_tree.gif); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-shadow: 0px 0px 4px 0px rgba(0,128,0,1); box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> Text using ca </span><span data-id="0,3,1:main" style="background-image: url(https://www.w3schools.com/cssref/img_tree.gif); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md"> foo</span></span><span data-id="0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">.</span></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="background-image: url(https://www.w3schools.com/cssref/img_tree.gif); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-shadow: 0px 0px 4px 0px rgba(0,128,0,1); box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>hello</p></p><p data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>scroll down</p></p><p data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>scroll down</p></p><p data-id="0,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>more down</p></p><p data-id="0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>more down</p></p><p data-id="0,5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>more down</p></p><p data-id="0,6:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>down</p></p><p data-id="0,7:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>dahown</p></p><p data-id="0,8:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>😴</p></p></div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;conditional-attributes.ftd#present&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Click Here!</div><div data-id="2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial" ><div data-id="2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); padding: 5px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Bar says hello</div><div data-id="2,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;conditional-attributes.ftd#present@2&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Click Here!</div></div></div>
 
 
     <script>

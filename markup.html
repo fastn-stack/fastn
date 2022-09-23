@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>hello {world: This is text  {foo: Green Text}} {ca.foo: Text using ca {foo: foo}}.</title>
+    <title>1</title>
     <script type="ftd" id="ftd-data">
         {
   "conditional-attributes#6b223a": {
@@ -24,7 +24,7 @@
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$node$": "0,3",
+                  "$node$": "0,0,0,1",
                   "$variable$": "conditional-attributes#present"
                 }
               }
@@ -38,7 +38,7 @@
   "conditional-attributes#present": {
     "value": false,
     "dependencies": {
-      "0,3": [
+      "0,0,0,1": [
         {
           "condition": true,
           "dependency_type": "Style",
@@ -354,7 +354,7 @@
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$node$": "0,3",
+                  "$node$": "0,0,0,1",
                   "$variable$": "conditional-attributes#present"
                 }
               }
@@ -372,7 +372,7 @@
       "light": "https://www.w3schools.com/cssref/img_tree.gif"
     },
     "dependencies": {
-      "0,3": [
+      "0,0,0,1": [
         {
           "condition": null,
           "dependency_type": "Style",
@@ -413,7 +413,7 @@
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$node$": "0,3",
+                  "$node$": "0,0,0,1",
                   "$variable$": "conditional-attributes#present"
                 }
               }
@@ -755,7 +755,7 @@
           "condition": true,
           "dependency_type": "Variable",
           "parameters": {
-            "markup-line.ftd#red": {
+            "markup.ftd#blue": {
               "default": {
                 "important": false,
                 "reference": null,
@@ -774,7 +774,7 @@
           "condition": true,
           "dependency_type": "Variable",
           "parameters": {
-            "markup-line.ftd#src": {
+            "markup.ftd#orange-color": {
               "default": {
                 "important": false,
                 "reference": null,
@@ -793,7 +793,7 @@
           "condition": true,
           "dependency_type": "Variable",
           "parameters": {
-            "markup-line.ftd#yellow": {
+            "markup.ftd#yellow": {
               "default": {
                 "important": false,
                 "reference": null,
@@ -906,31 +906,403 @@
     "value": false,
     "dependencies": {}
   },
-  "markup-line.ftd#flag": {
+  "lib#amitu": {
+    "value": {
+      "address": {
+        "city-detail": {
+          "name": "Prayagraj",
+          "pincode": null
+        },
+        "first-line": "Bangalore",
+        "second-line": "Karnataka"
+      },
+      "name": "Amit Upadhyay",
+      "phone": 99999999
+    },
+    "dependencies": {
+      "0,0,0,1,3": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": "name"
+        }
+      ],
+      "0,0,0,5,0,3": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": "name"
+        }
+      ]
+    }
+  },
+  "markup.ftd#blue": {
+    "value": {
+      "$kind$": "light",
+      "dark": "blue",
+      "light": "blue"
+    },
+    "dependencies": {
+      "0,0,0,3": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "markup.ftd#dark-mode"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,0,0,5": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "markup.ftd#dark-mode"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,1,1": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "markup.ftd#dark-mode"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,2,1": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "markup.ftd#dark-mode"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,3": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "markup.ftd#dark-mode"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,4": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "markup.ftd#dark-mode"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "markup.ftd#dark-mode": {
     "value": true,
     "dependencies": {
-      "0,1": [
+      "0,0,0,3": [
         {
           "condition": true,
           "dependency_type": "Style",
           "parameters": {
-            "background-color": {
+            "color": {
               "default": {
                 "important": false,
-                "reference": "markup-line.ftd#yellow",
+                "reference": "markup.ftd#blue",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "markup.ftd#yellow",
                 "value": {
                   "$kind$": "light",
                   "dark": "rgba(255,255,0,1)",
                   "light": "rgba(255,255,0,1)"
                 }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,0,0,5": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "markup.ftd#blue",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
               },
               "value": {
                 "important": false,
-                "reference": "markup-line.ftd#red",
+                "reference": "markup.ftd#yellow",
                 "value": {
                   "$kind$": "light",
-                  "dark": "rgba(255,0,0,1)",
-                  "light": "rgba(255,0,0,1)"
+                  "dark": "rgba(255,255,0,1)",
+                  "light": "rgba(255,255,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,1,1": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "markup.ftd#blue",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "markup.ftd#yellow",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,255,0,1)",
+                  "light": "rgba(255,255,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,2,1": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "markup.ftd#blue",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "markup.ftd#yellow",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,255,0,1)",
+                  "light": "rgba(255,255,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,3": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "markup.ftd#blue",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "markup.ftd#yellow",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,255,0,1)",
+                  "light": "rgba(255,255,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,4": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "markup.ftd#blue",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "markup.ftd#yellow",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,255,0,1)",
+                  "light": "rgba(255,255,0,1)"
                 }
               }
             }
@@ -940,11 +1312,58 @@
       ]
     }
   },
-  "markup-line.ftd#red": {
+  "markup.ftd#orange": {
+    "value": true,
+    "dependencies": {
+      "0,0,0,1,1,1": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "background-color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": "markup.ftd#orange-color",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,165,0,1)",
+                  "light": "rgba(255,165,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,0,0,1,5": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "background-color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": "markup.ftd#orange-color",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,165,0,1)",
+                  "light": "rgba(255,165,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "markup.ftd#orange-color": {
     "value": {
       "$kind$": "light",
-      "dark": "red",
-      "light": "red"
+      "dark": "orange",
+      "light": "orange"
     },
     "dependencies": {
       "$style$": [
@@ -958,79 +1377,17 @@
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$node$": "0,1",
-                  "$variable$": "markup-line.ftd#flag"
+                  "$node$": "0,0,0,1,1,1",
+                  "$variable$": "markup.ftd#orange"
                 }
               }
             }
           },
           "remaining": null
-        }
-      ]
-    }
-  },
-  "markup-line.ftd#src": {
-    "value": {
-      "$kind$": "light",
-      "dark": "https://www.w3schools.com/cssref/img_tree.gif",
-      "light": "https://www.w3schools.com/cssref/img_tree.gif"
-    },
-    "dependencies": {
-      "0,1,1": [
+        },
         {
           "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-image": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "url(https://www.w3schools.com/cssref/img_tree.gif)",
-                  "light": "url(https://www.w3schools.com/cssref/img_tree.gif)"
-                }
-              }
-            }
-          },
-          "remaining": null
-        }
-      ],
-      "0,3,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-image": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "url(https://www.w3schools.com/cssref/img_tree.gif)",
-                  "light": "url(https://www.w3schools.com/cssref/img_tree.gif)"
-                }
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "markup-line.ftd#yellow": {
-    "value": {
-      "$kind$": "light",
-      "dark": "yellow",
-      "light": "yellow"
-    },
-    "dependencies": {
-      "0,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
+          "dependency_type": "Variable",
           "parameters": {
             "background-color": {
               "default": null,
@@ -1038,20 +1395,193 @@
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,255,0,1)",
-                  "light": "rgba(255,255,0,1)"
+                  "$node$": "0,0,0,1,5",
+                  "$variable$": "markup.ftd#orange"
                 }
               }
-            },
-            "dependents": {
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "markup.ftd#value@": {
+    "value": "Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}\n\n- hello1\n- hello2\n  - hello3\n  - hello4\n- hello5\n\nThe above is the list printing.\nThis checks if everything is **alright**.\n{purple: Check this purple text for instance}",
+    "dependencies": {
+      "0,0,0,5": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "markup.ftd#value@0,1,1": {
+    "value": "Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}\n\n- hello1\n- hello2\n  - hello3\n  - hello4\n- hello5\n\nThe above is the list printing.\nThis checks if everything is **alright**.\n{purple: Check this purple text for instance}",
+    "dependencies": {
+      "0,1,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "markup.ftd#value@0,2,1": {
+    "value": "Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}\n\n- hello1\n- hello2\n  - hello3\n  - hello4\n- hello5\n\nThe above is the list printing.\nThis checks if everything is **alright**.\n{purple: Check this purple text for instance}",
+    "dependencies": {
+      "0,2,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "markup.ftd#value@0,3": {
+    "value": "hello world says\n\nhello again",
+    "dependencies": {
+      "0,3": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "markup.ftd#value@0,4": {
+    "value": "India",
+    "dependencies": {
+      "0,4": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "markup.ftd#yellow": {
+    "value": {
+      "$kind$": "light",
+      "dark": "yellow",
+      "light": "yellow"
+    },
+    "dependencies": {
+      "$style$": [
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
               "default": null,
               "value": {
                 "important": false,
                 "reference": null,
-                "value": [
-                  "markup-line.ftd#flag"
-                ]
+                "value": {
+                  "$node$": "0,0,0,3",
+                  "$variable$": "markup.ftd#dark-mode"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "0,0,0,5",
+                  "$variable$": "markup.ftd#dark-mode"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "0,1,1",
+                  "$variable$": "markup.ftd#dark-mode"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "0,2,1",
+                  "$variable$": "markup.ftd#dark-mode"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "0,3",
+                  "$variable$": "markup.ftd#dark-mode"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "0,4",
+                  "$variable$": "markup.ftd#dark-mode"
+                }
               }
             }
           },
@@ -1202,14 +1732,74 @@ body.fpm-dark .ft_md a {
 }
         
 
-body.fpm-dark .c_0 {
-    color: rgba(0,128,0,1)
+.b_0 {
+    background-color: rgba(255,255,0,1)
 }
 
 
 
-.c_0 {
-    color: rgba(0,128,0,1)
+.b_2 {
+    background-color: rgba(255,192,203,1)
+}
+
+
+
+.b_3 {
+    background-color: rgba(0,128,0,1)
+}
+
+
+
+.b_4 {
+    background-color: rgba(255,165,0,1)
+}
+
+
+
+body.fpm-dark .b_0 {
+    background-color: rgba(255,255,0,1)
+}
+
+
+
+body.fpm-dark .b_2 {
+    background-color: rgba(255,192,203,1)
+}
+
+
+
+body.fpm-dark .b_3 {
+    background-color: rgba(0,128,0,1)
+}
+
+
+
+body.fpm-dark .b_4 {
+    background-color: rgba(255,165,0,1)
+}
+
+
+
+body.fpm-dark .c_1 {
+    color: rgba(255,0,0,1)
+}
+
+
+
+body.fpm-dark .c_5 {
+    color: rgba(128,0,128,1)
+}
+
+
+
+.c_1 {
+    color: rgba(255,0,0,1)
+}
+
+
+
+.c_5 {
+    color: rgba(128,0,128,1)
 }
 
 
@@ -1218,7 +1808,7 @@ body.fpm-dark .c_0 {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding: 20px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello </span><span data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;markup-line.ftd#flag&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(255,0,0,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> This is text  </span><span data-id="0,1,1:main" style="background-image: url(https://www.w3schools.com/cssref/img_tree.gif); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md"> Green Text</span></span><span data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> </span><span data-id="0,3:main" style="background-image: url(https://www.w3schools.com/cssref/img_tree.gif); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-shadow: 0px 0px 4px 0px rgba(0,128,0,1); box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> Text using ca </span><span data-id="0,3,1:main" style="background-image: url(https://www.w3schools.com/cssref/img_tree.gif); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md"> foo</span></span><span data-id="0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">.</span></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; margin-bottom: 20px; text-align: left; text-decoration: none; white-space: initial" class="b_0 ft_md"><p data-id="0,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,0,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Now </span><span data-id="0,0,0,1:main" style="background-image: url(https://www.w3schools.com/cssref/img_tree.gif); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-shadow: 0px 0px 4px 0px rgba(0,128,0,1); box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,0,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> </span><span data-id="0,0,0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"><span data-id="0,0,0,1,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> Hello </span><span data-id="0,0,0,1,1,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;markup.ftd#orange&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(255,165,0,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> AmitU</span></span><span data-id="0,0,0,1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> world. </span><span data-id="0,0,0,1,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Amit Upadhyay</span><span data-id="0,0,0,1,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> <strong>Greetings</strong> </span><span data-id="0,0,0,1,5:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;markup.ftd#orange&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(255,165,0,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">underline1</span><span data-id="0,0,0,1,6:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> </span><span data-id="0,0,0,1,7:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="b_2 ft_md">amit</span><span data-id="0,0,0,1,8:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> Amit Upadhyay</span></span><span data-id="0,0,0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> Outside</span><span data-id="0,0,0,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,0,1); margin-bottom: 40px; text-align: left; text-decoration: none; white-space: initial" class="b_3 ft_md"><span data-id="0,0,0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> </span><span data-id="0,0,0,3,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Hello</span></span><span data-id="0,0,0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"></span><span data-id="0,0,0,5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,0,1); line-height: 26px; margin-bottom: 40px; text-align: left; text-decoration: none; white-space: initial" class="b_3 ft_md"><p data-id="0,0,0,5,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,0,0,5,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Now </span><span data-id="0,0,0,5,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"><span data-id="0,0,0,5,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> Hello </span><span data-id="0,0,0,5,0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="b_4 ft_md"> Amitu</span></span><span data-id="0,0,0,5,0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> world. </span><span data-id="0,0,0,5,0,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Amit Upadhyay</span><span data-id="0,0,0,5,0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> <strong>Greetings</strong> </span><span data-id="0,0,0,5,0,5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="b_4 ft_md">underline</span></p><p data-id="0,0,0,5,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><ul> <li>hello1</li> <li>hello2 <ul> <li>hello3</li> <li>hello4</li> </ul> </li> <li>hello5</li> </ul></p><p data-id="0,0,0,5,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,0,0,5,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The above is the list printing. This checks if everything is <strong>alright</strong>.</span><span data-id="0,0,0,5,2,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_5 ft_md"> Check this purple text for instance</span></p></span><span data-id="0,0,0,6:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"></span><span data-id="0,0,0,7:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Markup</span></p><p data-id="0,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"></span><span data-id="0,0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"> Everyone should say <strong>Hi</strong> to each other</span></p></div><div data-id="0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">1</div><div data-id="0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,0,1); line-height: 26px; margin-bottom: 40px; text-align: left; text-decoration: none; white-space: initial" class="b_3 ft_md"><p data-id="0,1,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,1,1,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Now </span><span data-id="0,1,1,0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;markup.ftd#dark-mode&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,1,1,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> Hello </span><span data-id="0,1,1,0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="b_4 ft_md"> Amitu</span></span><span data-id="0,1,1,0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> world. </span><span data-id="0,1,1,0,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;markup.ftd#dark-mode&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Someone</span><span data-id="0,1,1,0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> <strong>Greetings</strong> </span><span data-id="0,1,1,0,5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="b_4 ft_md">underline</span></p><p data-id="0,1,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><ul> <li>hello1</li> <li>hello2 <ul> <li>hello3</li> <li>hello4</li> </ul> </li> <li>hello5</li> </ul></p><p data-id="0,1,1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,1,1,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The above is the list printing. This checks if everything is <strong>alright</strong>.</span><span data-id="0,1,1,2,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_5 ft_md"> Check this purple text for instance</span></p></div></div><div data-id="0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">2</div><div data-id="0,2,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,0,1); line-height: 26px; margin-bottom: 40px; text-align: left; text-decoration: none; white-space: initial" class="b_3 ft_md"><p data-id="0,2,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,2,1,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Now </span><span data-id="0,2,1,0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;markup.ftd#dark-mode&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,2,1,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> Hello </span><span data-id="0,2,1,0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="b_4 ft_md"> Amitu</span></span><span data-id="0,2,1,0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> world. </span><span data-id="0,2,1,0,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;markup.ftd#dark-mode&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Someone</span><span data-id="0,2,1,0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"> <strong>Greetings</strong> </span><span data-id="0,2,1,0,5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="b_4 ft_md">underline</span></p><p data-id="0,2,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><ul> <li>hello1</li> <li>hello2 <ul> <li>hello3</li> <li>hello4</li> </ul> </li> <li>hello5</li> </ul></p><p data-id="0,2,1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><span data-id="0,2,1,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The above is the list printing. This checks if everything is <strong>alright</strong>.</span><span data-id="0,2,1,2,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_5 ft_md"> Check this purple text for instance</span></p></div><div data-id="0,2,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">3</div></div><div data-id="0,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,0,1); line-height: 26px; margin-bottom: 40px; text-align: left; text-decoration: none; white-space: initial" class="b_3 ft_md"><p data-id="0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>hello world says</p></p><p data-id="0,3,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>hello again</p></p></div><div data-id="0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,0,1); margin-bottom: 40px; text-align: left; text-decoration: none; white-space: initial" class="b_3 ft_md">India</div></div></div>
 
 
     <script>
