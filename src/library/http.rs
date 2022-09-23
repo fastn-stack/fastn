@@ -61,3 +61,13 @@ pub async fn processor<'a>(
     };
     doc.from_json(&json, section)
 }
+
+// Need to pass the request object also
+// From request get the url, get query parameters, get the data from body(form data, post data)
+pub fn request_data_processor<'a>(
+    _section: &ftd::p1::Section,
+    _doc: &ftd::p2::TDoc<'a>,
+) -> ftd::p1::Result<ftd::Value> {
+    unimplemented!()
+    // doc.from_json(&vec![], section)
+}
