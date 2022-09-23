@@ -19,6 +19,7 @@ caption name:
 optional string version:
 optional body notes:
 string list implements:
+optional string endpoint:
 
 
 -- dependency-data list dependency:

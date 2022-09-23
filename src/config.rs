@@ -1060,6 +1060,7 @@ impl Config {
                     notes: None,
                     alias: None,
                     implements: Vec::new(),
+                    endpoint: None,
                 });
             };
             package.fpm_path = Some(root.join("FPM.ftd"));
