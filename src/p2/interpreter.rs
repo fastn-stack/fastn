@@ -49,8 +49,7 @@ impl InterpreterState {
 
         // Removing commented parts from the parsed document
         // Process this only once per parsed document no need to overdo it
-        if self.document_stack[l].processing_comments
-        {
+        if self.document_stack[l].processing_comments {
             self.document_stack[l].ignore_comments();
             self.document_stack[l].done_processing_comments();
         }
