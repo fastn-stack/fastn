@@ -48,7 +48,12 @@ impl InterpreterState {
         let l = self.document_stack.len() - 1; // Get the top of the stack
 
         // Removing commented parts from the parsed document
-        self.document_stack[l].ignore_comments();
+        // Process this only once per parsed document no need to overdo it
+        if self.document_stack[l].processing_comments
+        {
+            self.document_stack[l].ignore_comments();
+            self.document_stack[l].done_processing_comments();
+        }
         // beyond this point commented things will no longer exist in the parsed document
 
         if self.document_stack[l].processing_imports {
@@ -1174,7 +1179,7 @@ pub struct ParsedDocument {
     name: String,
     sections: Vec<ftd::p1::Section>,
     processing_imports: bool,
-    checking_ids: bool,
+    processing_comments: bool,
     doc_aliases: ftd::Map<String>,
     var_types: Vec<String>,
     foreign_variable_prefix: Vec<String>,
@@ -1187,7 +1192,7 @@ impl ParsedDocument {
             name: id.to_string(),
             sections: ftd::p1::parse(source, id)?,
             processing_imports: true,
-            checking_ids: true,
+            processing_comments: true,
             doc_aliases: ftd::p2::interpreter::default_aliases(),
             var_types: Default::default(),
             foreign_variable_prefix: vec![],
@@ -1199,9 +1204,8 @@ impl ParsedDocument {
         self.processing_imports = false;
     }
 
-    #[allow(dead_code)]
-    fn done_processing_terms(&mut self) {
-        self.checking_ids = false;
+    fn done_processing_comments(&mut self) {
+        self.processing_comments = false;
     }
 
     pub fn get_last_section(&self) -> Option<&ftd::p1::Section> {
