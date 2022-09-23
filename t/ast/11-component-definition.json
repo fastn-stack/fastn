@@ -1,0 +1,23 @@
+[
+  {
+    "ComponentDefinition": {
+      "name": "display",
+      "arguments": [
+        {
+          "name": "name",
+          "kind": {
+            "modifier": null,
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": null
+        }
+      ],
+      "definition": {
+        "name": "ftd.text",
+        "properties": [],
+        "children": []
+      }
+    }
+  }
+]

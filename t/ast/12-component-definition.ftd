@@ -1,0 +1,24 @@
+-- component display:
+
+-- string display.description:
+
+This is description of display component
+
+-- string list display.locations:
+
+-- string: Varanasi
+-- string: Prayagraj
+-- string: Bengaluru
+
+-- end: display.locations
+
+-- ftd.column:
+
+-- ftd.text: $obj
+$loop$: $locations as $obj
+
+-- ftd.text: $description
+
+-- end: ftd.column
+
+-- end: display

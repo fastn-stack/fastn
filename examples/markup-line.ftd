@@ -1,9 +1,30 @@
+-- import: conditional-attributes as ca
+
 -- ftd.color green: green
 dark: green
 
+-- ftd.color yellow: yellow
+dark: yellow
+
+-- ftd.color red: red
+dark: red
+
+-- boolean flag: true
+
+-- ftd.image-src src:
+light: https://www.w3schools.com/cssref/img_tree.gif
+dark: https://www.w3schools.com/cssref/img_tree.gif
+
 -- ftd.text:
+padding: 20
 
-hello "{world}" {world} {world}.
+hello {world: This is text  {foo: Green Text}} {ca.foo: Text using ca {foo: foo}}.
 
--- ftd.text world: World
+-- ftd.text world: Text from world component
+background-color: $yellow
+background-color if $flag: $red
+$on-click$: toggle $flag
+
+-- ftd.text foo: Some text
+background-image: $src
 color: $green

@@ -1,0 +1,65 @@
+[
+  {
+    "ComponentDefinition": {
+      "name": "display",
+      "arguments": [
+        {
+          "name": "description",
+          "kind": {
+            "modifier": null,
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": {
+            "String": "This is description of display component"
+          }
+        },
+        {
+          "name": "locations",
+          "kind": {
+            "modifier": "List",
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": {
+            "List": [
+              {
+                "String": "Varanasi"
+              },
+              {
+                "String": "Prayagraj"
+              },
+              {
+                "String": "Bengaluru"
+              }
+            ]
+          }
+        }
+      ],
+      "definition": {
+        "name": "ftd.column",
+        "properties": [],
+        "children": [
+          {
+            "name": "ftd.text",
+            "properties": [
+              {
+                "name": "$loop$",
+                "mutable": true,
+                "value": {
+                  "String": "$locations as $obj"
+                }
+              }
+            ],
+            "children": []
+          },
+          {
+            "name": "ftd.text",
+            "properties": [],
+            "children": []
+          }
+        ]
+      }
+    }
+  }
+]
