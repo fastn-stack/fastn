@@ -124,7 +124,7 @@ impl VariableValue {
         doc_id: &str,
         modifier: &Option<VariableModifier>,
     ) -> ftd::ast::Result<VariableValue> {
-        let value = VariableValue::from_p1(section, doc_id);
+        let value = VariableValue::from_p1(section);
         value.into_modifier(doc_id, section.line_number, modifier)
     }
 
@@ -133,7 +133,7 @@ impl VariableValue {
         doc_id: &str,
         modifier: &Option<VariableModifier>,
     ) -> ftd::ast::Result<VariableValue> {
-        let value = VariableValue::from_p1_header(header, doc_id);
+        let value = VariableValue::from_p1_header(header);
         value.into_modifier(doc_id, header.get_line_number(), modifier)
     }
 
@@ -162,7 +162,7 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> VariableValue {
+    pub(crate) fn from_p1(section: &ftd::p11::Section) -> VariableValue {
         use itertools::Itertools;
 
         if !section.sub_sections.is_empty() {
@@ -170,7 +170,7 @@ impl VariableValue {
                 section
                     .sub_sections
                     .iter()
-                    .map(|v| VariableValue::from_p1(v, doc_id))
+                    .map(|v| VariableValue::from_p1(v))
                     .collect_vec(),
             );
         }
@@ -178,18 +178,13 @@ impl VariableValue {
         let caption = section
             .caption
             .as_ref()
-            .and_then(|v| VariableValue::from_p1_header(v, doc_id).inner());
+            .and_then(|v| VariableValue::from_p1_header(v).inner());
 
         let headers = section
             .headers
             .0
             .iter()
-            .map(|header| {
-                (
-                    header.get_key(),
-                    VariableValue::from_p1_header(header, doc_id),
-                )
-            })
+            .map(|header| (header.get_key(), VariableValue::from_p1_header(header)))
             .collect_vec();
 
         let body = section.body.as_ref().map(|v| v.get_value());
@@ -212,22 +207,28 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn from_p1_header(header: &ftd::p11::Header, doc_id: &str) -> VariableValue {
+    pub(crate) fn from_p1_header(header: &ftd::p11::Header) -> VariableValue {
         use itertools::Itertools;
 
         match header {
-            ftd::p11::Header::KV(ftd::p11::header::KV { value, .. }) => match value {
-                Some(value) if value.ne(NULL) => VariableValue::String(value.to_string()),
-                _ => VariableValue::Optional(Box::new(None)),
-            },
+            ftd::p11::Header::KV(ftd::p11::header::KV { value, .. }) => {
+                VariableValue::from_value(value)
+            }
             ftd::p11::Header::Section(ftd::p11::header::Section { section, .. }) => {
                 VariableValue::List(
                     section
                         .iter()
-                        .map(|v| VariableValue::from_p1(v, doc_id))
+                        .map(|v| VariableValue::from_p1(v))
                         .collect_vec(),
                 )
             }
+        }
+    }
+
+    pub(crate) fn from_value(value: &Option<String>) -> VariableValue {
+        match value {
+            Some(value) if value.ne(NULL) => VariableValue::String(value.to_string()),
+            _ => VariableValue::Optional(Box::new(None)),
         }
     }
 }

@@ -15,7 +15,14 @@
       ],
       "definition": {
         "name": "ftd.text",
-        "properties": [],
+        "properties": [
+          {
+            "value": {
+              "String": "$name"
+            },
+            "source": "Body"
+          }
+        ],
         "children": []
       }
     }

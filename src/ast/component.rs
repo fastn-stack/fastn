@@ -99,7 +99,29 @@ impl Component {
         let properties = {
             let mut properties = vec![];
             for header in section.headers.0.iter() {
-                properties.push(Property::from_p1_header(header, doc_id)?);
+                let name = header.get_key();
+                properties.push(Property::from_p1_header(
+                    header,
+                    doc_id,
+                    PropertySource::Header {
+                        mutable: ftd::ast::utils::is_variable_mutable(name.as_str()),
+                        name,
+                    },
+                )?);
+            }
+            if let Some(ref caption) = section.caption {
+                properties.push(Property::from_p1_header(
+                    caption,
+                    doc_id,
+                    PropertySource::Caption,
+                )?);
+            }
+
+            if let Some(ftd::p11::Body { ref value, .. }) = section.body {
+                properties.push(Property::from_value(
+                    Some(value.to_owned()),
+                    PropertySource::Body,
+                ));
             }
             properties
         };
@@ -175,9 +197,8 @@ impl Argument {
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
-    pub name: String,
-    pub mutable: bool,
     pub value: Option<ftd::ast::VariableValue>,
+    pub source: PropertySource,
 }
 
 impl Property {
@@ -185,15 +206,15 @@ impl Property {
         header.get_kind().is_none()
     }
 
-    fn new(name: &str, mutable: bool, value: Option<ftd::ast::VariableValue>) -> Property {
-        Property {
-            name: name.to_string(),
-            mutable,
-            value,
-        }
+    fn new(value: Option<ftd::ast::VariableValue>, source: PropertySource) -> Property {
+        Property { value, source }
     }
 
-    fn from_p1_header(header: &ftd::p11::Header, doc_id: &str) -> ftd::ast::Result<Property> {
+    fn from_p1_header(
+        header: &ftd::p11::Header,
+        doc_id: &str,
+        source: PropertySource,
+    ) -> ftd::ast::Result<Property> {
         if !Self::is_property(header) {
             return ftd::ast::parse_error(
                 format!("Header is not property, found `{:?}`", header),
@@ -202,14 +223,20 @@ impl Property {
             );
         }
 
-        let value = ftd::ast::VariableValue::from_p1_header(header, doc_id).inner();
+        let value = ftd::ast::VariableValue::from_p1_header(header).inner();
 
-        let name = header.get_key();
-
-        Ok(Property::new(
-            name.as_str(),
-            ftd::ast::utils::is_variable_mutable(name.as_str()),
-            value,
-        ))
+        Ok(Property::new(value, source))
     }
+
+    fn from_value(value: Option<String>, source: PropertySource) -> Property {
+        let value = ftd::ast::VariableValue::from_value(&value).inner();
+        Property::new(value, source)
+    }
+}
+
+#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum PropertySource {
+    Caption,
+    Body,
+    Header { name: String, mutable: bool },
 }

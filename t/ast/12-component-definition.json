@@ -44,18 +44,35 @@
             "name": "ftd.text",
             "properties": [
               {
-                "name": "$loop$",
-                "mutable": true,
                 "value": {
                   "String": "$locations as $obj"
+                },
+                "source": {
+                  "Header": {
+                    "name": "$loop$",
+                    "mutable": true
+                  }
                 }
+              },
+              {
+                "value": {
+                  "String": "$obj"
+                },
+                "source": "Caption"
               }
             ],
             "children": []
           },
           {
             "name": "ftd.text",
-            "properties": [],
+            "properties": [
+              {
+                "value": {
+                  "String": "$description"
+                },
+                "source": "Caption"
+              }
+            ],
             "children": []
           }
         ]

@@ -94,7 +94,7 @@ impl VariableInvocation {
             );
         }
 
-        let value = ftd::ast::VariableValue::from_p1(section, doc_id);
+        let value = ftd::ast::VariableValue::from_p1(section);
 
         Ok(VariableInvocation::new(
             section.name.trim_start_matches(ftd::ast::utils::REFERENCE),
