@@ -2,12 +2,20 @@
 pub struct Import {
     pub module: String,
     pub alias: Option<String>,
+    pub line_number: usize,
 }
 
 pub const IMPORT: &str = "import";
 pub const AS: &str = "as";
 
 impl Import {
+    fn new(module: &str, alias: Option<String>, line_number: usize) -> Import {
+        Import {
+            module: module.to_string(),
+            alias,
+            line_number,
+        }
+    }
     pub(crate) fn is_import(section: &ftd::p11::Section) -> bool {
         section.name.eq(IMPORT)
     }
@@ -35,7 +43,7 @@ impl Import {
                 value: Some(value), ..
             })) => {
                 let (module, alias) = ftd::ast::utils::split_at(value.as_str(), AS);
-                Ok(Import { module, alias })
+                Ok(Import::new(module.as_str(), alias, section.line_number))
             }
             t => ftd::ast::parse_error(
                 format!(

@@ -2,7 +2,8 @@
   {
     "Import": {
       "module": "foo",
-      "alias": "f"
+      "alias": "f",
+      "line_number": 1
     }
   }
 ]
