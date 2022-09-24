@@ -65,10 +65,11 @@ pub async fn processor<'a>(
 // Need to pass the request object also
 // From request get the url, get query parameters, get the data from body(form data, post data)
 pub fn request_data_processor<'a>(
-    _section: &ftd::p1::Section,
-    _doc: &ftd::p2::TDoc<'a>,
-    _config: &fpm::Config,
+    section: &ftd::p1::Section,
+    doc: &ftd::p2::TDoc<'a>,
+    config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
-    unimplemented!()
-    // doc.from_json(&vec![], section)
+    // TODO: Need to return query parameters and body as well
+    let query = config.request.as_ref().unwrap().query();
+    doc.from_json(&query, section)
 }

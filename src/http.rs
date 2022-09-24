@@ -16,6 +16,15 @@ impl Request {
         }
         headers
     }
+
+    pub fn query(&self) -> std::collections::HashMap<String, serde_json::Value> {
+        // TODO: Remove unwrap
+        actix_web::web::Query::<std::collections::HashMap<String, serde_json::Value>>::from_query(
+            self.req.query_string(),
+        )
+        .unwrap()
+        .0
+    }
 }
 
 // pub(crate) struct Response {}
