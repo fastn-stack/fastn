@@ -18,7 +18,7 @@ lazy_static! {
 // This method will connect client request to out of the world
 pub(crate) async fn get_out(
     host: &str,
-    req: fpm::http::Request<'_>,
+    req: fpm::http::Request,
     body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only
 ) -> actix_web::HttpResponse {
     let headers = req.headers();

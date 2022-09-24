@@ -1,10 +1,11 @@
-pub(crate) struct Request<'a> {
-    pub req: &'a actix_web::HttpRequest,
+#[derive(Debug, Clone)]
+pub struct Request {
+    pub req: actix_web::HttpRequest,
     // method, uri, etc
 }
 
-impl<'a> Request<'a> {
-    pub fn from_actix(req: &'a actix_web::HttpRequest) -> Self {
+impl Request {
+    pub fn from_actix(req: actix_web::HttpRequest) -> Self {
         Request { req }
     }
 

@@ -67,6 +67,7 @@ pub async fn processor<'a>(
 pub fn request_data_processor<'a>(
     _section: &ftd::p1::Section,
     _doc: &ftd::p2::TDoc<'a>,
+    _config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     unimplemented!()
     // doc.from_json(&vec![], section)

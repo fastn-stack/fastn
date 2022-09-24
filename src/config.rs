@@ -14,6 +14,7 @@ pub struct Config {
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
     pub global_ids: std::collections::HashMap<String, String>,
+    pub request: Option<fpm::http::Request>,
 }
 
 impl Config {
@@ -1108,6 +1109,7 @@ impl Config {
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
             global_ids: Default::default(),
+            request: None,
         };
 
         let asset_documents = config.get_assets().await?;
