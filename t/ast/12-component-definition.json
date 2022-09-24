@@ -39,21 +39,11 @@
       "definition": {
         "name": "ftd.column",
         "properties": [],
+        "iteration": null,
         "children": [
           {
             "name": "ftd.text",
             "properties": [
-              {
-                "value": {
-                  "String": "$locations as $obj"
-                },
-                "source": {
-                  "Header": {
-                    "name": "$loop$",
-                    "mutable": true
-                  }
-                }
-              },
               {
                 "value": {
                   "String": "$obj"
@@ -61,6 +51,10 @@
                 "source": "Caption"
               }
             ],
+            "iteration": {
+              "on": "locations",
+              "alias": "obj"
+            },
             "children": []
           },
           {
@@ -73,6 +67,7 @@
                 "source": "Caption"
               }
             ],
+            "iteration": null,
             "children": []
           }
         ]

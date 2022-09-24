@@ -11,3 +11,5 @@ pub(crate) fn is_variable_mutable(name: &str) -> bool {
 }
 
 pub const REFERENCE: &str = "$";
+pub const LOOP: &str = "$loop$";
+pub const AS: &str = " as ";
