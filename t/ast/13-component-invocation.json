@@ -1,0 +1,111 @@
+[
+  {
+    "VariableDefinition": {
+      "name": "locations",
+      "kind": {
+        "modifier": "List",
+        "kind": "string"
+      },
+      "mutable": false,
+      "value": {
+        "List": [
+          {
+            "String": {
+              "value": "Varanasi",
+              "line_number": 3
+            }
+          },
+          {
+            "String": {
+              "value": "Prayagraj",
+              "line_number": 4
+            }
+          },
+          {
+            "String": {
+              "value": "Bengaluru",
+              "line_number": 5
+            }
+          }
+        ]
+      },
+      "line_number": 1
+    }
+  },
+  {
+    "VariableDefinition": {
+      "name": "flag",
+      "kind": {
+        "modifier": null,
+        "kind": "boolean"
+      },
+      "mutable": false,
+      "value": {
+        "String": {
+          "value": "true",
+          "line_number": 9
+        }
+      },
+      "line_number": 9
+    }
+  },
+  {
+    "ComponentInvocation": {
+      "name": "ftd.column",
+      "properties": [],
+      "iteration": null,
+      "events": [],
+      "children": [
+        {
+          "name": "ftd.text",
+          "properties": [
+            {
+              "value": {
+                "String": {
+                  "value": "$obj",
+                  "line_number": 13
+                }
+              },
+              "source": "Caption",
+              "line_number": 13
+            }
+          ],
+          "iteration": {
+            "on": "locations",
+            "alias": "obj",
+            "line_number": 14
+          },
+          "events": [],
+          "children": [],
+          "line_number": 13
+        },
+        {
+          "name": "ftd.text",
+          "properties": [
+            {
+              "value": {
+                "String": {
+                  "value": "$description",
+                  "line_number": 16
+                }
+              },
+              "source": "Caption",
+              "line_number": 16
+            }
+          ],
+          "iteration": null,
+          "events": [
+            {
+              "name": "click",
+              "action": "toggle $flag",
+              "line_number": 17
+            }
+          ],
+          "children": [],
+          "line_number": 16
+        }
+      ],
+      "line_number": 11
+    }
+  }
+]
