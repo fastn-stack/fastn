@@ -35,58 +35,63 @@ impl Record {
             section.line_number,
         ))
     }
-
-    #[allow(dead_code)]
-    pub fn add_field(
-        self,
-        name: &str,
-        kind: &str,
-        value: Option<String>,
-        line_number: usize,
-    ) -> Record {
-        let mut record = self;
-        record
-            .fields
-            .push(Field::new(name, kind, value, line_number));
-        record
-    }
 }
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Field {
     name: String,
-    kind: String,
-    value: Option<String>,
+    kind: ftd::ast::VariableKind,
+    mutable: bool,
+    value: Option<ftd::ast::VariableValue>,
     line_number: usize,
 }
 
 impl Field {
-    pub(crate) fn from_header(header: &ftd::p11::Header, doc_id: &str) -> ftd::ast::Result<Field> {
-        match header {
-            ftd::p11::Header::KV(ftd::p11::header::KV {
-                line_number,
-                key,
-                kind,
-                value,
-            }) => {
-                if let Some(kind) = kind {
-                    Ok(Field::new(key, kind, value.to_owned(), *line_number))
-                } else {
-                    ftd::ast::parse_error(
-                        format!("Can't find kind for record field: `{:?}`", key),
-                        doc_id,
-                        *line_number,
-                    )
-                }
-            }
-            ftd::p11::Header::Section(_) => unimplemented!(),
-        }
+    fn is_field(header: &ftd::p11::Header) -> bool {
+        header.get_kind().is_some()
     }
 
-    fn new(name: &str, kind: &str, value: Option<String>, line_number: usize) -> Field {
+    pub(crate) fn from_header(header: &ftd::p11::Header, doc_id: &str) -> ftd::ast::Result<Field> {
+        if !Self::is_field(header) {
+            return ftd::ast::parse_error(
+                format!("Header is not argument, found `{:?}`", header),
+                doc_id,
+                header.get_line_number(),
+            );
+        }
+
+        let kind = ftd::ast::VariableKind::get_kind(
+            header.get_kind().as_ref().unwrap().as_str(),
+            doc_id,
+            header.get_line_number(),
+        )?;
+
+        let value =
+            ftd::ast::VariableValue::from_header_with_modifier(header, doc_id, &kind.modifier)?
+                .inner();
+
+        let name = header.get_key();
+
+        Ok(Field::new(
+            name.as_str(),
+            kind,
+            ftd::ast::utils::is_variable_mutable(name.as_str()),
+            value,
+            header.get_line_number(),
+        ))
+    }
+
+    fn new(
+        name: &str,
+        kind: ftd::ast::VariableKind,
+        mutable: bool,
+        value: Option<ftd::ast::VariableValue>,
+        line_number: usize,
+    ) -> Field {
         Field {
             name: name.to_string(),
-            kind: kind.to_string(),
+            kind,
+            mutable,
             value,
             line_number,
         }

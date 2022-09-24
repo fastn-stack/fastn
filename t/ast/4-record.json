@@ -5,14 +5,24 @@
       "fields": [
         {
           "name": "age",
-          "kind": "integer",
+          "kind": {
+            "modifier": null,
+            "kind": "integer"
+          },
+          "mutable": false,
           "value": null,
           "line_number": 2
         },
         {
           "name": "details",
-          "kind": "string",
-          "value": "This contains details for record `foo`.\nThis is default text for the field details.\nIt can be overridden by the variable of this type.",
+          "kind": {
+            "modifier": null,
+            "kind": "string"
+          },
+          "mutable": false,
+          "value": {
+            "String": "This contains details for record `foo`.\nThis is default text for the field details.\nIt can be overridden by the variable of this type."
+          },
           "line_number": 8
         }
       ],

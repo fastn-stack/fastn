@@ -5,13 +5,21 @@
       "fields": [
         {
           "name": "name",
-          "kind": "string",
+          "kind": {
+            "modifier": null,
+            "kind": "string"
+          },
+          "mutable": false,
           "value": null,
           "line_number": 2
         },
         {
           "name": "age",
-          "kind": "integer",
+          "kind": {
+            "modifier": null,
+            "kind": "integer"
+          },
+          "mutable": false,
           "value": null,
           "line_number": 3
         }

@@ -1,6 +1,6 @@
 -- record person:
 string name:
-integer age:
+integer age: 12
 
 -- person list people:
 
