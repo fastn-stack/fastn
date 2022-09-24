@@ -21,7 +21,10 @@
           },
           "mutable": false,
           "value": {
-            "String": "12"
+            "String": {
+              "value": "12",
+              "line_number": 3
+            }
           },
           "line_number": 3
         }
@@ -47,19 +50,26 @@
                 {
                   "key": "name",
                   "value": {
-                    "String": "Arpita"
+                    "String": {
+                      "value": "Arpita",
+                      "line_number": 8
+                    }
                   },
                   "line_number": 8
                 },
                 {
                   "key": "age",
                   "value": {
-                    "String": "10"
+                    "String": {
+                      "value": "10",
+                      "line_number": 9
+                    }
                   },
                   "line_number": 9
                 }
               ],
-              "body": null
+              "body": null,
+              "line_number": 7
             }
           }
         ]

@@ -8,7 +8,10 @@
       "line_number": 1,
       "name": "score",
       "value": {
-        "String": "40"
+        "String": {
+          "value": "40",
+          "line_number": 1
+        }
       },
       "mutable": false
     }

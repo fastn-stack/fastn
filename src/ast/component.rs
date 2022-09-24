@@ -3,16 +3,23 @@ pub struct ComponentDefinition {
     pub name: String,
     pub arguments: Vec<Argument>,
     pub definition: Component,
+    pub line_number: usize,
 }
 
 pub const COMPONENT: &str = "component";
 
 impl ComponentDefinition {
-    fn new(name: &str, arguments: Vec<Argument>, definition: Component) -> ComponentDefinition {
+    fn new(
+        name: &str,
+        arguments: Vec<Argument>,
+        definition: Component,
+        line_number: usize,
+    ) -> ComponentDefinition {
         ComponentDefinition {
             name: name.to_string(),
             arguments,
             definition,
+            line_number,
         }
     }
 
@@ -60,6 +67,7 @@ impl ComponentDefinition {
             section.name.as_str(),
             arguments,
             definition,
+            section.line_number,
         ))
     }
 }
@@ -71,6 +79,7 @@ pub struct Component {
     pub iteration: Option<Loop>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
+    pub line_number: usize,
 }
 
 impl Component {
@@ -80,6 +89,7 @@ impl Component {
         iteration: Option<Loop>,
         events: Vec<Event>,
         children: Vec<Component>,
+        line_number: usize,
     ) -> Component {
         Component {
             name: name.to_string(),
@@ -87,6 +97,7 @@ impl Component {
             iteration,
             events,
             children,
+            line_number,
         }
     }
 
@@ -131,10 +142,15 @@ impl Component {
                 )?);
             }
 
-            if let Some(ftd::p11::Body { ref value, .. }) = section.body {
+            if let Some(ftd::p11::Body {
+                ref value,
+                line_number,
+            }) = section.body
+            {
                 properties.push(Property::from_value(
                     Some(value.to_owned()),
                     PropertySource::Body,
+                    line_number,
                 ));
             }
             properties
@@ -157,6 +173,7 @@ impl Component {
             iteration,
             events,
             children,
+            section.line_number,
         ))
     }
 }
@@ -167,6 +184,7 @@ pub struct Argument {
     pub kind: ftd::ast::VariableKind,
     pub mutable: bool,
     pub value: Option<ftd::ast::VariableValue>,
+    pub line_number: usize,
 }
 
 impl Argument {
@@ -179,12 +197,14 @@ impl Argument {
         kind: ftd::ast::VariableKind,
         mutable: bool,
         value: Option<ftd::ast::VariableValue>,
+        line_number: usize,
     ) -> Argument {
         Argument {
             name: name.to_string(),
             kind,
             mutable,
             value,
+            line_number,
         }
     }
 
@@ -214,6 +234,7 @@ impl Argument {
             kind,
             ftd::ast::utils::is_variable_mutable(name.as_str()),
             value,
+            header.get_line_number(),
         ))
     }
 }
@@ -222,6 +243,7 @@ impl Argument {
 pub struct Property {
     pub value: Option<ftd::ast::VariableValue>,
     pub source: PropertySource,
+    pub line_number: usize,
 }
 
 impl Property {
@@ -229,8 +251,16 @@ impl Property {
         header.get_kind().is_none()
     }
 
-    fn new(value: Option<ftd::ast::VariableValue>, source: PropertySource) -> Property {
-        Property { value, source }
+    fn new(
+        value: Option<ftd::ast::VariableValue>,
+        source: PropertySource,
+        line_number: usize,
+    ) -> Property {
+        Property {
+            value,
+            source,
+            line_number,
+        }
     }
 
     fn from_p1_header(
@@ -251,12 +281,12 @@ impl Property {
 
         let value = ftd::ast::VariableValue::from_p1_header(header).inner();
 
-        Ok(Property::new(value, source))
+        Ok(Property::new(value, source, header.get_line_number()))
     }
 
-    fn from_value(value: Option<String>, source: PropertySource) -> Property {
-        let value = ftd::ast::VariableValue::from_value(&value).inner();
-        Property::new(value, source)
+    fn from_value(value: Option<String>, source: PropertySource, line_number: usize) -> Property {
+        let value = ftd::ast::VariableValue::from_value(&value, line_number).inner();
+        Property::new(value, source, line_number)
     }
 }
 
@@ -271,13 +301,15 @@ pub enum PropertySource {
 pub struct Loop {
     on: String,
     alias: String,
+    line_number: usize,
 }
 
 impl Loop {
-    fn new(on: &str, alias: &str) -> Loop {
+    fn new(on: &str, alias: &str, line_number: usize) -> Loop {
         Loop {
             on: on.to_string(),
             alias: alias.to_string(),
+            line_number,
         }
     }
 
@@ -336,6 +368,7 @@ impl Loop {
         Ok(Some(Loop::new(
             on.trim_start_matches(ftd::ast::utils::REFERENCE),
             alias.as_str(),
+            loop_header.get_line_number(),
         )))
     }
 }
@@ -344,13 +377,15 @@ impl Loop {
 pub struct Event {
     name: String,
     action: String,
+    line_number: usize,
 }
 
 impl Event {
-    fn new(name: &str, action: &str) -> Event {
+    fn new(name: &str, action: &str, line_number: usize) -> Event {
         Event {
             name: name.to_string(),
             action: action.to_string(),
+            line_number,
         }
     }
 
@@ -391,6 +426,10 @@ impl Event {
                 line_number: header.get_line_number(),
             })?;
 
-        Ok(Some(Event::new(event_name.as_str(), action.as_str())))
+        Ok(Some(Event::new(
+            event_name.as_str(),
+            action.as_str(),
+            header.get_line_number(),
+        )))
     }
 }

@@ -92,8 +92,12 @@ pub enum VariableValue {
         caption: Box<Option<VariableValue>>,
         headers: Vec<HeaderValue>,
         body: Option<BodyValue>,
+        line_number: usize,
     },
-    String(String),
+    String {
+        value: String,
+        line_number: usize,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -234,7 +238,10 @@ impl VariableValue {
             return if let Some(caption) = caption {
                 caption
             } else if let Some(body) = body {
-                VariableValue::String(body.value)
+                VariableValue::String {
+                    value: body.value,
+                    line_number: body.line_number,
+                }
             } else {
                 VariableValue::Optional(Box::new(None))
             };
@@ -245,6 +252,7 @@ impl VariableValue {
             caption: Box::new(caption),
             headers,
             body,
+            line_number: section.line_number,
         }
     }
 
@@ -252,18 +260,21 @@ impl VariableValue {
         use itertools::Itertools;
 
         match header {
-            ftd::p11::Header::KV(ftd::p11::header::KV { value, .. }) => {
-                VariableValue::from_value(value)
-            }
+            ftd::p11::Header::KV(ftd::p11::header::KV {
+                value, line_number, ..
+            }) => VariableValue::from_value(value, *line_number),
             ftd::p11::Header::Section(ftd::p11::header::Section { section, .. }) => {
                 VariableValue::List(section.iter().map(VariableValue::from_p1).collect_vec())
             }
         }
     }
 
-    pub(crate) fn from_value(value: &Option<String>) -> VariableValue {
+    pub(crate) fn from_value(value: &Option<String>, line_number: usize) -> VariableValue {
         match value {
-            Some(value) if value.ne(NULL) => VariableValue::String(value.to_string()),
+            Some(value) if value.ne(NULL) => VariableValue::String {
+                value: value.to_string(),
+                line_number,
+            },
             _ => VariableValue::Optional(Box::new(None)),
         }
     }

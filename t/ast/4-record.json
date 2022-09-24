@@ -21,7 +21,10 @@
           },
           "mutable": false,
           "value": {
-            "String": "This contains details for record `foo`.\nThis is default text for the field details.\nIt can be overridden by the variable of this type."
+            "String": {
+              "value": "This contains details for record `foo`.\nThis is default text for the field details.\nIt can be overridden by the variable of this type.",
+              "line_number": 8
+            }
           },
           "line_number": 8
         }

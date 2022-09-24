@@ -11,8 +11,12 @@
           },
           "mutable": false,
           "value": {
-            "String": "true"
-          }
+            "String": {
+              "value": "true",
+              "line_number": 3
+            }
+          },
+          "line_number": 3
         },
         {
           "name": "description",
@@ -22,8 +26,12 @@
           },
           "mutable": false,
           "value": {
-            "String": "This is description of display component"
-          }
+            "String": {
+              "value": "This is description of display component",
+              "line_number": 8
+            }
+          },
+          "line_number": 8
         },
         {
           "name": "locations",
@@ -35,16 +43,26 @@
           "value": {
             "List": [
               {
-                "String": "Varanasi"
+                "String": {
+                  "value": "Varanasi",
+                  "line_number": 11
+                }
               },
               {
-                "String": "Prayagraj"
+                "String": {
+                  "value": "Prayagraj",
+                  "line_number": 12
+                }
               },
               {
-                "String": "Bengaluru"
+                "String": {
+                  "value": "Bengaluru",
+                  "line_number": 13
+                }
               }
             ]
-          }
+          },
+          "line_number": 13
         }
       ],
       "definition": {
@@ -58,39 +76,53 @@
             "properties": [
               {
                 "value": {
-                  "String": "$obj"
+                  "String": {
+                    "value": "$obj",
+                    "line_number": 19
+                  }
                 },
-                "source": "Caption"
+                "source": "Caption",
+                "line_number": 19
               }
             ],
             "iteration": {
               "on": "locations",
-              "alias": "obj"
+              "alias": "obj",
+              "line_number": 20
             },
             "events": [],
-            "children": []
+            "children": [],
+            "line_number": 19
           },
           {
             "name": "ftd.text",
             "properties": [
               {
                 "value": {
-                  "String": "$description"
+                  "String": {
+                    "value": "$description",
+                    "line_number": 22
+                  }
                 },
-                "source": "Caption"
+                "source": "Caption",
+                "line_number": 22
               }
             ],
             "iteration": null,
             "events": [
               {
                 "name": "click",
-                "action": "toggle $flag"
+                "action": "toggle $flag",
+                "line_number": 23
               }
             ],
-            "children": []
+            "children": [],
+            "line_number": 22
           }
-        ]
-      }
+        ],
+        "line_number": 17
+      },
+      "line_number": 1
     }
   }
 ]

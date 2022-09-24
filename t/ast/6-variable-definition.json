@@ -1,32 +1,47 @@
 [
   {
     "VariableDefinition": {
+      "name": "scores",
       "kind": {
         "modifier": "List",
         "kind": "integer"
       },
-      "line_number": 1,
-      "name": "scores",
+      "mutable": false,
       "value": {
         "List": [
           {
-            "String": "10"
+            "String": {
+              "value": "10",
+              "line_number": 3
+            }
           },
           {
-            "String": "20"
+            "String": {
+              "value": "20",
+              "line_number": 4
+            }
           },
           {
-            "String": "30"
+            "String": {
+              "value": "30",
+              "line_number": 5
+            }
           },
           {
-            "String": "40"
+            "String": {
+              "value": "40",
+              "line_number": 6
+            }
           },
           {
-            "String": "50"
+            "String": {
+              "value": "50",
+              "line_number": 7
+            }
           }
         ]
       },
-      "mutable": false
+      "line_number": 1
     }
   }
 ]

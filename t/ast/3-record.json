@@ -21,7 +21,10 @@
           },
           "mutable": false,
           "value": {
-            "String": "40"
+            "String": {
+              "value": "40",
+              "line_number": 3
+            }
           },
           "line_number": 3
         }

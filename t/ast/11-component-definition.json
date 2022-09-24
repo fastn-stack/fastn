@@ -10,7 +10,8 @@
             "kind": "string"
           },
           "mutable": false,
-          "value": null
+          "value": null,
+          "line_number": 2
         }
       ],
       "definition": {
@@ -18,14 +19,21 @@
         "properties": [
           {
             "value": {
-              "String": "$name"
+              "String": {
+                "value": "$name",
+                "line_number": 7
+              }
             },
-            "source": "Body"
+            "source": "Body",
+            "line_number": 7
           }
         ],
+        "iteration": null,
+        "events": [],
         "children": [],
-        "events": []
-      }
+        "line_number": 4
+      },
+      "line_number": 1
     }
   }
 ]
