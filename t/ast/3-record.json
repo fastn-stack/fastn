@@ -6,14 +6,17 @@
         {
           "name": "name",
           "kind": "string",
-          "value": null
+          "value": null,
+          "line_number": 2
         },
         {
           "name": "age",
           "kind": "integer",
-          "value": "40"
+          "value": "40",
+          "line_number": 3
         }
-      ]
+      ],
+      "line_number": 1
     }
   }
 ]

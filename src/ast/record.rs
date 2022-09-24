@@ -2,11 +2,20 @@
 pub struct Record {
     name: String,
     fields: Vec<Field>,
+    line_number: usize,
 }
 
 pub const RECORD: &str = "record";
 
 impl Record {
+    fn new(name: &str, fields: Vec<Field>, line_number: usize) -> Record {
+        Record {
+            name: name.to_string(),
+            fields,
+            line_number,
+        }
+    }
+
     pub(crate) fn is_record(section: &ftd::p11::Section) -> bool {
         section.kind.as_ref().map_or(false, |s| s.eq(RECORD))
     }
@@ -20,24 +29,25 @@ impl Record {
             );
         }
         let fields = get_fields_from_headers(&section.headers, doc_id)?;
-        Ok(Record {
-            name: section.name.to_string(),
+        Ok(Record::new(
+            section.name.as_str(),
             fields,
-        })
+            section.line_number,
+        ))
     }
 
     #[allow(dead_code)]
-    pub fn new(name: &str) -> Record {
-        Record {
-            name: name.to_string(),
-            fields: Default::default(),
-        }
-    }
-
-    #[allow(dead_code)]
-    pub fn add_field(self, name: &str, kind: &str, value: Option<String>) -> Record {
+    pub fn add_field(
+        self,
+        name: &str,
+        kind: &str,
+        value: Option<String>,
+        line_number: usize,
+    ) -> Record {
         let mut record = self;
-        record.fields.push(Field::new(name, kind, value));
+        record
+            .fields
+            .push(Field::new(name, kind, value, line_number));
         record
     }
 }
@@ -47,6 +57,7 @@ pub struct Field {
     name: String,
     kind: String,
     value: Option<String>,
+    line_number: usize,
 }
 
 impl Field {
@@ -59,11 +70,7 @@ impl Field {
                 value,
             }) => {
                 if let Some(kind) = kind {
-                    Ok(Field {
-                        name: key.to_string(),
-                        kind: kind.to_string(),
-                        value: value.to_owned(),
-                    })
+                    Ok(Field::new(key, kind, value.to_owned(), *line_number))
                 } else {
                     ftd::ast::parse_error(
                         format!("Can't find kind for record field: `{:?}`", key),
@@ -76,12 +83,12 @@ impl Field {
         }
     }
 
-    #[allow(dead_code)]
-    pub fn new(name: &str, kind: &str, value: Option<String>) -> Field {
+    fn new(name: &str, kind: &str, value: Option<String>, line_number: usize) -> Field {
         Field {
             name: name.to_string(),
             kind: kind.to_string(),
             value,
+            line_number,
         }
     }
 }

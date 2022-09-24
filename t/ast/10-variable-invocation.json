@@ -6,23 +6,27 @@
         {
           "name": "name",
           "kind": "string",
-          "value": null
+          "value": null,
+          "line_number": 2
         },
         {
           "name": "age",
           "kind": "integer",
-          "value": null
+          "value": null,
+          "line_number": 3
         }
-      ]
+      ],
+      "line_number": 1
     }
   },
   {
     "VariableDefinition": {
+      "name": "people",
       "kind": {
         "modifier": "List",
         "kind": "person"
       },
-      "name": "people",
+      "mutable": true,
       "value": {
         "List": [
           {
@@ -47,8 +51,7 @@
             }
           }
         ]
-      },
-      "mutable": true
+      }
     }
   },
   {
