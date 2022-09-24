@@ -4,7 +4,8 @@
       "name": "score",
       "value": {
         "String": "40"
-      }
+      },
+      "line_number": 1
     }
   }
 ]
