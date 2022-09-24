@@ -170,7 +170,7 @@ impl VariableValue {
                 section
                     .sub_sections
                     .iter()
-                    .map(|v| VariableValue::from_p1(v))
+                    .map(VariableValue::from_p1)
                     .collect_vec(),
             );
         }
@@ -215,12 +215,7 @@ impl VariableValue {
                 VariableValue::from_value(value)
             }
             ftd::p11::Header::Section(ftd::p11::header::Section { section, .. }) => {
-                VariableValue::List(
-                    section
-                        .iter()
-                        .map(|v| VariableValue::from_p1(v))
-                        .collect_vec(),
-                )
+                VariableValue::List(section.iter().map(VariableValue::from_p1).collect_vec())
             }
         }
     }
