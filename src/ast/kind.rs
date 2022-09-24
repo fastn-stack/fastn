@@ -90,10 +90,42 @@ pub enum VariableValue {
     Record {
         name: String,
         caption: Box<Option<VariableValue>>,
-        headers: Vec<(String, VariableValue)>,
-        body: Option<String>,
+        headers: Vec<HeaderValue>,
+        body: Option<BodyValue>,
     },
     String(String),
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct BodyValue {
+    value: String,
+    line_number: usize,
+}
+
+impl BodyValue {
+    fn new(value: &str, line_number: usize) -> BodyValue {
+        BodyValue {
+            value: value.to_string(),
+            line_number,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct HeaderValue {
+    key: String,
+    value: VariableValue,
+    line_number: usize,
+}
+
+impl HeaderValue {
+    fn new(key: &str, value: VariableValue, line_number: usize) -> HeaderValue {
+        HeaderValue {
+            key: key.to_string(),
+            value,
+            line_number,
+        }
+    }
 }
 
 impl VariableValue {
@@ -184,16 +216,25 @@ impl VariableValue {
             .headers
             .0
             .iter()
-            .map(|header| (header.get_key(), VariableValue::from_p1_header(header)))
+            .map(|header| {
+                HeaderValue::new(
+                    header.get_key().as_str(),
+                    VariableValue::from_p1_header(header),
+                    header.get_line_number(),
+                )
+            })
             .collect_vec();
 
-        let body = section.body.as_ref().map(|v| v.get_value());
+        let body = section
+            .body
+            .as_ref()
+            .map(|v| BodyValue::new(v.get_value().as_str(), v.line_number));
 
         if headers.is_empty() && !(caption.is_some() && body.is_some()) {
             return if let Some(caption) = caption {
                 caption
             } else if let Some(body) = body {
-                VariableValue::String(body)
+                VariableValue::String(body.value)
             } else {
                 VariableValue::Optional(Box::new(None))
             };

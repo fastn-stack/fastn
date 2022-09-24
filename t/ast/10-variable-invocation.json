@@ -42,24 +42,27 @@
               "name": "person",
               "caption": null,
               "headers": [
-                [
-                  "name",
-                  {
+                {
+                  "key": "name",
+                  "value": {
                     "String": "Arpita"
-                  }
-                ],
-                [
-                  "age",
-                  {
+                  },
+                  "line_number": 8
+                },
+                {
+                  "key": "age",
+                  "value": {
                     "String": "10"
-                  }
-                ]
+                  },
+                  "line_number": 9
+                }
               ],
               "body": null
             }
           }
         ]
-      }
+      },
+      "line_number": 5
     }
   },
   {
@@ -72,18 +75,20 @@
               "name": "person",
               "caption": null,
               "headers": [
-                [
-                  "name",
-                  {
+                {
+                  "key": "name",
+                  "value": {
                     "String": "Ayushi"
-                  }
-                ],
-                [
-                  "age",
-                  {
+                  },
+                  "line_number": 17
+                },
+                {
+                  "key": "age",
+                  "value": {
                     "String": "9"
-                  }
-                ]
+                  },
+                  "line_number": 18
+                }
               ],
               "body": null
             }

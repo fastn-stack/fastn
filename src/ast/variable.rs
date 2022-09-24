@@ -4,6 +4,7 @@ pub struct VariableDefinition {
     pub kind: ftd::ast::VariableKind,
     pub mutable: bool,
     pub value: ftd::ast::VariableValue,
+    pub line_number: usize,
 }
 
 impl VariableDefinition {
@@ -12,12 +13,14 @@ impl VariableDefinition {
         kind: ftd::ast::VariableKind,
         mutable: bool,
         value: ftd::ast::VariableValue,
+        line_number: usize,
     ) -> VariableDefinition {
         VariableDefinition {
             kind,
             name: name.to_string(),
             mutable,
             value,
+            line_number,
         }
     }
 
@@ -57,6 +60,7 @@ impl VariableDefinition {
             kind,
             ftd::ast::utils::is_variable_mutable(section.name.as_str()),
             value,
+            section.line_number,
         ))
     }
 }

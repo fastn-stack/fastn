@@ -5,6 +5,7 @@
         "modifier": null,
         "kind": "integer"
       },
+      "line_number": 1,
       "name": "score",
       "value": {
         "String": "40"

@@ -5,6 +5,7 @@
         "modifier": "List",
         "kind": "integer"
       },
+      "line_number": 1,
       "name": "scores",
       "value": {
         "List": [
