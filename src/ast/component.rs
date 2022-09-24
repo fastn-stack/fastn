@@ -69,6 +69,7 @@ pub struct Component {
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Option<Loop>,
+    pub events: Vec<Event>,
     pub children: Vec<Component>,
 }
 
@@ -77,12 +78,14 @@ impl Component {
         name: &str,
         properties: Vec<Property>,
         iteration: Option<Loop>,
+        events: Vec<Event>,
         children: Vec<Component>,
     ) -> Component {
         Component {
             name: name.to_string(),
             properties,
             iteration,
+            events,
             children,
         }
     }
@@ -107,7 +110,8 @@ impl Component {
             let mut properties = vec![];
             for header in section.headers.0.iter() {
                 let name = header.get_key();
-                if name.eq(ftd::ast::utils::LOOP) {
+                if name.eq(ftd::ast::utils::LOOP) || Event::get_event_name(name.as_str()).is_some()
+                {
                     continue;
                 }
                 properties.push(Property::from_p1_header(
@@ -145,11 +149,13 @@ impl Component {
         };
 
         let iteration = Loop::from_headers(&section.headers, doc_id)?;
+        let events = Event::from_headers(&section.headers, doc_id)?;
 
         Ok(Component::new(
             section.name.as_str(),
             properties,
             iteration,
+            events,
             children,
         ))
     }
@@ -232,7 +238,10 @@ impl Property {
         doc_id: &str,
         source: PropertySource,
     ) -> ftd::ast::Result<Property> {
-        if !Self::is_property(header) || header.get_key().eq(ftd::ast::utils::LOOP) {
+        if !Self::is_property(header)
+            || header.get_key().eq(ftd::ast::utils::LOOP)
+            || Event::get_event_name(header.get_key().as_str()).is_some()
+        {
             return ftd::ast::parse_error(
                 format!("Header is not property, found `{:?}`", header),
                 doc_id,
@@ -328,5 +337,60 @@ impl Loop {
             on.trim_start_matches(ftd::ast::utils::REFERENCE),
             alias.as_str(),
         )))
+    }
+}
+
+#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Event {
+    name: String,
+    action: String,
+}
+
+impl Event {
+    fn new(name: &str, action: &str) -> Event {
+        Event {
+            name: name.to_string(),
+            action: action.to_string(),
+        }
+    }
+
+    fn get_event_name(input: &str) -> Option<String> {
+        if !(input.starts_with("$on-") && input.ends_with(ftd::ast::utils::REFERENCE)) {
+            return None;
+        }
+        Some(
+            input
+                .trim_start_matches("$on-")
+                .trim_end_matches(ftd::ast::utils::REFERENCE)
+                .to_string(),
+        )
+    }
+
+    fn from_headers(headers: &ftd::p11::Headers, doc_id: &str) -> ftd::ast::Result<Vec<Event>> {
+        let mut events = vec![];
+        for header in headers.0.iter() {
+            if let Some(event) = Event::from_header(header, doc_id)? {
+                events.push(event);
+            }
+        }
+        Ok(events)
+    }
+
+    fn from_header(header: &ftd::p11::Header, doc_id: &str) -> ftd::ast::Result<Option<Event>> {
+        let event_name = if let Some(name) = Event::get_event_name(header.get_key().as_str()) {
+            name
+        } else {
+            return Ok(None);
+        };
+
+        let action = header
+            .get_value(doc_id)?
+            .ok_or(ftd::ast::Error::ParseError {
+                message: "Event cannot be empty".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: header.get_line_number(),
+            })?;
+
+        Ok(Some(Event::new(event_name.as_str(), action.as_str())))
     }
 }

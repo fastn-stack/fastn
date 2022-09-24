@@ -4,6 +4,17 @@
       "name": "display",
       "arguments": [
         {
+          "name": "flag",
+          "kind": {
+            "modifier": null,
+            "kind": "boolean"
+          },
+          "mutable": false,
+          "value": {
+            "String": "true"
+          }
+        },
+        {
           "name": "description",
           "kind": {
             "modifier": null,
@@ -40,6 +51,7 @@
         "name": "ftd.column",
         "properties": [],
         "iteration": null,
+        "events": [],
         "children": [
           {
             "name": "ftd.text",
@@ -55,6 +67,7 @@
               "on": "locations",
               "alias": "obj"
             },
+            "events": [],
             "children": []
           },
           {
@@ -68,6 +81,12 @@
               }
             ],
             "iteration": null,
+            "events": [
+              {
+                "name": "click",
+                "action": "toggle $flag"
+              }
+            ],
             "children": []
           }
         ]

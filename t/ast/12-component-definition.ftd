@@ -1,5 +1,7 @@
 -- component display:
 
+-- boolean display.flag: true
+
 -- string display.description:
 
 This is description of display component
@@ -18,6 +20,7 @@ This is description of display component
 $loop$: $locations as $obj
 
 -- ftd.text: $description
+$on-click$: toggle $flag
 
 -- end: ftd.column
 
