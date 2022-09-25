@@ -105,6 +105,20 @@ impl Header {
         }
     }
 
+    pub(crate) fn set_kind(&mut self, value: &str) {
+        match self {
+            Header::KV(ftd::p11::header::KV {
+                kind: Some(kind), ..
+            })
+            | Header::Section(ftd::p11::header::Section {
+                kind: Some(kind), ..
+            }) => {
+                *kind = value.to_string();
+            }
+            _ => {}
+        }
+    }
+
     pub(crate) fn get_value(&self, doc_id: &str) -> ftd::p11::Result<Option<String>> {
         match self {
             Header::KV(ftd::p11::header::KV { value, .. }) => Ok(value.to_owned()),
@@ -157,12 +171,21 @@ impl Header {
     pub fn remove_comments(&self) -> Option<Header> {
         let mut header = self.clone();
         let key = header.get_key().trim().to_string();
-        if key.starts_with('/') {
-            return None;
-        }
+        if let Some(kind) = header.get_kind() {
+            if kind.starts_with('/') {
+                return None;
+            }
+            if key.starts_with(r"\/") {
+                header.set_kind(kind.trim_start_matches('\\'));
+            }
+        } else {
+            if key.starts_with('/') {
+                return None;
+            }
 
-        if key.starts_with(r"\/") {
-            header.set_key(key.trim_start_matches('\\'));
+            if key.starts_with(r"\/") {
+                header.set_key(key.trim_start_matches('\\'));
+            }
         }
 
         match &mut header {

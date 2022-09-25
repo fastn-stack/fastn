@@ -16,8 +16,8 @@ impl AST {
         doc_id: &str,
     ) -> ftd::ast::Result<Vec<AST>> {
         let mut di_vec = vec![];
-        for section in sections {
-            di_vec.push(AST::from_section(section, doc_id)?);
+        for section in ignore_comments(sections) {
+            di_vec.push(AST::from_section(&section, doc_id)?);
         }
         Ok(di_vec)
     }
@@ -48,4 +48,36 @@ impl AST {
     pub(crate) fn list(self) -> Vec<Self> {
         vec![self]
     }
+}
+
+/// Filters out commented parts from the parsed document.
+///
+/// # Comments are ignored for
+/// 1.  /-- section: caption
+///
+/// 2.  /section-header: value
+///
+/// 3.  /body
+///
+/// 4.  /--- subsection: caption
+///
+/// 5.  /sub-section-header: value
+///
+/// ## Note: To allow ["/content"] inside body, use ["\\/content"].
+///
+/// Only '/' comments are ignored here.
+/// ';' comments are ignored inside the [`parser`] itself.
+///
+/// uses [`Section::remove_comments()`] and [`Subsection::remove_comments()`] to remove comments
+/// in sections and subsections accordingly.
+///
+/// [`parser`]: ftd::p1::parser::parse
+/// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+/// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+fn ignore_comments(sections: &[ftd::p11::Section]) -> Vec<ftd::p11::Section> {
+    // TODO: AST should contain the commented elements. Comments should not be ignored while creating AST.
+    sections
+        .iter()
+        .filter_map(|s| s.remove_comments())
+        .collect::<Vec<ftd::p11::Section>>()
 }
