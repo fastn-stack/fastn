@@ -1,0 +1,39 @@
+-- ft.page: `request-data` processor
+
+`request-data` processor can be used to find the data from query string. In
+future we will implement this processor to get data from request body. It can
+POST method body, or form body.
+
+[Github Discussion](https://github.com/FifthTry/fpm/discussions/516)
+
+
+E.g.:
+
+In below example url contains query parameter `id` with value `Ye Sab Tumhara Karam Aaqa`.
+We can access this value in `ftd` file as like below by calling `request-data`
+processor.
+
+-- ftd.code:
+lang: txt
+
+URL: http://127.0.0.1:8000/fifthtry/test/?id=Ye%20Sab%20Tumhara%20Karam%20Aaqa
+
+-- ftd.code:
+lang: ftd
+
+\-- record query-data:
+string id:
+
+
+\-- query-data query:
+$processor$: request-data
+
+
+\-- ft.markdown: $query.id
+
+
+-- ft.markdown:
+
+Output: Value of the query parameter `id` on the same document `fifthtry/test`
+in `query.id` `record` type, `Ye Sab Tumhara Karam Aaqa`.
+
