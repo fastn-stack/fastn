@@ -181,8 +181,12 @@ async fn serve(
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
-        let mut config =
-            fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
+        // url is present in config or not
+        // If not present than proxy pass it
+        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false)
+            .await
+            .unwrap()
+            .set_request(fpm::http::Request::from_actix(req.clone())));
 
         // If path is not present in sitemap then pass it to proxy
         // TODO: Need to handle other package URL as well, and that will start from `-`
@@ -197,7 +201,7 @@ async fn serve(
                     if let Some(endpoint) = config.package.endpoint.as_ref() {
                         return fpm::proxy::get_out(
                             endpoint,
-                            fpm::http::Request::from_actix(&req),
+                            fpm::http::Request::from_actix(req.clone()),
                             body,
                         )
                         .await;
@@ -205,6 +209,7 @@ async fn serve(
                 }
             }
         }
+        // TODO: pass &fpm::http::Request
         serve_file(&req, &mut config, &path).await
     };
     t.it(response)
