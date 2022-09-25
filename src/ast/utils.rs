@@ -10,6 +10,11 @@ pub(crate) fn is_variable_mutable(name: &str) -> bool {
     name.starts_with(REFERENCE)
 }
 
+pub(crate) fn is_condition(value: &str, kind: &Option<String>) -> bool {
+    value.eq(IF) && kind.is_none()
+}
+
 pub const REFERENCE: &str = "$";
 pub const LOOP: &str = "$loop$";
 pub const AS: &str = " as ";
+pub const IF: &str = "if";

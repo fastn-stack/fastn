@@ -77,6 +77,7 @@ pub struct Component {
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Option<Loop>,
+    pub condition: Option<ftd::ast::Condition>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
     pub line_number: usize,
@@ -87,6 +88,7 @@ impl Component {
         name: &str,
         properties: Vec<Property>,
         iteration: Option<Loop>,
+        condition: Option<ftd::ast::Condition>,
         events: Vec<Event>,
         children: Vec<Component>,
         line_number: usize,
@@ -95,6 +97,7 @@ impl Component {
             name: name.to_string(),
             properties,
             iteration,
+            condition,
             events,
             children,
             line_number,
@@ -121,7 +124,9 @@ impl Component {
             let mut properties = vec![];
             for header in section.headers.0.iter() {
                 let name = header.get_key();
-                if name.eq(ftd::ast::utils::LOOP) || Event::get_event_name(name.as_str()).is_some()
+                if name.eq(ftd::ast::utils::LOOP)
+                    || Event::get_event_name(name.as_str()).is_some()
+                    || ftd::ast::utils::is_condition(header.get_key().as_str(), &header.get_kind())
                 {
                     continue;
                 }
@@ -166,11 +171,13 @@ impl Component {
 
         let iteration = Loop::from_headers(&section.headers, doc_id)?;
         let events = Event::from_headers(&section.headers, doc_id)?;
+        let condition = ftd::ast::Condition::from_headers(&section.headers, doc_id)?;
 
         Ok(Component::new(
             section.name.as_str(),
             properties,
             iteration,
+            condition,
             events,
             children,
             section.line_number,

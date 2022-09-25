@@ -69,14 +69,21 @@ impl VariableDefinition {
 pub struct VariableInvocation {
     pub name: String,
     pub value: ftd::ast::VariableValue,
+    pub condition: Option<ftd::ast::Condition>,
     pub line_number: usize,
 }
 
 impl VariableInvocation {
-    fn new(name: &str, value: ftd::ast::VariableValue, line_number: usize) -> VariableInvocation {
+    fn new(
+        name: &str,
+        value: ftd::ast::VariableValue,
+        condition: Option<ftd::ast::Condition>,
+        line_number: usize,
+    ) -> VariableInvocation {
         VariableInvocation {
             name: name.to_string(),
             value,
+            condition,
             line_number,
         }
     }
@@ -101,10 +108,12 @@ impl VariableInvocation {
         }
 
         let value = ftd::ast::VariableValue::from_p1(section);
+        let condition = ftd::ast::Condition::from_headers(&section.headers, doc_id)?;
 
         Ok(VariableInvocation::new(
             section.name.trim_start_matches(ftd::ast::utils::REFERENCE),
             value,
+            condition,
             section.line_number,
         ))
     }

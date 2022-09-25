@@ -220,6 +220,7 @@ impl VariableValue {
             .headers
             .0
             .iter()
+            .filter(|v| !ftd::ast::utils::is_condition(v.get_key().as_str(), &v.get_kind()))
             .map(|header| {
                 HeaderValue::new(
                     header.get_key().as_str(),
@@ -277,6 +278,49 @@ impl VariableValue {
             },
             _ => VariableValue::Optional(Box::new(None)),
         }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Condition {
+    expression: String,
+    line_number: usize,
+}
+
+impl Condition {
+    fn new(expression: &str, line_number: usize) -> Condition {
+        Condition {
+            expression: expression.to_string(),
+            line_number,
+        }
+    }
+
+    pub(crate) fn from_headers(
+        headers: &ftd::p11::Headers,
+        doc_id: &str,
+    ) -> ftd::ast::Result<Option<Condition>> {
+        let condition = headers
+            .0
+            .iter()
+            .find(|v| ftd::ast::utils::is_condition(v.get_key().as_str(), &v.get_kind()));
+        let condition = if let Some(condition) = condition {
+            condition
+        } else {
+            return Ok(None);
+        };
+
+        let expression = condition
+            .get_value(doc_id)?
+            .ok_or(ftd::ast::Error::ParseError {
+                message: "`if` condition must contain expression".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: condition.get_line_number(),
+            })?;
+
+        Ok(Some(Condition::new(
+            expression.as_str(),
+            condition.get_line_number(),
+        )))
     }
 }
 

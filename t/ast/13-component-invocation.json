@@ -54,6 +54,7 @@
       "name": "ftd.column",
       "properties": [],
       "iteration": null,
+      "condition": null,
       "events": [],
       "children": [
         {
@@ -75,6 +76,7 @@
             "alias": "obj",
             "line_number": 14
           },
+          "condition": null,
           "events": [],
           "children": [],
           "line_number": 13
@@ -94,15 +96,39 @@
             }
           ],
           "iteration": null,
+          "condition": {
+            "expression": "$flag",
+            "line_number": 17
+          },
+          "events": [],
+          "children": [],
+          "line_number": 16
+        },
+        {
+          "name": "ftd.text",
+          "properties": [
+            {
+              "value": {
+                "String": {
+                  "value": "Click Here",
+                  "line_number": 19
+                }
+              },
+              "source": "Caption",
+              "line_number": 19
+            }
+          ],
+          "iteration": null,
+          "condition": null,
           "events": [
             {
               "name": "click",
               "action": "toggle $flag",
-              "line_number": 17
+              "line_number": 20
             }
           ],
           "children": [],
-          "line_number": 16
+          "line_number": 19
         }
       ],
       "line_number": 11

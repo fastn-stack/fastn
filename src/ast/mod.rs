@@ -12,7 +12,7 @@ mod variable;
 
 pub use component::{Component, ComponentDefinition};
 pub use import::Import;
-pub use kind::{VariableKind, VariableValue};
+pub use kind::{Condition, VariableKind, VariableValue};
 pub use main::AST;
 pub use record::Record;
 pub use variable::{VariableDefinition, VariableInvocation};
