@@ -6,6 +6,24 @@ pub fn split_at(text: &str, at: &str) -> (String, Option<String>) {
     }
 }
 
+pub(crate) fn get_import_alias(input: &str) -> (String, String) {
+    let (module, alias) = ftd::ast::utils::split_at(input, AS);
+    if let Some(alias) = alias {
+        return (module, alias);
+    }
+
+    match input.rsplit_once('/') {
+        Some((_, alias)) if alias.trim().is_empty() => return (module, alias.trim().to_string()),
+        _ => {}
+    }
+
+    if let Some((t, _)) = module.split_once('.') {
+        return (module, t.to_string());
+    }
+
+    (module.to_string(), module)
+}
+
 pub(crate) fn is_variable_mutable(name: &str) -> bool {
     name.starts_with(REFERENCE)
 }

@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Import {
     pub module: String,
-    pub alias: Option<String>,
+    pub alias: String,
     pub line_number: usize,
 }
 
@@ -9,10 +9,10 @@ pub const IMPORT: &str = "import";
 pub const AS: &str = "as";
 
 impl Import {
-    fn new(module: &str, alias: Option<String>, line_number: usize) -> Import {
+    fn new(module: &str, alias: &str, line_number: usize) -> Import {
         Import {
             module: module.to_string(),
-            alias,
+            alias: alias.to_string(),
             line_number,
         }
     }
@@ -42,8 +42,12 @@ impl Import {
             Some(ftd::p11::Header::KV(ftd::p11::header::KV {
                 value: Some(value), ..
             })) => {
-                let (module, alias) = ftd::ast::utils::split_at(value.as_str(), AS);
-                Ok(Import::new(module.as_str(), alias, section.line_number))
+                let (module, alias) = ftd::ast::utils::get_import_alias(value.as_str());
+                Ok(Import::new(
+                    module.as_str(),
+                    alias.as_str(),
+                    section.line_number,
+                ))
             }
             t => ftd::ast::parse_error(
                 format!(

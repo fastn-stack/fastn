@@ -11,6 +11,10 @@ pub enum AST {
 }
 
 impl AST {
+    pub fn is_import(&self) -> bool {
+        matches!(self, AST::Import(_))
+    }
+
     pub fn from_sections(
         sections: &[ftd::p11::Section],
         doc_id: &str,
