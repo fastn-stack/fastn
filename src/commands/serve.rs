@@ -192,8 +192,12 @@ async fn serve(
     } else {
         // url is present in config or not
         // If not present than proxy pass it
-        let mut config =
-            fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
+        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false)
+            .await
+            .unwrap()
+            .set_request(fpm::http::Request::from_actix(req.clone())));
+
+        // TODO: pass &fpm::http::Request
         serve_file(&req, &mut config, &path).await
 
         // if true: serve_file

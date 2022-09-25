@@ -447,6 +447,9 @@ impl Library2 {
                 .await
             }
             "cr-meta" => fpm::library::cr_meta::processor(section, doc, &self.config).await,
+            "request-data" => {
+                fpm::library::http::request_data_processor(section, doc, &self.config)
+            }
             t => Err(ftd::p1::Error::NotFound {
                 doc_id: self.document_id.to_string(),
                 line_number: section.line_number,

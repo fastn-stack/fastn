@@ -69,7 +69,8 @@ pub fn request_data_processor<'a>(
     doc: &ftd::p2::TDoc<'a>,
     config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
-    // TODO: Need to return query parameters and body as well
+    // TODO: Need to return from query parameters and body as well
     let query = config.request.as_ref().unwrap().query();
+    dbg!(&query);
     doc.from_json(&query, section)
 }
