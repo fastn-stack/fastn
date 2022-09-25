@@ -196,7 +196,7 @@ pub struct Argument {
 
 impl Argument {
     fn is_argument(header: &ftd::p11::Header) -> bool {
-        header.get_kind().is_some()
+        header.get_kind().is_some() && header.get_condition().is_none()
     }
 
     fn new(
@@ -250,6 +250,7 @@ impl Argument {
 pub struct Property {
     pub value: Option<ftd::ast::VariableValue>,
     pub source: PropertySource,
+    pub condition: Option<String>,
     pub line_number: usize,
 }
 
@@ -261,11 +262,13 @@ impl Property {
     fn new(
         value: Option<ftd::ast::VariableValue>,
         source: PropertySource,
+        condition: Option<String>,
         line_number: usize,
     ) -> Property {
         Property {
             value,
             source,
+            condition,
             line_number,
         }
     }
@@ -288,12 +291,17 @@ impl Property {
 
         let value = ftd::ast::VariableValue::from_p1_header(header).inner();
 
-        Ok(Property::new(value, source, header.get_line_number()))
+        Ok(Property::new(
+            value,
+            source,
+            header.get_condition(),
+            header.get_line_number(),
+        ))
     }
 
     fn from_value(value: Option<String>, source: PropertySource, line_number: usize) -> Property {
         let value = ftd::ast::VariableValue::from_value(&value, line_number).inner();
-        Property::new(value, source, line_number)
+        Property::new(value, source, None, line_number)
     }
 }
 

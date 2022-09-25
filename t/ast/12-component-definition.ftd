@@ -21,6 +21,7 @@ $loop$: $locations as $obj
 
 -- ftd.text: $description
 $on-click$: toggle $flag
+color if $flag: red
 
 -- end: ftd.column
 

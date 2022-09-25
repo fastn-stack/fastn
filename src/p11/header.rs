@@ -174,6 +174,13 @@ impl Header {
         }
     }
 
+    pub(crate) fn get_condition(&self) -> Option<String> {
+        match self {
+            Header::KV(ftd::p11::header::KV { condition, .. })
+            | Header::Section(ftd::p11::header::Section { condition, .. }) => condition.to_owned(),
+        }
+    }
+
     pub(crate) fn is_empty(&self) -> bool {
         match self {
             Header::KV(ftd::p11::header::KV { value, .. }) => value.is_none(),

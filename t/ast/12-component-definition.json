@@ -69,6 +69,7 @@
         "name": "ftd.column",
         "properties": [],
         "iteration": null,
+        "condition": null,
         "events": [],
         "children": [
           {
@@ -82,6 +83,7 @@
                   }
                 },
                 "source": "Caption",
+                "condition": null,
                 "line_number": 19
               }
             ],
@@ -90,6 +92,7 @@
               "alias": "obj",
               "line_number": 20
             },
+            "condition": null,
             "events": [],
             "children": [],
             "line_number": 19
@@ -100,15 +103,33 @@
               {
                 "value": {
                   "String": {
+                    "value": "red",
+                    "line_number": 24
+                  }
+                },
+                "source": {
+                  "Header": {
+                    "name": "color",
+                    "mutable": false
+                  }
+                },
+                "condition": "$flag",
+                "line_number": 24
+              },
+              {
+                "value": {
+                  "String": {
                     "value": "$description",
                     "line_number": 22
                   }
                 },
                 "source": "Caption",
+                "condition": null,
                 "line_number": 22
               }
             ],
             "iteration": null,
+            "condition": null,
             "events": [
               {
                 "name": "click",
