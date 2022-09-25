@@ -567,7 +567,7 @@ fn get_name_kind_and_condition(name_with_kind: &str) -> (String, Option<String>,
         return (name.to_string(), Some(kind.to_string()), condition);
     }
 
-    (name_with_kind.to_string(), None, condition)
+    (name_with_kind, None, condition)
 }
 
 fn clean_line(line: &str) -> String {
