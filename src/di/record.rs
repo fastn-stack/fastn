@@ -58,7 +58,18 @@ impl Field {
                 key,
                 kind,
                 value,
+                condition,
             }) => {
+                if condition.is_some() {
+                    return ftd::di::parse_error(
+                        format!(
+                            "Record field can't have condition: `{:?}` `{:?}`",
+                            key, condition
+                        ),
+                        doc_id,
+                        *line_number,
+                    );
+                }
                 if let Some(kind) = kind {
                     Ok(Field {
                         name: key.to_string(),

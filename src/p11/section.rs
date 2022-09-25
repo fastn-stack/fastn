@@ -78,6 +78,7 @@ impl Section {
             } else {
                 Some(value.to_string())
             },
+            None,
         ));
         self
     }
@@ -87,9 +88,10 @@ impl Section {
         key: &str,
         kind: Option<String>,
         section: Vec<ftd::p11::Section>,
+        condition: Option<String>,
     ) -> Self {
         self.headers
-            .push(ftd::p11::Header::section(0, key, kind, section));
+            .push(ftd::p11::Header::section(0, key, kind, section, condition));
         self
     }
 

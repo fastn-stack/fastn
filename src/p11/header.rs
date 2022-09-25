@@ -12,15 +12,23 @@ pub struct KV {
     pub key: String,
     pub kind: Option<String>,
     pub value: Option<String>,
+    pub condition: Option<String>,
 }
 
 impl KV {
-    pub fn new(key: &str, kind: Option<String>, value: Option<String>, line_number: usize) -> KV {
+    pub fn new(
+        key: &str,
+        kind: Option<String>,
+        value: Option<String>,
+        line_number: usize,
+        condition: Option<String>,
+    ) -> KV {
         KV {
             line_number,
             key: key.to_string(),
             kind,
             value,
+            condition,
         }
     }
 }
@@ -32,6 +40,7 @@ pub struct Section {
     pub key: String,
     pub kind: Option<String>,
     pub section: Vec<ftd::p11::Section>,
+    pub condition: Option<String>,
 }
 
 impl Header {
@@ -41,6 +50,7 @@ impl Header {
             ftd::p11::utils::CAPTION,
             None,
             Some(value.to_string()),
+            None,
         )
     }
 
@@ -49,8 +59,9 @@ impl Header {
         key: &str,
         kind: Option<String>,
         value: Option<String>,
+        condition: Option<String>,
     ) -> Header {
-        Header::KV(KV::new(key, kind, value, line_number))
+        Header::KV(KV::new(key, kind, value, line_number, condition))
     }
 
     pub(crate) fn section(
@@ -58,12 +69,14 @@ impl Header {
         key: &str,
         kind: Option<String>,
         section: Vec<ftd::p11::Section>,
+        condition: Option<String>,
     ) -> Header {
         Header::Section(Section {
             line_number,
             key: key.to_string(),
             kind,
             section,
+            condition,
         })
     }
 

@@ -139,13 +139,12 @@ fn di_import() {
             -- end: import
             "
         ),
-        "ASTParseError: foo:1 -> Subsection not expected for import statement `Section { name: \
-        \"import\", kind: None, caption: Some(KV(KV { line_number: 1, key: \"$caption$\", kind: \
-        None, value: Some(\"foo\") })), headers: Headers([]), body: None, sub_sections: [Section { \
-        name: \"ftd.text\", kind: None, caption: Some(KV(KV { line_number: 3, key: \"$caption$\", \
-        kind: None, value: Some(\"Hello\") })), headers: Headers([]), body: None, sub_sections: [], \
-        is_commented: false, line_number: 3, block_body: false }], is_commented: false, \
-        line_number: 1, block_body: false }`",
+        "ASTParseError: foo:1 -> Subsection not expected for import statement `Section { name: \"import\", \
+        kind: None, caption: Some(KV(KV { line_number: 1, key: \"$caption$\", kind: None, value: Some(\"foo\"), \
+        condition: None })), headers: Headers([]), body: None, sub_sections: [Section { name: \"ftd.text\", \
+        kind: None, caption: Some(KV(KV { line_number: 3, key: \"$caption$\", kind: None, value: Some(\"Hello\"), \
+        condition: None })), headers: Headers([]), body: None, sub_sections: [], is_commented: false, line_number: 3, \
+        block_body: false }], is_commented: false, line_number: 1, block_body: false }`",
     )
 }
 
@@ -272,8 +271,8 @@ fn di_component_definition() {
         ),
         &ftd::di::DI::Definition(
             ftd::di::Definition::new("markdown", "ftd.text")
-                .add_value_property("text", Some(s("caption or body")), None)
-                .add_value_property("text", None, Some(s("$text"))),
+                .add_value_property("text", Some(s("caption or body")), None, None)
+                .add_value_property("text", None, Some(s("$text")), None),
         )
         .list(),
     );
@@ -290,8 +289,8 @@ fn di_component_definition() {
         ),
         &ftd::di::DI::Definition(
             ftd::di::Definition::new("markdown", "ftd.text")
-                .add_value_property("text", Some(s("caption or body")), None)
-                .add_value_property("text", None, Some(s("$text"))),
+                .add_value_property("text", Some(s("caption or body")), None, None)
+                .add_value_property("text", None, Some(s("$text")), None),
         )
         .list(),
     );

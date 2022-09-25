@@ -60,7 +60,7 @@ impl Invocation {
     ) -> Invocation {
         let mut invocation = self;
         invocation.properties.push(ftd::di::Property::from_kv(
-            &ftd::p11::header::KV::new(key, kind, value, 0),
+            &ftd::p11::header::KV::new(key, kind, value, 0, None),
             ftd::di::Source::Header,
         ));
         invocation

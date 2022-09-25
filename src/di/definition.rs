@@ -73,10 +73,11 @@ impl Definition {
         key: &str,
         kind: Option<String>,
         value: Option<String>,
+        condition: Option<String>,
     ) -> Definition {
         let mut definition = self;
         definition.properties.push(ftd::di::Property::from_kv(
-            &ftd::p11::header::KV::new(key, kind, value, 0),
+            &ftd::p11::header::KV::new(key, kind, value, 0, condition),
             ftd::di::Source::Header,
         ));
         definition

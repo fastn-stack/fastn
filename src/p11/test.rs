@@ -729,6 +729,7 @@ fn header_section() {
                     .add_header_str("k1", "v1")
                     .add_header_str("k2", "This is value of section k2")
                     .list(),
+                None,
             )
             .list(),
     );
@@ -782,6 +783,7 @@ fn kind() {
                     .add_header_str("k1", "v1")
                     .add_header_str("k2", "This is value of section k2")
                     .list(),
+                None,
             )
             .add_sub_section(ftd::p11::Section::with_name("subsection").add_sub_section(
                 ftd::p11::Section::with_name("sub-subsection").and_body("This is sub-subsection"),
@@ -835,6 +837,7 @@ fn kind() {
                     .add_header_str("k1", "v1")
                     .add_header_str("k2", "This is value of section k2")
                     .list(),
+                None,
             )
             .add_sub_section(ftd::p11::Section::with_name("subsection").add_sub_section(
                 ftd::p11::Section::with_name("sub-subsection").and_body("This is sub-subsection"),
@@ -889,6 +892,7 @@ fn kind() {
                     .add_header_str("k1", "v1")
                     .add_header_str("k2", "This is value of section k2")
                     .list(),
+                None,
             )
             .add_sub_section(ftd::p11::Section::with_name("subsection").add_sub_section(
                 ftd::p11::Section::with_name("sub-subsection").and_body("This is sub-subsection"),
