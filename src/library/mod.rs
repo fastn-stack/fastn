@@ -220,6 +220,7 @@ pub fn process_sync<'a>(
         "document-full-id" => document::processor::document_full_id(section, doc, config),
         "document-suffix" => document::processor::document_suffix(section, doc, config),
         "get-identities" => fpm::user_group::processor::get_identities(section, doc, config),
+        "request-data" => fpm::library::http::request_data_processor(section, doc, config),
 
         t => Err(ftd::p1::Error::NotFound {
             doc_id: document_id.to_string(),
@@ -446,6 +447,9 @@ impl Library2 {
                 .await
             }
             "cr-meta" => fpm::library::cr_meta::processor(section, doc, &self.config).await,
+            "request-data" => {
+                fpm::library::http::request_data_processor(section, doc, &self.config)
+            }
             t => Err(ftd::p1::Error::NotFound {
                 doc_id: self.document_id.to_string(),
                 line_number: section.line_number,
