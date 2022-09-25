@@ -8,7 +8,15 @@
     },
     "sub_sections": [
       {
-        "name": "bar"
+        "name": "bar",
+        "headers": [
+          {
+            "type": "KV",
+            "key": "field",
+            "value": "Hello",
+            "condition": "expression"
+          }
+        ]
       }
     ]
   }

@@ -2,14 +2,13 @@ use {indoc::indoc, pretty_assertions::assert_eq}; // macro
 
 #[track_caller]
 fn p(s: &str, t: &Vec<ftd::p11::Section>) {
-    assert_eq!(
-        t,
-        &super::parse(s, "foo")
-            .unwrap_or_else(|e| panic!("{:?}", e))
-            .iter()
-            .map(|v| v.without_line_number())
-            .collect::<Vec<ftd::p11::Section>>(),
-    )
+    let data = super::parse(s, "foo")
+        .unwrap_or_else(|e| panic!("{:?}", e))
+        .iter()
+        .map(|v| v.without_line_number())
+        .collect::<Vec<ftd::p11::Section>>();
+    let expected_json = serde_json::to_string_pretty(&data).unwrap();
+    assert_eq!(t, &data, "Expected JSON: {}", expected_json)
 }
 
 #[track_caller]
