@@ -34,6 +34,15 @@ pub(crate) async fn get_out(
     );
 
     *proxy_request.headers_mut() = headers;
+
+    // TODO: Some extra headers, possibly Authentication header
+    // Authentication header can come from system environment variable
+    // env file path set in FPM.ftd file
+    proxy_request.headers_mut().insert(
+        reqwest::header::USER_AGENT,
+        reqwest::header::HeaderValue::from_static("fpm"),
+    );
+
     *proxy_request.body_mut() = Some(body.to_vec().into());
 
     match CLIENT.execute(proxy_request).await {
