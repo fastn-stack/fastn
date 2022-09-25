@@ -560,6 +560,9 @@ pub enum Error {
 
     #[error("CRAboutNotFound CR#{cr_number}: {message}")]
     CRAboutNotFound { message: String, cr_number: usize },
+
+    #[error("QueryPayloadError: {}", _0)]
+    QueryPayloadError(#[from] actix_web::error::QueryPayloadError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
