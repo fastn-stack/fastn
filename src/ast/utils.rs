@@ -18,7 +18,7 @@ pub(crate) fn get_import_alias(input: &str) -> (String, String) {
     }
 
     if let Some((t, _)) = module.split_once('.') {
-        return (module, t.to_string());
+        return (module.to_string(), t.to_string());
     }
 
     (module.to_string(), module)

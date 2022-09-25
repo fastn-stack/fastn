@@ -6,7 +6,6 @@ pub struct Import {
 }
 
 pub const IMPORT: &str = "import";
-pub const AS: &str = "as";
 
 impl Import {
     fn new(module: &str, alias: &str, line_number: usize) -> Import {
