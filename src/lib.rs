@@ -25,7 +25,6 @@ pub mod p11;
 pub mod p2;
 pub(crate) mod rendered;
 mod rt;
-pub mod sorted_json;
 mod ui;
 mod value_with_default;
 pub(crate) mod variable;

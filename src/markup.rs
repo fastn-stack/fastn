@@ -1,16 +1,15 @@
 const MAGIC: &str = "MMMMMMMMMAMMAMSMASMDASMDAMSDMASMDASDMASMDASDMAASD";
-lazy_static::lazy_static! {
-    pub static ref MD: comrak::ComrakOptions = {
-        let mut m = comrak::ComrakOptions::default();
-        m.extension.strikethrough = true;
-        m.extension.table = true;
-        m.extension.autolink = true;
-        m.extension.tasklist = true;
-        m.extension.superscript = true;
-        m.parse.smart = true;
-        m
-    };
-}
+
+pub static MD: once_cell::sync::Lazy<comrak::ComrakOptions> = once_cell::sync::Lazy::new(|| {
+    let mut m = comrak::ComrakOptions::default();
+    m.extension.strikethrough = true;
+    m.extension.table = true;
+    m.extension.autolink = true;
+    m.extension.tasklist = true;
+    m.extension.superscript = true;
+    m.parse.smart = true;
+    m
+});
 
 pub fn markup(i: &str) -> String {
     comrak::markdown_to_html(i.replace("![", MAGIC).trim(), &MD)

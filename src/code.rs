@@ -1,23 +1,30 @@
 static SYNTAX_DIR: include_dir::Dir<'_> = include_dir::include_dir!("syntax");
 pub const DEFAULT_THEME: &str = "base16-ocean.dark";
 
-lazy_static::lazy_static! {
-    pub static ref SS: syntect::parsing::SyntaxSet = {
+pub static SS: once_cell::sync::Lazy<syntect::parsing::SyntaxSet> =
+    once_cell::sync::Lazy::new(|| {
         let mut builder = syntect::parsing::SyntaxSet::load_defaults_newlines().into_builder();
         for f in SYNTAX_DIR.files() {
-            builder.add(syntect::parsing::syntax_definition::SyntaxDefinition::load_from_str(
-                f.contents_utf8().unwrap(),
-                true,
-                f.path().file_stem().and_then(|x| x.to_str())
-            ).unwrap());
+            builder.add(
+                syntect::parsing::syntax_definition::SyntaxDefinition::load_from_str(
+                    f.contents_utf8().unwrap(),
+                    true,
+                    f.path().file_stem().and_then(|x| x.to_str()),
+                )
+                .unwrap(),
+            );
         }
         builder.build()
-    };
-    pub static ref KNOWN_EXTENSIONS: std::collections::HashSet<String> =
-        SS.syntaxes().iter().flat_map(|v| v.file_extensions.to_vec()).collect();
-    pub static ref TS: syntect::highlighting::ThemeSet =
-        syntect::highlighting::ThemeSet::load_defaults();
-}
+    });
+pub static KNOWN_EXTENSIONS: once_cell::sync::Lazy<std::collections::HashSet<String>> =
+    once_cell::sync::Lazy::new(|| {
+        SS.syntaxes()
+            .iter()
+            .flat_map(|v| v.file_extensions.to_vec())
+            .collect()
+    });
+pub static TS: once_cell::sync::Lazy<syntect::highlighting::ThemeSet> =
+    once_cell::sync::Lazy::new(syntect::highlighting::ThemeSet::load_defaults);
 
 pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::p1::Result<String> {
     let syntax = SS

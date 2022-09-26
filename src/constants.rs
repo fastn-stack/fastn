@@ -97,12 +97,14 @@ pub mod regex {
     /// ending with .ftd, .md, .jpg ... etc
     pub const FILE_EXTENSION: &str = r"[.][a-z\d]+[/]?$";
 
-    lazy_static::lazy_static! {
-        pub static ref ID: regex::Regex = regex::Regex::new(ID_HEADER).unwrap();
-        pub static ref S: regex::Regex = regex::Regex::new(LINK_SYNTAX).unwrap();
-        pub static ref EXT: regex::Regex = regex::Regex::new(FILE_EXTENSION).unwrap();
-        pub static ref URL: regex::Regex = regex::Regex::new(URL_PATTERN).unwrap();
-    }
+    pub static ID: once_cell::sync::Lazy<regex::Regex> =
+        once_cell::sync::Lazy::new(|| regex::Regex::new(ID_HEADER).unwrap());
+    pub static S: once_cell::sync::Lazy<regex::Regex> =
+        once_cell::sync::Lazy::new(|| regex::Regex::new(LINK_SYNTAX).unwrap());
+    pub static EXT: once_cell::sync::Lazy<regex::Regex> =
+        once_cell::sync::Lazy::new(|| regex::Regex::new(FILE_EXTENSION).unwrap());
+    pub static URL: once_cell::sync::Lazy<regex::Regex> =
+        once_cell::sync::Lazy::new(|| regex::Regex::new(URL_PATTERN).unwrap());
 
     /// fetches capture group by group index and returns it as &str
     pub fn capture_group_by_index<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
