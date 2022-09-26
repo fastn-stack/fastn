@@ -216,14 +216,14 @@ async fn sync(
     req: actix_web::web::Json<fpm::apis::sync::SyncRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync(req).await
+    fpm::apis::sync(req.0).await
 }
 
 async fn sync2(
     req: actix_web::web::Json<fpm::apis::sync2::SyncRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync2(req).await
+    fpm::apis::sync2(req.0).await
 }
 
 pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
@@ -233,7 +233,7 @@ pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
 
 pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     let _lock = LOCK.read().await;
-    fpm::apis::view_source(req).await
+    fpm::apis::view_source(fpm::http::Request::from_actix(req)).await
 }
 
 pub async fn edit(
@@ -241,14 +241,14 @@ pub async fn edit(
     req_data: actix_web::web::Json<fpm::apis::edit::EditRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit(fpm::http::Request::from_actix(req), req_data).await
+    fpm::apis::edit(fpm::http::Request::from_actix(req), req_data.0).await
 }
 
 pub async fn revert(
     req: actix_web::web::Json<fpm::apis::edit::RevertRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit::revert(req).await
+    fpm::apis::edit::revert(req.0).await
 }
 
 pub async fn editor_sync() -> actix_web::Result<actix_web::HttpResponse> {

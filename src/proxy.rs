@@ -37,7 +37,7 @@ pub(crate) async fn get_out(
 
     match CLIENT.execute(proxy_request).await {
         Ok(response) => {
-            println!("success response from service");
+            println!("api_ok response from service");
             fpm::http::ResponseBuilder::from_reqwest(response).await
         }
         Err(e) => actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(

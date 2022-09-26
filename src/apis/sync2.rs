@@ -111,14 +111,12 @@ pub struct File {
     pub content: Vec<u8>,
 }
 
-pub async fn sync2(
-    req: actix_web::web::Json<SyncRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
-    dbg!("remote server call", &req.0.package_name);
+pub async fn sync2(req: SyncRequest) -> actix_web::Result<actix_web::HttpResponse> {
+    dbg!("remote server call", &req.package_name);
 
-    match sync_worker(req.0).await {
-        Ok(data) => fpm::apis::success(data),
-        Err(err) => fpm::apis::server_error(err.to_string()),
+    match sync_worker(req).await {
+        Ok(data) => fpm::http::api_ok(data),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 

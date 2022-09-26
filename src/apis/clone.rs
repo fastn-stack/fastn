@@ -9,8 +9,8 @@ pub struct CloneResponse {
 
 pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
     match clone_worker().await {
-        Ok(data) => fpm::apis::success(data),
-        Err(err) => fpm::apis::server_error(err.to_string()),
+        Ok(data) => fpm::http::api_ok(data),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 

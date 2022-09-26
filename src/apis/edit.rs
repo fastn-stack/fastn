@@ -26,11 +26,11 @@ pub struct EditResponse {
 
 pub async fn edit(
     req: fpm::http::Request,
-    req_data: actix_web::web::Json<EditRequest>,
+    req_data: EditRequest,
 ) -> actix_web::Result<actix_web::HttpResponse> {
     let mut config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
-        Err(err) => return fpm::apis::server_error(err.to_string()),
+        Err(err) => return fpm::http::api_error(err.to_string()),
     };
     config.current_document = Some(req_data.path.to_string());
 
@@ -52,9 +52,9 @@ pub async fn edit(
         }
     };
 
-    match edit_worker(config, req_data.0).await {
-        Ok(data) => fpm::apis::success(data),
-        Err(err) => fpm::apis::server_error(err.to_string()),
+    match edit_worker(config, req_data).await {
+        Ok(data) => fpm::http::api_ok(data),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
@@ -181,7 +181,7 @@ pub(crate) async fn edit_worker(
 pub async fn sync() -> actix_web::Result<actix_web::HttpResponse> {
     let config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
-        Err(err) => return fpm::apis::server_error(err.to_string()),
+        Err(err) => return fpm::http::api_error(err.to_string()),
     };
     match fpm::commands::sync::sync(&config, None).await {
         Ok(_) => {
@@ -189,9 +189,9 @@ pub async fn sync() -> actix_web::Result<actix_web::HttpResponse> {
             struct SyncResponse {
                 reload: bool,
             }
-            fpm::apis::success(SyncResponse { reload: true })
+            fpm::http::api_ok(SyncResponse { reload: true })
         }
-        Err(err) => fpm::apis::server_error(err.to_string()),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
@@ -200,22 +200,20 @@ pub struct RevertRequest {
     pub path: String,
 }
 
-pub async fn revert(
-    req: actix_web::web::Json<RevertRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn revert(rev: RevertRequest) -> actix_web::Result<actix_web::HttpResponse> {
     let config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
-        Err(err) => return fpm::apis::server_error(err.to_string()),
+        Err(err) => return fpm::http::api_error(err.to_string()),
     };
 
-    match fpm::commands::revert::revert(&config, req.0.path.as_str()).await {
+    match fpm::commands::revert::revert(&config, rev.path.as_str()).await {
         Ok(_) => {
             #[derive(serde::Serialize)]
             struct RevertResponse {
                 reload: bool,
             }
-            fpm::apis::success(RevertResponse { reload: true })
+            fpm::http::api_ok(RevertResponse { reload: true })
         }
-        Err(err) => fpm::apis::server_error(err.to_string()),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }

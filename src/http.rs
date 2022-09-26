@@ -54,7 +54,6 @@ where
 #[derive(Debug, Clone)]
 pub struct Request {
     pub req: actix_web::HttpRequest,
-    // method, uri, etc
 }
 
 impl Request {
@@ -110,8 +109,6 @@ impl Request {
         ).map_err(fpm::Error::QueryPayloadError)?.0)
     }
 }
-
-// pub(crate) struct Response {}
 
 pub(crate) struct ResponseBuilder {
     // headers: std::collections::HashMap<String, String>,
@@ -270,4 +267,37 @@ pub(crate) async fn http_get_str(url: &str) -> fpm::Result<String> {
         }),
         Err(e) => Err(e),
     }
+}
+
+pub(crate) fn api_ok(data: impl serde::Serialize) -> actix_web::Result<actix_web::HttpResponse> {
+    #[derive(serde::Serialize)]
+    struct SuccessResponse<T: serde::Serialize> {
+        data: T,
+        success: bool,
+    }
+
+    let data = serde_json::to_string(&SuccessResponse {
+        data,
+        success: true,
+    })?;
+
+    Ok(ok_with_content_type(data, "application/json"))
+}
+
+pub(crate) fn api_error<T: Into<String>>(message: T) -> actix_web::Result<actix_web::HttpResponse> {
+    #[derive(serde::Serialize, Debug)]
+    struct ErrorResponse {
+        message: String,
+        success: bool,
+    }
+
+    let resp = ErrorResponse {
+        message: message.into(),
+        success: false,
+    };
+
+    Ok(actix_web::HttpResponse::Ok()
+        .content_type(actix_web::http::header::ContentType::json())
+        .status(actix_web::http::StatusCode::INTERNAL_SERVER_ERROR)
+        .body(serde_json::to_string(&resp)?))
 }

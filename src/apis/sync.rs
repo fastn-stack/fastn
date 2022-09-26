@@ -64,14 +64,12 @@ pub struct SyncRequest {
 /// If no conflict merge it, update file on remote and send back new content as Updated
 /// If conflict occur, Then send back updated version in latest.ftd with conflicted content
 ///
-pub async fn sync(
-    req: actix_web::web::Json<SyncRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
-    dbg!("remote server call", &req.0.package_name);
+pub async fn sync(req: SyncRequest) -> actix_web::Result<actix_web::HttpResponse> {
+    dbg!("remote server call", &req.package_name);
 
-    match sync_worker(req.0).await {
-        Ok(data) => fpm::apis::success(data),
-        Err(err) => fpm::apis::server_error(err.to_string()),
+    match sync_worker(req).await {
+        Ok(data) => fpm::http::api_ok(data),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
@@ -387,7 +385,7 @@ fn get_all_timestamps(path: &str, history: &[String]) -> fpm::Result<Vec<(u128, 
 // #[derive(Debug, std::fmt::Display)]
 // struct ApiResponseError {
 //     message: String,
-//     success: bool,
+//     api_ok: bool,
 // }
 
 // TODO: Fir kabhi

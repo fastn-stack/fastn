@@ -13,9 +13,9 @@ pub async fn create_cr(
                 url: String,
             }
             let url = format!("-/{}/-/about/", cr_number);
-            fpm::apis::success(CreateCRResponse { url })
+            fpm::http::api_ok(CreateCRResponse { url })
         }
-        Err(err) => fpm::apis::server_error(err.to_string()),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
@@ -34,8 +34,8 @@ async fn create_cr_worker(cr_request: CreateCRRequest) -> fpm::Result<usize> {
 
 pub async fn create_cr_page() -> actix_web::Result<actix_web::HttpResponse> {
     match create_cr_page_worker().await {
-        Ok(body) => Ok(actix_web::HttpResponse::Ok().body(body)),
-        Err(err) => fpm::apis::server_error(err.to_string()),
+        Ok(body) => Ok(fpm::http::ok(body)),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
