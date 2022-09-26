@@ -1221,15 +1221,7 @@ impl Config {
 
     pub(crate) async fn can_read(
         &self,
-        req: &actix_web::HttpRequest,
-        document_path: &str,
-    ) -> fpm::Result<bool> {
-        self.can_read_(req, document_path).await
-    }
-
-    async fn can_read_(
-        &self,
-        req: &actix_web::HttpRequest,
+        req: &fpm::http::Request,
         document_path: &str,
     ) -> fpm::Result<bool> {
         use itertools::Itertools;
@@ -1253,7 +1245,7 @@ impl Config {
 
     pub(crate) async fn can_write(
         &self,
-        req: &actix_web::HttpRequest,
+        req: &fpm::http::Request,
         document_path: &str,
     ) -> fpm::Result<bool> {
         use itertools::Itertools;

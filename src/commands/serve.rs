@@ -1,11 +1,7 @@
 static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
     once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
-async fn serve_file(
-    req: &actix_web::HttpRequest,
-    config: &mut fpm::Config,
-    path: &camino::Utf8Path,
-) -> actix_web::HttpResponse {
+async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> actix_web::HttpResponse {
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
@@ -15,6 +11,11 @@ async fn serve_file(
 
     // Auth Stuff
     if !f.is_static() {
+        let req = if let Some(ref r) = config.request {
+            r
+        } else {
+            return fpm::server_error!("request not set");
+        };
         match config.can_read(req, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
@@ -48,21 +49,12 @@ async fn serve_file(
 }
 
 async fn serve_cr_file(
-    req: &actix_web::HttpRequest,
+    req: &fpm::http::Request,
     config: &mut fpm::Config,
     path: &camino::Utf8Path,
     cr_number: usize,
 ) -> actix_web::HttpResponse {
     let _lock = LOCK.read().await;
-    serve_cr_file_(req, config, path, cr_number).await
-}
-
-async fn serve_cr_file_(
-    req: &actix_web::HttpRequest,
-    config: &mut fpm::Config,
-    path: &camino::Utf8Path,
-    cr_number: usize,
-) -> actix_web::HttpResponse {
     let f = match config
         .get_file_and_package_by_cr_id(path.as_str(), cr_number)
         .await
@@ -123,7 +115,7 @@ async fn serve_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
 }
 
 async fn static_file(
-    req: &actix_web::HttpRequest,
+    req: &fpm::http::Request,
     file_path: camino::Utf8PathBuf,
 ) -> actix_web::HttpResponse {
     if !file_path.exists() {
@@ -131,7 +123,7 @@ async fn static_file(
     }
 
     match actix_files::NamedFile::open_async(&file_path).await {
-        Ok(r) => r.into_response(req),
+        Ok(r) => r.into_response(&req.req),
         Err(e) => {
             fpm::not_found!("FPM-Error: path: {:?}, error: {:?}", file_path, e)
         }
@@ -142,23 +134,25 @@ async fn serve(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
 ) -> actix_web::HttpResponse {
+    let req = fpm::http::Request::from_actix(req);
+
     // TODO:
     if false {
         return fpm::proxy::get_out(
             "http://127.0.0.1:8001", // TODO: read it from FPM.ftd
-            fpm::http::Request::from_actix(req),
+            req,
             body,
         )
         .await;
     }
 
     let _lock = LOCK.read().await;
-    let r = format!("{} {}", req.method().as_str(), req.path());
+    let r = format!("{} {}", req.method(), req.path());
     let t = fpm::time(r.as_str());
     println!("{r} started");
 
     // TODO: remove unwrap
-    let path: camino::Utf8PathBuf = req.match_info().query("path").parse().unwrap();
+    let path: camino::Utf8PathBuf = req.url_data("path").parse().unwrap();
 
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
@@ -167,9 +161,10 @@ async fn serve(
         let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_fpm_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        let mut config =
-            fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
-        serve_file(&req, &mut config, &path.join("/")).await
+        let mut config = fpm::time("Config::read()")
+            .it(fpm::Config::read(None, false).await.unwrap())
+            .set_request(req);
+        serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fpm::cr::get_cr_path_from_url(path.as_str()) {
         let mut config =
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
@@ -180,10 +175,10 @@ async fn serve(
         let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false)
             .await
             .unwrap()
-            .set_request(fpm::http::Request::from_actix(req.clone())));
+            .set_request(req));
 
         // TODO: pass &fpm::http::Request
-        serve_file(&req, &mut config, &path).await
+        serve_file(&mut config, &path).await
 
         // if true: serve_file
         // else: proxy_pass
@@ -246,7 +241,7 @@ pub async fn edit(
     req_data: actix_web::web::Json<fpm::apis::edit::EditRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit(req, req_data).await
+    fpm::apis::edit(fpm::http::Request::from_actix(req), req_data).await
 }
 
 pub async fn revert(

@@ -62,6 +62,35 @@ impl Request {
         Request { req }
     }
 
+    pub fn method(&self) -> &str {
+        self.req.method().as_str()
+    }
+
+    pub fn path(&self) -> &str {
+        self.req.path()
+    }
+
+    pub fn url_data(&self, key: &str) -> &str {
+        self.req.match_info().query(key)
+    }
+
+    pub fn cookies(&self) -> std::collections::HashMap<String, String> {
+        self.req
+            .cookies()
+            .unwrap()
+            .iter()
+            .map(|c| (c.name().to_string(), c.value().to_string()))
+            .collect()
+    }
+
+    pub fn cookie(&self, name: &str) -> Option<String> {
+        self.req.cookie(name).map(|v| v.value().to_string())
+    }
+
+    pub fn host(&self) -> String {
+        self.req.connection_info().host().to_string()
+    }
+
     pub fn headers(&self) -> reqwest::header::HeaderMap {
         let mut headers = reqwest::header::HeaderMap::new();
         for (key, value) in self.req.headers() {
