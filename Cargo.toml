@@ -47,7 +47,6 @@ remote = []
 # and create it's own [dependencies.<name>] section, and document it with why are you not
 # using the latest dependency, and what is the plan.
 
-actix-files = "0.6"
 actix-http = "3"
 antidote = "1"
 async-lock = "2"

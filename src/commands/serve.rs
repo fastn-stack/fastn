@@ -114,16 +114,13 @@ async fn serve_fpm_file(config: &fpm::Config) -> fpm::http::Response {
     fpm::http::ok_with_content_type(response, "application/octet-stream")
 }
 
-async fn static_file(
-    req: &fpm::http::Request,
-    file_path: camino::Utf8PathBuf,
-) -> fpm::http::Response {
+async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
     if !file_path.exists() {
-        return fpm::not_found!("");
+        return fpm::not_found!("no such static file ({})", file_path);
     }
 
-    match actix_files::NamedFile::open_async(&file_path).await {
-        Ok(r) => r.into_response(&req.req),
+    match tokio::fs::read(file_path.as_path()).await {
+        Ok(r) => fpm::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
         Err(e) => {
             fpm::not_found!("FPM-Error: path: {:?}, error: {:?}", file_path, e)
         }
@@ -146,7 +143,7 @@ async fn serve(
 
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
-        static_file(&req, favicon).await
+        static_file(favicon).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("FPM.ftd")) {
         let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_fpm_file(&config).await
