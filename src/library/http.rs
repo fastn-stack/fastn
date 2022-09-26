@@ -56,8 +56,8 @@ pub async fn processor<'a>(
         if key == "$processor$" || value == "method" {
             continue;
         }
-        if value.starts_with("$") {
-            if let Some(value) = doc.get_value(line.clone(), value)?.to_string() {
+        if value.starts_with('$') {
+            if let Some(value) = doc.get_value(*line, value)?.to_string() {
                 resolved_headers.insert(key.to_string(), value);
             }
         } else {
@@ -68,7 +68,7 @@ pub async fn processor<'a>(
     // construct query-params from section resolved headers
     let query_parameters = resolved_headers
         .into_iter()
-        .filter(|(k, _)| if k.eq("url") { false } else { true })
+        .filter(|(k, _)| !k.eq("url"))
         .collect::<std::collections::HashMap<_, _>>();
 
     let json = match crate::http::http_get(url.as_str(), query_parameters).await {
