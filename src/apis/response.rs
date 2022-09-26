@@ -10,10 +10,7 @@ pub(crate) fn success(data: impl serde::Serialize) -> actix_web::Result<actix_we
         success: true,
     })?;
 
-    Ok(actix_web::HttpResponse::Ok()
-        .content_type(actix_web::http::header::ContentType::json())
-        .status(actix_web::http::StatusCode::OK)
-        .body(data))
+    Ok(fpm::http::ok_with_content_type(data, "application/json"))
 }
 
 pub(crate) fn _access_h(_data: impl serde::Serialize) -> hyper::Response<hyper::Body> {
@@ -25,6 +22,12 @@ pub(crate) fn _error_h<T: Into<String>>(
     _status: hyper::StatusCode,
 ) -> hyper::Response<hyper::Body> {
     todo!()
+}
+
+pub(crate) fn server_error<T: Into<String>>(
+    message: T,
+) -> actix_web::Result<actix_web::HttpResponse> {
+    error(message, actix_web::http::StatusCode::INTERNAL_SERVER_ERROR)
 }
 
 pub(crate) fn error<T: Into<String>>(

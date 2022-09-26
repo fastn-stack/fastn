@@ -1,3 +1,56 @@
+#[macro_export]
+macro_rules! server_error {
+    ($($t:tt)*) => {{
+        fpm::http::server_error_(format!($($t)*))
+    }};
+}
+
+#[macro_export]
+macro_rules! unauthorised {
+    ($($t:tt)*) => {{
+        fpm::http::unauthorised_(format!($($t)*))
+    }};
+}
+
+#[macro_export]
+macro_rules! not_found {
+    ($($t:tt)*) => {{
+        fpm::http::not_found_(format!($($t)*))
+    }};
+}
+
+pub fn server_error_(msg: String) -> actix_web::HttpResponse {
+    eprintln!("server error: {}", msg);
+    actix_web::HttpResponse::InternalServerError().body(msg)
+}
+
+pub fn unauthorised_(msg: String) -> actix_web::HttpResponse {
+    eprintln!("unauthorised: {}", msg);
+    actix_web::HttpResponse::Unauthorized().body(msg)
+}
+
+pub fn not_found_(msg: String) -> actix_web::HttpResponse {
+    eprintln!("page not found: {}", msg);
+    actix_web::HttpResponse::NotFound().body(msg)
+}
+
+pub fn ok<V>(data: V) -> actix_web::HttpResponse
+where
+    V: actix_http::body::MessageBody + 'static,
+{
+    actix_web::HttpResponse::Ok().body(data)
+}
+
+pub fn ok_with_content_type<V, B>(data: B, content_type: V) -> actix_web::HttpResponse
+where
+    B: actix_http::body::MessageBody + 'static,
+    V: actix_http::header::TryIntoHeaderValue,
+{
+    actix_web::HttpResponse::Ok()
+        .content_type(content_type)
+        .body(data)
+}
+
 #[derive(Debug, Clone)]
 pub struct Request {
     pub req: actix_web::HttpRequest,
@@ -139,12 +192,12 @@ pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
     let c = reqwest::Client::builder()
         .default_headers(headers)
         .build()?;
-    let url_f = format!("{:?}", url);
+
     let res = c.get(url).send().await?;
     if !res.status().eq(&reqwest::StatusCode::OK) {
         return Err(fpm::Error::APIResponseError(format!(
             "url: {}, response_status: {}, response: {:?}",
-            url_f,
+            url,
             res.status(),
             res.text().await
         )));

@@ -1,7 +1,5 @@
-lazy_static! {
-    // read write lock for APIs
-    static ref LOCK: async_lock::RwLock<()> = async_lock::RwLock::new(());
-}
+static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
+    once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
 async fn serve_file(
     req: &actix_web::HttpRequest,
@@ -11,8 +9,7 @@ async fn serve_file(
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
-            eprintln!("FPM-Error: path: {}, {:?}", path, e);
-            return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+            return fpm::server_error!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
 
@@ -21,13 +18,11 @@ async fn serve_file(
         match config.can_read(req, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
-                    return actix_web::HttpResponse::Unauthorized()
-                        .body(format!("You are unauthorized to access: {}", path));
+                    return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(e) => {
-                eprintln!("FPM-Error: can_read error: {}, {:?}", path, e);
-                return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+                return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
             }
         }
     }
@@ -36,20 +31,18 @@ async fn serve_file(
     match f {
         fpm::File::Ftd(main_document) => {
             match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
-                Ok(r) => actix_web::HttpResponse::Ok().body(r),
+                Ok(r) => fpm::http::ok(r),
                 Err(e) => {
-                    eprintln!("FPM-Error: path: {}, {:?}", path, e);
-                    actix_web::HttpResponse::InternalServerError().body(e.to_string())
+                    fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
             }
         }
-        fpm::File::Image(image) => actix_web::HttpResponse::Ok()
-            .content_type(guess_mime_type(image.id.as_str()))
-            .body(image.content),
-        fpm::File::Static(s) => actix_web::HttpResponse::Ok().body(s.content),
+        fpm::File::Image(image) => {
+            fpm::http::ok_with_content_type(image.content, guess_mime_type(image.id.as_str()))
+        }
+        fpm::File::Static(s) => fpm::http::ok(s.content),
         _ => {
-            eprintln!("FPM unknown handler");
-            actix_web::HttpResponse::InternalServerError().body("".as_bytes())
+            fpm::server_error!("unknown handler")
         }
     }
 }
@@ -76,8 +69,7 @@ async fn serve_cr_file_(
     {
         Ok(f) => f,
         Err(e) => {
-            eprintln!("FPM-Error: path: {}, {:?}", path, e);
-            return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+            return fpm::server_error!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
 
@@ -86,13 +78,11 @@ async fn serve_cr_file_(
         match config.can_read(req, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
-                    return actix_web::HttpResponse::Unauthorized()
-                        .body(format!("You are unauthorized to access: {}", path));
+                    return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(e) => {
-                eprintln!("FPM-Error: can_read error: {}, {:?}", path, e);
-                return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+                return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
             }
         }
     }
@@ -101,20 +91,18 @@ async fn serve_cr_file_(
     match f {
         fpm::File::Ftd(main_document) => {
             match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
-                Ok(r) => actix_web::HttpResponse::Ok().body(r),
+                Ok(r) => fpm::http::ok(r),
                 Err(e) => {
-                    eprintln!("FPM-Error: path: {}, {:?}", path, e);
-                    actix_web::HttpResponse::InternalServerError().body(e.to_string())
+                    fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
             }
         }
-        fpm::File::Image(image) => actix_web::HttpResponse::Ok()
-            .content_type(guess_mime_type(image.id.as_str()))
-            .body(image.content),
-        fpm::File::Static(s) => actix_web::HttpResponse::Ok().body(s.content),
+        fpm::File::Image(image) => {
+            fpm::http::ok_with_content_type(image.content, guess_mime_type(image.id.as_str()))
+        }
+        fpm::File::Static(s) => fpm::http::ok(s.content),
         _ => {
-            eprintln!("FPM unknown handler");
-            actix_web::HttpResponse::InternalServerError().body("".as_bytes())
+            fpm::server_error!("FPM unknown handler")
         }
     }
 }
@@ -128,13 +116,10 @@ async fn serve_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
         match tokio::fs::read(config.get_root_for_package(&config.package).join("FPM.ftd")).await {
             Ok(res) => res,
             Err(e) => {
-                eprintln!("FPM-Error: path: FPM.ftd error: {:?}", e);
-                return actix_web::HttpResponse::NotFound().body(e.to_string());
+                return fpm::not_found!("FPM-Error: path: FPM.ftd error: {:?}", e);
             }
         };
-    actix_web::HttpResponse::Ok()
-        .content_type("application/octet-stream")
-        .body(response)
+    fpm::http::ok_with_content_type(response, "application/octet-stream")
 }
 
 async fn static_file(
@@ -142,14 +127,13 @@ async fn static_file(
     file_path: camino::Utf8PathBuf,
 ) -> actix_web::HttpResponse {
     if !file_path.exists() {
-        return actix_web::HttpResponse::NotFound().body("".as_bytes());
+        return fpm::not_found!("");
     }
 
     match actix_files::NamedFile::open_async(&file_path).await {
         Ok(r) => r.into_response(req),
         Err(e) => {
-            eprintln!("FPM-Error: path: {:?}, error: {:?}", file_path, e);
-            actix_web::HttpResponse::NotFound().body(e.to_string())
+            fpm::not_found!("FPM-Error: path: {:?}, error: {:?}", file_path, e)
         }
     }
 }

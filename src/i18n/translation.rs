@@ -1,8 +1,7 @@
 const RES: &str = "translation";
 
-lazy_static! {
-    pub static ref TRANSLATION: fpm::i18n::Base = fpm::i18n::new_base(RES);
-}
+pub static TRANSLATION: once_cell::sync::Lazy<fpm::i18n::Base> =
+    once_cell::sync::Lazy::new(|| fpm::i18n::new_base(RES));
 
 pub fn search(
     lang: &realm_lang::Language,

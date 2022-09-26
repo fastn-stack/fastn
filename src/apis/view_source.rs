@@ -11,8 +11,7 @@ pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpR
     match handle_view_source(path.as_str()).await {
         Ok(body) => actix_web::HttpResponse::Ok().body(body),
         Err(e) => {
-            println!("new_path: {}, Error: {:?}", path, e);
-            actix_web::HttpResponse::InternalServerError().body(e.to_string())
+            fpm::server_error!("new_path: {}, Error: {:?}", path, e)
         }
     }
 }

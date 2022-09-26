@@ -71,10 +71,7 @@ pub async fn sync(
 
     match sync_worker(req.0).await {
         Ok(data) => fpm::apis::success(data),
-        Err(err) => fpm::apis::error(
-            err.to_string(),
-            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-        ),
+        Err(err) => fpm::apis::server_error(err.to_string()),
     }
 }
 

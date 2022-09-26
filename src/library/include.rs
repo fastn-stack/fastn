@@ -130,12 +130,12 @@ impl IncludeDocument {
     }
 }
 
-lazy_static! {
-    static ref ANCHOR_START: regex::Regex =
-        regex::Regex::new(r"ANCHOR:\s*(?P<anchor_name>[\w_-]+)").unwrap();
-    static ref ANCHOR_END: regex::Regex =
-        regex::Regex::new(r"ANCHOR_END:\s*(?P<anchor_name>[\w_-]+)").unwrap();
-}
+static ANCHOR_START: once_cell::sync::Lazy<regex::Regex> = once_cell::sync::Lazy::new(|| {
+    regex::Regex::new(r"ANCHOR:\s*(?P<anchor_name>[\w_-]+)").unwrap()
+});
+static ANCHOR_END: once_cell::sync::Lazy<regex::Regex> = once_cell::sync::Lazy::new(|| {
+    regex::Regex::new(r"ANCHOR_END:\s*(?P<anchor_name>[\w_-]+)").unwrap()
+});
 
 /// Take anchored lines from a string.
 /// Lines containing anchor are ignored.
