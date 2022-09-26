@@ -134,6 +134,8 @@ async fn serve(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
 ) -> actix_web::HttpResponse {
+    let req = fpm::http::Request::from_actix(req);
+
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method(), req.path());
     let t = fpm::time(r.as_str());
@@ -176,12 +178,13 @@ async fn serve(
             if let Some(sitemap) = config.package.sitemap.as_ref() {
                 if !sitemap.path_exists(path.as_str()) {
                     if let Some(endpoint) = config.package.endpoint.as_ref() {
-                        return fpm::proxy::get_out(
-                            endpoint,
-                            fpm::http::Request::from_actix(req.clone()),
-                            body,
-                        )
-                        .await;
+                        let req = if let Some(r) = config.request {
+                            r
+                        } else {
+                            return fpm::server_error!("request not set");
+                        };
+
+                        return fpm::proxy::get_out(endpoint, req, body).await;
                     };
                 }
             }
