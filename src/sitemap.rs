@@ -396,6 +396,8 @@ pub enum ParseError {
         message: String,
         row_content: String,
     },
+    #[error("id: {id} not found while linking in sitemap, doc: {doc_id}")]
+    InvalidID { doc_id: String, id: String },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -422,7 +424,11 @@ pub struct SitemapTemp {
 }
 
 impl SitemapParser {
-    pub fn read_line(&mut self, line: &str) -> Result<(), ParseError> {
+    pub fn read_line(
+        &mut self,
+        line: &str,
+        global_ids: &std::collections::HashMap<String, String>,
+    ) -> Result<(), ParseError> {
         // The row could be one of the 4 things:
 
         // - Heading
@@ -478,7 +484,7 @@ impl SitemapParser {
                 }
                 Some(k) => {
                     let l = format!("{}{}", k, iter.collect::<String>());
-                    self.read_attrs(l.as_str())?;
+                    self.read_attrs(l.as_str(), global_ids)?;
                     return Ok(());
                     // panic!()
                 }
@@ -487,7 +493,7 @@ impl SitemapParser {
                 }
             }
         }
-        self.eval_temp_item()?;
+        self.eval_temp_item(global_ids)?;
 
         // Stop eager checking, Instead of split and evaluate URL/title, first push
         // The complete string, postprocess if url doesn't exist
@@ -513,7 +519,10 @@ impl SitemapParser {
         Ok(())
     }
 
-    fn eval_temp_item(&mut self) -> Result<(), ParseError> {
+    fn eval_temp_item(
+        &mut self,
+        global_ids: &std::collections::HashMap<String, String>,
+    ) -> Result<(), ParseError> {
         if let Some((ref toc_item, depth)) = self.temp_item {
             // Split the line by `:`. title = 0, url = Option<1>
             let resp_item = if toc_item.get_title().is_none() && toc_item.get_id().is_some() {
@@ -522,13 +531,39 @@ impl SitemapParser {
                 let (title, url) = match current_title.as_str().matches(':').count() {
                     1 | 0 => {
                         if let Some((first, second)) = current_title.rsplit_once(':') {
-                            (
-                                Some(first.trim().to_string()),
-                                Some(second.trim().to_string()),
-                            )
+                            // Case 1: first = <Title>: second = <url>
+                            // Case 2: first = <Title>: second = <id> (<url> = link to <id>)
+
+                            match second.trim().is_empty()
+                                || second.trim_end().ends_with(".html")
+                                || second.contains('/')
+                            {
+                                // Treat second as url if it contains '/'
+                                true => (
+                                    Some(first.trim().to_string()),
+                                    Some(second.trim().to_string()),
+                                ),
+                                // otherwise treat second as <id>
+                                false => {
+                                    let link = global_ids.get(second.trim()).ok_or_else(|| {
+                                        ParseError::InvalidID {
+                                            doc_id: self.doc_name.clone(),
+                                            id: second.trim().to_string(),
+                                        }
+                                    })?;
+                                    (Some(first.trim().to_string()), Some(link.to_string()))
+                                }
+                            }
                         } else {
-                            // No matches, i.e. return the current string as title, url as none
-                            (Some(current_title), None)
+                            // Case 1: current_title = <title>, <url> = None
+                            // Case 2: current_title = <id>, <url> = link to <id>
+
+                            // Try finding for link if found assign that link
+                            let possible_link = global_ids.get(current_title.trim());
+                            match possible_link {
+                                Some(link) => (Some(current_title), Some(link.to_string())),
+                                None => (Some(current_title), None),
+                            }
                         }
                     }
                     _ => {
@@ -572,12 +607,15 @@ impl SitemapParser {
         self.temp_item = None;
         Ok(())
     }
-    fn read_attrs(&mut self, line: &str) -> Result<(), ParseError> {
+    fn read_attrs(
+        &mut self,
+        line: &str,
+        global_ids: &std::collections::HashMap<String, String>,
+    ) -> Result<(), ParseError> {
         if line.trim().is_empty() {
             // Empty line found. Process the temp_item
-            self.eval_temp_item()?;
+            self.eval_temp_item(global_ids)?;
         } else {
-            // let id = self.temp_item.unwrap().0.get_id();
             let doc_id = self.doc_name.to_string();
             match &mut self.temp_item {
                 Some((i, _)) => match line.split_once(':') {
@@ -589,24 +627,29 @@ impl SitemapParser {
                             if i.get_title().is_none() {
                                 i.set_title(id);
                             }
-                        }
-                        if k.eq("nav-title") {
+                        } else if k.eq("id") {
+                            // Fetch link corresponding to the id from global_ids map
+                            let link = global_ids.get(v).ok_or_else(|| ParseError::InvalidID {
+                                id: v.to_string(),
+                                doc_id: self.doc_name.clone(),
+                            })?;
+                            i.set_id(Some(link.clone()));
+                            if i.get_title().is_none() {
+                                i.set_title(id);
+                            }
+                        } else if k.eq("nav-title") {
                             i.set_nav_title(Some(v.to_string()));
-                        }
-                        if k.eq("skip") {
+                        } else if k.eq("skip") {
                             i.set_skip(v.parse::<bool>().map_err(|e| {
                                 ParseError::InvalidTOCItem {
                                     doc_id,
                                     message: e.to_string(),
                                     row_content: line.to_string(),
                                 }
-                            })?)
-                        }
-
-                        if k.eq("readers") {
+                            })?);
+                        } else if k.eq("readers") {
                             i.set_readers(v);
-                        }
-                        if k.eq("writers") {
+                        } else if k.eq("writers") {
                             i.set_writers(v);
                         }
                         i.insert_key_value(k, v);
@@ -640,10 +683,10 @@ impl Sitemap {
             doc_name: package.name.to_string(),
         };
         for line in s.split('\n') {
-            parser.read_line(line)?;
+            parser.read_line(line, &config.global_ids)?;
         }
         if parser.temp_item.is_some() {
-            parser.eval_temp_item()?;
+            parser.eval_temp_item(&config.global_ids)?;
         }
         let mut sitemap = Sitemap {
             sections: construct_tree_util(parser.finalize()?),
