@@ -30,12 +30,7 @@ pub async fn edit(
 ) -> actix_web::Result<actix_web::HttpResponse> {
     let mut config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
-        Err(err) => {
-            return fpm::apis::error(
-                err.to_string(),
-                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-            )
-        }
+        Err(err) => return fpm::apis::server_error(err.to_string()),
     };
     config.current_document = Some(req_data.path.to_string());
 

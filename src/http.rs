@@ -66,6 +66,10 @@ impl Request {
         self.req.method().as_str()
     }
 
+    pub fn uri(&self) -> String {
+        self.req.uri().to_string()
+    }
+
     pub fn path(&self) -> &str {
         self.req.path()
     }

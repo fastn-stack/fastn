@@ -208,7 +208,7 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
 
 pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     let _lock = LOCK.write().await;
-    fpm::apis::cache::clear(&req).await
+    fpm::apis::cache::clear(&fpm::http::Request::from_actix(req)).await
 }
 
 // TODO: Move them to routes folder

@@ -30,7 +30,7 @@ pub(crate) fn server_error<T: Into<String>>(
     error(message, actix_web::http::StatusCode::INTERNAL_SERVER_ERROR)
 }
 
-pub(crate) fn error<T: Into<String>>(
+fn error<T: Into<String>>(
     message: T,
     status: actix_web::http::StatusCode,
 ) -> actix_web::Result<actix_web::HttpResponse> {
