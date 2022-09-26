@@ -149,25 +149,16 @@ impl fpm::Package {
             std::io::stdout().flush()?;
             // Download the zip folder
             {
-                let response = if download_url[1..].contains("://")
-                    || download_url.starts_with("//")
-                {
-                    crate::http::http_get(download_url.as_str(), std::collections::HashMap::new())
-                        .await?
-                } else if let Ok(response) = crate::http::http_get(
-                    format!("https://{}", download_url).as_str(),
-                    std::collections::HashMap::new(),
-                )
-                .await
-                {
-                    response
-                } else {
-                    crate::http::http_get(
-                        format!("http://{}", download_url).as_str(),
-                        std::collections::HashMap::new(),
-                    )
-                    .await?
-                };
+                let response =
+                    if download_url[1..].contains("://") || download_url.starts_with("//") {
+                        crate::http::http_get(download_url.as_str()).await?
+                    } else if let Ok(response) =
+                        crate::http::http_get(format!("https://{}", download_url).as_str()).await
+                    {
+                        response
+                    } else {
+                        crate::http::http_get(format!("http://{}", download_url).as_str()).await?
+                    };
                 let mut file = std::fs::File::create(&path)?;
                 // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
                 file.write_all(&response)?;
@@ -400,21 +391,13 @@ impl fpm::Package {
         // Download the zip folder
         {
             let response = if download_url[1..].contains("://") || download_url.starts_with("//") {
-                crate::http::http_get(download_url.as_str(), std::collections::HashMap::new())
-                    .await?
-            } else if let Ok(response) = crate::http::http_get(
-                format!("https://{}", download_url).as_str(),
-                std::collections::HashMap::new(),
-            )
-            .await
+                crate::http::http_get(download_url.as_str()).await?
+            } else if let Ok(response) =
+                crate::http::http_get(format!("https://{}", download_url).as_str()).await
             {
                 response
             } else {
-                crate::http::http_get(
-                    format!("http://{}", download_url).as_str(),
-                    std::collections::HashMap::new(),
-                )
-                .await?
+                crate::http::http_get(format!("http://{}", download_url).as_str()).await?
             };
             let mut file = std::fs::File::create(&path)?;
             // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?

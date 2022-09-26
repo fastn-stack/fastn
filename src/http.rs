@@ -83,9 +83,10 @@ pub(crate) async fn construct_url_and_get_str(url: &str) -> fpm::Result<String> 
 }
 
 pub(crate) async fn construct_url_and_get(url: &str) -> fpm::Result<Vec<u8>> {
-    construct_url_and_return_response(url.to_string(), |f| async move {
-        http_get(f.as_str(), std::collections::HashMap::new()).await
-    })
+    construct_url_and_return_response(
+        url.to_string(),
+        |f| async move { http_get(f.as_str()).await },
+    )
     .await
 }
 
@@ -129,10 +130,7 @@ pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::B
         .await?)
 }
 
-pub(crate) async fn http_get(
-    url: &str,
-    query_params: std::collections::HashMap<String, String>,
-) -> fpm::Result<Vec<u8>> {
+pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert(
         reqwest::header::USER_AGENT,
@@ -142,7 +140,7 @@ pub(crate) async fn http_get(
         .default_headers(headers)
         .build()?;
 
-    let res = c.get(url).query(&query_params).send().await?;
+    let res = c.get(url).send().await?;
     if !res.status().eq(&reqwest::StatusCode::OK) {
         return Err(fpm::Error::APIResponseError(format!(
             "url: {}, response_status: {}, response: {:?}",
@@ -177,7 +175,7 @@ pub async fn http_get_with_type<T: serde::de::DeserializeOwned>(
 
 pub(crate) async fn http_get_str(url: &str) -> fpm::Result<String> {
     let url_f = format!("{:?}", url);
-    match http_get(url, std::collections::HashMap::new()).await {
+    match http_get(url).await {
         Ok(bytes) => String::from_utf8(bytes).map_err(|e| fpm::Error::UsageError {
             message: format!(
                 "Cannot convert the response to string: URL: {:?}, ERROR: {}",

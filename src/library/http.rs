@@ -42,36 +42,23 @@ pub async fn processor<'a>(
         }
     };
 
-    for (_, k, v) in section.header.0.iter() {
-        if k == "$processor$" || k == "url" || k == "method" {
-            continue;
-        }
-        url.query_pairs_mut().append_pair(k, v);
-    }
-
-    // 1 id: $query.id
-    // After resolve headers: id:1234(value of $query.id)
-    let mut resolved_headers = std::collections::HashMap::new();
     for (line, key, value) in section.header.0.iter() {
-        if key == "$processor$" || value == "method" {
+        if key == "$processor$" || key == "url" || key == "method" {
             continue;
         }
+
+        // 1 id: $query.id
+        // After resolve headers: id:1234(value of $query.id)
         if value.starts_with('$') {
             if let Some(value) = doc.get_value(*line, value)?.to_string() {
-                resolved_headers.insert(key.to_string(), value);
+                url.query_pairs_mut().append_pair(key, &value);
             }
         } else {
-            resolved_headers.insert(key.to_string(), value.clone());
+            url.query_pairs_mut().append_pair(key, value);
         }
     }
 
-    // construct query-params from section resolved headers
-    let query_parameters = resolved_headers
-        .into_iter()
-        .filter(|(k, _)| !k.eq("url"))
-        .collect::<std::collections::HashMap<_, _>>();
-
-    let json = match crate::http::http_get(url.as_str(), query_parameters).await {
+    let json = match crate::http::http_get(url.as_str()).await {
         Ok(v) => v,
         Err(e) => {
             return ftd::p2::utils::e2(
