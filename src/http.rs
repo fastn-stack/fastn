@@ -20,17 +20,17 @@ macro_rules! not_found {
 }
 
 pub fn server_error_(msg: String) -> actix_web::HttpResponse {
-    eprintln!("server error: {}", msg);
+    fpm::warning!("server error: {}", msg);
     actix_web::HttpResponse::InternalServerError().body(msg)
 }
 
 pub fn unauthorised_(msg: String) -> actix_web::HttpResponse {
-    eprintln!("unauthorised: {}", msg);
+    fpm::warning!("unauthorised: {}", msg);
     actix_web::HttpResponse::Unauthorized().body(msg)
 }
 
 pub fn not_found_(msg: String) -> actix_web::HttpResponse {
-    eprintln!("page not found: {}", msg);
+    fpm::warning!("page not found: {}", msg);
     actix_web::HttpResponse::NotFound().body(msg)
 }
 

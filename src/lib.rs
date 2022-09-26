@@ -16,6 +16,7 @@ mod doc;
 mod file;
 mod font;
 mod history;
+#[macro_use]
 mod http;
 mod i18n;
 pub mod library;
