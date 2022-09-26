@@ -274,7 +274,7 @@ pub async fn create_cr_page() -> fpm::Result<fpm::http::Response> {
     fpm::apis::cr::create_cr_page().await
 }
 
-pub async fn fpm_serve(
+pub async fn listen(
     bind_address: &str,
     port: Option<u16>,
     package_download_base_url: Option<String>,
@@ -344,7 +344,7 @@ You can try without providing port, it will automatically pick unused port."#,
             if cfg!(feature = "remote") {
                 let json_cfg = actix_web::web::JsonConfig::default()
                     .content_type(|mime| mime == mime_guess::mime::APPLICATION_JSON)
-                    .limit(9862416400);
+                    .limit(9862416400); // TODO: explain this number
 
                 actix_web::App::new()
                     .app_data(json_cfg)
@@ -379,10 +379,6 @@ You can try without providing port, it will automatically pick unused port."#,
         .run()
         .await
 }
-
-// fn authentication(req: &actix_web::HttpRequest) -> bool {
-//     false
-// }
 
 // cargo install --features controller --path=.
 // FPM_CONTROLLER=http://127.0.0.1:8000 FPM_INSTANCE_ID=12345 fpm serve 8001
