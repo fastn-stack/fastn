@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq, Clone)]
 pub struct FileHistory {
     pub filename: String,
@@ -113,6 +111,8 @@ impl fpm::Config {
     pub async fn get_non_deleted_latest_file_paths(
         &self,
     ) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
+        use itertools::Itertools;
+
         Ok(self
             .get_remote_manifest(false)
             .await?
@@ -200,6 +200,8 @@ pub(crate) async fn insert_into_history(
     file_list: &std::collections::BTreeMap<String, fpm::history::FileEditTemp>,
     history: &mut Vec<fpm::history::FileHistory>,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let mut file_history: std::collections::BTreeMap<String, fpm::history::FileHistory> = history
         .iter_mut()
         .map(|v| (v.filename.to_string(), v.clone()))
@@ -214,6 +216,8 @@ pub(crate) async fn insert_into_history_(
     file_list: &std::collections::BTreeMap<String, fpm::history::FileEditTemp>,
     file_history: &mut std::collections::BTreeMap<String, fpm::history::FileHistory>,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let timestamp = fpm::timestamp_nanosecond();
     for (file, file_op) in file_list {
         let version =

@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 /// `Sitemap` stores the sitemap for the fpm package defines in the FPM.ftd
 ///
 /// ```ftd
@@ -1062,6 +1060,8 @@ impl Sitemap {
     }
 
     pub(crate) fn get_sitemap_by_id(&self, id: &str) -> Option<SiteMapCompat> {
+        use itertools::Itertools;
+
         let mut sections = vec![];
         let mut subsections = vec![];
         let mut toc = vec![];
@@ -1443,6 +1443,8 @@ impl Sitemap {
         doc_path: &str,
         groups: &'a std::collections::BTreeMap<String, fpm::user_group::UserGroup>,
     ) -> Vec<&'a fpm::user_group::UserGroup> {
+        use itertools::Itertools;
+
         for section in self.sections.iter() {
             let readers = find_section(section, doc_path);
             if readers.is_empty() {
@@ -1524,6 +1526,8 @@ impl Sitemap {
         doc_path: &str,
         groups: &'a std::collections::BTreeMap<String, fpm::user_group::UserGroup>,
     ) -> Vec<&'a fpm::user_group::UserGroup> {
+        use itertools::Itertools;
+
         for section in self.sections.iter() {
             let writers = find_section(section, doc_path);
             if writers.is_empty() {

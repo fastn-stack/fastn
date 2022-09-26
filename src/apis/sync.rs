@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq)]
 pub enum SyncStatus {
     Conflict,
@@ -74,6 +72,8 @@ pub async fn sync(req: SyncRequest) -> actix_web::Result<actix_web::HttpResponse
 }
 
 pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
+    use itertools::Itertools;
+
     // TODO: Need to call at once only
     let config = fpm::Config::read(None, false).await?;
     let mut snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
@@ -330,6 +330,8 @@ async fn clone_history_files(
     server_snapshot: &std::collections::BTreeMap<String, u128>,
     client_snapshot: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<Vec<File>> {
+    use itertools::Itertools;
+
     let diff = snapshot_diff(server_snapshot, client_snapshot);
 
     let history = ignore::WalkBuilder::new(config.history_dir())

@@ -1,6 +1,6 @@
-use itertools::Itertools;
-
 pub async fn edit(config: &fpm::Config, file: &str, cr: &str) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let cr = cr.parse::<usize>()?;
 
     if !fpm::cr::is_open_cr_exists(config, cr).await? {

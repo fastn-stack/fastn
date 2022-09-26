@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 pub async fn rm(config: &fpm::Config, file: &str, cr: Option<&str>) -> fpm::Result<()> {
     if let Some(cr) = cr {
         let cr = cr.parse::<usize>()?;
@@ -10,6 +8,8 @@ pub async fn rm(config: &fpm::Config, file: &str, cr: Option<&str>) -> fpm::Resu
 }
 
 async fn simple_rm(config: &fpm::Config, file: &str) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let mut workspace = config.get_workspace_map().await?;
 
     if !config
@@ -43,6 +43,8 @@ async fn simple_rm(config: &fpm::Config, file: &str) -> fpm::Result<()> {
 }
 
 async fn cr_rm(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let remote_manifest = config.get_remote_manifest(false).await?;
     let file_edit = if let Some(file_edit) = remote_manifest.get(file) {
         file_edit

@@ -1,6 +1,3 @@
-use itertools::Itertools;
-use sha2::Digest;
-
 pub async fn merge(
     config: &fpm::Config,
     src: Option<&str>,
@@ -38,6 +35,9 @@ async fn merge_main_into_cr(
     dest: usize,
     file: Option<&str>,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+    use sha2::Digest;
+
     let remote_manifest: std::collections::BTreeMap<String, fpm::history::FileEdit> = config
         .get_remote_manifest(true)
         .await?
@@ -329,6 +329,9 @@ async fn merge_cr_into_main(
     src: usize,
     file: Option<&str>,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+    use sha2::Digest;
+
     //TODO: check if cr is closed
     let remote_manifest: std::collections::BTreeMap<String, fpm::history::FileEdit> = config
         .get_remote_manifest(true)

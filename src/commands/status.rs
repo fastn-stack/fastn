@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
     let workspaces = fpm::snapshot::get_workspace(config).await?;
@@ -60,6 +58,8 @@ async fn all_status(
     snapshots: &std::collections::BTreeMap<String, u128>,
     workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let mut file_status = std::collections::BTreeMap::new();
     let mut track_status = std::collections::BTreeMap::new();
     for doc in config.get_files(&config.package).await? {

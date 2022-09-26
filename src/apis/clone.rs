@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug)]
 pub struct CloneResponse {
     pub package_name: String,
@@ -15,6 +13,8 @@ pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
 }
 
 async fn clone_worker() -> fpm::Result<CloneResponse> {
+    use itertools::Itertools;
+
     let config = fpm::Config::read(None, false).await?;
     let all_files = config
         .get_all_file_path(&config.package, Default::default())?

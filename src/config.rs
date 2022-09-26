@@ -1,7 +1,5 @@
 // Document: https://fpm.dev/crate/config/
 // Document: https://fpm.dev/crate/package/
-use std::convert::TryInto;
-use std::iter::FromIterator;
 
 #[derive(Debug, Clone)]
 pub struct Config {

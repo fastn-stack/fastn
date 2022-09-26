@@ -1,5 +1,3 @@
-use std::convert::TryInto;
-
 pub async fn clone(source: &str) -> fpm::Result<()> {
     let clone_response = call_clone_api(source).await?;
     let package_name = clone_response.package_name;
