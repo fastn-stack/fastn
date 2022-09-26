@@ -1,6 +1,50 @@
 #[derive(Default)]
 pub struct HostExports {}
 
+impl fpm_utils::backend_host_export::host::Host for HostExports {
+    fn http(
+        &mut self,
+        request: fpm_utils::backend_host_export::host::Httprequest<'_>,
+    ) -> fpm_utils::backend_host_export::host::Httpresponse {
+        let request_client = reqwest::blocking::Client::new();
+
+        let mut headers = reqwest::header::HeaderMap::new();
+        // request
+        //     .headers
+        //     .clone()
+        //     .into_iter()
+        //     .map(|(header_key, header_val)| {
+        //         headers.insert(
+        //             header_key,
+        //             reqwest::header::HeaderValue::from_str(header_val).unwrap(),
+        //         );
+        //     });
+        headers.insert(
+            "Content-Type",
+            reqwest::header::HeaderValue::from_str("application/json").unwrap(),
+        );
+        let resp = match request.method {
+            "GET" => request_client
+                .get(request.path)
+                .send()
+                .unwrap()
+                .text()
+                .unwrap(),
+            "POST" => request_client
+                .post(request.path)
+                .body(dbg!(request.payload.to_string()))
+                .headers(headers)
+                .send()
+                .unwrap()
+                .text()
+                .unwrap(),
+            _ => panic!("Not implemented"),
+        };
+
+        fpm_utils::backend_host_export::host::Httpresponse { data: dbg!(resp) }
+    }
+}
+
 pub struct Context<I, E> {
     pub imports: I,
     pub exports: E,
@@ -40,6 +84,9 @@ pub async fn handle_wasm(
                 exports: fpm_utils::backend_host_import::guest_backend::GuestBackendData {},
             },
         );
+
+        fpm_utils::backend_host_export::host::add_to_linker(&mut linker, |cx| &mut cx.imports)
+            .unwrap();
 
         let (import, _i) =
             fpm_utils::backend_host_import::guest_backend::GuestBackend::instantiate(

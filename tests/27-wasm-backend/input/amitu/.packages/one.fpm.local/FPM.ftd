@@ -2,3 +2,7 @@
 
 -- fpm.package: one.fpm.local
 backend: true
+
+-- fpm.sitemap:
+
+# Home: /
