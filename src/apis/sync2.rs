@@ -109,7 +109,7 @@ pub struct File {
     pub content: Vec<u8>,
 }
 
-pub async fn sync2(req: SyncRequest) -> fpm::Result<actix_web::HttpResponse> {
+pub async fn sync2(req: SyncRequest) -> fpm::Result<fpm::http::Response> {
     dbg!("remote server call", &req.package_name);
 
     match sync_worker(req).await {

@@ -27,7 +27,7 @@ pub struct EditResponse {
 pub async fn edit(
     req: fpm::http::Request,
     req_data: EditRequest,
-) -> fpm::Result<actix_web::HttpResponse> {
+) -> fpm::Result<fpm::http::Response> {
     let mut config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
         Err(err) => return fpm::http::api_error(err.to_string()),
@@ -178,7 +178,7 @@ pub(crate) async fn edit_worker(
     })
 }
 
-pub async fn sync() -> fpm::Result<actix_web::HttpResponse> {
+pub async fn sync() -> fpm::Result<fpm::http::Response> {
     let config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
         Err(err) => return fpm::http::api_error(err.to_string()),
@@ -200,7 +200,7 @@ pub struct RevertRequest {
     pub path: String,
 }
 
-pub async fn revert(rev: RevertRequest) -> fpm::Result<actix_web::HttpResponse> {
+pub async fn revert(rev: RevertRequest) -> fpm::Result<fpm::http::Response> {
     let config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
         Err(err) => return fpm::http::api_error(err.to_string()),

@@ -1,7 +1,7 @@
 static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
     once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
-async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> actix_web::HttpResponse {
+async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::http::Response {
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
@@ -53,7 +53,7 @@ async fn serve_cr_file(
     config: &mut fpm::Config,
     path: &camino::Utf8Path,
     cr_number: usize,
-) -> actix_web::HttpResponse {
+) -> fpm::http::Response {
     let _lock = LOCK.read().await;
     let f = match config
         .get_file_and_package_by_cr_id(path.as_str(), cr_number)
@@ -103,7 +103,7 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
     mime_guess::from_path(path).first_or_octet_stream()
 }
 
-async fn serve_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
+async fn serve_fpm_file(config: &fpm::Config) -> fpm::http::Response {
     let response =
         match tokio::fs::read(config.get_root_for_package(&config.package).join("FPM.ftd")).await {
             Ok(res) => res,
@@ -117,7 +117,7 @@ async fn serve_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
 async fn static_file(
     req: &fpm::http::Request,
     file_path: camino::Utf8PathBuf,
-) -> actix_web::HttpResponse {
+) -> fpm::http::Response {
     if !file_path.exists() {
         return fpm::not_found!("");
     }
@@ -133,7 +133,7 @@ async fn static_file(
 async fn serve(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
-) -> actix_web::HttpResponse {
+) -> fpm::Result<fpm::http::Response> {
     let req = fpm::http::Request::from_actix(req);
 
     let _lock = LOCK.read().await;
@@ -181,10 +181,10 @@ async fn serve(
                         let req = if let Some(r) = config.request {
                             r
                         } else {
-                            return fpm::server_error!("request not set");
+                            return Ok(fpm::server_error!("request not set"));
                         };
 
-                        return fpm::proxy::get_out(endpoint, req, body).await;
+                        return fpm::proxy::get_out(endpoint, req, &body).await;
                     };
                 }
             }
@@ -196,7 +196,7 @@ async fn serve(
         // if true: serve_file
         // else: proxy_pass
     };
-    t.it(response)
+    t.it(Ok(response))
 }
 
 pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
@@ -215,7 +215,7 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
     Ok(())
 }
 
-pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub async fn clear_cache(req: actix_web::HttpRequest) -> fpm::http::Response {
     let _lock = LOCK.write().await;
     fpm::apis::cache::clear(&fpm::http::Request::from_actix(req)).await
 }
@@ -223,24 +223,24 @@ pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse
 // TODO: Move them to routes folder
 async fn sync(
     req: actix_web::web::Json<fpm::apis::sync::SyncRequest>,
-) -> fpm::Result<actix_web::HttpResponse> {
+) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
     fpm::apis::sync(req.0).await
 }
 
 async fn sync2(
     req: actix_web::web::Json<fpm::apis::sync2::SyncRequest>,
-) -> fpm::Result<actix_web::HttpResponse> {
+) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
     fpm::apis::sync2(req.0).await
 }
 
-pub async fn clone() -> fpm::Result<actix_web::HttpResponse> {
+pub async fn clone() -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
     fpm::apis::clone().await
 }
 
-pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub(crate) async fn view_source(req: actix_web::HttpRequest) -> fpm::http::Response {
     let _lock = LOCK.read().await;
     fpm::apis::view_source(fpm::http::Request::from_actix(req)).await
 }
@@ -248,31 +248,31 @@ pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpR
 pub async fn edit(
     req: actix_web::HttpRequest,
     req_data: actix_web::web::Json<fpm::apis::edit::EditRequest>,
-) -> fpm::Result<actix_web::HttpResponse> {
+) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
     fpm::apis::edit(fpm::http::Request::from_actix(req), req_data.0).await
 }
 
 pub async fn revert(
     req: actix_web::web::Json<fpm::apis::edit::RevertRequest>,
-) -> fpm::Result<actix_web::HttpResponse> {
+) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
     fpm::apis::edit::revert(req.0).await
 }
 
-pub async fn editor_sync() -> fpm::Result<actix_web::HttpResponse> {
+pub async fn editor_sync() -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
     fpm::apis::edit::sync().await
 }
 
 pub async fn create_cr(
     req: actix_web::web::Json<fpm::apis::cr::CreateCRRequest>,
-) -> fpm::Result<actix_web::HttpResponse> {
+) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::cr::create_cr(req).await
+    fpm::apis::cr::create_cr(req.0).await
 }
 
-pub async fn create_cr_page() -> fpm::Result<actix_web::HttpResponse> {
+pub async fn create_cr_page() -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
     fpm::apis::cr::create_cr_page().await
 }

@@ -1,4 +1,4 @@
-pub(crate) async fn view_source(req: fpm::http::Request) -> actix_web::HttpResponse {
+pub(crate) async fn view_source(req: fpm::http::Request) -> fpm::http::Response {
     // TODO: Need to remove unwrap
     let path = {
         let mut path: camino::Utf8PathBuf = req.url_data("path").parse().unwrap();

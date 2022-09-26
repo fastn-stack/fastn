@@ -3,10 +3,8 @@ pub struct CreateCRRequest {
     pub title: Option<String>,
 }
 
-pub async fn create_cr(
-    req: actix_web::web::Json<CreateCRRequest>,
-) -> fpm::Result<actix_web::HttpResponse> {
-    match create_cr_worker(req.0).await {
+pub async fn create_cr(req: CreateCRRequest) -> fpm::Result<fpm::http::Response> {
+    match create_cr_worker(req).await {
         Ok(cr_number) => {
             #[derive(serde::Serialize)]
             struct CreateCRResponse {
@@ -32,7 +30,7 @@ async fn create_cr_worker(cr_request: CreateCRRequest) -> fpm::Result<usize> {
     Ok(cr_number as usize)
 }
 
-pub async fn create_cr_page() -> fpm::Result<actix_web::HttpResponse> {
+pub async fn create_cr_page() -> fpm::Result<fpm::http::Response> {
     match create_cr_page_worker().await {
         Ok(body) => Ok(fpm::http::ok(body)),
         Err(err) => fpm::http::api_error(err.to_string()),

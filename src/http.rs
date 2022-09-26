@@ -19,31 +19,33 @@ macro_rules! not_found {
     }};
 }
 
-pub fn server_error_(msg: String) -> actix_web::HttpResponse {
+pub fn server_error_(msg: String) -> fpm::http::Response {
     fpm::warning!("server error: {}", msg);
     actix_web::HttpResponse::InternalServerError().body(msg)
 }
 
-pub fn unauthorised_(msg: String) -> actix_web::HttpResponse {
+pub fn unauthorised_(msg: String) -> fpm::http::Response {
     fpm::warning!("unauthorised: {}", msg);
     actix_web::HttpResponse::Unauthorized().body(msg)
 }
 
-pub fn not_found_(msg: String) -> actix_web::HttpResponse {
+pub fn not_found_(msg: String) -> fpm::http::Response {
     fpm::warning!("page not found: {}", msg);
     actix_web::HttpResponse::NotFound().body(msg)
 }
 
 impl actix_web::ResponseError for fpm::Error {}
 
-pub fn ok<V>(data: V) -> actix_web::HttpResponse
+pub type Response = actix_web::HttpResponse;
+
+pub fn ok<V>(data: V) -> fpm::http::Response
 where
     V: actix_http::body::MessageBody + 'static,
 {
     actix_web::HttpResponse::Ok().body(data)
 }
 
-pub fn ok_with_content_type<V, B>(data: B, content_type: V) -> actix_web::HttpResponse
+pub fn ok_with_content_type<V, B>(data: B, content_type: V) -> fpm::http::Response
 where
     B: actix_http::body::MessageBody + 'static,
     V: actix_http::header::TryIntoHeaderValue,
@@ -124,7 +126,7 @@ impl ResponseBuilder {
     // .build
     // response from string, json, bytes etc
 
-    pub async fn from_reqwest(response: reqwest::Response) -> actix_web::HttpResponse {
+    pub async fn from_reqwest(response: reqwest::Response) -> fpm::http::Response {
         let status = response.status();
 
         let mut response_builder = actix_web::HttpResponse::build(status);
@@ -271,7 +273,7 @@ pub(crate) async fn http_get_str(url: &str) -> fpm::Result<String> {
     }
 }
 
-pub(crate) fn api_ok(data: impl serde::Serialize) -> fpm::Result<actix_web::HttpResponse> {
+pub(crate) fn api_ok(data: impl serde::Serialize) -> fpm::Result<fpm::http::Response> {
     #[derive(serde::Serialize)]
     struct SuccessResponse<T: serde::Serialize> {
         data: T,
@@ -286,7 +288,7 @@ pub(crate) fn api_ok(data: impl serde::Serialize) -> fpm::Result<actix_web::Http
     Ok(ok_with_content_type(data, "application/json"))
 }
 
-pub(crate) fn api_error<T: Into<String>>(message: T) -> fpm::Result<actix_web::HttpResponse> {
+pub(crate) fn api_error<T: Into<String>>(message: T) -> fpm::Result<fpm::http::Response> {
     #[derive(serde::Serialize, Debug)]
     struct ErrorResponse {
         message: String,

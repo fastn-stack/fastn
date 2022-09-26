@@ -18,8 +18,8 @@ static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
 pub(crate) async fn get_out(
     host: &str,
     req: fpm::http::Request,
-    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only
-) -> actix_web::HttpResponse {
+    body: &[u8], // TODO: Not liking it, It should be fetched from request only
+) -> fpm::Result<fpm::http::Response> {
     let headers = req.headers();
     // TODO: It should be part of fpm::Request::uri()
     let path = &req.req.uri().to_string()[1..];
@@ -28,8 +28,7 @@ pub(crate) async fn get_out(
 
     let mut proxy_request = reqwest::Request::new(
         req.req.method().clone(),
-        reqwest::Url::parse(format!("{}/{}?{}", host, path, req.req.query_string()).as_str())
-            .unwrap(),
+        reqwest::Url::parse(format!("{}/{}?{}", host, path, req.req.query_string()).as_str())?,
     );
 
     *proxy_request.headers_mut() = headers;
@@ -55,13 +54,5 @@ pub(crate) async fn get_out(
 
     *proxy_request.body_mut() = Some(body.to_vec().into());
 
-    match CLIENT.execute(proxy_request).await {
-        Ok(response) => {
-            println!("api_ok response from service");
-            fpm::http::ResponseBuilder::from_reqwest(response).await
-        }
-        Err(e) => actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
-            fpm::Error::HttpError(e),
-        )),
-    }
+    Ok(fpm::http::ResponseBuilder::from_reqwest(CLIENT.execute(proxy_request).await?).await)
 }

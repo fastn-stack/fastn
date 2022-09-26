@@ -5,7 +5,7 @@ pub struct CloneResponse {
     pub reserved_crs: Vec<i32>,
 }
 
-pub async fn clone() -> fpm::Result<actix_web::HttpResponse> {
+pub async fn clone() -> fpm::Result<fpm::http::Response> {
     match clone_worker().await {
         Ok(data) => fpm::http::api_ok(data),
         Err(err) => fpm::http::api_error(err.to_string()),
