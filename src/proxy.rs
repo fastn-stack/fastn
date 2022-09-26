@@ -14,7 +14,7 @@ fn client_builder() -> reqwest::Client {
 static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
     once_cell::sync::Lazy::new(|| std::sync::Arc::new(client_builder()));
 
-// This method will connect client request to out of the world
+// This method will connect client request to the out of the world
 pub(crate) async fn get_out(
     host: &str,
     req: fpm::http::Request,
@@ -33,6 +33,26 @@ pub(crate) async fn get_out(
     );
 
     *proxy_request.headers_mut() = headers;
+
+    // TODO: Some extra headers, possibly Authentication header
+    // Authentication header can come from system environment variable
+    // env file path set in FPM.ftd file
+    // We can get the data from request parameter
+    // Flow will be
+    // 1. Add Movie ftd page
+    // 2. fpm will forward request to microservice and that service will redirect to /movie/?id=5
+    // fpm will send back this response to browser
+    // browser will request now /movie/?id=5
+    // on this movie.ftd page we will call a processor: `request-data` which will give the
+    // `id` from the request query parameter. Than, we will use processor: `http` to call http api
+    // `/api/movie/?id=<id>` of movie-db service, this will happen while fpm is converting ftd code
+    // to html, so all this happening on server side. So we can say server side rendering.
+
+    proxy_request.headers_mut().insert(
+        reqwest::header::USER_AGENT,
+        reqwest::header::HeaderValue::from_static("fpm"),
+    );
+
     *proxy_request.body_mut() = Some(body.to_vec().into());
 
     match CLIENT.execute(proxy_request).await {

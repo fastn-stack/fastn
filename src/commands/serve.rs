@@ -136,16 +136,6 @@ async fn serve(
 ) -> actix_web::HttpResponse {
     let req = fpm::http::Request::from_actix(req);
 
-    // TODO:
-    if false {
-        return fpm::proxy::get_out(
-            "http://127.0.0.1:8001", // TODO: read it from FPM.ftd
-            req,
-            body,
-        )
-        .await;
-    }
-
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method(), req.path());
     let t = fpm::time(r.as_str());
@@ -177,16 +167,35 @@ async fn serve(
             .unwrap()
             .set_request(req));
 
+        // If path is not present in sitemap then pass it to proxy
+        // TODO: Need to handle other package URL as well, and that will start from `-`
+        // and all the static files starts with `-`
+        // So task is how to handle proxy urls which are starting with `-/<package-name>/<proxy-path>`
+        // In that case need to check whether that url is present in sitemap or not and than proxy
+        // pass the url if the file is not static
+        // So final check would be file is not static and path is not present in the package's sitemap
+        if !path.starts_with("-/") {
+            if let Some(sitemap) = config.package.sitemap.as_ref() {
+                if !sitemap.path_exists(path.as_str()) {
+                    if let Some(endpoint) = config.package.endpoint.as_ref() {
+                        let req = if let Some(r) = config.request {
+                            r
+                        } else {
+                            return fpm::server_error!("request not set");
+                        };
+
+                        return fpm::proxy::get_out(endpoint, req, body).await;
+                    };
+                }
+            }
+        }
         // TODO: pass &fpm::http::Request
+
         serve_file(&mut config, &path).await
 
         // if true: serve_file
         // else: proxy_pass
     };
-
-    // if 404 than: pass proxy
-    // traces the fpm config and than, if not present than proxy pass
-
     t.it(response)
 }
 

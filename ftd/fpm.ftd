@@ -10,6 +10,7 @@ optional string translation-of:
 string list translation:
 optional string canonical-url:
 boolean inherit-auto-imports-from-original: true
+optional string endpoint:
 
 
 
@@ -18,6 +19,7 @@ caption name:
 optional string version:
 optional body notes:
 string list implements:
+optional string endpoint:
 
 
 -- dependency-data list dependency:

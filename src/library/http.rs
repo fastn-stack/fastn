@@ -58,7 +58,9 @@ pub async fn processor<'a>(
         }
     }
 
-    let json = match crate::http::http_get(url.as_str()).await {
+    println!("calling `http` processor with url: {}", &url);
+
+    let response = match crate::http::http_get(url.as_str()).await {
         Ok(v) => v,
         Err(e) => {
             return ftd::p2::utils::e2(
@@ -68,7 +70,16 @@ pub async fn processor<'a>(
             )
         }
     };
-    doc.from_json(&json, section)
+
+    let response_string = String::from_utf8(response).map_err(|e| ftd::p1::Error::ParseError {
+        message: format!("`http` processor API response error: {}", e),
+        doc_id: doc.name.to_string(),
+        line_number: section.line_number,
+    })?;
+    let response_json: serde_json::Value =
+        serde_json::from_str(&response_string).map_err(|e| ftd::p1::Error::Serde { source: e })?;
+
+    doc.from_json(&response_json, section)
 }
 
 // Need to pass the request object also

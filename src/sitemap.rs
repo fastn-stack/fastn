@@ -129,6 +129,18 @@ pub struct Section {
 }
 
 impl Section {
+    pub fn path_exists(&self, path: &str) -> bool {
+        if fpm::utils::ids_matches(self.id.as_str(), path) {
+            return true;
+        }
+
+        for subsection in self.subsections.iter() {
+            if subsection.path_exists(path) {
+                return true;
+            }
+        }
+        false
+    }
     /// returns the file id portion of the url only in case
     /// any component id is referred in the url itself
     pub fn get_file_id(&self) -> String {
@@ -176,6 +188,23 @@ impl Default for Subsection {
 }
 
 impl Subsection {
+    /// path: /foo/demo/
+    /// path: /
+    fn path_exists(&self, path: &str) -> bool {
+        if let Some(id) = self.id.as_ref() {
+            if fpm::utils::ids_matches(path, id.as_str()) {
+                return true;
+            }
+        }
+
+        for toc in self.toc.iter() {
+            if toc.path_exists(path) {
+                return true;
+            }
+        }
+
+        false
+    }
     /// returns the file id portion of the url only in case
     /// any component id is referred in the url itself
     pub fn get_file_id(&self) -> Option<String> {
@@ -201,6 +230,22 @@ pub struct TocItem {
 }
 
 impl TocItem {
+    /// path: /foo/demo/
+    /// path: /
+    pub fn path_exists(&self, path: &str) -> bool {
+        if fpm::utils::ids_matches(self.id.as_str(), path) {
+            return true;
+        }
+
+        for child in self.children.iter() {
+            if child.path_exists(path) {
+                return true;
+            }
+        }
+
+        false
+    }
+
     /// returns the file id portion of the url only in case
     /// any component id is referred in the url itself
     pub fn get_file_id(&self) -> String {
@@ -1552,6 +1597,18 @@ impl Sitemap {
             }
             vec![]
         }
+    }
+
+    /// path: /foo/demo/
+    /// path: /
+    pub fn path_exists(&self, path: &str) -> bool {
+        for section in self.sections.iter() {
+            if section.path_exists(path) {
+                return true;
+            }
+        }
+
+        false
     }
 }
 
