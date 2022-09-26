@@ -48,9 +48,9 @@ remote = []
 # using the latest dependency, and what is the plan.
 
 actix-files = "0.6"
-actix-web = "4.2.1"
 actix-http = "3"
 antidote = "1"
+async-lock = "2"
 async-recursion = "1"
 camino = "1"
 clap = "3"
@@ -117,6 +117,8 @@ features = [
     "json",
 ]
 
+[dependencies.actix-web]
+version = "4.2.1"
 
 [dependencies.tokio]
 version = "1"
@@ -150,9 +152,6 @@ features = [
     # binaries, one with bundled, one without, but it is not worth the tradeoff right now.
     "bundled",
 ]
-
-[dependencies.async-lock]
-version = "2.5.0"
 
 [dev-dependencies]
 indoc = "1"
