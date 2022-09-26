@@ -19,10 +19,6 @@ macro_rules! not_found {
     }};
 }
 
-pub(crate) use not_found;
-pub(crate) use server_error;
-pub(crate) use unauthorised;
-
 pub fn server_error_(msg: String) -> actix_web::HttpResponse {
     eprintln!("server error: {}", msg);
     actix_web::HttpResponse::InternalServerError().body(msg)

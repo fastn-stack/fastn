@@ -9,7 +9,7 @@ async fn serve_file(
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
-            return fpm::http::server_error!("FPM-Error: path: {}, {:?}", path, e);
+            return fpm::server_error!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
 
@@ -18,11 +18,11 @@ async fn serve_file(
         match config.can_read(req, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
-                    return fpm::http::unauthorised!("You are unauthorized to access: {}", path);
+                    return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(e) => {
-                return fpm::http::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
+                return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
             }
         }
     }
@@ -33,7 +33,7 @@ async fn serve_file(
             match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
                 Ok(r) => fpm::http::ok(r),
                 Err(e) => {
-                    fpm::http::server_error!("FPM-Error: path: {}, {:?}", path, e)
+                    fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
             }
         }
@@ -42,7 +42,7 @@ async fn serve_file(
         }
         fpm::File::Static(s) => fpm::http::ok(s.content),
         _ => {
-            fpm::http::server_error!("unknown handler")
+            fpm::server_error!("unknown handler")
         }
     }
 }
@@ -69,7 +69,7 @@ async fn serve_cr_file_(
     {
         Ok(f) => f,
         Err(e) => {
-            return fpm::http::server_error!("FPM-Error: path: {}, {:?}", path, e);
+            return fpm::server_error!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
 
@@ -78,11 +78,11 @@ async fn serve_cr_file_(
         match config.can_read(req, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
-                    return fpm::http::unauthorised!("You are unauthorized to access: {}", path);
+                    return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(e) => {
-                return fpm::http::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
+                return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
             }
         }
     }
@@ -93,7 +93,7 @@ async fn serve_cr_file_(
             match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
                 Ok(r) => fpm::http::ok(r),
                 Err(e) => {
-                    fpm::http::server_error!("FPM-Error: path: {}, {:?}", path, e)
+                    fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
             }
         }
@@ -102,7 +102,7 @@ async fn serve_cr_file_(
         }
         fpm::File::Static(s) => fpm::http::ok(s.content),
         _ => {
-            fpm::http::server_error!("FPM unknown handler")
+            fpm::server_error!("FPM unknown handler")
         }
     }
 }
@@ -116,7 +116,7 @@ async fn serve_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
         match tokio::fs::read(config.get_root_for_package(&config.package).join("FPM.ftd")).await {
             Ok(res) => res,
             Err(e) => {
-                return fpm::http::not_found!("FPM-Error: path: FPM.ftd error: {:?}", e);
+                return fpm::not_found!("FPM-Error: path: FPM.ftd error: {:?}", e);
             }
         };
     fpm::http::ok_with_content_type(response, "application/octet-stream")
@@ -127,13 +127,13 @@ async fn static_file(
     file_path: camino::Utf8PathBuf,
 ) -> actix_web::HttpResponse {
     if !file_path.exists() {
-        return fpm::http::not_found!("");
+        return fpm::not_found!("");
     }
 
     match actix_files::NamedFile::open_async(&file_path).await {
         Ok(r) => r.into_response(req),
         Err(e) => {
-            fpm::http::not_found!("FPM-Error: path: {:?}, error: {:?}", file_path, e)
+            fpm::not_found!("FPM-Error: path: {:?}, error: {:?}", file_path, e)
         }
     }
 }
