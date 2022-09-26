@@ -189,7 +189,7 @@ pub enum Interpreter {
     },
 }
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Default, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Document {
     pub data: ftd::Map<ftd::interpreter2::Thing>,
     pub name: String,

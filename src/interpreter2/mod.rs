@@ -1,8 +1,13 @@
+#[cfg(test)]
+#[macro_use]
+mod test;
+
 mod main;
 mod tdoc;
 mod things;
 mod utils;
 
+pub use main::{interpret, Document, Interpreter};
 pub use tdoc::TDoc;
 pub use things::{
     kind::{Kind, KindData},

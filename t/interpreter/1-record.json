@@ -1,0 +1,48 @@
+{
+  "data": {
+    "foo#foo": {
+      "Record": {
+        "name": "foo#foo",
+        "fields": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "age",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "Integer": {
+                    "value": 40
+                  }
+                },
+                "line_number": 3
+              }
+            },
+            "line_number": 3
+          }
+        ],
+        "line_number": 1
+      }
+    }
+  },
+  "name": "foo",
+  "instructions": [],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}
