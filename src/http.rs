@@ -1,3 +1,43 @@
+#[macro_export]
+macro_rules! server_error {
+    ($($t:tt)*) => {{
+        fpm::http::server_error_(format!($($t)*))
+    }};
+}
+
+#[macro_export]
+macro_rules! unauthorised {
+    ($($t:tt)*) => {{
+        fpm::http::unauthorised_(format!($($t)*))
+    }};
+}
+
+#[macro_export]
+macro_rules! not_found {
+    ($($t:tt)*) => {{
+        fpm::http::not_found_(format!($($t)*))
+    }};
+}
+
+pub(crate) use not_found;
+pub(crate) use server_error;
+pub(crate) use unauthorised;
+
+pub fn server_error_(msg: String) -> actix_web::HttpResponse {
+    eprintln!("server error: {}", msg);
+    actix_web::HttpResponse::InternalServerError().body(msg)
+}
+
+pub fn unauthorised_(msg: String) -> actix_web::HttpResponse {
+    eprintln!("unauthorised: {}", msg);
+    actix_web::HttpResponse::Unauthorized().body(msg)
+}
+
+pub fn not_found_(msg: String) -> actix_web::HttpResponse {
+    eprintln!("page not found: {}", msg);
+    actix_web::HttpResponse::NotFound().body(msg)
+}
+
 #[derive(Debug, Clone)]
 pub struct Request {
     pub req: actix_web::HttpRequest,
