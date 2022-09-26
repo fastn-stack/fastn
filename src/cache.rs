@@ -49,12 +49,12 @@ pub async fn create_or_inc(path: &str) -> fpm::Result<usize> {
     }
 }*/
 
-pub async fn get_without_lock(path: &str) -> fpm::Result<usize> {
+async fn get_without_lock(path: &str) -> fpm::Result<usize> {
     let value = tokio::fs::read_to_string(path).await?;
     Ok(value.parse()?)
 }
 
-pub async fn create_without_lock(path: &str) -> fpm::Result<usize> {
+async fn create_without_lock(path: &str) -> fpm::Result<usize> {
     use tokio::io::AsyncWriteExt;
     let content: usize = 1;
     tokio::fs::File::create(path)
@@ -64,7 +64,7 @@ pub async fn create_without_lock(path: &str) -> fpm::Result<usize> {
     get_without_lock(path).await
 }
 
-pub async fn update_get(path: &str, value: usize) -> fpm::Result<usize> {
+async fn update_get(path: &str, value: usize) -> fpm::Result<usize> {
     match LOCK.try_write() {
         Ok(_) => {
             let old_value = get_without_lock(path).await?;
@@ -75,7 +75,7 @@ pub async fn update_get(path: &str, value: usize) -> fpm::Result<usize> {
     }
 }
 
-pub async fn update_create(path: &str, value: usize) -> fpm::Result<usize> {
+async fn update_create(path: &str, value: usize) -> fpm::Result<usize> {
     match LOCK.try_write() {
         Ok(_) => {
             let old_value = create_without_lock(path).await?;
