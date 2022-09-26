@@ -14,6 +14,7 @@ pub struct Config {
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
     pub global_ids: std::collections::HashMap<String, String>,
+    pub request: Option<fpm::http::Request>, // TODO: It should only contain reference
 }
 
 impl Config {
@@ -337,8 +338,7 @@ impl Config {
                 }
             }
 
-            let (_header, value) =
-                ftd::identifier::segregate_key_value(id_string, doc_name, line_number)?;
+            let (_header, value) = ftd::p2::utils::split_once(id_string, doc_name, line_number)?;
             let document_id = fpm::library::convert_to_document_id(doc_name);
 
             if let Some(id) = value {
@@ -1060,6 +1060,7 @@ impl Config {
                     notes: None,
                     alias: None,
                     implements: Vec::new(),
+                    endpoint: None,
                 });
             };
             package.fpm_path = Some(root.join("FPM.ftd"));
@@ -1109,6 +1110,7 @@ impl Config {
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
             global_ids: Default::default(),
+            request: None,
         };
 
         let asset_documents = config.get_assets().await?;
@@ -1146,6 +1148,11 @@ impl Config {
         config.update_ids_from_package().await?;
 
         Ok(config)
+    }
+
+    pub fn set_request(mut self, req: fpm::http::Request) -> Self {
+        self.request = Some(req);
+        self
     }
 
     pub(crate) async fn resolve_package(

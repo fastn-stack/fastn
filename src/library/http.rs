@@ -49,7 +49,9 @@ pub async fn processor<'a>(
         url.query_pairs_mut().append_pair(k, v);
     }
 
-    let json = match crate::http::http_get(url.as_str()).await {
+    println!("calling `http` processor with url: {}", &url);
+
+    let response = match crate::http::http_get(url.as_str()).await {
         Ok(v) => v,
         Err(e) => {
             return ftd::p2::utils::e2(
@@ -59,5 +61,40 @@ pub async fn processor<'a>(
             )
         }
     };
-    doc.from_json(&json, section)
+
+    let response_string = String::from_utf8(response).map_err(|e| ftd::p1::Error::ParseError {
+        message: format!("`http` processor API response error: {}", e),
+        doc_id: doc.name.to_string(),
+        line_number: section.line_number,
+    })?;
+    let response_json: serde_json::Value =
+        serde_json::from_str(&response_string).map_err(|e| ftd::p1::Error::Serde { source: e })?;
+
+    doc.from_json(&response_json, section)
+}
+
+// Need to pass the request object also
+// From request get the url, get query parameters, get the data from body(form data, post data)
+pub fn request_data_processor<'a>(
+    section: &ftd::p1::Section,
+    doc: &ftd::p2::TDoc<'a>,
+    config: &fpm::Config,
+) -> ftd::p1::Result<ftd::Value> {
+    // TODO: Need to return from query parameters and body as well
+    let query = match config.request.as_ref() {
+        Some(request) => request.query().map_err(|e| ftd::p1::Error::ParseError {
+            message: format!("Not able to parse from query string: {:?}", e),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
+        })?,
+        None => {
+            return ftd::p2::utils::e2(
+                "HttpRequest object should not be null",
+                doc.name,
+                section.line_number,
+            )
+        }
+    };
+    dbg!(&query);
+    doc.from_json(&query, section)
 }
