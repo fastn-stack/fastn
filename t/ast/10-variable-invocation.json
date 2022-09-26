@@ -36,38 +36,41 @@
       },
       "mutable": true,
       "value": {
-        "List": [
-          {
-            "Record": {
-              "name": "person",
-              "caption": null,
-              "headers": [
-                {
-                  "key": "name",
-                  "value": {
-                    "String": {
-                      "value": "Arpita",
-                      "line_number": 8
-                    }
+        "List": {
+          "value": [
+            {
+              "Record": {
+                "name": "person",
+                "caption": null,
+                "headers": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "String": {
+                        "value": "Arpita",
+                        "line_number": 8
+                      }
+                    },
+                    "line_number": 8
                   },
-                  "line_number": 8
-                },
-                {
-                  "key": "age",
-                  "value": {
-                    "String": {
-                      "value": "10",
-                      "line_number": 9
-                    }
-                  },
-                  "line_number": 9
-                }
-              ],
-              "body": null,
-              "line_number": 7
+                  {
+                    "key": "age",
+                    "value": {
+                      "String": {
+                        "value": "10",
+                        "line_number": 9
+                      }
+                    },
+                    "line_number": 9
+                  }
+                ],
+                "body": null,
+                "line_number": 7
+              }
             }
-          }
-        ]
+          ],
+          "line_number": 5
+        }
       },
       "line_number": 5
     }
@@ -76,39 +79,43 @@
     "VariableInvocation": {
       "name": "people",
       "value": {
-        "List": [
-          {
-            "Record": {
-              "name": "person",
-              "caption": null,
-              "headers": [
-                {
-                  "key": "name",
-                  "value": {
-                    "String": {
-                      "value": "Ayushi",
-                      "line_number": 17
-                    }
+        "List": {
+          "value": [
+            {
+              "Record": {
+                "name": "person",
+                "caption": null,
+                "headers": [
+                  {
+                    "key": "name",
+                    "value": {
+                      "String": {
+                        "value": "Ayushi",
+                        "line_number": 17
+                      }
+                    },
+                    "line_number": 17
                   },
-                  "line_number": 17
-                },
-                {
-                  "key": "age",
-                  "value": {
-                    "String": {
-                      "value": "9",
-                      "line_number": 18
-                    }
-                  },
-                  "line_number": 18
-                }
-              ],
-              "body": null,
-              "line_number": 16
+                  {
+                    "key": "age",
+                    "value": {
+                      "String": {
+                        "value": "9",
+                        "line_number": 18
+                      }
+                    },
+                    "line_number": 18
+                  }
+                ],
+                "body": null,
+                "line_number": 16
+              }
             }
-          }
-        ]
+          ],
+          "line_number": 14
+        }
       },
+      "condition": null,
       "line_number": 14
     }
   }

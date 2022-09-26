@@ -58,4 +58,8 @@ impl Import {
             ),
         }
     }
+
+    pub fn line_number(&self) -> usize {
+        self.line_number
+    }
 }

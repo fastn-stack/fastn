@@ -12,9 +12,9 @@ mod variable;
 
 pub use component::{Component, ComponentDefinition};
 pub use import::Import;
-pub use kind::{Condition, VariableKind, VariableValue};
+pub use kind::{Condition, VariableKind, VariableModifier, VariableValue};
 pub use main::AST;
-pub use record::Record;
+pub use record::{Field, Record};
 pub use variable::{VariableDefinition, VariableInvocation};
 
 #[derive(thiserror::Error, Debug)]

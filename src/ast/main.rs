@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum AST {
     Import(ftd::ast::Import),
@@ -11,10 +9,6 @@ pub enum AST {
 }
 
 impl AST {
-    pub fn is_import(&self) -> bool {
-        matches!(self, AST::Import(_))
-    }
-
     pub fn from_sections(
         sections: &[ftd::p11::Section],
         doc_id: &str,
@@ -46,6 +40,32 @@ impl AST {
                 line_number: section.line_number,
             });
         })
+    }
+
+    pub fn line_number(&self) -> usize {
+        match self {
+            AST::Import(i) => i.line_number(),
+            AST::Record(r) => r.line_number(),
+            AST::VariableDefinition(v) => v.line_number(),
+            AST::VariableInvocation(v) => v.line_number(),
+            AST::ComponentDefinition(c) => c.line_number(),
+            AST::ComponentInvocation(c) => c.line_number(),
+        }
+    }
+
+    pub fn get_record(&self, doc_id: &str) -> ftd::ast::Result<&ftd::ast::Record> {
+        if let ftd::ast::AST::Record(r) = self {
+            return Ok(r);
+        }
+        ftd::ast::parse_error(
+            format!("`{:?}` is not a record", self),
+            doc_id,
+            self.line_number(),
+        )
+    }
+
+    pub fn is_record(&self) -> bool {
+        matches!(self, AST::Record(_))
     }
 
     #[cfg(test)]

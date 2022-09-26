@@ -1,8 +1,8 @@
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Record {
-    name: String,
-    fields: Vec<Field>,
-    line_number: usize,
+    pub name: String,
+    pub fields: Vec<Field>,
+    pub line_number: usize,
 }
 
 pub const RECORD: &str = "record";
@@ -35,15 +35,19 @@ impl Record {
             section.line_number,
         ))
     }
+
+    pub fn line_number(&self) -> usize {
+        self.line_number
+    }
 }
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Field {
-    name: String,
-    kind: ftd::ast::VariableKind,
-    mutable: bool,
-    value: Option<ftd::ast::VariableValue>,
-    line_number: usize,
+    pub name: String,
+    pub kind: ftd::ast::VariableKind,
+    pub mutable: bool,
+    pub value: Option<ftd::ast::VariableValue>,
+    pub line_number: usize,
 }
 
 impl Field {

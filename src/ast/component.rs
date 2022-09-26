@@ -70,6 +70,10 @@ impl ComponentDefinition {
             section.line_number,
         ))
     }
+
+    pub fn line_number(&self) -> usize {
+        self.line_number
+    }
 }
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -182,6 +186,10 @@ impl Component {
             children,
             section.line_number,
         ))
+    }
+
+    pub fn line_number(&self) -> usize {
+        self.line_number
     }
 }
 

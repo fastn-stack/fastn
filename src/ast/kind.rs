@@ -32,10 +32,10 @@ impl VariableModifier {
 
     pub(crate) fn get_modifier(expr: &str) -> Option<VariableModifier> {
         let expr = expr.split_whitespace().collect::<Vec<&str>>();
-        if expr.len() == 2 {
+        if expr.len() >= 2 {
             if VariableModifier::is_optional_from_expr(expr.get(0).unwrap()) {
                 return Some(VariableModifier::Optional);
-            } else if VariableModifier::is_list_from_expr(expr.get(1).unwrap()) {
+            } else if VariableModifier::is_list_from_expr(expr.last().unwrap()) {
                 return Some(VariableModifier::List);
             }
         }
@@ -57,7 +57,7 @@ impl VariableKind {
         line_number: usize,
     ) -> ftd::ast::Result<VariableKind> {
         let expr = kind.split_whitespace().collect::<Vec<&str>>();
-        if expr.len() > 2 || expr.is_empty() {
+        if expr.len() > 5 || expr.is_empty() {
             return ftd::ast::parse_error(
                 format!("Invalid variable kind, found: `{}`", kind),
                 doc_id,
@@ -67,9 +67,9 @@ impl VariableKind {
 
         let modifier = VariableModifier::get_modifier(kind);
         let kind = match modifier {
-            Some(VariableModifier::Optional) if expr.len() == 2 => expr.get(1).unwrap(),
-            Some(VariableModifier::List) if expr.len() == 2 => expr.get(0).unwrap(),
-            None => expr.get(0).unwrap(),
+            Some(VariableModifier::Optional) if expr.len() >= 2 => expr[1..].join(" "),
+            Some(VariableModifier::List) if expr.len() >= 2 => expr[..expr.len() - 1].join(" "),
+            None => expr.join(" "),
             _ => {
                 return ftd::ast::parse_error(
                     format!("Invalid variable kind, found: `{}`", kind),
@@ -79,14 +79,20 @@ impl VariableKind {
             }
         };
 
-        Ok(VariableKind::new(kind, modifier))
+        Ok(VariableKind::new(kind.as_str(), modifier))
     }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum VariableValue {
-    Optional(Box<Option<VariableValue>>),
-    List(Vec<VariableValue>),
+    Optional {
+        value: Box<Option<VariableValue>>,
+        line_number: usize,
+    },
+    List {
+        value: Vec<VariableValue>,
+        line_number: usize,
+    },
     Record {
         name: String,
         caption: Box<Option<VariableValue>>,
@@ -135,23 +141,46 @@ impl HeaderValue {
 impl VariableValue {
     pub(crate) fn inner(&self) -> Option<VariableValue> {
         match self {
-            VariableValue::Optional(value) => value.as_ref().as_ref().map(|v| v.to_owned()),
+            VariableValue::Optional { value, .. } => value.as_ref().as_ref().map(|v| v.to_owned()),
             t => Some(t.to_owned()),
         }
     }
 
+    pub(crate) fn string(&self, doc_id: &str) -> ftd::ast::Result<String> {
+        match self {
+            VariableValue::String { value, .. } => Ok(value.to_string()),
+            t => ftd::ast::parse_error(
+                format!("Expect Variable value string, found: `{:?}`", t),
+                doc_id,
+                t.line_number(),
+            ),
+        }
+    }
+
+    pub(crate) fn line_number(&self) -> usize {
+        match self {
+            VariableValue::Optional { line_number, .. }
+            | VariableValue::List { line_number, .. }
+            | VariableValue::Record { line_number, .. }
+            | VariableValue::String { line_number, .. } => *line_number,
+        }
+    }
+
     fn is_null(&self) -> bool {
-        VariableValue::Optional(Box::new(None)).eq(self)
+        matches!(self, VariableValue::Optional { value, .. } if value.is_none())
     }
 
     fn is_list(&self) -> bool {
-        matches!(self, VariableValue::List(_))
+        matches!(self, VariableValue::List { .. })
     }
 
     fn into_optional(self) -> VariableValue {
         match self {
-            t @ VariableValue::Optional(_) => t,
-            t => VariableValue::Optional(Box::new(Some(t))),
+            t @ VariableValue::Optional { .. } => t,
+            t => VariableValue::Optional {
+                line_number: t.line_number(),
+                value: Box::new(Some(t)),
+            },
         }
     }
 
@@ -182,7 +211,10 @@ impl VariableValue {
         match modifier {
             Some(modifier) if modifier.is_list() => {
                 if self.is_null() {
-                    Ok(VariableValue::List(vec![]))
+                    Ok(VariableValue::List {
+                        value: vec![],
+                        line_number: self.line_number(),
+                    })
                 } else if self.is_list() {
                     Ok(self)
                 } else {
@@ -202,13 +234,14 @@ impl VariableValue {
         use itertools::Itertools;
 
         if !section.sub_sections.is_empty() {
-            return VariableValue::List(
-                section
+            return VariableValue::List {
+                value: section
                     .sub_sections
                     .iter()
                     .map(VariableValue::from_p1)
                     .collect_vec(),
-            );
+                line_number: section.line_number,
+            };
         }
 
         let caption = section
@@ -244,7 +277,10 @@ impl VariableValue {
                     line_number: body.line_number,
                 }
             } else {
-                VariableValue::Optional(Box::new(None))
+                VariableValue::Optional {
+                    value: Box::new(None),
+                    line_number: section.line_number,
+                }
             };
         }
 
@@ -264,9 +300,14 @@ impl VariableValue {
             ftd::p11::Header::KV(ftd::p11::header::KV {
                 value, line_number, ..
             }) => VariableValue::from_value(value, *line_number),
-            ftd::p11::Header::Section(ftd::p11::header::Section { section, .. }) => {
-                VariableValue::List(section.iter().map(VariableValue::from_p1).collect_vec())
-            }
+            ftd::p11::Header::Section(ftd::p11::header::Section {
+                section,
+                line_number,
+                ..
+            }) => VariableValue::List {
+                value: section.iter().map(VariableValue::from_p1).collect_vec(),
+                line_number: *line_number,
+            },
         }
     }
 
@@ -276,7 +317,10 @@ impl VariableValue {
                 value: value.to_string(),
                 line_number,
             },
-            _ => VariableValue::Optional(Box::new(None)),
+            _ => VariableValue::Optional {
+                value: Box::new(None),
+                line_number,
+            },
         }
     }
 }

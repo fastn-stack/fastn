@@ -3,39 +3,43 @@
     "VariableInvocation": {
       "name": "scores",
       "value": {
-        "List": [
-          {
-            "String": {
-              "value": "10",
-              "line_number": 3
+        "List": {
+          "value": [
+            {
+              "String": {
+                "value": "10",
+                "line_number": 3
+              }
+            },
+            {
+              "String": {
+                "value": "20",
+                "line_number": 4
+              }
+            },
+            {
+              "String": {
+                "value": "30",
+                "line_number": 5
+              }
+            },
+            {
+              "String": {
+                "value": "40",
+                "line_number": 6
+              }
+            },
+            {
+              "String": {
+                "value": "50",
+                "line_number": 7
+              }
             }
-          },
-          {
-            "String": {
-              "value": "20",
-              "line_number": 4
-            }
-          },
-          {
-            "String": {
-              "value": "30",
-              "line_number": 5
-            }
-          },
-          {
-            "String": {
-              "value": "40",
-              "line_number": 6
-            }
-          },
-          {
-            "String": {
-              "value": "50",
-              "line_number": 7
-            }
-          }
-        ]
+          ],
+          "line_number": 1
+        }
       },
+      "condition": null,
       "line_number": 1
     }
   }

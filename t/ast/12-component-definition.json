@@ -41,26 +41,29 @@
           },
           "mutable": false,
           "value": {
-            "List": [
-              {
-                "String": {
-                  "value": "Varanasi",
-                  "line_number": 11
+            "List": {
+              "value": [
+                {
+                  "String": {
+                    "value": "Varanasi",
+                    "line_number": 11
+                  }
+                },
+                {
+                  "String": {
+                    "value": "Prayagraj",
+                    "line_number": 12
+                  }
+                },
+                {
+                  "String": {
+                    "value": "Bengaluru",
+                    "line_number": 13
+                  }
                 }
-              },
-              {
-                "String": {
-                  "value": "Prayagraj",
-                  "line_number": 12
-                }
-              },
-              {
-                "String": {
-                  "value": "Bengaluru",
-                  "line_number": 13
-                }
-              }
-            ]
+              ],
+              "line_number": 13
+            }
           },
           "line_number": 13
         }

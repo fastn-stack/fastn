@@ -63,6 +63,10 @@ impl VariableDefinition {
             section.line_number,
         ))
     }
+
+    pub fn line_number(&self) -> usize {
+        self.line_number
+    }
 }
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -86,6 +90,10 @@ impl VariableInvocation {
             condition,
             line_number,
         }
+    }
+
+    pub fn line_number(&self) -> usize {
+        self.line_number
     }
 
     pub fn is_variable_invocation(section: &ftd::p11::Section) -> bool {
