@@ -891,6 +891,7 @@ name = "fpm"
 version = "0.1.11"
 dependencies = [
  "actix-files",
+ "actix-http",
  "actix-web",
  "antidote",
  "async-lock",

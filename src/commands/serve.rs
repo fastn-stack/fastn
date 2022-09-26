@@ -31,16 +31,16 @@ async fn serve_file(
     match f {
         fpm::File::Ftd(main_document) => {
             match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
-                Ok(r) => actix_web::HttpResponse::Ok().body(r),
+                Ok(r) => fpm::http::ok(r),
                 Err(e) => {
                     fpm::http::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
             }
         }
-        fpm::File::Image(image) => actix_web::HttpResponse::Ok()
-            .content_type(guess_mime_type(image.id.as_str()))
-            .body(image.content),
-        fpm::File::Static(s) => actix_web::HttpResponse::Ok().body(s.content),
+        fpm::File::Image(image) => {
+            fpm::http::ok_with_content_type(image.content, guess_mime_type(image.id.as_str()))
+        }
+        fpm::File::Static(s) => fpm::http::ok(s.content),
         _ => {
             fpm::http::server_error!("unknown handler")
         }
@@ -91,16 +91,16 @@ async fn serve_cr_file_(
     match f {
         fpm::File::Ftd(main_document) => {
             match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
-                Ok(r) => actix_web::HttpResponse::Ok().body(r),
+                Ok(r) => fpm::http::ok(r),
                 Err(e) => {
                     fpm::http::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
             }
         }
-        fpm::File::Image(image) => actix_web::HttpResponse::Ok()
-            .content_type(guess_mime_type(image.id.as_str()))
-            .body(image.content),
-        fpm::File::Static(s) => actix_web::HttpResponse::Ok().body(s.content),
+        fpm::File::Image(image) => {
+            fpm::http::ok_with_content_type(image.content, guess_mime_type(image.id.as_str()))
+        }
+        fpm::File::Static(s) => fpm::http::ok(s.content),
         _ => {
             fpm::http::server_error!("FPM unknown handler")
         }
@@ -119,9 +119,7 @@ async fn serve_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
                 return fpm::http::not_found!("FPM-Error: path: FPM.ftd error: {:?}", e);
             }
         };
-    actix_web::HttpResponse::Ok()
-        .content_type("application/octet-stream")
-        .body(response)
+    fpm::http::ok_with_content_type(response, "application/octet-stream")
 }
 
 async fn static_file(

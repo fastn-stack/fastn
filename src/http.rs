@@ -38,6 +38,23 @@ pub fn not_found_(msg: String) -> actix_web::HttpResponse {
     actix_web::HttpResponse::NotFound().body(msg)
 }
 
+pub fn ok<V>(data: V) -> actix_web::HttpResponse
+where
+    V: actix_http::body::MessageBody + 'static,
+{
+    actix_web::HttpResponse::Ok().body(data)
+}
+
+pub fn ok_with_content_type<V, B>(data: B, content_type: V) -> actix_web::HttpResponse
+where
+    B: actix_http::body::MessageBody + 'static,
+    V: actix_http::header::TryIntoHeaderValue,
+{
+    actix_web::HttpResponse::Ok()
+        .content_type(content_type)
+        .body(data)
+}
+
 #[derive(Debug, Clone)]
 pub struct Request {
     pub req: actix_web::HttpRequest,
