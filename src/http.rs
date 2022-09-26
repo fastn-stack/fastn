@@ -34,6 +34,8 @@ pub fn not_found_(msg: String) -> actix_web::HttpResponse {
     actix_web::HttpResponse::NotFound().body(msg)
 }
 
+impl actix_web::ResponseError for fpm::Error {}
+
 pub fn ok<V>(data: V) -> actix_web::HttpResponse
 where
     V: actix_http::body::MessageBody + 'static,
@@ -269,7 +271,7 @@ pub(crate) async fn http_get_str(url: &str) -> fpm::Result<String> {
     }
 }
 
-pub(crate) fn api_ok(data: impl serde::Serialize) -> actix_web::Result<actix_web::HttpResponse> {
+pub(crate) fn api_ok(data: impl serde::Serialize) -> fpm::Result<actix_web::HttpResponse> {
     #[derive(serde::Serialize)]
     struct SuccessResponse<T: serde::Serialize> {
         data: T,
@@ -284,7 +286,7 @@ pub(crate) fn api_ok(data: impl serde::Serialize) -> actix_web::Result<actix_web
     Ok(ok_with_content_type(data, "application/json"))
 }
 
-pub(crate) fn api_error<T: Into<String>>(message: T) -> actix_web::Result<actix_web::HttpResponse> {
+pub(crate) fn api_error<T: Into<String>>(message: T) -> fpm::Result<actix_web::HttpResponse> {
     #[derive(serde::Serialize, Debug)]
     struct ErrorResponse {
         message: String,

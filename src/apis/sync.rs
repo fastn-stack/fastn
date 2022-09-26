@@ -62,7 +62,7 @@ pub struct SyncRequest {
 /// If no conflict merge it, update file on remote and send back new content as Updated
 /// If conflict occur, Then send back updated version in latest.ftd with conflicted content
 ///
-pub async fn sync(req: SyncRequest) -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn sync(req: SyncRequest) -> fpm::Result<actix_web::HttpResponse> {
     dbg!("remote server call", &req.package_name);
 
     match sync_worker(req).await {

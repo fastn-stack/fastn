@@ -5,7 +5,7 @@ pub struct CreateCRRequest {
 
 pub async fn create_cr(
     req: actix_web::web::Json<CreateCRRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
+) -> fpm::Result<actix_web::HttpResponse> {
     match create_cr_worker(req.0).await {
         Ok(cr_number) => {
             #[derive(serde::Serialize)]
@@ -32,7 +32,7 @@ async fn create_cr_worker(cr_request: CreateCRRequest) -> fpm::Result<usize> {
     Ok(cr_number as usize)
 }
 
-pub async fn create_cr_page() -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn create_cr_page() -> fpm::Result<actix_web::HttpResponse> {
     match create_cr_page_worker().await {
         Ok(body) => Ok(fpm::http::ok(body)),
         Err(err) => fpm::http::api_error(err.to_string()),
