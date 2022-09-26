@@ -11,9 +11,8 @@ fn client_builder() -> reqwest::Client {
         .unwrap()
 }
 
-lazy_static! {
-    static ref CLIENT: std::sync::Arc<reqwest::Client> = std::sync::Arc::new(client_builder());
-}
+static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
+    once_cell::sync::Lazy::new(|| std::sync::Arc::new(client_builder()));
 
 // This method will connect client request to out of the world
 pub(crate) async fn get_out(

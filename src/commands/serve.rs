@@ -1,6 +1,6 @@
-lazy_static! {
-    static ref LOCK: async_lock::RwLock<()> = async_lock::RwLock::new(());
-}
+
+static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
+    once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
 async fn serve_file(
     req: &actix_web::HttpRequest,

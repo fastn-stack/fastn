@@ -9,9 +9,8 @@
 // TODO: Need to use async lock
 // TODO: https://docs.rs/async-rwlock/latest/async_rwlock/
 
-lazy_static! {
-    static ref LOCK: std::sync::RwLock<u32> = std::sync::RwLock::new(5);
-}
+static LOCK: once_cell::sync::Lazy<std::sync::RwLock<u32>> =
+    once_cell::sync::Lazy::new(|| std::sync::RwLock::new(5));
 
 /*pub async fn get(path: &str) -> fpm::Result<usize> {
     match LOCK.try_read() {

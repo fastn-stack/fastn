@@ -777,11 +777,11 @@ dependencies = [
 [[package]]
 name = "fbt-lib"
 version = "0.1.18"
-source = "git+https://github.com/FifthTry/fbt?rev=1a346ff#1a346ff97b86985c05d6de1c83a1f78619158a6a"
+source = "git+https://github.com/FifthTry/fbt?rev=ea0ee98#ea0ee9832ab515c8acf7f0a1f4d89f2d4e6671eb"
 dependencies = [
  "colored",
  "diffy",
- "ftd 0.1.18",
+ "ftd",
  "rand",
  "sha2",
  "walkdir",
@@ -902,15 +902,15 @@ dependencies = [
  "edit",
  "fbt-lib",
  "fluent",
- "ftd 0.2.0",
+ "ftd",
  "futures",
  "hyper",
  "ignore",
  "indoc",
  "intl-memoizer",
  "itertools",
- "lazy_static 1.4.0",
  "mime_guess",
+ "once_cell",
  "pretty_assertions",
  "realm-lang",
  "regex",
@@ -929,28 +929,8 @@ dependencies = [
 
 [[package]]
 name = "ftd"
-version = "0.1.18"
-source = "git+https://github.com/FifthTry/ftd?rev=68fdacb#68fdacb5ce358879f90666089e62a1bc0272be7c"
-dependencies = [
- "comrak",
- "css-color-parser",
- "format_num",
- "include_dir",
- "indoc",
- "itertools",
- "lazy_static 1.4.0",
- "regex",
- "serde",
- "serde_json",
- "slug",
- "syntect",
- "thiserror",
-]
-
-[[package]]
-name = "ftd"
 version = "0.2.0"
-source = "git+https://github.com/FifthTry/ftd?rev=e12cd85#e12cd85dfc80455f8491646c1953a585a300c6d9"
+source = "git+https://github.com/FifthTry/ftd?rev=b698bd6#b698bd6acf4b6dfc1557976ef63f378c473e8432"
 dependencies = [
  "comrak",
  "css-color-parser",
@@ -958,7 +938,7 @@ dependencies = [
  "include_dir",
  "indoc",
  "itertools",
- "lazy_static 1.4.0",
+ "once_cell",
  "regex",
  "serde",
  "serde_json",
