@@ -192,12 +192,12 @@ pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
     let c = reqwest::Client::builder()
         .default_headers(headers)
         .build()?;
-    let url_f = format!("{:?}", url);
+
     let res = c.get(url).send().await?;
     if !res.status().eq(&reqwest::StatusCode::OK) {
         return Err(fpm::Error::APIResponseError(format!(
             "url: {}, response_status: {}, response: {:?}",
-            url_f,
+            url,
             res.status(),
             res.text().await
         )));
