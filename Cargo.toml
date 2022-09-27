@@ -47,7 +47,6 @@ remote = []
 # and create it's own [dependencies.<name>] section, and document it with why are you not
 # using the latest dependency, and what is the plan.
 
-actix-http = "3"
 antidote = "1"
 async-lock = "2"
 async-recursion = "1"
@@ -118,6 +117,7 @@ features = [
 
 [dependencies.actix-web]
 version = "4.2.1"
+default-features = false
 
 [dependencies.tokio]
 version = "1"

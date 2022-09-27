@@ -60,27 +60,42 @@ pub struct Request {
     body: actix_web::web::Bytes,
 }
 
+fn get_cookies(headers: &reqwest::header::HeaderMap) -> std::collections::HashMap<String, String> {
+    let mut cookies = std::collections::HashMap::new();
+    if let Some(cookie) = headers.get("cookie") {
+        if let Ok(cookie) = cookie.to_str() {
+            for cookie in cookie.split(";") {
+                let cookie = cookie.trim();
+                if let Some(index) = cookie.find("=") {
+                    let (key, value) = cookie.split_at(index);
+                    let key = key.trim();
+                    let value = value.trim_start_matches("=").trim();
+                    cookies.insert(key.to_string(), value.to_string());
+                }
+            }
+        }
+    }
+    cookies
+}
+
 impl Request {
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
+        let headers = {
+            let mut headers = reqwest::header::HeaderMap::new();
+            for (key, value) in req.headers() {
+                headers.insert(key.clone(), value.clone());
+            }
+            headers
+        };
+
         Request {
-            cookies: req
-                .cookies()
-                .unwrap()
-                .iter()
-                .map(|c| (c.name().to_string(), c.value().to_string()))
-                .collect(),
+            cookies: get_cookies(&headers),
             body,
             method: req.method().to_string(),
             uri: req.uri().to_string(),
             path: req.path().to_string(),
             query_string: req.query_string().to_string(),
-            headers: {
-                let mut headers = reqwest::header::HeaderMap::new();
-                for (key, value) in req.headers() {
-                    headers.insert(key.clone(), value.clone());
-                }
-                headers
-            },
+            headers,
             query: {
                 actix_web::web::Query::<std::collections::HashMap<String, serde_json::Value>>::from_query(
                     req.query_string(),
