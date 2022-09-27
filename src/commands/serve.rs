@@ -222,17 +222,19 @@ pub async fn clear_cache(
 
 // TODO: Move them to routes folder
 async fn sync(
-    req: actix_web::web::Json<fpm::apis::sync::SyncRequest>,
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync(req.0).await
+    fpm::apis::sync(fpm::http::Request::from_actix(req, body).json()?).await
 }
 
 async fn sync2(
-    req: actix_web::web::Json<fpm::apis::sync2::SyncRequest>,
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync2(req.0).await
+    fpm::apis::sync2(fpm::http::Request::from_actix(req, body).json()?).await
 }
 
 pub async fn clone() -> fpm::Result<fpm::http::Response> {
@@ -250,18 +252,20 @@ pub(crate) async fn view_source(
 
 pub async fn edit(
     req: actix_web::HttpRequest,
-    req_data: actix_web::web::Json<fpm::apis::edit::EditRequest>,
     body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit(fpm::http::Request::from_actix(req, body), req_data.0).await
+    let req = fpm::http::Request::from_actix(req, body);
+    let e = req.json()?;
+    fpm::apis::edit(req, e).await
 }
 
 pub async fn revert(
-    req: actix_web::web::Json<fpm::apis::edit::RevertRequest>,
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit::revert(req.0).await
+    fpm::apis::edit::revert(fpm::http::Request::from_actix(req, body).json()?).await
 }
 
 pub async fn editor_sync() -> fpm::Result<fpm::http::Response> {
@@ -270,10 +274,11 @@ pub async fn editor_sync() -> fpm::Result<fpm::http::Response> {
 }
 
 pub async fn create_cr(
-    req: actix_web::web::Json<fpm::apis::cr::CreateCRRequest>,
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::cr::create_cr(req.0).await
+    fpm::apis::cr::create_cr(fpm::http::Request::from_actix(req, body).json()?).await
 }
 
 pub async fn create_cr_page() -> fpm::Result<fpm::http::Response> {

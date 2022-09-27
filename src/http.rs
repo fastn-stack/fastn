@@ -100,6 +100,10 @@ impl Request {
         }
     }
 
+    pub fn json<T: serde::de::DeserializeOwned>(&self) -> fpm::Result<T> {
+        Ok(serde_json::from_slice(&self.body)?)
+    }
+
     pub fn body(&self) -> &[u8] {
         &self.body
     }
