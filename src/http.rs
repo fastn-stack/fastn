@@ -61,7 +61,6 @@ pub struct Request {
     uri: String,
     path: String,
     path_data: String,
-    host: String,
     query_string: String,
     cookies: std::collections::HashMap<String, String>,
     headers: reqwest::header::HeaderMap,
@@ -72,13 +71,18 @@ pub struct Request {
 impl Request {
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         Request {
+            cookies: req
+                .cookies()
+                .unwrap()
+                .iter()
+                .map(|c| (c.name().to_string(), c.value().to_string()))
+                .collect(),
+            body,
             method: req.method().to_string(),
             uri: req.uri().to_string(),
             path: req.path().to_string(),
             path_data: req.match_info().query("path").to_string(),
-            host: req.connection_info().host().to_string(),
             query_string: req.query_string().to_string(),
-            body,
             headers: {
                 let mut headers = reqwest::header::HeaderMap::new();
                 for (key, value) in req.headers() {
@@ -91,12 +95,6 @@ impl Request {
                     req.query_string(),
                 ).unwrap().0
             },
-            cookies: req
-                .cookies()
-                .unwrap()
-                .iter()
-                .map(|c| (c.name().to_string(), c.value().to_string()))
-                .collect(),
         }
     }
 
@@ -140,8 +138,15 @@ impl Request {
         self.cookies().get(name).map(|v| v.to_string())
     }
 
-    pub fn host(&self) -> &str {
-        self.host.as_str()
+    pub fn host(&self) -> String {
+        use std::borrow::Borrow;
+
+        self.headers
+            .borrow()
+            .get("host")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("localhost")
+            .to_string()
     }
 
     pub fn headers(&self) -> &reqwest::header::HeaderMap {
