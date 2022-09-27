@@ -25,7 +25,7 @@ pub struct EditResponse {
 }
 
 pub async fn edit(
-    req: fpm::http::Request,
+    req: &fpm::http::Request,
     req_data: EditRequest,
 ) -> fpm::Result<fpm::http::Response> {
     let mut config = match fpm::Config::read(None, false).await {
@@ -34,7 +34,7 @@ pub async fn edit(
     };
     config.current_document = Some(req_data.path.to_string());
 
-    match config.can_write(&req, req_data.path.as_str()).await {
+    match config.can_write(req, req_data.path.as_str()).await {
         Ok(can_write) => {
             if !can_write {
                 return Ok(fpm::unauthorised!(

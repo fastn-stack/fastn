@@ -1,7 +1,11 @@
-pub(crate) async fn view_source(req: fpm::http::Request) -> fpm::http::Response {
+pub(crate) async fn view_source(req: &fpm::http::Request) -> fpm::http::Response {
     // TODO: Need to remove unwrap
     let path = {
-        let mut path: camino::Utf8PathBuf = req.url_data("path").parse().unwrap();
+        let mut path: camino::Utf8PathBuf = req
+            .path()
+            .replacen("/-/view-source/", "", 1)
+            .parse()
+            .unwrap();
         if path.eq(&camino::Utf8PathBuf::new().join("")) {
             path = path.join("/");
         }

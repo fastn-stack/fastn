@@ -60,7 +60,6 @@ pub struct Request {
     method: String,
     uri: String,
     path: String,
-    path_data: String,
     host: String,
     query_string: String,
     cookies: std::collections::HashMap<String, String>,
@@ -75,7 +74,6 @@ impl Request {
             method: req.method().to_string(),
             uri: req.uri().to_string(),
             path: req.path().to_string(),
-            path_data: req.match_info().query("path").to_string(),
             host: req.connection_info().host().to_string(),
             query_string: req.query_string().to_string(),
             body,
@@ -122,14 +120,6 @@ impl Request {
 
     pub fn query_string(&self) -> &str {
         self.query_string.as_str()
-    }
-
-    pub fn url_data(&self, key: &str) -> &str {
-        if key == "path" {
-            self.path_data.as_str()
-        } else {
-            unimplemented!("url data not implemented for {}", key)
-        }
     }
 
     pub fn cookies(&self) -> &std::collections::HashMap<String, String> {
