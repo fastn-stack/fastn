@@ -127,19 +127,14 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
     }
 }
 
-async fn serve(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
-) -> fpm::Result<fpm::http::Response> {
-    let req = fpm::http::Request::from_actix(req, body);
-
+async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method(), req.path());
     let t = fpm::time(r.as_str());
     println!("{r} started");
 
     // TODO: remove unwrap
-    let path: camino::Utf8PathBuf = req.url_data("path").parse().unwrap();
+    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
 
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
@@ -212,29 +207,20 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
     Ok(())
 }
 
-pub async fn clear_cache(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes,
-) -> fpm::http::Response {
+pub async fn clear_cache(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::cache::clear(&fpm::http::Request::from_actix(req, body)).await
+    Ok(fpm::apis::cache::clear(&req).await)
 }
 
 // TODO: Move them to routes folder
-async fn sync(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes,
-) -> fpm::Result<fpm::http::Response> {
+async fn sync(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync(fpm::http::Request::from_actix(req, body).json()?).await
+    fpm::apis::sync(req.json()?).await
 }
 
-async fn sync2(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes,
-) -> fpm::Result<fpm::http::Response> {
+async fn sync2(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync2(fpm::http::Request::from_actix(req, body).json()?).await
+    fpm::apis::sync2(req.json()?).await
 }
 
 pub async fn clone() -> fpm::Result<fpm::http::Response> {
@@ -242,30 +228,19 @@ pub async fn clone() -> fpm::Result<fpm::http::Response> {
     fpm::apis::clone().await
 }
 
-pub(crate) async fn view_source(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes,
-) -> fpm::http::Response {
+pub(crate) async fn view_source(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
-    fpm::apis::view_source(fpm::http::Request::from_actix(req, body)).await
+    Ok(fpm::apis::view_source(&req).await)
 }
 
-pub async fn edit(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes,
-) -> fpm::Result<fpm::http::Response> {
+pub async fn edit(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    let req = fpm::http::Request::from_actix(req, body);
-    let e = req.json()?;
-    fpm::apis::edit(req, e).await
+    fpm::apis::edit(&req, req.json()?).await
 }
 
-pub async fn revert(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes,
-) -> fpm::Result<fpm::http::Response> {
+pub async fn revert(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit::revert(fpm::http::Request::from_actix(req, body).json()?).await
+    fpm::apis::edit::revert(req.json()?).await
 }
 
 pub async fn editor_sync() -> fpm::Result<fpm::http::Response> {
@@ -273,17 +248,34 @@ pub async fn editor_sync() -> fpm::Result<fpm::http::Response> {
     fpm::apis::edit::sync().await
 }
 
-pub async fn create_cr(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes,
-) -> fpm::Result<fpm::http::Response> {
+pub async fn create_cr(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::cr::create_cr(fpm::http::Request::from_actix(req, body).json()?).await
+    fpm::apis::cr::create_cr(req.json()?).await
 }
 
 pub async fn create_cr_page() -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
     fpm::apis::cr::create_cr_page().await
+}
+
+async fn route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+) -> fpm::Result<fpm::http::Response> {
+    let req = fpm::http::Request::from_actix(req, body);
+    match (req.method(), req.path()) {
+        ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
+        ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
+        ("get", "/-/clone/") if cfg!(feature = "remote") => clone().await,
+        ("get", t) if t.starts_with("/-/view-src/") => view_source(req).await,
+        ("post", "/-/edit/") => edit(req).await,
+        ("post", "/-/revert/") => revert(req).await,
+        ("get", "/-/editor-sync/") => editor_sync().await,
+        ("post", "/-/create-cr/") => create_cr(req).await,
+        ("get", "/-/create-cr-page/") => create_cr_page().await,
+        ("post", "/-/clear-cache/") => clear_cache(req).await,
+        (_, _) => serve(req).await,
+    }
 }
 
 pub async fn listen(
@@ -351,34 +343,7 @@ You can try without providing port, it will automatically pick unused port."#,
         }
     };
 
-    let app = move || {
-        {
-            if cfg!(feature = "remote") {
-                let json_cfg = actix_web::web::JsonConfig::default()
-                    .content_type(|mime| mime == mime_guess::mime::APPLICATION_JSON)
-                    .limit(9862416400); // TODO: explain this number
-
-                actix_web::App::new()
-                    .app_data(json_cfg)
-                    .route("/-/sync/", actix_web::web::post().to(sync))
-                    .route("/-/sync2/", actix_web::web::post().to(sync2))
-                    .route("/-/clone/", actix_web::web::get().to(clone))
-            } else {
-                actix_web::App::new()
-            }
-        }
-        .route(
-            "/-/view-src/{path:.*}",
-            actix_web::web::get().to(view_source),
-        )
-        .route("/-/edit/", actix_web::web::post().to(edit))
-        .route("/-/revert/", actix_web::web::post().to(revert))
-        .route("/-/editor-sync/", actix_web::web::get().to(editor_sync))
-        .route("/-/create-cr/", actix_web::web::post().to(create_cr))
-        .route("/-/create-cr/", actix_web::web::get().to(create_cr_page))
-        .route("/-/clear-cache/", actix_web::web::post().to(clear_cache))
-        .route("/{path:.*}", actix_web::web::route().to(serve))
-    };
+    let app = move || actix_web::App::new().route("/{path:.*}", actix_web::web::route().to(route));
 
     println!("### Server Started ###");
     println!(
