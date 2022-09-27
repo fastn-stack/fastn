@@ -111,7 +111,7 @@ async fn serve_fpm_file(config: &fpm::Config) -> fpm::http::Response {
                 return fpm::not_found!("FPM-Error: path: FPM.ftd error: {:?}", e);
             }
         };
-    fpm::http::ok_with_content_type(response, "application/octet-stream")
+    fpm::http::ok_with_content_type(response, mime_guess::mime::APPLICATION_OCTET_STREAM)
 }
 
 async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {

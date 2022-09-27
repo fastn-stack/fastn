@@ -38,18 +38,11 @@ impl actix_web::ResponseError for fpm::Error {}
 
 pub type Response = actix_web::HttpResponse;
 
-pub fn ok<V>(data: V) -> fpm::http::Response
-where
-    V: actix_http::body::MessageBody + 'static,
-{
+pub fn ok(data: Vec<u8>) -> fpm::http::Response {
     actix_web::HttpResponse::Ok().body(data)
 }
 
-pub fn ok_with_content_type<V, B>(data: B, content_type: V) -> fpm::http::Response
-where
-    B: actix_http::body::MessageBody + 'static,
-    V: actix_http::header::TryIntoHeaderValue,
-{
+pub fn ok_with_content_type(data: Vec<u8>, content_type: mime_guess::Mime) -> fpm::http::Response {
     actix_web::HttpResponse::Ok()
         .content_type(content_type)
         .body(data)
@@ -314,12 +307,15 @@ pub(crate) fn api_ok(data: impl serde::Serialize) -> fpm::Result<fpm::http::Resp
         success: bool,
     }
 
-    let data = serde_json::to_string(&SuccessResponse {
+    let data = serde_json::to_vec(&SuccessResponse {
         data,
         success: true,
     })?;
 
-    Ok(ok_with_content_type(data, "application/json"))
+    Ok(ok_with_content_type(
+        data,
+        mime_guess::mime::APPLICATION_JSON,
+    ))
 }
 
 pub(crate) fn api_error<T: Into<String>>(message: T) -> fpm::Result<fpm::http::Response> {

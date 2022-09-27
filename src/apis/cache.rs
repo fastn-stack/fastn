@@ -58,7 +58,7 @@ pub async fn clear(req: &fpm::http::Request) -> fpm::http::Response {
         );
     }
 
-    fpm::http::ok("Done")
+    fpm::http::ok("Done".into())
 }
 
 pub async fn clear_(query: &QueryParams) -> fpm::Result<()> {
