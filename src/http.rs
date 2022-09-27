@@ -57,60 +57,95 @@ where
 
 #[derive(Debug, Clone)]
 pub struct Request {
-    pub req: actix_web::HttpRequest,
+    method: String,
+    uri: String,
+    path: String,
+    path_data: String,
+    host: String,
+    query_string: String,
+    cookies: std::collections::HashMap<String, String>,
+    headers: reqwest::header::HeaderMap,
+    query: std::collections::HashMap<String, serde_json::Value>,
+    body: actix_web::web::Bytes,
 }
 
 impl Request {
-    pub fn from_actix(req: actix_web::HttpRequest) -> Self {
-        Request { req }
+    pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
+        Request {
+            method: req.method().to_string(),
+            uri: req.uri().to_string(),
+            path: req.path().to_string(),
+            path_data: req.match_info().query("path").to_string(),
+            host: req.connection_info().host().to_string(),
+            query_string: req.query_string().to_string(),
+            body,
+            headers: {
+                let mut headers = reqwest::header::HeaderMap::new();
+                for (key, value) in req.headers() {
+                    headers.insert(key.clone(), value.clone());
+                }
+                headers
+            },
+            query: {
+                actix_web::web::Query::<std::collections::HashMap<String, serde_json::Value>>::from_query(
+                    req.query_string(),
+                ).unwrap().0
+            },
+            cookies: req
+                .cookies()
+                .unwrap()
+                .iter()
+                .map(|c| (c.name().to_string(), c.value().to_string()))
+                .collect(),
+        }
+    }
+
+    pub fn body(&self) -> &[u8] {
+        &self.body
     }
 
     pub fn method(&self) -> &str {
-        self.req.method().as_str()
+        self.method.as_str()
     }
 
-    pub fn uri(&self) -> String {
-        self.req.uri().to_string()
+    pub fn uri(&self) -> &str {
+        self.uri.as_str()
     }
 
     pub fn path(&self) -> &str {
-        self.req.path()
+        self.path.as_str()
+    }
+
+    pub fn query_string(&self) -> &str {
+        self.query_string.as_str()
     }
 
     pub fn url_data(&self, key: &str) -> &str {
-        self.req.match_info().query(key)
+        if key == "path" {
+            self.path_data.as_str()
+        } else {
+            unimplemented!("url data not implemented for {}", key)
+        }
     }
 
-    pub fn cookies(&self) -> std::collections::HashMap<String, String> {
-        self.req
-            .cookies()
-            .unwrap()
-            .iter()
-            .map(|c| (c.name().to_string(), c.value().to_string()))
-            .collect()
+    pub fn cookies(&self) -> &std::collections::HashMap<String, String> {
+        &self.cookies
     }
 
     pub fn cookie(&self, name: &str) -> Option<String> {
-        self.req.cookie(name).map(|v| v.value().to_string())
+        self.cookies().get(name).map(|v| v.to_string())
     }
 
-    pub fn host(&self) -> String {
-        self.req.connection_info().host().to_string()
+    pub fn host(&self) -> &str {
+        self.host.as_str()
     }
 
-    pub fn headers(&self) -> reqwest::header::HeaderMap {
-        let mut headers = reqwest::header::HeaderMap::new();
-        for (key, value) in self.req.headers() {
-            headers.insert(key.clone(), value.clone());
-        }
-        headers
+    pub fn headers(&self) -> &reqwest::header::HeaderMap {
+        &self.headers
     }
 
-    pub fn query(&self) -> fpm::Result<std::collections::HashMap<String, serde_json::Value>> {
-        // TODO: Remove unwrap
-        Ok(actix_web::web::Query::<std::collections::HashMap<String, serde_json::Value>>::from_query(
-            self.req.query_string(),
-        ).map_err(fpm::Error::QueryPayloadError)?.0)
+    pub fn query(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.query
     }
 }
 

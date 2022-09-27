@@ -18,20 +18,30 @@ static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
 pub(crate) async fn get_out(
     host: &str,
     req: fpm::http::Request,
-    body: &[u8], // TODO: Not liking it, It should be fetched from request only
 ) -> fpm::Result<fpm::http::Response> {
     let headers = req.headers();
     // TODO: It should be part of fpm::Request::uri()
-    let path = &req.req.uri().to_string()[1..];
+    let path = &req.uri().to_string()[1..];
 
-    println!("proxy_request: {} {}", req.req.method(), path);
+    println!("proxy_request: {} {}", req.method(), path);
 
     let mut proxy_request = reqwest::Request::new(
-        req.req.method().clone(),
-        reqwest::Url::parse(format!("{}/{}?{}", host, path, req.req.query_string()).as_str())?,
+        match req.method() {
+            "GET" => reqwest::Method::GET,
+            "POST" => reqwest::Method::POST,
+            "PUT" => reqwest::Method::PUT,
+            "DELETE" => reqwest::Method::DELETE,
+            "PATCH" => reqwest::Method::PATCH,
+            "HEAD" => reqwest::Method::HEAD,
+            "OPTIONS" => reqwest::Method::OPTIONS,
+            "TRACE" => reqwest::Method::TRACE,
+            "CONNECT" => reqwest::Method::CONNECT,
+            _ => reqwest::Method::GET,
+        },
+        reqwest::Url::parse(format!("{}/{}?{}", host, path, req.query_string()).as_str())?,
     );
 
-    *proxy_request.headers_mut() = headers;
+    *proxy_request.headers_mut() = headers.to_owned();
 
     // TODO: Some extra headers, possibly Authentication header
     // Authentication header can come from system environment variable
@@ -52,7 +62,7 @@ pub(crate) async fn get_out(
         reqwest::header::HeaderValue::from_static("fpm"),
     );
 
-    *proxy_request.body_mut() = Some(body.to_vec().into());
+    *proxy_request.body_mut() = Some(req.body().to_vec().into());
 
     Ok(fpm::http::ResponseBuilder::from_reqwest(CLIENT.execute(proxy_request).await?).await)
 }

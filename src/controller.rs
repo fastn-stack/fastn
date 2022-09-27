@@ -182,7 +182,7 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
 
 pub async fn get_remote_identities(
     remote_host: &str,
-    cookies: std::collections::HashMap<String, String>,
+    cookies: &std::collections::HashMap<String, String>,
     identities: &[(String, String)],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
     use itertools::Itertools;

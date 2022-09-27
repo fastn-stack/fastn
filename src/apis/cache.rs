@@ -39,7 +39,7 @@ fn query(uri: &str) -> fpm::Result<QueryParams> {
 }
 
 pub async fn clear(req: &fpm::http::Request) -> fpm::http::Response {
-    let query = match query(req.uri().as_str()) {
+    let query = match query(req.uri()) {
         Ok(q) => q,
         Err(err) => {
             return fpm::server_error!(

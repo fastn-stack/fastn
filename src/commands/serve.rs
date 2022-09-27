@@ -131,7 +131,7 @@ async fn serve(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
 ) -> fpm::Result<fpm::http::Response> {
-    let req = fpm::http::Request::from_actix(req);
+    let req = fpm::http::Request::from_actix(req, body);
 
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method(), req.path());
@@ -181,7 +181,7 @@ async fn serve(
                             return Ok(fpm::server_error!("request not set"));
                         };
 
-                        return fpm::proxy::get_out(endpoint, req, &body).await;
+                        return fpm::proxy::get_out(endpoint, req).await;
                     };
                 }
             }
@@ -212,9 +212,12 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
     Ok(())
 }
 
-pub async fn clear_cache(req: actix_web::HttpRequest) -> fpm::http::Response {
+pub async fn clear_cache(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+) -> fpm::http::Response {
     let _lock = LOCK.write().await;
-    fpm::apis::cache::clear(&fpm::http::Request::from_actix(req)).await
+    fpm::apis::cache::clear(&fpm::http::Request::from_actix(req, body)).await
 }
 
 // TODO: Move them to routes folder
@@ -237,17 +240,21 @@ pub async fn clone() -> fpm::Result<fpm::http::Response> {
     fpm::apis::clone().await
 }
 
-pub(crate) async fn view_source(req: actix_web::HttpRequest) -> fpm::http::Response {
+pub(crate) async fn view_source(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+) -> fpm::http::Response {
     let _lock = LOCK.read().await;
-    fpm::apis::view_source(fpm::http::Request::from_actix(req)).await
+    fpm::apis::view_source(fpm::http::Request::from_actix(req, body)).await
 }
 
 pub async fn edit(
     req: actix_web::HttpRequest,
     req_data: actix_web::web::Json<fpm::apis::edit::EditRequest>,
+    body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit(fpm::http::Request::from_actix(req), req_data.0).await
+    fpm::apis::edit(fpm::http::Request::from_actix(req, body), req_data.0).await
 }
 
 pub async fn revert(

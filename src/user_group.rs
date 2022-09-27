@@ -433,7 +433,7 @@ pub async fn access_identities(
     use itertools::Itertools;
     if cfg!(feature = "remote") {
         return fpm::controller::get_remote_identities(
-            req.host().as_str(),
+            req.host(),
             req.cookies(),
             get_identities(config, document_name, is_read)?
                 .into_iter()
