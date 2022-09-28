@@ -52,4 +52,15 @@ where
     }
 }
 
+pub(crate) fn kind_eq(
+    key: &str,
+    kind: &ftd::interpreter2::Kind,
+    doc: &ftd::interpreter2::TDoc,
+    line_number: usize,
+) -> ftd::interpreter2::Result<bool> {
+    let var_kind = ftd::ast::VariableKind::get_kind(key, doc.name, line_number)?;
+    let kind_data = ftd::interpreter2::KindData::from_ast_kind(var_kind, doc, line_number)?;
+    Ok(kind_data.kind.eq(kind))
+}
+
 pub const REFERENCE: &str = ftd::ast::utils::REFERENCE;

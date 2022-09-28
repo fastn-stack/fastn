@@ -10,24 +10,33 @@
       "value": {
         "List": {
           "value": [
-            {
-              "String": {
-                "value": "Varanasi",
-                "line_number": 3
+            [
+              "string",
+              {
+                "String": {
+                  "value": "Varanasi",
+                  "line_number": 3
+                }
               }
-            },
-            {
-              "String": {
-                "value": "Prayagraj",
-                "line_number": 4
+            ],
+            [
+              "string",
+              {
+                "String": {
+                  "value": "Prayagraj",
+                  "line_number": 4
+                }
               }
-            },
-            {
-              "String": {
-                "value": "Bengaluru",
-                "line_number": 5
+            ],
+            [
+              "string",
+              {
+                "String": {
+                  "value": "Bengaluru",
+                  "line_number": 5
+                }
               }
-            }
+            ]
           ],
           "line_number": 1
         }

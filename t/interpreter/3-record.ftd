@@ -13,4 +13,15 @@ string name:
 name: Arpita
 age: 10
 
+-- person:
+name: Ayushi
+age: 9
+
 -- end: company.people
+
+-- string list company.locations:
+
+-- string: Varanasi
+-- string: Bengaluru
+
+-- end: company.locations

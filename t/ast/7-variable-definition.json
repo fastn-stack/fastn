@@ -43,36 +43,39 @@
       "value": {
         "List": {
           "value": [
-            {
-              "Record": {
-                "name": "person",
-                "caption": null,
-                "headers": [
-                  {
-                    "key": "name",
-                    "value": {
-                      "String": {
-                        "value": "Arpita",
-                        "line_number": 8
-                      }
+            [
+              "person",
+              {
+                "Record": {
+                  "name": "person",
+                  "caption": null,
+                  "headers": [
+                    {
+                      "key": "name",
+                      "value": {
+                        "String": {
+                          "value": "Arpita",
+                          "line_number": 8
+                        }
+                      },
+                      "line_number": 8
                     },
-                    "line_number": 8
-                  },
-                  {
-                    "key": "age",
-                    "value": {
-                      "String": {
-                        "value": "10",
-                        "line_number": 9
-                      }
-                    },
-                    "line_number": 9
-                  }
-                ],
-                "body": null,
-                "line_number": 7
+                    {
+                      "key": "age",
+                      "value": {
+                        "String": {
+                          "value": "10",
+                          "line_number": 9
+                        }
+                      },
+                      "line_number": 9
+                    }
+                  ],
+                  "body": null,
+                  "line_number": 7
+                }
               }
-            }
+            ]
           ],
           "line_number": 5
         }

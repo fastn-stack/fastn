@@ -67,6 +67,38 @@
                           },
                           "line_number": 12
                         }
+                      },
+                      {
+                        "Value": {
+                          "value": {
+                            "Record": {
+                              "name": "foo#person",
+                              "fields": {
+                                "age": {
+                                  "Value": {
+                                    "value": {
+                                      "Integer": {
+                                        "value": 9
+                                      }
+                                    },
+                                    "line_number": 18
+                                  }
+                                },
+                                "name": {
+                                  "Value": {
+                                    "value": {
+                                      "String": {
+                                        "text": "Ayushi"
+                                      }
+                                    },
+                                    "line_number": 17
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "line_number": 16
+                        }
                       }
                     ],
                     "kind": {
@@ -84,10 +116,64 @@
                     }
                   }
                 },
-                "line_number": 14
+                "line_number": 18
               }
             },
-            "line_number": 14
+            "line_number": 18
+          },
+          {
+            "name": "locations",
+            "kind": {
+              "kind": {
+                "List": {
+                  "kind": "String"
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "List": {
+                    "data": [
+                      {
+                        "Value": {
+                          "value": {
+                            "String": {
+                              "text": "Varanasi"
+                            }
+                          },
+                          "line_number": 24
+                        }
+                      },
+                      {
+                        "Value": {
+                          "value": {
+                            "String": {
+                              "text": "Bengaluru"
+                            }
+                          },
+                          "line_number": 25
+                        }
+                      }
+                    ],
+                    "kind": {
+                      "kind": {
+                        "List": {
+                          "kind": "String"
+                        }
+                      },
+                      "caption": false,
+                      "body": false
+                    }
+                  }
+                },
+                "line_number": 25
+              }
+            },
+            "line_number": 25
           }
         ],
         "line_number": 7

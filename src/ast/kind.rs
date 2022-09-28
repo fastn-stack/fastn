@@ -90,7 +90,7 @@ pub enum VariableValue {
         line_number: usize,
     },
     List {
-        value: Vec<VariableValue>,
+        value: Vec<(String, VariableValue)>,
         line_number: usize,
     },
     Record {
@@ -189,7 +189,10 @@ impl VariableValue {
         matches!(self, VariableValue::List { .. })
     }
 
-    pub(crate) fn into_list(self, doc_name: &str) -> ftd::ast::Result<Vec<VariableValue>> {
+    pub(crate) fn into_list(
+        self,
+        doc_name: &str,
+    ) -> ftd::ast::Result<Vec<(String, VariableValue)>> {
         match self {
             VariableValue::List { value, .. } => Ok(value),
             t => ftd::ast::parse_error(
@@ -295,7 +298,7 @@ impl VariableValue {
                 value: section
                     .sub_sections
                     .iter()
-                    .map(VariableValue::from_p1)
+                    .map(|v| (v.name.to_string(), VariableValue::from_p1(v)))
                     .collect_vec(),
                 line_number: section.line_number,
             };
@@ -362,7 +365,10 @@ impl VariableValue {
                 line_number,
                 ..
             }) => VariableValue::List {
-                value: section.iter().map(VariableValue::from_p1).collect_vec(),
+                value: section
+                    .iter()
+                    .map(|v| (v.name.to_string(), VariableValue::from_p1(v)))
+                    .collect_vec(),
                 line_number: *line_number,
             },
         }

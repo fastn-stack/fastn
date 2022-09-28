@@ -51,7 +51,19 @@ impl PropertyValue {
                 let line_number = value.line_number();
                 let value_list = value.into_list(doc.name)?;
                 let mut values = vec![];
-                for value in value_list {
+                for (key, value) in value_list {
+                    if !ftd::interpreter2::utils::kind_eq(
+                        key.as_str(),
+                        kind,
+                        doc,
+                        value.line_number(),
+                    )? {
+                        return ftd::interpreter2::utils::e2(
+                            format!("Expected list of `{:?}`, found: `{}`", kind, key),
+                            doc.name,
+                            value.line_number(),
+                        );
+                    }
                     values.push(PropertyValue::from_ast_value_with_kind(
                         value,
                         doc,
@@ -124,7 +136,7 @@ impl PropertyValue {
                         for header in headers {
                             header_list.extend(match &header.value {
                                 ftd::ast::VariableValue::List { value, .. } => value.to_owned(),
-                                t => vec![t.to_owned()],
+                                t => vec![(header.key.to_string(), t.to_owned())],
                             });
                         }
                         result_field.insert(
