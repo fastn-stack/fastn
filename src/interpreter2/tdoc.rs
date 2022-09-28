@@ -26,6 +26,22 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn get_variable(
+        &'a self,
+        line_number: usize,
+        name: &'a str,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Variable> {
+        match self.get_thing(line_number, name)? {
+            ftd::interpreter2::Thing::Variable(r) => Ok(r),
+            t => self.err(
+                format!("Expected Variable, found: `{:?}`", t).as_str(),
+                name,
+                "get_variable",
+                line_number,
+            ),
+        }
+    }
+
     pub fn eq(&'a self, name1: &'a str, name2: &'a str) -> bool {
         let name1 = self.resolve_name(name1);
         let name2 = self.resolve_name(name2);

@@ -1,0 +1,11 @@
+-- record person:
+string name:
+integer age:
+
+-- person $foo:
+name: FOO
+age: 10
+
+-- $foo:
+name: FOO 1
+age: 11

@@ -32,4 +32,22 @@ impl Variable {
             line_number: variable_definition.line_number,
         })
     }
+
+    pub(crate) fn update_from_ast(
+        ast: ftd::ast::AST,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Variable> {
+        let variable_definition = ast.get_variable_invocation(doc.name)?;
+        let mut variable_thing = doc.get_variable(
+            variable_definition.line_number,
+            variable_definition.name.as_str(),
+        )?;
+        let value = ftd::interpreter2::PropertyValue::from_ast_value_with_kind(
+            variable_definition.value,
+            doc,
+            &variable_thing.kind,
+        )?;
+        variable_thing.value = value;
+        Ok(variable_thing)
+    }
 }

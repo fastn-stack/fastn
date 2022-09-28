@@ -80,6 +80,12 @@ impl InterpreterState {
                     variable.name.to_string(),
                     ftd::interpreter2::Thing::Variable(variable),
                 );
+            } else if ast.is_variable_invocation() {
+                let variable = ftd::interpreter2::Variable::update_from_ast(ast, &doc)?;
+                self.bag.insert(
+                    variable.name.to_string(),
+                    ftd::interpreter2::Thing::Variable(variable),
+                );
             }
         }
 

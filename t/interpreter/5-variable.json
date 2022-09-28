@@ -1,0 +1,87 @@
+{
+  "data": {
+    "foo#foo": {
+      "Variable": {
+        "name": "foo#foo",
+        "kind": {
+          "kind": {
+            "Record": {
+              "name": "foo#person"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "Record": {
+                "name": "foo#person",
+                "fields": {
+                  "age": {
+                    "Value": {
+                      "value": {
+                        "Integer": {
+                          "value": 11
+                        }
+                      },
+                      "line_number": 11
+                    }
+                  },
+                  "name": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "FOO 1"
+                        }
+                      },
+                      "line_number": 10
+                    }
+                  }
+                }
+              }
+            },
+            "line_number": 9
+          }
+        },
+        "line_number": 5
+      }
+    },
+    "foo#person": {
+      "Record": {
+        "name": "foo#person",
+        "fields": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "age",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 3
+          }
+        ],
+        "line_number": 1
+      }
+    }
+  },
+  "name": "foo",
+  "instructions": [],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}
