@@ -1189,7 +1189,7 @@ dependencies = [
 [[package]]
 name = "fpm-utils"
 version = "0.1.0"
-source = "git+https://github.com/FifthTry/fpm-utils?rev=e8d2fa4#e8d2fa4c88d71ec6fe7077784e3b8c41598306c9"
+source = "git+https://github.com/FifthTry/fpm-utils?rev=8d252a7#8d252a77fa8cea41501c740f8cb184a499ac9ff1"
 dependencies = [
  "wit-bindgen-host-wasmtime-rust",
 ]

@@ -212,7 +212,7 @@ async fn serve(
                         // Expect the backend.wasm file to exist here
                         let wasm_module =
                             config.get_root_for_package(&package).join("backend.wasm");
-                        if let Ok(resp) = fpm::wasm::handle_wasm(&req, wasm_module).await {
+                        if let Ok(resp) = fpm::wasm::handle_wasm(&req, body, wasm_module).await {
                             return resp;
                         }
                     }

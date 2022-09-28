@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 #[derive(Default)]
 pub struct HostExports {}
 
@@ -6,42 +8,35 @@ impl fpm_utils::backend_host_export::host::Host for HostExports {
         &mut self,
         request: fpm_utils::backend_host_export::host::Httprequest<'_>,
     ) -> fpm_utils::backend_host_export::host::Httpresponse {
-        let request_client = reqwest::blocking::Client::new();
-
+        let url = request.path.to_string();
+        let request_method = request.method.to_string();
+        let request_body = request.payload.to_string();
         let mut headers = reqwest::header::HeaderMap::new();
-        // request
-        //     .headers
-        //     .clone()
-        //     .into_iter()
-        //     .map(|(header_key, header_val)| {
-        //         headers.insert(
-        //             header_key,
-        //             reqwest::header::HeaderValue::from_str(header_val).unwrap(),
-        //         );
-        //     });
-        headers.insert(
-            "Content-Type",
-            reqwest::header::HeaderValue::from_str("application/json").unwrap(),
-        );
-        let resp = match request.method {
-            "GET" => request_client
-                .get(request.path)
-                .send()
-                .unwrap()
-                .text()
-                .unwrap(),
-            "POST" => request_client
-                .post(request.path)
-                .body(dbg!(request.payload.to_string()))
-                .headers(headers)
-                .send()
-                .unwrap()
-                .text()
-                .unwrap(),
-            _ => panic!("Not implemented"),
-        };
-
-        fpm_utils::backend_host_export::host::Httpresponse { data: dbg!(resp) }
+        request
+            .headers
+            .clone()
+            .into_iter()
+            .for_each(|(header_key, header_val)| {
+                headers.insert(
+                    reqwest::header::HeaderName::from_str(header_key).unwrap(),
+                    reqwest::header::HeaderValue::from_str(header_val).unwrap(),
+                );
+            });
+        let resp = std::thread::spawn(move || {
+            let request_client = reqwest::blocking::Client::new();
+            match request_method.as_str() {
+                "GET" => request_client.get(url).headers(headers),
+                "POST" => request_client.post(url).headers(headers).body(request_body),
+                _ => panic!(""),
+            }
+            .send()
+            .unwrap()
+            .text()
+            .unwrap()
+        })
+        .join()
+        .unwrap();
+        fpm_utils::backend_host_export::host::Httpresponse { data: resp }
     }
 }
 
@@ -52,10 +47,12 @@ pub struct Context<I, E> {
 
 pub async fn handle_wasm(
     req: &actix_web::HttpRequest,
+    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only
     wasm_module: camino::Utf8PathBuf,
 ) -> actix_web::Result<actix_web::HttpResponse> {
     pub async fn inner(
         req: &actix_web::HttpRequest,
+        body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only
         wasm_module: camino::Utf8PathBuf,
     ) -> actix_web::Result<actix_web::HttpResponse> {
         let mut wasm_config = wit_bindgen_host_wasmtime_rust::wasmtime::Config::new();
@@ -99,6 +96,12 @@ pub async fn handle_wasm(
         // TODO: Handle the error efficiently
 
         let uri = req.uri().to_string();
+        let b = body.to_vec();
+        let body_str = if let Ok(b) = std::str::from_utf8(&b) {
+            b
+        } else {
+            ""
+        };
         let request = fpm_utils::backend_host_import::guest_backend::Httprequest {
             path: uri.as_str(),
             headers: &(&req.headers().iter().fold(
@@ -110,6 +113,7 @@ pub async fn handle_wasm(
             ))[..],
             querystring: req.query_string(),
             method: req.method().as_str(),
+            payload: body_str,
         };
         fpm::time("WASM Guest function").it(match import.handlerequest(&mut store, request) {
             Ok(data) => Ok(actix_web::HttpResponse::Ok()
@@ -122,5 +126,5 @@ pub async fn handle_wasm(
             ),
         })
     }
-    fpm::time("WASM Execution: ").it(inner(req, wasm_module).await)
+    fpm::time("WASM Execution: ").it(inner(req, body, wasm_module).await)
 }
