@@ -200,14 +200,13 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn is_record(&self, record_name: &str) -> bool {
-        matches!(self, VariableValue::Record { name, .. } if name.eq(record_name))
+    pub(crate) fn is_record(&self) -> bool {
+        matches!(self, VariableValue::Record { .. })
     }
 
     #[allow(clippy::type_complexity)]
     pub(crate) fn get_record(
         &self,
-        record_name: &str,
         doc_id: &str,
     ) -> ftd::ast::Result<(
         &String,
@@ -223,9 +222,9 @@ impl VariableValue {
                 headers,
                 body,
                 line_number,
-            } if name.eq(record_name) => Ok((name, caption, headers, body, *line_number)),
+            } => Ok((name, caption, headers, body, *line_number)),
             t => ftd::ast::parse_error(
-                format!("Expected Record of `{}`, found: `{:?}`", record_name, t),
+                format!("Expected Record, found: `{:?}`", t),
                 doc_id,
                 self.line_number(),
             ),

@@ -1,0 +1,132 @@
+{
+  "data": {
+    "foo#company": {
+      "Record": {
+        "name": "foo#company",
+        "fields": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 8
+          },
+          {
+            "name": "people",
+            "kind": {
+              "kind": {
+                "List": {
+                  "kind": {
+                    "Record": {
+                      "name": "foo#person"
+                    }
+                  }
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "List": {
+                    "data": [
+                      {
+                        "Value": {
+                          "value": {
+                            "Record": {
+                              "name": "foo#person",
+                              "fields": {
+                                "age": {
+                                  "Value": {
+                                    "value": {
+                                      "Integer": {
+                                        "value": 10
+                                      }
+                                    },
+                                    "line_number": 14
+                                  }
+                                },
+                                "name": {
+                                  "Value": {
+                                    "value": {
+                                      "String": {
+                                        "text": "Arpita"
+                                      }
+                                    },
+                                    "line_number": 13
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "line_number": 12
+                        }
+                      }
+                    ],
+                    "kind": {
+                      "kind": {
+                        "List": {
+                          "kind": {
+                            "Record": {
+                              "name": "foo#person"
+                            }
+                          }
+                        }
+                      },
+                      "caption": false,
+                      "body": false
+                    }
+                  }
+                },
+                "line_number": 14
+              }
+            },
+            "line_number": 14
+          }
+        ],
+        "line_number": 7
+      }
+    },
+    "foo#person": {
+      "Record": {
+        "name": "foo#person",
+        "fields": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "age",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 3
+          }
+        ],
+        "line_number": 1
+      }
+    }
+  },
+  "name": "foo",
+  "instructions": [],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}

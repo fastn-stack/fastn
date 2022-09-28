@@ -20,6 +20,12 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn eq(&'a self, name1: &'a str, name2: &'a str) -> bool {
+        let name1 = self.resolve_name(name1);
+        let name2 = self.resolve_name(name2);
+        name1.eq(&name2)
+    }
+
     pub fn get_thing(
         &'a self,
         line_number: usize,

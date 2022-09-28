@@ -50,6 +50,7 @@ impl InterpreterState {
                 }
             }
             self.document_stack[l].done_processing_imports();
+            self.document_stack[l].reorder(&self.bag)?;
         }
 
         let parsed_document = &mut self.document_stack[l];
@@ -167,6 +168,15 @@ impl ParsedDocument {
 
     fn done_processing_imports(&mut self) {
         self.processing_imports = false;
+    }
+
+    fn reorder(
+        &mut self,
+        _bag: &ftd::Map<ftd::interpreter2::Thing>,
+    ) -> ftd::interpreter2::Result<()> {
+        // TODO: reorder
+        self.ast.reverse();
+        Ok(())
     }
 
     pub fn get_doc_aliases(&self) -> ftd::Map<String> {

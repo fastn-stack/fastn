@@ -1,0 +1,16 @@
+-- record person:
+string name:
+integer age:
+
+
+
+-- record company:
+string name:
+
+-- person list company.people:
+
+-- person:
+name: Arpita
+age: 10
+
+-- end: company.people
