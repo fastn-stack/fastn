@@ -22,21 +22,13 @@ all the dependencies of a package.
 files on GitHub pages, S3 etc. static site hosting sites.
 
 
-## `fpm-repo`
+## Contributors
 
-`fpm` packages can be shared with others by using `.tar.gz` format defined by `fpm`
-or via Git repository (any version control system for that matter). `fpm` is 
-capable of downloading package dependencies for packages that are hosted on version
-control systems or tarballs served over HTTP.
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
 
-`fpm` has a sister project, `fpm-repo` (under development), which can be used for
-first class package hosting. You can choose if your `fpm` package would be natively
-hosted on say GitHub or via a `fpm-repo` you have created or available as SAAS.
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
 
-`fpm-repo` has advantages over GitHub etc. hosting as a `fpm` package is inherently 
-a website, and `fpm-repo` shows the site directly, without a static build step.
-
-`ftd` has some dynamic features, which an be used when using `fpm-repo`.
-
-`fpm-repo` also offers web based editing experience, with built-in version control,
-change request based workflow (equivalent to GitHub Pull Request workflow).
+<!-- ALL-CONTRIBUTORS-LIST:END -->
