@@ -57,6 +57,26 @@
         "review",
         "test"
       ]
+    },
+    {
+      "login": "amitu",
+      "name": "Amit Upadhyay",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58662?v=4",
+      "profile": "https://www.fifthtry.com",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "eventOrganizing",
+        "ideas",
+        "maintenance",
+        "mentoring",
+        "review",
+        "tool",
+        "test",
+        "tutorial",
+        "video"
+      ]
     }
   ],
   "contributorsPerLine": 7,
