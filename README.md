@@ -4,7 +4,9 @@
 
 </div>
 
-# ![FPM](FPM.svg) `fpm`: FTD Package Manager
+# `fpm`: FTD Package Manager
+
+![FPM](FPM.svg =100x100) 
 
 [`ftd`](https://ftd.dev) is a language to create web pages or documents for 
 publishing on the web. It starts with Markdown, but adds features to create full
