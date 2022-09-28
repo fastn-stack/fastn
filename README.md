@@ -4,7 +4,9 @@
 
 </div>
 
-# ![FTD](FTD.svg) FTD: Programming Language For Prose
+# FTD: Programming Language For Prose
+
+![FTD](FTD.svg = 100x100) 
 
 Homepage: [ftd.dev](https://ftd.dev/)
 
