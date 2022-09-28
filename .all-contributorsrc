@@ -89,6 +89,18 @@
         "test",
         "ideas"
       ]
+    },
+    {
+      "login": "AviralVerma13",
+      "name": "Aviral Verma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/106665143?v=4",
+      "profile": "http://fifthtry.com",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
