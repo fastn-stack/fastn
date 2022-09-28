@@ -25,6 +25,22 @@
         "tutorial",
         "video"
       ]
+    },
+    {
+      "login": "AbrarNitk",
+      "name": "Abrar Khan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17473503?v=4",
+      "profile": "https://github.com/AbrarNitk",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "ideas",
+        "maintenance",
+        "mentoring",
+        "review",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
