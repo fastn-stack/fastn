@@ -84,14 +84,15 @@ impl PropertyValue {
             }
             Kind::Record { name } if value.is_record() => {
                 let record = doc.get_record(value.line_number(), name)?;
-                let (rec_name, caption, headers, body, line_number) = value.get_record(doc.name)?;
-                if !doc.eq(name, rec_name) {
-                    return ftd::interpreter2::utils::e2(
-                        format!("Expected record of `{}`, found: `{}`", name, rec_name),
-                        doc.name,
-                        value.line_number(),
-                    );
-                }
+                let (_, caption, headers, body, line_number) = value.get_record(doc.name)?;
+                // TODO: Check if the record name and the value kind are same
+                // if !doc.eq(name, rec_name) {
+                //     return ftd::interpreter2::utils::e2(
+                //         format!("Expected record of `{}`, found: `{}`", name, rec_name),
+                //         doc.name,
+                //         value.line_number(),
+                //     );
+                // }
                 let mut result_field: ftd::Map<PropertyValue> = Default::default();
                 for field in record.fields {
                     if field.is_caption() && caption.is_some() {

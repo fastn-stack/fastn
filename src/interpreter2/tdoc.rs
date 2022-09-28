@@ -17,6 +17,12 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Record> {
         match self.get_thing(line_number, name)? {
             ftd::interpreter2::Thing::Record(r) => Ok(r),
+            t => self.err(
+                format!("Expected Record, found: `{:?}`", t).as_str(),
+                name,
+                "get_record",
+                line_number,
+            ),
         }
     }
 

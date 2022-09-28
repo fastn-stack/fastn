@@ -13,6 +13,7 @@ pub use things::{
     kind::{Kind, KindData},
     record::Record,
     value::{PropertyValue, Value},
+    variable::Variable,
     Thing,
 };
 

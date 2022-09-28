@@ -1,0 +1,9 @@
+-- record person:
+string name:
+integer age:
+
+
+
+-- person foo:
+name: FOO
+age: 10

@@ -62,6 +62,13 @@ impl KindData {
             "ftd.ui" => Kind::UI,
             k => match doc.get_thing(line_number, k)? {
                 ftd::interpreter2::Thing::Record(r) => Kind::Record { name: r.name },
+                t => {
+                    return ftd::interpreter2::utils::e2(
+                        format!("Can't get find for `{:?}`", t),
+                        doc.name,
+                        line_number,
+                    )
+                }
             },
         };
 

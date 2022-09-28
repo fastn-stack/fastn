@@ -64,8 +64,26 @@ impl AST {
         )
     }
 
+    pub fn get_variable_definition(
+        self,
+        doc_id: &str,
+    ) -> ftd::ast::Result<ftd::ast::VariableDefinition> {
+        if let ftd::ast::AST::VariableDefinition(v) = self {
+            return Ok(v);
+        }
+        ftd::ast::parse_error(
+            format!("`{:?}` is not a variable definition", self),
+            doc_id,
+            self.line_number(),
+        )
+    }
+
     pub fn is_record(&self) -> bool {
         matches!(self, AST::Record(_))
+    }
+
+    pub fn is_variable_definition(&self) -> bool {
+        matches!(self, AST::VariableDefinition(_))
     }
 
     #[cfg(test)]
