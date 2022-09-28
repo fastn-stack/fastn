@@ -59,8 +59,8 @@ pub(crate) use utils::{copy_dir_all, time, timestamp_nanosecond};
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
-pub const FPM_UI_INTERFACE: &str = "fifthtry.github.io/fpm-ui";
-pub const PACKAGE_THEME_INTERFACE: &str = "fifthtry.github.io/theme";
+pub const FPM_UI_INTERFACE: &str = "ftd-lang.github.io/fpm-ui";
+pub const PACKAGE_THEME_INTERFACE: &str = "ftd-lang.github.io/theme";
 pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
 pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
