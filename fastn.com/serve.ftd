@@ -1,7 +1,7 @@
 -- ft.page: `fpm serve`
 
 
-`fpm serve [<port>]` creates an `http` server, which serves static files from `.build` directory.
+`fpm serve [<port>]` creates an `http` server, which dynamically builds ftd files when serving.
 
 -- ft.h1: Usage
 
