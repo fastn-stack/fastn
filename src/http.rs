@@ -64,12 +64,12 @@ fn get_cookies(headers: &reqwest::header::HeaderMap) -> std::collections::HashMa
     let mut cookies = std::collections::HashMap::new();
     if let Some(cookie) = headers.get("cookie") {
         if let Ok(cookie) = cookie.to_str() {
-            for cookie in cookie.split(";") {
+            for cookie in cookie.split(';') {
                 let cookie = cookie.trim();
-                if let Some(index) = cookie.find("=") {
+                if let Some(index) = cookie.find('=') {
                     let (key, value) = cookie.split_at(index);
                     let key = key.trim();
-                    let value = value.trim_start_matches("=").trim();
+                    let value = value.trim_start_matches('=').trim();
                     cookies.insert(key.to_string(), value.to_string());
                 }
             }
