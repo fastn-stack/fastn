@@ -41,6 +41,22 @@
         "review",
         "test"
       ]
+    },
+    {
+      "login": "sharmashobhit",
+      "name": "Shobhit Sharma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1982566?v=4",
+      "profile": "https://github.com/sharmashobhit",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "ideas",
+        "maintenance",
+        "mentoring",
+        "review",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
