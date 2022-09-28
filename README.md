@@ -1,11 +1,6 @@
-<br/>
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
 <div align="center">
 
-![Contributors](https://img.shields.io/github/contributors/ftd-lang/fpm?color=dark-green) ![Issues](https://img.shields.io/github/issues/ftd-lang/fpm) ![License](https://img.shields.io/github/license/ftd-lang/fpm) [![Discord](https://img.shields.io/discord/793929082483769345)](https://discord.com/channels/793929082483769345/)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-) ![Contributors](https://img.shields.io/github/contributors/ftd-lang/fpm?color=dark-green) ![Issues](https://img.shields.io/github/issues/ftd-lang/fpm) ![License](https://img.shields.io/github/license/ftd-lang/fpm) [![Discord](https://img.shields.io/discord/793929082483769345)](https://discord.com/channels/793929082483769345/)
 
 </div>
 
