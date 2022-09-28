@@ -319,6 +319,82 @@ So the document `intro.ftd` in the package `bar.com` is included in the sitemap
 with the variant `main`.
 The generated HTML includes the canonical url with value as `bar.com/intro`
 
+-- ft.h1: Linking using `id`
+
+There are several different ways by which the user can link sitemap titles to different components
+(present within the same package) using `id`.
+
+-- ft.h2: By directly using `<id>` as title
+
+In this case, the displayed title will be same as the `<id>` itself which will link to the component
+having `id: <id>` within the same package. If the user wants the title to be different from `<id>`,
+then he/she should use any of the other two methods mentioned below.
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.sitemap:
+
+# foo
+
+## foo2
+
+- foo3
+
+-- ft.markdown:
+
+In the above example, `foo`, `foo2` and `foo3` are different component id's (within the same package).
+Here the section title `foo` will be linked to component having `id: foo` (if present within
+the same package). Similarly, the subsection title `foo2` and ToC title `foo3` will be linked
+to their corresponding components having `id: foo2` and `id: foo3` respectively.
+
+-- ft.h2: By using `<id>` as url
+
+The user can pass the `<id>` as url which would link the title to the component
+having `id: <id>` (if present within the same package).
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Section: foo
+
+## Subsection: foo2
+
+- ToC: foo3
+
+-- ft.markdown:
+
+In the above example, `foo`, `foo2` and `foo3` are different component id's (within the same package).
+The `Section` title will be linked to the component having `id: foo`. Similarly, the `Subsection`
+and `ToC` titles will be linked to the components having `id: foo2` and `id: foo3` respectively.
+
+-- ft.h2: By using `id` header
+
+In this case, the user can make use of the `id` header when linking `<id>`
+with any sitemap element (Section, Subsection or ToC).
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Section
+  id: foo
+
+## Subsection
+  id: foo2
+
+- ToC
+  id: foo3
+
+-- ft.markdown:
+
+In the above example, `foo`, `foo2` and `foo3` are different component id's (within the same package).
+The `Section` title will be linked to the component having `id: foo`.
+Similarly, the `Subsection` and `ToC` title will be linked to the components having `id: foo2`
+and `id: foo3` respectively.
 
 -- ft.h1: Skip Header
 
