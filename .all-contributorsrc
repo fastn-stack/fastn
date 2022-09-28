@@ -1,0 +1,36 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "Arpita-Jaiswal",
+      "name": "Arpita Jaiswal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26044181?v=4",
+      "profile": "https://github.com/Arpita-Jaiswal",
+      "contributions": [
+        "code",
+        "doc",
+        "example",
+        "eventOrganizing",
+        "ideas",
+        "maintenance",
+        "mentoring",
+        "review",
+        "tool",
+        "test",
+        "tutorial",
+        "video"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "fpm",
+  "projectOwner": "ftd-lang"
+}
