@@ -1,13 +1,13 @@
--- ft.page: FTD Documentation
+-- ft.page: `ftd` Documentation
 
 
 -- ft.markdown: 
 
-Everything you need to know about FTD.
+Everything you need to know about `ftd`.
 
 -- ft.h1: First Steps
 
-Are you new to FTD or to programming? This is the place to start!
+Are you new to `ftd` or to programming? This is the place to start!
 
 - **From Scratch:** Overview | Installation
 - **Tutorial:** Creating Your First FPM Package
