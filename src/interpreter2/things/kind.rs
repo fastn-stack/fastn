@@ -26,7 +26,7 @@ impl KindData {
         }
     }
     pub(crate) fn from_ast_kind(
-        var_kind: &ftd::ast::VariableKind,
+        var_kind: ftd::ast::VariableKind,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<KindData> {
@@ -96,6 +96,14 @@ impl KindData {
             caption: self.caption,
             body: self.body,
         }
+    }
+
+    pub fn is_list(&self) -> bool {
+        matches!(self.kind, Kind::List { .. })
+    }
+
+    pub fn is_optional(&self) -> bool {
+        matches!(self.kind, Kind::Optional { .. })
     }
 }
 

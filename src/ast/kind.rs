@@ -96,7 +96,7 @@ pub enum VariableValue {
     Record {
         name: String,
         caption: Box<Option<VariableValue>>,
-        headers: Vec<HeaderValue>,
+        headers: HeaderValues,
         body: Option<BodyValue>,
         line_number: usize,
     },
@@ -108,8 +108,8 @@ pub enum VariableValue {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct BodyValue {
-    value: String,
-    line_number: usize,
+    pub value: String,
+    pub line_number: usize,
 }
 
 impl BodyValue {
@@ -122,10 +122,25 @@ impl BodyValue {
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct HeaderValues(Vec<HeaderValue>);
+
+impl HeaderValues {
+    fn new(headers: Vec<HeaderValue>) -> HeaderValues {
+        HeaderValues(headers)
+    }
+
+    pub fn get_by_key(&self, key: &str) -> Vec<&HeaderValue> {
+        use itertools::Itertools;
+
+        self.0.iter().filter(|v| v.key.eq(key)).collect_vec()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct HeaderValue {
-    key: String,
-    value: VariableValue,
-    line_number: usize,
+    pub key: String,
+    pub value: VariableValue,
+    pub line_number: usize,
 }
 
 impl HeaderValue {
@@ -170,8 +185,51 @@ impl VariableValue {
         matches!(self, VariableValue::Optional { value, .. } if value.is_none())
     }
 
-    fn is_list(&self) -> bool {
+    pub(crate) fn is_list(&self) -> bool {
         matches!(self, VariableValue::List { .. })
+    }
+
+    pub(crate) fn into_list(self, doc_name: &str) -> ftd::ast::Result<Vec<VariableValue>> {
+        match self {
+            VariableValue::List { value, .. } => Ok(value),
+            t => ftd::ast::parse_error(
+                format!("Expected list, found: `{:?}`", t),
+                doc_name,
+                t.line_number(),
+            ),
+        }
+    }
+
+    pub(crate) fn is_record(&self, record_name: &str) -> bool {
+        matches!(self, VariableValue::Record { name, .. } if name.eq(record_name))
+    }
+
+    #[allow(clippy::type_complexity)]
+    pub(crate) fn get_record(
+        &self,
+        record_name: &str,
+        doc_id: &str,
+    ) -> ftd::ast::Result<(
+        &String,
+        &Box<Option<VariableValue>>,
+        &HeaderValues,
+        &Option<BodyValue>,
+        usize,
+    )> {
+        match self {
+            VariableValue::Record {
+                name,
+                caption,
+                headers,
+                body,
+                line_number,
+            } if name.eq(record_name) => Ok((name, caption, headers, body, *line_number)),
+            t => ftd::ast::parse_error(
+                format!("Expected Record of `{}`, found: `{:?}`", record_name, t),
+                doc_id,
+                self.line_number(),
+            ),
+        }
     }
 
     fn into_optional(self) -> VariableValue {
@@ -287,7 +345,7 @@ impl VariableValue {
         VariableValue::Record {
             name: section.name.to_string(),
             caption: Box::new(caption),
-            headers,
+            headers: HeaderValues::new(headers),
             body,
             line_number: section.line_number,
         }

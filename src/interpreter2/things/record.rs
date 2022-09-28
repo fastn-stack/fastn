@@ -19,23 +19,23 @@ impl Record {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Record> {
         let record = ast.get_record(doc.name)?;
         let name = doc.resolve_name(record.name.as_str());
-        let fields = Field::from_ast_fields(&record.fields, doc)?;
+        let fields = Field::from_ast_fields(record.fields, doc)?;
         Ok(Record::new(name.as_str(), fields, record.line_number))
     }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Field {
-    name: String,
-    kind: ftd::interpreter2::KindData,
-    mutable: bool,
-    value: Option<ftd::interpreter2::PropertyValue>,
-    line_number: usize,
+    pub name: String,
+    pub kind: ftd::interpreter2::KindData,
+    pub mutable: bool,
+    pub value: Option<ftd::interpreter2::PropertyValue>,
+    pub line_number: usize,
 }
 
 impl Field {
     fn from_ast_fields(
-        fields: &[ftd::ast::Field],
+        fields: Vec<ftd::ast::Field>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Vec<Field>> {
         let mut result = vec![];
@@ -46,11 +46,11 @@ impl Field {
     }
 
     fn from_ast_field(
-        field: &ftd::ast::Field,
+        field: ftd::ast::Field,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Field> {
-        let kind = ftd::interpreter2::KindData::from_ast_kind(&field.kind, doc, field.line_number)?;
-        let value = field.value.as_ref().map_or(Ok(None), |v| {
+        let kind = ftd::interpreter2::KindData::from_ast_kind(field.kind, doc, field.line_number)?;
+        let value = field.value.map_or(Ok(None), |v| {
             ftd::interpreter2::PropertyValue::from_ast_value_with_kind(v, doc, &kind).map(Some)
         })?;
         Ok(Field {
@@ -60,5 +60,13 @@ impl Field {
             value,
             line_number: field.line_number,
         })
+    }
+
+    pub fn is_caption(&self) -> bool {
+        self.kind.caption
+    }
+
+    pub fn is_body(&self) -> bool {
+        self.kind.body
     }
 }

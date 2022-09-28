@@ -10,6 +10,16 @@ impl<'a> TDoc<'a> {
         ftd::interpreter2::utils::resolve_name(name, self.name, self.aliases)
     }
 
+    pub fn get_record(
+        &'a self,
+        line_number: usize,
+        name: &'a str,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Record> {
+        match self.get_thing(line_number, name)? {
+            ftd::interpreter2::Thing::Record(r) => Ok(r),
+        }
+    }
+
     pub fn get_thing(
         &'a self,
         line_number: usize,

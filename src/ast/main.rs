@@ -53,7 +53,7 @@ impl AST {
         }
     }
 
-    pub fn get_record(&self, doc_id: &str) -> ftd::ast::Result<&ftd::ast::Record> {
+    pub fn get_record(self, doc_id: &str) -> ftd::ast::Result<ftd::ast::Record> {
         if let ftd::ast::AST::Record(r) = self {
             return Ok(r);
         }

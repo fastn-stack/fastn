@@ -7,7 +7,7 @@ mod import;
 mod kind;
 mod main;
 mod record;
-mod utils;
+pub(crate) mod utils;
 mod variable;
 
 pub use component::{Component, ComponentDefinition};

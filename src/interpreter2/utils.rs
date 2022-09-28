@@ -51,3 +51,5 @@ where
         line_number,
     }
 }
+
+pub const REFERENCE: &str = ftd::ast::utils::REFERENCE;
