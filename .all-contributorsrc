@@ -101,6 +101,20 @@
         "test",
         "ideas"
       ]
+    },
+    {
+      "login": "gsalunke",
+      "name": "Ganesh Salunke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68585007?v=4",
+      "profile": "https://github.com/gsalunke",
+      "contributions": [
+        "code",
+        "doc",
+        "test",
+        "ideas",
+        "mentoring",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
