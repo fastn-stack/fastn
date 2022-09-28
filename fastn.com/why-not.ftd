@@ -15,7 +15,7 @@ but still in infancy), if you have a serious need and you have run out of taking
 risk budget.
 
 
--- ft.h1: Use `FTD`
+-- ft.h1: Use `ftd`
 
 We promote `fpm` for working with `ftd` files, but `fpm` is not the only way to
 use `ftd`. You can directly depend on `ftd`, and build many websites, especially
