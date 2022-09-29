@@ -6,7 +6,7 @@
 
 # FTD: Programming Language For Prose
 
-![FTD](FTD.svg) 
+<img src="FTD.svg" width="100" height="100" alt="FTD"/>
 
 Homepage: [ftd.dev](https://ftd.dev/)
 
