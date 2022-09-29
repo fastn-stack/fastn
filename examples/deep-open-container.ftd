@@ -8,8 +8,6 @@ dark: green
 dark: blue
 
 -- ftd.column ft_container:
-optional string id:
-id: $id
 padding-top: 30
 padding-left: 100
 align: center
@@ -20,8 +18,6 @@ color: $red
 
 
 -- ftd.column ft_container_mobile:
-optional string id:
-id: $id
 width: fill
 padding-top: 10
 padding-left: 20
@@ -36,8 +32,6 @@ color: $green
 
 -- ftd.column desktop:
 width: fill
-optional string id:
-id: $id
 
 --- ftd.text: Desktop Main
 
@@ -54,8 +48,6 @@ id: foo
 
 -- ftd.column mobile:
 width: fill
-optional string id:
-id: $id
 
 --- ftd.text: Mobile Main
 

@@ -5,8 +5,6 @@ dark: #4d4d4d
 dark: black
 
 -- ftd.column ft_container:
-optional string id:
-id: $id
 width: fill
 padding-top: 30
 padding-left: 100

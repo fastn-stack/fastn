@@ -10,7 +10,7 @@ dark: https://www.w3schools.com/cssref/img_tree.gif
 -- ftd.text: Click here
 $on-click$: toggle $foo
 
--- ftd.image: Sample Image
+-- ftd.image:
 src: $src
 if: $foo
 

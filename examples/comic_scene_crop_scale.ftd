@@ -38,8 +38,6 @@ left: 0
 top: 0
 
 -- ftd.scene ethan-happy-facing-side:
-integer left:
-integer top:
 left: $left
 top: $top
 scale: 1.2

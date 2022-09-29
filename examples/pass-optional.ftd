@@ -10,8 +10,6 @@ color: $red
 
 
 -- ftd.column foo:
-optional integer left:
-optional integer right:
 optional ftd.color color:
 caption title: Hello world
 anchor: parent

@@ -3,8 +3,6 @@ dark: red
 
 -- ftd.column desktop:
 width: fill
-optional string id:
-id: $id
 open: true
 append-at: desktop-container
 
@@ -17,8 +15,6 @@ id: desktop-container
 
 -- ftd.column mobile:
 width: fill
-optional string id:
-id: $id
 open: true
 append-at: mobile-container
 

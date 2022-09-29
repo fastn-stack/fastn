@@ -165,7 +165,6 @@ if: $body is not null
 body: $body
 
 -- ftd.iframe youtube:
-string id:
 youtube: $id
 height: 400
 width: fill

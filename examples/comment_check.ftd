@@ -27,8 +27,7 @@ color: $red
 ;; [Subsection Comment] <-
 /--- ftd.text: hello4
 
-;; [Caption commented out] <-
---- ftd.text: /hello5 from caption
+--- ftd.text:
 color: $green
 ;; [Subsection header commented] <-
 /padding-left: 20
@@ -38,12 +37,6 @@ hello5 from body
 -- ftd.row foo:
 align: center
 optional string /name:
-
-;; [Caption comment escaped] <-
---- ftd.text: \/foo says caption here
-
-;; [Body Comment] <-
-/foo says hello there
 
 /--- ftd.text: foo says bye bye
 

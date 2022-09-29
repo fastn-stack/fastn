@@ -33,8 +33,6 @@ top: 70
 
 -- ftd.scene ethan-happy-facing-side:
 width: 500
-integer left:
-integer top:
 left: $left
 top: $top
 
