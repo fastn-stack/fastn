@@ -60,13 +60,11 @@ pub enum WASMError {
 pub type WasmRunnerResult<T> = std::result::Result<T, WASMError>;
 
 pub async fn handle_wasm(
-    req: &actix_web::HttpRequest,
-    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only
+    req: fpm::http::Request,
     wasm_module: camino::Utf8PathBuf,
-) -> actix_web::Result<actix_web::HttpResponse> {
+) -> fpm::http::Response {
     pub async fn inner(
-        req: &actix_web::HttpRequest,
-        body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only
+        req: fpm::http::Request,
         wasm_module: camino::Utf8PathBuf,
     ) -> WasmRunnerResult<actix_web::HttpResponse> {
         let mut wasm_config = wit_bindgen_host_wasmtime_rust::wasmtime::Config::new();
@@ -106,7 +104,8 @@ pub async fn handle_wasm(
             )?;
 
         let uri = req.uri().to_string();
-        let b = body.to_vec();
+        // TODO: Fix body
+        let b = req.body().to_vec();
         let body_str = if let Ok(b) = std::str::from_utf8(&b) {
             b
         } else {
@@ -125,7 +124,7 @@ pub async fn handle_wasm(
                 },
             ))[..],
             querystring: req.query_string(),
-            method: req.method().as_str(),
+            method: req.method(),
             payload: body_str,
         };
         fpm::time("WASM Guest function").it(match import.handlerequest(&mut store, request) {
@@ -140,12 +139,8 @@ pub async fn handle_wasm(
             Err(err) => Err(WASMError::WasmFunctionInvokeError(err.to_string())),
         })
     }
-    todo!("FIX ME")
-    // fpm::time("WASM Execution: ").it(match inner(req, body, wasm_module).await {
-    //     Ok(resp) => Ok(resp),
-    //     Err(err) => fpm::apis::error(
-    //         err.to_string(),
-    //         actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-    //     ),
-    // })
+    fpm::time("WASM Execution: ").it(match inner(req, wasm_module).await {
+        Ok(resp) => resp,
+        Err(err) => fpm::server_error!("{}", err.to_string()),
+    })
 }

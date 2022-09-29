@@ -6,6 +6,8 @@ canonical-url: https://some-other-site.com/
 backend: true
 
 
+-- fpm.dependency: one.fpm.local
+
 -- fpm.sitemap:
 
 # Home: /

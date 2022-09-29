@@ -183,7 +183,20 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         }
         // TODO: pass &fpm::http::Request
 
-        serve_file(&mut config, &path).await
+        let file_response = serve_file(&mut config, &path).await;
+        // Fallback to WASM execution in case of no sucessful response
+        if file_response.status() == actix_web::http::StatusCode::INTERNAL_SERVER_ERROR {
+            let package = config.find_package_by_id(path.as_str()).await.unwrap().1;
+            let wasm_module = config.get_root_for_package(&package).join("backend.wasm");
+            let req = if let Some(r) = config.request {
+                r
+            } else {
+                return Ok(fpm::server_error!("request not set"));
+            };
+            fpm::wasm::handle_wasm(req, wasm_module).await
+        } else {
+            file_response
+        }
 
         // if true: serve_file
         // else: proxy_pass

@@ -6,3 +6,6 @@ canonical-url: https://some-other-site.com/
 backend: true
 
 
+-- fpm.sitemap:
+
+# Home: /
