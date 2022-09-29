@@ -1,5 +1,3 @@
-use std::thread::current;
-
 #[derive(Debug, Default)]
 pub struct InterpreterState {
     pub id: String,
@@ -516,8 +514,8 @@ impl InterpreterState {
         // dbg!(&child.root);
         // dbg!(&child.properties);
 
-        dbg!(&parent);
-        dbg!(&child);
+        // dbg!(&parent);
+        // dbg!(&child);
 
         // Case 1: Markdown component (with id defined)
         //      Case 1.1: Kernel markdown component ftd.text
@@ -541,7 +539,7 @@ impl InterpreterState {
             } else {
                 // Case 1.2
                 return Ok(());
-                todo!()
+                // todo!()
             }
         }
 
@@ -566,45 +564,65 @@ impl InterpreterState {
             }
 
             println!("Container component found !!");
+            // Todo: this needs to be changed after resolving for text on different component levels
             // check if the component has id assigned
             if let Some(id_property) = child.properties.get("id") {
                 let id = id_property.resolve_default_value_string(&doc, parent.line_number)?;
-                if let Some(region_property) = parent.properties.get("region") {
-                    println!("Found some region !!");
-                    let region =
-                        region_property.resolve_default_value_string(&doc, parent.line_number)?;
-                    if matches!(
-                        region.as_str(),
-                        "h0" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
-                    ) {
-                        println!("valid region");
-                        // prioritize finding ftd.text with region title
-                        for instruction in parent.instructions.iter() {
-                            if let ftd::Instruction::ChildComponent { child: cc } = instruction {
-                                if cc.root.eq("ftd#text") {
-                                    if let Some(text_region_property) = cc.properties.get("region")
-                                    {
-                                        let text_region = text_region_property
-                                            .resolve_default_value_string(&doc, cc.line_number)?;
-                                        if text_region.eq("title") {
-                                            if let Some(text_property) = cc.properties.get("text") {
-                                                if let Some(text_property_value) =
-                                                    &text_property.default
-                                                {
-                                                    if let Some(title_text) =
-                                                        resolve_property_value(
-                                                            text_property_value,
-                                                            child,
-                                                            doc,
-                                                        )?
-                                                    {
-                                                        insert_heading(
-                                                            page_headings,
-                                                            id.as_str(),
-                                                            title_text,
-                                                            doc.name,
-                                                        );
+                println!("Found id: {}", id);
+                // prioritize finding ftd.text with region title
+                let container_instructions = find_container_instructions(parent, doc)?;
+                if let Some(instructions) = container_instructions {
+                    dbg!(&instructions);
+                    for instruction in instructions.iter() {
+                        if let ftd::Instruction::ChildComponent { child: cc } = instruction {
+                            dbg!(&cc.root);
+                            if cc.root.eq("ftd#text") {
+                                println!("Text child found");
+                                if let Some(text_region_property) = cc.properties.get("region") {
+                                    println!("Text region found");
+                                    let text_region = text_region_property
+                                        .resolve_default_value_string(&doc, cc.line_number)?;
+                                    if text_region.eq("title") {
+                                        println!("Text region is title noice!!");
+                                        if let Some(text_property) = cc.properties.get("text") {
+                                            if let Some(text_property_value) =
+                                                &text_property.default
+                                            {
+                                                // dbg!(&text_property, &text_property_value);
+                                                let title = resolve_title_header_from_container(
+                                                    text_property_value,
+                                                    parent,
+                                                    &child.properties,
+                                                    doc,
+                                                )?;
+                                                dbg!(&title);
+                                                if let Some(mut title_text) = title {
+                                                    // check if the title needs to be resolved
+                                                    if title_text.starts_with('$') {
+                                                        // resolve title then add heading
+                                                        if let Some(title_property_name) =
+                                                            title_text.strip_prefix('$')
+                                                        {
+                                                            if let Some(resolved_title) =
+                                                                resolve_title(
+                                                                    title_property_name,
+                                                                    parent,
+                                                                    child,
+                                                                    doc,
+                                                                )?
+                                                            {
+                                                                title_text = resolved_title;
+                                                            }
+                                                        }
                                                     }
+                                                    // or simply add the heading with the title if already resolved
+                                                    dbg!(&title_text);
+                                                    insert_heading(
+                                                        page_headings,
+                                                        id.as_str(),
+                                                        title_text,
+                                                        doc.name,
+                                                    );
                                                 }
                                             }
                                         }
@@ -614,64 +632,143 @@ impl InterpreterState {
                         }
                     }
                 }
+
+                // if let Some(region_property) = parent.properties.get("region") {
+                //     println!("Found some region !!");
+                //     let region =
+                //         region_property.resolve_default_value_string(&doc, parent.line_number)?;
+                //     if matches!(
+                //         region.as_str(),
+                //         "h0" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+                //     ) {
+                //         println!("valid region");
+                //
+                //     }
+                // }
             }
         }
 
         /*
-           full name - m
-           properties - title = $value
+           full name - current
+           properties - h1 = $value
 
-           full_name - tf.h1
-           properties - caption = $title
+           full_name - p2
+           properties - h2 = $h1
 
-           full_name - ftd.column
-           properties - text = $caption
+           full_name - ..pN
+           properties - hN = $hN-1
         */
 
         return Ok(());
 
-        fn resolve_for_text_from_container(
+        fn find_container_instructions<'a>(
+            root_component: &'a ftd::Component,
+            doc: &'a ftd::p2::TDoc,
+        ) -> ftd::p1::Result<Option<Vec<ftd::Instruction>>> {
+            // dbg!(&root_component.full_name, &root_component.root);
+            // dbg!(&root_component.instructions);
+            if matches!(root_component.root.as_str(), "ftd#row" | "ftd#column") {
+                return Ok(Some(root_component.instructions.clone()));
+            }
+
+            if root_component.kernel {
+                return Ok(None);
+            }
+
+            let parent =
+                doc.get_component(root_component.line_number, root_component.root.as_str())?;
+            return find_container_instructions(&parent, doc);
+        }
+
+        pub fn resolve_property_value(
             property_value: &ftd::PropertyValue,
+        ) -> ftd::p1::Result<Option<String>> {
+            return match property_value {
+                ftd::PropertyValue::Value { value } => Ok(value.to_string()),
+                ftd::PropertyValue::Variable { name, .. } => {
+                    Ok(Some(format!("${}", name.to_string())))
+                }
+                ftd::PropertyValue::Reference { name, .. } => {
+                    Ok(Some(format!("${}", name.to_string())))
+                }
+            };
+        }
+
+        fn resolve_title(
+            parent_property_name: &str,
+            parent: &ftd::Component,
+            child: &ftd::ChildComponent,
+            doc: &ftd::p2::TDoc,
+        ) -> ftd::p1::Result<Option<String>> {
+            if let Some(parent_property) = parent.properties.get(parent_property_name) {
+                let property_default = &parent_property.default;
+                if let Some(property_value) = property_default {
+                    let resolved_value = resolve_property_value(property_value)?;
+                    if let Some(value) = resolved_value {
+                        let stripped_value = value.trim_start_matches('$');
+                        dbg!(&value);
+                        dbg!(&stripped_value);
+                        if let Some(child_property) = child.properties.get(stripped_value) {
+                            let title = child_property
+                                .resolve_default_value_string(&doc, parent.line_number)?;
+                            return Ok(Some(title));
+                        }
+                    }
+                }
+            }
+            Ok(None)
+        }
+
+        fn resolve_title_header_from_container(
+            text_property_value: &ftd::PropertyValue,
             current_component: &ftd::Component,
-            properties: &ftd::Map<ftd::Property>,
+            properties: &ftd::Map<ftd::component::Property>,
             doc: &ftd::p2::TDoc,
         ) -> ftd::p1::Result<Option<String>> {
             if matches!(
                 current_component.full_name.as_str(),
                 "ftd#row" | "ftd#column"
             ) {
-                match property_value {
-                    ftd::PropertyValue::Value { value } => return Ok(value.to_string()),
-                    ftd::PropertyValue::Variable { name, .. } => {
-                        if let Some(ftd::PropertyValue::Value { value }) = properties.get(name) {
-                            return Ok(value.to_string());
-                        }
-                    }
-                    ftd::PropertyValue::Reference { name, .. } => {
-                        if let Some(ftd::PropertyValue::Value { value }) = properties.get(name) {
-                            return Ok(value.to_string());
-                        }
-                    }
-                    _ => return Ok(None),
-                }
+                // println!(
+                //     "Properties for container: {}",
+                //     current_component.full_name.as_str()
+                // );
+                // dbg!(&properties.keys());
+                // dbg!(&current_component.properties.keys());
+                return resolve_property_value(text_property_value);
             }
 
             if current_component.kernel {
+                println!("end 1");
                 return Ok(None);
             }
 
-            let current_component = doc.get_component(
+            let root_component = doc.get_component(
                 current_component.line_number,
                 current_component.root.as_str(),
             )?;
-            let properties = &current_component.properties;
+            let root_properties = &root_component.properties;
+            // dbg!(&root_component);
 
-            let res = resolve_for_text_from_container(
-                property_value,
-                &current_component,
-                properties,
+            let res = resolve_title_header_from_container(
+                text_property_value,
+                &root_component,
+                root_properties,
                 doc,
-            );
+            )?;
+
+            if let Some(res) = res {
+                if let Some(header) = res.strip_prefix("$") {
+                    if let Some(property) = properties.get(header) {
+                        if let Some(property_value) = &property.default {
+                            return resolve_property_value(property_value);
+                        }
+                    }
+                }
+                return Ok(Some(res));
+            }
+            println!("end 3");
+            return Ok(None);
         }
 
         fn insert_heading(
