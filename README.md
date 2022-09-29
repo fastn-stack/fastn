@@ -1,12 +1,17 @@
+
 <div align="center">
 
 ![Contributors](https://img.shields.io/github/contributors/ftd-lang/ftd?color=dark-green) ![Issues](https://img.shields.io/github/issues/ftd-lang/ftd) ![License](https://img.shields.io/github/license/ftd-lang/ftd) [![Discord](https://img.shields.io/discord/793929082483769345)](https://discord.com/channels/793929082483769345/)
 
 </div>
 
+<div align="center">
+    <img src="FTD.svg" width="150" alt="FTD" />
+</div>
+
+
 # FTD: Programming Language For Prose
 
-<img src="FTD.svg" width="100" height="100" alt="FTD"/>
 
 Homepage: [ftd.dev](https://ftd.dev/)
 
