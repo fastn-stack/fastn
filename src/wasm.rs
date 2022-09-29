@@ -27,7 +27,7 @@ impl fpm_utils::backend_host_export::host::Host for HostExports {
             match request_method.as_str() {
                 "GET" => request_client.get(url).headers(headers),
                 "POST" => request_client.post(url).headers(headers).body(request_body),
-                _ => panic!(""),
+                _ => panic!("METHOD not allowed"),
             }
             .send()
             .unwrap()
@@ -45,6 +45,20 @@ pub struct Context<I, E> {
     pub exports: E,
 }
 
+#[derive(thiserror::Error, Debug)]
+pub enum WASMError {
+    #[error("Wasmtime Error: {}", _0)]
+    WasmTimeError(#[from] wit_bindgen_host_wasmtime_rust::anyhow::Error),
+
+    #[error("JSON Parsing Error: {}", _0)]
+    SerdeJsonError(#[from] serde_json::Error),
+
+    #[error("WasmFunctionInvokeError: {}", _0)]
+    WasmFunctionInvokeError(String),
+}
+
+pub type WasmRunnerResult<T> = std::result::Result<T, WASMError>;
+
 pub async fn handle_wasm(
     req: &actix_web::HttpRequest,
     body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only
@@ -54,19 +68,18 @@ pub async fn handle_wasm(
         req: &actix_web::HttpRequest,
         body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only
         wasm_module: camino::Utf8PathBuf,
-    ) -> actix_web::Result<actix_web::HttpResponse> {
+    ) -> WasmRunnerResult<actix_web::HttpResponse> {
         let mut wasm_config = wit_bindgen_host_wasmtime_rust::wasmtime::Config::new();
         wasm_config.cache_config_load_default().unwrap();
         wasm_config.wasm_backtrace_details(
             wit_bindgen_host_wasmtime_rust::wasmtime::WasmBacktraceDetails::Disable,
         );
 
-        let engine = wit_bindgen_host_wasmtime_rust::wasmtime::Engine::new(&wasm_config).unwrap();
+        let engine = wit_bindgen_host_wasmtime_rust::wasmtime::Engine::new(&wasm_config)?;
         let module = wit_bindgen_host_wasmtime_rust::wasmtime::Module::from_file(
             &engine,
             wasm_module.as_str(),
-        )
-        .unwrap();
+        )?;
 
         let mut linker: wit_bindgen_host_wasmtime_rust::wasmtime::Linker<
             fpm::wasm::Context<
@@ -82,8 +95,7 @@ pub async fn handle_wasm(
             },
         );
 
-        fpm_utils::backend_host_export::host::add_to_linker(&mut linker, |cx| &mut cx.imports)
-            .unwrap();
+        fpm_utils::backend_host_export::host::add_to_linker(&mut linker, |cx| &mut cx.imports)?;
 
         let (import, _i) =
             fpm_utils::backend_host_import::guest_backend::GuestBackend::instantiate(
@@ -91,9 +103,7 @@ pub async fn handle_wasm(
                 &module,
                 &mut linker,
                 |cx| &mut cx.exports,
-            )
-            .expect("Unable to run");
-        // TODO: Handle the error efficiently
+            )?;
 
         let uri = req.uri().to_string();
         let b = body.to_vec();
@@ -107,7 +117,10 @@ pub async fn handle_wasm(
             headers: &(&req.headers().iter().fold(
                 vec![],
                 |mut accumulator, (header_name, header_value)| {
-                    accumulator.push((header_name.as_str(), header_value.to_str().expect("msg")));
+                    accumulator.push((
+                        header_name.as_str(),
+                        header_value.to_str().expect("Unable to parse header value"),
+                    ));
                     accumulator
                 },
             ))[..],
@@ -118,13 +131,20 @@ pub async fn handle_wasm(
         fpm::time("WASM Guest function").it(match import.handlerequest(&mut store, request) {
             Ok(data) => Ok(actix_web::HttpResponse::Ok()
                 .content_type(actix_web::http::header::ContentType::json())
-                .status(actix_web::http::StatusCode::OK)
-                .body(data)),
-            Err(err) => fpm::apis::error(
-                err.to_string(),
-                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-            ),
+                .status(if data.success {
+                    actix_web::http::StatusCode::OK
+                } else {
+                    actix_web::http::StatusCode::BAD_REQUEST
+                })
+                .body(serde_json::to_string(&data)?)),
+            Err(err) => Err(WASMError::WasmFunctionInvokeError(err.to_string())),
         })
     }
-    fpm::time("WASM Execution: ").it(inner(req, body, wasm_module).await)
+    fpm::time("WASM Execution: ").it(match inner(req, body, wasm_module).await {
+        Ok(resp) => Ok(resp),
+        Err(err) => fpm::apis::error(
+            err.to_string(),
+            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+    })
 }
