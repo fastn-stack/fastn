@@ -3,13 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Foo</title>
+    <title>Once upon a time...</title>
     <script type="ftd" id="ftd-data">
         {
+  "comic_with_scene_without_comicgen.ftd#bg-src": {
+    "value": {
+      "$kind$": "light",
+      "dark": "https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg",
+      "light": "https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg"
+    },
+    "dependencies": {
+      "1": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "background-image": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "url(https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg)",
+                  "light": "url(https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "comic_with_scene_without_comicgen.ftd#body1@0": {
+    "value": null,
+    "dependencies": {
+      "0,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "comic_with_scene_without_comicgen.ftd#body@0,1": {
+    "value": null,
+    "dependencies": {
+      "0,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "comic_with_scene_without_comicgen.ftd#body@2": {
+    "value": null,
+    "dependencies": {
+      "2,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "comic_with_scene_without_comicgen.ftd#body@2,1": {
+    "value": null,
+    "dependencies": {
+      "2,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "comic_with_scene_without_comicgen.ftd#src0": {
+    "value": {
+      "$kind$": "light",
+      "dark": "https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg",
+      "light": "https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg"
+    },
+    "dependencies": {
+      "1,0,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "comic_with_scene_without_comicgen.ftd#src1": {
+    "value": {
+      "$kind$": "light",
+      "dark": "https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/sad.svg",
+      "light": "https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/sad.svg"
+    },
+    "dependencies": {
+      "1,0,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "comic_with_scene_without_comicgen.ftd#title@0": {
+    "value": "Once upon a time...",
+    "dependencies": {
+      "0,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "comic_with_scene_without_comicgen.ftd#title@2": {
+    "value": "The End!!",
+    "dependencies": {
+      "2,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
   "ftd#dark-mode": {
     "value": false,
     "dependencies": {
       "$value#kind$": [
+        {
+          "condition": true,
+          "dependency_type": "Variable",
+          "parameters": {
+            "comic_with_scene_without_comicgen.ftd#bg-src": {
+              "default": {
+                "important": false,
+                "reference": null,
+                "value": "light"
+              },
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "dark"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Variable",
+          "parameters": {
+            "comic_with_scene_without_comicgen.ftd#src0": {
+              "default": {
+                "important": false,
+                "reference": null,
+                "value": "light"
+              },
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "dark"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Variable",
+          "parameters": {
+            "comic_with_scene_without_comicgen.ftd#src1": {
+              "default": {
+                "important": false,
+                "reference": null,
+                "value": "light"
+              },
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "dark"
+              }
+            }
+          },
+          "remaining": null
+        },
         {
           "condition": true,
           "dependency_type": "Variable",
@@ -354,19 +553,6 @@
   "ftd#system-dark-mode": {
     "value": false,
     "dependencies": {}
-  },
-  "global-key-event.ftd#name": {
-    "value": "Foo",
-    "dependencies": {
-      "0": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
   }
 }
     </script>
@@ -374,59 +560,7 @@
         {}
     </script>
     <script>
-        document.addEventListener("click", function(event) {});
-
-
-let global_keys = {};
-let buffer = [];
-let lastKeyTime = Date.now();
-
-
-document.addEventListener("keydown", function(event) {
-    global_keys[event.key] = true;
-    const currentTime = Date.now();
-    if (currentTime - lastKeyTime > 1000) {{
-        buffer = [];
-    }}
-    lastKeyTime = currentTime;
-    if (event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA") {
-        return;
-    }          
-    buffer.push(event.key);
-
-
-
-if (buffer.join(',').includes(" ,-")) {
-   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Jatinderjit","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-
-if (buffer.join(',').includes("Shift,Shift")) {
-   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Rajshri","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-
-if (global_keys["Control"] && global_keys["a"] && buffer.join(',').includes("Control,a")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Arpita","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-
-if (global_keys["Control"] && global_keys["s"] && buffer.join(',').includes("Control,s")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Ayushi","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-});
-
-
-document.addEventListener("keyup", function(event) { global_keys[event.key] = false; })
+        
     </script>
     <style>
         *, :after, :before {
@@ -561,12 +695,48 @@ body.fpm-dark .ft_md a {
     text-decoration: none;
 }
         
+
+.b_2 {
+    background-color: rgba(255,255,255,1)
+}
+
+
+
+body.fpm-dark .b_2 {
+    background-color: rgba(255,255,255,1)
+}
+
+
+
+body.fpm-dark .c_0 {
+    color: rgba(0,0,0,1)
+}
+
+
+
+body.fpm-dark .c_1 {
+    color: rgba(77,77,77,1)
+}
+
+
+
+.c_0 {
+    color: rgba(0,0,0,1)
+}
+
+
+
+.c_1 {
+    color: rgba(77,77,77,1)
+}
+
+
     </style>
 
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Foo</div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><h1 data-id="0:main" id="once-upon-a-time" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">Once upon a time…</div><div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"></div></h1><div data-id="1:main" style="background-image: url(https://image.shutterstock.com/z/stock-\u0026lt;!\u0026ndash;\u0026ndash;\u0026gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-decoration: none; white-space: initial; width: 1000px" ><div data-id="1:scene:main" style="position: relative" ><img alt="Scene" data-id="1:scene-bg:main" src="https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg" style="display: block; height: auto; width: 100%" ><div data-id="1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 0px; position: absolute; text-decoration: none; top: 60px; white-space: initial; width: 500px" ><div data-id="1,0:scene:main" style="position: relative" ><div data-id="1,0:scene-bg:main" style="display: block; height: auto; width: 100%" ></div><img data-id="1,0,0:main" loading="lazy" src="https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 0px; position: absolute; text-decoration: none; top: 0px; white-space: initial" ><img data-id="1,0,1:main" loading="lazy" src="https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/sad.svg" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 0px; position: absolute; text-decoration: none; top: 0px; white-space: initial" ></div></div><div data-id="1,1:main" style="border-radius: 150px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 190px; padding: 10px; position: absolute; text-align: left; text-decoration: none; top: 70px; white-space: initial" class="b_2 ft_md">Hello Everyone! I am Ethan</div></div></div><h2 data-id="2:main" id="the-end" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">The End!!</div><div data-id="2,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"></div></h2></div>
 
 
     <script>

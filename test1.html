@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Foo</title>
+    <title>Conditional Attributes</title>
     <script type="ftd" id="ftd-data">
         {
   "ftd#dark-mode": {
@@ -256,6 +256,82 @@
             }
           },
           "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Variable",
+          "parameters": {
+            "test1.ftd#blue": {
+              "default": {
+                "important": false,
+                "reference": null,
+                "value": "light"
+              },
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "dark"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Variable",
+          "parameters": {
+            "test1.ftd#green": {
+              "default": {
+                "important": false,
+                "reference": null,
+                "value": "light"
+              },
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "dark"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Variable",
+          "parameters": {
+            "test1.ftd#grey": {
+              "default": {
+                "important": false,
+                "reference": null,
+                "value": "light"
+              },
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "dark"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": true,
+          "dependency_type": "Variable",
+          "parameters": {
+            "test1.ftd#red": {
+              "default": {
+                "important": false,
+                "reference": null,
+                "value": "light"
+              },
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "dark"
+              }
+            }
+          },
+          "remaining": null
         }
       ]
     }
@@ -355,14 +431,1111 @@
     "value": false,
     "dependencies": {}
   },
-  "global-key-event.ftd#name": {
-    "value": "Foo",
+  "test1.ftd#blue": {
+    "value": {
+      "$kind$": "light",
+      "dark": "blue",
+      "light": "blue"
+    },
     "dependencies": {
-      "0": [
+      "$style$": [
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "16,0",
+                  "$variable$": "test1.ftd#yes@16,0"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "21,0",
+                  "$variable$": "test1.ftd#present"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body1@0": {
+    "value": "`ftd` supports `if` expression to decide the value of attribute, based on the\narguments, or global variables.",
+    "dependencies": {
+      "0,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@0,1": {
+    "value": "`ftd` supports `if` expression to decide the value of attribute, based on the\narguments, or global variables.",
+    "dependencies": {
+      "0,1": [
         {
           "condition": null,
           "dependency_type": "Value",
           "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@1": {
+    "value": "The priority of conditional attributes is in increasing order (low -> high) i.e.\nthe condition at bottom has higher priority than the above conditions. The value of\nattribute with no condition is taken as default.",
+    "dependencies": {
+      "1,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@1,1": {
+    "value": "The priority of conditional attributes is in increasing order (low -> high) i.e.\nthe condition at bottom has higher priority than the above conditions. The value of\nattribute with no condition is taken as default.",
+    "dependencies": {
+      "1,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@12": {
+    "value": "Here, in above sample code, no conditional statement is satisfied, so the value of\nstyle `color` is set to its default value (i.e. `grey`).",
+    "dependencies": {
+      "12": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@13": {
+    "value": null,
+    "dependencies": {
+      "13,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@13,1": {
+    "value": null,
+    "dependencies": {
+      "13,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@14": {
+    "value": "-- ftd.text foo:\ncaption name:\noptional string yes:\ncolor: grey\ncolor if $yes is not null: blue\ntext: $name\n\n-- foo: hello\nyes: world",
+    "dependencies": {
+      "14,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "14,2": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@17": {
+    "value": "Here, in above sample code, we have defined the argument `yes` of optional string type.\nif `yes` is passed then `color if $yes is not null` condition would be satisfied and\nthe `color` gets set to `blue`.",
+    "dependencies": {
+      "17": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@18": {
+    "value": null,
+    "dependencies": {
+      "18,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@18,1": {
+    "value": null,
+    "dependencies": {
+      "18,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@19": {
+    "value": "-- boolean present: false\n\n-- ftd.text foo:\ncaption name:\noptional string yes:\ncolor: grey\ncolor if $present: blue\ncolor if not $present: red\ncolor if $yes is not null: green\ntext: $name\n\n-- foo: hello\nyes: world",
+    "dependencies": {
+      "19,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "19,2": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@2": {
+    "value": "Lets understand it better with few examples",
+    "dependencies": {
+      "2,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@2,1": {
+    "value": "Lets understand it better with few examples",
+    "dependencies": {
+      "2,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@22": {
+    "value": "Here, in above sample code, both `color if not $present: red` and\n`color if $yes is not null: blue` are satisfied, so according to the precedence rule,\nthe value of attribute/style is set to value in last satisfied condition, i.e.,\n`color if $yes is not null: blue` has highest priority. So the `color` gets set to `blue`.",
+    "dependencies": {
+      "22": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@3": {
+    "value": null,
+    "dependencies": {
+      "3,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@3,1": {
+    "value": null,
+    "dependencies": {
+      "3,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@4": {
+    "value": "-- boolean present: false\n\n-- ftd.text foo:\ncaption name:\ncolor: grey\ncolor if $present: green\ncolor if not $present: red\ntext: $name\n\n-- foo: hello",
+    "dependencies": {
+      "4,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "4,2": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@7": {
+    "value": "Here, in above sample code, the attribute or style `color` has default value as\n`grey` and it follows the conditional statements. According to the value of the\nvariable `present` (in this case, it is `false`), the value of the style `color`\nis set (in this case, it's `red`).",
+    "dependencies": {
+      "7": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@8": {
+    "value": null,
+    "dependencies": {
+      "8,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@8,1": {
+    "value": null,
+    "dependencies": {
+      "8,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#body@9": {
+    "value": "-- boolean present: false\n\n-- ftd.text foo:\ncaption name:\ncolor: grey\ncolor if $present: green\ntext: $name\n\n-- foo: hello",
+    "dependencies": {
+      "9,1": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "9,2": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#caption@14": {
+    "value": "Conditional Attribute using arguments",
+    "dependencies": {
+      "14,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        },
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "14,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "14,2": [
+        {
+          "condition": "$IsNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#caption@19": {
+    "value": "Conditional Attribute deciding priority",
+    "dependencies": {
+      "19,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        },
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "19,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "19,2": [
+        {
+          "condition": "$IsNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#caption@4": {
+    "value": "Conditional Attribute using variable",
+    "dependencies": {
+      "4,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        },
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "4,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "4,2": [
+        {
+          "condition": "$IsNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#caption@9": {
+    "value": "Conditional Attribute with default",
+    "dependencies": {
+      "9,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        },
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "9,1": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ],
+      "9,2": [
+        {
+          "condition": "$IsNull$",
+          "dependency_type": "Visible",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#green": {
+    "value": {
+      "$kind$": "light",
+      "dark": "green",
+      "light": "green"
+    },
+    "dependencies": {
+      "$style$": [
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "6,0",
+                  "$variable$": "test1.ftd#present"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "11,0",
+                  "$variable$": "test1.ftd#present"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "21,0",
+                  "$variable$": "test1.ftd#yes@21,0"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#grey": {
+    "value": {
+      "$kind$": "light",
+      "dark": "grey",
+      "light": "grey"
+    },
+    "dependencies": {
+      "11,0": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "test1.ftd#present"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "16,0": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "test1.ftd#yes@16,0"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "21,0": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "test1.ftd#present",
+                  "test1.ftd#present",
+                  "test1.ftd#yes@21,0"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "6,0": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": [
+                  "test1.ftd#present",
+                  "test1.ftd#present"
+                ]
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#name@11,0": {
+    "value": "hello",
+    "dependencies": {
+      "11,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#name@16,0": {
+    "value": "hello",
+    "dependencies": {
+      "16,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#name@21,0": {
+    "value": "hello",
+    "dependencies": {
+      "21,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#name@6,0": {
+    "value": "hello",
+    "dependencies": {
+      "6,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#present": {
+    "value": false,
+    "dependencies": {
+      "11,0": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "test1.ftd#grey",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "test1.ftd#green",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,128,0,1)",
+                  "light": "rgba(0,128,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "21,0": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "test1.ftd#grey",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "test1.ftd#blue",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": false,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "test1.ftd#grey",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "test1.ftd#red",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,0,0,1)",
+                  "light": "rgba(255,0,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "6,0": [
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "test1.ftd#grey",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "test1.ftd#green",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,128,0,1)",
+                  "light": "rgba(0,128,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": false,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "test1.ftd#grey",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "test1.ftd#red",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,0,0,1)",
+                  "light": "rgba(255,0,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#red": {
+    "value": {
+      "$kind$": "light",
+      "dark": "red",
+      "light": "red"
+    },
+    "dependencies": {
+      "$style$": [
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "6,0",
+                  "$variable$": "test1.ftd#present"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "21,0",
+                  "$variable$": "test1.ftd#present"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#title@0": {
+    "value": "Conditional Attributes",
+    "dependencies": {
+      "0,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#title@1": {
+    "value": "Priority Order",
+    "dependencies": {
+      "1,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#title@13": {
+    "value": "Example 3:",
+    "dependencies": {
+      "13,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#title@18": {
+    "value": "Example 4:",
+    "dependencies": {
+      "18,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#title@2": {
+    "value": "Examples",
+    "dependencies": {
+      "2,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#title@3": {
+    "value": "Example 1:",
+    "dependencies": {
+      "3,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#title@8": {
+    "value": "Example 2:",
+    "dependencies": {
+      "8,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#yes@16,0": {
+    "value": "world",
+    "dependencies": {
+      "16,0": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "test1.ftd#grey",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "test1.ftd#blue",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,0,255,1)",
+                  "light": "rgba(0,0,255,1)"
+                }
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
+  },
+  "test1.ftd#yes@21,0": {
+    "value": "world",
+    "dependencies": {
+      "21,0": [
+        {
+          "condition": "$IsNotNull$",
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": {
+                "important": false,
+                "reference": "test1.ftd#grey",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(128,128,128,1)",
+                  "light": "rgba(128,128,128,1)"
+                }
+              },
+              "value": {
+                "important": false,
+                "reference": "test1.ftd#green",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,128,0,1)",
+                  "light": "rgba(0,128,0,1)"
+                }
+              }
+            }
+          },
           "remaining": null
         }
       ]
@@ -374,59 +1547,7 @@
         {}
     </script>
     <script>
-        document.addEventListener("click", function(event) {});
-
-
-let global_keys = {};
-let buffer = [];
-let lastKeyTime = Date.now();
-
-
-document.addEventListener("keydown", function(event) {
-    global_keys[event.key] = true;
-    const currentTime = Date.now();
-    if (currentTime - lastKeyTime > 1000) {{
-        buffer = [];
-    }}
-    lastKeyTime = currentTime;
-    if (event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA") {
-        return;
-    }          
-    buffer.push(event.key);
-
-
-
-if (buffer.join(',').includes(" ,-")) {
-   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Jatinderjit","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-
-if (buffer.join(',').includes("Shift,Shift")) {
-   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Rajshri","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-
-if (global_keys["Control"] && global_keys["a"] && buffer.join(',').includes("Control,a")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Arpita","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-
-if (global_keys["Control"] && global_keys["s"] && buffer.join(',').includes("Control,s")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Ayushi","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-});
-
-
-document.addEventListener("keyup", function(event) { global_keys[event.key] = false; })
+        
     </script>
     <style>
         *, :after, :before {
@@ -561,12 +1682,186 @@ body.fpm-dark .ft_md a {
     text-decoration: none;
 }
         
+
+.b_2 {
+    background-color: rgba(58,64,78,1)
+}
+
+
+
+.b_4 {
+    background-color: rgba(43,48,59,1)
+}
+
+
+
+.b_6 {
+    border-color: rgba(128,128,128,1)
+}
+
+
+
+body.fpm-dark .b_2 {
+    background-color: rgba(58,64,78,1)
+}
+
+
+
+body.fpm-dark .b_4 {
+    background-color: rgba(43,48,59,1)
+}
+
+
+
+body.fpm-dark .b_6 {
+    border-color: rgba(128,128,128,1)
+}
+
+
+
+body.fpm-dark .c_0 {
+    color: rgba(0,0,0,1)
+}
+
+
+
+body.fpm-dark .c_1 {
+    color: rgba(77,77,77,1)
+}
+
+
+
+body.fpm-dark .c_3 {
+    color: rgba(220,220,220,1)
+}
+
+
+
+body.fpm-dark .c_5 {
+    color: rgba(128,128,128,1)
+}
+
+
+
+.c_0 {
+    color: rgba(0,0,0,1)
+}
+
+
+
+.c_1 {
+    color: rgba(77,77,77,1)
+}
+
+
+
+.c_3 {
+    color: rgba(220,220,220,1)
+}
+
+
+
+.c_5 {
+    color: rgba(128,128,128,1)
+}
+
+
     </style>
 
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Foo</div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><h1 data-id="0:main" id="conditional-attributes" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">Conditional Attributes</div><div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"><code>ftd</code> supports <code>if</code> expression to decide the value of attribute, based on the arguments, or global variables.</div></h1><h3 data-id="1:main" id="priority-order" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">Priority Order</div><div data-id="1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">The priority of conditional attributes is in increasing order (low -&gt; high) i.e. the condition at bottom has higher priority than the above conditions. The value of attribute with no condition is taken as default.</div></h3><h3 data-id="2:main" id="examples" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">Examples</div><div data-id="2,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Lets understand it better with few examples</div></h3><h5 data-id="3:main" id="example-1" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">Example 1:</div><div data-id="3,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"></div></h5><div data-id="4:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 12px; padding-top: 12px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="4,0:main" style="border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_2 c_3 ft_md">Conditional Attribute using variable</div><div data-id="4,1:main" style="border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_4 c_1"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">boolean present</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">false
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text foo</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption name</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">color</span><span style="color:#65737e;">: </span><span style="color:#d08770;">grey
+</span><span style="color:#b48ead;">color if $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">green
+</span><span style="color:#b48ead;">color if not $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">red
+</span><span style="color:#b48ead;">text</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$name
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">foo</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello
+</span></pre>
+</div><div data-id="4,2:main" style="border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; display: none; line-height: 26px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_4 c_1"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">boolean present</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">false
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text foo</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption name</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">color</span><span style="color:#65737e;">: </span><span style="color:#d08770;">grey
+</span><span style="color:#b48ead;">color if $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">green
+</span><span style="color:#b48ead;">color if not $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">red
+</span><span style="color:#b48ead;">text</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$name
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">foo</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello
+</span></pre>
+</div></div><div data-id="5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_5 ft_md">Output:</div><div data-id="6:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial; width: 100%" class="b_6"><div data-id="6,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello</div></div><div data-id="7:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Here, in above sample code, the attribute or style <code>color</code> has default value as <code>grey</code> and it follows the conditional statements. According to the value of the variable <code>present</code> (in this case, it is <code>false</code>), the value of the style <code>color</code> is set (in this case, it’s <code>red</code>).</div><h5 data-id="8:main" id="example-2" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="8,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">Example 2:</div><div data-id="8,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"></div></h5><div data-id="9:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 12px; padding-top: 12px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="9,0:main" style="border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_2 c_3 ft_md">Conditional Attribute with default</div><div data-id="9,1:main" style="border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_4 c_1"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">boolean present</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">false
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text foo</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption name</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">color</span><span style="color:#65737e;">: </span><span style="color:#d08770;">grey
+</span><span style="color:#b48ead;">color if $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">green
+</span><span style="color:#b48ead;">text</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$name
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">foo</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello
+</span></pre>
+</div><div data-id="9,2:main" style="border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; display: none; line-height: 26px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_4 c_1"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">boolean present</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">false
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text foo</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption name</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">color</span><span style="color:#65737e;">: </span><span style="color:#d08770;">grey
+</span><span style="color:#b48ead;">color if $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">green
+</span><span style="color:#b48ead;">text</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$name
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">foo</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello
+</span></pre>
+</div></div><div data-id="10:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_5 ft_md">Output:</div><div data-id="11:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial; width: 100%" class="b_6"><div data-id="11,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(128,128,128,1); text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello</div></div><div data-id="12:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Here, in above sample code, no conditional statement is satisfied, so the value of style <code>color</code> is set to its default value (i.e. <code>grey</code>).</div><h5 data-id="13:main" id="example-3" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="13,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">Example 3:</div><div data-id="13,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"></div></h5><div data-id="14:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 12px; padding-top: 12px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="14,0:main" style="border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_2 c_3 ft_md">Conditional Attribute using arguments</div><div data-id="14,1:main" style="border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_4 c_1"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text foo</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption name</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">optional string yes</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">color</span><span style="color:#65737e;">: </span><span style="color:#d08770;">grey
+</span><span style="color:#b48ead;">color if $yes is not null</span><span style="color:#65737e;">: </span><span style="color:#d08770;">blue
+</span><span style="color:#b48ead;">text</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$name
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">foo</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello
+</span><span style="color:#b48ead;">yes</span><span style="color:#65737e;">: </span><span style="color:#d08770;">world
+</span></pre>
+</div><div data-id="14,2:main" style="border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; display: none; line-height: 26px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_4 c_1"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text foo</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption name</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">optional string yes</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">color</span><span style="color:#65737e;">: </span><span style="color:#d08770;">grey
+</span><span style="color:#b48ead;">color if $yes is not null</span><span style="color:#65737e;">: </span><span style="color:#d08770;">blue
+</span><span style="color:#b48ead;">text</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$name
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">foo</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello
+</span><span style="color:#b48ead;">yes</span><span style="color:#65737e;">: </span><span style="color:#d08770;">world
+</span></pre>
+</div></div><div data-id="15:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_5 ft_md">Output:</div><div data-id="16:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial; width: 100%" class="b_6"><div data-id="16,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,255,1); text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello</div></div><div data-id="17:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Here, in above sample code, we have defined the argument <code>yes</code> of optional string type. if <code>yes</code> is passed then <code>color if $yes is not null</code> condition would be satisfied and the <code>color</code> gets set to <code>blue</code>.</div><h5 data-id="18:main" id="example-4" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="18,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_0 ft_md">Example 4:</div><div data-id="18,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md"></div></h5><div data-id="19:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 12px; padding-top: 12px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="19,0:main" style="border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_2 c_3 ft_md">Conditional Attribute deciding priority</div><div data-id="19,1:main" style="border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_4 c_1"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">boolean present</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">false
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text foo</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption name</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">optional string yes</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">color</span><span style="color:#65737e;">: </span><span style="color:#d08770;">grey
+</span><span style="color:#b48ead;">color if $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">blue
+</span><span style="color:#b48ead;">color if not $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">red
+</span><span style="color:#b48ead;">color if $yes is not null</span><span style="color:#65737e;">: </span><span style="color:#d08770;">green
+</span><span style="color:#b48ead;">text</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$name
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">foo</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello
+</span><span style="color:#b48ead;">yes</span><span style="color:#65737e;">: </span><span style="color:#d08770;">world
+</span></pre>
+</div><div data-id="19,2:main" style="border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; display: none; line-height: 26px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; text-decoration: none; white-space: initial; width: 100%" class="b_4 c_1"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">boolean present</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">false
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text foo</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption name</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">optional string yes</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">color</span><span style="color:#65737e;">: </span><span style="color:#d08770;">grey
+</span><span style="color:#b48ead;">color if $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">blue
+</span><span style="color:#b48ead;">color if not $present</span><span style="color:#65737e;">: </span><span style="color:#d08770;">red
+</span><span style="color:#b48ead;">color if $yes is not null</span><span style="color:#65737e;">: </span><span style="color:#d08770;">green
+</span><span style="color:#b48ead;">text</span><span style="color:#65737e;">: </span><span style="color:#d08770;">$name
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">foo</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello
+</span><span style="color:#b48ead;">yes</span><span style="color:#65737e;">: </span><span style="color:#d08770;">world
+</span></pre>
+</div></div><div data-id="20:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_5 ft_md">Output:</div><div data-id="21:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial; width: 100%" class="b_6"><div data-id="21,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello</div></div><div data-id="22:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">Here, in above sample code, both <code>color if not $present: red</code> and <code>color if $yes is not null: blue</code> are satisfied, so according to the precedence rule, the value of attribute/style is set to value in last satisfied condition, i.e., <code>color if $yes is not null: blue</code> has highest priority. So the <code>color</code> gets set to <code>blue</code>.</div></div>
 
 
     <script>
