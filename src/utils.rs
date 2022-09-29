@@ -1,4 +1,5 @@
 // https://stackoverflow.com/questions/71985357/whats-the-best-way-to-write-a-custom-format-macro
+#[macro_export]
 macro_rules! warning {
     ($($t:tt)*) => {{
         use colored::Colorize;

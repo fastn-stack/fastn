@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 pub async fn sync2(
     config: &fpm::Config,
     files: Option<Vec<String>>,
@@ -38,6 +36,8 @@ pub async fn sync2(
 }*/
 
 async fn simple_sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let mut workspace = config.get_clone_workspace().await?;
     let changed_files = {
         let mut changed_files = config
@@ -84,6 +84,8 @@ async fn update_workspace(
     response: &fpm::apis::sync2::SyncResponse,
     workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let remote_history = fpm::history::FileHistory::from_ftd(response.latest_ftd.as_str())?;
     let remote_manifest =
         fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;

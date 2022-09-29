@@ -426,33 +426,16 @@ access_identities(req: HttpRequest, document_name: str, rw: bool)
 
 pub async fn access_identities(
     config: &fpm::Config,
-    req: &actix_web::HttpRequest,
-    document_name: &str,
-    is_read: bool,
-) -> fpm::Result<Vec<UserIdentity>> {
-    access_identities_(config, req, document_name, is_read).await
-}
-
-async fn access_identities_(
-    config: &fpm::Config,
-    req: &actix_web::HttpRequest,
+    req: &fpm::http::Request,
     document_name: &str,
     is_read: bool,
 ) -> fpm::Result<Vec<UserIdentity>> {
     use itertools::Itertools;
     if cfg!(feature = "remote") {
-        let sitemap_identities = get_identities(config, document_name, is_read)?;
-        let cookies: std::collections::HashMap<String, String> = req
-            .cookies()
-            .unwrap()
-            .iter()
-            .map(|c| (c.name().to_string(), c.value().to_string()))
-            .collect();
-        let host = req.connection_info().host().to_string();
         return fpm::controller::get_remote_identities(
-            host.as_str(),
-            cookies,
-            sitemap_identities
+            req.host().as_str(),
+            req.cookies(),
+            get_identities(config, document_name, is_read)?
                 .into_iter()
                 .map(|x| (x.key, x.value))
                 .collect_vec()
@@ -462,7 +445,7 @@ async fn access_identities_(
     }
 
     Ok(if let Some(identity) = req.cookie("identities") {
-        parse_identities(identity.value())
+        parse_identities(identity.as_str())
     } else {
         parse_cli_identities()
     })

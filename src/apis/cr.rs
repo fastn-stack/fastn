@@ -3,22 +3,17 @@ pub struct CreateCRRequest {
     pub title: Option<String>,
 }
 
-pub async fn create_cr(
-    req: actix_web::web::Json<CreateCRRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
-    match create_cr_worker(req.0).await {
+pub async fn create_cr(req: CreateCRRequest) -> fpm::Result<fpm::http::Response> {
+    match create_cr_worker(req).await {
         Ok(cr_number) => {
             #[derive(serde::Serialize)]
             struct CreateCRResponse {
                 url: String,
             }
             let url = format!("-/{}/-/about/", cr_number);
-            fpm::apis::success(CreateCRResponse { url })
+            fpm::http::api_ok(CreateCRResponse { url })
         }
-        Err(err) => fpm::apis::error(
-            err.to_string(),
-            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-        ),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
@@ -35,13 +30,10 @@ async fn create_cr_worker(cr_request: CreateCRRequest) -> fpm::Result<usize> {
     Ok(cr_number as usize)
 }
 
-pub async fn create_cr_page() -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn create_cr_page() -> fpm::Result<fpm::http::Response> {
     match create_cr_page_worker().await {
-        Ok(body) => Ok(actix_web::HttpResponse::Ok().body(body)),
-        Err(err) => fpm::apis::error(
-            err.to_string(),
-            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-        ),
+        Ok(body) => Ok(fpm::http::ok(body)),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 

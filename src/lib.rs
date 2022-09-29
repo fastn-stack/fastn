@@ -1,9 +1,6 @@
 extern crate self as fpm;
 
 #[macro_use]
-extern crate lazy_static;
-
-#[macro_use]
 pub mod utils;
 
 // Temp comment
@@ -19,7 +16,9 @@ mod doc;
 mod file;
 mod font;
 mod history;
+#[macro_use]
 mod http;
+mod error;
 mod i18n;
 pub mod library;
 mod package_doc;
@@ -41,13 +40,14 @@ pub use commands::{
     abort_merge::abort_merge, add::add, build::build, clone::clone, close_cr::close_cr,
     create_cr::create_cr, diff::diff, edit::edit, mark_resolve::mark_resolve,
     mark_upto_date::mark_upto_date, merge::merge, resolve_conflict::resolve_conflict,
-    revert::revert, rm::rm, serve::fpm_serve, start_project::start_project,
+    revert::revert, rm::rm, serve::listen, start_project::start_project,
     start_tracking::start_tracking, status::status, stop_tracking::stop_tracking, sync2::sync2,
     sync_status::sync_status, translation_status::translation_status, update::update,
 };
 pub use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
+pub use error::Error;
 pub use file::File;
 pub(crate) use file::{get_file, paths_to_files, Document, Static};
 pub(crate) use font::Font;
@@ -60,8 +60,8 @@ pub(crate) use utils::{copy_dir_all, time, timestamp_nanosecond};
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
-pub const FPM_UI_INTERFACE: &str = "fifthtry.github.io/fpm-ui";
-pub const PACKAGE_THEME_INTERFACE: &str = "fifthtry.github.io/theme";
+pub const FPM_UI_INTERFACE: &str = "ftd-lang.github.io/fpm-ui";
+pub const PACKAGE_THEME_INTERFACE: &str = "ftd-lang.github.io/theme";
 pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
 pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
@@ -505,66 +505,6 @@ pub fn debug_env_vars() -> String {
 // fn default_markdown() -> &'static str {
 //     include_str!("../ftd/markdown.ftd")
 // }
-
-#[derive(thiserror::Error, Debug)]
-pub enum Error {
-    #[error("HttpError: {}", _0)]
-    HttpError(#[from] reqwest::Error),
-
-    #[error("IoError: {}", _0)]
-    IoError(#[from] std::io::Error),
-
-    #[error("ZipError: {}", _0)]
-    ZipError(#[from] zip::result::ZipError),
-
-    #[error("SerdeJsonError: {}", _0)]
-    SerdeJsonError(#[from] serde_json::Error),
-
-    #[error("FTDError: {}", _0)]
-    FTDError(#[from] ftd::p1::Error),
-
-    #[error("IgnoreError: {}", _0)]
-    IgnoreError(#[from] ignore::Error),
-
-    #[error("FromPathBufError: {}", _0)]
-    FromPathBufError(#[from] camino::FromPathBufError),
-
-    #[error("StripPrefixError: {}", _0)]
-    StripPrefixError(#[from] std::path::StripPrefixError),
-
-    #[error("SitemapParseError: {}", _0)]
-    SitemapParseError(#[from] fpm::sitemap::ParseError),
-
-    #[error("URLParseError: {}", _0)]
-    UrlParseError(#[from] url::ParseError),
-
-    #[error("UTF8Error: {}", _0)]
-    UTF8Error(#[from] std::string::FromUtf8Error),
-
-    #[error("ParseIntError: {}", _0)]
-    ParseIntError(#[from] std::num::ParseIntError),
-
-    #[error("APIResponseError: {}", _0)]
-    APIResponseError(String),
-
-    #[error("PackageError: {message}")]
-    PackageError { message: String },
-
-    #[error("UsageError: {message}")]
-    UsageError { message: String },
-
-    #[error("GenericError: {}", _0)]
-    GenericError(String),
-
-    #[error("GroupNotFound: id: {id}, {message}")]
-    GroupNotFound { id: String, message: String },
-
-    #[error("CRAboutNotFound CR#{cr_number}: {message}")]
-    CRAboutNotFound { message: String, cr_number: usize },
-
-    #[error("QueryPayloadError: {}", _0)]
-    QueryPayloadError(#[from] actix_web::error::QueryPayloadError),
-}
 
 pub type Result<T> = std::result::Result<T, Error>;
 

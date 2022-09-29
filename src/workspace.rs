@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Eq, Clone)]
 pub struct WorkspaceEntry {
     pub filename: String,
@@ -36,6 +34,8 @@ impl CRWorkspace {
 
 impl fpm::Config {
     pub(crate) async fn evaluate_clone_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
+        use itertools::Itertools;
+
         let history_list = self.get_history().await?;
         Ok(
             fpm::history::FileHistory::get_remote_manifest(history_list.as_slice(), true)?
@@ -52,6 +52,8 @@ impl fpm::Config {
     }
 
     pub(crate) async fn write_clone_available_cr(&self, reserved_crs: &[i32]) -> fpm::Result<()> {
+        use itertools::Itertools;
+
         fpm::utils::update(
             &self.clone_available_crs_path(),
             reserved_crs
@@ -143,6 +145,8 @@ impl fpm::Config {
     }
 
     pub(crate) async fn update_workspace(&self, workspace: Vec<WorkspaceEntry>) -> fpm::Result<()> {
+        use itertools::Itertools;
+
         let workspace = {
             let mut initial_workspace = self.get_workspace_map().await?;
             initial_workspace.extend(workspace.into_iter().map(|v| (v.filename.to_string(), v)));

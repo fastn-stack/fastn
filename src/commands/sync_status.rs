@@ -1,6 +1,6 @@
-use itertools::Itertools;
-
 pub async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let get_files_status = config.get_files_status().await?;
     if let Some(source) = source {
         if let Some(file_status) = get_files_status

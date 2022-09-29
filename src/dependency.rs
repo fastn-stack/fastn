@@ -1,5 +1,3 @@
-use tokio::io::AsyncWriteExt;
-
 #[derive(Debug, Clone)]
 pub struct Dependency {
     pub package: fpm::Package,
@@ -266,6 +264,8 @@ impl fpm::Package {
         download_dependencies: bool,
     ) -> fpm::Result<()> {
         use std::io::Write;
+        use tokio::io::AsyncWriteExt;
+
         // TODO: in future we will check if we have a new version in the package's repo.
         //       for now assume if package exists we have the latest package and if you
         //       want to update a package, delete the corresponding folder and latest

@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 pub async fn create_cr(config: &fpm::Config, title: Option<&str>) -> fpm::Result<()> {
     let cr_number = config.extract_cr_number().await?;
     let cr_meta_content = fpm::cr::generate_cr_meta_content(&fpm::cr::CRMeta {
@@ -27,6 +25,8 @@ pub(crate) async fn add_cr_to_workspace(
     config: &fpm::Config,
     cr_meta: &fpm::cr::CRMeta,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     fpm::cr::create_cr_meta(config, cr_meta).await?;
     fpm::cr::create_cr_about(config, cr_meta).await?;
 

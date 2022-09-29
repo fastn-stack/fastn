@@ -38,28 +38,27 @@ fn query(uri: &str) -> fpm::Result<QueryParams> {
     })
 }
 
-pub async fn clear(req: &actix_web::HttpRequest) -> actix_web::HttpResponse {
-    let query = match query(req.uri().to_string().as_str()) {
+pub async fn clear(req: &fpm::http::Request) -> fpm::http::Response {
+    let query = match query(req.uri()) {
         Ok(q) => q,
         Err(err) => {
-            eprintln!(
+            return fpm::server_error!(
                 "FPM-Error: /-/clear-cache/, uri: {:?}, error: {:?}",
                 req.uri(),
                 err
             );
-            return actix_web::HttpResponse::InternalServerError().body(err.to_string());
         }
     };
 
     if let Err(err) = clear_(&query).await {
-        eprintln!(
+        return fpm::server_error!(
             "FPM-Error: /-/clear-cache/, query: {:?}, error: {:?}",
-            query, err
+            query,
+            err
         );
-        return actix_web::HttpResponse::InternalServerError().body(err.to_string());
     }
 
-    actix_web::HttpResponse::Ok().body("Done".to_string())
+    fpm::http::ok("Done".into())
 }
 
 pub async fn clear_(query: &QueryParams) -> fpm::Result<()> {

@@ -6,12 +6,10 @@
 
 // TODO: Need to change it later
 // TODO: https://stackoverflow.com/questions/29445026/converting-number-primitives-i32-f64-etc-to-byte-representations
-// TODO: Need to use async lock
-// TODO: https://docs.rs/async-rwlock/latest/async_rwlock/
 
-lazy_static! {
-    static ref LOCK: std::sync::RwLock<u32> = std::sync::RwLock::new(5);
-}
+// TODO: what is this lock protecting? We already have a lock in fpm::commands::serve::LOCK.
+static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
+    once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
 /*pub async fn get(path: &str) -> fpm::Result<usize> {
     match LOCK.try_read() {
@@ -32,7 +30,7 @@ pub async fn create(path: &str) -> fpm::Result<usize> {
                 .await?
                 .write_all(content.to_string().as_bytes())
                 .await?;
-            Ok(get_without_lock(path).await?)
+            Ok(_get_without_lock(path).await?)
         }
         Err(e) => Err(fpm::Error::GenericError(e.to_string())),
     }
@@ -50,40 +48,46 @@ pub async fn create_or_inc(path: &str) -> fpm::Result<usize> {
     }
 }*/
 
-pub async fn get_without_lock(path: &str) -> fpm::Result<usize> {
+async fn _get_without_lock(path: &str) -> fpm::Result<usize> {
     let value = tokio::fs::read_to_string(path).await?;
     Ok(value.parse()?)
 }
 
-pub async fn create_without_lock(path: &str) -> fpm::Result<usize> {
+async fn _create_without_lock(path: &str) -> fpm::Result<usize> {
     use tokio::io::AsyncWriteExt;
     let content: usize = 1;
     tokio::fs::File::create(path)
         .await?
         .write_all(content.to_string().as_bytes())
         .await?;
-    get_without_lock(path).await
+    _get_without_lock(path).await
 }
 
-pub async fn update_get(path: &str, value: usize) -> fpm::Result<usize> {
+async fn update_get(path: &str, value: usize) -> fpm::Result<usize> {
+    // TODO: why are we not just taking the lock using `let _lock = LOCK.write()`?
     match LOCK.try_write() {
-        Ok(_) => {
-            let old_value = get_without_lock(path).await?;
+        Some(_lock) => {
+            let old_value = _get_without_lock(path).await?;
             tokio::fs::write(path, (old_value + value).to_string().as_bytes()).await?;
-            Ok(get_without_lock(path).await?)
+            Ok(_get_without_lock(path).await?)
         }
-        Err(e) => Err(fpm::Error::GenericError(e.to_string())),
+        None => Err(fpm::Error::GenericError(
+            "Failed to acquire lock".to_string(),
+        )),
     }
 }
 
-pub async fn update_create(path: &str, value: usize) -> fpm::Result<usize> {
+async fn update_create(path: &str, value: usize) -> fpm::Result<usize> {
+    // TODO: why are we not just taking the lock using `let _lock = LOCK.write()`?
     match LOCK.try_write() {
-        Ok(_) => {
-            let old_value = create_without_lock(path).await?;
+        Some(_lock) => {
+            let old_value = _create_without_lock(path).await?;
             tokio::fs::write(path, (old_value + value).to_string().as_bytes()).await?;
-            Ok(get_without_lock(path).await?)
+            Ok(_get_without_lock(path).await?)
         }
-        Err(e) => Err(fpm::Error::GenericError(e.to_string())),
+        None => Err(fpm::Error::GenericError(
+            "Failed to acquire lock".to_string(),
+        )),
     }
 }
 
@@ -94,5 +98,3 @@ pub async fn update(path: &str, value: usize) -> fpm::Result<usize> {
         update_create(path, value).await
     }
 }
-
-mod tests {}

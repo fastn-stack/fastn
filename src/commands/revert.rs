@@ -1,6 +1,6 @@
-use itertools::Itertools;
-
 pub async fn revert(config: &fpm::Config, path: &str) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let mut workspace = config.get_workspace_map().await?;
     let get_files_status = config
         .get_files_status_with_workspace(&mut workspace)

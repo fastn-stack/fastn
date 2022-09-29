@@ -42,11 +42,20 @@ pub async fn processor<'a>(
         }
     };
 
-    for (_, k, v) in section.header.0.iter() {
-        if k == "$processor$" || k == "url" || k == "method" {
+    for (line, key, value) in section.header.0.iter() {
+        if key == "$processor$" || key == "url" || key == "method" {
             continue;
         }
-        url.query_pairs_mut().append_pair(k, v);
+
+        // 1 id: $query.id
+        // After resolve headers: id:1234(value of $query.id)
+        if value.starts_with('$') {
+            if let Some(value) = doc.get_value(*line, value)?.to_string() {
+                url.query_pairs_mut().append_pair(key, &value);
+            }
+        } else {
+            url.query_pairs_mut().append_pair(key, value);
+        }
     }
 
     println!("calling `http` processor with url: {}", &url);
@@ -82,11 +91,7 @@ pub fn request_data_processor<'a>(
 ) -> ftd::p1::Result<ftd::Value> {
     // TODO: Need to return from query parameters and body as well
     let query = match config.request.as_ref() {
-        Some(request) => request.query().map_err(|e| ftd::p1::Error::ParseError {
-            message: format!("Not able to parse from query string: {:?}", e),
-            doc_id: doc.name.to_string(),
-            line_number: section.line_number,
-        })?,
+        Some(request) => request.query(),
         None => {
             return ftd::p2::utils::e2(
                 "HttpRequest object should not be null",
@@ -95,6 +100,6 @@ pub fn request_data_processor<'a>(
             )
         }
     };
-    dbg!(&query);
-    doc.from_json(&query, section)
+    dbg!(query);
+    doc.from_json(query, section)
 }

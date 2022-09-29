@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug)]
 pub struct CloneResponse {
     pub package_name: String,
@@ -7,17 +5,17 @@ pub struct CloneResponse {
     pub reserved_crs: Vec<i32>,
 }
 
-pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn clone() -> fpm::Result<fpm::http::Response> {
+    // TODO: implement authentication
     match clone_worker().await {
-        Ok(data) => fpm::apis::success(data),
-        Err(err) => fpm::apis::error(
-            err.to_string(),
-            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-        ),
+        Ok(data) => fpm::http::api_ok(data),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
 async fn clone_worker() -> fpm::Result<CloneResponse> {
+    use itertools::Itertools;
+
     let config = fpm::Config::read(None, false).await?;
     let all_files = config
         .get_all_file_path(&config.package, Default::default())?

@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 pub async fn add(config: &fpm::Config, file: &str, cr: Option<&str>) -> fpm::Result<()> {
     if let Some(cr) = cr {
         let cr = cr.parse::<usize>()?;
@@ -10,6 +8,8 @@ pub async fn add(config: &fpm::Config, file: &str, cr: Option<&str>) -> fpm::Res
 }
 
 async fn simple_add(config: &fpm::Config, file: &str) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let mut workspace = config.get_clone_workspace().await?;
 
     if workspace.contains_key(file) {
@@ -42,6 +42,8 @@ async fn simple_add(config: &fpm::Config, file: &str) -> fpm::Result<()> {
 }
 
 async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     if !fpm::cr::is_open_cr_exists(config, cr).await? {
         return fpm::usage_error(format!("CR#{} is closed", cr));
     };

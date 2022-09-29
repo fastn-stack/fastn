@@ -140,11 +140,12 @@ pub async fn handle_wasm(
             Err(err) => Err(WASMError::WasmFunctionInvokeError(err.to_string())),
         })
     }
-    fpm::time("WASM Execution: ").it(match inner(req, body, wasm_module).await {
-        Ok(resp) => Ok(resp),
-        Err(err) => fpm::apis::error(
-            err.to_string(),
-            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-        ),
-    })
+    todo!("FIX ME")
+    // fpm::time("WASM Execution: ").it(match inner(req, body, wasm_module).await {
+    //     Ok(resp) => Ok(resp),
+    //     Err(err) => fpm::apis::error(
+    //         err.to_string(),
+    //         actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
+    //     ),
+    // })
 }

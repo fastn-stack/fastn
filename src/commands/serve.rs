@@ -1,33 +1,29 @@
-lazy_static! {
-    // read write lock for APIs
-    static ref LOCK: async_lock::RwLock<()> = async_lock::RwLock::new(());
-}
+static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
+    once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
-async fn serve_file(
-    req: &actix_web::HttpRequest,
-    config: &mut fpm::Config,
-    path: &camino::Utf8Path,
-) -> actix_web::HttpResponse {
+async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::http::Response {
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
-            eprintln!("FPM-Error: path: {}, {:?}", path, e);
-            return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+            return fpm::server_error!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
 
     // Auth Stuff
     if !f.is_static() {
+        let req = if let Some(ref r) = config.request {
+            r
+        } else {
+            return fpm::server_error!("request not set");
+        };
         match config.can_read(req, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
-                    return actix_web::HttpResponse::Unauthorized()
-                        .body(format!("You are unauthorized to access: {}", path));
+                    return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(e) => {
-                eprintln!("FPM-Error: can_read error: {}, {:?}", path, e);
-                return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+                return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
             }
         }
     }
@@ -36,48 +32,36 @@ async fn serve_file(
     match f {
         fpm::File::Ftd(main_document) => {
             match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
-                Ok(r) => actix_web::HttpResponse::Ok().body(r),
+                Ok(r) => fpm::http::ok(r),
                 Err(e) => {
-                    eprintln!("FPM-Error: path: {}, {:?}", path, e);
-                    actix_web::HttpResponse::InternalServerError().body(e.to_string())
+                    fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
             }
         }
-        fpm::File::Image(image) => actix_web::HttpResponse::Ok()
-            .content_type(guess_mime_type(image.id.as_str()))
-            .body(image.content),
-        fpm::File::Static(s) => actix_web::HttpResponse::Ok().body(s.content),
+        fpm::File::Image(image) => {
+            fpm::http::ok_with_content_type(image.content, guess_mime_type(image.id.as_str()))
+        }
+        fpm::File::Static(s) => fpm::http::ok(s.content),
         _ => {
-            eprintln!("FPM unknown handler");
-            actix_web::HttpResponse::InternalServerError().body("".as_bytes())
+            fpm::server_error!("unknown handler")
         }
     }
 }
 
 async fn serve_cr_file(
-    req: &actix_web::HttpRequest,
+    req: &fpm::http::Request,
     config: &mut fpm::Config,
     path: &camino::Utf8Path,
     cr_number: usize,
-) -> actix_web::HttpResponse {
+) -> fpm::http::Response {
     let _lock = LOCK.read().await;
-    serve_cr_file_(req, config, path, cr_number).await
-}
-
-async fn serve_cr_file_(
-    req: &actix_web::HttpRequest,
-    config: &mut fpm::Config,
-    path: &camino::Utf8Path,
-    cr_number: usize,
-) -> actix_web::HttpResponse {
     let f = match config
         .get_file_and_package_by_cr_id(path.as_str(), cr_number)
         .await
     {
         Ok(f) => f,
         Err(e) => {
-            eprintln!("FPM-Error: path: {}, {:?}", path, e);
-            return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+            return fpm::server_error!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
 
@@ -86,13 +70,11 @@ async fn serve_cr_file_(
         match config.can_read(req, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
-                    return actix_web::HttpResponse::Unauthorized()
-                        .body(format!("You are unauthorized to access: {}", path));
+                    return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(e) => {
-                eprintln!("FPM-Error: can_read error: {}, {:?}", path, e);
-                return actix_web::HttpResponse::InternalServerError().body(e.to_string());
+                return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
             }
         }
     }
@@ -101,20 +83,18 @@ async fn serve_cr_file_(
     match f {
         fpm::File::Ftd(main_document) => {
             match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
-                Ok(r) => actix_web::HttpResponse::Ok().body(r),
+                Ok(r) => fpm::http::ok(r),
                 Err(e) => {
-                    eprintln!("FPM-Error: path: {}, {:?}", path, e);
-                    actix_web::HttpResponse::InternalServerError().body(e.to_string())
+                    fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
             }
         }
-        fpm::File::Image(image) => actix_web::HttpResponse::Ok()
-            .content_type(guess_mime_type(image.id.as_str()))
-            .body(image.content),
-        fpm::File::Static(s) => actix_web::HttpResponse::Ok().body(s.content),
+        fpm::File::Image(image) => {
+            fpm::http::ok_with_content_type(image.content, guess_mime_type(image.id.as_str()))
+        }
+        fpm::File::Static(s) => fpm::http::ok(s.content),
         _ => {
-            eprintln!("FPM unknown handler");
-            actix_web::HttpResponse::InternalServerError().body("".as_bytes())
+            fpm::server_error!("FPM unknown handler")
         }
     }
 }
@@ -123,59 +103,50 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
     mime_guess::from_path(path).first_or_octet_stream()
 }
 
-async fn serve_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
+async fn serve_fpm_file(config: &fpm::Config) -> fpm::http::Response {
     let response =
         match tokio::fs::read(config.get_root_for_package(&config.package).join("FPM.ftd")).await {
             Ok(res) => res,
             Err(e) => {
-                eprintln!("FPM-Error: path: FPM.ftd error: {:?}", e);
-                return actix_web::HttpResponse::NotFound().body(e.to_string());
+                return fpm::not_found!("FPM-Error: path: FPM.ftd error: {:?}", e);
             }
         };
-    actix_web::HttpResponse::Ok()
-        .content_type("application/octet-stream")
-        .body(response)
+    fpm::http::ok_with_content_type(response, mime_guess::mime::APPLICATION_OCTET_STREAM)
 }
 
-async fn static_file(
-    req: &actix_web::HttpRequest,
-    file_path: camino::Utf8PathBuf,
-) -> actix_web::HttpResponse {
+async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
     if !file_path.exists() {
-        return actix_web::HttpResponse::NotFound().body("".as_bytes());
+        return fpm::not_found!("no such static file ({})", file_path);
     }
 
-    match actix_files::NamedFile::open_async(&file_path).await {
-        Ok(r) => r.into_response(req),
+    match tokio::fs::read(file_path.as_path()).await {
+        Ok(r) => fpm::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
         Err(e) => {
-            eprintln!("FPM-Error: path: {:?}, error: {:?}", file_path, e);
-            actix_web::HttpResponse::NotFound().body(e.to_string())
+            fpm::not_found!("FPM-Error: path: {:?}, error: {:?}", file_path, e)
         }
     }
 }
 
-async fn serve(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes, // TODO: Not liking it, It should be fetched from request only :(
-) -> actix_web::HttpResponse {
+async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
-    let r = format!("{} {}", req.method().as_str(), req.path());
+    let r = format!("{} {}", req.method(), req.path());
     let t = fpm::time(r.as_str());
     println!("{r} started");
 
     // TODO: remove unwrap
-    let path: camino::Utf8PathBuf = req.match_info().query("path").parse().unwrap();
+    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
 
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
-        static_file(&req, favicon).await
+        static_file(favicon).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("FPM.ftd")) {
         let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
         serve_fpm_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        let mut config =
-            fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
-        serve_file(&req, &mut config, &path.join("/")).await
+        let mut config = fpm::time("Config::read()")
+            .it(fpm::Config::read(None, false).await.unwrap())
+            .set_request(req);
+        serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fpm::cr::get_cr_path_from_url(path.as_str()) {
         let mut config =
             fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
@@ -186,7 +157,7 @@ async fn serve(
         let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false)
             .await
             .unwrap()
-            .set_request(fpm::http::Request::from_actix(req.clone())));
+            .set_request(req));
 
         // If path is not present in sitemap then pass it to proxy
         // TODO: Need to handle other package URL as well, and that will start from `-`
@@ -195,37 +166,29 @@ async fn serve(
         // In that case need to check whether that url is present in sitemap or not and than proxy
         // pass the url if the file is not static
         // So final check would be file is not static and path is not present in the package's sitemap
+        if !path.starts_with("-/") {
+            if let Some(sitemap) = config.package.sitemap.as_ref() {
+                if !sitemap.path_exists(path.as_str()) {
+                    if let Some(endpoint) = config.package.endpoint.as_ref() {
+                        let req = if let Some(r) = config.request {
+                            r
+                        } else {
+                            return Ok(fpm::server_error!("request not set"));
+                        };
 
-        let package = config.find_package_by_id(path.as_str()).await.unwrap().1;
-        if let Some(sitemap) = package.sitemap.as_ref() {
-            if !sitemap.path_exists(path.as_str()) {
-                match (config.package.endpoint.as_ref(), config.package.backend) {
-                    (Some(endpoint), false) => {
-                        return fpm::proxy::get_out(
-                            endpoint,
-                            fpm::http::Request::from_actix(req.clone()),
-                            body,
-                        )
-                        .await;
-                    }
-                    (None, true) => {
-                        // Expect the backend.wasm file to exist here
-                        let wasm_module =
-                            config.get_root_for_package(&package).join("backend.wasm");
-                        if let Ok(resp) = fpm::wasm::handle_wasm(&req, body, wasm_module).await {
-                            return resp;
-                        }
-                    }
-                    (_, _) => {
-                        // Pass
-                    }
+                        return fpm::proxy::get_out(endpoint, req).await;
+                    };
                 }
             }
         }
         // TODO: pass &fpm::http::Request
-        serve_file(&req, &mut config, &path).await
+
+        serve_file(&mut config, &path).await
+
+        // if true: serve_file
+        // else: proxy_pass
     };
-    t.it(response)
+    t.it(Ok(response))
 }
 
 pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
@@ -244,69 +207,78 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
     Ok(())
 }
 
-pub async fn clear_cache(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub async fn clear_cache(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::cache::clear(&req).await
+    Ok(fpm::apis::cache::clear(&req).await)
 }
 
 // TODO: Move them to routes folder
-async fn sync(
-    req: actix_web::web::Json<fpm::apis::sync::SyncRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
+async fn sync(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync(req).await
+    fpm::apis::sync(req.json()?).await
 }
 
-async fn sync2(
-    req: actix_web::web::Json<fpm::apis::sync2::SyncRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
+async fn sync2(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync2(req).await
+    fpm::apis::sync2(req.json()?).await
 }
 
-pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn clone() -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
     fpm::apis::clone().await
 }
 
-pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub(crate) async fn view_source(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
-    fpm::apis::view_source(req).await
+    Ok(fpm::apis::view_source(&req).await)
 }
 
-pub async fn edit(
-    req: actix_web::HttpRequest,
-    req_data: actix_web::web::Json<fpm::apis::edit::EditRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn edit(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit(req, req_data).await
+    fpm::apis::edit(&req, req.json()?).await
 }
 
-pub async fn revert(
-    req: actix_web::web::Json<fpm::apis::edit::RevertRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn revert(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit::revert(req).await
+    fpm::apis::edit::revert(req.json()?).await
 }
 
-pub async fn editor_sync() -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn editor_sync() -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
     fpm::apis::edit::sync().await
 }
 
-pub async fn create_cr(
-    req: actix_web::web::Json<fpm::apis::cr::CreateCRRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn create_cr(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::cr::create_cr(req).await
+    fpm::apis::cr::create_cr(req.json()?).await
 }
 
-pub async fn create_cr_page() -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn create_cr_page() -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
     fpm::apis::cr::create_cr_page().await
 }
 
-pub async fn fpm_serve(
+async fn route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+) -> fpm::Result<fpm::http::Response> {
+    let req = fpm::http::Request::from_actix(req, body);
+    match (req.method(), req.path()) {
+        ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
+        ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
+        ("get", "/-/clone/") if cfg!(feature = "remote") => clone().await,
+        ("get", t) if t.starts_with("/-/view-src/") => view_source(req).await,
+        ("post", "/-/edit/") => edit(req).await,
+        ("post", "/-/revert/") => revert(req).await,
+        ("get", "/-/editor-sync/") => editor_sync().await,
+        ("post", "/-/create-cr/") => create_cr(req).await,
+        ("get", "/-/create-cr-page/") => create_cr_page().await,
+        ("post", "/-/clear-cache/") => clear_cache(req).await,
+        (_, _) => serve(req).await,
+    }
+}
+
+pub async fn listen(
     bind_address: &str,
     port: Option<u16>,
     package_download_base_url: Option<String>,
@@ -371,34 +343,7 @@ You can try without providing port, it will automatically pick unused port."#,
         }
     };
 
-    let app = move || {
-        {
-            if cfg!(feature = "remote") {
-                let json_cfg = actix_web::web::JsonConfig::default()
-                    .content_type(|mime| mime == mime_guess::mime::APPLICATION_JSON)
-                    .limit(9862416400);
-
-                actix_web::App::new()
-                    .app_data(json_cfg)
-                    .route("/-/sync/", actix_web::web::post().to(sync))
-                    .route("/-/sync2/", actix_web::web::post().to(sync2))
-                    .route("/-/clone/", actix_web::web::get().to(clone))
-            } else {
-                actix_web::App::new()
-            }
-        }
-        .route(
-            "/-/view-src/{path:.*}",
-            actix_web::web::get().to(view_source),
-        )
-        .route("/-/edit/", actix_web::web::post().to(edit))
-        .route("/-/revert/", actix_web::web::post().to(revert))
-        .route("/-/editor-sync/", actix_web::web::get().to(editor_sync))
-        .route("/-/create-cr/", actix_web::web::post().to(create_cr))
-        .route("/-/create-cr/", actix_web::web::get().to(create_cr_page))
-        .route("/-/clear-cache/", actix_web::web::post().to(clear_cache))
-        .route("/{path:.*}", actix_web::web::route().to(serve))
-    };
+    let app = move || actix_web::App::new().route("/{path:.*}", actix_web::web::route().to(route));
 
     println!("### Server Started ###");
     println!(
@@ -411,10 +356,6 @@ You can try without providing port, it will automatically pick unused port."#,
         .run()
         .await
 }
-
-// fn authentication(req: &actix_web::HttpRequest) -> bool {
-//     false
-// }
 
 // cargo install --features controller --path=.
 // FPM_CONTROLLER=http://127.0.0.1:8000 FPM_INSTANCE_ID=12345 fpm serve 8001

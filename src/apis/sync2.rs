@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 #[derive(serde::Deserialize, serde::Serialize, std::fmt::Debug, Clone)]
 #[serde(tag = "action")]
 pub enum SyncRequestFile {
@@ -111,17 +109,12 @@ pub struct File {
     pub content: Vec<u8>,
 }
 
-pub async fn sync2(
-    req: actix_web::web::Json<SyncRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
-    dbg!("remote server call", &req.0.package_name);
+pub async fn sync2(req: SyncRequest) -> fpm::Result<fpm::http::Response> {
+    dbg!("remote server call", &req.package_name);
 
-    match sync_worker(req.0).await {
-        Ok(data) => fpm::apis::success(data),
-        Err(err) => fpm::apis::error(
-            err.to_string(),
-            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-        ),
+    match sync_worker(req).await {
+        Ok(data) => fpm::http::api_ok(data),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
@@ -309,6 +302,8 @@ pub(crate) async fn do_sync(
 }
 
 pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
+    use itertools::Itertools;
+
     // TODO: Need to call at once only
     let config = fpm::Config::read(None, false).await?;
     let mut synced_files = do_sync(&config, request.files.as_slice()).await?;
@@ -336,6 +331,8 @@ async fn clone_history_files(
     remote_manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
     client_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
 ) -> fpm::Result<Vec<File>> {
+    use itertools::Itertools;
+
     let diff = snapshot_diff(remote_manifest, client_latest);
     let history = ignore::WalkBuilder::new(config.remote_history_dir())
         .hidden(false)

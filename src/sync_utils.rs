@@ -1,6 +1,3 @@
-use itertools::Itertools;
-use sha2::Digest;
-
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub enum Status {
     Conflict(i32),
@@ -133,6 +130,8 @@ impl FileStatus {
 
 impl fpm::Config {
     pub(crate) async fn get_files_status(&self) -> fpm::Result<Vec<FileStatus>> {
+        use itertools::Itertools;
+
         let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> =
             self.get_workspace_map().await?;
         let changed_files = self.get_files_status_with_workspace(&mut workspace).await?;
@@ -145,6 +144,8 @@ impl fpm::Config {
         &self,
         workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
     ) -> fpm::Result<Vec<FileStatus>> {
+        use itertools::Itertools;
+
         let mut changed_files: std::collections::BTreeMap<String, FileStatus> = self
             .get_files_status_wrt_workspace(workspace)
             .await?
@@ -178,6 +179,8 @@ impl fpm::Config {
         &self,
         workspace: &std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
     ) -> fpm::Result<Vec<FileStatus>> {
+        use sha2::Digest;
+
         let mut changed_files = vec![];
         for (filename, workspace_entry) in workspace {
             let version = if let Some(version) = workspace_entry.version {
@@ -251,6 +254,8 @@ impl fpm::Config {
         files: &mut std::collections::BTreeMap<String, FileStatus>,
         manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
     ) -> fpm::Result<(Vec<fpm::workspace::WorkspaceEntry>, Vec<String>)> {
+        use sha2::Digest;
+
         let mut already_removed_files = vec![];
         let mut already_added_files = vec![];
         let mut uptodate_files = vec![];

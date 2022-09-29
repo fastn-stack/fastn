@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 pub async fn resolve_conflict(
     config: &fpm::Config,
     path: &str,
@@ -110,6 +108,8 @@ async fn mark_resolve(
     file_status: &fpm::sync_utils::FileStatus,
     delete_it: bool,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let path = file_status.get_file_path();
     let is_clone_edited_remote_deleted = file_status
         .status()

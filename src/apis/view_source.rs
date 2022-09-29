@@ -1,7 +1,11 @@
-pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub(crate) async fn view_source(req: &fpm::http::Request) -> fpm::http::Response {
     // TODO: Need to remove unwrap
     let path = {
-        let mut path: camino::Utf8PathBuf = req.match_info().query("path").parse().unwrap();
+        let mut path: camino::Utf8PathBuf = req
+            .path()
+            .replacen("/-/view-source/", "", 1)
+            .parse()
+            .unwrap();
         if path.eq(&camino::Utf8PathBuf::new().join("")) {
             path = path.join("/");
         }
@@ -9,32 +13,9 @@ pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpR
     };
 
     match handle_view_source(path.as_str()).await {
-        Ok(body) => actix_web::HttpResponse::Ok().body(body),
+        Ok(body) => fpm::http::ok(body),
         Err(e) => {
-            println!("new_path: {}, Error: {:?}", path, e);
-            actix_web::HttpResponse::InternalServerError().body(e.to_string())
-        }
-    }
-}
-
-pub(crate) async fn _view_source_h(
-    _req: hyper::Request<hyper::Body>,
-) -> hyper::Response<hyper::Body> {
-    // TODO: Need to remove unwrap
-    let path: String = {
-        // let mut path: camino::Utf8PathBuf = req.match_info().query("path").parse().unwrap();
-        // if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        //     path = path.join("/");
-        // }
-        // path
-        "TODO".to_string()
-    };
-
-    match handle_view_source(path.as_str()).await {
-        Ok(body) => hyper::Response::new(body.into()),
-        Err(e) => {
-            println!("new_path: {}, Error: {:?}", path, e);
-            fpm::apis::response::_error_h(e.to_string(), hyper::StatusCode::INTERNAL_SERVER_ERROR)
+            fpm::server_error!("new_path: {}, Error: {:?}", path, e)
         }
     }
 }

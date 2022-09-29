@@ -25,45 +25,36 @@ pub struct EditResponse {
 }
 
 pub async fn edit(
-    req: actix_web::HttpRequest,
-    req_data: actix_web::web::Json<EditRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
+    req: &fpm::http::Request,
+    req_data: EditRequest,
+) -> fpm::Result<fpm::http::Response> {
     let mut config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
-        Err(err) => {
-            return fpm::apis::error(
-                err.to_string(),
-                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-            )
-        }
+        Err(err) => return fpm::http::api_error(err.to_string()),
     };
     config.current_document = Some(req_data.path.to_string());
 
-    match config.can_write(&req, req_data.path.as_str()).await {
+    match config.can_write(req, req_data.path.as_str()).await {
         Ok(can_write) => {
             if !can_write {
-                return Ok(actix_web::HttpResponse::Unauthorized().body(format!(
+                return Ok(fpm::unauthorised!(
                     "You are unauthorized to access: {}",
                     req_data.path.as_str()
-                )));
+                ));
             }
         }
         Err(e) => {
-            eprintln!(
+            return Ok(fpm::server_error!(
                 "FPM-Error: can_read error: {}, {:?}",
                 req_data.path.as_str(),
                 e
-            );
-            return Ok(actix_web::HttpResponse::InternalServerError().body(e.to_string()));
+            ));
         }
     };
 
-    match edit_worker(config, req_data.0).await {
-        Ok(data) => fpm::apis::success(data),
-        Err(err) => fpm::apis::error(
-            err.to_string(),
-            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-        ),
+    match edit_worker(config, req_data).await {
+        Ok(data) => fpm::http::api_ok(data),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
@@ -187,15 +178,10 @@ pub(crate) async fn edit_worker(
     })
 }
 
-pub async fn sync() -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn sync() -> fpm::Result<fpm::http::Response> {
     let config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
-        Err(err) => {
-            return fpm::apis::error(
-                err.to_string(),
-                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-            )
-        }
+        Err(err) => return fpm::http::api_error(err.to_string()),
     };
     match fpm::commands::sync::sync(&config, None).await {
         Ok(_) => {
@@ -203,12 +189,9 @@ pub async fn sync() -> actix_web::Result<actix_web::HttpResponse> {
             struct SyncResponse {
                 reload: bool,
             }
-            fpm::apis::success(SyncResponse { reload: true })
+            fpm::http::api_ok(SyncResponse { reload: true })
         }
-        Err(err) => fpm::apis::error(
-            err.to_string(),
-            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-        ),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
@@ -217,30 +200,20 @@ pub struct RevertRequest {
     pub path: String,
 }
 
-pub async fn revert(
-    req: actix_web::web::Json<RevertRequest>,
-) -> actix_web::Result<actix_web::HttpResponse> {
+pub async fn revert(rev: RevertRequest) -> fpm::Result<fpm::http::Response> {
     let config = match fpm::Config::read(None, false).await {
         Ok(config) => config,
-        Err(err) => {
-            return fpm::apis::error(
-                err.to_string(),
-                actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-            )
-        }
+        Err(err) => return fpm::http::api_error(err.to_string()),
     };
 
-    match fpm::commands::revert::revert(&config, req.0.path.as_str()).await {
+    match fpm::commands::revert::revert(&config, rev.path.as_str()).await {
         Ok(_) => {
             #[derive(serde::Serialize)]
             struct RevertResponse {
                 reload: bool,
             }
-            fpm::apis::success(RevertResponse { reload: true })
+            fpm::http::api_ok(RevertResponse { reload: true })
         }
-        Err(err) => fpm::apis::error(
-            err.to_string(),
-            actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
-        ),
+        Err(err) => fpm::http::api_error(err.to_string()),
     }
 }

@@ -55,10 +55,10 @@ setup() {
     done
 
     if [[ $PRE_RELEASE ]]; then
-        URL="https://api.github.com/repos/fifthtry/fpm/releases"
+        URL="https://api.github.com/repos/ftd-lang/fpm/releases"
         echo "Downloading the latest pre-release binaries"
     else
-        URL="https://api.github.com/repos/fifthtry/fpm/releases/latest"
+        URL="https://api.github.com/repos/ftd-lang/fpm/releases/latest"
         echo "Downloading the latest production ready binaries"
     fi
 

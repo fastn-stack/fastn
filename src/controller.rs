@@ -21,7 +21,7 @@
 /// fpm-ready:
 /// Once dependencies are ready fpm calls /fpm-ready/ API on the controller. We will pass the
 /// FPM_INSTANCE_ID and the git commit hash as input to the API
-/// The API will return with success, and once it is done fpm will start receiving HTTP traffic
+/// The API will return with api_ok, and once it is done fpm will start receiving HTTP traffic
 /// from the controller service.
 
 #[derive(serde::Deserialize, Debug)]
@@ -99,7 +99,7 @@ pub async fn resolve_dependencies(fpm_instance: String, fpm_controller: String) 
 /// input: fpm_instance
 /// output: package_name and git repo URL
 /// format: {
-///     "success": true,
+///     "api_ok": true,
 ///     "result": {
 ///         "package": "<package name>"
 ///         "git": "<git url>"
@@ -127,10 +127,10 @@ async fn get_package(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<Pa
 
 /// fpm-ready API
 /// input: fpm_instance, *(git commit hash)
-/// output: success: true/false
+/// output: api_ok: true/false
 /// format: lang: json
 /// {
-///     "success": true
+///     "api_ok": true
 /// }
 
 /// Git commit hash needs to be computed before making a call to the fpm_ready API
@@ -182,7 +182,7 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
 
 pub async fn get_remote_identities(
     remote_host: &str,
-    cookies: std::collections::HashMap<String, String>,
+    cookies: &std::collections::HashMap<String, String>,
     identities: &[(String, String)],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
     use itertools::Itertools;

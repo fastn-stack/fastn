@@ -1,8 +1,3 @@
-use crate::apis::sync::SyncResponseFile;
-use fpm::apis::sync::SyncStatus;
-use fpm::Config;
-use itertools::Itertools;
-
 pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
     // Read All the Document
     // Get all the updated, added and deleted files
@@ -233,26 +228,26 @@ async fn update_current_directory(
 ) -> fpm::Result<()> {
     for file in files {
         match file {
-            SyncResponseFile::Add { path, content, .. } => {
+            fpm::apis::sync::SyncResponseFile::Add { path, content, .. } => {
                 fpm::utils::update1(&config.root, path, content).await?;
             }
-            SyncResponseFile::Update {
+            fpm::apis::sync::SyncResponseFile::Update {
                 path,
                 content,
                 status,
             } => {
-                if SyncStatus::CloneDeletedRemoteEdited.eq(status) {
+                if fpm::apis::sync::SyncStatus::CloneDeletedRemoteEdited.eq(status) {
                     println!("CloneDeletedRemoteEdit: {}", path);
                 }
-                if SyncStatus::CloneEditedRemoteDeleted.eq(status) {
+                if fpm::apis::sync::SyncStatus::CloneEditedRemoteDeleted.eq(status) {
                     println!("CloneEditedRemoteDeleted: {}", path);
                 }
-                if SyncStatus::Conflict.eq(status) {
+                if fpm::apis::sync::SyncStatus::Conflict.eq(status) {
                     println!("Conflict: {}", path);
                 }
                 fpm::utils::update1(&config.root, path, content).await?;
             }
-            SyncResponseFile::Delete { path, .. } => {
+            fpm::apis::sync::SyncResponseFile::Delete { path, .. } => {
                 if config.root.join(path).exists() {
                     tokio::fs::remove_file(config.root.join(path)).await?;
                 }
@@ -309,6 +304,8 @@ async fn on_conflict(
     response: &fpm::apis::sync::SyncResponse,
     request: &fpm::apis::sync::SyncRequest,
 ) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let client_snapshot = fpm::snapshot::resolve_snapshots(&request.latest_ftd).await?;
     let mut workspace = fpm::snapshot::get_workspace(config).await?;
 
@@ -318,9 +315,9 @@ async fn on_conflict(
 
     for file in response.files.iter() {
         match file {
-            SyncResponseFile::Update { path, status, .. }
-            | SyncResponseFile::Add { path, status, .. }
-            | SyncResponseFile::Delete { path, status, .. } => {
+            fpm::apis::sync::SyncResponseFile::Update { path, status, .. }
+            | fpm::apis::sync::SyncResponseFile::Add { path, status, .. }
+            | fpm::apis::sync::SyncResponseFile::Delete { path, status, .. } => {
                 if fpm::apis::sync::SyncStatus::Conflict.eq(status) {
                     let server_snapshot =
                         fpm::snapshot::resolve_snapshots(&response.latest_ftd).await?;
@@ -384,7 +381,9 @@ async fn on_conflict(
     Ok(())
 }
 
-async fn collect_garbage(config: &Config) -> fpm::Result<()> {
+async fn collect_garbage(config: &fpm::Config) -> fpm::Result<()> {
+    use itertools::Itertools;
+
     let mut workspaces = fpm::snapshot::get_workspace(config).await?;
 
     let paths = workspaces

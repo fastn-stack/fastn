@@ -1,7 +1,5 @@
 // Document: https://fpm.dev/crate/config/
 // Document: https://fpm.dev/crate/package/
-use std::convert::TryInto;
-use std::iter::FromIterator;
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -466,6 +464,11 @@ impl Config {
             fpm::paths_to_files(self.package.name.as_str(), all_files_path, &path).await?;
         for document in documents.iter() {
             if let fpm::File::Ftd(doc) = document {
+                // Ignore fetching id's from FPM.ftd since
+                // id's would be used to link inside sitemap
+                if doc.id.eq("FPM.ftd") {
+                    continue;
+                }
                 self.update_global_ids_from_file(&doc.id, &doc.content)
                     .await?;
             }
@@ -1115,6 +1118,9 @@ impl Config {
 
         let asset_documents = config.get_assets().await?;
 
+        // Update global_ids map from the current package files
+        config.update_ids_from_package().await?;
+
         config.package.sitemap = {
             let sitemap = match package.translation_of.as_ref() {
                 Some(translation) => translation,
@@ -1143,9 +1149,6 @@ impl Config {
         };
 
         config.add_package(&package);
-
-        // Update terms map from the current package files
-        config.update_ids_from_package().await?;
 
         Ok(config)
     }
@@ -1217,15 +1220,7 @@ impl Config {
 
     pub(crate) async fn can_read(
         &self,
-        req: &actix_web::HttpRequest,
-        document_path: &str,
-    ) -> fpm::Result<bool> {
-        self.can_read_(req, document_path).await
-    }
-
-    async fn can_read_(
-        &self,
-        req: &actix_web::HttpRequest,
+        req: &fpm::http::Request,
         document_path: &str,
     ) -> fpm::Result<bool> {
         use itertools::Itertools;
@@ -1249,7 +1244,7 @@ impl Config {
 
     pub(crate) async fn can_write(
         &self,
-        req: &actix_web::HttpRequest,
+        req: &fpm::http::Request,
         document_path: &str,
     ) -> fpm::Result<bool> {
         use itertools::Itertools;
