@@ -22,7 +22,7 @@ impl Variable {
         let value = ftd::interpreter2::PropertyValue::from_ast_value_with_kind(
             variable_definition.value,
             doc,
-            &kind,
+            Some(&kind),
         )?;
         Ok(Variable {
             name,
@@ -45,7 +45,7 @@ impl Variable {
         let value = ftd::interpreter2::PropertyValue::from_ast_value_with_kind(
             variable_definition.value,
             doc,
-            &variable_thing.kind,
+            Some(&variable_thing.kind),
         )?;
         variable_thing.value = value;
         Ok(variable_thing)

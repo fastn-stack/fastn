@@ -1,3 +1,5 @@
+use crate::interpreter2::{Kind, Thing};
+
 #[derive(Debug, PartialEq)]
 pub struct TDoc<'a> {
     pub name: &'a str,
@@ -46,6 +48,81 @@ impl<'a> TDoc<'a> {
         let name1 = self.resolve_name(name1);
         let name2 = self.resolve_name(name2);
         name1.eq(&name2)
+    }
+
+    pub(crate) fn resolve_reference_name(
+        &self,
+        name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<String> {
+        Ok(if let Some(l) = name.strip_prefix('$') {
+            let d =
+                ftd::interpreter2::utils::get_doc_name_and_remaining(l, self.name, line_number)?.0;
+            if ftd::interpreter2::utils::get_special_variable().contains(&d.as_str()) {
+                return Ok(format!("${}", l));
+            }
+            format!("${}", self.resolve_name(l))
+        } else {
+            name.to_string()
+        })
+    }
+
+    pub fn get_kind(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::KindData> {
+        let name = if let Some(name) = name.strip_prefix('$') {
+            name
+        } else {
+            name
+        };
+
+        let (initial_thing, remaining) = self.get_initial_thing(line_number, name)?;
+
+        let initial_kind = match initial_thing {
+            Thing::Record(r) => ftd::interpreter2::KindData {
+                kind: ftd::interpreter2::Kind::Record { name: r.name },
+                caption: true,
+                body: true,
+            },
+            Thing::Variable(v) => v.kind,
+        };
+
+        if let Some(remaining) = remaining {
+            return get_kind_(initial_kind.kind, remaining.as_str(), self, line_number);
+        }
+
+        return Ok(initial_kind);
+
+        fn get_kind_(
+            kind: ftd::interpreter2::Kind,
+            name: &str,
+            doc: &ftd::interpreter2::TDoc,
+            line_number: usize,
+        ) -> ftd::interpreter2::Result<ftd::interpreter2::KindData> {
+            let (v, remaining) = name
+                .split_once('.')
+                .map(|(v, n)| (v, Some(n)))
+                .unwrap_or((name, None));
+
+            match kind {
+                Kind::Record { name: rec_name } => {
+                    let record = doc.get_record(line_number, rec_name.as_str())?;
+                    let field_kind = record.get_field(v, doc.name, line_number)?.kind.to_owned();
+                    if let Some(remaining) = remaining {
+                        get_kind_(field_kind.kind, remaining, doc, line_number)
+                    } else {
+                        Ok(field_kind)
+                    }
+                }
+                t => ftd::interpreter2::utils::e2(
+                    format!("Expected Record field `{}`, found: `{:?}`", name, t),
+                    doc.name,
+                    line_number,
+                ),
+            }
+        }
     }
 
     pub fn get_thing(

@@ -22,6 +22,42 @@ impl Record {
         let fields = Field::from_ast_fields(record.fields, doc)?;
         Ok(Record::new(name.as_str(), fields, record.line_number))
     }
+
+    pub(crate) fn get_field(
+        &self,
+        name: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<&Field> {
+        use itertools::Itertools;
+
+        let field = self.fields.iter().filter(|v| v.name.eq(name)).collect_vec();
+        if field.is_empty() {
+            return ftd::interpreter2::utils::e2(
+                format!(
+                    "Cannot find the field `{}` for record `{}`",
+                    name, self.name
+                )
+                .as_str(),
+                doc_id,
+                line_number,
+            );
+        }
+
+        if field.len() > 1 {
+            return ftd::interpreter2::utils::e2(
+                format!(
+                    "Multiple fields `{}` for record `{}` found",
+                    name, self.name
+                )
+                .as_str(),
+                doc_id,
+                line_number,
+            );
+        }
+
+        Ok(field.first().unwrap())
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -51,7 +87,8 @@ impl Field {
     ) -> ftd::interpreter2::Result<Field> {
         let kind = ftd::interpreter2::KindData::from_ast_kind(field.kind, doc, field.line_number)?;
         let value = field.value.map_or(Ok(None), |v| {
-            ftd::interpreter2::PropertyValue::from_ast_value_with_kind(v, doc, &kind).map(Some)
+            ftd::interpreter2::PropertyValue::from_ast_value_with_kind(v, doc, Some(&kind))
+                .map(Some)
         })?;
         Ok(Field {
             name: field.name.to_string(),

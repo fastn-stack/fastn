@@ -11,6 +11,16 @@ pub enum Kind {
     UI,
 }
 
+impl Kind {
+    pub(crate) fn is_list(&self) -> bool {
+        matches!(self, Kind::List { .. })
+    }
+
+    pub fn is_optional(&self) -> bool {
+        matches!(self, Kind::Optional { .. })
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct KindData {
     pub kind: Kind,
@@ -106,11 +116,11 @@ impl KindData {
     }
 
     pub fn is_list(&self) -> bool {
-        matches!(self.kind, Kind::List { .. })
+        self.kind.is_list()
     }
 
     pub fn is_optional(&self) -> bool {
-        matches!(self.kind, Kind::Optional { .. })
+        self.kind.is_optional()
     }
 }
 

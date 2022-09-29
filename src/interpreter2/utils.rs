@@ -64,3 +64,57 @@ pub(crate) fn kind_eq(
 }
 
 pub const REFERENCE: &str = ftd::ast::utils::REFERENCE;
+
+pub(crate) fn get_doc_name_and_remaining(
+    s: &str,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::interpreter2::Result<(String, Option<String>)> {
+    let mut part1 = "".to_string();
+    let mut pattern_to_split_at = s.to_string();
+    if let Some((p1, p2)) = s.split_once('#') {
+        part1 = format!("{}#", p1);
+        pattern_to_split_at = p2.to_string();
+    }
+    Ok(if pattern_to_split_at.contains('.') {
+        let (p1, p2) = ftd::interpreter2::utils::split(
+            pattern_to_split_at.as_str(),
+            ".",
+            doc_id,
+            line_number,
+        )?;
+        (format!("{}{}", part1, p1), Some(p2))
+    } else {
+        (s.to_string(), None)
+    })
+}
+
+pub fn split(
+    name: &str,
+    split_at: &str,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::interpreter2::Result<(String, String)> {
+    if !name.contains(split_at) {
+        return ftd::interpreter2::utils::e2(
+            format!("{} is not found in {}", split_at, name),
+            doc_id,
+            line_number,
+        );
+    }
+    let mut part = name.splitn(2, split_at);
+    let part_1 = part.next().unwrap().trim();
+    let part_2 = part.next().unwrap().trim();
+    Ok((part_1.to_string(), part_2.to_string()))
+}
+
+pub(crate) fn get_special_variable() -> Vec<&'static str> {
+    vec![
+        "MOUSE-IN",
+        "SIBLING-INDEX",
+        "SIBLING-INDEX-0",
+        "CHILDREN-COUNT",
+        "CHILDREN-COUNT-MINUS-ONE",
+        "PARENT",
+    ]
+}

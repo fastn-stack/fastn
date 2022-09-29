@@ -390,8 +390,8 @@ impl VariableValue {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Condition {
-    expression: String,
-    line_number: usize,
+    pub expression: String,
+    pub line_number: usize,
 }
 
 impl Condition {
