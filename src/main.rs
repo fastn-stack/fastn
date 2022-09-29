@@ -175,11 +175,22 @@ pub fn interpret_helper(
                 break;
             }
             ftd::Interpreter::StuckOnProcessor { state, section } => {
-                let value = lib.process(
+                match lib.is_lazy_processor(
                     &section,
                     &state.tdoc(&mut Default::default(), &mut Default::default()),
-                )?;
-                s = state.continue_after_processor(&section, value)?;
+                )? {
+                    true => {
+                        println!("Received LP-php");
+                        s = state.continue_after_storing_section(&section)?;
+                    }
+                    false => {
+                        let value = lib.process(
+                            &section,
+                            &state.tdoc(&mut Default::default(), &mut Default::default()),
+                        )?;
+                        s = state.continue_after_processor(&section, value)?;
+                    }
+                }
             }
             ftd::Interpreter::StuckOnImport { module, state: st } => {
                 let source = lib.get_with_result(
@@ -272,6 +283,25 @@ impl ExampleLibrary {
 
     pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
+    }
+
+    /// checks if the current processor is a lazy processor
+    /// or not
+    ///
+    /// lazy processor = processor which needs to be resolved after
+    /// interpretation
+    pub fn is_lazy_processor(
+        &self,
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<bool> {
+        match section
+            .header
+            .str(doc.name, section.line_number, "$processor$")?
+        {
+            "php" => Ok(true),
+            _ => Ok(false),
+        }
     }
 
     pub fn process(

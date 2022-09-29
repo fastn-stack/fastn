@@ -1,3 +1,5 @@
+use std::thread::current;
+
 #[derive(Debug, Default)]
 pub struct InterpreterState {
     pub id: String,
@@ -86,6 +88,11 @@ impl InterpreterState {
 
         while let Some(p1) = parsed_document.sections.last_mut() {
             // first resolve the foreign_variables in the section before proceeding further
+
+            // println!("Current processing section (Top)");
+            // dbg!(&p1.name);
+            // dbg!(&p1.line_number);
+
             let doc = ftd::p2::TDoc {
                 name: &parsed_document.name,
                 aliases: &parsed_document.doc_aliases,
@@ -204,6 +211,9 @@ impl InterpreterState {
                 thing.push((name, ftd::p2::Thing::Component(d)));
                 // processed_p1.push(p1.name.to_string());
             } else if let Ok(ref var_data) = var_data {
+                // println!("From var data block");
+                // dbg!(&p1.name);
+                // dbg!(&p1.line_number);
                 let d = if p1
                     .header
                     .str(doc.name, p1.line_number, "$processor$")
@@ -300,7 +310,12 @@ impl InterpreterState {
                             p1.line_number,
                         );
                     }
-                    ftd::p2::Thing::Component(_) => {
+                    ftd::p2::Thing::Component(c) => {
+                        // println!("From last block");
+                        // dbg!(&p1.name);
+                        // dbg!(&p1.line_number);
+                        // dbg!(&c.root, &c.full_name, &c.line_number);
+                        // dbg!(&c.properties);
                         if p1
                             .header
                             .str_optional(doc.name, p1.line_number, "$processor$")?
@@ -342,6 +357,15 @@ impl InterpreterState {
                                 &doc,
                                 &Default::default(),
                             )?;
+
+                            if parsed_document.process_lazy_processors {
+                                ftd::InterpreterState::evaluate_component_for_headings(
+                                    &mut parsed_document.page_headings,
+                                    &c,
+                                    &parent,
+                                    &doc,
+                                )?;
+                            }
 
                             let mut children = vec![];
 
@@ -416,6 +440,42 @@ impl InterpreterState {
             self.bag.extend(thing);
         }
 
+        if parsed_document.process_lazy_processors {
+            println!("Processing sections after interpretation");
+            // process lazy processors and add those to the bag
+            // after interpreting the entire document
+
+            // let doc = ftd::p2::TDoc {
+            //     name: &parsed_document.name,
+            //     aliases: &parsed_document.doc_aliases,
+            //     bag: &self.bag,
+            //     local_variables: &mut Default::default(),
+            //     referenced_local_variables: &mut Default::default(),
+            // };
+
+            while let Some(section) = parsed_document.lazy_processor_sections.pop() {
+                match section.header.str(
+                    parsed_document.name.as_str(),
+                    section.line_number,
+                    "$processor$",
+                )? {
+                    "php" => {
+                        println!("processing php section");
+                        // dbg!(&section.name);
+                        // dbg!(&section.line_number);
+
+                        dbg!(&parsed_document.page_headings);
+                        println!("Currently not assigning the value to the processor section (debugging)");
+                        // let value = doc.from_json(&parsed_document.page_headings, &section)?;
+                        // return self.continue_after_processor(&section, value);
+                    }
+                    _ => unreachable!("No lazy processor besides php till now"),
+                }
+            }
+            parsed_document.process_lazy_processors = false;
+            println!("Done processing lazy processors");
+        }
+
         if self.document_stack.len() > 1 {
             return self.continue_after_pop();
         }
@@ -442,6 +502,190 @@ impl InterpreterState {
         };
 
         Ok(Interpreter::Done { document: d })
+    }
+
+    fn evaluate_component_for_headings(
+        page_headings: &mut Vec<ftd::PageHeadingItem>,
+        parent: &ftd::Component,
+        child: &ftd::ChildComponent,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<()> {
+        // dbg!(&parent.root, &parent.full_name);
+        // dbg!(&parent.properties);
+        //
+        // dbg!(&child.root);
+        // dbg!(&child.properties);
+
+        dbg!(&parent);
+        dbg!(&child);
+
+        // Case 1: Markdown component (with id defined)
+        //      Case 1.1: Kernel markdown component ftd.text
+        //                - Fetch title from text property
+        //      Case 1.2: Derived markdown component
+        //                - Fetch title from the text property
+        //                  after resolving if its a variable
+        //                  otherwise fetch the default value if present
+
+        if ftd::p2::utils::is_markdown_component(&doc, &parent.full_name, parent.line_number)? {
+            if parent.kernel {
+                // Case 1.1
+                if let (Some(id_property), Some(text_property)) =
+                    (child.properties.get("id"), child.properties.get("text"))
+                {
+                    let id = id_property.resolve_default_value_string(&doc, parent.line_number)?;
+                    let title =
+                        text_property.resolve_default_value_string(&doc, parent.line_number)?;
+                    insert_heading(page_headings, id.as_str(), title, doc.name);
+                }
+            } else {
+                // Case 1.2
+                return Ok(());
+                todo!()
+            }
+        }
+
+        // Case 2: Container component (with defined id)
+        //      Case 2.1: Container with region
+        //          Case 2.1.1: Containing markdown component with region title
+        //                      - Fetch the title from this component
+        //                        (if found otherwise proceed to 2.1.2)
+        //          Case 2.1.2: Not containing markdown component with region title
+        //                      - Fetch the title from the first markdown component
+        //                        (if found otherwise no heading)
+        //      Case 2.2: Container without region
+        //          Case 2.2.1: Containing markdown component
+        //                      - Fetch the title from this component
+        //                        (if found otherwise no heading)
+
+        if ftd::p2::utils::is_container_component(doc, &parent.full_name, parent.line_number)? {
+            // No sure how to handle this,
+            // ignoring this for now
+            if parent.kernel {
+                return Ok(());
+            }
+
+            println!("Container component found !!");
+            // check if the component has id assigned
+            if let Some(id_property) = child.properties.get("id") {
+                let id = id_property.resolve_default_value_string(&doc, parent.line_number)?;
+                if let Some(region_property) = parent.properties.get("region") {
+                    println!("Found some region !!");
+                    let region =
+                        region_property.resolve_default_value_string(&doc, parent.line_number)?;
+                    if matches!(
+                        region.as_str(),
+                        "h0" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+                    ) {
+                        println!("valid region");
+                        // prioritize finding ftd.text with region title
+                        for instruction in parent.instructions.iter() {
+                            if let ftd::Instruction::ChildComponent { child: cc } = instruction {
+                                if cc.root.eq("ftd#text") {
+                                    if let Some(text_region_property) = cc.properties.get("region")
+                                    {
+                                        let text_region = text_region_property
+                                            .resolve_default_value_string(&doc, cc.line_number)?;
+                                        if text_region.eq("title") {
+                                            if let Some(text_property) = cc.properties.get("text") {
+                                                if let Some(text_property_value) =
+                                                    &text_property.default
+                                                {
+                                                    if let Some(title_text) =
+                                                        resolve_property_value(
+                                                            text_property_value,
+                                                            child,
+                                                            doc,
+                                                        )?
+                                                    {
+                                                        insert_heading(
+                                                            page_headings,
+                                                            id.as_str(),
+                                                            title_text,
+                                                            doc.name,
+                                                        );
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /*
+           full name - m
+           properties - title = $value
+
+           full_name - tf.h1
+           properties - caption = $title
+
+           full_name - ftd.column
+           properties - text = $caption
+        */
+
+        return Ok(());
+
+        fn resolve_for_text_from_container(
+            property_value: &ftd::PropertyValue,
+            current_component: &ftd::Component,
+            properties: &ftd::Map<ftd::Property>,
+            doc: &ftd::p2::TDoc,
+        ) -> ftd::p1::Result<Option<String>> {
+            if matches!(
+                current_component.full_name.as_str(),
+                "ftd#row" | "ftd#column"
+            ) {
+                match property_value {
+                    ftd::PropertyValue::Value { value } => return Ok(value.to_string()),
+                    ftd::PropertyValue::Variable { name, .. } => {
+                        if let Some(ftd::PropertyValue::Value { value }) = properties.get(name) {
+                            return Ok(value.to_string());
+                        }
+                    }
+                    ftd::PropertyValue::Reference { name, .. } => {
+                        if let Some(ftd::PropertyValue::Value { value }) = properties.get(name) {
+                            return Ok(value.to_string());
+                        }
+                    }
+                    _ => return Ok(None),
+                }
+            }
+
+            if current_component.kernel {
+                return Ok(None);
+            }
+
+            let current_component = doc.get_component(
+                current_component.line_number,
+                current_component.root.as_str(),
+            )?;
+            let properties = &current_component.properties;
+
+            let res = resolve_for_text_from_container(
+                property_value,
+                &current_component,
+                properties,
+                doc,
+            );
+        }
+
+        fn insert_heading(
+            page_headings: &mut Vec<ftd::PageHeadingItem>,
+            id: &str,
+            title: String,
+            doc_name: &str,
+        ) {
+            let document_id = ftd::p2::utils::convert_to_document_id(doc_name);
+            let url = format!("{}#{}", document_id, slug::slugify(id));
+
+            dbg!(&title, &url);
+            page_headings.push(ftd::PageHeadingItem { title, url });
+        }
     }
 
     fn resolve_foreign_variable_name(name: &str) -> String {
@@ -783,6 +1027,29 @@ impl InterpreterState {
                 .extend_from_slice(prefix.as_slice());
         }
         self.parsed_libs.insert(module.to_string(), prefix);
+    }
+
+    /// store the section which needs to be resolved after interpretation
+    /// and continue for the next section
+    pub fn continue_after_storing_section(
+        mut self,
+        section: &ftd::p1::Section,
+    ) -> ftd::p1::Result<Interpreter> {
+        // Store the section which needs to be processed after interpreting
+
+        // Where this section should be stored ? (could be a thought to consider)
+        // For now it's kept under the parsed document
+        println!("Storing after process section in parsed document");
+        if let Some(current_processing_document) = self.document_stack.last_mut() {
+            current_processing_document
+                .lazy_processor_sections
+                .push(section.to_owned());
+            current_processing_document.process_lazy_processors = true;
+            println!("Marking bool flag (process_lazy_processors) as true");
+        }
+
+        // Store first then go ahead
+        self.continue_()
     }
 
     pub fn continue_after_checking_id(
@@ -1179,10 +1446,17 @@ pub struct ParsedDocument {
     sections: Vec<ftd::p1::Section>,
     processing_imports: bool,
     processing_comments: bool,
+    process_lazy_processors: bool,
     doc_aliases: ftd::Map<String>,
     var_types: Vec<String>,
     foreign_variable_prefix: Vec<String>,
     instructions: Vec<ftd::Instruction>,
+    /// sections which needs to be processed
+    /// after interpretation of the current document is over
+    lazy_processor_sections: Vec<ftd::p1::Section>,
+    /// page heading of the current document will be stored here
+    /// as blocks of `[<heading/title>, <url>]`
+    page_headings: Vec<ftd::PageHeadingItem>,
 }
 
 impl ParsedDocument {
@@ -1192,10 +1466,13 @@ impl ParsedDocument {
             sections: ftd::p1::parse(source, id)?,
             processing_imports: true,
             processing_comments: true,
+            process_lazy_processors: false,
             doc_aliases: ftd::p2::interpreter::default_aliases(),
             var_types: Default::default(),
             foreign_variable_prefix: vec![],
             instructions: vec![],
+            lazy_processor_sections: vec![],
+            page_headings: vec![],
         })
     }
 

@@ -77,6 +77,14 @@ pub struct Document {
     pub css_collector: String,
 }
 
+// Temporary struct for debugging (for php)
+// This will be replaced with the toc-item later
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct PageHeadingItem {
+    pub title: String,
+    pub url: String,
+}
+
 // TextSource location = (is_from_section = T/F, subsection_index if is_from_section = F else 0)
 pub type TextSourceLocation = (bool, usize);
 pub type TextSourceWithLocation = (ftd::TextSource, TextSourceLocation);

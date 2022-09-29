@@ -133,7 +133,7 @@ impl Property {
     /// returns the value as string from property.default
     ///
     /// returns empty string in case if it's None
-    fn resolve_default_value_string(
+    pub fn resolve_default_value_string(
         &self,
         doc: &ftd::p2::TDoc,
         line_number: usize,
