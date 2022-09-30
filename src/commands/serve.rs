@@ -5,7 +5,7 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
-            return fpm::server_error!("FPM-Error: path: {}, {:?}", path, e);
+            return fpm::not_found!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
 
@@ -186,8 +186,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         let file_response = serve_file(&mut config, &path).await;
         // Fallback to WASM execution in case of no sucessful response
         // TODO: This is hacky. Use the sitemap eventually.
-        dbg!(&file_response);
-        if file_response.status() == actix_web::http::StatusCode::INTERNAL_SERVER_ERROR {
+        if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
             let package = config.find_package_by_id(path.as_str()).await.unwrap().1;
             let wasm_module = config.get_root_for_package(&package).join("backend.wasm");
             let req = if let Some(r) = config.request {

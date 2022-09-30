@@ -8,6 +8,8 @@ backend: true
 
 -- fpm.dependency: blog-backend.fpm.local
 
+-- fpm.dependency: blog-theme.fpm.local as theme
+
 -- fpm.sitemap:
 
 # Home: /
