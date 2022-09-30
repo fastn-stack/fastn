@@ -185,6 +185,8 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
 
         let file_response = serve_file(&mut config, &path).await;
         // Fallback to WASM execution in case of no sucessful response
+        // TODO: This is hacky. Use the sitemap eventually.
+        dbg!(&file_response);
         if file_response.status() == actix_web::http::StatusCode::INTERNAL_SERVER_ERROR {
             let package = config.find_package_by_id(path.as_str()).await.unwrap().1;
             let wasm_module = config.get_root_for_package(&package).join("backend.wasm");

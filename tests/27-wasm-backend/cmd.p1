@@ -7,3 +7,4 @@ output: amitu/.build
 Processing www.amitu.com/FPM.ftd ... done in <omitted>
 Processing www.amitu.com/backend.wasm ... done in <omitted>
 Processing www.amitu.com/index.ftd ... done in <omitted>
+Processing www.amitu.com/post.ftd ... done in <omitted>

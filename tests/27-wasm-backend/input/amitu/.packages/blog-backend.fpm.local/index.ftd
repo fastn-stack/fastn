@@ -1,0 +1,53 @@
+-- import: fpm
+
+-- string package-id:
+$processor$: package-id
+$always-include$: true
+
+-- string doc-id:
+$processor$: document-id
+$always-include$: true
+
+
+-- optional string subscriber-email:
+$always-include$: true
+
+-- ftd.row subscription-box:
+
+--- ftd.input:
+placeholder: Enter Email
+$on-change$: $subscriber-email=$VALUE
+role: $fpm.type.copy-tight
+color: $fpm.color.main.text
+background-color: $fpm.color.main.background.step-1
+padding-vertical: $fpm.space.space-2
+padding-horizontal: $fpm.space.space-3
+border-width: 1
+border-color: $fpm.color.main.border
+width: fill
+
+--- ftd.text: $package-id
+
+--- ftd.text: Subscribe to the blog
+$on-click$: message-host $login-form-api
+
+-- ftd.row like-box:
+
+--- ftd.text: Like!!!
+$on-click$: message-host $like-form-api
+
+-- object like-form-api:
+function: http
+method: post
+url: /-/blog-backend.fpm.local/like/
+package: $package-id
+post: $doc-id
+
+
+-- object login-form-api:
+function: http
+method: post
+url: /-/blog-backend.fpm.local/subscribe/
+email: $subscriber-email
+package: $package-id
+

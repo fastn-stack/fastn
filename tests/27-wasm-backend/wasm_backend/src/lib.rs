@@ -27,7 +27,7 @@ impl guest_backend::GuestBackend for GuestBackend {
         let apikey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imppandlb3Bsaml5ZnJ4ZW9sbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjMxNTM2NjksImV4cCI6MTk3ODcyOTY2OX0.Urn5gEQyen8Kig-ArlfpP7N4CFktDJCJA1PZDQYYaOg";
         let header_map = [("Content-Type", "application/json"), ("apiKey", apikey)];
         let resp = match a.path.as_str() {
-            "/subscribe/" => {
+            "/-/blog-backend.fpm.local/subscribe/" => {
                 let data: SubscribeData = serde_json::from_str(a.payload.as_str()).unwrap();
                 host::http(host::Httprequest {
                     path: format!("{base_url}/blog-subscription").as_str(),
@@ -36,7 +36,7 @@ impl guest_backend::GuestBackend for GuestBackend {
                     headers: &header_map,
                 })
             }
-            "/like/" => {
+            "/-/blog-backend.fpm.local/like/" => {
                 let data: LikeData = serde_json::from_str(a.payload.as_str()).unwrap();
                 host::http(host::Httprequest {
                     path: format!("{base_url}/blog-like").as_str(),

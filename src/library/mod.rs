@@ -219,6 +219,10 @@ pub fn process_sync<'a>(
         "document-id" => document::processor::document_id(section, doc, config),
         "document-full-id" => document::processor::document_full_id(section, doc, config),
         "document-suffix" => document::processor::document_suffix(section, doc, config),
+        "package-id" => Ok(ftd::Value::String {
+            text: config.package.name.clone(),
+            source: ftd::TextSource::Default,
+        }),
         "get-identities" => fpm::user_group::processor::get_identities(section, doc, config),
         "request-data" => fpm::library::http::request_data_processor(section, doc, config),
 
@@ -432,6 +436,10 @@ impl Library2 {
             "document-full-id" => document::processor::document_full_id(section, doc, &self.config),
             "document-name" => document::processor::document_name(section, doc, &self.config).await,
             "document-suffix" => document::processor::document_suffix(section, doc, &self.config),
+            "package-id" => Ok(ftd::Value::String {
+                text: self.config.package.name.clone(),
+                source: ftd::TextSource::Default,
+            }),
             "package-tree" => {
                 fpm::library::package_tree::processor(section, doc, &self.config).await
             }

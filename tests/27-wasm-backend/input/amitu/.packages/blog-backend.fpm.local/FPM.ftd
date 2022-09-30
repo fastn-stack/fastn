@@ -1,6 +1,6 @@
 -- import: fpm
 
--- fpm.package: one.fpm.local
+-- fpm.package: blog-backend.fpm.local
 backend: true
 
 -- fpm.sitemap:
