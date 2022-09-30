@@ -48,13 +48,13 @@ pub struct Context<I, E> {
 #[derive(thiserror::Error, Debug)]
 pub enum WASMError {
     #[error("Wasmtime Error: {}", _0)]
-    WasmTimeError(#[from] wit_bindgen_host_wasmtime_rust::anyhow::Error),
+    WasmTime(#[from] wit_bindgen_host_wasmtime_rust::anyhow::Error),
 
     #[error("JSON Parsing Error: {}", _0)]
-    SerdeJsonError(#[from] serde_json::Error),
+    SerdeJson(#[from] serde_json::Error),
 
     #[error("WasmFunctionInvokeError: {}", _0)]
-    WasmFunctionInvokeError(String),
+    WasmFunctionInvoke(String),
 }
 
 pub type WasmRunnerResult<T> = std::result::Result<T, WASMError>;
@@ -136,7 +136,7 @@ pub async fn handle_wasm(
                     actix_web::http::StatusCode::BAD_REQUEST
                 })
                 .body(serde_json::to_string(&data)?)),
-            Err(err) => Err(WASMError::WasmFunctionInvokeError(err.to_string())),
+            Err(err) => Err(WASMError::WasmFunctionInvoke(err.to_string())),
         })
     }
     fpm::time("WASM Execution: ").it(match inner(req, wasm_module).await {
