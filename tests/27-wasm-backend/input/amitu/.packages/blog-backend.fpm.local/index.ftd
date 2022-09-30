@@ -12,7 +12,9 @@ $always-include$: true
 -- optional string subscriber-email:
 $always-include$: true
 
--- ftd.row subscription-box:
+-- ftd.column subscription-box:
+
+--- ftd.text: Like this post! Join the mailing list
 
 --- ftd.input:
 placeholder: Enter Email
@@ -26,9 +28,7 @@ border-width: 1
 border-color: $fpm.color.main.border
 width: fill
 
---- ftd.text: $package-id
-
---- ftd.text: Subscribe to the blog
+--- ftd.text: ✉️ Join my mailing list
 $on-click$: message-host $login-form-api
 
 -- ftd.row like-box:
