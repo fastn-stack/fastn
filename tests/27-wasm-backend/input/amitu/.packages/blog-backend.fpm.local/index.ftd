@@ -32,8 +32,9 @@ width: fill
 $on-click$: message-host $login-form-api
 
 -- ftd.row like-box:
+optional string like-message: Like!!!
 
---- ftd.text: Like!!!
+--- ftd.text: $like-message
 $on-click$: message-host $like-form-api
 
 -- object like-form-api:

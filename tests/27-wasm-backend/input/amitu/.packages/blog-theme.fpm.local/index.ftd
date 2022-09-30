@@ -12,3 +12,4 @@ text: $post-title
 --- ftd.text: $body
 
 --- blog-utils.like-box:
+like-message: 👍 Like this post
