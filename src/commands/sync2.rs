@@ -44,10 +44,7 @@ async fn simple_sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::R
             .get_files_status_with_workspace(&mut workspace)
             .await?;
         if let Some(ref files) = files {
-            changed_files = changed_files
-                .into_iter()
-                .filter(|v| files.contains(&v.get_file_path()))
-                .collect();
+            changed_files.retain(|v| files.contains(&v.get_file_path()));
         }
         changed_files
     };
