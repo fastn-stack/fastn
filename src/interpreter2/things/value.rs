@@ -259,9 +259,8 @@ impl PropertyValue {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
         match value.string(doc.name) {
             Ok(name) if name.starts_with(ftd::interpreter2::utils::CLONE) => {
-                let reference = name
-                    .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
-                    .to_string();
+                let reference =
+                    doc.resolve_name(name.trim_start_matches(ftd::interpreter2::utils::REFERENCE));
 
                 let found_kind = doc.get_kind(reference.as_str(), value.line_number())?;
 
@@ -284,9 +283,8 @@ impl PropertyValue {
                 })
             }
             Ok(name) if name.starts_with(ftd::interpreter2::utils::REFERENCE) => {
-                let reference = name
-                    .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
-                    .to_string();
+                let reference =
+                    doc.resolve_name(name.trim_start_matches(ftd::interpreter2::utils::REFERENCE));
 
                 let found_kind = doc.get_kind(reference.as_str(), value.line_number())?;
 
