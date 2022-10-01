@@ -160,8 +160,10 @@ impl<'a> TDoc<'a> {
         {
             let mut variable = None;
             let mut remaining = name;
+            let mut value = value.clone();
             while let Some(reference) = value.reference_name() {
                 let (var, rem) = doc.get_initial_variable(reference, line_number)?;
+                value = var.value.clone();
                 variable = Some(var);
                 remaining = if let Some(remaining) = remaining {
                     rem.map(|v| format!("{}.{}", v, remaining))

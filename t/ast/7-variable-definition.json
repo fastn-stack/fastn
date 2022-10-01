@@ -52,6 +52,7 @@
                   "headers": [
                     {
                       "key": "name",
+                      "mutable": false,
                       "value": {
                         "String": {
                           "value": "Arpita",
@@ -62,6 +63,7 @@
                     },
                     {
                       "key": "age",
+                      "mutable": false,
                       "value": {
                         "String": {
                           "value": "10",

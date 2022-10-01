@@ -47,6 +47,7 @@
                   "headers": [
                     {
                       "key": "name",
+                      "mutable": false,
                       "value": {
                         "String": {
                           "value": "Arpita",
@@ -57,6 +58,7 @@
                     },
                     {
                       "key": "age",
+                      "mutable": false,
                       "value": {
                         "String": {
                           "value": "10",
@@ -93,6 +95,7 @@
                   "headers": [
                     {
                       "key": "name",
+                      "mutable": false,
                       "value": {
                         "String": {
                           "value": "Ayushi",
@@ -103,6 +106,7 @@
                     },
                     {
                       "key": "age",
+                      "mutable": false,
                       "value": {
                         "String": {
                           "value": "9",
