@@ -8,7 +8,7 @@ pub enum Kind {
     Record { name: String }, // the full name of the record (full document name.record name)
     List { kind: Box<Kind> },
     Optional { kind: Box<Kind> },
-    UI,
+    UI { name: Option<String> },
 }
 
 impl Kind {
@@ -69,7 +69,7 @@ impl KindData {
             "integer" => Kind::Integer,
             "decimal" => Kind::Decimal,
             "boolean" => Kind::Boolean,
-            "ftd.ui" => Kind::UI,
+            "ftd.ui" => Kind::UI { name: None },
             k => match doc.get_thing(line_number, k)? {
                 ftd::interpreter2::Thing::Record(r) => Kind::Record { name: r.name },
                 t => {

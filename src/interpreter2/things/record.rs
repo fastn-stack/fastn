@@ -70,7 +70,7 @@ pub struct Field {
 }
 
 impl Field {
-    fn from_ast_fields(
+    pub(crate) fn from_ast_fields(
         fields: Vec<ftd::ast::Field>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Vec<Field>> {
@@ -81,7 +81,7 @@ impl Field {
         Ok(result)
     }
 
-    fn from_ast_field(
+    pub(crate) fn from_ast_field(
         field: ftd::ast::Field,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Field> {

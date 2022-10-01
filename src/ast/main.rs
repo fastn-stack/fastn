@@ -92,6 +92,20 @@ impl AST {
         )
     }
 
+    pub fn get_component_definition(
+        self,
+        doc_id: &str,
+    ) -> ftd::ast::Result<ftd::ast::ComponentDefinition> {
+        if let ftd::ast::AST::ComponentDefinition(v) = self {
+            return Ok(v);
+        }
+        ftd::ast::parse_error(
+            format!("`{:?}` is not a component definition", self),
+            doc_id,
+            self.line_number(),
+        )
+    }
+
     pub fn is_record(&self) -> bool {
         matches!(self, AST::Record(_))
     }
@@ -102,6 +116,10 @@ impl AST {
 
     pub fn is_variable_invocation(&self) -> bool {
         matches!(self, AST::VariableInvocation(_))
+    }
+
+    pub fn is_component_definition(&self) -> bool {
+        matches!(self, AST::ComponentDefinition(_))
     }
 
     #[cfg(test)]

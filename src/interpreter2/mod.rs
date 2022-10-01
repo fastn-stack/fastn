@@ -10,9 +10,10 @@ mod utils;
 pub use main::{interpret, Document, Interpreter};
 pub use tdoc::TDoc;
 pub use things::{
+    component::ComponentDefinition,
     expression::Boolean,
     kind::{Kind, KindData},
-    record::Record,
+    record::{Field, Record},
     value::{PropertyValue, Value},
     variable::Variable,
     Thing,

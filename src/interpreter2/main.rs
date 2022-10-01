@@ -86,6 +86,12 @@ impl InterpreterState {
                     variable.name.to_string(),
                     ftd::interpreter2::Thing::Variable(variable),
                 );
+            } else if ast.is_component_definition() {
+                let component = ftd::interpreter2::ComponentDefinition::from_ast(ast, &doc)?;
+                self.bag.insert(
+                    component.name.to_string(),
+                    ftd::interpreter2::Thing::Component(component),
+                );
             }
         }
 

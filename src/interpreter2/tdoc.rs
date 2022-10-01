@@ -312,6 +312,11 @@ impl<'a> TDoc<'a> {
                 body: true,
             },
             ftd::interpreter2::Thing::Variable(v) => v.kind,
+            ftd::interpreter2::Thing::Component(c) => ftd::interpreter2::KindData {
+                kind: ftd::interpreter2::Kind::UI { name: Some(c.name) },
+                caption: true,
+                body: true,
+            },
         };
 
         if let Some(remaining) = remaining {

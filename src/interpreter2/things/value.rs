@@ -403,7 +403,9 @@ impl Value {
             Value::Optional { kind, .. } => ftd::interpreter2::Kind::Optional {
                 kind: Box::new(kind.kind.clone()),
             },
-            Value::UI { .. } => ftd::interpreter2::Kind::UI,
+            Value::UI { name } => ftd::interpreter2::Kind::UI {
+                name: Some(name.to_string()),
+            },
         }
     }
 }

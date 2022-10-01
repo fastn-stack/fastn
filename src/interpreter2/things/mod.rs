@@ -1,3 +1,4 @@
+pub(crate) mod component;
 pub(crate) mod expression;
 pub(crate) mod kind;
 pub(crate) mod record;
@@ -8,6 +9,7 @@ pub(crate) mod variable;
 pub enum Thing {
     Record(ftd::interpreter2::Record),
     Variable(ftd::interpreter2::Variable),
+    Component(ftd::interpreter2::ComponentDefinition),
 }
 
 impl Thing {

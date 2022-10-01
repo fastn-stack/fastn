@@ -53,13 +53,7 @@ impl ComponentDefinition {
             );
         }
 
-        let arguments = {
-            let mut arguments = vec![];
-            for header in section.headers.0.iter() {
-                arguments.push(Argument::from_p1_header(header, doc_id)?);
-            }
-            arguments
-        };
+        let arguments = ftd::ast::record::get_fields_from_headers(&section.headers, doc_id)?;
 
         let definition = Component::from_p1(section.sub_sections.first().unwrap(), doc_id)?;
 
@@ -193,66 +187,7 @@ impl Component {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Argument {
-    pub name: String,
-    pub kind: ftd::ast::VariableKind,
-    pub mutable: bool,
-    pub value: Option<ftd::ast::VariableValue>,
-    pub line_number: usize,
-}
-
-impl Argument {
-    fn is_argument(header: &ftd::p11::Header) -> bool {
-        header.get_kind().is_some() && header.get_condition().is_none()
-    }
-
-    fn new(
-        name: &str,
-        kind: ftd::ast::VariableKind,
-        mutable: bool,
-        value: Option<ftd::ast::VariableValue>,
-        line_number: usize,
-    ) -> Argument {
-        Argument {
-            name: name.to_string(),
-            kind,
-            mutable,
-            value,
-            line_number,
-        }
-    }
-
-    fn from_p1_header(header: &ftd::p11::Header, doc_id: &str) -> ftd::ast::Result<Argument> {
-        if !Self::is_argument(header) {
-            return ftd::ast::parse_error(
-                format!("Header is not argument, found `{:?}`", header),
-                doc_id,
-                header.get_line_number(),
-            );
-        }
-
-        let kind = ftd::ast::VariableKind::get_kind(
-            header.get_kind().as_ref().unwrap().as_str(),
-            doc_id,
-            header.get_line_number(),
-        )?;
-
-        let value =
-            ftd::ast::VariableValue::from_header_with_modifier(header, doc_id, &kind.modifier)?
-                .inner();
-
-        let name = header.get_key();
-
-        Ok(Argument::new(
-            name.as_str(),
-            kind,
-            ftd::ast::utils::is_variable_mutable(name.as_str()),
-            value,
-            header.get_line_number(),
-        ))
-    }
-}
+type Argument = ftd::ast::Field;
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
