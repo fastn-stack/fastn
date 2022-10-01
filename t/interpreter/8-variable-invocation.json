@@ -1,0 +1,140 @@
+{
+  "data": {
+    "foo#a1": {
+      "Variable": {
+        "name": "foo#a1",
+        "kind": {
+          "kind": {
+            "Record": {
+              "name": "foo#person"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Reference": {
+            "name": "foo#n1",
+            "kind": {
+              "kind": {
+                "Record": {
+                  "name": "foo#person"
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "line_number": 11
+          }
+        },
+        "line_number": 11
+      }
+    },
+    "foo#n1": {
+      "Variable": {
+        "name": "foo#n1",
+        "kind": {
+          "kind": {
+            "Record": {
+              "name": "foo#person"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "Record": {
+                "name": "foo#person",
+                "fields": {
+                  "gender": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "f"
+                        }
+                      },
+                      "line_number": 9
+                    }
+                  },
+                  "name": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "Name1"
+                        }
+                      },
+                      "line_number": 14
+                    }
+                  }
+                }
+              }
+            },
+            "line_number": 7
+          }
+        },
+        "line_number": 7
+      }
+    },
+    "foo#name": {
+      "Variable": {
+        "name": "foo#name",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Name0"
+              }
+            },
+            "line_number": 5
+          }
+        },
+        "line_number": 5
+      }
+    },
+    "foo#person": {
+      "Record": {
+        "name": "foo#person",
+        "fields": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "gender",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 3
+          }
+        ],
+        "line_number": 1
+      }
+    }
+  },
+  "name": "foo",
+  "instructions": [],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}
