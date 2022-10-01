@@ -1,0 +1,14 @@
+-- record person:
+string name:
+string gender:
+
+-- string $name: Name0
+
+-- person $n1:
+$name: $name
+gender: f
+
+-- person $a1: $n1
+
+-- $n1.name: Name2
+-- $a1.name: Name1

@@ -166,7 +166,10 @@ impl<'a> TDoc<'a> {
                 value = var.value.clone();
                 variable = Some(var);
                 remaining = if let Some(remaining) = remaining {
-                    rem.map(|v| format!("{}.{}", v, remaining))
+                    Some(
+                        rem.map(|v| format!("{}.{}", v, remaining))
+                            .unwrap_or(remaining),
+                    )
                 } else {
                     rem
                 };
@@ -188,6 +191,7 @@ impl<'a> TDoc<'a> {
                         line_number,
                     },
                 )?;
+
                 match value {
                     ftd::interpreter2::Value::Record {
                         name: rec_name,
