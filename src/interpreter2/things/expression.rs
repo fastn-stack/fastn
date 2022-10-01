@@ -66,6 +66,7 @@ impl Boolean {
                     left.as_str(),
                     doc,
                     None,
+                    false,
                     condition.line_number,
                 )?;
                 if !value.kind().is_optional() {
@@ -87,6 +88,7 @@ impl Boolean {
                     left.as_str(),
                     doc,
                     None,
+                    false,
                     condition.line_number,
                 )?;
                 if !value.kind().is_list() {
@@ -108,6 +110,7 @@ impl Boolean {
                         left.as_str(),
                         doc,
                         None,
+                        false,
                         condition.line_number,
                     )?;
                     let right = ftd::interpreter2::PropertyValue::from_string(
@@ -118,6 +121,7 @@ impl Boolean {
                             caption: false,
                             body: false,
                         }),
+                        false,
                         condition.line_number,
                     )?;
                     Boolean::Equal { left, right }
@@ -127,6 +131,7 @@ impl Boolean {
                             left.as_str(),
                             doc,
                             None,
+                            false,
                             condition.line_number,
                         )?,
                         right: ftd::interpreter2::PropertyValue::Value {

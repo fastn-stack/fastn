@@ -77,7 +77,7 @@ impl Field {
         let name = header.get_key();
 
         Ok(Field::new(
-            name.as_str(),
+            name.trim_start_matches(ftd::ast::utils::REFERENCE),
             kind,
             ftd::ast::utils::is_variable_mutable(name.as_str()),
             value,

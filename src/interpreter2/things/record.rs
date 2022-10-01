@@ -87,7 +87,7 @@ impl Field {
     ) -> ftd::interpreter2::Result<Field> {
         let kind = ftd::interpreter2::KindData::from_ast_kind(field.kind, doc, field.line_number)?;
         let value = field.value.map_or(Ok(None), |v| {
-            ftd::interpreter2::PropertyValue::from_ast_value_with_kind(v, doc, Some(&kind))
+            ftd::interpreter2::PropertyValue::from_ast_value(v, doc, field.mutable, Some(&kind))
                 .map(Some)
         })?;
         Ok(Field {

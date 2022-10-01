@@ -139,14 +139,16 @@ impl HeaderValues {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct HeaderValue {
     pub key: String,
+    pub mutable: bool,
     pub value: VariableValue,
     pub line_number: usize,
 }
 
 impl HeaderValue {
-    fn new(key: &str, value: VariableValue, line_number: usize) -> HeaderValue {
+    fn new(key: &str, mutable: bool, value: VariableValue, line_number: usize) -> HeaderValue {
         HeaderValue {
             key: key.to_string(),
+            mutable,
             value,
             line_number,
         }
@@ -315,8 +317,10 @@ impl VariableValue {
             .iter()
             .filter(|v| !ftd::ast::utils::is_condition(v.get_key().as_str(), &v.get_kind()))
             .map(|header| {
+                let key = header.get_key();
                 HeaderValue::new(
-                    header.get_key().as_str(),
+                    key.trim_start_matches(ftd::ast::utils::REFERENCE),
+                    ftd::ast::utils::is_variable_mutable(key.as_str()),
                     VariableValue::from_p1_header(header),
                     header.get_line_number(),
                 )

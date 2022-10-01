@@ -63,6 +63,7 @@ pub(crate) fn kind_eq(
     Ok(kind_data.kind.eq(kind))
 }
 
+pub const CLONE: &str = "*$";
 pub const REFERENCE: &str = ftd::ast::utils::REFERENCE;
 
 pub(crate) fn get_doc_name_and_remaining(
@@ -106,6 +107,14 @@ pub fn split(
     let part_1 = part.next().unwrap().trim();
     let part_2 = part.next().unwrap().trim();
     Ok((part_1.to_string(), part_2.to_string()))
+}
+
+pub fn split_at(text: &str, at: &str) -> (String, Option<String>) {
+    if let Some((p1, p2)) = text.split_once(at) {
+        (p1.trim().to_string(), Some(p2.trim().to_string()))
+    } else {
+        (text.to_string(), None)
+    }
 }
 
 pub(crate) fn get_special_variable() -> Vec<&'static str> {

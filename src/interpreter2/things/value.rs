@@ -9,13 +9,55 @@ pub enum PropertyValue {
         kind: ftd::interpreter2::KindData,
         line_number: usize,
     },
+    Clone {
+        name: String,
+        kind: ftd::interpreter2::KindData,
+        line_number: usize,
+    },
 }
 
 impl PropertyValue {
+    pub(crate) fn resolve(
+        self,
+        doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        match self {
+            ftd::interpreter2::PropertyValue::Value { value, .. } => Ok(value),
+            ftd::interpreter2::PropertyValue::Reference { name, .. }
+            | ftd::interpreter2::PropertyValue::Clone { name, .. } => {
+                doc.resolve(name.as_str(), line_number)
+            }
+        }
+    }
+
+    pub(crate) fn value(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<&ftd::interpreter2::Value> {
+        match self {
+            ftd::interpreter2::PropertyValue::Value { value, .. } => Ok(value),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected value found `{:?}`", t).as_str(),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn reference_name(&self) -> Option<&String> {
+        match self {
+            PropertyValue::Reference { name, .. } => Some(name),
+            _ => None,
+        }
+    }
+
     pub(crate) fn from_string(
         value: &str,
         doc: &ftd::interpreter2::TDoc,
         expected_kind: Option<&ftd::interpreter2::KindData>,
+        mutable: bool,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
         let value = ftd::ast::VariableValue::String {
@@ -23,15 +65,18 @@ impl PropertyValue {
             line_number,
         };
 
-        PropertyValue::from_ast_value_with_kind(value, doc, expected_kind)
+        PropertyValue::from_ast_value(value, doc, mutable, expected_kind)
     }
 
-    pub(crate) fn from_ast_value_with_kind(
+    pub(crate) fn from_ast_value(
         value: ftd::ast::VariableValue,
         doc: &ftd::interpreter2::TDoc,
+        mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
-        if let Ok(reference) = PropertyValue::reference_from_ast_value(&value, doc, expected_kind) {
+        if let Ok(reference) =
+            PropertyValue::reference_from_ast_value(&value, doc, mutable, expected_kind)
+        {
             return Ok(reference);
         }
         let expected_kind = expected_kind.ok_or(ftd::interpreter2::Error::ParseError {
@@ -81,9 +126,10 @@ impl PropertyValue {
                             value.line_number(),
                         );
                     }
-                    values.push(PropertyValue::from_ast_value_with_kind(
+                    values.push(PropertyValue::from_ast_value(
                         value,
                         doc,
+                        mutable,
                         Some(&ftd::interpreter2::KindData {
                             kind: kind.as_ref().clone(),
                             caption: expected_kind.caption,
@@ -103,22 +149,16 @@ impl PropertyValue {
                 let record = doc.get_record(value.line_number(), name)?;
                 let (_, caption, headers, body, line_number) = value.get_record(doc.name)?;
                 // TODO: Check if the record name and the value kind are same
-                // if !doc.eq(name, rec_name) {
-                //     return ftd::interpreter2::utils::e2(
-                //         format!("Expected record of `{}`, found: `{}`", name, rec_name),
-                //         doc.name,
-                //         value.line_number(),
-                //     );
-                // }
                 let mut result_field: ftd::Map<PropertyValue> = Default::default();
                 for field in record.fields {
                     if field.is_caption() && caption.is_some() {
                         let caption = caption.as_ref().as_ref().unwrap().clone();
                         result_field.insert(
                             field.name.to_string(),
-                            PropertyValue::from_ast_value_with_kind(
+                            PropertyValue::from_ast_value(
                                 caption,
                                 doc,
+                                field.mutable,
                                 Some(&field.kind),
                             )?,
                         );
@@ -128,12 +168,13 @@ impl PropertyValue {
                         let body = body.as_ref().unwrap();
                         result_field.insert(
                             field.name.to_string(),
-                            PropertyValue::from_ast_value_with_kind(
+                            PropertyValue::from_ast_value(
                                 ftd::ast::VariableValue::String {
                                     value: body.value.to_string(),
                                     line_number: body.line_number,
                                 },
                                 doc,
+                                field.mutable,
                                 Some(&field.kind),
                             )?,
                         );
@@ -163,12 +204,13 @@ impl PropertyValue {
                         }
                         result_field.insert(
                             field.name.to_string(),
-                            PropertyValue::from_ast_value_with_kind(
+                            PropertyValue::from_ast_value(
                                 ftd::ast::VariableValue::List {
                                     value: header_list,
                                     line_number: value.line_number(),
                                 },
                                 doc,
+                                field.mutable,
                                 Some(&field.kind),
                             )?,
                         );
@@ -187,9 +229,10 @@ impl PropertyValue {
                     let first_header = headers.first().unwrap();
                     result_field.insert(
                         field.name.to_string(),
-                        PropertyValue::from_ast_value_with_kind(
+                        PropertyValue::from_ast_value(
                             first_header.value.clone(),
                             doc,
+                            first_header.mutable,
                             Some(&field.kind),
                         )?,
                     );
@@ -211,9 +254,35 @@ impl PropertyValue {
     fn reference_from_ast_value(
         value: &ftd::ast::VariableValue,
         doc: &ftd::interpreter2::TDoc,
+        mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
         match value.string(doc.name) {
+            Ok(name) if name.starts_with(ftd::interpreter2::utils::CLONE) => {
+                let reference = name
+                    .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
+                    .to_string();
+
+                let found_kind = doc.get_kind(reference.as_str(), value.line_number())?;
+
+                match expected_kind {
+                    Some(ekind) if !ekind.kind.eq(&found_kind.kind) => {
+                        return ftd::interpreter2::utils::e2(
+                            format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
+                                .as_str(),
+                            doc.name,
+                            value.line_number(),
+                        )
+                    }
+                    _ => {}
+                }
+
+                Ok(PropertyValue::Clone {
+                    name: reference,
+                    kind: found_kind,
+                    line_number: value.line_number(),
+                })
+            }
             Ok(name) if name.starts_with(ftd::interpreter2::utils::REFERENCE) => {
                 let reference = name
                     .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
@@ -233,11 +302,32 @@ impl PropertyValue {
                     _ => {}
                 }
 
-                Ok(PropertyValue::Reference {
-                    name: reference,
-                    kind: found_kind,
-                    line_number: value.line_number(),
-                })
+                if mutable {
+                    let is_variable_mutable = doc
+                        .get_variable(reference.as_str(), value.line_number())?
+                        .mutable;
+                    if !is_variable_mutable {
+                        return ftd::interpreter2::utils::e2(
+                            format!(
+                                "Cannot have mutable reference of immutable variable `{}`",
+                                reference
+                            ),
+                            doc.name,
+                            value.line_number(),
+                        );
+                    }
+                    Ok(PropertyValue::Reference {
+                        name: reference,
+                        kind: found_kind,
+                        line_number: value.line_number(),
+                    })
+                } else {
+                    Ok(PropertyValue::Clone {
+                        name: reference,
+                        kind: found_kind,
+                        line_number: value.line_number(),
+                    })
+                }
             }
             _ => ftd::interpreter2::utils::e2(
                 format!("Expected reference, found: `{:?}`", value),
@@ -251,6 +341,7 @@ impl PropertyValue {
         match self {
             PropertyValue::Value { value, .. } => value.kind(),
             PropertyValue::Reference { kind, .. } => kind.kind.to_owned(),
+            PropertyValue::Clone { kind, .. } => kind.kind.to_owned(),
         }
     }
 }
@@ -291,6 +382,13 @@ pub enum Value {
 }
 
 impl Value {
+    pub(crate) fn inner(&self) -> Option<Self> {
+        match self {
+            Value::Optional { data, .. } => data.as_ref().to_owned(),
+            t => Some(t.to_owned()),
+        }
+    }
+
     fn kind(&self) -> ftd::interpreter2::Kind {
         match self {
             Value::String { .. } => ftd::interpreter2::Kind::String,

@@ -19,9 +19,10 @@ impl Variable {
             doc,
             variable_definition.line_number,
         )?;
-        let value = ftd::interpreter2::PropertyValue::from_ast_value_with_kind(
+        let value = ftd::interpreter2::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
+            variable_definition.mutable,
             Some(&kind),
         )?;
         Ok(Variable {
@@ -38,16 +39,22 @@ impl Variable {
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Variable> {
         let variable_definition = ast.get_variable_invocation(doc.name)?;
-        let mut variable_thing = doc.get_variable(
-            variable_definition.line_number,
+        let kind = doc.get_kind(
             variable_definition.name.as_str(),
+            variable_definition.line_number,
         )?;
-        let value = ftd::interpreter2::PropertyValue::from_ast_value_with_kind(
+
+        let value = ftd::interpreter2::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
-            Some(&variable_thing.kind),
+            true,
+            Some(&kind),
         )?;
-        variable_thing.value = value;
-        Ok(variable_thing)
+        let variable = doc.set_value(
+            variable_definition.name.as_str(),
+            value,
+            variable_definition.line_number,
+        )?;
+        Ok(variable)
     }
 }
