@@ -65,6 +65,13 @@ pub struct Component {
 }
 
 impl Component {
+    pub(crate) fn from_ast(
+        ast: ftd::ast::AST,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<Component> {
+        let component_invocation = ast.get_component_invocation(doc.name)?;
+        Component::from_ast_component(component_invocation, None, doc)
+    }
     fn from_ast_component(
         ast_component: ftd::ast::Component,
         definition_name_with_arguments: Option<(&str, &[Argument])>,

@@ -92,6 +92,9 @@ impl InterpreterState {
                     component.name.to_string(),
                     ftd::interpreter2::Thing::Component(component),
                 );
+            } else if ast.is_component() {
+                let component = ftd::interpreter2::Component::from_ast(ast, &doc)?;
+                parsed_document.instructions.push(component);
             }
         }
 
@@ -169,7 +172,7 @@ pub struct ParsedDocument {
     processing_imports: bool,
     doc_aliases: ftd::Map<String>,
     foreign_variable_prefix: Vec<String>,
-    instructions: Vec<ftd::Instruction>,
+    instructions: Vec<ftd::interpreter2::Component>,
 }
 
 impl ParsedDocument {
@@ -221,6 +224,6 @@ pub enum Interpreter {
 pub struct Document {
     pub data: ftd::Map<ftd::interpreter2::Thing>,
     pub name: String,
-    pub instructions: Vec<ftd::Instruction>,
+    pub instructions: Vec<ftd::interpreter2::Component>,
     pub aliases: ftd::Map<String>,
 }
