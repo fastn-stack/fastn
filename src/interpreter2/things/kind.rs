@@ -70,7 +70,7 @@ impl KindData {
             "decimal" => Kind::Decimal,
             "boolean" => Kind::Boolean,
             "ftd.ui" => Kind::UI { name: None },
-            k => match doc.get_thing(line_number, k)? {
+            k => match doc.get_thing(k, line_number)? {
                 ftd::interpreter2::Thing::Record(r) => Kind::Record { name: r.name },
                 t => {
                     return ftd::interpreter2::utils::e2(

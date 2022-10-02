@@ -43,8 +43,9 @@ pub enum Boolean {
 }
 
 impl Boolean {
-    fn from_ast_condition(
+    pub(crate) fn from_ast_condition(
         condition: ftd::ast::Condition,
+        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Boolean> {
         let (boolean, mut left, mut right) = ftd::interpreter2::Boolean::boolean_left_right(
@@ -62,12 +63,13 @@ impl Boolean {
                 value: left == "true",
             },
             "IsNotNull" | "IsNull" => {
-                let value = ftd::interpreter2::PropertyValue::from_string(
+                let value = ftd::interpreter2::PropertyValue::from_string_with_argument(
                     left.as_str(),
                     doc,
                     None,
                     false,
                     condition.line_number,
+                    definition_name_with_arguments,
                 )?;
                 if !value.kind().is_optional() {
                     return ftd::interpreter2::utils::e2(
@@ -84,12 +86,13 @@ impl Boolean {
                 }
             }
             "IsNotEmpty" | "IsEmpty" => {
-                let value = ftd::interpreter2::PropertyValue::from_string(
+                let value = ftd::interpreter2::PropertyValue::from_string_with_argument(
                     left.as_str(),
                     doc,
                     None,
                     false,
                     condition.line_number,
+                    definition_name_with_arguments,
                 )?;
                 if !value.kind().is_list() {
                     return ftd::interpreter2::utils::e2(
@@ -106,14 +109,15 @@ impl Boolean {
             }
             "NotEqual" | "Equal" => {
                 if let Some(right) = right {
-                    let left = ftd::interpreter2::PropertyValue::from_string(
+                    let left = ftd::interpreter2::PropertyValue::from_string_with_argument(
                         left.as_str(),
                         doc,
                         None,
                         false,
                         condition.line_number,
+                        definition_name_with_arguments,
                     )?;
-                    let right = ftd::interpreter2::PropertyValue::from_string(
+                    let right = ftd::interpreter2::PropertyValue::from_string_with_argument(
                         right.as_str(),
                         doc,
                         Some(&ftd::interpreter2::KindData {
@@ -123,16 +127,18 @@ impl Boolean {
                         }),
                         false,
                         condition.line_number,
+                        definition_name_with_arguments,
                     )?;
                     Boolean::Equal { left, right }
                 } else {
                     Boolean::Equal {
-                        left: ftd::interpreter2::PropertyValue::from_string(
+                        left: ftd::interpreter2::PropertyValue::from_string_with_argument(
                             left.as_str(),
                             doc,
                             None,
                             false,
                             condition.line_number,
+                            definition_name_with_arguments,
                         )?,
                         right: ftd::interpreter2::PropertyValue::Value {
                             value: ftd::interpreter2::Value::Boolean {

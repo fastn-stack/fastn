@@ -10,7 +10,7 @@ mod utils;
 pub use main::{interpret, Document, Interpreter};
 pub use tdoc::TDoc;
 pub use things::{
-    component::ComponentDefinition,
+    component::{Argument, Component, ComponentDefinition},
     expression::Boolean,
     kind::{Kind, KindData},
     record::{Field, Record},

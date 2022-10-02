@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Default, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Record {
     pub name: String,
     pub fields: Vec<Field>,

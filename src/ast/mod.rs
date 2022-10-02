@@ -10,7 +10,7 @@ mod record;
 pub(crate) mod utils;
 mod variable;
 
-pub use component::{Component, ComponentDefinition};
+pub use component::{Component, ComponentDefinition, Event, Loop, Property, PropertySource};
 pub use import::Import;
 pub use kind::{Condition, VariableKind, VariableModifier, VariableValue};
 pub use main::AST;

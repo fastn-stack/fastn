@@ -399,7 +399,7 @@ pub struct Condition {
 }
 
 impl Condition {
-    fn new(expression: &str, line_number: usize) -> Condition {
+    pub fn new(expression: &str, line_number: usize) -> Condition {
         Condition {
             expression: expression.to_string(),
             line_number,

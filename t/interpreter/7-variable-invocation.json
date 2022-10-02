@@ -25,6 +25,7 @@
               "caption": false,
               "body": false
             },
+            "is_local_variable": false,
             "line_number": 11
           }
         },
@@ -68,6 +69,7 @@
                         "caption": false,
                         "body": false
                       },
+                      "is_local_variable": false,
                       "line_number": 8
                     }
                   }

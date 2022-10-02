@@ -248,18 +248,24 @@ impl Property {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum PropertySource {
     Caption,
     Body,
     Header { name: String, mutable: bool },
 }
 
+impl Default for PropertySource {
+    fn default() -> PropertySource {
+        PropertySource::Caption
+    }
+}
+
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Loop {
-    on: String,
-    alias: String,
-    line_number: usize,
+    pub on: String,
+    pub alias: String,
+    pub line_number: usize,
 }
 
 impl Loop {
@@ -333,9 +339,9 @@ impl Loop {
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Event {
-    name: String,
-    action: String,
-    line_number: usize,
+    pub name: String,
+    pub action: String,
+    pub line_number: usize,
 }
 
 impl Event {

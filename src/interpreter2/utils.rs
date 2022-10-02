@@ -127,3 +127,22 @@ pub(crate) fn get_special_variable() -> Vec<&'static str> {
         "PARENT",
     ]
 }
+
+pub fn get_argument_for_reference_and_remaining<'a>(
+    name: &'a str,
+    doc_id: &'a str,
+    component_definition_name_with_arguments: Option<(&'a str, &'a [ftd::interpreter2::Argument])>,
+) -> Option<(&'a ftd::interpreter2::Argument, Option<String>)> {
+    if let Some((component_name, arguments)) = component_definition_name_with_arguments {
+        if let Some(referenced_argument) = name
+            .strip_prefix(format!("{}.", component_name).as_str())
+            .or(name.strip_prefix(format!("{}#{}.", doc_id, component_name).as_str()))
+        {
+            let (p1, p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
+            if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
+                return Some((argument, p2));
+            }
+        }
+    }
+    None
+}
