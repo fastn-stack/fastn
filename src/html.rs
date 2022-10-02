@@ -255,19 +255,19 @@ impl Node {
 impl ftd::Element {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         match self {
-            Self::Row(i) => (i.to_node(doc_id, collector)),
-            Self::Scene(i) => (i.to_node(doc_id, collector)),
-            Self::Grid(i) => (i.to_node(doc_id, collector)),
-            Self::Markup(i) => (i.to_node(doc_id, collector)),
-            Self::TextBlock(i) => (i.to_node(doc_id, collector)),
-            Self::Code(i) => (i.to_node(doc_id, collector)),
-            Self::Image(i) => (i.to_node(doc_id, collector)),
-            Self::Column(i) => (i.to_node(doc_id, true, collector)),
-            Self::IFrame(i) => (i.to_node(doc_id, collector)),
-            Self::Input(i) => (i.to_node(doc_id, collector)),
-            Self::Integer(i) => (i.to_node(doc_id, collector)),
-            Self::Boolean(i) => (i.to_node(doc_id, collector)),
-            Self::Decimal(i) => (i.to_node(doc_id, collector)),
+            Self::Row(i) => i.to_node(doc_id, collector),
+            Self::Scene(i) => i.to_node(doc_id, collector),
+            Self::Grid(i) => i.to_node(doc_id, collector),
+            Self::Markup(i) => i.to_node(doc_id, collector),
+            Self::TextBlock(i) => i.to_node(doc_id, collector),
+            Self::Code(i) => i.to_node(doc_id, collector),
+            Self::Image(i) => i.to_node(doc_id, collector),
+            Self::Column(i) => i.to_node(doc_id, true, collector),
+            Self::IFrame(i) => i.to_node(doc_id, collector),
+            Self::Input(i) => i.to_node(doc_id, collector),
+            Self::Integer(i) => i.to_node(doc_id, collector),
+            Self::Boolean(i) => i.to_node(doc_id, collector),
+            Self::Decimal(i) => i.to_node(doc_id, collector),
             Self::Null => Node {
                 condition: None,
                 events: vec![],
@@ -1704,8 +1704,8 @@ fn gradient(d: &ftd::GradientDirection, c: &[ftd::ColorValue]) -> String {
 
 pub fn anchor(l: &ftd::Anchor) -> String {
     match l {
-        ftd::Anchor::Parent => ("absolute".to_string()),
-        ftd::Anchor::Window => ("fixed".to_string()),
+        ftd::Anchor::Parent => "absolute".to_string(),
+        ftd::Anchor::Window => "fixed".to_string(),
     }
 }
 

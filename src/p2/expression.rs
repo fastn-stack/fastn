@@ -421,15 +421,22 @@ impl Boolean {
     pub fn set_null(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<bool> {
         Ok(match self {
             Self::Literal { .. } | Self::IsNotEmpty { .. } | Self::IsEmpty { .. } => true,
-            Self::Equal { left, right } => match (left, right) {
-                (ftd::PropertyValue::Value { .. }, ftd::PropertyValue::Value { .. })
-                | (ftd::PropertyValue::Value { .. }, ftd::PropertyValue::Variable { .. })
-                | (ftd::PropertyValue::Variable { .. }, ftd::PropertyValue::Value { .. })
-                | (ftd::PropertyValue::Variable { .. }, ftd::PropertyValue::Variable { .. }) => {
-                    true
-                }
-                _ => false,
-            },
+            Self::Equal { left, right } => matches!(
+                (left, right),
+                (
+                    ftd::PropertyValue::Value { .. },
+                    ftd::PropertyValue::Value { .. }
+                ) | (
+                    ftd::PropertyValue::Value { .. },
+                    ftd::PropertyValue::Variable { .. }
+                ) | (
+                    ftd::PropertyValue::Variable { .. },
+                    ftd::PropertyValue::Value { .. }
+                ) | (
+                    ftd::PropertyValue::Variable { .. },
+                    ftd::PropertyValue::Variable { .. }
+                )
+            ),
             Self::IsNotNull { .. } | Self::IsNull { .. } => false,
             _ => {
                 return ftd::p2::utils::e2(
