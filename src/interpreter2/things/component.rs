@@ -20,6 +20,7 @@ impl ComponentDefinition {
             line_number,
         }
     }
+
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
@@ -65,6 +66,18 @@ pub struct Component {
 }
 
 impl Component {
+    pub(crate) fn from_name(name: &str) -> Component {
+        Component {
+            name: name.to_string(),
+            properties: vec![],
+            iteration: Box::new(None),
+            condition: Box::new(None),
+            events: vec![],
+            children: vec![],
+            line_number: 0,
+        }
+    }
+
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,

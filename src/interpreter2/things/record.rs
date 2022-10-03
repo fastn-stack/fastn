@@ -70,6 +70,32 @@ pub struct Field {
 }
 
 impl Field {
+    pub fn new(
+        name: &str,
+        kind: ftd::interpreter2::KindData,
+        mutable: bool,
+        value: Option<ftd::interpreter2::PropertyValue>,
+        line_number: usize,
+    ) -> Field {
+        Field {
+            name: name.to_string(),
+            kind,
+            mutable,
+            value,
+            line_number,
+        }
+    }
+
+    pub fn default(name: &str, kind: ftd::interpreter2::KindData) -> Field {
+        Field {
+            name: name.to_string(),
+            kind,
+            mutable: false,
+            value: None,
+            line_number: 0,
+        }
+    }
+
     pub(crate) fn from_ast_fields(
         fields: Vec<ftd::ast::Field>,
         doc: &ftd::interpreter2::TDoc,

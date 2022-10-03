@@ -1,4 +1,5 @@
 pub(crate) mod component;
+pub mod default;
 pub(crate) mod expression;
 pub(crate) mod kind;
 pub(crate) mod record;

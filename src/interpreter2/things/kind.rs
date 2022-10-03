@@ -12,6 +12,38 @@ pub enum Kind {
 }
 
 impl Kind {
+    pub fn into_kind_data(self) -> KindData {
+        KindData::new(self)
+    }
+
+    pub fn string() -> Kind {
+        Kind::String
+    }
+
+    pub fn integer() -> Kind {
+        Kind::Integer
+    }
+
+    pub fn decimal() -> Kind {
+        Kind::Decimal
+    }
+
+    pub fn boolean() -> Kind {
+        Kind::Boolean
+    }
+
+    pub fn record(name: &str) -> Kind {
+        Kind::Record {
+            name: name.to_string(),
+        }
+    }
+
+    pub fn into_optional(self) -> Kind {
+        Kind::Optional {
+            kind: Box::new(self),
+        }
+    }
+
     pub(crate) fn is_list(&self) -> bool {
         matches!(self, Kind::List { .. })
     }
@@ -29,6 +61,33 @@ pub struct KindData {
 }
 
 impl KindData {
+    pub fn new(kind: Kind) -> KindData {
+        KindData {
+            kind,
+            caption: false,
+            body: false,
+        }
+    }
+
+    pub fn caption(self) -> KindData {
+        let mut kind = self;
+        kind.caption = true;
+        kind
+    }
+
+    pub fn body(self) -> KindData {
+        let mut kind = self;
+        kind.body = true;
+        kind
+    }
+
+    pub fn caption_or_body(self) -> KindData {
+        let mut kind = self;
+        kind.caption = true;
+        kind.body = true;
+        kind
+    }
+
     pub(crate) fn into_by_ast_modifier(self, modifier: &ftd::ast::VariableModifier) -> Self {
         match modifier {
             ftd::ast::VariableModifier::Optional => self.optional(),

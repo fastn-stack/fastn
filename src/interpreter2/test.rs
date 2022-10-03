@@ -23,7 +23,10 @@ pub fn interpret_helper(
 
 #[track_caller]
 fn p(s: &str, t: &str) {
-    let i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
+    let mut i = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
+    for thing in ftd::interpreter2::default::default_bag().keys() {
+        i.data.remove(thing);
+    }
     let expected_json = serde_json::to_string_pretty(&i).unwrap();
     let t: ftd::interpreter2::Document = serde_json::from_str(t)
         .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));

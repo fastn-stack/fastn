@@ -11,6 +11,7 @@ pub use main::{interpret, Document, Interpreter};
 pub use tdoc::TDoc;
 pub use things::{
     component::{Argument, Component, ComponentDefinition},
+    default,
     expression::Boolean,
     kind::{Kind, KindData},
     record::{Field, Record},

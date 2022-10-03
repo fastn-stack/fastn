@@ -12,7 +12,7 @@ impl InterpreterState {
     fn new(id: String) -> InterpreterState {
         InterpreterState {
             id,
-            // bag: ftd::p2::interpreter::default_bag(),
+            bag: ftd::interpreter2::default::default_bag(),
             ..Default::default()
         }
     }
@@ -181,7 +181,7 @@ impl ParsedDocument {
             name: id.to_string(),
             ast: ftd::ast::AST::from_sections(ftd::p11::parse(source, id)?.as_slice(), id)?,
             processing_imports: true,
-            doc_aliases: default_aliases(),
+            doc_aliases: ftd::interpreter2::default::default_aliases(),
             foreign_variable_prefix: vec![],
             instructions: vec![],
         })
@@ -203,10 +203,6 @@ impl ParsedDocument {
     pub fn get_doc_aliases(&self) -> ftd::Map<String> {
         self.doc_aliases.clone()
     }
-}
-
-pub fn default_aliases() -> ftd::Map<String> {
-    std::iter::IntoIterator::into_iter([("ftd".to_string(), "ftd".to_string())]).collect()
 }
 
 #[derive(Debug)]
