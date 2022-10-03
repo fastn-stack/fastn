@@ -1,8 +1,13 @@
 pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> String {
+    let name = name
+        .trim_start_matches(ftd::interpreter2::utils::CLONE)
+        .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
+        .to_string();
+
     if name.contains('#') {
         return name.to_string();
     }
-    match ftd::interpreter2::utils::split_module(name) {
+    match ftd::interpreter2::utils::split_module(name.as_str()) {
         (Some(m), v, None) => match aliases.get(m) {
             Some(m) => format!("{}#{}", m, v),
             None => format!("{}#{}.{}", doc_name, m, v),

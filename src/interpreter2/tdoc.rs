@@ -318,7 +318,10 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         component_definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
     ) -> ftd::interpreter2::Result<(bool, ftd::interpreter2::KindData)> {
-        let name = if let Some(name) = name.strip_prefix('$') {
+        let name = if let Some(name) = name
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
+        {
             name
         } else {
             name
@@ -423,7 +426,10 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Thing> {
-        let name = if let Some(name) = name.strip_prefix('$') {
+        let name = if let Some(name) = name
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
+        {
             name
         } else {
             name
@@ -572,7 +578,7 @@ impl<'a> TDoc<'a> {
                 ftd::interpreter2::utils::get_doc_name_and_remaining(name, self.name, line_number)?;
             return match self.bag.get(name.as_str()) {
                 Some(a) => Ok((a.to_owned(), remaining_value)),
-                None => self.err("not found", name, "get_thing", line_number),
+                None => self.err("not found", name, "get_initial_thing", line_number),
             };
         }
         return Ok(match get_initial_thing_(self, None, self.name, name) {
@@ -580,11 +586,13 @@ impl<'a> TDoc<'a> {
             None => {
                 if let Some((m, v)) = name.split_once('.') {
                     match get_initial_thing_(self, Some(m), m, v) {
-                        None => return self.err("not found", name, "get_thing", line_number),
+                        None => {
+                            return self.err("not found", name, "get_initial_thing", line_number)
+                        }
                         Some(a) => a,
                     }
                 } else {
-                    return self.err("not found", name, "get_thing", line_number);
+                    return self.err("not found", name, "get_initial_thing", line_number);
                 }
             }
         });

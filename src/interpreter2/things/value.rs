@@ -284,7 +284,7 @@ impl PropertyValue {
         match value.string(doc.name) {
             Ok(name) if name.starts_with(ftd::interpreter2::utils::CLONE) => {
                 let reference =
-                    doc.resolve_name(name.trim_start_matches(ftd::interpreter2::utils::REFERENCE));
+                    doc.resolve_name(name.trim_start_matches(ftd::interpreter2::utils::CLONE));
 
                 let (is_local_variable, found_kind) = doc.get_kind_with_argument(
                     reference.as_str(),
