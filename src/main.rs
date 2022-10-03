@@ -180,7 +180,6 @@ pub fn interpret_helper(
                     &state.tdoc(&mut Default::default(), &mut Default::default()),
                 )? {
                     true => {
-                        println!("Received LP-php");
                         s = state.continue_after_storing_section(&section)?;
                     }
                     false => {
@@ -299,7 +298,7 @@ impl ExampleLibrary {
             .header
             .str(doc.name, section.line_number, "$processor$")?
         {
-            "php" => Ok(true),
+            "page-headings" => Ok(true),
             _ => Ok(false),
         }
     }

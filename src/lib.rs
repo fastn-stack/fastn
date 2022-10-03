@@ -79,12 +79,28 @@ pub struct Document {
     pub css_collector: String,
 }
 
-// Temporary struct for debugging (for php)
-// This will be replaced with the toc-item later
+// Page-heading struct identical with fpm::library::toc::TocItemCompat
+// to be used by page-headings processor
 #[derive(Debug, Clone, serde::Serialize)]
 pub struct PageHeadingItem {
-    pub title: String,
-    pub url: String,
+    pub url: Option<String>,
+    pub number: Option<String>,
+    pub title: Option<String>,
+    pub path: Option<String>,
+    #[serde(rename = "is-heading")]
+    pub is_heading: bool,
+    // TODO: Font icon mapping to html?
+    #[serde(rename = "font-icon")]
+    pub font_icon: Option<String>,
+    #[serde(rename = "is-disabled")]
+    pub is_disabled: bool,
+    #[serde(rename = "is-active")]
+    pub is_active: bool,
+    #[serde(rename = "is-open")]
+    pub is_open: bool,
+    #[serde(rename = "img-src")]
+    pub image_src: Option<String>,
+    pub children: Vec<PageHeadingItem>,
 }
 
 // TextSource location = (is_from_section = T/F, subsection_index if is_from_section = F else 0)
