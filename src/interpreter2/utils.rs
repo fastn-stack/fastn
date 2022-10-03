@@ -136,7 +136,7 @@ pub fn get_argument_for_reference_and_remaining<'a>(
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
-            .or(name.strip_prefix(format!("{}#{}.", doc_id, component_name).as_str()))
+            .or_else(|| name.strip_prefix(format!("{}#{}.", doc_id, component_name).as_str()))
         {
             let (p1, p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
             if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
