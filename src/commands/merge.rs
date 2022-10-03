@@ -118,10 +118,7 @@ async fn merge_main_into_cr(
                 }
             }
             if !already_deleted.is_empty() {
-                cr_deleted_list = cr_deleted_list
-                    .into_iter()
-                    .filter(|(k, _)| !already_deleted.contains(k))
-                    .collect();
+                cr_deleted_list.retain(|k, _| !already_deleted.contains(k));
                 new_file_status.insert(
                     cr_file_path.to_string(),
                     fpm::sync_utils::FileStatus::Update {
