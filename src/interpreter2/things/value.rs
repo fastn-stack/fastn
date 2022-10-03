@@ -93,13 +93,13 @@ impl PropertyValue {
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
-        if let Ok(reference) = PropertyValue::reference_from_ast_value(
+        if let Some(reference) = PropertyValue::reference_from_ast_value(
             &value,
             doc,
             mutable,
             expected_kind,
             definition_name_with_arguments,
-        ) {
+        )? {
             return Ok(reference);
         }
         let expected_kind = expected_kind.ok_or(ftd::interpreter2::Error::ParseError {
@@ -280,7 +280,7 @@ impl PropertyValue {
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
+    ) -> ftd::interpreter2::Result<Option<ftd::interpreter2::PropertyValue>> {
         match value.string(doc.name) {
             Ok(name) if name.starts_with(ftd::interpreter2::utils::CLONE) => {
                 let reference =
@@ -304,12 +304,12 @@ impl PropertyValue {
                     _ => {}
                 }
 
-                Ok(PropertyValue::Clone {
+                Ok(Some(PropertyValue::Clone {
                     name: reference,
                     kind: found_kind,
                     is_local_variable,
                     line_number: value.line_number(),
-                })
+                }))
             }
             Ok(name) if name.starts_with(ftd::interpreter2::utils::REFERENCE) => {
                 let reference =
@@ -358,26 +358,22 @@ impl PropertyValue {
                             value.line_number(),
                         );
                     }
-                    Ok(PropertyValue::Reference {
+                    Ok(Some(PropertyValue::Reference {
                         name: reference,
                         kind: found_kind,
                         is_local_variable,
                         line_number: value.line_number(),
-                    })
+                    }))
                 } else {
-                    Ok(PropertyValue::Clone {
+                    Ok(Some(PropertyValue::Clone {
                         name: reference,
                         kind: found_kind,
                         is_local_variable,
                         line_number: value.line_number(),
-                    })
+                    }))
                 }
             }
-            _ => ftd::interpreter2::utils::e2(
-                format!("Expected reference, found: `{:?}`", value),
-                doc.name,
-                value.line_number(),
-            ),
+            _ => Ok(None),
         }
     }
 

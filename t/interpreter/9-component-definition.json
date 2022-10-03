@@ -1,0 +1,55 @@
+{
+  "data": {
+    "foo#print": {
+      "Component": {
+        "name": "foo#print",
+        "arguments": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          }
+        ],
+        "definition": {
+          "name": "ftd#text",
+          "properties": [
+            {
+              "value": {
+                "Clone": {
+                  "name": "foo#print.name",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "is_local_variable": true,
+                  "line_number": 4
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line_number": 4
+            }
+          ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [],
+          "line_number": 4
+        },
+        "line_number": 1
+      }
+    }
+  },
+  "name": "foo",
+  "instructions": [],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}

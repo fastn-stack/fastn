@@ -1,0 +1,6 @@
+-- component print:
+string name:
+
+-- ftd.text: $print.name
+
+-- end: print
