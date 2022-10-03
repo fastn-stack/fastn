@@ -161,8 +161,20 @@ impl Property {
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Property> {
-        let component = doc.get_component(component_name, ast_property.line_number)?;
-        let argument = Property::get_argument_for_property(&ast_property, &component, doc)?;
+        let argument = match definition_name_with_arguments {
+            Some((name, arg)) if name.eq(component_name) => {
+                Property::get_argument_for_property(&ast_property, name, arg, doc)?
+            }
+            _ => {
+                let component = doc.get_component(component_name, ast_property.line_number)?;
+                Property::get_argument_for_property(
+                    &ast_property,
+                    component.name.as_str(),
+                    component.arguments.as_slice(),
+                    doc,
+                )?
+            }
+        };
         let value = if let Some(ref v) = ast_property.value {
             Some(
                 ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
@@ -206,42 +218,43 @@ impl Property {
         })
     }
 
-    fn get_argument_for_property<'a>(
-        ast_property: &'a ftd::ast::Property,
-        component: &'a ftd::interpreter2::ComponentDefinition,
-        doc: &'a ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<&'a Argument> {
+    fn get_argument_for_property(
+        ast_property: &ftd::ast::Property,
+        component_name: &str,
+        component_argument: &[Argument],
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<Argument> {
         match &ast_property.source {
-            ftd::ast::PropertySource::Caption => {
-                component.arguments.iter().find(|v| v.is_caption()).ok_or(
-                    ftd::interpreter2::Error::ParseError {
-                        message: format!(
-                            "Caption type argument not found for component `{}`",
-                            component.name
-                        ),
-                        doc_id: doc.name.to_string(),
-                        line_number: ast_property.line_number,
-                    },
-                )
-            }
-            ftd::ast::PropertySource::Body => {
-                component.arguments.iter().find(|v| v.is_body()).ok_or(
-                    ftd::interpreter2::Error::ParseError {
-                        message: format!(
-                            "Body type argument not found for component `{}`",
-                            component.name
-                        ),
-                        doc_id: doc.name.to_string(),
-                        line_number: ast_property.line_number,
-                    },
-                )
-            }
+            ftd::ast::PropertySource::Caption => component_argument
+                .iter()
+                .find(|v| v.is_caption())
+                .ok_or(ftd::interpreter2::Error::ParseError {
+                    message: format!(
+                        "Caption type argument not found for component `{}`",
+                        component_name
+                    ),
+                    doc_id: doc.name.to_string(),
+                    line_number: ast_property.line_number,
+                })
+                .map(ToOwned::to_owned),
+            ftd::ast::PropertySource::Body => component_argument
+                .iter()
+                .find(|v| v.is_body())
+                .ok_or(ftd::interpreter2::Error::ParseError {
+                    message: format!(
+                        "Body type argument not found for component `{}`",
+                        component_name
+                    ),
+                    doc_id: doc.name.to_string(),
+                    line_number: ast_property.line_number,
+                })
+                .map(ToOwned::to_owned),
             ftd::ast::PropertySource::Header { name, mutable } => {
-                let argument = component.arguments.iter().find(|v| v.name.eq(name)).ok_or(
+                let argument = component_argument.iter().find(|v| v.name.eq(name)).ok_or(
                     ftd::interpreter2::Error::ParseError {
                         message: format!(
                             "Body type argument not found for component `{}`",
-                            component.name
+                            component_name
                         ),
                         doc_id: doc.name.to_string(),
                         line_number: ast_property.line_number,
@@ -259,7 +272,7 @@ impl Property {
                         ast_property.line_number,
                     );
                 }
-                Ok(argument)
+                Ok(argument.to_owned())
             }
         }
     }
