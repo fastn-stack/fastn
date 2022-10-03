@@ -266,8 +266,8 @@ impl Property {
                 let argument = component_argument.iter().find(|v| v.name.eq(name)).ok_or(
                     ftd::interpreter2::Error::ParseError {
                         message: format!(
-                            "Body type argument not found for component `{}`",
-                            component_name
+                            "Header type {} {} argument not found for component `{}`",
+                            name, mutable, component_name
                         ),
                         doc_id: doc.name.to_string(),
                         line_number: ast_property.line_number,

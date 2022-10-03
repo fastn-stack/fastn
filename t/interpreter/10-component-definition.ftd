@@ -1,0 +1,11 @@
+-- string name: Name 1
+
+-- component print:
+string name:
+
+-- ftd.text: $print.name
+
+-- end: print
+
+-- print:
+name: $name

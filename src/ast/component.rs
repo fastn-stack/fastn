@@ -133,7 +133,9 @@ impl Component {
                     doc_id,
                     PropertySource::Header {
                         mutable: ftd::ast::utils::is_variable_mutable(name.as_str()),
-                        name,
+                        name: name
+                            .trim_start_matches(ftd::ast::utils::REFERENCE)
+                            .to_string(),
                     },
                 )?);
             }

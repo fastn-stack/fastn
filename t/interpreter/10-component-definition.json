@@ -1,0 +1,110 @@
+{
+  "data": {
+    "foo#name": {
+      "Variable": {
+        "name": "foo#name",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Name 1"
+              }
+            },
+            "line_number": 1
+          }
+        },
+        "line_number": 1
+      }
+    },
+    "foo#print": {
+      "Component": {
+        "name": "foo#print",
+        "arguments": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 4
+          }
+        ],
+        "definition": {
+          "name": "ftd#text",
+          "properties": [
+            {
+              "value": {
+                "Clone": {
+                  "name": "foo#print.name",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "is_local_variable": true,
+                  "line_number": 6
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line_number": 6
+            }
+          ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [],
+          "line_number": 6
+        },
+        "line_number": 3
+      }
+    }
+  },
+  "name": "foo",
+  "instructions": [
+    {
+      "name": "foo#print",
+      "properties": [
+        {
+          "value": {
+            "Clone": {
+              "name": "foo#name",
+              "kind": {
+                "kind": "String",
+                "caption": false,
+                "body": false
+              },
+              "is_local_variable": false,
+              "line_number": 11
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "name",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 11
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 10
+    }
+  ],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}
