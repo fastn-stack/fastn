@@ -783,8 +783,7 @@ window.ftd = (function () {
                 let reference = JSON.parse(action["parameters"].data[0].reference);
                 let resolved_data = ftd_utils.resolve_reference(value, reference, data, obj);
                 let func = resolved_data.function? resolved_data.function.trim().replaceAll("-", "_").toLowerCase(): "http";
-                let method = resolved_data.method? resolved_data.method.trim().toUpperCase(): "GET";
-                window[func](id, method, resolved_data, reference);
+                window[func](id, resolved_data, reference);
             } else {
                 let target = action["target"].trim().replaceAll("-", "_");
                 window[target](id);
@@ -1033,6 +1032,7 @@ window.ftd = (function () {
 
     exports.set_value = function (id, variable, value) {
         let data = ftd_data[id];
+        console.log("FTD DATA", id, data);
         if (!data[variable]) {
             console_log(variable, "is not in data, ignoring");
             return;
@@ -1047,7 +1047,8 @@ function console_print(id, data) {
     console.log("console_print",data);
 }
 
-function http(id, method="GET", data, reference) {
+function http(id, data) {
+    let method = data.method? data.method.trim().toUpperCase(): "GET";
     let xhr = new XMLHttpRequest();
     xhr.open(method.toUpperCase(), data.url);
     xhr.setRequestHeader("Accept", "application/json");
@@ -1063,13 +1064,18 @@ function http(id, method="GET", data, reference) {
         }
         let response = JSON.parse(xhr.response);
         console_log("API response", data.url, xhr.response)
-        if (!!response.data && !!response.data.url) {
+        if (!!response && !!response.url) {
             window.location.href = response.data.url;
-        } else if (!!response.data && !!response.data.reload) {
+        } else if (!!response && !!response.reload) {
             window.location.reload();
         } else {
-            for (const key of Object.keys(response.data)) {
-                ftd.set_value(id, key, response.data[key])
+            console.log(data, response)
+            for (const key of Object.keys(response)) {
+                let ftd_variable = key;
+                if (data[ftd_variable]) {
+                    ftd_variable = data[key];
+                }
+                ftd.set_value(id, ftd_variable, response[key])
             }
         }
     };
