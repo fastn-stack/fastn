@@ -1075,7 +1075,7 @@ function http(id, request_data, referenced_data) {
         let response = JSON.parse(xhr.response);
         if (!!response && !!response.url) {
             // Warning: we don't handle header location redirect
-            window.location.href = response.data.url;
+            window.location.href = response.url;
         } else if (!!response && !!response.reload) {
             window.location.reload();
         } else {
