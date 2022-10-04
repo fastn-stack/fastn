@@ -781,17 +781,9 @@ window.ftd = (function () {
             if (action["parameters"].data !== undefined) {
                 let value = action["parameters"].data[0].value;
                 let reference = JSON.parse(action["parameters"].data[0].reference);
-
-                console.log("Reference Data", reference);
-
                 let filtered_data = filter_object(reference, (key) => !key.startsWith("$"));
-
-
-                console.log("filtered data", filtered_data);
                 let resolved_data = ftd_utils.resolve_reference(value, filtered_data, data, obj);
                 let func = resolved_data.function? resolved_data.function.trim().replaceAll("-", "_").toLowerCase(): "http";
-                console.log("Resolved Data", resolved_data);
-
                 window[func](id, resolved_data, reference);
             } else {
                 let target = action["target"].trim().replaceAll("-", "_");
@@ -1096,7 +1088,7 @@ function http(id, request_data, referenced_data) {
             }
         }
     };
-    console.log("Request Data", request_data);
+    console_log("Request Data", request_data);
     xhr.send(JSON.stringify(request_data));
 }
 
