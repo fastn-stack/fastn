@@ -44,6 +44,13 @@ impl Kind {
         }
     }
 
+    pub fn inner(self) -> Kind {
+        match self {
+            Kind::Optional { kind } => kind.as_ref().to_owned(),
+            t => t,
+        }
+    }
+
     pub(crate) fn is_list(&self) -> bool {
         matches!(self, Kind::List { .. })
     }

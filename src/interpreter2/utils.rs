@@ -5,7 +5,7 @@ pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> S
         .to_string();
 
     if name.contains('#') {
-        return name.to_string();
+        return name;
     }
     match ftd::interpreter2::utils::split_module(name.as_str()) {
         (Some(m), v, None) => match aliases.get(m) {

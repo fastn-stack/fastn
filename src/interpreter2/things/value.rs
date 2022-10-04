@@ -107,7 +107,7 @@ impl PropertyValue {
             doc_id: doc.name.to_string(),
             line_number: value.line_number(),
         })?;
-        Ok(match &expected_kind.kind {
+        Ok(match &expected_kind.kind.clone().inner() {
             ftd::interpreter2::Kind::String => PropertyValue::Value {
                 value: Value::String {
                     text: value.string(doc.name)?,
@@ -268,7 +268,8 @@ impl PropertyValue {
                     line_number,
                 }
             }
-            _ => {
+            t => {
+                dbg!("from_ast_value_with_argument", &t);
                 unimplemented!()
             }
         })

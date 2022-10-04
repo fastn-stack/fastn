@@ -1,0 +1,173 @@
+{
+  "data": {
+    "foo#name": {
+      "Variable": {
+        "name": "foo#name",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Name 1"
+              }
+            },
+            "line_number": 1
+          }
+        },
+        "line_number": 1
+      }
+    },
+    "foo#print": {
+      "Component": {
+        "name": "foo#print",
+        "arguments": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 4
+          }
+        ],
+        "definition": {
+          "name": "ftd#row",
+          "properties": [
+            {
+              "value": {
+                "Value": {
+                  "value": {
+                    "Integer": {
+                      "value": 40
+                    }
+                  },
+                  "line_number": 8
+                }
+              },
+              "source": {
+                "Header": {
+                  "name": "padding",
+                  "mutable": false
+                }
+              },
+              "condition": null,
+              "line_number": 8
+            }
+          ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [
+            {
+              "name": "ftd#text",
+              "properties": [
+                {
+                  "value": {
+                    "Clone": {
+                      "name": "foo#print.name",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
+                      },
+                      "is_local_variable": true,
+                      "line_number": 10
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 10
+                }
+              ],
+              "iteration": null,
+              "condition": null,
+              "events": [],
+              "children": [],
+              "line_number": 10
+            }
+          ],
+          "line_number": 7
+        },
+        "line_number": 3
+      }
+    }
+  },
+  "name": "foo",
+  "instructions": [
+    {
+      "name": "foo#print",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#name",
+              "kind": {
+                "kind": "String",
+                "caption": false,
+                "body": false
+              },
+              "is_local_variable": false,
+              "line_number": 19
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "name",
+              "mutable": true
+            }
+          },
+          "condition": null,
+          "line_number": 19
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 18
+    },
+    {
+      "name": "foo#print",
+      "properties": [
+        {
+          "value": {
+            "Clone": {
+              "name": "foo#name",
+              "kind": {
+                "kind": "String",
+                "caption": false,
+                "body": false
+              },
+              "is_local_variable": false,
+              "line_number": 23
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "name",
+              "mutable": true
+            }
+          },
+          "condition": null,
+          "line_number": 23
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 22
+    }
+  ],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}

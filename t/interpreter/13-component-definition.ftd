@@ -1,0 +1,23 @@
+-- string $name: Name 1
+
+-- component print:
+string $name:
+
+
+-- ftd.row:
+padding: 40
+
+-- ftd.text: $print.name
+
+-- end: ftd.row
+
+
+-- end: print
+
+
+-- print:
+$name: $name
+
+
+-- print:
+$name: *$name
