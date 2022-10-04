@@ -781,8 +781,17 @@ window.ftd = (function () {
             if (action["parameters"].data !== undefined) {
                 let value = action["parameters"].data[0].value;
                 let reference = JSON.parse(action["parameters"].data[0].reference);
-                let resolved_data = ftd_utils.resolve_reference(value, reference, data, obj);
+
+                console.log("Reference Data", reference);
+
+                let filtered_data = filter_object(reference, (key) => !key.startsWith("$"));
+
+
+                console.log("filtered data", filtered_data);
+                let resolved_data = ftd_utils.resolve_reference(value, filtered_data, data, obj);
                 let func = resolved_data.function? resolved_data.function.trim().replaceAll("-", "_").toLowerCase(): "http";
+                console.log("Resolved Data", resolved_data);
+
                 window[func](id, resolved_data, reference);
             } else {
                 let target = action["target"].trim().replaceAll("-", "_");
@@ -1032,7 +1041,6 @@ window.ftd = (function () {
 
     exports.set_value = function (id, variable, value) {
         let data = ftd_data[id];
-        console.log("FTD DATA", id, data);
         if (!data[variable]) {
             console_log(variable, "is not in data, ignoring");
             return;
@@ -1043,43 +1051,53 @@ window.ftd = (function () {
     return exports;
 })();
 
-function console_print(id, data) {
-    console.log("console_print",data);
+function filter_object(data, filter_fn) {
+    if (data instanceof Object) {
+        let filtered_data = {};
+        for(const key of Object.keys(data)) {
+            if (filter_fn(key)) {
+                filtered_data[key] = data[key];
+            }
+        }
+        return filtered_data;
+    }
+    return data;
 }
 
-function http(id, data) {
-    let method = data.method? data.method.trim().toUpperCase(): "GET";
+function http(id, request_data, referenced_data) {
+    let method = request_data.method? request_data.method.trim().toUpperCase(): "GET";
     let xhr = new XMLHttpRequest();
-    xhr.open(method.toUpperCase(), data.url);
+    xhr.open(method.toUpperCase(), request_data.url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status !== 200) {
-            console.log("Error in calling url: ", data.url, xhr.responseText);
+            console.log("Error in calling url: ", request_data.url, xhr.responseText);
             return;
         }
         if (xhr.readyState !== 4) {
             return;
         }
+
         let response = JSON.parse(xhr.response);
-        console_log("API response", data.url, xhr.response)
         if (!!response && !!response.url) {
+            // Warning: we don't handle header location redirect
             window.location.href = response.data.url;
         } else if (!!response && !!response.reload) {
             window.location.reload();
         } else {
-            console.log(data, response)
             for (const key of Object.keys(response)) {
                 let ftd_variable = key;
-                if (data[ftd_variable]) {
-                    ftd_variable = data[key];
+                if (referenced_data["$" + ftd_variable]) {
+                    ftd_variable = referenced_data["$" + ftd_variable];
                 }
                 ftd.set_value(id, ftd_variable, response[key])
             }
         }
     };
-    xhr.send(JSON.stringify(data));
+    console.log("Request Data", request_data);
+    xhr.send(JSON.stringify(request_data));
 }
 
 function redirect(id, data) {
@@ -1109,7 +1127,7 @@ window.ftd.post_init = function () {
 
     function initialise_device() {
         last_device = get_device();
-        console_log("last_device", last_device);
+        console.log("last_device", last_device);
         window.ftd.set_bool_for_all(FTD_DEVICE, last_device);
     }
 
@@ -1121,7 +1139,7 @@ window.ftd.post_init = function () {
 
         window.ftd.set_string_for_all(FTD_DEVICE, current);
         last_device = current;
-        console_log("last_device", last_device);
+        console.log("last_device", last_device);
     }
 
     function update_markdown_colors() {
