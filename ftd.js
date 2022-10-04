@@ -1119,7 +1119,7 @@ window.ftd.post_init = function () {
 
     function initialise_device() {
         last_device = get_device();
-        console.log("last_device", last_device);
+        console_log("last_device", last_device);
         window.ftd.set_bool_for_all(FTD_DEVICE, last_device);
     }
 
@@ -1131,7 +1131,7 @@ window.ftd.post_init = function () {
 
         window.ftd.set_string_for_all(FTD_DEVICE, current);
         last_device = current;
-        console.log("last_device", last_device);
+        console_log("last_device", last_device);
     }
 
     function update_markdown_colors() {
