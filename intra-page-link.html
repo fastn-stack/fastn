@@ -1746,10 +1746,10 @@ window.ftd = (function () {
             if (action["parameters"].data !== undefined) {
                 let value = action["parameters"].data[0].value;
                 let reference = JSON.parse(action["parameters"].data[0].reference);
-                let resolved_data = ftd_utils.resolve_reference(value, reference, data, obj);
+                let filtered_data = filter_object(reference, (key) => !key.startsWith("$"));
+                let resolved_data = ftd_utils.resolve_reference(value, filtered_data, data, obj);
                 let func = resolved_data.function? resolved_data.function.trim().replaceAll("-", "_").toLowerCase(): "http";
-                let method = resolved_data.method? resolved_data.method.trim().toUpperCase(): "GET";
-                window[func](id, method, resolved_data, reference);
+                window[func](id, resolved_data, reference);
             } else {
                 let target = action["target"].trim().replaceAll("-", "_");
                 window[target](id);
@@ -2008,37 +2008,53 @@ window.ftd = (function () {
     return exports;
 })();
 
-function console_print(id, data) {
-    console.log("console_print",data);
+function filter_object(data, filter_fn) {
+    if (data instanceof Object) {
+        let filtered_data = {};
+        for(const key of Object.keys(data)) {
+            if (filter_fn(key)) {
+                filtered_data[key] = data[key];
+            }
+        }
+        return filtered_data;
+    }
+    return data;
 }
 
-function http(id, method="GET", data, reference) {
+function http(id, request_data, referenced_data) {
+    let method = request_data.method? request_data.method.trim().toUpperCase(): "GET";
     let xhr = new XMLHttpRequest();
-    xhr.open(method.toUpperCase(), data.url);
+    xhr.open(method.toUpperCase(), request_data.url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status !== 200) {
-            console.log("Error in calling url: ", data.url, xhr.responseText);
+            console.log("Error in calling url: ", request_data.url, xhr.responseText);
             return;
         }
         if (xhr.readyState !== 4) {
             return;
         }
+
         let response = JSON.parse(xhr.response);
-        console_log("API response", data.url, xhr.response)
-        if (!!response.data && !!response.data.url) {
-            window.location.href = response.data.url;
-        } else if (!!response.data && !!response.data.reload) {
+        if (!!response && !!response.url) {
+            // Warning: we don't handle header location redirect
+            window.location.href = response.url;
+        } else if (!!response && !!response.reload) {
             window.location.reload();
         } else {
-            for (const key of Object.keys(response.data)) {
-                ftd.set_value(id, key, response.data[key])
+            for (const key of Object.keys(response)) {
+                let ftd_variable = key;
+                if (referenced_data["$" + ftd_variable]) {
+                    ftd_variable = referenced_data["$" + ftd_variable];
+                }
+                ftd.set_value(id, ftd_variable, response[key])
             }
         }
     };
-    xhr.send(JSON.stringify(data));
+    console_log("Request Data", request_data);
+    xhr.send(JSON.stringify(request_data));
 }
 
 function redirect(id, data) {
