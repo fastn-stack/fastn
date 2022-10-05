@@ -1508,7 +1508,7 @@ window.ftd = (function () {
             if (action["parameters"].data !== undefined) {
                 let value = action["parameters"].data[0].value;
                 let reference = JSON.parse(action["parameters"].data[0].reference);
-                let filtered_data = filter_object(reference, (key) => !key.startsWith("$"));
+                let filtered_data = filter_keys(reference, (key) => !key.startsWith("$"));
                 let resolved_data = ftd_utils.resolve_reference(value, filtered_data, data, obj);
                 let func = resolved_data.function? resolved_data.function.trim().replaceAll("-", "_").toLowerCase(): "http";
                 window[func](id, resolved_data, reference);
@@ -1770,52 +1770,78 @@ window.ftd = (function () {
     return exports;
 })();
 
-function filter_object(data, filter_fn) {
-    if (data instanceof Object) {
-        let filtered_data = {};
-        for(const key of Object.keys(data)) {
-            if (filter_fn(key)) {
-                filtered_data[key] = data[key];
-            }
-        }
-        return filtered_data;
+function filter_keys(data, filter_fn) {
+    if (!(data instanceof Object)) {
+        throw "data is not an object";
     }
-    return data;
-}
 
+    let o = {};
+
+    for(const key of Object.keys(data)) {
+        if (filter_fn(key)) {
+            o[key] = data[key];
+        }
+    }
+
+    return o;
+}
 function http(id, request_data, referenced_data) {
     let method = request_data.method? request_data.method.trim().toUpperCase(): "GET";
     let xhr = new XMLHttpRequest();
-    xhr.open(method.toUpperCase(), request_data.url);
+    xhr.open(method, request_data.url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status !== 200) {
-            console.log("Error in calling url: ", request_data.url, xhr.responseText);
+        if (xhr.readyState !== 4) {
+            // this means request is still underway
+            // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
             return;
         }
-        if (xhr.readyState !== 4) {
+
+        if (xhr.status > 500) {
+            console.log("Error in calling url: ", request_data.url, xhr.responseText);
             return;
         }
 
         let response = JSON.parse(xhr.response);
-        if (!!response && !!response.url) {
+        if (!!response && !!response.redirect) {
             // Warning: we don't handle header location redirect
-            window.location.href = response.url;
+            window.location.href = response.redirect;
         } else if (!!response && !!response.reload) {
             window.location.reload();
         } else {
-            for (const key of Object.keys(response)) {
-                let ftd_variable = key;
+            let data = {};
+
+            if (!!response.errors) {
+                for (key of Object.keys(response.errors)) {
+                    let value = response.errors[key];
+                    if (Array.isArray(value)) {
+                        // django returns a list of strings
+                        value = value.join(" ");
+                        // also django does not append `-error`
+                        key = key + "-error";
+                    }
+                    data[key] = value;
+                }
+            }
+
+            if (!!response.data) {
+                if (!!data) {
+                    console_log("both .errrors and .data are present in response, ignoring .data");
+                } else {
+                    data = response.data;
+                }
+            }
+
+            for (ftd_variable of Object.keys(data)) {
                 if (referenced_data["$" + ftd_variable]) {
                     ftd_variable = referenced_data["$" + ftd_variable];
                 }
-                ftd.set_value(id, ftd_variable, response[key])
+                ftd.set_value(id, ftd_variable, data[key])
             }
         }
     };
-    console_log("Request Data", request_data);
     xhr.send(JSON.stringify(request_data));
 }
 
