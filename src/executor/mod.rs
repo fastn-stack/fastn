@@ -9,7 +9,7 @@ mod tdoc;
 mod utils;
 mod value;
 
-pub use element::{Column, Element, Row};
+pub use element::{Column, Common, Container, Element, Row, Text};
 pub use main::{ExecuteDoc, RT};
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;
