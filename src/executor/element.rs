@@ -75,7 +75,7 @@ pub fn common_from_properties(
         is_not_visible: false,
         is_dummy: false,
         padding: ftd::executor::value::optional_i64(
-            "text",
+            "padding",
             properties,
             arguments,
             doc,

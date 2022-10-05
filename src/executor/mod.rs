@@ -1,3 +1,7 @@
+#[cfg(test)]
+#[macro_use]
+mod test;
+
 mod element;
 mod main;
 mod markup;
@@ -6,6 +10,7 @@ mod utils;
 mod value;
 
 pub use element::{Column, Element, Row};
+pub use main::{ExecuteDoc, RT};
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;
 

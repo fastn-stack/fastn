@@ -1,0 +1,56 @@
+{
+  "name": "foo",
+  "aliases": {
+    "ftd": "ftd"
+  },
+  "bag": {},
+  "main": {
+    "container": {
+      "children": [
+        {
+          "Text": {
+            "text": {
+              "value": {
+                "original": "Hello World",
+                "rendered": "Hello World"
+              },
+              "properties": [
+                {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "Hello World"
+                        }
+                      },
+                      "line_number": 1
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 1
+                }
+              ]
+            },
+            "common": {
+              "is_not_visible": false,
+              "is_dummy": false,
+              "padding": {
+                "value": null,
+                "properties": []
+              }
+            }
+          }
+        }
+      ]
+    },
+    "common": {
+      "is_not_visible": false,
+      "is_dummy": false,
+      "padding": {
+        "value": null,
+        "properties": []
+      }
+    }
+  }
+}

@@ -8,10 +8,16 @@ pub struct ExecuteDoc<'a> {
     pub instructions: &'a [ftd::interpreter2::Component],
 }
 
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct RT {
+    pub name: String,
+    pub aliases: ftd::Map<String>,
+    pub bag: ftd::Map<ftd::interpreter2::Thing>,
+    pub main: ftd::executor::Column,
+}
+
 impl<'a> ExecuteDoc<'a> {
-    pub fn from_interpreter(
-        document: ftd::interpreter2::Document,
-    ) -> ftd::executor::Result<ftd::executor::Column> {
+    pub fn from_interpreter(document: ftd::interpreter2::Document) -> ftd::executor::Result<RT> {
         let mut document = document;
         let execute_doc = ExecuteDoc {
             name: document.name.as_str(),
@@ -22,7 +28,13 @@ impl<'a> ExecuteDoc<'a> {
         .execute(&[])?;
         let mut main = ftd::executor::element::default_column();
         main.container.children.extend(execute_doc);
-        Ok(main)
+
+        Ok(RT {
+            name: document.name.to_string(),
+            aliases: document.aliases,
+            bag: document.data,
+            main,
+        })
     }
 
     fn execute(

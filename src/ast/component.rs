@@ -267,12 +267,9 @@ impl PropertySource {
     pub fn is_equal(&self, other: &PropertySource) -> bool {
         match self {
             PropertySource::Caption | PropertySource::Body => self.eq(other),
-            PropertySource::Header { name, .. } => match other {
-                PropertySource::Header {
+            PropertySource::Header { name, .. } => matches!(other, PropertySource::Header {
                     name: other_name, ..
-                } if other_name.eq(name) => true,
-                _ => false,
-            },
+               } if other_name.eq(name)),
         }
     }
 }
