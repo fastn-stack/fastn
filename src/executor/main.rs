@@ -41,14 +41,22 @@ impl<'a> ExecuteDoc<'a> {
         &mut self,
         parent_container: &[usize],
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
-        let mut elements = vec![];
-        for (idx, instruction) in self.instructions.iter().enumerate() {
-            let mut doc = ftd::executor::TDoc {
-                name: self.name,
-                aliases: self.aliases,
-                bag: self.bag,
-            };
+        let mut doc = ftd::executor::TDoc {
+            name: self.name,
+            aliases: self.aliases,
+            bag: self.bag,
+        };
 
+        ExecuteDoc::execute_from_instructions(self.instructions, &mut doc, parent_container)
+    }
+
+    fn execute_from_instructions(
+        instructions: &[ftd::interpreter2::Component],
+        doc: &mut ftd::executor::TDoc,
+        parent_container: &[usize],
+    ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
+        let mut elements = vec![];
+        for (idx, instruction) in instructions.iter().enumerate() {
             let local_container = {
                 let mut local_container = parent_container.to_vec();
                 local_container.push(idx);
@@ -57,7 +65,7 @@ impl<'a> ExecuteDoc<'a> {
 
             elements.push(ExecuteDoc::execute_from_instruction(
                 instruction,
-                &mut doc,
+                doc,
                 local_container.as_slice(),
             )?);
         }
@@ -68,7 +76,7 @@ impl<'a> ExecuteDoc<'a> {
     fn execute_from_instruction(
         instruction: &ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
-        _local_container: &[usize],
+        local_container: &[usize],
     ) -> ftd::executor::Result<ftd::executor::Element> {
         let component_definition = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
@@ -86,6 +94,20 @@ impl<'a> ExecuteDoc<'a> {
                         component_definition.arguments.as_slice(),
                         doc,
                         instruction.line_number,
+                    )?)
+                }
+                "ftd#row" => {
+                    let children = ExecuteDoc::execute_from_instructions(
+                        instruction.children.as_slice(),
+                        doc,
+                        local_container,
+                    )?;
+                    ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
+                        instruction.properties.as_slice(),
+                        component_definition.arguments.as_slice(),
+                        doc,
+                        instruction.line_number,
+                        children,
                     )?)
                 }
                 _ => unimplemented!(),
