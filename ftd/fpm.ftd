@@ -176,6 +176,7 @@ optional string path:
 optional string number:
 optional string font-icon:
 optional string img-src:
+optional string document:
 boolean is-heading:
 boolean is-disabled:
 boolean is-active: false

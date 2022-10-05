@@ -182,11 +182,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             }
         }
         // TODO: pass &fpm::http::Request
-
         serve_file(&mut config, &path).await
-
-        // if true: serve_file
-        // else: proxy_pass
     };
     t.it(Ok(response))
 }

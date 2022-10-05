@@ -124,6 +124,7 @@ pub struct Section {
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+    pub document: Option<String>,
 }
 
 impl Section {
@@ -164,6 +165,7 @@ pub struct Subsection {
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+    pub document: Option<String>,
 }
 
 impl Default for Subsection {
@@ -181,6 +183,7 @@ impl Default for Subsection {
             skip: false,
             readers: vec![],
             writers: vec![],
+            document: None,
         }
     }
 }
@@ -225,6 +228,7 @@ pub struct TocItem {
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+    pub document: Option<String>,
 }
 
 impl TocItem {
@@ -292,6 +296,7 @@ pub struct TocItemCompat {
     pub children: Vec<TocItemCompat>,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+    pub document: Option<String>,
 }
 
 impl TocItemCompat {
@@ -317,6 +322,7 @@ impl TocItemCompat {
             children: vec![],
             readers,
             writers,
+            document: None,
         }
     }
 
@@ -405,6 +411,15 @@ impl SitemapElement {
             SitemapElement::TocItem(s) => &mut s.writers,
         };
         writers.push(group.to_string());
+    }
+
+    pub(crate) fn set_document(&mut self, doc: &str) {
+        let document = match self {
+            SitemapElement::Section(s) => &mut s.document,
+            SitemapElement::Subsection(s) => &mut s.document,
+            SitemapElement::TocItem(s) => &mut s.document,
+        };
+        *document = Some(doc.to_string());
     }
 
     pub(crate) fn get_title(&self) -> Option<String> {
@@ -694,6 +709,8 @@ impl SitemapParser {
                             i.set_readers(v);
                         } else if k.eq("writers") {
                             i.set_writers(v);
+                        } else if k.eq("document") {
+                            i.set_document(v);
                         }
                         i.insert_key_value(k, v);
                     }
