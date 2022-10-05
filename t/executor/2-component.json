@@ -1,0 +1,146 @@
+{
+  "name": "foo",
+  "aliases": {
+    "ftd": "ftd"
+  },
+  "bag": {
+    "foo#flag": {
+      "Variable": {
+        "name": "foo#flag",
+        "kind": {
+          "kind": "Boolean",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Boolean": {
+                "value": true
+              }
+            },
+            "line_number": 1
+          }
+        },
+        "line_number": 1
+      }
+    }
+  },
+  "main": {
+    "container": {
+      "children": [
+        {
+          "Text": {
+            "text": {
+              "value": {
+                "original": "Hello World",
+                "rendered": "Hello World"
+              },
+              "properties": [
+                {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "Hello World"
+                        }
+                      },
+                      "line_number": 3
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 3
+                }
+              ]
+            },
+            "common": {
+              "is_not_visible": false,
+              "is_dummy": false,
+              "padding": {
+                "value": 40,
+                "properties": [
+                  {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Integer": {
+                            "value": 40
+                          }
+                        },
+                        "line_number": 4
+                      }
+                    },
+                    "source": {
+                      "Header": {
+                        "name": "padding",
+                        "mutable": false
+                      }
+                    },
+                    "condition": {
+                      "Equal": {
+                        "left": {
+                          "Clone": {
+                            "name": "foo#flag",
+                            "kind": {
+                              "kind": "Boolean",
+                              "caption": false,
+                              "body": false
+                            },
+                            "is_local_variable": false,
+                            "line_number": 4
+                          }
+                        },
+                        "right": {
+                          "Value": {
+                            "value": {
+                              "Boolean": {
+                                "value": true
+                              }
+                            },
+                            "line_number": 4
+                          }
+                        },
+                        "line_number": 4
+                      }
+                    },
+                    "line_number": 4
+                  },
+                  {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Integer": {
+                            "value": 30
+                          }
+                        },
+                        "line_number": 5
+                      }
+                    },
+                    "source": {
+                      "Header": {
+                        "name": "padding",
+                        "mutable": false
+                      }
+                    },
+                    "condition": null,
+                    "line_number": 5
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "common": {
+      "is_not_visible": false,
+      "is_dummy": false,
+      "padding": {
+        "value": null,
+        "properties": []
+      }
+    }
+  }
+}
