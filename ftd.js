@@ -781,7 +781,7 @@ window.ftd = (function () {
             if (action["parameters"].data !== undefined) {
                 let value = action["parameters"].data[0].value;
                 let reference = JSON.parse(action["parameters"].data[0].reference);
-                let filtered_data = filter_object(reference, (key) => !key.startsWith("$"));
+                let filtered_data = filter_keys(reference, (key) => !key.startsWith("$"));
                 let resolved_data = ftd_utils.resolve_reference(value, filtered_data, data, obj);
                 let func = resolved_data.function? resolved_data.function.trim().replaceAll("-", "_").toLowerCase(): "http";
                 window[func](id, resolved_data, reference);
@@ -1043,19 +1043,21 @@ window.ftd = (function () {
     return exports;
 })();
 
-function filter_object(data, filter_fn) {
-    if (data instanceof Object) {
-        let filtered_data = {};
-        for(const key of Object.keys(data)) {
-            if (filter_fn(key)) {
-                filtered_data[key] = data[key];
-            }
-        }
-        return filtered_data;
+function filter_keys(data, filter_fn) {
+    if (!(data instanceof Object)) {
+        throw "data is not an object";
     }
-    return data;
-}
 
+    let o = {};
+
+    for(const key of Object.keys(data)) {
+        if (filter_fn(key)) {
+            o[key] = data[key];
+        }
+    }
+
+    return o;
+}
 function http(id, request_data, referenced_data) {
     let method = request_data.method? request_data.method.trim().toUpperCase(): "GET";
     let xhr = new XMLHttpRequest();
