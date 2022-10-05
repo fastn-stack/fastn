@@ -24,19 +24,22 @@ pub fn interpret_helper(
 #[track_caller]
 fn p(s: &str, t: &str) {
     let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
-    let mut executor =
+    let executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
     let html = executor.main.to_node("foo").to_html("foo");
-    let html_str = std::fs::read_to_string("ftd.html")
-        .expect("cant read ftd.html")
-        .replace("__ftd_doc_title__", "")
-        .replace("__ftd_data__", "")
-        .replace("__ftd_external_children__", "")
-        .replace("__ftd__", html.as_str())
-        .replace("__ftd_js__", "")
-        .replace("__ftd_body_events__", "")
-        .replace("__ftd_css__", "")
-        .replace("__ftd_element_css__", "");
+    let html_str = ftd::html1::utils::trim_all_lines(
+        std::fs::read_to_string("ftd.html")
+            .expect("cant read ftd.html")
+            .replace("__ftd_doc_title__", "")
+            .replace("__ftd_data__", "")
+            .replace("__ftd_external_children__", "")
+            .replace("__ftd__", html.as_str())
+            .replace("__ftd_js__", "")
+            .replace("__ftd_body_events__", "")
+            .replace("__ftd_css__", "")
+            .replace("__ftd_element_css__", "")
+            .as_str(),
+    );
     assert_eq!(&t, &html_str, "Expected JSON: {}", html_str)
 }
 

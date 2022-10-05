@@ -110,6 +110,20 @@ impl<'a> ExecuteDoc<'a> {
                         children,
                     )?)
                 }
+                "ftd#column" => {
+                    let children = ExecuteDoc::execute_from_instructions(
+                        instruction.children.as_slice(),
+                        doc,
+                        local_container,
+                    )?;
+                    ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
+                        instruction.properties.as_slice(),
+                        component_definition.arguments.as_slice(),
+                        doc,
+                        instruction.line_number,
+                        children,
+                    )?)
+                }
                 _ => unimplemented!(),
             };
 

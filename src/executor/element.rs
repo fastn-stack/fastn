@@ -77,6 +77,18 @@ pub fn row_from_properties(
     Ok(Row { container, common })
 }
 
+pub fn column_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+    children: Vec<Element>,
+) -> ftd::executor::Result<Column> {
+    let common = common_from_properties(properties, arguments, doc, line_number)?;
+    let container = container_from_properties(properties, arguments, doc, line_number, children)?;
+    Ok(Column { container, common })
+}
+
 pub fn common_from_properties(
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],

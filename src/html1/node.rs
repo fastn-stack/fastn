@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
@@ -14,7 +16,7 @@ impl Node {
         Node {
             node: s(node),
             attrs: common.attrs(),
-            style: common.style(doc_id, &mut vec![]),
+            style: common.style(doc_id, &mut []),
             children: vec![],
             text: None,
             classes: vec![],
@@ -181,7 +183,7 @@ impl ftd::executor::Common {
         Default::default()
     }
 
-    fn style(&self, _doc_id: &str, _classes: &mut Vec<String>) -> ftd::Map<String> {
+    fn style(&self, _doc_id: &str, _classes: &mut [String]) -> ftd::Map<String> {
         let mut d: ftd::Map<String> = Default::default();
 
         d.insert(s("text-decoration"), s("none"));

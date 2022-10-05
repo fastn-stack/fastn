@@ -3,5 +3,6 @@
 mod test;
 
 mod node;
+mod utils;
 
 pub use node::Node;
