@@ -181,8 +181,23 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
                 }
             }
         }
+
+        let path_or_document = config
+            .package
+            .sitemap
+            .as_ref()
+            .map(|x| {
+                x.document(path.as_str())
+                    .unwrap_or_else(|| path.to_string())
+            })
+            .unwrap_or_else(|| path.to_string());
+
         // TODO: pass &fpm::http::Request
-        serve_file(&mut config, &path).await
+        serve_file(
+            &mut config,
+            camino::Utf8PathBuf::new().join(path_or_document).as_path(),
+        )
+        .await
     };
     t.it(Ok(response))
 }
