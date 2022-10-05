@@ -87,49 +87,61 @@ impl<'a> ExecuteDoc<'a> {
         };
 
         if component_definition.definition.name.eq("ftd.kernel") {
-            let element = match component_definition.name.as_str() {
-                "ftd#text" => {
-                    ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
-                        instruction.properties.as_slice(),
-                        component_definition.arguments.as_slice(),
-                        doc,
-                        instruction.line_number,
-                    )?)
-                }
-                "ftd#row" => {
-                    let children = ExecuteDoc::execute_from_instructions(
-                        instruction.children.as_slice(),
-                        doc,
-                        local_container,
-                    )?;
-                    ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
-                        instruction.properties.as_slice(),
-                        component_definition.arguments.as_slice(),
-                        doc,
-                        instruction.line_number,
-                        children,
-                    )?)
-                }
-                "ftd#column" => {
-                    let children = ExecuteDoc::execute_from_instructions(
-                        instruction.children.as_slice(),
-                        doc,
-                        local_container,
-                    )?;
-                    ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
-                        instruction.properties.as_slice(),
-                        component_definition.arguments.as_slice(),
-                        doc,
-                        instruction.line_number,
-                        children,
-                    )?)
-                }
-                _ => unimplemented!(),
-            };
-
-            return Ok(element);
+            return ExecuteDoc::execute_kernel_components(
+                instruction,
+                doc,
+                local_container,
+                &component_definition,
+            );
         }
 
         todo!()
+    }
+
+    fn execute_kernel_components(
+        instruction: &ftd::interpreter2::Component,
+        doc: &mut ftd::executor::TDoc,
+        local_container: &[usize],
+        component_definition: &ftd::interpreter2::ComponentDefinition,
+    ) -> ftd::executor::Result<ftd::executor::Element> {
+        Ok(match component_definition.name.as_str() {
+            "ftd#text" => {
+                ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
+                    instruction.properties.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    doc,
+                    instruction.line_number,
+                )?)
+            }
+            "ftd#row" => {
+                let children = ExecuteDoc::execute_from_instructions(
+                    instruction.children.as_slice(),
+                    doc,
+                    local_container,
+                )?;
+                ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
+                    instruction.properties.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    doc,
+                    instruction.line_number,
+                    children,
+                )?)
+            }
+            "ftd#column" => {
+                let children = ExecuteDoc::execute_from_instructions(
+                    instruction.children.as_slice(),
+                    doc,
+                    local_container,
+                )?;
+                ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
+                    instruction.properties.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    doc,
+                    instruction.line_number,
+                    children,
+                )?)
+            }
+            _ => unimplemented!(),
+        })
     }
 }
