@@ -11,6 +11,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(row_function()),
         ),
         (
+            "ftd#column".to_string(),
+            ftd::interpreter2::Thing::Component(column_function()),
+        ),
+        (
             "ftd#text".to_string(),
             ftd::interpreter2::Thing::Component(markup_function()),
         ),
@@ -20,7 +24,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
 
 pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
-        name: "ftd#row".to_string(),
+        name: "ftd#text".to_string(),
         arguments: [
             common_arguments(),
             vec![
@@ -79,6 +83,27 @@ pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {
 pub fn row_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#row".to_string(),
+        arguments: [
+            container_arguments(),
+            common_arguments(),
+            vec![ftd::interpreter2::Argument::default(
+                "spacing",
+                ftd::interpreter2::Kind::string()
+                    .into_optional()
+                    .into_kind_data(),
+            )],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
+}
+
+pub fn column_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#column".to_string(),
         arguments: [
             container_arguments(),
             common_arguments(),

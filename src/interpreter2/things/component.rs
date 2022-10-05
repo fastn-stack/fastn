@@ -141,15 +141,27 @@ impl Component {
     }
 }
 
-#[derive(Debug, Default, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub type PropertySource = ftd::ast::PropertySource;
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
-    pub value: Option<ftd::interpreter2::PropertyValue>,
+    pub value: ftd::interpreter2::PropertyValue,
     pub source: ftd::ast::PropertySource,
     pub condition: Option<ftd::interpreter2::Boolean>,
     pub line_number: usize,
 }
 
 impl Property {
+    pub(crate) fn resolve(
+        &self,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<Option<ftd::interpreter2::Value>> {
+        Ok(match self.condition {
+            Some(ref condition) if !condition.eval(doc)? => None,
+            _ => Some(self.value.clone().resolve(doc, self.line_number)?),
+        })
+    }
+
     fn from_ast_properties(
         ast_properties: Vec<ftd::ast::Property>,
         component_name: &str,
@@ -188,19 +200,13 @@ impl Property {
                 )?
             }
         };
-        let value = if let Some(ref v) = ast_property.value {
-            Some(
-                ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
-                    v.to_owned(),
-                    doc,
-                    argument.mutable,
-                    Some(&argument.kind),
-                    definition_name_with_arguments,
-                )?,
-            )
-        } else {
-            None
-        };
+        let value = ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
+            ast_property.value.to_owned(),
+            doc,
+            argument.mutable,
+            Some(&argument.kind),
+            definition_name_with_arguments,
+        )?;
 
         let condition = if let Some(ref v) = ast_property.condition {
             Some(ftd::interpreter2::Boolean::from_ast_condition(
@@ -212,7 +218,7 @@ impl Property {
             None
         };
 
-        if value.is_none() && !argument.kind.is_optional() {
+        if ast_property.value.is_null() && !argument.kind.is_optional() {
             return ftd::interpreter2::utils::e2(
                 format!(
                     "Excepted Value for argument {} in component {}",

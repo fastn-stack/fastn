@@ -183,7 +183,7 @@ impl VariableValue {
         }
     }
 
-    fn is_null(&self) -> bool {
+    pub fn is_null(&self) -> bool {
         matches!(self, VariableValue::Optional { value, .. } if value.is_none())
     }
 

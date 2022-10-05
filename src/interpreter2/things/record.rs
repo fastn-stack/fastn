@@ -86,6 +86,22 @@ impl Field {
         }
     }
 
+    pub fn to_sources(&self) -> Vec<ftd::interpreter2::PropertySource> {
+        let mut sources = vec![ftd::interpreter2::PropertySource::Header {
+            name: self.name.to_string(),
+            mutable: self.mutable,
+        }];
+        if self.is_caption() {
+            sources.push(ftd::interpreter2::PropertySource::Caption);
+        }
+
+        if self.is_body() {
+            sources.push(ftd::interpreter2::PropertySource::Body);
+        }
+
+        sources
+    }
+
     pub fn default(name: &str, kind: ftd::interpreter2::KindData) -> Field {
         Field {
             name: name.to_string(),

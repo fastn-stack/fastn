@@ -15,6 +15,7 @@ mod di;
 mod dnode;
 mod event;
 mod execute_doc;
+mod executor;
 mod html;
 pub mod interpreter;
 pub mod interpreter2;

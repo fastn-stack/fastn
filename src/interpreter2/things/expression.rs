@@ -5,40 +5,39 @@ pub enum Boolean {
     // if: $caption is not null
     IsNotNull {
         value: ftd::interpreter2::PropertyValue,
+        line_number: usize,
     },
     // if: $caption is null
     IsNull {
         value: ftd::interpreter2::PropertyValue,
+        line_number: usize,
     },
     // if: $list is not empty
     IsNotEmpty {
         value: ftd::interpreter2::PropertyValue,
+        line_number: usize,
     },
     // if: $list is empty
     IsEmpty {
         value: ftd::interpreter2::PropertyValue,
+        line_number: usize,
     },
     // if: $caption == hello | if: $foo
     Equal {
         left: ftd::interpreter2::PropertyValue,
         right: ftd::interpreter2::PropertyValue,
+        line_number: usize,
     },
     // if: $caption != hello
     NotEqual {
         left: ftd::interpreter2::PropertyValue,
         right: ftd::interpreter2::PropertyValue,
-    },
-    // if: not $show_something
-    Not {
-        of: Box<Boolean>,
+        line_number: usize,
     },
     // if: false
     Literal {
         value: bool,
-    },
-    // if: $array is empty
-    ListIsEmpty {
-        value: ftd::interpreter2::PropertyValue,
+        line_number: usize,
     },
 }
 
@@ -61,6 +60,7 @@ impl Boolean {
         Ok(match boolean.as_str() {
             "Literal" => Boolean::Literal {
                 value: left == "true",
+                line_number: condition.line_number,
             },
             "IsNotNull" | "IsNull" => {
                 let value = ftd::interpreter2::PropertyValue::from_string_with_argument(
@@ -80,9 +80,15 @@ impl Boolean {
                 }
 
                 if boolean.as_str() == "IsNotNull" {
-                    Boolean::IsNotNull { value }
+                    Boolean::IsNotNull {
+                        value,
+                        line_number: condition.line_number,
+                    }
                 } else {
-                    Boolean::IsNull { value }
+                    Boolean::IsNull {
+                        value,
+                        line_number: condition.line_number,
+                    }
                 }
             }
             "IsNotEmpty" | "IsEmpty" => {
@@ -102,9 +108,15 @@ impl Boolean {
                     );
                 }
                 if boolean.as_str() == "IsNotEmpty" {
-                    Boolean::IsNotEmpty { value }
+                    Boolean::IsNotEmpty {
+                        value,
+                        line_number: condition.line_number,
+                    }
                 } else {
-                    Boolean::IsEmpty { value }
+                    Boolean::IsEmpty {
+                        value,
+                        line_number: condition.line_number,
+                    }
                 }
             }
             "NotEqual" | "Equal" => {
@@ -129,7 +141,11 @@ impl Boolean {
                         condition.line_number,
                         definition_name_with_arguments,
                     )?;
-                    Boolean::Equal { left, right }
+                    Boolean::Equal {
+                        left,
+                        right,
+                        line_number: condition.line_number,
+                    }
                 } else {
                     Boolean::Equal {
                         left: ftd::interpreter2::PropertyValue::from_string_with_argument(
@@ -146,6 +162,7 @@ impl Boolean {
                             },
                             line_number: condition.line_number,
                         },
+                        line_number: condition.line_number,
                     }
                 }
             }
@@ -192,6 +209,40 @@ impl Boolean {
                     line_number,
                 )
             }
+        })
+    }
+
+    pub fn eval(&self, doc: &ftd::interpreter2::TDoc) -> ftd::interpreter2::Result<bool> {
+        Ok(match self {
+            Boolean::IsNotNull { value, line_number } => {
+                !value.clone().resolve(doc, *line_number)?.is_null()
+            }
+            Boolean::IsNull { value, line_number } => {
+                value.clone().resolve(doc, *line_number)?.is_null()
+            }
+            Boolean::IsNotEmpty { value, line_number } => {
+                !value.clone().resolve(doc, *line_number)?.is_empty()
+            }
+            Boolean::IsEmpty { value, line_number } => {
+                value.clone().resolve(doc, *line_number)?.is_empty()
+            }
+            Boolean::Equal {
+                left,
+                right,
+                line_number,
+            } => left
+                .clone()
+                .resolve(doc, *line_number)?
+                .is_equal(&right.clone().resolve(doc, *line_number)?),
+            Boolean::NotEqual {
+                left,
+                right,
+                line_number,
+            } => left
+                .clone()
+                .resolve(doc, *line_number)?
+                .is_equal(&right.clone().resolve(doc, *line_number)?),
+            Boolean::Literal { value, .. } => *value,
         })
     }
 }

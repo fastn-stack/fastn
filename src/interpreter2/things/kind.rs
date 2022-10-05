@@ -16,6 +16,15 @@ impl Kind {
         KindData::new(self)
     }
 
+    pub fn is_same_as(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::UI { .. }, Self::UI { .. }) => matches!(other, Self::UI { .. }),
+            (Self::Optional { kind, .. }, _) => kind.is_same_as(other),
+            (_, Self::Optional { kind: other, .. }) => self.is_same_as(other),
+            _ => self.eq(other),
+        }
+    }
+
     pub fn string() -> Kind {
         Kind::String
     }

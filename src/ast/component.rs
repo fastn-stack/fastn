@@ -193,7 +193,7 @@ type Argument = ftd::ast::Field;
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
-    pub value: Option<ftd::ast::VariableValue>,
+    pub value: ftd::ast::VariableValue,
     pub source: PropertySource,
     pub condition: Option<String>,
     pub line_number: usize,
@@ -205,7 +205,7 @@ impl Property {
     }
 
     fn new(
-        value: Option<ftd::ast::VariableValue>,
+        value: ftd::ast::VariableValue,
         source: PropertySource,
         condition: Option<String>,
         line_number: usize,
@@ -234,7 +234,7 @@ impl Property {
             );
         }
 
-        let value = ftd::ast::VariableValue::from_p1_header(header).inner();
+        let value = ftd::ast::VariableValue::from_p1_header(header);
 
         Ok(Property::new(
             value,
@@ -245,7 +245,7 @@ impl Property {
     }
 
     fn from_value(value: Option<String>, source: PropertySource, line_number: usize) -> Property {
-        let value = ftd::ast::VariableValue::from_value(&value, line_number).inner();
+        let value = ftd::ast::VariableValue::from_value(&value, line_number);
         Property::new(value, source, None, line_number)
     }
 }
@@ -260,6 +260,20 @@ pub enum PropertySource {
 impl Default for PropertySource {
     fn default() -> PropertySource {
         PropertySource::Caption
+    }
+}
+
+impl PropertySource {
+    pub fn is_equal(&self, other: &PropertySource) -> bool {
+        match self {
+            PropertySource::Caption | PropertySource::Body => self.eq(other),
+            PropertySource::Header { name, .. } => match other {
+                PropertySource::Header {
+                    name: other_name, ..
+                } if other_name.eq(name) => true,
+                _ => false,
+            },
+        }
     }
 }
 

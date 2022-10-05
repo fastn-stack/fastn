@@ -424,6 +424,41 @@ pub enum Value {
 }
 
 impl Value {
+    pub fn is_null(&self) -> bool {
+        if let Self::String { text, .. } = self {
+            return text.is_empty();
+        }
+        if let Self::Optional { data, .. } = self {
+            let value = if let Some(ftd::interpreter2::Value::String { text, .. }) = data.as_ref() {
+                text.is_empty()
+            } else {
+                false
+            };
+            if data.as_ref().eq(&None) || value {
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn is_empty(&self) -> bool {
+        if let Self::List { data, .. } = self {
+            if data.is_empty() {
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn is_equal(&self, other: &Self) -> bool {
+        match (self.to_owned().inner(), other.to_owned().inner()) {
+            (Some(Value::String { text: ref a, .. }), Some(Value::String { text: ref b, .. })) => {
+                a == b
+            }
+            (a, b) => a == b,
+        }
+    }
+
     pub(crate) fn inner(&self) -> Option<Self> {
         match self {
             Value::Optional { data, .. } => data.as_ref().to_owned(),
