@@ -1059,36 +1059,60 @@ function filter_object(data, filter_fn) {
 function http(id, request_data, referenced_data) {
     let method = request_data.method? request_data.method.trim().toUpperCase(): "GET";
     let xhr = new XMLHttpRequest();
-    xhr.open(method.toUpperCase(), request_data.url);
+    xhr.open(method, request_data.url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status !== 200) {
-            console.log("Error in calling url: ", request_data.url, xhr.responseText);
+        if (xhr.readyState !== 4) {
+            // this means request is still underway
+            // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
             return;
         }
-        if (xhr.readyState !== 4) {
+
+        if (xhr.status > 500) {
+            console.log("Error in calling url: ", request_data.url, xhr.responseText);
             return;
         }
 
         let response = JSON.parse(xhr.response);
-        if (!!response && !!response.url) {
+        if (!!response && !!response.redirect) {
             // Warning: we don't handle header location redirect
-            window.location.href = response.url;
+            window.location.href = response.redirect;
         } else if (!!response && !!response.reload) {
             window.location.reload();
         } else {
-            for (const key of Object.keys(response)) {
-                let ftd_variable = key;
+            let data = {};
+
+            if (!!response.errors) {
+                for (key of Object.keys(response.errors)) {
+                    let value = response.errors[key];
+                    if (Array.isArray(value)) {
+                        // django returns a list of strings
+                        value = value.join(" ");
+                        // also django does not append `-error`
+                        key = key + "-error";
+                    }
+                    data[key] = value;
+                }
+            }
+
+            if (!!response.data) {
+                if (!!data) {
+                    console_log("both .errrors and .data are present in response, ignoring .data");
+                } else {
+                    data = response.data;
+                }
+            }
+
+            for (ftd_variable of Object.keys(data)) {
                 if (referenced_data["$" + ftd_variable]) {
                     ftd_variable = referenced_data["$" + ftd_variable];
                 }
-                ftd.set_value(id, ftd_variable, response[key])
+                ftd.set_value(id, ftd_variable, data[key])
             }
         }
     };
-    console_log("Request Data", request_data);
     xhr.send(JSON.stringify(request_data));
 }
 
