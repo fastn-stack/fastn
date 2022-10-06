@@ -28,7 +28,6 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
         }
     }
 
-    config.current_document = Some(f.get_id());
     match f {
         fpm::File::Ftd(main_document) => {
             match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
@@ -181,12 +180,9 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
                 }
             }
         }
+
         // TODO: pass &fpm::http::Request
-
-        serve_file(&mut config, &path).await
-
-        // if true: serve_file
-        // else: proxy_pass
+        serve_file(&mut config, path.as_path()).await
     };
     t.it(Ok(response))
 }

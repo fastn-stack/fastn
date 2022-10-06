@@ -124,6 +124,7 @@ pub struct Section {
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+    pub document: Option<String>,
 }
 
 impl Section {
@@ -139,6 +140,21 @@ impl Section {
         }
         false
     }
+
+    pub fn document(&self, path: &str) -> Option<String> {
+        if fpm::utils::ids_matches(self.id.as_str(), path) {
+            return self.document.clone();
+        }
+
+        for subsection in self.subsections.iter() {
+            let document = subsection.document(path);
+            if document.is_some() {
+                return document;
+            }
+        }
+        None
+    }
+
     /// returns the file id portion of the url only in case
     /// any component id is referred in the url itself
     pub fn get_file_id(&self) -> String {
@@ -164,6 +180,7 @@ pub struct Subsection {
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+    pub document: Option<String>,
 }
 
 impl Default for Subsection {
@@ -181,6 +198,7 @@ impl Default for Subsection {
             skip: false,
             readers: vec![],
             writers: vec![],
+            document: None,
         }
     }
 }
@@ -203,6 +221,26 @@ impl Subsection {
 
         false
     }
+
+    /// path: /foo/demo/
+    /// path: /
+    fn document(&self, path: &str) -> Option<String> {
+        if let Some(id) = self.id.as_ref() {
+            if fpm::utils::ids_matches(path, id.as_str()) {
+                return self.document.clone();
+            }
+        }
+
+        for toc in self.toc.iter() {
+            let document = toc.document(path);
+            if document.is_some() {
+                return document;
+            }
+        }
+
+        None
+    }
+
     /// returns the file id portion of the url only in case
     /// any component id is referred in the url itself
     pub fn get_file_id(&self) -> Option<String> {
@@ -225,6 +263,7 @@ pub struct TocItem {
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+    pub document: Option<String>,
 }
 
 impl TocItem {
@@ -242,6 +281,22 @@ impl TocItem {
         }
 
         false
+    }
+
+    /// path: /foo/demo/
+    /// path: /
+    pub fn document(&self, path: &str) -> Option<String> {
+        if fpm::utils::ids_matches(self.id.as_str(), path) {
+            return self.document.clone();
+        }
+
+        for child in self.children.iter() {
+            let document = child.document(path);
+            if document.is_some() {
+                return document;
+            }
+        }
+        None
     }
 
     /// returns the file id portion of the url only in case
@@ -292,6 +347,7 @@ pub struct TocItemCompat {
     pub children: Vec<TocItemCompat>,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+    pub document: Option<String>,
 }
 
 impl TocItemCompat {
@@ -317,6 +373,7 @@ impl TocItemCompat {
             children: vec![],
             readers,
             writers,
+            document: None,
         }
     }
 
@@ -405,6 +462,15 @@ impl SitemapElement {
             SitemapElement::TocItem(s) => &mut s.writers,
         };
         writers.push(group.to_string());
+    }
+
+    pub(crate) fn set_document(&mut self, doc: &str) {
+        let document = match self {
+            SitemapElement::Section(s) => &mut s.document,
+            SitemapElement::Subsection(s) => &mut s.document,
+            SitemapElement::TocItem(s) => &mut s.document,
+        };
+        *document = Some(doc.to_string());
     }
 
     pub(crate) fn get_title(&self) -> Option<String> {
@@ -694,6 +760,8 @@ impl SitemapParser {
                             i.set_readers(v);
                         } else if k.eq("writers") {
                             i.set_writers(v);
+                        } else if k.eq("document") {
+                            i.set_document(v);
                         }
                         i.insert_key_value(k, v);
                     }
@@ -1611,8 +1679,19 @@ impl Sitemap {
                 return true;
             }
         }
-
         false
+    }
+
+    /// path: foo/temp/
+    /// path: /
+    pub fn document(&self, path: &str) -> Option<String> {
+        for section in self.sections.iter() {
+            let document = section.document(path);
+            if document.is_some() {
+                return document;
+            }
+        }
+        None
     }
 }
 

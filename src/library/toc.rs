@@ -39,6 +39,7 @@ pub struct TocItemCompat {
     #[serde(rename = "img-src")]
     pub image_src: Option<String>,
     pub children: Vec<TocItemCompat>,
+    pub document: Option<String>,
 }
 
 #[derive(PartialEq, Eq, Debug, Default, Clone)]
@@ -53,6 +54,7 @@ pub struct TocItem {
     pub img_src: Option<String>,
     pub font_icon: Option<String>,
     pub children: Vec<TocItem>,
+    pub document: Option<String>,
 }
 
 impl TocItem {
@@ -74,6 +76,7 @@ impl TocItem {
             is_disabled: self.is_disabled,
             is_active: false,
             is_open: false,
+            document: self.document.clone(),
         }
     }
 }
@@ -459,7 +462,8 @@ mod test {
                         is_heading: true,
                         font_icon: None,
                         children: vec![],
-                        path: None
+                        path: None,
+                        document: None,
                     },
                     super::TocItem {
                         title: Some(format!("Test Page")),
@@ -471,7 +475,8 @@ mod test {
                         img_src: None,
                         font_icon: None,
                         children: vec![],
-                        path: None
+                        path: None,
+                        document: None,
                     },
                     super::TocItem {
                         title: Some(format!("Title One")),
@@ -483,7 +488,8 @@ mod test {
                         img_src: None,
                         font_icon: None,
                         children: vec![],
-                        path: None
+                        path: None,
+                        document: None,
                     },
                     super::TocItem {
                         title: Some(format!("Home Page")),
@@ -495,6 +501,7 @@ mod test {
                         img_src: None,
                         font_icon: None,
                         path: None,
+                        document: None,
                         children: vec![
                             super::TocItem {
                                 title: Some(format!("Nested Title")),
@@ -506,7 +513,8 @@ mod test {
                                 img_src: None,
                                 font_icon: None,
                                 children: vec![],
-                                path: None
+                                path: None,
+                                document: None,
                             },
                             super::TocItem {
                                 id: None,
@@ -518,7 +526,8 @@ mod test {
                                 img_src: None,
                                 font_icon: None,
                                 children: vec![],
-                                path: None
+                                path: None,
+                                document: None,
                             },
                             super::TocItem {
                                 title: Some(format!("Nested Title 2")),
@@ -530,7 +539,8 @@ mod test {
                                 img_src: None,
                                 font_icon: None,
                                 children: vec![],
-                                path: None
+                                path: None,
+                                document: None,
                             },
                             super::TocItem {
                                 id: None,
@@ -542,6 +552,7 @@ mod test {
                                 img_src: None,
                                 font_icon: None,
                                 path: None,
+                                document: None,
                                 children: vec![super::TocItem {
                                     id: None,
                                     title: Some(format!("Further Nesting")),
@@ -552,7 +563,8 @@ mod test {
                                     img_src: None,
                                     font_icon: None,
                                     children: vec![],
-                                    path: None
+                                    path: None,
+                                    document: None,
                                 },],
                             },
                             super::TocItem {
@@ -565,7 +577,8 @@ mod test {
                                 img_src: None,
                                 font_icon: None,
                                 children: vec![],
-                                path: None
+                                path: None,
+                                document: None,
                             },
                         ],
                     }
@@ -593,7 +606,8 @@ mod test {
                     img_src: None,
                     font_icon: None,
                     children: vec![],
-                    path: None
+                    path: None,
+                    document: None,
                 }]
             }
         );
@@ -620,7 +634,8 @@ mod test {
                         img_src: None,
                         font_icon: None,
                         children: vec![],
-                        path: None
+                        path: None,
+                        document: None,
                     },
                     super::TocItem {
                         title: Some(format!("Hindi")),
@@ -632,7 +647,8 @@ mod test {
                         img_src: None,
                         font_icon: None,
                         children: vec![],
-                        path: None
+                        path: None,
+                        document: None,
                     }
                 ]
             }
