@@ -638,3 +638,27 @@ For HTTP request get `doc-id` and `read`. Based on this find the groups using
 (traverse all group trees, and find all identities, remove the minus signs,
 and create a set of all identities). Pass `total identities` to
 `get-identities API`, it returns `actual identities` for the current user.
+
+
+-- ft.h1: Custom URL Support in Sitemap
+
+You can define `document` key in Sitemap's section, subsection and toc.
+
+In the below example, If request come for `/section/` so document
+`section-temp.ftd` will be served. If request come for `/sub-section/` so
+document `sub-section.ftd` will be served. If request come for `/toc1/` so
+document `toc-temp.ftd` will be served.
+
+-- ftd.code:
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Section: /section/
+  document: section-temp.ftd
+
+## SubSection: /sub-section/
+  document: sub-section.ftd
+
+- Toc 1: /toc1/
+  document: toc-temp.ftd
