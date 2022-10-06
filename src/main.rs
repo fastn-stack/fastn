@@ -175,20 +175,18 @@ pub fn interpret_helper(
                 break;
             }
             ftd::Interpreter::StuckOnProcessor { state, section } => {
-                match lib.is_lazy_processor(
+                if lib.is_lazy_processor(
                     &section,
                     &state.tdoc(&mut Default::default(), &mut Default::default()),
                 )? {
-                    true => {
-                        s = state.continue_after_storing_section(&section)?;
-                    }
-                    false => {
-                        let value = lib.process(
-                            &section,
-                            &state.tdoc(&mut Default::default(), &mut Default::default()),
-                        )?;
-                        s = state.continue_after_processor(&section, value)?;
-                    }
+                    s = state.continue_after_storing_section(&section)?;
+                }
+                else {
+                    let value = lib.process(
+                        &section,
+                        &state.tdoc(&mut Default::default(), &mut Default::default()),
+                    )?;
+                    s = state.continue_after_processor(&section, value)?;
                 }
             }
             ftd::Interpreter::StuckOnImport { module, state: st } => {
@@ -287,20 +285,16 @@ impl ExampleLibrary {
     /// checks if the current processor is a lazy processor
     /// or not
     ///
-    /// lazy processor = processor which needs to be resolved after
-    /// interpretation
+    /// for more details
+    /// visit www.fpm.dev/glossary/#lazy-processor
     pub fn is_lazy_processor(
         &self,
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<bool> {
-        match section
+        Ok(section
             .header
-            .str(doc.name, section.line_number, "$processor$")?
-        {
-            "page-headings" => Ok(true),
-            _ => Ok(false),
-        }
+            .str(doc.name, section.line_number, "$processor$")?.eq("page-headings"))
     }
 
     pub fn process(
