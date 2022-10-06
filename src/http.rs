@@ -60,24 +60,6 @@ pub struct Request {
     body: actix_web::web::Bytes,
 }
 
-fn get_cookies(headers: &reqwest::header::HeaderMap) -> std::collections::HashMap<String, String> {
-    let mut cookies = std::collections::HashMap::new();
-    if let Some(cookie) = headers.get("cookie") {
-        if let Ok(cookie) = cookie.to_str() {
-            for cookie in cookie.split(';') {
-                let cookie = cookie.trim();
-                if let Some(index) = cookie.find('=') {
-                    let (key, value) = cookie.split_at(index);
-                    let key = key.trim();
-                    let value = value.trim_start_matches('=').trim();
-                    cookies.insert(key.to_string(), value.to_string());
-                }
-            }
-        }
-    }
-    cookies
-}
-
 impl Request {
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         let headers = {
@@ -88,7 +70,7 @@ impl Request {
             headers
         };
 
-        Request {
+        return Request {
             cookies: get_cookies(&headers),
             body,
             method: req.method().to_string(),
@@ -101,11 +83,56 @@ impl Request {
                     req.query_string(),
                 ).unwrap().0
             },
+        };
+
+        fn get_cookies(
+            headers: &reqwest::header::HeaderMap,
+        ) -> std::collections::HashMap<String, String> {
+            let mut cookies = std::collections::HashMap::new();
+            if let Some(cookie) = headers.get("cookie") {
+                if let Ok(cookie) = cookie.to_str() {
+                    for cookie in cookie.split(';') {
+                        let cookie = cookie.trim();
+                        if let Some(index) = cookie.find('=') {
+                            let (key, value) = cookie.split_at(index);
+                            let key = key.trim();
+                            let value = value.trim_start_matches('=').trim();
+                            cookies.insert(key.to_string(), value.to_string());
+                        }
+                    }
+                }
+            }
+            cookies
         }
     }
 
     pub fn json<T: serde::de::DeserializeOwned>(&self) -> fpm::Result<T> {
         Ok(serde_json::from_slice(&self.body)?)
+    }
+
+    pub fn body_as_json(
+        &self,
+    ) -> fpm::Result<Option<std::collections::HashMap<String, serde_json::Value>>> {
+        if self.body.is_empty() {
+            return Ok(None);
+        }
+        if self.content_type() != Some(mime_guess::mime::APPLICATION_JSON) {
+            return Err(fpm::Error::UsageError {
+                message: fpm::warning!(
+                    "expected content type {}, got {:?}",
+                    mime_guess::mime::APPLICATION_JSON,
+                    self.content_type()
+                ),
+            });
+        }
+        Ok(Some(serde_json::from_slice(&self.body)?))
+    }
+
+    pub fn content_type(&self) -> Option<mime_guess::Mime> {
+        self.headers
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .and_then(|v| v.parse().ok())
     }
 
     pub fn body(&self) -> &[u8] {
