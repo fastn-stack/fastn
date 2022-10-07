@@ -996,7 +996,7 @@ let ftd_utils = {
     },
 
     is_equal_condition: function (value, condition) {
-        let val = value.toString().replaceAll("\"", "");
+        let val = value === null ? "" : value.toString().replaceAll("\"", "");
         return ((value === condition)
             || (condition === "$IsNull$" && (val.trim().length === 0 || value === null))
             || (condition === "$IsNotNull$" && (val.trim().length !== 0 && value !== null))
