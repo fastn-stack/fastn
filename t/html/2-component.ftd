@@ -1,0 +1,8 @@
+-- ftd.column:
+padding: 40
+
+-- ftd.text: Hello World
+
+-- ftd.text: again
+
+-- end: ftd.column
