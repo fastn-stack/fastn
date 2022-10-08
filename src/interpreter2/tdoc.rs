@@ -506,6 +506,7 @@ impl<'a> TDoc<'a> {
                                         },
                                         line_number,
                                     },
+                                    conditional_value: vec![],
                                     line_number,
                                 });
                             if let Some(remaining) = remaining {
@@ -532,6 +533,7 @@ impl<'a> TDoc<'a> {
                                 value: val.to_owned(),
                                 line_number: *line_number,
                             },
+                            conditional_value: vec![],
                             line_number: *line_number,
                         })
                     } else if let Some(ftd::interpreter2::PropertyValue::Reference {

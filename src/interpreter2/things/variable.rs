@@ -4,6 +4,7 @@ pub struct Variable {
     pub kind: ftd::interpreter2::KindData,
     pub mutable: bool,
     pub value: ftd::interpreter2::PropertyValue,
+    pub conditional_value: Vec<ConditionalValue>,
     pub line_number: usize,
 }
 
@@ -30,6 +31,7 @@ impl Variable {
             kind,
             mutable: variable_definition.mutable,
             value,
+            conditional_value: vec![],
             line_number: variable_definition.line_number,
         })
     }
@@ -56,5 +58,26 @@ impl Variable {
             variable_definition.line_number,
         )?;
         Ok(variable)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ConditionalValue {
+    pub condition: ftd::interpreter2::Boolean,
+    pub value: ftd::interpreter2::PropertyValue,
+    pub line_number: usize,
+}
+
+impl ConditionalValue {
+    pub fn new(
+        condition: ftd::interpreter2::Boolean,
+        value: ftd::interpreter2::PropertyValue,
+        line_number: usize,
+    ) -> ConditionalValue {
+        ConditionalValue {
+            condition,
+            value,
+            line_number,
+        }
     }
 }

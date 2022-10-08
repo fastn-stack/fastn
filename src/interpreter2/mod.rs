@@ -16,7 +16,7 @@ pub use things::{
     kind::{Kind, KindData},
     record::{Field, Record},
     value::{PropertyValue, Value},
-    variable::Variable,
+    variable::{ConditionalValue, Variable},
     Thing,
 };
 

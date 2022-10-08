@@ -12,6 +12,7 @@
           "caption": false,
           "body": false
         },
+        "conditional_value": [],
         "mutable": true,
         "value": {
           "Reference": {
@@ -44,6 +45,7 @@
           "caption": false,
           "body": false
         },
+        "conditional_value": [],
         "mutable": true,
         "value": {
           "Value": {
@@ -90,6 +92,7 @@
           "caption": false,
           "body": false
         },
+        "conditional_value": [],
         "mutable": true,
         "value": {
           "Value": {

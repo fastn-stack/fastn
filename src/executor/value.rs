@@ -36,7 +36,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
 
     let sources = argument.to_sources();
     let ftd::executor::Value { properties, value } =
-        find_value_by_source(sources.as_slice(), properties, doc)?;
+        find_value_by_argument(sources.as_slice(), properties, doc, &argument, line_number)?;
     let expected_kind = value.as_ref().map(|v| v.kind());
     if !expected_kind
         .as_ref()
@@ -55,20 +55,45 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
     Ok(ftd::executor::Value::new(value, properties))
 }
 
-pub(crate) fn find_value_by_source(
+pub(crate) fn find_properties_by_source(
     source: &[ftd::interpreter2::PropertySource],
     properties: &[ftd::interpreter2::Property],
     doc: &ftd::executor::TDoc,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
+    argument: &ftd::interpreter2::Argument,
+    line_number: usize,
+) -> ftd::executor::Result<Vec<ftd::interpreter2::Property>> {
     use itertools::Itertools;
 
-    let properties = properties
+    let mut properties = properties
         .iter()
         .filter(|v| source.iter().any(|s| v.source.is_equal(s)))
         .map(ToOwned::to_owned)
         .collect_vec();
 
-    ftd::executor::utils::validate_properties(properties.as_slice(), doc.name)?;
+    ftd::executor::utils::validate_properties_and_set_default(
+        &mut properties,
+        argument,
+        doc.name,
+        line_number,
+    )?;
+
+    Ok(properties)
+}
+
+pub(crate) fn find_value_by_argument(
+    source: &[ftd::interpreter2::PropertySource],
+    properties: &[ftd::interpreter2::Property],
+    doc: &ftd::executor::TDoc,
+    argument: &ftd::interpreter2::Argument,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter2::Value>>> {
+    let properties = ftd::executor::value::find_properties_by_source(
+        source,
+        properties,
+        doc,
+        argument,
+        line_number,
+    )?;
 
     let mut value = None;
     for p in properties.iter() {

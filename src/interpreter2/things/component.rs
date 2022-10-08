@@ -146,7 +146,7 @@ pub type PropertySource = ftd::ast::PropertySource;
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
     pub value: ftd::interpreter2::PropertyValue,
-    pub source: ftd::ast::PropertySource,
+    pub source: ftd::interpreter2::PropertySource,
     pub condition: Option<ftd::interpreter2::Boolean>,
     pub line_number: usize,
 }

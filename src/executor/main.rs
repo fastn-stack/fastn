@@ -95,6 +95,14 @@ impl<'a> ExecuteDoc<'a> {
             );
         }
 
+        let _local_variables = doc.insert_local_variables(
+            component_definition.name.as_str(),
+            instruction.properties.as_slice(),
+            component_definition.arguments.as_slice(),
+            local_container,
+            instruction.line_number,
+        )?;
+
         todo!()
     }
 
