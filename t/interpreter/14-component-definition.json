@@ -1,0 +1,454 @@
+{
+  "data": {
+    "foo#d1": {
+      "Variable": {
+        "name": "foo#d1",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Default 1"
+              }
+            },
+            "line_number": 20
+          }
+        },
+        "line_number": 20
+      }
+    },
+    "foo#f1": {
+      "Variable": {
+        "name": "foo#f1",
+        "kind": {
+          "kind": "Boolean",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "Boolean": {
+                "value": true
+              }
+            },
+            "line_number": 21
+          }
+        },
+        "line_number": 21
+      }
+    },
+    "foo#n1": {
+      "Variable": {
+        "name": "foo#n1",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Name 1"
+              }
+            },
+            "line_number": 19
+          }
+        },
+        "line_number": 19
+      }
+    },
+    "foo#print": {
+      "Component": {
+        "name": "foo#print",
+        "arguments": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "default",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 3
+          },
+          {
+            "name": "padding",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 4
+          },
+          {
+            "name": "flag",
+            "kind": {
+              "kind": "Boolean",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 5
+          }
+        ],
+        "definition": {
+          "name": "ftd#column",
+          "properties": [],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [
+            {
+              "name": "ftd#text",
+              "properties": [
+                {
+                  "value": {
+                    "Clone": {
+                      "name": "foo#print.name",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
+                      },
+                      "is_local_variable": true,
+                      "line_number": 10
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "text",
+                      "mutable": false
+                    }
+                  },
+                  "condition": {
+                    "Equal": {
+                      "left": {
+                        "Clone": {
+                          "name": "foo#print.flag",
+                          "kind": {
+                            "kind": "Boolean",
+                            "caption": false,
+                            "body": false
+                          },
+                          "is_local_variable": true,
+                          "line_number": 10
+                        }
+                      },
+                      "right": {
+                        "Value": {
+                          "value": {
+                            "Boolean": {
+                              "value": true
+                            }
+                          },
+                          "line_number": 10
+                        }
+                      },
+                      "line_number": 10
+                    }
+                  },
+                  "line_number": 10
+                },
+                {
+                  "value": {
+                    "Clone": {
+                      "name": "foo#print.default",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
+                      },
+                      "is_local_variable": true,
+                      "line_number": 11
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "text",
+                      "mutable": false
+                    }
+                  },
+                  "condition": null,
+                  "line_number": 11
+                },
+                {
+                  "value": {
+                    "Clone": {
+                      "name": "foo#print.padding",
+                      "kind": {
+                        "kind": "Integer",
+                        "caption": false,
+                        "body": false
+                      },
+                      "is_local_variable": true,
+                      "line_number": 12
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "padding",
+                      "mutable": false
+                    }
+                  },
+                  "condition": {
+                    "Equal": {
+                      "left": {
+                        "Clone": {
+                          "name": "foo#print.flag",
+                          "kind": {
+                            "kind": "Boolean",
+                            "caption": false,
+                            "body": false
+                          },
+                          "is_local_variable": true,
+                          "line_number": 12
+                        }
+                      },
+                      "right": {
+                        "Value": {
+                          "value": {
+                            "Boolean": {
+                              "value": true
+                            }
+                          },
+                          "line_number": 12
+                        }
+                      },
+                      "line_number": 12
+                    }
+                  },
+                  "line_number": 12
+                }
+              ],
+              "iteration": null,
+              "condition": null,
+              "events": [],
+              "children": [],
+              "line_number": 9
+            }
+          ],
+          "line_number": 7
+        },
+        "line_number": 1
+      }
+    }
+  },
+  "name": "foo",
+  "instructions": [
+    {
+      "name": "foo#print",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#n1",
+              "kind": {
+                "kind": "String",
+                "caption": false,
+                "body": false
+              },
+              "is_local_variable": false,
+              "line_number": 24
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "name",
+              "mutable": true
+            }
+          },
+          "condition": {
+            "Equal": {
+              "left": {
+                "Clone": {
+                  "name": "foo#f1",
+                  "kind": {
+                    "kind": "Boolean",
+                    "caption": false,
+                    "body": false
+                  },
+                  "is_local_variable": false,
+                  "line_number": 24
+                }
+              },
+              "right": {
+                "Value": {
+                  "value": {
+                    "Boolean": {
+                      "value": true
+                    }
+                  },
+                  "line_number": 24
+                }
+              },
+              "line_number": 24
+            }
+          },
+          "line_number": 24
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Name 2"
+                }
+              },
+              "line_number": 25
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "name",
+              "mutable": true
+            }
+          },
+          "condition": null,
+          "line_number": 25
+        },
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#d1",
+              "kind": {
+                "kind": "String",
+                "caption": false,
+                "body": false
+              },
+              "is_local_variable": false,
+              "line_number": 26
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "default",
+              "mutable": true
+            }
+          },
+          "condition": {
+            "Equal": {
+              "left": {
+                "Clone": {
+                  "name": "foo#f1",
+                  "kind": {
+                    "kind": "Boolean",
+                    "caption": false,
+                    "body": false
+                  },
+                  "is_local_variable": false,
+                  "line_number": 26
+                }
+              },
+              "right": {
+                "Value": {
+                  "value": {
+                    "Boolean": {
+                      "value": true
+                    }
+                  },
+                  "line_number": 26
+                }
+              },
+              "line_number": 26
+            }
+          },
+          "line_number": 26
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Default 2"
+                }
+              },
+              "line_number": 27
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "default",
+              "mutable": true
+            }
+          },
+          "condition": null,
+          "line_number": 27
+        },
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#f1",
+              "kind": {
+                "kind": "Boolean",
+                "caption": false,
+                "body": false
+              },
+              "is_local_variable": false,
+              "line_number": 28
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "flag",
+              "mutable": true
+            }
+          },
+          "condition": null,
+          "line_number": 28
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "Integer": {
+                  "value": 20
+                }
+              },
+              "line_number": 29
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "padding",
+              "mutable": true
+            }
+          },
+          "condition": null,
+          "line_number": 29
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 23
+    }
+  ],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}

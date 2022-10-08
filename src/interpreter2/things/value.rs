@@ -294,7 +294,7 @@ impl PropertyValue {
                 )?;
 
                 match expected_kind {
-                    Some(ekind) if !ekind.kind.eq(&found_kind.kind) => {
+                    Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter2::utils::e2(
                             format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
                                 .as_str(),
@@ -323,7 +323,7 @@ impl PropertyValue {
                 )?;
 
                 match expected_kind {
-                    Some(ekind) if !ekind.kind.eq(&found_kind.kind) => {
+                    Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter2::utils::e2(
                             format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
                                 .as_str(),
