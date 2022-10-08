@@ -8,7 +8,7 @@
           "caption": false,
           "body": false
         },
-        "mutable": false,
+        "mutable": true,
         "value": {
           "Value": {
             "value": {
@@ -82,12 +82,14 @@
         },
         "mutable": true,
         "value": {
-          "Value": {
-            "value": {
-              "String": {
-                "text": "Name2"
-              }
+          "Reference": {
+            "name": "foo#n",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
             },
+            "is_local_variable": false,
             "line_number": 13
           }
         },

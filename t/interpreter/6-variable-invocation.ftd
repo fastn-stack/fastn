@@ -8,6 +8,6 @@ string gender:
 $name: $name
 gender: f
 
--- string n: sjdh
+-- string $n: sjdh
 
--- $n1.name: Name2
+-- $n1.name: $n
