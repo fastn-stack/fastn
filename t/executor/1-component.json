@@ -38,7 +38,8 @@
               "padding": {
                 "value": null,
                 "properties": []
-              }
+              },
+              "id": "0"
             }
           }
         }
@@ -50,7 +51,8 @@
       "padding": {
         "value": null,
         "properties": []
-      }
+      },
+      "id": ""
     }
   }
 }

@@ -1,0 +1,255 @@
+{
+  "name": "foo",
+  "aliases": {
+    "ftd": "ftd"
+  },
+  "bag": {
+    "foo#flag": {
+      "Variable": {
+        "name": "foo#flag",
+        "kind": {
+          "kind": "Boolean",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Boolean": {
+                "value": true
+              }
+            },
+            "line_number": 1
+          }
+        },
+        "conditional_value": [],
+        "line_number": 1
+      }
+    }
+  },
+  "main": {
+    "container": {
+      "children": [
+        {
+          "Column": {
+            "container": {
+              "children": [
+                {
+                  "Text": {
+                    "text": {
+                      "value": {
+                        "original": "Hello World",
+                        "rendered": "Hello World"
+                      },
+                      "properties": [
+                        {
+                          "value": {
+                            "Value": {
+                              "value": {
+                                "String": {
+                                  "text": "Hello World"
+                                }
+                              },
+                              "line_number": 5
+                            }
+                          },
+                          "source": "Caption",
+                          "condition": null,
+                          "line_number": 5
+                        }
+                      ]
+                    },
+                    "common": {
+                      "is_not_visible": false,
+                      "is_dummy": false,
+                      "padding": {
+                        "value": 40,
+                        "properties": [
+                          {
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Integer": {
+                                    "value": 40
+                                  }
+                                },
+                                "line_number": 6
+                              }
+                            },
+                            "source": {
+                              "Header": {
+                                "name": "padding",
+                                "mutable": false
+                              }
+                            },
+                            "condition": {
+                              "Equal": {
+                                "left": {
+                                  "Clone": {
+                                    "name": "foo#flag",
+                                    "kind": {
+                                      "kind": "Boolean",
+                                      "caption": false,
+                                      "body": false
+                                    },
+                                    "is_local_variable": false,
+                                    "line_number": 6
+                                  }
+                                },
+                                "right": {
+                                  "Value": {
+                                    "value": {
+                                      "Boolean": {
+                                        "value": true
+                                      }
+                                    },
+                                    "line_number": 6
+                                  }
+                                },
+                                "line_number": 6
+                              }
+                            },
+                            "line_number": 6
+                          },
+                          {
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Integer": {
+                                    "value": 30
+                                  }
+                                },
+                                "line_number": 7
+                              }
+                            },
+                            "source": {
+                              "Header": {
+                                "name": "padding",
+                                "mutable": false
+                              }
+                            },
+                            "condition": null,
+                            "line_number": 7
+                          }
+                        ]
+                      },
+                      "id": "0,0"
+                    }
+                  }
+                },
+                {
+                  "Column": {
+                    "container": {
+                      "children": [
+                        {
+                          "Text": {
+                            "text": {
+                              "value": {
+                                "original": "Hello",
+                                "rendered": "Hello"
+                              },
+                              "properties": [
+                                {
+                                  "value": {
+                                    "Value": {
+                                      "value": {
+                                        "String": {
+                                          "text": "Hello"
+                                        }
+                                      },
+                                      "line_number": 11
+                                    }
+                                  },
+                                  "source": "Caption",
+                                  "condition": null,
+                                  "line_number": 11
+                                }
+                              ]
+                            },
+                            "common": {
+                              "is_not_visible": false,
+                              "is_dummy": false,
+                              "padding": {
+                                "value": null,
+                                "properties": []
+                              },
+                              "id": "0,1,0"
+                            }
+                          }
+                        },
+                        {
+                          "Text": {
+                            "text": {
+                              "value": {
+                                "original": "Again",
+                                "rendered": "Again"
+                              },
+                              "properties": [
+                                {
+                                  "value": {
+                                    "Value": {
+                                      "value": {
+                                        "String": {
+                                          "text": "Again"
+                                        }
+                                      },
+                                      "line_number": 13
+                                    }
+                                  },
+                                  "source": "Caption",
+                                  "condition": null,
+                                  "line_number": 13
+                                }
+                              ]
+                            },
+                            "common": {
+                              "is_not_visible": false,
+                              "is_dummy": false,
+                              "padding": {
+                                "value": null,
+                                "properties": []
+                              },
+                              "id": "0,1,1"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "common": {
+                      "is_not_visible": false,
+                      "is_dummy": false,
+                      "padding": {
+                        "value": null,
+                        "properties": []
+                      },
+                      "id": "0,1"
+                    }
+                  }
+                }
+              ]
+            },
+            "common": {
+              "is_not_visible": false,
+              "is_dummy": false,
+              "padding": {
+                "value": null,
+                "properties": []
+              },
+              "id": "0"
+            }
+          }
+        }
+      ]
+    },
+    "common": {
+      "is_not_visible": false,
+      "is_dummy": false,
+      "padding": {
+        "value": null,
+        "properties": []
+      },
+      "id": ""
+    }
+  }
+}

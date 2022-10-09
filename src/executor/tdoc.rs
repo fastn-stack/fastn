@@ -21,9 +21,9 @@ impl<'a> TDoc<'a> {
         arguments: &[ftd::interpreter2::Argument],
         container: &[usize],
         line_number: usize,
-    ) -> ftd::executor::Result<ftd::Map<ftd::interpreter2::Variable>> {
+    ) -> ftd::executor::Result<ftd::Map<String>> {
         let string_container = ftd::executor::utils::get_string_container(container);
-        let mut map: ftd::Map<ftd::interpreter2::Variable> = Default::default();
+        let mut map: ftd::Map<String> = Default::default();
         for argument in arguments {
             let source = argument.to_sources();
             let properties = ftd::executor::value::find_properties_by_source(
@@ -65,6 +65,8 @@ impl<'a> TDoc<'a> {
             let variable_name = self.itdoc().resolve_name(
                 format!("{}:{}:{}", component_name, argument.name, string_container).as_str(),
             );
+            let name_in_component_definition = format!("{}.{}", component_name, argument.name);
+            map.insert(name_in_component_definition, variable_name.to_string());
 
             let variable = ftd::interpreter2::Variable {
                 name: variable_name,
@@ -75,14 +77,11 @@ impl<'a> TDoc<'a> {
                 line_number,
             };
 
-            let name_in_component_definition = format!("{}.{}", component_name, argument.name);
             self.bag.insert(
                 variable.name.to_string(),
-                ftd::interpreter2::Thing::Variable(variable.clone()),
+                ftd::interpreter2::Thing::Variable(variable),
             );
-            map.insert(name_in_component_definition, variable);
         }
-
         Ok(map)
     }
 }

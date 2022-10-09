@@ -1,0 +1,235 @@
+{
+  "name": "foo",
+  "aliases": {
+    "ftd": "ftd"
+  },
+  "bag": {
+    "foo#print": {
+      "Component": {
+        "name": "foo#print",
+        "arguments": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          }
+        ],
+        "definition": {
+          "name": "ftd#column",
+          "properties": [],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [
+            {
+              "name": "ftd#text",
+              "properties": [
+                {
+                  "value": {
+                    "Clone": {
+                      "name": "foo#print.name",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
+                      },
+                      "is_local_variable": true,
+                      "line_number": 6
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 6
+                }
+              ],
+              "iteration": null,
+              "condition": null,
+              "events": [],
+              "children": [],
+              "line_number": 6
+            }
+          ],
+          "line_number": 4
+        },
+        "line_number": 1
+      }
+    },
+    "foo#print:name:0": {
+      "Variable": {
+        "name": "foo#print:name:0",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Hello"
+              }
+            },
+            "line_number": 14
+          }
+        },
+        "conditional_value": [],
+        "line_number": 13
+      }
+    },
+    "foo#print:name:1": {
+      "Variable": {
+        "name": "foo#print:name:1",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Hello Again"
+              }
+            },
+            "line_number": 17
+          }
+        },
+        "conditional_value": [],
+        "line_number": 16
+      }
+    }
+  },
+  "main": {
+    "container": {
+      "children": [
+        {
+          "Column": {
+            "container": {
+              "children": [
+                {
+                  "Text": {
+                    "text": {
+                      "value": {
+                        "original": "Hello",
+                        "rendered": "Hello"
+                      },
+                      "properties": [
+                        {
+                          "value": {
+                            "Clone": {
+                              "name": "foo#print:name:0",
+                              "kind": {
+                                "kind": "String",
+                                "caption": false,
+                                "body": false
+                              },
+                              "is_local_variable": true,
+                              "line_number": 6
+                            }
+                          },
+                          "source": "Caption",
+                          "condition": null,
+                          "line_number": 6
+                        }
+                      ]
+                    },
+                    "common": {
+                      "is_not_visible": false,
+                      "is_dummy": false,
+                      "padding": {
+                        "value": null,
+                        "properties": []
+                      },
+                      "id": "0,0"
+                    }
+                  }
+                }
+              ]
+            },
+            "common": {
+              "is_not_visible": false,
+              "is_dummy": false,
+              "padding": {
+                "value": null,
+                "properties": []
+              },
+              "id": "0"
+            }
+          }
+        },
+        {
+          "Column": {
+            "container": {
+              "children": [
+                {
+                  "Text": {
+                    "text": {
+                      "value": {
+                        "original": "Hello Again",
+                        "rendered": "Hello Again"
+                      },
+                      "properties": [
+                        {
+                          "value": {
+                            "Clone": {
+                              "name": "foo#print:name:1",
+                              "kind": {
+                                "kind": "String",
+                                "caption": false,
+                                "body": false
+                              },
+                              "is_local_variable": true,
+                              "line_number": 6
+                            }
+                          },
+                          "source": "Caption",
+                          "condition": null,
+                          "line_number": 6
+                        }
+                      ]
+                    },
+                    "common": {
+                      "is_not_visible": false,
+                      "is_dummy": false,
+                      "padding": {
+                        "value": null,
+                        "properties": []
+                      },
+                      "id": "1,0"
+                    }
+                  }
+                }
+              ]
+            },
+            "common": {
+              "is_not_visible": false,
+              "is_dummy": false,
+              "padding": {
+                "value": null,
+                "properties": []
+              },
+              "id": "1"
+            }
+          }
+        }
+      ]
+    },
+    "common": {
+      "is_not_visible": false,
+      "is_dummy": false,
+      "padding": {
+        "value": null,
+        "properties": []
+      },
+      "id": ""
+    }
+  }
+}

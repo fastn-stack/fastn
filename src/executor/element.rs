@@ -46,6 +46,7 @@ pub struct Common {
     pub is_not_visible: bool,
     pub is_dummy: bool,
     pub padding: ftd::executor::Value<Option<i64>>,
+    pub id: String,
 }
 
 pub fn default_column() -> Column {
@@ -57,11 +58,12 @@ pub fn text_from_properties(
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
+    local_container: &[usize],
     line_number: usize,
 ) -> ftd::executor::Result<Text> {
     let text = ftd::executor::value::string("text", properties, arguments, doc, line_number)?
         .map(|v| ftd::executor::element::markup_inline(v.as_str()));
-    let common = common_from_properties(properties, arguments, doc, line_number)?;
+    let common = common_from_properties(properties, arguments, doc, local_container, line_number)?;
     Ok(Text { text, common })
 }
 
@@ -69,10 +71,11 @@ pub fn row_from_properties(
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
+    local_container: &[usize],
     line_number: usize,
     children: Vec<Element>,
 ) -> ftd::executor::Result<Row> {
-    let common = common_from_properties(properties, arguments, doc, line_number)?;
+    let common = common_from_properties(properties, arguments, doc, local_container, line_number)?;
     let container = container_from_properties(properties, arguments, doc, line_number, children)?;
     Ok(Row { container, common })
 }
@@ -81,10 +84,11 @@ pub fn column_from_properties(
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
+    local_container: &[usize],
     line_number: usize,
     children: Vec<Element>,
 ) -> ftd::executor::Result<Column> {
-    let common = common_from_properties(properties, arguments, doc, line_number)?;
+    let common = common_from_properties(properties, arguments, doc, local_container, line_number)?;
     let container = container_from_properties(properties, arguments, doc, line_number, children)?;
     Ok(Column { container, common })
 }
@@ -93,6 +97,7 @@ pub fn common_from_properties(
     properties: &[ftd::interpreter2::Property],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
+    local_container: &[usize],
     line_number: usize,
 ) -> ftd::executor::Result<Common> {
     Ok(Common {
@@ -105,6 +110,7 @@ pub fn common_from_properties(
             doc,
             line_number,
         )?,
+        id: ftd::executor::utils::get_string_container(local_container),
     })
 }
 

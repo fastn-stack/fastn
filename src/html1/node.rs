@@ -29,6 +29,8 @@ impl Node {
         container: &ftd::executor::Container,
         doc_id: &str,
     ) -> Node {
+        use itertools::Itertools;
+
         let mut attrs = common.attrs();
         attrs.extend(container.attrs());
         let mut classes = container.add_class();
@@ -43,7 +45,11 @@ impl Node {
             style,
             classes,
             text: None,
-            children: Default::default(),
+            children: container
+                .children
+                .iter()
+                .map(|v| v.to_node(doc_id))
+                .collect_vec(),
             null: common.is_dummy,
         }
     }

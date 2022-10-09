@@ -55,6 +55,22 @@ impl PropertyValue {
         }
     }
 
+    pub fn get_reference_or_clone(&self) -> Option<&String> {
+        match self {
+            PropertyValue::Reference { name, .. } | PropertyValue::Clone { name, .. } => Some(name),
+            _ => None,
+        }
+    }
+
+    pub fn set_reference_or_clone(&mut self, new_name: &str) {
+        match self {
+            PropertyValue::Reference { name, .. } | PropertyValue::Clone { name, .. } => {
+                *name = new_name.to_string();
+            }
+            _ => {}
+        }
+    }
+
     pub(crate) fn from_string_with_argument(
         value: &str,
         doc: &ftd::interpreter2::TDoc,

@@ -1,0 +1,17 @@
+-- boolean flag: true
+
+-- ftd.column:
+
+-- ftd.text: Hello World
+padding if $flag: 40
+padding: 30
+
+-- ftd.column:
+
+-- ftd.text: Hello
+
+-- ftd.text: Again
+
+-- end: ftd.column
+
+-- end: ftd.column
