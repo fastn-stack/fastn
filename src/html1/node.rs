@@ -186,7 +186,8 @@ impl ftd::executor::Text {
 impl ftd::executor::Common {
     fn attrs(&self) -> ftd::Map<String> {
         // TODO: Implement attributes
-        Default::default()
+        std::iter::IntoIterator::into_iter([("data-id".to_string(), self.data_id.to_string())])
+            .collect()
     }
 
     fn style(&self, _doc_id: &str, _classes: &mut [String]) -> ftd::Map<String> {
