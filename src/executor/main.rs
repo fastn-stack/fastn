@@ -78,7 +78,7 @@ impl<'a> ExecuteDoc<'a> {
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
     ) -> ftd::executor::Result<ftd::executor::Element> {
-        let mut component_definition = {
+        let component_definition = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
             doc.itdoc()
@@ -95,6 +95,21 @@ impl<'a> ExecuteDoc<'a> {
             );
         }
 
+        ExecuteDoc::execute_simple_component(
+            instruction,
+            doc,
+            local_container,
+            component_definition,
+        )
+    }
+
+    fn execute_simple_component(
+        instruction: &ftd::interpreter2::Component,
+        doc: &mut ftd::executor::TDoc,
+        local_container: &[usize],
+        component_definition: ftd::interpreter2::ComponentDefinition,
+    ) -> ftd::executor::Result<ftd::executor::Element> {
+        let mut component_definition = component_definition;
         let local_variable_map = doc.insert_local_variables(
             component_definition.name.as_str(),
             instruction.properties.as_slice(),
