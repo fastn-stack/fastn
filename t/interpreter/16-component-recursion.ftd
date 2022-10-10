@@ -1,3 +1,18 @@
 -- record toc-item:
 string name:
 toc-item list children:
+
+-- component print-toc-item:
+toc-item item:
+
+-- ftd.column:
+
+-- ftd.text: $print-toc-item.item.name
+
+-- print-toc-item:
+item: $obj
+$loop$: $print-toc-item.item.children as $obj
+
+-- end: ftd.column
+
+-- end: print-toc-item

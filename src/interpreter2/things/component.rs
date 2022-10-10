@@ -336,12 +336,10 @@ impl Loop {
         &self,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Argument> {
-        let mut kind_data = self.children(doc)?.1;
         let kind = self.loop_object_kind(doc.name)?;
-        kind_data.kind = kind;
         Ok(ftd::interpreter2::Argument {
             name: self.alias.to_string(),
-            kind: kind_data,
+            kind: ftd::interpreter2::KindData::new(kind),
             mutable: false,
             value: None,
             line_number: 0,
