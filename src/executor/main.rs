@@ -103,6 +103,30 @@ impl<'a> ExecuteDoc<'a> {
         )
     }
 
+    fn execute_recursive_component(
+        instruction: &ftd::interpreter2::Component,
+        doc: &mut ftd::executor::TDoc,
+        _local_container: &[usize],
+        _component_definition: ftd::interpreter2::ComponentDefinition,
+    ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
+        let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
+            iteration
+        } else {
+            return ftd::executor::utils::parse_error(
+                format!("Expected recursive, found: `{:?}`", instruction),
+                doc.name,
+                instruction.line_number,
+            );
+        };
+
+        let _variable = iteration
+            .on
+            .clone()
+            .resolve(&doc.itdoc(), iteration.line_number)?;
+
+        todo!()
+    }
+
     fn execute_simple_component(
         instruction: &ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,

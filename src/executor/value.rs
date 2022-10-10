@@ -36,7 +36,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
 
     let sources = argument.to_sources();
     let ftd::executor::Value { properties, value } =
-        find_value_by_argument(sources.as_slice(), properties, doc, &argument, line_number)?;
+        find_value_by_argument(sources.as_slice(), properties, doc, argument, line_number)?;
     let expected_kind = value.as_ref().map(|v| v.kind());
     if !expected_kind
         .as_ref()

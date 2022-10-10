@@ -1,0 +1,12 @@
+-- string list locations:
+
+-- string: Varanasi
+-- string: Prayagraj
+-- string: Bengaluru
+-- string: Meerut
+
+-- end: locations
+
+
+-- ftd.text: $obj
+$loop$: $locations as $obj

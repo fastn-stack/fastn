@@ -343,7 +343,7 @@ impl Loop {
         };
 
         Ok(Some(Loop::new(
-            on.trim_start_matches(ftd::ast::utils::REFERENCE),
+            on.as_str(),
             alias.as_str(),
             loop_header.get_line_number(),
         )))

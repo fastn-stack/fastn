@@ -92,14 +92,14 @@ impl Component {
     ) -> ftd::interpreter2::Result<Component> {
         let name = doc.resolve_name(ast_component.name.as_str());
 
-        let properties = Property::from_ast_properties(
-            ast_component.properties,
-            ast_component.name.as_str(),
-            definition_name_with_arguments,
-            doc,
-        )?;
+        let mut loop_object_name_and_kind = None;
         let iteration = if let Some(v) = ast_component.iteration {
-            Some(Loop::from_ast_loop(v, definition_name_with_arguments, doc)?)
+            let iteration = Loop::from_ast_loop(v, definition_name_with_arguments, doc)?;
+            loop_object_name_and_kind = Some((
+                iteration.alias.to_string(),
+                iteration.loop_object_as_argument(doc.name)?,
+            ));
+            Some(iteration)
         } else {
             None
         };
@@ -108,6 +108,7 @@ impl Component {
             Some(ftd::interpreter2::Boolean::from_ast_condition(
                 v,
                 definition_name_with_arguments,
+                &loop_object_name_and_kind,
                 doc,
             )?)
         } else {
@@ -128,6 +129,14 @@ impl Component {
             }
             children
         };
+
+        let properties = Property::from_ast_properties(
+            ast_component.properties,
+            ast_component.name.as_str(),
+            definition_name_with_arguments,
+            &loop_object_name_and_kind,
+            doc,
+        )?;
 
         Ok(Component {
             name,
@@ -166,6 +175,7 @@ impl Property {
         ast_properties: Vec<ftd::ast::Property>,
         component_name: &str,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Vec<Property>> {
         let mut properties = vec![];
@@ -174,6 +184,7 @@ impl Property {
                 property,
                 component_name,
                 definition_name_with_arguments,
+                loop_object_name_and_kind,
                 doc,
             )?);
         }
@@ -184,6 +195,7 @@ impl Property {
         ast_property: ftd::ast::Property,
         component_name: &str,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Property> {
         let argument = match definition_name_with_arguments {
@@ -206,12 +218,14 @@ impl Property {
             argument.mutable,
             Some(&argument.kind),
             definition_name_with_arguments,
+            loop_object_name_and_kind,
         )?;
 
         let condition = if let Some(ref v) = ast_property.condition {
             Some(ftd::interpreter2::Boolean::from_ast_condition(
                 ftd::ast::Condition::new(v, ast_property.line_number),
                 definition_name_with_arguments,
+                loop_object_name_and_kind,
                 doc,
             )?)
         } else {
@@ -313,6 +327,35 @@ impl Loop {
         }
     }
 
+    pub(crate) fn loop_object_as_argument(
+        &self,
+        doc_id: &str,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Argument> {
+        let kind = self.loop_object_kind(doc_id)?;
+        Ok(ftd::interpreter2::Argument {
+            name: self.alias.to_string(),
+            kind: ftd::interpreter2::KindData::new(kind),
+            mutable: false,
+            value: None,
+            line_number: 0,
+        })
+    }
+
+    pub(crate) fn loop_object_kind(
+        &self,
+        doc_id: &str,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Kind> {
+        let kind = self.on.kind();
+        match kind {
+            ftd::interpreter2::Kind::List { kind } => Ok(kind.as_ref().to_owned()),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected list kind, found: {:?}", t),
+                doc_id,
+                self.line_number,
+            ),
+        }
+    }
+
     fn from_ast_loop(
         ast_loop: ftd::ast::Loop,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
@@ -325,6 +368,7 @@ impl Loop {
             false,
             ast_loop.line_number,
             definition_name_with_arguments,
+            &None,
         )?;
 
         Ok(Loop::new(on, ast_loop.alias.as_str(), ast_loop.line_number))

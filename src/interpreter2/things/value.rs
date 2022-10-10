@@ -78,6 +78,7 @@ impl PropertyValue {
         mutable: bool,
         line_number: usize,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
         let value = ftd::ast::VariableValue::String {
             value: value.to_string(),
@@ -90,6 +91,7 @@ impl PropertyValue {
             mutable,
             expected_kind,
             definition_name_with_arguments,
+            loop_object_name_and_kind,
         )
     }
 
@@ -99,7 +101,7 @@ impl PropertyValue {
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
-        PropertyValue::from_ast_value_with_argument(value, doc, mutable, expected_kind, None)
+        PropertyValue::from_ast_value_with_argument(value, doc, mutable, expected_kind, None, &None)
     }
 
     pub(crate) fn from_ast_value_with_argument(
@@ -108,6 +110,7 @@ impl PropertyValue {
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
         if let Some(reference) = PropertyValue::reference_from_ast_value(
             &value,
@@ -115,6 +118,7 @@ impl PropertyValue {
             mutable,
             expected_kind,
             definition_name_with_arguments,
+            loop_object_name_and_kind,
         )? {
             return Ok(reference);
         }
@@ -284,8 +288,7 @@ impl PropertyValue {
                     line_number,
                 }
             }
-            t => {
-                dbg!("from_ast_value_with_argument", &t);
+            _ => {
                 unimplemented!()
             }
         })
@@ -297,16 +300,18 @@ impl PropertyValue {
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<Option<ftd::interpreter2::PropertyValue>> {
         match value.string(doc.name) {
-            Ok(name) if name.starts_with(ftd::interpreter2::utils::CLONE) => {
-                let reference =
-                    doc.resolve_name(name.trim_start_matches(ftd::interpreter2::utils::CLONE));
+            Ok(reference) if reference.starts_with(ftd::interpreter2::utils::CLONE) => {
+                let reference_full_name =
+                    doc.resolve_name(reference.trim_start_matches(ftd::interpreter2::utils::CLONE));
 
                 let (is_local_variable, found_kind) = doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
+                    loop_object_name_and_kind,
                 )?;
 
                 match expected_kind {
@@ -322,20 +327,22 @@ impl PropertyValue {
                 }
 
                 Ok(Some(PropertyValue::Clone {
-                    name: reference,
+                    name: reference_full_name,
                     kind: found_kind,
                     is_local_variable,
                     line_number: value.line_number(),
                 }))
             }
-            Ok(name) if name.starts_with(ftd::interpreter2::utils::REFERENCE) => {
-                let reference =
-                    doc.resolve_name(name.trim_start_matches(ftd::interpreter2::utils::REFERENCE));
+            Ok(reference) if reference.starts_with(ftd::interpreter2::utils::REFERENCE) => {
+                let reference_full_name = doc.resolve_name(
+                    reference.trim_start_matches(ftd::interpreter2::utils::REFERENCE),
+                );
 
                 let (is_local_variable, found_kind) = doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
+                    loop_object_name_and_kind,
                 )?;
 
                 match expected_kind {
@@ -352,13 +359,14 @@ impl PropertyValue {
 
                 if mutable {
                     let is_variable_mutable = if !is_local_variable {
-                        doc.get_variable(reference.as_str(), value.line_number())?
+                        doc.get_variable(reference_full_name.as_str(), value.line_number())?
                             .mutable
                     } else {
                         ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
                             reference.as_str(),
                             doc.name,
                             definition_name_with_arguments,
+                            loop_object_name_and_kind,
                         )
                         .unwrap()
                         .0
@@ -376,14 +384,14 @@ impl PropertyValue {
                         );
                     }
                     Ok(Some(PropertyValue::Reference {
-                        name: reference,
+                        name: reference_full_name,
                         kind: found_kind,
                         is_local_variable,
                         line_number: value.line_number(),
                     }))
                 } else {
                     Ok(Some(PropertyValue::Clone {
-                        name: reference,
+                        name: reference_full_name,
                         kind: found_kind,
                         is_local_variable,
                         line_number: value.line_number(),

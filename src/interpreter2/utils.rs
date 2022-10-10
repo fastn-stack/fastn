@@ -137,6 +137,7 @@ pub fn get_argument_for_reference_and_remaining<'a>(
     name: &'a str,
     doc_id: &'a str,
     component_definition_name_with_arguments: Option<(&'a str, &'a [ftd::interpreter2::Argument])>,
+    loop_object_name_and_kind: &'a Option<(String, ftd::interpreter2::Argument)>,
 ) -> Option<(&'a ftd::interpreter2::Argument, Option<String>)> {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
@@ -149,5 +150,16 @@ pub fn get_argument_for_reference_and_remaining<'a>(
             }
         }
     }
+    if let Some((loop_name, loop_argument)) = loop_object_name_and_kind {
+        if name.starts_with(format!("{}.", loop_name).as_str())
+            || name.starts_with(format!("{}#{}.", doc_id, loop_name).as_str())
+            || name.eq(loop_name)
+            || name.eq(format!("{}#{}", doc_id, loop_name).as_str())
+        {
+            let p2 = ftd::interpreter2::utils::split_at(name, ".").1;
+            return Some((loop_argument, p2));
+        }
+    }
+
     None
 }

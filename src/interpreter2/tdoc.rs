@@ -317,6 +317,7 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
         component_definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<(bool, ftd::interpreter2::KindData)> {
         let name = if let Some(name) = name
             .strip_prefix(ftd::interpreter2::utils::REFERENCE)
@@ -332,6 +333,7 @@ impl<'a> TDoc<'a> {
                 name,
                 self.name,
                 component_definition_name_with_arguments,
+                loop_object_name_and_kind,
             )
             .map(|v| (v.0.kind.to_owned(), v.1));
 
@@ -402,7 +404,9 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::KindData> {
-        Ok(self.get_kind_with_argument(name, line_number, None)?.1)
+        Ok(self
+            .get_kind_with_argument(name, line_number, None, &None)?
+            .1)
     }
 
     pub fn get_component(

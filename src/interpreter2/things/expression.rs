@@ -45,6 +45,7 @@ impl Boolean {
     pub(crate) fn from_ast_condition(
         condition: ftd::ast::Condition,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Boolean> {
         let (boolean, mut left, mut right) = ftd::interpreter2::Boolean::boolean_left_right(
@@ -70,6 +71,7 @@ impl Boolean {
                     false,
                     condition.line_number,
                     definition_name_with_arguments,
+                    loop_object_name_and_kind,
                 )?;
                 if !value.kind().is_optional() {
                     return ftd::interpreter2::utils::e2(
@@ -99,6 +101,7 @@ impl Boolean {
                     false,
                     condition.line_number,
                     definition_name_with_arguments,
+                    loop_object_name_and_kind,
                 )?;
                 if !value.kind().is_list() {
                     return ftd::interpreter2::utils::e2(
@@ -128,6 +131,7 @@ impl Boolean {
                         false,
                         condition.line_number,
                         definition_name_with_arguments,
+                        loop_object_name_and_kind,
                     )?;
                     let right = ftd::interpreter2::PropertyValue::from_string_with_argument(
                         right.as_str(),
@@ -140,6 +144,7 @@ impl Boolean {
                         false,
                         condition.line_number,
                         definition_name_with_arguments,
+                        loop_object_name_and_kind,
                     )?;
                     Boolean::Equal {
                         left,
@@ -155,6 +160,7 @@ impl Boolean {
                             false,
                             condition.line_number,
                             definition_name_with_arguments,
+                            loop_object_name_and_kind,
                         )?,
                         right: ftd::interpreter2::PropertyValue::Value {
                             value: ftd::interpreter2::Value::Boolean {

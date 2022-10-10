@@ -29,8 +29,8 @@ impl<'a> TDoc<'a> {
             let properties = ftd::executor::value::find_properties_by_source(
                 source.as_slice(),
                 properties,
-                &self,
-                &argument,
+                self,
+                argument,
                 line_number,
             )?;
 
