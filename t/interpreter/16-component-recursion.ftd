@@ -2,6 +2,32 @@
 string name:
 toc-item list children:
 
+
+
+-- toc-item toc:
+name: TOC title 1
+
+-- toc.children:
+
+-- toc-item:
+name: TOC title 2
+
+-- toc-item:
+name: TOC title 3
+
+-- toc-item.children:
+
+-- toc-item:
+name: TOC title 4
+
+-- end: toc-item.children
+
+-- end: toc.children
+
+-- end: toc
+
+
+
 -- component print-toc-item:
 toc-item item:
 

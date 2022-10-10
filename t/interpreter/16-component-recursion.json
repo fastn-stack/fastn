@@ -17,7 +17,7 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 6
+            "line_number": 32
           }
         ],
         "definition": {
@@ -40,19 +40,19 @@
                         "body": false
                       },
                       "is_local_variable": true,
-                      "line_number": 10
+                      "line_number": 36
                     }
                   },
                   "source": "Caption",
                   "condition": null,
-                  "line_number": 10
+                  "line_number": 36
                 }
               ],
               "iteration": null,
               "condition": null,
               "events": [],
               "children": [],
-              "line_number": 10
+              "line_number": 36
             },
             {
               "name": "foo#print-toc-item",
@@ -71,7 +71,7 @@
                         "body": false
                       },
                       "is_local_variable": true,
-                      "line_number": 13
+                      "line_number": 39
                     }
                   },
                   "source": {
@@ -81,7 +81,7 @@
                     }
                   },
                   "condition": null,
-                  "line_number": 13
+                  "line_number": 39
                 }
               ],
               "iteration": {
@@ -102,21 +102,220 @@
                       "body": false
                     },
                     "is_local_variable": true,
-                    "line_number": 14
+                    "line_number": 40
                   }
                 },
                 "alias": "obj",
-                "line_number": 14
+                "line_number": 40
               },
               "condition": null,
               "events": [],
               "children": [],
-              "line_number": 12
+              "line_number": 38
             }
           ],
-          "line_number": 8
+          "line_number": 34
         },
-        "line_number": 5
+        "line_number": 31
+      }
+    },
+    "foo#toc": {
+      "Variable": {
+        "name": "foo#toc",
+        "kind": {
+          "kind": {
+            "Record": {
+              "name": "foo#toc-item"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Record": {
+                "name": "foo#toc-item",
+                "fields": {
+                  "children": {
+                    "Value": {
+                      "value": {
+                        "List": {
+                          "data": [
+                            {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "foo#toc-item",
+                                    "fields": {
+                                      "children": {
+                                        "Value": {
+                                          "value": {
+                                            "List": {
+                                              "data": [],
+                                              "kind": {
+                                                "kind": {
+                                                  "List": {
+                                                    "kind": {
+                                                      "Record": {
+                                                        "name": "foo#toc-item"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "caption": false,
+                                                "body": false
+                                              }
+                                            }
+                                          },
+                                          "line_number": 12
+                                        }
+                                      },
+                                      "name": {
+                                        "Value": {
+                                          "value": {
+                                            "String": {
+                                              "text": "TOC title 2"
+                                            }
+                                          },
+                                          "line_number": 13
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "line_number": 12
+                              }
+                            },
+                            {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "foo#toc-item",
+                                    "fields": {
+                                      "children": {
+                                        "Value": {
+                                          "value": {
+                                            "List": {
+                                              "data": [
+                                                {
+                                                  "Value": {
+                                                    "value": {
+                                                      "Record": {
+                                                        "name": "foo#toc-item",
+                                                        "fields": {
+                                                          "children": {
+                                                            "Value": {
+                                                              "value": {
+                                                                "List": {
+                                                                  "data": [],
+                                                                  "kind": {
+                                                                    "kind": {
+                                                                      "List": {
+                                                                        "kind": {
+                                                                          "Record": {
+                                                                            "name": "foo#toc-item"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    "caption": false,
+                                                                    "body": false
+                                                                  }
+                                                                }
+                                                              },
+                                                              "line_number": 20
+                                                            }
+                                                          },
+                                                          "name": {
+                                                            "Value": {
+                                                              "value": {
+                                                                "String": {
+                                                                  "text": "TOC title 4"
+                                                                }
+                                                              },
+                                                              "line_number": 21
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "line_number": 20
+                                                  }
+                                                }
+                                              ],
+                                              "kind": {
+                                                "kind": {
+                                                  "List": {
+                                                    "kind": {
+                                                      "Record": {
+                                                        "name": "foo#toc-item"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "caption": false,
+                                                "body": false
+                                              }
+                                            }
+                                          },
+                                          "line_number": 15
+                                        }
+                                      },
+                                      "name": {
+                                        "Value": {
+                                          "value": {
+                                            "String": {
+                                              "text": "TOC title 3"
+                                            }
+                                          },
+                                          "line_number": 16
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "line_number": 15
+                              }
+                            }
+                          ],
+                          "kind": {
+                            "kind": {
+                              "List": {
+                                "kind": {
+                                  "Record": {
+                                    "name": "foo#toc-item"
+                                  }
+                                }
+                              }
+                            },
+                            "caption": false,
+                            "body": false
+                          }
+                        }
+                      },
+                      "line_number": 7
+                    }
+                  },
+                  "name": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "TOC title 1"
+                        }
+                      },
+                      "line_number": 8
+                    }
+                  }
+                }
+              }
+            },
+            "line_number": 7
+          }
+        },
+        "conditional_value": [],
+        "line_number": 7
       }
     },
     "foo#toc-item": {
