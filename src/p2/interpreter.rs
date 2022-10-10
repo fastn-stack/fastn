@@ -778,24 +778,6 @@ impl InterpreterState {
             new_heading_with_region: &(Option<ftd::Region>, ftd::PageHeadingItem),
             doc_name: &str,
         ) -> ftd::p1::Result<()> {
-            // Heading priority order
-            // h0 > h1 > h2 > h3 > h4 > h5 > h6
-
-            // step 1: make page-heading item
-            // step 2: insert heading
-            //      step 2.1 pick out last heading item from page-headings list
-            //      step 2.2 put the current page-heading item somewhere in the last heading item
-
-            // case 1:
-            // if the current page-heading item is of same priority or more as the last page-heading item
-            // or if the list is empty
-            // return reference of the current list where the current page-heading item will be inserted
-
-            // case 2:
-            // if the current page-heading item is of less priority than the last page-heading item
-            // or if the list is empty
-            // go to the children vector list and proceed with the step 2.2
-
             if tree_nodes.is_empty() {
                 tree_nodes.push(new_heading_with_region.clone());
                 return Ok(());
