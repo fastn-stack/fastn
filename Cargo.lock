@@ -1054,8 +1054,8 @@ dependencies = [
  "edit",
  "fbt-lib",
  "fluent",
+ "ftd 0.2.0 (git+https://github.com/FifthTry/ftd?rev=06ed458)",
  "fpm-utils",
- "ftd 0.2.0 (git+https://github.com/FifthTry/ftd?rev=beb7b06)",
  "futures",
  "hyper",
  "ignore",
@@ -1089,6 +1089,26 @@ dependencies = [
  "serde",
  "serde_json",
  "wit-bindgen-host-wasmtime-rust",
+]
+
+[[package]]
+name = "ftd"
+version = "0.2.0"
+source = "git+https://github.com/FifthTry/ftd?rev=06ed458#06ed458dab09b1c50891e3d41981823edfacb78a"
+dependencies = [
+ "comrak",
+ "css-color-parser",
+ "format_num",
+ "include_dir",
+ "indoc",
+ "itertools",
+ "once_cell",
+ "regex",
+ "serde",
+ "serde_json",
+ "slug",
+ "syntect",
+ "thiserror",
 ]
 
 [[package]]
