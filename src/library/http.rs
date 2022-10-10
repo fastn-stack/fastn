@@ -89,9 +89,9 @@ pub fn request_data_processor<'a>(
     doc: &ftd::p2::TDoc<'a>,
     config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
-    // TODO: Need to return from query parameters and body as well
-    let query = match config.request.as_ref() {
-        Some(request) => request.query(),
+    // TODO: URL params not yet handled
+    let req = match config.request.as_ref() {
+        Some(v) => v,
         None => {
             return ftd::p2::utils::e2(
                 "HttpRequest object should not be null",
@@ -100,6 +100,21 @@ pub fn request_data_processor<'a>(
             )
         }
     };
-    dbg!(query);
-    doc.from_json(query, section)
+    let mut data = req.query().clone();
+
+    match req.body_as_json() {
+        Ok(Some(b)) => {
+            data.extend(b);
+        }
+        Ok(None) => {}
+        Err(e) => {
+            return ftd::p2::utils::e2(
+                format!("Error while parsing request body: {:?}", e),
+                doc.name,
+                section.line_number,
+            )
+        }
+    }
+
+    doc.from_json(&data, section)
 }

@@ -182,7 +182,7 @@ pub async fn parse2<'a>(
                             .global_ids
                             .get(id)
                             .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
-                                message: format!("id: {} not found while linking", id),
+                                message: fpm::warning!("id: {} not found while linking", id),
                                 doc_id: st.id.clone(),
                                 line_number: *ln,
                             })?

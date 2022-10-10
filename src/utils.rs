@@ -3,7 +3,9 @@
 macro_rules! warning {
     ($($t:tt)*) => {{
         use colored::Colorize;
-        eprintln!("WARN: {}", format!($($t)*).yellow());
+        let msg = format!($($t)*);
+        eprintln!("WARN: {}", msg.yellow());
+        msg
     }};
 }
 

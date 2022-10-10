@@ -84,6 +84,7 @@ pub async fn processor<'a>(
             img_src: None,
             font_icon: None,
             children: vec![],
+            document: None,
         });
     }
 
