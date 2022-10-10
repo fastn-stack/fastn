@@ -1084,6 +1084,7 @@ dependencies = [
 [[package]]
 name = "fpm-utils"
 version = "0.1.0"
+source = "git+https://github.com/FifthTry/fpm-utils?rev=1519f8f#1519f8ff350f3c082e820c955da80387b5b8740b"
 dependencies = [
  "serde",
  "serde_json",

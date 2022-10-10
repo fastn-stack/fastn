@@ -77,8 +77,8 @@ url = "2"
 zip = { git = "https://github.com/zip-rs/zip" }
 
 wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git" }
-# fpm-utils = { git = "https://github.com/FifthTry/fpm-utils", rev="8d252a7"}
-fpm-utils = { path = "../fpm-utils"}
+fpm-utils = { git = "https://github.com/FifthTry/fpm-utils", rev="1519f8f"}
+# fpm-utils = { path = "../fpm-utils"}
 
 [dependencies.hyper]
 version = "0.14"
