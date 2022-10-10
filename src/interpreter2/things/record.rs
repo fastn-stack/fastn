@@ -138,7 +138,7 @@ impl Field {
     ) -> ftd::interpreter2::Result<Field> {
         let kind = ftd::interpreter2::KindData::from_ast_kind(
             field.kind,
-            &known_kinds,
+            known_kinds,
             doc,
             field.line_number,
         )?;
