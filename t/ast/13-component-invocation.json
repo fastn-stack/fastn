@@ -85,7 +85,7 @@
             }
           ],
           "iteration": {
-            "on": "locations",
+            "on": "$locations",
             "alias": "obj",
             "line_number": 14
           },

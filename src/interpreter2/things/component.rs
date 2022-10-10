@@ -335,7 +335,9 @@ impl Loop {
         &self,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Argument> {
-        let kind_data = self.children(doc)?.1;
+        let mut kind_data = self.children(doc)?.1;
+        let kind = self.loop_object_kind(doc.name)?;
+        kind_data.kind = kind;
         Ok(ftd::interpreter2::Argument {
             name: self.alias.to_string(),
             kind: kind_data,
@@ -343,6 +345,21 @@ impl Loop {
             value: None,
             line_number: 0,
         })
+    }
+
+    pub(crate) fn loop_object_kind(
+        &self,
+        doc_id: &str,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Kind> {
+        let kind = self.on.kind();
+        match kind {
+            ftd::interpreter2::Kind::List { kind } => Ok(kind.as_ref().to_owned()),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected list kind, found: {:?}", t),
+                doc_id,
+                self.line_number,
+            ),
+        }
     }
 
     fn from_ast_loop(
