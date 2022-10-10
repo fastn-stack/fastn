@@ -42,3 +42,8 @@ $loop$: $print-toc-item.item.children as $obj
 -- end: ftd.column
 
 -- end: print-toc-item
+
+
+
+-- print-toc-item:
+item: $toc

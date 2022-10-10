@@ -380,7 +380,44 @@
     }
   },
   "name": "foo",
-  "instructions": [],
+  "instructions": [
+    {
+      "name": "foo#print-toc-item",
+      "properties": [
+        {
+          "value": {
+            "Clone": {
+              "name": "foo#toc",
+              "kind": {
+                "kind": {
+                  "Record": {
+                    "name": "foo#toc-item"
+                  }
+                },
+                "caption": false,
+                "body": false
+              },
+              "is_local_variable": false,
+              "line_number": 49
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "item",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 49
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 48
+    }
+  ],
   "aliases": {
     "ftd": "ftd"
   }
