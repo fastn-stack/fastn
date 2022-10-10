@@ -338,11 +338,11 @@ fn update_local_variable_reference_in_property_value(
 
     if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
         if reference_or_clone.starts_with(format!("{}.", k).as_str()) || reference_or_clone.eq(k) {
-            Some(v)
+            Some(reference_or_clone.replace(k, v))
         } else {
             None
         }
     }) {
-        property_value.set_reference_or_clone(local_variable)
+        property_value.set_reference_or_clone(local_variable.as_str())
     }
 }
