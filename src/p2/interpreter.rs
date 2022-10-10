@@ -575,7 +575,7 @@ impl InterpreterState {
                     if is_valid_heading_region(region_value.as_str()) {
                         for instruction in container_instructions.iter() {
                             let title_text = extract_title_if_markdown_component(
-                                &instruction,
+                                instruction,
                                 parent,
                                 child,
                                 doc,
@@ -588,11 +588,7 @@ impl InterpreterState {
                                     doc.name,
                                     region_value.clone(),
                                 )?;
-                                insert_page_heading_in_tree(
-                                    page_headings,
-                                    &new_item,
-                                    doc.name,
-                                )?;
+                                insert_page_heading_in_tree(page_headings, &new_item, doc.name)?;
                             }
                         }
                     }
@@ -603,10 +599,7 @@ impl InterpreterState {
         return Ok(());
 
         fn is_valid_heading_region(region: &str) -> bool {
-            match region {
-                "h0" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" => true,
-                _ => false,
-            }
+            matches!(region, "h0" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6")
         }
 
         fn extract_title_if_markdown_component(
@@ -621,11 +614,9 @@ impl InterpreterState {
                         cc.properties
                             .get("region")
                             .and_then(|text_region_property| {
-                                Some(
-                                    text_region_property
-                                        .resolve_default_value_string(doc, cc.line_number)
-                                        .ok()?,
-                                )
+                                text_region_property
+                                    .resolve_default_value_string(doc, cc.line_number)
+                                    .ok()
                             });
                     if let Some(text_region) = text_region {
                         if text_region.eq("title") {
@@ -635,7 +626,7 @@ impl InterpreterState {
                                 .and_then(|text_property| text_property.default.as_ref())
                                 .and_then(|text_property_value| {
                                     resolve_title_header_from_container(
-                                        &text_property_value,
+                                        text_property_value,
                                         parent,
                                         &child.properties,
                                         doc,
@@ -662,10 +653,7 @@ impl InterpreterState {
         fn find_container_instructions_with_region(
             root_component: &ftd::Component,
             doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<(
-            Vec<ftd::Instruction>,
-            Option<ftd::component::Property>,
-        )> {
+        ) -> ftd::p1::Result<(Vec<ftd::Instruction>, Option<ftd::component::Property>)> {
             if matches!(root_component.root.as_str(), "ftd#row" | "ftd#column") {
                 let region = root_component.properties.get("region");
                 return Ok((root_component.instructions.clone(), region.cloned()));
@@ -701,7 +689,7 @@ impl InterpreterState {
                 .properties
                 .get(parent_property_name)
                 .and_then(|property| property.default.as_ref())
-                .and_then(|property_value| resolve_property_value(&property_value).ok()?)
+                .and_then(|property_value| resolve_property_value(property_value).ok()?)
                 .and_then(|value| {
                     let stripped_value = value.trim_start_matches('$');
                     child.properties.get(stripped_value)
@@ -749,7 +737,7 @@ impl InterpreterState {
                     .and_then(|stripped_partial_header| properties.get(stripped_partial_header))
                     .and_then(|property| property.default.as_ref());
 
-                if let Some(ref value) = property_value {
+                if let Some(value) = property_value {
                     return resolve_property_value(value);
                 }
 
