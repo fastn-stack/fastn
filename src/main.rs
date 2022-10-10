@@ -180,8 +180,7 @@ pub fn interpret_helper(
                     &state.tdoc(&mut Default::default(), &mut Default::default()),
                 )? {
                     s = state.continue_after_storing_section(&section)?;
-                }
-                else {
+                } else {
                     let value = lib.process(
                         &section,
                         &state.tdoc(&mut Default::default(), &mut Default::default()),
@@ -294,7 +293,8 @@ impl ExampleLibrary {
     ) -> ftd::p1::Result<bool> {
         Ok(section
             .header
-            .str(doc.name, section.line_number, "$processor$")?.eq("page-headings"))
+            .str(doc.name, section.line_number, "$processor$")?
+            .eq("page-headings"))
     }
 
     pub fn process(
