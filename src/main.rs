@@ -175,7 +175,7 @@ pub fn interpret_helper(
                 break;
             }
             ftd::Interpreter::StuckOnProcessor { state, section } => {
-                if lib.is_lazy_processor(
+                if ftd::ExampleLibrary::is_lazy_processor(
                     &section,
                     &state.tdoc(&mut Default::default(), &mut Default::default()),
                 )? {
@@ -287,7 +287,6 @@ impl ExampleLibrary {
     /// for more details
     /// visit www.fpm.dev/glossary/#lazy-processor
     pub fn is_lazy_processor(
-        &self,
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<bool> {

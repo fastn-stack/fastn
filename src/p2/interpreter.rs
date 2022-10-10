@@ -438,27 +438,16 @@ impl InterpreterState {
             };
 
             while let Some(section) = parsed_document.lazy_processor_sections.pop() {
-                match section.header.str(
-                    parsed_document.name.as_str(),
-                    section.line_number,
-                    "$processor$",
-                )? {
-                    "page-headings" => {
-                        // println!("Linear heading list");
-                        // dbg!(&parsed_document.page_headings);
-                        // println!("Heading list as list of tree nodes");
-                        // dbg!(&parsed_document.new_page_headings);
-                        let mut final_list: Vec<ftd::PageHeadingItemCompat> = vec![];
-                        ftd::InterpreterState::from_page_heading_list_to_compat(
-                            &parsed_document.page_headings,
-                            &mut final_list,
-                            None,
-                        );
-                        dbg!(&final_list);
-                        let value = doc.from_json(&final_list, &section)?;
-                        return self.continue_after_processor(&section, value);
-                    }
-                    _ => unreachable!("No lazy processor besides page-headings till now"),
+                // currently only page-headings is a lazy processor
+                if ftd::ExampleLibrary::is_lazy_processor(&section, &doc)? {
+                    let mut final_list: Vec<ftd::PageHeadingItemCompat> = vec![];
+                    ftd::InterpreterState::from_page_heading_list_to_compat(
+                        &parsed_document.page_headings,
+                        &mut final_list,
+                        None,
+                    );
+                    let value = doc.from_json(&final_list, &section)?;
+                    return self.continue_after_processor(&section, value);
                 }
             }
             parsed_document.process_lazy_processors = false;
@@ -492,6 +481,9 @@ impl InterpreterState {
         Ok(Interpreter::Done { document: d })
     }
 
+    // projects the condensed page-heading list into a
+    // PageHeadingItemCompat list identical to the
+    // record of fpm.toc-item
     pub fn from_page_heading_list_to_compat(
         page_headings: &Vec<(Option<ftd::Region>, ftd::PageHeadingItem)>,
         target_compat_list: &mut Vec<ftd::PageHeadingItemCompat>,
@@ -502,8 +494,6 @@ impl InterpreterState {
             url: &Option<String>,
             number: &Option<String>,
         ) -> ftd::PageHeadingItemCompat {
-            println!("What are we getting here");
-            dbg!(number);
             ftd::PageHeadingItemCompat {
                 url: url.clone(),
                 number: number.clone(),
@@ -531,7 +521,6 @@ impl InterpreterState {
             let current_number = get_depth_number(current_depth_index, &number);
             let mut start_compat_node =
                 make_compat_item(&heading_item.title, &heading_item.url, &current_number);
-            dbg!(&start_compat_node);
             ftd::InterpreterState::from_page_heading_list_to_compat(
                 &heading_item.children,
                 &mut start_compat_node.children,
@@ -548,8 +537,6 @@ impl InterpreterState {
         child: &ftd::ChildComponent,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<()> {
-        // todo: add region check on container before proceeding to collect headings
-        // todo: insert headings in tree form instead pushing all headings in linear list format
         // todo: work on all these cases
         // Case 2: Container component (with defined id)
         //      id = use user defined id for linking else the auto-generated one
@@ -566,7 +553,7 @@ impl InterpreterState {
         //                        (if found otherwise no heading)
 
         if ftd::p2::utils::is_container_component(doc, &parent.full_name, parent.line_number)? {
-            // No sure how to handle this,
+            // Not sure if this needs to be handled,
             // ignoring this for now
             if parent.kernel {
                 return Ok(());
@@ -586,28 +573,26 @@ impl InterpreterState {
                     let region_value =
                         region.resolve_default_value_string(doc, parent.line_number)?;
                     if is_valid_heading_region(region_value.as_str()) {
-                        if let Some(instructions) = container_instructions {
-                            for instruction in instructions.iter() {
-                                let title_text = extract_title_if_markdown_component(
-                                    &instruction,
-                                    parent,
-                                    child,
-                                    doc,
-                                );
-                                if let Some(title) = title_text {
-                                    // Heading list as list of tree nodes -------------------------
-                                    let new_item = create_page_heading_item_with_region(
-                                        component_id.as_str(),
-                                        title,
-                                        doc.name,
-                                        region_value.clone(),
-                                    )?;
-                                    insert_page_heading_in_tree(
-                                        page_headings,
-                                        &new_item,
-                                        doc.name,
-                                    )?;
-                                }
+                        for instruction in container_instructions.iter() {
+                            let title_text = extract_title_if_markdown_component(
+                                &instruction,
+                                parent,
+                                child,
+                                doc,
+                            );
+                            if let Some(title) = title_text {
+                                // Heading list as list of tree nodes -------------------------
+                                let new_item = create_page_heading_item_with_region(
+                                    component_id.as_str(),
+                                    title,
+                                    doc.name,
+                                    region_value.clone(),
+                                )?;
+                                insert_page_heading_in_tree(
+                                    page_headings,
+                                    &new_item,
+                                    doc.name,
+                                )?;
                             }
                         }
                     }
@@ -678,16 +663,16 @@ impl InterpreterState {
             root_component: &ftd::Component,
             doc: &ftd::p2::TDoc,
         ) -> ftd::p1::Result<(
-            Option<Vec<ftd::Instruction>>,
+            Vec<ftd::Instruction>,
             Option<ftd::component::Property>,
         )> {
             if matches!(root_component.root.as_str(), "ftd#row" | "ftd#column") {
                 let region = root_component.properties.get("region");
-                return Ok((Some(root_component.instructions.clone()), region.cloned()));
+                return Ok((root_component.instructions.clone(), region.cloned()));
             }
 
             if root_component.kernel {
-                return Ok((None, None));
+                return Ok((vec![], None));
             }
 
             let parent =
