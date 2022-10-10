@@ -31,7 +31,6 @@ mod value_with_default;
 pub(crate) mod variable;
 mod youtube_id;
 
-pub use main::ExampleLibrary;
 pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
 pub use constants::{identifier, regex};
@@ -41,6 +40,7 @@ pub use ftd::{
     value_with_default::ValueWithDefault,
 };
 pub use html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
+pub use main::ExampleLibrary;
 pub use or_type::OrType;
 pub use rendered::Rendered;
 pub use rt::RT;
