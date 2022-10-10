@@ -1323,6 +1323,8 @@ pub(crate) struct PackageTemp {
     pub favicon: Option<String>,
     #[serde(rename = "endpoint")]
     pub endpoint: Option<String>,
+    #[serde(rename = "backend")]
+    pub backend: bool,
 }
 
 impl PackageTemp {
@@ -1360,6 +1362,7 @@ impl PackageTemp {
             sitemap_temp: None,
             favicon: self.favicon,
             endpoint: self.endpoint,
+            backend: self.backend,
         }
     }
 }
@@ -1411,6 +1414,9 @@ pub struct Package {
 
     /// endpoint for proxy service
     pub endpoint: Option<String>,
+
+    /// Attribute to define the usage of a WASM backend
+    pub backend: bool,
 }
 
 impl Package {
@@ -1437,6 +1443,7 @@ impl Package {
             sitemap: None,
             favicon: None,
             endpoint: None,
+            backend: false,
         }
     }
 

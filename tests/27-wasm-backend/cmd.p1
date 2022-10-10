@@ -1,0 +1,11 @@
+-- fbt:
+cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build
+output: amitu/.build
+
+-- stdout:
+
+Processing www.amitu.com/FPM.ftd ... done in <omitted>
+Processing www.amitu.com/backend.wasm ... done in <omitted>
+Processing www.amitu.com/index.ftd ... done in <omitted>
+Processing www.amitu.com/post-two.ftd ... done in <omitted>
+Processing www.amitu.com/post.ftd ... done in <omitted>

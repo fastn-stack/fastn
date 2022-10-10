@@ -32,6 +32,7 @@ mod tracker;
 mod translation;
 mod user_group;
 mod version;
+mod wasm;
 mod workspace;
 
 pub(crate) use auto_import::AutoImport;

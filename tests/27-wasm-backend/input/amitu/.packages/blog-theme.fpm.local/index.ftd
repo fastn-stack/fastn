@@ -1,0 +1,25 @@
+-- import: blog-backend.fpm.local as blog-utils
+
+
+-- ftd.row post:
+string post-title:
+string publish-date:
+body body:
+
+--- ftd.column:
+width: 700
+
+--- ftd.text:
+text: $post-title
+
+--- ftd.text: $body
+
+--- blog-utils.like-box:
+like-message: 👍 Like this post
+
+--- container: ftd.main
+
+--- ftd.column:
+width: 300
+
+--- blog-utils.subscription-box:
