@@ -77,10 +77,18 @@ pub struct Document {
     pub css_collector: String,
 }
 
+// Condensed form of page-heading item stored by parsed document
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct PageHeadingItem {
+    pub url: Option<String>,
+    pub title: Option<String>,
+    pub children: Vec<(Option<ftd::Region>, PageHeadingItem)>,
+}
+
 // Page-heading struct identical with fpm::library::toc::TocItemCompat
 // to be used by page-headings processor
 #[derive(Debug, Clone, serde::Serialize)]
-pub struct PageHeadingItem {
+pub struct PageHeadingItemCompat {
     pub url: Option<String>,
     pub number: Option<String>,
     pub title: Option<String>,
@@ -98,7 +106,7 @@ pub struct PageHeadingItem {
     pub is_open: bool,
     #[serde(rename = "img-src")]
     pub image_src: Option<String>,
-    pub children: Vec<PageHeadingItem>,
+    pub children: Vec<PageHeadingItemCompat>,
 }
 
 // TextSource location = (is_from_section = T/F, subsection_index if is_from_section = F else 0)

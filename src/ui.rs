@@ -2031,6 +2031,32 @@ impl Region {
         )
     }
 
+    /// returns heading priority value based on heading size
+    ///
+    /// Priority Order of Headings
+    ///
+    /// h0 > h1 > h2 > h3 > h4 > h5 > h6 > h7
+    ///
+    /// will throw error if tried to compute heading priority
+    /// of any non-heading region
+    pub fn heading_priority_value(&self, doc_id: &str) -> ftd::p1::Result<i32> {
+        match self {
+            Self::H0 => Ok(0),
+            Self::H1 => Ok(-1),
+            Self::H2 => Ok(-2),
+            Self::H3 => Ok(-3),
+            Self::H4 => Ok(-4),
+            Self::H5 => Ok(-5),
+            Self::H6 => Ok(-6),
+            Self::H7 => Ok(-7),
+            _ => ftd::p2::utils::e2(
+                format!("{} is not a valid heading region", self.to_string()),
+                doc_id,
+                0,
+            ),
+        }
+    }
+
     pub fn is_primary_heading(&self) -> bool {
         matches!(self, ftd::Region::H0 | ftd::Region::H1)
     }
