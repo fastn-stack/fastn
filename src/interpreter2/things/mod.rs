@@ -28,4 +28,19 @@ impl Thing {
             ),
         }
     }
+
+    pub(crate) fn record(
+        self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Record> {
+        match self {
+            ftd::interpreter2::Thing::Record(v) => Ok(v),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected Record, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
 }

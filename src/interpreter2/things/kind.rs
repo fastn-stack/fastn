@@ -67,6 +67,13 @@ impl Kind {
     pub fn is_optional(&self) -> bool {
         matches!(self, Kind::Optional { .. })
     }
+
+    pub fn get_record_name(&self) -> Option<&str> {
+        match self {
+            ftd::interpreter2::Kind::Record { ref name, .. } => Some(name),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]

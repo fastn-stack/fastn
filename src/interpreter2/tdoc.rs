@@ -111,12 +111,12 @@ impl<'a> TDoc<'a> {
             line_number: usize,
             doc: &ftd::interpreter2::TDoc,
         ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+            let (p1, p2) = ftd::interpreter2::utils::split_at(name, ".");
             match value {
                 ftd::interpreter2::Value::Record {
                     name: rec_name,
                     fields,
                 } => {
-                    let (p1, p2) = ftd::interpreter2::utils::split_at(name, ".");
                     let field = fields
                         .get(p1.as_str())
                         .ok_or(ftd::interpreter2::Error::ParseError {
@@ -130,6 +130,25 @@ impl<'a> TDoc<'a> {
                         return resolve_(p2.as_str(), &field, line_number, doc);
                     }
                     Ok(field)
+                }
+                ftd::interpreter2::Value::List { data, kind } => {
+                    let p1 = p1.parse::<usize>()?;
+                    let value = data
+                        .get(p1)
+                        .ok_or(ftd::interpreter2::Error::ParseError {
+                            message: format!(
+                                "Can't find index `{}` in list of kind `{:?}`",
+                                p1, kind
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?
+                        .clone()
+                        .resolve(doc, line_number)?;
+                    if let Some(p2) = p2 {
+                        return resolve_(p2.as_str(), &value, line_number, doc);
+                    }
+                    Ok(value)
                 }
                 t => ftd::interpreter2::utils::e2(
                     format!("Expected record found `{:?}`", t).as_str(),
@@ -375,19 +394,22 @@ impl<'a> TDoc<'a> {
             doc: &ftd::interpreter2::TDoc,
             line_number: usize,
         ) -> ftd::interpreter2::Result<ftd::interpreter2::KindData> {
-            let (v, remaining) = name
-                .split_once('.')
-                .map(|(v, n)| (v, Some(n)))
-                .unwrap_or((name, None));
-
+            let (v, remaining) = ftd::interpreter2::utils::split_at(name, ".");
             match kind {
                 ftd::interpreter2::Kind::Record { name: rec_name } => {
                     let record = doc.get_record(rec_name.as_str(), line_number)?;
-                    let field_kind = record.get_field(v, doc.name, line_number)?.kind.to_owned();
+                    let field_kind = record.get_field(&v, doc.name, line_number)?.kind.to_owned();
                     if let Some(remaining) = remaining {
-                        get_kind_(field_kind.kind, remaining, doc, line_number)
+                        get_kind_(field_kind.kind, &remaining, doc, line_number)
                     } else {
                         Ok(field_kind)
+                    }
+                }
+                ftd::interpreter2::Kind::List { kind } => {
+                    if let Some(remaining) = remaining {
+                        get_kind_(*kind, &remaining, doc, line_number)
+                    } else {
+                        Ok(ftd::interpreter2::KindData::new(*kind))
                     }
                 }
                 t => ftd::interpreter2::utils::e2(
@@ -452,10 +474,7 @@ impl<'a> TDoc<'a> {
             name: &str,
             thing: &ftd::interpreter2::Thing,
         ) -> ftd::interpreter2::Result<ftd::interpreter2::Thing> {
-            let (v, remaining) = name
-                .split_once('.')
-                .map(|(v, n)| (v, Some(n)))
-                .unwrap_or((name, None));
+            let (v, remaining) = ftd::interpreter2::utils::split_at(name, ".");
             let thing = match thing.clone() {
                 ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                     name,
@@ -466,9 +485,14 @@ impl<'a> TDoc<'a> {
                     let fields = match value.resolve(doc, line_number)?.inner() {
                         Some(ftd::interpreter2::Value::Record { fields, .. }) => fields,
                         Some(ftd::interpreter2::Value::Object { values }) => values,
+                        Some(ftd::interpreter2::Value::List { data, .. }) => data
+                            .into_iter()
+                            .enumerate()
+                            .map(|(index, v)| (index.to_string(), v))
+                            .collect::<ftd::Map<ftd::interpreter2::PropertyValue>>(),
                         None => {
-                            let kind_name = match value_kind {
-                                ftd::interpreter2::Kind::Record { ref name, .. } => name,
+                            let kind_name = match value_kind.get_record_name() {
+                                Some(name) => name,
                                 _ => {
                                     return doc.err(
                                         "not an record",
@@ -479,24 +503,22 @@ impl<'a> TDoc<'a> {
                                 }
                             };
                             let kind_thing = doc.get_thing(kind_name, line_number)?;
-                            let kind = if let Some(fields_kind) = match kind_thing {
-                                ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
-                                    fields,
-                                    ..
-                                }) => fields
-                                    .iter()
-                                    .find(|f| f.name.eq(v))
-                                    .map(|v| v.kind.to_owned()),
-                                _ => None,
-                            } {
-                                fields_kind
-                            } else {
-                                return doc.err(
-                                    "not an record or or-type",
-                                    thing,
-                                    "get_thing",
-                                    line_number,
-                                );
+                            let kind = match kind_thing
+                                .record(doc.name, line_number)?
+                                .fields
+                                .iter()
+                                .find(|f| f.name.eq(&v))
+                                .map(|v| v.kind.to_owned())
+                            {
+                                Some(f) => f,
+                                _ => {
+                                    return doc.err(
+                                        "not an record or or-type",
+                                        thing,
+                                        "get_thing",
+                                        line_number,
+                                    );
+                                }
                             };
                             let thing =
                                 ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
@@ -514,18 +536,17 @@ impl<'a> TDoc<'a> {
                                     line_number,
                                 });
                             if let Some(remaining) = remaining {
-                                return get_thing_(doc, line_number, remaining, &thing);
+                                return get_thing_(doc, line_number, &remaining, &thing);
                             }
                             return Ok(thing);
                         }
                         _ => return doc.err("not an record", thing, "get_thing", line_number),
                     };
-                    if let Some(ftd::interpreter2::PropertyValue::Value {
-                        value: val,
-                        line_number,
-                    }) = fields.get(v)
-                    {
-                        ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                    match fields.get(&v) {
+                        Some(ftd::interpreter2::PropertyValue::Value {
+                            value: val,
+                            line_number,
+                        }) => ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                             name,
                             kind: ftd::interpreter2::KindData {
                                 kind: val.kind(),
@@ -539,19 +560,17 @@ impl<'a> TDoc<'a> {
                             },
                             conditional_value: vec![],
                             line_number: *line_number,
-                        })
-                    } else if let Some(ftd::interpreter2::PropertyValue::Reference {
-                        name, ..
-                    }) = fields.get(v)
-                    {
-                        let (initial_thing, name) = doc.get_initial_thing(name, line_number)?;
-                        if let Some(remaining) = name {
-                            get_thing_(doc, line_number, remaining.as_str(), &initial_thing)?
-                        } else {
-                            initial_thing
+                        }),
+                        Some(ftd::interpreter2::PropertyValue::Reference { name, .. })
+                        | Some(ftd::interpreter2::PropertyValue::Clone { name, .. }) => {
+                            let (initial_thing, name) = doc.get_initial_thing(name, line_number)?;
+                            if let Some(remaining) = name {
+                                get_thing_(doc, line_number, remaining.as_str(), &initial_thing)?
+                            } else {
+                                initial_thing
+                            }
                         }
-                    } else {
-                        thing.clone()
+                        _ => thing.clone(),
                     }
                 }
                 _ => {
@@ -559,7 +578,7 @@ impl<'a> TDoc<'a> {
                 }
             };
             if let Some(remaining) = remaining {
-                return get_thing_(doc, line_number, remaining, &thing);
+                return get_thing_(doc, line_number, &remaining, &thing);
             }
             Ok(thing)
         }
