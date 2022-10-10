@@ -27,7 +27,8 @@ impl ComponentDefinition {
     ) -> ftd::interpreter2::Result<ComponentDefinition> {
         let component_definition = ast.get_component_definition(doc.name)?;
         let name = doc.resolve_name(component_definition.name.as_str());
-        let arguments = Argument::from_ast_fields(component_definition.arguments, doc)?;
+        let arguments =
+            Argument::from_ast_fields(component_definition.arguments, doc, &Default::default())?;
         let definition_name_with_arguments =
             (component_definition.name.as_str(), arguments.as_slice());
         let definition = Component::from_ast_component(

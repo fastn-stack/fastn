@@ -119,6 +119,7 @@ impl KindData {
     }
     pub(crate) fn from_ast_kind(
         var_kind: ftd::ast::VariableKind,
+        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<KindData> {
@@ -152,6 +153,7 @@ impl KindData {
             "decimal" => Kind::Decimal,
             "boolean" => Kind::Boolean,
             "ftd.ui" => Kind::UI { name: None },
+            k if known_kinds.contains_key(k) => known_kinds.get(k).unwrap().to_owned(),
             k => match doc.get_thing(k, line_number)? {
                 ftd::interpreter2::Thing::Record(r) => Kind::Record { name: r.name },
                 t => {

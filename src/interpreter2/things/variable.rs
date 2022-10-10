@@ -17,6 +17,7 @@ impl Variable {
         let name = doc.resolve_name(variable_definition.name.as_str());
         let kind = ftd::interpreter2::KindData::from_ast_kind(
             variable_definition.kind,
+            &Default::default(),
             doc,
             variable_definition.line_number,
         )?;

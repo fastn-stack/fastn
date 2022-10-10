@@ -1,0 +1,69 @@
+{
+  "data": {
+    "foo#toc-item": {
+      "Record": {
+        "name": "foo#toc-item",
+        "fields": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "children",
+            "kind": {
+              "kind": {
+                "List": {
+                  "kind": {
+                    "Record": {
+                      "name": "foo#toc-item"
+                    }
+                  }
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "List": {
+                    "data": [],
+                    "kind": {
+                      "kind": {
+                        "List": {
+                          "kind": {
+                            "Record": {
+                              "name": "foo#toc-item"
+                            }
+                          }
+                        }
+                      },
+                      "caption": false,
+                      "body": false
+                    }
+                  }
+                },
+                "line_number": 3
+              }
+            },
+            "line_number": 3
+          }
+        ],
+        "line_number": 1
+      }
+    }
+  },
+  "name": "foo",
+  "instructions": [],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}

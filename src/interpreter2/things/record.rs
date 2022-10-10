@@ -19,7 +19,14 @@ impl Record {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Record> {
         let record = ast.get_record(doc.name)?;
         let name = doc.resolve_name(record.name.as_str());
-        let fields = Field::from_ast_fields(record.fields, doc)?;
+        let known_kinds = std::iter::IntoIterator::into_iter([(
+            record.name.to_string(),
+            ftd::interpreter2::Kind::Record {
+                name: name.to_string(),
+            },
+        )])
+        .collect::<ftd::Map<ftd::interpreter2::Kind>>();
+        let fields = Field::from_ast_fields(record.fields, doc, &known_kinds)?;
         Ok(Record::new(name.as_str(), fields, record.line_number))
     }
 
@@ -115,10 +122,11 @@ impl Field {
     pub(crate) fn from_ast_fields(
         fields: Vec<ftd::ast::Field>,
         doc: &ftd::interpreter2::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
     ) -> ftd::interpreter2::Result<Vec<Field>> {
         let mut result = vec![];
         for field in fields {
-            result.push(Field::from_ast_field(field, doc)?);
+            result.push(Field::from_ast_field(field, doc, known_kinds)?);
         }
         Ok(result)
     }
@@ -126,8 +134,14 @@ impl Field {
     pub(crate) fn from_ast_field(
         field: ftd::ast::Field,
         doc: &ftd::interpreter2::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
     ) -> ftd::interpreter2::Result<Field> {
-        let kind = ftd::interpreter2::KindData::from_ast_kind(field.kind, doc, field.line_number)?;
+        let kind = ftd::interpreter2::KindData::from_ast_kind(
+            field.kind,
+            &known_kinds,
+            doc,
+            field.line_number,
+        )?;
         let value = field.value.map_or(Ok(None), |v| {
             ftd::interpreter2::PropertyValue::from_ast_value(v, doc, field.mutable, Some(&kind))
                 .map(Some)
