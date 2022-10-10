@@ -78,6 +78,10 @@ impl Component {
         }
     }
 
+    pub(crate) fn is_loop(&self) -> bool {
+        self.iteration.is_some()
+    }
+
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
@@ -97,7 +101,7 @@ impl Component {
             let iteration = Loop::from_ast_loop(v, definition_name_with_arguments, doc)?;
             loop_object_name_and_kind = Some((
                 iteration.alias.to_string(),
-                iteration.loop_object_as_argument(doc.name)?,
+                iteration.loop_object_as_argument(doc)?,
             ));
             Some(iteration)
         } else {
@@ -329,31 +333,16 @@ impl Loop {
 
     pub(crate) fn loop_object_as_argument(
         &self,
-        doc_id: &str,
+        doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Argument> {
-        let kind = self.loop_object_kind(doc_id)?;
+        let kind_data = self.children(doc)?.1;
         Ok(ftd::interpreter2::Argument {
             name: self.alias.to_string(),
-            kind: ftd::interpreter2::KindData::new(kind),
+            kind: kind_data,
             mutable: false,
             value: None,
             line_number: 0,
         })
-    }
-
-    pub(crate) fn loop_object_kind(
-        &self,
-        doc_id: &str,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Kind> {
-        let kind = self.on.kind();
-        match kind {
-            ftd::interpreter2::Kind::List { kind } => Ok(kind.as_ref().to_owned()),
-            t => ftd::interpreter2::utils::e2(
-                format!("Expected list kind, found: {:?}", t),
-                doc_id,
-                self.line_number,
-            ),
-        }
     }
 
     fn from_ast_loop(
@@ -372,6 +361,25 @@ impl Loop {
         )?;
 
         Ok(Loop::new(on, ast_loop.alias.as_str(), ast_loop.line_number))
+    }
+
+    pub fn children(
+        &self,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<(
+        Vec<ftd::interpreter2::PropertyValue>,
+        ftd::interpreter2::KindData,
+    )> {
+        let value = self.on.clone().resolve(doc, self.line_number)?;
+        if let ftd::interpreter2::Value::List { data, kind } = value {
+            Ok((data, kind))
+        } else {
+            ftd::interpreter2::utils::e2(
+                format!("Expected list type data, found: {:?}", self.on),
+                doc.name,
+                self.line_number,
+            )
+        }
     }
 }
 

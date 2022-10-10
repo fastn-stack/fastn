@@ -62,12 +62,19 @@ impl<'a> ExecuteDoc<'a> {
                 local_container.push(idx);
                 local_container
             };
-
-            elements.push(ExecuteDoc::execute_from_instruction(
-                instruction,
-                doc,
-                local_container.as_slice(),
-            )?);
+            if instruction.is_loop() {
+                elements.extend(ExecuteDoc::execute_recursive_component(
+                    instruction,
+                    doc,
+                    local_container.as_slice(),
+                )?);
+            } else {
+                elements.push(ExecuteDoc::execute_from_instruction(
+                    instruction,
+                    doc,
+                    local_container.as_slice(),
+                )?);
+            }
         }
 
         Ok(elements)
@@ -106,8 +113,7 @@ impl<'a> ExecuteDoc<'a> {
     fn execute_recursive_component(
         instruction: &ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
-        _local_container: &[usize],
-        _component_definition: ftd::interpreter2::ComponentDefinition,
+        local_container: &[usize],
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
         let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
             iteration
@@ -119,12 +125,40 @@ impl<'a> ExecuteDoc<'a> {
             );
         };
 
-        let _variable = iteration
-            .on
-            .clone()
-            .resolve(&doc.itdoc(), iteration.line_number)?;
-
-        todo!()
+        let children_length = iteration.children(&doc.itdoc())?.0.len();
+        let reference_name =
+            iteration
+                .on
+                .get_reference_or_clone()
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: format!(
+                        "Expected reference for loop object, found: `{:?}`",
+                        iteration.on
+                    ),
+                    doc_id: doc.name.to_string(),
+                    line_number: iteration.line_number,
+                })?;
+        let mut elements = vec![];
+        for index in 0..children_length {
+            let new_instruction = update_instruction_for_loop_element(
+                instruction,
+                doc,
+                index,
+                iteration.alias.as_str(),
+                reference_name,
+            )?;
+            let local_container = {
+                let mut local_container = local_container.to_vec();
+                local_container.push(index);
+                local_container
+            };
+            elements.push(ExecuteDoc::execute_from_instruction(
+                &new_instruction,
+                doc,
+                local_container.as_slice(),
+            )?);
+        }
+        Ok(elements)
     }
 
     fn execute_simple_component(
@@ -201,6 +235,36 @@ impl<'a> ExecuteDoc<'a> {
     }
 }
 
+fn update_instruction_for_loop_element(
+    instruction: &ftd::interpreter2::Component,
+    doc: &mut ftd::executor::TDoc,
+    index_in_loop: usize,
+    alias: &str,
+    reference_name: &str,
+) -> ftd::executor::Result<ftd::interpreter2::Component> {
+    let mut instruction = instruction.clone();
+    let reference_replace_pattern = doc.itdoc().resolve_name(alias);
+    let replace_with = format!("{}.{}", reference_name, index_in_loop);
+    let map =
+        std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();
+    update_local_variable_references_in_component(&mut instruction, &map);
+    Ok(instruction)
+}
+
+fn update_reference_value(
+    property_value: &mut ftd::interpreter2::PropertyValue,
+    reference_replace_pattern: &str,
+    replace_with: &str,
+) {
+    match property_value {
+        ftd::interpreter2::PropertyValue::Clone { name, .. }
+        | ftd::interpreter2::PropertyValue::Reference { name, .. } => {
+            *name = name.replace(reference_replace_pattern, replace_with);
+        }
+        _ => {}
+    }
+}
+
 fn update_local_variable_references_in_component(
     component: &mut ftd::interpreter2::Component,
     local_variable_map: &ftd::Map<String>,
@@ -272,7 +336,13 @@ fn update_local_variable_reference_in_property_value(
             return;
         };
 
-    if let Some(local_variable) = local_variable.get(reference_or_clone) {
+    if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
+        if reference_or_clone.starts_with(format!("{}.", k).as_str()) || reference_or_clone.eq(k) {
+            Some(v)
+        } else {
+            None
+        }
+    }) {
         property_value.set_reference_or_clone(local_variable)
     }
 }
