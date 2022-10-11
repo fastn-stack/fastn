@@ -124,7 +124,13 @@ pub struct Section {
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
+    /// In Sitemap, It is valid for section, sub-section and toc
+    /// # Section: /books/
+    ///   document: /books/python/
     pub document: Option<String>,
+    /// /books/<string:book_name>/
+    /// here book_name is path parameter
+    pub path_parameters: Option<std::collections::HashMap<String, String>>,
 }
 
 impl Section {
@@ -181,6 +187,9 @@ pub struct Subsection {
     pub readers: Vec<String>,
     pub writers: Vec<String>,
     pub document: Option<String>,
+    /// /books/<string:book_name>/
+    /// here book_name is path parameter
+    pub path_parameters: Option<std::collections::HashMap<String, String>>,
 }
 
 impl Default for Subsection {
@@ -199,6 +208,7 @@ impl Default for Subsection {
             readers: vec![],
             writers: vec![],
             document: None,
+            path_parameters: None,
         }
     }
 }
@@ -264,6 +274,9 @@ pub struct TocItem {
     pub readers: Vec<String>,
     pub writers: Vec<String>,
     pub document: Option<String>,
+    /// /books/<string:book_name>/
+    /// here book_name is path parameter
+    pub path_parameters: Option<std::collections::HashMap<String, String>>,
 }
 
 impl TocItem {
