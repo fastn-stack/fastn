@@ -109,6 +109,7 @@ pub struct PageHeadingItemCompat {
     pub is_open: bool,
     #[serde(rename = "img-src")]
     pub image_src: Option<String>,
+    pub document: Option<String>,
     pub children: Vec<PageHeadingItemCompat>,
 }
 
