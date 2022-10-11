@@ -505,6 +505,7 @@ impl InterpreterState {
                 is_active: false,
                 is_open: false,
                 image_src: None,
+                document: None,
                 children: vec![],
             }
         }
