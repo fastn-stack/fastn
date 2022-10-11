@@ -3,7 +3,6 @@ string name:
 toc-item list children:
 
 
-
 -- toc-item toc:
 name: TOC title 1
 
@@ -23,8 +22,6 @@ name: TOC title 4
 -- end: toc-item.children
 
 -- end: toc.children
-
--- end: toc
 
 
 
