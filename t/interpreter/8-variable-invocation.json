@@ -25,7 +25,8 @@
               "caption": false,
               "body": false
             },
-            "is_local_variable": false,
+            "source": "Global",
+            "is_mutable": true,
             "line_number": 11
           }
         },
@@ -59,22 +60,27 @@
                           "text": "f"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 9
                     }
                   },
                   "name": {
-                    "Value": {
-                      "value": {
-                        "String": {
-                          "text": "Name1"
-                        }
+                    "Reference": {
+                      "name": "foo#name",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
                       },
-                      "line_number": 14
+                      "source": "Global",
+                      "is_mutable": false,
+                      "line_number": 8
                     }
                   }
                 }
               }
             },
+            "is_mutable": true,
             "line_number": 7
           }
         },
@@ -95,10 +101,11 @@
           "Value": {
             "value": {
               "String": {
-                "text": "Name0"
+                "text": "Name1"
               }
             },
-            "line_number": 5
+            "is_mutable": true,
+            "line_number": 14
           }
         },
         "conditional_value": [],

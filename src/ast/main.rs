@@ -136,11 +136,6 @@ impl AST {
     pub fn is_component(&self) -> bool {
         matches!(self, AST::ComponentInvocation(_))
     }
-
-    #[cfg(test)]
-    pub(crate) fn list(self) -> Vec<Self> {
-        vec![self]
-    }
 }
 
 /// Filters out commented parts from the parsed document.

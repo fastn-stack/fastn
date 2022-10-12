@@ -21,14 +21,17 @@
           "properties": [
             {
               "value": {
-                "Clone": {
+                "Reference": {
                   "name": "foo#print.name",
                   "kind": {
                     "kind": "String",
                     "caption": false,
                     "body": false
                   },
-                  "is_local_variable": true,
+                  "source": {
+                    "Local": "print"
+                  },
+                  "is_mutable": false,
                   "line_number": 4
                 }
               },

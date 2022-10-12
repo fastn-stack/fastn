@@ -25,6 +25,7 @@
                           "text": "Varanasi"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 3
                     }
                   },
@@ -35,6 +36,7 @@
                           "text": "Prayagraj"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 4
                     }
                   },
@@ -45,6 +47,7 @@
                           "text": "Bengaluru"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 5
                     }
                   },
@@ -55,6 +58,7 @@
                           "text": "Meerut"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 6
                     }
                   }
@@ -70,6 +74,7 @@
                 }
               }
             },
+            "is_mutable": false,
             "line_number": 1
           }
         },
@@ -85,14 +90,17 @@
       "properties": [
         {
           "value": {
-            "Clone": {
+            "Reference": {
               "name": "foo#obj",
               "kind": {
                 "kind": "String",
                 "caption": false,
                 "body": false
               },
-              "is_local_variable": true,
+              "source": {
+                "Loop": "obj"
+              },
+              "is_mutable": false,
               "line_number": 11
             }
           },
@@ -103,7 +111,7 @@
       ],
       "iteration": {
         "on": {
-          "Clone": {
+          "Reference": {
             "name": "foo#locations",
             "kind": {
               "kind": {
@@ -114,7 +122,8 @@
               "caption": false,
               "body": false
             },
-            "is_local_variable": false,
+            "source": "Global",
+            "is_mutable": false,
             "line_number": 12
           }
         },

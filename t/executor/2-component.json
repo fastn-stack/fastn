@@ -20,6 +20,7 @@
                 "value": true
               }
             },
+            "is_mutable": false,
             "line_number": 1
           }
         },
@@ -47,6 +48,7 @@
                           "text": "Hello World"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 3
                     }
                   },
@@ -70,6 +72,7 @@
                             "value": 40
                           }
                         },
+                        "is_mutable": false,
                         "line_number": 4
                       }
                     },
@@ -82,14 +85,15 @@
                     "condition": {
                       "Equal": {
                         "left": {
-                          "Clone": {
+                          "Reference": {
                             "name": "foo#flag",
                             "kind": {
                               "kind": "Boolean",
                               "caption": false,
                               "body": false
                             },
-                            "is_local_variable": false,
+                            "source": "Global",
+                            "is_mutable": false,
                             "line_number": 4
                           }
                         },
@@ -100,6 +104,7 @@
                                 "value": true
                               }
                             },
+                            "is_mutable": false,
                             "line_number": 4
                           }
                         },
@@ -116,6 +121,7 @@
                             "value": 30
                           }
                         },
+                        "is_mutable": false,
                         "line_number": 5
                       }
                     },

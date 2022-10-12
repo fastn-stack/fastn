@@ -16,6 +16,7 @@
                 "text": "Default 1"
               }
             },
+            "is_mutable": true,
             "line_number": 20
           }
         },
@@ -39,6 +40,7 @@
                 "value": true
               }
             },
+            "is_mutable": true,
             "line_number": 21
           }
         },
@@ -62,6 +64,7 @@
                 "text": "Name 1"
               }
             },
+            "is_mutable": true,
             "line_number": 19
           }
         },
@@ -130,14 +133,17 @@
               "properties": [
                 {
                   "value": {
-                    "Clone": {
+                    "Reference": {
                       "name": "foo#print.name",
                       "kind": {
                         "kind": "String",
                         "caption": false,
                         "body": false
                       },
-                      "is_local_variable": true,
+                      "source": {
+                        "Local": "print"
+                      },
+                      "is_mutable": false,
                       "line_number": 10
                     }
                   },
@@ -150,14 +156,17 @@
                   "condition": {
                     "Equal": {
                       "left": {
-                        "Clone": {
+                        "Reference": {
                           "name": "foo#print.flag",
                           "kind": {
                             "kind": "Boolean",
                             "caption": false,
                             "body": false
                           },
-                          "is_local_variable": true,
+                          "source": {
+                            "Local": "print"
+                          },
+                          "is_mutable": false,
                           "line_number": 10
                         }
                       },
@@ -168,6 +177,7 @@
                               "value": true
                             }
                           },
+                          "is_mutable": false,
                           "line_number": 10
                         }
                       },
@@ -178,14 +188,17 @@
                 },
                 {
                   "value": {
-                    "Clone": {
+                    "Reference": {
                       "name": "foo#print.default",
                       "kind": {
                         "kind": "String",
                         "caption": false,
                         "body": false
                       },
-                      "is_local_variable": true,
+                      "source": {
+                        "Local": "print"
+                      },
+                      "is_mutable": false,
                       "line_number": 11
                     }
                   },
@@ -200,14 +213,17 @@
                 },
                 {
                   "value": {
-                    "Clone": {
+                    "Reference": {
                       "name": "foo#print.padding",
                       "kind": {
                         "kind": "Integer",
                         "caption": false,
                         "body": false
                       },
-                      "is_local_variable": true,
+                      "source": {
+                        "Local": "print"
+                      },
+                      "is_mutable": false,
                       "line_number": 12
                     }
                   },
@@ -220,14 +236,17 @@
                   "condition": {
                     "Equal": {
                       "left": {
-                        "Clone": {
+                        "Reference": {
                           "name": "foo#print.flag",
                           "kind": {
                             "kind": "Boolean",
                             "caption": false,
                             "body": false
                           },
-                          "is_local_variable": true,
+                          "source": {
+                            "Local": "print"
+                          },
+                          "is_mutable": false,
                           "line_number": 12
                         }
                       },
@@ -238,6 +257,7 @@
                               "value": true
                             }
                           },
+                          "is_mutable": false,
                           "line_number": 12
                         }
                       },
@@ -274,7 +294,8 @@
                 "caption": false,
                 "body": false
               },
-              "is_local_variable": false,
+              "source": "Global",
+              "is_mutable": true,
               "line_number": 24
             }
           },
@@ -287,14 +308,15 @@
           "condition": {
             "Equal": {
               "left": {
-                "Clone": {
+                "Reference": {
                   "name": "foo#f1",
                   "kind": {
                     "kind": "Boolean",
                     "caption": false,
                     "body": false
                   },
-                  "is_local_variable": false,
+                  "source": "Global",
+                  "is_mutable": false,
                   "line_number": 24
                 }
               },
@@ -305,6 +327,7 @@
                       "value": true
                     }
                   },
+                  "is_mutable": false,
                   "line_number": 24
                 }
               },
@@ -321,6 +344,7 @@
                   "text": "Name 2"
                 }
               },
+              "is_mutable": true,
               "line_number": 25
             }
           },
@@ -342,7 +366,8 @@
                 "caption": false,
                 "body": false
               },
-              "is_local_variable": false,
+              "source": "Global",
+              "is_mutable": true,
               "line_number": 26
             }
           },
@@ -355,14 +380,15 @@
           "condition": {
             "Equal": {
               "left": {
-                "Clone": {
+                "Reference": {
                   "name": "foo#f1",
                   "kind": {
                     "kind": "Boolean",
                     "caption": false,
                     "body": false
                   },
-                  "is_local_variable": false,
+                  "source": "Global",
+                  "is_mutable": false,
                   "line_number": 26
                 }
               },
@@ -373,6 +399,7 @@
                       "value": true
                     }
                   },
+                  "is_mutable": false,
                   "line_number": 26
                 }
               },
@@ -389,6 +416,7 @@
                   "text": "Default 2"
                 }
               },
+              "is_mutable": true,
               "line_number": 27
             }
           },
@@ -410,7 +438,8 @@
                 "caption": false,
                 "body": false
               },
-              "is_local_variable": false,
+              "source": "Global",
+              "is_mutable": true,
               "line_number": 28
             }
           },
@@ -431,6 +460,7 @@
                   "value": 20
                 }
               },
+              "is_mutable": true,
               "line_number": 29
             }
           },

@@ -1,11 +1,15 @@
 use pretty_assertions::assert_eq; // macro
 
 #[track_caller]
-fn p(s: &str, t: &str) {
+fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let sections = ftd::p11::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
     let ast = ftd::ast::AST::from_sections(sections.as_slice(), "foo")
         .unwrap_or_else(|e| panic!("{:?}", e));
     let expected_json = serde_json::to_string_pretty(&ast).unwrap();
+    if fix {
+        std::fs::write(file_location, expected_json).unwrap();
+        return;
+    }
     let t: Vec<ftd::ast::AST> = serde_json::from_str(t)
         .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
     assert_eq!(&t, &ast, "Expected JSON: {}", expected_json)
@@ -41,12 +45,14 @@ fn f(s: &str, m: &str) {
 fn ast_test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test
+    let cli_args: Vec<String> = std::env::args().collect();
+    let fix = cli_args.iter().any(|v| v.eq("fix"));
     for (files, json) in find_file_groups() {
-        let t = std::fs::read_to_string(json).unwrap();
+        let t = std::fs::read_to_string(&json).unwrap();
         for f in files {
             let s = std::fs::read_to_string(&f).unwrap();
-            println!("testing {}", f.display());
-            p(&s, &t);
+            println!("{} {}", if fix { "fixing" } else { "testing" }, f.display());
+            p(&s, &t, fix, &json);
         }
     }
 }

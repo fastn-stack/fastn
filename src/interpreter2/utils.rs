@@ -143,7 +143,11 @@ pub fn get_argument_for_reference_and_remaining<'a>(
     doc_id: &'a str,
     component_definition_name_with_arguments: Option<(&'a str, &'a [ftd::interpreter2::Argument])>,
     loop_object_name_and_kind: &'a Option<(String, ftd::interpreter2::Argument)>,
-) -> Option<(&'a ftd::interpreter2::Argument, Option<String>)> {
+) -> Option<(
+    &'a ftd::interpreter2::Argument,
+    Option<String>,
+    ftd::interpreter2::PropertyValueSource,
+)> {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
@@ -151,7 +155,11 @@ pub fn get_argument_for_reference_and_remaining<'a>(
         {
             let (p1, p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
             if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
-                return Some((argument, p2));
+                return Some((
+                    argument,
+                    p2,
+                    ftd::interpreter2::PropertyValueSource::Local(component_name.to_string()),
+                ));
             }
         }
     }
@@ -162,7 +170,11 @@ pub fn get_argument_for_reference_and_remaining<'a>(
             || name.eq(format!("{}#{}", doc_id, loop_name).as_str())
         {
             let p2 = ftd::interpreter2::utils::split_at(name, ".").1;
-            return Some((loop_argument, p2));
+            return Some((
+                loop_argument,
+                p2,
+                ftd::interpreter2::PropertyValueSource::Loop(loop_name.to_string()),
+            ));
         }
     }
 

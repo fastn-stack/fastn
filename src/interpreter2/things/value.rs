@@ -2,23 +2,42 @@
 pub enum PropertyValue {
     Value {
         value: ftd::interpreter2::Value,
+        is_mutable: bool,
         line_number: usize,
     },
     Reference {
         name: String,
         kind: ftd::interpreter2::KindData,
-        is_local_variable: bool,
+        source: ftd::interpreter2::PropertyValueSource,
+        is_mutable: bool,
         line_number: usize,
     },
     Clone {
         name: String,
         kind: ftd::interpreter2::KindData,
-        is_local_variable: bool,
+        source: ftd::interpreter2::PropertyValueSource,
+        is_mutable: bool,
         line_number: usize,
     },
 }
 
 impl PropertyValue {
+    pub(crate) fn is_mutable(&self) -> bool {
+        match self {
+            PropertyValue::Value { is_mutable, .. }
+            | PropertyValue::Reference { is_mutable, .. }
+            | PropertyValue::Clone { is_mutable, .. } => *is_mutable,
+        }
+    }
+
+    pub(crate) fn line_number(&self) -> usize {
+        match self {
+            PropertyValue::Value { line_number, .. }
+            | PropertyValue::Reference { line_number, .. }
+            | PropertyValue::Clone { line_number, .. } => *line_number,
+        }
+    }
+
     pub(crate) fn resolve(
         self,
         doc: &ftd::interpreter2::TDoc,
@@ -107,7 +126,7 @@ impl PropertyValue {
     pub(crate) fn from_ast_value_with_argument(
         value: ftd::ast::VariableValue,
         doc: &ftd::interpreter2::TDoc,
-        mutable: bool,
+        is_mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
@@ -115,7 +134,7 @@ impl PropertyValue {
         if let Some(reference) = PropertyValue::reference_from_ast_value(
             &value,
             doc,
-            mutable,
+            is_mutable,
             expected_kind,
             definition_name_with_arguments,
             loop_object_name_and_kind,
@@ -132,24 +151,28 @@ impl PropertyValue {
                 value: Value::String {
                     text: value.string(doc.name)?,
                 },
+                is_mutable,
                 line_number: value.line_number(),
             },
             ftd::interpreter2::Kind::Integer => PropertyValue::Value {
                 value: Value::Integer {
                     value: value.string(doc.name)?.parse()?,
                 },
+                is_mutable,
                 line_number: value.line_number(),
             },
             ftd::interpreter2::Kind::Decimal => PropertyValue::Value {
                 value: Value::Decimal {
                     value: value.string(doc.name)?.parse()?,
                 },
+                is_mutable,
                 line_number: value.line_number(),
             },
             ftd::interpreter2::Kind::Boolean => PropertyValue::Value {
                 value: Value::Boolean {
                     value: value.string(doc.name)?.parse()?,
                 },
+                is_mutable,
                 line_number: value.line_number(),
             },
             ftd::interpreter2::Kind::List { kind } if value.is_list() => {
@@ -172,7 +195,7 @@ impl PropertyValue {
                     values.push(PropertyValue::from_ast_value(
                         value,
                         doc,
-                        mutable,
+                        is_mutable,
                         Some(&ftd::interpreter2::KindData {
                             kind: kind.as_ref().clone(),
                             caption: expected_kind.caption,
@@ -185,6 +208,7 @@ impl PropertyValue {
                         data: values,
                         kind: expected_kind.clone(),
                     },
+                    is_mutable,
                     line_number,
                 }
             }
@@ -232,6 +256,7 @@ impl PropertyValue {
                                     data: Box::new(None),
                                     kind: expected_kind.to_owned(),
                                 },
+                                is_mutable,
                                 line_number,
                             },
                         );
@@ -285,6 +310,7 @@ impl PropertyValue {
                         name: name.to_string(),
                         fields: result_field,
                     },
+                    is_mutable,
                     line_number,
                 }
             }
@@ -304,10 +330,11 @@ impl PropertyValue {
     ) -> ftd::interpreter2::Result<Option<ftd::interpreter2::PropertyValue>> {
         match value.string(doc.name) {
             Ok(reference) if reference.starts_with(ftd::interpreter2::utils::CLONE) => {
-                let reference_full_name =
-                    doc.resolve_name(reference.trim_start_matches(ftd::interpreter2::utils::CLONE));
+                let reference = reference
+                    .trim_start_matches(ftd::interpreter2::utils::CLONE)
+                    .to_string();
 
-                let (is_local_variable, found_kind) = doc.get_kind_with_argument(
+                let (source, found_kind) = doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
@@ -326,19 +353,22 @@ impl PropertyValue {
                     _ => {}
                 }
 
+                let reference_full_name = source.get_reference_name(reference.as_str(), doc);
+
                 Ok(Some(PropertyValue::Clone {
                     name: reference_full_name,
                     kind: found_kind,
-                    is_local_variable,
+                    source,
+                    is_mutable: mutable,
                     line_number: value.line_number(),
                 }))
             }
             Ok(reference) if reference.starts_with(ftd::interpreter2::utils::REFERENCE) => {
-                let reference_full_name = doc.resolve_name(
-                    reference.trim_start_matches(ftd::interpreter2::utils::REFERENCE),
-                );
+                let reference = reference
+                    .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
+                    .to_string();
 
-                let (is_local_variable, found_kind) = doc.get_kind_with_argument(
+                let (source, found_kind) = doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
@@ -358,8 +388,8 @@ impl PropertyValue {
                 }
 
                 if mutable {
-                    let is_variable_mutable = if !is_local_variable {
-                        doc.get_variable(reference_full_name.as_str(), value.line_number())?
+                    let is_variable_mutable = if source.is_global() {
+                        doc.get_variable(reference.as_str(), value.line_number())?
                             .mutable
                     } else {
                         ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
@@ -383,20 +413,17 @@ impl PropertyValue {
                             value.line_number(),
                         );
                     }
-                    Ok(Some(PropertyValue::Reference {
-                        name: reference_full_name,
-                        kind: found_kind,
-                        is_local_variable,
-                        line_number: value.line_number(),
-                    }))
-                } else {
-                    Ok(Some(PropertyValue::Clone {
-                        name: reference_full_name,
-                        kind: found_kind,
-                        is_local_variable,
-                        line_number: value.line_number(),
-                    }))
                 }
+
+                let reference_full_name = source.get_reference_name(reference.as_str(), doc);
+
+                Ok(Some(PropertyValue::Reference {
+                    name: reference_full_name,
+                    kind: found_kind,
+                    source,
+                    is_mutable: mutable,
+                    line_number: value.line_number(),
+                }))
             }
             _ => Ok(None),
         }
@@ -407,6 +434,30 @@ impl PropertyValue {
             PropertyValue::Value { value, .. } => value.kind(),
             PropertyValue::Reference { kind, .. } => kind.kind.to_owned(),
             PropertyValue::Clone { kind, .. } => kind.kind.to_owned(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum PropertyValueSource {
+    Global,
+    Local(String),
+    Loop(String),
+}
+
+impl PropertyValueSource {
+    fn is_global(&self) -> bool {
+        PropertyValueSource::Global.eq(self)
+    }
+
+    fn get_reference_name(&self, name: &str, doc: &ftd::interpreter2::TDoc) -> String {
+        let name = name
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
+            .unwrap_or(name);
+        match self {
+            PropertyValueSource::Global | PropertyValueSource::Local(_) => doc.resolve_name(name),
+            PropertyValueSource::Loop(_) => doc.resolve_name(name), //TODO: arpita
         }
     }
 }

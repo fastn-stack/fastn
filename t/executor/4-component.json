@@ -32,14 +32,17 @@
               "properties": [
                 {
                   "value": {
-                    "Clone": {
+                    "Reference": {
                       "name": "foo#print.name",
                       "kind": {
                         "kind": "String",
                         "caption": false,
                         "body": false
                       },
-                      "is_local_variable": true,
+                      "source": {
+                        "Local": "print"
+                      },
+                      "is_mutable": false,
                       "line_number": 6
                     }
                   },
@@ -76,6 +79,7 @@
                 "text": "Hello"
               }
             },
+            "is_mutable": false,
             "line_number": 14
           }
         },
@@ -99,6 +103,7 @@
                 "text": "Hello Again"
               }
             },
+            "is_mutable": false,
             "line_number": 17
           }
         },
@@ -124,14 +129,17 @@
                       "properties": [
                         {
                           "value": {
-                            "Clone": {
+                            "Reference": {
                               "name": "foo#print:name:0",
                               "kind": {
                                 "kind": "String",
                                 "caption": false,
                                 "body": false
                               },
-                              "is_local_variable": true,
+                              "source": {
+                                "Local": "print"
+                              },
+                              "is_mutable": false,
                               "line_number": 6
                             }
                           },
@@ -179,14 +187,17 @@
                       "properties": [
                         {
                           "value": {
-                            "Clone": {
+                            "Reference": {
                               "name": "foo#print:name:1",
                               "kind": {
                                 "kind": "String",
                                 "caption": false,
                                 "body": false
                               },
-                              "is_local_variable": true,
+                              "source": {
+                                "Local": "print"
+                              },
+                              "is_mutable": false,
                               "line_number": 6
                             }
                           },

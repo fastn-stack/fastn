@@ -23,6 +23,7 @@
                           "text": "Hello World"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 1
                     }
                   },

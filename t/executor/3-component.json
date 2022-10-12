@@ -20,6 +20,7 @@
                 "value": true
               }
             },
+            "is_mutable": false,
             "line_number": 1
           }
         },
@@ -51,6 +52,7 @@
                                   "text": "Hello World"
                                 }
                               },
+                              "is_mutable": false,
                               "line_number": 5
                             }
                           },
@@ -74,6 +76,7 @@
                                     "value": 40
                                   }
                                 },
+                                "is_mutable": false,
                                 "line_number": 6
                               }
                             },
@@ -86,14 +89,15 @@
                             "condition": {
                               "Equal": {
                                 "left": {
-                                  "Clone": {
+                                  "Reference": {
                                     "name": "foo#flag",
                                     "kind": {
                                       "kind": "Boolean",
                                       "caption": false,
                                       "body": false
                                     },
-                                    "is_local_variable": false,
+                                    "source": "Global",
+                                    "is_mutable": false,
                                     "line_number": 6
                                   }
                                 },
@@ -104,6 +108,7 @@
                                         "value": true
                                       }
                                     },
+                                    "is_mutable": false,
                                     "line_number": 6
                                   }
                                 },
@@ -120,6 +125,7 @@
                                     "value": 30
                                   }
                                 },
+                                "is_mutable": false,
                                 "line_number": 7
                               }
                             },
@@ -158,6 +164,7 @@
                                           "text": "Hello"
                                         }
                                       },
+                                      "is_mutable": false,
                                       "line_number": 11
                                     }
                                   },
@@ -194,6 +201,7 @@
                                           "text": "Again"
                                         }
                                       },
+                                      "is_mutable": false,
                                       "line_number": 13
                                     }
                                   },

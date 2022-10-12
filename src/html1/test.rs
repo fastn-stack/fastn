@@ -22,7 +22,7 @@ pub fn interpret_helper(
 }
 
 #[track_caller]
-fn p(s: &str, t: &str) {
+fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
@@ -40,6 +40,10 @@ fn p(s: &str, t: &str) {
             .replace("__ftd_element_css__", "")
             .as_str(),
     );
+    if fix {
+        std::fs::write(file_location, html_str).unwrap();
+        return;
+    }
     assert_eq!(&t, &html_str, "Expected JSON: {}", html_str)
 }
 
@@ -47,12 +51,14 @@ fn p(s: &str, t: &str) {
 fn html_test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test
+    let cli_args: Vec<String> = std::env::args().collect();
+    let fix = cli_args.iter().any(|v| v.eq("fix"));
     for (files, json) in find_file_groups() {
-        let t = std::fs::read_to_string(json).unwrap();
+        let t = std::fs::read_to_string(&json).unwrap();
         for f in files {
             let s = std::fs::read_to_string(&f).unwrap();
-            println!("testing {}", f.display());
-            p(&s, &t);
+            println!("{} {}", if fix { "fixing" } else { "testing" }, f.display());
+            p(&s, &t, fix, &json);
         }
     }
 }

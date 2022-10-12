@@ -36,14 +36,17 @@
               "properties": [
                 {
                   "value": {
-                    "Clone": {
+                    "Reference": {
                       "name": "foo#print-toc-item.item.name",
                       "kind": {
                         "kind": "String",
                         "caption": false,
                         "body": false
                       },
-                      "is_local_variable": true,
+                      "source": {
+                        "Local": "print-toc-item"
+                      },
+                      "is_mutable": false,
                       "line_number": 36
                     }
                   },
@@ -63,7 +66,7 @@
               "properties": [
                 {
                   "value": {
-                    "Clone": {
+                    "Reference": {
                       "name": "foo#obj",
                       "kind": {
                         "kind": {
@@ -74,7 +77,10 @@
                         "caption": false,
                         "body": false
                       },
-                      "is_local_variable": true,
+                      "source": {
+                        "Loop": "obj"
+                      },
+                      "is_mutable": false,
                       "line_number": 39
                     }
                   },
@@ -90,7 +96,7 @@
               ],
               "iteration": {
                 "on": {
-                  "Clone": {
+                  "Reference": {
                     "name": "foo#print-toc-item.item.children",
                     "kind": {
                       "kind": {
@@ -105,7 +111,10 @@
                       "caption": false,
                       "body": false
                     },
-                    "is_local_variable": true,
+                    "source": {
+                      "Local": "print-toc-item"
+                    },
+                    "is_mutable": false,
                     "line_number": 40
                   }
                 },
@@ -137,7 +146,7 @@
         },
         "mutable": false,
         "value": {
-          "Clone": {
+          "Reference": {
             "name": "foo#toc",
             "kind": {
               "kind": {
@@ -148,7 +157,8 @@
               "caption": false,
               "body": false
             },
-            "is_local_variable": false,
+            "source": "Global",
+            "is_mutable": false,
             "line_number": 49
           }
         },
@@ -170,7 +180,7 @@
         },
         "mutable": false,
         "value": {
-          "Clone": {
+          "Reference": {
             "name": "foo#print-toc-item:item:0.children.0",
             "kind": {
               "kind": {
@@ -181,7 +191,10 @@
               "caption": false,
               "body": false
             },
-            "is_local_variable": true,
+            "source": {
+              "Loop": "obj"
+            },
+            "is_mutable": false,
             "line_number": 39
           }
         },
@@ -203,7 +216,7 @@
         },
         "mutable": false,
         "value": {
-          "Clone": {
+          "Reference": {
             "name": "foo#print-toc-item:item:0.children.1",
             "kind": {
               "kind": {
@@ -214,7 +227,10 @@
               "caption": false,
               "body": false
             },
-            "is_local_variable": true,
+            "source": {
+              "Loop": "obj"
+            },
+            "is_mutable": false,
             "line_number": 39
           }
         },
@@ -236,7 +252,7 @@
         },
         "mutable": false,
         "value": {
-          "Clone": {
+          "Reference": {
             "name": "foo#print-toc-item:item:0,1,1.children.0",
             "kind": {
               "kind": {
@@ -247,7 +263,10 @@
               "caption": false,
               "body": false
             },
-            "is_local_variable": true,
+            "source": {
+              "Loop": "obj"
+            },
+            "is_mutable": false,
             "line_number": 39
           }
         },
@@ -305,6 +324,7 @@
                                               }
                                             }
                                           },
+                                          "is_mutable": false,
                                           "line_number": 12
                                         }
                                       },
@@ -315,12 +335,14 @@
                                               "text": "TOC title 2"
                                             }
                                           },
+                                          "is_mutable": false,
                                           "line_number": 13
                                         }
                                       }
                                     }
                                   }
                                 },
+                                "is_mutable": false,
                                 "line_number": 12
                               }
                             },
@@ -361,6 +383,7 @@
                                                                   }
                                                                 }
                                                               },
+                                                              "is_mutable": false,
                                                               "line_number": 20
                                                             }
                                                           },
@@ -371,12 +394,14 @@
                                                                   "text": "TOC title 4"
                                                                 }
                                                               },
+                                                              "is_mutable": false,
                                                               "line_number": 21
                                                             }
                                                           }
                                                         }
                                                       }
                                                     },
+                                                    "is_mutable": false,
                                                     "line_number": 20
                                                   }
                                                 }
@@ -396,6 +421,7 @@
                                               }
                                             }
                                           },
+                                          "is_mutable": false,
                                           "line_number": 15
                                         }
                                       },
@@ -406,12 +432,14 @@
                                               "text": "TOC title 3"
                                             }
                                           },
+                                          "is_mutable": false,
                                           "line_number": 16
                                         }
                                       }
                                     }
                                   }
                                 },
+                                "is_mutable": false,
                                 "line_number": 15
                               }
                             }
@@ -431,6 +459,7 @@
                           }
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 7
                     }
                   },
@@ -441,12 +470,14 @@
                           "text": "TOC title 1"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 8
                     }
                   }
                 }
               }
             },
+            "is_mutable": false,
             "line_number": 7
           }
         },
@@ -505,6 +536,7 @@
                     }
                   }
                 },
+                "is_mutable": false,
                 "line_number": 3
               }
             },
@@ -532,14 +564,17 @@
                       "properties": [
                         {
                           "value": {
-                            "Clone": {
+                            "Reference": {
                               "name": "foo#print-toc-item:item:0.name",
                               "kind": {
                                 "kind": "String",
                                 "caption": false,
                                 "body": false
                               },
-                              "is_local_variable": true,
+                              "source": {
+                                "Local": "print-toc-item"
+                              },
+                              "is_mutable": false,
                               "line_number": 36
                             }
                           },
@@ -574,14 +609,17 @@
                               "properties": [
                                 {
                                   "value": {
-                                    "Clone": {
+                                    "Reference": {
                                       "name": "foo#print-toc-item:item:0,1,0.name",
                                       "kind": {
                                         "kind": "String",
                                         "caption": false,
                                         "body": false
                                       },
-                                      "is_local_variable": true,
+                                      "source": {
+                                        "Local": "print-toc-item"
+                                      },
+                                      "is_mutable": false,
                                       "line_number": 36
                                     }
                                   },
@@ -629,14 +667,17 @@
                               "properties": [
                                 {
                                   "value": {
-                                    "Clone": {
+                                    "Reference": {
                                       "name": "foo#print-toc-item:item:0,1,1.name",
                                       "kind": {
                                         "kind": "String",
                                         "caption": false,
                                         "body": false
                                       },
-                                      "is_local_variable": true,
+                                      "source": {
+                                        "Local": "print-toc-item"
+                                      },
+                                      "is_mutable": false,
                                       "line_number": 36
                                     }
                                   },
@@ -671,14 +712,17 @@
                                       "properties": [
                                         {
                                           "value": {
-                                            "Clone": {
+                                            "Reference": {
                                               "name": "foo#print-toc-item:item:0,1,1,1,0.name",
                                               "kind": {
                                                 "kind": "String",
                                                 "caption": false,
                                                 "body": false
                                               },
-                                              "is_local_variable": true,
+                                              "source": {
+                                                "Local": "print-toc-item"
+                                              },
+                                              "is_mutable": false,
                                               "line_number": 36
                                             }
                                           },

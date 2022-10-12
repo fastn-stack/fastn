@@ -340,9 +340,9 @@ impl Loop {
         Ok(ftd::interpreter2::Argument {
             name: self.alias.to_string(),
             kind: ftd::interpreter2::KindData::new(kind),
-            mutable: false,
-            value: None,
-            line_number: 0,
+            mutable: self.on.is_mutable(),
+            value: Some(self.on.to_owned()),
+            line_number: self.on.line_number(),
         })
     }
 

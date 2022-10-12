@@ -77,6 +77,7 @@ impl<'a> TDoc<'a> {
                 (
                     ftd::interpreter2::PropertyValue::Value {
                         value: v.to_value(kind),
+                        is_mutable: false,
                         line_number: v.line_number,
                     },
                     v.name,
@@ -313,12 +314,23 @@ impl<'a> TDoc<'a> {
                             )
                         }
                     },
-                    ftd::interpreter2::PropertyValue::Reference { name, kind, .. }
-                    | ftd::interpreter2::PropertyValue::Clone { name, kind, .. } => {
+                    ftd::interpreter2::PropertyValue::Reference {
+                        name,
+                        kind,
+                        is_mutable,
+                        ..
+                    }
+                    | ftd::interpreter2::PropertyValue::Clone {
+                        name,
+                        kind,
+                        is_mutable,
+                        ..
+                    } => {
                         let resolved_value = doc.resolve(name, kind, line_number)?;
                         *value = ftd::interpreter2::PropertyValue::Value {
                             value: resolved_value,
                             line_number,
+                            is_mutable: *is_mutable,
                         };
                         change_value(value, set, Some(remaining), doc, line_number)?;
                     }
@@ -337,28 +349,27 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         component_definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-    ) -> ftd::interpreter2::Result<(bool, ftd::interpreter2::KindData)> {
-        let name = if let Some(name) = name
+    ) -> ftd::interpreter2::Result<(
+        ftd::interpreter2::PropertyValueSource,
+        ftd::interpreter2::KindData,
+    )> {
+        let name = name
             .strip_prefix(ftd::interpreter2::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
-        {
-            name
-        } else {
-            name
-        };
+            .unwrap_or(name);
 
-        let initial_kind_with_remaining =
+        let initial_kind_with_remaining_and_source =
             ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
                 name,
                 self.name,
                 component_definition_name_with_arguments,
                 loop_object_name_and_kind,
             )
-            .map(|v| (v.0.kind.to_owned(), v.1));
+            .map(|v| (v.0.kind.to_owned(), v.1, v.2));
 
-        let (initial_kind, remaining, is_local_variable) =
-            if let Some(r) = initial_kind_with_remaining {
-                (r.0, r.1, true)
+        let (initial_kind, remaining, source) =
+            if let Some(r) = initial_kind_with_remaining_and_source {
+                r
             } else {
                 let (initial_thing, remaining) = self.get_initial_thing(name, line_number)?;
 
@@ -376,17 +387,21 @@ impl<'a> TDoc<'a> {
                     },
                 };
 
-                (initial_kind, remaining, false)
+                (
+                    initial_kind,
+                    remaining,
+                    ftd::interpreter2::PropertyValueSource::Global,
+                )
             };
 
         if let Some(remaining) = remaining {
             return Ok((
-                is_local_variable,
+                source,
                 get_kind_(initial_kind.kind, remaining.as_str(), self, line_number)?,
             ));
         }
 
-        return Ok((is_local_variable, initial_kind));
+        return Ok((source, initial_kind));
 
         fn get_kind_(
             kind: ftd::interpreter2::Kind,
@@ -452,14 +467,10 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Thing> {
-        let name = if let Some(name) = name
+        let name = name
             .strip_prefix(ftd::interpreter2::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
-        {
-            name
-        } else {
-            name
-        };
+            .unwrap_or(name);
 
         let (initial_thing, remaining) = self.get_initial_thing(name, line_number)?;
 
@@ -479,6 +490,7 @@ impl<'a> TDoc<'a> {
                 ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                     name,
                     value,
+                    mutable,
                     ..
                 }) => {
                     let value_kind = value.kind();
@@ -524,12 +536,13 @@ impl<'a> TDoc<'a> {
                                 ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                                     name,
                                     kind: kind.to_owned(),
-                                    mutable: false,
+                                    mutable,
                                     value: ftd::interpreter2::PropertyValue::Value {
                                         value: ftd::interpreter2::Value::Optional {
                                             data: Box::new(None),
                                             kind,
                                         },
+                                        is_mutable: mutable,
                                         line_number,
                                     },
                                     conditional_value: vec![],
@@ -546,6 +559,7 @@ impl<'a> TDoc<'a> {
                         Some(ftd::interpreter2::PropertyValue::Value {
                             value: val,
                             line_number,
+                            is_mutable,
                         }) => ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                             name,
                             kind: ftd::interpreter2::KindData {
@@ -557,6 +571,7 @@ impl<'a> TDoc<'a> {
                             value: ftd::interpreter2::PropertyValue::Value {
                                 value: val.to_owned(),
                                 line_number: *line_number,
+                                is_mutable: *is_mutable,
                             },
                             conditional_value: vec![],
                             line_number: *line_number,

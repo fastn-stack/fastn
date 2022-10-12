@@ -26,6 +26,7 @@
                           "value": 10
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 9
                     }
                   },
@@ -36,12 +37,14 @@
                           "text": "FOO"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 8
                     }
                   }
                 }
               }
             },
+            "is_mutable": false,
             "line_number": 7
           }
         },

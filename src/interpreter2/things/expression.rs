@@ -166,6 +166,7 @@ impl Boolean {
                             value: ftd::interpreter2::Value::Boolean {
                                 value: boolean.as_str() == "Equal",
                             },
+                            is_mutable: false,
                             line_number: condition.line_number,
                         },
                         line_number: condition.line_number,

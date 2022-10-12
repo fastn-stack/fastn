@@ -15,7 +15,7 @@ pub use things::{
     expression::Boolean,
     kind::{Kind, KindData},
     record::{Field, Record},
-    value::{PropertyValue, Value},
+    value::{PropertyValue, PropertyValueSource, Value},
     variable::{ConditionalValue, Variable},
     Thing,
 };

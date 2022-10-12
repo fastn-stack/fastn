@@ -12,7 +12,6 @@
           "caption": false,
           "body": false
         },
-        "conditional_value": [],
         "mutable": true,
         "value": {
           "Reference": {
@@ -26,10 +25,12 @@
               "caption": false,
               "body": false
             },
-            "is_local_variable": false,
+            "source": "Global",
+            "is_mutable": true,
             "line_number": 11
           }
         },
+        "conditional_value": [],
         "line_number": 11
       }
     },
@@ -45,7 +46,6 @@
           "caption": false,
           "body": false
         },
-        "conditional_value": [],
         "mutable": true,
         "value": {
           "Value": {
@@ -60,6 +60,7 @@
                           "text": "f"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 9
                     }
                   },
@@ -71,16 +72,19 @@
                         "caption": false,
                         "body": false
                       },
-                      "is_local_variable": false,
+                      "source": "Global",
+                      "is_mutable": true,
                       "line_number": 8
                     }
                   }
                 }
               }
             },
+            "is_mutable": true,
             "line_number": 7
           }
         },
+        "conditional_value": [],
         "line_number": 7
       }
     },
@@ -92,7 +96,6 @@
           "caption": false,
           "body": false
         },
-        "conditional_value": [],
         "mutable": true,
         "value": {
           "Value": {
@@ -101,9 +104,11 @@
                 "text": "Name1"
               }
             },
+            "is_mutable": true,
             "line_number": 14
           }
         },
+        "conditional_value": [],
         "line_number": 5
       }
     },

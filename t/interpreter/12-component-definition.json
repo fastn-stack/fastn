@@ -16,6 +16,7 @@
                 "text": "Name 1"
               }
             },
+            "is_mutable": true,
             "line_number": 1
           }
         },
@@ -44,14 +45,17 @@
           "properties": [
             {
               "value": {
-                "Clone": {
+                "Reference": {
                   "name": "foo#print.name",
                   "kind": {
                     "kind": "String",
                     "caption": false,
                     "body": false
                   },
-                  "is_local_variable": true,
+                  "source": {
+                    "Local": "print"
+                  },
+                  "is_mutable": false,
                   "line_number": 6
                 }
               },
@@ -84,7 +88,8 @@
                 "caption": false,
                 "body": false
               },
-              "is_local_variable": false,
+              "source": "Global",
+              "is_mutable": true,
               "line_number": 11
             }
           },
@@ -116,7 +121,8 @@
                 "caption": false,
                 "body": false
               },
-              "is_local_variable": false,
+              "source": "Global",
+              "is_mutable": true,
               "line_number": 14
             }
           },

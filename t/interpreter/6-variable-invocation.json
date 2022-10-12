@@ -16,6 +16,7 @@
                 "text": "sjdh"
               }
             },
+            "is_mutable": true,
             "line_number": 11
           }
         },
@@ -49,6 +50,7 @@
                           "text": "f"
                         }
                       },
+                      "is_mutable": false,
                       "line_number": 9
                     }
                   },
@@ -60,13 +62,15 @@
                         "caption": false,
                         "body": false
                       },
-                      "is_local_variable": false,
+                      "source": "Global",
+                      "is_mutable": true,
                       "line_number": 8
                     }
                   }
                 }
               }
             },
+            "is_mutable": true,
             "line_number": 7
           }
         },
@@ -91,7 +95,8 @@
               "caption": false,
               "body": false
             },
-            "is_local_variable": false,
+            "source": "Global",
+            "is_mutable": true,
             "line_number": 13
           }
         },
