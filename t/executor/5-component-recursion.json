@@ -132,148 +132,6 @@
         "line_number": 31
       }
     },
-    "foo#print-toc-item:item:0": {
-      "Variable": {
-        "name": "foo#print-toc-item:item:0",
-        "kind": {
-          "kind": {
-            "Record": {
-              "name": "foo#toc-item"
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Reference": {
-            "name": "foo#toc",
-            "kind": {
-              "kind": {
-                "Record": {
-                  "name": "foo#toc-item"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "source": "Global",
-            "is_mutable": false,
-            "line_number": 49
-          }
-        },
-        "conditional_value": [],
-        "line_number": 48
-      }
-    },
-    "foo#print-toc-item:item:0,1,0": {
-      "Variable": {
-        "name": "foo#print-toc-item:item:0,1,0",
-        "kind": {
-          "kind": {
-            "Record": {
-              "name": "foo#toc-item"
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Reference": {
-            "name": "foo#print-toc-item:item:0.children.0",
-            "kind": {
-              "kind": {
-                "Record": {
-                  "name": "foo#toc-item"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "source": {
-              "Loop": "obj"
-            },
-            "is_mutable": false,
-            "line_number": 39
-          }
-        },
-        "conditional_value": [],
-        "line_number": 38
-      }
-    },
-    "foo#print-toc-item:item:0,1,1": {
-      "Variable": {
-        "name": "foo#print-toc-item:item:0,1,1",
-        "kind": {
-          "kind": {
-            "Record": {
-              "name": "foo#toc-item"
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Reference": {
-            "name": "foo#print-toc-item:item:0.children.1",
-            "kind": {
-              "kind": {
-                "Record": {
-                  "name": "foo#toc-item"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "source": {
-              "Loop": "obj"
-            },
-            "is_mutable": false,
-            "line_number": 39
-          }
-        },
-        "conditional_value": [],
-        "line_number": 38
-      }
-    },
-    "foo#print-toc-item:item:0,1,1,1,0": {
-      "Variable": {
-        "name": "foo#print-toc-item:item:0,1,1,1,0",
-        "kind": {
-          "kind": {
-            "Record": {
-              "name": "foo#toc-item"
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Reference": {
-            "name": "foo#print-toc-item:item:0,1,1.children.0",
-            "kind": {
-              "kind": {
-                "Record": {
-                  "name": "foo#toc-item"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "source": {
-              "Loop": "obj"
-            },
-            "is_mutable": false,
-            "line_number": 39
-          }
-        },
-        "conditional_value": [],
-        "line_number": 38
-      }
-    },
     "foo#toc": {
       "Variable": {
         "name": "foo#toc",
@@ -565,7 +423,7 @@
                         {
                           "value": {
                             "Reference": {
-                              "name": "foo#print-toc-item:item:0.name",
+                              "name": "foo#toc.name",
                               "kind": {
                                 "kind": "String",
                                 "caption": false,
@@ -610,7 +468,7 @@
                                 {
                                   "value": {
                                     "Reference": {
-                                      "name": "foo#print-toc-item:item:0,1,0.name",
+                                      "name": "foo#toc.children.0.name",
                                       "kind": {
                                         "kind": "String",
                                         "caption": false,
@@ -668,7 +526,7 @@
                                 {
                                   "value": {
                                     "Reference": {
-                                      "name": "foo#print-toc-item:item:0,1,1.name",
+                                      "name": "foo#toc.children.1.name",
                                       "kind": {
                                         "kind": "String",
                                         "caption": false,
@@ -713,7 +571,7 @@
                                         {
                                           "value": {
                                             "Reference": {
-                                              "name": "foo#print-toc-item:item:0,1,1,1,0.name",
+                                              "name": "foo#toc.children.1.children.0.name",
                                               "kind": {
                                                 "kind": "String",
                                                 "caption": false,

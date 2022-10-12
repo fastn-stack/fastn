@@ -4,6 +4,30 @@
     "ftd": "ftd"
   },
   "bag": {
+    "foo#name": {
+      "Variable": {
+        "name": "foo#name",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Hello World"
+              }
+            },
+            "is_mutable": false,
+            "line_number": 1
+          }
+        },
+        "conditional_value": [],
+        "line_number": 1
+      }
+    },
     "foo#print": {
       "Component": {
         "name": "foo#print",
@@ -17,7 +41,7 @@
             },
             "mutable": false,
             "value": null,
-            "line_number": 2
+            "line_number": 4
           }
         ],
         "definition": {
@@ -43,48 +67,24 @@
                         "Local": "print"
                       },
                       "is_mutable": false,
-                      "line_number": 6
+                      "line_number": 8
                     }
                   },
                   "source": "Caption",
                   "condition": null,
-                  "line_number": 6
+                  "line_number": 8
                 }
               ],
               "iteration": null,
               "condition": null,
               "events": [],
               "children": [],
-              "line_number": 6
+              "line_number": 8
             }
           ],
-          "line_number": 4
+          "line_number": 6
         },
-        "line_number": 1
-      }
-    },
-    "foo#print:name:0": {
-      "Variable": {
-        "name": "foo#print:name:0",
-        "kind": {
-          "kind": "String",
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Value": {
-            "value": {
-              "String": {
-                "text": "Hello"
-              }
-            },
-            "is_mutable": false,
-            "line_number": 14
-          }
-        },
-        "conditional_value": [],
-        "line_number": 13
+        "line_number": 3
       }
     },
     "foo#print:name:1": {
@@ -104,11 +104,11 @@
               }
             },
             "is_mutable": false,
-            "line_number": 17
+            "line_number": 19
           }
         },
         "conditional_value": [],
-        "line_number": 16
+        "line_number": 18
       }
     }
   },
@@ -123,14 +123,14 @@
                   "Text": {
                     "text": {
                       "value": {
-                        "original": "Hello",
-                        "rendered": "Hello"
+                        "original": "Hello World",
+                        "rendered": "Hello World"
                       },
                       "properties": [
                         {
                           "value": {
                             "Reference": {
-                              "name": "foo#print:name:0",
+                              "name": "foo#name",
                               "kind": {
                                 "kind": "String",
                                 "caption": false,
@@ -140,12 +140,12 @@
                                 "Local": "print"
                               },
                               "is_mutable": false,
-                              "line_number": 6
+                              "line_number": 8
                             }
                           },
                           "source": "Caption",
                           "condition": null,
-                          "line_number": 6
+                          "line_number": 8
                         }
                       ]
                     },
@@ -198,12 +198,12 @@
                                 "Local": "print"
                               },
                               "is_mutable": false,
-                              "line_number": 6
+                              "line_number": 8
                             }
                           },
                           "source": "Caption",
                           "condition": null,
-                          "line_number": 6
+                          "line_number": 8
                         }
                       ]
                     },
