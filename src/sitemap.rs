@@ -149,6 +149,54 @@ impl Section {
     }
 
     pub fn document(&self, path: &str) -> Option<String> {
+        use itertools::Itertools;
+        // check if path parameters is not empty then match with it self.path_parameters else id match
+        // url request: /foo/abrark/28/
+        // sitemap: /foo/<string:username>/<integer:age>/
+
+        if !self.path_parameters.is_empty() {
+            // /arpita/foo/28/
+            // arpita foo 28
+            // [string,integer]
+            // string foo integer
+            // TODO: Need to fix this algorithm
+            let sitemap_id = self.id.trim_matches('/').split("/").collect_vec();
+            dbg!(&sitemap_id);
+            let request_url = path.trim_matches('/').split("/").collect_vec();
+            dbg!(&request_url);
+            dbg!(&self.path_parameters);
+            let mut path_params_idx: usize = 0;
+            if sitemap_id.len() == request_url.len() {
+                for idx in 0..sitemap_id.len() {
+                    if sitemap_id[idx].eq(request_url[idx]) {
+                        continue;
+                    } else {
+                        let param_type = self
+                            .path_parameters
+                            .get(path_params_idx)
+                            .unwrap()
+                            .0
+                            .as_str();
+                        dbg!(&param_type);
+                        path_params_idx += 1;
+                        if param_type == "string" {
+                            continue; // no need to check because everything is string by default
+                        } else if param_type == "integer" {
+                            // check if it a integer or not
+                            let value = request_url[idx];
+                            if !value.parse::<u64>().is_ok() {
+                                break;
+                            }
+                        }
+                    }
+                }
+                dbg!(&path_params_idx);
+                if path_params_idx == self.path_parameters.len() {
+                    return self.document.clone();
+                }
+            }
+        }
+
         if fpm::utils::ids_matches(self.id.as_str(), path) {
             return self.document.clone();
         }
