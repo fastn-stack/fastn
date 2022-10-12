@@ -72,6 +72,7 @@ slug = { version = "0.1" }
 sha2 = "0.10"
 thiserror = "1"
 url = "2"
+lazy_static = "1"
 
 # becasue they havent crated a release yet which fixes incompatibility with latest actix-http
 zip = { git = "https://github.com/zip-rs/zip" }

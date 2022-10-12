@@ -128,9 +128,10 @@ pub struct Section {
     /// # Section: /books/
     ///   document: /books/python/
     pub document: Option<String>,
-    /// /books/<string:book_name>/
+    /// /books/<string:book_name>/<integer:price>/
     /// here book_name is path parameter
-    pub path_parameters: Option<std::collections::HashMap<String, String>>,
+    /// [(string, book_name), (integer, price)]
+    pub path_parameters: Vec<(String, String)>,
 }
 
 impl Section {
@@ -189,7 +190,7 @@ pub struct Subsection {
     pub document: Option<String>,
     /// /books/<string:book_name>/
     /// here book_name is path parameter
-    pub path_parameters: Option<std::collections::HashMap<String, String>>,
+    pub path_parameters: Vec<(String, String)>,
 }
 
 impl Default for Subsection {
@@ -208,7 +209,7 @@ impl Default for Subsection {
             readers: vec![],
             writers: vec![],
             document: None,
-            path_parameters: None,
+            path_parameters: vec![],
         }
     }
 }
@@ -276,7 +277,7 @@ pub struct TocItem {
     pub document: Option<String>,
     /// /books/<string:book_name>/
     /// here book_name is path parameter
-    pub path_parameters: Option<std::collections::HashMap<String, String>>,
+    pub path_parameters: Vec<(String, String)>,
 }
 
 impl TocItem {
@@ -502,6 +503,33 @@ impl SitemapElement {
             SitemapElement::TocItem(s) => Some(s.id.clone()),
         }
     }
+
+    // If url contains path parameters so it will set those parameters
+    // /person/<string:username>/<integer:age>
+    // In that case it will parse and set parameters `username` and `age`
+    pub(crate) fn set_path_params(&mut self, url: &str) {
+        lazy_static::lazy_static! {
+            static ref PATH_PARAMS: regex::Regex = regex::Regex::new(r"<\s*([a-z]\w+)\s*:\s*([a-z|A-Z|0-9|_]\w+)\s*>")
+            .expect("PATH_PARAMS: Regex is wrong");
+        }
+        let params = PATH_PARAMS
+            .captures_iter(url)
+            .into_iter()
+            .map(|params| (params[1].to_string(), params[2].to_string()))
+            .collect::<Vec<_>>();
+
+        match self {
+            SitemapElement::Section(s) => {
+                s.path_parameters = params;
+            }
+            SitemapElement::Subsection(s) => {
+                s.path_parameters = params;
+            }
+            SitemapElement::TocItem(t) => {
+                t.path_parameters = params;
+            }
+        }
+    }
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -557,9 +585,11 @@ impl SitemapParser {
         // - Prefix/suffix item
         // - Separator
         // - ToC item
+
         if line.trim().is_empty() {
             return Ok(());
         }
+
         let mut iter = line.chars();
         let mut depth = 0;
         let mut rest = "".to_string();
@@ -606,7 +636,7 @@ impl SitemapParser {
                 }
                 Some(k) => {
                     let l = format!("{}{}", k, iter.collect::<String>());
-                    self.read_attrs(l.as_str(), global_ids)?;
+                    self.parse_attrs(l.as_str(), global_ids)?;
                     return Ok(());
                     // panic!()
                 }
@@ -729,7 +759,7 @@ impl SitemapParser {
         self.temp_item = None;
         Ok(())
     }
-    fn read_attrs(
+    fn parse_attrs(
         &mut self,
         line: &str,
         global_ids: &std::collections::HashMap<String, String>,
@@ -749,6 +779,7 @@ impl SitemapParser {
                             if i.get_title().is_none() {
                                 i.set_title(id);
                             }
+                            i.set_path_params(v);
                         } else if k.eq("id") {
                             // Fetch link corresponding to the id from global_ids map
                             let link = global_ids.get(v).ok_or_else(|| ParseError::InvalidID {

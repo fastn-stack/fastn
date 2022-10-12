@@ -804,6 +804,7 @@ dependencies = [
  "indoc",
  "intl-memoizer",
  "itertools",
+ "lazy_static 1.4.0",
  "mime_guess",
  "once_cell",
  "pretty_assertions",
