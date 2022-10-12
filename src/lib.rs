@@ -85,7 +85,9 @@ pub struct Document {
 pub struct PageHeadingItem {
     pub url: Option<String>,
     pub title: Option<String>,
-    pub children: Vec<(Option<ftd::Region>, PageHeadingItem)>,
+    pub region: Option<ftd::Region>,
+    pub number: Option<String>,
+    pub children: Vec<PageHeadingItem>,
 }
 
 // Page-heading struct identical with fpm::library::toc::TocItemCompat
