@@ -243,7 +243,8 @@ fn update_instruction_for_loop_element(
     reference_name: &str,
 ) -> ftd::executor::Result<ftd::interpreter2::Component> {
     let mut instruction = instruction.clone();
-    let reference_replace_pattern = doc.itdoc().resolve_name(alias);
+    let reference_replace_pattern = ftd::interpreter2::PropertyValueSource::Loop(alias.to_string())
+        .get_reference_name(alias, &doc.itdoc());
     let replace_with = format!("{}.{}", reference_name, index_in_loop);
     let map =
         std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();

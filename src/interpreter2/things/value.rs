@@ -450,14 +450,14 @@ impl PropertyValueSource {
         PropertyValueSource::Global.eq(self)
     }
 
-    fn get_reference_name(&self, name: &str, doc: &ftd::interpreter2::TDoc) -> String {
+    pub fn get_reference_name(&self, name: &str, doc: &ftd::interpreter2::TDoc) -> String {
         let name = name
             .strip_prefix(ftd::interpreter2::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
             .unwrap_or(name);
         match self {
             PropertyValueSource::Global | PropertyValueSource::Local(_) => doc.resolve_name(name),
-            PropertyValueSource::Loop(_) => doc.resolve_name(name), //TODO: arpita
+            PropertyValueSource::Loop(_) => doc.resolve_name(name), //TODO: Some different name for loop
         }
     }
 }
