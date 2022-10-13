@@ -195,7 +195,7 @@ pub fn params_matches(
     use itertools::Itertools;
     // request_attrs: [arpita, foo, 28]
     let request_attrs = request_url.trim_matches('/').split('/').collect_vec();
-    // request_attrs: [<string:username>, foo, <integer:age>]
+    // sitemap_attrs: [<string:username>, foo, <integer:age>]
     let sitemap_attrs = sitemap_url.trim_matches('/').split('/').collect_vec();
 
     if request_attrs.len().ne(&sitemap_attrs.len()) {
@@ -208,15 +208,13 @@ pub fn params_matches(
     for idx in 0..request_attrs.len() {
         // either value match or type match
         let value_match = request_attrs[idx].eq(sitemap_attrs[idx]);
-        let value_or_type_match = if value_match {
+        let value_or_type_match = value_match || {
             // request's attribute value type == type stored in sitemap:params_type
             let attribute_value = request_attrs[idx];
             assert!(params_type.len() > type_matches_count);
             let attribute_type = &params_type[type_matches_count].0;
             type_matches_count += 1;
             is_type_match(attribute_value, attribute_type)
-        } else {
-            false
         };
         if !value_or_type_match {
             return false;
@@ -232,7 +230,8 @@ pub fn params_matches(
         match r#type {
             "string" => true, // value.parse::<String>().is_ok(),
             "integer" => value.parse::<i64>().is_ok(),
-            "float" => value.parse::<f64>().is_ok(),
+            "decimal" => value.parse::<f64>().is_ok(),
+            "boolean" => value.parse::<bool>().is_ok(),
             _ => unimplemented!(),
         }
     }
