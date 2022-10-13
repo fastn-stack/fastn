@@ -184,7 +184,7 @@ impl Section {
                 return false;
             }
         }
-        return false;
+        return true;
 
         fn is_type_match(value: &str, r#type: &str) -> bool {
             value_parse_to_type(value, r#type)
