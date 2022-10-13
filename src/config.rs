@@ -557,7 +557,12 @@ impl Config {
     }
 
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
-        if let Some(id) = self.package.sitemap.as_ref().and_then(|x| x.document(path)) {
+        if let Some(id) = self
+            .package
+            .sitemap
+            .as_ref()
+            .and_then(|sitemap| sitemap.resolve_path(path))
+        {
             let file_name = self.get_file_path_and_resolve(id.as_str()).await?;
             let package = self.find_package_by_id(id.as_str()).await?.1;
             let file = fpm::get_file(

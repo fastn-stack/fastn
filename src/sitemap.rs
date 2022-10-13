@@ -148,7 +148,7 @@ impl Section {
         false
     }
 
-    pub fn document(&self, path: &str) -> Option<String> {
+    pub fn resolve_path(&self, path: &str) -> Option<String> {
         use itertools::Itertools;
         // check if path parameters is not empty then match with it self.path_parameters else id match
         // url request: /foo/abrark/28/
@@ -160,9 +160,9 @@ impl Section {
             // [string,integer]
             // string foo integer
             // TODO: Need to fix this algorithm
-            let sitemap_id = self.id.trim_matches('/').split("/").collect_vec();
+            let sitemap_id = self.id.trim_matches('/').split('/').collect_vec();
             dbg!(&sitemap_id);
-            let request_url = path.trim_matches('/').split("/").collect_vec();
+            let request_url = path.trim_matches('/').split('/').collect_vec();
             dbg!(&request_url);
             dbg!(&self.path_parameters);
             let mut path_params_idx: usize = 0;
@@ -184,7 +184,7 @@ impl Section {
                         } else if param_type == "integer" {
                             // check if it a integer or not
                             let value = request_url[idx];
-                            if !value.parse::<u64>().is_ok() {
+                            if value.parse::<u64>().is_err() {
                                 break;
                             }
                         }
@@ -1776,9 +1776,10 @@ impl Sitemap {
 
     /// path: foo/temp/
     /// path: /
-    pub fn document(&self, path: &str) -> Option<String> {
+    // TODO: If nothing is found return 404, Handle 404 Errors
+    pub fn resolve_path(&self, path: &str) -> Option<String> {
         for section in self.sections.iter() {
-            let document = section.document(path);
+            let document = section.resolve_path(path);
             if document.is_some() {
                 return document;
             }
