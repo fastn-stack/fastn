@@ -208,13 +208,15 @@ pub fn params_matches(
     for idx in 0..request_attrs.len() {
         // either value match or type match
         let value_match = request_attrs[idx].eq(sitemap_attrs[idx]);
-        let value_or_type_match = value_match || {
+        let value_or_type_match = if value_match {
             // request's attribute value type == type stored in sitemap:params_type
             let attribute_value = request_attrs[idx];
             assert!(params_type.len() > type_matches_count);
             let attribute_type = &params_type[type_matches_count].0;
             type_matches_count += 1;
             is_type_match(attribute_value, attribute_type)
+        } else {
+            false
         };
         if !value_or_type_match {
             return false;
