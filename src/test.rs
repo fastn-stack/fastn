@@ -23,7 +23,7 @@ pub fn interpret_helper(
     source: &str,
     lib: &ftd::p2::TestLibrary,
 ) -> ftd::p1::Result<ftd::p2::Document> {
-    let mut s = ftd::p2::interpreter::interpret(name, source)?;
+    let mut s = ftd::p2::interpreter::interpret(name, source, &None)?;
     let document;
     loop {
         match s {

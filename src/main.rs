@@ -166,7 +166,7 @@ pub fn interpret_helper(
     source: &str,
     lib: &ExampleLibrary,
 ) -> ftd::p1::Result<ftd::p2::Document> {
-    let mut s = ftd::interpret(name, source)?;
+    let mut s = ftd::interpret(name, source, &None)?;
     let document;
     loop {
         match s {
