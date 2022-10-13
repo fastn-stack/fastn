@@ -148,6 +148,58 @@ impl Section {
         false
     }
 
+    // request_url: /arpita/foo/28/
+    // sitemap_url: /<string:username>/foo/<integer:age>/
+    // params_types: [(string, username), (integer, age)]
+    fn params_matches(
+        request_url: &str,
+        sitemap_url: &str,
+        params_type: &[(String, String)],
+    ) -> bool {
+        use itertools::Itertools;
+        // request_attrs: [arpita, foo, 28]
+        let request_attrs = request_url.trim_matches('/').split('/').collect_vec();
+        // request_attrs: [<string:username>, foo, <integer:age>]
+        let sitemap_attrs = sitemap_url.trim_matches('/').split('/').collect_vec();
+
+        if request_attrs.len().ne(&sitemap_attrs.len()) {
+            return false;
+        }
+
+        // For every element either value should match or request attribute type should match to
+        // sitemap's params_types
+        let mut type_matches_count = 0;
+        for idx in 0..request_attrs.len() {
+            // either value match or type match
+            let value_match = request_attrs[idx].eq(sitemap_attrs[idx]);
+            let value_or_type_match = value_match || {
+                // request's attribute value type == type stored in sitemap:params_type
+                let attribute_value = request_attrs[idx];
+                assert!(params_type.len() > type_matches_count);
+                let attribute_type = &params_type[type_matches_count].0;
+                type_matches_count += 1;
+                is_type_match(attribute_value, attribute_type)
+            };
+            if !value_or_type_match {
+                return false;
+            }
+        }
+        return false;
+
+        fn is_type_match(value: &str, r#type: &str) -> bool {
+            value_parse_to_type(value, r#type)
+        }
+
+        fn value_parse_to_type(value: &str, r#type: &str) -> bool {
+            match r#type {
+                "string" => true, // value.parse::<String>().is_ok(),
+                "integer" => value.parse::<i64>().is_ok(),
+                "float" => value.parse::<f64>().is_ok(),
+                _ => unimplemented!(),
+            }
+        }
+    }
+
     pub fn resolve_path(&self, path: &str) -> Option<String> {
         use itertools::Itertools;
         // check if path parameters is not empty then match with it self.path_parameters else id match
@@ -155,10 +207,10 @@ impl Section {
         // sitemap: /foo/<string:username>/<integer:age>/
 
         if !self.path_parameters.is_empty() {
-            // /arpita/foo/28/
-            // arpita foo 28
-            // [string,integer]
-            // string foo integer
+            // path: /arpita/foo/28/
+            // request: arpita foo 28
+            // sitemap: [string,integer]
+            // Mapping: arpita -> string, foo -> foo, 28 -> integer
             // TODO: Need to fix this algorithm
             let sitemap_id = self.id.trim_matches('/').split('/').collect_vec();
             dbg!(&sitemap_id);
