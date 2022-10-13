@@ -538,7 +538,8 @@ fn change_container(
     *current_container = match named_containers.get(name) {
         Some(v) => v.get(0).unwrap().to_owned(),
         None => {
-            return ftd::p2::utils::e2("no such container", doc_id, 0);
+            let error_msg = format!("no such container: {}", name);
+            return ftd::p2::utils::e2(error_msg.as_str(), doc_id, 0);
         }
     };
     Ok(())
