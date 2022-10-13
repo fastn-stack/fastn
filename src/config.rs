@@ -561,7 +561,7 @@ impl Config {
             .package
             .sitemap
             .as_ref()
-            .and_then(|sitemap| sitemap.resolve_path(path))
+            .and_then(|sitemap| sitemap.resolve_document(path))
         {
             let file_name = self.get_file_path_and_resolve(id.as_str()).await?;
             let package = self.find_package_by_id(id.as_str()).await?.1;

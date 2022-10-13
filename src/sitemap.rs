@@ -148,7 +148,7 @@ impl Section {
         false
     }
 
-    pub fn resolve_path(&self, path: &str) -> Option<String> {
+    pub fn resolve_document(&self, path: &str) -> Option<String> {
         // request url: /foo/abrark/28/
         // sitemap url: /foo/<string:username>/<integer:age>/
 
@@ -165,7 +165,7 @@ impl Section {
         }
 
         for subsection in self.subsections.iter() {
-            let document = subsection.resolve_path(path);
+            let document = subsection.resolve_document(path);
             if document.is_some() {
                 return document;
             }
@@ -300,7 +300,7 @@ impl Subsection {
 
     /// path: /foo/demo/
     /// path: /
-    fn resolve_path(&self, path: &str) -> Option<String> {
+    fn resolve_document(&self, path: &str) -> Option<String> {
         if !self.path_parameters.is_empty() {
             // path: /arpita/foo/28/
             // request: arpita foo 28
@@ -318,7 +318,7 @@ impl Subsection {
         }
 
         for toc in self.toc.iter() {
-            let document = toc.document(path);
+            let document = toc.resolve_document(path);
             if document.is_some() {
                 return document;
             }
@@ -374,7 +374,7 @@ impl TocItem {
 
     /// path: /foo/demo/
     /// path: /
-    pub fn document(&self, path: &str) -> Option<String> {
+    pub fn resolve_document(&self, path: &str) -> Option<String> {
         if !self.path_parameters.is_empty() {
             // path: /arpita/foo/28/
             // request: arpita foo 28
@@ -388,7 +388,7 @@ impl TocItem {
         }
 
         for child in self.children.iter() {
-            let document = child.document(path);
+            let document = child.resolve_document(path);
             if document.is_some() {
                 return document;
             }
@@ -1800,6 +1800,8 @@ impl Sitemap {
 
     /// path: /foo/demo/
     /// path: /
+    /// `path` matches to sitemap.id or not
+    // TODO: possibly not required just call self.resolve_path(&self, path: &str).is_some()
     pub fn path_exists(&self, path: &str) -> bool {
         for section in self.sections.iter() {
             if section.path_exists(path) {
@@ -1812,9 +1814,9 @@ impl Sitemap {
     /// path: foo/temp/
     /// path: /
     // TODO: If nothing is found return 404, Handle 404 Errors
-    pub fn resolve_path(&self, path: &str) -> Option<String> {
+    pub fn resolve_document(&self, path: &str) -> Option<String> {
         for section in self.sections.iter() {
-            let document = section.resolve_path(path);
+            let document = section.resolve_document(path);
             if document.is_some() {
                 return document;
             }
