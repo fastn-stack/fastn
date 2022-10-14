@@ -157,7 +157,7 @@ impl Section {
             // request: arpita foo 28
             // sitemap: [string,integer]
             // Mapping: arpita -> string, foo -> foo, 28 -> integer
-            if params_matches(path, self.id.as_str(), self.path_parameters.as_slice()) {
+            if utils::params_matches(path, self.id.as_str(), self.path_parameters.as_slice()) {
                 return self.document.clone();
             }
         } else if fpm::utils::ids_matches(self.id.as_str(), path) {
@@ -181,59 +181,6 @@ impl Section {
             .map(|s| s.0)
             .unwrap_or(self.id.as_str())
             .to_string()
-    }
-}
-
-// request_url: /arpita/foo/28/
-// sitemap_url: /<string:username>/foo/<integer:age>/
-// params_types: [(string, username), (integer, age)]
-pub fn params_matches(
-    request_url: &str,
-    sitemap_url: &str,
-    params_type: &[(String, String)],
-) -> bool {
-    use itertools::Itertools;
-    // request_attrs: [arpita, foo, 28]
-    let request_attrs = request_url.trim_matches('/').split('/').collect_vec();
-    // sitemap_attrs: [<string:username>, foo, <integer:age>]
-    let sitemap_attrs = sitemap_url.trim_matches('/').split('/').collect_vec();
-
-    if request_attrs.len().ne(&sitemap_attrs.len()) {
-        return false;
-    }
-
-    // For every element either value should match or request attribute type should match to
-    // sitemap's params_types
-    let mut type_matches_count = 0;
-    for idx in 0..request_attrs.len() {
-        // either value match or type match
-        let value_match = request_attrs[idx].eq(sitemap_attrs[idx]);
-        let value_or_type_match = value_match || {
-            // request's attribute value type == type stored in sitemap:params_type
-            let attribute_value = request_attrs[idx];
-            assert!(params_type.len() > type_matches_count);
-            let attribute_type = &params_type[type_matches_count].0;
-            type_matches_count += 1;
-            is_type_match(attribute_value, attribute_type)
-        };
-        if !value_or_type_match {
-            return false;
-        }
-    }
-    return true;
-
-    fn is_type_match(value: &str, r#type: &str) -> bool {
-        value_parse_to_type(value, r#type)
-    }
-
-    fn value_parse_to_type(value: &str, r#type: &str) -> bool {
-        match r#type {
-            "string" => true, // value.parse::<String>().is_ok(),
-            "integer" => value.parse::<i64>().is_ok(),
-            "decimal" => value.parse::<f64>().is_ok(),
-            "boolean" => value.parse::<bool>().is_ok(),
-            _ => unimplemented!(),
-        }
     }
 }
 
@@ -306,7 +253,7 @@ impl Subsection {
             // sitemap: [string,integer]
             // Mapping: arpita -> string, foo -> foo, 28 -> integer
             if let Some(id) = self.id.as_ref() {
-                if params_matches(path, id.as_str(), self.path_parameters.as_slice()) {
+                if utils::params_matches(path, id.as_str(), self.path_parameters.as_slice()) {
                     return self.document.clone();
                 }
             }
@@ -379,7 +326,7 @@ impl TocItem {
             // request: arpita foo 28
             // sitemap: [string,integer]
             // Mapping: arpita -> string, foo -> foo, 28 -> integer
-            if params_matches(path, self.id.as_str(), self.path_parameters.as_slice()) {
+            if utils::params_matches(path, self.id.as_str(), self.path_parameters.as_slice()) {
                 return self.document.clone();
             }
         } else if fpm::utils::ids_matches(self.id.as_str(), path) {
@@ -590,15 +537,7 @@ impl SitemapElement {
     // /person/<string:username>/<integer:age>
     // In that case it will parse and set parameters `username` and `age`
     pub(crate) fn set_path_params(&mut self, url: &str) {
-        lazy_static::lazy_static! {
-            static ref PATH_PARAMS: regex::Regex = regex::Regex::new(r"<\s*([a-z]\w+)\s*:\s*([a-z|A-Z|0-9|_]\w+)\s*>")
-            .expect("PATH_PARAMS: Regex is wrong");
-        }
-        let params = PATH_PARAMS
-            .captures_iter(url)
-            .into_iter()
-            .map(|params| (params[1].to_string(), params[2].to_string()))
-            .collect::<Vec<_>>();
+        let params = utils::parse_path_params(url);
 
         match self {
             SitemapElement::Section(s) => {
@@ -1944,4 +1883,84 @@ fn construct_tree(elements: Vec<(TocItem, usize)>, smallest_level: usize) -> Vec
         stack_tree.push(node);
     }
     stack_tree
+}
+
+mod utils {
+
+    // # Input
+    // request_url: /arpita/foo/28/
+    // sitemap_url: /<string:username>/foo/<integer:age>/
+    // params_types: [(string, username), (integer, age)]
+    // # Output
+    // true
+    pub fn params_matches(
+        request_url: &str,
+        sitemap_url: &str,
+        params_type: &[(String, String)],
+    ) -> bool {
+        use itertools::Itertools;
+        // request_attrs: [arpita, foo, 28]
+        let request_attrs = request_url.trim_matches('/').split('/').collect_vec();
+        // sitemap_attrs: [<string:username>, foo, <integer:age>]
+        let sitemap_attrs = sitemap_url.trim_matches('/').split('/').collect_vec();
+
+        if request_attrs.len().ne(&sitemap_attrs.len()) {
+            return false;
+        }
+
+        // For every element either value should match or request attribute type should match to
+        // sitemap's params_types
+        let mut type_matches_count = 0;
+        for idx in 0..request_attrs.len() {
+            // either value match or type match
+            let value_match = request_attrs[idx].eq(sitemap_attrs[idx]);
+            if value_match {
+                continue;
+            }
+
+            let type_match = {
+                // request's attribute value type == type stored in sitemap:params_type
+                let attribute_value = request_attrs[idx];
+                assert!(params_type.len() > type_matches_count);
+                let attribute_type = &params_type[type_matches_count].0;
+                type_matches_count += 1;
+                is_type_match(attribute_value, attribute_type)
+            };
+            if !type_match {
+                return false;
+            }
+        }
+        return true;
+
+        fn is_type_match(value: &str, r#type: &str) -> bool {
+            value_parse_to_type(value, r#type)
+        }
+
+        fn value_parse_to_type(value: &str, r#type: &str) -> bool {
+            match r#type {
+                "string" => true, // value.parse::<String>().is_ok(),
+                "integer" => value.parse::<i64>().is_ok(),
+                "decimal" => value.parse::<f64>().is_ok(),
+                "boolean" => value.parse::<bool>().is_ok(),
+                _ => unimplemented!(),
+            }
+        }
+    }
+
+    // url: /<string:username>/<integer:age>/ => [("string", "username"), ("integer", "age")]
+    pub fn parse_path_params(url: &str) -> Vec<(String, String)> {
+        fn path_params_regex() -> &'static regex::Regex {
+            static PP: once_cell::sync::OnceCell<regex::Regex> = once_cell::sync::OnceCell::new();
+            PP.get_or_init(|| {
+                regex::Regex::new(r"<\s*([a-z]\w+)\s*:\s*([a-z|A-Z|0-9|_]\w+)\s*>")
+                    .expect("PATH_PARAMS: Regex is wrong")
+            })
+        }
+
+        path_params_regex()
+            .captures_iter(url)
+            .into_iter()
+            .map(|params| (params[1].to_string(), params[2].to_string()))
+            .collect::<Vec<_>>()
+    }
 }
