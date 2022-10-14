@@ -150,14 +150,14 @@ impl Section {
     }
 
     pub fn resolve_document(&self, path: &str) -> Option<String> {
-        // request url: /foo/abrark/28/
-        // sitemap url: /foo/<string:username>/<integer:age>/
+        // path: /abrark/foo/28/
+        // In sitemap url: /<string:username>/foo/<integer:age>/
 
         if !self.path_parameters.is_empty() {
-            // path: /arpita/foo/28/
-            // request: arpita foo 28
+            // path: /abrark/foo/28/
+            // request: abrark foo 28
             // sitemap: [string,integer]
-            // Mapping: arpita -> string, foo -> foo, 28 -> integer
+            // params_matches: abrark -> string, foo -> foo, 28 -> integer
             if utils::params_matches(path, self.id.as_str(), self.path_parameters.as_slice()) {
                 return self.document.clone();
             }
@@ -1963,5 +1963,90 @@ mod utils {
             .into_iter()
             .map(|params| (params[1].to_string(), params[2].to_string()))
             .collect::<Vec<_>>()
+    }
+
+    #[cfg(test)]
+    mod tests {
+
+        #[test]
+        fn parse_path_params_test_1() {
+            let output = super::parse_path_params("/<string:username>/<integer:age>/");
+            let test_output = vec![
+                ("string".to_string(), "username".to_string()),
+                ("integer".to_string(), "age".to_string()),
+            ];
+            assert_eq!(test_output, output)
+        }
+
+        #[test]
+        fn parse_path_params_test_2() {
+            let output = super::parse_path_params("/< string: username >/< integer: age >/");
+            let test_output = vec![
+                ("string".to_string(), "username".to_string()),
+                ("integer".to_string(), "age".to_string()),
+            ];
+            assert_eq!(test_output, output)
+        }
+
+        #[test]
+        fn params_matches_test_1() {
+            // Input:
+            // request_url: /arpita/foo/28/
+            // sitemap_url: /<string:username>/foo/<integer:age>/
+            // params_types: [(string, username), (integer, age)]
+            // Output: true
+            // Reason: Everything is matching
+            let output = super::params_matches(
+                "/arpita/foo/28/",
+                "/<string:username>/foo/<integer:age>/",
+                &vec![
+                    ("string".to_string(), "username".to_string()),
+                    ("integer".to_string(), "age".to_string()),
+                ],
+            );
+
+            assert_eq!(output, true)
+        }
+
+        #[test]
+        fn params_matches_test_2() {
+            // Input:
+            // request_url: /arpita/foo/28/
+            // sitemap_url: /<integer:username>/foo/<integer:age>/
+            // params_types: [(integer, username), (integer, age)]
+            // Output: false
+            // Reason: `arpita` can not be converted into `integer`
+            let output = super::params_matches(
+                "/arpita/foo/28/",
+                "/<integer:username>/foo/<integer:age>/",
+                &vec![
+                    ("integer".to_string(), "username".to_string()),
+                    ("integer".to_string(), "age".to_string()),
+                ],
+            );
+
+            assert_eq!(output, false)
+        }
+
+        #[test]
+        fn params_matches_test_3() {
+            // Input:
+            // request_url: /arpita/foo/
+            // sitemap_url: /<string:username>/foo/<integer:age>/
+            // params_types: [(string, username), (integer, age)]
+            // Output: false
+            // Reason: There is nothing to match in request_url after `foo`
+            //         against with sitemap_url `<integer:age>`
+            let output = super::params_matches(
+                "/arpita/foo/",
+                "/<string:username>/foo/<integer:age>/",
+                &vec![
+                    ("string".to_string(), "username".to_string()),
+                    ("integer".to_string(), "age".to_string()),
+                ],
+            );
+
+            assert_eq!(output, false)
+        }
     }
 }
