@@ -124,13 +124,14 @@ pub struct Section {
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
-    /// In Sitemap, It is valid for section, sub-section and toc
+    /// In FPM.ftd sitemap, we can use `document` for section, subsection and toc.
     /// # Section: /books/
     ///   document: /books/python/
     pub document: Option<String>,
-    /// /books/<string:book_name>/<integer:price>/
-    /// here book_name is path parameter
-    /// [(string, book_name), (integer, price)]
+    /// If we can define dynamic `url` in section, subsection and toc of a sitemap.
+    /// `url: /books/<string:book_name>/<integer:price>/`
+    /// here book_name and price are path parameters
+    /// path_parameters: [(string, book_name), (integer, price)]
     pub path_parameters: Vec<(String, String)>,
 }
 
