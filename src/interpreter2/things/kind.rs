@@ -236,14 +236,6 @@ impl KindData {
         }
     }
 
-    pub(crate) fn list_type(
-        &self,
-        doc_name: &str,
-        line_number: usize,
-    ) -> ftd::interpreter2::Result<KindData> {
-        Ok(KindData::new(self.kind.list_type(doc_name, line_number)?))
-    }
-
     pub fn is_list(&self) -> bool {
         self.kind.is_list()
     }

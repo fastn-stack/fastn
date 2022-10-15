@@ -39,7 +39,7 @@ impl Function {
             return None;
         }
 
-        match (section.name.find("("), section.name.find(")")) {
+        match (section.name.find('('), section.name.find(')')) {
             (Some(si), Some(ei)) if si < ei => Some(section.name[..si].to_string()),
             _ => None,
         }

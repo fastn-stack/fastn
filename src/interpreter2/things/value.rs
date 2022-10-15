@@ -668,6 +668,7 @@ impl Value {
         }
     }
 
+    #[allow(dead_code)]
     pub(crate) fn to_string(
         &self,
         doc: &ftd::interpreter2::TDoc,
