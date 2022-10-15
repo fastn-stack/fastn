@@ -334,6 +334,31 @@ impl<'a> TDoc<'a> {
                         };
                         change_value(value, set, Some(remaining), doc, line_number)?;
                     }
+                    ftd::interpreter2::PropertyValue::FunctionCall {
+                        name,
+                        kind,
+                        is_mutable,
+                        values,
+                        ..
+                    } => {
+                        let function = doc.get_function(name, line_number)?;
+                        let resolved_value = function
+                            .resolve(kind, values, doc, line_number)?
+                            .ok_or(ftd::interpreter2::Error::ParseError {
+                                message: format!(
+                                    "Expected return value of type {:?} for function {}",
+                                    kind, name
+                                ),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            })?;
+                        *value = ftd::interpreter2::PropertyValue::Value {
+                            value: resolved_value,
+                            line_number,
+                            is_mutable: *is_mutable,
+                        };
+                        change_value(value, set, Some(remaining), doc, line_number)?;
+                    }
                 }
             } else {
                 assert_eq!(value.kind(), set.kind());
@@ -385,6 +410,7 @@ impl<'a> TDoc<'a> {
                         caption: true,
                         body: true,
                     },
+                    ftd::interpreter2::Thing::Function(_) => todo!(),
                 };
 
                 (
@@ -599,6 +625,15 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn get_function(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Function> {
+        let initial_thing = self.get_initial_thing(name, line_number)?.0;
+        initial_thing.function(self.name, line_number)
+    }
+
     pub fn get_initial_variable(
         &'a self,
         name: &'a str,
@@ -614,39 +649,55 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> ftd::interpreter2::Result<(ftd::interpreter2::Thing, Option<String>)> {
         if name.contains('#') {
-            let (name, remaining_value) =
-                ftd::interpreter2::utils::get_doc_name_and_remaining(name, self.name, line_number)?;
+            let (name, remaining_value) = if let Ok(function_name) =
+                ftd::interpreter2::utils::get_function_name(name, self.name, line_number)
+            {
+                (function_name, None)
+            } else {
+                ftd::interpreter2::utils::get_doc_name_and_remaining(name, self.name, line_number)?
+            };
             return match self.bag.get(name.as_str()) {
                 Some(a) => Ok((a.to_owned(), remaining_value)),
                 None => self.err("not found", name, "get_initial_thing", line_number),
             };
         }
-        return Ok(match get_initial_thing_(self, None, self.name, name) {
-            Some(a) => a,
-            None => {
-                if let Some((m, v)) = name.split_once('.') {
-                    match get_initial_thing_(self, Some(m), m, v) {
-                        None => {
-                            return self.err("not found", name, "get_initial_thing", line_number)
+        return Ok(
+            match get_initial_thing_(self, self.name, name, line_number) {
+                Some(a) => a,
+                None => {
+                    if let Some((m, v)) = name.split_once('.') {
+                        match get_initial_thing_(self, m, v, line_number) {
+                            None => {
+                                return self.err(
+                                    "not found",
+                                    name,
+                                    "get_initial_thing",
+                                    line_number,
+                                )
+                            }
+                            Some(a) => a,
                         }
-                        Some(a) => a,
+                    } else {
+                        return self.err("not found", name, "get_initial_thing", line_number);
                     }
-                } else {
-                    return self.err("not found", name, "get_initial_thing", line_number);
                 }
-            }
-        });
+            },
+        );
 
         fn get_initial_thing_(
             doc: &ftd::interpreter2::TDoc,
-            root_name: Option<&str>,
             doc_name: &str,
             name: &str,
+            line_number: usize,
         ) -> Option<(ftd::interpreter2::Thing, Option<String>)> {
-            let (name, remaining_value) = if let Some((v, remaining_value)) = name.split_once('.') {
-                (v, Some(remaining_value.to_string()))
+            let (name, remaining_value) = if let Ok(function_name) =
+                ftd::interpreter2::utils::get_function_name(name, doc.name, line_number)
+            {
+                (function_name, None)
+            } else if let Some((v, remaining_value)) = name.split_once('.') {
+                (v.to_string(), Some(remaining_value.to_string()))
             } else {
-                (name, None)
+                (name.to_string(), None)
             };
 
             match doc
@@ -655,14 +706,11 @@ impl<'a> TDoc<'a> {
                 .map(ToOwned::to_owned)
             {
                 Some(a) => Some((a, remaining_value)),
-                None => match root_name {
-                    Some(doc_name) => match doc.aliases.get(doc_name) {
-                        Some(g) => doc
-                            .bag
-                            .get(format!("{}#{}", g, name).as_str())
-                            .map(|v| (v.clone(), remaining_value)),
-                        None => None,
-                    },
+                None => match doc.aliases.get(doc_name) {
+                    Some(g) => doc
+                        .bag
+                        .get(format!("{}#{}", g, name).as_str())
+                        .map(|v| (v.clone(), remaining_value)),
                     None => None,
                 },
             }

@@ -37,6 +37,7 @@ slug = "0.1"
 include_dir = "0.7"
 indoc = "1"
 itertools = "0.10"
+evalexpr = "8.1.0"
 
 
 [dependencies.syntect]

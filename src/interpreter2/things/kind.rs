@@ -9,6 +9,7 @@ pub enum Kind {
     List { kind: Box<Kind> },
     Optional { kind: Box<Kind> },
     UI { name: Option<String> },
+    Void,
 }
 
 impl Kind {
@@ -66,6 +67,37 @@ impl Kind {
 
     pub fn is_optional(&self) -> bool {
         matches!(self, Kind::Optional { .. })
+    }
+
+    pub fn is_string(&self) -> bool {
+        matches!(self, Kind::String { .. })
+    }
+
+    pub fn is_integer(&self) -> bool {
+        matches!(self, Kind::Integer { .. })
+    }
+
+    pub fn is_boolean(&self) -> bool {
+        matches!(self, Kind::Boolean { .. })
+    }
+
+    pub fn is_decimal(&self) -> bool {
+        matches!(self, Kind::Decimal { .. })
+    }
+
+    pub(crate) fn list_type(
+        &self,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<Kind> {
+        match &self {
+            Kind::List { kind } => Ok(kind.as_ref().clone()),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected List, found: `{:?}`", t),
+                doc_name,
+                line_number,
+            ),
+        }
     }
 
     pub fn get_record_name(&self) -> Option<&str> {
@@ -199,12 +231,36 @@ impl KindData {
         }
     }
 
+    pub(crate) fn list_type(
+        &self,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<KindData> {
+        Ok(KindData::new(self.kind.list_type(doc_name, line_number)?))
+    }
+
     pub fn is_list(&self) -> bool {
         self.kind.is_list()
     }
 
     pub fn is_optional(&self) -> bool {
         self.kind.is_optional()
+    }
+
+    pub fn is_string(&self) -> bool {
+        self.kind.is_string()
+    }
+
+    pub fn is_integer(&self) -> bool {
+        self.kind.is_integer()
+    }
+
+    pub fn is_boolean(&self) -> bool {
+        self.kind.is_boolean()
+    }
+
+    pub fn is_decimal(&self) -> bool {
+        self.kind.is_decimal()
     }
 }
 
