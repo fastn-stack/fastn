@@ -89,7 +89,7 @@ pub(crate) fn get_function_name_and_properties(
     doc_id: &str,
     line_number: usize,
 ) -> ftd::interpreter2::Result<(String, Vec<(String, String)>)> {
-    let (si, ei) = match (s.find("("), s.find(")")) {
+    let (si, ei) = match (s.find('('), s.find(')')) {
         (Some(si), Some(ei)) if si < ei => (si, ei),
         _ => {
             return ftd::interpreter2::utils::e2(
@@ -101,7 +101,7 @@ pub(crate) fn get_function_name_and_properties(
     };
     let function_name = s[..si].to_string();
     let mut properties = vec![];
-    for value in s[si + 1..ei].split(",") {
+    for value in s[si + 1..ei].split(',') {
         let (p1, p2) = ftd::interpreter2::utils::split(value, "=", doc_id, line_number)?;
         properties.push((p1.trim().to_string(), p2.trim().to_string()));
     }

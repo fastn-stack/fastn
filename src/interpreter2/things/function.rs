@@ -122,7 +122,7 @@ impl Function {
 
         let mut evalexpr_context = evalexpr::HashMapContext::new();
         for (key, context) in context.iter() {
-            evalexpr_context.set_value(key.to_string(), context.value.to_owned());
+            evalexpr_context.set_value(key.to_string(), context.value.to_owned())?;
         }
 
         let expression = self.convert_to_evalexpr_expression();
@@ -130,23 +130,26 @@ impl Function {
         let eval = evalexpr::eval_with_context_mut(expression.as_str(), &mut evalexpr_context)?;
 
         for (key, context) in context {
-            if context.mutable {
-                let value = ftd::interpreter2::Value::from_evalexpr_value(
-                    evalexpr_context.get_value(key.as_str()).unwrap().clone(),
-                    &context.kind,
-                    doc.name,
-                    line_number,
-                )?;
-                // TODO: insert new value in doc.bag
-                let _variable = doc.set_value(
-                    key.as_str(),
-                    ftd::interpreter2::PropertyValue::Value {
-                        value,
-                        is_mutable: true,
+            match context.reference {
+                Some(reference) if context.mutable => {
+                    let value = ftd::interpreter2::Value::from_evalexpr_value(
+                        evalexpr_context.get_value(key.as_str()).unwrap().clone(),
+                        &context.kind,
+                        doc.name,
                         line_number,
-                    },
-                    line_number,
-                )?;
+                    )?;
+                    // TODO: insert new value in doc.bag
+                    let _variable = doc.set_value(
+                        reference.as_str(),
+                        ftd::interpreter2::PropertyValue::Value {
+                            value,
+                            is_mutable: true,
+                            line_number,
+                        },
+                        line_number,
+                    )?;
+                }
+                _ => {}
             }
         }
 
