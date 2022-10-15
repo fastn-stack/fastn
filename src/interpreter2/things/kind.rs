@@ -85,6 +85,10 @@ impl Kind {
         matches!(self, Kind::Decimal { .. })
     }
 
+    pub fn is_void(&self) -> bool {
+        matches!(self, Kind::Void { .. })
+    }
+
     pub(crate) fn list_type(
         &self,
         doc_name: &str,
@@ -184,6 +188,7 @@ impl KindData {
             "integer" => Kind::Integer,
             "decimal" => Kind::Decimal,
             "boolean" => Kind::Boolean,
+            "void" => Kind::Void,
             "ftd.ui" => Kind::UI { name: None },
             k if known_kinds.contains_key(k) => known_kinds.get(k).unwrap().to_owned(),
             k => match doc.get_thing(k, line_number)? {
@@ -261,6 +266,10 @@ impl KindData {
 
     pub fn is_decimal(&self) -> bool {
         self.kind.is_decimal()
+    }
+
+    pub fn is_void(&self) -> bool {
+        self.kind.is_void()
     }
 }
 

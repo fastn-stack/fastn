@@ -68,6 +68,17 @@ impl AST {
         )
     }
 
+    pub fn get_function(self, doc_id: &str) -> ftd::ast::Result<ftd::ast::Function> {
+        if let ftd::ast::AST::FunctionDefinition(r) = self {
+            return Ok(r);
+        }
+        ftd::ast::parse_error(
+            format!("`{:?}` is not a function", self),
+            doc_id,
+            self.line_number(),
+        )
+    }
+
     pub fn get_variable_definition(
         self,
         doc_id: &str,
@@ -127,6 +138,10 @@ impl AST {
 
     pub fn is_variable_definition(&self) -> bool {
         matches!(self, AST::VariableDefinition(_))
+    }
+
+    pub fn is_function(&self) -> bool {
+        matches!(self, AST::FunctionDefinition(_))
     }
 
     pub fn is_variable_invocation(&self) -> bool {
