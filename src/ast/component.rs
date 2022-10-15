@@ -189,7 +189,7 @@ impl Component {
     }
 }
 
-type Argument = ftd::ast::Field;
+pub type Argument = ftd::ast::Field;
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
