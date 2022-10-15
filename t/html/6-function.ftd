@@ -4,4 +4,10 @@ string b:
 
 a + b
 
+
+-- string name: Arpita
+
+
 -- ftd.text: append(a=hello, b=world)
+
+-- ftd.text: append(a = $name, b = Jaiswal)

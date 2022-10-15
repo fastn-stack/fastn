@@ -102,12 +102,8 @@ pub(crate) fn get_function_name_and_properties(
     let function_name = s[..si].to_string();
     let mut properties = vec![];
     for value in s[si + 1..ei].split(",") {
-        properties.push(ftd::interpreter2::utils::split(
-            value,
-            "=",
-            doc_id,
-            line_number,
-        )?);
+        let (p1, p2) = ftd::interpreter2::utils::split(value, "=", doc_id, line_number)?;
+        properties.push((p1.trim().to_string(), p2.trim().to_string()));
     }
 
     Ok((function_name, properties))
