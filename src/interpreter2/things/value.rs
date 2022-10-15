@@ -453,6 +453,82 @@ impl PropertyValue {
                     line_number: value.line_number(),
                 }))
             }
+            Ok(expression)
+                if ftd::interpreter2::utils::get_function_name(
+                    expression.as_str(),
+                    doc.name,
+                    value.line_number(),
+                )
+                .is_ok() =>
+            {
+                let (function_name, properties) =
+                    ftd::interpreter2::utils::get_function_name_and_properties(
+                        expression.as_str(),
+                        doc.name,
+                        value.line_number(),
+                    )?;
+                let function = doc.get_function(function_name.as_str(), value.line_number())?;
+                let mut values: ftd::Map<PropertyValue> = Default::default();
+
+                for (key, property) in properties {
+                    let (property_key, mutable) =
+                        if let Some(key) = key.strip_prefix(ftd::interpreter2::utils::REFERENCE) {
+                            (key.to_string(), true)
+                        } else {
+                            (key, false)
+                        };
+
+                    let function_argument = function
+                        .arguments
+                        .iter()
+                        .find(|v| v.name.eq(property_key.as_str()))
+                        .ok_or(ftd::interpreter2::Error::ParseError {
+                            message: format!(
+                                "Cannot find argument `{}` in function `{}`",
+                                property_key, function_name
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number: value.line_number(),
+                        })?;
+
+                    if !(mutable.eq(&function_argument.mutable)) {
+                        return ftd::interpreter2::utils::e2(
+                            format!(
+                                "Mutability conflict in argument `{}` for function `{}`",
+                                property_key, function_name
+                            ),
+                            doc.name,
+                            value.line_number(),
+                        );
+                    }
+
+                    values.insert(
+                        property_key,
+                        PropertyValue::from_ast_value_with_argument(
+                            ftd::ast::VariableValue::String {
+                                value: property.to_string(),
+                                line_number: value.line_number(),
+                            },
+                            doc,
+                            mutable,
+                            Some(&function_argument.kind),
+                            definition_name_with_arguments,
+                            loop_object_name_and_kind,
+                        )?,
+                    );
+                }
+
+                let reference_full_name =
+                    PropertyValueSource::Global.get_reference_name(function_name.as_str(), doc);
+
+                Ok(Some(PropertyValue::FunctionCall {
+                    name: reference_full_name,
+                    kind: function.return_kind,
+                    is_mutable: mutable,
+                    line_number: value.line_number(),
+                    values,
+                }))
+            }
             _ => Ok(None),
         }
     }

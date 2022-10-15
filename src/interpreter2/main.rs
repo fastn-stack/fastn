@@ -74,6 +74,12 @@ impl InterpreterState {
                     record.name.to_string(),
                     ftd::interpreter2::Thing::Record(record),
                 );
+            } else if ast.is_function() {
+                let function = ftd::interpreter2::Function::from_ast(ast, &doc)?;
+                self.bag.insert(
+                    function.name.to_string(),
+                    ftd::interpreter2::Thing::Function(function),
+                );
             } else if ast.is_variable_definition() {
                 let variable = ftd::interpreter2::Variable::from_ast(ast, &doc)?;
                 self.bag.insert(

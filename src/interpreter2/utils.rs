@@ -81,10 +81,36 @@ pub(crate) fn get_function_name(
     doc_id: &str,
     line_number: usize,
 ) -> ftd::interpreter2::Result<String> {
-    match (s.find("("), s.find(")")) {
-        (Some(si), Some(ei)) if si < ei => Ok(s[..si].to_string()),
-        _ => ftd::interpreter2::utils::e2(format!("{} is not a function", s), doc_id, line_number),
+    Ok(get_function_name_and_properties(s, doc_id, line_number)?.0)
+}
+
+pub(crate) fn get_function_name_and_properties(
+    s: &str,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::interpreter2::Result<(String, Vec<(String, String)>)> {
+    let (si, ei) = match (s.find("("), s.find(")")) {
+        (Some(si), Some(ei)) if si < ei => (si, ei),
+        _ => {
+            return ftd::interpreter2::utils::e2(
+                format!("{} is not a function", s),
+                doc_id,
+                line_number,
+            )
+        }
+    };
+    let function_name = s[..si].to_string();
+    let mut properties = vec![];
+    for value in s[si + 1..ei].split(",") {
+        properties.push(ftd::interpreter2::utils::split(
+            value,
+            "=",
+            doc_id,
+            line_number,
+        )?);
     }
+
+    Ok((function_name, properties))
 }
 
 pub(crate) fn get_doc_name_and_remaining(

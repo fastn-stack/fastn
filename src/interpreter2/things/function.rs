@@ -1,18 +1,60 @@
-#[derive(Debug, Default, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
-    pub return_kind: Option<ftd::interpreter2::Kind>,
+    pub return_kind: ftd::interpreter2::KindData,
     pub arguments: Vec<ftd::interpreter2::Argument>,
     pub expression: Vec<Expression>,
     pub line_number: usize,
 }
 
 impl Function {
+    fn new(
+        name: &str,
+        return_kind: ftd::interpreter2::KindData,
+        arguments: Vec<ftd::interpreter2::Argument>,
+        expression: Vec<Expression>,
+        line_number: usize,
+    ) -> Function {
+        Function {
+            name: name.to_string(),
+            return_kind,
+            arguments,
+            expression,
+            line_number,
+        }
+    }
+
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Function> {
-        todo!()
+        let function = ast.get_function(doc.name)?;
+        let name = doc.resolve_name(function.name.as_str());
+        let arguments = ftd::interpreter2::Argument::from_ast_fields(
+            function.arguments,
+            doc,
+            &Default::default(),
+        )?;
+
+        let kind = ftd::interpreter2::KindData::from_ast_kind(
+            function.kind,
+            &Default::default(),
+            doc,
+            function.line_number,
+        )?;
+
+        let expression = vec![Expression {
+            expression: function.definition.value.to_string(),
+            line_number: function.definition.line_number,
+        }];
+
+        Ok(Function::new(
+            name.as_str(),
+            kind,
+            arguments,
+            expression,
+            function.line_number,
+        ))
     }
 
     pub(crate) fn resolve(
@@ -44,8 +86,15 @@ impl Function {
                         doc_id: doc.name.to_string(),
                         line_number,
                     })?;
-            if !(argument.mutable && function_value.is_mutable()) {
-                return ftd::interpreter2::utils::e2("mutability conflict", doc.name, line_number);
+            if !argument.mutable.eq(&function_value.is_mutable()) {
+                return ftd::interpreter2::utils::e2(
+                    format!(
+                        "Mutability conflict for argument `{}` in function `{}`",
+                        argument.name, self.name
+                    ),
+                    doc.name,
+                    line_number,
+                );
             }
             if !argument.kind.kind.is_same_as(&function_value.kind()) {
                 return ftd::interpreter2::utils::e2(
@@ -101,10 +150,10 @@ impl Function {
             }
         }
 
-        if let Some(ref return_kind) = self.return_kind {
+        if !self.return_kind.is_void() {
             return Ok(Some(ftd::interpreter2::Value::from_evalexpr_value(
                 eval,
-                return_kind,
+                &self.return_kind.kind,
                 doc.name,
                 line_number,
             )?));
@@ -117,7 +166,7 @@ impl Function {
 
         self.expression
             .iter()
-            .map(|v| v.0.to_string())
+            .map(|v| v.expression.to_string())
             .collect_vec()
             .join("\n")
     }
@@ -135,4 +184,7 @@ Todo: Convert Expression into
 */
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Expression(pub String);
+pub struct Expression {
+    pub expression: String,
+    pub line_number: usize,
+}
