@@ -641,6 +641,7 @@ and create a set of all identities). Pass `total identities` to
 
 
 -- ft.h1: Custom URL Support in Sitemap
+id: sitemap-custom-url
 
 You can define `document` key in Sitemap's section, subsection and toc.
 
@@ -649,7 +650,8 @@ In the below example, If request come for `/section/` so document
 document `sub-section.ftd` will be served. If request come for `/toc1/` so
 document `toc-temp.ftd` will be served.
 
--- ftd.code:
+
+-- ft.code: FPM.ftd
 lang: ftd
 
 \-- fpm.sitemap:
@@ -662,3 +664,43 @@ lang: ftd
 
 - Toc 1: /toc1/
   document: toc-temp.ftd
+
+
+-- ft.h1: Dynamic Parameters in URL
+
+You can define `url` like `url: /<string:username>/foo/<integer:age>/` in
+sitemap. With this configuration you have to also define
+[`document`](id: sitemap-custom-url).
+
+In the below example if `request` come for urls so they will be mapped
+accordingly
+
+- `/amitu/manager/40/` -> `person-manager.ftd`
+- `/arpita/manager/28/` -> `person-manager.ftd`
+- `/abrark/employee/30/` -> `person-employee.ftd`
+- `/shobhit/employee/30/` -> `person-employee.ftd`
+- `/abrark/task/30/` -> `task-type-1.ftd`
+- `/abrark/task2/30/` -> `task-type-2.ftd`
+
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Manager
+url: /<string:username>/manager/<integer:age>/
+document: person-manager.ftd
+
+## Employee
+url: /<string:username>/employee/<integer:age>/
+document: person-employee.ftd
+
+
+- Task1
+  url: /<string:username>/task/<integer:age>/
+  document: task-type-1.ftd
+
+  - Task2
+    url: /<string:username>/task2/<integer:age>/
+    document: task-type-2.ftd
