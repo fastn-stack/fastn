@@ -5,9 +5,18 @@ string b:
 a + b
 
 
+-- integer sum(a,b):
+integer a:
+integer b:
+
+a + b
+
+
 -- string name: Arpita
+-- integer number: 10
 
 
 -- ftd.text: append(a=hello, b=world)
 
 -- ftd.text: append(a = $name, b = Jaiswal)
+padding: sum(a = $number, b = 4)
