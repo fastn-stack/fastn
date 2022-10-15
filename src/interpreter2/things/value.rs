@@ -19,6 +19,13 @@ pub enum PropertyValue {
         is_mutable: bool,
         line_number: usize,
     },
+    FunctionCall {
+        name: String,
+        kind: ftd::interpreter2::KindData,
+        is_mutable: bool,
+        line_number: usize,
+        values: ftd::Map<PropertyValue>,
+    },
 }
 
 impl PropertyValue {
@@ -26,7 +33,8 @@ impl PropertyValue {
         match self {
             PropertyValue::Value { is_mutable, .. }
             | PropertyValue::Reference { is_mutable, .. }
-            | PropertyValue::Clone { is_mutable, .. } => *is_mutable,
+            | PropertyValue::Clone { is_mutable, .. }
+            | PropertyValue::FunctionCall { is_mutable, .. } => *is_mutable,
         }
     }
 
@@ -34,7 +42,8 @@ impl PropertyValue {
         match self {
             PropertyValue::Value { line_number, .. }
             | PropertyValue::Reference { line_number, .. }
-            | PropertyValue::Clone { line_number, .. } => *line_number,
+            | PropertyValue::Clone { line_number, .. }
+            | PropertyValue::FunctionCall { line_number, .. } => *line_number,
         }
     }
 
@@ -48,6 +57,25 @@ impl PropertyValue {
             ftd::interpreter2::PropertyValue::Reference { name, kind, .. }
             | ftd::interpreter2::PropertyValue::Clone { name, kind, .. } => {
                 doc.resolve(name.as_str(), &kind, line_number)
+            }
+            ftd::interpreter2::PropertyValue::FunctionCall {
+                name,
+                kind,
+                values,
+                line_number,
+                ..
+            } => {
+                let function = doc.get_function(name.as_str(), line_number)?;
+                function.resolve(&kind, &values, doc, line_number)?.ok_or(
+                    ftd::interpreter2::Error::ParseError {
+                        message: format!(
+                            "Expected return value of type {:?} for function {}",
+                            kind, name
+                        ),
+                        doc_id: doc.name.to_string(),
+                        line_number,
+                    },
+                )
             }
         }
     }
@@ -434,6 +462,7 @@ impl PropertyValue {
             PropertyValue::Value { value, .. } => value.kind(),
             PropertyValue::Reference { kind, .. } => kind.kind.to_owned(),
             PropertyValue::Clone { kind, .. } => kind.kind.to_owned(),
+            PropertyValue::FunctionCall { kind, .. } => kind.kind.to_owned(),
         }
     }
 }
@@ -561,5 +590,104 @@ impl Value {
                 name: Some(name.to_string()),
             },
         }
+    }
+
+    pub(crate) fn to_string(
+        &self,
+        doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<String> {
+        Ok(match self {
+            Value::String { text } => format!("\"{}\"", text),
+            Value::Integer { value } => value.to_string(),
+            Value::Decimal { value } => value.to_string(),
+            Value::Boolean { value } => value.to_string(),
+            Value::List { data, .. } => {
+                let mut values = vec![];
+                for value in data {
+                    let v = value
+                        .clone()
+                        .resolve(doc, line_number)?
+                        .to_string(doc, value.line_number())?;
+                    values.push(v);
+                }
+                format!("({:?})", values.join(","))
+            }
+            t => unimplemented!("{:?}", t),
+        })
+    }
+
+    pub(crate) fn to_evalexpr_value(
+        &self,
+        doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<evalexpr::Value> {
+        Ok(match self {
+            Value::String { text } => evalexpr::Value::String(text.to_string()),
+            Value::Integer { value } => evalexpr::Value::Int(*value),
+            Value::Decimal { value } => evalexpr::Value::Float(*value),
+            Value::Boolean { value } => evalexpr::Value::Boolean(*value),
+            Value::List { data, .. } => {
+                let mut values = vec![];
+                for value in data {
+                    let v = value
+                        .clone()
+                        .resolve(doc, line_number)?
+                        .to_evalexpr_value(doc, value.line_number())?;
+                    values.push(v);
+                }
+                evalexpr::Value::Tuple(values)
+            }
+            Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    data.to_evalexpr_value(doc, line_number)?
+                } else {
+                    evalexpr::Value::Empty
+                }
+            }
+            t => unimplemented!("{:?}", t),
+        })
+    }
+
+    pub(crate) fn from_evalexpr_value(
+        value: evalexpr::Value,
+        expected_kind: &ftd::interpreter2::Kind,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<Value> {
+        Ok(match value {
+            evalexpr::Value::String(text) if expected_kind.is_string() => Value::String { text },
+            evalexpr::Value::Float(value) if expected_kind.is_decimal() => Value::Decimal { value },
+            evalexpr::Value::Int(value) if expected_kind.is_integer() => Value::Integer { value },
+            evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
+                Value::Boolean { value }
+            }
+            evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
+                let mut values = vec![];
+                let val_kind = expected_kind.list_type(doc_name, line_number)?;
+                for val in data {
+                    values.push(ftd::interpreter2::PropertyValue::Value {
+                        value: Value::from_evalexpr_value(val, &val_kind, doc_name, line_number)?,
+                        is_mutable: false,
+                        line_number,
+                    });
+                }
+                Value::List {
+                    data: values,
+                    kind: ftd::interpreter2::KindData::new(val_kind),
+                }
+            }
+            evalexpr::Value::Empty if expected_kind.is_optional() => Value::Optional {
+                data: Box::new(None),
+                kind: ftd::interpreter2::KindData::new(expected_kind.clone()),
+            },
+            t => {
+                return ftd::interpreter2::utils::e2(
+                    format!("Expected kind: `{:?}`, found: `{:?}`", expected_kind, t),
+                    doc_name,
+                    line_number,
+                )
+            }
+        })
     }
 }

@@ -76,6 +76,17 @@ pub(crate) fn kind_eq(
 pub const CLONE: &str = "*$";
 pub const REFERENCE: &str = ftd::ast::utils::REFERENCE;
 
+pub(crate) fn get_function_name(
+    s: &str,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::interpreter2::Result<String> {
+    match (s.find("("), s.find(")")) {
+        (Some(si), Some(ei)) if si < ei => Ok(s[..si].to_string()),
+        _ => ftd::interpreter2::utils::e2(format!("{} is not a function", s), doc_id, line_number),
+    }
+}
+
 pub(crate) fn get_doc_name_and_remaining(
     s: &str,
     doc_id: &str,

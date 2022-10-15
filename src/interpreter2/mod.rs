@@ -13,6 +13,7 @@ pub use things::{
     component::{Argument, Component, ComponentDefinition, Loop, Property, PropertySource},
     default,
     expression::Boolean,
+    function::Function,
     kind::{Kind, KindData},
     record::{Field, Record},
     value::{PropertyValue, PropertyValueSource, Value},
@@ -57,6 +58,9 @@ pub enum Error {
         doc_id: String,
         line_number: usize,
     },
+
+    #[error("EvalexprError: {}", _0)]
+    EvalexprError(#[from] evalexpr::EvalexprError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
