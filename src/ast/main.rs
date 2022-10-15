@@ -6,6 +6,7 @@ pub enum AST {
     VariableInvocation(ftd::ast::VariableInvocation),
     ComponentDefinition(ftd::ast::ComponentDefinition),
     ComponentInvocation(ftd::ast::Component),
+    FunctionDefinition(ftd::ast::Function),
 }
 
 impl AST {
@@ -25,6 +26,8 @@ impl AST {
             AST::Import(ftd::ast::Import::from_p1(section, doc_id)?)
         } else if ftd::ast::Record::is_record(section) {
             AST::Record(ftd::ast::Record::from_p1(section, doc_id)?)
+        } else if ftd::ast::Function::is_function(section) {
+            AST::FunctionDefinition(ftd::ast::Function::from_p1(section, doc_id)?)
         } else if ftd::ast::VariableDefinition::is_variable_definition(section) {
             AST::VariableDefinition(ftd::ast::VariableDefinition::from_p1(section, doc_id)?)
         } else if ftd::ast::VariableInvocation::is_variable_invocation(section) {
@@ -50,6 +53,7 @@ impl AST {
             AST::VariableInvocation(v) => v.line_number(),
             AST::ComponentDefinition(c) => c.line_number(),
             AST::ComponentInvocation(c) => c.line_number(),
+            AST::FunctionDefinition(f) => f.line_number(),
         }
     }
 

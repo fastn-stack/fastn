@@ -28,7 +28,8 @@ impl VariableDefinition {
         !(ftd::ast::Import::is_import(section)
             || ftd::ast::Record::is_record(section)
             || ftd::ast::ComponentDefinition::is_component_definition(section)
-            || section.kind.is_none())
+            || section.kind.is_none()
+            || ftd::ast::Function::is_function(section))
     }
 
     pub(crate) fn from_p1(

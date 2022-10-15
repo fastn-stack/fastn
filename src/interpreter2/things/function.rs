@@ -12,6 +12,7 @@ impl Function {
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Function> {
+        todo!()
     }
 
     pub(crate) fn resolve(
