@@ -648,6 +648,11 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<(ftd::interpreter2::Thing, Option<String>)> {
+        let name = name
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
+            .unwrap_or(name);
+
         if name.contains('#') {
             let (name, remaining_value) = if let Ok(function_name) =
                 ftd::interpreter2::utils::get_function_name(name, self.name, line_number)

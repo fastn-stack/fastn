@@ -2,6 +2,6 @@
 string a:
 string b:
 
-a + b
+a + " " + b
 
 -- ftd.text: $append(a=hello, b=world)
