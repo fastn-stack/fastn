@@ -1,0 +1,200 @@
+{
+  "node": {
+    "classes": [],
+    "events": [],
+    "node": "div",
+    "attrs": {
+      "data-id": ""
+    },
+    "style": {
+      "align-items": "flex-start",
+      "display": "flex",
+      "flex-direction": "column",
+      "justify-content": "flex-start",
+      "text-decoration": "none"
+    },
+    "children": [
+      {
+        "classes": [],
+        "events": [],
+        "node": "div",
+        "attrs": {
+          "data-id": "0"
+        },
+        "style": {
+          "align-items": "flex-start",
+          "display": "flex",
+          "flex-direction": "column",
+          "justify-content": "flex-start",
+          "text-decoration": "none"
+        },
+        "children": [
+          {
+            "classes": [
+              "ft_md"
+            ],
+            "events": [],
+            "node": "div",
+            "attrs": {
+              "data-id": "0,0"
+            },
+            "style": {
+              "text-decoration": "none"
+            },
+            "children": [],
+            "text": "Hello",
+            "null": false
+          }
+        ],
+        "text": null,
+        "null": false
+      },
+      {
+        "classes": [],
+        "events": [],
+        "node": "div",
+        "attrs": {
+          "data-id": "1"
+        },
+        "style": {
+          "align-items": "flex-start",
+          "display": "flex",
+          "flex-direction": "column",
+          "justify-content": "flex-start",
+          "text-decoration": "none"
+        },
+        "children": [
+          {
+            "classes": [
+              "ft_md"
+            ],
+            "events": [],
+            "node": "div",
+            "attrs": {
+              "data-id": "1,0"
+            },
+            "style": {
+              "text-decoration": "none"
+            },
+            "children": [],
+            "text": "Hello Again",
+            "null": false
+          }
+        ],
+        "text": null,
+        "null": false
+      }
+    ],
+    "text": null,
+    "null": false
+  },
+  "bag": {
+    "foo#print": {
+      "Component": {
+        "name": "foo#print",
+        "arguments": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          }
+        ],
+        "definition": {
+          "name": "ftd#column",
+          "properties": [],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [
+            {
+              "name": "ftd#text",
+              "properties": [
+                {
+                  "value": {
+                    "Reference": {
+                      "name": "foo#print.name",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
+                      },
+                      "source": {
+                        "Local": "print"
+                      },
+                      "is_mutable": false,
+                      "line_number": 6
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 6
+                }
+              ],
+              "iteration": null,
+              "condition": null,
+              "events": [],
+              "children": [],
+              "line_number": 6
+            }
+          ],
+          "line_number": 4
+        },
+        "line_number": 1
+      }
+    },
+    "foo#print:name:0": {
+      "Variable": {
+        "name": "foo#print:name:0",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Hello"
+              }
+            },
+            "is_mutable": false,
+            "line_number": 14
+          }
+        },
+        "conditional_value": [],
+        "line_number": 13
+      }
+    },
+    "foo#print:name:1": {
+      "Variable": {
+        "name": "foo#print:name:1",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Hello Again"
+              }
+            },
+            "is_mutable": false,
+            "line_number": 17
+          }
+        },
+        "conditional_value": [],
+        "line_number": 16
+      }
+    }
+  }
+}

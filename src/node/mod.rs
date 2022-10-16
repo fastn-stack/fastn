@@ -3,6 +3,7 @@
 mod test;
 
 mod main;
-mod utils;
+mod node_data;
 
 pub use main::Node;
+pub use node_data::NodeData;

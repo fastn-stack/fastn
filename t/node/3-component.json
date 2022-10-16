@@ -1,0 +1,101 @@
+{
+  "node": {
+    "classes": [],
+    "events": [],
+    "node": "div",
+    "attrs": {
+      "data-id": ""
+    },
+    "style": {
+      "align-items": "flex-start",
+      "display": "flex",
+      "flex-direction": "column",
+      "justify-content": "flex-start",
+      "text-decoration": "none"
+    },
+    "children": [
+      {
+        "classes": [],
+        "events": [],
+        "node": "div",
+        "attrs": {
+          "data-id": "0"
+        },
+        "style": {
+          "align-items": "flex-start",
+          "display": "flex",
+          "flex-direction": "row",
+          "justify-content": "flex-start",
+          "padding": "40px",
+          "text-decoration": "none"
+        },
+        "children": [
+          {
+            "classes": [
+              "ft_md"
+            ],
+            "events": [],
+            "node": "div",
+            "attrs": {
+              "data-id": "0,0"
+            },
+            "style": {
+              "padding": "20px",
+              "text-decoration": "none"
+            },
+            "children": [],
+            "text": "Hello World",
+            "null": false
+          },
+          {
+            "classes": [
+              "ft_md"
+            ],
+            "events": [],
+            "node": "div",
+            "attrs": {
+              "data-id": "0,1"
+            },
+            "style": {
+              "padding": "2px",
+              "text-decoration": "none"
+            },
+            "children": [],
+            "text": "again",
+            "null": false
+          }
+        ],
+        "text": null,
+        "null": false
+      }
+    ],
+    "text": null,
+    "null": false
+  },
+  "bag": {
+    "foo#flag": {
+      "Variable": {
+        "name": "foo#flag",
+        "kind": {
+          "kind": "Boolean",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Boolean": {
+                "value": true
+              }
+            },
+            "is_mutable": false,
+            "line_number": 1
+          }
+        },
+        "conditional_value": [],
+        "line_number": 1
+      }
+    }
+  }
+}

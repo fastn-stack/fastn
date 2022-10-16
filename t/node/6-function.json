@@ -1,0 +1,348 @@
+{
+  "node": {
+    "classes": [],
+    "events": [],
+    "node": "div",
+    "attrs": {
+      "data-id": ""
+    },
+    "style": {
+      "align-items": "flex-start",
+      "display": "flex",
+      "flex-direction": "column",
+      "justify-content": "flex-start",
+      "text-decoration": "none"
+    },
+    "children": [
+      {
+        "classes": [
+          "ft_md"
+        ],
+        "events": [],
+        "node": "div",
+        "attrs": {
+          "data-id": "0"
+        },
+        "style": {
+          "padding": "5px",
+          "text-decoration": "none"
+        },
+        "children": [],
+        "text": "hello world",
+        "null": false
+      },
+      {
+        "classes": [
+          "ft_md"
+        ],
+        "events": [],
+        "node": "div",
+        "attrs": {
+          "data-id": "1"
+        },
+        "style": {
+          "padding": "14px",
+          "text-decoration": "none"
+        },
+        "children": [],
+        "text": "Arpita Jaiswal",
+        "null": false
+      },
+      {
+        "classes": [
+          "ft_md"
+        ],
+        "events": [],
+        "node": "div",
+        "attrs": {
+          "data-id": "2"
+        },
+        "style": {
+          "padding": "15px",
+          "text-decoration": "none"
+        },
+        "children": [],
+        "text": "Arpita FifthTry",
+        "null": false
+      }
+    ],
+    "text": null,
+    "null": false
+  },
+  "bag": {
+    "foo#append": {
+      "Function": {
+        "name": "foo#append",
+        "return_kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "b",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 3
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a + \" \" + b",
+            "line_number": 7
+          }
+        ],
+        "line_number": 1
+      }
+    },
+    "foo#compare": {
+      "Function": {
+        "name": "foo#compare",
+        "return_kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 16
+          },
+          {
+            "name": "b",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 17
+          },
+          {
+            "name": "c",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 18
+          },
+          {
+            "name": "d",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 19
+          }
+        ],
+        "expression": [
+          {
+            "expression": "e = a + c;\nif(e > b, c, d)",
+            "line_number": 25
+          }
+        ],
+        "line_number": 15
+      }
+    },
+    "foo#length": {
+      "Function": {
+        "name": "foo#length",
+        "return_kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 27
+          }
+        ],
+        "expression": [
+          {
+            "expression": "len(a)",
+            "line_number": 32
+          }
+        ],
+        "line_number": 26
+      }
+    },
+    "foo#name": {
+      "Variable": {
+        "name": "foo#name",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Arpita"
+              }
+            },
+            "is_mutable": false,
+            "line_number": 33
+          }
+        },
+        "conditional_value": [],
+        "line_number": 33
+      }
+    },
+    "foo#new-name": {
+      "Variable": {
+        "name": "foo#new-name",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "FunctionCall": {
+            "name": "foo#append",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "is_mutable": false,
+            "line_number": 35,
+            "values": {
+              "a": {
+                "Reference": {
+                  "name": "foo#name",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": false,
+                  "line_number": 35
+                }
+              },
+              "b": {
+                "Value": {
+                  "value": {
+                    "String": {
+                      "text": "FifthTry"
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 35
+                }
+              }
+            }
+          }
+        },
+        "conditional_value": [],
+        "line_number": 35
+      }
+    },
+    "foo#number": {
+      "Variable": {
+        "name": "foo#number",
+        "kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Integer": {
+                "value": 10
+              }
+            },
+            "is_mutable": false,
+            "line_number": 34
+          }
+        },
+        "conditional_value": [],
+        "line_number": 34
+      }
+    },
+    "foo#sum": {
+      "Function": {
+        "name": "foo#sum",
+        "return_kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 9
+          },
+          {
+            "name": "b",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 10
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a + b",
+            "line_number": 14
+          }
+        ],
+        "line_number": 8
+      }
+    }
+  }
+}

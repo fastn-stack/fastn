@@ -26,22 +26,30 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
-    let mut node = ftd::node::NodeData::from_rt(executor);
-    for thing in ftd::interpreter2::default::default_bag().keys() {
-        node.bag.remove(thing);
-    }
-    let expected_json = serde_json::to_string_pretty(&node).unwrap();
+    let node = ftd::node::NodeData::from_rt(executor);
+    let html_ui = ftd::html1::HtmlUI::from_node_data(node);
+    let html_str = ftd::html1::utils::trim_all_lines(
+        std::fs::read_to_string("ftd.html")
+            .expect("cant read ftd.html")
+            .replace("__ftd_doc_title__", "")
+            .replace("__ftd_data__", "")
+            .replace("__ftd_external_children__", "")
+            .replace("__ftd__", html_ui.html.as_str())
+            .replace("__ftd_js__", "")
+            .replace("__ftd_body_events__", "")
+            .replace("__ftd_css__", "")
+            .replace("__ftd_element_css__", "")
+            .as_str(),
+    );
     if fix {
-        std::fs::write(file_location, expected_json).unwrap();
+        std::fs::write(file_location, html_str).unwrap();
         return;
     }
-    let t: ftd::node::NodeData = serde_json::from_str(t)
-        .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
-    assert_eq!(&t, &node, "Expected JSON: {}", expected_json)
+    assert_eq!(&t, &html_str, "Expected JSON: {}", html_str)
 }
 
 #[test]
-fn node_test_all() {
+fn html_test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test
     let cli_args: Vec<String> = std::env::args().collect();
@@ -85,7 +93,7 @@ fn find_all_files_matching_extension_recursively(
 
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = find_all_files_matching_extension_recursively("t/node", "ftd");
+        let mut f = find_all_files_matching_extension_recursively("t/html", "ftd");
         f.sort();
         f
     };
@@ -109,7 +117,7 @@ fn filename_with_second_last_extension_replaced_with_json(
     let stem = path.file_stem().unwrap().to_str().unwrap();
 
     path.with_file_name(format!(
-        "{}.json",
+        "{}.html",
         match stem.split_once('.') {
             Some((b, _)) => b,
             None => stem,

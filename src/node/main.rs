@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
@@ -57,65 +55,6 @@ impl Node {
             null: common.is_dummy,
             events: common.event.clone(),
         }
-    }
-
-    pub fn to_html(&self, doc_id: &str) -> String {
-        let style = format!("style=\"{}\"", self.style_to_html(/*self.visible*/ true));
-        let classes = self.class_to_html();
-        let attrs = self.attrs_to_html();
-
-        let body = match self.text.as_ref() {
-            Some(v) => v.to_string(),
-            None => self
-                .children
-                .iter()
-                .map(|v| v.to_html(doc_id))
-                .collect::<Vec<String>>()
-                .join(""),
-        };
-
-        format!(
-            "<{node} {attrs} {style} {classes}>{body}</{node}>",
-            node = self.node.as_str(),
-            attrs = attrs,
-            style = style,
-            classes = classes,
-            body = body,
-        )
-    }
-
-    pub fn style_to_html(&self, visible: bool) -> String {
-        let mut styles = self.style.to_owned();
-        if !visible {
-            styles.insert("display".to_string(), "none".to_string());
-        }
-        styles
-            .iter()
-            .map(|(k, v)| format!("{}: {}", *k, escape(v))) // TODO: escape needed?
-            .collect::<Vec<String>>()
-            .join("; ")
-    }
-
-    pub fn class_to_html(&self) -> String {
-        if self.classes.is_empty() {
-            return "".to_string();
-        }
-        format!(
-            "class=\"{}\"",
-            self.classes
-                .iter()
-                .map(|k| k.to_string())
-                .collect::<Vec<String>>()
-                .join(" ")
-        )
-    }
-
-    fn attrs_to_html(&self) -> String {
-        self.attrs
-            .iter()
-            .map(|(k, v)| format!("{}={}", *k, quote(v))) // TODO: escape needed?
-            .collect::<Vec<String>>()
-            .join(" ")
     }
 }
 
@@ -240,14 +179,4 @@ impl ftd::executor::Container {
 
 fn s(s: &str) -> String {
     s.to_string()
-}
-
-pub fn escape(s: &str) -> String {
-    let s = s.replace('>', "\\u003E");
-    let s = s.replace('<', "\\u003C");
-    s.replace('&', "\\u0026")
-}
-
-fn quote(i: &str) -> String {
-    format!("{:?}", i)
 }
