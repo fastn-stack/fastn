@@ -64,6 +64,7 @@
                     },
                     "common": {
                       "is_not_visible": false,
+                      "event": [],
                       "is_dummy": false,
                       "padding": {
                         "value": 40,
@@ -176,6 +177,7 @@
                             },
                             "common": {
                               "is_not_visible": false,
+                              "event": [],
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
@@ -213,6 +215,7 @@
                             },
                             "common": {
                               "is_not_visible": false,
+                              "event": [],
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
@@ -226,6 +229,7 @@
                     },
                     "common": {
                       "is_not_visible": false,
+                      "event": [],
                       "is_dummy": false,
                       "padding": {
                         "value": null,
@@ -239,6 +243,7 @@
             },
             "common": {
               "is_not_visible": false,
+              "event": [],
               "is_dummy": false,
               "padding": {
                 "value": null,
@@ -252,6 +257,7 @@
     },
     "common": {
       "is_not_visible": false,
+      "event": [],
       "is_dummy": false,
       "padding": {
         "value": null,

@@ -1,0 +1,146 @@
+{
+  "name": "foo",
+  "aliases": {
+    "ftd": "ftd"
+  },
+  "bag": {
+    "foo#flag": {
+      "Variable": {
+        "name": "foo#flag",
+        "kind": {
+          "kind": "Boolean",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "Boolean": {
+                "value": true
+              }
+            },
+            "is_mutable": true,
+            "line_number": 7
+          }
+        },
+        "conditional_value": [],
+        "line_number": 7
+      }
+    },
+    "foo#toggle": {
+      "Function": {
+        "name": "foo#toggle",
+        "return_kind": {
+          "kind": "Void",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "Boolean",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 2
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a = !a;",
+            "line_number": 6
+          }
+        ],
+        "line_number": 1
+      }
+    }
+  },
+  "main": {
+    "container": {
+      "children": [
+        {
+          "Text": {
+            "text": {
+              "value": {
+                "original": "Click here",
+                "rendered": "Click here"
+              },
+              "properties": [
+                {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "Click here"
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 9
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 9
+                }
+              ]
+            },
+            "common": {
+              "is_not_visible": false,
+              "event": [
+                {
+                  "name": "Click",
+                  "action": {
+                    "name": "foo#toggle",
+                    "kind": {
+                      "kind": "Void",
+                      "caption": false,
+                      "body": false
+                    },
+                    "is_mutable": false,
+                    "line_number": 10,
+                    "values": {
+                      "a": {
+                        "Reference": {
+                          "name": "foo#flag",
+                          "kind": {
+                            "kind": "Boolean",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": "Global",
+                          "is_mutable": true,
+                          "line_number": 10
+                        }
+                      }
+                    }
+                  },
+                  "line_number": 10
+                }
+              ],
+              "is_dummy": false,
+              "padding": {
+                "value": null,
+                "properties": []
+              },
+              "data_id": "0"
+            }
+          }
+        }
+      ]
+    },
+    "common": {
+      "is_not_visible": false,
+      "event": [],
+      "is_dummy": false,
+      "padding": {
+        "value": null,
+        "properties": []
+      },
+      "data_id": ""
+    }
+  }
+}

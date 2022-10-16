@@ -41,9 +41,12 @@ pub struct Container {
     pub children: Vec<Element>,
 }
 
+pub type Event = ftd::interpreter2::Event;
+
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Common {
     pub is_not_visible: bool,
+    pub event: Vec<Event>,
     pub is_dummy: bool,
     pub padding: ftd::executor::Value<Option<i64>>,
     pub data_id: String,
@@ -56,6 +59,7 @@ pub fn default_column() -> Column {
 
 pub fn text_from_properties(
     properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
@@ -63,38 +67,62 @@ pub fn text_from_properties(
 ) -> ftd::executor::Result<Text> {
     let text = ftd::executor::value::string("text", properties, arguments, doc, line_number)?
         .map(|v| ftd::executor::element::markup_inline(v.as_str()));
-    let common = common_from_properties(properties, arguments, doc, local_container, line_number)?;
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        doc,
+        local_container,
+        line_number,
+    )?;
     Ok(Text { text, common })
 }
 
 pub fn row_from_properties(
     properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     children: Vec<Element>,
 ) -> ftd::executor::Result<Row> {
-    let common = common_from_properties(properties, arguments, doc, local_container, line_number)?;
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        doc,
+        local_container,
+        line_number,
+    )?;
     let container = container_from_properties(properties, arguments, doc, line_number, children)?;
     Ok(Row { container, common })
 }
 
 pub fn column_from_properties(
     properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
     children: Vec<Element>,
 ) -> ftd::executor::Result<Column> {
-    let common = common_from_properties(properties, arguments, doc, local_container, line_number)?;
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        doc,
+        local_container,
+        line_number,
+    )?;
     let container = container_from_properties(properties, arguments, doc, line_number, children)?;
     Ok(Column { container, common })
 }
 
 pub fn common_from_properties(
     properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
@@ -102,6 +130,7 @@ pub fn common_from_properties(
 ) -> ftd::executor::Result<Common> {
     Ok(Common {
         is_not_visible: false,
+        event: events.to_owned(),
         is_dummy: false,
         padding: ftd::executor::value::optional_i64(
             "padding",

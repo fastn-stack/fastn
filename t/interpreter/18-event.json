@@ -81,7 +81,7 @@
       "condition": null,
       "events": [
         {
-          "name": "click",
+          "name": "Click",
           "action": {
             "name": "foo#toggle",
             "kind": {

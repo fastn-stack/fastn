@@ -405,7 +405,7 @@ impl Loop {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Event {
-    name: String,
+    name: ftd::interpreter2::EventName,
     action: ftd::interpreter2::FunctionCall,
     line_number: usize,
 }
@@ -426,8 +426,14 @@ impl Event {
             ast_event.line_number,
         )?;
 
+        let event_name = ftd::interpreter2::EventName::from_string(
+            ast_event.name.as_str(),
+            doc.name,
+            ast_event.line_number,
+        )?;
+
         Ok(Event {
-            name: ast_event.name.to_string(),
+            name: event_name,
             action,
             line_number: ast_event.line_number,
         })
@@ -449,5 +455,27 @@ impl Event {
             )?);
         }
         Ok(events)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum EventName {
+    Click,
+}
+
+impl EventName {
+    pub(crate) fn from_string(
+        e: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::EventName> {
+        match e {
+            "click" => Ok(EventName::Click),
+            t => ftd::interpreter2::utils::e2(
+                format!("`{}` event not found", t),
+                doc_id,
+                line_number,
+            ),
+        }
     }
 }

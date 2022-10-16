@@ -194,6 +194,7 @@ impl<'a> ExecuteDoc<'a> {
             "ftd#text" => {
                 ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
                     instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
                     doc,
                     local_container,
@@ -208,6 +209,7 @@ impl<'a> ExecuteDoc<'a> {
                 )?;
                 ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
                     instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
                     doc,
                     local_container,
@@ -223,6 +225,7 @@ impl<'a> ExecuteDoc<'a> {
                 )?;
                 ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
                     instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
                     doc,
                     local_container,
