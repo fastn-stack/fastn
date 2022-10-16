@@ -191,3 +191,111 @@ pub struct Expression {
     pub expression: String,
     pub line_number: usize,
 }
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct FunctionCall {
+    pub name: String,
+    pub kind: ftd::interpreter2::KindData,
+    pub is_mutable: bool,
+    pub line_number: usize,
+    pub values: ftd::Map<ftd::interpreter2::PropertyValue>,
+}
+
+impl FunctionCall {
+    pub fn new(
+        name: &str,
+        kind: ftd::interpreter2::KindData,
+        is_mutable: bool,
+        line_number: usize,
+        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+    ) -> FunctionCall {
+        FunctionCall {
+            name: name.to_string(),
+            kind,
+            is_mutable,
+            line_number,
+            values,
+        }
+    }
+
+    pub(crate) fn from_string(
+        value: &str,
+        doc: &ftd::interpreter2::TDoc,
+        mutable: bool,
+        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::FunctionCall> {
+        let expression = value
+            .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
+            .to_string();
+
+        let (function_name, properties) =
+            ftd::interpreter2::utils::get_function_name_and_properties(
+                expression.as_str(),
+                doc.name,
+                line_number,
+            )?;
+        let function = doc.get_function(function_name.as_str(), line_number)?;
+        let mut values: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
+
+        for (key, property) in properties {
+            let (property_key, mutable) =
+                if let Some(key) = key.strip_prefix(ftd::interpreter2::utils::REFERENCE) {
+                    (key.to_string(), true)
+                } else {
+                    (key, false)
+                };
+
+            let function_argument = function
+                .arguments
+                .iter()
+                .find(|v| v.name.eq(property_key.as_str()))
+                .ok_or(ftd::interpreter2::Error::ParseError {
+                    message: format!(
+                        "Cannot find argument `{}` in function `{}`",
+                        property_key, function_name
+                    ),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+
+            if !(mutable.eq(&function_argument.mutable)) {
+                return ftd::interpreter2::utils::e2(
+                    format!(
+                        "Mutability conflict in argument `{}` for function `{}`",
+                        property_key, function_name
+                    ),
+                    doc.name,
+                    line_number,
+                );
+            }
+
+            values.insert(
+                property_key,
+                ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
+                    ftd::ast::VariableValue::String {
+                        value: property.to_string(),
+                        line_number,
+                    },
+                    doc,
+                    mutable,
+                    Some(&function_argument.kind),
+                    definition_name_with_arguments,
+                    loop_object_name_and_kind,
+                )?,
+            );
+        }
+
+        let reference_full_name = ftd::interpreter2::PropertyValueSource::Global
+            .get_reference_name(function_name.as_str(), doc);
+
+        Ok(ftd::interpreter2::FunctionCall::new(
+            reference_full_name.as_str(),
+            function.return_kind,
+            mutable,
+            line_number,
+            values,
+        ))
+    }
+}

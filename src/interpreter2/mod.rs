@@ -13,7 +13,7 @@ pub use things::{
     component::{Argument, Component, ComponentDefinition, Loop, Property, PropertySource},
     default,
     expression::Boolean,
-    function::Function,
+    function::{Function, FunctionCall},
     kind::{Kind, KindData},
     record::{Field, Record},
     value::{PropertyValue, PropertyValueSource, Value},

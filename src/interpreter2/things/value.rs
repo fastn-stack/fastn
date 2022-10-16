@@ -19,13 +19,7 @@ pub enum PropertyValue {
         is_mutable: bool,
         line_number: usize,
     },
-    FunctionCall {
-        name: String,
-        kind: ftd::interpreter2::KindData,
-        is_mutable: bool,
-        line_number: usize,
-        values: ftd::Map<PropertyValue>,
-    },
+    FunctionCall(ftd::interpreter2::FunctionCall),
 }
 
 impl PropertyValue {
@@ -34,7 +28,9 @@ impl PropertyValue {
             PropertyValue::Value { is_mutable, .. }
             | PropertyValue::Reference { is_mutable, .. }
             | PropertyValue::Clone { is_mutable, .. }
-            | PropertyValue::FunctionCall { is_mutable, .. } => *is_mutable,
+            | PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall { is_mutable, .. }) => {
+                *is_mutable
+            }
         }
     }
 
@@ -43,7 +39,9 @@ impl PropertyValue {
             PropertyValue::Value { line_number, .. }
             | PropertyValue::Reference { line_number, .. }
             | PropertyValue::Clone { line_number, .. }
-            | PropertyValue::FunctionCall { line_number, .. } => *line_number,
+            | PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall {
+                line_number, ..
+            }) => *line_number,
         }
     }
 
@@ -58,13 +56,13 @@ impl PropertyValue {
             | ftd::interpreter2::PropertyValue::Clone { name, kind, .. } => {
                 doc.resolve(name.as_str(), &kind, line_number)
             }
-            ftd::interpreter2::PropertyValue::FunctionCall {
+            ftd::interpreter2::PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall {
                 name,
                 kind,
                 values,
                 line_number,
                 ..
-            } => {
+            }) => {
                 let function = doc.get_function(name.as_str(), line_number)?;
                 function.resolve(&kind, &values, doc, line_number)?.ok_or(
                     ftd::interpreter2::Error::ParseError {
@@ -367,76 +365,19 @@ impl PropertyValue {
                     .is_ok() =>
             {
                 let expression = expression
-                    .trim_start_matches(ftd::interpreter2::utils::CLONE)
+                    .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
                     .to_string();
 
-                let (function_name, properties) =
-                    ftd::interpreter2::utils::get_function_name_and_properties(
+                Ok(Some(ftd::interpreter2::PropertyValue::FunctionCall(
+                    ftd::interpreter2::FunctionCall::from_string(
                         expression.as_str(),
-                        doc.name,
+                        doc,
+                        mutable,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
                         value.line_number(),
-                    )?;
-                let function = doc.get_function(function_name.as_str(), value.line_number())?;
-                let mut values: ftd::Map<PropertyValue> = Default::default();
-
-                for (key, property) in properties {
-                    let (property_key, mutable) =
-                        if let Some(key) = key.strip_prefix(ftd::interpreter2::utils::REFERENCE) {
-                            (key.to_string(), true)
-                        } else {
-                            (key, false)
-                        };
-
-                    let function_argument = function
-                        .arguments
-                        .iter()
-                        .find(|v| v.name.eq(property_key.as_str()))
-                        .ok_or(ftd::interpreter2::Error::ParseError {
-                            message: format!(
-                                "Cannot find argument `{}` in function `{}`",
-                                property_key, function_name
-                            ),
-                            doc_id: doc.name.to_string(),
-                            line_number: value.line_number(),
-                        })?;
-
-                    if !(mutable.eq(&function_argument.mutable)) {
-                        return ftd::interpreter2::utils::e2(
-                            format!(
-                                "Mutability conflict in argument `{}` for function `{}`",
-                                property_key, function_name
-                            ),
-                            doc.name,
-                            value.line_number(),
-                        );
-                    }
-
-                    values.insert(
-                        property_key,
-                        PropertyValue::from_ast_value_with_argument(
-                            ftd::ast::VariableValue::String {
-                                value: property.to_string(),
-                                line_number: value.line_number(),
-                            },
-                            doc,
-                            mutable,
-                            Some(&function_argument.kind),
-                            definition_name_with_arguments,
-                            loop_object_name_and_kind,
-                        )?,
-                    );
-                }
-
-                let reference_full_name =
-                    PropertyValueSource::Global.get_reference_name(function_name.as_str(), doc);
-
-                Ok(Some(PropertyValue::FunctionCall {
-                    name: reference_full_name,
-                    kind: function.return_kind,
-                    is_mutable: mutable,
-                    line_number: value.line_number(),
-                    values,
-                }))
+                    )?,
+                )))
             }
             Ok(reference) if reference.starts_with(ftd::interpreter2::utils::CLONE) => {
                 let reference = reference
@@ -543,7 +484,9 @@ impl PropertyValue {
             PropertyValue::Value { value, .. } => value.kind(),
             PropertyValue::Reference { kind, .. } => kind.kind.to_owned(),
             PropertyValue::Clone { kind, .. } => kind.kind.to_owned(),
-            PropertyValue::FunctionCall { kind, .. } => kind.kind.to_owned(),
+            PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall { kind, .. }) => {
+                kind.kind.to_owned()
+            }
         }
     }
 }

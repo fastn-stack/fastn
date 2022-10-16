@@ -334,13 +334,15 @@ impl<'a> TDoc<'a> {
                         };
                         change_value(value, set, Some(remaining), doc, line_number)?;
                     }
-                    ftd::interpreter2::PropertyValue::FunctionCall {
-                        name,
-                        kind,
-                        is_mutable,
-                        values,
-                        ..
-                    } => {
+                    ftd::interpreter2::PropertyValue::FunctionCall(
+                        ftd::interpreter2::FunctionCall {
+                            name,
+                            kind,
+                            is_mutable,
+                            values,
+                            ..
+                        },
+                    ) => {
                         let function = doc.get_function(name, line_number)?;
                         let resolved_value = function
                             .resolve(kind, values, doc, line_number)?
