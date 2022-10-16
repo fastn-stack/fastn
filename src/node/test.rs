@@ -27,7 +27,7 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
     let html = executor.main.to_node("foo").to_html("foo");
-    let html_str = ftd::html1::utils::trim_all_lines(
+    let html_str = ftd::node::utils::trim_all_lines(
         std::fs::read_to_string("ftd.html")
             .expect("cant read ftd.html")
             .replace("__ftd_doc_title__", "")

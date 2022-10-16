@@ -3,6 +3,7 @@
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
+    pub events: Vec<Event>,
     pub node: String,
     pub attrs: ftd::Map<String>,
     pub style: ftd::Map<String>,
@@ -10,6 +11,8 @@ pub struct Node {
     pub text: Option<String>,
     pub null: bool,
 }
+
+pub type Event = ftd::executor::Event;
 
 impl Node {
     fn from_common(node: &str, common: &ftd::executor::Common, doc_id: &str) -> Node {
@@ -21,6 +24,7 @@ impl Node {
             text: None,
             classes: vec![],
             null: common.is_dummy,
+            events: common.event.clone(),
         }
     }
 
@@ -51,6 +55,7 @@ impl Node {
                 .map(|v| v.to_node(doc_id))
                 .collect_vec(),
             null: common.is_dummy,
+            events: common.event.clone(),
         }
     }
 

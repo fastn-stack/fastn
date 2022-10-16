@@ -2,7 +2,7 @@
 #[macro_use]
 mod test;
 
-mod node;
+mod main;
 mod utils;
 
-pub use node::Node;
+pub use main::Node;
