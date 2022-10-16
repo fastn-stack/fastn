@@ -78,6 +78,10 @@ impl PropertyValue {
         }
     }
 
+    pub fn is_value(&self) -> bool {
+        matches!(self, ftd::interpreter2::PropertyValue::Value { .. })
+    }
+
     pub(crate) fn value(
         &self,
         doc_id: &str,

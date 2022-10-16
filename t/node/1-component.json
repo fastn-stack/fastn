@@ -4,14 +4,43 @@
     "events": [],
     "node": "div",
     "attrs": {
-      "data-id": ""
+      "data-id": {
+        "value": "",
+        "properties": [],
+        "pattern": null
+      }
     },
     "style": {
-      "align-items": "flex-start",
-      "display": "flex",
-      "flex-direction": "column",
-      "justify-content": "flex-start",
-      "text-decoration": "none"
+      "align-items": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null
+      },
+      "display": {
+        "value": "flex",
+        "properties": [],
+        "pattern": null
+      },
+      "flex-direction": {
+        "value": "column",
+        "properties": [],
+        "pattern": null
+      },
+      "justify-content": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null
+      },
+      "padding": {
+        "value": null,
+        "properties": [],
+        "pattern": "{}px"
+      },
+      "text-decoration": {
+        "value": "none",
+        "properties": [],
+        "pattern": null
+      }
     },
     "children": [
       {
@@ -19,15 +48,43 @@
         "events": [],
         "node": "div",
         "attrs": {
-          "data-id": "0"
+          "data-id": {
+            "value": "0",
+            "properties": [],
+            "pattern": null
+          }
         },
         "style": {
-          "align-items": "flex-start",
-          "display": "flex",
-          "flex-direction": "row",
-          "justify-content": "flex-start",
-          "padding": "40px",
-          "text-decoration": "none"
+          "align-items": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null
+          },
+          "display": {
+            "value": "flex",
+            "properties": [],
+            "pattern": null
+          },
+          "flex-direction": {
+            "value": "row",
+            "properties": [],
+            "pattern": null
+          },
+          "justify-content": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null
+          },
+          "padding": {
+            "value": "40px",
+            "properties": [],
+            "pattern": "{}px"
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null
+          }
         },
         "children": [
           {
@@ -37,14 +94,30 @@
             "events": [],
             "node": "div",
             "attrs": {
-              "data-id": "0,0"
+              "data-id": {
+                "value": "0,0",
+                "properties": [],
+                "pattern": null
+              }
             },
             "style": {
-              "padding": "2px",
-              "text-decoration": "none"
+              "padding": {
+                "value": "2px",
+                "properties": [],
+                "pattern": "{}px"
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null
+              }
             },
             "children": [],
-            "text": "Hello World",
+            "text": {
+              "value": "Hello World",
+              "properties": [],
+              "pattern": null
+            },
             "null": false
           },
           {
@@ -54,18 +127,38 @@
             "events": [],
             "node": "div",
             "attrs": {
-              "data-id": "0,1"
+              "data-id": {
+                "value": "0,1",
+                "properties": [],
+                "pattern": null
+              }
             },
             "style": {
-              "padding": "2px",
-              "text-decoration": "none"
+              "padding": {
+                "value": "2px",
+                "properties": [],
+                "pattern": "{}px"
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null
+              }
             },
             "children": [],
-            "text": "again",
+            "text": {
+              "value": "again",
+              "properties": [],
+              "pattern": null
+            },
             "null": false
           }
         ],
-        "text": null,
+        "text": {
+          "value": null,
+          "properties": [],
+          "pattern": null
+        },
         "null": false
       },
       {
@@ -73,15 +166,43 @@
         "events": [],
         "node": "div",
         "attrs": {
-          "data-id": "1"
+          "data-id": {
+            "value": "1",
+            "properties": [],
+            "pattern": null
+          }
         },
         "style": {
-          "align-items": "flex-start",
-          "display": "flex",
-          "flex-direction": "row",
-          "justify-content": "flex-start",
-          "padding": "40px",
-          "text-decoration": "none"
+          "align-items": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null
+          },
+          "display": {
+            "value": "flex",
+            "properties": [],
+            "pattern": null
+          },
+          "flex-direction": {
+            "value": "row",
+            "properties": [],
+            "pattern": null
+          },
+          "justify-content": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null
+          },
+          "padding": {
+            "value": "40px",
+            "properties": [],
+            "pattern": "{}px"
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null
+          }
         },
         "children": [
           {
@@ -91,14 +212,30 @@
             "events": [],
             "node": "div",
             "attrs": {
-              "data-id": "1,0"
+              "data-id": {
+                "value": "1,0",
+                "properties": [],
+                "pattern": null
+              }
             },
             "style": {
-              "padding": "2px",
-              "text-decoration": "none"
+              "padding": {
+                "value": "2px",
+                "properties": [],
+                "pattern": "{}px"
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null
+              }
             },
             "children": [],
-            "text": "Hello",
+            "text": {
+              "value": "Hello",
+              "properties": [],
+              "pattern": null
+            },
             "null": false
           },
           {
@@ -108,18 +245,38 @@
             "events": [],
             "node": "div",
             "attrs": {
-              "data-id": "1,1"
+              "data-id": {
+                "value": "1,1",
+                "properties": [],
+                "pattern": null
+              }
             },
             "style": {
-              "padding": "2px",
-              "text-decoration": "none"
+              "padding": {
+                "value": "2px",
+                "properties": [],
+                "pattern": "{}px"
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null
+              }
             },
             "children": [],
-            "text": "again",
+            "text": {
+              "value": "again",
+              "properties": [],
+              "pattern": null
+            },
             "null": false
           }
         ],
-        "text": null,
+        "text": {
+          "value": null,
+          "properties": [],
+          "pattern": null
+        },
         "null": false
       },
       {
@@ -129,18 +286,38 @@
         "events": [],
         "node": "div",
         "attrs": {
-          "data-id": "2"
+          "data-id": {
+            "value": "2",
+            "properties": [],
+            "pattern": null
+          }
         },
         "style": {
-          "padding": "40px",
-          "text-decoration": "none"
+          "padding": {
+            "value": "40px",
+            "properties": [],
+            "pattern": "{}px"
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null
+          }
         },
         "children": [],
-        "text": "Hello from text",
+        "text": {
+          "value": "Hello from text",
+          "properties": [],
+          "pattern": null
+        },
         "null": false
       }
     ],
-    "text": null,
+    "text": {
+      "value": null,
+      "properties": [],
+      "pattern": null
+    },
     "null": false
   },
   "bag": {}

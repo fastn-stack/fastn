@@ -4,14 +4,43 @@
     "events": [],
     "node": "div",
     "attrs": {
-      "data-id": ""
+      "data-id": {
+        "value": "",
+        "properties": [],
+        "pattern": null
+      }
     },
     "style": {
-      "align-items": "flex-start",
-      "display": "flex",
-      "flex-direction": "column",
-      "justify-content": "flex-start",
-      "text-decoration": "none"
+      "align-items": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null
+      },
+      "display": {
+        "value": "flex",
+        "properties": [],
+        "pattern": null
+      },
+      "flex-direction": {
+        "value": "column",
+        "properties": [],
+        "pattern": null
+      },
+      "justify-content": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null
+      },
+      "padding": {
+        "value": null,
+        "properties": [],
+        "pattern": "{}px"
+      },
+      "text-decoration": {
+        "value": "none",
+        "properties": [],
+        "pattern": null
+      }
     },
     "children": [
       {
@@ -19,15 +48,43 @@
         "events": [],
         "node": "div",
         "attrs": {
-          "data-id": "0"
+          "data-id": {
+            "value": "0",
+            "properties": [],
+            "pattern": null
+          }
         },
         "style": {
-          "align-items": "flex-start",
-          "display": "flex",
-          "flex-direction": "column",
-          "justify-content": "flex-start",
-          "padding": "40px",
-          "text-decoration": "none"
+          "align-items": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null
+          },
+          "display": {
+            "value": "flex",
+            "properties": [],
+            "pattern": null
+          },
+          "flex-direction": {
+            "value": "column",
+            "properties": [],
+            "pattern": null
+          },
+          "justify-content": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null
+          },
+          "padding": {
+            "value": "40px",
+            "properties": [],
+            "pattern": "{}px"
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null
+          }
         },
         "children": [
           {
@@ -37,13 +94,30 @@
             "events": [],
             "node": "div",
             "attrs": {
-              "data-id": "0,0"
+              "data-id": {
+                "value": "0,0",
+                "properties": [],
+                "pattern": null
+              }
             },
             "style": {
-              "text-decoration": "none"
+              "padding": {
+                "value": null,
+                "properties": [],
+                "pattern": "{}px"
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null
+              }
             },
             "children": [],
-            "text": "Hello World",
+            "text": {
+              "value": "Hello World",
+              "properties": [],
+              "pattern": null
+            },
             "null": false
           },
           {
@@ -53,21 +127,46 @@
             "events": [],
             "node": "div",
             "attrs": {
-              "data-id": "0,1"
+              "data-id": {
+                "value": "0,1",
+                "properties": [],
+                "pattern": null
+              }
             },
             "style": {
-              "text-decoration": "none"
+              "padding": {
+                "value": null,
+                "properties": [],
+                "pattern": "{}px"
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null
+              }
             },
             "children": [],
-            "text": "again",
+            "text": {
+              "value": "again",
+              "properties": [],
+              "pattern": null
+            },
             "null": false
           }
         ],
-        "text": null,
+        "text": {
+          "value": null,
+          "properties": [],
+          "pattern": null
+        },
         "null": false
       }
     ],
-    "text": null,
+    "text": {
+      "value": null,
+      "properties": [],
+      "pattern": null
+    },
     "null": false
   },
   "bag": {}

@@ -4,14 +4,43 @@
     "events": [],
     "node": "div",
     "attrs": {
-      "data-id": ""
+      "data-id": {
+        "value": "",
+        "properties": [],
+        "pattern": null
+      }
     },
     "style": {
-      "align-items": "flex-start",
-      "display": "flex",
-      "flex-direction": "column",
-      "justify-content": "flex-start",
-      "text-decoration": "none"
+      "align-items": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null
+      },
+      "display": {
+        "value": "flex",
+        "properties": [],
+        "pattern": null
+      },
+      "flex-direction": {
+        "value": "column",
+        "properties": [],
+        "pattern": null
+      },
+      "justify-content": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null
+      },
+      "padding": {
+        "value": null,
+        "properties": [],
+        "pattern": "{}px"
+      },
+      "text-decoration": {
+        "value": "none",
+        "properties": [],
+        "pattern": null
+      }
     },
     "children": [
       {
@@ -21,14 +50,143 @@
         "events": [],
         "node": "div",
         "attrs": {
-          "data-id": "0"
+          "data-id": {
+            "value": "0",
+            "properties": [],
+            "pattern": null
+          }
         },
         "style": {
-          "padding": "5px",
-          "text-decoration": "none"
+          "padding": {
+            "value": "5px",
+            "properties": [
+              {
+                "value": {
+                  "FunctionCall": {
+                    "name": "foo#compare",
+                    "kind": {
+                      "kind": "Integer",
+                      "caption": false,
+                      "body": false
+                    },
+                    "is_mutable": false,
+                    "line_number": 39,
+                    "values": {
+                      "a": {
+                        "Reference": {
+                          "name": "foo#number",
+                          "kind": {
+                            "kind": "Integer",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": "Global",
+                          "is_mutable": false,
+                          "line_number": 39
+                        }
+                      },
+                      "b": {
+                        "Value": {
+                          "value": {
+                            "Integer": {
+                              "value": 20
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 39
+                        }
+                      },
+                      "c": {
+                        "Value": {
+                          "value": {
+                            "Integer": {
+                              "value": 4
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 39
+                        }
+                      },
+                      "d": {
+                        "Value": {
+                          "value": {
+                            "Integer": {
+                              "value": 5
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 39
+                        }
+                      }
+                    }
+                  }
+                },
+                "source": {
+                  "Header": {
+                    "name": "padding",
+                    "mutable": false
+                  }
+                },
+                "condition": null,
+                "line_number": 39
+              }
+            ],
+            "pattern": "{}px"
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null
+          }
         },
         "children": [],
-        "text": "hello world",
+        "text": {
+          "value": "hello world",
+          "properties": [
+            {
+              "value": {
+                "FunctionCall": {
+                  "name": "foo#append",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "is_mutable": false,
+                  "line_number": 38,
+                  "values": {
+                    "a": {
+                      "Value": {
+                        "value": {
+                          "String": {
+                            "text": "hello"
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 38
+                      }
+                    },
+                    "b": {
+                      "Value": {
+                        "value": {
+                          "String": {
+                            "text": "world"
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 38
+                      }
+                    }
+                  }
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line_number": 38
+            }
+          ],
+          "pattern": null
+        },
         "null": false
       },
       {
@@ -38,14 +196,123 @@
         "events": [],
         "node": "div",
         "attrs": {
-          "data-id": "1"
+          "data-id": {
+            "value": "1",
+            "properties": [],
+            "pattern": null
+          }
         },
         "style": {
-          "padding": "14px",
-          "text-decoration": "none"
+          "padding": {
+            "value": "14px",
+            "properties": [
+              {
+                "value": {
+                  "FunctionCall": {
+                    "name": "foo#sum",
+                    "kind": {
+                      "kind": "Integer",
+                      "caption": false,
+                      "body": false
+                    },
+                    "is_mutable": false,
+                    "line_number": 42,
+                    "values": {
+                      "a": {
+                        "Reference": {
+                          "name": "foo#number",
+                          "kind": {
+                            "kind": "Integer",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": "Global",
+                          "is_mutable": false,
+                          "line_number": 42
+                        }
+                      },
+                      "b": {
+                        "Value": {
+                          "value": {
+                            "Integer": {
+                              "value": 4
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 42
+                        }
+                      }
+                    }
+                  }
+                },
+                "source": {
+                  "Header": {
+                    "name": "padding",
+                    "mutable": false
+                  }
+                },
+                "condition": null,
+                "line_number": 42
+              }
+            ],
+            "pattern": "{}px"
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null
+          }
         },
         "children": [],
-        "text": "Arpita Jaiswal",
+        "text": {
+          "value": "Arpita Jaiswal",
+          "properties": [
+            {
+              "value": {
+                "FunctionCall": {
+                  "name": "foo#append",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "is_mutable": false,
+                  "line_number": 41,
+                  "values": {
+                    "a": {
+                      "Reference": {
+                        "name": "foo#name",
+                        "kind": {
+                          "kind": "String",
+                          "caption": false,
+                          "body": false
+                        },
+                        "source": "Global",
+                        "is_mutable": false,
+                        "line_number": 41
+                      }
+                    },
+                    "b": {
+                      "Value": {
+                        "value": {
+                          "String": {
+                            "text": "Jaiswal"
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 41
+                      }
+                    }
+                  }
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line_number": 41
+            }
+          ],
+          "pattern": null
+        },
         "null": false
       },
       {
@@ -55,18 +322,95 @@
         "events": [],
         "node": "div",
         "attrs": {
-          "data-id": "2"
+          "data-id": {
+            "value": "2",
+            "properties": [],
+            "pattern": null
+          }
         },
         "style": {
-          "padding": "15px",
-          "text-decoration": "none"
+          "padding": {
+            "value": "15px",
+            "properties": [
+              {
+                "value": {
+                  "FunctionCall": {
+                    "name": "foo#length",
+                    "kind": {
+                      "kind": "Integer",
+                      "caption": false,
+                      "body": false
+                    },
+                    "is_mutable": false,
+                    "line_number": 45,
+                    "values": {
+                      "a": {
+                        "Reference": {
+                          "name": "foo#new-name",
+                          "kind": {
+                            "kind": "String",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": "Global",
+                          "is_mutable": false,
+                          "line_number": 45
+                        }
+                      }
+                    }
+                  }
+                },
+                "source": {
+                  "Header": {
+                    "name": "padding",
+                    "mutable": false
+                  }
+                },
+                "condition": null,
+                "line_number": 45
+              }
+            ],
+            "pattern": "{}px"
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null
+          }
         },
         "children": [],
-        "text": "Arpita FifthTry",
+        "text": {
+          "value": "Arpita FifthTry",
+          "properties": [
+            {
+              "value": {
+                "Reference": {
+                  "name": "foo#new-name",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": false,
+                  "line_number": 44
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line_number": 44
+            }
+          ],
+          "pattern": null
+        },
         "null": false
       }
     ],
-    "text": null,
+    "text": {
+      "value": null,
+      "properties": [],
+      "pattern": null
+    },
     "null": false
   },
   "bag": {

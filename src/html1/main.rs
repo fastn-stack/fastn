@@ -28,7 +28,7 @@ impl HtmlGenerator {
         let classes = self.class_to_html(&node);
         let attrs = self.attrs_to_html(&node);
 
-        let body = match node.text.as_ref() {
+        let body = match node.text.value.as_ref() {
             Some(v) => v.to_string(),
             None => node
                 .children
@@ -49,7 +49,12 @@ impl HtmlGenerator {
     }
 
     pub fn style_to_html(&self, node: &ftd::node::Node, visible: bool) -> String {
-        let mut styles = node.style.to_owned();
+        let mut styles: ftd::Map<String> = node
+            .style
+            .to_owned()
+            .into_iter()
+            .filter_map(|(k, v)| v.value.map(|v| (k, v)))
+            .collect();
         if !visible {
             styles.insert("display".to_string(), "none".to_string());
         }
@@ -77,7 +82,7 @@ impl HtmlGenerator {
     fn attrs_to_html(&self, node: &ftd::node::Node) -> String {
         node.attrs
             .iter()
-            .map(|(k, v)| format!("{}={}", *k, quote(v))) // TODO: escape needed?
+            .filter_map(|(k, v)| v.value.as_ref().map(|v| format!("{}={}", *k, quote(v)))) // TODO: escape needed?
             .collect::<Vec<String>>()
             .join(" ")
     }

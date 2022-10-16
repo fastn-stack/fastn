@@ -4,14 +4,43 @@
     "events": [],
     "node": "div",
     "attrs": {
-      "data-id": ""
+      "data-id": {
+        "value": "",
+        "properties": [],
+        "pattern": null
+      }
     },
     "style": {
-      "align-items": "flex-start",
-      "display": "flex",
-      "flex-direction": "column",
-      "justify-content": "flex-start",
-      "text-decoration": "none"
+      "align-items": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null
+      },
+      "display": {
+        "value": "flex",
+        "properties": [],
+        "pattern": null
+      },
+      "flex-direction": {
+        "value": "column",
+        "properties": [],
+        "pattern": null
+      },
+      "justify-content": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null
+      },
+      "padding": {
+        "value": null,
+        "properties": [],
+        "pattern": "{}px"
+      },
+      "text-decoration": {
+        "value": "none",
+        "properties": [],
+        "pattern": null
+      }
     },
     "children": [
       {
@@ -19,15 +48,43 @@
         "events": [],
         "node": "div",
         "attrs": {
-          "data-id": "0"
+          "data-id": {
+            "value": "0",
+            "properties": [],
+            "pattern": null
+          }
         },
         "style": {
-          "align-items": "flex-start",
-          "display": "flex",
-          "flex-direction": "column",
-          "justify-content": "flex-start",
-          "padding": "30px",
-          "text-decoration": "none"
+          "align-items": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null
+          },
+          "display": {
+            "value": "flex",
+            "properties": [],
+            "pattern": null
+          },
+          "flex-direction": {
+            "value": "column",
+            "properties": [],
+            "pattern": null
+          },
+          "justify-content": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null
+          },
+          "padding": {
+            "value": "30px",
+            "properties": [],
+            "pattern": "{}px"
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null
+          }
         },
         "children": [
           {
@@ -37,13 +94,51 @@
             "events": [],
             "node": "div",
             "attrs": {
-              "data-id": "0,0"
+              "data-id": {
+                "value": "0,0",
+                "properties": [],
+                "pattern": null
+              }
             },
             "style": {
-              "text-decoration": "none"
+              "padding": {
+                "value": null,
+                "properties": [],
+                "pattern": "{}px"
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null
+              }
             },
             "children": [],
-            "text": "TOC title 1",
+            "text": {
+              "value": "TOC title 1",
+              "properties": [
+                {
+                  "value": {
+                    "Reference": {
+                      "name": "foo#toc.name",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
+                      },
+                      "source": {
+                        "Local": "print-toc-item"
+                      },
+                      "is_mutable": false,
+                      "line_number": 34
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 34
+                }
+              ],
+              "pattern": null
+            },
             "null": false
           },
           {
@@ -51,15 +146,43 @@
             "events": [],
             "node": "div",
             "attrs": {
-              "data-id": "0,1,0"
+              "data-id": {
+                "value": "0,1,0",
+                "properties": [],
+                "pattern": null
+              }
             },
             "style": {
-              "align-items": "flex-start",
-              "display": "flex",
-              "flex-direction": "column",
-              "justify-content": "flex-start",
-              "padding": "30px",
-              "text-decoration": "none"
+              "align-items": {
+                "value": "flex-start",
+                "properties": [],
+                "pattern": null
+              },
+              "display": {
+                "value": "flex",
+                "properties": [],
+                "pattern": null
+              },
+              "flex-direction": {
+                "value": "column",
+                "properties": [],
+                "pattern": null
+              },
+              "justify-content": {
+                "value": "flex-start",
+                "properties": [],
+                "pattern": null
+              },
+              "padding": {
+                "value": "30px",
+                "properties": [],
+                "pattern": "{}px"
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null
+              }
             },
             "children": [
               {
@@ -69,17 +192,59 @@
                 "events": [],
                 "node": "div",
                 "attrs": {
-                  "data-id": "0,1,0,0"
+                  "data-id": {
+                    "value": "0,1,0,0",
+                    "properties": [],
+                    "pattern": null
+                  }
                 },
                 "style": {
-                  "text-decoration": "none"
+                  "padding": {
+                    "value": null,
+                    "properties": [],
+                    "pattern": "{}px"
+                  },
+                  "text-decoration": {
+                    "value": "none",
+                    "properties": [],
+                    "pattern": null
+                  }
                 },
                 "children": [],
-                "text": "TOC title 2",
+                "text": {
+                  "value": "TOC title 2",
+                  "properties": [
+                    {
+                      "value": {
+                        "Reference": {
+                          "name": "foo#toc.children.0.name",
+                          "kind": {
+                            "kind": "String",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": {
+                            "Local": "print-toc-item"
+                          },
+                          "is_mutable": false,
+                          "line_number": 34
+                        }
+                      },
+                      "source": "Caption",
+                      "condition": null,
+                      "line_number": 34
+                    }
+                  ],
+                  "pattern": null
+                },
                 "null": false
               }
             ],
-            "text": null,
+            "text": {
+              "value": null,
+              "properties": [],
+              "pattern": null
+            },
             "null": false
           },
           {
@@ -87,15 +252,43 @@
             "events": [],
             "node": "div",
             "attrs": {
-              "data-id": "0,1,1"
+              "data-id": {
+                "value": "0,1,1",
+                "properties": [],
+                "pattern": null
+              }
             },
             "style": {
-              "align-items": "flex-start",
-              "display": "flex",
-              "flex-direction": "column",
-              "justify-content": "flex-start",
-              "padding": "30px",
-              "text-decoration": "none"
+              "align-items": {
+                "value": "flex-start",
+                "properties": [],
+                "pattern": null
+              },
+              "display": {
+                "value": "flex",
+                "properties": [],
+                "pattern": null
+              },
+              "flex-direction": {
+                "value": "column",
+                "properties": [],
+                "pattern": null
+              },
+              "justify-content": {
+                "value": "flex-start",
+                "properties": [],
+                "pattern": null
+              },
+              "padding": {
+                "value": "30px",
+                "properties": [],
+                "pattern": "{}px"
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null
+              }
             },
             "children": [
               {
@@ -105,13 +298,51 @@
                 "events": [],
                 "node": "div",
                 "attrs": {
-                  "data-id": "0,1,1,0"
+                  "data-id": {
+                    "value": "0,1,1,0",
+                    "properties": [],
+                    "pattern": null
+                  }
                 },
                 "style": {
-                  "text-decoration": "none"
+                  "padding": {
+                    "value": null,
+                    "properties": [],
+                    "pattern": "{}px"
+                  },
+                  "text-decoration": {
+                    "value": "none",
+                    "properties": [],
+                    "pattern": null
+                  }
                 },
                 "children": [],
-                "text": "TOC title 3",
+                "text": {
+                  "value": "TOC title 3",
+                  "properties": [
+                    {
+                      "value": {
+                        "Reference": {
+                          "name": "foo#toc.children.1.name",
+                          "kind": {
+                            "kind": "String",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": {
+                            "Local": "print-toc-item"
+                          },
+                          "is_mutable": false,
+                          "line_number": 34
+                        }
+                      },
+                      "source": "Caption",
+                      "condition": null,
+                      "line_number": 34
+                    }
+                  ],
+                  "pattern": null
+                },
                 "null": false
               },
               {
@@ -119,15 +350,43 @@
                 "events": [],
                 "node": "div",
                 "attrs": {
-                  "data-id": "0,1,1,1,0"
+                  "data-id": {
+                    "value": "0,1,1,1,0",
+                    "properties": [],
+                    "pattern": null
+                  }
                 },
                 "style": {
-                  "align-items": "flex-start",
-                  "display": "flex",
-                  "flex-direction": "column",
-                  "justify-content": "flex-start",
-                  "padding": "30px",
-                  "text-decoration": "none"
+                  "align-items": {
+                    "value": "flex-start",
+                    "properties": [],
+                    "pattern": null
+                  },
+                  "display": {
+                    "value": "flex",
+                    "properties": [],
+                    "pattern": null
+                  },
+                  "flex-direction": {
+                    "value": "column",
+                    "properties": [],
+                    "pattern": null
+                  },
+                  "justify-content": {
+                    "value": "flex-start",
+                    "properties": [],
+                    "pattern": null
+                  },
+                  "padding": {
+                    "value": "30px",
+                    "properties": [],
+                    "pattern": "{}px"
+                  },
+                  "text-decoration": {
+                    "value": "none",
+                    "properties": [],
+                    "pattern": null
+                  }
                 },
                 "children": [
                   {
@@ -137,29 +396,83 @@
                     "events": [],
                     "node": "div",
                     "attrs": {
-                      "data-id": "0,1,1,1,0,0"
+                      "data-id": {
+                        "value": "0,1,1,1,0,0",
+                        "properties": [],
+                        "pattern": null
+                      }
                     },
                     "style": {
-                      "text-decoration": "none"
+                      "padding": {
+                        "value": null,
+                        "properties": [],
+                        "pattern": "{}px"
+                      },
+                      "text-decoration": {
+                        "value": "none",
+                        "properties": [],
+                        "pattern": null
+                      }
                     },
                     "children": [],
-                    "text": "TOC title 4",
+                    "text": {
+                      "value": "TOC title 4",
+                      "properties": [
+                        {
+                          "value": {
+                            "Reference": {
+                              "name": "foo#toc.children.1.children.0.name",
+                              "kind": {
+                                "kind": "String",
+                                "caption": false,
+                                "body": false
+                              },
+                              "source": {
+                                "Local": "print-toc-item"
+                              },
+                              "is_mutable": false,
+                              "line_number": 34
+                            }
+                          },
+                          "source": "Caption",
+                          "condition": null,
+                          "line_number": 34
+                        }
+                      ],
+                      "pattern": null
+                    },
                     "null": false
                   }
                 ],
-                "text": null,
+                "text": {
+                  "value": null,
+                  "properties": [],
+                  "pattern": null
+                },
                 "null": false
               }
             ],
-            "text": null,
+            "text": {
+              "value": null,
+              "properties": [],
+              "pattern": null
+            },
             "null": false
           }
         ],
-        "text": null,
+        "text": {
+          "value": null,
+          "properties": [],
+          "pattern": null
+        },
         "null": false
       }
     ],
-    "text": null,
+    "text": {
+      "value": null,
+      "properties": [],
+      "pattern": null
+    },
     "null": false
   },
   "bag": {
