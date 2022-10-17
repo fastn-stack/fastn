@@ -589,16 +589,17 @@ impl InterpreterState {
                                     package_name,
                                 )
                                 .ok()?;
-                                let numbered_title = format!("{} {}", assigned_number, title);
-                                Some((numbered_title, header))
+                                // let numbered_title = format!("{} {}", assigned_number, title);
+                                Some((title, header, assigned_number))
                             });
 
                         // adjust numbering of the title in the header component
-                        if let Some((numbered_title, header)) = status {
+                        if let Some((title, header, number)) = status {
                             adjust_title_in_component(
                                 header.as_str(),
                                 child,
-                                numbered_title.as_str(),
+                                title.as_str(),
+                                number.as_str(),
                             );
                             break;
                         }
@@ -687,6 +688,7 @@ impl InterpreterState {
             parent_property_name: &str,
             child: &mut ftd::ChildComponent,
             title: &str,
+            number: &str,
         ) {
             fn set_title_property(new_value: &str, property: &mut ftd::component::Property) {
                 if let Some(ftd::PropertyValue::Value {
@@ -695,6 +697,19 @@ impl InterpreterState {
                 {
                     *text = new_value.to_string();
                 }
+            }
+
+            if child.properties.get("h-number").is_none() {
+                let mut number_property = ftd::component::Property::default();
+                number_property.default = Some(ftd::PropertyValue::Value {
+                    value: (ftd::Value::String {
+                        text: number.to_string(),
+                        source: ftd::TextSource::Header,
+                    }),
+                });
+                child
+                    .properties
+                    .insert("h-number".to_string(), number_property.clone());
             }
 
             let child_property = child
@@ -810,13 +825,13 @@ impl InterpreterState {
         ) -> ftd::p1::Result<String> {
             fn assign_auto_slug_id(
                 heading: &mut ftd::PageHeadingItem,
-                assigned_number: &str,
+                _assigned_number: &str,
                 doc_name: &str,
                 package_name: &Option<String>,
             ) {
                 if let Some(title) = &heading.title {
-                    let auto_component_id =
-                        Some(slug::slugify(format!("{} {}", assigned_number, title)));
+                    // let auto_component_id = Some(slug::slugify(format!("{} {}", assigned_number, title)));
+                    let auto_component_id = Some(title.clone());
                     heading.url = make_url(doc_name, &auto_component_id, package_name);
                 }
             }
