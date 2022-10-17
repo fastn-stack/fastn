@@ -13,6 +13,10 @@
 /// In above example, the id starts with `#` becomes the section. Similarly the id
 /// starts with `##` becomes the subsection and then the id starts with `-` becomes
 /// the table od content (TOC).
+
+// document and path-parameters
+type ResolveDocOutput = (Option<String>, Vec<(String, ftd::Value)>);
+
 #[derive(Debug, Clone, Default)]
 pub struct Sitemap {
     pub sections: Vec<Section>,
@@ -151,10 +155,8 @@ impl Section {
 
     // Input: /abrark/foo/28/
     // Output: document: person.ftd, path-params: [(username, abrar), (age, 28)]
-    pub fn resolve_document(
-        &self,
-        path: &str,
-    ) -> fpm::Result<(Option<String>, Vec<(String, ftd::Value)>)> {
+
+    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
         // path: /abrark/foo/28/
         // In sitemap url: /<string:username>/foo/<integer:age>/
         if !self.path_parameters.is_empty() {
@@ -255,10 +257,7 @@ impl Subsection {
 
     /// path: /foo/demo/
     /// path: /
-    fn resolve_document(
-        &self,
-        path: &str,
-    ) -> fpm::Result<(Option<String>, Vec<(String, ftd::Value)>)> {
+    fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
         if !self.path_parameters.is_empty() {
             // path: /arpita/foo/28/
             // request: arpita foo 28
@@ -1767,10 +1766,7 @@ impl Sitemap {
     /// path: foo/temp/
     /// path: /
     // TODO: If nothing is found return 404, Handle 404 Errors
-    pub fn resolve_document(
-        &self,
-        path: &str,
-    ) -> fpm::Result<(Option<String>, Vec<(String, ftd::Value)>)> {
+    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
         for section in self.sections.iter() {
             let (document, path_params) = section.resolve_document(path)?;
             if document.is_some() {
