@@ -1947,7 +1947,7 @@ mod utils {
                 "string" => Ok(ftd::Value::String {
                     text: value.to_string(),
                     source: ftd::TextSource::Default,
-                }), // value.parse::<String>().is_ok(),
+                }),
                 "integer" => {
                     let value = value.parse::<i64>().unwrap();
                     Ok(ftd::Value::Integer { value })
