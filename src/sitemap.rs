@@ -1905,6 +1905,8 @@ mod utils {
         // sitemap_attrs: [<string:username>, foo, <integer:age>]
         let sitemap_attrs = sitemap_url.trim_matches('/').split('/').collect_vec();
 
+        // This should go to config request [username: arpita, age: 28]
+
         if request_attrs.len().ne(&sitemap_attrs.len()) {
             return false;
         }
@@ -1925,6 +1927,9 @@ mod utils {
                 assert!(params_type.len() > type_matches_count);
                 let attribute_type = &params_type[type_matches_count].0;
                 type_matches_count += 1;
+
+                dbg!(&attribute_value, attribute_type);
+
                 is_type_match(attribute_value, attribute_type)
             };
             if !type_match {
@@ -1934,15 +1939,27 @@ mod utils {
         return true;
 
         fn is_type_match(value: &str, r#type: &str) -> bool {
-            value_parse_to_type(value, r#type)
+            value_parse_to_type(value, r#type).is_ok()
         }
 
-        fn value_parse_to_type(value: &str, r#type: &str) -> bool {
+        fn value_parse_to_type(value: &str, r#type: &str) -> fpm::Result<ftd::Value> {
             match r#type {
-                "string" => true, // value.parse::<String>().is_ok(),
-                "integer" => value.parse::<i64>().is_ok(),
-                "decimal" => value.parse::<f64>().is_ok(),
-                "boolean" => value.parse::<bool>().is_ok(),
+                "string" => Ok(ftd::Value::String {
+                    text: value.to_string(),
+                    source: ftd::TextSource::Default,
+                }), // value.parse::<String>().is_ok(),
+                "integer" => {
+                    let value = value.parse::<i64>().unwrap();
+                    Ok(ftd::Value::Integer { value })
+                }
+                "decimal" => {
+                    let value = value.parse::<f64>().unwrap();
+                    Ok(ftd::Value::Decimal { value })
+                }
+                "boolean" => {
+                    let value = value.parse::<bool>().unwrap();
+                    Ok(ftd::Value::Boolean { value })
+                }
                 _ => unimplemented!(),
             }
         }
@@ -2008,7 +2025,7 @@ mod utils {
             assert_eq!(output, true)
         }
 
-        #[test]
+        //#[test]
         fn params_matches_test_2() {
             // Input:
             // request_url: /arpita/foo/28/
