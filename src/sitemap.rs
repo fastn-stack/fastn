@@ -1949,15 +1949,15 @@ mod utils {
                     source: ftd::TextSource::Default,
                 }),
                 "integer" => {
-                    let value = value.parse::<i64>().unwrap();
+                    let value = value.parse::<i64>()?;
                     Ok(ftd::Value::Integer { value })
                 }
                 "decimal" => {
-                    let value = value.parse::<f64>().unwrap();
+                    let value = value.parse::<f64>()?;
                     Ok(ftd::Value::Decimal { value })
                 }
                 "boolean" => {
-                    let value = value.parse::<bool>().unwrap();
+                    let value = value.parse::<bool>()?;
                     Ok(ftd::Value::Boolean { value })
                 }
                 _ => unimplemented!(),
@@ -2025,7 +2025,7 @@ mod utils {
             assert_eq!(output, true)
         }
 
-        //#[test]
+        #[test]
         fn params_matches_test_2() {
             // Input:
             // request_url: /arpita/foo/28/

@@ -36,6 +36,12 @@ pub enum Error {
     #[error("ParseIntError: {}", _0)]
     ParseIntError(#[from] std::num::ParseIntError),
 
+    #[error("ParseFloatError: {}", _0)]
+    ParseFloatError(#[from] std::num::ParseFloatError),
+
+    #[error("ParseBoolError: {}", _0)]
+    ParseBoolError(#[from] std::str::ParseBoolError),
+
     #[error("APIResponseError: {}", _0)]
     APIResponseError(String),
 
