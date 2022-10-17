@@ -152,7 +152,6 @@ impl Section {
     pub fn resolve_document(&self, path: &str) -> Option<String> {
         // path: /abrark/foo/28/
         // In sitemap url: /<string:username>/foo/<integer:age>/
-
         if !self.path_parameters.is_empty() {
             // path: /abrark/foo/28/
             // request: abrark foo 28
@@ -1894,11 +1893,20 @@ mod utils {
     // params_types: [(string, username), (integer, age)]
     // # Output
     // true
+
     pub fn params_matches(
         request_url: &str,
         sitemap_url: &str,
         params_type: &[(String, String)],
     ) -> bool {
+        parse_named_params(request_url, sitemap_url, params_type).is_ok()
+    }
+
+    pub fn parse_named_params(
+        request_url: &str,
+        sitemap_url: &str,
+        params_type: &[(String, String)],
+    ) -> fpm::Result<Vec<(String, ftd::Value)>> {
         use itertools::Itertools;
         // request_attrs: [arpita, foo, 28]
         let request_attrs = request_url.trim_matches('/').split('/').collect_vec();
@@ -1908,8 +1916,11 @@ mod utils {
         // This should go to config request [username: arpita, age: 28]
 
         if request_attrs.len().ne(&sitemap_attrs.len()) {
-            return false;
+            return Err(fpm::Error::GenericError("".to_string()));
         }
+
+        // [(param_name, value)]
+        let mut path_parameters: Vec<(String, ftd::Value)> = vec![];
 
         // For every element either value should match or request attribute type should match to
         // sitemap's params_types
@@ -1921,26 +1932,25 @@ mod utils {
                 continue;
             }
 
-            let type_match = {
+            let parsed_value = {
                 // request's attribute value type == type stored in sitemap:params_type
                 let attribute_value = request_attrs[idx];
                 assert!(params_type.len() > type_matches_count);
                 let attribute_type = &params_type[type_matches_count].0;
-                type_matches_count += 1;
-
                 dbg!(&attribute_value, attribute_type);
-
-                is_type_match(attribute_value, attribute_type)
+                value_parse_to_type(attribute_value, attribute_type)
             };
-            if !type_match {
-                return false;
-            }
-        }
-        return true;
+            match parsed_value {
+                Ok(value) => {
+                    let attribute_name = params_type[type_matches_count].1.to_string();
+                    path_parameters.push((attribute_name, value));
+                }
+                Err(e) => return Err(fpm::Error::GenericError(e.to_string())),
+            };
 
-        fn is_type_match(value: &str, r#type: &str) -> bool {
-            value_parse_to_type(value, r#type).is_ok()
+            type_matches_count += 1;
         }
+        return Ok(path_parameters);
 
         fn value_parse_to_type(value: &str, r#type: &str) -> fpm::Result<ftd::Value> {
             match r#type {
@@ -1984,6 +1994,7 @@ mod utils {
 
     #[cfg(test)]
     mod tests {
+        use ftd::TextSource;
 
         #[test]
         fn parse_path_params_test_1() {
@@ -2064,6 +2075,32 @@ mod utils {
             );
 
             assert_eq!(output, false)
+        }
+
+        #[test]
+        fn parse_named_params_1() {
+            let output = super::parse_named_params(
+                "/arpita/foo/28/",
+                "/<string:username>/foo/<integer:age>/",
+                &vec![
+                    ("string".to_string(), "username".to_string()),
+                    ("integer".to_string(), "age".to_string()),
+                ],
+            );
+
+            assert_eq!(
+                output.unwrap(),
+                vec![
+                    (
+                        "username".to_string(),
+                        ftd::Value::String {
+                            text: "arpita".to_string(),
+                            source: TextSource::Default
+                        }
+                    ),
+                    ("age".to_string(), ftd::Value::Integer { value: 28 })
+                ]
+            )
         }
     }
 }
