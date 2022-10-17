@@ -221,11 +221,11 @@ window.ftd.post_init = function () {
     }
     function set_meta(name, value) {
         let meta = document.querySelector("meta[name=" + name + "]");
-        if (!!meta && meta instanceof HTMLMetaElement) {
-            meta.content;
+        if (!!meta) {
+            meta.content = value;
         }
         else {
-            let meta = document.createElement('meta');
+            meta = document.createElement('meta');
             meta.name = name;
             meta.content = value;
             document.getElementsByTagName('head')[0].appendChild(meta);
@@ -271,7 +271,7 @@ window.ftd.post_init = function () {
         }
     }
     function start_watching_dark_mode_system_preference() {
-        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", update_dark_mode);
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", update_dark_mode);
     }
     initialise_dark_mode();
     initialise_device();
@@ -285,6 +285,15 @@ window.ftd = (function () {
         if (!!element) {
             ftd_data[id] = JSON.parse(element.innerText);
             window.ftd.post_init();
+        }
+    };
+    function handle_event(evt, id, action, obj) {
+    }
+    exports.handle_event = function (evt, id, event, obj) {
+        console_log(id, event);
+        let actions = JSON.parse(event);
+        for (const action in actions) {
+            handle_event(evt, id, actions[action], obj);
         }
     };
     return exports;

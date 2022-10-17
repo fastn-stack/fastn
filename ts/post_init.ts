@@ -34,7 +34,7 @@ window.ftd.post_init = function () {
         window.ftd.set_string_for_all(FTD_DEVICE, current);
         last_device = current;
         console_log("last_device", last_device);
-    }
+    };
 
     function update_markdown_colors() {
         // remove all colors from ftd.css: copy every deleted stuff in this function
@@ -187,7 +187,7 @@ window.ftd.post_init = function () {
         document.body.classList.add(DARK_MODE_CLASS);
         set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
         update_theme_color();
-    }
+    };
 
     window.enable_light_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
@@ -200,7 +200,7 @@ window.ftd.post_init = function () {
         }
         set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
         update_theme_color();
-    }
+    };
 
     window.enable_system_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
@@ -210,16 +210,16 @@ window.ftd.post_init = function () {
         if (system_dark_mode()) {
             window.ftd.set_bool_for_all(DARK_MODE, true);
             document.body.classList.add(DARK_MODE_CLASS);
-            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK)
+            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK);
         } else {
             window.ftd.set_bool_for_all(DARK_MODE, false);
             if (document.body.classList.contains(DARK_MODE_CLASS)) {
                 document.body.classList.remove(DARK_MODE_CLASS);
             }
-            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT)
+            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
         }
         update_theme_color();
-    }
+    };
 
     function update_theme_color() {
         let theme_color = window.ftd.get_value("main", FTD_THEME_COLOR);
@@ -233,11 +233,11 @@ window.ftd.post_init = function () {
     }
 
     function set_meta(name: string, value: string) {
-        let meta: HTMLElement | null = document.querySelector("meta[name=" + name + "]");
-        if (!!meta && meta instanceof HTMLMetaElement) {
-            meta.content;
+        let meta: HTMLMetaElement | null = document.querySelector("meta[name=" + name + "]");
+        if (!!meta) {
+            meta.content = value;
         } else {
-            let meta = document.createElement('meta');
+            meta = document.createElement('meta');
             meta.name = name;
             meta.content = value;
             document.getElementsByTagName('head')[0].appendChild(meta);
@@ -245,7 +245,7 @@ window.ftd.post_init = function () {
     }
 
     function delete_meta(name: string) {
-        let meta = document.querySelector("meta[name=" + name + "]")
+        let meta = document.querySelector("meta[name=" + name + "]");
         if (!!meta) {
             meta.remove();
         }
@@ -291,7 +291,7 @@ window.ftd.post_init = function () {
     }
 
     function start_watching_dark_mode_system_preference() {
-        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener(
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener(
             "change", update_dark_mode
         );
     }

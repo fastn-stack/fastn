@@ -9,6 +9,7 @@ declare global {
     }
 
     interface Export {
-        init: object
+        init: object;
+        handle_event(evt: Event, id: string, event: string, obj: Element): void;
     }
 }

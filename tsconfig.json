@@ -2,7 +2,7 @@
   "include": ["ts"],
   "compilerOptions": {
     "outFile": "build.js",
-    "typeRoots": ["ts/types"],
+    "typeRoots": ["/usr/local/lib/node_modules/@types","ts/types"],
     "allowJs" : true,
     "importsNotUsedAsValues": "error",
     "module": "AMD",
@@ -105,10 +105,39 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+  },
+  "rules": {
+    "class-name": false,
+    "export-name": false,
+    "forin": false,
+    "label-position": false,
+    "member-access": true,
+    "no-arg": false,
+    "no-console": false,
+    "no-construct": false,
+    "no-duplicate-variable": true,
+    "no-eval": false,
+    "no-function-expression": true,
+    "no-internal-module": true,
+    "no-shadowed-variable": true,
+    "no-switch-case-fall-through": true,
+    "no-unnecessary-semicolons": true,
+    "no-unused-expression": true,
+    "no-use-before-declare": true,
+    "no-with-statement": true,
+    "semicolon": true,
+    "trailing-comma": false,
+    "typedef": false,
+    "typedef-whitespace": false,
+    "use-named-parameter": true,
+    "variable-name": false,
+    "whitespace": false
   }
 }
 
 // How to run typescript?
-// 1. Install typescript using `npm install -g typescript`
+// 1. Install typescript using `sudo npm install -g typescript`
 // 2. Run command `tsc --build`
+// 3. Install TSLint `sudo npm install -g tslint typescript --save`
+// 4. Run Lint `tslint --fix --config tsconfig.json -p tsconfig.json`
 
