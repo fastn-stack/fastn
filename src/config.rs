@@ -3,15 +3,18 @@
 
 #[derive(Debug, Clone)]
 pub struct Config {
+    // Global Information
     pub package: Package,
     pub root: camino::Utf8PathBuf,
     pub packages_root: camino::Utf8PathBuf,
     pub original_directory: camino::Utf8PathBuf,
-    pub extra_data: serde_json::Map<String, serde_json::Value>,
-    pub current_document: Option<String>,
     pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
     pub global_ids: std::collections::HashMap<String, String>,
+    // Related to current request, related to per request
+    pub extra_data: serde_json::Map<String, serde_json::Value>,
+    pub path_parameters: Vec<(String, ftd::Value)>,
+    pub current_document: Option<String>,
     pub request: Option<fpm::http::Request>, // TODO: It should only contain reference
 }
 
@@ -1134,6 +1137,7 @@ impl Config {
             downloaded_assets: Default::default(),
             global_ids: Default::default(),
             request: None,
+            path_parameters: vec![],
         };
 
         let asset_documents = config.get_assets().await?;
