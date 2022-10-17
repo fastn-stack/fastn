@@ -58,9 +58,12 @@ pub struct Request {
     headers: reqwest::header::HeaderMap,
     query: std::collections::HashMap<String, serde_json::Value>,
     body: actix_web::web::Bytes,
+    // path_params: Vec<(String, )>
 }
 
 impl Request {
+    //pub fn get_named_params() -> {}
+
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         let headers = {
             let mut headers = reqwest::header::HeaderMap::new();
