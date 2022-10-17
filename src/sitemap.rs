@@ -278,9 +278,9 @@ impl Subsection {
         }
 
         for toc in self.toc.iter() {
-            let document = toc.resolve_document(path);
+            let (document, path_params) = toc.resolve_document(path)?;
             if document.is_some() {
-                return Ok((document, vec![]));
+                return Ok((document, path_params));
             }
         }
 
@@ -334,26 +334,29 @@ impl TocItem {
 
     /// path: /foo/demo/
     /// path: /
-    pub fn resolve_document(&self, path: &str) -> Option<String> {
+    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
         if !self.path_parameters.is_empty() {
             // path: /arpita/foo/28/
             // request: arpita foo 28
             // sitemap: [string,integer]
             // Mapping: arpita -> string, foo -> foo, 28 -> integer
-            if utils::params_matches(path, self.id.as_str(), self.path_parameters.as_slice()) {
-                return self.document.clone();
+            let params =
+                utils::parse_named_params(path, self.id.as_str(), self.path_parameters.as_slice());
+
+            if params.is_ok() {
+                return Ok((self.document.clone(), params?));
             }
         } else if fpm::utils::ids_matches(self.id.as_str(), path) {
-            return self.document.clone();
+            return Ok((self.document.clone(), vec![]));
         }
 
         for child in self.children.iter() {
-            let document = child.resolve_document(path);
+            let (document, path_prams) = child.resolve_document(path)?;
             if document.is_some() {
-                return document;
+                return Ok((document, path_prams));
             }
         }
-        None
+        Ok((None, vec![]))
     }
 
     /// returns the file id portion of the url only in case
@@ -1908,14 +1911,6 @@ mod utils {
     // # Output
     // true
 
-    pub fn params_matches(
-        request_url: &str,
-        sitemap_url: &str,
-        params_type: &[(String, String)],
-    ) -> bool {
-        parse_named_params(request_url, sitemap_url, params_type).is_ok()
-    }
-
     pub fn parse_named_params(
         request_url: &str,
         sitemap_url: &str,
@@ -2031,68 +2026,7 @@ mod utils {
         }
 
         #[test]
-        fn params_matches_test_1() {
-            // Input:
-            // request_url: /arpita/foo/28/
-            // sitemap_url: /<string:username>/foo/<integer:age>/
-            // params_types: [(string, username), (integer, age)]
-            // Output: true
-            // Reason: Everything is matching
-            let output = super::params_matches(
-                "/arpita/foo/28/",
-                "/<string:username>/foo/<integer:age>/",
-                &vec![
-                    ("string".to_string(), "username".to_string()),
-                    ("integer".to_string(), "age".to_string()),
-                ],
-            );
-
-            assert_eq!(output, true)
-        }
-
-        #[test]
-        fn params_matches_test_2() {
-            // Input:
-            // request_url: /arpita/foo/28/
-            // sitemap_url: /<integer:username>/foo/<integer:age>/
-            // params_types: [(integer, username), (integer, age)]
-            // Output: false
-            // Reason: `arpita` can not be converted into `integer`
-            let output = super::params_matches(
-                "/arpita/foo/28/",
-                "/<integer:username>/foo/<integer:age>/",
-                &vec![
-                    ("integer".to_string(), "username".to_string()),
-                    ("integer".to_string(), "age".to_string()),
-                ],
-            );
-
-            assert_eq!(output, false)
-        }
-
-        #[test]
-        fn params_matches_test_3() {
-            // Input:
-            // request_url: /arpita/foo/
-            // sitemap_url: /<string:username>/foo/<integer:age>/
-            // params_types: [(string, username), (integer, age)]
-            // Output: false
-            // Reason: There is nothing to match in request_url after `foo`
-            //         against with sitemap_url `<integer:age>`
-            let output = super::params_matches(
-                "/arpita/foo/",
-                "/<string:username>/foo/<integer:age>/",
-                &vec![
-                    ("string".to_string(), "username".to_string()),
-                    ("integer".to_string(), "age".to_string()),
-                ],
-            );
-
-            assert_eq!(output, false)
-        }
-
-        #[test]
-        fn parse_named_params_1() {
+        fn parse_named_params() {
             let output = super::parse_named_params(
                 "/arpita/foo/28/",
                 "/<string:username>/foo/<integer:age>/",
@@ -2115,6 +2049,68 @@ mod utils {
                     ("age".to_string(), ftd::Value::Integer { value: 28 })
                 ]
             )
+        }
+
+        #[test]
+        fn parse_named_params_1() {
+            // Input:
+            // request_url: /arpita/foo/28/
+            // sitemap_url: /<string:username>/foo/<integer:age>/
+            // params_types: [(string, username), (integer, age)]
+            // Output: true
+            // Reason: Everything is matching
+
+            let output = super::parse_named_params(
+                "/arpita/foo/28/",
+                "/<string:username>/foo/<integer:age>/",
+                &vec![
+                    ("string".to_string(), "username".to_string()),
+                    ("integer".to_string(), "age".to_string()),
+                ],
+            );
+
+            assert_eq!(output.is_ok(), true)
+        }
+
+        #[test]
+        fn parse_named_params_2() {
+            // Input:
+            // request_url: /arpita/foo/28/
+            // sitemap_url: /<integer:username>/foo/<integer:age>/
+            // params_types: [(integer, username), (integer, age)]
+            // Output: false
+            // Reason: `arpita` can not be converted into `integer`
+            let output = super::parse_named_params(
+                "/arpita/foo/28/",
+                "/<integer:username>/foo/<integer:age>/",
+                &vec![
+                    ("integer".to_string(), "username".to_string()),
+                    ("integer".to_string(), "age".to_string()),
+                ],
+            );
+
+            assert_eq!(output.is_ok(), false)
+        }
+
+        #[test]
+        fn parse_named_params_3() {
+            // Input:
+            // request_url: /arpita/foo/
+            // sitemap_url: /<string:username>/foo/<integer:age>/
+            // params_types: [(string, username), (integer, age)]
+            // Output: false
+            // Reason: There is nothing to match in request_url after `foo`
+            //         against with sitemap_url `<integer:age>`
+            let output = super::parse_named_params(
+                "/arpita/foo/",
+                "/<string:username>/foo/<integer:age>/",
+                &vec![
+                    ("string".to_string(), "username".to_string()),
+                    ("integer".to_string(), "age".to_string()),
+                ],
+            );
+
+            assert_eq!(output.is_ok(), false)
         }
     }
 }
