@@ -102,6 +102,18 @@ pub fn request_data_processor<'a>(
     };
     let mut data = req.query().clone();
 
+    let mut path_parameters = std::collections::HashMap::new();
+    for (name, value) in config.path_parameters.iter() {
+        let json_value = value.to_serde_value().ok_or(ftd::p1::Error::ParseError {
+            message: format!("ftd value cannot be parsed to json: name: {}", name),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
+        })?;
+        path_parameters.insert(name.to_string(), json_value);
+    }
+
+    data.extend(path_parameters);
+
     match req.body_as_json() {
         Ok(Some(b)) => {
             data.extend(b);
