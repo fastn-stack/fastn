@@ -1,10 +1,12 @@
 -- ft.page: `request-data` processor
 
-`request-data` processor can be used to find the data from query string. In
-future we will implement this processor to get data from request body. It can
-POST method body, or form body.
+`request-data` processor can be used to find the data from query string and path
+parameters. In future we will implement this processor to get data from request
+body. It can POST method body, or form body.
 
-[Github Discussion](https://github.com/FifthTry/fpm/discussions/516)
+
+- `request-data` processor: [Github Discussion](https://github.com/FifthTry/fpm/discussions/516)
+- Named Parameter Support: [GitHub Discussion](https://github.com/ftd-lang/fpm/discussions/551)
 
 
 E.g.:
@@ -13,12 +15,12 @@ In below example url contains query parameter `id` with value `Ye Sab Tumhara Ka
 We can access this value in `ftd` file as like below by calling `request-data`
 processor.
 
--- ftd.code:
+-- ft.code:
 lang: txt
 
 URL: http://127.0.0.1:8000/fifthtry/test/?id=Ye%20Sab%20Tumhara%20Karam%20Aaqa
 
--- ftd.code:
+-- ft.code:
 lang: ftd
 
 \-- record query-data:
@@ -37,3 +39,44 @@ $processor$: request-data
 Output: Value of the query parameter `id` on the same document `fifthtry/test`
 in `query.id` `record` type, `Ye Sab Tumhara Karam Aaqa`.
 
+-- ft.h1: Named Parameters In `request-data`
+
+We have implemented [`dynamic-parameters`](/sitemap/#dynamic-parameters-in-url)
+in sitemap. Now we can access these named parameters in `request-data` processor.
+
+-- ft.h2: How To Access Named Parameters in `request-data`
+
+Let's say if we have a url mapping like below in sitemap. If request come for
+`/abrark/manager/28/`, So we will be able to get `username` and `age` at
+`person-manager.ftd` document.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Manager
+url: /<string:username>/manager/<integer:age>/
+document: person-manager.ftd
+
+-- ft.code: person-manager.ftd
+lang: ftd
+
+\;; Define a record person
+\-- record person:
+string username:
+integer age:
+
+\;; Calling the `request-data` processor
+\-- person p:
+$processor$: request-data
+
+
+\;; Using the information
+\;; It will show username as `abrark`
+\-- ftd.text: $p.username
+color: $fpm.color.main.text
+
+\;; It will show age as `28`
+\-- ftd.integer: $p.age
+color: $fpm.color.main.text
