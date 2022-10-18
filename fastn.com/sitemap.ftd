@@ -408,6 +408,7 @@ section or toc, they can use `skip` in section, sub-section and toc header.
 The skipped section, sub-section or toc would not be available in [processor
 sitemap](processors/sitemap/) till it is not the active opened page.
 
+Value of `skip` will be `true` if `url` contains [dynamic parameters](/sitemap/#dynamic-parameters-in-url).
 
 -- ft.h2: `skip` in Section
 
