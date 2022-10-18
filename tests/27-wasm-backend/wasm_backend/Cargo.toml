@@ -9,6 +9,6 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-wit-bindgen-guest-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev="9ef6717e2c5337e84e0a7bd56918a5ae4bef12ca" }
+wit-bindgen-guest-rust-macro = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev="45604f58336afaa23a79ed619ef50b69de473688" }
 serde = {version="1.0.144", features=["derive"]}
 serde_json = "1.0.85"

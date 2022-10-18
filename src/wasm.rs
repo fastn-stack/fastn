@@ -135,7 +135,7 @@ pub async fn handle_wasm(
                 } else {
                     actix_web::http::StatusCode::BAD_REQUEST
                 })
-                .body(serde_json::to_string(&data)?)),
+                .body(data.data)),
             Err(err) => Err(WASMError::WasmFunctionInvoke(err.to_string())),
         })
     }
