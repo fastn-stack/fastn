@@ -556,6 +556,10 @@ impl SitemapElement {
     pub(crate) fn set_path_params(&mut self, url: &str) {
         let params = utils::parse_path_params(url);
 
+        if !params.is_empty() {
+            self.set_skip(true);
+        }
+
         match self {
             SitemapElement::Section(s) => {
                 s.path_parameters = params;
