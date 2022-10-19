@@ -700,16 +700,18 @@ impl InterpreterState {
             }
 
             if child.properties.get("h-number").is_none() {
-                let mut number_property = ftd::component::Property::default();
-                number_property.default = Some(ftd::PropertyValue::Value {
-                    value: (ftd::Value::String {
-                        text: number.to_string(),
-                        source: ftd::TextSource::Header,
+                let number_property = ftd::component::Property {
+                    default: Some(ftd::PropertyValue::Value {
+                        value: (ftd::Value::String {
+                            text: number.to_string(),
+                            source: ftd::TextSource::Header,
+                        }),
                     }),
-                });
+                    ..Default::default()
+                };
                 child
                     .properties
-                    .insert("h-number".to_string(), number_property.clone());
+                    .insert("h-number".to_string(), number_property);
             }
 
             let child_property = child
@@ -774,11 +776,9 @@ impl InterpreterState {
             package_name: &Option<String>,
         ) -> Option<String> {
             fn trim_package_from_url(url: String, package_name: &Option<String>) -> String {
-                let trimmed_package = package_name.as_ref().and_then(|actual_package| {
-                    Some(
-                        url.trim_start_matches('/')
-                            .trim_start_matches(actual_package.as_str()),
-                    )
+                let trimmed_package = package_name.as_ref().map(|actual_package| {
+                    url.trim_start_matches('/')
+                        .trim_start_matches(actual_package.as_str())
                 });
                 if let Some(res) = trimmed_package {
                     return res.to_string();
