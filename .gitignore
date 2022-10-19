@@ -3,7 +3,7 @@
 **/.DS_Store
 
 # Rust stuff
-/target/
+target
 **/*.rs.bk
 
 # fpm test
