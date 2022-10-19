@@ -2,7 +2,8 @@
 
 We have started with `01-wasm-hello-world` and now we are going to export a function from the host to the guest.
 
-Build guest using `cargo build --target wasm32-unknown-unknown` and run `host` using `cargo run`. The output is:
+Build guest using `cargo build --target wasm32-unknown-unknown` and run `host` using `cargo run` from respective 
+folders. The output is:
 
 ```txt
 $ cargo run
