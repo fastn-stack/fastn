@@ -38,7 +38,19 @@ pub(crate) async fn get_out(
             "CONNECT" => reqwest::Method::CONNECT,
             _ => reqwest::Method::GET,
         },
-        reqwest::Url::parse(format!("{}/{}?{}", host, path, req.query_string()).as_str())?,
+        reqwest::Url::parse(
+            format!(
+                "{}/{}{}",
+                host,
+                path,
+                if req.query_string().is_empty() {
+                    "".to_string()
+                } else {
+                    format!("?{}", req.query_string())
+                }
+            )
+            .as_str(),
+        )?,
     );
 
     *proxy_request.headers_mut() = headers.to_owned();
@@ -67,6 +79,10 @@ pub(crate) async fn get_out(
             reqwest::header::COOKIE,
             reqwest::header::HeaderValue::from_str(cookies.as_str()).unwrap(),
         );
+    }
+
+    for header in fpm::utils::ignore_headers() {
+        proxy_request.headers_mut().remove(header);
     }
 
     *proxy_request.body_mut() = Some(req.body().to_vec().into());
