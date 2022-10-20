@@ -204,7 +204,7 @@ pub async fn revert(
     req: &fpm::http::Request,
     rev: RevertRequest,
 ) -> fpm::Result<fpm::http::Response> {
-    let config = match fpm::Config::read(None, false, Some(&req)).await {
+    let config = match fpm::Config::read(None, false, Some(req)).await {
         Ok(config) => config,
         Err(err) => return fpm::http::api_error(err.to_string()),
     };
