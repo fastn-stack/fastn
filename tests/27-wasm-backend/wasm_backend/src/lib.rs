@@ -5,13 +5,27 @@ wit_bindgen_guest_rust::import!("/Users/shobhitsharma/repos/fifthtry/fpm-utils/w
 
 #[fpm_utils_macro::wasm_backend]
 fn handlerequest(a: guest_backend::Httprequest) -> guest_backend::Httpresponse {
-    let base_url = "https://jijweopljiyfrxeolnkt.supabase.co/rest/v1";
-    let apikey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imppandlb3Bsaml5ZnJ4ZW9sbmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjMxNTM2NjksImV4cCI6MTk3ODcyOTY2OX0.Urn5gEQyen8Kig-ArlfpP7N4CFktDJCJA1PZDQYYaOg";
+    let base_url_header_key = String::from("X-FPM-BLOG-APP-SUPABASE-BASE-URL");
+    let apikey_header_key = String::from("X-FPM-BLOG-APP-SUPABASE-API-KEY");
+    let (_, base_url) = a
+        .headers
+        .iter()
+        .find(|(key, _)| key == &base_url_header_key)
+        .expect(
+            format!(
+                "{base_url_header_key} not found in the request. Please configure app properly"
+            )
+            .as_str(),
+        );
+    let (_, apikey) = a
+        .headers
+        .iter()
+        .find(|(key, _)| key == &apikey_header_key)
+        .expect(
+            format!("{apikey_header_key} not found in the request. Please configure app properly")
+                .as_str(),
+        );
     let header_map = [("Content-Type", "application/json"), ("apiKey", apikey)];
-    return guest_backend::Httpresponse {
-        data: serde_json::to_string(&a).unwrap(),
-        success: false,
-    };
     let resp = match a.path.as_str() {
         "/-/blog-backend.fpm.local/subscribe/" => {
             let data: types::SubscribeData = serde_json::from_str(a.payload.as_str()).unwrap();

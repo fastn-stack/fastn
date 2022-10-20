@@ -494,6 +494,8 @@ impl FPMLibrary {
                 "{}\n\n-- optional package-data package:\n",
                 fpm::fpm_ftd()
             ))
+        } else if name == "env" {
+            return Some(fpm::get_env_ftd_file());
         } else {
             // Note: currently we do not allow users to import other modules from FPM.ftd
             eprintln!("FPM.ftd can only import `fpm` module");
