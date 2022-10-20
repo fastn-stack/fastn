@@ -75,7 +75,7 @@ pub async fn resolve_dependencies(fpm_instance: String, fpm_controller: String) 
         );
         // Resolve dependencies by reading the FPM.ftd using config.read()
         // Assuming package_name and repo name are identical
-        fpm::Config::read(None, false).await?;
+        fpm::Config::read(None, false, None).await?;
     } else {
         return Err(fpm::Error::APIResponseError(format!(
             "Package {} Cloning failed: {}",

@@ -1039,7 +1039,11 @@ impl Config {
     }
 
     /// `read()` is the way to read a Config.
-    pub async fn read(root: Option<String>, resolve_sitemap: bool) -> fpm::Result<fpm::Config> {
+    pub async fn read(
+        root: Option<String>,
+        resolve_sitemap: bool,
+        req: Option<&fpm::http::Request>,
+    ) -> fpm::Result<fpm::Config> {
         let (root, original_directory) = match root {
             Some(r) => {
                 let root: camino::Utf8PathBuf = tokio::fs::canonicalize(r.as_str())
@@ -1157,7 +1161,7 @@ impl Config {
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
             global_ids: Default::default(),
-            request: None,
+            request: req.map(ToOwned::to_owned),
             path_parameters: vec![],
         };
 

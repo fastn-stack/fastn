@@ -3,8 +3,11 @@ pub struct CreateCRRequest {
     pub title: Option<String>,
 }
 
-pub async fn create_cr(req: CreateCRRequest) -> fpm::Result<fpm::http::Response> {
-    match create_cr_worker(req).await {
+pub async fn create_cr(
+    req: &fpm::http::Request,
+    cr_req: CreateCRRequest,
+) -> fpm::Result<fpm::http::Response> {
+    match create_cr_worker(req, cr_req).await {
         Ok(cr_number) => {
             #[derive(serde::Serialize)]
             struct CreateCRResponse {
@@ -17,8 +20,11 @@ pub async fn create_cr(req: CreateCRRequest) -> fpm::Result<fpm::http::Response>
     }
 }
 
-async fn create_cr_worker(cr_request: CreateCRRequest) -> fpm::Result<usize> {
-    let config = fpm::Config::read(None, false).await?;
+async fn create_cr_worker(
+    req: &fpm::http::Request,
+    cr_request: CreateCRRequest,
+) -> fpm::Result<usize> {
+    let config = fpm::Config::read(None, false, Some(req)).await?;
     let cr_number = config.extract_cr_number().await?;
     let default_title = format!("CR#{cr_number}");
     let cr_meta = fpm::cr::CRMeta {
@@ -30,15 +36,15 @@ async fn create_cr_worker(cr_request: CreateCRRequest) -> fpm::Result<usize> {
     Ok(cr_number as usize)
 }
 
-pub async fn create_cr_page() -> fpm::Result<fpm::http::Response> {
-    match create_cr_page_worker().await {
+pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
+    match create_cr_page_worker(req).await {
         Ok(body) => Ok(fpm::http::ok(body)),
         Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
-async fn create_cr_page_worker() -> fpm::Result<Vec<u8>> {
-    let mut config = fpm::Config::read(None, false).await?;
+async fn create_cr_page_worker(req: fpm::http::Request) -> fpm::Result<Vec<u8>> {
+    let mut config = fpm::Config::read(None, false, Some(&req)).await?;
     let create_cr_ftd = fpm::package_info_create_cr(&config)?;
 
     let main_document = fpm::Document {

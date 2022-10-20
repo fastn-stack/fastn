@@ -166,7 +166,7 @@ impl Library {
             .str(doc.name, section.line_number, "$processor$")?
         {
             // These processors are implemented both in Rust and Python
-            "http" => fpm::library::http::processor(section, doc).await,
+            "http" => fpm::library::http::processor(section, doc, &self.config).await,
             "package-query" => fpm::library::sqlite::processor(section, doc, &self.config).await,
             "fetch-file" => fpm::library::fetch_file::processor(section, doc, &self.config).await,
             "package-tree" => {
@@ -423,7 +423,7 @@ impl Library2 {
             .str(doc.name, section.line_number, "$processor$")?
         {
             // "toc" => fpm::library::toc::processor(section, doc),
-            "http" => fpm::library::http::processor(section, doc).await,
+            "http" => fpm::library::http::processor(section, doc, &self.config).await,
             "package-query" => fpm::library::sqlite::processor(section, doc, &self.config).await,
             "toc" => fpm::library::toc::processor(section, doc, &self.config),
             "include" => fpm::library::include::processor(section, doc, &self.config),

@@ -1,6 +1,7 @@
 pub async fn processor<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
+    config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     {
         let method = section
@@ -60,7 +61,12 @@ pub async fn processor<'a>(
 
     println!("calling `http` processor with url: {}", &url);
 
-    let response = match crate::http::http_get(url.as_str()).await {
+    let response = match crate::http::http_get_with_cookie(
+        url.as_str(),
+        config.request.as_ref().and_then(|v| v.cookies_string()),
+    )
+    .await
+    {
         Ok(v) => v,
         Err(e) => {
             return ftd::p2::utils::e2(

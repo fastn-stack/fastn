@@ -139,21 +139,22 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let response = if path.eq(&favicon) {
         static_file(favicon).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("FPM.ftd")) {
-        let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
+        let config = fpm::time("Config::read()")
+            .it(fpm::Config::read(None, false, Some(&req)).await.unwrap());
         serve_fpm_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
         let mut config = fpm::time("Config::read()")
-            .it(fpm::Config::read(None, false).await.unwrap())
+            .it(fpm::Config::read(None, false, Some(&req)).await.unwrap())
             .set_request(req);
         serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fpm::cr::get_cr_path_from_url(path.as_str()) {
-        let mut config =
-            fpm::time("Config::read()").it(fpm::Config::read(None, false).await.unwrap());
+        let mut config = fpm::time("Config::read()")
+            .it(fpm::Config::read(None, false, Some(&req)).await.unwrap());
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
         // url is present in config or not
         // If not present than proxy pass it
-        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false)
+        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
             .set_request(req));
@@ -228,17 +229,17 @@ pub async fn clear_cache(req: fpm::http::Request) -> fpm::Result<fpm::http::Resp
 // TODO: Move them to routes folder
 async fn sync(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync(req.json()?).await
+    fpm::apis::sync(&req, req.json()?).await
 }
 
 async fn sync2(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::sync2(req.json()?).await
+    fpm::apis::sync2(&req, req.json()?).await
 }
 
-pub async fn clone() -> fpm::Result<fpm::http::Response> {
+pub async fn clone(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
-    fpm::apis::clone().await
+    fpm::apis::clone(req).await
 }
 
 pub(crate) async fn view_source(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
@@ -253,22 +254,22 @@ pub async fn edit(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
 
 pub async fn revert(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit::revert(req.json()?).await
+    fpm::apis::edit::revert(&req, req.json()?).await
 }
 
-pub async fn editor_sync() -> fpm::Result<fpm::http::Response> {
+pub async fn editor_sync(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::edit::sync().await
+    fpm::apis::edit::sync(req).await
 }
 
 pub async fn create_cr(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    fpm::apis::cr::create_cr(req.json()?).await
+    fpm::apis::cr::create_cr(&req, req.json()?).await
 }
 
-pub async fn create_cr_page() -> fpm::Result<fpm::http::Response> {
+pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
-    fpm::apis::cr::create_cr_page().await
+    fpm::apis::cr::create_cr_page(req).await
 }
 
 async fn route(
@@ -279,13 +280,13 @@ async fn route(
     match (req.method(), req.path()) {
         ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
         ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
-        ("get", "/-/clone/") if cfg!(feature = "remote") => clone().await,
+        ("get", "/-/clone/") if cfg!(feature = "remote") => clone(req).await,
         ("get", t) if t.starts_with("/-/view-src/") => view_source(req).await,
         ("post", "/-/edit/") => edit(req).await,
         ("post", "/-/revert/") => revert(req).await,
-        ("get", "/-/editor-sync/") => editor_sync().await,
+        ("get", "/-/editor-sync/") => editor_sync(req).await,
         ("post", "/-/create-cr/") => create_cr(req).await,
-        ("get", "/-/create-cr-page/") => create_cr_page().await,
+        ("get", "/-/create-cr-page/") => create_cr_page(req).await,
         ("post", "/-/clear-cache/") => clear_cache(req).await,
         (_, _) => serve(req).await,
     }

@@ -46,7 +46,7 @@ async fn async_main() -> fpm::Result<()> {
         return Ok(());
     }
 
-    let mut config = fpm::Config::read(None, true).await?;
+    let mut config = fpm::Config::read(None, true, None).await?;
 
     if matches.subcommand_matches("update").is_some() {
         fpm::update(&config).await?;

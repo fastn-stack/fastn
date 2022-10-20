@@ -62,20 +62,26 @@ pub struct SyncRequest {
 /// If no conflict merge it, update file on remote and send back new content as Updated
 /// If conflict occur, Then send back updated version in latest.ftd with conflicted content
 ///
-pub async fn sync(req: SyncRequest) -> fpm::Result<fpm::http::Response> {
-    dbg!("remote server call", &req.package_name);
+pub async fn sync(
+    req: &fpm::http::Request,
+    sync_req: SyncRequest,
+) -> fpm::Result<fpm::http::Response> {
+    dbg!("remote server call", &sync_req.package_name);
 
-    match sync_worker(req).await {
+    match sync_worker(req, sync_req).await {
         Ok(data) => fpm::http::api_ok(data),
         Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
-pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
+pub(crate) async fn sync_worker(
+    req: &fpm::http::Request,
+    request: SyncRequest,
+) -> fpm::Result<SyncResponse> {
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let config = fpm::Config::read(None, false).await?;
+    let config = fpm::Config::read(None, false, Some(req)).await?;
     let mut snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
     let client_snapshots = fpm::snapshot::resolve_snapshots(&request.latest_ftd).await?;
     // let latest_ftd = tokio::fs::read_to_string(config.history_dir().join(".latest.ftd")).await?;
