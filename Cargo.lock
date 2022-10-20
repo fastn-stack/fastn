@@ -1083,7 +1083,7 @@ dependencies = [
 [[package]]
 name = "fpm-utils"
 version = "0.1.0"
-source = "git+https://github.com/FifthTry/fpm-utils?rev=a735cd9#a735cd9a8a2e675861b440094d5b342cfeb7c9a9"
+source = "git+https://github.com/ftd-lang/fpm-utils?rev=0ce396db408b413f5a4eb6b2c5b87db3829cf879#0ce396db408b413f5a4eb6b2c5b87db3829cf879"
 dependencies = [
  "serde",
  "serde_json",
@@ -2048,9 +2048,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.43"
+version = "1.0.47"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a2ca2c61bc9f3d74d2886294ab7b9853abd9c1ad903a3ac7815c58989bb7bab"
+checksum = "5ea3d908b0e36316caf9e9e2c4625cdde190a7e6f440d794667ed17a1855e725"
 dependencies = [
  "unicode-ident",
 ]
@@ -2531,9 +2531,9 @@ checksum = "6bdef32e8150c2a081110b42772ffe7d7c9032b606bc226c8260fd97e0976601"
 
 [[package]]
 name = "syn"
-version = "1.0.99"
+version = "1.0.102"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58dbef6ec655055e20b86b15a8cc6d439cca19b667537ac6a1369572d151ab13"
+checksum = "3fcd952facd492f9be3ef0d0b7032a6e442ee9b361d4acc2b1d0c4aaa5f613a1"
 dependencies = [
  "proc-macro2",
  "quote",
