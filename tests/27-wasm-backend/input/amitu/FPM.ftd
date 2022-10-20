@@ -1,10 +1,16 @@
 -- import: fpm
 
+-- fpm.backend-header list package-headers:
+
+-- package-headers:
+header-key: HEADER-ONE
+header-value: val_header_one
+
 -- fpm.package: www.amitu.com
 download-base-url: amitu
 canonical-url: https://some-other-site.com/
 backend: true
-
+backend-headers: package-headers
 
 -- fpm.dependency: blog-backend.fpm.local
 mountpoint: /backend/

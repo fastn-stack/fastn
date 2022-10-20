@@ -1,3 +1,7 @@
+-- record backend-header:
+string header-key:
+string header-value:
+
 -- record package-data:
 caption name:
 boolean versioned: false
@@ -12,7 +16,7 @@ optional string canonical-url:
 boolean inherit-auto-imports-from-original: true
 optional string endpoint:
 boolean backend: false
-
+backend-header list backend-headers:
 
 
 -- record dependency-data:

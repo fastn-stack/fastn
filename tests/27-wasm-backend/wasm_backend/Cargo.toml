@@ -9,6 +9,9 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-wit-bindgen-guest-rust-macro = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev="45604f58336afaa23a79ed619ef50b69de473688" }
-serde = {version="1.0.144", features=["derive"]}
-serde_json = "1.0.85"
+serde = { version = "1", features = ["derive"] }
+serde_derive = "1"
+serde_json = "1"
+# fpm-utils-macro = { git = "https://github.com/ftd-lang/fpm-utils", rev="0ce396db408b413f5a4eb6b2c5b87db3829cf879"}
+fpm-utils-macro = {path="/Users/shobhitsharma/repos/fifthtry/fpm-utils"}
+wit-bindgen-guest-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev="9ef6717e2c5337e84e0a7bd56918a5ae4bef12ca" }

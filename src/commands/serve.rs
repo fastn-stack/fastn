@@ -192,7 +192,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             } else {
                 return Ok(fpm::server_error!("request not set"));
             };
-            fpm::wasm::handle_wasm(req, wasm_module).await
+            fpm::wasm::handle_wasm(req, wasm_module, config.package.backend_headers).await
         } else {
             file_response
         }

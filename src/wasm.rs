@@ -62,10 +62,12 @@ pub type WasmRunnerResult<T> = std::result::Result<T, WASMError>;
 pub async fn handle_wasm(
     req: fpm::http::Request,
     wasm_module: camino::Utf8PathBuf,
+    backend_headers: Option<Vec<fpm::config::BackendHeader>>,
 ) -> fpm::http::Response {
     pub async fn inner(
         req: fpm::http::Request,
         wasm_module: camino::Utf8PathBuf,
+        backend_headers: Option<Vec<fpm::config::BackendHeader>>,
     ) -> WasmRunnerResult<actix_web::HttpResponse> {
         let mut wasm_config = wit_bindgen_host_wasmtime_rust::wasmtime::Config::new();
         wasm_config.cache_config_load_default().unwrap();
@@ -111,18 +113,32 @@ pub async fn handle_wasm(
         } else {
             ""
         };
+        let mut headers = vec![];
+
+        req.headers()
+            .iter()
+            .for_each(|(header_name, header_value)| {
+                headers.push((
+                    header_name.as_str().to_string(),
+                    header_value
+                        .to_str()
+                        .expect("Unable to parse header value")
+                        .to_string(),
+                ));
+            });
+        if let Some(b_headers) = backend_headers {
+            b_headers.into_iter().for_each(|header| {
+                let hk = header.header_key;
+                headers.push((format!("X-FPM-{hk}"), header.header_value));
+            })
+        };
+        let headers: Vec<(&str, &str)> = headers
+            .iter()
+            .map(|(k, v)| (k.as_str(), v.as_str()))
+            .collect();
         let request = fpm_utils::backend_host_import::guest_backend::Httprequest {
             path: uri.as_str(),
-            headers: &(&req.headers().iter().fold(
-                vec![],
-                |mut accumulator, (header_name, header_value)| {
-                    accumulator.push((
-                        header_name.as_str(),
-                        header_value.to_str().expect("Unable to parse header value"),
-                    ));
-                    accumulator
-                },
-            ))[..],
+            headers: &(headers)[..],
             querystring: req.query_string(),
             method: req.method(),
             payload: body_str,
@@ -139,7 +155,7 @@ pub async fn handle_wasm(
             Err(err) => Err(WASMError::WasmFunctionInvoke(err.to_string())),
         })
     }
-    fpm::time("WASM Execution: ").it(match inner(req, wasm_module).await {
+    fpm::time("WASM Execution: ").it(match inner(req, wasm_module, backend_headers).await {
         Ok(resp) => resp,
         Err(err) => fpm::server_error!("{}", err.to_string()),
     })
