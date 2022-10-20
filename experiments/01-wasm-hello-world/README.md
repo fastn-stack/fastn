@@ -25,7 +25,7 @@ Run `cargo run` to execute the host, which runs the `guest` wasm file.
 ## Wasm File Size
 
 Experimented with https://github.com/WebAssembly/binaryen/releases/tag/version_110. The binary size is 1.7M, and
-with the wasm-opt it became 1.4M. Not a great reduction.
+with the `wasm-opt` it became 1.4M. Not a great reduction.
 
 `~/Downloads/binaryen-version_110/bin/wasm-opt -Oz -o output.wasm target/wasm32-unknown-unknown/debug/guest.wasm`
 

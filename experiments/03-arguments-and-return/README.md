@@ -54,7 +54,7 @@ to:
 fn main() {
     // ...
 
-    let from_host = wasmtime::Func::wrap(&mut store, |a: i32| {
+    let from_host = wasmtime::Func::wrap(&mut store, |a: i32 | {
         println!("wasm sent: {}", a);
         a + 10
     });
