@@ -47,7 +47,7 @@ fn handlerequest(a: guest_backend::Httprequest) -> guest_backend::Httpresponse {
         }
         "/-/blog-backend.fpm.local/echo/" => {
             return guest_backend::Httpresponse {
-                data: String::from("{\"Hello\": \"World!\"}"),
+                data: serde_json::to_string(&a).unwrap(),
                 success: true,
             };
         }
