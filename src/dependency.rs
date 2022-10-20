@@ -56,7 +56,7 @@ impl DependencyTemp {
             endpoint: self.endpoint,
             mountpoint: match self.mountpoint {
                 Some(mp) => {
-                    let trimmed_mountpoint = mp.trim_start_matches("/").trim_end_matches("/");
+                    let trimmed_mountpoint = mp.trim_start_matches('/').trim_end_matches('/');
                     Some(format!("/{trimmed_mountpoint}/"))
                 }
                 None => None,
