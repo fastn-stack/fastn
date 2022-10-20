@@ -12,7 +12,7 @@ pub(crate) async fn view_source(req: &fpm::http::Request) -> fpm::http::Response
         path
     };
 
-    match handle_view_source(path.as_str()).await {
+    match handle_view_source(req, path.as_str()).await {
         Ok(body) => fpm::http::ok(body),
         Err(e) => {
             fpm::server_error!("new_path: {}, Error: {:?}", path, e)
@@ -20,8 +20,8 @@ pub(crate) async fn view_source(req: &fpm::http::Request) -> fpm::http::Response
     }
 }
 
-async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
-    let mut config = fpm::Config::read(None, false).await?;
+async fn handle_view_source(req: &fpm::http::Request, path: &str) -> fpm::Result<Vec<u8>> {
+    let mut config = fpm::Config::read(None, false, Some(req)).await?;
     let file_name = config.get_file_path_and_resolve(path).await?;
     let file = config.get_file_and_package_by_id(path).await?;
 

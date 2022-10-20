@@ -109,10 +109,13 @@ pub struct File {
     pub content: Vec<u8>,
 }
 
-pub async fn sync2(req: SyncRequest) -> fpm::Result<fpm::http::Response> {
-    dbg!("remote server call", &req.package_name);
+pub async fn sync2(
+    req: &fpm::http::Request,
+    sync_req: SyncRequest,
+) -> fpm::Result<fpm::http::Response> {
+    dbg!("remote server call", &sync_req.package_name);
 
-    match sync_worker(req).await {
+    match sync_worker(req, sync_req).await {
         Ok(data) => fpm::http::api_ok(data),
         Err(err) => fpm::http::api_error(err.to_string()),
     }
@@ -301,11 +304,14 @@ pub(crate) async fn do_sync(
     Ok(synced_files)
 }
 
-pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncResponse> {
+pub(crate) async fn sync_worker(
+    req: &fpm::http::Request,
+    request: SyncRequest,
+) -> fpm::Result<SyncResponse> {
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let config = fpm::Config::read(None, false).await?;
+    let config = fpm::Config::read(None, false, Some(req)).await?;
     let mut synced_files = do_sync(&config, request.files.as_slice()).await?;
     let remote_history = config.get_history().await?;
     let remote_manifest =

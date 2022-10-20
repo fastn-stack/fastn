@@ -5,18 +5,18 @@ pub struct CloneResponse {
     pub reserved_crs: Vec<i32>,
 }
 
-pub async fn clone() -> fpm::Result<fpm::http::Response> {
+pub async fn clone(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     // TODO: implement authentication
-    match clone_worker().await {
+    match clone_worker(req).await {
         Ok(data) => fpm::http::api_ok(data),
         Err(err) => fpm::http::api_error(err.to_string()),
     }
 }
 
-async fn clone_worker() -> fpm::Result<CloneResponse> {
+async fn clone_worker(req: fpm::http::Request) -> fpm::Result<CloneResponse> {
     use itertools::Itertools;
 
-    let config = fpm::Config::read(None, false).await?;
+    let config = fpm::Config::read(None, false, Some(&req)).await?;
     let all_files = config
         .get_all_file_path(&config.package, Default::default())?
         .into_iter()

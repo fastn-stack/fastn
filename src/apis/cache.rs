@@ -50,7 +50,7 @@ pub async fn clear(req: &fpm::http::Request) -> fpm::http::Response {
         }
     };
 
-    if let Err(err) = clear_(&query).await {
+    if let Err(err) = clear_(&query, req).await {
         return fpm::server_error!(
             "FPM-Error: /-/clear-cache/, query: {:?}, error: {:?}",
             query,
@@ -61,8 +61,8 @@ pub async fn clear(req: &fpm::http::Request) -> fpm::http::Response {
     fpm::http::ok("Done".into())
 }
 
-pub async fn clear_(query: &QueryParams) -> fpm::Result<()> {
-    let config = fpm::time("Config::read()").it(fpm::Config::read(None, false).await?);
+pub async fn clear_(query: &QueryParams, req: &fpm::http::Request) -> fpm::Result<()> {
+    let config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(req)).await?);
     if config.package.download_base_url.is_none() {
         return Err(fpm::Error::APIResponseError(
             "cannot remove anything, package does not have `download_base_url`".to_string(),

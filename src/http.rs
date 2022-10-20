@@ -63,7 +63,6 @@ pub struct Request {
 
 impl Request {
     //pub fn get_named_params() -> {}
-
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         let headers = {
             let mut headers = reqwest::header::HeaderMap::new();
@@ -290,11 +289,31 @@ pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::B
 }
 
 pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
+    http_get_with_cookie(url, None).await
+}
+
+pub(crate) async fn http_get_with_cookie(
+    url: &str,
+    cookie: Option<std::collections::HashMap<String, String>>,
+) -> fpm::Result<Vec<u8>> {
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert(
         reqwest::header::USER_AGENT,
         reqwest::header::HeaderValue::from_static("fpm"),
     );
+    if let Some(cookie) = cookie {
+        let header_value: String = cookie
+            .iter()
+            // TODO: check if extra escaping is needed
+            .map(|(k, v)| format!("{}={}", k, v).replace(";", "%3B"))
+            .collect::<Vec<_>>()
+            .join(";");
+        headers.insert(
+            reqwest::header::COOKIE,
+            reqwest::header::HeaderValue::from_str(header_value.as_str()).unwrap(),
+        );
+    }
+
     let c = reqwest::Client::builder()
         .default_headers(headers)
         .build()?;
