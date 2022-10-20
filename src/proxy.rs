@@ -62,6 +62,13 @@ pub(crate) async fn get_out(
         reqwest::header::HeaderValue::from_static("fpm"),
     );
 
+    if let Some(cookies) = req.cookies_string() {
+        proxy_request.headers_mut().insert(
+            reqwest::header::COOKIE,
+            reqwest::header::HeaderValue::from_str(cookies.as_str()).unwrap(),
+        );
+    }
+
     *proxy_request.body_mut() = Some(req.body().to_vec().into());
 
     Ok(fpm::http::ResponseBuilder::from_reqwest(CLIENT.execute(proxy_request).await?).await)

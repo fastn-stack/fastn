@@ -63,7 +63,7 @@ pub async fn processor<'a>(
 
     let response = match crate::http::http_get_with_cookie(
         url.as_str(),
-        config.request.as_ref().map(|v| v.cookies().to_owned()),
+        config.request.as_ref().and_then(|v| v.cookies_string()),
     )
     .await
     {

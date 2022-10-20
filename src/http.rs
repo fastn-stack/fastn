@@ -161,6 +161,20 @@ impl Request {
         &self.cookies
     }
 
+    pub fn cookies_string(&self) -> Option<String> {
+        if self.cookies.is_empty() {
+            return None;
+        }
+        Some(
+            self.cookies()
+                .iter()
+                // TODO: check if extra escaping is needed
+                .map(|(k, v)| format!("{}={}", k, v).replace(";", "%3B"))
+                .collect::<Vec<_>>()
+                .join(";"),
+        )
+    }
+
     pub fn cookie(&self, name: &str) -> Option<String> {
         self.cookies().get(name).map(|v| v.to_string())
     }
@@ -294,7 +308,7 @@ pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
 
 pub(crate) async fn http_get_with_cookie(
     url: &str,
-    cookie: Option<std::collections::HashMap<String, String>>,
+    cookie: Option<String>,
 ) -> fpm::Result<Vec<u8>> {
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert(
@@ -302,15 +316,9 @@ pub(crate) async fn http_get_with_cookie(
         reqwest::header::HeaderValue::from_static("fpm"),
     );
     if let Some(cookie) = cookie {
-        let header_value: String = cookie
-            .iter()
-            // TODO: check if extra escaping is needed
-            .map(|(k, v)| format!("{}={}", k, v).replace(";", "%3B"))
-            .collect::<Vec<_>>()
-            .join(";");
         headers.insert(
             reqwest::header::COOKIE,
-            reqwest::header::HeaderValue::from_str(header_value.as_str()).unwrap(),
+            reqwest::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
         );
     }
 
