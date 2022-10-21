@@ -75,11 +75,10 @@ pub(crate) async fn get_out(
     );
 
     if let Some(ip) = req.get_ip() {
-        dbg!(ip.as_str());
-        // proxy_request.headers_mut().insert(
-        //     reqwest::header::FORWARDED,
-        //     reqwest::header::HeaderValue::from_str(ip.as_str()).unwrap(),
-        // );
+        proxy_request.headers_mut().insert(
+            reqwest::header::FORWARDED,
+            reqwest::header::HeaderValue::from_str(ip.as_str()).unwrap(),
+        );
     }
 
     if let Some(cookies) = req.cookies_string() {
