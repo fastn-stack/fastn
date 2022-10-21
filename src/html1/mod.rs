@@ -3,6 +3,6 @@
 mod test;
 
 mod main;
-mod utils;
+pub mod utils;
 
 pub use main::HtmlUI;
