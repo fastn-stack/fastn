@@ -3,6 +3,12 @@ pub extern "C" fn hello() -> u32 {
     SizedData::from_string("wasm says hello".to_string()).to_bytes()
 }
 
+#[no_mangle]
+pub extern "C" fn free(ptr: u32, size: u32) {
+    let v = unsafe { Vec::from_raw_parts(ptr as *mut u8, size as usize, size as usize) };
+    drop(v);
+}
+
 struct SizedData {
     len: u32,  // same as usize in wasm
     data: u32, // same as *const u8 in wasm
@@ -10,9 +16,8 @@ struct SizedData {
 
 impl SizedData {
     fn from_string(s: String) -> Self {
-        let len = s.len() as u32;
-
         let mut d = s.into_bytes();
+        let len = d.len() as u32;
         let data = d.as_mut_ptr() as u32;
 
         std::mem::forget(d);

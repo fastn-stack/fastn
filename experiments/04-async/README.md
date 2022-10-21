@@ -18,6 +18,9 @@ called from wasm: [I32(10), I32(1)]
 wasm said: 532
 ```
 
+While working on this experiment, I found [wasmtime's async_functions tests](https://github.com/bytecodealliance/wasmtime/blob/ff0e84ecf449cf89d970457fd6206e1c06429980/tests/all/async_functions.rs)
+to be quite helpful.
+
 ## Guest Changes
 
 There is no significant change in the guest code. WASM guest code has no idea if a host function is sync or async. 
