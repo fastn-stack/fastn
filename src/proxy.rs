@@ -94,6 +94,7 @@ pub(crate) async fn get_out(
     }
 
     *proxy_request.body_mut() = Some(req.body().to_vec().into());
+    dbg!(&proxy_request.headers());
 
     Ok(fpm::http::ResponseBuilder::from_reqwest(CLIENT.execute(proxy_request).await?).await)
 }
