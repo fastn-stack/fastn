@@ -13,7 +13,8 @@
 # FTD: Programming Language For Prose
 
 
-Homepage: [ftd.dev](https://ftd.dev/)
+Homepage: [ftd.dev](https://ftd.dev/)  
+Example: https://ftd-lang.github.io/ftd/
 
 > FTD is an open source programming language for writing prose.
 
@@ -31,3 +32,4 @@ License: BSD
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
