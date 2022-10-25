@@ -969,14 +969,14 @@ impl Sitemap {
                                     package_root,
                                     section.get_file_id().as_str(),
                                 )
-                                .map_err(|e| {
-                                    fpm::Error::UsageError {
-                                        message: format!(
-                                        "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                        section.get_file_id(), e
-                                    ),
-                                    }
-                                })?,
+                                    .map_err(|e| {
+                                        fpm::Error::UsageError {
+                                            message: format!(
+                                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                                section.get_file_id(), e
+                                            ),
+                                        }
+                                    })?,
                             ),
                         ),
                         None,
@@ -1020,30 +1020,30 @@ impl Sitemap {
                     (None, None)
                 } else {
                     match fpm::Config::get_file_name(current_package_root, id.as_str()) {
-                            Ok(name) => {
-                                if current_package_root.eq(package_root) {
-                                    (Some(current_package_root.join(name)), None)
-                                } else {
-                                    (
-                                        Some(package_root.join(name.as_str())),
-                                        Some(current_package_root.join(name)),
-                                    )
-                                }
+                        Ok(name) => {
+                            if current_package_root.eq(package_root) {
+                                (Some(current_package_root.join(name)), None)
+                            } else {
+                                (
+                                    Some(package_root.join(name.as_str())),
+                                    Some(current_package_root.join(name)),
+                                )
                             }
-                            Err(_) => (
-                                Some(package_root.join(
-                                    fpm::Config::get_file_name(package_root, id.as_str()).map_err(
-                                        |e| fpm::Error::UsageError {
-                                            message: format!(
-                                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                                id, e
-                                            ),
-                                        },
-                                    )?,
-                                )),
-                                None,
-                            ),
                         }
+                        Err(_) => (
+                            Some(package_root.join(
+                                fpm::Config::get_file_name(package_root, id.as_str()).map_err(
+                                    |e| fpm::Error::UsageError {
+                                        message: format!(
+                                            "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                            id, e
+                                        ),
+                                    },
+                                )?,
+                            )),
+                            None,
+                        ),
+                    }
                 };
                 subsection.file_location = file_location;
                 subsection.translation_file_location = translation_file_location;
@@ -1104,14 +1104,14 @@ impl Sitemap {
                                     package_root,
                                     toc.get_file_id().as_str(),
                                 )
-                                .map_err(|e| {
-                                    fpm::Error::UsageError {
-                                        message: format!(
-                                        "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                        toc.get_file_id(), e
-                                    ),
-                                    }
-                                })?,
+                                    .map_err(|e| {
+                                        fpm::Error::UsageError {
+                                            message: format!(
+                                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                                toc.get_file_id(), e
+                                            ),
+                                        }
+                                    })?,
                             ),
                         ),
                         None,
