@@ -85,7 +85,7 @@ pub mod regex {
     /// Linking syntax: `<prefix>[<id_or_text>](<type1><id>)?`
     pub const LINK_SYNTAX: &str = r"(?x) # Enabling comment mode {GROUP 0 = entire match}
     (?P<prefix>.?) # Character Prefix Group <prefix>
-    \[(?P<id_or_text>[-\w\s]+)\] # Referred Id Capture Group <id_or_text>
+    \[(?P<id_or_text>[@:%\.\+\?~\#\-\w\s]+)\] # Referred Id Capture Group <id_or_text>
     (\(((?P<type1>\s*id\s*:(?P<id>[-\w\s]+))|(?P<ahead>[\-\s\w@:%\.\+\?~\#/=]+\s* # <type1> group and <ahead> group
     (\x22(?P<hover_text>[\-\s\w@:%\.\+\?~\#/=]+)\x22)?\s*))\))? # <hover_text> group";
 
