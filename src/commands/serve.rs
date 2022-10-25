@@ -188,6 +188,12 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
             let package = config.find_package_by_id(path.as_str()).await.unwrap().1;
             let wasm_module = config.get_root_for_package(&package).join("backend.wasm");
+            // Set the temp path to and do `get_file_and_package_by_id` to retrieve the backend.wasm
+            // File for the particular dependency package
+            let wasm_module_path = format!("-/{}/backend.wasm", package.name,);
+            config
+                .get_file_and_package_by_id(wasm_module_path.as_str())
+                .await?;
             let req = if let Some(r) = config.request {
                 r
             } else {

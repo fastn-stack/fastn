@@ -27,6 +27,10 @@ impl fpm_utils::backend_host_export::host::Host for HostExports {
             match request_method.as_str() {
                 "GET" => request_client.get(url).headers(headers),
                 "POST" => request_client.post(url).headers(headers).body(request_body),
+                "PATCH" => request_client
+                    .patch(url)
+                    .headers(headers)
+                    .body(request_body),
                 _ => panic!("METHOD not allowed"),
             }
             .send()
