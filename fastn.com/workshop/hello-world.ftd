@@ -4,13 +4,13 @@ id: ws-hello-world
 To use [FTD](https://ftd.dev) language we have to use [FPM](https://fpm.dev)
 the package manager and server for FTD.
 
-In this exercise we will install FPM, and run a hello world program.
+In this exercise **we will install FPM, and run a hello world program**.
 
 
 -- ds.h1: Task 1: Install FPM
 
 
-To install fpm we will use the install script:
+To install {ds.highlight: fpm we will use the installation script}:
 
 -- ds.code: install fpm
 lang: sh
@@ -27,7 +27,7 @@ and download the fpm binary for your platform from the latest release as well.
 
 We support recent versions of Linux, Mac and Windows.
 
-To test if the installation worked, run:
+{ds.highlight: To test if the installation worked, run:}
 
 -- ds.code: run `fpm` to see if its working
 lang: sh
@@ -44,18 +44,21 @@ If you get an error message in chat or speak up.
 
 -- ds.h1: Task 2: FPM.ftd
 
-Note: If you have not yet done the [workshop basics](id: ws-basics), please do
-it now: `git clone https://github.com/ftd-lang/ftd-workshop.git`.
+-- ds.markdown:
 
-FTD files are organized in FPM as a "fpm package". This is like `npm package` for
-JavaScript or `cargo crate` for Rust.
+Note: If you have not yet cloned `ftd-lang/ftd-workshop` repo as mentioned in
+[workshop basics](id: ws-basics), please do it now:
+`git clone https://github.com/ftd-lang/ftd-workshop.git`.
+
+FTD files are organized in FPM as a "fpm package". This is like `npm package`
+for JavaScript or `cargo crate` for Rust.
 
 A FPM package is a folder containing a file named `FPM.ftd` and some FTD files.
 
 If you run `fpm serve` right now and go to http://127.0.0.1:8000 it will fail
 with message in terminal saying FPM.ftd file is missing.
 
-Lets fix this by creating a `FPM.ftd` file with the following content:
+{ds.highlight: Lets fix this by creating a `FPM.ftd` file with the following content:}
 
 -- ds.code: sample `FPM.ftd` file
 lang: ftd
@@ -64,6 +67,8 @@ lang: ftd
 
 \-- fpm.package: hello
 
+
+-- ft.markdown:
 
 We have "imported" fpm, a special `ftd module` (each ftd file is called a `fpm
 module`, the way we call `.py` files `python modules`).
@@ -92,14 +97,16 @@ the URL is `/x/y/`. We have special rule for `index.ftd` file, so `index.ftd`
 on top level is `/`. `x/index.ftd` would have been `/x/` and so on.
 
 
-This repo comes with an [index.ftd](index.ftd) file, go ahead and view it and
-modify it as it instructs.
+This repo comes with an [index.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/01-hello-world/index.ftd)
+file, {ds.highlight: go ahead and view it and modify it as it instructs}.
 
 
 -- ds.h1: You are Done
 
+-- ds.markdown:
+
 You have installed fpm and created your first fpm package. Good job!
 
-Move to learning about [booleans now](id: ws-booleans) or back to
+{ds.highlight: Move to learning about [booleans now](id: ws-booleans)} or back to
 [the workshop page](id: workshop).
 

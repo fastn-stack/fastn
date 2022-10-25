@@ -29,7 +29,12 @@ lang: ftd
 name: John
 age: 20
 
--- ds.markdown:
+-- ds.h1: Task 1: Define and Use A Record
+
+Head over to [records.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/records.ftd)
+and create your first record and an instance of it.
+
+-- ds.h1: Special Types: `caption` and `body`
 
 We take a lot of pride in read-ablity and neatness of our code, so we have
 created the types `caption` and `body`, both of which are aliases for `string`
@@ -63,14 +68,26 @@ Note: you can only have single caption and single body types in a record. If
 you want to have more than one multi-line field for a record, you can either use
 a local string variable, or wait for 0.3 syntax to be done.
 
--- ds.h1: Task 1: Define and Use A Record
-
-Head over to [records.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/records.ftd)
-and create your first record and an instance of it.
-
 -- ds.h1: Task 2: Caption And Body Types
 
 Fix the mistakes in [caption-and-body.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/caption-and-body.ftd).
+
+
+-- d.h1: Task 3: Default Values For Fields
+
+Record fields can be given optional default values, eg:
+
+-- ds.code:
+lang: ftd
+
+\-- record person:
+caption name:
+integer age: 18
+body bio:
+
+-- ds.markdown:
+
+Go through
 
 -- ds.h1: You Are Done
 

@@ -26,93 +26,92 @@ language: en
 
 # Home: /
 
-# Why FTD?: why/
+# Why FTD?: /why/
+## Overview: /why/
 
-## Overview: why/
+- Why FTD?: /why/
+- Philosophy: /philosophy/
 
-- Why FTD?: why/
-- Philosophy: philosophy/
+## Alternatives: /alternatives/
 
-## Alternatives: alternatives/
-
-- Why not MDX?: why/not-mdx/
-
+- Why not MDX?: /why/not-mdx/
 
 
 
 
-# Docs: docs/
 
-## Start Here: docs/
+# Docs: /docs/
 
-- Start Here: docs/
-- `ftd p1` grammar: p1-grammar/
-- `import`: import/
-- `ftd Library`: library/
-- Comments In `ftd` Files: comments/
+## Start Here: /docs/
 
-## Data Modelling: data-modelling/
+- Start Here: /docs/
+- `ftd p1` grammar: /p1-grammar/
+- `import`: /import/
+- `ftd Library`: /library/
+- Comments In `ftd` Files: /comments/
 
-- Overview: data-modelling/
-- Variables: variables/
-- Built-in Types: built-in-types/
-- `record`: record/
-- `or-type`: or-type/
-- `list`: list/
+## Data Modelling: /data-modelling/
+
+- Overview: /data-modelling/
+- Variables: /variables/
+- Built-in Types: /built-in-types/
+- `record`: /record/
+- `or-type`: /or-type/
+- `list`: /list/
 - FTD Variables: /ftd-variables/
 
 ## UI: ui/
 
 - UI: ui/
-- `component`: component/
-- Kernel Components: kernel/
-  - `ftd.row`: row/
-  - `ftd.column`: column/
-  - `ftd.text`: text/
-  - `ftd.image`: image/
-  - `ftd.iframe`: iframe/
-  - `ftd.integer`: integer/
-  - `ftd.decimal`: decimal/
-  - `ftd.boolean`: boolean/
-  - `ftd.code`: code/
-  - `ftd.input`: input/
-  - `ftd.scene`: scene/
-  - `ftd.grid`: grid/
-- Reference Linking: reference-linking/
-- Universal Attributes: universal-attributes/
-- Common Attributes: common/
-- Common Text Attributes: text-common/
-- FTD "markup": markup/
-- Container Attributes: container/
-- Container Management: container-management/
-- Inner Container: inner-container/
+- `component`: /component/
+- Kernel Components: /kernel/
+  - `ftd.row`: /row/
+  - `ftd.column`: /column/
+  - `ftd.text`: /text/
+  - `ftd.image`: /image/
+  - `ftd.iframe`: /iframe/
+  - `ftd.integer`: /integer/
+  - `ftd.decimal`: /decimal/
+  - `ftd.boolean`: /boolean/
+  - `ftd.code`: /code/
+  - `ftd.input`: /input/
+  - `ftd.scene`: /scene/
+  - `ftd.grid`: /grid/
+- Reference Linking: /reference-linking/
+- Universal Attributes: /universal-attributes/
+- Common Attributes: /common/
+- Common Text Attributes: /text-common/
+- FTD "markup": /markup/
+- Container Attributes: /container/
+- Container Management: /container-management/
+- Inner Container: /inner-container/
 - `if` Conditional Components
-  url: if/
-- Conditional Attributes: if-attr/
+  url: /if/
+- Conditional Attributes: /if-attr/
 - `$loop$`: Looping Over Lists
-  url: loop/
-- ID: id/
+  url: /loop/
+- ID: /id/
 - `$on-<event-name>$`: Event Handling
-  url: event-handling/
-- Auto Nesting: auto-nesting/
-- Ajax Call: ajax-call/
+  url: /event-handling/
+- Auto Nesting: /auto-nesting/
+- Ajax Call: /ajax-call/
 - `$on-global-key[<keys>]$` Global Key Events
-  url: global-key-events/
+  url: /global-key-events/
 
 
 ## API: reading-data/
 
-- Reading FTD Files: reading-data/
+- Reading FTD Files: /reading-data/
 - `ftd::p1`: A JSON/YML Replacement
-  url: p1/
+  url: /p1/
 
 
-## Development: development/
+## Development: /development/
 
-- Roadmap & RFCs: roadmap/
-- Journal: journal/
-- Changelog: changelog/
-- Internals: internals/
+- Roadmap & RFCs: /roadmap/
+- Journal: /journal/
+- Changelog: /changelog/
+- Internals: /internals/
 - How to add `foreign-variables`: /foreign-variable/
 - Supported Browsers: /supported-browsers/
 - How To:
@@ -157,26 +156,26 @@ language: en
 
 
 
-# News: news/
+# News: /news/
 
-## Blog: news/
+## Blog: /news/
 
-- Latest News: news/
-- React Bangalore Feb 2022: news/react-banglore-22-01-2022/
-
-
-## Changelog: changelog/
-
-- Latest News: news/
-- React Bangalore Feb 2022: news/react-banglore-22-01-2022/
+- Latest News: /news/
+- React Bangalore Feb 2022: /news/react-banglore-22-01-2022/
 
 
+## Changelog: /changelog/
 
-## Talks & Videos: news/talks/
+- Latest News: /news/
+- React Bangalore Feb 2022: /news/react-banglore-22-01-2022/
 
 
 
-## Upcoming Events: news/upcoming/
+## Talks & Videos: /news/talks/
+
+
+
+## Upcoming Events: /news/upcoming/
 
 
 

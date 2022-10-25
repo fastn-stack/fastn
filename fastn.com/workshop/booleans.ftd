@@ -1,25 +1,54 @@
 -- ds.page: Booleans in FTD
 id: ws-booleans
 
+-- ds.markdown:
+
 We created a simple hello world message [the last exercise](id: ws-hello-world).
 We could have done this in HTML as well. Where we differ from HTML is, if you
 wanted to add a variable or define data, you would have to switch to JavaScript.
 But we can do everything in FTD itself.
 
--- ds.h1: Lesson: FTD is strongly/statically typed
+Unlike JavaScript and Python and other dynamically typed languages, {ds.highlight:
+FTD is statically typed language}. All variables in FTD have a type, which must be
+specified when the variable is constructed.
 
-Unlike JavaScript and Python and other dynamically typed languages, FTD is
-statically typed language. All variables in FTD have a type.
+
+-- ds.code: This is how a boolean variable is created
+lang: ftd
+
+\-- boolean foo: true
+
+-- ds.markdown:
+
+We have created a `boolean` variable named `foo`, with an initial value of
+`true`. A boolean variable can have only two values, `true` or `false`, and it
+must be initialised with a value.
+
+-- ds.h1: Conditional UI
+
+We can use the `if` condition on a node to conditionally show a UI node:
+
+-- ds.code: We get the value of a variable using `$open` syntax
+lang: ftd
+
+\-- ftd.text: open is true
+if: $open
+
+-- ds.markdown:
+
+Only if the variable `open` is true only then text "open is true" would be
+visible.
+
 
 -- ds.h1: Task 1: Fix the `index.ftd` file
 
-We wanted to create a link in the [index.ftd](index.ftd) file, but for some
+We wanted to create a link in the [index.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/02-boolean/index.ftd) file, but for some
 reason the link is not working, can you find the problem and fix it?
 
 -- ds.h1: Task 2: Fix the `boolean.ftd`
 
 If you open `/boolean/` you will see an error. This is because we have not yet
-defined a variable that we are trying to use. [boolean.ftd](boolean.ftd) is
+defined a variable that we are trying to use. [boolean.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/02-boolean/boolean.ftd) is
 buggy! View the `boolean.ftd` and follow the instructions there to create a new
 variable.
 
@@ -29,8 +58,8 @@ variable.
 
 You have learnt how to define a boolean variable and use to control the UI.
 
-Move to learning about [numbers and strings](/workshop/numbers-and-strings/) or
-back to [the workshop](id: workshop).
+{ds.highlight: Move to learning about [numbers and strings](/workshop/numbers-and-strings/)}
+or back to [the workshop](id: workshop).
 
 
 
