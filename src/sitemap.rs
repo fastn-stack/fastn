@@ -1281,7 +1281,7 @@ impl Sitemap {
                     current_page = current_toc;
                 }
                 let mut section_toc = TocItemCompat::new(
-                    Some(get_url(section.id.as_str())),
+                    get_url(section.id.as_str()),
                     section.title.clone(),
                     true,
                     true,
@@ -1304,7 +1304,7 @@ impl Sitemap {
                 current_subsection = curr_subsection;
                 current_page = curr_toc;
                 let mut section_toc = TocItemCompat::new(
-                    Some(get_url(section.id.as_str())),
+                    get_url(section.id.as_str()),
                     section.title.clone(),
                     true,
                     true,
@@ -1321,7 +1321,7 @@ impl Sitemap {
 
             if !section.skip {
                 sections.push(TocItemCompat::new(
-                    Some(get_url(section.id.as_str())),
+                    get_url(section.id.as_str()),
                     section.title.clone(),
                     false,
                     false,
@@ -1336,7 +1336,7 @@ impl Sitemap {
                 .filter(|s| !s.skip)
                 .map(|v| {
                     TocItemCompat::new(
-                        Some(get_url(v.id.as_str())),
+                        get_url(v.id.as_str()),
                         v.title.clone(),
                         false,
                         false,
@@ -1386,7 +1386,7 @@ impl Sitemap {
                     toc.extend(toc_list);
                     current_page = current_toc;
                     let mut subsection_toc = TocItemCompat::new(
-                        subsection.id.as_ref().map(|v| get_url(v.as_str())),
+                        subsection.id.as_ref().and_then(|v| get_url(v.as_str())),
                         subsection.title.clone(),
                         true,
                         true,
@@ -1408,7 +1408,7 @@ impl Sitemap {
                     current_page = Some(current_toc);
                     if subsection.visible {
                         let mut subsection_toc = TocItemCompat::new(
-                            subsection.id.as_ref().map(|v| get_url(v.as_str())),
+                            subsection.id.as_ref().and_then(|v| get_url(v.as_str())),
                             subsection.title.clone(),
                             true,
                             true,
@@ -1427,7 +1427,7 @@ impl Sitemap {
 
                 if !subsection.skip {
                     subsection_list.push(TocItemCompat::new(
-                        subsection.id.as_ref().map(|v| get_url(v.as_str())),
+                        subsection.id.as_ref().and_then(|v| get_url(v.as_str())),
                         subsection.title.clone(),
                         false,
                         false,
@@ -1484,7 +1484,7 @@ impl Sitemap {
                 let is_active = fpm::utils::ids_matches(toc_item.get_file_id().as_str(), id);
                 let current_toc = {
                     let mut current_toc = TocItemCompat::new(
-                        Some(get_url(toc_item.id.as_str()).to_string()),
+                        get_url(toc_item.id.as_str()),
                         toc_item.title.clone(),
                         is_active,
                         is_active || is_open,
@@ -1516,18 +1516,21 @@ impl Sitemap {
             (found_here, toc_list)
         }
 
-        fn get_url(id: &str) -> String {
+        fn get_url(id: &str) -> Option<String> {
+            if id.trim().is_empty() {
+                return None;
+            }
             if id.eq("/") {
-                return id.to_string();
+                return Some(id.to_string());
             }
             let id = id.trim_start_matches('/');
             if id.contains('#') {
-                return id.trim_end_matches('/').to_string();
+                return Some(id.trim_end_matches('/').to_string());
             }
             if id.ends_with('/') || id.ends_with("index.html") {
-                return id.to_string();
+                return Some(id.to_string());
             }
-            format!("{}/", id)
+            Some(format!("{}/", id))
         }
     }
 
