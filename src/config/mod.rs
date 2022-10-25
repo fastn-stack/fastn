@@ -1074,7 +1074,7 @@ impl Config {
         };
 
         let mut package = {
-            let temp_package: Option<PackageTemp> = fpm_doc.get("fpm#package")?;
+            let temp_package: Option<fpm::package::PackageTemp> = fpm_doc.get("fpm#package")?;
             let mut package = match temp_package {
                 Some(v) => v.into_package(),
                 None => {
@@ -1296,74 +1296,5 @@ impl Config {
         }
 
         Ok(false)
-    }
-}
-
-/// PackageTemp is a struct that is used for mapping the `fpm.package` data in FPM.ftd file. It is
-/// not used elsewhere in program, it is immediately converted to `fpm::Package` struct during
-/// deserialization process
-#[derive(serde::Deserialize, Debug, Clone)]
-pub(crate) struct PackageTemp {
-    pub name: String,
-    pub versioned: bool,
-    #[serde(rename = "translation-of")]
-    pub translation_of: Option<String>,
-    #[serde(rename = "translation")]
-    pub translations: Vec<String>,
-    #[serde(rename = "language")]
-    pub language: Option<String>,
-    pub about: Option<String>,
-    pub zip: Option<String>,
-    #[serde(rename = "download-base-url")]
-    pub download_base_url: Option<String>,
-    #[serde(rename = "canonical-url")]
-    pub canonical_url: Option<String>,
-    #[serde(rename = "inherit-auto-imports-from-original")]
-    pub import_auto_imports_from_original: bool,
-    #[serde(rename = "favicon")]
-    pub favicon: Option<String>,
-    #[serde(rename = "endpoint")]
-    pub endpoint: Option<String>,
-    #[serde(rename = "backend")]
-    pub backend: bool,
-}
-
-impl PackageTemp {
-    pub fn into_package(self) -> fpm::Package {
-        // TODO: change this method to: `validate(self) -> fpm::Result<fpm::Package>` and do all
-        //       validations in it. Like a package must not have both translation-of and
-        //       `translations` set.
-        let translation_of = self.translation_of.as_ref().map(|v| fpm::Package::new(v));
-        let translations = self
-            .translations
-            .clone()
-            .into_iter()
-            .map(|v| fpm::Package::new(&v))
-            .collect::<Vec<fpm::Package>>();
-
-        fpm::Package {
-            name: self.name,
-            versioned: self.versioned,
-            translation_of: Box::new(translation_of),
-            translations,
-            language: self.language,
-            about: self.about,
-            zip: self.zip,
-            download_base_url: self.download_base_url,
-            translation_status_summary: None,
-            canonical_url: self.canonical_url,
-            dependencies: vec![],
-            auto_import: vec![],
-            fpm_path: None,
-            ignored_paths: vec![],
-            fonts: vec![],
-            import_auto_imports_from_original: self.import_auto_imports_from_original,
-            groups: std::collections::BTreeMap::new(),
-            sitemap: None,
-            sitemap_temp: None,
-            favicon: self.favicon,
-            endpoint: self.endpoint,
-            backend: self.backend,
-        }
     }
 }

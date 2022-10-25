@@ -132,7 +132,7 @@ impl fpm::Package {
                 };
 
                 ftd_document
-                    .get::<fpm::config::PackageTemp>("fpm#package")?
+                    .get::<fpm::package::PackageTemp>("fpm#package")?
                     .into_package()
                     .zip
                     .ok_or(fpm::Error::UsageError {
@@ -473,7 +473,7 @@ impl fpm::Package {
             }
         };
         let mut package = {
-            let temp_package: fpm::config::PackageTemp = ftd_document.get("fpm#package")?;
+            let temp_package: fpm::package::PackageTemp = ftd_document.get("fpm#package")?;
             temp_package.into_package()
         };
 
@@ -591,7 +591,7 @@ impl fpm::Package {
             }
         };
         let mut package = {
-            let temp_package: fpm::config::PackageTemp = ftd_document.get("fpm#package")?;
+            let temp_package: fpm::package::PackageTemp = ftd_document.get("fpm#package")?;
             temp_package.into_package()
         };
 
