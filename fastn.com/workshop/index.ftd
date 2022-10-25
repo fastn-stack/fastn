@@ -1,0 +1,80 @@
+-- import: bling/holder
+-- import: cbox
+
+-- ds.page: FTD Workshop
+id: workshop
+
+Welcome to the FTD Language's official workshop.
+
+-- cbox.info: About This Workshop
+
+{ds.highlight: FTD language is a possible replacement for JavaScript/React to
+build web front-ends}. In this workshop you will learn the basics of FTD and
+build a web app that talks to existing web services. We will build an application
+for managing to-do lists from scratch.
+
+Basic knowledge of HTTP API is needed, but *no prior knowledge of front-end is
+required*.
+
+The workshop is taught by the creators of FTD, and you will learn about the
+motivation and design decisions that shaped FTD as well.
+
+**In this hands-on workshop we will go through a series of exercises
+in stages and write code to get the application working**. Participants are
+required to have a decent computer, but there is no need to install any software
+before hand (other than your favorite editor).
+
+-- ft.markdown:
+
+This workshop is a 3 part workshop, where in each part we will learn a different
+aspect of programming with FTD. In first two parts we will interact with HTTP API
+and create side data driven server rendered pages. In the third part we will
+create client side event handling and interact with HTTP APIs (ajax and form
+submissions).
+
+
+-- cbox.note: Basic Instruction
+id: ws-basics
+
+Clone [this repository](https://github.com/ftd-lang/ftd-workshop):
+`git clone https://github.com/ftd-lang/ftd-workshop.git`.
+
+Get on the [discord channel for this workshop](https://discord.gg/d2MgKBybEQ)
+and interact with the instructors and others going through the workshop to show
+progress and ask for help.
+
+For each step there is a folder, eg the first step is `01-data/01-hello-world`.
+`cd` into this folder, and follow run the commands from that folder.
+
+You will be running `fpm serve` in each folder, so do remember to kill the fpm
+server when you are done with a step and moving to another step.
+
+Each step is organized as a series of tasks. Do give a shout out to everyone
+when you are done with a task. Or feel free to ask for help in Chat or view
+by speaking out during the workshop.
+
+{ds.highlight: Have fun, you are among friends.}
+
+
+-- ft.h1: Part 1: Working With Data In FTD
+
+-- ds.markdown:
+
+In this part we will install [fpm](https://fpm.dev) and learn about data
+modelling capabilities of FTD.
+
+- [Step 1: Hello World](id: ws-hello-world)
+- [Step 2: Boolean Variables](id: ws-booleans)
+- [Step 3: Numbers And Strings](id: ws-numbers-and-strings)
+- [Step 4: Records](id: ws-records)
+
+-- ft.h1: Part 2: Building Reusable Server Side UI
+
+In this part we will learn how to create re-usable UI components.
+
+
+-- ft.h1: Part 3: Front-end Event Handling And HTTP APIs
+
+In this we will learn how to do event handling and to work with HTTP APIs.
+
+

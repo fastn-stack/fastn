@@ -1,4 +1,11 @@
--- ft.page: Responsive
-toc: $ft.toc
+-- ft.page: Responsive Support In FTD
+
+`ftd` comes with support for responsive user interfaces.
+
+
+-- ft.h1: Responsive Colors: Dark/Light Mode
+
+More and more software supports dark mode today. We at `ftd` do not believe it
+is a fad, but that dark mode support helps in readablity.
     
 

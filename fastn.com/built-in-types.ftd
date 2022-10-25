@@ -245,6 +245,7 @@ letter-spacing: 0
 -- ft.h1: `ftd.type`
 
 It defines the typography of the font.
+
 It is record type with the following fields.
 
 -- ft.code: `ftd.type` record (ftd.ftd)
@@ -261,16 +262,17 @@ optional string style:
 
 -- ft.markdown:
 
-It defines the
+It defines the:
+
 - `font`: A prioritized list of one or more font family
   names and/or generic family names for the selected element.
-- `desktop`, `mobile` and `xl`: These are of ftd.font-size type. These
-   are responsive. So only one of these will be applicable depending on device.
+- `desktop`, `mobile` and `xl`: These are of `ftd.font-size` type. These
+  are responsive. So only one of these will be applicable depending on device.
 - `weight`: The weight (or boldness) of the font.
 - `style`: The appearance of decorative lines on text or styling of font. It is
-   an optional field. It takes the following values: `italic`, `underline` and
-   `strike`. More than one of these values can be using space separation.
-   Example: `style: italic underline`
+  an optional field. It takes the following values: `italic`, `underline` and
+  `strike`. More than one of these values can be using space separation.
+  Example: `style: italic underline`
 
 
 -- ft.code:
@@ -304,9 +306,11 @@ style: italic
 This would return `red` color in light mode and `orange` color in dark mode.
 
 
--- ft.h1: length: String
+-- ft.h1: `length`
 
-This accepts following set of string:
+`length` is a type that is used for passing UI dimensions. It has one of the
+
+`length` accepts following set of string:
 
 - `fill`: This gives 100% space
 - `auto`: This gives auto space (read more about it in `auto` css property value)

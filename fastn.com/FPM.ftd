@@ -6,6 +6,8 @@ language: en
 
 -- fpm.dependency: fifthtry.github.io/doc-site as ft
 -- fpm.dependency: fifthtry.github.io/product-switcher as ps
+-- fpm.dependency: fifthtry.github.io/bling as bling
+-- fpm.dependency: fifthtry.github.io/admonitions as cbox
 -- fpm.dependency: fifthtry.github.io/fifthtry-brand-switcher as fbs
 
 -- fpm.dependency: fifthtry.github.io/dark-mode-switcher as dms
@@ -117,8 +119,19 @@ language: en
   - Create FTD Variables: /how-to/ftd-variable/
   - Use FTD Variables in JS: /how-to/use-ftd-variable/
 
-# Course: /c1/
+# Learn: /workshop/
 
+## Hands On Workshop: /workshop/
+
+- Start Here: /workshop/
+- Part 1 - Working With Data:
+  - 1 - Hello World: /workshop/hello-world/
+  - 2 - Booleans: /workshop/booleans/
+  - 3 - Numbers And Strings: /workshop/numbers-and-strings/
+  - 4 - Records: /workshop/records/
+
+
+## Course: /c1/
 - Chapter 1: FPM Intro
   url: -/arjaupashak.com/c1/intro/
   - Installation Instruction: -/fpm.dev/how-to/install/
