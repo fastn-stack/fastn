@@ -1,4 +1,5 @@
 pub mod dependency;
+pub mod package_doc;
 
 #[derive(Debug, Clone)]
 pub struct Package {
@@ -15,7 +16,7 @@ pub struct Package {
     pub canonical_url: Option<String>,
     /// `dependencies` keeps track of direct dependencies of a given package. This too should be
     /// moved to `fpm::Package` to support recursive dependencies etc.
-    pub dependencies: Vec<fpm::Dependency>,
+    pub dependencies: Vec<dependency::Dependency>,
     /// `auto_import` keeps track of the global auto imports in the package.
     pub auto_import: Vec<fpm::AutoImport>,
     /// `fpm_path` contains the fpm package root. This value is found in `FPM.ftd` or
