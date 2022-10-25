@@ -56,21 +56,37 @@ by speaking out during the workshop.
 {ds.highlight: Have fun, you are among friends.}
 
 
--- ft.h1: Part 1: Working With Data In FTD
 
--- ds.markdown:
+
+-- ft.h1: Part 1: Working With Data In FTD
 
 In this part we will install [fpm](https://fpm.dev) and learn about data
 modelling capabilities of FTD.
 
-- [Step 1: Hello World](id: ws-hello-world)
-- [Step 2: Boolean Variables](id: ws-booleans)
-- [Step 3: Numbers And Strings](id: ws-numbers-and-strings)
-- [Step 4: Records](id: ws-records)
+- [Data-1: Hello World](/workshop/hello-world/)
+- [Data-2: Boolean Variables](/workshop/booleans/)
+- [Data-3: Numbers And Strings](/workshop/numbers-and-strings/)
+- [Data-4: Records](/workshop/records/)
+- [Data-5: Optionals](/workshop/optionals/)
+- [Data-6: Lists](/workshop/lists/)
+- [Data-7: HTTP Processor](/workshop/http/)
 
--- ft.h1: Part 2: Building Reusable Server Side UI
 
-In this part we will learn how to create re-usable UI components.
+
+-- ft.h1: Part 2: Building UI
+
+In this part we will learn how to create re-usable, server-rendered, UI
+components.
+
+- [UI-1: Basic Styling](/workshop/basic-styling/)
+- [UI-2: Dark Mode Support](/workshop/dark-mode/)
+- [UI-3: Row And Columns: Layouting In FTD](/workshop/layouts/)
+- [UI-4: Creating Custom Components](/workshop/components/)
+- UI-5: Loop
+- [UI-6: Images In FTD](/workshop/images/)
+- [UI-7: Import: Splitting FTD Into Modules](/workshop/imports/)
+- [UI-8: Using Reusable FTD Component Libraries: Dependencies](/workshop/dependencies/)
+- [UI-9: Auto Imports](/workshop/auto-imports/)
 
 
 -- ft.h1: Part 3: Front-end Event Handling And HTTP APIs

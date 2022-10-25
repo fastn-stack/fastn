@@ -129,6 +129,20 @@ language: en
   - 2 - Booleans: /workshop/booleans/
   - 3 - Numbers And Strings: /workshop/numbers-and-strings/
   - 4 - Records: /workshop/records/
+  - 5 - Optionals: /workshop/optionals/
+  - 6 - Lists: /workshop/lists/
+  - 7 - HTTP Processor: /workshop/http/
+- Part 2 - Building UI:
+  - 1 - Basic Styling: /workshop/styling/
+  - 2 - Dark Mode Support: /workshop/dark-mode/
+  - 3 - Row And Columns: /workshop/layouts/
+  - 4 - Custom Components: /workshop/components/
+  - 5 - Loop:
+  - 6 - Images: /workshop/images/
+  - 7 - Import: /workshop/imports/
+  - 8 - Package Dependencies: /workshop/dependencies/
+  - 9 - Auto Import: /workshop/auto-imports/
+
 
 
 ## Course: /c1/
