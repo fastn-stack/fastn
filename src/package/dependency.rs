@@ -483,14 +483,13 @@ impl fpm::Package {
 
         package.fpm_path = Some(fpm_path.to_owned());
         package.dependencies = {
-            let temp_deps: Vec<fpm::dependency::DependencyTemp> =
-                ftd_document.get("fpm#dependency")?;
+            let temp_deps: Vec<DependencyTemp> = ftd_document.get("fpm#dependency")?;
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+                .collect::<Vec<fpm::Result<Dependency>>>()
                 .into_iter()
-                .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
+                .collect::<fpm::Result<Vec<Dependency>>>()?
         };
 
         let auto_imports: Vec<String> = ftd_document.get("fpm#auto-import")?;
@@ -601,14 +600,13 @@ impl fpm::Package {
 
         package.fpm_path = Some(fpm_path.to_owned());
         package.dependencies = {
-            let temp_deps: Vec<fpm::dependency::DependencyTemp> =
-                ftd_document.get("fpm#dependency")?;
+            let temp_deps: Vec<DependencyTemp> = ftd_document.get("fpm#dependency")?;
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+                .collect::<Vec<fpm::Result<Dependency>>>()
                 .into_iter()
-                .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
+                .collect::<fpm::Result<Vec<Dependency>>>()?
         };
 
         let auto_imports: Vec<String> = ftd_document.get("fpm#auto-import")?;

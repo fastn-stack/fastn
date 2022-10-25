@@ -11,7 +11,6 @@ mod commands;
 mod config;
 mod controller;
 mod cr;
-mod dependency;
 mod doc;
 mod file;
 mod font;
@@ -46,12 +45,12 @@ pub use commands::{
     sync_status::sync_status, translation_status::translation_status, update::update,
 };
 pub use config::Config;
-pub(crate) use dependency::Dependency;
 pub use error::Error;
 pub use file::File;
 pub(crate) use file::{get_file, paths_to_files, Document, Static};
 pub(crate) use font::Font;
 pub use library::{FPMLibrary, Library, Library2};
+pub(crate) use package::dependency::Dependency;
 pub(crate) use package::Package;
 pub use render::render;
 pub(crate) use snapshot::Snapshot;

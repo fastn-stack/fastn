@@ -1,3 +1,5 @@
+pub mod dependency;
+
 #[derive(Debug, Clone)]
 pub struct Package {
     pub name: String,
@@ -460,7 +462,7 @@ impl Package {
         package.translation_status_summary = fpm_document.get("fpm#translation-status-summary")?;
         package.fpm_path = Some(fpm_path.to_owned());
         package.dependencies = fpm_document
-            .get::<Vec<fpm::dependency::DependencyTemp>>("fpm#dependency")?
+            .get::<Vec<dependency::DependencyTemp>>("fpm#dependency")?
             .into_iter()
             .map(|v| v.into_dependency())
             .collect::<Vec<fpm::Result<fpm::Dependency>>>()

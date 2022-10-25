@@ -1064,7 +1064,8 @@ impl Config {
         };
 
         let mut deps = {
-            let temp_deps: Vec<fpm::dependency::DependencyTemp> = fpm_doc.get("fpm#dependency")?;
+            let temp_deps: Vec<fpm::package::dependency::DependencyTemp> =
+                fpm_doc.get("fpm#dependency")?;
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
