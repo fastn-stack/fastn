@@ -1,5 +1,6 @@
 pub mod dependency;
 pub mod package_doc;
+pub mod user_group;
 
 #[derive(Debug, Clone)]
 pub struct Package {

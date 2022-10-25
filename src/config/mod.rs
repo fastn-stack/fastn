@@ -725,7 +725,7 @@ impl Config {
 
         if package.name.eq(self.package.name.as_str()) {
             let file_info_map = fpm::cr::cr_clone_file_info(self, cr_number).await?;
-            let file_info = fpm::package_doc::file_id_to_names(id.as_str())
+            let file_info = fpm::package::package_doc::file_id_to_names(id.as_str())
                 .into_iter()
                 .find_map(|id| file_info_map.get(&id))
                 .ok_or_else(|| fpm::Error::UsageError {

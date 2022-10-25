@@ -36,7 +36,7 @@ async fn handle_view_source(req: &fpm::http::Request, path: &str) -> fpm::Result
                 parent_path: config.root.as_str().to_string(),
                 package_name: config.package.name.clone(),
             };
-            fpm::package_doc::read_ftd(&mut config, &main_document, "/", false).await
+            fpm::package::package_doc::read_ftd(&mut config, &main_document, "/", false).await
         }
         fpm::File::Static(ref file) | fpm::File::Image(ref file) => Ok(file.content.to_owned()),
     }
