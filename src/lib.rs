@@ -24,7 +24,7 @@ pub mod library;
 mod package_doc;
 mod proxy;
 mod render;
-mod sitemap;
+pub mod sitemap;
 mod snapshot;
 mod sync_utils;
 mod track;

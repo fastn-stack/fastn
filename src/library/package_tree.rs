@@ -69,7 +69,7 @@ async fn construct_tree(
     files: &[String],
     snapshots: &std::collections::BTreeMap<String, u128>,
     workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
-) -> fpm::Result<Vec<fpm::sitemap::TocItemCompat>> {
+) -> fpm::Result<Vec<fpm::sitemap::toc::TocItemCompat>> {
     let mut tree = vec![];
     for file in files {
         insert(
@@ -89,7 +89,7 @@ async fn construct_tree(
 #[async_recursion::async_recursion(?Send)]
 async fn insert(
     config: &fpm::Config,
-    tree: &mut Vec<fpm::sitemap::TocItemCompat>,
+    tree: &mut Vec<fpm::sitemap::toc::TocItemCompat>,
     path: &str,
     url: &str,
     full_path: &str,
@@ -112,7 +112,7 @@ async fn insert(
             .map(|v| full_path.trim_end_matches(v))
             .unwrap_or(full_path);
         tree.push(
-            fpm::sitemap::TocItemCompat::new(
+            fpm::sitemap::toc::TocItemCompat::new(
                 None,
                 Some(path.to_string()),
                 false,

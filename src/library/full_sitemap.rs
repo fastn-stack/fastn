@@ -86,7 +86,7 @@ fn to_sitemap_compat(sitemap: &fpm::sitemap::Sitemap) -> SiteMapCompat {
         }
     }
 
-    fn to_toc_compat(toc_item: &fpm::sitemap::TocItem) -> TocItemCompat {
+    fn to_toc_compat(toc_item: &fpm::sitemap::toc::TocItem) -> TocItemCompat {
         let toc_compat = TocItemCompat {
             id: toc_item.id.clone(),
             title: toc_item.title.clone(),
@@ -105,7 +105,7 @@ fn to_sitemap_compat(sitemap: &fpm::sitemap::Sitemap) -> SiteMapCompat {
         toc_compat
     }
 
-    fn to_subsection_compat(subsection: &fpm::sitemap::Subsection) -> SubSectionCompat {
+    fn to_subsection_compat(subsection: &fpm::sitemap::section::Subsection) -> SubSectionCompat {
         SubSectionCompat {
             id: subsection.id.clone(),
             title: subsection.title.clone(),
@@ -124,7 +124,7 @@ fn to_sitemap_compat(sitemap: &fpm::sitemap::Sitemap) -> SiteMapCompat {
         }
     }
 
-    fn to_section_compat(section: &fpm::sitemap::Section) -> SectionCompat {
+    fn to_section_compat(section: &fpm::sitemap::section::Section) -> SectionCompat {
         SectionCompat {
             id: section.id.to_string(),
             title: section.title.clone(),
