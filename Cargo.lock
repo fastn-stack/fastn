@@ -634,6 +634,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "evalexpr"
+version = "8.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aacfb566035f8cd02f6ec9247c242f3f9904a0b288ea383abcf4e95df6436a34"
+
+[[package]]
 name = "event-listener"
 version = "2.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -797,7 +803,7 @@ dependencies = [
  "edit",
  "fbt-lib",
  "fluent",
- "ftd 0.2.0 (git+https://github.com/FifthTry/ftd?rev=d0694ed)",
+ "ftd 0.2.0 (git+https://github.com/FifthTry/ftd?rev=bc131bf)",
  "futures",
  "hyper",
  "ignore",
@@ -845,10 +851,11 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.2.0"
-source = "git+https://github.com/FifthTry/ftd?rev=d0694ed#d0694edb05c8446834721985acae2d7a5920bd83"
+source = "git+https://github.com/FifthTry/ftd?rev=bc131bf#bc131bfd0c4e0ecc0e392301e1c69dc4f3299778"
 dependencies = [
  "comrak",
  "css-color-parser",
+ "evalexpr",
  "format_num",
  "include_dir",
  "indoc",
