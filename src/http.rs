@@ -58,6 +58,7 @@ pub struct Request {
     headers: reqwest::header::HeaderMap,
     query: std::collections::HashMap<String, serde_json::Value>,
     body: actix_web::web::Bytes,
+    ip: Option<String>,
     // path_params: Vec<(String, )>
 }
 
@@ -85,6 +86,7 @@ impl Request {
                     req.query_string(),
                 ).unwrap().0
             },
+            ip: req.peer_addr().map(|x| x.ip().to_string()),
         };
 
         fn get_cookies(
@@ -196,6 +198,10 @@ impl Request {
 
     pub fn query(&self) -> &std::collections::HashMap<String, serde_json::Value> {
         &self.query
+    }
+
+    pub fn get_ip(&self) -> Option<String> {
+        self.ip.clone()
     }
 }
 

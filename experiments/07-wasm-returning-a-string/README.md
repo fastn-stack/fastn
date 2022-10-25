@@ -1,5 +1,8 @@
 # `wasm-returning-a-string`
 
+While working on this experiment, [radu-matei post on wasm memory](https://radu-matei.com/blog/practical-guide-to-wasm-memory/)
+and [his code](https://github.com/radu-matei/wasm-memory/blob/main/src/main.rs) were quite helpful.
+
 ## Why do we care about `usize`'s size?
 
 In the [last experiment](../06-usize-size/) we saw that the size of a `usize` in wasm is 4 bytes, not 8 bytes as Rust 

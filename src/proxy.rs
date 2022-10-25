@@ -74,6 +74,13 @@ pub(crate) async fn get_out(
         reqwest::header::HeaderValue::from_static("fpm"),
     );
 
+    if let Some(ip) = req.get_ip() {
+        proxy_request.headers_mut().insert(
+            reqwest::header::FORWARDED,
+            reqwest::header::HeaderValue::from_str(ip.as_str()).unwrap(),
+        );
+    }
+
     if let Some(cookies) = req.cookies_string() {
         proxy_request.headers_mut().insert(
             reqwest::header::COOKIE,
@@ -86,6 +93,7 @@ pub(crate) async fn get_out(
     }
 
     *proxy_request.body_mut() = Some(req.body().to_vec().into());
+    dbg!(&proxy_request.headers());
 
     Ok(fpm::http::ResponseBuilder::from_reqwest(CLIENT.execute(proxy_request).await?).await)
 }
