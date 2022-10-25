@@ -1,4 +1,27 @@
 "use strict";
+window.ftd = (function () {
+    let ftd_data = {};
+    let exports = {};
+    exports.init = function (id, data) {
+        let element = document.getElementById(data);
+        if (!!element) {
+            ftd_data[id] = JSON.parse(element.innerText);
+            // window.ftd.post_init();
+        }
+    };
+    function handle_event(evt, id, action, obj) {
+        console.log(id, action);
+    }
+    exports.handle_event = function (evt, id, event, obj) {
+        console_log(id, event);
+        let actions = JSON.parse(event);
+        for (const action in actions) {
+            handle_event(evt, id, actions[action], obj);
+        }
+    };
+    return exports;
+})();
+/*
 window.ftd.post_init = function () {
     const DARK_MODE = "ftd#dark-mode";
     const SYSTEM_DARK_MODE = "ftd#system-dark-mode";
@@ -18,24 +41,30 @@ window.ftd.post_init = function () {
     const THEME_COLOR_META = "theme-color";
     const MARKDOWN_COLOR = "ftd#markdown-color";
     const MARKDOWN_BACKGROUND_COLOR = "ftd#markdown-background-color";
-    let last_device;
+    let last_device: string;
+
     function initialise_device() {
         last_device = get_device();
         console_log("last_device", last_device);
         window.ftd.set_bool_for_all(FTD_DEVICE, last_device);
     }
+
     window.onresize = function () {
         let current = get_device();
         if (current === last_device) {
             return;
         }
+
         window.ftd.set_string_for_all(FTD_DEVICE, current);
         last_device = current;
         console_log("last_device", last_device);
     };
+
     function update_markdown_colors() {
         // remove all colors from ftd.css: copy every deleted stuff in this function
         let markdown_style_sheet = document.createElement('style');
+
+
         markdown_style_sheet.innerHTML = `
         .ft_md a {
             color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link.light")};
@@ -53,12 +82,12 @@ window.ftd.post_init = function () {
         body.fpm-dark .ft_md code {
             color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".code.dark")};
             background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".code.dark")};
-        }        
+        }
                 
         .ft_md a:visited {
             color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited.light")};
             background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited.light")};
-        }      
+        }
         body.fpm-dark .ft_md a:visited {
             color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited.dark")};
             background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited.dark")};
@@ -79,23 +108,26 @@ window.ftd.post_init = function () {
         }
         body.fpm-dark .ft_md a:visited code {
             color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".link-visited-code.dark")};
-            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited-code.dark")};            
+            background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".link-visited-code.dark")};
         }
         
         .ft_md ul ol li:before {
             color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".ul-ol-li-before.light")};
             background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".ul-ol-li-before.light")};
-        }     
+        }
         body.fpm-dark .ft_md ul ol li:before {
             color: ${window.ftd.get_value("main", MARKDOWN_COLOR + ".ul-ol-li-before.dark")};
             background-color: ${window.ftd.get_value("main", MARKDOWN_BACKGROUND_COLOR + ".ul-ol-li-before.dark")};
-        }     
+        }
         `;
+
         document.getElementsByTagName('head')[0].appendChild(markdown_style_sheet);
     }
+
     function get_device() {
         // not at all sure about this functions logic.
         let width = window.innerWidth;
+
         // in future we may want to have more than one break points, and then
         // we may also want the theme builders to decide where the breakpoints
         // should go. we should be able to fetch fpm variables here, or maybe
@@ -103,6 +135,7 @@ window.ftd.post_init = function () {
         // checks on width user agent etc, but it would be good if we can
         // standardize few breakpoints. or maybe we should do both, some
         // standard breakpoints and pass the raw data.
+
         // we would then rename this function to detect_device() which will
         // return one of "desktop", "tablet", "mobile". and also maybe have
         // another function detect_orientation(), "landscape" and "portrait" etc,
@@ -132,7 +165,8 @@ window.ftd.post_init = function () {
         }
         return "desktop";
     }
-    /*
+
+    /!*
         ftd.dark-mode behaviour:
 
         ftd.dark-mode is a boolean, default false, it tells the UI to show
@@ -166,7 +200,8 @@ window.ftd.post_init = function () {
         users preferences up front and renders the HTML on service wide
         following user's preference.
 
-     */
+     *!/
+
     window.enable_dark_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
@@ -177,6 +212,7 @@ window.ftd.post_init = function () {
         set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
         update_theme_color();
     };
+
     window.enable_light_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
@@ -189,6 +225,7 @@ window.ftd.post_init = function () {
         set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
         update_theme_color();
     };
+
     window.enable_system_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
@@ -198,8 +235,7 @@ window.ftd.post_init = function () {
             window.ftd.set_bool_for_all(DARK_MODE, true);
             document.body.classList.add(DARK_MODE_CLASS);
             set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK);
-        }
-        else {
+        } else {
             window.ftd.set_bool_for_all(DARK_MODE, false);
             if (document.body.classList.contains(DARK_MODE_CLASS)) {
                 document.body.classList.remove(DARK_MODE_CLASS);
@@ -208,52 +244,59 @@ window.ftd.post_init = function () {
         }
         update_theme_color();
     };
+
     function update_theme_color() {
         let theme_color = window.ftd.get_value("main", FTD_THEME_COLOR);
         if (!!theme_color) {
             document.body.style.backgroundColor = FTD_THEME_COLOR;
             set_meta(THEME_COLOR_META, theme_color);
-        }
-        else {
+        } else {
             document.body.style.backgroundColor = FTD_THEME_COLOR;
             delete_meta(THEME_COLOR_META);
         }
     }
-    function set_meta(name, value) {
-        let meta = document.querySelector("meta[name=" + name + "]");
+
+    function set_meta(name: string, value: string) {
+        let meta: HTMLMetaElement | null = document.querySelector("meta[name=" + name + "]");
         if (!!meta) {
             meta.content = value;
-        }
-        else {
+        } else {
             meta = document.createElement('meta');
             meta.name = name;
             meta.content = value;
             document.getElementsByTagName('head')[0].appendChild(meta);
         }
     }
-    function delete_meta(name) {
+
+    function delete_meta(name: string) {
         let meta = document.querySelector("meta[name=" + name + "]");
         if (!!meta) {
             meta.remove();
         }
     }
-    function set_cookie(name, value) {
+
+    function set_cookie(name: string, value: string) {
         document.cookie = name + "=" + value + "; path=/";
     }
+
     function system_dark_mode() {
         return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
     }
+
     function initialise_dark_mode() {
         update_dark_mode();
         start_watching_dark_mode_system_preference();
     }
-    function get_cookie(name, def) {
+
+    function get_cookie(name: string, def: string) {
         // source: https://stackoverflow.com/questions/5639346/
         let regex = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
         return regex !== null ? regex.pop() : def;
     }
+
     function update_dark_mode() {
         let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
+
         switch (current_dark_mode_cookie) {
             case COOKIE_SYSTEM_LIGHT:
             case COOKIE_SYSTEM_DARK:
@@ -270,34 +313,16 @@ window.ftd.post_init = function () {
                 window.enable_system_mode();
         }
     }
+
     function start_watching_dark_mode_system_preference() {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", update_dark_mode);
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener(
+            "change", update_dark_mode
+        );
     }
     initialise_dark_mode();
     initialise_device();
     update_markdown_colors();
-};
-window.ftd = (function () {
-    let ftd_data = {};
-    let exports = {};
-    exports.init = function (id, data) {
-        let element = document.getElementById(data);
-        if (!!element) {
-            ftd_data[id] = JSON.parse(element.innerText);
-            window.ftd.post_init();
-        }
-    };
-    function handle_event(evt, id, action, obj) {
-    }
-    exports.handle_event = function (evt, id, event, obj) {
-        console_log(id, event);
-        let actions = JSON.parse(event);
-        for (const action in actions) {
-            handle_event(evt, id, actions[action], obj);
-        }
-    };
-    return exports;
-})();
+};*/
 function console_log(...message) {
     if (true) { // false
         console.log(...message);

@@ -1,0 +1,11 @@
+-- integer sum(a,b):
+integer a:
+integer b:
+
+a + b
+
+
+-- integer $value: 3
+
+-- ftd.integer: $value
+$on-click$: $sum(a = $value, b = 1)

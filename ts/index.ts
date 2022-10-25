@@ -7,12 +7,12 @@ window.ftd = (function() {
         let element = document.getElementById(data);
         if (!!element) {
             ftd_data[id] = JSON.parse(element.innerText);
-            window.ftd.post_init();
+            // window.ftd.post_init();
         }
     };
 
     function handle_event(evt: Event, id: string, action: object, obj: Element) {
-
+        console.log(id, action);
     }
 
     exports.handle_event = function (evt: Event, id: string, event: string, obj: Element) {

@@ -135,6 +135,33 @@ pub fn string(
     }
 }
 
+pub fn i64(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<i64>> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::Integer { value: v }) => {
+            Ok(ftd::executor::Value::new(v, value.properties))
+        }
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type integer, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
 pub fn optional_i64(
     key: &str,
     properties: &[ftd::interpreter2::Property],
@@ -157,6 +184,34 @@ pub fn optional_i64(
         None => Ok(ftd::executor::Value::new(None, value.properties)),
         t => ftd::executor::utils::parse_error(
             format!("Expected value of type optional integer, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
+pub fn optional_string(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<Option<String>>> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::String { text }) => {
+            Ok(ftd::executor::Value::new(Some(text), value.properties))
+        }
+        None => Ok(ftd::executor::Value::new(None, value.properties)),
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type optional string, found: {:?}", t),
             doc.name,
             line_number,
         ),

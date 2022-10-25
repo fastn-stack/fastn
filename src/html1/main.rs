@@ -8,7 +8,7 @@ pub struct HtmlUI {
 
 impl HtmlUI {
     pub fn from_node_data(node_data: ftd::node::NodeData) -> HtmlUI {
-        let html = HtmlGenerator.to_html(node_data.node);
+        let html = HtmlGenerator::new("main").to_html(node_data.name.as_str(), node_data.node);
         HtmlUI {
             html,
             js: s(""),
@@ -17,23 +17,43 @@ impl HtmlUI {
     }
 }
 
-struct HtmlGenerator;
+struct HtmlGenerator {
+    id: String,
+}
 
 impl HtmlGenerator {
-    pub fn to_html(&self, node: ftd::node::Node) -> String {
+    pub fn new(id: &str) -> HtmlGenerator {
+        HtmlGenerator { id: id.to_string() }
+    }
+
+    pub fn to_html(&self, doc_name: &str, node: ftd::node::Node) -> String {
         let style = format!(
             "style=\"{}\"",
             self.style_to_html(&node, /*self.visible*/ true)
         );
         let classes = self.class_to_html(&node);
-        let attrs = self.attrs_to_html(&node);
+
+        let attrs = {
+            let mut attr = self.attrs_to_html(&node);
+            let events = ftd::html1::events::group_by_js_event(&node.events);
+            for (name, actions) in events {
+                let event = format!(
+                    "window.ftd.handle_event(event, '{}', '{}', this)",
+                    self.id,
+                    actions.replace('\"', "&quot;")
+                );
+                attr.push(' ');
+                attr.push_str(&format!("{}={}", name, quote(&event)));
+            }
+            attr
+        };
 
         let body = match node.text.value.as_ref() {
             Some(v) => v.to_string(),
             None => node
                 .children
                 .into_iter()
-                .map(|v| self.to_html(v))
+                .map(|v| self.to_html(doc_name, v))
                 .collect::<Vec<String>>()
                 .join(""),
         };

@@ -18,8 +18,70 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             "ftd#text".to_string(),
             ftd::interpreter2::Thing::Component(markup_function()),
         ),
+        (
+            "ftd#integer".to_string(),
+            ftd::interpreter2::Thing::Component(integer_function()),
+        ),
     ])
     .collect()
+}
+
+pub fn integer_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#integer".to_string(),
+        arguments: [
+            common_arguments(),
+            vec![
+                ftd::interpreter2::Argument::default(
+                    "value",
+                    ftd::interpreter2::Kind::integer()
+                        .into_kind_data()
+                        .caption_or_body(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "align",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "style",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "role",
+                    ftd::interpreter2::Kind::record("ftd#type")
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "format",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "text-indent",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "text-align",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+            ],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
 }
 
 pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {

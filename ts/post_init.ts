@@ -1,3 +1,4 @@
+/*
 window.ftd.post_init = function () {
     const DARK_MODE = "ftd#dark-mode";
     const SYSTEM_DARK_MODE = "ftd#system-dark-mode";
@@ -142,7 +143,7 @@ window.ftd.post_init = function () {
         return "desktop";
     }
 
-    /*
+    /!*
         ftd.dark-mode behaviour:
 
         ftd.dark-mode is a boolean, default false, it tells the UI to show
@@ -176,7 +177,7 @@ window.ftd.post_init = function () {
         users preferences up front and renders the HTML on service wide
         following user's preference.
 
-     */
+     *!/
 
     window.enable_dark_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
@@ -298,4 +299,4 @@ window.ftd.post_init = function () {
     initialise_dark_mode();
     initialise_device();
     update_markdown_colors();
-};
+};*/

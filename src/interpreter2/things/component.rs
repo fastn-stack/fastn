@@ -405,8 +405,8 @@ impl Loop {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Event {
-    name: ftd::interpreter2::EventName,
-    action: ftd::interpreter2::FunctionCall,
+    pub name: ftd::interpreter2::EventName,
+    pub action: ftd::interpreter2::FunctionCall,
     line_number: usize,
 }
 

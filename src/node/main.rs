@@ -64,6 +64,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Row(r) => r.to_node(doc_id),
             ftd::executor::Element::Column(c) => c.to_node(doc_id),
             ftd::executor::Element::Text(t) => t.to_node(doc_id),
+            ftd::executor::Element::Integer(t) => t.to_node(doc_id),
         }
     }
 }
