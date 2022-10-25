@@ -17,6 +17,7 @@
 // document and path-parameters
 type ResolveDocOutput = (Option<String>, Vec<(String, ftd::Value)>);
 
+pub mod dynamic_urls;
 pub mod section;
 pub mod toc;
 pub mod utils;
