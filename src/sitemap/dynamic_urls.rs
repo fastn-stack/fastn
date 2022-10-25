@@ -1,7 +1,15 @@
+#[derive(Debug, serde::Deserialize, Clone)]
+pub struct DynamicUrlsTemp {
+    #[serde(rename = "dynamic-urls-body")]
+    pub body: Option<String>,
+}
+
 pub struct DynamicUrls {
     pub urls: Vec<DynamicUrl>,
-    pub readers: Vec<String>,
-    pub writers: Vec<String>,
+    // Todo: Inherit from sitemap if present else person can
+    // because if a person did not defined sitemap, sitemap is optional
+    // pub readers: Vec<String>,
+    // pub writers: Vec<String>,
 }
 
 pub struct DynamicUrl {
