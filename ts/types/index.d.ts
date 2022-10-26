@@ -12,4 +12,9 @@ declare global {
         init: object;
         handle_event(evt: Event, id: string, event: string, obj: Element): void;
     }
+
+    interface Action {
+        name: string;
+        values: Object;
+    }
 }

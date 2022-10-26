@@ -16,6 +16,15 @@ pub enum Thing {
 }
 
 impl Thing {
+    pub fn line_number(&self) -> usize {
+        match self {
+            Thing::Record(r) => r.line_number,
+            Thing::Variable(v) => v.line_number,
+            Thing::Component(c) => c.line_number,
+            Thing::Function(f) => f.line_number,
+        }
+    }
+
     pub(crate) fn variable(
         self,
         doc_id: &str,

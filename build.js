@@ -11,6 +11,16 @@ window.ftd = (function () {
     };
     function handle_event(evt, id, action, obj) {
         console.log(id, action);
+        console.log(action.name);
+        console.log("ftd_data", ftd_data[id]);
+        let argument;
+        for (argument in action.values) {
+            if (action.values.hasOwnProperty(argument)) {
+                if (typeof (action.values[argument]) === 'object') {
+                }
+                console.log(argument, action.values[argument], typeof (action.values[argument]), typeof (action.values[argument]) === 'object');
+            }
+        }
     }
     exports.handle_event = function (evt, id, event, obj) {
         console_log(id, event);
@@ -327,4 +337,7 @@ function console_log(...message) {
     if (true) { // false
         console.log(...message);
     }
+}
+function isObject(obj) {
+    return obj === Object(obj);
 }

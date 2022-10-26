@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <title></title>
 <script type="ftd" id="ftd-data">
-{}
+{
+"foo#value": 3
+}
 </script>
 <script type="ftd" id="ftd-external-children">
 {}
@@ -21,7 +23,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;&foo#value&quot;,&quot;b&quot;:1}}]', this)" style="text-decoration: none" class="ft_md">3</div></div>
+<div data-id="" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#value&quot;,&quot;b&quot;:{&quot;value&quot;:1}}}]', this)" style="text-decoration: none" class="ft_md">3</div></div>
 
 
 <script>
@@ -38,6 +40,16 @@ ftd_data[id] = JSON.parse(element.innerText);
 };
 function handle_event(evt, id, action, obj) {
 console.log(id, action);
+console.log(action.name);
+console.log("ftd_data", ftd_data[id]);
+let argument;
+for (argument in action.values) {
+if (action.values.hasOwnProperty(argument)) {
+if (typeof (action.values[argument]) === 'object') {
+}
+console.log(argument, action.values[argument], typeof (action.values[argument]), typeof (action.values[argument]) === 'object');
+}
+}
 }
 exports.handle_event = function (evt, id, event, obj) {
 console_log(id, event);
@@ -354,6 +366,9 @@ function console_log(...message) {
 if (true) { // false
 console.log(...message);
 }
+}
+function isObject(obj) {
+return obj === Object(obj);
 }
 
 function foo__sum___main(a,b){

@@ -3,3 +3,7 @@ function console_log(...message: any) {
         console.log(...message);
     }
 }
+
+function isObject(obj: object) {
+    return obj === Object(obj);
+}

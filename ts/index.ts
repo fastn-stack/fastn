@@ -11,8 +11,20 @@ window.ftd = (function() {
         }
     };
 
-    function handle_event(evt: Event, id: string, action: object, obj: Element) {
+    function handle_event(evt: Event, id: string, action: Action, obj: Element) {
         console.log(id, action);
+        console.log(action.name);
+        console.log("ftd_data",ftd_data[id]);
+        let argument: keyof typeof action.values;
+        for (argument in action.values) {
+            if (action.values.hasOwnProperty(argument)) {
+                if(typeof(action.values[argument]) === 'object') {
+
+                }
+                console.log(argument, action.values[argument], typeof(action.values[argument]), typeof(action.values[argument]) === 'object');
+            }
+
+        }
     }
 
     exports.handle_event = function (evt: Event, id: string, event: string, obj: Element) {

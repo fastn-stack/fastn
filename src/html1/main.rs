@@ -11,10 +11,14 @@ impl HtmlUI {
     pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> HtmlUI {
         let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data);
         let html = HtmlGenerator::new(id).to_html(node_data.name.as_str(), node_data.node);
+        let variables =
+            ftd::html1::data::DataGenerator::new(node_data.name.as_str(), &node_data.bag)
+                .get_data();
         HtmlUI {
             html,
             js: s(""),
-            variables: s(""),
+            variables: serde_json::to_string_pretty(&variables)
+                .expect("failed to convert document to json"),
             functions,
         }
     }

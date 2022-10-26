@@ -2,6 +2,7 @@
 #[macro_use]
 mod test;
 
+mod data;
 mod events;
 mod functions;
 mod main;
