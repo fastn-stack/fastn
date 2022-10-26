@@ -109,7 +109,24 @@ impl HtmlGenerator {
     fn attrs_to_html(&self, node: &ftd::node::Node) -> String {
         node.attrs
             .iter()
-            .filter_map(|(k, v)| v.value.as_ref().map(|v| format!("{}={}", *k, quote(v)))) // TODO: escape needed?
+            .filter_map(|(k, v)| {
+                v.value.as_ref().map(|v| {
+                    let v = if k.eq("data-id") {
+                        format!(
+                            "{}{}",
+                            v,
+                            if v.is_empty() {
+                                self.id.to_string()
+                            } else {
+                                format!(":{}", self.id)
+                            }
+                        )
+                    } else {
+                        v.to_string()
+                    };
+                    format!("{}={}", *k, quote(v.as_str()))
+                })
+            }) // TODO: escape needed?
             .collect::<Vec<String>>()
             .join(" ")
     }

@@ -1,4 +1,5 @@
 {
+  "name": "foo",
   "node": {
     "classes": [],
     "events": [],

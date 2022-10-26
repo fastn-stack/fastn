@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <title></title>
 <script type="ftd" id="ftd-data">
-{}
+{
+"foo#print:name:0": "Hello",
+"foo#print:name:1": "Hello Again"
+}
 </script>
 <script type="ftd" id="ftd-external-children">
 {}
@@ -21,7 +24,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0,0" style="text-decoration: none" class="ft_md">Hello</div></div><div data-id="1" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="1,0" style="text-decoration: none" class="ft_md">Hello Again</div></div></div>
+<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0,0:main" style="text-decoration: none" class="ft_md">Hello</div></div><div data-id="1:main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="1,0:main" style="text-decoration: none" class="ft_md">Hello Again</div></div></div>
 
 
 <script>
@@ -38,6 +41,24 @@ ftd_data[id] = JSON.parse(element.innerText);
 };
 function handle_event(evt, id, action, obj) {
 console.log(id, action);
+console.log(action.name);
+let function_arguments = [];
+let argument;
+for (argument in action.values) {
+if (action.values.hasOwnProperty(argument)) {
+if (typeof action.values[argument] === 'object') {
+function_arguments.push(action.values[argument]);
+}
+else {
+function_arguments.push({
+"value": resolve_reference(action.values[argument], ftd_data[id]),
+"reference": action.values[argument]
+});
+}
+}
+}
+window[action.name](...function_arguments);
+change_value(function_arguments, ftd_data[id]);
 }
 exports.handle_event = function (evt, id, event, obj) {
 console_log(id, event);
@@ -354,6 +375,24 @@ function console_log(...message) {
 if (true) { // false
 console.log(...message);
 }
+}
+function isObject(obj) {
+return obj === Object(obj);
+}
+function resolve_reference(reference, data) {
+return data[reference];
+}
+function change_value(function_arguments, data) {
+for (const a in function_arguments) {
+console.log(function_arguments[a]);
+if (!!function_arguments[a]["reference"]) {
+let reference = function_arguments[a]["reference"];
+data[reference] = function_arguments[a]["value"];
+}
+}
+}
+function isFunctionArgument(object) {
+return 'member' in object;
 }
 
 

@@ -20,7 +20,7 @@ impl<'a> DataGenerator<'a> {
             {
                 let value = match value {
                     ftd::interpreter2::PropertyValue::Value { value, .. } => value,
-                    t => unimplemented!("{:?}", t),
+                    _ => continue, //todo
                 };
 
                 if let Some(value) = get_value(&value) {
@@ -36,7 +36,7 @@ impl<'a> DataGenerator<'a> {
                 for val in data {
                     let value = match val {
                         ftd::interpreter2::PropertyValue::Value { value, .. } => value,
-                        t => unimplemented!("{:?}", t),
+                        _ => continue, //todo
                     };
                     if let Some(val) = get_value(&value) {
                         list_data.push(val);
@@ -62,7 +62,7 @@ impl<'a> DataGenerator<'a> {
                     for (k, v) in fields {
                         let value = match v {
                             ftd::interpreter2::PropertyValue::Value { value, .. } => value,
-                            t => unimplemented!("{:?}", t),
+                            _ => continue, //todo
                         };
                         value_fields.insert(k, value);
                     }
