@@ -1,5 +1,3 @@
-use crate::sitemap::section::{Section, Subsection};
-
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct DynamicUrlsTemp {
     #[serde(rename = "dynamic-urls-body")]
@@ -63,8 +61,8 @@ impl DynamicUrls {
             false
         }
 
-        fn check_sub_section(sub_section: &Subsection) -> bool {
-            // Note: No need check subsection
+        fn check_sub_section(sub_section: &fpm::sitemap::section::Subsection) -> bool {
+            // Note: No need to check subsection
             // if sub_section.path_parameters.is_empty() {
             //     return true;
             // }
@@ -77,8 +75,8 @@ impl DynamicUrls {
             false
         }
 
-        fn check_section(section: &Section) -> bool {
-            // Note: No need check section
+        fn check_section(section: &fpm::sitemap::section::Section) -> bool {
+            // Note: No need to check section
             // if section.path_parameters.is_empty() {
             //     return true;
             // }
@@ -100,63 +98,105 @@ impl DynamicUrls {
     }
 
     pub fn resolve_document(&self, path: &str) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
-        // fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> fpm::Result<ResolveDocOutput> {
-        //     if fpm::utils::ids_matches(toc.id.as_str(), path) {
-        //         return Ok((toc.document.clone(), vec![]));
-        //     }
-        //
-        //     for child in toc.children.iter() {
-        //         let (document, path_prams) = resolve_in_toc(child, path)?;
-        //         if document.is_some() {
-        //             return Ok((document, path_prams));
-        //         }
-        //     }
-        //     Ok((None, vec![]))
-        // }
-        //
-        // fn resolve_in_sub_section(
-        //     sub_section: &section::Subsection,
-        //     path: &str,
-        // ) -> fpm::Result<ResolveDocOutput> {
-        //     if let Some(id) = sub_section.id.as_ref() {
-        //         if fpm::utils::ids_matches(path, id.as_str()) {
-        //             return Ok((sub_section.document.clone(), vec![]));
-        //         }
-        //     }
-        //
-        //     for toc in sub_section.toc.iter() {
-        //         let (document, path_params) = resolve_in_toc(toc, path)?;
-        //         if document.is_some() {
-        //             return Ok((document, path_params));
-        //         }
-        //     }
-        //
-        //     Ok((None, vec![]))
-        // }
-        //
-        // fn resolve_in_section(
-        //     section: &section::Section,
-        //     path: &str,
-        // ) -> fpm::Result<ResolveDocOutput> {
-        //     if fpm::utils::ids_matches(section.id.as_str(), path) {
-        //         return Ok((section.document.clone(), vec![]));
-        //     }
-        //
-        //     for subsection in section.subsections.iter() {
-        //         let (document, path_params) = resolve_in_sub_section(subsection, path)?;
-        //         if document.is_some() {
-        //             return Ok((document, path_params));
-        //         }
-        //     }
-        //     Ok((None, vec![]))
-        // }
-        //
-        // for section in sitemap.sections.iter() {
-        //     let (document, path_params) = resolve_in_section(section, path)?;
-        //     if document.is_some() {
-        //         return Ok((document, path_params));
-        //     }
-        // }
+        fn resolve_in_toc(
+            toc: &fpm::sitemap::toc::TocItem,
+            path: &str,
+        ) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
+            if !toc.path_parameters.is_empty() {
+                // path: /arpita/foo/28/
+                // request: arpita foo 28
+                // sitemap: [string,integer]
+                // Mapping: arpita -> string, foo -> foo, 28 -> integer
+                let params = fpm::sitemap::utils::parse_named_params(
+                    path,
+                    toc.id.as_str(),
+                    toc.path_parameters.as_slice(),
+                );
+
+                if params.is_ok() {
+                    return Ok((toc.document.clone(), params?));
+                }
+            }
+
+            for child in toc.children.iter() {
+                let (document, path_prams) = resolve_in_toc(child, path)?;
+                if document.is_some() {
+                    return Ok((document, path_prams));
+                }
+            }
+
+            Ok((None, vec![]))
+        }
+
+        fn resolve_in_sub_section(
+            sub_section: &fpm::sitemap::section::Subsection,
+            path: &str,
+        ) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
+            if !sub_section.path_parameters.is_empty() {
+                // path: /arpita/foo/28/
+                // request: arpita foo 28
+                // sitemap: [string,integer]
+                // Mapping: arpita -> string, foo -> foo, 28 -> integer
+                if let Some(id) = sub_section.id.as_ref() {
+                    let params = fpm::sitemap::utils::parse_named_params(
+                        path,
+                        id.as_str(),
+                        sub_section.path_parameters.as_slice(),
+                    );
+
+                    if params.is_ok() {
+                        return Ok((sub_section.document.clone(), params?));
+                    }
+                }
+            }
+            for toc in sub_section.toc.iter() {
+                let (document, path_params) = resolve_in_toc(toc, path)?;
+                if document.is_some() {
+                    return Ok((document, path_params));
+                }
+            }
+
+            Ok((None, vec![]))
+        }
+
+        fn resolve_in_section(
+            section: &fpm::sitemap::section::Section,
+            path: &str,
+        ) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
+            // path: /abrark/foo/28/
+            // In sitemap url: /<string:username>/foo/<integer:age>/
+            if !section.path_parameters.is_empty() {
+                // path: /abrark/foo/28/
+                // request: abrark foo 28
+                // sitemap: [string,integer]
+                // params_matches: abrark -> string, foo -> foo, 28 -> integer
+                let params = fpm::sitemap::utils::parse_named_params(
+                    path,
+                    section.id.as_str(),
+                    section.path_parameters.as_slice(),
+                );
+
+                if params.is_ok() {
+                    return Ok((section.document.clone(), params?));
+                }
+            }
+
+            for subsection in section.subsections.iter() {
+                let (document, path_params) = resolve_in_sub_section(subsection, path)?;
+                if document.is_some() {
+                    return Ok((document, path_params));
+                }
+            }
+            Ok((None, vec![]))
+        }
+
+        for section in self.sections.iter() {
+            let (document, path_params) = resolve_in_section(section, path)?;
+            if document.is_some() {
+                return Ok((document, path_params));
+            }
+        }
+
         Ok((None, vec![]))
     }
 }
