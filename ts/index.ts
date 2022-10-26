@@ -11,20 +11,28 @@ window.ftd = (function() {
         }
     };
 
+
     function handle_event(evt: Event, id: string, action: Action, obj: Element) {
         console.log(id, action);
         console.log(action.name);
-        console.log("ftd_data",ftd_data[id]);
+
+        let function_arguments: FunctionArgument[] = [];
         let argument: keyof typeof action.values;
         for (argument in action.values) {
             if (action.values.hasOwnProperty(argument)) {
-                if(typeof(action.values[argument]) === 'object') {
-
+                if (typeof action.values[argument] === 'object') {
+                    function_arguments.push(<FunctionArgument>action.values[argument]);
+                } else {
+                    function_arguments.push({
+                        "value": resolve_reference(<string>action.values[argument], ftd_data[id]),
+                        "reference": <string>action.values[argument]
+                    });
                 }
-                console.log(argument, action.values[argument], typeof(action.values[argument]), typeof(action.values[argument]) === 'object');
             }
-
         }
+
+        window[action.name](...function_arguments);
+        change_value(function_arguments, ftd_data[id]);
     }
 
     exports.handle_event = function (evt: Event, id: string, event: string, obj: Element) {
