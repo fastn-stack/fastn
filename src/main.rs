@@ -179,14 +179,24 @@ fn ftd_v2_write(id: &str, s: &str) {
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
     let node = ftd::node::NodeData::from_rt(executor);
     let html_ui = ftd::html1::HtmlUI::from_node_data(node, "main");
+    let ftd_js = std::fs::read_to_string("build.js").expect("build.js not found");
     let html_str = ftd::html1::utils::trim_all_lines(
-        std::fs::read_to_string("ftd.html")
+        std::fs::read_to_string("build.html")
             .expect("cant read ftd.html")
             .replace("__ftd_doc_title__", "")
-            .replace("__ftd_data__", "")
-            .replace("__ftd_external_children__", "")
+            .replace("__ftd_data__", html_ui.variables.as_str())
+            .replace("__ftd_external_children__", "{}")
             .replace("__ftd__", html_ui.html.as_str())
-            .replace("__ftd_js__", "")
+            .replace("__ftd_js__", ftd_js.as_str())
+            .replace(
+                "__ftd_functions__",
+                format!(
+                    "{}\n{}",
+                    html_ui.functions.as_str(),
+                    html_ui.dependencies.as_str()
+                )
+                .as_str(),
+            )
             .replace("__ftd_body_events__", "")
             .replace("__ftd_css__", "")
             .replace("__ftd_element_css__", "")
