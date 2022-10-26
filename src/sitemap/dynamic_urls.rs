@@ -38,8 +38,6 @@ impl DynamicUrls {
             sections: fpm::sitemap::construct_tree_util(parser.finalize()?),
         };
 
-        dbg!(&dynamic_urls);
-
         if dynamic_urls.not_have_path_params() {
             return Err(fpm::sitemap::ParseError::InvalidDynamicUrls {
                 message: "All the dynamic urls must contain dynamic params".to_string(),
