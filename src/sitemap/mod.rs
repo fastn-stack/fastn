@@ -22,6 +22,8 @@ pub mod section;
 pub mod toc;
 pub mod utils;
 
+pub use dynamic_urls::{DynamicUrls, DynamicUrlsTemp};
+
 #[derive(Debug, Clone, Default)]
 pub struct Sitemap {
     pub sections: Vec<section::Section>,

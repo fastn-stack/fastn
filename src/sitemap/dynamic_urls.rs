@@ -4,6 +4,7 @@ pub struct DynamicUrlsTemp {
     pub body: Option<String>,
 }
 
+#[derive(Debug, Clone)]
 pub struct DynamicUrls {
     pub urls: Vec<DynamicUrl>,
     // Todo: Inherit from sitemap if present else person can
@@ -12,6 +13,7 @@ pub struct DynamicUrls {
     // pub writers: Vec<String>,
 }
 
+#[derive(Debug, Clone)]
 pub struct DynamicUrl {
     pub id: String,
     pub readers: Vec<String>,
