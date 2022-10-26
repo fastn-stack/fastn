@@ -1,5 +1,3 @@
-use crate::sitemap::{ParseError, ParsingState, SitemapParser};
-
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct DynamicUrlsTemp {
     #[serde(rename = "dynamic-urls-body")]
@@ -8,27 +6,18 @@ pub struct DynamicUrlsTemp {
 
 #[derive(Debug, Clone)]
 pub struct DynamicUrls {
-    pub urls: Vec<DynamicUrl>,
-    // Todo: Inherit from sitemap if present else person can
-    // because if a person did not defined sitemap, sitemap is optional
-    // pub readers: Vec<String>,
-    // pub writers: Vec<String>,
+    pub sections: Vec<fpm::sitemap::section::Section>,
 }
 
 impl DynamicUrls {
     pub fn parse(
-        s: &str,
-        package: &fpm::Package,
         config: &mut fpm::Config,
-        asset_documents: &std::collections::HashMap<String, String>,
-        base_url: &str,
-        resolve_sitemap: bool,
-    ) -> Result<Self, ParseError> {
-        dbg!("Dynamic Urls Body");
-        dbg!(s);
-
-        let mut parser = SitemapParser {
-            state: ParsingState::WaitingForSection,
+        package: &fpm::Package,
+        s: &str,
+    ) -> Result<Self, fpm::sitemap::ParseError> {
+        // Note: Using Sitemap Parser, because format of dynamic-urls is same as sitemap
+        let mut parser = fpm::sitemap::SitemapParser {
+            state: fpm::sitemap::ParsingState::WaitingForSection,
             sections: vec![],
             temp_item: None,
             doc_name: package.name.to_string(),
@@ -42,9 +31,9 @@ impl DynamicUrls {
             parser.eval_temp_item(&config.global_ids)?;
         }
 
-        dbg!(&parser);
-
-        Ok(DynamicUrls { urls: vec![] })
+        Ok(DynamicUrls {
+            sections: fpm::sitemap::construct_tree_util(parser.finalize()?),
+        })
     }
 }
 
