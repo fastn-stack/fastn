@@ -21,7 +21,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo#sum&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;&foo#value&quot;,&quot;b&quot;:1}}]', this)" style="text-decoration: none" class="ft_md">3</div></div>
+<div data-id="" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;&foo#value&quot;,&quot;b&quot;:1}}]', this)" style="text-decoration: none" class="ft_md">3</div></div>
 
 
 <script>
@@ -355,6 +355,11 @@ if (true) { // false
 console.log(...message);
 }
 }
+
+function foo__sum___main(a,b){
+a.value = a.value+b.value;
+}
+
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>

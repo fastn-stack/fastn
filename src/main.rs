@@ -178,7 +178,7 @@ fn ftd_v2_write(id: &str, s: &str) {
     let executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
     let node = ftd::node::NodeData::from_rt(executor);
-    let html_ui = ftd::html1::HtmlUI::from_node_data(node);
+    let html_ui = ftd::html1::HtmlUI::from_node_data(node, "main");
     let html_str = ftd::html1::utils::trim_all_lines(
         std::fs::read_to_string("ftd.html")
             .expect("cant read ftd.html")

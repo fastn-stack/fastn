@@ -1,11 +1,11 @@
--- integer sum(a,b):
-integer a:
+-- void sum(a,b):
+integer $a:
 integer b:
 
-a + b
+a = a + b;
 
 
 -- integer $value: 3
 
 -- ftd.integer: $value
-$on-click$: $sum(a = $value, b = 1)
+$on-click$: $sum($a = $value, b = 1)

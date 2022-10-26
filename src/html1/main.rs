@@ -4,21 +4,24 @@ pub struct HtmlUI {
     pub html: String,
     pub js: String,
     pub variables: String,
+    pub functions: String,
 }
 
 impl HtmlUI {
-    pub fn from_node_data(node_data: ftd::node::NodeData) -> HtmlUI {
-        let html = HtmlGenerator::new("main").to_html(node_data.name.as_str(), node_data.node);
+    pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> HtmlUI {
+        let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data);
+        let html = HtmlGenerator::new(id).to_html(node_data.name.as_str(), node_data.node);
         HtmlUI {
             html,
             js: s(""),
             variables: s(""),
+            functions,
         }
     }
 }
 
-struct HtmlGenerator {
-    id: String,
+pub(crate) struct HtmlGenerator {
+    pub id: String,
 }
 
 impl HtmlGenerator {
@@ -35,7 +38,7 @@ impl HtmlGenerator {
 
         let attrs = {
             let mut attr = self.attrs_to_html(&node);
-            let events = ftd::html1::events::group_by_js_event(&node.events);
+            let events = self.group_by_js_event(&node.events);
             for (name, actions) in events {
                 let event = format!(
                     "window.ftd.handle_event(event, '{}', '{}', this)",
