@@ -19,7 +19,7 @@ backend: true
 backend-headers: package-headers
 
 -- fpm.dependency: blog-backend.fpm.local
-mountpoint: /backend/
+mount-point: /backend/
 
 -- fpm.dependency: blog-theme.fpm.local as theme
 

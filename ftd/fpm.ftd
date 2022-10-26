@@ -25,7 +25,7 @@ optional string version:
 optional body notes:
 string list implements:
 optional string endpoint:
-optional string mountpoint:
+optional string mount-point:
 
 
 -- dependency-data list dependency:

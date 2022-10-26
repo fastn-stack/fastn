@@ -38,6 +38,7 @@ pub(crate) struct DependencyTemp {
     pub notes: Option<String>,
     pub implements: Vec<String>,
     pub endpoint: Option<String>,
+    #[serde(rename = "mount-point")]
     pub mountpoint: Option<String>,
 }
 
