@@ -177,7 +177,7 @@ impl SitemapElement {
     }
 }
 
-#[derive(thiserror::Error, Debug, PartialEq)]
+#[derive(thiserror::Error, Debug, PartialEq, Eq)]
 pub enum ParseError {
     #[error("{doc_id} -> {message} -> Row Content: {row_content}")]
     InvalidTOCItem {
@@ -1407,7 +1407,7 @@ impl Sitemap {
     }
 
     pub fn has_path_params(&self) -> bool {
-        section::Section::has_path_params_util(&self.sections)
+        section::Section::contains_path_params(&self.sections)
     }
 }
 
