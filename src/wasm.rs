@@ -66,12 +66,12 @@ pub type WasmRunnerResult<T> = std::result::Result<T, WASMError>;
 pub async fn handle_wasm(
     req: fpm::http::Request,
     wasm_module: camino::Utf8PathBuf,
-    backend_headers: Option<Vec<fpm::config::BackendHeader>>,
+    backend_headers: Option<Vec<fpm::package::BackendHeader>>,
 ) -> fpm::http::Response {
     pub async fn inner(
         req: fpm::http::Request,
         wasm_module: camino::Utf8PathBuf,
-        backend_headers: Option<Vec<fpm::config::BackendHeader>>,
+        backend_headers: Option<Vec<fpm::package::BackendHeader>>,
     ) -> WasmRunnerResult<actix_web::HttpResponse> {
         let mut wasm_config = wit_bindgen_host_wasmtime_rust::wasmtime::Config::new();
         wasm_config.cache_config_load_default().unwrap();

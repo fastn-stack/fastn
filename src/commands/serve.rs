@@ -30,7 +30,7 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
 
     match f {
         fpm::File::Ftd(main_document) => {
-            match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
+            match fpm::package::package_doc::read_ftd(config, &main_document, "/", false).await {
                 Ok(r) => fpm::http::ok(r),
                 Err(e) => {
                     fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)
@@ -81,7 +81,7 @@ async fn serve_cr_file(
     config.current_document = Some(f.get_id());
     match f {
         fpm::File::Ftd(main_document) => {
-            match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
+            match fpm::package::package_doc::read_ftd(config, &main_document, "/", false).await {
                 Ok(r) => fpm::http::ok(r),
                 Err(e) => {
                     fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)

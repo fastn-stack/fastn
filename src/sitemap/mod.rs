@@ -17,437 +17,37 @@
 // document and path-parameters
 type ResolveDocOutput = (Option<String>, Vec<(String, ftd::Value)>);
 
+pub mod section;
+pub mod toc;
+pub mod utils;
+
 #[derive(Debug, Clone, Default)]
 pub struct Sitemap {
-    pub sections: Vec<Section>,
+    pub sections: Vec<section::Section>,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
-}
-
-#[derive(Debug, Clone, Default)]
-pub struct Section {
-    /// `id` is the document id (or url) provided in the section
-    /// Example:
-    ///
-    /// ```ftd
-    ///
-    /// # foo/
-    ///
-    /// ```
-    ///
-    /// Here foo/ is store as `id`
-    pub id: String,
-
-    /// `title` contains the title of the document. This can be specified inside
-    /// document itself.
-    ///
-    /// Example: In the foo.ftd document
-    ///
-    /// ```ftd
-    /// -- fpm.info DOCUMENT_INFO:
-    /// title: Foo Title
-    /// ```
-    ///
-    /// In above example the `title` stores `Foo Title`.
-    ///
-    /// In the case where the title is not defined as above, the title would be
-    /// according to heading priority
-    ///
-    /// Example: In the foo.ftd document
-    ///
-    /// ```ftd
-    ///
-    /// -- ft.h0: Foo Heading Title
-    /// ```
-    /// In above example, the `title` stores `Foo Heading Title`.
-    pub title: Option<String>,
-
-    /// `file_location` stores the location of the document in the
-    /// file system
-    ///
-    /// In case of translation package, it stores the location in original
-    /// package
-    /// It is an optional field as the id provided could be an url to a website.
-    /// Eg:
-    /// ```ftd
-    /// # Fifthtry: https://fifthtry.com/
-    /// ````
-    /// In that case it store `None`
-    pub file_location: Option<camino::Utf8PathBuf>,
-
-    /// `translation_file_location` has value in case of translation package.
-    /// It stores the location of the document in the
-    /// file system in the translation package.
-    pub translation_file_location: Option<camino::Utf8PathBuf>,
-
-    /// `extra_data` stores the key value data provided in the section.
-    /// This is passed as context and consumes by processors like `get-data`.
-    ///
-    /// Example:
-    ///
-    /// In `FPM.ftd`
-    ///
-    /// ```fpm
-    /// -- fpm.sitemap:
-    ///
-    /// \# foo/
-    /// show: true
-    /// message: Hello World
-    /// ```
-    ///
-    /// In `foo.ftd`
-    ///
-    /// ```ftd
-    ///
-    /// -- boolean show:
-    /// $processor$: get-data
-    ///
-    /// -- string message:
-    /// $processor$: get-data
-    /// ```
-    ///
-    /// The above example injects the value `true` and `Hello World`
-    /// to the variables `show` and `message` respectively in foo.ftd
-    /// and then renders it.
-    //    pub extra_data: Vec<(String, String)>,
-    pub extra_data: std::collections::BTreeMap<String, String>,
-    pub is_active: bool,
-    pub nav_title: Option<String>,
-    pub subsections: Vec<Subsection>,
-
-    /// `skip` is used for skipping the section from sitemap processor
-    /// Example:
-    ///
-    /// ```ftd
-    ///
-    /// # foo: /
-    /// skip: true
-    ///
-    /// ```
-    /// default value will be `false`
-    pub skip: bool,
-    pub readers: Vec<String>,
-    pub writers: Vec<String>,
-    /// In FPM.ftd sitemap, we can use `document` for section, subsection and toc.
-    /// # Section: /books/
-    ///   document: /books/python/
-    pub document: Option<String>,
-    /// If we can define dynamic `url` in section, subsection and toc of a sitemap.
-    /// `url: /books/<string:book_name>/<integer:price>/`
-    /// here book_name and price are path parameters
-    /// path_parameters: [(string, book_name), (integer, price)]
-    pub path_parameters: Vec<(String, String)>,
-}
-
-impl Section {
-    pub fn path_exists(&self, path: &str) -> bool {
-        if fpm::utils::ids_matches(self.id.as_str(), path) {
-            return true;
-        }
-
-        for subsection in self.subsections.iter() {
-            if subsection.path_exists(path) {
-                return true;
-            }
-        }
-        false
-    }
-
-    // Input: /abrark/foo/28/
-    // Output: document: person.ftd, path-params: [(username, abrar), (age, 28)]
-
-    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
-        // path: /abrark/foo/28/
-        // In sitemap url: /<string:username>/foo/<integer:age>/
-        if !self.path_parameters.is_empty() {
-            // path: /abrark/foo/28/
-            // request: abrark foo 28
-            // sitemap: [string,integer]
-            // params_matches: abrark -> string, foo -> foo, 28 -> integer
-
-            let params =
-                utils::parse_named_params(path, self.id.as_str(), self.path_parameters.as_slice());
-
-            if params.is_ok() {
-                return Ok((self.document.clone(), params?));
-            }
-        } else if fpm::utils::ids_matches(self.id.as_str(), path) {
-            return Ok((self.document.clone(), vec![]));
-        }
-
-        for subsection in self.subsections.iter() {
-            let (document, path_params) = subsection.resolve_document(path)?;
-            if document.is_some() {
-                return Ok((document, path_params));
-            }
-        }
-        Ok((None, vec![]))
-    }
-
-    /// returns the file id portion of the url only in case
-    /// any component id is referred in the url itself
-    pub fn get_file_id(&self) -> String {
-        self.id
-            .rsplit_once('#')
-            .map(|s| s.0)
-            .unwrap_or(self.id.as_str())
-            .to_string()
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct Subsection {
-    pub id: Option<String>,
-    pub title: Option<String>,
-    pub file_location: Option<camino::Utf8PathBuf>,
-    pub translation_file_location: Option<camino::Utf8PathBuf>,
-    pub visible: bool,
-    pub extra_data: std::collections::BTreeMap<String, String>,
-    pub is_active: bool,
-    pub nav_title: Option<String>,
-    pub toc: Vec<TocItem>,
-    pub skip: bool,
-    pub readers: Vec<String>,
-    pub writers: Vec<String>,
-    pub document: Option<String>,
-    /// /books/<string:book_name>/
-    /// here book_name is path parameter
-    pub path_parameters: Vec<(String, String)>,
-}
-
-impl Default for Subsection {
-    fn default() -> Self {
-        Subsection {
-            id: None,
-            title: None,
-            file_location: Default::default(),
-            translation_file_location: None,
-            visible: true,
-            extra_data: Default::default(),
-            is_active: false,
-            nav_title: None,
-            toc: vec![],
-            skip: false,
-            readers: vec![],
-            writers: vec![],
-            document: None,
-            path_parameters: vec![],
-        }
-    }
-}
-
-impl Subsection {
-    /// path: /foo/demo/
-    /// path: /
-    fn path_exists(&self, path: &str) -> bool {
-        if let Some(id) = self.id.as_ref() {
-            if fpm::utils::ids_matches(path, id.as_str()) {
-                return true;
-            }
-        }
-
-        for toc in self.toc.iter() {
-            if toc.path_exists(path) {
-                return true;
-            }
-        }
-
-        false
-    }
-
-    /// path: /foo/demo/
-    /// path: /
-    fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
-        if !self.path_parameters.is_empty() {
-            // path: /arpita/foo/28/
-            // request: arpita foo 28
-            // sitemap: [string,integer]
-            // Mapping: arpita -> string, foo -> foo, 28 -> integer
-            if let Some(id) = self.id.as_ref() {
-                let params =
-                    utils::parse_named_params(path, id.as_str(), self.path_parameters.as_slice());
-
-                if params.is_ok() {
-                    return Ok((self.document.clone(), params?));
-                }
-            }
-        } else if let Some(id) = self.id.as_ref() {
-            if fpm::utils::ids_matches(path, id.as_str()) {
-                return Ok((self.document.clone(), vec![]));
-            }
-        }
-
-        for toc in self.toc.iter() {
-            let (document, path_params) = toc.resolve_document(path)?;
-            if document.is_some() {
-                return Ok((document, path_params));
-            }
-        }
-
-        Ok((None, vec![]))
-    }
-
-    /// returns the file id portion of the url only in case
-    /// any component id is referred in the url itself
-    pub fn get_file_id(&self) -> Option<String> {
-        self.id
-            .as_ref()
-            .map(|id| id.rsplit_once('#').map(|s| s.0).unwrap_or(id).to_string())
-    }
-}
-
-#[derive(Debug, Clone, Default)]
-pub struct TocItem {
-    pub id: String,
-    pub title: Option<String>,
-    pub file_location: Option<camino::Utf8PathBuf>,
-    pub translation_file_location: Option<camino::Utf8PathBuf>,
-    pub extra_data: std::collections::BTreeMap<String, String>,
-    pub is_active: bool,
-    pub nav_title: Option<String>,
-    pub children: Vec<TocItem>,
-    pub skip: bool,
-    pub readers: Vec<String>,
-    pub writers: Vec<String>,
-    pub document: Option<String>,
-    /// /books/<string:book_name>/
-    /// here book_name is path parameter
-    pub path_parameters: Vec<(String, String)>,
-}
-
-impl TocItem {
-    /// path: /foo/demo/
-    /// path: /
-    pub fn path_exists(&self, path: &str) -> bool {
-        if fpm::utils::ids_matches(self.id.as_str(), path) {
-            return true;
-        }
-
-        for child in self.children.iter() {
-            if child.path_exists(path) {
-                return true;
-            }
-        }
-
-        false
-    }
-
-    /// path: /foo/demo/
-    /// path: /
-    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
-        if !self.path_parameters.is_empty() {
-            // path: /arpita/foo/28/
-            // request: arpita foo 28
-            // sitemap: [string,integer]
-            // Mapping: arpita -> string, foo -> foo, 28 -> integer
-            let params =
-                utils::parse_named_params(path, self.id.as_str(), self.path_parameters.as_slice());
-
-            if params.is_ok() {
-                return Ok((self.document.clone(), params?));
-            }
-        } else if fpm::utils::ids_matches(self.id.as_str(), path) {
-            return Ok((self.document.clone(), vec![]));
-        }
-
-        for child in self.children.iter() {
-            let (document, path_prams) = child.resolve_document(path)?;
-            if document.is_some() {
-                return Ok((document, path_prams));
-            }
-        }
-        Ok((None, vec![]))
-    }
-
-    /// returns the file id portion of the url only in case
-    /// any component id is referred in the url itself
-    pub fn get_file_id(&self) -> String {
-        self.id
-            .rsplit_once('#')
-            .map(|s| s.0)
-            .unwrap_or(self.id.as_str())
-            .to_string()
-    }
 }
 
 #[derive(Debug, Default, serde::Serialize)]
 pub struct SiteMapCompat {
-    pub sections: Vec<TocItemCompat>,
-    pub subsections: Vec<TocItemCompat>,
-    pub toc: Vec<TocItemCompat>,
+    pub sections: Vec<toc::TocItemCompat>,
+    pub subsections: Vec<toc::TocItemCompat>,
+    pub toc: Vec<toc::TocItemCompat>,
     #[serde(rename = "current-section")]
-    pub current_section: Option<TocItemCompat>,
+    pub current_section: Option<toc::TocItemCompat>,
     #[serde(rename = "current-subsection")]
-    pub current_subsection: Option<TocItemCompat>,
+    pub current_subsection: Option<toc::TocItemCompat>,
     #[serde(rename = "current-page")]
-    pub current_page: Option<TocItemCompat>,
+    pub current_page: Option<toc::TocItemCompat>,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
-}
-
-#[derive(Debug, Default, Clone, serde::Serialize)]
-pub struct TocItemCompat {
-    pub url: Option<String>,
-    pub number: Option<String>,
-    pub title: Option<String>,
-    pub path: Option<String>,
-    #[serde(rename = "is-heading")]
-    pub is_heading: bool,
-    // TODO: Font icon mapping to html?
-    #[serde(rename = "font-icon")]
-    pub font_icon: Option<String>,
-    #[serde(rename = "is-disabled")]
-    pub is_disabled: bool,
-    #[serde(rename = "is-active")]
-    pub is_active: bool,
-    #[serde(rename = "is-open")]
-    pub is_open: bool,
-    #[serde(rename = "img-src")]
-    pub image_src: Option<String>,
-    pub children: Vec<TocItemCompat>,
-    pub readers: Vec<String>,
-    pub writers: Vec<String>,
-    pub document: Option<String>,
-}
-
-impl TocItemCompat {
-    pub(crate) fn new(
-        url: Option<String>,
-        title: Option<String>,
-        is_active: bool,
-        is_open: bool,
-        readers: Vec<String>,
-        writers: Vec<String>,
-    ) -> TocItemCompat {
-        TocItemCompat {
-            url,
-            number: None,
-            title,
-            path: None,
-            is_heading: false,
-            font_icon: None,
-            is_disabled: false,
-            is_active,
-            is_open,
-            image_src: None,
-            children: vec![],
-            readers,
-            writers,
-            document: None,
-        }
-    }
-
-    pub(crate) fn add_path(mut self, path: &str) -> Self {
-        self.path = Some(path.to_string());
-        self
-    }
 }
 
 #[derive(Debug, Clone)]
 pub enum SitemapElement {
-    Section(Section),
-    Subsection(Subsection),
-    TocItem(TocItem),
+    Section(section::Section),
+    Subsection(section::Subsection),
+    TocItem(toc::TocItem),
 }
 
 impl SitemapElement {
@@ -692,19 +292,19 @@ impl SitemapParser {
         // Stop eager checking, Instead of split and evaluate URL/title, first push
         // The complete string, postprocess if url doesn't exist
         let sitemapelement = match self.state {
-            ParsingState::WaitingForSection => SitemapElement::Section(Section {
+            ParsingState::WaitingForSection => SitemapElement::Section(section::Section {
                 id: rest.as_str().trim().to_string(),
                 ..Default::default()
             }),
-            ParsingState::ParsingSection => SitemapElement::Section(Section {
+            ParsingState::ParsingSection => SitemapElement::Section(section::Section {
                 id: rest.as_str().trim().to_string(),
                 ..Default::default()
             }),
-            ParsingState::ParsingSubsection => SitemapElement::Subsection(Subsection {
+            ParsingState::ParsingSubsection => SitemapElement::Subsection(section::Subsection {
                 id: Some(rest.as_str().trim().to_string()),
                 ..Default::default()
             }),
-            ParsingState::ParsingTOC => SitemapElement::TocItem(TocItem {
+            ParsingState::ParsingTOC => SitemapElement::TocItem(toc::TocItem {
                 id: rest.as_str().trim().to_string(),
                 ..Default::default()
             }),
@@ -927,7 +527,7 @@ impl Sitemap {
         return Ok(());
 
         async fn resolve_section(
-            section: &mut fpm::sitemap::Section,
+            section: &mut section::Section,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
             asset_documents: &std::collections::HashMap<String, String>,
@@ -969,14 +569,14 @@ impl Sitemap {
                                     package_root,
                                     section.get_file_id().as_str(),
                                 )
-                                .map_err(|e| {
-                                    fpm::Error::UsageError {
-                                        message: format!(
-                                        "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                        section.get_file_id(), e
-                                    ),
-                                    }
-                                })?,
+                                    .map_err(|e| {
+                                        fpm::Error::UsageError {
+                                            message: format!(
+                                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                                section.get_file_id(), e
+                                            ),
+                                        }
+                                    })?,
                             ),
                         ),
                         None,
@@ -1001,7 +601,7 @@ impl Sitemap {
         }
 
         async fn resolve_subsection(
-            subsection: &mut fpm::sitemap::Subsection,
+            subsection: &mut section::Subsection,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
             asset_documents: &std::collections::HashMap<String, String>,
@@ -1020,30 +620,30 @@ impl Sitemap {
                     (None, None)
                 } else {
                     match fpm::Config::get_file_name(current_package_root, id.as_str()) {
-                            Ok(name) => {
-                                if current_package_root.eq(package_root) {
-                                    (Some(current_package_root.join(name)), None)
-                                } else {
-                                    (
-                                        Some(package_root.join(name.as_str())),
-                                        Some(current_package_root.join(name)),
-                                    )
-                                }
+                        Ok(name) => {
+                            if current_package_root.eq(package_root) {
+                                (Some(current_package_root.join(name)), None)
+                            } else {
+                                (
+                                    Some(package_root.join(name.as_str())),
+                                    Some(current_package_root.join(name)),
+                                )
                             }
-                            Err(_) => (
-                                Some(package_root.join(
-                                    fpm::Config::get_file_name(package_root, id.as_str()).map_err(
-                                        |e| fpm::Error::UsageError {
-                                            message: format!(
-                                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                                id, e
-                                            ),
-                                        },
-                                    )?,
-                                )),
-                                None,
-                            ),
                         }
+                        Err(_) => (
+                            Some(package_root.join(
+                                fpm::Config::get_file_name(package_root, id.as_str()).map_err(
+                                    |e| fpm::Error::UsageError {
+                                        message: format!(
+                                            "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                            id, e
+                                        ),
+                                    },
+                                )?,
+                            )),
+                            None,
+                        ),
+                    }
                 };
                 subsection.file_location = file_location;
                 subsection.translation_file_location = translation_file_location;
@@ -1065,7 +665,7 @@ impl Sitemap {
 
         #[async_recursion::async_recursion(?Send)]
         async fn resolve_toc(
-            toc: &mut fpm::sitemap::TocItem,
+            toc: &mut toc::TocItem,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
             asset_documents: &std::collections::HashMap<String, String>,
@@ -1104,14 +704,14 @@ impl Sitemap {
                                     package_root,
                                     toc.get_file_id().as_str(),
                                 )
-                                .map_err(|e| {
-                                    fpm::Error::UsageError {
-                                        message: format!(
-                                        "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                        toc.get_file_id(), e
-                                    ),
-                                    }
-                                })?,
+                                    .map_err(|e| {
+                                        fpm::Error::UsageError {
+                                            message: format!(
+                                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                                toc.get_file_id(), e
+                                            ),
+                                        }
+                                    })?,
                             ),
                         ),
                         None,
@@ -1192,7 +792,7 @@ impl Sitemap {
         }
 
         fn get_toc_locations(
-            toc: &fpm::sitemap::TocItem,
+            toc: &toc::TocItem,
         ) -> Vec<(
             &camino::Utf8PathBuf,
             &Option<camino::Utf8PathBuf>,
@@ -1245,7 +845,7 @@ impl Sitemap {
                             .as_ref()
                             .map(|v| fpm::utils::ids_matches(v, id))
                             .unwrap_or(false);
-                        let toc = TocItemCompat::new(
+                        let toc = toc::TocItemCompat::new(
                             v.id.clone(),
                             v.title.clone(),
                             active,
@@ -1280,8 +880,8 @@ impl Sitemap {
                     toc.extend(toc_list);
                     current_page = current_toc;
                 }
-                let mut section_toc = TocItemCompat::new(
-                    Some(get_url(section.id.as_str())),
+                let mut section_toc = toc::TocItemCompat::new(
+                    get_url(section.id.as_str()),
                     section.title.clone(),
                     true,
                     true,
@@ -1303,8 +903,8 @@ impl Sitemap {
                 toc.extend(toc_list);
                 current_subsection = curr_subsection;
                 current_page = curr_toc;
-                let mut section_toc = TocItemCompat::new(
-                    Some(get_url(section.id.as_str())),
+                let mut section_toc = toc::TocItemCompat::new(
+                    get_url(section.id.as_str()),
                     section.title.clone(),
                     true,
                     true,
@@ -1320,8 +920,8 @@ impl Sitemap {
             }
 
             if !section.skip {
-                sections.push(TocItemCompat::new(
-                    Some(get_url(section.id.as_str())),
+                sections.push(toc::TocItemCompat::new(
+                    get_url(section.id.as_str()),
                     section.title.clone(),
                     false,
                     false,
@@ -1335,8 +935,8 @@ impl Sitemap {
                 .iter()
                 .filter(|s| !s.skip)
                 .map(|v| {
-                    TocItemCompat::new(
-                        Some(get_url(v.id.as_str())),
+                    toc::TocItemCompat::new(
+                        get_url(v.id.as_str()),
                         v.title.clone(),
                         false,
                         false,
@@ -1359,12 +959,12 @@ impl Sitemap {
         #[allow(clippy::type_complexity)]
         fn get_subsection_by_id(
             id: &str,
-            subsections: &[Subsection],
+            subsections: &[section::Subsection],
         ) -> Option<(
-            Vec<TocItemCompat>,
-            Vec<TocItemCompat>,
-            Option<TocItemCompat>,
-            Option<TocItemCompat>,
+            Vec<toc::TocItemCompat>,
+            Vec<toc::TocItemCompat>,
+            Option<toc::TocItemCompat>,
+            Option<toc::TocItemCompat>,
         )> {
             let mut subsection_list = vec![];
             let mut toc = vec![];
@@ -1385,8 +985,8 @@ impl Sitemap {
                     let (toc_list, current_toc) = get_all_toc(subsection.toc.as_slice(), id);
                     toc.extend(toc_list);
                     current_page = current_toc;
-                    let mut subsection_toc = TocItemCompat::new(
-                        subsection.id.as_ref().map(|v| get_url(v.as_str())),
+                    let mut subsection_toc = toc::TocItemCompat::new(
+                        subsection.id.as_ref().and_then(|v| get_url(v.as_str())),
                         subsection.title.clone(),
                         true,
                         true,
@@ -1407,8 +1007,8 @@ impl Sitemap {
                     toc.extend(toc_list);
                     current_page = Some(current_toc);
                     if subsection.visible {
-                        let mut subsection_toc = TocItemCompat::new(
-                            subsection.id.as_ref().map(|v| get_url(v.as_str())),
+                        let mut subsection_toc = toc::TocItemCompat::new(
+                            subsection.id.as_ref().and_then(|v| get_url(v.as_str())),
                             subsection.title.clone(),
                             true,
                             true,
@@ -1426,8 +1026,8 @@ impl Sitemap {
                 }
 
                 if !subsection.skip {
-                    subsection_list.push(TocItemCompat::new(
-                        subsection.id.as_ref().map(|v| get_url(v.as_str())),
+                    subsection_list.push(toc::TocItemCompat::new(
+                        subsection.id.as_ref().and_then(|v| get_url(v.as_str())),
                         subsection.title.clone(),
                         false,
                         false,
@@ -1440,7 +1040,7 @@ impl Sitemap {
             if found {
                 subsection_list.extend(subsections[index + 1..].iter().filter(|s| !s.skip).map(
                     |v| {
-                        TocItemCompat::new(
+                        toc::TocItemCompat::new(
                             v.id.clone(),
                             v.title.clone(),
                             false,
@@ -1455,13 +1055,19 @@ impl Sitemap {
             None
         }
 
-        fn get_all_toc(toc: &[TocItem], id: &str) -> (Vec<TocItemCompat>, Option<TocItemCompat>) {
+        fn get_all_toc(
+            toc: &[toc::TocItem],
+            id: &str,
+        ) -> (Vec<toc::TocItemCompat>, Option<toc::TocItemCompat>) {
             let mut current_page = None;
             let toc = get_toc_by_id_(id, toc, &mut current_page).1;
             (toc, current_page)
         }
 
-        fn get_toc_by_id(id: &str, toc: &[TocItem]) -> Option<(Vec<TocItemCompat>, TocItemCompat)> {
+        fn get_toc_by_id(
+            id: &str,
+            toc: &[toc::TocItem],
+        ) -> Option<(Vec<toc::TocItemCompat>, toc::TocItemCompat)> {
             let mut current_page = None;
             let toc_list = get_toc_by_id_(id, toc, &mut current_page).1;
             if let Some(current_page) = current_page {
@@ -1472,9 +1078,9 @@ impl Sitemap {
 
         fn get_toc_by_id_(
             id: &str,
-            toc: &[TocItem],
-            current_page: &mut Option<TocItemCompat>,
-        ) -> (bool, Vec<TocItemCompat>) {
+            toc: &[toc::TocItem],
+            current_page: &mut Option<toc::TocItemCompat>,
+        ) -> (bool, Vec<toc::TocItemCompat>) {
             let mut toc_list = vec![];
             let mut found_here = false;
 
@@ -1483,8 +1089,8 @@ impl Sitemap {
                     get_toc_by_id_(id, toc_item.children.as_slice(), current_page);
                 let is_active = fpm::utils::ids_matches(toc_item.get_file_id().as_str(), id);
                 let current_toc = {
-                    let mut current_toc = TocItemCompat::new(
-                        Some(get_url(toc_item.id.as_str()).to_string()),
+                    let mut current_toc = toc::TocItemCompat::new(
+                        get_url(toc_item.id.as_str()),
                         toc_item.title.clone(),
                         is_active,
                         is_active || is_open,
@@ -1516,18 +1122,21 @@ impl Sitemap {
             (found_here, toc_list)
         }
 
-        fn get_url(id: &str) -> String {
+        fn get_url(id: &str) -> Option<String> {
+            if id.trim().is_empty() {
+                return None;
+            }
             if id.eq("/") {
-                return id.to_string();
+                return Some(id.to_string());
             }
             let id = id.trim_start_matches('/');
             if id.contains('#') {
-                return id.trim_end_matches('/').to_string();
+                return Some(id.trim_end_matches('/').to_string());
             }
             if id.ends_with('/') || id.ends_with("index.html") {
-                return id.to_string();
+                return Some(id.to_string());
             }
-            format!("{}/", id)
+            Some(format!("{}/", id))
         }
     }
 
@@ -1550,7 +1159,7 @@ impl Sitemap {
 
         fn get_extra_data_from_subsections(
             id: &str,
-            subsections: &[Subsection],
+            subsections: &[section::Subsection],
         ) -> Option<std::collections::BTreeMap<String, String>> {
             for subsection in subsections {
                 if subsection.visible
@@ -1572,7 +1181,7 @@ impl Sitemap {
 
         fn get_extra_data_from_toc(
             id: &str,
-            toc: &[TocItem],
+            toc: &[toc::TocItem],
         ) -> Option<std::collections::BTreeMap<String, String>> {
             for toc_item in toc {
                 if fpm::utils::ids_matches(toc_item.id.as_str(), id) {
@@ -1615,7 +1224,7 @@ impl Sitemap {
 
         return vec![];
 
-        fn find_toc(toc: &TocItem, doc_path: &str) -> Vec<String> {
+        fn find_toc(toc: &toc::TocItem, doc_path: &str) -> Vec<String> {
             if toc.id.eq(doc_path) {
                 return toc.readers.clone();
             }
@@ -1633,7 +1242,7 @@ impl Sitemap {
             vec![]
         }
 
-        fn find_subsection(subsection: &Subsection, doc_path: &str) -> Vec<String> {
+        fn find_subsection(subsection: &section::Subsection, doc_path: &str) -> Vec<String> {
             if subsection
                 .id
                 .as_ref()
@@ -1656,7 +1265,7 @@ impl Sitemap {
             vec![]
         }
 
-        fn find_section(section: &Section, doc_path: &str) -> Vec<String> {
+        fn find_section(section: &section::Section, doc_path: &str) -> Vec<String> {
             if section.id.eq(doc_path) {
                 return section.readers.clone();
             }
@@ -1697,7 +1306,7 @@ impl Sitemap {
 
         return vec![];
 
-        fn find_toc(toc: &TocItem, doc_path: &str) -> Vec<String> {
+        fn find_toc(toc: &toc::TocItem, doc_path: &str) -> Vec<String> {
             if toc.id.eq(doc_path) {
                 return toc.writers.clone();
             }
@@ -1715,7 +1324,7 @@ impl Sitemap {
             vec![]
         }
 
-        fn find_subsection(subsection: &Subsection, doc_path: &str) -> Vec<String> {
+        fn find_subsection(subsection: &section::Subsection, doc_path: &str) -> Vec<String> {
             if subsection
                 .id
                 .as_ref()
@@ -1738,7 +1347,7 @@ impl Sitemap {
             vec![]
         }
 
-        fn find_section(section: &Section, doc_path: &str) -> Vec<String> {
+        fn find_section(section: &section::Section, doc_path: &str) -> Vec<String> {
             if section.id.eq(doc_path) {
                 return section.writers.clone();
             }
@@ -1787,16 +1396,16 @@ impl Sitemap {
 #[derive(Debug)]
 struct LevelTree {
     level: usize,
-    item: TocItem,
+    item: toc::TocItem,
 }
 
 impl LevelTree {
-    fn new(level: usize, item: TocItem) -> Self {
+    fn new(level: usize, item: toc::TocItem) -> Self {
         Self { level, item }
     }
 }
 
-fn construct_tree_util(mut elements: Vec<(SitemapElement, usize)>) -> Vec<Section> {
+fn construct_tree_util(mut elements: Vec<(SitemapElement, usize)>) -> Vec<section::Section> {
     let mut sections = vec![];
     elements.reverse();
     construct_tree_util_(elements, &mut sections);
@@ -1804,7 +1413,7 @@ fn construct_tree_util(mut elements: Vec<(SitemapElement, usize)>) -> Vec<Sectio
 
     fn construct_tree_util_(
         mut elements: Vec<(SitemapElement, usize)>,
-        sections: &mut Vec<Section>,
+        sections: &mut Vec<section::Section>,
     ) {
         if elements.is_empty() {
             return;
@@ -1829,25 +1438,27 @@ fn construct_tree_util(mut elements: Vec<(SitemapElement, usize)>) -> Vec<Sectio
         let last_subsection = if let Some(subsection) = last_section.subsections.last_mut() {
             subsection
         } else {
-            last_section.subsections.push(Subsection {
+            last_section.subsections.push(section::Subsection {
                 visible: false,
                 ..Default::default()
             });
             last_section.subsections.last_mut().unwrap()
         };
 
-        let mut toc_items: Vec<(TocItem, usize)> = vec![];
+        let mut toc_items: Vec<(toc::TocItem, usize)> = vec![];
         while let Some((SitemapElement::TocItem(toc), level)) = elements.last() {
             toc_items.push((toc.to_owned(), level.to_owned()));
             elements.pop();
         }
-        toc_items.push((TocItem::default(), smallest_level));
+        toc_items.push((toc::TocItem::default(), smallest_level));
         // println!("Elements: {:#?}", elements);
         let mut tree = construct_tree(toc_items, smallest_level);
         let _garbage = tree.pop();
-        last_subsection
-            .toc
-            .extend(tree.into_iter().map(|x| x.item).collect::<Vec<TocItem>>());
+        last_subsection.toc.extend(
+            tree.into_iter()
+                .map(|x| x.item)
+                .collect::<Vec<toc::TocItem>>(),
+        );
 
         construct_tree_util_(elements, sections);
     }
@@ -1857,7 +1468,7 @@ fn get_top_level(stack: &[LevelTree]) -> usize {
     stack.last().map(|x| x.level).unwrap()
 }
 
-fn construct_tree(elements: Vec<(TocItem, usize)>, smallest_level: usize) -> Vec<LevelTree> {
+fn construct_tree(elements: Vec<(toc::TocItem, usize)>, smallest_level: usize) -> Vec<LevelTree> {
     let mut stack_tree = vec![];
     for (toc_item, level) in elements.into_iter() {
         if level < smallest_level {
@@ -1904,217 +1515,4 @@ fn construct_tree(elements: Vec<(TocItem, usize)>, smallest_level: usize) -> Vec
         stack_tree.push(node);
     }
     stack_tree
-}
-
-mod utils {
-
-    // # Input
-    // request_url: /arpita/foo/28/
-    // sitemap_url: /<string:username>/foo/<integer:age>/
-    // params_types: [(string, username), (integer, age)]
-    // # Output
-    // true
-
-    pub fn parse_named_params(
-        request_url: &str,
-        sitemap_url: &str,
-        params_type: &[(String, String)],
-    ) -> fpm::Result<Vec<(String, ftd::Value)>> {
-        use itertools::Itertools;
-        // request_attrs: [arpita, foo, 28]
-        let request_attrs = request_url.trim_matches('/').split('/').collect_vec();
-        // sitemap_attrs: [<string:username>, foo, <integer:age>]
-        let sitemap_attrs = sitemap_url.trim_matches('/').split('/').collect_vec();
-
-        // This should go to config request [username: arpita, age: 28]
-
-        if request_attrs.len().ne(&sitemap_attrs.len()) {
-            return Err(fpm::Error::GenericError("".to_string()));
-        }
-
-        // [(param_name, value)]
-        let mut path_parameters: Vec<(String, ftd::Value)> = vec![];
-
-        // For every element either value should match or request attribute type should match to
-        // sitemap's params_types
-        let mut type_matches_count = 0;
-        for idx in 0..request_attrs.len() {
-            // either value match or type match
-            let value_match = request_attrs[idx].eq(sitemap_attrs[idx]);
-            if value_match {
-                continue;
-            }
-
-            let parsed_value = {
-                // request's attribute value type == type stored in sitemap:params_type
-                let attribute_value = request_attrs[idx];
-                assert!(params_type.len() > type_matches_count);
-                let attribute_type = &params_type[type_matches_count].0;
-                dbg!(&attribute_value, attribute_type);
-                value_parse_to_type(attribute_value, attribute_type)
-            };
-            match parsed_value {
-                Ok(value) => {
-                    let attribute_name = params_type[type_matches_count].1.to_string();
-                    path_parameters.push((attribute_name, value));
-                }
-                Err(e) => return Err(fpm::Error::GenericError(e.to_string())),
-            };
-
-            type_matches_count += 1;
-        }
-        return Ok(path_parameters);
-
-        fn value_parse_to_type(value: &str, r#type: &str) -> fpm::Result<ftd::Value> {
-            match r#type {
-                "string" => Ok(ftd::Value::String {
-                    text: value.to_string(),
-                    source: ftd::TextSource::Default,
-                }),
-                "integer" => {
-                    let value = value.parse::<i64>()?;
-                    Ok(ftd::Value::Integer { value })
-                }
-                "decimal" => {
-                    let value = value.parse::<f64>()?;
-                    Ok(ftd::Value::Decimal { value })
-                }
-                "boolean" => {
-                    let value = value.parse::<bool>()?;
-                    Ok(ftd::Value::Boolean { value })
-                }
-                _ => unimplemented!(),
-            }
-        }
-    }
-
-    // url: /<string:username>/<integer:age>/ => [("string", "username"), ("integer", "age")]
-    pub fn parse_path_params(url: &str) -> Vec<(String, String)> {
-        fn path_params_regex() -> &'static regex::Regex {
-            static PP: once_cell::sync::OnceCell<regex::Regex> = once_cell::sync::OnceCell::new();
-            PP.get_or_init(|| {
-                regex::Regex::new(r"<\s*([a-z]\w+)\s*:\s*([a-z|A-Z|0-9|_]\w+)\s*>")
-                    .expect("PATH_PARAMS: Regex is wrong")
-            })
-        }
-
-        path_params_regex()
-            .captures_iter(url)
-            .into_iter()
-            .map(|params| (params[1].to_string(), params[2].to_string()))
-            .collect::<Vec<_>>()
-    }
-
-    #[cfg(test)]
-    mod tests {
-        use ftd::TextSource;
-
-        #[test]
-        fn parse_path_params_test_1() {
-            let output = super::parse_path_params("/<string:username>/<integer:age>/");
-            let test_output = vec![
-                ("string".to_string(), "username".to_string()),
-                ("integer".to_string(), "age".to_string()),
-            ];
-            assert_eq!(test_output, output)
-        }
-
-        #[test]
-        fn parse_path_params_test_2() {
-            let output = super::parse_path_params("/< string: username >/< integer: age >/");
-            let test_output = vec![
-                ("string".to_string(), "username".to_string()),
-                ("integer".to_string(), "age".to_string()),
-            ];
-            assert_eq!(test_output, output)
-        }
-
-        #[test]
-        fn parse_named_params() {
-            let output = super::parse_named_params(
-                "/arpita/foo/28/",
-                "/<string:username>/foo/<integer:age>/",
-                &vec![
-                    ("string".to_string(), "username".to_string()),
-                    ("integer".to_string(), "age".to_string()),
-                ],
-            );
-
-            assert_eq!(
-                output.unwrap(),
-                vec![
-                    (
-                        "username".to_string(),
-                        ftd::Value::String {
-                            text: "arpita".to_string(),
-                            source: TextSource::Default
-                        }
-                    ),
-                    ("age".to_string(), ftd::Value::Integer { value: 28 })
-                ]
-            )
-        }
-
-        #[test]
-        fn parse_named_params_1() {
-            // Input:
-            // request_url: /arpita/foo/28/
-            // sitemap_url: /<string:username>/foo/<integer:age>/
-            // params_types: [(string, username), (integer, age)]
-            // Output: true
-            // Reason: Everything is matching
-
-            let output = super::parse_named_params(
-                "/arpita/foo/28/",
-                "/<string:username>/foo/<integer:age>/",
-                &vec![
-                    ("string".to_string(), "username".to_string()),
-                    ("integer".to_string(), "age".to_string()),
-                ],
-            );
-
-            assert_eq!(output.is_ok(), true)
-        }
-
-        #[test]
-        fn parse_named_params_2() {
-            // Input:
-            // request_url: /arpita/foo/28/
-            // sitemap_url: /<integer:username>/foo/<integer:age>/
-            // params_types: [(integer, username), (integer, age)]
-            // Output: false
-            // Reason: `arpita` can not be converted into `integer`
-            let output = super::parse_named_params(
-                "/arpita/foo/28/",
-                "/<integer:username>/foo/<integer:age>/",
-                &vec![
-                    ("integer".to_string(), "username".to_string()),
-                    ("integer".to_string(), "age".to_string()),
-                ],
-            );
-
-            assert_eq!(output.is_ok(), false)
-        }
-
-        #[test]
-        fn parse_named_params_3() {
-            // Input:
-            // request_url: /arpita/foo/
-            // sitemap_url: /<string:username>/foo/<integer:age>/
-            // params_types: [(string, username), (integer, age)]
-            // Output: false
-            // Reason: There is nothing to match in request_url after `foo`
-            //         against with sitemap_url `<integer:age>`
-            let output = super::parse_named_params(
-                "/arpita/foo/",
-                "/<string:username>/foo/<integer:age>/",
-                &vec![
-                    ("string".to_string(), "username".to_string()),
-                    ("integer".to_string(), "age".to_string()),
-                ],
-            );
-
-            assert_eq!(output.is_ok(), false)
-        }
-    }
 }
