@@ -563,7 +563,7 @@ impl Config {
 
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
         let (document, path_params) = match self.package.sitemap.as_ref() {
-            Some(sitemap) => sitemap.resolve_document(path)?,
+            Some(sitemap) => sitemap.resolve_document_1(path)?,
             None => (None, vec![]),
         };
 
