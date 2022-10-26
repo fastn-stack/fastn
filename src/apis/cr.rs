@@ -54,5 +54,5 @@ async fn create_cr_page_worker(req: fpm::http::Request) -> fpm::Result<Vec<u8>> 
         package_name: config.package.name.clone(),
     };
 
-    fpm::package_doc::read_ftd(&mut config, &main_document, "/", false).await
+    fpm::package::package_doc::read_ftd(&mut config, &main_document, "/", false).await
 }
