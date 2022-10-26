@@ -124,7 +124,7 @@ mod tests {
         let output = super::parse_named_params(
             "/arpita/foo/28/",
             "/<string:username>/foo/<integer:age>/",
-            &vec![
+            &[
                 ("string".to_string(), "username".to_string()),
                 ("integer".to_string(), "age".to_string()),
             ],
@@ -157,13 +157,13 @@ mod tests {
         let output = super::parse_named_params(
             "/arpita/foo/28/",
             "/<string:username>/foo/<integer:age>/",
-            &vec![
+            &[
                 ("string".to_string(), "username".to_string()),
                 ("integer".to_string(), "age".to_string()),
             ],
         );
 
-        assert_eq!(output.is_ok(), true)
+        assert!(output.is_ok())
     }
 
     #[test]
@@ -177,13 +177,13 @@ mod tests {
         let output = super::parse_named_params(
             "/arpita/foo/28/",
             "/<integer:username>/foo/<integer:age>/",
-            &vec![
+            &[
                 ("integer".to_string(), "username".to_string()),
                 ("integer".to_string(), "age".to_string()),
             ],
         );
 
-        assert_eq!(output.is_ok(), false)
+        assert!(output.is_err())
     }
 
     #[test]
@@ -198,12 +198,12 @@ mod tests {
         let output = super::parse_named_params(
             "/arpita/foo/",
             "/<string:username>/foo/<integer:age>/",
-            &vec![
+            &[
                 ("string".to_string(), "username".to_string()),
                 ("integer".to_string(), "age".to_string()),
             ],
         );
 
-        assert_eq!(output.is_ok(), false)
+        assert!(output.is_err())
     }
 }

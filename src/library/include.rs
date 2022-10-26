@@ -241,7 +241,6 @@ pub enum ParseError {
 
 #[cfg(test)]
 mod test {
-    use indoc::indoc;
     use pretty_assertions::assert_eq;
 
     macro_rules! p {
@@ -260,7 +259,7 @@ mod test {
     fn parse_path() {
         // File Import
         p!(
-            &indoc!("code.rs"),
+            "code.rs",
             super::IncludeDocument {
                 path: "code.rs".to_string(),
                 roa: super::RangeOrAnchor::Range(super::LineRange::RangeFull)
@@ -268,7 +267,7 @@ mod test {
         );
         // Line Import
         p!(
-            &indoc!("code.rs:4"),
+            "code.rs:4",
             super::IncludeDocument {
                 path: "code.rs".to_string(),
                 roa: super::RangeOrAnchor::Range(super::LineRange::SingleLine(4))
@@ -276,7 +275,7 @@ mod test {
         );
         // Anchor Import
         p!(
-            &indoc!("code.rs:MAIN_CODE"),
+            "code.rs:MAIN_CODE",
             super::IncludeDocument {
                 path: "code.rs".to_string(),
                 roa: super::RangeOrAnchor::Anchor("MAIN_CODE".to_string())
@@ -284,7 +283,7 @@ mod test {
         );
         // Range From Import
         p!(
-            &indoc!("code.rs:2:"),
+            "code.rs:2:",
             super::IncludeDocument {
                 path: "code.rs".to_string(),
                 roa: super::RangeOrAnchor::Range(super::LineRange::RangeFrom(2))
@@ -292,7 +291,7 @@ mod test {
         );
         // Range To Import
         p!(
-            &indoc!("code.rs::2"),
+            "code.rs::2",
             super::IncludeDocument {
                 path: "code.rs".to_string(),
                 roa: super::RangeOrAnchor::Range(super::LineRange::RangeTo(2))
