@@ -113,6 +113,26 @@ pub struct Section {
     pub path_parameters: Vec<(String, String)>,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct Subsection {
+    pub id: Option<String>,
+    pub title: Option<String>,
+    pub file_location: Option<camino::Utf8PathBuf>,
+    pub translation_file_location: Option<camino::Utf8PathBuf>,
+    pub visible: bool,
+    pub extra_data: std::collections::BTreeMap<String, String>,
+    pub is_active: bool,
+    pub nav_title: Option<String>,
+    pub toc: Vec<fpm::sitemap::toc::TocItem>,
+    pub skip: bool,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
+    pub document: Option<String>,
+    /// /books/<string:book_name>/
+    /// here book_name is path parameter
+    pub path_parameters: Vec<(String, String)>,
+}
+
 impl Section {
     pub fn path_exists(&self, path: &str) -> bool {
         if fpm::utils::ids_matches(self.id.as_str(), path) {
@@ -170,26 +190,54 @@ impl Section {
             .unwrap_or(self.id.as_str())
             .to_string()
     }
-}
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct Subsection {
-    pub id: Option<String>,
-    pub title: Option<String>,
-    pub file_location: Option<camino::Utf8PathBuf>,
-    pub translation_file_location: Option<camino::Utf8PathBuf>,
-    pub visible: bool,
-    pub extra_data: std::collections::BTreeMap<String, String>,
-    pub is_active: bool,
-    pub nav_title: Option<String>,
-    pub toc: Vec<fpm::sitemap::toc::TocItem>,
-    pub skip: bool,
-    pub readers: Vec<String>,
-    pub writers: Vec<String>,
-    pub document: Option<String>,
-    /// /books/<string:book_name>/
-    /// here book_name is path parameter
-    pub path_parameters: Vec<(String, String)>,
+    pub fn has_path_params_util(sections: &[Section]) -> bool {
+        for section in sections.iter() {
+            if section.contains_path_params() {
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn contains_path_params(&self) -> bool {
+        fn check_toc(toc: &fpm::sitemap::toc::TocItem) -> bool {
+            if !toc.path_parameters.is_empty() {
+                return true;
+            }
+
+            for toc in toc.children.iter() {
+                if check_toc(toc) {
+                    return true;
+                }
+            }
+            false
+        }
+
+        fn check_sub_section(sub_section: &Subsection) -> bool {
+            if !sub_section.path_parameters.is_empty() {
+                return true;
+            }
+
+            for toc in sub_section.toc.iter() {
+                if check_toc(toc) {
+                    return true;
+                }
+            }
+            false
+        }
+
+        if !self.path_parameters.is_empty() {
+            return true;
+        }
+
+        for sub_section in self.subsections.iter() {
+            if check_sub_section(sub_section) {
+                return true;
+            }
+        }
+        false
+    }
 }
 
 impl Default for Subsection {

@@ -31,9 +31,23 @@ impl DynamicUrls {
             parser.eval_temp_item(global_ids)?;
         }
 
-        Ok(DynamicUrls {
+        let dynamic_urls = DynamicUrls {
             sections: fpm::sitemap::construct_tree_util(parser.finalize()?),
-        })
+        };
+
+        dbg!(&dynamic_urls);
+
+        if !dynamic_urls.has_path_params() {
+            return Err(fpm::sitemap::ParseError::InvalidDynamicUrls {
+                message: "All the dynamic urls must contain dynamic params".to_string(),
+            });
+        }
+
+        Ok(dynamic_urls)
+    }
+
+    pub fn has_path_params(&self) -> bool {
+        fpm::sitemap::section::Section::has_path_params_util(&self.sections)
     }
 }
 

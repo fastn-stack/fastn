@@ -195,6 +195,8 @@ pub enum ParseError {
     InvalidID { doc_id: String, id: String },
     #[error("message: {message} ")]
     InvalidSitemap { message: String },
+    #[error("message: {message} ")]
+    InvalidDynamicUrls { message: String },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -497,7 +499,7 @@ impl Sitemap {
             writers: vec![],
         };
 
-        if sitemap.contains_path_params() {
+        if sitemap.has_path_params() {
             return Err(ParseError::InvalidSitemap {
                 message: "Sitemap should not contain urls with dynamic params".to_string(),
             });
@@ -1404,52 +1406,8 @@ impl Sitemap {
         Ok((None, vec![]))
     }
 
-    pub fn contains_path_params(&self) -> bool {
-        fn toc_contains_path_params(toc: &toc::TocItem) -> bool {
-            if !toc.path_parameters.is_empty() {
-                return true;
-            }
-
-            for toc in toc.children.iter() {
-                if toc_contains_path_params(toc) {
-                    return true;
-                }
-            }
-            false
-        }
-
-        fn sub_section_contains_path_params(sub_section: &section::Subsection) -> bool {
-            if !sub_section.path_parameters.is_empty() {
-                return true;
-            }
-
-            for toc in sub_section.toc.iter() {
-                if toc_contains_path_params(toc) {
-                    return true;
-                }
-            }
-            false
-        }
-
-        fn section_contains_path_params(section: &section::Section) -> bool {
-            if !section.path_parameters.is_empty() {
-                return true;
-            }
-
-            for sub_section in section.subsections.iter() {
-                if sub_section_contains_path_params(sub_section) {
-                    return true;
-                }
-            }
-            false
-        }
-
-        for section in self.sections.iter() {
-            if section_contains_path_params(section) {
-                return true;
-            }
-        }
-        false
+    pub fn has_path_params(&self) -> bool {
+        section::Section::has_path_params_util(&self.sections)
     }
 }
 
