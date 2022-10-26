@@ -140,7 +140,8 @@
               ],
               "pattern": null
             },
-            "null": false
+            "null": false,
+            "data_id": "0,0"
           },
           {
             "classes": [],
@@ -238,7 +239,8 @@
                   ],
                   "pattern": null
                 },
-                "null": false
+                "null": false,
+                "data_id": "0,1,0,0"
               }
             ],
             "text": {
@@ -246,7 +248,8 @@
               "properties": [],
               "pattern": null
             },
-            "null": false
+            "null": false,
+            "data_id": "0,1,0"
           },
           {
             "classes": [],
@@ -344,7 +347,8 @@
                   ],
                   "pattern": null
                 },
-                "null": false
+                "null": false,
+                "data_id": "0,1,1,0"
               },
               {
                 "classes": [],
@@ -442,7 +446,8 @@
                       ],
                       "pattern": null
                     },
-                    "null": false
+                    "null": false,
+                    "data_id": "0,1,1,1,0,0"
                   }
                 ],
                 "text": {
@@ -450,7 +455,8 @@
                   "properties": [],
                   "pattern": null
                 },
-                "null": false
+                "null": false,
+                "data_id": "0,1,1,1,0"
               }
             ],
             "text": {
@@ -458,7 +464,8 @@
               "properties": [],
               "pattern": null
             },
-            "null": false
+            "null": false,
+            "data_id": "0,1,1"
           }
         ],
         "text": {
@@ -466,7 +473,8 @@
           "properties": [],
           "pattern": null
         },
-        "null": false
+        "null": false,
+        "data_id": "0"
       }
     ],
     "text": {
@@ -474,7 +482,8 @@
       "properties": [],
       "pattern": null
     },
-    "null": false
+    "null": false,
+    "data_id": ""
   },
   "bag": {
     "foo#print-toc-item": {

@@ -119,7 +119,8 @@
               "properties": [],
               "pattern": null
             },
-            "null": false
+            "null": false,
+            "data_id": "0,0"
           },
           {
             "classes": [
@@ -152,7 +153,8 @@
               "properties": [],
               "pattern": null
             },
-            "null": false
+            "null": false,
+            "data_id": "0,1"
           }
         ],
         "text": {
@@ -160,7 +162,8 @@
           "properties": [],
           "pattern": null
         },
-        "null": false
+        "null": false,
+        "data_id": "0"
       },
       {
         "classes": [],
@@ -237,7 +240,8 @@
               "properties": [],
               "pattern": null
             },
-            "null": false
+            "null": false,
+            "data_id": "1,0"
           },
           {
             "classes": [
@@ -270,7 +274,8 @@
               "properties": [],
               "pattern": null
             },
-            "null": false
+            "null": false,
+            "data_id": "1,1"
           }
         ],
         "text": {
@@ -278,7 +283,8 @@
           "properties": [],
           "pattern": null
         },
-        "null": false
+        "null": false,
+        "data_id": "1"
       },
       {
         "classes": [
@@ -311,7 +317,8 @@
           "properties": [],
           "pattern": null
         },
-        "null": false
+        "null": false,
+        "data_id": "2"
       }
     ],
     "text": {
@@ -319,7 +326,8 @@
       "properties": [],
       "pattern": null
     },
-    "null": false
+    "null": false,
+    "data_id": ""
   },
   "bag": {}
 }

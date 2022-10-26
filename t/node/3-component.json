@@ -190,7 +190,8 @@
               "properties": [],
               "pattern": null
             },
-            "null": false
+            "null": false,
+            "data_id": "0,0"
           },
           {
             "classes": [
@@ -294,7 +295,8 @@
               "properties": [],
               "pattern": null
             },
-            "null": false
+            "null": false,
+            "data_id": "0,1"
           }
         ],
         "text": {
@@ -302,7 +304,8 @@
           "properties": [],
           "pattern": null
         },
-        "null": false
+        "null": false,
+        "data_id": "0"
       }
     ],
     "text": {
@@ -310,7 +313,8 @@
       "properties": [],
       "pattern": null
     },
-    "null": false
+    "null": false,
+    "data_id": ""
   },
   "bag": {
     "foo#flag": {

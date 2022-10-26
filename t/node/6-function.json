@@ -188,7 +188,8 @@
           ],
           "pattern": null
         },
-        "null": false
+        "null": false,
+        "data_id": "0"
       },
       {
         "classes": [
@@ -314,7 +315,8 @@
           ],
           "pattern": null
         },
-        "null": false
+        "null": false,
+        "data_id": "1"
       },
       {
         "classes": [
@@ -404,7 +406,8 @@
           ],
           "pattern": null
         },
-        "null": false
+        "null": false,
+        "data_id": "2"
       }
     ],
     "text": {
@@ -412,7 +415,8 @@
       "properties": [],
       "pattern": null
     },
-    "null": false
+    "null": false,
+    "data_id": ""
   },
   "bag": {
     "foo#append": {

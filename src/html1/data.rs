@@ -23,7 +23,7 @@ impl<'a> DataGenerator<'a> {
                     _ => continue, //todo
                 };
 
-                if let Some(value) = get_value(&value) {
+                if let Some(value) = get_value(value) {
                     d.insert(k.to_string(), value);
                 }
             }
@@ -38,7 +38,7 @@ impl<'a> DataGenerator<'a> {
                         ftd::interpreter2::PropertyValue::Value { value, .. } => value,
                         _ => continue, //todo
                     };
-                    if let Some(val) = get_value(&value) {
+                    if let Some(val) = get_value(value) {
                         list_data.push(val);
                     }
                 }

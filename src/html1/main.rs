@@ -81,7 +81,7 @@ impl HtmlGenerator {
     pub fn style_to_html(&self, node: &ftd::node::Node, visible: bool) -> String {
         let mut styles: ftd::Map<String> = node
             .style
-            .to_owned()
+            .clone()
             .into_iter()
             .filter_map(|(k, v)| v.value.map(|v| (k, v)))
             .collect();

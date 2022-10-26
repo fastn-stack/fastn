@@ -35,13 +35,13 @@ impl<'a> DependencyGenerator<'a> {
             .iter()
             .find(|v| v.condition.is_none());
         if let Some(default) = default {
-            match &default.value {
-                ftd::interpreter2::PropertyValue::Reference { name, .. } => result.push(format!(
+            if let ftd::interpreter2::PropertyValue::Reference { name, .. } = &default.value {
+                result.push(format!(
                     "document.querySelector(`[data-id=\"{}\"]`).innerHTML = data[\"{}\"];",
                     node_data_id, name
-                )),
-                _ => {} // todo
+                ))
             }
+            // todo: else {}
         }
         for children in self.node.children.iter() {
             result.push(DependencyGenerator::new(self.id, children).get_dependencies_());
