@@ -1396,7 +1396,7 @@ impl Sitemap {
     /// path: foo/temp/
     /// path: /
     // TODO: If nothing is found return 404, Handle 404 Errors
-    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
+    pub fn resolve_document_old(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
         for section in self.sections.iter() {
             let (document, path_params) = section.resolve_document(path)?;
             if document.is_some() {
@@ -1409,61 +1409,51 @@ impl Sitemap {
     /// path: foo/temp/
     /// path: /
     /// resolve it from `fpm.sitemap` or `fpm.dynamic-urls`
-    pub fn resolve_document_1(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
-        fn resolve_in_sitemap(sitemap: &Sitemap, path: &str) -> fpm::Result<ResolveDocOutput> {
-            fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> fpm::Result<ResolveDocOutput> {
-                if fpm::utils::ids_matches(toc.id.as_str(), path) {
-                    return Ok((toc.document.clone(), vec![]));
-                }
-
-                for child in toc.children.iter() {
-                    let (document, path_prams) = resolve_in_toc(child, path)?;
-                    if document.is_some() {
-                        return Ok((document, path_prams));
-                    }
-                }
-                Ok((None, vec![]))
+    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
+        fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> fpm::Result<ResolveDocOutput> {
+            if fpm::utils::ids_matches(toc.id.as_str(), path) {
+                return Ok((toc.document.clone(), vec![]));
             }
 
-            fn resolve_in_sub_section(
-                sub_section: &section::Subsection,
-                path: &str,
-            ) -> fpm::Result<ResolveDocOutput> {
-                if let Some(id) = sub_section.id.as_ref() {
-                    if fpm::utils::ids_matches(path, id.as_str()) {
-                        return Ok((sub_section.document.clone(), vec![]));
-                    }
+            for child in toc.children.iter() {
+                let (document, path_prams) = resolve_in_toc(child, path)?;
+                if document.is_some() {
+                    return Ok((document, path_prams));
                 }
+            }
+            Ok((None, vec![]))
+        }
 
-                for toc in sub_section.toc.iter() {
-                    let (document, path_params) = resolve_in_toc(toc, path)?;
-                    if document.is_some() {
-                        return Ok((document, path_params));
-                    }
+        fn resolve_in_sub_section(
+            sub_section: &section::Subsection,
+            path: &str,
+        ) -> fpm::Result<ResolveDocOutput> {
+            if let Some(id) = sub_section.id.as_ref() {
+                if fpm::utils::ids_matches(path, id.as_str()) {
+                    return Ok((sub_section.document.clone(), vec![]));
                 }
-
-                Ok((None, vec![]))
             }
 
-            fn resolve_in_section(
-                section: &section::Section,
-                path: &str,
-            ) -> fpm::Result<ResolveDocOutput> {
-                if fpm::utils::ids_matches(section.id.as_str(), path) {
-                    return Ok((section.document.clone(), vec![]));
+            for toc in sub_section.toc.iter() {
+                let (document, path_params) = resolve_in_toc(toc, path)?;
+                if document.is_some() {
+                    return Ok((document, path_params));
                 }
-
-                for subsection in section.subsections.iter() {
-                    let (document, path_params) = resolve_in_sub_section(subsection, path)?;
-                    if document.is_some() {
-                        return Ok((document, path_params));
-                    }
-                }
-                Ok((None, vec![]))
             }
 
-            for section in sitemap.sections.iter() {
-                let (document, path_params) = resolve_in_section(section, path)?;
+            Ok((None, vec![]))
+        }
+
+        fn resolve_in_section(
+            section: &section::Section,
+            path: &str,
+        ) -> fpm::Result<ResolveDocOutput> {
+            if fpm::utils::ids_matches(section.id.as_str(), path) {
+                return Ok((section.document.clone(), vec![]));
+            }
+
+            for subsection in section.subsections.iter() {
+                let (document, path_params) = resolve_in_sub_section(subsection, path)?;
                 if document.is_some() {
                     return Ok((document, path_params));
                 }
@@ -1471,13 +1461,13 @@ impl Sitemap {
             Ok((None, vec![]))
         }
 
-        fn resolve_in_dynamic_urls() -> fpm::Result<ResolveDocOutput> {
-            Ok((None, vec![]))
+        for section in self.sections.iter() {
+            let (document, path_params) = resolve_in_section(section, path)?;
+            if document.is_some() {
+                return Ok((document, path_params));
+            }
         }
-
-        return resolve_in_sitemap(self, path);
-
-        // Ok((None, vec![]))
+        Ok((None, vec![]))
     }
 
     pub fn has_path_params(&self) -> bool {
