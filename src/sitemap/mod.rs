@@ -177,7 +177,7 @@ impl SitemapElement {
     }
 }
 
-#[derive(thiserror::Error, Debug)]
+#[derive(thiserror::Error, Debug, PartialEq)]
 pub enum ParseError {
     #[error("{doc_id} -> {message} -> Row Content: {row_content}")]
     InvalidTOCItem {

@@ -1178,8 +1178,8 @@ impl Config {
         config.package.dynamic_urls = {
             match &package.dynamic_urls_temp {
                 Some(urls_temp) => Some(fpm::sitemap::DynamicUrls::parse(
-                    &mut config,
-                    &package,
+                    &config.global_ids,
+                    &package.name,
                     urls_temp.body.as_str(),
                 )?),
                 None => None,

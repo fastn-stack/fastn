@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct Section {
     /// `id` is the document id (or url) provided in the section
     /// Example:
@@ -172,7 +172,7 @@ impl Section {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Subsection {
     pub id: Option<String>,
     pub title: Option<String>,
