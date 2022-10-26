@@ -1,15 +1,15 @@
 -- ds.page: Numbers And Strings
+id: ws-numbers-and-strings
 
 In the last exercise we created a boolean, we will now use numbers and strings
 in FTD.
 
-We have two types, `integer` and `decimal` in FTD for dealing with numbers in
-FTD. Integers are signed. `integer`s and `decimal`s are quite similar to
-`boolean`s, we have the `-- integer foo: 10` syntax to define them.
+We have two types, {ds.highlight: `integer` and `decimal` for dealing with
+numbers} in FTD. _Integers are signed_. `integer`s and `decimal`s are quite
+similar to `boolean`s, we have the `-- integer foo: 10` syntax to define them.
 
-Strings are interesting in FTD as we do not use quotes, so a string is defined
-like `-- string name: amitu`. Also sometimes strings are long, so you can define
-strings also as:
+{ds.highlight: Strings in FTD do not use quotes}, so a string is defined like
+`-- string name: amitu`. Also you can define multi-line string like this:
 
 -- ds.code: multi-line string in ftd
 lang: ftd
@@ -38,10 +38,13 @@ software before hand (other than your favorite editor).
 
 -- ds.h1: Task: Fix FTD files
 
-Go through [numbers.ftd](numbers.ftd) and [strings.ftd](strings.ftd) as per
+Go through [numbers.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/03-numbers-and-strings/numbers.ftd)
+and [strings.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/03-numbers-and-strings/strings.ftd) as per
 instructions given in the file.
 
 -- ds.h1: You Are Done
 
-You have learnt basics of numbers and strings. Lets move on to [records
-now](../04-records/) or go back to [the workshop page](/workshop/).
+-- ds.markdown:
+
+You have learnt basics of numbers and strings. {ds.highlight: Lets move on to
+[records now](id: ws-records)} or go back to [the workshop page](id: workshop).

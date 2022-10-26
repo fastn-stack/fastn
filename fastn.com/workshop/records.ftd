@@ -1,9 +1,11 @@
 -- ds.page: Records
 id: ws-records
 
-Till now we dealt with basic types like [booleans](../02-boolean/), [numbers
-and strings](../03-numbers-and-strings/). Now we are moving to more interesting
-stuff: record.
+-- ds.markdown:
+
+Till now we dealt with basic types like [booleans](id: ws-booleans), [numbers
+and strings](id: ws-numbers-and-strings). Now we are moving to more interesting
+stuff: `record`.
 
 Records are like classes or structs in some language. Record is composed of a
 bunch of fields.
@@ -11,7 +13,7 @@ bunch of fields.
 
 An example record looks like this:
 
--- ds.code:
+-- ds.code: lets define a new record `person`
 lang: ftd
 
 \-- record person:
@@ -22,7 +24,7 @@ integer age:
 
 And to create an instance of the record we use:
 
--- ds.code:
+-- ds.code: creating a variable of type `person`
 lang: ftd
 
 \-- person john:
@@ -41,7 +43,7 @@ created the types `caption` and `body`, both of which are aliases for `string`
 type, but they also govern where the value should written. Best demonstrated
 using and example:
 
--- ds.code:
+-- ds.code: record with `caption` and `body`
 lang: ftd
 
 \-- record person:
@@ -54,8 +56,8 @@ age: 20
 
 John Doe is the best of Johns, but the worst of Does.
 
-Hindi people think he has something to do with the "desh ke liye". Punjabi
-people consider him the patron saint of forging mistakes.
+Hindi people think he has something to do with the "desh ke liye".
+Punjabi people consider him the patron saint of forging mistakes.
 
 -- ds.markdown:
 
@@ -64,16 +66,16 @@ done for `age`. The `name`'s type is `caption` so it appears in the "caption"
 position of the section, and `bio` appears as "body" and is suitable for
 multi-line texts.
 
-Note: you can only have single caption and single body types in a record. If
-you want to have more than one multi-line field for a record, you can either use
-a local string variable, or wait for 0.3 syntax to be done.
+Note: {ds.highlight: you can only have single caption and single body types in
+a record}. If you want to have more than one multi-line field for a record, you
+can either use a local string variable, or wait for 0.3 syntax to be ready.
 
 -- ds.h1: Task 2: Caption And Body Types
 
 Fix the mistakes in [caption-and-body.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/caption-and-body.ftd).
 
 
--- d.h1: Task 3: Default Values For Fields
+-- ds.h1: Task 3: Default Values For Fields
 
 Record fields can be given optional default values, eg:
 
