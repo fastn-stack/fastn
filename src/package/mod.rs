@@ -512,6 +512,17 @@ impl Package {
         package.resolve(&file_extract_path).await?;
         Ok(package)
     }
+
+    pub fn from_fpm_doc(fpm_doc: &ftd::p2::Document) -> fpm::Result<Package> {
+        let temp_package: Option<PackageTemp> = fpm_doc.get("fpm#package")?;
+
+        match temp_package {
+            Some(v) => Ok(v.into_package()),
+            None => Err(fpm::Error::PackageError {
+                message: "FPM.ftd does not contain package definition".to_string(),
+            }),
+        }
+    }
 }
 
 /// PackageTemp is a struct that is used for mapping the `fpm.package` data in FPM.ftd file. It is

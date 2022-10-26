@@ -1075,16 +1075,7 @@ impl Config {
         };
 
         let mut package = {
-            let temp_package: Option<fpm::package::PackageTemp> = fpm_doc.get("fpm#package")?;
-            let mut package = match temp_package {
-                Some(v) => v.into_package(),
-                None => {
-                    return Err(fpm::Error::PackageError {
-                        message: "FPM.ftd does not contain package definition".to_string(),
-                    })
-                }
-            };
-
+            let mut package = fpm::Package::from_fpm_doc(&fpm_doc)?;
             if package.name != fpm::FPM_UI_INTERFACE
                 && !deps
                     .iter()
@@ -1112,6 +1103,7 @@ impl Config {
             package.ignored_paths = fpm_doc.get::<Vec<String>>("fpm#ignore")?;
             package.fonts = fpm_doc.get("fpm#font")?;
             package.sitemap_temp = fpm_doc.get("fpm#sitemap")?;
+            package.dynamic_urls_temp = fpm_doc.get("fpm#dynamic-urls")?;
             package
         };
 
@@ -1178,6 +1170,21 @@ impl Config {
                     s.writers = sitemap_temp.writers.clone();
                     Some(s)
                 }
+                None => None,
+            }
+        };
+
+        // Handling of `-- fpm.dynamic-urls:`
+        config.package.dynamic_urls = {
+            match &package.dynamic_urls_temp {
+                Some(urls_temp) => Some(fpm::sitemap::DynamicUrls::parse(
+                    urls_temp.body.as_str(),
+                    &package,
+                    &mut config,
+                    &asset_documents,
+                    "/",
+                    resolve_sitemap,
+                )?),
                 None => None,
             }
         };

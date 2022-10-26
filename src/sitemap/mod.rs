@@ -157,6 +157,8 @@ impl SitemapElement {
     // /person/<string:username>/<integer:age>
     // In that case it will parse and set parameters `username` and `age`
     pub(crate) fn set_path_params(&mut self, url: &str) {
+        dbg!(url);
+
         let params = utils::parse_path_params(url);
 
         if !params.is_empty() {
