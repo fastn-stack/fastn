@@ -29,6 +29,7 @@ window.ftd = (function () {
         }
         window[action.name](...function_arguments);
         change_value(function_arguments, ftd_data[id]);
+        window["node_change_" + id](ftd_data[id]);
     }
     exports.handle_event = function (evt, id, event, obj) {
         console_log(id, event);
@@ -354,7 +355,6 @@ function resolve_reference(reference, data) {
 }
 function change_value(function_arguments, data) {
     for (const a in function_arguments) {
-        console.log(function_arguments[a]);
         if (!!function_arguments[a]["reference"]) {
             let reference = function_arguments[a]["reference"];
             data[reference] = function_arguments[a]["value"];

@@ -59,6 +59,7 @@ function_arguments.push({
 }
 window[action.name](...function_arguments);
 change_value(function_arguments, ftd_data[id]);
+window["node_change_" + id](ftd_data[id]);
 }
 exports.handle_event = function (evt, id, event, obj) {
 console_log(id, event);
@@ -384,7 +385,6 @@ return data[reference];
 }
 function change_value(function_arguments, data) {
 for (const a in function_arguments) {
-console.log(function_arguments[a]);
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
 data[reference] = function_arguments[a]["value"];
@@ -393,6 +393,13 @@ data[reference] = function_arguments[a]["value"];
 }
 function isFunctionArgument(object) {
 return 'member' in object;
+}
+
+
+function node_change_main(data){
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = data["foo#print:name:0"];
+
+document.querySelector(`[data-id="1,0:main"]`).innerHTML = data["foo#print:name:1"];
 }
 
 

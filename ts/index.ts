@@ -33,6 +33,7 @@ window.ftd = (function() {
 
         window[action.name](...function_arguments);
         change_value(function_arguments, ftd_data[id]);
+        window["node_change_" + id](ftd_data[id]);
     }
 
     exports.handle_event = function (evt: Event, id: string, event: string, obj: Element) {

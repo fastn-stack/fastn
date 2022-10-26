@@ -37,7 +37,15 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
             .replace("__ftd_external_children__", "{}")
             .replace("__ftd__", html_ui.html.as_str())
             .replace("__ftd_js__", ftd_js.as_str())
-            .replace("__ftd_functions__", html_ui.functions.as_str())
+            .replace(
+                "__ftd_functions__",
+                format!(
+                    "{}\n{}",
+                    html_ui.functions.as_str(),
+                    html_ui.dependencies.as_str()
+                )
+                .as_str(),
+            )
             .replace("__ftd_body_events__", "")
             .replace("__ftd_css__", "")
             .replace("__ftd_element_css__", "")

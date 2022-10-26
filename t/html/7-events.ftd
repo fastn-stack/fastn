@@ -2,7 +2,8 @@
 integer $a:
 integer b:
 
-a = a + b;
+e = 1;
+a = a + b + e;
 
 
 -- integer $value: 3

@@ -2,7 +2,7 @@
 
 pub struct HtmlUI {
     pub html: String,
-    pub js: String,
+    pub dependencies: String,
     pub variables: String,
     pub functions: String,
 }
@@ -10,13 +10,16 @@ pub struct HtmlUI {
 impl HtmlUI {
     pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> HtmlUI {
         let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data);
+        let dependencies = ftd::html1::dependencies::DependencyGenerator::new(id, &node_data.node)
+            .get_dependencies();
         let html = HtmlGenerator::new(id).to_html(node_data.name.as_str(), node_data.node);
         let variables =
             ftd::html1::data::DataGenerator::new(node_data.name.as_str(), &node_data.bag)
                 .get_data();
+
         HtmlUI {
             html,
-            js: s(""),
+            dependencies,
             variables: serde_json::to_string_pretty(&variables)
                 .expect("failed to convert document to json"),
             functions,
@@ -112,15 +115,7 @@ impl HtmlGenerator {
             .filter_map(|(k, v)| {
                 v.value.as_ref().map(|v| {
                     let v = if k.eq("data-id") {
-                        format!(
-                            "{}{}",
-                            v,
-                            if v.is_empty() {
-                                self.id.to_string()
-                            } else {
-                                format!(":{}", self.id)
-                            }
-                        )
+                        ftd::html1::utils::full_data_id(self.id.as_str(), v)
                     } else {
                         v.to_string()
                     };

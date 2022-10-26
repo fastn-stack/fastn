@@ -3,6 +3,7 @@
 mod test;
 
 mod data;
+mod dependencies;
 mod events;
 mod functions;
 mod main;

@@ -32,3 +32,11 @@ pub(crate) fn name_with_id(s: &str, id: &str) -> String {
 pub(crate) fn function_name_to_js_function(s: &str) -> String {
     s.replace('#', "__").replace('-', "_").replace(':', "___")
 }
+
+pub(crate) fn full_data_id(id: &str, data_id: &str) -> String {
+    if data_id.trim().is_empty() {
+        id.to_string()
+    } else {
+        format!("{}:{}", data_id, id)
+    }
+}

@@ -8,6 +8,7 @@ pub struct Node {
     pub children: Vec<Node>,
     pub text: ftd::node::Value,
     pub null: bool,
+    pub data_id: String,
 }
 
 pub type Event = ftd::executor::Event;
@@ -23,6 +24,7 @@ impl Node {
             classes: vec![],
             null: common.is_dummy,
             events: common.event.clone(),
+            data_id: common.data_id.clone(),
         }
     }
 
@@ -54,6 +56,7 @@ impl Node {
                 .collect_vec(),
             null: common.is_dummy,
             events: common.event.clone(),
+            data_id: common.data_id.to_string(),
         }
     }
 }
