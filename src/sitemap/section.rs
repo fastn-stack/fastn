@@ -239,56 +239,6 @@ impl Section {
         }
         false
     }
-
-    // return true if any one does not contain path_params
-    pub fn not_contains_path_params(sections: &[Section]) -> bool {
-        fn check_toc(toc: &fpm::sitemap::toc::TocItem) -> bool {
-            if toc.path_parameters.is_empty() {
-                return true;
-            }
-
-            for toc in toc.children.iter() {
-                if check_toc(toc) {
-                    return true;
-                }
-            }
-            false
-        }
-
-        fn check_sub_section(sub_section: &Subsection) -> bool {
-            if sub_section.path_parameters.is_empty() {
-                return true;
-            }
-
-            for toc in sub_section.toc.iter() {
-                if check_toc(toc) {
-                    return true;
-                }
-            }
-            false
-        }
-
-        fn check_section(section: &Section) -> bool {
-            if section.path_parameters.is_empty() {
-                return true;
-            }
-
-            for sub_section in section.subsections.iter() {
-                if check_sub_section(sub_section) {
-                    return true;
-                }
-            }
-            false
-        }
-
-        for section in sections.iter() {
-            if check_section(section) {
-                return true;
-            }
-        }
-
-        false
-    }
 }
 
 impl Default for Subsection {
