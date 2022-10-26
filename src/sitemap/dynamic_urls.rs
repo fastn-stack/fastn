@@ -1,3 +1,6 @@
+// document and path-parameters
+type ResolveDocOutput = (Option<String>, Vec<(String, ftd::Value)>);
+
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct DynamicUrlsTemp {
     #[serde(rename = "dynamic-urls-body")]
@@ -97,11 +100,11 @@ impl DynamicUrls {
         false
     }
 
-    pub fn resolve_document(&self, path: &str) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
+    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
         fn resolve_in_toc(
             toc: &fpm::sitemap::toc::TocItem,
             path: &str,
-        ) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
+        ) -> fpm::Result<ResolveDocOutput> {
             if !toc.path_parameters.is_empty() {
                 // path: /arpita/foo/28/
                 // request: arpita foo 28
@@ -131,7 +134,7 @@ impl DynamicUrls {
         fn resolve_in_sub_section(
             sub_section: &fpm::sitemap::section::Subsection,
             path: &str,
-        ) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
+        ) -> fpm::Result<ResolveDocOutput> {
             if !sub_section.path_parameters.is_empty() {
                 // path: /arpita/foo/28/
                 // request: arpita foo 28
@@ -162,7 +165,7 @@ impl DynamicUrls {
         fn resolve_in_section(
             section: &fpm::sitemap::section::Section,
             path: &str,
-        ) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
+        ) -> fpm::Result<ResolveDocOutput> {
             // path: /abrark/foo/28/
             // In sitemap url: /<string:username>/foo/<integer:age>/
             if !section.path_parameters.is_empty() {

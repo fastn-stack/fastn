@@ -564,10 +564,10 @@ impl Config {
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
         let (document, path_params) = match self.package.sitemap.as_ref() {
             //1. First resolve document in sitemap
-            Some(sitemap) => match sitemap.resolve_document(path)? {
-                (Some(document), params) => (Some(document), params),
+            Some(sitemap) => match sitemap.resolve_document(path) {
+                Some(document) => (Some(document), vec![]),
                 //2.  Else resolve document in dynamic urls
-                _ => match self.package.dynamic_urls.as_ref() {
+                None => match self.package.dynamic_urls.as_ref() {
                     Some(dynamic_urls) => dynamic_urls.resolve_document(path)?,
                     None => (None, vec![]),
                 },

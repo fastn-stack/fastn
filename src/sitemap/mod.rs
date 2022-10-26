@@ -13,10 +13,6 @@
 /// In above example, the id starts with `#` becomes the section. Similarly the id
 /// starts with `##` becomes the subsection and then the id starts with `-` becomes
 /// the table od content (TOC).
-
-// document and path-parameters
-type ResolveDocOutput = (Option<String>, Vec<(String, ftd::Value)>);
-
 pub mod dynamic_urls;
 pub mod section;
 pub mod toc;
@@ -1395,79 +1391,59 @@ impl Sitemap {
 
     /// path: foo/temp/
     /// path: /
-    // TODO: If nothing is found return 404, Handle 404 Errors
-    pub fn resolve_document_old(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
-        for section in self.sections.iter() {
-            let (document, path_params) = section.resolve_document(path)?;
-            if document.is_some() {
-                return Ok((document, path_params));
-            }
-        }
-        Ok((None, vec![]))
-    }
-
-    /// path: foo/temp/
-    /// path: /
-    /// resolve it from `fpm.sitemap` or `fpm.dynamic-urls`
-    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
-        fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> fpm::Result<ResolveDocOutput> {
+    pub fn resolve_document(&self, path: &str) -> Option<String> {
+        fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> Option<String> {
             if fpm::utils::ids_matches(toc.id.as_str(), path) {
-                return Ok((toc.document.clone(), vec![]));
+                return toc.document.clone();
             }
 
             for child in toc.children.iter() {
-                let (document, path_prams) = resolve_in_toc(child, path)?;
+                let document = resolve_in_toc(child, path);
                 if document.is_some() {
-                    return Ok((document, path_prams));
+                    return document;
                 }
             }
-            Ok((None, vec![]))
+            None
         }
 
-        fn resolve_in_sub_section(
-            sub_section: &section::Subsection,
-            path: &str,
-        ) -> fpm::Result<ResolveDocOutput> {
+        fn resolve_in_sub_section(sub_section: &section::Subsection, path: &str) -> Option<String> {
             if let Some(id) = sub_section.id.as_ref() {
                 if fpm::utils::ids_matches(path, id.as_str()) {
-                    return Ok((sub_section.document.clone(), vec![]));
+                    return sub_section.document.clone();
                 }
             }
 
             for toc in sub_section.toc.iter() {
-                let (document, path_params) = resolve_in_toc(toc, path)?;
+                let document = resolve_in_toc(toc, path);
                 if document.is_some() {
-                    return Ok((document, path_params));
+                    return document;
                 }
             }
 
-            Ok((None, vec![]))
+            None
         }
 
-        fn resolve_in_section(
-            section: &section::Section,
-            path: &str,
-        ) -> fpm::Result<ResolveDocOutput> {
+        fn resolve_in_section(section: &section::Section, path: &str) -> Option<String> {
             if fpm::utils::ids_matches(section.id.as_str(), path) {
-                return Ok((section.document.clone(), vec![]));
+                return section.document.clone();
             }
 
             for subsection in section.subsections.iter() {
-                let (document, path_params) = resolve_in_sub_section(subsection, path)?;
+                let document = resolve_in_sub_section(subsection, path);
                 if document.is_some() {
-                    return Ok((document, path_params));
+                    return document;
                 }
             }
-            Ok((None, vec![]))
+            None
         }
 
         for section in self.sections.iter() {
-            let (document, path_params) = resolve_in_section(section, path)?;
+            let document = resolve_in_section(section, path);
             if document.is_some() {
-                return Ok((document, path_params));
+                return document;
             }
         }
-        Ok((None, vec![]))
+        None
     }
 
     pub fn has_path_params(&self) -> bool {

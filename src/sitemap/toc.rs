@@ -34,36 +34,6 @@ impl TocItem {
         false
     }
 
-    /// path: /foo/demo/
-    /// path: /
-    pub fn resolve_document(&self, path: &str) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
-        if !self.path_parameters.is_empty() {
-            // path: /arpita/foo/28/
-            // request: arpita foo 28
-            // sitemap: [string,integer]
-            // Mapping: arpita -> string, foo -> foo, 28 -> integer
-            let params = fpm::sitemap::utils::parse_named_params(
-                path,
-                self.id.as_str(),
-                self.path_parameters.as_slice(),
-            );
-
-            if params.is_ok() {
-                return Ok((self.document.clone(), params?));
-            }
-        } else if fpm::utils::ids_matches(self.id.as_str(), path) {
-            return Ok((self.document.clone(), vec![]));
-        }
-
-        for child in self.children.iter() {
-            let (document, path_prams) = child.resolve_document(path)?;
-            if document.is_some() {
-                return Ok((document, path_prams));
-            }
-        }
-        Ok((None, vec![]))
-    }
-
     /// returns the file id portion of the url only in case
     /// any component id is referred in the url itself
     pub fn get_file_id(&self) -> String {
