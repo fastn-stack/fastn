@@ -1,12 +1,25 @@
 -- import: fpm
+-- import: env
+
+
+-- fpm.backend-header list package-headers:
+
+-- package-headers:
+header-key: BLOG-APP-SUPABASE-BASE-URL
+header-value: $env.FPM_SUPABASE_BASE_URL
+
+-- package-headers:
+header-key: BLOG-APP-SUPABASE-API-KEY
+header-value: $env.FPM_SUPABASE_API_KEY
 
 -- fpm.package: www.amitu.com
 download-base-url: amitu
 canonical-url: https://some-other-site.com/
 backend: true
-
+backend-headers: package-headers
 
 -- fpm.dependency: blog-backend.fpm.local
+mount-point: /backend/
 
 -- fpm.dependency: blog-theme.fpm.local as theme
 

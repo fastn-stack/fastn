@@ -6,6 +6,7 @@ pub struct Dependency {
     pub alias: Option<String>,
     pub implements: Vec<String>,
     pub endpoint: Option<String>,
+    pub mountpoint: Option<String>,
 }
 
 impl Dependency {
@@ -37,6 +38,8 @@ pub(crate) struct DependencyTemp {
     pub notes: Option<String>,
     pub implements: Vec<String>,
     pub endpoint: Option<String>,
+    #[serde(rename = "mount-point")]
+    pub mountpoint: Option<String>,
 }
 
 impl DependencyTemp {
@@ -52,6 +55,13 @@ impl DependencyTemp {
             alias,
             implements: self.implements,
             endpoint: self.endpoint,
+            mountpoint: match self.mountpoint {
+                Some(mp) => {
+                    let trimmed_mountpoint = mp.trim_start_matches('/').trim_end_matches('/');
+                    Some(format!("/{trimmed_mountpoint}/"))
+                }
+                None => None,
+            },
         })
     }
 }

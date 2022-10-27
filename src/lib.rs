@@ -30,7 +30,7 @@ mod track;
 mod tracker;
 mod translation;
 mod version;
-// mod wasm;
+mod wasm;
 mod workspace;
 
 pub(crate) use auto_import::AutoImport;
@@ -486,6 +486,19 @@ fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::
             }
         }
     })
+}
+
+pub fn get_env_ftd_file() -> String {
+    std::env::vars()
+        .into_iter()
+        .filter(|(key, val)| {
+            vec!["CARGO", "VERGEN", "FPM"]
+                .iter()
+                .any(|prefix| !key.is_empty() && key.starts_with(prefix) && !val.is_empty())
+        })
+        .fold(String::new(), |accumulator, (key, value)| {
+            format!("{accumulator}\n-- string {key}: {value}")
+        })
 }
 
 pub fn debug_env_vars() -> String {

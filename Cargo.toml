@@ -76,9 +76,9 @@ url = "2"
 # becasue they havent crated a release yet which fixes incompatibility with latest actix-http
 zip = { git = "https://github.com/zip-rs/zip" }
 
-#wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git" }
-#fpm-utils = { git = "https://github.com/FifthTry/fpm-utils", rev="1519f8f"}
-#fpm-utils = { path = "../fpm-utils"}
+wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev="45604f58336afaa23a79ed619ef50b69de473688" }
+fpm-utils = { git = "https://github.com/ftd-lang/fpm-utils", rev="0ce396db408b413f5a4eb6b2c5b87db3829cf879"}
+# fpm-utils = { path = "../fpm-utils/crates/fpm-utils-host"}
 
 [dependencies.hyper]
 version = "0.14"
