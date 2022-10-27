@@ -310,6 +310,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("translation-status")
                 .about("Show the translation status of files in this fpm package")
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("diff")
