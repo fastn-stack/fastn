@@ -82,13 +82,13 @@ async fn async_main() -> fpm::Result<()> {
             println!("{}", fpm::debug_env_vars());
         }
 
-        fpm::build(
+        return fpm::build(
             &mut config,
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
             build.get_flag("ignore_failed"),
         )
-        .await?;
+        .await;
     }
 
     if let Some(mark_resolve) = matches.subcommand_matches("mark-resolved") {
@@ -119,23 +119,24 @@ async fn async_main() -> fpm::Result<()> {
         return fpm::create_cr(&config, create_cr.value_of_("title")).await;
     }
     if let Some(close_cr) = matches.subcommand_matches("close-cr") {
-        fpm::close_cr(&config, close_cr.value_of_("cr").unwrap()).await?;
+        return fpm::close_cr(&config, close_cr.value_of_("cr").unwrap()).await;
     }
     if let Some(status) = matches.subcommand_matches("status") {
         // TODO: handle multiple files
-        fpm::status(&config, status.value_of_("file")).await?;
+        return fpm::status(&config, status.value_of_("file")).await;
     }
     if matches.subcommand_matches("translation-status").is_some() {
-        fpm::translation_status(&config).await?;
+        return fpm::translation_status(&config).await;
     }
     if let Some(diff) = matches.subcommand_matches("diff") {
         let all = diff.get_flag("all");
-        if let Some(source) = diff.get_many::<String>("source") {
-            fpm::diff(&config, Some(source.map(|v| v.to_string()).collect()), all).await?;
+        return if let Some(source) = diff.get_many::<String>("source") {
+            fpm::diff(&config, Some(source.map(|v| v.to_string()).collect()), all).await
         } else {
-            fpm::diff(&config, None, all).await?;
-        }
+            fpm::diff(&config, None, all).await
+        };
     }
+
     if let Some(resolve_conflict) = matches.subcommand_matches("resolve-conflict") {
         let use_ours = resolve_conflict.get_flag("use-ours");
         let use_theirs = resolve_conflict.get_flag("use-theirs");
@@ -143,27 +144,28 @@ async fn async_main() -> fpm::Result<()> {
         let revive_it = resolve_conflict.get_flag("revive-it");
         let delete_it = resolve_conflict.get_flag("delete-it");
         let source = resolve_conflict.value_of_("source").unwrap();
-        fpm::resolve_conflict(
+        return fpm::resolve_conflict(
             &config, source, use_ours, use_theirs, print, revive_it, delete_it,
         )
-        .await?;
+        .await;
     }
     if let Some(tracks) = matches.subcommand_matches("start-tracking") {
         let source = tracks.value_of_("source").unwrap();
         let target = tracks.value_of_("target").unwrap();
-        fpm::start_tracking(&config, source, target).await?;
+        return fpm::start_tracking(&config, source, target).await;
     }
     if let Some(mark) = matches.subcommand_matches("mark-upto-date") {
         let source = mark.value_of_("source").unwrap();
         let target = mark.value_of_("target");
-        fpm::mark_upto_date(&config, source, target).await?;
+        return fpm::mark_upto_date(&config, source, target).await;
     }
     if let Some(mark) = matches.subcommand_matches("stop-tracking") {
         let source = mark.value_of_("source").unwrap();
         let target = mark.value_of_("target");
-        fpm::stop_tracking(&config, source, target).await?;
+        return fpm::stop_tracking(&config, source, target).await;
     }
-    Ok(())
+
+    unreachable!("No subcommand matched");
 }
 
 fn app(authors: &'static str, version: &'static str) -> clap::Command {
@@ -361,14 +363,8 @@ mod sub_command {
         let serve = clap::Command::new("serve")
             .about("Create an http server and serves static files")
             .arg(clap::arg!(port: --port <PORT> "The port to listen on").default_value("8080"))
-            .arg(
-                clap::arg!(bind: --bind <ADDRESS> "The address to bind to")
-                    .default_value("127.0.0.1"),
-            )
-            .arg(
-                clap::arg!(download_base_url: --"download-base-url" <URL> "If running without files locally, download requested files from here.")
-            );
-
+            .arg(clap::arg!(bind: --bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
+            .arg(clap::arg!(download_base_url: --"download-base-url" <URL> "If running without files locally, download requested files from here."));
         if cfg!(feature = "remote") {
             serve
         } else {
