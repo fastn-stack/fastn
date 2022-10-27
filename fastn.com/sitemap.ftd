@@ -667,10 +667,10 @@ lang: ftd
   document: toc-temp.ftd
 
 
--- ft.h1: Dynamic Parameters in URL
+-- ft.h1: Dynamic Urls
 
 You can define `url` like `url: /<string:username>/foo/<integer:age>/` in
-sitemap. With this configuration you have to also define
+`dynamic-urls`. With this configuration you have to also define
 [`document`](id: sitemap-custom-url).
 
 In the below example if `request` come for urls so they will be mapped
@@ -687,7 +687,7 @@ accordingly
 -- ft.code: FPM.ftd
 lang: ftd
 
-\-- fpm.sitemap:
+\-- fpm.dynamic-urls:
 
 # Manager
 url: /<string:username>/manager/<integer:age>/
@@ -705,3 +705,25 @@ document: person-employee.ftd
   - Task2
     url: /<string:username>/task2/<integer:age>/
     document: task-type-2.ftd
+
+-- ft.h2: Mandatory Syntax
+
+You can customized your urls same as sitemap. One section `#` `Title` and `url`
+is mandatory.
+
+
+Note: `-- fpm.sitemap:` will not contain any urls with dynamic parameters, and
+`-- fpm.dynamic-urls:` will not contain any urls without dynamic parameters.
+
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.dynamic-urls:
+
+# Manager
+url: /<string:username>/manager/<integer:age>/
+document: person-manager.ftd
+- Task1
+  url: /<string:username>/task/<integer:age>/
+  document: task-type-1.ftd
