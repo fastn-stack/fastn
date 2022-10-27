@@ -188,31 +188,20 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
             //                   -n or --name   -p or --path
             // Necessary <project-name> with Optional [project-path]
             clap::Command::new("create-package")
-                .about("Creates a template ftd project at the target location with the given project name")
-                .arg(
-                    clap::arg!(name: <NAME> "The name of the package to create")
-                )
-                .arg(
-                    clap::arg!(path: -p --path [PATH] "Package path (relative or absolute path)")
-                )
+                .about("Create a new FPM package")
+                .arg(clap::arg!(name: <NAME> "The name of the package to create"))
+                .arg(clap::arg!(path: -p --path [PATH] "Where to create the package (relative or absolute path, default value: the name)"))
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
             clap::Command::new("build")
                 .about("Build static site from this fpm package")
-                .arg(clap::Arg::new("file").required(false))
+                .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
                 .arg(
-                    clap::Arg::new("base")
-                        .long("base")
-                        .action(clap::ArgAction::Set)
-                        .default_value("/")
-                        .help("Base URL"),
+                    clap::arg!(base: -b --base [BASE] "The base path.").default_value("/")
                 )
                 .arg(
-                    clap::Arg::new("ignore-failed")
-                        .long("ignore-failed")
-                        .action(clap::ArgAction::SetTrue)
-                        .required(false),
+                    clap::arg!(ignore_failed: --"ignore-failed" "Ignore failed files.")
                 )
                 .arg(
                     clap::Arg::new("verbose")
@@ -223,10 +212,11 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
-        clap::Command::new("mark-resolve")
-            .about("Marks the conflicted file as resolved")
-            .arg(clap::Arg::new("path").required(true))
-            .version(env!("CARGO_PKG_VERSION")),
+            clap::Command::new("mark-resolve")
+                .about("Marks the conflicted file as resolved")
+                .arg(clap::Arg::new("path").required(true))
+                .version(env!("CARGO_PKG_VERSION"))
+                .hide(true),
         )
         .subcommand(
             clap::Command::new("abort-merge")
@@ -245,7 +235,10 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
                 .about("Edit a file in CR workspace")
                 .args(&[
                     clap::Arg::new("file").required(true),
-                    clap::Arg::new("cr").long("cr").action(clap::ArgAction::Set).required(true),
+                    clap::Arg::new("cr")
+                        .long("cr")
+                        .action(clap::ArgAction::Set)
+                        .required(true),
                 ])
                 .version(env!("CARGO_PKG_VERSION")),
         )
@@ -271,8 +264,13 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
             clap::Command::new("merge")
                 .about("Merge two manifests together")
                 .args(&[
-                    clap::Arg::new("src").long("src").action(clap::ArgAction::Set),
-                    clap::Arg::new("dest").long("dest").action(clap::ArgAction::Set).required(true),
+                    clap::Arg::new("src")
+                        .long("src")
+                        .action(clap::ArgAction::Set),
+                    clap::Arg::new("dest")
+                        .long("dest")
+                        .action(clap::ArgAction::Set)
+                        .required(true),
                     clap::Arg::new("file"),
                 ])
                 .version(env!("CARGO_PKG_VERSION")),
@@ -335,11 +333,21 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("resolve-conflict")
                 .args(&[
-                    clap::Arg::new("use-ours").long("use-ours").action(clap::ArgAction::SetTrue),
-                    clap::Arg::new("use-theirs").long("use-theirs").action(clap::ArgAction::SetTrue),
-                    clap::Arg::new("revive-it").long("revive-it").action(clap::ArgAction::SetTrue),
-                    clap::Arg::new("delete-it").long("delete-it").action(clap::ArgAction::SetTrue),
-                    clap::Arg::new("print").long("print").action(clap::ArgAction::SetTrue),
+                    clap::Arg::new("use-ours")
+                        .long("use-ours")
+                        .action(clap::ArgAction::SetTrue),
+                    clap::Arg::new("use-theirs")
+                        .long("use-theirs")
+                        .action(clap::ArgAction::SetTrue),
+                    clap::Arg::new("revive-it")
+                        .long("revive-it")
+                        .action(clap::ArgAction::SetTrue),
+                    clap::Arg::new("delete-it")
+                        .long("delete-it")
+                        .action(clap::ArgAction::SetTrue),
+                    clap::Arg::new("print")
+                        .long("print")
+                        .action(clap::ArgAction::SetTrue),
                     clap::Arg::new("source").required(true),
                 ])
                 .about("Show un-synced changes to files in this fpm package")
