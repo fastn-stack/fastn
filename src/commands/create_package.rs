@@ -5,7 +5,9 @@ async fn template_contents(project_name: &str) -> (String, String) {
     (ftd, index)
 }
 
-pub async fn start_project(name: &str, path: Option<&str>) -> fpm::Result<()> {
+pub async fn create_package(name: &str, path: Option<&str>) -> fpm::Result<()> {
+    use colored::Colorize;
+
     let base_path = {
         match std::env::current_dir() {
             Ok(bp) => match bp.to_str() {
@@ -68,8 +70,9 @@ pub async fn start_project(name: &str, path: Option<&str>) -> fpm::Result<()> {
     fpm::history::insert_into_history(&final_dir, &file_list, &mut Default::default()).await?;
 
     println!(
-        "Template FTD project created - {}\nPath -{}",
-        name, final_dir
+        "FPM Package Created: {}\nPath: {}",
+        name.green(),
+        final_dir.to_string().yellow()
     );
 
     Ok(())

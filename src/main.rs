@@ -11,12 +11,12 @@ async fn async_main() -> fpm::Result<()> {
 
     let matches = app(authors(), version()).get_matches();
 
-    if let Some(project) = matches.subcommand_matches("start-project") {
+    if let Some(project) = matches.subcommand_matches("create-package") {
         // project-name => required field (any package Url or standard project name)
-        let name = project.value_of_("package-name").unwrap();
+        let name = project.value_of_("name").unwrap();
         // project-path is optional
-        let path = project.value_of_("package-path");
-        fpm::start_project(name, path).await?;
+        let path = project.value_of_("path");
+        fpm::create_package(name, path).await?;
         return Ok(());
     }
 
@@ -180,35 +180,20 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
         .version(version)
         .author(authors)
         .arg_required_else_help(true)
-        .arg(
-            clap::Arg::new("verbose")
-                .short('v')
-                .help("Sets the level of verbosity"),
-        )
-        .arg(
-            clap::Arg::new("test")
-                .long("test")
-                .help("Runs the command in test mode")
-                .hide(true),
-        )
+        .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
+        .arg(clap::arg!(text: --text "Runs the command in test mode").hide(true))
         .subcommand(
             // Initial subcommand format
-            // fpm start-project <project-name> [project-path]
+            // fpm create-package <project-name> [project-path]
             //                   -n or --name   -p or --path
             // Necessary <project-name> with Optional [project-path]
-            clap::Command::new("start-project")
+            clap::Command::new("create-package")
                 .about("Creates a template ftd project at the target location with the given project name")
                 .arg(
-                    clap::Arg::new("package-name")
-                        .required(true)
-                        .help("Package name")
+                    clap::arg!(name: <NAME> "The name of the package to create")
                 )
                 .arg(
-                    clap::Arg::new("package-path")
-                        .short('p')
-                        .long("path")
-                        .action(clap::ArgAction::Set)
-                        .help("Package path (relative)")
+                    clap::arg!(path: -p --path [PATH] "Package path (relative or absolute path)")
                 )
                 .version(env!("CARGO_PKG_VERSION")),
         )
@@ -226,6 +211,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
                 .arg(
                     clap::Arg::new("ignore-failed")
                         .long("ignore-failed")
+                        .action(clap::ArgAction::SetTrue)
                         .required(false),
                 )
                 .arg(
@@ -349,11 +335,11 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("resolve-conflict")
                 .args(&[
-                    clap::Arg::new("use-ours").long("use-ours"),
-                    clap::Arg::new("use-theirs").long("use-theirs"),
-                    clap::Arg::new("revive-it").long("revive-it"),
-                    clap::Arg::new("delete-it").long("delete-it"),
-                    clap::Arg::new("print").long("print"),
+                    clap::Arg::new("use-ours").long("use-ours").action(clap::ArgAction::SetTrue),
+                    clap::Arg::new("use-theirs").long("use-theirs").action(clap::ArgAction::SetTrue),
+                    clap::Arg::new("revive-it").long("revive-it").action(clap::ArgAction::SetTrue),
+                    clap::Arg::new("delete-it").long("delete-it").action(clap::ArgAction::SetTrue),
+                    clap::Arg::new("print").long("print").action(clap::ArgAction::SetTrue),
                     clap::Arg::new("source").required(true),
                 ])
                 .about("Show un-synced changes to files in this fpm package")
