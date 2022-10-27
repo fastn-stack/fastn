@@ -516,7 +516,6 @@ impl Package {
         package.resolve(&file_extract_path).await?;
         Ok(package)
     }
-    < < < < < < < HEAD
 
     pub fn from_fpm_doc(fpm_doc: &ftd::p2::Document) -> fpm::Result<Package> {
         let temp_package: Option<PackageTemp> = fpm_doc.get("fpm#package")?;
