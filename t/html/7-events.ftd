@@ -6,7 +6,20 @@ e = 1;
 a = a + b + e;
 
 
+-- void append(a,b):
+string $a:
+string b:
+
+a = a + " " + b
+
+
 -- integer $value: 3
 
 -- ftd.integer: $value
 $on-click$: $sum($a = $value, b = 1)
+
+
+-- string $name: FifthTry
+
+-- ftd.text: $name
+$on-click$: $append($a = $name, b = FTD)
