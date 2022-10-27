@@ -84,21 +84,21 @@ async fn async_main() -> fpm::Result<()> {
     }
 
     if let Some(build) = matches.subcommand_matches("build") {
-        if build.contains_id("verbose") {
+        if matches.contains_id("verbose") {
             println!("{}", fpm::debug_env_vars());
         }
 
         fpm::build(
             &mut config,
-            build.value_of_("file"),
-            build.value_of_("base").unwrap(), // unwrap okay because base is required
-            build.contains_id("ignore-failed"),
+            build.value_of_("file"), // TODO: handle more than one files
+            build.value_of_("base").unwrap_or("/"),
+            build.contains_id("ignore_failed"),
         )
         .await?;
     }
 
-    if let Some(mark_resolve) = matches.subcommand_matches("mark-resolve") {
-        fpm::mark_resolve(&config, mark_resolve.value_of_("path").unwrap()).await?;
+    if let Some(mark_resolve) = matches.subcommand_matches("mark-resolved") {
+        fpm::mark_resolved(&config, mark_resolve.value_of_("path").unwrap()).await?;
     }
 
     if let Some(abort_merge) = matches.subcommand_matches("abort-merge") {
@@ -191,7 +191,6 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
                 .about("Create a new FPM package")
                 .arg(clap::arg!(name: <NAME> "The name of the package to create"))
                 .arg(clap::arg!(path: -p --path [PATH] "Where to create the package (relative or absolute path, default value: the name)"))
-                .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
             clap::Command::new("build")
@@ -203,53 +202,46 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
                 .arg(
                     clap::arg!(ignore_failed: --"ignore-failed" "Ignore failed files.")
                 )
-                .arg(
-                    clap::Arg::new("verbose")
-                        .long("verbose")
-                        .short('v')
-                        .required(false),
-                )
-                .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
-            clap::Command::new("mark-resolve")
+            clap::Command::new("mark-resolved")
                 .about("Marks the conflicted file as resolved")
-                .arg(clap::Arg::new("path").required(true))
-                .version(env!("CARGO_PKG_VERSION"))
-                .hide(true),
+                .arg(clap::arg!(path: <PATH> "The path of the conflicted file"))
+                .hide(true), // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("abort-merge")
                 .about("Aborts the remote changes")
                 .arg(clap::Arg::new("path").required(true))
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true), // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("clone")
                 .about("Clone a package into a new directory")
                 .arg(clap::Arg::new("source").required(true))
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true)
         )
         .subcommand(
             clap::Command::new("edit")
                 .about("Edit a file in CR workspace")
-                .args(&[
-                    clap::Arg::new("file").required(true),
+                .arg(clap::arg!(file: <FILE> "The file to edit"))
+                .arg(
                     clap::Arg::new("cr")
                         .long("cr")
                         .action(clap::ArgAction::Set)
-                        .required(true),
-                ])
-                .version(env!("CARGO_PKG_VERSION")),
+                        .required(true)
+                )
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("add")
                 .about("Adds a file in workspace")
-                .args(&[
-                    clap::Arg::new("file").required(true),
-                    clap::Arg::new("cr").long("cr").action(clap::ArgAction::Set),
-                ])
-                .version(env!("CARGO_PKG_VERSION")),
+                .arg(
+                    clap::Arg::new("file").required(true))
+                .arg(
+                    clap::Arg::new("cr").long("cr").action(clap::ArgAction::Set)
+                )
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("rm")
@@ -258,7 +250,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
                     clap::Arg::new("file").required(true),
                     clap::Arg::new("cr").long("cr").action(clap::ArgAction::Set),
                 ])
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("merge")
@@ -273,65 +265,64 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
                         .required(true),
                     clap::Arg::new("file"),
                 ])
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("revert")
                 .about("Reverts the local changes")
                 .arg(clap::Arg::new("path").required(true))
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("update")
                 .about("Reinstall all the dependency packages")
-                .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
             clap::Command::new("sync")
-                .arg(clap::Arg::new("source").action(clap::ArgAction::Append))
                 .about("Sync with fpm-repo or .history folder if not using fpm-repo")
-                .version(env!("CARGO_PKG_VERSION")),
+                .arg(clap::Arg::new("source").action(clap::ArgAction::Append))
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("status")
-                .arg(clap::Arg::new("source"))
                 .about("Show the status of files in this fpm package")
-                .version(env!("CARGO_PKG_VERSION")),
+                .arg(clap::Arg::new("source"))
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("sync-status")
-                .arg(clap::Arg::new("source"))
                 .about("Show the sync status of files in this fpm package")
-                .version(env!("CARGO_PKG_VERSION")),
+                .arg(clap::Arg::new("source"))
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("create-cr")
-                .arg(clap::Arg::new("title"))
                 .about("Create a Change Request")
-                .version(env!("CARGO_PKG_VERSION")),
+                .arg(clap::Arg::new("title"))
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("close-cr")
-                .arg(clap::Arg::new("cr").required(true))
                 .about("Create a Change Request")
-                .version(env!("CARGO_PKG_VERSION")),
+                .arg(clap::Arg::new("cr").required(true))
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("translation-status")
                 .about("Show the translation status of files in this fpm package")
-                .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
             clap::Command::new("diff")
+                .about("Show un-synced changes to files in this fpm package")
                 .args(&[
                     clap::Arg::new("source").action(clap::ArgAction::Append),
                     clap::Arg::new("all").long("all").short('a'),
                 ])
-                .about("Show un-synced changes to files in this fpm package")
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("resolve-conflict")
+                .about("Show un-synced changes to files in this fpm package")
                 .args(&[
                     clap::Arg::new("use-ours")
                         .long("use-ours")
@@ -350,27 +341,27 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
                         .action(clap::ArgAction::SetTrue),
                     clap::Arg::new("source").required(true),
                 ])
-                .about("Show un-synced changes to files in this fpm package")
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("check")
                 .about("Check if everything is fine with current fpm package")
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("mark-upto-date")
+                .about("Marks file as up to date.")
                 .args(&[
                     clap::Arg::new("source").required(true),
                     clap::Arg::new("target")
                         .long("target")
                         .action(clap::ArgAction::Set),
                 ])
-                .about("Marks file as up to date.")
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("start-tracking")
+                .about("Add a tracking relation between two files")
                 .args(&[
                     clap::Arg::new("source").required(true),
                     clap::Arg::new("target")
@@ -378,19 +369,18 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
                         .action(clap::ArgAction::Set)
                         .required(true),
                 ])
-                .about("Add a tracking relation between two files")
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("stop-tracking")
+                .about("Remove a tracking relation between two files")
                 .args(&[
                     clap::Arg::new("source").required(true),
                     clap::Arg::new("target")
                         .long("target")
                         .action(clap::ArgAction::Set),
                 ])
-                .about("Remove a tracking relation between two files")
-                .version(env!("CARGO_PKG_VERSION")),
+                .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(sub_command::serve())
 }
@@ -398,23 +388,14 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
 mod sub_command {
     pub fn serve() -> clap::Command {
         let serve = clap::Command::new("serve")
+            .about("Create an http server and serves static files")
+            .arg(clap::arg!(port: --port <PORT> "The port to listen on").default_value("8080"))
             .arg(
-                clap::Arg::new("port")
-                    .long("port")
-                    .action(clap::ArgAction::Set)
-                    .help("Specify the port to serve on"),
+                clap::arg!(bind: --bind <ADDRESS> "The address to bind to")
+                    .default_value("127.0.0.1"),
             )
             .arg(
-                clap::Arg::new("bind")
-                    .long("bind")
-                    .action(clap::ArgAction::Set)
-                    .help("Specify the bind address to serve on"),
-            )
-            .arg(
-                clap::Arg::new("download-base-url")
-                    .long("download-base-url")
-                    .action(clap::ArgAction::Set)
-                    .help("URL of Package to download documents, where it is stored."),
+                clap::arg!(download_base_url: --"download-base-url" <URL> "If running without files locally, download requested files from here.")
             );
 
         if cfg!(feature = "remote") {
@@ -422,16 +403,9 @@ mod sub_command {
         } else {
             serve
                 .arg(
-                    clap::Arg::new("identities")
-                        .long("identities")
-                        .action(clap::ArgAction::Set)
-                        .required(false)
-                        .help(
-                            "Http request identities, fpm allows these identities to access documents",
-                        ),
+                    clap::arg!(identities: --identities <IDENTITIES> "Http request identities, fpm allows these identities to access documents")
+                        .hide(true) // this is only for testing purpose
                 )
-                .about("Create an http server and serves static files")
-                .version(env!("CARGO_PKG_VERSION"))
         }
     }
 }

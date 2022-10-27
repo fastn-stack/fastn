@@ -1,4 +1,4 @@
-pub async fn mark_resolve(config: &fpm::Config, path: &str) -> fpm::Result<()> {
+pub async fn mark_resolved(config: &fpm::Config, path: &str) -> fpm::Result<()> {
     use itertools::Itertools;
 
     let mut workspaces = fpm::snapshot::get_workspace(config).await?;
