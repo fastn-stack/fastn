@@ -169,6 +169,8 @@ You can add a sitemap in FPM.ftd file. Details in [sitemap docs](sitemap/).
 In sitemap you can also put `readers` and `writers` user groups at section,
 subsection and toc level.
 
+Note: `sitemap` will only contain urls without dynamic parameters.
+
 -- ft.code:
 lang: ftd
 
@@ -189,3 +191,27 @@ readers: random
 
 - ToC 2: /page2
 readers: random
+
+-- ft.h1: `fpm.dynamic-urls`
+
+You can add a `dynamic-urls`, syntactically same as sitemap. In`dynamic-urls`
+you can also put `readers` and `writers` user groups at section, subsection
+and toc level.
+
+Note: `dynamic-urls` will only contain urls with dynamic parameters.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.dynamic-urls:
+
+# Manager
+url: /<string:username>/manager/<integer:age>/
+document: person-manager.ftd
+readers: readers
+writers: writers
+- Task1
+  url: /<string:username>/task/<integer:age>/
+  document: task-type-1.ftd
+  readers: readers
+  writers: writers

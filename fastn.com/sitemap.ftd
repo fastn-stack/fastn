@@ -742,6 +742,10 @@ lang: ftd
 # Manager
 url: /<string:username>/manager/<integer:age>/
 document: person-manager.ftd
+readers: readers
+writers: writers
 - Task1
   url: /<string:username>/task/<integer:age>/
   document: task-type-1.ftd
+  readers: readers
+  writers: writers
