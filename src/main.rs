@@ -181,7 +181,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
         .author(authors)
         .arg_required_else_help(true)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
-        .arg(clap::arg!(text: --text "Runs the command in test mode").hide(true))
+        .arg(clap::arg!(test: --test "Runs the command in test mode").hide(true))
         .subcommand(
             // Initial subcommand format
             // fpm create-package <project-name> [project-path]

@@ -5,41 +5,36 @@ Will have to be updated every time version changes.
 
 -- stdout:
 
-fpm: FTD Package Manager 0.1.11
-Abrar Khan, Amit Upadhyay, Arpita Jaiswal, Shobhit Sharma
+Usage: fpm [OPTIONS] [COMMAND]
 
-USAGE:
-    fpm [OPTIONS] [SUBCOMMAND]
+Commands:
+  create-package      Creates a template ftd project at the target location with the given project name
+  build               Build static site from this fpm package
+  mark-resolve        Marks the conflicted file as resolved
+  abort-merge         Aborts the remote changes
+  clone               Clone a package into a new directory
+  edit                Edit a file in CR workspace
+  add                 Adds a file in workspace
+  rm                  Removes a file in workspace
+  merge               Merge two manifests together
+  revert              Reverts the local changes
+  update              Reinstall all the dependency packages
+  sync                Sync with fpm-repo or .history folder if not using fpm-repo
+  status              Show the status of files in this fpm package
+  sync-status         Show the sync status of files in this fpm package
+  create-cr           Create a Change Request
+  close-cr            Create a Change Request
+  translation-status  Show the translation status of files in this fpm package
+  diff                Show un-synced changes to files in this fpm package
+  resolve-conflict    Show un-synced changes to files in this fpm package
+  check               Check if everything is fine with current fpm package
+  mark-upto-date      Marks file as up to date.
+  start-tracking      Add a tracking relation between two files
+  stop-tracking       Remove a tracking relation between two files
+  serve               Create an http server and serves static files
+  help                Print this message or the help of the given subcommand(s)
 
-OPTIONS:
-    -h, --help       Print help information
-    -v               Sets the level of verbosity
-    -V, --version    Print version information
-
-SUBCOMMANDS:
-    abort-merge           Aborts the remote changes
-    add                   Adds a file in workspace
-    build                 Build static site from this fpm package
-    check                 Check if everything is fine with current fpm package
-    clone                 Clone a package into a new directory
-    close-cr              Create a Change Request
-    create-cr             Create a Change Request
-    diff                  Show un-synced changes to files in this fpm package
-    edit                  Edit a file in CR workspace
-    help                  Print this message or the help of the given subcommand(s)
-    mark-resolve          Marks the conflicted file as resolved
-    mark-upto-date        Marks file as up to date.
-    merge                 Merge two manifests together
-    resolve-conflict      Show un-synced changes to files in this fpm package
-    revert                Reverts the local changes
-    rm                    Removes a file in workspace
-    serve                 Create an http server and serves static files
-    start-project         Creates a template ftd project at the target location with the given
-                              project name
-    start-tracking        Add a tracking relation between two files
-    status                Show the status of files in this fpm package
-    stop-tracking         Remove a tracking relation between two files
-    sync                  Sync with fpm-repo or .history folder if not using fpm-repo
-    sync-status           Show the sync status of files in this fpm package
-    translation-status    Show the translation status of files in this fpm package
-    update                Reinstall all the dependency packages
+Options:
+  -v             Sets the level of verbosity
+  -h, --help     Print help information
+  -V, --version  Print version information
