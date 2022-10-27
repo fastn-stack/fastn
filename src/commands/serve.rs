@@ -168,6 +168,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         // So final check would be file is not static and path is not present in the package's sitemap
         if !path.starts_with("-/") {
             if let Some(sitemap) = config.package.sitemap.as_ref() {
+                // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
                 if !sitemap.path_exists(path.as_str()) {
                     if let Some(endpoint) = config.package.endpoint.as_ref() {
                         let req = if let Some(r) = config.request {

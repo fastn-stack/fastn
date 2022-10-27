@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq)]
 pub struct Section {
     /// `id` is the document id (or url) provided in the section
     /// Example:
@@ -113,66 +113,7 @@ pub struct Section {
     pub path_parameters: Vec<(String, String)>,
 }
 
-impl Section {
-    pub fn path_exists(&self, path: &str) -> bool {
-        if fpm::utils::ids_matches(self.id.as_str(), path) {
-            return true;
-        }
-
-        for subsection in self.subsections.iter() {
-            if subsection.path_exists(path) {
-                return true;
-            }
-        }
-        false
-    }
-
-    // Input: /abrark/foo/28/
-    // Output: document: person.ftd, path-params: [(username, abrar), (age, 28)]
-
-    pub fn resolve_document(&self, path: &str) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
-        // path: /abrark/foo/28/
-        // In sitemap url: /<string:username>/foo/<integer:age>/
-        if !self.path_parameters.is_empty() {
-            // path: /abrark/foo/28/
-            // request: abrark foo 28
-            // sitemap: [string,integer]
-            // params_matches: abrark -> string, foo -> foo, 28 -> integer
-
-            let params = fpm::sitemap::utils::parse_named_params(
-                path,
-                self.id.as_str(),
-                self.path_parameters.as_slice(),
-            );
-
-            if params.is_ok() {
-                return Ok((self.document.clone(), params?));
-            }
-        } else if fpm::utils::ids_matches(self.id.as_str(), path) {
-            return Ok((self.document.clone(), vec![]));
-        }
-
-        for subsection in self.subsections.iter() {
-            let (document, path_params) = subsection.resolve_document(path)?;
-            if document.is_some() {
-                return Ok((document, path_params));
-            }
-        }
-        Ok((None, vec![]))
-    }
-
-    /// returns the file id portion of the url only in case
-    /// any component id is referred in the url itself
-    pub fn get_file_id(&self) -> String {
-        self.id
-            .rsplit_once('#')
-            .map(|s| s.0)
-            .unwrap_or(self.id.as_str())
-            .to_string()
-    }
-}
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Subsection {
     pub id: Option<String>,
     pub title: Option<String>,
@@ -190,6 +131,80 @@ pub struct Subsection {
     /// /books/<string:book_name>/
     /// here book_name is path parameter
     pub path_parameters: Vec<(String, String)>,
+}
+
+impl Section {
+    pub fn path_exists(&self, path: &str) -> bool {
+        if fpm::utils::ids_matches(self.id.as_str(), path) {
+            return true;
+        }
+
+        for subsection in self.subsections.iter() {
+            if subsection.path_exists(path) {
+                return true;
+            }
+        }
+        false
+    }
+
+    /// returns the file id portion of the url only in case
+    /// any component id is referred in the url itself
+    pub fn get_file_id(&self) -> String {
+        self.id
+            .rsplit_once('#')
+            .map(|s| s.0)
+            .unwrap_or(self.id.as_str())
+            .to_string()
+    }
+
+    // return true if any one does contain path_params
+    pub fn contains_path_params(sections: &[Section]) -> bool {
+        fn check_toc(toc: &fpm::sitemap::toc::TocItem) -> bool {
+            if !toc.path_parameters.is_empty() {
+                return true;
+            }
+
+            for toc in toc.children.iter() {
+                if check_toc(toc) {
+                    return true;
+                }
+            }
+            false
+        }
+
+        fn check_sub_section(sub_section: &Subsection) -> bool {
+            if !sub_section.path_parameters.is_empty() {
+                return true;
+            }
+
+            for toc in sub_section.toc.iter() {
+                if check_toc(toc) {
+                    return true;
+                }
+            }
+            false
+        }
+
+        fn check_section(section: &Section) -> bool {
+            if !section.path_parameters.is_empty() {
+                return true;
+            }
+
+            for sub_section in section.subsections.iter() {
+                if check_sub_section(sub_section) {
+                    return true;
+                }
+            }
+            false
+        }
+
+        for section in sections.iter() {
+            if check_section(section) {
+                return true;
+            }
+        }
+        false
+    }
 }
 
 impl Default for Subsection {
@@ -230,41 +245,6 @@ impl Subsection {
         }
 
         false
-    }
-
-    /// path: /foo/demo/
-    /// path: /
-    fn resolve_document(&self, path: &str) -> fpm::Result<fpm::sitemap::ResolveDocOutput> {
-        if !self.path_parameters.is_empty() {
-            // path: /arpita/foo/28/
-            // request: arpita foo 28
-            // sitemap: [string,integer]
-            // Mapping: arpita -> string, foo -> foo, 28 -> integer
-            if let Some(id) = self.id.as_ref() {
-                let params = fpm::sitemap::utils::parse_named_params(
-                    path,
-                    id.as_str(),
-                    self.path_parameters.as_slice(),
-                );
-
-                if params.is_ok() {
-                    return Ok((self.document.clone(), params?));
-                }
-            }
-        } else if let Some(id) = self.id.as_ref() {
-            if fpm::utils::ids_matches(path, id.as_str()) {
-                return Ok((self.document.clone(), vec![]));
-            }
-        }
-
-        for toc in self.toc.iter() {
-            let (document, path_params) = toc.resolve_document(path)?;
-            if document.is_some() {
-                return Ok((document, path_params));
-            }
-        }
-
-        Ok((None, vec![]))
     }
 
     /// returns the file id portion of the url only in case

@@ -45,6 +45,24 @@ body sitemap-body:
 
 
 
+;; Example: Dynamic Urls
+;; -- fpm.dynamic-urls:
+;; - /person/<string:name>/
+;;  document: person.ftd
+;;  readers: readers/person
+;;  writers: writers/person
+;; - /person1/<string:name>/
+;;  document: person.ftd
+;;  readers: readers/person
+;;  writers: writers/person
+
+-- record dynamic-urls-rec:
+body dynamic-urls-body:
+
+-- optional dynamic-urls-rec dynamic-urls:
+
+
+
 -- record font-data:
 caption name:
 optional string woff:

@@ -13,13 +13,12 @@
 /// In above example, the id starts with `#` becomes the section. Similarly the id
 /// starts with `##` becomes the subsection and then the id starts with `-` becomes
 /// the table od content (TOC).
-
-// document and path-parameters
-type ResolveDocOutput = (Option<String>, Vec<(String, ftd::Value)>);
-
+pub mod dynamic_urls;
 pub mod section;
 pub mod toc;
 pub mod utils;
+
+pub use dynamic_urls::{DynamicUrls, DynamicUrlsTemp};
 
 #[derive(Debug, Clone, Default)]
 pub struct Sitemap {
@@ -174,7 +173,7 @@ impl SitemapElement {
     }
 }
 
-#[derive(thiserror::Error, Debug)]
+#[derive(thiserror::Error, Debug, PartialEq, Eq)]
 pub enum ParseError {
     #[error("{doc_id} -> {message} -> Row Content: {row_content}")]
     InvalidTOCItem {
@@ -190,6 +189,10 @@ pub enum ParseError {
     },
     #[error("id: {id} not found while linking in sitemap, doc: {doc_id}")]
     InvalidID { doc_id: String, id: String },
+    #[error("message: {message} ")]
+    InvalidSitemap { message: String },
+    #[error("message: {message} ")]
+    InvalidDynamicUrls { message: String },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -401,6 +404,7 @@ impl SitemapParser {
         self.temp_item = None;
         Ok(())
     }
+
     fn parse_attrs(
         &mut self,
         line: &str,
@@ -490,6 +494,12 @@ impl Sitemap {
             readers: vec![],
             writers: vec![],
         };
+
+        if sitemap.has_path_params() {
+            return Err(ParseError::InvalidSitemap {
+                message: "Sitemap should not contain urls with dynamic params".to_string(),
+            });
+        }
 
         if resolve_sitemap {
             sitemap
@@ -1381,15 +1391,63 @@ impl Sitemap {
 
     /// path: foo/temp/
     /// path: /
-    // TODO: If nothing is found return 404, Handle 404 Errors
-    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
+    pub fn resolve_document(&self, path: &str) -> Option<String> {
+        fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> Option<String> {
+            if fpm::utils::ids_matches(toc.id.as_str(), path) {
+                return toc.document.clone();
+            }
+
+            for child in toc.children.iter() {
+                let document = resolve_in_toc(child, path);
+                if document.is_some() {
+                    return document;
+                }
+            }
+            None
+        }
+
+        fn resolve_in_sub_section(sub_section: &section::Subsection, path: &str) -> Option<String> {
+            if let Some(id) = sub_section.id.as_ref() {
+                if fpm::utils::ids_matches(path, id.as_str()) {
+                    return sub_section.document.clone();
+                }
+            }
+
+            for toc in sub_section.toc.iter() {
+                let document = resolve_in_toc(toc, path);
+                if document.is_some() {
+                    return document;
+                }
+            }
+
+            None
+        }
+
+        fn resolve_in_section(section: &section::Section, path: &str) -> Option<String> {
+            if fpm::utils::ids_matches(section.id.as_str(), path) {
+                return section.document.clone();
+            }
+
+            for subsection in section.subsections.iter() {
+                let document = resolve_in_sub_section(subsection, path);
+                if document.is_some() {
+                    return document;
+                }
+            }
+            None
+        }
+
         for section in self.sections.iter() {
-            let (document, path_params) = section.resolve_document(path)?;
+            let document = resolve_in_section(section, path);
             if document.is_some() {
-                return Ok((document, path_params));
+                return document;
             }
         }
-        Ok((None, vec![]))
+        None
+    }
+
+    pub fn has_path_params(&self) -> bool {
+        section::Section::contains_path_params(&self.sections)
     }
 }
 
