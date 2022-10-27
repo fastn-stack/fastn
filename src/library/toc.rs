@@ -429,7 +429,7 @@ mod test {
     #[test]
     fn parse() {
         p!(
-            &indoc!(
+            indoc!(
                 "
         # Hello World!
 
@@ -453,7 +453,7 @@ mod test {
             super::ToC {
                 items: vec![
                     super::TocItem {
-                        title: Some(format!("Hello World!")),
+                        title: Some("Hello World!".to_string()),
                         id: None,
                         url: None,
                         number: vec![],
@@ -466,7 +466,7 @@ mod test {
                         document: None,
                     },
                     super::TocItem {
-                        title: Some(format!("Test Page")),
+                        title: Some("Test Page".to_string()),
                         id: None,
                         url: Some("/test-page/".to_string()),
                         number: vec![1],
@@ -479,7 +479,7 @@ mod test {
                         document: None,
                     },
                     super::TocItem {
-                        title: Some(format!("Title One")),
+                        title: Some("Title One".to_string()),
                         id: None,
                         url: None,
                         number: vec![],
@@ -492,7 +492,7 @@ mod test {
                         document: None,
                     },
                     super::TocItem {
-                        title: Some(format!("Home Page")),
+                        title: Some("Home Page".to_string()),
                         id: None,
                         url: Some("/home/".to_string()),
                         number: vec![1],
@@ -504,7 +504,7 @@ mod test {
                         document: None,
                         children: vec![
                             super::TocItem {
-                                title: Some(format!("Nested Title")),
+                                title: Some("Nested Title".to_string()),
                                 id: None,
                                 url: None,
                                 number: vec![],
@@ -518,7 +518,7 @@ mod test {
                             },
                             super::TocItem {
                                 id: None,
-                                title: Some(format!("Nested Link")),
+                                title: Some("Nested Link".to_string()),
                                 url: Some("/home/nested-link/".to_string(),),
                                 number: vec![1, 1],
                                 is_heading: false,
@@ -530,7 +530,7 @@ mod test {
                                 document: None,
                             },
                             super::TocItem {
-                                title: Some(format!("Nested Title 2")),
+                                title: Some("Nested Title 2".to_string()),
                                 id: None,
                                 url: None,
                                 number: vec![],
@@ -544,7 +544,7 @@ mod test {
                             },
                             super::TocItem {
                                 id: None,
-                                title: Some(format!("Nested Link Two")),
+                                title: Some("Nested Link Two".to_string()),
                                 url: Some("/home/nested-link-two/".to_string()),
                                 number: vec![1, 1],
                                 is_heading: false,
@@ -555,7 +555,7 @@ mod test {
                                 document: None,
                                 children: vec![super::TocItem {
                                     id: None,
-                                    title: Some(format!("Further Nesting")),
+                                    title: Some("Further Nesting".to_string()),
                                     url: Some("/home/nested-link-two/further-nested/".to_string()),
                                     number: vec![1, 1, 1],
                                     is_heading: false,
@@ -569,7 +569,7 @@ mod test {
                             },
                             super::TocItem {
                                 id: None,
-                                title: Some(format!("`ftd::p1` grammar")),
+                                title: Some("`ftd::p1` grammar".to_string()),
                                 url: Some("/p1-grammar/".to_string()),
                                 number: vec![1, 2],
                                 is_heading: false,
@@ -590,14 +590,14 @@ mod test {
     #[test]
     fn parse_heading() {
         p!(
-            &indoc!(
+            indoc!(
                 "
         # Home Page
         "
             ),
             super::ToC {
                 items: vec![super::TocItem {
-                    title: Some(format!("Home Page")),
+                    title: Some("Home Page".to_string()),
                     id: None,
                     url: None,
                     number: vec![],
@@ -616,7 +616,7 @@ mod test {
     #[test]
     fn parse_simple_with_num() {
         p!(
-            &indoc!(
+            indoc!(
                 "
         - Home Page: /home-page/
         - Hindi: https://test.website.com
@@ -625,7 +625,7 @@ mod test {
             super::ToC {
                 items: vec![
                     super::TocItem {
-                        title: Some(format!("Home Page")),
+                        title: Some("Home Page".to_string()),
                         is_heading: false,
                         id: None,
                         url: Some("/home-page/".to_string()),
@@ -638,7 +638,7 @@ mod test {
                         document: None,
                     },
                     super::TocItem {
-                        title: Some(format!("Hindi")),
+                        title: Some("Hindi".to_string()),
                         is_heading: false,
                         id: None,
                         url: Some("https://test.website.com".to_string()),
