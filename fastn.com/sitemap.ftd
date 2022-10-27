@@ -706,15 +706,33 @@ document: person-employee.ftd
     url: /<string:username>/task2/<integer:age>/
     document: task-type-2.ftd
 
--- ft.h2: Mandatory Syntax
+-- ft.h2: Syntax
 
-You can customized your urls same as sitemap. One section `#` `Title` and `url`
-is mandatory.
+Syntactically, You can customize your urls same as sitemap. One section `#`,
+`Title`, `url` and `document` is mandatory.
 
 
 Note: `-- fpm.sitemap:` will not contain any urls with dynamic parameters, and
 `-- fpm.dynamic-urls:` will not contain any urls without dynamic parameters.
 
+
+-- ft.h3: Examples
+
+One url entry only with single `section`.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.dynamic-urls:
+
+# Manager
+url: /<string:username>/manager/<integer:age>/
+document: person-manager.ftd
+
+
+-- ft.markdown:
+
+One url entry only with one `section` and one `toc` item.
 
 -- ft.code: FPM.ftd
 lang: ftd
