@@ -6,6 +6,7 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#name": "FifthTry",
 "foo#value": 3
 }
 </script>
@@ -23,7 +24,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#value&quot;,&quot;b&quot;:{&quot;value&quot;:1}}}]', this)" style="text-decoration: none" class="ft_md">3</div></div>
+<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#value&quot;,&quot;b&quot;:{&quot;value&quot;:1}}}]', this)" style="text-decoration: none" class="ft_md">3</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#name&quot;,&quot;b&quot;:{&quot;value&quot;:&quot;FTD&quot;}}}]', this)" style="text-decoration: none" class="ft_md">FifthTry</div></div>
 
 
 <script>
@@ -394,6 +395,12 @@ function isFunctionArgument(object) {
 return 'member' in object;
 }
 
+function foo__append___main(a,b){
+a.value = a.value+" "+b.value
+}
+
+
+
 function foo__sum___main(a,b){
 let e = 1;
 a.value = a.value+b.value+e;
@@ -402,6 +409,8 @@ a.value = a.value+b.value+e;
 
 function node_change_main(data){
 document.querySelector(`[data-id="0:main"]`).innerHTML = data["foo#value"];
+
+document.querySelector(`[data-id="1:main"]`).innerHTML = data["foo#name"];
 }
 
 
