@@ -84,7 +84,7 @@ async fn async_main() -> fpm::Result<()> {
     }
 
     if let Some(build) = matches.subcommand_matches("build") {
-        if matches.contains_id("verbose") {
+        if matches.get_flag("verbose") {
             println!("{}", fpm::debug_env_vars());
         }
 
@@ -92,7 +92,7 @@ async fn async_main() -> fpm::Result<()> {
             &mut config,
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
-            build.contains_id("ignore_failed"),
+            build.get_flag("ignore_failed"),
         )
         .await?;
     }
@@ -137,7 +137,7 @@ async fn async_main() -> fpm::Result<()> {
         fpm::translation_status(&config).await?;
     }
     if let Some(diff) = matches.subcommand_matches("diff") {
-        let all = diff.contains_id("all");
+        let all = diff.get_flag("all");
         if let Some(source) = diff.get_many::<String>("source") {
             let sources = source.map(|v| v.to_string()).collect();
             fpm::diff(&config, Some(sources), all).await?;
@@ -146,11 +146,11 @@ async fn async_main() -> fpm::Result<()> {
         }
     }
     if let Some(resolve_conflict) = matches.subcommand_matches("resolve-conflict") {
-        let use_ours = resolve_conflict.contains_id("use-ours");
-        let use_theirs = resolve_conflict.contains_id("use-theirs");
-        let print = resolve_conflict.contains_id("print");
-        let revive_it = resolve_conflict.contains_id("revive-it");
-        let delete_it = resolve_conflict.contains_id("delete-it");
+        let use_ours = resolve_conflict.get_flag("use-ours");
+        let use_theirs = resolve_conflict.get_flag("use-theirs");
+        let print = resolve_conflict.get_flag("print");
+        let revive_it = resolve_conflict.get_flag("revive-it");
+        let delete_it = resolve_conflict.get_flag("delete-it");
         let source = resolve_conflict.value_of_("source").unwrap();
         fpm::resolve_conflict(
             &config, source, use_ours, use_theirs, print, revive_it, delete_it,
