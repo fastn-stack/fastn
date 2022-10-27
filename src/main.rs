@@ -16,8 +16,7 @@ async fn async_main() -> fpm::Result<()> {
         let name = project.value_of_("name").unwrap();
         // project-path is optional
         let path = project.value_of_("path");
-        fpm::create_package(name, path).await?;
-        return Ok(());
+        return fpm::create_package(name, path).await;
     }
 
     if let Some(mark) = matches.subcommand_matches("serve") {
@@ -32,55 +31,50 @@ async fn async_main() -> fpm::Result<()> {
         let bind = mark.value_of_("bind").unwrap_or("127.0.0.1").to_string();
         let download_base_url = mark.value_of_("download-base-url");
 
-        fpm::listen(
+        return fpm::listen(
             bind.as_str(),
             port,
             download_base_url.map(ToString::to_string),
         )
-        .await?;
-        return Ok(());
+        .await;
     }
 
     if let Some(clone) = matches.subcommand_matches("clone") {
-        fpm::clone(clone.value_of_("source").unwrap()).await?;
-        return Ok(());
+        return fpm::clone(clone.value_of_("source").unwrap()).await;
     }
 
     let mut config = fpm::Config::read(None, true, None).await?;
 
     if matches.subcommand_matches("update").is_some() {
-        fpm::update(&config).await?;
+        return fpm::update(&config).await;
     }
 
     if let Some(edit) = matches.subcommand_matches("edit") {
-        fpm::edit(
+        return fpm::edit(
             &config,
             edit.value_of_("file").unwrap(),
             edit.value_of_("cr").unwrap(),
         )
-        .await?;
-        return Ok(());
+        .await;
     }
 
     if let Some(add) = matches.subcommand_matches("add") {
-        fpm::add(&config, add.value_of_("file").unwrap(), add.value_of_("cr")).await?;
-        return Ok(());
+        // TODO: support multiple files
+        return fpm::add(&config, add.value_of_("file").unwrap(), add.value_of_("cr")).await;
     }
 
     if let Some(rm) = matches.subcommand_matches("rm") {
-        fpm::rm(&config, rm.value_of_("file").unwrap(), rm.value_of_("cr")).await?;
-        return Ok(());
+        return fpm::rm(&config, rm.value_of_("file").unwrap(), rm.value_of_("cr")).await;
     }
 
     if let Some(merge) = matches.subcommand_matches("merge") {
-        fpm::merge(
+        return fpm::merge(
             &config,
             merge.value_of_("src"),
             merge.value_of_("dest").unwrap(),
-            merge.value_of_("file"),
+            merge.value_of_("file"), // TODO: support multiple files
         )
-        .await?;
-        return Ok(());
+        .await;
     }
 
     if let Some(build) = matches.subcommand_matches("build") {
@@ -98,40 +92,38 @@ async fn async_main() -> fpm::Result<()> {
     }
 
     if let Some(mark_resolve) = matches.subcommand_matches("mark-resolved") {
-        fpm::mark_resolved(&config, mark_resolve.value_of_("path").unwrap()).await?;
+        return fpm::mark_resolved(&config, mark_resolve.value_of_("path").unwrap()).await;
     }
 
     if let Some(abort_merge) = matches.subcommand_matches("abort-merge") {
-        fpm::abort_merge(&config, abort_merge.value_of_("path").unwrap()).await?;
+        return fpm::abort_merge(&config, abort_merge.value_of_("path").unwrap()).await;
     }
 
     if let Some(revert) = matches.subcommand_matches("revert") {
-        fpm::revert(&config, revert.value_of_("path").unwrap()).await?;
+        return fpm::revert(&config, revert.value_of_("path").unwrap()).await;
     }
 
     if let Some(sync) = matches.subcommand_matches("sync") {
-        if let Some(source) = sync.get_many::<String>("source") {
+        return if let Some(source) = sync.get_many::<String>("file") {
             let sources = source.map(|v| v.to_string()).collect();
-            fpm::sync2(&config, Some(sources)).await?;
+            fpm::sync2(&config, Some(sources)).await
         } else {
-            fpm::sync2(&config, None).await?;
-        }
+            fpm::sync2(&config, None).await
+        };
     }
     if let Some(status) = matches.subcommand_matches("sync-status") {
-        let source = status.value_of_("source");
-        fpm::sync_status(&config, source).await?;
+        // TODO: handle multiple files
+        return fpm::sync_status(&config, status.value_of_("file")).await;
     }
     if let Some(create_cr) = matches.subcommand_matches("create-cr") {
-        let title = create_cr.value_of_("title");
-        fpm::create_cr(&config, title).await?;
+        return fpm::create_cr(&config, create_cr.value_of_("title")).await;
     }
     if let Some(close_cr) = matches.subcommand_matches("close-cr") {
-        let cr = close_cr.value_of_("cr").unwrap();
-        fpm::close_cr(&config, cr).await?;
+        fpm::close_cr(&config, close_cr.value_of_("cr").unwrap()).await?;
     }
     if let Some(status) = matches.subcommand_matches("status") {
-        let source = status.value_of_("source");
-        fpm::status(&config, source).await?;
+        // TODO: handle multiple files
+        fpm::status(&config, status.value_of_("file")).await?;
     }
     if matches.subcommand_matches("translation-status").is_some() {
         fpm::translation_status(&config).await?;
@@ -139,8 +131,7 @@ async fn async_main() -> fpm::Result<()> {
     if let Some(diff) = matches.subcommand_matches("diff") {
         let all = diff.get_flag("all");
         if let Some(source) = diff.get_many::<String>("source") {
-            let sources = source.map(|v| v.to_string()).collect();
-            fpm::diff(&config, Some(sources), all).await?;
+            fpm::diff(&config, Some(source.map(|v| v.to_string()).collect()), all).await?;
         } else {
             fpm::diff(&config, None, all).await?;
         }
@@ -196,12 +187,8 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
             clap::Command::new("build")
                 .about("Build static site from this fpm package")
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
-                .arg(
-                    clap::arg!(base: -b --base [BASE] "The base path.").default_value("/")
-                )
-                .arg(
-                    clap::arg!(ignore_failed: --"ignore-failed" "Ignore failed files.")
-                )
+                .arg(clap::arg!(base: -b --base [BASE] "The base path.").default_value("/"))
+                .arg(clap::arg!(ignore_failed: --"ignore-failed" "Ignore failed files."))
         )
         .subcommand(
             clap::Command::new("mark-resolved")
@@ -212,65 +199,48 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("abort-merge")
                 .about("Aborts the remote changes")
-                .arg(clap::Arg::new("path").required(true))
+                .arg(clap::arg!(path: <PATH> "The path of the conflicted file"))
                 .hide(true), // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("clone")
                 .about("Clone a package into a new directory")
-                .arg(clap::Arg::new("source").required(true))
+                .arg(clap::arg!(source: <SOURCE> "The source package to clone"))
                 .hide(true)
         )
         .subcommand(
             clap::Command::new("edit")
                 .about("Edit a file in CR workspace")
                 .arg(clap::arg!(file: <FILE> "The file to edit"))
-                .arg(
-                    clap::Arg::new("cr")
-                        .long("cr")
-                        .action(clap::ArgAction::Set)
-                        .required(true)
-                )
+                .arg(clap::arg!(cr: --cr <CR> "The CR to edit the file in").required(true))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("add")
-                .about("Adds a file in workspace")
-                .arg(
-                    clap::Arg::new("file").required(true))
-                .arg(
-                    clap::Arg::new("cr").long("cr").action(clap::ArgAction::Set)
-                )
+                .about("Add one or more files in the workspace")
+                .arg(clap::arg!(file: <FILE>... "The file(s) to add"))
+                .arg(clap::arg!(cr: --cr <CR> "The CR to add the file(s) in"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("rm")
-                .about("Removes a file in workspace")
-                .args(&[
-                    clap::Arg::new("file").required(true),
-                    clap::Arg::new("cr").long("cr").action(clap::ArgAction::Set),
-                ])
+                .about("Removes one or more files from the workspace")
+                .arg(clap::arg!(file: <FILE>... "The file(s) to remove"))
+                .arg(clap::arg!(cr: --cr <CR> "The CR to remove the file(s) from"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("merge")
                 .about("Merge two manifests together")
-                .args(&[
-                    clap::Arg::new("src")
-                        .long("src")
-                        .action(clap::ArgAction::Set),
-                    clap::Arg::new("dest")
-                        .long("dest")
-                        .action(clap::ArgAction::Set)
-                        .required(true),
-                    clap::Arg::new("file"),
-                ])
+                .arg(clap::arg!(src: <SRC> "The source manifest to merge"))
+                .arg(clap::arg!(dest: <DEST> "The destination manifest to merge"))
+                .arg(clap::arg!(file: <FILE>... "The file(s) to merge"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("revert")
                 .about("Reverts the local changes")
-                .arg(clap::Arg::new("path").required(true))
+                .arg(clap::arg!(path: <PATH> "The path of the conflicted file"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
@@ -279,32 +249,32 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
         )
         .subcommand(
             clap::Command::new("sync")
-                .about("Sync with fpm-repo or .history folder if not using fpm-repo")
-                .arg(clap::Arg::new("source").action(clap::ArgAction::Append))
+                .about("Sync with fpm-repo (or .history folder if not using fpm-repo)")
+                .arg(clap::arg!(file: <FILE>... "The file(s) to sync (leave empty to sync entire package)"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("status")
                 .about("Show the status of files in this fpm package")
-                .arg(clap::Arg::new("source"))
+                .arg(clap::arg!(file: <FILE>... "The file(s) to see status of (leave empty to see status of entire package)").required(false))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("sync-status")
                 .about("Show the sync status of files in this fpm package")
-                .arg(clap::Arg::new("source"))
+                .arg(clap::arg!(file: <FILE>... "The file(s) to see status of (leave empty to see status of entire package)").required(false))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("create-cr")
                 .about("Create a Change Request")
-                .arg(clap::Arg::new("title"))
+                .arg(clap::arg!(title: <TITLE> "The title of the new CR"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("close-cr")
                 .about("Create a Change Request")
-                .arg(clap::Arg::new("cr").required(true))
+                .arg(clap::arg!(cr: <CR> "The CR to Close"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(

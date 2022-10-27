@@ -303,7 +303,7 @@ pub async fn listen(
     bind_address: &str,
     port: Option<u16>,
     package_download_base_url: Option<String>,
-) -> std::io::Result<()> {
+) -> fpm::Result<()> {
     use colored::Colorize;
 
     if package_download_base_url.is_some() {
@@ -355,7 +355,8 @@ You can try without providing port, it will automatically pick unused port."#,
     actix_web::HttpServer::new(app)
         .listen(tcp_listener)?
         .run()
-        .await
+        .await?;
+    Ok(())
 }
 
 // cargo install --features controller --path=.
