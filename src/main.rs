@@ -9,7 +9,7 @@ fn main() -> fpm::Result<()> {
 async fn async_main() -> fpm::Result<()> {
     use colored::Colorize;
 
-    let matches = app(authors(), version()).get_matches();
+    let matches = app(version()).get_matches();
 
     if let Some(project) = matches.subcommand_matches("create-package") {
         // project-name => required field (any package Url or standard project name)
@@ -86,7 +86,7 @@ async fn async_main() -> fpm::Result<()> {
             &mut config,
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
-            build.get_flag("ignore_failed"),
+            build.get_flag("ignore-failed"),
         )
         .await;
     }
@@ -130,7 +130,7 @@ async fn async_main() -> fpm::Result<()> {
     }
     if let Some(diff) = matches.subcommand_matches("diff") {
         let all = diff.get_flag("all");
-        return if let Some(source) = diff.get_many::<String>("source") {
+        return if let Some(source) = diff.get_many::<String>("file") {
             fpm::diff(&config, Some(source.map(|v| v.to_string()).collect()), all).await
         } else {
             fpm::diff(&config, None, all).await
@@ -143,7 +143,7 @@ async fn async_main() -> fpm::Result<()> {
         let print = resolve_conflict.get_flag("print");
         let revive_it = resolve_conflict.get_flag("revive-it");
         let delete_it = resolve_conflict.get_flag("delete-it");
-        let source = resolve_conflict.value_of_("source").unwrap();
+        let source = resolve_conflict.value_of_("file").unwrap(); // TODO: handle multiple files
         return fpm::resolve_conflict(
             &config, source, use_ours, use_theirs, print, revive_it, delete_it,
         )
@@ -168,13 +168,12 @@ async fn async_main() -> fpm::Result<()> {
     unreachable!("No subcommand matched");
 }
 
-fn app(authors: &'static str, version: &'static str) -> clap::Command {
+fn app(version: &'static str) -> clap::Command {
     clap::Command::new("fpm: FTD Package Manager")
         .version(version)
-        .author(authors)
         .arg_required_else_help(true)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
-        .arg(clap::arg!(test: --test "Runs the command in test mode").hide(true))
+        .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
         .subcommand(
             // Initial subcommand format
             // fpm create-package <project-name> [project-path]
@@ -183,14 +182,14 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
             clap::Command::new("create-package")
                 .about("Create a new FPM package")
                 .arg(clap::arg!(name: <NAME> "The name of the package to create"))
-                .arg(clap::arg!(path: -p --path [PATH] "Where to create the package (relative or absolute path, default value: the name)"))
+                .arg(clap::arg!(-p --path [PATH] "Where to create the package (relative or absolute path, default value: the name)"))
         )
         .subcommand(
             clap::Command::new("build")
                 .about("Build static site from this fpm package")
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
-                .arg(clap::arg!(base: -b --base [BASE] "The base path.").default_value("/"))
-                .arg(clap::arg!(ignore_failed: --"ignore-failed" "Ignore failed files."))
+                .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
+                .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
         )
         .subcommand(
             clap::Command::new("mark-resolved")
@@ -214,21 +213,21 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
             clap::Command::new("edit")
                 .about("Edit a file in CR workspace")
                 .arg(clap::arg!(file: <FILE> "The file to edit"))
-                .arg(clap::arg!(cr: --cr <CR> "The CR to edit the file in").required(true))
+                .arg(clap::arg!(--cr <CR> "The CR to edit the file in").required(true))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("add")
                 .about("Add one or more files in the workspace")
                 .arg(clap::arg!(file: <FILE>... "The file(s) to add"))
-                .arg(clap::arg!(cr: --cr <CR> "The CR to add the file(s) in"))
+                .arg(clap::arg!(--cr <CR> "The CR to add the file(s) in"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("rm")
                 .about("Removes one or more files from the workspace")
                 .arg(clap::arg!(file: <FILE>... "The file(s) to remove"))
-                .arg(clap::arg!(cr: --cr <CR> "The CR to remove the file(s) from"))
+                .arg(clap::arg!(--cr <CR> "The CR to remove the file(s) from"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
@@ -287,33 +286,19 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("diff")
                 .about("Show un-synced changes to files in this fpm package")
-                .args(&[
-                    clap::Arg::new("source").action(clap::ArgAction::Append),
-                    clap::Arg::new("all").long("all").short('a'),
-                ])
+                .arg(clap::arg!(file: <FILE>... "The file(s) to see diff of (leave empty to see diff of entire package)").required(false))
+                .arg(clap::arg!(-a --all "Show all changes."))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("resolve-conflict")
                 .about("Show un-synced changes to files in this fpm package")
-                .args(&[
-                    clap::Arg::new("use-ours")
-                        .long("use-ours")
-                        .action(clap::ArgAction::SetTrue),
-                    clap::Arg::new("use-theirs")
-                        .long("use-theirs")
-                        .action(clap::ArgAction::SetTrue),
-                    clap::Arg::new("revive-it")
-                        .long("revive-it")
-                        .action(clap::ArgAction::SetTrue),
-                    clap::Arg::new("delete-it")
-                        .long("delete-it")
-                        .action(clap::ArgAction::SetTrue),
-                    clap::Arg::new("print")
-                        .long("print")
-                        .action(clap::ArgAction::SetTrue),
-                    clap::Arg::new("source").required(true),
-                ])
+                .arg(clap::arg!(--"use-ours" "Use our version of the file"))
+                .arg(clap::arg!(--"use-theirs" "Use their version of the file"))
+                .arg(clap::arg!(--"revive-it" "Revive the file"))
+                .arg(clap::arg!(--"delete-it" "Delete the file"))
+                .arg(clap::arg!(--"print" "Print the file to stdout"))
+                .arg(clap::arg!(file: <FILE> "The file to resolve the conflict for"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
@@ -324,35 +309,22 @@ fn app(authors: &'static str, version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("mark-upto-date")
                 .about("Marks file as up to date.")
-                .args(&[
-                    clap::Arg::new("source").required(true),
-                    clap::Arg::new("target")
-                        .long("target")
-                        .action(clap::ArgAction::Set),
-                ])
+                .arg(clap::arg!(source: <SOURCE> "The source file to mark as up to date"))
+                .arg(clap::arg!(--target <TARGET> "The target file to mark as up to date"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("start-tracking")
                 .about("Add a tracking relation between two files")
-                .args(&[
-                    clap::Arg::new("source").required(true),
-                    clap::Arg::new("target")
-                        .long("target")
-                        .action(clap::ArgAction::Set)
-                        .required(true),
-                ])
+                .arg(clap::arg!(source: <SOURCE> "The source file to start track"))
+                .arg(clap::arg!(--target <TARGET> "The target file that will track the source").required(true))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("stop-tracking")
                 .about("Remove a tracking relation between two files")
-                .args(&[
-                    clap::Arg::new("source").required(true),
-                    clap::Arg::new("target")
-                        .long("target")
-                        .action(clap::ArgAction::Set),
-                ])
+                .arg(clap::arg!(source: <SOURCE> "The file stop tracking"))
+                .arg(clap::arg!(--target <TARGET> "If source tracks multiple targets, specify which one to stop tracking"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(sub_command::serve())
@@ -388,17 +360,6 @@ pub fn version() -> &'static str {
             None => env!("CARGO_PKG_VERSION"),
         }
     }
-}
-
-pub fn authors() -> &'static str {
-    Box::leak(
-        env!("CARGO_PKG_AUTHORS")
-            .split(':')
-            .map(|v| v.split_once('<').map(|(v, _)| v.trim()).unwrap_or_default())
-            .collect::<Vec<_>>()
-            .join(", ")
-            .into_boxed_str(),
-    )
 }
 
 trait ValueOf {
