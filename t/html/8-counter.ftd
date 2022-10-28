@@ -24,6 +24,15 @@ integer b:
 a /= b;
 
 
+-- integer rmultiple(a,b):
+integer a:
+integer b:
+
+e = a*b;
+e
+
+
+
 -- integer $value: 50
 
 
@@ -31,7 +40,7 @@ a /= b;
 integer $count:
 
 -- ftd.row:
-padding: $counter.count
+padding: $rmultiple(a = $counter.count, b = 2)
 
 -- ftd.text: 🐎
 padding: 2

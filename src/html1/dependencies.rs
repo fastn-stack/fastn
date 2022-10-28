@@ -9,7 +9,6 @@ impl<'a> DependencyGenerator<'a> {
     }
 
     pub(crate) fn get_dependencies(&self) -> String {
-        dbg!(&self.node);
         let dependencies = self.get_dependencies_();
         if dependencies.trim().is_empty() {
             return "".to_string();
@@ -71,6 +70,30 @@ impl<'a> DependencyGenerator<'a> {
                         format!(
                             "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = data[\"{}\"];",
                             node_data_id, key, name
+                        )
+                    };
+                    result.push(value);
+                } else if let ftd::interpreter2::PropertyValue::FunctionCall(function_call) =
+                    &default.value
+                {
+                    let action = serde_json::to_string(&ftd::html1::Action::from_function_call(
+                        &function_call,
+                        self.id,
+                    ))
+                    .unwrap();
+                    let event = format!(
+                        "window.ftd.handle_function(event, '{}', '{}', this)",
+                        self.id, action
+                    );
+                    let value = if let Some(ref pattern) = attribute.pattern {
+                        format!(
+                            "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = \"{}\".format({});",
+                            node_data_id, key, pattern, event
+                        )
+                    } else {
+                        format!(
+                            "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = {};",
+                            node_data_id, key, event
                         )
                     };
                     result.push(value);

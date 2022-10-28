@@ -306,6 +306,8 @@ fn update_local_variable_references_in_component(
     for child in component.children.iter_mut() {
         update_local_variable_references_in_component(child, local_variable_map);
     }
+
+    dbg!(&component);
 }
 
 fn update_local_variable_reference_in_property(
@@ -351,12 +353,17 @@ fn update_local_variable_reference_in_property_value(
     property_value: &mut ftd::interpreter2::PropertyValue,
     local_variable: &ftd::Map<String>,
 ) {
-    let reference_or_clone =
-        if let Some(reference_or_clone) = property_value.get_reference_or_clone() {
-            reference_or_clone
-        } else {
+    let reference_or_clone = match property_value {
+        ftd::interpreter2::PropertyValue::Reference { name, .. }
+        | ftd::interpreter2::PropertyValue::Clone { name, .. } => name.to_string(),
+        ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {
+            for property_value in function_call.values.values_mut() {
+                update_local_variable_reference_in_property_value(property_value, local_variable);
+            }
             return;
-        };
+        }
+        _ => return,
+    };
 
     if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
         if reference_or_clone.starts_with(format!("{}.", k).as_str()) || reference_or_clone.eq(k) {

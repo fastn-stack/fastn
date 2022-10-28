@@ -12,6 +12,7 @@ declare global {
     interface Export {
         init: object;
         handle_event(evt: Event, id: string, event: string, obj: Element): void;
+        handle_function(evt: Event, id: string, event: string, obj: Element): any;
     }
 
     interface String {
