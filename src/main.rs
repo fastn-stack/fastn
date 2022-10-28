@@ -324,10 +324,13 @@ fn app(version: &'static str) -> clap::Command {
 mod sub_command {
     pub fn serve() -> clap::Command {
         let serve = clap::Command::new("serve")
-            .about("Create an http server and serves static files")
-            .arg(clap::arg!(port: --port <PORT> "The port to listen on"))
-            .arg(clap::arg!(bind: --bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
-            .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download requested files from here."));
+            .about("Serve package content over HTTP")
+            .after_help("FPM packages can have dynamic features. If your package uses any \
+            dynamic feature, then you want to use `fpm serve` instead of `fpm build`.\n\n\
+            Read more about it on https://fpm.dev/serve/")
+            .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
+            .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
+            .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"));
         if cfg!(feature = "remote") {
             serve
         } else {
