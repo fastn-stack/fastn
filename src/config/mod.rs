@@ -563,7 +563,7 @@ impl Config {
         Ok(file)
     }
 
-    pub fn get_mountpoint_sanitized_path(&self, path: &str) -> Option<(String, &Package)> {
+    pub fn get_mountpoint_sanitized_path(&self, path: &str) -> Option<(String, &Package, String)> {
         // It should return dependency package-name and sanitized path
         self.package
             .dep_with_mount_point()
@@ -572,8 +572,64 @@ impl Config {
             .map(|(mp, dep)| {
                 let package_name = dep.name.trim_matches('/');
                 let new_path = path.trim_start_matches(mp.trim_start_matches('/'));
-                (format!("-/{package_name}/{new_path}"), dep)
+                (
+                    format!("-/{package_name}/{new_path}"),
+                    dep,
+                    new_path.to_string(),
+                )
             })
+    }
+
+    pub async fn update_sitemap(&self, package: &Package) -> fpm::Result<Package> {
+        let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
+        let fpm_doc = utils::fpm_doc(fpm_path).await?;
+
+        dbg!(&fpm_doc);
+
+        let mut package = package.clone();
+
+        package.sitemap_temp = fpm_doc.get("fpm#sitemap")?;
+        dbg!(&package.sitemap_temp);
+        package.dynamic_urls_temp = fpm_doc.get("fpm#dynamic-urls")?;
+
+        let asset_documents = self.get_assets().await?;
+
+        package.sitemap = match package.sitemap_temp.as_ref() {
+            Some(sitemap_temp) => {
+                let mut s = fpm::sitemap::Sitemap::parse(
+                    sitemap_temp.body.as_str(),
+                    &package,
+                    &mut self.clone(), //TODO: totally wrong
+                    &asset_documents,
+                    "/",
+                    false,
+                )
+                .await?;
+                s.readers = sitemap_temp.readers.clone();
+                s.writers = sitemap_temp.writers.clone();
+                Some(s)
+            }
+            None => None,
+        };
+
+        // Handling of `-- fpm.dynamic-urls:`
+        package.dynamic_urls = {
+            match &package.dynamic_urls_temp {
+                Some(urls_temp) => Some(fpm::sitemap::DynamicUrls::parse(
+                    &self.global_ids,
+                    &package.name,
+                    urls_temp.body.as_str(),
+                )?),
+                None => None,
+            }
+        };
+
+        dbg!(&package.sitemap);
+
+        dbg!(&fpm_path);
+        dbg!(&fpm_path.exists());
+        dbg!(&package.fpm_path);
+        Ok(package)
     }
 
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
@@ -583,25 +639,34 @@ impl Config {
         //
         // Sanitize the mountpoint request.
         // Get the package and sanitized path
-        let sanitized_path = match self.get_mountpoint_sanitized_path(path) {
-            Some((new_path, _)) => new_path,
-            None => path.to_string(),
-        };
-
-        dbg!(path, &sanitized_path);
+        let (sanitized_path, mut sanitized_package, remaining_path) =
+            match self.get_mountpoint_sanitized_path(path) {
+                Some((new_path, package, remaining_path)) => (new_path, package, remaining_path),
+                None => (path.to_string(), &self.package, path.to_string()),
+            };
         let path = sanitized_path.as_str();
-        let (document, path_params) = match self.package.sitemap.as_ref() {
+
+        // dbg!(&sanitized_package.sitemap);
+
+        let sanitized_package = self.update_sitemap(sanitized_package).await?;
+
+        // dbg!(&sanitized_package.sitemap);
+        dbg!(&remaining_path);
+
+        let (document, path_params) = match sanitized_package.sitemap.as_ref() {
             //1. First resolve document in sitemap
-            Some(sitemap) => match sitemap.resolve_document(path) {
+            Some(sitemap) => match sitemap.resolve_document(remaining_path.as_str()) {
                 Some(document) => (Some(document), vec![]),
                 //2.  Else resolve document in dynamic urls
-                None => match self.package.dynamic_urls.as_ref() {
-                    Some(dynamic_urls) => dynamic_urls.resolve_document(path)?,
+                None => match sanitized_package.dynamic_urls.as_ref() {
+                    Some(dynamic_urls) => dynamic_urls.resolve_document(remaining_path.as_str())?,
                     None => (None, vec![]),
                 },
             },
             None => (None, vec![]),
         };
+
+        dbg!(&document);
 
         if let Some(id) = document {
             let file_name = self.get_file_path_and_resolve(id.as_str()).await?;
@@ -783,7 +848,7 @@ impl Config {
     pub(crate) async fn find_package_by_id(&self, id: &str) -> fpm::Result<(String, fpm::Package)> {
         let sanitized_id = self
             .get_mountpoint_sanitized_path(id)
-            .map(|(x, _)| x)
+            .map(|(x, _, _)| x)
             .unwrap_or(id.to_string());
 
         let id = sanitized_id.as_str();
@@ -1092,18 +1157,7 @@ impl Config {
             }
         };
 
-        let fpm_doc = {
-            let doc = tokio::fs::read_to_string(root.join("FPM.ftd"));
-            let lib = fpm::FPMLibrary::default();
-            match fpm::doc::parse_ftd("FPM", doc.await?.as_str(), &lib) {
-                Ok(v) => v,
-                Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.ftd 3: {:?}", &e),
-                    });
-                }
-            }
-        };
+        let fpm_doc = utils::fpm_doc(&root.join("FPM.ftd")).await?;
 
         let mut deps = {
             let temp_deps: Vec<fpm::package::dependency::DependencyTemp> =
