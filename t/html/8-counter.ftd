@@ -27,29 +27,41 @@ a /= b;
 -- integer $value: 50
 
 
+-- component counter:
+integer $count:
+
 -- ftd.row:
-padding: $value
+padding: $counter.count
 
 -- ftd.text: 🐎
 padding: 2
-$on-click$: $divide($a = $value, b = 2)
+$on-click$: $divide($a = $counter.count, b = 2)
 
 -- ftd.text: 🐜
 padding: 2
-$on-click$: $diff($a = $value, b = 1)
+$on-click$: $diff($a = $counter.count, b = 1)
 
 -- ftd.text: Where to??
 padding: 2
 
--- ftd.integer: $value
+-- ftd.integer: $counter.count
 padding: 2
 
 -- ftd.text: 🐌
 padding: 2
-$on-click$: $sum($a = $value, b = 1)
+$on-click$: $sum($a = $counter.count, b = 1)
 
 -- ftd.text: 🐎
 padding: 2
-$on-click$: $multiply($a = $value, b = 2)
+$on-click$: $multiply($a = $counter.count, b = 2)
 
 -- end: ftd.row
+
+-- end: counter
+
+
+
+
+
+-- counter:
+$count: $value
