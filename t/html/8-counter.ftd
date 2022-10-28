@@ -1,0 +1,55 @@
+-- void sum(a,b):
+integer $a:
+integer b:
+
+a += b;
+
+-- void diff(a,b):
+integer $a:
+integer b:
+
+a -= b;
+
+
+-- void multiply(a,b):
+integer $a:
+integer b:
+
+a *= b;
+
+-- void divide(a,b):
+integer $a:
+integer b:
+
+a /= b;
+
+
+-- integer $value: 50
+
+
+-- ftd.row:
+padding: $value
+
+-- ftd.text: 🐎
+padding: 2
+$on-click$: $divide($a = $value, b = 2)
+
+-- ftd.text: 🐜
+padding: 2
+$on-click$: $diff($a = $value, b = 1)
+
+-- ftd.text: Where to??
+padding: 2
+
+-- ftd.integer: $value
+padding: 2
+
+-- ftd.text: 🐌
+padding: 2
+$on-click$: $sum($a = $value, b = 1)
+
+-- ftd.text: 🐎
+padding: 2
+$on-click$: $multiply($a = $value, b = 2)
+
+-- end: ftd.row

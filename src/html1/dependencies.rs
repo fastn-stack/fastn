@@ -9,6 +9,7 @@ impl<'a> DependencyGenerator<'a> {
     }
 
     pub(crate) fn get_dependencies(&self) -> String {
+        dbg!(&self.node);
         let dependencies = self.get_dependencies_();
         if dependencies.trim().is_empty() {
             return "".to_string();
@@ -43,6 +44,41 @@ impl<'a> DependencyGenerator<'a> {
             }
             // todo: else {}
         }
+
+        for (key, attribute) in self.node.attrs.iter() {
+            let default = attribute.properties.iter().find(|v| v.condition.is_none());
+            if let Some(default) = default {
+                if let ftd::interpreter2::PropertyValue::Reference { name, .. } = &default.value {
+                    result.push(format!(
+                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", data[\"{}\"]);",
+                        node_data_id, key, name
+                    ));
+                }
+                // todo: else {}
+            }
+        }
+
+        for (key, attribute) in self.node.style.iter() {
+            let default = attribute.properties.iter().find(|v| v.condition.is_none());
+            if let Some(default) = default {
+                if let ftd::interpreter2::PropertyValue::Reference { name, .. } = &default.value {
+                    let value = if let Some(ref pattern) = attribute.pattern {
+                        format!(
+                            "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = \"{}\".format(data[\"{}\"]);",
+                            node_data_id, key, pattern, name
+                        )
+                    } else {
+                        format!(
+                            "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = data[\"{}\"];",
+                            node_data_id, key, name
+                        )
+                    };
+                    result.push(value);
+                }
+                // todo: else {}
+            }
+        }
+
         for children in self.node.children.iter() {
             result.push(DependencyGenerator::new(self.id, children).get_dependencies_());
         }

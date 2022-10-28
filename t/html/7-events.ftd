@@ -23,3 +23,7 @@ $on-click$: $sum($a = $value, b = 1)
 
 -- ftd.text: $name
 $on-click$: $append($a = $name, b = FTD)
+
+
+-- ftd.text: Why am I running? 🏃🏻‍♀️
+padding: $value

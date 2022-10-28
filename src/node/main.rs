@@ -171,7 +171,7 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.padding.value.map(|p| format!("{}px", p)),
                 self.padding.to_owned(),
-                Some(s("{}px")),
+                Some(s("{0}px")),
             ),
         );
 

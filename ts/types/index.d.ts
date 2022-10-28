@@ -13,4 +13,8 @@ declare global {
         init: object;
         handle_event(evt: Event, id: string, event: string, obj: Element): void;
     }
+
+    interface String {
+        format(...args: any[]): String;
+    }
 }
