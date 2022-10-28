@@ -1,6 +1,8 @@
 // Document: https://fpm.dev/crate/config/
 // Document: https://fpm.dev/crate/package/
 
+use fpm::package::Package;
+
 mod utils;
 
 #[derive(Debug, Clone)]
@@ -561,20 +563,17 @@ impl Config {
         Ok(file)
     }
 
-    pub fn get_mountpoint_sanitized_path(&self, path: &str) -> String {
+    pub fn get_mountpoint_sanitized_path(&self, path: &str) -> Option<(String, &Package)> {
         // It should return dependency package-name and sanitized path
-        if let Some((mp, dep)) = self
-            .package
+        self.package
             .dep_with_mount_point()
-            .iter()
+            .into_iter()
             .find(|(mp, _)| path.starts_with(mp.trim_start_matches('/')))
-        {
-            let package_name = dep.name.trim_matches('/');
-            let new_path = path.trim_start_matches(mp.trim_start_matches('/'));
-            format!("-/{package_name}/{new_path}")
-        } else {
-            path.to_string()
-        }
+            .map(|(mp, dep)| {
+                let package_name = dep.name.trim_matches('/');
+                let new_path = path.trim_start_matches(mp.trim_start_matches('/'));
+                (format!("-/{package_name}/{new_path}"), dep)
+            })
     }
 
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
@@ -584,7 +583,11 @@ impl Config {
         //
         // Sanitize the mountpoint request.
         // Get the package and sanitized path
-        let sanitized_path = self.get_mountpoint_sanitized_path(path);
+        let sanitized_path = match self.get_mountpoint_sanitized_path(path) {
+            Some((new_path, _)) => new_path,
+            None => path.to_string(),
+        };
+
         dbg!(path, &sanitized_path);
         let path = sanitized_path.as_str();
         let (document, path_params) = match self.package.sitemap.as_ref() {
@@ -778,7 +781,11 @@ impl Config {
 
     /// Return (package name or alias, package)
     pub(crate) async fn find_package_by_id(&self, id: &str) -> fpm::Result<(String, fpm::Package)> {
-        let sanitized_id = self.get_mountpoint_sanitized_path(id);
+        let sanitized_id = self
+            .get_mountpoint_sanitized_path(id)
+            .map(|(x, _)| x)
+            .unwrap_or(id.to_string());
+
         let id = sanitized_id.as_str();
         let id = if let Some(id) = id.strip_prefix("-/") {
             id
