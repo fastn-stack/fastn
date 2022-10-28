@@ -562,22 +562,30 @@ impl Config {
     }
 
     pub fn get_mountpoint_sanitized_path(&self, path: &str) -> String {
+        // It should return dependency package-name and sanitized path
         if let Some((mp, dep)) = self
             .package
-            .get_all_mountpoints()
+            .dep_with_mount_point()
             .iter()
             .find(|(mp, _)| path.starts_with(mp.trim_start_matches('/')))
         {
+            let package_name = dep.name.trim_matches('/');
             let new_path = path.trim_start_matches(mp.trim_start_matches('/'));
-            format!("-/{dep}/{new_path}")
+            format!("-/{package_name}/{new_path}")
         } else {
             path.to_string()
         }
     }
 
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
+        // This function will return file and package by given path
+        // path can be mounted(mount-point) with other dependencies
+        // If any package is mounted with any dependency package, get the dependency package
+        //
         // Sanitize the mountpoint request.
+        // Get the package and sanitized path
         let sanitized_path = self.get_mountpoint_sanitized_path(path);
+        dbg!(path, &sanitized_path);
         let path = sanitized_path.as_str();
         let (document, path_params) = match self.package.sitemap.as_ref() {
             //1. First resolve document in sitemap

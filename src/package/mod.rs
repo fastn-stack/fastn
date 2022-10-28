@@ -528,19 +528,12 @@ impl Package {
         }
     }
 
-    pub fn get_all_mountpoints(&self) -> Vec<(&str, &str)> {
+    pub fn dep_with_mount_point(&self) -> Vec<(&str, &Package)> {
         self.dependencies
             .iter()
             .fold(&mut vec![], |accumulator, dep| {
                 if let Some(mp) = &dep.mountpoint {
-                    accumulator.push((
-                        mp.as_str(),
-                        dep.package
-                            .name
-                            .as_str()
-                            .trim_start_matches('/')
-                            .trim_end_matches('/'),
-                    ))
+                    accumulator.push((mp.as_str(), &dep.package))
                 }
                 accumulator
             })

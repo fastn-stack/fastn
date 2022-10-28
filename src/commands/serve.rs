@@ -1,7 +1,10 @@
 static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
     once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
+/// path: /-/<package-name>/<file-name>/
+/// path: /<file-name>/
 async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::http::Response {
+    dbg!("Serving Path: ", &path);
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
@@ -166,6 +169,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         // In that case need to check whether that url is present in sitemap or not and than proxy
         // pass the url if the file is not static
         // So final check would be file is not static and path is not present in the package's sitemap
+
         if !path.starts_with("-/") {
             if let Some(sitemap) = config.package.sitemap.as_ref() {
                 // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
@@ -184,7 +188,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         }
 
         let file_response = serve_file(&mut config, path.as_path()).await;
-        // Fallback to WASM execution in case of no sucessful response
+        // Fallback to WASM execution in case of no successful response
         // TODO: This is hacky. Use the sitemap eventually.
         if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
             let package = config.find_package_by_id(path.as_str()).await.unwrap().1;
