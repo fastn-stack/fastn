@@ -1,4 +1,23 @@
-pub async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
+pub const COMMAND: &str = "sync-status";
+
+pub fn command() -> clap::Command {
+    clap::Command::new(COMMAND)
+        .about("Show the sync status of files in this fpm package")
+        .arg(clap::arg!(file: <FILE>... "The file(s) to see status of (leave empty to see status of entire package)").required(false))
+        .hide(true) // hidden since the feature is not being released yet.
+}
+
+pub async fn handle_command(matches: &clap::ArgMatches) -> fpm::Result<()> {
+    use fpm::utils::ValueOf;
+
+    sync_status(
+        &fpm::Config::read(None, true, None).await?,
+        matches.value_of_("file"), // TODO: handle multiple files
+    )
+    .await
+}
+
+async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
     use itertools::Itertools;
 
     let get_files_status = config.get_files_status().await?;
