@@ -24,7 +24,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#value&quot;,&quot;b&quot;:{&quot;value&quot;:1}}}]', this)" style="text-decoration: none" class="ft_md">3</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#name&quot;,&quot;b&quot;:{&quot;value&quot;:&quot;FTD&quot;}}}]', this)" style="text-decoration: none" class="ft_md">FifthTry</div></div>
+<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#value&quot;,&quot;b&quot;:{&quot;value&quot;:1}}}]', this)" style="text-decoration: none" class="ft_md">3</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#name&quot;,&quot;b&quot;:{&quot;value&quot;:&quot;FTD&quot;}}}]', this)" style="text-decoration: none" class="ft_md">FifthTry</div><div data-id="2:main" style="padding: 3px; text-decoration: none" class="ft_md">Why am I running? 🏃🏻‍♀️</div></div>
 
 
 <script>
@@ -394,6 +394,14 @@ data[reference] = function_arguments[a]["value"];
 function isFunctionArgument(object) {
 return 'member' in object;
 }
+String.prototype.format = function () {
+var formatted = this;
+for (var i = 0; i < arguments.length; i++) {
+var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+formatted = formatted.replace(regexp, arguments[i]);
+}
+return formatted;
+};
 
 function foo__append___main(a,b){
 a.value = a.value+" "+b.value
@@ -411,6 +419,8 @@ function node_change_main(data){
 document.querySelector(`[data-id="0:main"]`).innerHTML = data["foo#value"];
 
 document.querySelector(`[data-id="1:main"]`).innerHTML = data["foo#name"];
+
+document.querySelector(`[data-id="2:main"]`).style["padding"] = "{0}px".format(data["foo#value"]);
 }
 
 
