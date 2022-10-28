@@ -208,6 +208,26 @@ ftd_data[id] = JSON.parse(element.innerText);
 // window.ftd.post_init();
 }
 };
+function handle_function(evt, id, action, obj) {
+console.log(id, action);
+console.log(action.name);
+let function_arguments = [];
+let argument;
+for (argument in action.values) {
+if (action.values.hasOwnProperty(argument)) {
+if (typeof action.values[argument] === 'object') {
+function_arguments.push(action.values[argument]);
+}
+else {
+function_arguments.push({
+"value": resolve_reference(action.values[argument], ftd_data[id]),
+"reference": action.values[argument]
+});
+}
+}
+}
+return window[action.name](...function_arguments);
+}
 function handle_event(evt, id, action, obj) {
 console.log(id, action);
 console.log(action.name);
@@ -236,6 +256,11 @@ let actions = JSON.parse(event);
 for (const action in actions) {
 handle_event(evt, id, actions[action], obj);
 }
+};
+exports.handle_function = function (evt, id, event, obj) {
+console_log(id, event);
+let actions = JSON.parse(event);
+return handle_function(evt, id, actions, obj);
 };
 return exports;
 })();
