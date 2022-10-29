@@ -35,76 +35,79 @@ impl<'a> DependencyGenerator<'a> {
             .iter()
             .find(|v| v.condition.is_none());
         if let Some(default) = default {
-            if let ftd::interpreter2::PropertyValue::Reference { name, .. } = &default.value {
-                result.push(format!(
-                    "document.querySelector(`[data-id=\"{}\"]`).innerHTML = data[\"{}\"];",
-                    node_data_id, name
-                ))
-            }
-            // todo: else {}
+            let value_string = self.get_formatted_dep_string_from_property_value(
+                &default.value,
+                &self.node.text.pattern,
+            );
+            let value = format!(
+                "document.querySelector(`[data-id=\"{}\"]`).innerHTML = {};",
+                node_data_id, value_string
+            );
+            result.push(value);
         }
 
         for (key, attribute) in self.node.attrs.iter() {
             let default = attribute.properties.iter().find(|v| v.condition.is_none());
             if let Some(default) = default {
-                if let ftd::interpreter2::PropertyValue::Reference { name, .. } = &default.value {
-                    result.push(format!(
-                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", data[\"{}\"]);",
-                        node_data_id, key, name
-                    ));
-                }
-                // todo: else {}
+                let value_string = self.get_formatted_dep_string_from_property_value(
+                    &default.value,
+                    &attribute.pattern,
+                );
+                let value = format!(
+                    "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                    node_data_id, key, value_string
+                );
+                result.push(value);
             }
         }
 
         for (key, attribute) in self.node.style.iter() {
             let default = attribute.properties.iter().find(|v| v.condition.is_none());
             if let Some(default) = default {
-                if let ftd::interpreter2::PropertyValue::Reference { name, .. } = &default.value {
-                    let value = if let Some(ref pattern) = attribute.pattern {
-                        format!(
-                            "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = \"{}\".format(data[\"{}\"]);",
-                            node_data_id, key, pattern, name
-                        )
-                    } else {
-                        format!(
-                            "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = data[\"{}\"];",
-                            node_data_id, key, name
-                        )
-                    };
-                    result.push(value);
-                } else if let ftd::interpreter2::PropertyValue::FunctionCall(function_call) =
-                    &default.value
-                {
-                    let action = serde_json::to_string(&ftd::html1::Action::from_function_call(
-                        &function_call,
-                        self.id,
-                    ))
-                    .unwrap();
-                    let event = format!(
-                        "window.ftd.handle_function(event, '{}', '{}', this)",
-                        self.id, action
-                    );
-                    let value = if let Some(ref pattern) = attribute.pattern {
-                        format!(
-                            "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = \"{}\".format({});",
-                            node_data_id, key, pattern, event
-                        )
-                    } else {
-                        format!(
-                            "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = {};",
-                            node_data_id, key, event
-                        )
-                    };
-                    result.push(value);
-                }
-                // todo: else {}
+                let value_string = self.get_formatted_dep_string_from_property_value(
+                    &default.value,
+                    &attribute.pattern,
+                );
+                let value = format!(
+                    "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = {};",
+                    node_data_id, key, value_string
+                );
+                result.push(value);
             }
         }
 
         for children in self.node.children.iter() {
             result.push(DependencyGenerator::new(self.id, children).get_dependencies_());
         }
-        result.join("\n\n")
+        result.join("\n")
+    }
+
+    fn get_formatted_dep_string_from_property_value(
+        &self,
+        property_value: &ftd::interpreter2::PropertyValue,
+        pattern: &Option<String>,
+    ) -> String {
+        let value_string = match property_value {
+            ftd::interpreter2::PropertyValue::Reference { name, .. } => {
+                format!("data[\"{}\"]", name)
+            }
+            ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {
+                let action = serde_json::to_string(&ftd::html1::Action::from_function_call(
+                    &function_call,
+                    self.id,
+                ))
+                .unwrap();
+                format!(
+                    "window.ftd.handle_function(event, '{}', '{}', this)",
+                    self.id, action
+                )
+            }
+            _ => todo!(),
+        };
+
+        match pattern {
+            Some(p) => format!("\"{}\".format({})", p, value_string),
+            None => value_string,
+        }
     }
 }

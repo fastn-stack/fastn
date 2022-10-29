@@ -29,8 +29,6 @@ impl<'a> ExecuteDoc<'a> {
         let mut main = ftd::executor::element::default_column();
         main.container.children.extend(execute_doc);
 
-        dbg!(&main);
-
         Ok(RT {
             name: document.name.to_string(),
             aliases: document.aliases,
@@ -306,8 +304,6 @@ fn update_local_variable_references_in_component(
     for child in component.children.iter_mut() {
         update_local_variable_references_in_component(child, local_variable_map);
     }
-
-    dbg!(&component);
 }
 
 fn update_local_variable_reference_in_property(
