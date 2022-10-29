@@ -13,10 +13,10 @@ build web front-ends}. In this workshop you will learn the basics of FTD and
 build a web app that talks to existing web services. We will build an application
 for managing to-do lists from scratch.
 
-Basic knowledge of HTTP API is needed, but *no prior knowledge of front-end is
-required*.
+You will need basic knowledge of HTTP API, but *no prior knowledge of front-end
+is required*.
 
-The workshop is taught by the creators of FTD, and you will learn about the
+The creators of FTD are conducting the workshop, and you will learn about the
 motivation and design decisions that shaped FTD as well.
 
 **In this hands-on workshop we will go through a series of exercises

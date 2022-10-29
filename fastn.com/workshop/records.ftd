@@ -7,13 +7,12 @@ Till now we dealt with basic types like [booleans](id: ws-booleans), [numbers
 and strings](id: ws-numbers-and-strings). Now we are moving to more interesting
 stuff: `record`.
 
-Records are like classes or structs in some language. Record is composed of a
-bunch of fields.
+Records are like classes or structs in some language. Record contains one or more fields.
 
 
 An example record looks like this:
 
--- ds.code: lets define a new record `person`
+-- ds.code: defining a record called `person`
 lang: ftd
 
 \-- record person:
@@ -24,7 +23,7 @@ integer age:
 
 And to create an instance of the record we use:
 
--- ds.code: creating a variable of type `person`
+-- ds.code: creating a variable `john` of type `person`
 lang: ftd
 
 \-- person john:
@@ -33,8 +32,8 @@ age: 20
 
 -- ds.h1: Task 1: Define and Use A Record
 
-Head over to [records.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/records.ftd)
-and create your first record and an instance of it.
+Open [records.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/records.ftd)
+and define your first record and then an instance of it.
 
 -- ds.h1: Special Types: `caption` and `body`
 
@@ -75,9 +74,9 @@ can either use a local string variable, or wait for 0.3 syntax to be ready.
 Fix the mistakes in [caption-and-body.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/caption-and-body.ftd).
 
 
--- ds.h1: Task 3: Default Values For Fields
+-- ds.h1: Default Values For Fields
 
-Record fields can be given optional default values, eg:
+Record fields can have default values, eg:
 
 -- ds.code:
 lang: ftd
@@ -87,11 +86,43 @@ caption name:
 integer age: 18
 body bio:
 
+
 -- ds.markdown:
 
-Go through
+Here we have specified `18` as `age`. When creating a variable of type person
+we can leave off age now:
 
--- ds.h1: You Are Done
+-- ds.code:
+lang: ftd
+
+\-- person john: John Lee
+
+Elder brother of the notorious Bache Qui.
+
+-- ds.markdown:
+
+The default value of a field can be set to another field as well:
+
+-- ds.code:
+lang: ftd
+
+\-- record person:
+caption name:
+string nick-name: $name
+integer age: 18
+body bio:
+
+-- ds.markdown:
+
+Here we have specified an optional (because it has a default value) `nick-name`.
+If you leave out the `nick-name`, the `name` would be used as the `nick-name`.
+
+
+-- ds.h1: Task: Use Default Values
+
+Fix the mistakes in [caption-and-body.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/default.ftd).
+
+-- ds.h1: Move To Next Chapter
 
 -- ds.markdown:
 
