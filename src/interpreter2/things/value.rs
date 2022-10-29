@@ -493,6 +493,17 @@ impl PropertyValue {
             }
         }
     }
+
+    pub(crate) fn new_none(
+        kind: ftd::interpreter2::KindData,
+        line_number: usize,
+    ) -> ftd::interpreter2::PropertyValue {
+        ftd::interpreter2::PropertyValue::Value {
+            value: ftd::interpreter2::Value::new_none(kind),
+            is_mutable: false,
+            line_number,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -718,5 +729,12 @@ impl Value {
                 )
             }
         })
+    }
+
+    pub(crate) fn new_none(kind: ftd::interpreter2::KindData) -> ftd::interpreter2::Value {
+        ftd::interpreter2::Value::Optional {
+            data: Box::new(None),
+            kind,
+        }
     }
 }

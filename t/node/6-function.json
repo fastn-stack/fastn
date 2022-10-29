@@ -127,7 +127,13 @@
                           "line_number": 39
                         }
                       }
-                    }
+                    },
+                    "order": [
+                      "a",
+                      "b",
+                      "c",
+                      "d"
+                    ]
                   }
                 },
                 "source": {
@@ -188,7 +194,11 @@
                         "line_number": 38
                       }
                     }
-                  }
+                  },
+                  "order": [
+                    "a",
+                    "b"
+                  ]
                 }
               },
               "source": "Caption",
@@ -257,7 +267,11 @@
                           "line_number": 42
                         }
                       }
-                    }
+                    },
+                    "order": [
+                      "a",
+                      "b"
+                    ]
                   }
                 },
                 "source": {
@@ -320,7 +334,11 @@
                         "line_number": 41
                       }
                     }
-                  }
+                  },
+                  "order": [
+                    "a",
+                    "b"
+                  ]
                 }
               },
               "source": "Caption",
@@ -378,7 +396,10 @@
                           "line_number": 45
                         }
                       }
-                    }
+                    },
+                    "order": [
+                      "a"
+                    ]
                   }
                 },
                 "source": {
@@ -645,7 +666,11 @@
                   "line_number": 35
                 }
               }
-            }
+            },
+            "order": [
+              "a",
+              "b"
+            ]
           }
         },
         "conditional_value": [],
