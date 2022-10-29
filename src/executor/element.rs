@@ -51,6 +51,7 @@ pub struct Common {
     pub is_dummy: bool,
     pub padding: ftd::executor::Value<Option<i64>>,
     pub data_id: String,
+    pub line_number: usize,
 }
 
 pub fn default_column() -> Column {
@@ -176,6 +177,7 @@ pub fn common_from_properties(
             line_number,
         )?,
         data_id: ftd::executor::utils::get_string_container(local_container),
+        line_number,
     })
 }
 
