@@ -126,6 +126,7 @@
                         "original": "Hello World",
                         "rendered": "Hello World"
                       },
+                      "line_number": 8,
                       "properties": [
                         {
                           "value": {
@@ -155,9 +156,11 @@
                       "is_dummy": false,
                       "padding": {
                         "value": null,
+                        "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,0"
+                      "data_id": "0,0",
+                      "line_number": 8
                     }
                   }
                 }
@@ -169,9 +172,11 @@
               "is_dummy": false,
               "padding": {
                 "value": null,
+                "line_number": null,
                 "properties": []
               },
-              "data_id": "0"
+              "data_id": "0",
+              "line_number": 6
             }
           }
         },
@@ -186,6 +191,7 @@
                         "original": "Hello Again",
                         "rendered": "Hello Again"
                       },
+                      "line_number": 8,
                       "properties": [
                         {
                           "value": {
@@ -215,9 +221,11 @@
                       "is_dummy": false,
                       "padding": {
                         "value": null,
+                        "line_number": null,
                         "properties": []
                       },
-                      "data_id": "1,0"
+                      "data_id": "1,0",
+                      "line_number": 8
                     }
                   }
                 }
@@ -229,9 +237,11 @@
               "is_dummy": false,
               "padding": {
                 "value": null,
+                "line_number": null,
                 "properties": []
               },
-              "data_id": "1"
+              "data_id": "1",
+              "line_number": 6
             }
           }
         }
@@ -243,9 +253,11 @@
       "is_dummy": false,
       "padding": {
         "value": null,
+        "line_number": null,
         "properties": []
       },
-      "data_id": ""
+      "data_id": "",
+      "line_number": 0
     }
   }
 }

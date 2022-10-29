@@ -419,6 +419,7 @@
                         "original": "TOC title 1",
                         "rendered": "TOC title 1"
                       },
+                      "line_number": 36,
                       "properties": [
                         {
                           "value": {
@@ -448,9 +449,11 @@
                       "is_dummy": false,
                       "padding": {
                         "value": null,
+                        "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,0"
+                      "data_id": "0,0",
+                      "line_number": 36
                     }
                   }
                 },
@@ -465,6 +468,7 @@
                                 "original": "TOC title 2",
                                 "rendered": "TOC title 2"
                               },
+                              "line_number": 36,
                               "properties": [
                                 {
                                   "value": {
@@ -494,9 +498,11 @@
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
+                                "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,0,0"
+                              "data_id": "0,1,0,0",
+                              "line_number": 36
                             }
                           }
                         }
@@ -508,9 +514,11 @@
                       "is_dummy": false,
                       "padding": {
                         "value": null,
+                        "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,1,0"
+                      "data_id": "0,1,0",
+                      "line_number": 34
                     }
                   }
                 },
@@ -525,6 +533,7 @@
                                 "original": "TOC title 3",
                                 "rendered": "TOC title 3"
                               },
+                              "line_number": 36,
                               "properties": [
                                 {
                                   "value": {
@@ -554,9 +563,11 @@
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
+                                "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,1,0"
+                              "data_id": "0,1,1,0",
+                              "line_number": 36
                             }
                           }
                         },
@@ -571,6 +582,7 @@
                                         "original": "TOC title 4",
                                         "rendered": "TOC title 4"
                                       },
+                                      "line_number": 36,
                                       "properties": [
                                         {
                                           "value": {
@@ -600,9 +612,11 @@
                                       "is_dummy": false,
                                       "padding": {
                                         "value": null,
+                                        "line_number": null,
                                         "properties": []
                                       },
-                                      "data_id": "0,1,1,1,0,0"
+                                      "data_id": "0,1,1,1,0,0",
+                                      "line_number": 36
                                     }
                                   }
                                 }
@@ -614,9 +628,11 @@
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
+                                "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,1,1,0"
+                              "data_id": "0,1,1,1,0",
+                              "line_number": 34
                             }
                           }
                         }
@@ -628,9 +644,11 @@
                       "is_dummy": false,
                       "padding": {
                         "value": null,
+                        "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,1,1"
+                      "data_id": "0,1,1",
+                      "line_number": 34
                     }
                   }
                 }
@@ -642,9 +660,11 @@
               "is_dummy": false,
               "padding": {
                 "value": null,
+                "line_number": null,
                 "properties": []
               },
-              "data_id": "0"
+              "data_id": "0",
+              "line_number": 34
             }
           }
         }
@@ -656,9 +676,11 @@
       "is_dummy": false,
       "padding": {
         "value": null,
+        "line_number": null,
         "properties": []
       },
-      "data_id": ""
+      "data_id": "",
+      "line_number": 0
     }
   }
 }

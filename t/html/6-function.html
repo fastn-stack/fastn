@@ -39,6 +39,26 @@ ftd_data[id] = JSON.parse(element.innerText);
 // window.ftd.post_init();
 }
 };
+function handle_function(evt, id, action, obj) {
+console.log(id, action);
+console.log(action.name);
+let function_arguments = [];
+let argument;
+for (argument in action.values) {
+if (action.values.hasOwnProperty(argument)) {
+if (typeof action.values[argument] === 'object') {
+function_arguments.push(action.values[argument]);
+}
+else {
+function_arguments.push({
+"value": resolve_reference(action.values[argument], ftd_data[id]),
+"reference": action.values[argument]
+});
+}
+}
+}
+return window[action.name](...function_arguments);
+}
 function handle_event(evt, id, action, obj) {
 console.log(id, action);
 console.log(action.name);
@@ -67,6 +87,11 @@ let actions = JSON.parse(event);
 for (const action in actions) {
 handle_event(evt, id, actions[action], obj);
 }
+};
+exports.handle_function = function (evt, id, event, obj) {
+console_log(id, event);
+let actions = JSON.parse(event);
+return handle_function(evt, id, actions, obj);
 };
 return exports;
 })();
@@ -394,6 +419,14 @@ data[reference] = function_arguments[a]["value"];
 function isFunctionArgument(object) {
 return 'member' in object;
 }
+String.prototype.format = function () {
+var formatted = this;
+for (var i = 0; i < arguments.length; i++) {
+var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+formatted = formatted.replace(regexp, arguments[i]);
+}
+return formatted;
+};
 
 function foo__append___main(a,b){
 return (a.value+" "+b.value);
@@ -420,7 +453,12 @@ return (a.value+b.value);
 
 
 function node_change_main(data){
+document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":{"value":"hello"},"b":{"value":"world"}}}', this);
+document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":{"a":"foo#number","b":{"value":20},"c":{"value":4},"d":{"value":5}}}', this));
+document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":"foo#name","b":{"value":"Jaiswal"}}}', this);
+document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":{"a":"foo#number","b":{"value":4}}}', this));
 document.querySelector(`[data-id="2:main"]`).innerHTML = data["foo#new-name"];
+document.querySelector(`[data-id="2:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":{"a":"foo#new-name"}}', this));
 }
 
 

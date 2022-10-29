@@ -8,39 +8,46 @@
       "data-id": {
         "value": "",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       }
     },
     "style": {
       "align-items": {
         "value": "flex-start",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       },
       "display": {
         "value": "flex",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       },
       "flex-direction": {
         "value": "column",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       },
       "justify-content": {
         "value": "flex-start",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       },
       "padding": {
         "value": null,
         "properties": [],
-        "pattern": "{}px"
+        "pattern": "{0}px",
+        "line_number": null
       },
       "text-decoration": {
         "value": "none",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       }
     },
     "children": [
@@ -52,39 +59,46 @@
           "data-id": {
             "value": "0",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "style": {
           "align-items": {
             "value": "flex-start",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           },
           "display": {
             "value": "flex",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           },
           "flex-direction": {
             "value": "column",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           },
           "justify-content": {
             "value": "flex-start",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           },
           "padding": {
             "value": null,
             "properties": [],
-            "pattern": "{}px"
+            "pattern": "{0}px",
+            "line_number": null
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "children": [
@@ -98,19 +112,22 @@
               "data-id": {
                 "value": "0,0",
                 "properties": [],
-                "pattern": null
+                "pattern": null,
+                "line_number": null
               }
             },
             "style": {
               "padding": {
                 "value": null,
                 "properties": [],
-                "pattern": "{}px"
+                "pattern": "{0}px",
+                "line_number": null
               },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
-                "pattern": null
+                "pattern": null,
+                "line_number": null
               }
             },
             "children": [],
@@ -138,19 +155,23 @@
                   "line_number": 6
                 }
               ],
-              "pattern": null
+              "pattern": null,
+              "line_number": 6
             },
             "null": false,
-            "data_id": "0,0"
+            "data_id": "0,0",
+            "line_number": 6
           }
         ],
         "text": {
           "value": null,
           "properties": [],
-          "pattern": null
+          "pattern": null,
+          "line_number": null
         },
         "null": false,
-        "data_id": "0"
+        "data_id": "0",
+        "line_number": 4
       },
       {
         "classes": [],
@@ -160,39 +181,46 @@
           "data-id": {
             "value": "1",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "style": {
           "align-items": {
             "value": "flex-start",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           },
           "display": {
             "value": "flex",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           },
           "flex-direction": {
             "value": "column",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           },
           "justify-content": {
             "value": "flex-start",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           },
           "padding": {
             "value": null,
             "properties": [],
-            "pattern": "{}px"
+            "pattern": "{0}px",
+            "line_number": null
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "children": [
@@ -206,19 +234,22 @@
               "data-id": {
                 "value": "1,0",
                 "properties": [],
-                "pattern": null
+                "pattern": null,
+                "line_number": null
               }
             },
             "style": {
               "padding": {
                 "value": null,
                 "properties": [],
-                "pattern": "{}px"
+                "pattern": "{0}px",
+                "line_number": null
               },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
-                "pattern": null
+                "pattern": null,
+                "line_number": null
               }
             },
             "children": [],
@@ -246,28 +277,34 @@
                   "line_number": 6
                 }
               ],
-              "pattern": null
+              "pattern": null,
+              "line_number": 6
             },
             "null": false,
-            "data_id": "1,0"
+            "data_id": "1,0",
+            "line_number": 6
           }
         ],
         "text": {
           "value": null,
           "properties": [],
-          "pattern": null
+          "pattern": null,
+          "line_number": null
         },
         "null": false,
-        "data_id": "1"
+        "data_id": "1",
+        "line_number": 4
       }
     ],
     "text": {
       "value": null,
       "properties": [],
-      "pattern": null
+      "pattern": null,
+      "line_number": null
     },
     "null": false,
-    "data_id": ""
+    "data_id": "",
+    "line_number": 0
   },
   "bag": {
     "foo#print": {

@@ -8,39 +8,46 @@
       "data-id": {
         "value": "",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       }
     },
     "style": {
       "align-items": {
         "value": "flex-start",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       },
       "display": {
         "value": "flex",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       },
       "flex-direction": {
         "value": "column",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       },
       "justify-content": {
         "value": "flex-start",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       },
       "padding": {
         "value": null,
         "properties": [],
-        "pattern": "{}px"
+        "pattern": "{0}px",
+        "line_number": null
       },
       "text-decoration": {
         "value": "none",
         "properties": [],
-        "pattern": null
+        "pattern": null,
+        "line_number": null
       }
     },
     "children": [
@@ -54,7 +61,8 @@
           "data-id": {
             "value": "0",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "style": {
@@ -132,12 +140,14 @@
                 "line_number": 39
               }
             ],
-            "pattern": "{}px"
+            "pattern": "{0}px",
+            "line_number": 39
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "children": [],
@@ -186,10 +196,12 @@
               "line_number": 38
             }
           ],
-          "pattern": null
+          "pattern": null,
+          "line_number": 38
         },
         "null": false,
-        "data_id": "0"
+        "data_id": "0",
+        "line_number": 38
       },
       {
         "classes": [
@@ -201,7 +213,8 @@
           "data-id": {
             "value": "1",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "style": {
@@ -257,12 +270,14 @@
                 "line_number": 42
               }
             ],
-            "pattern": "{}px"
+            "pattern": "{0}px",
+            "line_number": 42
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "children": [],
@@ -313,10 +328,12 @@
               "line_number": 41
             }
           ],
-          "pattern": null
+          "pattern": null,
+          "line_number": 41
         },
         "null": false,
-        "data_id": "1"
+        "data_id": "1",
+        "line_number": 41
       },
       {
         "classes": [
@@ -328,7 +345,8 @@
           "data-id": {
             "value": "2",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "style": {
@@ -373,12 +391,14 @@
                 "line_number": 45
               }
             ],
-            "pattern": "{}px"
+            "pattern": "{0}px",
+            "line_number": 45
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null
+            "pattern": null,
+            "line_number": null
           }
         },
         "children": [],
@@ -404,19 +424,23 @@
               "line_number": 44
             }
           ],
-          "pattern": null
+          "pattern": null,
+          "line_number": 44
         },
         "null": false,
-        "data_id": "2"
+        "data_id": "2",
+        "line_number": 44
       }
     ],
     "text": {
       "value": null,
       "properties": [],
-      "pattern": null
+      "pattern": null,
+      "line_number": null
     },
     "null": false,
-    "data_id": ""
+    "data_id": "",
+    "line_number": 0
   },
   "bag": {
     "foo#append": {

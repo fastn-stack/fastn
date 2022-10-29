@@ -3,6 +3,7 @@ pub struct Value {
     pub value: Option<String>,
     pub properties: Vec<ftd::interpreter2::Property>,
     pub pattern: Option<String>,
+    pub line_number: Option<usize>,
 }
 
 impl Value {
@@ -11,6 +12,7 @@ impl Value {
             value: Some(value.to_string()),
             properties: vec![],
             pattern: None,
+            line_number: None,
         }
     }
 
@@ -31,6 +33,7 @@ impl Value {
             value,
             properties,
             pattern,
+            line_number: exec_value.line_number,
         }
     }
 }

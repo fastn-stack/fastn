@@ -35,44 +35,47 @@ impl<'a> DependencyGenerator<'a> {
             .iter()
             .find(|v| v.condition.is_none());
         if let Some(default) = default {
-            let value_string = self.get_formatted_dep_string_from_property_value(
+            if let Some(value_string) = self.get_formatted_dep_string_from_property_value(
                 &default.value,
                 &self.node.text.pattern,
-            );
-            let value = format!(
-                "document.querySelector(`[data-id=\"{}\"]`).innerHTML = {};",
-                node_data_id, value_string
-            );
-            result.push(value);
+            ) {
+                let value = format!(
+                    "document.querySelector(`[data-id=\"{}\"]`).innerHTML = {};",
+                    node_data_id, value_string
+                );
+                result.push(value);
+            }
         }
 
         for (key, attribute) in self.node.attrs.iter() {
             let default = attribute.properties.iter().find(|v| v.condition.is_none());
             if let Some(default) = default {
-                let value_string = self.get_formatted_dep_string_from_property_value(
+                if let Some(value_string) = self.get_formatted_dep_string_from_property_value(
                     &default.value,
                     &attribute.pattern,
-                );
-                let value = format!(
-                    "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                    node_data_id, key, value_string
-                );
-                result.push(value);
+                ) {
+                    let value = format!(
+                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                        node_data_id, key, value_string
+                    );
+                    result.push(value);
+                }
             }
         }
 
         for (key, attribute) in self.node.style.iter() {
             let default = attribute.properties.iter().find(|v| v.condition.is_none());
             if let Some(default) = default {
-                let value_string = self.get_formatted_dep_string_from_property_value(
+                if let Some(value_string) = self.get_formatted_dep_string_from_property_value(
                     &default.value,
                     &attribute.pattern,
-                );
-                let value = format!(
-                    "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = {};",
-                    node_data_id, key, value_string
-                );
-                result.push(value);
+                ) {
+                    let value = format!(
+                        "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = {};",
+                        node_data_id, key, value_string
+                    );
+                    result.push(value);
+                }
             }
         }
 
@@ -86,7 +89,7 @@ impl<'a> DependencyGenerator<'a> {
         &self,
         property_value: &ftd::interpreter2::PropertyValue,
         pattern: &Option<String>,
-    ) -> String {
+    ) -> Option<String> {
         let value_string = match property_value {
             ftd::interpreter2::PropertyValue::Reference { name, .. } => {
                 format!("data[\"{}\"]", name)
@@ -102,12 +105,12 @@ impl<'a> DependencyGenerator<'a> {
                     self.id, action
                 )
             }
-            _ => todo!(),
+            _ => return None,
         };
 
-        match pattern {
+        Some(match pattern {
             Some(p) => format!("\"{}\".format({})", p, value_string),
             None => value_string,
-        }
+        })
     }
 }

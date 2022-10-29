@@ -69,6 +69,7 @@
                 "original": "Click here",
                 "rendered": "Click here"
               },
+              "line_number": 9,
               "properties": [
                 {
                   "value": {
@@ -124,9 +125,11 @@
               "is_dummy": false,
               "padding": {
                 "value": null,
+                "line_number": null,
                 "properties": []
               },
-              "data_id": "0"
+              "data_id": "0",
+              "line_number": 9
             }
           }
         }
@@ -138,9 +141,11 @@
       "is_dummy": false,
       "padding": {
         "value": null,
+        "line_number": null,
         "properties": []
       },
-      "data_id": ""
+      "data_id": "",
+      "line_number": 0
     }
   }
 }
