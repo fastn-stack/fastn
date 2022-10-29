@@ -5,26 +5,35 @@ function console_log(...message: any) {
 }
 
 function isObject(obj: object) {
-    return obj === Object(obj);
+    return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 
 function resolve_reference(reference: string, data: any) {
     return data[reference];
 }
 
-function change_value(function_arguments: FunctionArgument[], data: {
+function deepCopy(object: any) {
+    if (isObject(object)) {
+        return JSON.parse(JSON.stringify(object));
+    }
+    return object;
+}
+
+function change_value(function_arguments: (FunctionArgument | any)[], data: {
     [key: string]: any;
 }) {
     for (const a in function_arguments) {
-        if (!!function_arguments[a]["reference"]) {
-            let reference: string = <string>function_arguments[a]["reference"];
-            data[reference] = function_arguments[a]["value"];
+        if (isFunctionArgument(function_arguments[a])) {
+            if (!!function_arguments[a]["reference"]) {
+                let reference: string = <string>function_arguments[a]["reference"];
+                data[reference] = function_arguments[a]["value"];
+            }
         }
     }
 }
 
 function isFunctionArgument(object: any): object is FunctionArgument {
-    return 'member' in object;
+    return (<FunctionArgument>object).value !== undefined;
 }
 
 String.prototype.format = function() {

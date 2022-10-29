@@ -37,9 +37,21 @@ impl ftd::html1::Action {
             ftd::interpreter2::PropertyValue::Value { value, .. } => {
                 ftd::html1::Action::from_value(value)
             }
-            ftd::interpreter2::PropertyValue::Reference { name, .. }
-            | ftd::interpreter2::PropertyValue::Clone { name, .. } => {
-                serde_json::json!(name)
+            ftd::interpreter2::PropertyValue::Reference {
+                name, is_mutable, ..
+            } => {
+                serde_json::json!({
+                    "reference": name,
+                    "mutable": is_mutable
+                })
+            }
+            ftd::interpreter2::PropertyValue::Clone {
+                name, is_mutable, ..
+            } => {
+                serde_json::json!({
+                    "clone": name,
+                    "mutable": is_mutable
+                })
             }
             ftd::interpreter2::PropertyValue::FunctionCall(fnc) => unimplemented!("{:?}", fnc),
         }
@@ -47,18 +59,10 @@ impl ftd::html1::Action {
 
     fn from_value(value: &ftd::interpreter2::Value) -> serde_json::Value {
         match value {
-            ftd::interpreter2::Value::String { text } => serde_json::json!({
-                "value": text,
-            }),
-            ftd::interpreter2::Value::Integer { value } => serde_json::json!({
-                "value": value,
-            }),
-            ftd::interpreter2::Value::Decimal { value } => serde_json::json!({
-                "value": value,
-            }),
-            ftd::interpreter2::Value::Boolean { value } => serde_json::json!({
-                "value": value,
-            }),
+            ftd::interpreter2::Value::String { text } => serde_json::json!(text),
+            ftd::interpreter2::Value::Integer { value } => serde_json::json!(value),
+            ftd::interpreter2::Value::Decimal { value } => serde_json::json!(value),
+            ftd::interpreter2::Value::Boolean { value } => serde_json::json!(value),
             t => {
                 unimplemented!("{:?}", t)
             }

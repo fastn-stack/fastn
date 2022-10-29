@@ -80,7 +80,10 @@ impl<'a> DependencyGenerator<'a> {
         }
 
         for children in self.node.children.iter() {
-            result.push(DependencyGenerator::new(self.id, children).get_dependencies_());
+            let value = DependencyGenerator::new(self.id, children).get_dependencies_();
+            if !value.trim().is_empty() {
+                result.push(value.trim().to_string());
+            }
         }
         result.join("\n")
     }

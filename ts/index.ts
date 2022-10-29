@@ -11,7 +11,7 @@ window.ftd = (function() {
         }
     };
 
-    function handle_function(evt: Event, id: string, action: Action, obj: Element, function_arguments: FunctionArgument[]) {
+    function handle_function(evt: Event, id: string, action: Action, obj: Element, function_arguments: (FunctionArgument | any)[]) {
         console.log(id, action);
         console.log(action.name);
 
@@ -19,12 +19,21 @@ window.ftd = (function() {
         for (argument in action.values) {
             if (action.values.hasOwnProperty(argument)) {
                 if (typeof action.values[argument] === 'object') {
-                    function_arguments.push(<FunctionArgument>action.values[argument]);
+                    let function_argument = <FunctionArgument>action.values[argument];
+                    if (!!function_argument.reference) {
+                        let value = resolve_reference(function_argument.reference, ftd_data[id]);
+                        if (!!function_argument.mutable) {
+                            function_argument.value = value;
+                            function_arguments.push(function_argument);
+                        } else {
+                            function_arguments.push(deepCopy(value));
+                        }
+                    } else if (!!function_argument.clone){
+                        let value = deepCopy(resolve_reference(function_argument.clone, ftd_data[id]));
+                        function_arguments.push(value);
+                    }
                 } else {
-                    function_arguments.push({
-                        "value": resolve_reference(<string>action.values[argument], ftd_data[id]),
-                        "reference": <string>action.values[argument]
-                    });
+                    function_arguments.push(action.values[argument]);
                 }
             }
         }
@@ -34,7 +43,7 @@ window.ftd = (function() {
 
 
     function handle_event(evt: Event, id: string, action: Action, obj: Element) {
-        let function_arguments: FunctionArgument[] = [];
+        let function_arguments: (FunctionArgument | any)[] = [];
         handle_function(evt, id, action, obj, function_arguments);
         change_value(function_arguments, ftd_data[id]);
         window["node_change_" + id](ftd_data[id]);
@@ -51,7 +60,7 @@ window.ftd = (function() {
     exports.handle_function = function (evt: Event, id: string, event: string, obj: Element) {
         console_log(id, event);
         let actions = JSON.parse(event);
-        let function_arguments: FunctionArgument[] = [];
+        let function_arguments: (FunctionArgument | any)[] = [];
         return handle_function(evt, id, actions, obj, function_arguments);
     };
 

@@ -24,7 +24,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#value&quot;,&quot;b&quot;:{&quot;value&quot;:1}}}]', this)" style="text-decoration: none" class="ft_md">3</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:{&quot;a&quot;:&quot;foo#name&quot;,&quot;b&quot;:{&quot;value&quot;:&quot;FTD&quot;}}}]', this)" style="text-decoration: none" class="ft_md">FifthTry</div><div data-id="2:main" style="padding: 3px; text-decoration: none" class="ft_md">Why am I running? 🏃🏻‍♀️</div></div>
+<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;},&quot;b&quot;:1}}]', this)" style="text-decoration: none" class="ft_md">3</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__append___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#name&quot;},&quot;b&quot;:&quot;FTD&quot;}}]', this)" style="text-decoration: none" class="ft_md">FifthTry</div><div data-id="2:main" style="padding: 3px; text-decoration: none" class="ft_md">Why am I running? 🏃🏻‍♀️</div></div>
 
 
 <script>
@@ -46,13 +46,24 @@ let argument;
 for (argument in action.values) {
 if (action.values.hasOwnProperty(argument)) {
 if (typeof action.values[argument] === 'object') {
-function_arguments.push(action.values[argument]);
+let function_argument = action.values[argument];
+if (!!function_argument.reference) {
+let value = resolve_reference(function_argument.reference, ftd_data[id]);
+if (!!function_argument.mutable) {
+function_argument.value = value;
+function_arguments.push(function_argument);
 }
 else {
-function_arguments.push({
-"value": resolve_reference(action.values[argument], ftd_data[id]),
-"reference": action.values[argument]
-});
+function_arguments.push(deepCopy(value));
+}
+}
+else if (!!function_argument.clone) {
+let value = deepCopy(resolve_reference(function_argument.clone, ftd_data[id]));
+function_arguments.push(value);
+}
+}
+else {
+function_arguments.push(action.values[argument]);
 }
 }
 }
@@ -387,21 +398,29 @@ console.log(...message);
 }
 }
 function isObject(obj) {
-return obj === Object(obj);
+return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 function resolve_reference(reference, data) {
 return data[reference];
 }
+function deepCopy(object) {
+if (isObject(object)) {
+return JSON.parse(JSON.stringify(object));
+}
+return object;
+}
 function change_value(function_arguments, data) {
 for (const a in function_arguments) {
+if (isFunctionArgument(function_arguments[a])) {
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
 data[reference] = function_arguments[a]["value"];
 }
 }
 }
+}
 function isFunctionArgument(object) {
-return 'member' in object;
+return object.value !== undefined;
 }
 String.prototype.format = function () {
 var formatted = this;
@@ -413,14 +432,14 @@ return formatted;
 };
 
 function foo__append___main(a,b){
-a.value = a.value+" "+b.value
+a.value = a.value+" "+b
 }
 
 
 
 function foo__sum___main(a,b){
 let e = 1;
-a.value = a.value+b.value+e;
+a.value = a.value+b+e;
 }
 
 

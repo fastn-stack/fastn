@@ -13,5 +13,7 @@ declare global {
     interface FunctionArgument {
         value: any;
         reference: string | null;
+        clone: string | null;
+        mutable: boolean;
     }
 }

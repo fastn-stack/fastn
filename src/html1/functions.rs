@@ -36,7 +36,7 @@ impl FunctionGenerator {
         let arguments = function
             .arguments
             .iter()
-            .map(|v| v.name.to_string())
+            .map(|v| (v.name.to_string(), v.mutable))
             .collect_vec();
         for expression in function.expression {
             let node = evalexpr::build_operator_tree(expression.expression.as_str())?;
@@ -59,7 +59,7 @@ impl FunctionGenerator {
         
                         "},
             function_name = function_name,
-            arguments = arguments.join(","),
+            arguments = arguments.iter().map(|(k, _)| k).join(","),
             expressions = expressions
         ))
     }
@@ -68,7 +68,12 @@ impl FunctionGenerator {
 struct ExpressionGenerator;
 
 impl ExpressionGenerator {
-    pub fn to_string(&self, node: &evalexpr::Node, root: bool, arguments: &[String]) -> String {
+    pub fn to_string(
+        &self,
+        node: &evalexpr::Node,
+        root: bool,
+        arguments: &[(String, bool)],
+    ) -> String {
         use itertools::Itertools;
 
         if self.is_root(node.operator()) {
@@ -131,7 +136,7 @@ impl ExpressionGenerator {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
-            let prefix = if !arguments.contains(&first.to_string()) {
+            let prefix = if !arguments.iter().any(|(v, _)| first.to_string().eq(v)) {
                 "let "
             } else {
                 ""
@@ -169,7 +174,7 @@ impl ExpressionGenerator {
         format!(
             "{}{}",
             value,
-            if arguments.contains(&value) {
+            if arguments.iter().any(|(v, mutable)| value.eq(v) && *mutable) {
                 ".value"
             } else {
                 ""

@@ -46,13 +46,24 @@ let argument;
 for (argument in action.values) {
 if (action.values.hasOwnProperty(argument)) {
 if (typeof action.values[argument] === 'object') {
-function_arguments.push(action.values[argument]);
+let function_argument = action.values[argument];
+if (!!function_argument.reference) {
+let value = resolve_reference(function_argument.reference, ftd_data[id]);
+if (!!function_argument.mutable) {
+function_argument.value = value;
+function_arguments.push(function_argument);
 }
 else {
-function_arguments.push({
-"value": resolve_reference(action.values[argument], ftd_data[id]),
-"reference": action.values[argument]
-});
+function_arguments.push(deepCopy(value));
+}
+}
+else if (!!function_argument.clone) {
+let value = deepCopy(resolve_reference(function_argument.clone, ftd_data[id]));
+function_arguments.push(value);
+}
+}
+else {
+function_arguments.push(action.values[argument]);
 }
 }
 }
@@ -387,21 +398,29 @@ console.log(...message);
 }
 }
 function isObject(obj) {
-return obj === Object(obj);
+return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 function resolve_reference(reference, data) {
 return data[reference];
 }
+function deepCopy(object) {
+if (isObject(object)) {
+return JSON.parse(JSON.stringify(object));
+}
+return object;
+}
 function change_value(function_arguments, data) {
 for (const a in function_arguments) {
+if (isFunctionArgument(function_arguments[a])) {
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
 data[reference] = function_arguments[a]["value"];
 }
 }
 }
+}
 function isFunctionArgument(object) {
-return 'member' in object;
+return object.value !== undefined;
 }
 String.prototype.format = function () {
 var formatted = this;
@@ -413,36 +432,36 @@ return formatted;
 };
 
 function foo__append___main(a,b){
-return (a.value+" "+b.value);
+return (a+" "+b);
 }
 
 
 
 function foo__compare___main(a,b,c,d){
-let e = a.value+c.value;
-return (if((e>b.value),c.value,d.value));
+let e = a+c;
+return (if((e>b),c,d));
 }
 
 
 
 function foo__length___main(a){
-return (lena.value);
+return (lena);
 }
 
 
 
 function foo__sum___main(a,b){
-return (a.value+b.value);
+return (a+b);
 }
 
 
 function node_change_main(data){
-document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":{"value":"hello"},"b":{"value":"world"}}}', this);
-document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":{"a":"foo#number","b":{"value":20},"c":{"value":4},"d":{"value":5}}}', this));
-document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":"foo#name","b":{"value":"Jaiswal"}}}', this);
-document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":{"a":"foo#number","b":{"value":4}}}', this));
+document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":"hello","b":"world"}}', this);
+document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":20,"c":4,"d":5}}', this));
+document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":{"mutable":false,"reference":"foo#name"},"b":"Jaiswal"}}', this);
+document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":4}}', this));
 document.querySelector(`[data-id="2:main"]`).innerHTML = data["foo#new-name"];
-document.querySelector(`[data-id="2:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":{"a":"foo#new-name"}}', this));
+document.querySelector(`[data-id="2:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":{"a":{"mutable":false,"reference":"foo#new-name"}}}', this));
 }
 
 
