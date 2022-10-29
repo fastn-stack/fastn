@@ -64,7 +64,7 @@ impl<'a> TDoc<'a> {
             };
 
             let name_in_component_definition = format!("{}.{}", component_name, argument.name);
-            match default.get_reference_or_clone() {
+            match default.reference_name() {
                 Some(name) if conditions.is_empty() => {
                     map.insert(name_in_component_definition, name.to_string());
                     continue;

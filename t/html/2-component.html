@@ -54,10 +54,6 @@ else {
 function_arguments.push(deepCopy(value));
 }
 }
-else if (!!function_argument.clone) {
-let value = deepCopy(resolve_reference(function_argument.clone, ftd_data[id]));
-function_arguments.push(value);
-}
 }
 else {
 function_arguments.push(action.values[argument]);

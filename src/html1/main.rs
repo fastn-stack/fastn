@@ -9,13 +9,19 @@ pub struct HtmlUI {
 
 impl HtmlUI {
     pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> ftd::html1::Result<HtmlUI> {
+        let tdoc = ftd::interpreter2::TDoc {
+            name: node_data.name.as_str(),
+            aliases: &node_data.aliases,
+            bag: &node_data.bag,
+        };
+
         let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data)?;
-        let dependencies = ftd::html1::dependencies::DependencyGenerator::new(id, &node_data.node)
-            .get_dependencies();
-        let html = HtmlGenerator::new(id).to_html(node_data.name.as_str(), node_data.node);
-        let variables =
-            ftd::html1::data::DataGenerator::new(node_data.name.as_str(), &node_data.bag)
-                .get_data();
+        let dependencies =
+            ftd::html1::dependencies::DependencyGenerator::new(id, &node_data.node, &tdoc)
+                .get_dependencies()?;
+        let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
+        let html =
+            HtmlGenerator::new(id, &tdoc).to_html(node_data.name.as_str(), node_data.node)?;
 
         Ok(HtmlUI {
             html,
@@ -27,16 +33,20 @@ impl HtmlUI {
     }
 }
 
-pub(crate) struct HtmlGenerator {
+pub(crate) struct HtmlGenerator<'a> {
     pub id: String,
+    pub doc: &'a ftd::interpreter2::TDoc<'a>,
 }
 
-impl HtmlGenerator {
-    pub fn new(id: &str) -> HtmlGenerator {
-        HtmlGenerator { id: id.to_string() }
+impl<'a> HtmlGenerator<'a> {
+    pub fn new(id: &str, doc: &'a ftd::interpreter2::TDoc<'a>) -> HtmlGenerator<'a> {
+        HtmlGenerator {
+            id: id.to_string(),
+            doc,
+        }
     }
 
-    pub fn to_html(&self, doc_name: &str, node: ftd::node::Node) -> String {
+    pub fn to_html(&self, doc_name: &str, node: ftd::node::Node) -> ftd::html1::Result<String> {
         let style = format!(
             "style=\"{}\"",
             self.style_to_html(&node, /*self.visible*/ true)
@@ -45,7 +55,7 @@ impl HtmlGenerator {
 
         let attrs = {
             let mut attr = self.attrs_to_html(&node);
-            let events = self.group_by_js_event(&node.events);
+            let events = self.group_by_js_event(&node.events)?;
             for (name, actions) in events {
                 let event = format!(
                     "window.ftd.handle_event(event, '{}', '{}', this)",
@@ -64,18 +74,18 @@ impl HtmlGenerator {
                 .children
                 .into_iter()
                 .map(|v| self.to_html(doc_name, v))
-                .collect::<Vec<String>>()
+                .collect::<ftd::html1::Result<Vec<String>>>()?
                 .join(""),
         };
 
-        format!(
+        Ok(format!(
             "<{node} {attrs} {style} {classes}>{body}</{node}>",
             node = node.node.as_str(),
             attrs = attrs,
             style = style,
             classes = classes,
             body = body,
-        )
+        ))
     }
 
     pub fn style_to_html(&self, node: &ftd::node::Node, visible: bool) -> String {

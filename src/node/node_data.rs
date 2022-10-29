@@ -5,6 +5,7 @@ pub struct NodeData {
     pub name: String,
     pub node: ftd::node::Node,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
+    pub aliases: ftd::Map<String>,
 }
 
 impl NodeData {
@@ -14,6 +15,7 @@ impl NodeData {
             name: rt.name.to_string(),
             node,
             bag: rt.bag,
+            aliases: rt.aliases,
         }
     }
 }
