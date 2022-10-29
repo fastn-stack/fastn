@@ -7,7 +7,7 @@ pub struct Value {
 }
 
 impl Value {
-    pub fn from_str(value: &str) -> Value {
+    pub fn from_string(value: &str) -> Value {
         Value {
             value: Some(value.to_string()),
             properties: vec![],

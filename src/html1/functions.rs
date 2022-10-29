@@ -7,20 +7,23 @@ impl FunctionGenerator {
         FunctionGenerator { id: id.to_string() }
     }
 
-    pub fn get_functions(&self, node_data: &ftd::node::NodeData) -> String {
+    pub fn get_functions(&self, node_data: &ftd::node::NodeData) -> ftd::html1::Result<String> {
         let mut vector = vec![];
         for function in node_data
             .bag
             .values()
             .filter_map(|v| v.to_owned().function(node_data.name.as_str(), 0).ok())
         {
-            vector.push(self.get_function(function))
+            vector.push(self.get_function(function)?)
         }
 
-        vector.join("\n\n")
+        Ok(vector.join("\n\n"))
     }
 
-    pub fn get_function(&self, function: ftd::interpreter2::Function) -> String {
+    pub fn get_function(
+        &self,
+        function: ftd::interpreter2::Function,
+    ) -> ftd::html1::Result<String> {
         use itertools::Itertools;
 
         /*let node = dbg!(evalexpr::build_operator_tree(
@@ -36,7 +39,7 @@ impl FunctionGenerator {
             .map(|v| v.name.to_string())
             .collect_vec();
         for expression in function.expression {
-            let node = evalexpr::build_operator_tree(expression.expression.as_str()).unwrap(); //Todo: remove unwrap
+            let node = evalexpr::build_operator_tree(expression.expression.as_str())?;
             result.push(ftd::html1::utils::trim_brackets(
                 ExpressionGenerator
                     .to_string(&node, true, arguments.as_slice())
@@ -48,17 +51,17 @@ impl FunctionGenerator {
             ftd::html1::utils::name_with_id(function.name.as_str(), self.id.as_str()).as_str(),
         );
 
-        format!(
+        Ok(format!(
             indoc::indoc! {"
-                    function {function_name}({arguments}){{
-                        {expressions}
-                    }}
-
-                "},
+                            function {function_name}({arguments}){{
+                                {expressions}
+                            }}
+        
+                        "},
             function_name = function_name,
             arguments = arguments.join(","),
             expressions = expressions
-        )
+        ))
     }
 }
 

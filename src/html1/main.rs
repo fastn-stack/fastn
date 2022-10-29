@@ -8,8 +8,8 @@ pub struct HtmlUI {
 }
 
 impl HtmlUI {
-    pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> HtmlUI {
-        let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data);
+    pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> ftd::html1::Result<HtmlUI> {
+        let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data)?;
         let dependencies = ftd::html1::dependencies::DependencyGenerator::new(id, &node_data.node)
             .get_dependencies();
         let html = HtmlGenerator::new(id).to_html(node_data.name.as_str(), node_data.node);
@@ -17,13 +17,13 @@ impl HtmlUI {
             ftd::html1::data::DataGenerator::new(node_data.name.as_str(), &node_data.bag)
                 .get_data();
 
-        HtmlUI {
+        Ok(HtmlUI {
             html,
             dependencies,
             variables: serde_json::to_string_pretty(&variables)
                 .expect("failed to convert document to json"),
             functions,
-        }
+        })
     }
 }
 

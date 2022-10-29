@@ -80,17 +80,19 @@ impl ftd::executor::Row {
         let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
             n.style
-                .insert(s("display"), ftd::node::Value::from_str("flex"));
+                .insert(s("display"), ftd::node::Value::from_string("flex"));
         }
         n.style
-            .insert(s("flex-direction"), ftd::node::Value::from_str("row"));
+            .insert(s("flex-direction"), ftd::node::Value::from_string("row"));
 
-        n.style
-            .insert(s("align-items"), ftd::node::Value::from_str("flex-start"));
+        n.style.insert(
+            s("align-items"),
+            ftd::node::Value::from_string("flex-start"),
+        );
 
         n.style.insert(
             s("justify-content"),
-            ftd::node::Value::from_str("flex-start"),
+            ftd::node::Value::from_string("flex-start"),
         );
 
         n.children = {
@@ -110,17 +112,19 @@ impl ftd::executor::Column {
         let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
             n.style
-                .insert(s("display"), ftd::node::Value::from_str("flex"));
+                .insert(s("display"), ftd::node::Value::from_string("flex"));
         }
         n.style
-            .insert(s("flex-direction"), ftd::node::Value::from_str("column"));
+            .insert(s("flex-direction"), ftd::node::Value::from_string("column"));
 
-        n.style
-            .insert(s("align-items"), ftd::node::Value::from_str("flex-start"));
+        n.style.insert(
+            s("align-items"),
+            ftd::node::Value::from_string("flex-start"),
+        );
 
         n.style.insert(
             s("justify-content"),
-            ftd::node::Value::from_str("flex-start"),
+            ftd::node::Value::from_string("flex-start"),
         );
 
         n.children = {
@@ -155,7 +159,7 @@ impl ftd::executor::Common {
         // TODO: Implement attributes
         std::iter::IntoIterator::into_iter([(
             "data-id".to_string(),
-            ftd::node::Value::from_str(self.data_id.as_str()),
+            ftd::node::Value::from_string(self.data_id.as_str()),
         )])
         .collect()
     }
@@ -163,10 +167,10 @@ impl ftd::executor::Common {
     fn style(&self, _doc_id: &str, _classes: &mut [String]) -> ftd::Map<ftd::node::Value> {
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
-        d.insert(s("text-decoration"), ftd::node::Value::from_str("none"));
+        d.insert(s("text-decoration"), ftd::node::Value::from_string("none"));
 
         if self.is_not_visible {
-            d.insert(s("display"), ftd::node::Value::from_str("none"));
+            d.insert(s("display"), ftd::node::Value::from_string("none"));
         }
 
         d.insert(

@@ -96,7 +96,7 @@ impl<'a> DependencyGenerator<'a> {
             }
             ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {
                 let action = serde_json::to_string(&ftd::html1::Action::from_function_call(
-                    &function_call,
+                    function_call,
                     self.id,
                 ))
                 .unwrap();
