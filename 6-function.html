@@ -427,6 +427,11 @@ formatted = formatted.replace(regexp, arguments[i]);
 return formatted;
 };
 
+function isempty(str) {
+return (!str || str.length === 0 );
+}
+
+
 function foo__append___main(a,b){
 return (a+" "+b);
 }
