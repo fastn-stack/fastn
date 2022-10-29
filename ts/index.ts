@@ -11,11 +11,10 @@ window.ftd = (function() {
         }
     };
 
-    function handle_function(evt: Event, id: string, action: Action, obj: Element) {
+    function handle_function(evt: Event, id: string, action: Action, obj: Element, function_arguments: FunctionArgument[]) {
         console.log(id, action);
         console.log(action.name);
 
-        let function_arguments: FunctionArgument[] = [];
         let argument: keyof typeof action.values;
         for (argument in action.values) {
             if (action.values.hasOwnProperty(argument)) {
@@ -35,25 +34,8 @@ window.ftd = (function() {
 
 
     function handle_event(evt: Event, id: string, action: Action, obj: Element) {
-        console.log(id, action);
-        console.log(action.name);
-
         let function_arguments: FunctionArgument[] = [];
-        let argument: keyof typeof action.values;
-        for (argument in action.values) {
-            if (action.values.hasOwnProperty(argument)) {
-                if (typeof action.values[argument] === 'object') {
-                    function_arguments.push(<FunctionArgument>action.values[argument]);
-                } else {
-                    function_arguments.push({
-                        "value": resolve_reference(<string>action.values[argument], ftd_data[id]),
-                        "reference": <string>action.values[argument]
-                    });
-                }
-            }
-        }
-
-        window[action.name](...function_arguments);
+        handle_function(evt, id, action, obj, function_arguments);
         change_value(function_arguments, ftd_data[id]);
         window["node_change_" + id](ftd_data[id]);
     }
@@ -69,7 +51,8 @@ window.ftd = (function() {
     exports.handle_function = function (evt: Event, id: string, event: string, obj: Element) {
         console_log(id, event);
         let actions = JSON.parse(event);
-        return handle_function(evt, id, actions, obj);
+        let function_arguments: FunctionArgument[] = [];
+        return handle_function(evt, id, actions, obj, function_arguments);
     };
 
     return exports;
