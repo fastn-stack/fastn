@@ -39,45 +39,35 @@ ftd_data[id] = JSON.parse(element.innerText);
 // window.ftd.post_init();
 }
 };
-function handle_function(evt, id, action, obj) {
+function handle_function(evt, id, action, obj, function_arguments) {
 console.log(id, action);
 console.log(action.name);
-let function_arguments = [];
 let argument;
 for (argument in action.values) {
 if (action.values.hasOwnProperty(argument)) {
 if (typeof action.values[argument] === 'object') {
-function_arguments.push(action.values[argument]);
+let function_argument = action.values[argument];
+if (!!function_argument.reference) {
+let value = resolve_reference(function_argument.reference, ftd_data[id]);
+if (!!function_argument.mutable) {
+function_argument.value = value;
+function_arguments.push(function_argument);
 }
 else {
-function_arguments.push({
-"value": resolve_reference(action.values[argument], ftd_data[id]),
-"reference": action.values[argument]
-});
+function_arguments.push(deepCopy(value));
+}
+}
+}
+else {
+function_arguments.push(action.values[argument]);
 }
 }
 }
 return window[action.name](...function_arguments);
 }
 function handle_event(evt, id, action, obj) {
-console.log(id, action);
-console.log(action.name);
 let function_arguments = [];
-let argument;
-for (argument in action.values) {
-if (action.values.hasOwnProperty(argument)) {
-if (typeof action.values[argument] === 'object') {
-function_arguments.push(action.values[argument]);
-}
-else {
-function_arguments.push({
-"value": resolve_reference(action.values[argument], ftd_data[id]),
-"reference": action.values[argument]
-});
-}
-}
-}
-window[action.name](...function_arguments);
+handle_function(evt, id, action, obj, function_arguments);
 change_value(function_arguments, ftd_data[id]);
 window["node_change_" + id](ftd_data[id]);
 }
@@ -91,7 +81,8 @@ handle_event(evt, id, actions[action], obj);
 exports.handle_function = function (evt, id, event, obj) {
 console_log(id, event);
 let actions = JSON.parse(event);
-return handle_function(evt, id, actions, obj);
+let function_arguments = [];
+return handle_function(evt, id, actions, obj, function_arguments);
 };
 return exports;
 })();
@@ -403,21 +394,29 @@ console.log(...message);
 }
 }
 function isObject(obj) {
-return obj === Object(obj);
+return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 function resolve_reference(reference, data) {
 return data[reference];
 }
+function deepCopy(object) {
+if (isObject(object)) {
+return JSON.parse(JSON.stringify(object));
+}
+return object;
+}
 function change_value(function_arguments, data) {
 for (const a in function_arguments) {
+if (isFunctionArgument(function_arguments[a])) {
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
 data[reference] = function_arguments[a]["value"];
 }
 }
 }
+}
 function isFunctionArgument(object) {
-return 'member' in object;
+return object.value !== undefined;
 }
 String.prototype.format = function () {
 var formatted = this;
@@ -431,7 +430,6 @@ return formatted;
 
 function node_change_main(data){
 document.querySelector(`[data-id="0,0:main"]`).innerHTML = data["foo#print:name:0"];
-
 document.querySelector(`[data-id="1,0:main"]`).innerHTML = data["foo#print:name:1"];
 }
 
