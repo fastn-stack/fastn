@@ -211,6 +211,16 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                 )?)
             }
+            "ftd#boolean" => {
+                ftd::executor::Element::Boolean(ftd::executor::element::boolean_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                )?)
+            }
             "ftd#row" => {
                 let children = ExecuteDoc::execute_from_instructions(
                     instruction.children.as_slice(),

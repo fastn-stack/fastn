@@ -426,6 +426,11 @@ formatted = formatted.replace(regexp, arguments[i]);
 return formatted;
 };
 
+function isempty(str) {
+return (!str || str.length === 0 );
+}
+
+
 function foo__diff___main(a,b){
 return (a.value -= b);
 }

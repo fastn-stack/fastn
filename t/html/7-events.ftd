@@ -13,6 +13,12 @@ string b:
 a = a + " " + b
 
 
+-- boolean is-empty(a):
+optional string a:
+
+isempty(a)
+
+
 -- component foo:
 integer $foo-value:
 

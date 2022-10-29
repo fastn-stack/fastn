@@ -742,5 +742,8 @@
         "line_number": 8
       }
     }
+  },
+  "aliases": {
+    "ftd": "ftd"
   }
 }

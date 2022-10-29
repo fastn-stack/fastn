@@ -181,6 +181,35 @@ pub fn i64(
     }
 }
 
+pub fn bool(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<bool>> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
+            v,
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type boolean, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
 pub fn optional_i64(
     key: &str,
     properties: &[ftd::interpreter2::Property],

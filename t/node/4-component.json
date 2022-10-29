@@ -414,5 +414,8 @@
         "line_number": 16
       }
     }
+  },
+  "aliases": {
+    "ftd": "ftd"
   }
 }

@@ -426,6 +426,9 @@ formatted = formatted.replace(regexp, arguments[i]);
 return formatted;
 };
 
+function isempty(str) {
+return (!str || str.length === 0 );
+}
 
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");

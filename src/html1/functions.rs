@@ -9,6 +9,7 @@ impl FunctionGenerator {
 
     pub fn get_functions(&self, node_data: &ftd::node::NodeData) -> ftd::html1::Result<String> {
         let mut vector = vec![];
+        vector.extend(from_default_functions());
         for function in node_data
             .bag
             .values()
@@ -227,4 +228,15 @@ impl ExpressionGenerator {
     pub fn is_root(&self, operator: &evalexpr::Operator) -> bool {
         matches!(operator, evalexpr::Operator::RootNode)
     }
+}
+
+fn from_default_functions() -> Vec<String> {
+    // todo: check ftd::interpreter2::default::default_functions()
+    let value = indoc::indoc! {"
+        function isempty(str) {
+            return (!str || str.length === 0 );
+        }
+    "}
+    .to_string();
+    vec![value]
 }

@@ -120,7 +120,7 @@ impl Function {
             );
         }
 
-        let mut evalexpr_context = evalexpr::HashMapContext::new();
+        let mut evalexpr_context = ftd::interpreter2::default::default_context()?;
         for (key, context) in context.iter() {
             evalexpr_context.set_value(key.to_string(), context.value.to_owned())?;
         }

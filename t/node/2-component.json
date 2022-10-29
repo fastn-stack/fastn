@@ -202,5 +202,8 @@
     "data_id": "",
     "line_number": 0
   },
-  "bag": {}
+  "bag": {},
+  "aliases": {
+    "ftd": "ftd"
+  }
 }

@@ -596,6 +596,9 @@ formatted = formatted.replace(regexp, arguments[i]);
 return formatted;
 };
 
+function isempty(str) {
+return (!str || str.length === 0 );
+}
 
 function node_change_main(data){
 document.querySelector(`[data-id="0,0:main"]`).innerHTML = data["foo#toc.name"];

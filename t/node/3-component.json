@@ -369,5 +369,8 @@
         "line_number": 1
       }
     }
+  },
+  "aliases": {
+    "ftd": "ftd"
   }
 }
