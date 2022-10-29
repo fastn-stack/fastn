@@ -10,7 +10,7 @@ pub fn default_functions() -> ftd::Map<evalexpr::Function> {
     std::iter::IntoIterator::into_iter([(
         "isempty".to_string(),
         Function::new(|argument| {
-            if let Ok(_) = argument.as_empty() {
+            if argument.as_empty().is_ok() {
                 Ok(Value::Boolean(true))
             } else if let Ok(s) = argument.as_string() {
                 Ok(Value::Boolean(s.is_empty()))
