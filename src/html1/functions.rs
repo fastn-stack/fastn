@@ -154,6 +154,9 @@ impl ExpressionGenerator {
         if let Some(operator) = self.has_operator(node.operator()) {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
+            if matches!(node.operator(), evalexpr::Operator::Not) {
+                return vec![operator, self.to_string(first, false, arguments)].join("");
+            }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
             return vec![
                 self.to_string(first, false, arguments),
