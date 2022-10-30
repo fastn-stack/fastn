@@ -14,7 +14,7 @@ pub use things::{
         Argument, Component, ComponentDefinition, Event, EventName, Loop, Property, PropertySource,
     },
     default,
-    expression::Boolean,
+    expression1::Boolean,
     function::{Function, FunctionCall},
     kind::{Kind, KindData},
     record::{Field, Record},

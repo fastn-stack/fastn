@@ -86,8 +86,21 @@
                       }
                     },
                     "condition": {
-                      "Equal": {
-                        "left": {
+                      "expression": {
+                        "operator": "RootNode",
+                        "children": [
+                          {
+                            "operator": {
+                              "VariableIdentifierRead": {
+                                "identifier": "flag"
+                              }
+                            },
+                            "children": []
+                          }
+                        ]
+                      },
+                      "references": {
+                        "flag": {
                           "Reference": {
                             "name": "foo#flag",
                             "kind": {
@@ -99,20 +112,9 @@
                             "is_mutable": false,
                             "line_number": 4
                           }
-                        },
-                        "right": {
-                          "Value": {
-                            "value": {
-                              "Boolean": {
-                                "value": true
-                              }
-                            },
-                            "is_mutable": false,
-                            "line_number": 4
-                          }
-                        },
-                        "line_number": 4
-                      }
+                        }
+                      },
+                      "line_number": 4
                     },
                     "line_number": 4
                   },

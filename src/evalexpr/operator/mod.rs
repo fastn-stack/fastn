@@ -6,7 +6,7 @@ use std::borrow::Borrow;
 mod display;
 
 /// An enum that represents operators in the operator tree.
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum Operator {
     /// A root node in the operator tree.
     /// The whole expression is stored under a root node, as well as each subexpression surrounded by parentheses.
@@ -512,6 +512,24 @@ impl Operator {
                 Ok(Value::Empty)
             }
             _ => self.eval(arguments, context),
+        }
+    }
+
+    /// Returns the variable identifier read
+    pub fn get_variable_identifier_read(&self) -> Option<String> {
+        if let Operator::VariableIdentifierRead { identifier } = self {
+            Some(identifier.to_string())
+        } else {
+            None
+        }
+    }
+
+    /// Returns the variable identifier write
+    pub fn get_variable_identifier_write(&self) -> Option<String> {
+        if let Operator::VariableIdentifierWrite { identifier } = self {
+            Some(identifier.to_string())
+        } else {
+            None
         }
     }
 }

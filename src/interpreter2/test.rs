@@ -118,6 +118,7 @@ fn filename_with_second_last_extension_replaced_with_json(
 fn evalexpr_test() {
     use ftd::evalexpr::*;
     let mut context = ftd::interpreter2::default::default_context().unwrap();
+    dbg!(ftd::evalexpr::build_operator_tree("$a >= $b").unwrap());
     assert_eq!(
         eval_with_context_mut("e = \"\"; isempty(e)", &mut context),
         Ok(Value::from(true))

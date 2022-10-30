@@ -33,17 +33,28 @@ mod iter;
 /// assert_eq!(node.eval_with_context(&context), Ok(Value::from(3)));
 /// ```
 ///
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Node {
     operator: Operator,
     children: Vec<Node>,
 }
 
 impl Node {
-    fn new(operator: Operator) -> Self {
+    /// Return a node object
+    pub fn new(operator: Operator) -> Self {
         Self {
             children: Vec::new(),
             operator,
+        }
+    }
+
+    /// Adds the children in node
+    pub fn add_children(self, children: Vec<Node>) -> Self {
+        let mut new_children = self.children;
+        new_children.extend(children);
+        Self {
+            children: new_children,
+            operator: self.operator,
         }
     }
 

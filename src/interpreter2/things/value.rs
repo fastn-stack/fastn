@@ -743,4 +743,14 @@ impl Value {
             kind,
         }
     }
+
+    pub(crate) fn into_evalexpr_value(self) -> ftd::evalexpr::Value {
+        match self {
+            ftd::interpreter2::Value::String { text } => ftd::evalexpr::Value::String(text),
+            ftd::interpreter2::Value::Integer { value } => ftd::evalexpr::Value::Int(value),
+            ftd::interpreter2::Value::Decimal { value } => ftd::evalexpr::Value::Float(value),
+            ftd::interpreter2::Value::Boolean { value } => ftd::evalexpr::Value::Boolean(value),
+            t => unimplemented!("{:?}", t),
+        }
+    }
 }

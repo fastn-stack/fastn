@@ -4,11 +4,11 @@
 padding: 40
 
 -- ftd.text: Hello World
-padding if $flag: 20
+padding if {flag}: 20
 padding: 2
 
 -- ftd.text: again
-padding if not $flag: 20
+padding if {!flag}: 20
 padding: 2
 
 -- end: ftd.row

@@ -21,7 +21,7 @@ pub const EMPTY_VALUE: () = ();
 
 /// The value type used by the parser.
 /// Values can be of different subtypes that are the variants of this enum.
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 #[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub enum Value {
     /// A string value.

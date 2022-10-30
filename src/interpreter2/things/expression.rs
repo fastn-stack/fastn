@@ -47,8 +47,8 @@ impl Boolean {
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Boolean> {
-        let (boolean, mut left, mut right) = ftd::interpreter2::Boolean::boolean_left_right(
+    ) -> ftd::interpreter2::Result<Boolean> {
+        let (boolean, mut left, mut right) = Boolean::boolean_left_right(
             condition.line_number,
             condition.expression.as_str(),
             doc.name,
