@@ -13,6 +13,7 @@ mod condition;
 mod constants;
 mod di;
 mod dnode;
+pub mod evalexpr;
 mod event;
 mod execute_doc;
 pub mod executor;

@@ -661,12 +661,12 @@ impl Value {
         &self,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<evalexpr::Value> {
+    ) -> ftd::interpreter2::Result<ftd::evalexpr::Value> {
         Ok(match self {
-            Value::String { text } => evalexpr::Value::String(text.to_string()),
-            Value::Integer { value } => evalexpr::Value::Int(*value),
-            Value::Decimal { value } => evalexpr::Value::Float(*value),
-            Value::Boolean { value } => evalexpr::Value::Boolean(*value),
+            Value::String { text } => ftd::evalexpr::Value::String(text.to_string()),
+            Value::Integer { value } => ftd::evalexpr::Value::Int(*value),
+            Value::Decimal { value } => ftd::evalexpr::Value::Float(*value),
+            Value::Boolean { value } => ftd::evalexpr::Value::Boolean(*value),
             Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
@@ -676,13 +676,13 @@ impl Value {
                         .to_evalexpr_value(doc, value.line_number())?;
                     values.push(v);
                 }
-                evalexpr::Value::Tuple(values)
+                ftd::evalexpr::Value::Tuple(values)
             }
             Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.to_evalexpr_value(doc, line_number)?
                 } else {
-                    evalexpr::Value::Empty
+                    ftd::evalexpr::Value::Empty
                 }
             }
             t => unimplemented!("{:?}", t),
@@ -690,19 +690,25 @@ impl Value {
     }
 
     pub(crate) fn from_evalexpr_value(
-        value: evalexpr::Value,
+        value: ftd::evalexpr::Value,
         expected_kind: &ftd::interpreter2::Kind,
         doc_name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<Value> {
         Ok(match value {
-            evalexpr::Value::String(text) if expected_kind.is_string() => Value::String { text },
-            evalexpr::Value::Float(value) if expected_kind.is_decimal() => Value::Decimal { value },
-            evalexpr::Value::Int(value) if expected_kind.is_integer() => Value::Integer { value },
-            evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
+            ftd::evalexpr::Value::String(text) if expected_kind.is_string() => {
+                Value::String { text }
+            }
+            ftd::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
+                Value::Decimal { value }
+            }
+            ftd::evalexpr::Value::Int(value) if expected_kind.is_integer() => {
+                Value::Integer { value }
+            }
+            ftd::evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
                 Value::Boolean { value }
             }
-            evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
+            ftd::evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
                 let mut values = vec![];
                 let val_kind = expected_kind.list_type(doc_name, line_number)?;
                 for val in data {
@@ -717,7 +723,7 @@ impl Value {
                     kind: ftd::interpreter2::KindData::new(val_kind),
                 }
             }
-            evalexpr::Value::Empty if expected_kind.is_optional() => Value::Optional {
+            ftd::evalexpr::Value::Empty if expected_kind.is_optional() => Value::Optional {
                 data: Box::new(None),
                 kind: ftd::interpreter2::KindData::new(expected_kind.clone()),
             },

@@ -1,11 +1,11 @@
-use evalexpr::ContextWithMutableFunctions;
+use ftd::evalexpr::ContextWithMutableFunctions;
 
 pub fn default_aliases() -> ftd::Map<String> {
     std::iter::IntoIterator::into_iter([("ftd".to_string(), "ftd".to_string())]).collect()
 }
 
-pub fn default_functions() -> ftd::Map<evalexpr::Function> {
-    use evalexpr::*;
+pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
+    use ftd::evalexpr::*;
 
     std::iter::IntoIterator::into_iter([(
         "isempty".to_string(),
@@ -24,8 +24,8 @@ pub fn default_functions() -> ftd::Map<evalexpr::Function> {
     .collect()
 }
 
-pub fn default_context() -> ftd::interpreter2::Result<evalexpr::HashMapContext> {
-    let mut context = evalexpr::HashMapContext::new();
+pub fn default_context() -> ftd::interpreter2::Result<ftd::evalexpr::HashMapContext> {
+    let mut context = ftd::evalexpr::HashMapContext::new();
     for (key, function) in default_functions() {
         context.set_function(key, function)?;
     }

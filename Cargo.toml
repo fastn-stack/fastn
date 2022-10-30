@@ -37,7 +37,6 @@ slug = "0.1"
 include_dir = "0.7"
 indoc = "1"
 itertools = "0.10"
-evalexpr = "8.1.0"
 
 
 [dependencies.syntect]
@@ -75,6 +74,9 @@ default-features = false
 [dev-dependencies]
 diffy = "0.2"
 pretty_assertions = "1.2"
+ron = "0.7.0"
+rand = "0.8.5"
+rand_pcg = "0.3.1"
 
 #[dev-dependencies.rusty-hook]
 # We have intentionally decided not to use it.

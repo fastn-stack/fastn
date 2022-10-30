@@ -116,7 +116,7 @@ fn filename_with_second_last_extension_replaced_with_json(
 
 #[test]
 fn evalexpr_test() {
-    use evalexpr::*;
+    use ftd::evalexpr::*;
     let mut context = ftd::interpreter2::default::default_context().unwrap();
     assert_eq!(
         eval_with_context_mut("e = \"\"; isempty(e)", &mut context),

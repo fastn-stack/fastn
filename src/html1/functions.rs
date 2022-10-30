@@ -27,7 +27,7 @@ impl FunctionGenerator {
     ) -> ftd::html1::Result<String> {
         use itertools::Itertools;
 
-        /*let node = dbg!(evalexpr::build_operator_tree(
+        /*let node = dbg!(ftd::evalexpr::build_operator_tree(
             "a = a+b+f(a, b)+(j, k) + (a+b + g(a+j, k)); a"
         )
         .unwrap()); //Todo: remove unwrap
@@ -40,7 +40,7 @@ impl FunctionGenerator {
             .map(|v| (v.name.to_string(), v.mutable))
             .collect_vec();
         for expression in function.expression {
-            let node = evalexpr::build_operator_tree(expression.expression.as_str())?;
+            let node = ftd::evalexpr::build_operator_tree(expression.expression.as_str())?;
             result.push(ftd::html1::utils::trim_brackets(
                 ExpressionGenerator
                     .to_string(&node, true, arguments.as_slice())
@@ -71,7 +71,7 @@ struct ExpressionGenerator;
 impl ExpressionGenerator {
     pub fn to_string(
         &self,
-        node: &evalexpr::Node,
+        node: &ftd::evalexpr::Node,
         root: bool,
         arguments: &[(String, bool)],
     ) -> String {
@@ -154,7 +154,7 @@ impl ExpressionGenerator {
         if let Some(operator) = self.has_operator(node.operator()) {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
-            if matches!(node.operator(), evalexpr::Operator::Not) {
+            if matches!(node.operator(), ftd::evalexpr::Operator::Not) {
                 return vec![operator, self.to_string(first, false, arguments)].join("");
             }
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
@@ -186,35 +186,35 @@ impl ExpressionGenerator {
         )
     }
 
-    pub fn has_value(&self, operator: &evalexpr::Operator) -> Option<String> {
+    pub fn has_value(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {
         match operator {
-            evalexpr::Operator::Const { .. }
-            | evalexpr::Operator::VariableIdentifierRead { .. }
-            | evalexpr::Operator::VariableIdentifierWrite { .. } => Some(operator.to_string()),
+            ftd::evalexpr::Operator::Const { .. }
+            | ftd::evalexpr::Operator::VariableIdentifierRead { .. }
+            | ftd::evalexpr::Operator::VariableIdentifierWrite { .. } => Some(operator.to_string()),
             _ => None,
         }
     }
 
-    pub fn has_function(&self, operator: &evalexpr::Operator) -> Option<String> {
+    pub fn has_function(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {
         match operator {
-            evalexpr::Operator::FunctionIdentifier { .. } => Some(operator.to_string()),
+            ftd::evalexpr::Operator::FunctionIdentifier { .. } => Some(operator.to_string()),
             _ => None,
         }
     }
 
-    pub fn is_assignment(&self, operator: &evalexpr::Operator) -> bool {
-        matches!(operator, evalexpr::Operator::Assign)
+    pub fn is_assignment(&self, operator: &ftd::evalexpr::Operator) -> bool {
+        matches!(operator, ftd::evalexpr::Operator::Assign)
     }
 
-    pub fn is_chain(&self, operator: &evalexpr::Operator) -> bool {
-        matches!(operator, evalexpr::Operator::Chain)
+    pub fn is_chain(&self, operator: &ftd::evalexpr::Operator) -> bool {
+        matches!(operator, ftd::evalexpr::Operator::Chain)
     }
 
-    pub fn is_tuple(&self, operator: &evalexpr::Operator) -> bool {
-        matches!(operator, evalexpr::Operator::Tuple)
+    pub fn is_tuple(&self, operator: &ftd::evalexpr::Operator) -> bool {
+        matches!(operator, ftd::evalexpr::Operator::Tuple)
     }
 
-    pub fn has_operator(&self, operator: &evalexpr::Operator) -> Option<String> {
+    pub fn has_operator(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {
         if self.has_value(operator).is_none()
             && self.has_function(operator).is_none()
             && !self.is_chain(operator)
@@ -228,8 +228,8 @@ impl ExpressionGenerator {
         }
     }
 
-    pub fn is_root(&self, operator: &evalexpr::Operator) -> bool {
-        matches!(operator, evalexpr::Operator::RootNode)
+    pub fn is_root(&self, operator: &ftd::evalexpr::Operator) -> bool {
+        matches!(operator, ftd::evalexpr::Operator::RootNode)
     }
 }
 

@@ -62,7 +62,7 @@ pub enum Error {
     },
 
     #[error("EvalexprError: {}", _0)]
-    EvalexprError(#[from] evalexpr::EvalexprError),
+    EvalexprError(#[from] ftd::evalexpr::EvalexprError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

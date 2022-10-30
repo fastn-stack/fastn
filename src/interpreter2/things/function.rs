@@ -64,10 +64,10 @@ impl Function {
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<Option<ftd::interpreter2::Value>> {
-        use evalexpr::*;
+        use ftd::evalexpr::*;
 
         struct VariableContext {
-            value: evalexpr::Value,
+            value: ftd::evalexpr::Value,
             reference: Option<String>,
             mutable: bool,
             kind: ftd::interpreter2::Kind,
@@ -127,7 +127,8 @@ impl Function {
 
         let expression = self.convert_to_evalexpr_expression();
 
-        let eval = evalexpr::eval_with_context_mut(expression.as_str(), &mut evalexpr_context)?;
+        let eval =
+            ftd::evalexpr::eval_with_context_mut(expression.as_str(), &mut evalexpr_context)?;
 
         for (key, context) in context {
             match context.reference {
