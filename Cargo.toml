@@ -72,7 +72,7 @@ version = "0.14"
 default-features = false
 
 [dev-dependencies]
-diffy = "0.2"
+diffy = "0.3"
 pretty_assertions = "1.2"
 ron = "0.7.0"
 rand = "0.8.5"
