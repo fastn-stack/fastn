@@ -14,6 +14,7 @@
                 "original": "Hello World",
                 "rendered": "Hello World"
               },
+              "line_number": 1,
               "properties": [
                 {
                   "value": {
@@ -35,12 +36,15 @@
             },
             "common": {
               "is_not_visible": false,
+              "event": [],
               "is_dummy": false,
               "padding": {
                 "value": null,
+                "line_number": null,
                 "properties": []
               },
-              "data_id": "0"
+              "data_id": "0",
+              "line_number": 1
             }
           }
         }
@@ -48,12 +52,15 @@
     },
     "common": {
       "is_not_visible": false,
+      "event": [],
       "is_dummy": false,
       "padding": {
         "value": null,
+        "line_number": null,
         "properties": []
       },
-      "data_id": ""
+      "data_id": "",
+      "line_number": 0
     }
   }
 }

@@ -19,6 +19,7 @@ pub enum PropertyValue {
         is_mutable: bool,
         line_number: usize,
     },
+    FunctionCall(ftd::interpreter2::FunctionCall),
 }
 
 impl PropertyValue {
@@ -26,7 +27,10 @@ impl PropertyValue {
         match self {
             PropertyValue::Value { is_mutable, .. }
             | PropertyValue::Reference { is_mutable, .. }
-            | PropertyValue::Clone { is_mutable, .. } => *is_mutable,
+            | PropertyValue::Clone { is_mutable, .. }
+            | PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall { is_mutable, .. }) => {
+                *is_mutable
+            }
         }
     }
 
@@ -34,7 +38,10 @@ impl PropertyValue {
         match self {
             PropertyValue::Value { line_number, .. }
             | PropertyValue::Reference { line_number, .. }
-            | PropertyValue::Clone { line_number, .. } => *line_number,
+            | PropertyValue::Clone { line_number, .. }
+            | PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall {
+                line_number, ..
+            }) => *line_number,
         }
     }
 
@@ -49,7 +56,30 @@ impl PropertyValue {
             | ftd::interpreter2::PropertyValue::Clone { name, kind, .. } => {
                 doc.resolve(name.as_str(), &kind, line_number)
             }
+            ftd::interpreter2::PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall {
+                name,
+                kind,
+                values,
+                line_number,
+                ..
+            }) => {
+                let function = doc.get_function(name.as_str(), line_number)?;
+                function.resolve(&kind, &values, doc, line_number)?.ok_or(
+                    ftd::interpreter2::Error::ParseError {
+                        message: format!(
+                            "Expected return value of type {:?} for function {}",
+                            kind, name
+                        ),
+                        doc_id: doc.name.to_string(),
+                        line_number,
+                    },
+                )
+            }
         }
+    }
+
+    pub fn is_value(&self) -> bool {
+        matches!(self, ftd::interpreter2::PropertyValue::Value { .. })
     }
 
     pub(crate) fn value(
@@ -329,6 +359,30 @@ impl PropertyValue {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<Option<ftd::interpreter2::PropertyValue>> {
         match value.string(doc.name) {
+            Ok(expression)
+                if expression.starts_with(ftd::interpreter2::utils::REFERENCE)
+                    && ftd::interpreter2::utils::get_function_name(
+                        expression.trim_start_matches(ftd::interpreter2::utils::REFERENCE),
+                        doc.name,
+                        value.line_number(),
+                    )
+                    .is_ok() =>
+            {
+                let expression = expression
+                    .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
+                    .to_string();
+
+                Ok(Some(ftd::interpreter2::PropertyValue::FunctionCall(
+                    ftd::interpreter2::FunctionCall::from_string(
+                        expression.as_str(),
+                        doc,
+                        mutable,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                        value.line_number(),
+                    )?,
+                )))
+            }
             Ok(reference) if reference.starts_with(ftd::interpreter2::utils::CLONE) => {
                 let reference = reference
                     .trim_start_matches(ftd::interpreter2::utils::CLONE)
@@ -434,6 +488,20 @@ impl PropertyValue {
             PropertyValue::Value { value, .. } => value.kind(),
             PropertyValue::Reference { kind, .. } => kind.kind.to_owned(),
             PropertyValue::Clone { kind, .. } => kind.kind.to_owned(),
+            PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall { kind, .. }) => {
+                kind.kind.to_owned()
+            }
+        }
+    }
+
+    pub(crate) fn new_none(
+        kind: ftd::interpreter2::KindData,
+        line_number: usize,
+    ) -> ftd::interpreter2::PropertyValue {
+        ftd::interpreter2::PropertyValue::Value {
+            value: ftd::interpreter2::Value::new_none(kind),
+            is_mutable: false,
+            line_number,
         }
     }
 }
@@ -450,14 +518,14 @@ impl PropertyValueSource {
         PropertyValueSource::Global.eq(self)
     }
 
-    fn get_reference_name(&self, name: &str, doc: &ftd::interpreter2::TDoc) -> String {
+    pub fn get_reference_name(&self, name: &str, doc: &ftd::interpreter2::TDoc) -> String {
         let name = name
             .strip_prefix(ftd::interpreter2::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
             .unwrap_or(name);
         match self {
             PropertyValueSource::Global | PropertyValueSource::Local(_) => doc.resolve_name(name),
-            PropertyValueSource::Loop(_) => doc.resolve_name(name), //TODO: arpita
+            PropertyValueSource::Loop(_) => doc.resolve_name(name), //TODO: Some different name for loop
         }
     }
 }
@@ -560,6 +628,129 @@ impl Value {
             Value::UI { name, .. } => ftd::interpreter2::Kind::UI {
                 name: Some(name.to_string()),
             },
+        }
+    }
+
+    #[allow(dead_code)]
+    pub(crate) fn to_string(
+        &self,
+        doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<String> {
+        Ok(match self {
+            Value::String { text } => format!("\"{}\"", text),
+            Value::Integer { value } => value.to_string(),
+            Value::Decimal { value } => value.to_string(),
+            Value::Boolean { value } => value.to_string(),
+            Value::List { data, .. } => {
+                let mut values = vec![];
+                for value in data {
+                    let v = value
+                        .clone()
+                        .resolve(doc, line_number)?
+                        .to_string(doc, value.line_number())?;
+                    values.push(v);
+                }
+                format!("({:?})", values.join(","))
+            }
+            t => unimplemented!("{:?}", t),
+        })
+    }
+
+    pub(crate) fn to_evalexpr_value(
+        &self,
+        doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::evalexpr::Value> {
+        Ok(match self {
+            Value::String { text } => ftd::evalexpr::Value::String(text.to_string()),
+            Value::Integer { value } => ftd::evalexpr::Value::Int(*value),
+            Value::Decimal { value } => ftd::evalexpr::Value::Float(*value),
+            Value::Boolean { value } => ftd::evalexpr::Value::Boolean(*value),
+            Value::List { data, .. } => {
+                let mut values = vec![];
+                for value in data {
+                    let v = value
+                        .clone()
+                        .resolve(doc, line_number)?
+                        .to_evalexpr_value(doc, value.line_number())?;
+                    values.push(v);
+                }
+                ftd::evalexpr::Value::Tuple(values)
+            }
+            Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    data.to_evalexpr_value(doc, line_number)?
+                } else {
+                    ftd::evalexpr::Value::Empty
+                }
+            }
+            t => unimplemented!("{:?}", t),
+        })
+    }
+
+    pub(crate) fn from_evalexpr_value(
+        value: ftd::evalexpr::Value,
+        expected_kind: &ftd::interpreter2::Kind,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<Value> {
+        Ok(match value {
+            ftd::evalexpr::Value::String(text) if expected_kind.is_string() => {
+                Value::String { text }
+            }
+            ftd::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
+                Value::Decimal { value }
+            }
+            ftd::evalexpr::Value::Int(value) if expected_kind.is_integer() => {
+                Value::Integer { value }
+            }
+            ftd::evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
+                Value::Boolean { value }
+            }
+            ftd::evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
+                let mut values = vec![];
+                let val_kind = expected_kind.list_type(doc_name, line_number)?;
+                for val in data {
+                    values.push(ftd::interpreter2::PropertyValue::Value {
+                        value: Value::from_evalexpr_value(val, &val_kind, doc_name, line_number)?,
+                        is_mutable: false,
+                        line_number,
+                    });
+                }
+                Value::List {
+                    data: values,
+                    kind: ftd::interpreter2::KindData::new(val_kind),
+                }
+            }
+            ftd::evalexpr::Value::Empty if expected_kind.is_optional() => Value::Optional {
+                data: Box::new(None),
+                kind: ftd::interpreter2::KindData::new(expected_kind.clone()),
+            },
+            t => {
+                return ftd::interpreter2::utils::e2(
+                    format!("Expected kind: `{:?}`, found: `{:?}`", expected_kind, t),
+                    doc_name,
+                    line_number,
+                )
+            }
+        })
+    }
+
+    pub(crate) fn new_none(kind: ftd::interpreter2::KindData) -> ftd::interpreter2::Value {
+        ftd::interpreter2::Value::Optional {
+            data: Box::new(None),
+            kind,
+        }
+    }
+
+    pub(crate) fn into_evalexpr_value(self) -> ftd::evalexpr::Value {
+        match self {
+            ftd::interpreter2::Value::String { text } => ftd::evalexpr::Value::String(text),
+            ftd::interpreter2::Value::Integer { value } => ftd::evalexpr::Value::Int(value),
+            ftd::interpreter2::Value::Decimal { value } => ftd::evalexpr::Value::Float(value),
+            ftd::interpreter2::Value::Boolean { value } => ftd::evalexpr::Value::Boolean(value),
+            t => unimplemented!("{:?}", t),
         }
     }
 }

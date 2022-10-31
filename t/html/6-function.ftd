@@ -1,0 +1,45 @@
+-- string append(a,b):
+string a:
+string b:
+
+a + " " + b
+
+
+-- integer sum(a,b):
+integer a:
+integer b:
+
+a + b
+
+
+-- integer compare(a,b,c,d):
+integer a:
+integer b:
+integer c:
+integer d:
+
+e = a + c;
+if(e > b, c, d)
+
+
+
+-- integer length(a):
+string a:
+
+len(a)
+
+
+
+-- string name: Arpita
+-- integer number: 10
+-- string new-name: $append(a = $name, b = FifthTry)
+
+
+-- ftd.text: $append(a=hello, b=world)
+padding: $compare(a = $number, b = 20, c = 4, d = 5)
+
+-- ftd.text: $append(a = $name, b = Jaiswal)
+padding: $sum(a = $number, b = 4)
+
+-- ftd.text: $new-name
+padding: $length(a = $new-name)

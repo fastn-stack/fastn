@@ -1,0 +1,17 @@
+-- component print:
+string name:
+
+-- ftd.column:
+
+-- ftd.text: $print.name
+
+-- end: ftd.column
+
+-- end: print
+
+
+-- print:
+name: Hello
+
+-- print:
+name: Hello Again

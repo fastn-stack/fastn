@@ -120,8 +120,12 @@ impl Component {
             None
         };
 
-        let events =
-            Event::from_ast_events(ast_component.events, definition_name_with_arguments, doc)?;
+        let events = Event::from_ast_events(
+            ast_component.events,
+            definition_name_with_arguments,
+            &loop_object_name_and_kind,
+            doc,
+        )?;
 
         let children = {
             let mut children = vec![];
@@ -399,22 +403,38 @@ impl Loop {
     }
 }
 
-#[derive(Debug, Default, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Event {
-    name: String,
-    action: String, //TODO: to action containing ftd::interpreter2::Thing::Function
+    pub name: ftd::interpreter2::EventName,
+    pub action: ftd::interpreter2::FunctionCall,
     line_number: usize,
 }
 
 impl Event {
     fn from_ast_event(
         ast_event: ftd::ast::Event,
-        _definition_name_with_arguments: Option<(&str, &[Argument])>,
-        _doc: &ftd::interpreter2::TDoc,
+        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Event> {
+        let action = ftd::interpreter2::FunctionCall::from_string(
+            ast_event.action.as_str(),
+            doc,
+            false,
+            definition_name_with_arguments,
+            loop_object_name_and_kind,
+            ast_event.line_number,
+        )?;
+
+        let event_name = ftd::interpreter2::EventName::from_string(
+            ast_event.name.as_str(),
+            doc.name,
+            ast_event.line_number,
+        )?;
+
         Ok(Event {
-            name: ast_event.name.to_string(),
-            action: ast_event.action.to_string(),
+            name: event_name,
+            action,
             line_number: ast_event.line_number,
         })
     }
@@ -422,6 +442,7 @@ impl Event {
     fn from_ast_events(
         ast_events: Vec<ftd::ast::Event>,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Vec<Event>> {
         let mut events = vec![];
@@ -429,9 +450,32 @@ impl Event {
             events.push(Event::from_ast_event(
                 event,
                 definition_name_with_arguments,
+                loop_object_name_and_kind,
                 doc,
             )?);
         }
         Ok(events)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum EventName {
+    Click,
+}
+
+impl EventName {
+    pub(crate) fn from_string(
+        e: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::EventName> {
+        match e {
+            "click" => Ok(EventName::Click),
+            t => ftd::interpreter2::utils::e2(
+                format!("`{}` event not found", t),
+                doc_id,
+                line_number,
+            ),
+        }
     }
 }

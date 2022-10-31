@@ -194,6 +194,27 @@ impl<'a> ExecuteDoc<'a> {
             "ftd#text" => {
                 ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
                     instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                )?)
+            }
+            "ftd#integer" => {
+                ftd::executor::Element::Integer(ftd::executor::element::integer_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                )?)
+            }
+            "ftd#boolean" => {
+                ftd::executor::Element::Boolean(ftd::executor::element::boolean_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
                     doc,
                     local_container,
@@ -208,6 +229,7 @@ impl<'a> ExecuteDoc<'a> {
                 )?;
                 ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
                     instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
                     doc,
                     local_container,
@@ -223,6 +245,7 @@ impl<'a> ExecuteDoc<'a> {
                 )?;
                 ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
                     instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
                     doc,
                     local_container,
@@ -243,7 +266,8 @@ fn update_instruction_for_loop_element(
     reference_name: &str,
 ) -> ftd::executor::Result<ftd::interpreter2::Component> {
     let mut instruction = instruction.clone();
-    let reference_replace_pattern = doc.itdoc().resolve_name(alias);
+    let reference_replace_pattern = ftd::interpreter2::PropertyValueSource::Loop(alias.to_string())
+        .get_reference_name(alias, &doc.itdoc());
     let replace_with = format!("{}.{}", reference_name, index_in_loop);
     let map =
         std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();
@@ -273,6 +297,12 @@ fn update_local_variable_references_in_component(
         update_local_variable_reference_in_property(property, local_variable_map);
     }
 
+    for events in component.events.iter_mut() {
+        for action in events.action.values.values_mut() {
+            update_local_variable_reference_in_property_value(action, local_variable_map);
+        }
+    }
+
     if let Some(condition) = component.condition.as_mut() {
         update_local_variable_reference_in_condition(condition, local_variable_map);
     }
@@ -300,7 +330,10 @@ fn update_local_variable_reference_in_condition(
     condition: &mut ftd::interpreter2::Boolean,
     local_variable: &ftd::Map<String>,
 ) {
-    match condition {
+    for reference in condition.references.values_mut() {
+        update_local_variable_reference_in_property_value(reference, local_variable);
+    }
+    /*match condition {
         ftd::interpreter2::Boolean::IsNotNull { value, .. } => {
             update_local_variable_reference_in_property_value(value, local_variable)
         }
@@ -322,19 +355,24 @@ fn update_local_variable_reference_in_condition(
             update_local_variable_reference_in_property_value(right, local_variable);
         }
         ftd::interpreter2::Boolean::Literal { .. } => {}
-    }
+    }*/
 }
 
 fn update_local_variable_reference_in_property_value(
     property_value: &mut ftd::interpreter2::PropertyValue,
     local_variable: &ftd::Map<String>,
 ) {
-    let reference_or_clone =
-        if let Some(reference_or_clone) = property_value.get_reference_or_clone() {
-            reference_or_clone
-        } else {
+    let reference_or_clone = match property_value {
+        ftd::interpreter2::PropertyValue::Reference { name, .. }
+        | ftd::interpreter2::PropertyValue::Clone { name, .. } => name.to_string(),
+        ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {
+            for property_value in function_call.values.values_mut() {
+                update_local_variable_reference_in_property_value(property_value, local_variable);
+            }
             return;
-        };
+        }
+        _ => return,
+    };
 
     if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
         if reference_or_clone.starts_with(format!("{}.", k).as_str()) || reference_or_clone.eq(k) {

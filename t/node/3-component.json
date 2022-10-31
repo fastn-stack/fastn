@@ -1,0 +1,385 @@
+{
+  "name": "foo",
+  "node": {
+    "classes": [],
+    "events": [],
+    "node": "div",
+    "attrs": {
+      "data-id": {
+        "value": "",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      }
+    },
+    "style": {
+      "align-items": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      },
+      "display": {
+        "value": "flex",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      },
+      "flex-direction": {
+        "value": "column",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      },
+      "justify-content": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      },
+      "padding": {
+        "value": null,
+        "properties": [],
+        "pattern": "{0}px",
+        "line_number": null
+      },
+      "text-decoration": {
+        "value": "none",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      }
+    },
+    "children": [
+      {
+        "classes": [],
+        "events": [],
+        "node": "div",
+        "attrs": {
+          "data-id": {
+            "value": "0",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          }
+        },
+        "style": {
+          "align-items": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          },
+          "display": {
+            "value": "flex",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          },
+          "flex-direction": {
+            "value": "row",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          },
+          "justify-content": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          },
+          "padding": {
+            "value": "40px",
+            "properties": [],
+            "pattern": "{0}px",
+            "line_number": 4
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          }
+        },
+        "children": [
+          {
+            "classes": [
+              "ft_md"
+            ],
+            "events": [],
+            "node": "div",
+            "attrs": {
+              "data-id": {
+                "value": "0,0",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "style": {
+              "padding": {
+                "value": "20px",
+                "properties": [
+                  {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Integer": {
+                            "value": 20
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 7
+                      }
+                    },
+                    "source": {
+                      "Header": {
+                        "name": "padding",
+                        "mutable": false
+                      }
+                    },
+                    "condition": {
+                      "expression": {
+                        "operator": "RootNode",
+                        "children": [
+                          {
+                            "operator": {
+                              "VariableIdentifierRead": {
+                                "identifier": "flag"
+                              }
+                            },
+                            "children": []
+                          }
+                        ]
+                      },
+                      "references": {
+                        "flag": {
+                          "Reference": {
+                            "name": "foo#flag",
+                            "kind": {
+                              "kind": "Boolean",
+                              "caption": false,
+                              "body": false
+                            },
+                            "source": "Global",
+                            "is_mutable": false,
+                            "line_number": 7
+                          }
+                        }
+                      },
+                      "line_number": 7
+                    },
+                    "line_number": 7
+                  },
+                  {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Integer": {
+                            "value": 2
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 8
+                      }
+                    },
+                    "source": {
+                      "Header": {
+                        "name": "padding",
+                        "mutable": false
+                      }
+                    },
+                    "condition": null,
+                    "line_number": 8
+                  }
+                ],
+                "pattern": "{0}px",
+                "line_number": 7
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "children": [],
+            "text": {
+              "value": "Hello World",
+              "properties": [],
+              "pattern": null,
+              "line_number": 6
+            },
+            "null": false,
+            "data_id": "0,0",
+            "line_number": 6
+          },
+          {
+            "classes": [
+              "ft_md"
+            ],
+            "events": [],
+            "node": "div",
+            "attrs": {
+              "data-id": {
+                "value": "0,1",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "style": {
+              "padding": {
+                "value": "2px",
+                "properties": [
+                  {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Integer": {
+                            "value": 20
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 11
+                      }
+                    },
+                    "source": {
+                      "Header": {
+                        "name": "padding",
+                        "mutable": false
+                      }
+                    },
+                    "condition": {
+                      "expression": {
+                        "operator": "RootNode",
+                        "children": [
+                          {
+                            "operator": "Not",
+                            "children": [
+                              {
+                                "operator": {
+                                  "VariableIdentifierRead": {
+                                    "identifier": "flag"
+                                  }
+                                },
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "references": {
+                        "flag": {
+                          "Reference": {
+                            "name": "foo#flag",
+                            "kind": {
+                              "kind": "Boolean",
+                              "caption": false,
+                              "body": false
+                            },
+                            "source": "Global",
+                            "is_mutable": false,
+                            "line_number": 11
+                          }
+                        }
+                      },
+                      "line_number": 11
+                    },
+                    "line_number": 11
+                  },
+                  {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Integer": {
+                            "value": 2
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 12
+                      }
+                    },
+                    "source": {
+                      "Header": {
+                        "name": "padding",
+                        "mutable": false
+                      }
+                    },
+                    "condition": null,
+                    "line_number": 12
+                  }
+                ],
+                "pattern": "{0}px",
+                "line_number": 12
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "children": [],
+            "text": {
+              "value": "again",
+              "properties": [],
+              "pattern": null,
+              "line_number": 10
+            },
+            "null": false,
+            "data_id": "0,1",
+            "line_number": 10
+          }
+        ],
+        "text": {
+          "value": null,
+          "properties": [],
+          "pattern": null,
+          "line_number": null
+        },
+        "null": false,
+        "data_id": "0",
+        "line_number": 3
+      }
+    ],
+    "text": {
+      "value": null,
+      "properties": [],
+      "pattern": null,
+      "line_number": null
+    },
+    "null": false,
+    "data_id": "",
+    "line_number": 0
+  },
+  "bag": {
+    "foo#flag": {
+      "Variable": {
+        "name": "foo#flag",
+        "kind": {
+          "kind": "Boolean",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Boolean": {
+                "value": true
+              }
+            },
+            "is_mutable": false,
+            "line_number": 1
+          }
+        },
+        "conditional_value": [],
+        "line_number": 1
+      }
+    }
+  },
+  "aliases": {
+    "ftd": "ftd"
+  }
+}

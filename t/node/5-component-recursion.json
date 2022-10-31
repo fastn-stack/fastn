@@ -1,0 +1,980 @@
+{
+  "name": "foo",
+  "node": {
+    "classes": [],
+    "events": [],
+    "node": "div",
+    "attrs": {
+      "data-id": {
+        "value": "",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      }
+    },
+    "style": {
+      "align-items": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      },
+      "display": {
+        "value": "flex",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      },
+      "flex-direction": {
+        "value": "column",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      },
+      "justify-content": {
+        "value": "flex-start",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      },
+      "padding": {
+        "value": null,
+        "properties": [],
+        "pattern": "{0}px",
+        "line_number": null
+      },
+      "text-decoration": {
+        "value": "none",
+        "properties": [],
+        "pattern": null,
+        "line_number": null
+      }
+    },
+    "children": [
+      {
+        "classes": [],
+        "events": [],
+        "node": "div",
+        "attrs": {
+          "data-id": {
+            "value": "0",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          }
+        },
+        "style": {
+          "align-items": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          },
+          "display": {
+            "value": "flex",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          },
+          "flex-direction": {
+            "value": "column",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          },
+          "justify-content": {
+            "value": "flex-start",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          },
+          "padding": {
+            "value": "30px",
+            "properties": [],
+            "pattern": "{0}px",
+            "line_number": 32
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "pattern": null,
+            "line_number": null
+          }
+        },
+        "children": [
+          {
+            "classes": [
+              "ft_md"
+            ],
+            "events": [],
+            "node": "div",
+            "attrs": {
+              "data-id": {
+                "value": "0,0",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "style": {
+              "padding": {
+                "value": null,
+                "properties": [],
+                "pattern": "{0}px",
+                "line_number": null
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "children": [],
+            "text": {
+              "value": "TOC title 1",
+              "properties": [
+                {
+                  "value": {
+                    "Reference": {
+                      "name": "foo#toc.name",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
+                      },
+                      "source": {
+                        "Local": "print-toc-item"
+                      },
+                      "is_mutable": false,
+                      "line_number": 34
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 34
+                }
+              ],
+              "pattern": null,
+              "line_number": 34
+            },
+            "null": false,
+            "data_id": "0,0",
+            "line_number": 34
+          },
+          {
+            "classes": [],
+            "events": [],
+            "node": "div",
+            "attrs": {
+              "data-id": {
+                "value": "0,1,0",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "style": {
+              "align-items": {
+                "value": "flex-start",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              },
+              "display": {
+                "value": "flex",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              },
+              "flex-direction": {
+                "value": "column",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              },
+              "justify-content": {
+                "value": "flex-start",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              },
+              "padding": {
+                "value": "30px",
+                "properties": [],
+                "pattern": "{0}px",
+                "line_number": 32
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "children": [
+              {
+                "classes": [
+                  "ft_md"
+                ],
+                "events": [],
+                "node": "div",
+                "attrs": {
+                  "data-id": {
+                    "value": "0,1,0,0",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  }
+                },
+                "style": {
+                  "padding": {
+                    "value": null,
+                    "properties": [],
+                    "pattern": "{0}px",
+                    "line_number": null
+                  },
+                  "text-decoration": {
+                    "value": "none",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  }
+                },
+                "children": [],
+                "text": {
+                  "value": "TOC title 2",
+                  "properties": [
+                    {
+                      "value": {
+                        "Reference": {
+                          "name": "foo#toc.children.0.name",
+                          "kind": {
+                            "kind": "String",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": {
+                            "Local": "print-toc-item"
+                          },
+                          "is_mutable": false,
+                          "line_number": 34
+                        }
+                      },
+                      "source": "Caption",
+                      "condition": null,
+                      "line_number": 34
+                    }
+                  ],
+                  "pattern": null,
+                  "line_number": 34
+                },
+                "null": false,
+                "data_id": "0,1,0,0",
+                "line_number": 34
+              }
+            ],
+            "text": {
+              "value": null,
+              "properties": [],
+              "pattern": null,
+              "line_number": null
+            },
+            "null": false,
+            "data_id": "0,1,0",
+            "line_number": 31
+          },
+          {
+            "classes": [],
+            "events": [],
+            "node": "div",
+            "attrs": {
+              "data-id": {
+                "value": "0,1,1",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "style": {
+              "align-items": {
+                "value": "flex-start",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              },
+              "display": {
+                "value": "flex",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              },
+              "flex-direction": {
+                "value": "column",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              },
+              "justify-content": {
+                "value": "flex-start",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              },
+              "padding": {
+                "value": "30px",
+                "properties": [],
+                "pattern": "{0}px",
+                "line_number": 32
+              },
+              "text-decoration": {
+                "value": "none",
+                "properties": [],
+                "pattern": null,
+                "line_number": null
+              }
+            },
+            "children": [
+              {
+                "classes": [
+                  "ft_md"
+                ],
+                "events": [],
+                "node": "div",
+                "attrs": {
+                  "data-id": {
+                    "value": "0,1,1,0",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  }
+                },
+                "style": {
+                  "padding": {
+                    "value": null,
+                    "properties": [],
+                    "pattern": "{0}px",
+                    "line_number": null
+                  },
+                  "text-decoration": {
+                    "value": "none",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  }
+                },
+                "children": [],
+                "text": {
+                  "value": "TOC title 3",
+                  "properties": [
+                    {
+                      "value": {
+                        "Reference": {
+                          "name": "foo#toc.children.1.name",
+                          "kind": {
+                            "kind": "String",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": {
+                            "Local": "print-toc-item"
+                          },
+                          "is_mutable": false,
+                          "line_number": 34
+                        }
+                      },
+                      "source": "Caption",
+                      "condition": null,
+                      "line_number": 34
+                    }
+                  ],
+                  "pattern": null,
+                  "line_number": 34
+                },
+                "null": false,
+                "data_id": "0,1,1,0",
+                "line_number": 34
+              },
+              {
+                "classes": [],
+                "events": [],
+                "node": "div",
+                "attrs": {
+                  "data-id": {
+                    "value": "0,1,1,1,0",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  }
+                },
+                "style": {
+                  "align-items": {
+                    "value": "flex-start",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  },
+                  "display": {
+                    "value": "flex",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  },
+                  "flex-direction": {
+                    "value": "column",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  },
+                  "justify-content": {
+                    "value": "flex-start",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  },
+                  "padding": {
+                    "value": "30px",
+                    "properties": [],
+                    "pattern": "{0}px",
+                    "line_number": 32
+                  },
+                  "text-decoration": {
+                    "value": "none",
+                    "properties": [],
+                    "pattern": null,
+                    "line_number": null
+                  }
+                },
+                "children": [
+                  {
+                    "classes": [
+                      "ft_md"
+                    ],
+                    "events": [],
+                    "node": "div",
+                    "attrs": {
+                      "data-id": {
+                        "value": "0,1,1,1,0,0",
+                        "properties": [],
+                        "pattern": null,
+                        "line_number": null
+                      }
+                    },
+                    "style": {
+                      "padding": {
+                        "value": null,
+                        "properties": [],
+                        "pattern": "{0}px",
+                        "line_number": null
+                      },
+                      "text-decoration": {
+                        "value": "none",
+                        "properties": [],
+                        "pattern": null,
+                        "line_number": null
+                      }
+                    },
+                    "children": [],
+                    "text": {
+                      "value": "TOC title 4",
+                      "properties": [
+                        {
+                          "value": {
+                            "Reference": {
+                              "name": "foo#toc.children.1.children.0.name",
+                              "kind": {
+                                "kind": "String",
+                                "caption": false,
+                                "body": false
+                              },
+                              "source": {
+                                "Local": "print-toc-item"
+                              },
+                              "is_mutable": false,
+                              "line_number": 34
+                            }
+                          },
+                          "source": "Caption",
+                          "condition": null,
+                          "line_number": 34
+                        }
+                      ],
+                      "pattern": null,
+                      "line_number": 34
+                    },
+                    "null": false,
+                    "data_id": "0,1,1,1,0,0",
+                    "line_number": 34
+                  }
+                ],
+                "text": {
+                  "value": null,
+                  "properties": [],
+                  "pattern": null,
+                  "line_number": null
+                },
+                "null": false,
+                "data_id": "0,1,1,1,0",
+                "line_number": 31
+              }
+            ],
+            "text": {
+              "value": null,
+              "properties": [],
+              "pattern": null,
+              "line_number": null
+            },
+            "null": false,
+            "data_id": "0,1,1",
+            "line_number": 31
+          }
+        ],
+        "text": {
+          "value": null,
+          "properties": [],
+          "pattern": null,
+          "line_number": null
+        },
+        "null": false,
+        "data_id": "0",
+        "line_number": 31
+      }
+    ],
+    "text": {
+      "value": null,
+      "properties": [],
+      "pattern": null,
+      "line_number": null
+    },
+    "null": false,
+    "data_id": "",
+    "line_number": 0
+  },
+  "bag": {
+    "foo#print-toc-item": {
+      "Component": {
+        "name": "foo#print-toc-item",
+        "arguments": [
+          {
+            "name": "item",
+            "kind": {
+              "kind": {
+                "Record": {
+                  "name": "foo#toc-item"
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 29
+          }
+        ],
+        "definition": {
+          "name": "ftd#column",
+          "properties": [
+            {
+              "value": {
+                "Value": {
+                  "value": {
+                    "Integer": {
+                      "value": 30
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 32
+                }
+              },
+              "source": {
+                "Header": {
+                  "name": "padding",
+                  "mutable": false
+                }
+              },
+              "condition": null,
+              "line_number": 32
+            }
+          ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [
+            {
+              "name": "ftd#text",
+              "properties": [
+                {
+                  "value": {
+                    "Reference": {
+                      "name": "foo#print-toc-item.item.name",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
+                      },
+                      "source": {
+                        "Local": "print-toc-item"
+                      },
+                      "is_mutable": false,
+                      "line_number": 34
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 34
+                }
+              ],
+              "iteration": null,
+              "condition": null,
+              "events": [],
+              "children": [],
+              "line_number": 34
+            },
+            {
+              "name": "foo#print-toc-item",
+              "properties": [
+                {
+                  "value": {
+                    "Reference": {
+                      "name": "foo#obj",
+                      "kind": {
+                        "kind": {
+                          "Record": {
+                            "name": "foo#toc-item"
+                          }
+                        },
+                        "caption": false,
+                        "body": false
+                      },
+                      "source": {
+                        "Loop": "obj"
+                      },
+                      "is_mutable": false,
+                      "line_number": 37
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "item",
+                      "mutable": false
+                    }
+                  },
+                  "condition": null,
+                  "line_number": 37
+                }
+              ],
+              "iteration": {
+                "on": {
+                  "Reference": {
+                    "name": "foo#print-toc-item.item.children",
+                    "kind": {
+                      "kind": {
+                        "List": {
+                          "kind": {
+                            "Record": {
+                              "name": "foo#toc-item"
+                            }
+                          }
+                        }
+                      },
+                      "caption": false,
+                      "body": false
+                    },
+                    "source": {
+                      "Local": "print-toc-item"
+                    },
+                    "is_mutable": false,
+                    "line_number": 38
+                  }
+                },
+                "alias": "obj",
+                "line_number": 38
+              },
+              "condition": null,
+              "events": [],
+              "children": [],
+              "line_number": 36
+            }
+          ],
+          "line_number": 31
+        },
+        "line_number": 28
+      }
+    },
+    "foo#toc": {
+      "Variable": {
+        "name": "foo#toc",
+        "kind": {
+          "kind": {
+            "Record": {
+              "name": "foo#toc-item"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Record": {
+                "name": "foo#toc-item",
+                "fields": {
+                  "children": {
+                    "Value": {
+                      "value": {
+                        "List": {
+                          "data": [
+                            {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "foo#toc-item",
+                                    "fields": {
+                                      "children": {
+                                        "Value": {
+                                          "value": {
+                                            "List": {
+                                              "data": [],
+                                              "kind": {
+                                                "kind": {
+                                                  "List": {
+                                                    "kind": {
+                                                      "Record": {
+                                                        "name": "foo#toc-item"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "caption": false,
+                                                "body": false
+                                              }
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 11
+                                        }
+                                      },
+                                      "name": {
+                                        "Value": {
+                                          "value": {
+                                            "String": {
+                                              "text": "TOC title 2"
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 12
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 11
+                              }
+                            },
+                            {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "foo#toc-item",
+                                    "fields": {
+                                      "children": {
+                                        "Value": {
+                                          "value": {
+                                            "List": {
+                                              "data": [
+                                                {
+                                                  "Value": {
+                                                    "value": {
+                                                      "Record": {
+                                                        "name": "foo#toc-item",
+                                                        "fields": {
+                                                          "children": {
+                                                            "Value": {
+                                                              "value": {
+                                                                "List": {
+                                                                  "data": [],
+                                                                  "kind": {
+                                                                    "kind": {
+                                                                      "List": {
+                                                                        "kind": {
+                                                                          "Record": {
+                                                                            "name": "foo#toc-item"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    "caption": false,
+                                                                    "body": false
+                                                                  }
+                                                                }
+                                                              },
+                                                              "is_mutable": false,
+                                                              "line_number": 19
+                                                            }
+                                                          },
+                                                          "name": {
+                                                            "Value": {
+                                                              "value": {
+                                                                "String": {
+                                                                  "text": "TOC title 4"
+                                                                }
+                                                              },
+                                                              "is_mutable": false,
+                                                              "line_number": 20
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "is_mutable": false,
+                                                    "line_number": 19
+                                                  }
+                                                }
+                                              ],
+                                              "kind": {
+                                                "kind": {
+                                                  "List": {
+                                                    "kind": {
+                                                      "Record": {
+                                                        "name": "foo#toc-item"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "caption": false,
+                                                "body": false
+                                              }
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 14
+                                        }
+                                      },
+                                      "name": {
+                                        "Value": {
+                                          "value": {
+                                            "String": {
+                                              "text": "TOC title 3"
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 15
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 14
+                              }
+                            }
+                          ],
+                          "kind": {
+                            "kind": {
+                              "List": {
+                                "kind": {
+                                  "Record": {
+                                    "name": "foo#toc-item"
+                                  }
+                                }
+                              }
+                            },
+                            "caption": false,
+                            "body": false
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 6
+                    }
+                  },
+                  "name": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "TOC title 1"
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 7
+                    }
+                  }
+                }
+              }
+            },
+            "is_mutable": false,
+            "line_number": 6
+          }
+        },
+        "conditional_value": [],
+        "line_number": 6
+      }
+    },
+    "foo#toc-item": {
+      "Record": {
+        "name": "foo#toc-item",
+        "fields": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "children",
+            "kind": {
+              "kind": {
+                "List": {
+                  "kind": {
+                    "Record": {
+                      "name": "foo#toc-item"
+                    }
+                  }
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "List": {
+                    "data": [],
+                    "kind": {
+                      "kind": {
+                        "List": {
+                          "kind": {
+                            "Record": {
+                              "name": "foo#toc-item"
+                            }
+                          }
+                        }
+                      },
+                      "caption": false,
+                      "body": false
+                    }
+                  }
+                },
+                "is_mutable": false,
+                "line_number": 3
+              }
+            },
+            "line_number": 3
+          }
+        ],
+        "line_number": 1
+      }
+    }
+  },
+  "aliases": {
+    "ftd": "ftd"
+  }
+}

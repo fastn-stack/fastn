@@ -1,0 +1,10 @@
+-- void toggle(a):
+boolean $a:
+
+a = !a;
+
+
+-- boolean $flag: true
+
+-- ftd.text: Click here
+$on-click$: $toggle($a = $flag)

@@ -58,15 +58,23 @@ impl<'a> TDoc<'a> {
                         data: Box::new(None),
                         kind: argument.kind.to_owned(),
                     },
-                    is_mutable: false, // TODO: arpita fix this
+                    is_mutable: argument.mutable,
                     line_number,
                 }
             };
 
+            let name_in_component_definition = format!("{}.{}", component_name, argument.name);
+            match default.reference_name() {
+                Some(name) if conditions.is_empty() => {
+                    map.insert(name_in_component_definition, name.to_string());
+                    continue;
+                }
+                _ => {}
+            }
+
             let variable_name = self.itdoc().resolve_name(
                 format!("{}:{}:{}", component_name, argument.name, string_container).as_str(),
             );
-            let name_in_component_definition = format!("{}.{}", component_name, argument.name);
             map.insert(name_in_component_definition, variable_name.to_string());
 
             let variable = ftd::interpreter2::Variable {

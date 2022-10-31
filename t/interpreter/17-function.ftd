@@ -1,0 +1,7 @@
+-- string append(a,b):
+string a:
+string b:
+
+a + b
+
+-- ftd.text: $append(a=hello, b=world)

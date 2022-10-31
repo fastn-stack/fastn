@@ -76,6 +76,39 @@ pub(crate) fn kind_eq(
 pub const CLONE: &str = "*$";
 pub const REFERENCE: &str = ftd::ast::utils::REFERENCE;
 
+pub(crate) fn get_function_name(
+    s: &str,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::interpreter2::Result<String> {
+    Ok(get_function_name_and_properties(s, doc_id, line_number)?.0)
+}
+
+pub(crate) fn get_function_name_and_properties(
+    s: &str,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::interpreter2::Result<(String, Vec<(String, String)>)> {
+    let (si, ei) = match (s.find('('), s.find(')')) {
+        (Some(si), Some(ei)) if si < ei => (si, ei),
+        _ => {
+            return ftd::interpreter2::utils::e2(
+                format!("{} is not a function", s),
+                doc_id,
+                line_number,
+            )
+        }
+    };
+    let function_name = s[..si].to_string();
+    let mut properties = vec![];
+    for value in s[si + 1..ei].split(',') {
+        let (p1, p2) = ftd::interpreter2::utils::split(value, "=", doc_id, line_number)?;
+        properties.push((p1.trim().to_string(), p2.trim().to_string()));
+    }
+
+    Ok((function_name, properties))
+}
+
 pub(crate) fn get_doc_name_and_remaining(
     s: &str,
     doc_id: &str,

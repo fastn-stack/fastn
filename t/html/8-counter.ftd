@@ -1,0 +1,79 @@
+-- void sum(a,b):
+integer $a:
+integer b:
+
+a += b;
+
+-- void diff(a,b):
+integer $a:
+integer b:
+
+a -= b;
+
+
+-- void multiply(a,b):
+integer $a:
+integer b:
+
+a *= b;
+
+-- void divide(a,b):
+integer $a:
+integer b:
+
+a /= b;
+
+
+-- integer rmultiple(a,b):
+integer a:
+integer b:
+
+e = a*b;
+e
+
+
+
+-- integer $value: 50
+
+
+-- component counter:
+integer $count:
+
+-- ftd.row:
+padding: $rmultiple(a = $counter.count, b = 2)
+
+-- ftd.text: 🐎
+padding: 2
+$on-click$: $divide($a = $counter.count, b = 2)
+
+-- ftd.text: 🐜
+padding: 2
+$on-click$: $diff($a = $counter.count, b = 1)
+
+-- ftd.text: Where to??
+padding: 2
+
+-- ftd.integer: $counter.count
+padding: 2
+
+-- ftd.integer: $rmultiple(a = $counter.count, b = 2)
+padding: 2
+
+-- ftd.text: 🐌
+padding: 2
+$on-click$: $sum($a = $counter.count, b = 1)
+
+-- ftd.text: 🐎
+padding: 2
+$on-click$: $multiply($a = $counter.count, b = 2)
+
+-- end: ftd.row
+
+-- end: counter
+
+
+
+
+
+-- counter:
+$count: $value

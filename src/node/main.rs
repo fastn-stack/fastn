@@ -1,15 +1,18 @@
-#![allow(dead_code)]
-
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
+    pub events: Vec<Event>,
     pub node: String,
-    pub attrs: ftd::Map<String>,
-    pub style: ftd::Map<String>,
+    pub attrs: ftd::Map<ftd::node::Value>,
+    pub style: ftd::Map<ftd::node::Value>,
     pub children: Vec<Node>,
-    pub text: Option<String>,
+    pub text: ftd::node::Value,
     pub null: bool,
+    pub data_id: String,
+    pub line_number: usize,
 }
+
+pub type Event = ftd::executor::Event;
 
 impl Node {
     fn from_common(node: &str, common: &ftd::executor::Common, doc_id: &str) -> Node {
@@ -18,9 +21,12 @@ impl Node {
             attrs: common.attrs(),
             style: common.style(doc_id, &mut []),
             children: vec![],
-            text: None,
+            text: Default::default(),
             classes: vec![],
             null: common.is_dummy,
+            events: common.event.clone(),
+            data_id: common.data_id.clone(),
+            line_number: common.line_number,
         }
     }
 
@@ -44,73 +50,17 @@ impl Node {
             attrs,
             style,
             classes,
-            text: None,
+            text: Default::default(),
             children: container
                 .children
                 .iter()
                 .map(|v| v.to_node(doc_id))
                 .collect_vec(),
             null: common.is_dummy,
+            events: common.event.clone(),
+            data_id: common.data_id.to_string(),
+            line_number: common.line_number,
         }
-    }
-
-    pub fn to_html(&self, doc_id: &str) -> String {
-        let style = format!("style=\"{}\"", self.style_to_html(/*self.visible*/ true));
-        let classes = self.class_to_html();
-        let attrs = self.attrs_to_html();
-
-        let body = match self.text.as_ref() {
-            Some(v) => v.to_string(),
-            None => self
-                .children
-                .iter()
-                .map(|v| v.to_html(doc_id))
-                .collect::<Vec<String>>()
-                .join(""),
-        };
-
-        format!(
-            "<{node} {attrs} {style} {classes}>{body}</{node}>",
-            node = self.node.as_str(),
-            attrs = attrs,
-            style = style,
-            classes = classes,
-            body = body,
-        )
-    }
-
-    pub fn style_to_html(&self, visible: bool) -> String {
-        let mut styles = self.style.to_owned();
-        if !visible {
-            styles.insert("display".to_string(), "none".to_string());
-        }
-        styles
-            .iter()
-            .map(|(k, v)| format!("{}: {}", *k, escape(v))) // TODO: escape needed?
-            .collect::<Vec<String>>()
-            .join("; ")
-    }
-
-    pub fn class_to_html(&self) -> String {
-        if self.classes.is_empty() {
-            return "".to_string();
-        }
-        format!(
-            "class=\"{}\"",
-            self.classes
-                .iter()
-                .map(|k| k.to_string())
-                .collect::<Vec<String>>()
-                .join(" ")
-        )
-    }
-
-    fn attrs_to_html(&self) -> String {
-        self.attrs
-            .iter()
-            .map(|(k, v)| format!("{}={}", *k, quote(v))) // TODO: escape needed?
-            .collect::<Vec<String>>()
-            .join(" ")
     }
 }
 
@@ -120,6 +70,8 @@ impl ftd::executor::Element {
             ftd::executor::Element::Row(r) => r.to_node(doc_id),
             ftd::executor::Element::Column(c) => c.to_node(doc_id),
             ftd::executor::Element::Text(t) => t.to_node(doc_id),
+            ftd::executor::Element::Integer(t) => t.to_node(doc_id),
+            ftd::executor::Element::Boolean(t) => t.to_node(doc_id),
         }
     }
 }
@@ -128,13 +80,21 @@ impl ftd::executor::Row {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
-            n.style.insert(s("display"), s("flex"));
+            n.style
+                .insert(s("display"), ftd::node::Value::from_string("flex"));
         }
-        n.style.insert(s("flex-direction"), s("row"));
+        n.style
+            .insert(s("flex-direction"), ftd::node::Value::from_string("row"));
 
-        n.style.insert(s("align-items"), s("flex-start"));
+        n.style.insert(
+            s("align-items"),
+            ftd::node::Value::from_string("flex-start"),
+        );
 
-        n.style.insert(s("justify-content"), s("flex-start"));
+        n.style.insert(
+            s("justify-content"),
+            ftd::node::Value::from_string("flex-start"),
+        );
 
         n.children = {
             let mut children = vec![];
@@ -152,13 +112,21 @@ impl ftd::executor::Column {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
-            n.style.insert(s("display"), s("flex"));
+            n.style
+                .insert(s("display"), ftd::node::Value::from_string("flex"));
         }
-        n.style.insert(s("flex-direction"), s("column"));
+        n.style
+            .insert(s("flex-direction"), ftd::node::Value::from_string("column"));
 
-        n.style.insert(s("align-items"), s("flex-start"));
+        n.style.insert(
+            s("align-items"),
+            ftd::node::Value::from_string("flex-start"),
+        );
 
-        n.style.insert(s("justify-content"), s("flex-start"));
+        n.style.insert(
+            s("justify-content"),
+            ftd::node::Value::from_string("flex-start"),
+        );
 
         n.children = {
             let mut children = vec![];
@@ -178,30 +146,42 @@ impl ftd::executor::Text {
         let mut n = Node::from_common(node.as_str(), &self.common, doc_id);
         n.classes.extend(self.common.add_class());
         n.classes.push("ft_md".to_string());
-        n.text = Some(self.text.value.rendered.clone());
+        n.text = ftd::node::Value::from_executor_value(
+            Some(self.text.value.rendered.to_string()),
+            self.text.clone(),
+            None,
+        );
         n
     }
 }
 
 impl ftd::executor::Common {
-    fn attrs(&self) -> ftd::Map<String> {
+    fn attrs(&self) -> ftd::Map<ftd::node::Value> {
         // TODO: Implement attributes
-        std::iter::IntoIterator::into_iter([("data-id".to_string(), self.data_id.to_string())])
-            .collect()
+        std::iter::IntoIterator::into_iter([(
+            "data-id".to_string(),
+            ftd::node::Value::from_string(self.data_id.as_str()),
+        )])
+        .collect()
     }
 
-    fn style(&self, _doc_id: &str, _classes: &mut [String]) -> ftd::Map<String> {
-        let mut d: ftd::Map<String> = Default::default();
+    fn style(&self, _doc_id: &str, _classes: &mut [String]) -> ftd::Map<ftd::node::Value> {
+        let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
-        d.insert(s("text-decoration"), s("none"));
+        d.insert(s("text-decoration"), ftd::node::Value::from_string("none"));
 
         if self.is_not_visible {
-            d.insert(s("display"), s("none"));
+            d.insert(s("display"), ftd::node::Value::from_string("none"));
         }
 
-        if let Some(p) = self.padding.value {
-            d.insert(s("padding"), format!("{}px", p));
-        }
+        d.insert(
+            s("padding"),
+            ftd::node::Value::from_executor_value(
+                self.padding.value.map(|p| format!("{}px", p)),
+                self.padding.to_owned(),
+                Some(s("{0}px")),
+            ),
+        );
 
         d
     }
@@ -217,7 +197,7 @@ impl ftd::executor::Common {
 }
 
 impl ftd::executor::Container {
-    fn attrs(&self) -> ftd::Map<String> {
+    fn attrs(&self) -> ftd::Map<ftd::node::Value> {
         // TODO: Implement attributes
         Default::default()
     }
@@ -227,7 +207,7 @@ impl ftd::executor::Container {
         Default::default()
     }
 
-    fn style(&self) -> ftd::Map<String> {
+    fn style(&self) -> ftd::Map<ftd::node::Value> {
         // TODO: Implement style
         Default::default()
     }
@@ -235,14 +215,4 @@ impl ftd::executor::Container {
 
 fn s(s: &str) -> String {
     s.to_string()
-}
-
-pub fn escape(s: &str) -> String {
-    let s = s.replace('>', "\\u003E");
-    let s = s.replace('<', "\\u003C");
-    s.replace('&', "\\u0026")
-}
-
-fn quote(i: &str) -> String {
-    format!("{:?}", i)
 }

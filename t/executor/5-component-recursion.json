@@ -132,148 +132,6 @@
         "line_number": 31
       }
     },
-    "foo#print-toc-item:item:0": {
-      "Variable": {
-        "name": "foo#print-toc-item:item:0",
-        "kind": {
-          "kind": {
-            "Record": {
-              "name": "foo#toc-item"
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Reference": {
-            "name": "foo#toc",
-            "kind": {
-              "kind": {
-                "Record": {
-                  "name": "foo#toc-item"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "source": "Global",
-            "is_mutable": false,
-            "line_number": 49
-          }
-        },
-        "conditional_value": [],
-        "line_number": 48
-      }
-    },
-    "foo#print-toc-item:item:0,1,0": {
-      "Variable": {
-        "name": "foo#print-toc-item:item:0,1,0",
-        "kind": {
-          "kind": {
-            "Record": {
-              "name": "foo#toc-item"
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Reference": {
-            "name": "foo#print-toc-item:item:0.children.0",
-            "kind": {
-              "kind": {
-                "Record": {
-                  "name": "foo#toc-item"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "source": {
-              "Loop": "obj"
-            },
-            "is_mutable": false,
-            "line_number": 39
-          }
-        },
-        "conditional_value": [],
-        "line_number": 38
-      }
-    },
-    "foo#print-toc-item:item:0,1,1": {
-      "Variable": {
-        "name": "foo#print-toc-item:item:0,1,1",
-        "kind": {
-          "kind": {
-            "Record": {
-              "name": "foo#toc-item"
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Reference": {
-            "name": "foo#print-toc-item:item:0.children.1",
-            "kind": {
-              "kind": {
-                "Record": {
-                  "name": "foo#toc-item"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "source": {
-              "Loop": "obj"
-            },
-            "is_mutable": false,
-            "line_number": 39
-          }
-        },
-        "conditional_value": [],
-        "line_number": 38
-      }
-    },
-    "foo#print-toc-item:item:0,1,1,1,0": {
-      "Variable": {
-        "name": "foo#print-toc-item:item:0,1,1,1,0",
-        "kind": {
-          "kind": {
-            "Record": {
-              "name": "foo#toc-item"
-            }
-          },
-          "caption": false,
-          "body": false
-        },
-        "mutable": false,
-        "value": {
-          "Reference": {
-            "name": "foo#print-toc-item:item:0,1,1.children.0",
-            "kind": {
-              "kind": {
-                "Record": {
-                  "name": "foo#toc-item"
-                }
-              },
-              "caption": false,
-              "body": false
-            },
-            "source": {
-              "Loop": "obj"
-            },
-            "is_mutable": false,
-            "line_number": 39
-          }
-        },
-        "conditional_value": [],
-        "line_number": 38
-      }
-    },
     "foo#toc": {
       "Variable": {
         "name": "foo#toc",
@@ -561,11 +419,12 @@
                         "original": "TOC title 1",
                         "rendered": "TOC title 1"
                       },
+                      "line_number": 36,
                       "properties": [
                         {
                           "value": {
                             "Reference": {
-                              "name": "foo#print-toc-item:item:0.name",
+                              "name": "foo#toc.name",
                               "kind": {
                                 "kind": "String",
                                 "caption": false,
@@ -586,12 +445,15 @@
                     },
                     "common": {
                       "is_not_visible": false,
+                      "event": [],
                       "is_dummy": false,
                       "padding": {
                         "value": null,
+                        "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,0"
+                      "data_id": "0,0",
+                      "line_number": 36
                     }
                   }
                 },
@@ -606,11 +468,12 @@
                                 "original": "TOC title 2",
                                 "rendered": "TOC title 2"
                               },
+                              "line_number": 36,
                               "properties": [
                                 {
                                   "value": {
                                     "Reference": {
-                                      "name": "foo#print-toc-item:item:0,1,0.name",
+                                      "name": "foo#toc.children.0.name",
                                       "kind": {
                                         "kind": "String",
                                         "caption": false,
@@ -631,12 +494,15 @@
                             },
                             "common": {
                               "is_not_visible": false,
+                              "event": [],
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
+                                "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,0,0"
+                              "data_id": "0,1,0,0",
+                              "line_number": 36
                             }
                           }
                         }
@@ -644,12 +510,15 @@
                     },
                     "common": {
                       "is_not_visible": false,
+                      "event": [],
                       "is_dummy": false,
                       "padding": {
                         "value": null,
+                        "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,1,0"
+                      "data_id": "0,1,0",
+                      "line_number": 34
                     }
                   }
                 },
@@ -664,11 +533,12 @@
                                 "original": "TOC title 3",
                                 "rendered": "TOC title 3"
                               },
+                              "line_number": 36,
                               "properties": [
                                 {
                                   "value": {
                                     "Reference": {
-                                      "name": "foo#print-toc-item:item:0,1,1.name",
+                                      "name": "foo#toc.children.1.name",
                                       "kind": {
                                         "kind": "String",
                                         "caption": false,
@@ -689,12 +559,15 @@
                             },
                             "common": {
                               "is_not_visible": false,
+                              "event": [],
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
+                                "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,1,0"
+                              "data_id": "0,1,1,0",
+                              "line_number": 36
                             }
                           }
                         },
@@ -709,11 +582,12 @@
                                         "original": "TOC title 4",
                                         "rendered": "TOC title 4"
                                       },
+                                      "line_number": 36,
                                       "properties": [
                                         {
                                           "value": {
                                             "Reference": {
-                                              "name": "foo#print-toc-item:item:0,1,1,1,0.name",
+                                              "name": "foo#toc.children.1.children.0.name",
                                               "kind": {
                                                 "kind": "String",
                                                 "caption": false,
@@ -734,12 +608,15 @@
                                     },
                                     "common": {
                                       "is_not_visible": false,
+                                      "event": [],
                                       "is_dummy": false,
                                       "padding": {
                                         "value": null,
+                                        "line_number": null,
                                         "properties": []
                                       },
-                                      "data_id": "0,1,1,1,0,0"
+                                      "data_id": "0,1,1,1,0,0",
+                                      "line_number": 36
                                     }
                                   }
                                 }
@@ -747,12 +624,15 @@
                             },
                             "common": {
                               "is_not_visible": false,
+                              "event": [],
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
+                                "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,1,1,0"
+                              "data_id": "0,1,1,1,0",
+                              "line_number": 34
                             }
                           }
                         }
@@ -760,12 +640,15 @@
                     },
                     "common": {
                       "is_not_visible": false,
+                      "event": [],
                       "is_dummy": false,
                       "padding": {
                         "value": null,
+                        "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,1,1"
+                      "data_id": "0,1,1",
+                      "line_number": 34
                     }
                   }
                 }
@@ -773,12 +656,15 @@
             },
             "common": {
               "is_not_visible": false,
+              "event": [],
               "is_dummy": false,
               "padding": {
                 "value": null,
+                "line_number": null,
                 "properties": []
               },
-              "data_id": "0"
+              "data_id": "0",
+              "line_number": 34
             }
           }
         }
@@ -786,12 +672,15 @@
     },
     "common": {
       "is_not_visible": false,
+      "event": [],
       "is_dummy": false,
       "padding": {
         "value": null,
+        "line_number": null,
         "properties": []
       },
-      "data_id": ""
+      "data_id": "",
+      "line_number": 0
     }
   }
 }

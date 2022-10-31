@@ -7,9 +7,9 @@ boolean $flag:
 -- ftd.column:
 
 -- ftd.text:
-text if $print.flag: $print.name
+text if { print.flag }: $print.name
 text: $print.default
-padding if $print.flag: $print.padding
+padding if { print.flag }: $print.padding
 
 -- end: ftd.column
 
@@ -21,9 +21,9 @@ padding if $print.flag: $print.padding
 -- boolean $f1: true
 
 -- print:
-$name if $f1: $n1
+$name if { f1 }: $n1
 $name: Name 2
-$default if $f1: $d1
+$default if { f1 }: $d1
 $default: Default 2
 $flag: $f1
 $padding: 20

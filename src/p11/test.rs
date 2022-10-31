@@ -12,6 +12,21 @@ fn p(s: &str, t: &Vec<ftd::p11::Section>) {
 }
 
 #[track_caller]
+fn p1(s: &str, t: &Vec<ftd::p11::Section>, fix: bool, file_location: &std::path::PathBuf) {
+    let data = super::parse(s, "foo")
+        .unwrap_or_else(|e| panic!("{:?}", e))
+        .iter()
+        .map(|v| v.without_line_number())
+        .collect::<Vec<ftd::p11::Section>>();
+    let expected_json = serde_json::to_string_pretty(&data).unwrap();
+    if fix {
+        std::fs::write(file_location, expected_json).unwrap();
+        return;
+    }
+    assert_eq!(t, &data, "Expected JSON: {}", expected_json)
+}
+
+#[track_caller]
 fn f(s: &str, m: &str) {
     match super::parse(s, "foo") {
         Ok(r) => panic!("expected failure, found: {:?}", r),
@@ -36,16 +51,23 @@ fn f(s: &str, m: &str) {
 }
 
 #[test]
-fn test_all() {
+fn p1_test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test
+    let cli_args: Vec<String> = std::env::args().collect();
+    let fix = cli_args.iter().any(|v| v.eq("fix=true"));
+    let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
     for (files, json) in find_file_groups() {
         let t: Vec<ftd::p11::Section> =
-            serde_json::from_str(std::fs::read_to_string(json).unwrap().as_str()).unwrap();
+            serde_json::from_str(std::fs::read_to_string(&json).unwrap().as_str()).unwrap();
         for f in files {
+            match path {
+                Some(path) if !f.to_str().unwrap().contains(path) => continue,
+                _ => {}
+            }
             let s = std::fs::read_to_string(&f).unwrap();
             println!("testing {}", f.display());
-            p(&s, &t);
+            p1(&s, &t, fix, &json);
         }
     }
 }
@@ -74,7 +96,7 @@ fn find_all_files_matching_extension_recursively(
 
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = find_all_files_matching_extension_recursively("t/sub-section", "ftd");
+        let mut f = find_all_files_matching_extension_recursively("t/p1", "ftd");
         f.sort();
         f
     };

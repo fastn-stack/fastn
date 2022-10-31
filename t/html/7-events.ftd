@@ -1,0 +1,55 @@
+-- void sum(a,b):
+integer $a:
+integer b:
+
+e = 1;
+a = a + b + e;
+
+
+-- void append(a,b):
+string $a:
+string b:
+
+a = a + " " + b
+
+
+-- boolean is-empty(a):
+optional string a:
+
+isempty(a)
+
+
+-- component foo:
+integer $foo-value:
+
+-- ftd.integer: $foo.foo-value
+$on-click$: $sum($a = $foo.foo-value, b = 1)
+
+-- end: foo
+
+
+-- integer $value: 3
+
+-- ftd.integer: $value
+$on-click$: $sum($a = $value, b = 1)
+
+
+-- foo:
+$foo-value: $value
+
+
+-- foo:
+$foo-value: *$value
+
+
+
+-- string $name: FifthTry
+
+-- ftd.text: $name
+$on-click$: $append($a = $name, b = FTD)
+
+
+-- ftd.text: Why am I running? 🏃🏻‍♀️
+padding: $value
+
+

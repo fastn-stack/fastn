@@ -3,6 +3,7 @@
 mod test;
 
 mod component;
+mod function;
 mod import;
 mod kind;
 mod main;
@@ -10,7 +11,10 @@ mod record;
 pub(crate) mod utils;
 mod variable;
 
-pub use component::{Component, ComponentDefinition, Event, Loop, Property, PropertySource};
+pub use component::{
+    Argument, Component, ComponentDefinition, Event, Loop, Property, PropertySource,
+};
+pub use function::Function;
 pub use import::Import;
 pub use kind::{Condition, VariableKind, VariableModifier, VariableValue};
 pub use main::AST;

@@ -1,0 +1,137 @@
+{
+  "name": "foo",
+  "aliases": {
+    "ftd": "ftd"
+  },
+  "bag": {
+    "foo#append": {
+      "Function": {
+        "name": "foo#append",
+        "return_kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "b",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 3
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a + \" \" + b",
+            "line_number": 6
+          }
+        ],
+        "line_number": 1
+      }
+    }
+  },
+  "main": {
+    "container": {
+      "children": [
+        {
+          "Text": {
+            "text": {
+              "value": {
+                "original": "hello world",
+                "rendered": "hello world"
+              },
+              "line_number": 7,
+              "properties": [
+                {
+                  "value": {
+                    "FunctionCall": {
+                      "name": "foo#append",
+                      "kind": {
+                        "kind": "String",
+                        "caption": false,
+                        "body": false
+                      },
+                      "is_mutable": false,
+                      "line_number": 7,
+                      "values": {
+                        "a": {
+                          "Value": {
+                            "value": {
+                              "String": {
+                                "text": "hello"
+                              }
+                            },
+                            "is_mutable": false,
+                            "line_number": 7
+                          }
+                        },
+                        "b": {
+                          "Value": {
+                            "value": {
+                              "String": {
+                                "text": "world"
+                              }
+                            },
+                            "is_mutable": false,
+                            "line_number": 7
+                          }
+                        }
+                      },
+                      "order": [
+                        "a",
+                        "b"
+                      ]
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 7
+                }
+              ]
+            },
+            "common": {
+              "is_not_visible": false,
+              "event": [],
+              "is_dummy": false,
+              "padding": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "data_id": "0",
+              "line_number": 7
+            }
+          }
+        }
+      ]
+    },
+    "common": {
+      "is_not_visible": false,
+      "event": [],
+      "is_dummy": false,
+      "padding": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "data_id": "",
+      "line_number": 0
+    }
+  }
+}

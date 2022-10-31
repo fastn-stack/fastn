@@ -26,15 +26,27 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
-    let html = executor.main.to_node("foo").to_html("foo");
+    let node = ftd::node::NodeData::from_rt(executor);
+    let html_ui =
+        ftd::html1::HtmlUI::from_node_data(node, "main").unwrap_or_else(|e| panic!("{:?}", e));
+    let ftd_js = std::fs::read_to_string("build.js").expect("build.js not found");
     let html_str = ftd::html1::utils::trim_all_lines(
-        std::fs::read_to_string("ftd.html")
+        std::fs::read_to_string("build.html")
             .expect("cant read ftd.html")
             .replace("__ftd_doc_title__", "")
-            .replace("__ftd_data__", "")
-            .replace("__ftd_external_children__", "")
-            .replace("__ftd__", html.as_str())
-            .replace("__ftd_js__", "")
+            .replace("__ftd_data__", html_ui.variables.as_str())
+            .replace("__ftd_external_children__", "{}")
+            .replace("__ftd__", html_ui.html.as_str())
+            .replace("__ftd_js__", ftd_js.as_str())
+            .replace(
+                "__ftd_functions__",
+                format!(
+                    "{}\n{}",
+                    html_ui.functions.as_str(),
+                    html_ui.dependencies.as_str()
+                )
+                .as_str(),
+            )
             .replace("__ftd_body_events__", "")
             .replace("__ftd_css__", "")
             .replace("__ftd_element_css__", "")
@@ -52,10 +64,15 @@ fn html_test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test
     let cli_args: Vec<String> = std::env::args().collect();
-    let fix = cli_args.iter().any(|v| v.eq("fix"));
+    let fix = cli_args.iter().any(|v| v.eq("fix=true"));
+    let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
     for (files, json) in find_file_groups() {
         let t = std::fs::read_to_string(&json).unwrap();
         for f in files {
+            match path {
+                Some(path) if !f.to_str().unwrap().contains(path) => continue,
+                _ => {}
+            }
             let s = std::fs::read_to_string(&f).unwrap();
             println!("{} {}", if fix { "fixing" } else { "testing" }, f.display());
             p(&s, &t, fix, &json);

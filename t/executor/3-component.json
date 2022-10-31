@@ -43,6 +43,7 @@
                         "original": "Hello World",
                         "rendered": "Hello World"
                       },
+                      "line_number": 5,
                       "properties": [
                         {
                           "value": {
@@ -64,9 +65,11 @@
                     },
                     "common": {
                       "is_not_visible": false,
+                      "event": [],
                       "is_dummy": false,
                       "padding": {
                         "value": 40,
+                        "line_number": 6,
                         "properties": [
                           {
                             "value": {
@@ -87,8 +90,21 @@
                               }
                             },
                             "condition": {
-                              "Equal": {
-                                "left": {
+                              "expression": {
+                                "operator": "RootNode",
+                                "children": [
+                                  {
+                                    "operator": {
+                                      "VariableIdentifierRead": {
+                                        "identifier": "flag"
+                                      }
+                                    },
+                                    "children": []
+                                  }
+                                ]
+                              },
+                              "references": {
+                                "flag": {
                                   "Reference": {
                                     "name": "foo#flag",
                                     "kind": {
@@ -100,20 +116,9 @@
                                     "is_mutable": false,
                                     "line_number": 6
                                   }
-                                },
-                                "right": {
-                                  "Value": {
-                                    "value": {
-                                      "Boolean": {
-                                        "value": true
-                                      }
-                                    },
-                                    "is_mutable": false,
-                                    "line_number": 6
-                                  }
-                                },
-                                "line_number": 6
-                              }
+                                }
+                              },
+                              "line_number": 6
                             },
                             "line_number": 6
                           },
@@ -140,7 +145,8 @@
                           }
                         ]
                       },
-                      "data_id": "0,0"
+                      "data_id": "0,0",
+                      "line_number": 5
                     }
                   }
                 },
@@ -155,6 +161,7 @@
                                 "original": "Hello",
                                 "rendered": "Hello"
                               },
+                              "line_number": 11,
                               "properties": [
                                 {
                                   "value": {
@@ -176,12 +183,15 @@
                             },
                             "common": {
                               "is_not_visible": false,
+                              "event": [],
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
+                                "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,0"
+                              "data_id": "0,1,0",
+                              "line_number": 11
                             }
                           }
                         },
@@ -192,6 +202,7 @@
                                 "original": "Again",
                                 "rendered": "Again"
                               },
+                              "line_number": 13,
                               "properties": [
                                 {
                                   "value": {
@@ -213,12 +224,15 @@
                             },
                             "common": {
                               "is_not_visible": false,
+                              "event": [],
                               "is_dummy": false,
                               "padding": {
                                 "value": null,
+                                "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,1"
+                              "data_id": "0,1,1",
+                              "line_number": 13
                             }
                           }
                         }
@@ -226,12 +240,15 @@
                     },
                     "common": {
                       "is_not_visible": false,
+                      "event": [],
                       "is_dummy": false,
                       "padding": {
                         "value": null,
+                        "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,1"
+                      "data_id": "0,1",
+                      "line_number": 9
                     }
                   }
                 }
@@ -239,12 +256,15 @@
             },
             "common": {
               "is_not_visible": false,
+              "event": [],
               "is_dummy": false,
               "padding": {
                 "value": null,
+                "line_number": null,
                 "properties": []
               },
-              "data_id": "0"
+              "data_id": "0",
+              "line_number": 3
             }
           }
         }
@@ -252,12 +272,15 @@
     },
     "common": {
       "is_not_visible": false,
+      "event": [],
       "is_dummy": false,
       "padding": {
         "value": null,
+        "line_number": null,
         "properties": []
       },
-      "data_id": ""
+      "data_id": "",
+      "line_number": 0
     }
   }
 }

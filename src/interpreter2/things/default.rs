@@ -1,5 +1,35 @@
+use ftd::evalexpr::ContextWithMutableFunctions;
+
 pub fn default_aliases() -> ftd::Map<String> {
     std::iter::IntoIterator::into_iter([("ftd".to_string(), "ftd".to_string())]).collect()
+}
+
+pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
+    use ftd::evalexpr::*;
+
+    std::iter::IntoIterator::into_iter([(
+        "isempty".to_string(),
+        Function::new(|argument| {
+            if argument.as_empty().is_ok() {
+                Ok(Value::Boolean(true))
+            } else if let Ok(s) = argument.as_string() {
+                Ok(Value::Boolean(s.is_empty()))
+            } else if let Ok(s) = argument.as_tuple() {
+                Ok(Value::Boolean(s.is_empty()))
+            } else {
+                Ok(Value::Boolean(false)) //todo: throw error
+            }
+        }),
+    )])
+    .collect()
+}
+
+pub fn default_context() -> ftd::interpreter2::Result<ftd::evalexpr::HashMapContext> {
+    let mut context = ftd::evalexpr::HashMapContext::new();
+    for (key, function) in default_functions() {
+        context.set_function(key, function)?;
+    }
+    Ok(context)
 }
 
 pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
@@ -18,8 +48,132 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             "ftd#text".to_string(),
             ftd::interpreter2::Thing::Component(markup_function()),
         ),
+        (
+            "ftd#integer".to_string(),
+            ftd::interpreter2::Thing::Component(integer_function()),
+        ),
+        (
+            "ftd#boolean".to_string(),
+            ftd::interpreter2::Thing::Component(integer_function()),
+        ),
     ])
     .collect()
+}
+
+pub fn boolean_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#boolean".to_string(),
+        arguments: [
+            common_arguments(),
+            vec![
+                ftd::interpreter2::Argument::default(
+                    "value",
+                    ftd::interpreter2::Kind::boolean()
+                        .into_kind_data()
+                        .caption_or_body(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "align",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "style",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "role",
+                    ftd::interpreter2::Kind::record("ftd#type")
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "format",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "text-indent",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "text-align",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+            ],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
+}
+
+pub fn integer_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#integer".to_string(),
+        arguments: [
+            common_arguments(),
+            vec![
+                ftd::interpreter2::Argument::default(
+                    "value",
+                    ftd::interpreter2::Kind::integer()
+                        .into_kind_data()
+                        .caption_or_body(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "align",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "style",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "role",
+                    ftd::interpreter2::Kind::record("ftd#type")
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "format",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "text-indent",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "text-align",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+            ],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
 }
 
 pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {

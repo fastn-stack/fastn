@@ -43,6 +43,7 @@ pub fn main() {
     let id = std::env::args().nth(1);
 
     let dir = std::path::Path::new("./examples/");
+    let new_ftd_dir = std::path::Path::new("./t/html/");
 
     let mut write_doc = indoc::indoc!(
         "
@@ -58,6 +59,18 @@ desktop: $dsize
 mobile: $dsize
 xl: $dsize
 
+-- ftd.font-size small-dsize:
+line-height: 22
+size: 20
+letter-spacing: 0
+
+-- ftd.type small-heading: cursive
+weight: 800
+style: italic
+desktop: $small-dsize
+mobile: $small-dsize
+xl: $small-dsize
+
 -- ftd.column:
 padding-horizontal: 40
 padding-vertical: 20
@@ -69,6 +82,35 @@ padding-bottom: 20
 "
     )
     .to_string();
+
+    if id.is_none() && new_ftd_dir.is_dir() {
+        let mut new_ftd_dir_write_doc = write_doc.clone();
+        write_doc = format!(
+            "{}\n-- ftd.text: FTD-v2 Examples \npadding-bottom: 20\nrole: $small-heading\nlink: ftd-v2.html\n\n",
+            write_doc,
+        );
+        for entry in std::fs::read_dir(new_ftd_dir)
+            .unwrap_or_else(|_| panic!("{:?} is not a directory", new_ftd_dir.to_str()))
+        {
+            let path = entry.expect("no files inside ./examples").path();
+            let source = path
+                .to_str()
+                .unwrap_or_else(|| panic!("Path {:?} cannot be convert to string", path));
+            let split: Vec<_> = source.split('/').collect();
+            let id = split.last().expect("Filename should be present");
+            if id.contains(".ftd") {
+                let doc = std::fs::read_to_string(source).expect("cant read file");
+                ftd_v2_write(id, doc.as_str());
+                new_ftd_dir_write_doc = format!(
+                    "{}\n-- ftd.text: {} \n link: {}\n\n",
+                    new_ftd_dir_write_doc,
+                    id.replace(".ftd", ""),
+                    id.replace(".ftd", ".html"),
+                );
+            }
+        }
+        write("ftd-v2.ftd", new_ftd_dir_write_doc);
+    }
 
     if let Some(id) = id {
         let path = format!("./examples/{}.ftd", id);
@@ -105,6 +147,69 @@ padding-bottom: 20
         }
     }
     write("index.ftd", write_doc);
+}
+
+pub fn ftd_v2_interpret_helper(
+    name: &str,
+    source: &str,
+) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
+    let mut s = ftd::interpreter2::interpret(name, source)?;
+    let document;
+    loop {
+        match s {
+            ftd::interpreter2::Interpreter::Done { document: doc } => {
+                document = doc;
+                break;
+            }
+            ftd::interpreter2::Interpreter::StuckOnImport { module, state: st } => {
+                let source = "";
+                s = st.continue_after_import(module.as_str(), source)?;
+            }
+        }
+    }
+    Ok(document)
+}
+
+fn ftd_v2_write(id: &str, s: &str) {
+    use std::io::Write;
+    let start = std::time::Instant::now();
+    print!("Processing: {} ... ", id);
+    let doc = ftd_v2_interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
+    let executor =
+        ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
+    let node = ftd::node::NodeData::from_rt(executor);
+    let html_ui =
+        ftd::html1::HtmlUI::from_node_data(node, "main").unwrap_or_else(|e| panic!("{:?}", e));
+    let ftd_js = std::fs::read_to_string("build.js").expect("build.js not found");
+    let html_str = ftd::html1::utils::trim_all_lines(
+        std::fs::read_to_string("build.html")
+            .expect("cant read ftd.html")
+            .replace("__ftd_doc_title__", "")
+            .replace("__ftd_data__", html_ui.variables.as_str())
+            .replace("__ftd_external_children__", "{}")
+            .replace("__ftd__", html_ui.html.as_str())
+            .replace("__ftd_js__", ftd_js.as_str())
+            .replace(
+                "__ftd_functions__",
+                format!(
+                    "{}\n{}",
+                    html_ui.functions.as_str(),
+                    html_ui.dependencies.as_str()
+                )
+                .as_str(),
+            )
+            .replace("__ftd_body_events__", "")
+            .replace("__ftd_css__", "")
+            .replace("__ftd_element_css__", "")
+            .as_str(),
+    );
+    std::fs::create_dir_all("./docs").expect("failed to create docs folder");
+    let mut f = std::fs::File::create(format!("./docs/{}", id.replace(".ftd", ".html")))
+        .expect("failed to create .html file");
+    f.write_all(html_str.as_bytes())
+        .expect("failed to write to .html file");
+    let duration = start.elapsed();
+    println!("Done {:?}", duration);
 }
 
 fn write(id: &str, doc: String) {

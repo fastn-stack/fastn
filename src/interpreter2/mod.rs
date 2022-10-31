@@ -10,9 +10,12 @@ mod utils;
 pub use main::{interpret, Document, Interpreter};
 pub use tdoc::TDoc;
 pub use things::{
-    component::{Argument, Component, ComponentDefinition, Loop, Property, PropertySource},
+    component::{
+        Argument, Component, ComponentDefinition, Event, EventName, Loop, Property, PropertySource,
+    },
     default,
     expression::Boolean,
+    function::{Function, FunctionCall},
     kind::{Kind, KindData},
     record::{Field, Record},
     value::{PropertyValue, PropertyValueSource, Value},
@@ -57,6 +60,9 @@ pub enum Error {
         doc_id: String,
         line_number: usize,
     },
+
+    #[error("EvalexprError: {}", _0)]
+    EvalexprError(#[from] ftd::evalexpr::EvalexprError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

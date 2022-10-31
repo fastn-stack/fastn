@@ -42,10 +42,15 @@ fn interpreter_test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test
     let cli_args: Vec<String> = std::env::args().collect();
-    let fix = cli_args.iter().any(|v| v.eq("fix"));
+    let fix = cli_args.iter().any(|v| v.eq("fix=true"));
+    let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
     for (files, json) in find_file_groups() {
         let t = std::fs::read_to_string(&json).unwrap();
         for f in files {
+            match path {
+                Some(path) if !f.to_str().unwrap().contains(path) => continue,
+                _ => {}
+            }
             let s = std::fs::read_to_string(&f).unwrap();
             println!("{} {}", if fix { "fixing" } else { "testing" }, f.display());
             p(&s, &t, fix, &json);
@@ -107,4 +112,15 @@ fn filename_with_second_last_extension_replaced_with_json(
             None => stem,
         }
     ))
+}
+
+#[test]
+fn evalexpr_test() {
+    use ftd::evalexpr::*;
+    let mut context = ftd::interpreter2::default::default_context().unwrap();
+    dbg!(ftd::evalexpr::build_operator_tree("$a >= $b").unwrap());
+    assert_eq!(
+        eval_with_context_mut("e = \"\"; isempty(e)", &mut context),
+        Ok(Value::from(true))
+    );
 }
