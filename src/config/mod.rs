@@ -1,8 +1,6 @@
 // Document: https://fpm.dev/crate/config/
 // Document: https://fpm.dev/crate/package/
 
-use fpm::package::Package;
-
 mod utils;
 
 #[derive(Debug, Clone)]
@@ -565,9 +563,9 @@ impl Config {
 
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
-        package: &'a Package,
+        package: &'a fpm::Package,
         path: &'a str,
-    ) -> Option<(String, &'a Package, String)> {
+    ) -> Option<(String, &'a fpm::Package, String)> {
         // Problem for recursive dependency is that only current package contains dependency,
         // dependent package does not contain dependency
         let dependencies = package.dep_with_mount_point();
@@ -583,11 +581,11 @@ impl Config {
                     return data;
                 } else {
                     let package_name = dep.name.trim_matches('/');
-                    let new_path = path.trim_start_matches(mp.trim_start_matches('/'));
+                    let sanitized_path = path.trim_start_matches(mp.trim_start_matches('/'));
                     return Some((
-                        format!("-/{package_name}/{new_path}"),
+                        format!("-/{package_name}/{sanitized_path}"),
                         dep,
-                        new_path.to_string(),
+                        sanitized_path.to_string(),
                     ));
                 }
             }
@@ -595,7 +593,7 @@ impl Config {
         None
     }
 
-    pub async fn update_sitemap(&self, package: &Package) -> fpm::Result<Package> {
+    pub async fn update_sitemap(&self, package: &fpm::Package) -> fpm::Result<fpm::Package> {
         let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
 
         let fpm_doc = utils::fpm_doc(fpm_path).await?;
@@ -647,7 +645,7 @@ impl Config {
         // Get the package and sanitized path
 
         let package1;
-        let (sanitized_path, sanitized_package, remaining_path) =
+        let (path_with_package_name, sanitized_package, sanitized_path) =
             match self.get_mountpoint_sanitized_path(&self.package, path) {
                 Some((new_path, package, remaining_path)) => {
                     // Update the sitemap of the package, if it does ot contain the sitemap information
@@ -657,14 +655,14 @@ impl Config {
                 None => (path.to_string(), &self.package, path.to_string()),
             };
 
-        let path = sanitized_path.as_str();
+        // Getting `document` is, if exists
         let (document, path_params) = match sanitized_package.sitemap.as_ref() {
             //1. First resolve document in sitemap
-            Some(sitemap) => match sitemap.resolve_document(remaining_path.as_str()) {
+            Some(sitemap) => match sitemap.resolve_document(sanitized_path.as_str()) {
                 Some(document) => (Some(document), vec![]),
                 //2.  Else resolve document in dynamic urls
                 None => match sanitized_package.dynamic_urls.as_ref() {
-                    Some(dynamic_urls) => dynamic_urls.resolve_document(remaining_path.as_str())?,
+                    Some(dynamic_urls) => dynamic_urls.resolve_document(sanitized_path.as_str())?,
                     None => (None, vec![]),
                 },
             },
@@ -679,6 +677,7 @@ impl Config {
             )
         });
 
+        let path = path_with_package_name.as_str();
         if let Some(id) = document {
             let file_name = self.get_file_path_and_resolve(id.as_str()).await?;
             let package = self.find_package_by_id(id.as_str()).await?.1;
@@ -860,7 +859,7 @@ impl Config {
         let sanitized_id = self
             .get_mountpoint_sanitized_path(&self.package, id)
             .map(|(x, _, _)| x)
-            .unwrap_or(id.to_string());
+            .unwrap_or_else(|| id.to_string());
 
         let id = sanitized_id.as_str();
         let id = if let Some(id) = id.strip_prefix("-/") {
