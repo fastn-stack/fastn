@@ -531,11 +531,12 @@ fn change_container(
     parent_id: &Option<String>,
     doc_id: &str,
 ) -> ftd::p1::Result<()> {
-    if name == "ftd#main" || match_parent_id(name, parent_id) {
+    let name = name.replace(".", "#");
+    if name == "ftd#main" || match_parent_id(name.as_str(), parent_id) {
         *current_container = vec![];
         return Ok(());
     }
-    *current_container = match named_containers.get(name) {
+    *current_container = match named_containers.get(name.as_str()) {
         Some(v) => v.get(0).unwrap().to_owned(),
         None => {
             let error_msg = format!("no such container: {}", name);
