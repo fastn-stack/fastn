@@ -575,8 +575,10 @@ impl Config {
         for (mp, dep) in dependencies {
             if path.starts_with(mp.trim_matches('/')) {
                 let path_without_mp = path.trim_start_matches(mp.trim_start_matches('/'));
+
+                // This is for recursive dependencies mount-point
+                // Note: Currently not working because dependency of package does not contain dependencies
                 let data = self.get_mountpoint_sanitized_path(dep, path_without_mp);
-                dbg!(&data);
                 if data.is_some() {
                     return data;
                 } else {
@@ -640,7 +642,6 @@ impl Config {
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
         // This function will return file and package by given path
         // path can be mounted(mount-point) with other dependencies
-        // If any package is mounted with any dependency package, get the dependency package
         //
         // Sanitize the mountpoint request.
         // Get the package and sanitized path
