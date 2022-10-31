@@ -460,7 +460,7 @@ else if(function(){
 let f = data["foo#g"]+1;
 return (f>4);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__double___main","values":{"a":5}}', this));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__double___main","values":{"a":{"mutable":false,"reference":"foo#g"}}}', this));
 }
 else {document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(2);}
 }

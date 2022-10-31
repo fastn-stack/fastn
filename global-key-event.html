@@ -396,13 +396,6 @@ document.addEventListener("keydown", function(event) {
 
 
 
-if (buffer.join(',').includes(" ,-")) {
-   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Jatinderjit","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-    return;
-}
-
 if (buffer.join(',').includes("Shift,Shift")) {
    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Rajshri","reference":null},{"value":"string","reference":null}]}}]', this);
     buffer = [];
@@ -410,8 +403,8 @@ if (buffer.join(',').includes("Shift,Shift")) {
     return;
 }
 
-if (global_keys["Control"] && global_keys["s"] && buffer.join(',').includes("Control,s")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Ayushi","reference":null},{"value":"string","reference":null}]}}]', this);
+if (buffer.join(',').includes(" ,-")) {
+   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Jatinderjit","reference":null},{"value":"string","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
@@ -419,6 +412,13 @@ if (global_keys["Control"] && global_keys["s"] && buffer.join(',').includes("Con
 
 if (global_keys["Control"] && global_keys["a"] && buffer.join(',').includes("Control,a")) {
     window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Arpita","reference":null},{"value":"string","reference":null}]}}]', this);
+    buffer = [];
+    global_keys[event.key] = false;
+    return;
+}
+
+if (global_keys["Control"] && global_keys["s"] && buffer.join(',').includes("Control,s")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Ayushi","reference":null},{"value":"string","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
@@ -1917,6 +1917,39 @@ window.ftd.post_init = function () {
         update_theme_color();
     }
 
+
+    window.ftd_warnings_delivered = {};
+
+    window["ls.set_boolean"] = function(_id, resolved_data, reference) {
+        // TODO: we need a better way to detect absence of localStorage
+        if (!window.localStorage && !window.ftd_warnings_delivered["ls.set_boolean"]) {
+            // TODO: we should have `ftd.localStorage-present` or some such, so we can
+            //       show a warning in UI as well, instead of just in console.
+
+            // we are doing this business so we only show the warning once in console
+            window.ftd_warnings_delivered["ls.set_boolean"] = true;
+
+            console.warn("localStorage not available, but ls.set-boolean was used");
+            return;
+        }
+
+        // TODO: we are not using id yet.
+        console.log("ls.set-boolean", reference["variable"], resolved_data["variable"]);
+        window.localStorage.setItem(reference["variable"], resolved_data["variable"]);
+    }
+
+    function scan_local_store() {
+        // TODO: we need a better way to detect absence of localStorage
+        if (!window.localStorage) {
+            return;
+        }
+
+        Object.keys(window.localStorage).forEach(function(key){
+            // TODO: how do we handle id? we are harcoding main here, which is wrong
+            window.ftd.set_value("main", key, window.localStorage.getItem(key));
+        });
+    }
+
     function update_theme_color() {
         let theme_color = window.ftd.get_value("main", FTD_THEME_COLOR);
         if (!!theme_color) {
@@ -1994,7 +2027,9 @@ window.ftd.post_init = function () {
     initialise_dark_mode();
     initialise_device();
     update_markdown_colors();
+    scan_local_store();
 };
+
         window.ftd.init("main", "ftd-data", "ftd-external-children");
     </script>
     </body>
