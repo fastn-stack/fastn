@@ -1,6 +1,6 @@
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let engine = wasmtime::Engine::new(&wasmtime::Config::new().async_support(true))?;
+    let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(true))?;
     let module = wasmtime::Module::from_file(
         &engine,
         "../guest/target/wasm32-unknown-unknown/debug/guest.wasm",

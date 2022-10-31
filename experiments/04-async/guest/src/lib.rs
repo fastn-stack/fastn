@@ -9,8 +9,3 @@ pub extern "C" fn sum(x: i32) -> i32 {
         10
     }
 }
-
-/// lbp = length bytes pointer. length is u32, big endian.
-///
-/// string's length is length
-fn string_to_lbp(s: String) -> u32 {}
