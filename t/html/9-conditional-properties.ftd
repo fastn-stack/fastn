@@ -1,0 +1,21 @@
+-- integer increment(a):
+integer $a:
+
+a += 1
+
+
+-- integer double(a):
+integer a:
+
+a * 2
+
+
+-- integer $g: 1
+
+-- ftd.integer: $g
+
+-- ftd.text: Hello FTD
+padding if { g > 10 }: 20
+padding if { f = g + 1; f > 4 }: $double(a = 5)
+padding: 2
+$on-click$: $increment($a = $g)

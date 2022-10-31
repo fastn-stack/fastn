@@ -33,54 +33,76 @@ impl<'a> DependencyGenerator<'a> {
     fn get_dependencies_(&self) -> ftd::html1::Result<String> {
         let node_data_id = ftd::html1::utils::full_data_id(self.id, self.node.data_id.as_str());
         let mut result = vec![];
-        let default = self
-            .node
-            .text
-            .properties
-            .iter()
-            .find(|v| v.condition.is_none());
-        if let Some(default) = default {
+
+        let mut expressions = vec![];
+        for property in self.node.text.properties.iter() {
+            let condition = property
+                .condition
+                .as_ref()
+                .map(|v| self.get_condition_string(v));
             if let Some(value_string) = self.get_formatted_dep_string_from_property_value(
-                &default.value,
+                &property.value,
                 &self.node.text.pattern,
             )? {
                 let value = format!(
                     "document.querySelector(`[data-id=\"{}\"]`).innerHTML = {};",
                     node_data_id, value_string
                 );
-                result.push(value);
+                expressions.push((condition, value));
             }
         }
 
+        let value = js_expression_from_list(expressions);
+        if !value.trim().is_empty() {
+            result.push(value.trim().to_string());
+        }
+
         for (key, attribute) in self.node.attrs.iter() {
-            let default = attribute.properties.iter().find(|v| v.condition.is_none());
-            if let Some(default) = default {
+            let mut expressions = vec![];
+            for property in attribute.properties.iter() {
+                let condition = property
+                    .condition
+                    .as_ref()
+                    .map(|v| self.get_condition_string(v));
                 if let Some(value_string) = self.get_formatted_dep_string_from_property_value(
-                    &default.value,
+                    &property.value,
                     &attribute.pattern,
                 )? {
                     let value = format!(
                         "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
                         node_data_id, key, value_string
                     );
-                    result.push(value);
+                    expressions.push((condition, value));
                 }
+            }
+            let value = js_expression_from_list(expressions);
+            if !value.trim().is_empty() {
+                result.push(value.trim().to_string());
             }
         }
 
         for (key, attribute) in self.node.style.iter() {
-            let default = attribute.properties.iter().find(|v| v.condition.is_none());
-            if let Some(default) = default {
+            let mut expressions = vec![];
+            for property in attribute.properties.iter() {
+                let condition = property
+                    .condition
+                    .as_ref()
+                    .map(|v| self.get_condition_string(v));
                 if let Some(value_string) = self.get_formatted_dep_string_from_property_value(
-                    &default.value,
+                    &property.value,
                     &attribute.pattern,
                 )? {
                     let value = format!(
                         "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = {};",
                         node_data_id, key, value_string
                     );
-                    result.push(value);
+                    expressions.push((condition, value));
                 }
+            }
+
+            let value = js_expression_from_list(expressions);
+            if !value.trim().is_empty() {
+                result.push(value.trim().to_string());
             }
         }
 
@@ -92,6 +114,21 @@ impl<'a> DependencyGenerator<'a> {
             }
         }
         Ok(result.join("\n"))
+    }
+
+    fn get_condition_string(&self, condition: &ftd::interpreter2::Boolean) -> String {
+        let node = condition
+            .expression
+            .update_node_with_variable_reference(&condition.references);
+        let expression = ftd::html1::ExpressionGenerator.to_string(&node, true, &[]);
+        format!(
+            indoc::indoc! {"
+                function(){{
+                    {expression}
+                }}()"
+            },
+            expression = expression.trim(),
+        )
     }
 
     fn get_formatted_dep_string_from_property_value(
@@ -115,6 +152,9 @@ impl<'a> DependencyGenerator<'a> {
                     self.id, action
                 )
             }
+            ftd::interpreter2::PropertyValue::Value {
+                value, line_number, ..
+            } => value.to_string(self.doc, *line_number)?,
             _ => return Ok(None),
         };
 
@@ -123,4 +163,43 @@ impl<'a> DependencyGenerator<'a> {
             None => value_string,
         }))
     }
+}
+
+fn js_expression_from_list(expressions: Vec<(Option<String>, String)>) -> String {
+    let mut conditions = vec![];
+    let mut default = None;
+    for (condition, expression) in expressions {
+        if let Some(condition) = condition {
+            conditions.push(format!(
+                indoc::indoc! {"
+                        {if_exp}({condition}){{
+                            {expression}
+                        }}
+                    "},
+                if_exp = if conditions.is_empty() {
+                    "if"
+                } else {
+                    "else if"
+                },
+                condition = condition,
+                expression = expression.trim(),
+            ));
+        } else {
+            default = Some(expression)
+        }
+    }
+
+    let default = match default {
+        Some(d) if conditions.is_empty() => d,
+        Some(d) => format!("else {{{}}}", d),
+        None => "".to_string(),
+    };
+
+    format!(
+        indoc::indoc! {"
+            {expressions}{default}
+        "},
+        expressions = conditions.join(" "),
+        default = default,
+    )
 }

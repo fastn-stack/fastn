@@ -10,7 +10,7 @@ mod main;
 pub mod utils;
 
 pub use events::Action;
-pub use functions::FunctionGenerator;
+pub use functions::{ExpressionGenerator, FunctionGenerator};
 pub use main::HtmlUI;
 
 #[derive(thiserror::Error, Debug)]
