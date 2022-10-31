@@ -70,6 +70,29 @@ pub fn html() -> &'static str {
 // #[cfg(test)]
 pub type Map<T> = std::collections::BTreeMap<String, T>;
 
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct VecMap<T> {
+    value: Map<Vec<T>>,
+}
+
+impl<T> VecMap<T> {
+    pub fn new(&mut self, key: String) {
+        self.value.insert(key, vec![]);
+    }
+
+    pub fn insert(&mut self, key: String, value: T) {
+        if let Some(v) = self.value.get_mut(&key) {
+            v.push(value);
+        } else {
+            self.value.insert(key, vec![value]);
+        }
+    }
+
+    pub fn extend(&mut self, key: String, value: Vec<T>) {
+        self.value.insert(key, value);
+    }
+}
+
 // #[cfg(not(test))]
 // pub type Map<T> = std::collections::HashMap<String, T>;
 

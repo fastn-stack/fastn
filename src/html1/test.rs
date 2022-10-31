@@ -41,9 +41,10 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
             .replace(
                 "__ftd_functions__",
                 format!(
-                    "{}\n{}",
+                    "{}\n{}\n{}",
                     html_ui.functions.as_str(),
-                    html_ui.dependencies.as_str()
+                    html_ui.dependencies.as_str(),
+                    html_ui.variable_dependencies.as_str(),
                 )
                 .as_str(),
             )

@@ -192,9 +192,10 @@ fn ftd_v2_write(id: &str, s: &str) {
             .replace(
                 "__ftd_functions__",
                 format!(
-                    "{}\n{}",
+                    "{}\n{}\n{}",
                     html_ui.functions.as_str(),
-                    html_ui.dependencies.as_str()
+                    html_ui.dependencies.as_str(),
+                    html_ui.variable_dependencies.as_str()
                 )
                 .as_str(),
             )

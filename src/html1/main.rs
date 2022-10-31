@@ -5,6 +5,7 @@ pub struct HtmlUI {
     pub dependencies: String,
     pub variables: String,
     pub functions: String,
+    pub variable_dependencies: String,
 }
 
 impl HtmlUI {
@@ -14,6 +15,9 @@ impl HtmlUI {
             aliases: &node_data.aliases,
             bag: &node_data.bag,
         };
+
+        let variable_dependencies =
+            ftd::html1::VariableDependencyGenerator::new(id, &tdoc).get_set_functions()?;
 
         let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data)?;
         let dependencies =
@@ -29,6 +33,7 @@ impl HtmlUI {
             variables: serde_json::to_string_pretty(&variables)
                 .expect("failed to convert document to json"),
             functions,
+            variable_dependencies,
         })
     }
 }

@@ -72,7 +72,14 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
         let (value, var_name, var_line_number, remaining) =
             if let Ok(v) = self.get_initial_variable(name, line_number) {
-                (v.0.value, v.0.name, v.0.line_number, v.1)
+                let mut value = v.0.value;
+                for conditional in v.0.conditional_value.iter() {
+                    if conditional.condition.eval(self)? {
+                        value = conditional.value.clone();
+                        break;
+                    }
+                }
+                (value, v.0.name, v.0.line_number, v.1)
             } else if let Ok(v) = self.get_component(name, line_number) {
                 (
                     ftd::interpreter2::PropertyValue::Value {

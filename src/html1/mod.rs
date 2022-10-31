@@ -8,10 +8,12 @@ mod events;
 mod functions;
 mod main;
 pub mod utils;
+mod variable_dependencies;
 
 pub use events::Action;
 pub use functions::{ExpressionGenerator, FunctionGenerator};
 pub use main::HtmlUI;
+pub use variable_dependencies::VariableDependencyGenerator;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

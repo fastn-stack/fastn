@@ -14,14 +14,7 @@ impl<'a> DataGenerator<'a> {
                 value, ..
             }) = v
             {
-                let value = match value {
-                    ftd::interpreter2::PropertyValue::Value { value, .. } => value.to_owned(),
-                    t @ ftd::interpreter2::PropertyValue::Clone { line_number, .. } => {
-                        t.clone().resolve(self.doc, *line_number)?
-                    }
-                    _ => continue, //todo
-                };
-
+                let value = value.clone().resolve(&self.doc, value.line_number())?;
                 if let Some(value) = get_value(self.doc, &value)? {
                     d.insert(k.to_string(), value);
                 }
@@ -62,13 +55,7 @@ impl<'a> DataGenerator<'a> {
                 Some(ftd::interpreter2::Value::Record { fields, .. }) => {
                     let mut value_fields = ftd::Map::new();
                     for (k, v) in fields {
-                        let value = match &v {
-                            ftd::interpreter2::PropertyValue::Value { value, .. } => value.clone(),
-                            t @ ftd::interpreter2::PropertyValue::Clone { line_number, .. } => {
-                                t.clone().resolve(doc, *line_number)?
-                            }
-                            _ => continue, //todo
-                        };
+                        let value = v.clone().resolve(doc, v.line_number())?;
                         value_fields.insert(k, value);
                     }
                     serde_json::to_value(value_fields).ok()
