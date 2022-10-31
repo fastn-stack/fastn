@@ -333,29 +333,6 @@ fn update_local_variable_reference_in_condition(
     for reference in condition.references.values_mut() {
         update_local_variable_reference_in_property_value(reference, local_variable);
     }
-    /*match condition {
-        ftd::interpreter2::Boolean::IsNotNull { value, .. } => {
-            update_local_variable_reference_in_property_value(value, local_variable)
-        }
-        ftd::interpreter2::Boolean::IsNull { value, .. } => {
-            update_local_variable_reference_in_property_value(value, local_variable)
-        }
-        ftd::interpreter2::Boolean::IsNotEmpty { value, .. } => {
-            update_local_variable_reference_in_property_value(value, local_variable)
-        }
-        ftd::interpreter2::Boolean::IsEmpty { value, .. } => {
-            update_local_variable_reference_in_property_value(value, local_variable)
-        }
-        ftd::interpreter2::Boolean::Equal { left, right, .. } => {
-            update_local_variable_reference_in_property_value(left, local_variable);
-            update_local_variable_reference_in_property_value(right, local_variable);
-        }
-        ftd::interpreter2::Boolean::NotEqual { left, right, .. } => {
-            update_local_variable_reference_in_property_value(left, local_variable);
-            update_local_variable_reference_in_property_value(right, local_variable);
-        }
-        ftd::interpreter2::Boolean::Literal { .. } => {}
-    }*/
 }
 
 fn update_local_variable_reference_in_property_value(
