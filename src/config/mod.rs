@@ -561,6 +561,11 @@ impl Config {
         Ok(file)
     }
 
+    // Input
+    // path: /todos/add-todo/
+    // mount-point: /todos/
+    // Output
+    // -/<todos-package-name>/add-todo/, <todos-package-name>, /add-todo/
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
         package: &'a fpm::Package,

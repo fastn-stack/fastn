@@ -539,6 +539,46 @@ impl Package {
             })
             .to_owned()
     }
+
+    // Dependencies with mount point and end point
+    // Output: Package Dependencies
+    // [Package, endpoint, mount-point]
+    pub fn dep_with_end_point(&self) -> Vec<(&Package, &str, &str)> {
+        self.dependencies
+            .iter()
+            .fold(&mut vec![], |accumulator, dep| {
+                if let Some(ep) = &dep.endpoint {
+                    if let Some(mp) = &dep.mountpoint {
+                        accumulator.push((&dep.package, ep.as_str(), mp.as_str()))
+                    }
+                }
+
+                accumulator
+            })
+            .to_owned()
+    }
+
+    // Output: Package's dependency which contains mount-point and endpoint
+    // where request path starts-with dependency mount-point.
+    // (endpoint, sanitized request path from mount-point)
+    pub fn get_endpoint_dependency<'a>(&'a self, path: &'a str) -> Option<(&'a str, &'a str)> {
+        fn dep_endpoint<'a>(package: &'a Package, path: &'a str) -> Option<(&'a str, &'a str)> {
+            let dependencies = package.dep_with_end_point();
+            for (_, ep, mp) in dependencies {
+                if path.starts_with(mp.trim_matches('/')) {
+                    let path_without_mp = path.trim_start_matches(mp.trim_start_matches('/'));
+                    return Some((ep, path_without_mp));
+                }
+            }
+            None
+        }
+
+        match dep_endpoint(self, path) {
+            Some((ep, r)) => Some((ep, r)),
+            // TODO: should it refer to default package or not?
+            None => self.endpoint.as_ref().map(|ep| (ep.as_str(), path)),
+        }
+    }
 }
 
 /// Backend Header is a struct that is used to read and store the backend-header from the FPM.ftd file

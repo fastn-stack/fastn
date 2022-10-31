@@ -18,10 +18,11 @@ static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
 pub(crate) async fn get_out(
     host: &str,
     req: fpm::http::Request,
+    path: &str,
 ) -> fpm::Result<fpm::http::Response> {
     let headers = req.headers();
     // TODO: It should be part of fpm::Request::uri()
-    let path = &req.uri().to_string()[1..];
+    // let path = &req.uri().to_string()[1..];
 
     println!("proxy_request: {} {}", req.method(), path);
 

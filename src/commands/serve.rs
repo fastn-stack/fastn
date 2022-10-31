@@ -173,14 +173,16 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             if let Some(sitemap) = config.package.sitemap.as_ref() {
                 // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
                 if !sitemap.path_exists(path.as_str()) {
-                    if let Some(endpoint) = config.package.endpoint.as_ref() {
+                    if let Some((endpoint, without_mount_point)) =
+                        config.package.get_endpoint_dependency(path.as_str())
+                    {
                         let req = if let Some(r) = config.request {
                             r
                         } else {
                             return Ok(fpm::server_error!("request not set"));
                         };
 
-                        return fpm::proxy::get_out(endpoint, req).await;
+                        return fpm::proxy::get_out(endpoint, req, without_mount_point).await;
                     };
                 }
             }
