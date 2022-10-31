@@ -79,6 +79,51 @@ This is the repo where the dependency is hosted. If the `repo` is omitted it is
 assumed to the same as `repo` of the current package.
 
 
+-- ft.h2: `mount-point`
+
+`fpm.dependency` now contains a header `mount-point`. It is used for clean urls
+for a dependency.
+
+
+-- ft.code: abrark/FPM.ftd
+lang: ftd
+
+\-- import: fpm
+
+\-- fpm.package: abrark.com
+
+
+\-- fpm.dependency: fifthtry.github.io/todos as todos
+mount-point: /todos/
+
+\-- fpm.sitemap:
+
+# Todos
+- TODOs: /todos/
+
+-- ft.markdown:
+
+All the requests coming to `abrark.com` which has prefix `/todos/`(`mount-point`)
+in the urls, will be served by package `fifthtry.github.io/todos`.
+
+
+-- ft.code: fifthtry.github.io/todos/FPM.ftd
+lang: ftd
+
+\-- import: fpm
+
+\-- fpm.package: fifthtry.github.io/todos
+download-base-url: https://raw.githubusercontent.com/fifthtry/kameri-app/main
+
+\-- fpm.sitemap:
+
+# App: /
+
+- Add Todo: /add-todo/
+- Update Todo: /update-todo/
+- List: /
+
+
 -- ft.h1: `fpm.font`
 
 Any custom fonts can be included in FTD generated HTML files by using `font`
