@@ -563,36 +563,44 @@ impl Config {
         Ok(file)
     }
 
-    pub fn get_mountpoint_sanitized_path(&self, path: &str) -> Option<(String, &Package, String)> {
-        // It should return dependency package-name and sanitized path
-        self.package
-            .dep_with_mount_point()
-            .into_iter()
-            .find(|(mp, _)| path.starts_with(mp.trim_start_matches('/')))
-            .map(|(mp, dep)| {
-                let package_name = dep.name.trim_matches('/');
-                let new_path = path.trim_start_matches(mp.trim_start_matches('/'));
-                (
-                    format!("-/{package_name}/{new_path}"),
-                    dep,
-                    new_path.to_string(),
-                )
-            })
+    pub fn get_mountpoint_sanitized_path<'a>(
+        &'a self,
+        package: &'a Package,
+        path: &'a str,
+    ) -> Option<(String, &'a Package, String)> {
+        // Problem for recursive dependency is that only current package contains dependency,
+        // dependent package does not contain dependency
+        let dependencies = package.dep_with_mount_point();
+
+        for (mp, dep) in dependencies {
+            if path.starts_with(mp.trim_matches('/')) {
+                let path_without_mp = path.trim_start_matches(mp.trim_start_matches('/'));
+                let data = self.get_mountpoint_sanitized_path(dep, path_without_mp);
+                dbg!(&data);
+                if data.is_some() {
+                    return data;
+                } else {
+                    let package_name = dep.name.trim_matches('/');
+                    let new_path = path.trim_start_matches(mp.trim_start_matches('/'));
+                    return Some((
+                        format!("-/{package_name}/{new_path}"),
+                        dep,
+                        new_path.to_string(),
+                    ));
+                }
+            }
+        }
+        None
     }
 
     pub async fn update_sitemap(&self, package: &Package) -> fpm::Result<Package> {
         let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
 
-        dbg!(&fpm_path);
-
         let fpm_doc = utils::fpm_doc(fpm_path).await?;
-
-        dbg!(&fpm_doc);
 
         let mut package = package.clone();
 
         package.sitemap_temp = fpm_doc.get("fpm#sitemap")?;
-        dbg!(&package.sitemap_temp);
         package.dynamic_urls_temp = fpm_doc.get("fpm#dynamic-urls")?;
 
         let asset_documents = self.get_assets().await?;
@@ -626,8 +634,6 @@ impl Config {
                 None => None,
             }
         };
-
-        dbg!(&package.sitemap);
         Ok(package)
     }
 
@@ -639,10 +645,9 @@ impl Config {
         // Sanitize the mountpoint request.
         // Get the package and sanitized path
 
-        dbg!(&path);
         let package1;
         let (sanitized_path, sanitized_package, remaining_path) =
-            match self.get_mountpoint_sanitized_path(path) {
+            match self.get_mountpoint_sanitized_path(&self.package, path) {
                 Some((new_path, package, remaining_path)) => {
                     // Update the sitemap of the package, if it does ot contain the sitemap information
                     package1 = self.update_sitemap(package).await?;
@@ -652,48 +657,26 @@ impl Config {
             };
 
         let path = sanitized_path.as_str();
-
-        dbg!(&sanitized_package.sitemap.is_some());
-
-        // dbg!(&sanitized_package.sitemap);
-        dbg!(&remaining_path);
-
         let (document, path_params) = match sanitized_package.sitemap.as_ref() {
             //1. First resolve document in sitemap
             Some(sitemap) => match sitemap.resolve_document(remaining_path.as_str()) {
-                Some(document) => {
-                    let document = format!(
-                        "-/{}/{}",
-                        sanitized_package.name.trim_matches('/'),
-                        document.trim_matches('/')
-                    );
-                    (Some(document), vec![])
-                }
+                Some(document) => (Some(document), vec![]),
                 //2.  Else resolve document in dynamic urls
                 None => match sanitized_package.dynamic_urls.as_ref() {
-                    Some(dynamic_urls) => {
-                        let (doc, params) =
-                            dynamic_urls.resolve_document(remaining_path.as_str())?;
-
-                        match doc {
-                            Some(doc) => {
-                                let document = format!(
-                                    "-/{}/{}",
-                                    sanitized_package.name.trim_matches('/'),
-                                    doc.trim_matches('/')
-                                );
-                                (Some(document), params)
-                            }
-                            None => (None, vec![]),
-                        }
-                    }
+                    Some(dynamic_urls) => dynamic_urls.resolve_document(remaining_path.as_str())?,
                     None => (None, vec![]),
                 },
             },
             None => (None, vec![]),
         };
 
-        dbg!(&document);
+        let document = document.map(|doc| {
+            format!(
+                "-/{}/{}",
+                sanitized_package.name.trim_matches('/'),
+                doc.trim_matches('/')
+            )
+        });
 
         if let Some(id) = document {
             let file_name = self.get_file_path_and_resolve(id.as_str()).await?;
@@ -874,7 +857,7 @@ impl Config {
     /// Return (package name or alias, package)
     pub(crate) async fn find_package_by_id(&self, id: &str) -> fpm::Result<(String, fpm::Package)> {
         let sanitized_id = self
-            .get_mountpoint_sanitized_path(id)
+            .get_mountpoint_sanitized_path(&self.package, id)
             .map(|(x, _, _)| x)
             .unwrap_or(id.to_string());
 
