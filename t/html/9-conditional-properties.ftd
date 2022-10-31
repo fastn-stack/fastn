@@ -17,6 +17,6 @@ a * 2
 -- ftd.text: Hello FTD
 padding if { g % 2 == 0 }: 4
 padding if { g > 10 }: 20
-padding if { f = g + 1; f > 4 }: $double(a = 5)
+padding if { f = g + 1; f > 4 }: $double(a = $g)
 padding: 2
 $on-click$: $increment($a = $g)
