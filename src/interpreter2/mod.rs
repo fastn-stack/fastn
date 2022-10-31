@@ -5,7 +5,7 @@ mod test;
 mod main;
 mod tdoc;
 mod things;
-mod utils;
+pub mod utils;
 
 pub use main::{interpret, Document, Interpreter};
 pub use tdoc::TDoc;

@@ -104,6 +104,13 @@ impl PropertyValue {
         }
     }
 
+    pub(crate) fn get_function(&self) -> Option<&ftd::interpreter2::FunctionCall> {
+        match self {
+            PropertyValue::FunctionCall(f) => Some(f),
+            _ => None,
+        }
+    }
+
     pub fn get_reference_or_clone(&self) -> Option<&String> {
         match self {
             PropertyValue::Reference { name, .. } | PropertyValue::Clone { name, .. } => Some(name),

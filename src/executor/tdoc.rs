@@ -86,6 +86,8 @@ impl<'a> TDoc<'a> {
                 line_number,
             };
 
+            ftd::interpreter2::utils::validate_variable(&variable, &self.itdoc())?;
+
             self.bag.insert(
                 variable.name.to_string(),
                 ftd::interpreter2::Thing::Variable(variable),
