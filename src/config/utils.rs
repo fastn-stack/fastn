@@ -21,11 +21,9 @@ pub async fn fpm_doc(path: &camino::Utf8Path) -> fpm::Result<ftd::p2::Document> 
         let lib = fpm::FPMLibrary::default();
         match fpm::doc::parse_ftd("FPM", doc.await?.as_str(), &lib) {
             Ok(v) => Ok(v),
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse FPM.ftd 3: {:?}", &e),
-                });
-            }
+            Err(e) => Err(fpm::Error::PackageError {
+                message: format!("failed to parse FPM.ftd 3: {:?}", &e),
+            }),
         }
     }
 }

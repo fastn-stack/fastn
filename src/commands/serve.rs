@@ -4,7 +4,6 @@ static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
 /// path: /-/<package-name>/<file-name>/
 /// path: /<file-name>/
 async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::http::Response {
-    dbg!("Serving Path: ", &path);
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
