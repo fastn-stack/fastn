@@ -342,11 +342,35 @@ pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::R
     fpm::apis::cr::create_cr_page(req).await
 }
 
+async fn auth_route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+) -> fpm::Result<fpm::http::Response> {
+    Ok(actix_web::HttpResponse::Ok()
+        .content_type("")
+        .body("Hello Auth APi"))
+
+    //match (req.method(), req.path()) {}
+}
+
+// clone the fpm repo
+// change in the code in serve.rs
+// run command `cargo install --path=.`
+// After that fpm binary will be available to you
+// `fpm serve` or fpm serve --port 8000
+
+// cargo run -- serve, not working even after adding FPM.ftd and index.ftd file
+
 async fn route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
+    if req.path().starts_with("/auth/") {
+        return auth_route(req.clone(), body).await;
+    }
+
     let req = fpm::http::Request::from_actix(req, body);
+
     match (req.method(), req.path()) {
         ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
         ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
