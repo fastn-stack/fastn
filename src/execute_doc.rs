@@ -531,7 +531,7 @@ fn change_container(
     parent_id: &Option<String>,
     doc_id: &str,
 ) -> ftd::p1::Result<()> {
-    let name = name.replace(".", "#");
+    let name = name.replace('.', "#");
     if name == "ftd#main" || match_parent_id(name.as_str(), parent_id) {
         *current_container = vec![];
         return Ok(());
