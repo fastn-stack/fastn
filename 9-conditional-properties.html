@@ -447,6 +447,11 @@ return (a.value += 1);
 function node_change_main(data){
 document.querySelector(`[data-id="0:main"]`).innerHTML = data["foo#g"];
 if(function(){
+return (data["foo#g"]%2==0);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(4);
+}
+else if(function(){
 return (data["foo#g"]>10);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(20);
