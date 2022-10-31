@@ -582,6 +582,9 @@ impl Config {
 
     pub async fn update_sitemap(&self, package: &Package) -> fpm::Result<Package> {
         let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
+
+        dbg!(&fpm_path);
+
         let fpm_doc = utils::fpm_doc(fpm_path).await?;
 
         dbg!(&fpm_doc);
@@ -625,10 +628,6 @@ impl Config {
         };
 
         dbg!(&package.sitemap);
-
-        dbg!(&fpm_path);
-        dbg!(&fpm_path.exists());
-        dbg!(&package.fpm_path);
         Ok(package)
     }
 
@@ -639,16 +638,22 @@ impl Config {
         //
         // Sanitize the mountpoint request.
         // Get the package and sanitized path
-        let (sanitized_path, mut sanitized_package, remaining_path) =
+
+        dbg!(&path);
+        let package1;
+        let (sanitized_path, sanitized_package, remaining_path) =
             match self.get_mountpoint_sanitized_path(path) {
-                Some((new_path, package, remaining_path)) => (new_path, package, remaining_path),
+                Some((new_path, package, remaining_path)) => {
+                    // Update the sitemap of the package, if it does ot contain the sitemap information
+                    package1 = self.update_sitemap(package).await?;
+                    (new_path, &package1, remaining_path)
+                }
                 None => (path.to_string(), &self.package, path.to_string()),
             };
+
         let path = sanitized_path.as_str();
 
-        // dbg!(&sanitized_package.sitemap);
-
-        let sanitized_package = self.update_sitemap(sanitized_package).await?;
+        dbg!(&sanitized_package.sitemap.is_some());
 
         // dbg!(&sanitized_package.sitemap);
         dbg!(&remaining_path);
@@ -656,10 +661,32 @@ impl Config {
         let (document, path_params) = match sanitized_package.sitemap.as_ref() {
             //1. First resolve document in sitemap
             Some(sitemap) => match sitemap.resolve_document(remaining_path.as_str()) {
-                Some(document) => (Some(document), vec![]),
+                Some(document) => {
+                    let document = format!(
+                        "-/{}/{}",
+                        sanitized_package.name.trim_matches('/'),
+                        document.trim_matches('/')
+                    );
+                    (Some(document), vec![])
+                }
                 //2.  Else resolve document in dynamic urls
                 None => match sanitized_package.dynamic_urls.as_ref() {
-                    Some(dynamic_urls) => dynamic_urls.resolve_document(remaining_path.as_str())?,
+                    Some(dynamic_urls) => {
+                        let (doc, params) =
+                            dynamic_urls.resolve_document(remaining_path.as_str())?;
+
+                        match doc {
+                            Some(doc) => {
+                                let document = format!(
+                                    "-/{}/{}",
+                                    sanitized_package.name.trim_matches('/'),
+                                    doc.trim_matches('/')
+                                );
+                                (Some(document), params)
+                            }
+                            None => (None, vec![]),
+                        }
+                    }
                     None => (None, vec![]),
                 },
             },
