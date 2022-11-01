@@ -1,3 +1,13 @@
+pub trait ValueOf {
+    fn value_of_(&self, name: &str) -> Option<&str>;
+}
+
+impl ValueOf for clap::ArgMatches {
+    fn value_of_(&self, name: &str) -> Option<&str> {
+        self.get_one::<String>(name).map(|v| v.as_str())
+    }
+}
+
 // https://stackoverflow.com/questions/71985357/whats-the-best-way-to-write-a-custom-format-macro
 #[macro_export]
 macro_rules! warning {

@@ -8,8 +8,19 @@ fn main() -> fpm::Result<()> {
 
 async fn async_main() -> fpm::Result<()> {
     use colored::Colorize;
+    use fpm::utils::ValueOf;
 
     let matches = app(version()).get_matches();
+
+    match matches.subcommand() {
+        Some((fpm::commands::stop_tracking::COMMAND, matches)) => {
+            return fpm::commands::stop_tracking::handle_command(matches).await;
+        }
+        Some((fpm::commands::sync_status::COMMAND, matches)) => {
+            return fpm::commands::sync_status::handle_command(matches).await;
+        }
+        _ => {}
+    }
 
     if let Some(project) = matches.subcommand_matches("create-package") {
         // project-name => required field (any package Url or standard project name)
@@ -111,10 +122,6 @@ async fn async_main() -> fpm::Result<()> {
             fpm::sync2(&config, None).await
         };
     }
-    if let Some(status) = matches.subcommand_matches("sync-status") {
-        // TODO: handle multiple files
-        return fpm::sync_status(&config, status.value_of_("file")).await;
-    }
     if let Some(create_cr) = matches.subcommand_matches("create-cr") {
         return fpm::create_cr(&config, create_cr.value_of_("title")).await;
     }
@@ -158,11 +165,6 @@ async fn async_main() -> fpm::Result<()> {
         let source = mark.value_of_("source").unwrap();
         let target = mark.value_of_("target");
         return fpm::mark_upto_date(&config, source, target).await;
-    }
-    if let Some(mark) = matches.subcommand_matches("stop-tracking") {
-        let source = mark.value_of_("source").unwrap();
-        let target = mark.value_of_("target");
-        return fpm::stop_tracking(&config, source, target).await;
     }
 
     unreachable!("No subcommand matched");
@@ -260,12 +262,7 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(file: <FILE>... "The file(s) to see status of (leave empty to see status of entire package)").required(false))
                 .hide(true) // hidden since the feature is not being released yet.
         )
-        .subcommand(
-            clap::Command::new("sync-status")
-                .about("Show the sync status of files in this fpm package")
-                .arg(clap::arg!(file: <FILE>... "The file(s) to see status of (leave empty to see status of entire package)").required(false))
-                .hide(true) // hidden since the feature is not being released yet.
-        )
+        .subcommand(fpm::commands::sync_status::command())
         .subcommand(
             clap::Command::new("create-cr")
                 .about("Create a Change Request")
@@ -320,23 +317,20 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--target <TARGET> "The target file that will track the source").required(true))
                 .hide(true) // hidden since the feature is not being released yet.
         )
-        .subcommand(
-            clap::Command::new("stop-tracking")
-                .about("Remove a tracking relation between two files")
-                .arg(clap::arg!(source: <SOURCE> "The file stop tracking"))
-                .arg(clap::arg!(--target <TARGET> "If source tracks multiple targets, specify which one to stop tracking"))
-                .hide(true) // hidden since the feature is not being released yet.
-        )
+        .subcommand(fpm::commands::stop_tracking::command())
         .subcommand(sub_command::serve())
 }
 
 mod sub_command {
     pub fn serve() -> clap::Command {
         let serve = clap::Command::new("serve")
-            .about("Create an http server and serves static files")
-            .arg(clap::arg!(port: --port <PORT> "The port to listen on").default_value("8080"))
-            .arg(clap::arg!(bind: --bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
-            .arg(clap::arg!(download_base_url: --"download-base-url" <URL> "If running without files locally, download requested files from here."));
+            .about("Serve package content over HTTP")
+            .after_help("FPM packages can have dynamic features. If your package uses any \
+            dynamic feature, then you want to use `fpm serve` instead of `fpm build`.\n\n\
+            Read more about it on https://fpm.dev/serve/")
+            .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
+            .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
+            .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"));
         if cfg!(feature = "remote") {
             serve
         } else {
@@ -359,15 +353,5 @@ pub fn version() -> &'static str {
             }
             None => env!("CARGO_PKG_VERSION"),
         }
-    }
-}
-
-trait ValueOf {
-    fn value_of_(&self, name: &str) -> Option<&str>;
-}
-
-impl ValueOf for clap::ArgMatches {
-    fn value_of_(&self, name: &str) -> Option<&str> {
-        self.get_one::<String>(name).map(|v| v.as_str())
     }
 }

@@ -1,7 +1,28 @@
-pub async fn stop_tracking(config: &fpm::Config, who: &str, whom: Option<&str>) -> fpm::Result<()> {
+async fn stop_tracking(config: &fpm::Config, who: &str, whom: Option<&str>) -> fpm::Result<()> {
     check(who, whom, config.root.as_str()).await?;
 
     Ok(())
+}
+
+pub const COMMAND: &str = "stop-tracking";
+
+pub fn command() -> clap::Command {
+    clap::Command::new(COMMAND)
+        .about("Remove a tracking relation between two files")
+        .arg(clap::arg!(source: <SOURCE> "The file stop tracking"))
+        .arg(clap::arg!(--target <TARGET> "If source tracks multiple targets, specify which one to stop tracking"))
+        .hide(true) // hidden since the feature is not being released yet.
+}
+
+pub async fn handle_command(matches: &clap::ArgMatches) -> fpm::Result<()> {
+    use fpm::utils::ValueOf;
+
+    stop_tracking(
+        &fpm::Config::read(None, true, None).await?,
+        matches.value_of_("source").unwrap(),
+        matches.value_of_("target"),
+    )
+    .await
 }
 
 async fn check(who: &str, whom: Option<&str>, base_path: &str) -> fpm::Result<()> {

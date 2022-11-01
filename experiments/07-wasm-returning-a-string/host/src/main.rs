@@ -1,6 +1,6 @@
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let engine = wasmtime::Engine::new(&wasmtime::Config::new().async_support(true))?;
+    let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(true))?;
     let module = wasmtime::Module::from_file(
         &engine,
         "../guest/target/wasm32-unknown-unknown/debug/guest.wasm",
@@ -35,6 +35,6 @@ fn read_string(offset: usize, mem: wasmtime::Memory, store: &mut wasmtime::Store
     let str_offset = u32::from_ne_bytes(mem[offset + 4..offset + 8].try_into().unwrap()) as usize;
 
     std::str::from_utf8(&mem[str_offset..str_offset + size])
-        .unwrap_or_else(|_| "oops")
+        .unwrap_or("oops")
         .to_string()
 }

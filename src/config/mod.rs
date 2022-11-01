@@ -600,9 +600,6 @@ impl Config {
 
     pub async fn update_sitemap(&self, package: &fpm::Package) -> fpm::Result<fpm::Package> {
         let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
-
-        dbg!(&fpm_path);
-
         let fpm_doc = utils::fpm_doc(fpm_path).await?;
 
         let mut package = package.clone();
@@ -668,7 +665,6 @@ impl Config {
             &sanitized_package.name,
             &sanitized_path
         );
-
         // Getting `document` is, if exists
         let (document, path_params) = match sanitized_package.sitemap.as_ref() {
             //1. First resolve document in sitemap
