@@ -601,6 +601,8 @@ impl Config {
     pub async fn update_sitemap(&self, package: &fpm::Package) -> fpm::Result<fpm::Package> {
         let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
 
+        dbg!(&fpm_path);
+
         let fpm_doc = utils::fpm_doc(fpm_path).await?;
 
         let mut package = package.clone();
@@ -654,11 +656,18 @@ impl Config {
             match self.get_mountpoint_sanitized_path(&self.package, path) {
                 Some((new_path, package, remaining_path)) => {
                     // Update the sitemap of the package, if it does ot contain the sitemap information
+                    dbg!(&new_path, &package.name, &remaining_path);
                     package1 = self.update_sitemap(package).await?;
                     (new_path, &package1, remaining_path)
                 }
                 None => (path.to_string(), &self.package, path.to_string()),
             };
+
+        dbg!(
+            &path_with_package_name,
+            &sanitized_package.name,
+            &sanitized_path
+        );
 
         // Getting `document` is, if exists
         let (document, path_params) = match sanitized_package.sitemap.as_ref() {
@@ -696,7 +705,14 @@ impl Config {
             self.path_parameters = path_params;
             Ok(file)
         } else {
+            // -/fifthtry.github.io/todos/add-todo/
+            // -/fifthtry.github.io/doc-site/add-todo/
+            dbg!(path);
             let file_name = self.get_file_path_and_resolve(path).await?;
+            // .packages/todos/add-todo.ftd
+            // .packages/fifthtry.github.io/doc-site/add-todo.ftd
+            dbg!(&file_name);
+
             let package = self.find_package_by_id(path).await?.1;
             let mut file = fpm::get_file(
                 package.name.to_string(),
