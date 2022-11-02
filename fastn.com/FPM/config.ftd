@@ -12,6 +12,7 @@
 light: $assets.files.static.logo-fifthtry.svg.light
 dark: $assets.files.static.logo-fifthtry-dark.svg.dark
 
+-- ft.site-name: 
 
 -- ft.parent-brand: false
 
