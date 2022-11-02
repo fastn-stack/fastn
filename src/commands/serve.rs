@@ -173,6 +173,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
             // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
             // Already checked in the above method serve_file
+            println!("executing proxy");
             let url = fpm::config::utils::get_clean_url(&config, path.as_str())?;
             let host = format!("{}://{}", url.scheme(), url.host_str().unwrap());
             let req = if let Some(r) = config.request {

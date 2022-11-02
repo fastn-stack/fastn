@@ -617,6 +617,8 @@ impl Config {
     pub async fn update_sitemap(&self, package: &fpm::Package) -> fpm::Result<fpm::Package> {
         let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
 
+        dbg!(&fpm_path);
+
         let fpm_doc = utils::fpm_doc(fpm_path).await?;
 
         let mut package = package.clone();
@@ -658,13 +660,15 @@ impl Config {
         Ok(package)
     }
 
+    // -/kameri-app.herokuapp.com/
+    // .packages/kameri-app.heroku.com/index.ftd
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
         // This function will return file and package by given path
         // path can be mounted(mount-point) with other dependencies
         //
         // Sanitize the mountpoint request.
         // Get the package and sanitized path
-
+        dbg!(&path);
         let package1;
         let (path_with_package_name, sanitized_package, sanitized_path) =
             match self.get_mountpoint_sanitized_path(&self.package, path) {
@@ -753,6 +757,7 @@ impl Config {
                 };
                 file.set_id(format!("{}{}", url, extension).as_str());
             }
+            dbg!(&file.get_id());
             self.current_document = Some(file.get_id());
             Ok(file)
         }
