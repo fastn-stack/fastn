@@ -1,1 +1,8 @@
 -- ds.page: Dark Mode Support
+id: ws-dark-mode
+
+
+
+-- container: ws-dark-mode.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:

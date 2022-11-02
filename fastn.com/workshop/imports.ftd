@@ -1,1 +1,6 @@
 -- ds.page: Import: Splitting FTD Into Modules
+id: ws-imports
+
+-- container: ws-imports.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:

@@ -48,3 +48,8 @@ instructions given in the file.
 
 You have learnt basics of numbers and strings. {ds.highlight: Lets move on to
 [records now](id: ws-records)} or go back to [the workshop page](id: workshop).
+
+
+-- container: ws-numbers-and-strings.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:

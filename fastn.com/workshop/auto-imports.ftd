@@ -1,1 +1,8 @@
 -- ds.page: Auto Imports
+id: ws-auto-imports
+
+
+
+-- container: ws-auto-imports.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:

@@ -1,6 +1,7 @@
 -- ds.page: Records
 id: ws-records
 
+
 -- ds.markdown:
 
 Till now we dealt with basic types like [booleans](id: ws-booleans), [numbers
@@ -132,3 +133,8 @@ author friendly using caption and body types.
 You can move on to [lists](../06-lists/) now, or go back to the [list of
 steps](id: workshop).
 
+
+
+-- container: ws-records.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:

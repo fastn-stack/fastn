@@ -1,7 +1,13 @@
 -- ds.page: Optionals In FTD
+id: ws-optionals
 
 -- ds.h1: Task 2: Recursive Records
 
 We are going to create a record that contains a field with the same type as
 itself.
 
+
+
+-- container: ws-optionals.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:

@@ -1,10 +1,35 @@
 -- import: bling/holder
 -- import: cbox
 
+
+-- ftd.column sidebar:
+width: fill
+
+--- cbox.text-1: Need Help?
+
+Please join our [Discord to ask any questions](https://discord.gg/d2MgKBybEQ)
+related to this workshop!
+
+Or just meet the others who are learning FTD like you :-)
+
+
+--- cbox.info: Github Repo
+
+The code for this workshop can be found on Github:
+[ftd-lang/ftd-workshop](https://github.com/ftd-lang/ftd-workshop).
+
+
+--- cbox.text-1: Join The Next Session
+
+The next remote workshop would be happening on **4th Nov 2022**. [Learn more
+here](https://fifthtry.com/events/).
+
+
 -- ds.page: FTD Workshop
 id: workshop
 
 Welcome to the FTD Language's official workshop.
+
 
 -- cbox.info: About This Workshop
 
@@ -23,6 +48,7 @@ motivation and design decisions that shaped FTD as well.
 in stages and write code to get the application working**. Participants are
 required to have a decent computer, but there is no need to install any software
 before hand (other than your favorite editor).
+
 
 -- ft.markdown:
 
@@ -54,8 +80,6 @@ when you are done with a task. Or feel free to ask for help in Chat or view
 by speaking out during the workshop.
 
 {ds.highlight: Have fun, you are among friends.}
-
-
 
 
 -- ft.h1: Part 1: Working With Data In FTD
@@ -93,4 +117,8 @@ components.
 
 In this we will learn how to do event handling and to work with HTTP APIs.
 
+
+
+-- container: workshop.wrapper.right-sidebar
+-- sidebar:
 

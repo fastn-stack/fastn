@@ -1,1 +1,10 @@
 -- ds.page: Creating Custom Components
+id: ws-components
+
+
+
+
+
+-- container: ws-components.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:

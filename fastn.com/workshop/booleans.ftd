@@ -63,3 +63,8 @@ or back to [the workshop](id: workshop).
 
 
 
+
+
+-- container: ws-booleans.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:

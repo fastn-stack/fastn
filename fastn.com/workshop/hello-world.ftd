@@ -110,3 +110,8 @@ You have installed fpm and created your first fpm package. Good job!
 {ds.highlight: Move to learning about [booleans now](id: ws-booleans)} or back to
 [the workshop page](id: workshop).
 
+
+
+-- container: ws-hello-world.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:

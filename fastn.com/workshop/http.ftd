@@ -1,2 +1,7 @@
 -- ds.page: HTTP Processor
+id: ws-http
 
+
+-- container: ws-http.wrapper.right-sidebar
+-- import: ftd.dev/workshop
+-- workshop.sidebar:
