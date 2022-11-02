@@ -18,7 +18,7 @@ pub async fn processor<'a>(
         }
     }
 
-    let mut url = match section
+    let url = match section
         .header
         .string_optional(doc.name, section.line_number, "url")?
     {
@@ -32,53 +32,12 @@ pub async fn processor<'a>(
         }
     };
 
-    // get the endpoint from the url
-    // if url does not starts with http, so get hte endpoint from the package or dependency
-    // if urls start_with package-name it self
-
-    if !url.starts_with("http") {
-        if url.starts_with(format!("/-/{}", config.package.name.trim_matches('/')).as_str()) {
-            let remaining_url = url.trim_start_matches(
-                format!("/-/{}", config.package.name.trim_matches('/')).as_str(),
-            );
-            let end_point = match config.package.endpoint.as_ref() {
-                Some(ep) => ep,
-                None => {
-                    return ftd::p2::utils::e2(
-                        format!(
-                            "package does not contain the endpoint: {:?}",
-                            config.package.name
-                        ),
-                        doc.name,
-                        section.line_number,
-                    );
-                }
-            };
-            url = format!("{}{}", end_point, remaining_url);
-        } else {
-            let deps_ep = config.package.dep_with_ep();
-            for (dep, ep) in deps_ep {
-                if url.starts_with(format!("/-/{}", dep.name.trim_matches('/')).as_str()) {
-                    let remaining_url = url
-                        .trim_start_matches(format!("/-/{}", dep.name.trim_matches('/')).as_str());
-                    url = format!("{}{}", ep, remaining_url);
-                }
-            }
-        }
-    }
-
-    dbg!(&url);
-
-    let mut url = match url::Url::parse(url.as_str()) {
-        Ok(v) => v,
-        Err(e) => {
-            return ftd::p2::utils::e2(
-                format!("invalid url: {:?}", e),
-                doc.name,
-                section.line_number,
-            )
-        }
-    };
+    let mut url =
+        utils::get_clean_url(config, url.as_str()).map_err(|e| ftd::p1::Error::ParseError {
+            message: format!("invalid url: {:?}", e),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
+        })?;
 
     for (line, key, value) in section.header.0.iter() {
         if key == "$processor$" || key == "url" || key == "method" {
@@ -172,4 +131,54 @@ pub fn request_data_processor<'a>(
     }
 
     doc.from_json(&data, section)
+}
+
+mod utils {
+    // this url can be start with http of /-/package-name/
+    // It will return url with end-point, if package or dependency contains endpoint in them
+    pub fn get_clean_url(config: &fpm::Config, url: &str) -> fpm::Result<url::Url> {
+        if url.starts_with("http") {
+            return Ok(url::Url::parse(url)?);
+        }
+
+        // if path starts with /-/package-name, so it trim the package and return the remaining url
+        fn path_start_with(path: &str, package_name: &str) -> Option<String> {
+            let package_name = format!("/-/{}", package_name.trim().trim_matches('/'));
+            if path.starts_with(package_name.as_str()) {
+                return Some(path.trim_start_matches(package_name.as_str()).to_string());
+            }
+            None
+        }
+
+        // This is for current package
+        if let Some(remaining_url) = path_start_with(url, config.package.name.as_str()) {
+            let end_point = match config.package.endpoint.as_ref() {
+                Some(ep) => ep,
+                None => {
+                    return Err(fpm::Error::GenericError(format!(
+                        "package does not contain the endpoint: {:?}",
+                        config.package.name
+                    )));
+                }
+            };
+            return Ok(url::Url::parse(
+                format!("{}{}", end_point, remaining_url).as_str(),
+            )?);
+        }
+
+        // This is for dependency packages
+        let deps_ep = config.package.dep_with_ep();
+        for (dep, ep) in deps_ep {
+            if let Some(remaining_url) = path_start_with(url, dep.name.as_str()) {
+                return Ok(url::Url::parse(
+                    format!("{}{}", ep, remaining_url).as_str(),
+                )?);
+            }
+        }
+
+        Err(fpm::Error::GenericError(format!(
+            "http-processor: end-point not found url: {}",
+            url
+        )))
+    }
 }
