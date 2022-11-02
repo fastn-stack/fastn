@@ -161,6 +161,8 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             .unwrap()
             .set_request(req));
 
+        let file_response = serve_file(&mut config, path.as_path()).await;
+
         // If path is not present in sitemap then pass it to proxy
         // TODO: Need to handle other package URL as well, and that will start from `-`
         // and all the static files starts with `-`
@@ -168,27 +170,25 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         // In that case need to check whether that url is present in sitemap or not and than proxy
         // pass the url if the file is not static
         // So final check would be file is not static and path is not present in the package's sitemap
-
-        if !path.starts_with("-/") {
+        if !path.starts_with("-/")
+            && file_response.status() == actix_web::http::StatusCode::NOT_FOUND
+        {
             if let Some(sitemap) = config.package.sitemap.as_ref() {
                 // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
-                if !sitemap.path_exists(path.as_str()) {
-                    if let Some((endpoint, without_mount_point)) =
-                        config.package.get_endpoint_dependency(path.as_str())
-                    {
-                        let req = if let Some(r) = config.request {
-                            r
-                        } else {
-                            return Ok(fpm::server_error!("request not set"));
-                        };
-
-                        return fpm::proxy::get_out(endpoint, req, without_mount_point).await;
+                if let Some((endpoint, without_mount_point)) =
+                    config.package.get_dep_endpoint(path.as_str())
+                {
+                    let req = if let Some(r) = config.request {
+                        r
+                    } else {
+                        return Ok(fpm::server_error!("request not set"));
                     };
-                }
+
+                    return fpm::proxy::get_out(endpoint, req, without_mount_point).await;
+                };
             }
         }
 
-        let file_response = serve_file(&mut config, path.as_path()).await;
         // Fallback to WASM execution in case of no successful response
         // TODO: This is hacky. Use the sitemap eventually.
         if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {

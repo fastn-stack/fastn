@@ -561,7 +561,7 @@ impl Package {
     // Output: Package's dependency which contains mount-point and endpoint
     // where request path starts-with dependency mount-point.
     // (endpoint, sanitized request path from mount-point)
-    pub fn get_endpoint_dependency<'a>(&'a self, path: &'a str) -> Option<(&'a str, &'a str)> {
+    pub fn get_dep_endpoint<'a>(&'a self, path: &'a str) -> Option<(&'a str, &'a str)> {
         fn dep_endpoint<'a>(package: &'a Package, path: &'a str) -> Option<(&'a str, &'a str)> {
             let dependencies = package.dep_with_end_point();
             for (_, ep, mp) in dependencies {
