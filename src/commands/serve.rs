@@ -170,23 +170,18 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         // In that case need to check whether that url is present in sitemap or not and than proxy
         // pass the url if the file is not static
         // So final check would be file is not static and path is not present in the package's sitemap
-        if !path.starts_with("-/")
-            && file_response.status() == actix_web::http::StatusCode::NOT_FOUND
-        {
-            if let Some(sitemap) = config.package.sitemap.as_ref() {
-                // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
-                if let Some((endpoint, without_mount_point)) =
-                    config.package.get_dep_endpoint(path.as_str())
-                {
-                    let req = if let Some(r) = config.request {
-                        r
-                    } else {
-                        return Ok(fpm::server_error!("request not set"));
-                    };
+        if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
+            // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
+            // Already checked in the above method serve_file
+            let url = fpm::config::utils::get_clean_url(&config, path.as_str())?;
+            let host = format!("{}://{}", url.scheme(), url.host_str().unwrap());
+            let req = if let Some(r) = config.request {
+                r
+            } else {
+                return Ok(fpm::server_error!("request not set"));
+            };
 
-                    return fpm::proxy::get_out(endpoint, req, without_mount_point).await;
-                };
-            }
+            return fpm::proxy::get_out(host.as_str(), req, url.path()).await;
         }
 
         // Fallback to WASM execution in case of no successful response
@@ -209,10 +204,6 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         } else {
             file_response
         }
-        // file_response
-
-        // if true: serve_file
-        // else: proxy_pass
     };
     t.it(Ok(response))
 }

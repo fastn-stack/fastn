@@ -42,8 +42,8 @@ pub(crate) async fn get_out(
         reqwest::Url::parse(
             format!(
                 "{}/{}{}",
-                host,
-                path,
+                host.trim_end_matches('/'),
+                path.trim_start_matches('/'),
                 if req.query_string().is_empty() {
                     "".to_string()
                 } else {

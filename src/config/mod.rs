@@ -1,7 +1,7 @@
 // Document: https://fpm.dev/crate/config/
 // Document: https://fpm.dev/crate/package/
 
-mod utils;
+pub(crate) mod utils;
 
 #[derive(Debug, Clone)]
 pub struct Config {
