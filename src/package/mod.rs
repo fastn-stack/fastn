@@ -542,8 +542,23 @@ impl Package {
 
     // Dependencies with mount point and end point
     // Output: Package Dependencies
+    // [Package, endpoint]
+    pub fn dep_with_ep(&self) -> Vec<(&Package, &str)> {
+        self.dependencies
+            .iter()
+            .fold(&mut vec![], |accumulator, dep| {
+                if let Some(ep) = &dep.endpoint {
+                    accumulator.push((&dep.package, ep.as_str()))
+                }
+                accumulator
+            })
+            .to_owned()
+    }
+
+    // Dependencies with mount point and end point
+    // Output: Package Dependencies
     // [Package, endpoint, mount-point]
-    pub fn dep_with_end_point(&self) -> Vec<(&Package, &str, &str)> {
+    pub fn dep_with_ep_and_mp(&self) -> Vec<(&Package, &str, &str)> {
         self.dependencies
             .iter()
             .fold(&mut vec![], |accumulator, dep| {
@@ -563,7 +578,7 @@ impl Package {
     // (endpoint, sanitized request path from mount-point)
     pub fn get_dep_endpoint<'a>(&'a self, path: &'a str) -> Option<(&'a str, &'a str)> {
         fn dep_endpoint<'a>(package: &'a Package, path: &'a str) -> Option<(&'a str, &'a str)> {
-            let dependencies = package.dep_with_end_point();
+            let dependencies = package.dep_with_ep_and_mp();
             for (_, ep, mp) in dependencies {
                 if path.starts_with(mp.trim_matches('/')) {
                     let path_without_mp = path.trim_start_matches(mp.trim_start_matches('/'));

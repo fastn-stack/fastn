@@ -18,7 +18,7 @@ pub async fn processor<'a>(
         }
     }
 
-    let url = match section
+    let mut url = match section
         .header
         .string_optional(doc.name, section.line_number, "url")?
     {
@@ -31,6 +31,43 @@ pub async fn processor<'a>(
             )
         }
     };
+
+    // get the endpoint from the url
+    // if url does not starts with http, so get hte endpoint from the package or dependency
+    // if urls start_with package-name it self
+
+    if !url.starts_with("http") {
+        if url.starts_with(format!("/-/{}", config.package.name.trim_matches('/')).as_str()) {
+            let remaining_url = url.trim_start_matches(
+                format!("/-/{}", config.package.name.trim_matches('/')).as_str(),
+            );
+            let end_point = match config.package.endpoint.as_ref() {
+                Some(ep) => ep,
+                None => {
+                    return ftd::p2::utils::e2(
+                        format!(
+                            "package does not contain the endpoint: {:?}",
+                            config.package.name
+                        ),
+                        doc.name,
+                        section.line_number,
+                    );
+                }
+            };
+            url = format!("{}{}", end_point, remaining_url);
+        } else {
+            let deps_ep = config.package.dep_with_ep();
+            for (dep, ep) in deps_ep {
+                if url.starts_with(format!("/-/{}", dep.name.trim_matches('/')).as_str()) {
+                    let remaining_url = url
+                        .trim_start_matches(format!("/-/{}", dep.name.trim_matches('/')).as_str());
+                    url = format!("{}{}", ep, remaining_url);
+                }
+            }
+        }
+    }
+
+    dbg!(&url);
 
     let mut url = match url::Url::parse(url.as_str()) {
         Ok(v) => v,
