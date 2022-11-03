@@ -32,6 +32,7 @@ mod translation;
 mod version;
 mod wasm;
 mod workspace;
+mod auth;
 
 pub(crate) use auto_import::AutoImport;
 pub use commands::{

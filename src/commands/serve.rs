@@ -344,15 +344,87 @@ pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::R
 
 async fn auth_route(
     req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes
+) -> fpm::Result<fpm::http::Response> {
+
+    let auth_obj=fpm::auth::github::index(req);
+    Ok(auth_obj)
+   
+}
+async fn login_route(
+    req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
-    Ok(actix_web::HttpResponse::Ok()
-        .content_type("")
-        .body("Hello Auth APi"))
-
-    //match (req.method(), req.path()) {}
+    let login_obj=fpm::auth::github::login(req);
+    Ok(login_obj.await)
 }
 
+/*async fn index2_route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes
+) -> fpm::Result<fpm::http::Response> {
+    let index2_obj=fpm::auth::github::index2(req);
+        //dbg!(index2_obj.cookies();
+    Ok(index2_obj)
+}*/
+async fn logout_route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+) -> fpm::Result<fpm::http::Response> {
+    let logout_obj=fpm::auth::github::logout(req);
+        //logout_obj.c
+    Ok(logout_obj)
+}
+async fn auth_auth_route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+) -> fpm::Result<fpm::http::Response> {
+     //let params: actix_web::web::Query<fpm::auth::github::AuthRequest>;
+        //dbg!(params);
+        let uri_string=req.uri();
+        let final_url:String=format!("{}{}","http://localhost:8000",uri_string.clone().to_string());
+        let request_url = url::Url::parse(&final_url.to_string()).unwrap();
+        let pairs = request_url.query_pairs();
+        let mut code=String::from("");
+        let mut state=String::from("");
+        for pair in pairs{
+            if pair.0=="code"{
+                code=pair.1.to_string();
+            }
+            if pair.0=="state"{
+                state=pair.1.to_string();
+            }
+        }
+        let auth_obj=fpm::auth::github::auth(req,
+            fpm::auth::github::AuthRequest{code:code.clone(),state:state.clone()});
+            //auth_obj.await.cookies().collect();
+        Ok(auth_obj.await)
+}
+async fn get_identities_route(
+    req: actix_web::HttpRequest,
+    body: actix_web::web::Bytes,
+) -> fpm::Result<fpm::http::Response> {
+     //let params: actix_web::web::Query<fpm::auth::github::AuthRequest>;
+        //dbg!(params);
+        let mut repo_list: Vec<String> = Vec::new();
+        let uri_string=req.uri();
+    let final_url:String=format!("{}{}","http://localhost:8000",uri_string.clone().to_string());
+    let request_url = url::Url::parse(&final_url.to_string()).unwrap();
+    let pairs = request_url.query_pairs();
+    for pair in pairs{
+        if pair.0=="github_starred"{
+            if !repo_list.contains(&pair.1.to_string()){
+                repo_list.push(pair.1.to_string());
+            }
+           
+        }
+    }
+        let identity_obj=fpm::auth::github::get_identity(req,
+            &repo_list);
+        //dbg!(index_obj.await.cookies());
+            //let index_obj=fpm::auth::github::index(req);
+        Ok(identity_obj.await)
+}
 // clone the fpm repo
 // change in the code in serve.rs
 // run command `cargo install --path=.`
@@ -365,10 +437,26 @@ async fn route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
-    if req.path().starts_with("/auth/") {
+    if req.path()=="/auth/" {
         return auth_route(req.clone(), body).await;
     }
-
+    else if req.path()=="/auth/login/" {
+        return login_route(req.clone(), body).await;
+    }
+    /*else if req.path()=="/auth/index2/" {
+        return index2_route(req.clone(), body).await;
+    }*/
+    else if req.path()=="/auth/logout/" {
+        return logout_route(req.clone(), body).await;
+    }
+    else if req.path()=="/auth/auth/" {
+        return auth_auth_route(req.clone(), body).await;
+    }
+    else if req.path()=="/auth/get-identities/" {
+        return get_identities_route(req.clone(), body).await;
+    }else{
+        return auth_route(req.clone(), body).await;
+    }
     let req = fpm::http::Request::from_actix(req, body);
 
     match (req.method(), req.path()) {

@@ -72,12 +72,13 @@ slug = { version = "0.1" }
 sha2 = "0.10"
 thiserror = "1"
 url = "2"
-
+actix-session = { version = "0.7.2", features = ["cookie-session"] }
+oauth2 = "4.2.3"
 # becasue they havent crated a release yet which fixes incompatibility with latest actix-http
 zip = { git = "https://github.com/zip-rs/zip" }
 
-wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev="45604f58336afaa23a79ed619ef50b69de473688" }
-fpm-utils = { git = "https://github.com/ftd-lang/fpm-utils", rev="0ce396db408b413f5a4eb6b2c5b87db3829cf879"}
+wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev = "45604f58336afaa23a79ed619ef50b69de473688" }
+fpm-utils = { git = "https://github.com/ftd-lang/fpm-utils", rev = "0ce396db408b413f5a4eb6b2c5b87db3829cf879" }
 # fpm-utils = { path = "../fpm-utils/crates/fpm-utils-host"}
 
 [dependencies.hyper]
@@ -106,7 +107,6 @@ rev = "4527fa9"
 # path = "../ftd"
 
 
-
 [dependencies.reqwest]
 # We considered removing dependency from `reqwest`, and only use `hyper`. But `reqwest`
 # does too much (bundled) tls for example, that we can not.
@@ -116,7 +116,7 @@ features = [
     # we will have a dependency on libssl.
     "native-tls-vendored",
     "json",
-    "blocking"
+    "blocking",
 ]
 
 [dependencies.actix-web]
@@ -163,4 +163,3 @@ pretty_assertions = "1"
 [dev-dependencies.fbt-lib]
 git = "https://github.com/FifthTry/fbt"
 rev = "ea0ee98"
-
