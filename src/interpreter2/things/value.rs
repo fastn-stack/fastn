@@ -618,23 +618,17 @@ impl Value {
 
     pub(crate) fn kind(&self) -> ftd::interpreter2::Kind {
         match self {
-            Value::String { .. } => ftd::interpreter2::Kind::String,
-            Value::Integer { .. } => ftd::interpreter2::Kind::Integer,
-            Value::Decimal { .. } => ftd::interpreter2::Kind::Decimal,
-            Value::Boolean { .. } => ftd::interpreter2::Kind::Boolean,
-            Value::Object { .. } => ftd::interpreter2::Kind::Object,
-            Value::Record { name, .. } => ftd::interpreter2::Kind::Record {
-                name: name.to_string(),
-            },
-            Value::List { kind, .. } => ftd::interpreter2::Kind::List {
-                kind: Box::new(kind.kind.clone()),
-            },
+            Value::String { .. } => ftd::interpreter2::Kind::string(),
+            Value::Integer { .. } => ftd::interpreter2::Kind::integer(),
+            Value::Decimal { .. } => ftd::interpreter2::Kind::decimal(),
+            Value::Boolean { .. } => ftd::interpreter2::Kind::boolean(),
+            Value::Object { .. } => ftd::interpreter2::Kind::object(),
+            Value::Record { name, .. } => ftd::interpreter2::Kind::record(name),
+            Value::List { kind, .. } => kind.kind.clone().into_list(),
             Value::Optional { kind, .. } => ftd::interpreter2::Kind::Optional {
                 kind: Box::new(kind.kind.clone()),
             },
-            Value::UI { name, .. } => ftd::interpreter2::Kind::UI {
-                name: Some(name.to_string()),
-            },
+            Value::UI { name, .. } => ftd::interpreter2::Kind::ui_with_name(name),
         }
     }
 

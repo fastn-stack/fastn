@@ -176,9 +176,17 @@ impl<'a> ExecuteDoc<'a> {
             instruction.line_number,
         )?;
 
+        dbg!(&local_variable_map, &component_definition.definition);
+
         update_local_variable_references_in_component(
             &mut component_definition.definition,
             &local_variable_map,
+        );
+
+        dbg!(
+            "execute_simple_component::",
+            &instruction,
+            &component_definition
         );
 
         ExecuteDoc::execute_from_instruction(&component_definition.definition, doc, local_container)
@@ -222,6 +230,7 @@ impl<'a> ExecuteDoc<'a> {
                 )?)
             }
             "ftd#row" => {
+                dbg!(&instruction.get_children());
                 let children = ExecuteDoc::execute_from_instructions(
                     instruction.children.as_slice(),
                     doc,
@@ -238,6 +247,7 @@ impl<'a> ExecuteDoc<'a> {
                 )?)
             }
             "ftd#column" => {
+                dbg!(&instruction.get_children());
                 let children = ExecuteDoc::execute_from_instructions(
                     instruction.children.as_slice(),
                     doc,
@@ -348,7 +358,25 @@ fn update_local_variable_reference_in_property_value(
             }
             return;
         }
-        _ => return,
+        ftd::interpreter2::PropertyValue::Value { value, .. } => {
+            return match value {
+                ftd::interpreter2::Value::List { data, .. } => {
+                    for d in data.iter_mut() {
+                        update_local_variable_reference_in_property_value(d, local_variable);
+                    }
+                }
+                ftd::interpreter2::Value::Record { fields, .. }
+                | ftd::interpreter2::Value::Object { values: fields } => {
+                    for d in fields.values_mut() {
+                        update_local_variable_reference_in_property_value(d, local_variable);
+                    }
+                }
+                ftd::interpreter2::Value::UI { component, .. } => {
+                    update_local_variable_references_in_component(component, local_variable)
+                }
+                _ => {}
+            }
+        }
     };
 
     if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {

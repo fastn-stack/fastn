@@ -5,10 +5,19 @@ pub enum Kind {
     Integer,
     Decimal,
     Boolean,
-    Record { name: String }, // the full name of the record (full document name.record name)
-    List { kind: Box<Kind> },
-    Optional { kind: Box<Kind> },
-    UI { name: Option<String> },
+    Record {
+        name: String,
+    }, // the full name of the record (full document name.record name)
+    List {
+        kind: Box<Kind>,
+    },
+    Optional {
+        kind: Box<Kind>,
+    },
+    UI {
+        name: Option<String>,
+        subsection_source: bool,
+    },
     Void,
 }
 
@@ -42,9 +51,44 @@ impl Kind {
         Kind::Boolean
     }
 
+    pub fn ui() -> Kind {
+        Kind::UI {
+            name: None,
+            subsection_source: false,
+        }
+    }
+
+    pub fn ui_with_name(name: &str) -> Kind {
+        Kind::UI {
+            name: Some(name.to_string()),
+            subsection_source: false,
+        }
+    }
+
+    pub fn subsection_ui() -> Kind {
+        Kind::UI {
+            name: None,
+            subsection_source: true,
+        }
+    }
+
+    pub fn object() -> Kind {
+        Kind::Object
+    }
+
+    pub fn void() -> Kind {
+        Kind::Void
+    }
+
     pub fn record(name: &str) -> Kind {
         Kind::Record {
             name: name.to_string(),
+        }
+    }
+
+    pub fn into_list(self) -> Kind {
+        Kind::List {
+            kind: Box::new(self),
         }
     }
 
@@ -61,8 +105,25 @@ impl Kind {
         }
     }
 
+    pub fn inner_list(self) -> Kind {
+        match self {
+            Kind::List { kind } => kind.as_ref().to_owned(),
+            t => t,
+        }
+    }
+
     pub(crate) fn is_list(&self) -> bool {
         matches!(self, Kind::List { .. })
+    }
+
+    pub fn is_subsection_ui(&self) -> bool {
+        matches!(
+            self,
+            Kind::UI {
+                subsection_source: true,
+                ..
+            }
+        )
     }
 
     pub fn is_optional(&self) -> bool {
@@ -183,13 +244,25 @@ impl KindData {
             return Ok(kind_data);
         }
         let kind = match ast_kind.as_ref() {
-            "string" => Kind::String,
-            "object" => Kind::Object,
-            "integer" => Kind::Integer,
-            "decimal" => Kind::Decimal,
-            "boolean" => Kind::Boolean,
-            "void" => Kind::Void,
-            "ftd.ui" => Kind::UI { name: None },
+            "string" => Kind::string(),
+            "object" => Kind::object(),
+            "integer" => Kind::integer(),
+            "decimal" => Kind::decimal(),
+            "boolean" => Kind::boolean(),
+            "void" => Kind::void(),
+            "ftd.ui" => Kind::ui(),
+            "children" => {
+                if let Some(modifier) = var_kind.modifier {
+                    return ftd::interpreter2::utils::e2(
+                        format!("Can't add modifier `{:?}`", modifier),
+                        doc.name,
+                        line_number,
+                    );
+                }
+                Kind::List {
+                    kind: Box::new(Kind::subsection_ui()),
+                }
+            }
             k if known_kinds.contains_key(k) => known_kinds.get(k).unwrap().to_owned(),
             k => match doc.get_thing(k, line_number)? {
                 ftd::interpreter2::Thing::Record(r) => Kind::Record { name: r.name },

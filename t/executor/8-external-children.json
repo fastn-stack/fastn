@@ -1,0 +1,313 @@
+{
+  "name": "foo",
+  "aliases": {
+    "ftd": "ftd"
+  },
+  "bag": {
+    "foo#foo": {
+      "Component": {
+        "name": "foo#foo",
+        "arguments": [
+          {
+            "name": "c",
+            "kind": {
+              "kind": {
+                "List": {
+                  "kind": {
+                    "UI": {
+                      "name": null,
+                      "subsection_source": true
+                    }
+                  }
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          }
+        ],
+        "definition": {
+          "name": "ftd#row",
+          "properties": [
+            {
+              "value": {
+                "Value": {
+                  "value": {
+                    "List": {
+                      "data": [
+                        {
+                          "Value": {
+                            "value": {
+                              "UI": {
+                                "name": "ftd#text",
+                                "kind": {
+                                  "kind": {
+                                    "UI": {
+                                      "name": null,
+                                      "subsection_source": true
+                                    }
+                                  },
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "component": {
+                                  "name": "ftd#text",
+                                  "properties": [
+                                    {
+                                      "value": {
+                                        "Value": {
+                                          "value": {
+                                            "String": {
+                                              "text": "Hello"
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 6
+                                        }
+                                      },
+                                      "source": "Caption",
+                                      "condition": null,
+                                      "line_number": 6
+                                    }
+                                  ],
+                                  "iteration": null,
+                                  "condition": null,
+                                  "events": [],
+                                  "children": [],
+                                  "line_number": 6
+                                }
+                              }
+                            },
+                            "is_mutable": false,
+                            "line_number": 6
+                          }
+                        },
+                        {
+                          "Value": {
+                            "value": {
+                              "UI": {
+                                "name": "ftd#row",
+                                "kind": {
+                                  "kind": {
+                                    "UI": {
+                                      "name": null,
+                                      "subsection_source": true
+                                    }
+                                  },
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "component": {
+                                  "name": "ftd#row",
+                                  "properties": [
+                                    {
+                                      "value": {
+                                        "Reference": {
+                                          "name": "foo#foo.c",
+                                          "kind": {
+                                            "kind": {
+                                              "List": {
+                                                "kind": {
+                                                  "UI": {
+                                                    "name": null,
+                                                    "subsection_source": true
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "caption": false,
+                                            "body": false
+                                          },
+                                          "source": {
+                                            "Local": "foo"
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 9
+                                        }
+                                      },
+                                      "source": {
+                                        "Header": {
+                                          "name": "children",
+                                          "mutable": false
+                                        }
+                                      },
+                                      "condition": null,
+                                      "line_number": 9
+                                    }
+                                  ],
+                                  "iteration": null,
+                                  "condition": null,
+                                  "events": [],
+                                  "children": [],
+                                  "line_number": 8
+                                }
+                              }
+                            },
+                            "is_mutable": false,
+                            "line_number": 8
+                          }
+                        }
+                      ],
+                      "kind": {
+                        "kind": {
+                          "UI": {
+                            "name": null,
+                            "subsection_source": true
+                          }
+                        },
+                        "caption": false,
+                        "body": false
+                      }
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 6
+                }
+              },
+              "source": "Subsection",
+              "condition": null,
+              "line_number": 6
+            }
+          ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [],
+          "line_number": 4
+        },
+        "line_number": 1
+      }
+    },
+    "foo#foo:c:0": {
+      "Variable": {
+        "name": "foo#foo:c:0",
+        "kind": {
+          "kind": {
+            "List": {
+              "kind": {
+                "UI": {
+                  "name": null,
+                  "subsection_source": true
+                }
+              }
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "List": {
+                "data": [
+                  {
+                    "Value": {
+                      "value": {
+                        "UI": {
+                          "name": "ftd#text",
+                          "kind": {
+                            "kind": {
+                              "UI": {
+                                "name": null,
+                                "subsection_source": true
+                              }
+                            },
+                            "caption": false,
+                            "body": false
+                          },
+                          "component": {
+                            "name": "ftd#text",
+                            "properties": [
+                              {
+                                "value": {
+                                  "Value": {
+                                    "value": {
+                                      "String": {
+                                        "text": "Hello"
+                                      }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 21
+                                  }
+                                },
+                                "source": "Caption",
+                                "condition": null,
+                                "line_number": 21
+                              }
+                            ],
+                            "iteration": null,
+                            "condition": null,
+                            "events": [],
+                            "children": [],
+                            "line_number": 21
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 21
+                    }
+                  }
+                ],
+                "kind": {
+                  "kind": {
+                    "UI": {
+                      "name": null,
+                      "subsection_source": true
+                    }
+                  },
+                  "caption": false,
+                  "body": false
+                }
+              }
+            },
+            "is_mutable": false,
+            "line_number": 21
+          }
+        },
+        "conditional_value": [],
+        "line_number": 19
+      }
+    }
+  },
+  "main": {
+    "container": {
+      "children": [
+        {
+          "Row": {
+            "container": {
+              "children": []
+            },
+            "common": {
+              "is_not_visible": false,
+              "event": [],
+              "is_dummy": false,
+              "padding": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "data_id": "0",
+              "line_number": 4
+            }
+          }
+        }
+      ]
+    },
+    "common": {
+      "is_not_visible": false,
+      "event": [],
+      "is_dummy": false,
+      "padding": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "data_id": "",
+      "line_number": 0
+    }
+  }
+}

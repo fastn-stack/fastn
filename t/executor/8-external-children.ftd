@@ -1,0 +1,23 @@
+-- component foo:
+children c:
+
+-- ftd.row:
+
+-- ftd.text: Hello
+
+-- ftd.row:
+children: $foo.c
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: foo
+
+
+
+-- foo:
+
+-- ftd.text: Hello
+
+-- end: foo
