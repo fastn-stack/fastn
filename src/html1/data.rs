@@ -14,7 +14,7 @@ impl<'a> DataGenerator<'a> {
                 value, ..
             }) = v
             {
-                let value = value.clone().resolve(&self.doc, value.line_number())?;
+                let value = value.clone().resolve(self.doc, value.line_number())?;
                 if let Some(value) = get_value(self.doc, &value)? {
                     d.insert(k.to_string(), value);
                 }

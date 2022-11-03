@@ -65,7 +65,7 @@ impl<'a> VariableDependencyGenerator<'a> {
 
         for (variable_name, dependency) in visited.iter() {
             let mut v = Vec::from_iter(dependency);
-            v.sort_by(|&(_, a), &(_, b)| a.cmp(&b));
+            v.sort_by(|&(_, a), &(_, b)| a.cmp(b));
             let g = v.iter().map(|v| v.0.to_string()).collect_vec();
             dependencies.extend(variable_name.to_string(), g);
         }
@@ -88,7 +88,7 @@ impl<'a> VariableDependencyGenerator<'a> {
                 let order_dependencies = get_variable_order_dependencies_(visited, d, graph);
                 for (key, order) in order_dependencies.iter() {
                     match result.get(key) {
-                        Some(value) if *value >= *order + 1 => {}
+                        Some(value) if *value > *order => {}
                         _ => {
                             result.insert(key.to_string(), *order + 1);
                         }
@@ -119,7 +119,7 @@ impl<'a> VariableDependencyGenerator<'a> {
                 js_resolve_functions.push(g.trim().to_string());
             }
         }
-        return Ok(js_resolve_functions.join("\n"));
+        Ok(js_resolve_functions.join("\n"))
     }
 
     fn js_set_functions(&self) -> (String, Vec<String>) {

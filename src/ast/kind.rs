@@ -98,6 +98,7 @@ pub enum VariableValue {
         caption: Box<Option<VariableValue>>,
         headers: HeaderValues,
         body: Option<BodyValue>,
+        values: Vec<VariableValue>,
         line_number: usize,
     },
     String {
@@ -122,7 +123,7 @@ impl BodyValue {
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct HeaderValues(Vec<HeaderValue>);
+pub struct HeaderValues(pub Vec<HeaderValue>);
 
 impl HeaderValues {
     fn new(headers: Vec<HeaderValue>) -> HeaderValues {
@@ -142,15 +143,26 @@ pub struct HeaderValue {
     pub mutable: bool,
     pub value: VariableValue,
     pub line_number: usize,
+    pub kind: Option<String>,
+    pub condition: Option<String>,
 }
 
 impl HeaderValue {
-    fn new(key: &str, mutable: bool, value: VariableValue, line_number: usize) -> HeaderValue {
+    fn new(
+        key: &str,
+        mutable: bool,
+        value: VariableValue,
+        line_number: usize,
+        kind: Option<String>,
+        condition: Option<String>,
+    ) -> HeaderValue {
         HeaderValue {
             key: key.to_string(),
             mutable,
             value,
             line_number,
+            kind,
+            condition,
         }
     }
 }
@@ -218,6 +230,7 @@ impl VariableValue {
         &Box<Option<VariableValue>>,
         &HeaderValues,
         &Option<BodyValue>,
+        &Vec<VariableValue>,
         usize,
     )> {
         match self {
@@ -226,8 +239,9 @@ impl VariableValue {
                 caption,
                 headers,
                 body,
+                values,
                 line_number,
-            } => Ok((name, caption, headers, body, *line_number)),
+            } => Ok((name, caption, headers, body, values, *line_number)),
             t => ftd::ast::parse_error(
                 format!("Expected Record, found: `{:?}`", t),
                 doc_id,
@@ -295,16 +309,11 @@ impl VariableValue {
     pub(crate) fn from_p1(section: &ftd::p11::Section) -> VariableValue {
         use itertools::Itertools;
 
-        if !section.sub_sections.is_empty() {
-            return VariableValue::List {
-                value: section
-                    .sub_sections
-                    .iter()
-                    .map(|v| (v.name.to_string(), VariableValue::from_p1(v)))
-                    .collect_vec(),
-                line_number: section.line_number,
-            };
-        }
+        let values = section
+            .sub_sections
+            .iter()
+            .map(VariableValue::from_p1)
+            .collect_vec();
 
         let caption = section
             .caption
@@ -323,6 +332,8 @@ impl VariableValue {
                     ftd::ast::utils::is_variable_mutable(key.as_str()),
                     VariableValue::from_p1_header(header),
                     header.get_line_number(),
+                    header.get_kind(),
+                    header.get_condition(),
                 )
             })
             .collect_vec();
@@ -332,7 +343,7 @@ impl VariableValue {
             .as_ref()
             .map(|v| BodyValue::new(v.get_value().as_str(), v.line_number));
 
-        if headers.is_empty() && !(caption.is_some() && body.is_some()) {
+        if values.is_empty() && headers.is_empty() && !(caption.is_some() && body.is_some()) {
             return if let Some(caption) = caption {
                 caption
             } else if let Some(body) = body {
@@ -353,6 +364,7 @@ impl VariableValue {
             caption: Box::new(caption),
             headers: HeaderValues::new(headers),
             body,
+            values,
             line_number: section.line_number,
         }
     }
@@ -404,6 +416,28 @@ impl Condition {
             expression: expression.to_string(),
             line_number,
         }
+    }
+
+    pub(crate) fn from_ast_headers(
+        headers: &HeaderValues,
+        doc_id: &str,
+    ) -> ftd::ast::Result<Option<Condition>> {
+        let condition = headers
+            .0
+            .iter()
+            .find(|v| ftd::ast::utils::is_condition(v.key.as_str(), &v.kind));
+        let condition = if let Some(condition) = condition {
+            condition
+        } else {
+            return Ok(None);
+        };
+
+        let expression = condition.value.string(doc_id)?;
+
+        Ok(Some(Condition::new(
+            expression.as_str(),
+            condition.line_number,
+        )))
     }
 
     pub(crate) fn from_headers(

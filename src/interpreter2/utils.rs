@@ -70,7 +70,7 @@ pub(crate) fn kind_eq(
         doc,
         line_number,
     )?;
-    Ok(kind_data.kind.eq(kind))
+    Ok(kind_data.kind.is_same_as(kind))
 }
 
 pub const CLONE: &str = "*$";
