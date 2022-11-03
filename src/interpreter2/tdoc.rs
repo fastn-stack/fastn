@@ -415,7 +415,7 @@ impl<'a> TDoc<'a> {
                     },
                     ftd::interpreter2::Thing::Variable(v) => v.kind,
                     ftd::interpreter2::Thing::Component(c) => ftd::interpreter2::KindData {
-                        kind: ftd::interpreter2::Kind::UI { name: Some(c.name) },
+                        kind: ftd::interpreter2::Kind::ui_with_name(c.name.as_str()),
                         caption: true,
                         body: true,
                     },

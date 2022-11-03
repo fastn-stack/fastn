@@ -106,6 +106,10 @@ impl Field {
             sources.push(ftd::interpreter2::PropertySource::Body);
         }
 
+        if self.is_subsection_ui() {
+            sources.push(ftd::interpreter2::PropertySource::Subsection);
+        }
+
         sources
     }
 
@@ -159,7 +163,23 @@ impl Field {
         self.kind.caption
     }
 
+    pub fn is_subsection_ui(&self) -> bool {
+        self.kind.kind.clone().inner_list().is_subsection_ui()
+    }
+
     pub fn is_body(&self) -> bool {
         self.kind.body
+    }
+
+    pub(crate) fn for_component(
+        component_name: &str,
+        definition_name_with_arguments: &Option<(&str, &[Field])>,
+        doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<Vec<Field>> {
+        Ok(match definition_name_with_arguments {
+            Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
+            _ => doc.get_component(component_name, line_number)?.arguments,
+        })
     }
 }

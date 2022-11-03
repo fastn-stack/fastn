@@ -79,6 +79,22 @@ impl Component {
         }
     }
 
+    pub fn get_children(&self) -> Vec<Component> {
+        let mut children = vec![];
+        let property = if let Some(property) = self
+            .properties
+            .iter()
+            .find(|v| v.value.kind().inner_list().is_subsection_ui())
+        {
+            property
+        } else {
+            return children;
+        };
+
+        dbg!("get_children::", &property);
+        children
+    }
+
     pub(crate) fn is_loop(&self) -> bool {
         self.iteration.is_some()
     }
@@ -90,6 +106,7 @@ impl Component {
         let component_invocation = ast.get_component_invocation(doc.name)?;
         Component::from_ast_component(component_invocation, None, doc)
     }
+
     fn from_ast_component(
         ast_component: ftd::ast::Component,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
@@ -127,24 +144,14 @@ impl Component {
             doc,
         )?;
 
-        let children = {
-            let mut children = vec![];
-            for child in ast_component.children {
-                children.push(Component::from_ast_component(
-                    child,
-                    definition_name_with_arguments,
-                    doc,
-                )?);
-            }
-            children
-        };
-
-        let properties = Property::from_ast_properties(
+        let properties = Property::from_ast_properties_and_children(
             ast_component.properties,
+            ast_component.children,
             ast_component.name.as_str(),
             definition_name_with_arguments,
             &loop_object_name_and_kind,
             doc,
+            ast_component.line_number,
         )?;
 
         Ok(Component {
@@ -153,13 +160,50 @@ impl Component {
             iteration: Box::new(iteration),
             condition: Box::new(condition),
             events,
-            children,
+            children: vec![],
             line_number: ast_component.line_number,
         })
     }
 }
 
-pub type PropertySource = ftd::ast::PropertySource;
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum PropertySource {
+    Caption,
+    Body,
+    Header { name: String, mutable: bool },
+    Subsection,
+}
+
+impl PropertySource {
+    pub fn is_equal(&self, other: &PropertySource) -> bool {
+        match self {
+            PropertySource::Caption | PropertySource::Body | PropertySource::Subsection => {
+                self.eq(other)
+            }
+            PropertySource::Header { name, .. } => matches!(other, PropertySource::Header {
+                    name: other_name, ..
+               } if other_name.eq(name)),
+        }
+    }
+}
+
+impl From<ftd::ast::PropertySource> for PropertySource {
+    fn from(item: ftd::ast::PropertySource) -> Self {
+        match item {
+            ftd::ast::PropertySource::Caption => PropertySource::Caption,
+            ftd::ast::PropertySource::Body => PropertySource::Body,
+            ftd::ast::PropertySource::Header { name, mutable } => {
+                PropertySource::Header { name, mutable }
+            }
+        }
+    }
+}
+
+impl Default for PropertySource {
+    fn default() -> PropertySource {
+        PropertySource::Caption
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
@@ -180,18 +224,155 @@ impl Property {
         })
     }
 
+    fn from_ast_properties_and_children(
+        ast_properties: Vec<ftd::ast::Property>,
+        ast_children: Vec<ftd::ast::Component>,
+        component_name: &str,
+        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<Vec<Property>> {
+        let mut properties = Property::from_ast_properties(
+            ast_properties,
+            component_name,
+            definition_name_with_arguments,
+            loop_object_name_and_kind,
+            doc,
+            line_number,
+        )?;
+
+        validate_children_kind_property_against_children(
+            properties.as_slice(),
+            ast_children.as_slice(),
+            doc.name,
+        )?;
+
+        if let Some(property) = Property::from_ast_children(
+            ast_children,
+            component_name,
+            definition_name_with_arguments,
+            doc,
+        )? {
+            properties.push(property)
+        }
+
+        return Ok(properties);
+
+        fn validate_children_kind_property_against_children(
+            properties: &[Property],
+            ast_children: &[ftd::ast::Component],
+            doc_id: &str,
+        ) -> ftd::interpreter2::Result<()> {
+            if ast_children.is_empty() {
+                return Ok(());
+            }
+
+            if let Some(property) = properties
+                .iter()
+                .find(|v| v.value.kind().inner_list().is_subsection_ui())
+            {
+                return ftd::interpreter2::utils::e2(
+                    "Can't have children passed in both subsection and header",
+                    doc_id,
+                    property.line_number,
+                );
+            }
+            Ok(())
+        }
+    }
+
+    fn get_argument_for_children(component_arguments: &[Argument]) -> Option<&Argument> {
+        component_arguments
+            .iter()
+            .find(|v| v.kind.kind.clone().inner_list().is_subsection_ui())
+    }
+
+    fn from_ast_children(
+        ast_children: Vec<ftd::ast::Component>,
+        component_name: &str,
+        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<Option<Property>> {
+        if ast_children.is_empty() {
+            return Ok(None);
+        }
+
+        let line_number = ast_children.first().unwrap().line_number;
+        let component_arguments = Argument::for_component(
+            component_name,
+            &definition_name_with_arguments,
+            doc,
+            line_number,
+        )?;
+
+        let _argument = Property::get_argument_for_children(&component_arguments).ok_or(
+            ftd::interpreter2::Error::ParseError {
+                message: "Subsection is unexpected".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            },
+        )?;
+        let children = {
+            let mut children = vec![];
+            for child in ast_children {
+                children.push(Component::from_ast_component(
+                    child,
+                    definition_name_with_arguments,
+                    doc,
+                )?);
+            }
+            children
+        };
+
+        let value = ftd::interpreter2::PropertyValue::Value {
+            value: ftd::interpreter2::Value::List {
+                data: children
+                    .into_iter()
+                    .map(|v| ftd::interpreter2::PropertyValue::Value {
+                        line_number: v.line_number,
+                        value: ftd::interpreter2::Value::UI {
+                            name: v.name.to_string(),
+                            kind: ftd::interpreter2::Kind::subsection_ui().into_kind_data(),
+                            component: v,
+                        },
+                        is_mutable: false,
+                    })
+                    .collect(),
+                kind: ftd::interpreter2::Kind::subsection_ui().into_kind_data(),
+            },
+            is_mutable: false,
+            line_number,
+        };
+
+        Ok(Some(Property {
+            value,
+            source: ftd::interpreter2::PropertySource::Subsection,
+            condition: None,
+            line_number,
+        }))
+    }
+
     fn from_ast_properties(
         ast_properties: Vec<ftd::ast::Property>,
         component_name: &str,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
     ) -> ftd::interpreter2::Result<Vec<Property>> {
         let mut properties = vec![];
+        let component_arguments = Argument::for_component(
+            component_name,
+            &definition_name_with_arguments,
+            doc,
+            line_number,
+        )?;
         for property in ast_properties {
             properties.push(Property::from_ast_property(
                 property,
                 component_name,
+                component_arguments.as_slice(),
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
                 doc,
@@ -203,24 +384,18 @@ impl Property {
     fn from_ast_property(
         ast_property: ftd::ast::Property,
         component_name: &str,
+        component_arguments: &[Argument],
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<Property> {
-        let argument = match definition_name_with_arguments {
-            Some((name, arg)) if name.eq(component_name) => {
-                Property::get_argument_for_property(&ast_property, name, arg, doc)?
-            }
-            _ => {
-                let component = doc.get_component(component_name, ast_property.line_number)?;
-                Property::get_argument_for_property(
-                    &ast_property,
-                    component.name.as_str(),
-                    component.arguments.as_slice(),
-                    doc,
-                )?
-            }
-        };
+        let argument = Property::get_argument_for_property(
+            &ast_property,
+            component_name,
+            component_arguments,
+            doc,
+        )?;
+
         let value = ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
             ast_property.value.to_owned(),
             doc,
@@ -254,7 +429,7 @@ impl Property {
 
         Ok(Property {
             value,
-            source: ast_property.source,
+            source: ast_property.source.into(),
             condition,
             line_number: ast_property.line_number,
         })
@@ -306,7 +481,7 @@ impl Property {
                     let mutable = if argument.mutable {
                         "mutable"
                     } else {
-                        "immutuable"
+                        "immutable"
                     };
                     return ftd::interpreter2::utils::e2(
                         format!("Expected `{}` for {}", mutable, argument.name),

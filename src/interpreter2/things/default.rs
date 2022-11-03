@@ -290,6 +290,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_optional()
                 .into_kind_data(),
         ),
+        ftd::interpreter2::Argument::default(
+            "children",
+            ftd::interpreter2::Kind::subsection_ui()
+                .into_list()
+                .into_kind_data(),
+        ),
     ]
 }
 
