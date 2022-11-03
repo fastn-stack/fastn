@@ -98,7 +98,7 @@ impl Component {
             return Ok(vec![component]);
         }
         if let ftd::interpreter2::Value::List { data, kind } = value {
-            if kind.is_subsection_ui() {
+            if kind.is_ui() {
                 let mut children = vec![];
                 for value in data {
                     let value = value.resolve(doc, property.line_number)?;
@@ -125,7 +125,7 @@ impl Component {
         Component::from_ast_component(component_invocation, None, doc)
     }
 
-    fn from_ast_component(
+    pub(crate) fn from_ast_component(
         ast_component: ftd::ast::Component,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         doc: &ftd::interpreter2::TDoc,
@@ -171,8 +171,6 @@ impl Component {
             doc,
             ast_component.line_number,
         )?;
-
-        dbg!(&properties);
 
         Ok(Component {
             name,
@@ -349,7 +347,7 @@ impl Property {
             line_number,
         )?;
 
-        let argument = Property::get_argument_for_children(&component_arguments).ok_or(
+        let _argument = Property::get_argument_for_children(&component_arguments).ok_or(
             ftd::interpreter2::Error::ParseError {
                 message: "Subsection is unexpected".to_string(),
                 doc_id: doc.name.to_string(),

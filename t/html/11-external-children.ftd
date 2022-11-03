@@ -1,5 +1,6 @@
 -- component foo:
 children c:
+ftd.ui list headers:
 
 -- ftd.column:
 
@@ -15,13 +16,34 @@ children: $foo.c
 
 -- end: ftd.row
 
+-- ftd.column:
+children: $foo.headers
+
+-- end: ftd.column
+
 -- end: ftd.column
 
 -- end: foo
 
+-- boolean flag: true
 
 
 -- foo:
+
+-- foo.headers:
+
+-- ftd.text: Headers
+
+-- ftd.column:
+padding: 30
+
+-- ftd.text: Headers
+padding if {$flag}: 40
+
+-- end: ftd.column
+
+-- end: foo.headers
+
 
 -- ftd.text: Hello
 

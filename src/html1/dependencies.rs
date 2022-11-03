@@ -39,7 +39,7 @@ impl<'a> DependencyGenerator<'a> {
             let condition = property
                 .condition
                 .as_ref()
-                .map(|v| ftd::html1::utils::get_condition_string(v));
+                .map(ftd::html1::utils::get_condition_string);
             if let Some(value_string) =
                 ftd::html1::utils::get_formatted_dep_string_from_property_value(
                     self.id,
@@ -67,7 +67,7 @@ impl<'a> DependencyGenerator<'a> {
                 let condition = property
                     .condition
                     .as_ref()
-                    .map(|v| ftd::html1::utils::get_condition_string(v));
+                    .map(ftd::html1::utils::get_condition_string);
                 if let Some(value_string) =
                     ftd::html1::utils::get_formatted_dep_string_from_property_value(
                         self.id,
@@ -95,7 +95,7 @@ impl<'a> DependencyGenerator<'a> {
                 let condition = property
                     .condition
                     .as_ref()
-                    .map(|v| ftd::html1::utils::get_condition_string(v));
+                    .map(ftd::html1::utils::get_condition_string);
                 if let Some(value_string) =
                     ftd::html1::utils::get_formatted_dep_string_from_property_value(
                         self.id,
