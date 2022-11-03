@@ -77,7 +77,6 @@ pub(crate) fn find_properties_by_source(
 ) -> ftd::executor::Result<Vec<ftd::interpreter2::Property>> {
     use itertools::Itertools;
 
-    dbg!(&source, &properties, &argument);
     let mut properties = properties
         .iter()
         .filter(|v| source.iter().any(|s| v.source.is_equal(s)))

@@ -176,17 +176,9 @@ impl<'a> ExecuteDoc<'a> {
             instruction.line_number,
         )?;
 
-        dbg!(&local_variable_map, &component_definition.definition);
-
         update_local_variable_references_in_component(
             &mut component_definition.definition,
             &local_variable_map,
-        );
-
-        dbg!(
-            "execute_simple_component::",
-            &instruction,
-            &component_definition
         );
 
         ExecuteDoc::execute_from_instruction(&component_definition.definition, doc, local_container)
@@ -230,9 +222,8 @@ impl<'a> ExecuteDoc<'a> {
                 )?)
             }
             "ftd#row" => {
-                dbg!(&instruction.get_children());
                 let children = ExecuteDoc::execute_from_instructions(
-                    instruction.children.as_slice(),
+                    instruction.get_children(&doc.itdoc())?.as_slice(),
                     doc,
                     local_container,
                 )?;
@@ -247,9 +238,8 @@ impl<'a> ExecuteDoc<'a> {
                 )?)
             }
             "ftd#column" => {
-                dbg!(&instruction.get_children());
                 let children = ExecuteDoc::execute_from_instructions(
-                    instruction.children.as_slice(),
+                    instruction.get_children(&doc.itdoc())?.as_slice(),
                     doc,
                     local_container,
                 )?;

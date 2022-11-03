@@ -123,161 +123,209 @@
         ],
         "definition": {
           "name": "ftd#column",
-          "properties": [],
-          "iteration": null,
-          "condition": null,
-          "events": [],
-          "children": [
+          "properties": [
             {
-              "name": "ftd#text",
-              "properties": [
-                {
+              "value": {
+                "Value": {
                   "value": {
-                    "Reference": {
-                      "name": "foo#print.name",
-                      "kind": {
-                        "kind": "String",
-                        "caption": false,
-                        "body": false
-                      },
-                      "source": {
-                        "Local": "print"
-                      },
-                      "is_mutable": false,
-                      "line_number": 10
-                    }
-                  },
-                  "source": {
-                    "Header": {
-                      "name": "text",
-                      "mutable": false
-                    }
-                  },
-                  "condition": {
-                    "expression": {
-                      "operator": "RootNode",
-                      "children": [
+                    "List": {
+                      "data": [
                         {
-                          "operator": {
-                            "VariableIdentifierRead": {
-                              "identifier": "print.flag"
-                            }
-                          },
-                          "children": []
+                          "Value": {
+                            "value": {
+                              "UI": {
+                                "name": "ftd#text",
+                                "kind": {
+                                  "kind": {
+                                    "UI": {
+                                      "name": null,
+                                      "subsection_source": true
+                                    }
+                                  },
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "component": {
+                                  "name": "ftd#text",
+                                  "properties": [
+                                    {
+                                      "value": {
+                                        "Reference": {
+                                          "name": "foo#print.name",
+                                          "kind": {
+                                            "kind": "String",
+                                            "caption": false,
+                                            "body": false
+                                          },
+                                          "source": {
+                                            "Local": "print"
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 10
+                                        }
+                                      },
+                                      "source": {
+                                        "Header": {
+                                          "name": "text",
+                                          "mutable": false
+                                        }
+                                      },
+                                      "condition": {
+                                        "expression": {
+                                          "operator": "RootNode",
+                                          "children": [
+                                            {
+                                              "operator": {
+                                                "VariableIdentifierRead": {
+                                                  "identifier": "print.flag"
+                                                }
+                                              },
+                                              "children": []
+                                            }
+                                          ]
+                                        },
+                                        "references": {
+                                          "print.flag": {
+                                            "Reference": {
+                                              "name": "foo#print.flag",
+                                              "kind": {
+                                                "kind": "Boolean",
+                                                "caption": false,
+                                                "body": false
+                                              },
+                                              "source": {
+                                                "Local": "print"
+                                              },
+                                              "is_mutable": false,
+                                              "line_number": 10
+                                            }
+                                          }
+                                        },
+                                        "line_number": 10
+                                      },
+                                      "line_number": 10
+                                    },
+                                    {
+                                      "value": {
+                                        "Reference": {
+                                          "name": "foo#print.default",
+                                          "kind": {
+                                            "kind": "String",
+                                            "caption": false,
+                                            "body": false
+                                          },
+                                          "source": {
+                                            "Local": "print"
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 11
+                                        }
+                                      },
+                                      "source": {
+                                        "Header": {
+                                          "name": "text",
+                                          "mutable": false
+                                        }
+                                      },
+                                      "condition": null,
+                                      "line_number": 11
+                                    },
+                                    {
+                                      "value": {
+                                        "Reference": {
+                                          "name": "foo#print.padding",
+                                          "kind": {
+                                            "kind": "Integer",
+                                            "caption": false,
+                                            "body": false
+                                          },
+                                          "source": {
+                                            "Local": "print"
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 12
+                                        }
+                                      },
+                                      "source": {
+                                        "Header": {
+                                          "name": "padding",
+                                          "mutable": false
+                                        }
+                                      },
+                                      "condition": {
+                                        "expression": {
+                                          "operator": "RootNode",
+                                          "children": [
+                                            {
+                                              "operator": {
+                                                "VariableIdentifierRead": {
+                                                  "identifier": "print.flag"
+                                                }
+                                              },
+                                              "children": []
+                                            }
+                                          ]
+                                        },
+                                        "references": {
+                                          "print.flag": {
+                                            "Reference": {
+                                              "name": "foo#print.flag",
+                                              "kind": {
+                                                "kind": "Boolean",
+                                                "caption": false,
+                                                "body": false
+                                              },
+                                              "source": {
+                                                "Local": "print"
+                                              },
+                                              "is_mutable": false,
+                                              "line_number": 12
+                                            }
+                                          }
+                                        },
+                                        "line_number": 12
+                                      },
+                                      "line_number": 12
+                                    }
+                                  ],
+                                  "iteration": null,
+                                  "condition": null,
+                                  "events": [],
+                                  "children": [],
+                                  "line_number": 9
+                                }
+                              }
+                            },
+                            "is_mutable": false,
+                            "line_number": 9
+                          }
                         }
-                      ]
-                    },
-                    "references": {
-                      "print.flag": {
-                        "Reference": {
-                          "name": "foo#print.flag",
-                          "kind": {
-                            "kind": "Boolean",
-                            "caption": false,
-                            "body": false
-                          },
-                          "source": {
-                            "Local": "print"
-                          },
-                          "is_mutable": false,
-                          "line_number": 10
-                        }
-                      }
-                    },
-                    "line_number": 10
-                  },
-                  "line_number": 10
-                },
-                {
-                  "value": {
-                    "Reference": {
-                      "name": "foo#print.default",
+                      ],
                       "kind": {
-                        "kind": "String",
+                        "kind": {
+                          "UI": {
+                            "name": null,
+                            "subsection_source": true
+                          }
+                        },
                         "caption": false,
                         "body": false
-                      },
-                      "source": {
-                        "Local": "print"
-                      },
-                      "is_mutable": false,
-                      "line_number": 11
-                    }
-                  },
-                  "source": {
-                    "Header": {
-                      "name": "text",
-                      "mutable": false
-                    }
-                  },
-                  "condition": null,
-                  "line_number": 11
-                },
-                {
-                  "value": {
-                    "Reference": {
-                      "name": "foo#print.padding",
-                      "kind": {
-                        "kind": "Integer",
-                        "caption": false,
-                        "body": false
-                      },
-                      "source": {
-                        "Local": "print"
-                      },
-                      "is_mutable": false,
-                      "line_number": 12
-                    }
-                  },
-                  "source": {
-                    "Header": {
-                      "name": "padding",
-                      "mutable": false
-                    }
-                  },
-                  "condition": {
-                    "expression": {
-                      "operator": "RootNode",
-                      "children": [
-                        {
-                          "operator": {
-                            "VariableIdentifierRead": {
-                              "identifier": "print.flag"
-                            }
-                          },
-                          "children": []
-                        }
-                      ]
-                    },
-                    "references": {
-                      "print.flag": {
-                        "Reference": {
-                          "name": "foo#print.flag",
-                          "kind": {
-                            "kind": "Boolean",
-                            "caption": false,
-                            "body": false
-                          },
-                          "source": {
-                            "Local": "print"
-                          },
-                          "is_mutable": false,
-                          "line_number": 12
-                        }
                       }
-                    },
-                    "line_number": 12
+                    }
                   },
-                  "line_number": 12
+                  "is_mutable": false,
+                  "line_number": 9
                 }
-              ],
-              "iteration": null,
+              },
+              "source": "Subsection",
               "condition": null,
-              "events": [],
-              "children": [],
               "line_number": 9
             }
           ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [],
           "line_number": 7
         },
         "line_number": 1

@@ -46,42 +46,90 @@
         ],
         "definition": {
           "name": "ftd#column",
-          "properties": [],
-          "iteration": null,
-          "condition": null,
-          "events": [],
-          "children": [
+          "properties": [
             {
-              "name": "ftd#text",
-              "properties": [
-                {
+              "value": {
+                "Value": {
                   "value": {
-                    "Reference": {
-                      "name": "foo#print.name",
+                    "List": {
+                      "data": [
+                        {
+                          "Value": {
+                            "value": {
+                              "UI": {
+                                "name": "ftd#text",
+                                "kind": {
+                                  "kind": {
+                                    "UI": {
+                                      "name": null,
+                                      "subsection_source": true
+                                    }
+                                  },
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "component": {
+                                  "name": "ftd#text",
+                                  "properties": [
+                                    {
+                                      "value": {
+                                        "Reference": {
+                                          "name": "foo#print.name",
+                                          "kind": {
+                                            "kind": "String",
+                                            "caption": false,
+                                            "body": false
+                                          },
+                                          "source": {
+                                            "Local": "print"
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 8
+                                        }
+                                      },
+                                      "source": "Caption",
+                                      "condition": null,
+                                      "line_number": 8
+                                    }
+                                  ],
+                                  "iteration": null,
+                                  "condition": null,
+                                  "events": [],
+                                  "children": [],
+                                  "line_number": 8
+                                }
+                              }
+                            },
+                            "is_mutable": false,
+                            "line_number": 8
+                          }
+                        }
+                      ],
                       "kind": {
-                        "kind": "String",
+                        "kind": {
+                          "UI": {
+                            "name": null,
+                            "subsection_source": true
+                          }
+                        },
                         "caption": false,
                         "body": false
-                      },
-                      "source": {
-                        "Local": "print"
-                      },
-                      "is_mutable": false,
-                      "line_number": 8
+                      }
                     }
                   },
-                  "source": "Caption",
-                  "condition": null,
+                  "is_mutable": false,
                   "line_number": 8
                 }
-              ],
-              "iteration": null,
+              },
+              "source": "Subsection",
               "condition": null,
-              "events": [],
-              "children": [],
               "line_number": 8
             }
           ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [],
           "line_number": 6
         },
         "line_number": 3

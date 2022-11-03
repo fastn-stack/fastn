@@ -329,6 +329,10 @@ impl KindData {
         self.kind.is_boolean()
     }
 
+    pub fn is_subsection_ui(&self) -> bool {
+        self.kind.is_subsection_ui()
+    }
+
     pub fn is_decimal(&self) -> bool {
         self.kind.is_decimal()
     }

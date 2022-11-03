@@ -79,8 +79,10 @@ impl Component {
         }
     }
 
-    pub fn get_children(&self) -> Vec<Component> {
-        let mut children = vec![];
+    pub fn get_children(
+        &self,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<Vec<Component>> {
         let property = if let Some(property) = self
             .properties
             .iter()
@@ -88,11 +90,27 @@ impl Component {
         {
             property
         } else {
-            return children;
+            return Ok(vec![]);
         };
 
-        dbg!("get_children::", &property);
-        children
+        let value = property.value.clone().resolve(doc, property.line_number)?;
+        if let ftd::interpreter2::Value::UI { component, .. } = value {
+            return Ok(vec![component]);
+        }
+        if let ftd::interpreter2::Value::List { data, kind } = value {
+            if kind.is_subsection_ui() {
+                let mut children = vec![];
+                for value in data {
+                    let value = value.resolve(doc, property.line_number)?;
+                    if let ftd::interpreter2::Value::UI { component, .. } = value {
+                        children.push(component);
+                    }
+                }
+                return Ok(children);
+            }
+        }
+
+        Ok(vec![])
     }
 
     pub(crate) fn is_loop(&self) -> bool {
@@ -153,6 +171,8 @@ impl Component {
             doc,
             ast_component.line_number,
         )?;
+
+        dbg!(&properties);
 
         Ok(Component {
             name,
@@ -264,20 +284,43 @@ impl Property {
             ast_children: &[ftd::ast::Component],
             doc_id: &str,
         ) -> ftd::interpreter2::Result<()> {
-            if ast_children.is_empty() {
+            use itertools::Itertools;
+
+            let properties = properties
+                .iter()
+                .filter(|v| v.value.kind().inner_list().is_subsection_ui())
+                .collect_vec();
+
+            if properties.is_empty() {
                 return Ok(());
             }
 
-            if let Some(property) = properties
-                .iter()
-                .find(|v| v.value.kind().inner_list().is_subsection_ui())
-            {
+            let first_property = properties.first().unwrap();
+
+            if properties.len() > 1 {
+                return ftd::interpreter2::utils::e2(
+                    "Can't pass multiple children",
+                    doc_id,
+                    first_property.line_number,
+                );
+            }
+
+            if !ast_children.is_empty() {
                 return ftd::interpreter2::utils::e2(
                     "Can't have children passed in both subsection and header",
                     doc_id,
-                    property.line_number,
+                    first_property.line_number,
                 );
             }
+
+            if first_property.condition.is_some() {
+                return ftd::interpreter2::utils::e2(
+                    "Not supporting condition for children",
+                    doc_id,
+                    first_property.line_number,
+                );
+            }
+
             Ok(())
         }
     }
@@ -306,13 +349,14 @@ impl Property {
             line_number,
         )?;
 
-        let _argument = Property::get_argument_for_children(&component_arguments).ok_or(
+        let argument = Property::get_argument_for_children(&component_arguments).ok_or(
             ftd::interpreter2::Error::ParseError {
                 message: "Subsection is unexpected".to_string(),
                 doc_id: doc.name.to_string(),
                 line_number,
             },
         )?;
+
         let children = {
             let mut children = vec![];
             for child in ast_children {
