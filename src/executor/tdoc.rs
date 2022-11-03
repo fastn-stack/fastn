@@ -26,7 +26,6 @@ impl<'a> TDoc<'a> {
         let mut map: ftd::Map<String> = Default::default();
         for argument in arguments {
             let source = argument.to_sources();
-            dbg!("1", &argument);
             let properties = ftd::executor::value::find_properties_by_source(
                 source.as_slice(),
                 properties,
@@ -79,7 +78,7 @@ impl<'a> TDoc<'a> {
             map.insert(name_in_component_definition, variable_name.to_string());
 
             let variable = ftd::interpreter2::Variable {
-                name: dbg!(variable_name),
+                name: variable_name,
                 kind: argument.kind.to_owned(),
                 mutable: argument.mutable,
                 value: default,

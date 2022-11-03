@@ -1,97 +1,28 @@
--- boolean $flag: true
-
--- component moo:
-children c:
-ftd.ui list headers:
-
--- ftd.row:
-
--- ftd.row:
-if: { flag }
-children: $moo.c
-
--- end: ftd.row
-
--- ftd.row:
-if: { !flag }
-
--- bar: $obj
-$loop$: $moo.c as $obj
-i: $loop.counter
-
--- end: ftd.row
-
--- end: ftd.row
-
--- end: moo
-
-[1, 2, 3, 4, 5] = 15
-
-
-
-
-
-
--- component moo:
-ftd.ui c:
-
--- ftd.row:
-
-    -- ftd.row:
-    if: { flag }
-
-    -- bar: $moo.c
-
-    -- end: ftd.row
-
-    -- ftd.row:
-    if: { !flag }
-
-    -- $moo.c
-
-    -- end: ftd.row
-
--- end: ftd.row
-
--- end: moo
-
-
-
-
-
 -- component foo:
-ftd.ui list children:
-integer a:
+children c:
 
--- moo:
-headers: $foo.children
-padding: $foo.a
+-- ftd.column:
 
--- ftd.integer: $foo.a
+-- ftd.text: Hello
 
--- end: moo
+-- ftd.row:
+children: $foo.c
+
+-- end: ftd.row
+
+-- ftd.row:
+children: $foo.c
+
+-- end: ftd.row
+
+-- end: ftd.column
 
 -- end: foo
 
 
 
-
--- component bar:
-caption n:
-
--- end: bar
-
-
--- bar: FTD
-n: FTD
-
-
 -- foo:
-a: 5
 
 -- ftd.text: Hello
 
 -- end: foo
-
-
-

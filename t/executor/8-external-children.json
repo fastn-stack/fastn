@@ -279,7 +279,110 @@
         {
           "Row": {
             "container": {
-              "children": []
+              "children": [
+                {
+                  "Text": {
+                    "text": {
+                      "value": {
+                        "original": "Hello",
+                        "rendered": "Hello"
+                      },
+                      "line_number": 6,
+                      "properties": [
+                        {
+                          "value": {
+                            "Value": {
+                              "value": {
+                                "String": {
+                                  "text": "Hello"
+                                }
+                              },
+                              "is_mutable": false,
+                              "line_number": 6
+                            }
+                          },
+                          "source": "Caption",
+                          "condition": null,
+                          "line_number": 6
+                        }
+                      ]
+                    },
+                    "common": {
+                      "is_not_visible": false,
+                      "event": [],
+                      "is_dummy": false,
+                      "padding": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "data_id": "0,0",
+                      "line_number": 6
+                    }
+                  }
+                },
+                {
+                  "Row": {
+                    "container": {
+                      "children": [
+                        {
+                          "Text": {
+                            "text": {
+                              "value": {
+                                "original": "Hello",
+                                "rendered": "Hello"
+                              },
+                              "line_number": 21,
+                              "properties": [
+                                {
+                                  "value": {
+                                    "Value": {
+                                      "value": {
+                                        "String": {
+                                          "text": "Hello"
+                                        }
+                                      },
+                                      "is_mutable": false,
+                                      "line_number": 21
+                                    }
+                                  },
+                                  "source": "Caption",
+                                  "condition": null,
+                                  "line_number": 21
+                                }
+                              ]
+                            },
+                            "common": {
+                              "is_not_visible": false,
+                              "event": [],
+                              "is_dummy": false,
+                              "padding": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "data_id": "0,1,0",
+                              "line_number": 21
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "common": {
+                      "is_not_visible": false,
+                      "event": [],
+                      "is_dummy": false,
+                      "padding": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "data_id": "0,1",
+                      "line_number": 8
+                    }
+                  }
+                }
+              ]
             },
             "common": {
               "is_not_visible": false,

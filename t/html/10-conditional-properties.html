@@ -475,15 +475,6 @@ data["foo#boo:bv:0,0,0"] = data["foo#moo:mv:0,0"]
 };
 
 window.resolve_value_main = {};
-window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
-if(function(){
-return (data["foo#foo:fv:0"]>2);
-}()){
-data["foo#moo:mv:0,0"] = 6;
-}
-else {data["foo#moo:mv:0,0"] = 7;}
-
-}
 window.resolve_value_main["foo#boo:bv:0,0,0"] = function(data) {
 if(function(){
 return (data["foo#foo:fv:0"]>10);
@@ -496,6 +487,15 @@ return (data["foo#moo:mv:0,0"]>6);
 data["foo#boo:bv:0,0,0"] = 5;
 }
 else {data["foo#boo:bv:0,0,0"] = 4;}
+
+}
+window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
+if(function(){
+return (data["foo#foo:fv:0"]>2);
+}()){
+data["foo#moo:mv:0,0"] = 6;
+}
+else {data["foo#moo:mv:0,0"] = 7;}
 
 }
 window.ftd.init("main", "ftd-data", "ftd-external-children");
