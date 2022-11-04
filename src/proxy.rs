@@ -18,10 +18,12 @@ static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
 pub(crate) async fn get_out(
     host: &str,
     req: fpm::http::Request,
+    path: &str,
+    _package_name: Option<String>,
 ) -> fpm::Result<fpm::http::Response> {
     let headers = req.headers();
     // TODO: It should be part of fpm::Request::uri()
-    let path = &req.uri().to_string()[1..];
+    // let path = &req.uri().to_string()[1..];
 
     println!("proxy_request: {} {}", req.method(), path);
 
@@ -41,8 +43,8 @@ pub(crate) async fn get_out(
         reqwest::Url::parse(
             format!(
                 "{}/{}{}",
-                host,
-                path,
+                host.trim_end_matches('/'),
+                path.trim_start_matches('/'),
                 if req.query_string().is_empty() {
                     "".to_string()
                 } else {
@@ -74,6 +76,14 @@ pub(crate) async fn get_out(
         reqwest::header::HeaderValue::from_static("fpm"),
     );
 
+    // TODO: No need to send it to proxy-service, eve we can send the package-name for header
+    // if let Some(p) = package_name {
+    //     proxy_request.headers_mut().insert(
+    //         "FPM_PACKAGE_NAME",
+    //         reqwest::header::HeaderValue::from_str(p.as_str())?,
+    //     );
+    // }
+
     if let Some(ip) = req.get_ip() {
         proxy_request.headers_mut().insert(
             reqwest::header::FORWARDED,
@@ -93,7 +103,7 @@ pub(crate) async fn get_out(
     }
 
     *proxy_request.body_mut() = Some(req.body().to_vec().into());
-    dbg!(&proxy_request.headers());
+    // dbg!(&proxy_request.headers());
 
     Ok(fpm::http::ResponseBuilder::from_reqwest(CLIENT.execute(proxy_request).await?).await)
 }

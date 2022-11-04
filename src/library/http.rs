@@ -32,16 +32,13 @@ pub async fn processor<'a>(
         }
     };
 
-    let mut url = match url::Url::parse(url.as_str()) {
-        Ok(v) => v,
-        Err(e) => {
-            return ftd::p2::utils::e2(
-                format!("invalid url: {:?}", e),
-                doc.name,
-                section.line_number,
-            )
+    let (_, mut url) = fpm::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
+        ftd::p1::Error::ParseError {
+            message: format!("invalid url: {:?}", e),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
         }
-    };
+    })?;
 
     for (line, key, value) in section.header.0.iter() {
         if key == "$processor$" || key == "url" || key == "method" {

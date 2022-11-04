@@ -1,7 +1,7 @@
 // Document: https://fpm.dev/crate/config/
 // Document: https://fpm.dev/crate/package/
 
-mod utils;
+pub(crate) mod utils;
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -561,6 +561,11 @@ impl Config {
         Ok(file)
     }
 
+    // Input
+    // path: /todos/add-todo/
+    // mount-point: /todos/
+    // Output
+    // -/<todos-package-name>/add-todo/, <todos-package-name>, /add-todo/
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
         package: &'a fpm::Package,
@@ -568,6 +573,18 @@ impl Config {
     ) -> Option<(String, &'a fpm::Package, String)> {
         // Problem for recursive dependency is that only current package contains dependency,
         // dependent package does not contain dependency
+
+        // For similar package
+        if path.starts_with(format!("-/{}", package.name.trim_matches('/')).as_str()) {
+            let path_without_package_name =
+                path.trim_start_matches(format!("-/{}", package.name.trim_matches('/')).as_str());
+            return Some((
+                path.to_string(),
+                package,
+                path_without_package_name.to_string(),
+            ));
+        }
+
         let dependencies = package.dep_with_mount_point();
 
         for (mp, dep) in dependencies {
@@ -588,6 +605,10 @@ impl Config {
                         sanitized_path.to_string(),
                     ));
                 }
+            } else if path.starts_with(format!("-/{}", dep.name.trim_matches('/')).as_str()) {
+                let path_without_package_name =
+                    path.trim_start_matches(format!("-/{}", dep.name.trim_matches('/')).as_str());
+                return Some((path.to_string(), dep, path_without_package_name.to_string()));
             }
         }
         None
@@ -595,6 +616,8 @@ impl Config {
 
     pub async fn update_sitemap(&self, package: &fpm::Package) -> fpm::Result<fpm::Package> {
         let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
+
+        dbg!(&fpm_path);
 
         let fpm_doc = utils::fpm_doc(fpm_path).await?;
 
@@ -637,25 +660,38 @@ impl Config {
         Ok(package)
     }
 
+    // -/kameri-app.herokuapp.com/
+    // .packages/kameri-app.heroku.com/index.ftd
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
         // This function will return file and package by given path
         // path can be mounted(mount-point) with other dependencies
         //
         // Sanitize the mountpoint request.
         // Get the package and sanitized path
-
+        dbg!(&path);
         let package1;
         let (path_with_package_name, sanitized_package, sanitized_path) =
             match self.get_mountpoint_sanitized_path(&self.package, path) {
                 Some((new_path, package, remaining_path)) => {
                     // Update the sitemap of the package, if it does ot contain the sitemap information
-                    package1 = self.update_sitemap(package).await?;
-                    (new_path, &package1, remaining_path)
+                    dbg!(&new_path, &package.name, &remaining_path);
+                    if package.name != self.package.name {
+                        package1 = self.update_sitemap(package).await?;
+                        (new_path, &package1, remaining_path)
+                    } else {
+                        (new_path, package, remaining_path)
+                    }
                 }
                 None => (path.to_string(), &self.package, path.to_string()),
             };
 
-        // Getting `document` is, if exists
+        dbg!(
+            &path_with_package_name,
+            &sanitized_package.name,
+            &sanitized_path
+        );
+
+        // Getting `document` with dynamic parameters, if exists
         let (document, path_params) = match sanitized_package.sitemap.as_ref() {
             //1. First resolve document in sitemap
             Some(sitemap) => match sitemap.resolve_document(sanitized_path.as_str()) {
@@ -669,6 +705,7 @@ impl Config {
             None => (None, vec![]),
         };
 
+        // document with package-name prefix
         let document = document.map(|doc| {
             format!(
                 "-/{}/{}",
@@ -676,6 +713,8 @@ impl Config {
                 doc.trim_matches('/')
             )
         });
+
+        dbg!(&document);
 
         let path = path_with_package_name.as_str();
         if let Some(id) = document {
@@ -691,7 +730,14 @@ impl Config {
             self.path_parameters = path_params;
             Ok(file)
         } else {
+            // -/fifthtry.github.io/todos/add-todo/
+            // -/fifthtry.github.io/doc-site/add-todo/
+            dbg!(path);
             let file_name = self.get_file_path_and_resolve(path).await?;
+            // .packages/todos/add-todo.ftd
+            // .packages/fifthtry.github.io/doc-site/add-todo.ftd
+            dbg!(&file_name);
+
             let package = self.find_package_by_id(path).await?.1;
             let mut file = fpm::get_file(
                 package.name.to_string(),
@@ -711,6 +757,7 @@ impl Config {
                 };
                 file.set_id(format!("{}{}", url, extension).as_str());
             }
+            dbg!(&file.get_id());
             self.current_document = Some(file.get_id());
             Ok(file)
         }
