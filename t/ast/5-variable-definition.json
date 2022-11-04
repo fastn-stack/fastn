@@ -1,19 +1,19 @@
 [
   {
     "VariableDefinition": {
+      "name": "score",
       "kind": {
         "modifier": null,
         "kind": "integer"
       },
-      "line_number": 1,
-      "name": "score",
+      "mutable": false,
       "value": {
         "String": {
           "value": "40",
           "line_number": 1
         }
       },
-      "mutable": false
+      "line_number": 1
     }
   }
 ]

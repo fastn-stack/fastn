@@ -77,8 +77,8 @@
                                           "name": "foo#print.name",
                                           "kind": {
                                             "kind": "String",
-                                            "caption": false,
-                                            "body": false
+                                            "caption": true,
+                                            "body": true
                                           },
                                           "source": {
                                             "Local": "print"
@@ -182,8 +182,8 @@
                               "name": "foo#name",
                               "kind": {
                                 "kind": "String",
-                                "caption": false,
-                                "body": false
+                                "caption": true,
+                                "body": true
                               },
                               "source": {
                                 "Local": "print"
@@ -247,8 +247,8 @@
                               "name": "foo#print:name:1",
                               "kind": {
                                 "kind": "String",
-                                "caption": false,
-                                "body": false
+                                "caption": true,
+                                "body": true
                               },
                               "source": {
                                 "Local": "print"

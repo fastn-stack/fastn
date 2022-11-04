@@ -59,7 +59,9 @@
                           "line_number": 8
                         }
                       },
-                      "line_number": 8
+                      "line_number": 8,
+                      "kind": null,
+                      "condition": null
                     },
                     {
                       "key": "age",
@@ -70,10 +72,13 @@
                           "line_number": 9
                         }
                       },
-                      "line_number": 9
+                      "line_number": 9,
+                      "kind": null,
+                      "condition": null
                     }
                   ],
                   "body": null,
+                  "values": [],
                   "line_number": 7
                 }
               }
