@@ -64,11 +64,7 @@
                   }
                 ],
                 "kind": {
-                  "kind": {
-                    "List": {
-                      "kind": "String"
-                    }
-                  },
+                  "kind": "String",
                   "caption": false,
                   "body": false
                 }
@@ -94,8 +90,8 @@
               "name": "foo#obj",
               "kind": {
                 "kind": "String",
-                "caption": false,
-                "body": false
+                "caption": true,
+                "body": true
               },
               "source": {
                 "Loop": "obj"

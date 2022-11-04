@@ -53,8 +53,8 @@
                                           "name": "foo#print-toc-item.item.name",
                                           "kind": {
                                             "kind": "String",
-                                            "caption": false,
-                                            "body": false
+                                            "caption": true,
+                                            "body": true
                                           },
                                           "source": {
                                             "Local": "print-toc-item"
@@ -234,12 +234,8 @@
                                               "data": [],
                                               "kind": {
                                                 "kind": {
-                                                  "List": {
-                                                    "kind": {
-                                                      "Record": {
-                                                        "name": "foo#toc-item"
-                                                      }
-                                                    }
+                                                  "Record": {
+                                                    "name": "foo#toc-item"
                                                   }
                                                 },
                                                 "caption": false,
@@ -293,12 +289,8 @@
                                                                   "data": [],
                                                                   "kind": {
                                                                     "kind": {
-                                                                      "List": {
-                                                                        "kind": {
-                                                                          "Record": {
-                                                                            "name": "foo#toc-item"
-                                                                          }
-                                                                        }
+                                                                      "Record": {
+                                                                        "name": "foo#toc-item"
                                                                       }
                                                                     },
                                                                     "caption": false,
@@ -331,12 +323,8 @@
                                               ],
                                               "kind": {
                                                 "kind": {
-                                                  "List": {
-                                                    "kind": {
-                                                      "Record": {
-                                                        "name": "foo#toc-item"
-                                                      }
-                                                    }
+                                                  "Record": {
+                                                    "name": "foo#toc-item"
                                                   }
                                                 },
                                                 "caption": false,
@@ -369,12 +357,8 @@
                           ],
                           "kind": {
                             "kind": {
-                              "List": {
-                                "kind": {
-                                  "Record": {
-                                    "name": "foo#toc-item"
-                                  }
-                                }
+                              "Record": {
+                                "name": "foo#toc-item"
                               }
                             },
                             "caption": false,
@@ -446,12 +430,8 @@
                     "data": [],
                     "kind": {
                       "kind": {
-                        "List": {
-                          "kind": {
-                            "Record": {
-                              "name": "foo#toc-item"
-                            }
-                          }
+                        "Record": {
+                          "name": "foo#toc-item"
                         }
                       },
                       "caption": false,

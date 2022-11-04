@@ -154,8 +154,8 @@
                                           "name": "foo#print.name",
                                           "kind": {
                                             "kind": "String",
-                                            "caption": false,
-                                            "body": false
+                                            "caption": true,
+                                            "body": true
                                           },
                                           "source": {
                                             "Local": "print"
@@ -211,8 +211,8 @@
                                           "name": "foo#print.default",
                                           "kind": {
                                             "kind": "String",
-                                            "caption": false,
-                                            "body": false
+                                            "caption": true,
+                                            "body": true
                                           },
                                           "source": {
                                             "Local": "print"
@@ -235,7 +235,11 @@
                                         "Reference": {
                                           "name": "foo#print.padding",
                                           "kind": {
-                                            "kind": "Integer",
+                                            "kind": {
+                                              "Optional": {
+                                                "kind": "Integer"
+                                              }
+                                            },
                                             "caption": false,
                                             "body": false
                                           },

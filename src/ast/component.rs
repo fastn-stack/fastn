@@ -243,7 +243,7 @@ impl Component {
 
                 let mut children = vec![];
 
-                for child in values {
+                for (_, child) in values {
                     children.push(Component::from_variable_value(
                         name.as_str(),
                         child,

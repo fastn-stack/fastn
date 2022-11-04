@@ -98,7 +98,7 @@ pub enum VariableValue {
         caption: Box<Option<VariableValue>>,
         headers: HeaderValues,
         body: Option<BodyValue>,
-        values: Vec<VariableValue>,
+        values: Vec<(String, VariableValue)>,
         line_number: usize,
     },
     String {
@@ -230,7 +230,7 @@ impl VariableValue {
         &Box<Option<VariableValue>>,
         &HeaderValues,
         &Option<BodyValue>,
-        &Vec<VariableValue>,
+        &Vec<(String, VariableValue)>,
         usize,
     )> {
         match self {
@@ -293,6 +293,9 @@ impl VariableValue {
                     })
                 } else if self.is_list() {
                     Ok(self)
+                } else if self.is_record() {
+                    // todo: check if `end` exists
+                    Ok(self)
                 } else {
                     ftd::ast::parse_error(
                         format!("Expected List found: `{:?}`", self),
@@ -312,7 +315,7 @@ impl VariableValue {
         let values = section
             .sub_sections
             .iter()
-            .map(VariableValue::from_p1)
+            .map(|v| (v.name.to_string(), VariableValue::from_p1(v)))
             .collect_vec();
 
         let caption = section
@@ -356,6 +359,13 @@ impl VariableValue {
                     value: Box::new(None),
                     line_number: section.line_number,
                 }
+            };
+        }
+
+        if !values.is_empty() && caption.is_none() && body.is_none() && headers.is_empty() {
+            return VariableValue::List {
+                value: values,
+                line_number: section.line_number,
             };
         }
 
