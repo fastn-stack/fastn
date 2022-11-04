@@ -1,3 +1,5 @@
+use fpm::config;
+
 static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
     once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
@@ -160,6 +162,38 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             .await
             .unwrap()
             .set_request(req));
+
+        // if start with -/ and mount-point exists so send redirect to mount-point
+        // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
+        // Get all the dependencies with mount-point if path_start with any package-name so send redirect to mount-point
+
+        let package_dependencies = config.package.deps_contains_mount_point();
+        // if any package name starts with package-name to redirect it to /mount-point/remaining-url/
+        for (mp, dep) in package_dependencies {
+            if let Some(remaining_path) =
+                config::utils::trim_package_name(path.as_str(), dep.name.as_str())
+            {
+                let path = if remaining_path.trim_matches('/').is_empty() {
+                    format!("/{}/", mp.trim().trim_matches('/'))
+                } else {
+                    format!(
+                        "/{}/{}/",
+                        mp.trim().trim_matches('/'),
+                        remaining_path.trim_matches('/')
+                    )
+                };
+
+                dbg!("Send redirect");
+                dbg!(&path);
+                let mut resp =
+                    actix_web::HttpResponse::new(actix_web::http::StatusCode::PERMANENT_REDIRECT);
+                resp.headers_mut().insert(
+                    actix_web::http::header::LOCATION,
+                    actix_web::http::header::HeaderValue::from_str(path.as_str()).unwrap(), // TODO:
+                );
+                return Ok(resp);
+            }
+        }
 
         let file_response = serve_file(&mut config, path.as_path()).await;
 

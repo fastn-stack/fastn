@@ -528,7 +528,7 @@ impl Package {
         }
     }
 
-    pub fn dep_with_mount_point(&self) -> Vec<(&str, &Package)> {
+    pub fn deps_contains_mount_point(&self) -> Vec<(&str, &Package)> {
         self.dependencies
             .iter()
             .fold(&mut vec![], |accumulator, dep| {

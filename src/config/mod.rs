@@ -586,7 +586,7 @@ impl Config {
             ));
         }
 
-        let dependencies = package.dep_with_mount_point();
+        let dependencies = package.deps_contains_mount_point();
 
         for (mp, dep) in dependencies {
             if path.starts_with(mp.trim_matches('/')) {
