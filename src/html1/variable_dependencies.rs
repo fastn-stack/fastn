@@ -101,13 +101,17 @@ impl<'a> VariableDependencyGenerator<'a> {
     }
 
     pub(crate) fn get_set_functions(&self) -> ftd::html1::Result<String> {
-        let (set_function, dep) = self.js_set_functions();
+        let (set_function, mut dep) = self.js_set_functions();
         let mut js_resolve_functions = vec![];
         if !set_function.trim().is_empty() {
             js_resolve_functions.push(format!("window.set_value_{} = {{}};", self.id));
             js_resolve_functions.push(set_function);
         }
         let mut js_resolve_functions_available = false;
+
+        if cfg!(test) {
+            dep.sort();
+        }
 
         for d in dep {
             let g = self.js_resolve_function(d.as_str())?;
