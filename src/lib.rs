@@ -76,10 +76,6 @@ pub struct VecMap<T> {
 }
 
 impl<T> VecMap<T> {
-    pub fn new(&mut self, key: String) {
-        self.value.insert(key, vec![]);
-    }
-
     pub fn insert(&mut self, key: String, value: T) {
         if let Some(v) = self.value.get_mut(&key) {
             v.push(value);

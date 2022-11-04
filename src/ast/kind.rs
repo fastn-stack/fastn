@@ -291,9 +291,7 @@ impl VariableValue {
                         value: vec![],
                         line_number: self.line_number(),
                     })
-                } else if self.is_list() {
-                    Ok(self)
-                } else if self.is_record() {
+                } else if self.is_list() || self.is_record() {
                     // todo: check if `end` exists
                     Ok(self)
                 } else {
