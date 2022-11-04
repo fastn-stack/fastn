@@ -32,7 +32,23 @@ children: $foo.c
 -- end: foo
 
 
+-- void increment(a):
+integer $a:
+
+a += 1
+
+
+-- component counter:
+integer $count:
+
+-- ftd.integer: $counter.count
+$on-click$: $increment($a = $counter.count)
+
+-- end: counter
+
+
 -- boolean flag: true
+-- integer $count: 1
 
 
 -- foo:
@@ -55,5 +71,8 @@ padding if {$flag}: 40
 -- ftd.text: Hello
 
 -- ftd.text: World
+
+-- counter:
+$count: $count
 
 -- end: foo
