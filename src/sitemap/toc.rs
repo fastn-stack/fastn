@@ -1,6 +1,7 @@
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct TocItem {
     pub id: String,
+    pub icon: Option<String>,
     pub title: Option<String>,
     pub file_location: Option<camino::Utf8PathBuf>,
     pub translation_file_location: Option<camino::Utf8PathBuf>,
@@ -46,6 +47,21 @@ impl TocItem {
 }
 
 #[derive(Debug, Default, Clone, serde::Serialize)]
+pub struct ImageSrc {
+    pub light: String,
+    pub dark: String,
+}
+
+impl From<String> for ImageSrc {
+    fn from(path: String) -> Self {
+        ImageSrc {
+            light: path.clone(),
+            dark: path,
+        }
+    }
+}
+
+#[derive(Debug, Default, Clone, serde::Serialize)]
 pub struct TocItemCompat {
     pub url: Option<String>,
     pub number: Option<String>,
@@ -55,7 +71,7 @@ pub struct TocItemCompat {
     pub is_heading: bool,
     // TODO: Font icon mapping to html?
     #[serde(rename = "font-icon")]
-    pub font_icon: Option<String>,
+    pub font_icon: Option<ImageSrc>,
     #[serde(rename = "is-disabled")]
     pub is_disabled: bool,
     #[serde(rename = "is-active")]
@@ -78,6 +94,7 @@ impl TocItemCompat {
         is_open: bool,
         readers: Vec<String>,
         writers: Vec<String>,
+        icon: Option<String>,
     ) -> TocItemCompat {
         TocItemCompat {
             url,
@@ -85,7 +102,7 @@ impl TocItemCompat {
             title,
             path: None,
             is_heading: false,
-            font_icon: None,
+            font_icon: icon.map(Into::into),
             is_disabled: false,
             is_active,
             is_open,

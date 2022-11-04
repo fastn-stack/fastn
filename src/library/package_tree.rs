@@ -119,6 +119,7 @@ async fn insert(
                 false,
                 vec![],
                 vec![],
+                None,
             )
             .add_path(full_path),
         );

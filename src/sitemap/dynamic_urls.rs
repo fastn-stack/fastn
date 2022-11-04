@@ -229,6 +229,7 @@ mod tests {
             sections: vec![fpm::sitemap::section::Section {
                 id: "Dynamic Urls Section".to_string(),
                 title: Some("Dynamic Urls Section".to_string()),
+                icon: None,
                 file_location: None,
                 translation_file_location: None,
                 extra_data: Default::default(),
@@ -237,6 +238,7 @@ mod tests {
                 subsections: vec![fpm::sitemap::section::Subsection {
                     id: None,
                     title: None,
+                    icon: None,
                     file_location: None,
                     translation_file_location: None,
                     visible: false,
@@ -247,6 +249,7 @@ mod tests {
                         fpm::sitemap::toc::TocItem {
                             id: "/person/<string:name>/".to_string(),
                             title: Some("Url 1".to_string()),
+                            icon: None,
                             file_location: None,
                             translation_file_location: None,
                             extra_data: vec![
@@ -270,6 +273,7 @@ mod tests {
                         fpm::sitemap::toc::TocItem {
                             id: "/person/<string:name>/".to_string(),
                             title: Some("Url 2".to_string()),
+                            icon: None,
                             file_location: None,
                             translation_file_location: None,
                             extra_data: vec![

@@ -11,6 +11,7 @@ pub struct Section {
     ///
     /// Here foo/ is store as `id`
     pub id: String,
+    pub icon: Option<String>,
 
     /// `title` contains the title of the document. This can be specified inside
     /// document itself.
@@ -116,6 +117,7 @@ pub struct Section {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Subsection {
     pub id: Option<String>,
+    pub icon: Option<String>,
     pub title: Option<String>,
     pub file_location: Option<camino::Utf8PathBuf>,
     pub translation_file_location: Option<camino::Utf8PathBuf>,
@@ -212,6 +214,7 @@ impl Default for Subsection {
         Subsection {
             id: None,
             title: None,
+            icon: None,
             file_location: Default::default(),
             translation_file_location: None,
             visible: true,

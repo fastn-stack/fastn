@@ -68,6 +68,15 @@ impl SitemapElement {
         *element_title = title;
     }
 
+    pub(crate) fn set_icon(&mut self, path: Option<String>) {
+        let element_icon = match self {
+            SitemapElement::Section(s) => &mut s.icon,
+            SitemapElement::Subsection(s) => &mut s.icon,
+            SitemapElement::TocItem(s) => &mut s.icon,
+        };
+        *element_icon = path;
+    }
+
     pub(crate) fn set_id(&mut self, id: Option<String>) {
         let id = if let Some(id) = id {
             id
@@ -446,6 +455,8 @@ impl SitemapParser {
                                     row_content: line.to_string(),
                                 }
                             })?);
+                        } else if k.eq("icon") {
+                            i.set_icon(Some(v.to_string()));
                         } else if k.eq("readers") {
                             i.set_readers(v);
                         } else if k.eq("writers") {
@@ -862,6 +873,7 @@ impl Sitemap {
                             active,
                             v.readers.clone(),
                             v.writers.clone(),
+                            v.icon.clone(),
                         );
                         if active {
                             let mut curr_subsection = toc.clone();
@@ -897,6 +909,7 @@ impl Sitemap {
                     true,
                     section.readers.clone(),
                     section.writers.clone(),
+                    section.icon.clone(),
                 );
                 sections.push(section_toc.clone());
                 if let Some(ref title) = section.nav_title {
@@ -920,6 +933,7 @@ impl Sitemap {
                     true,
                     section.readers.clone(),
                     section.writers.clone(),
+                    section.icon.clone(),
                 );
                 sections.push(section_toc.clone());
                 if let Some(ref title) = section.nav_title {
@@ -937,6 +951,7 @@ impl Sitemap {
                     false,
                     section.readers.clone(),
                     section.writers.clone(),
+                    section.icon.clone(),
                 ));
             }
         }
@@ -952,6 +967,7 @@ impl Sitemap {
                         false,
                         v.readers.clone(),
                         v.writers.clone(),
+                        v.icon.clone(),
                     )
                 }),
         );
@@ -1002,6 +1018,7 @@ impl Sitemap {
                         true,
                         subsection.readers.clone(),
                         subsection.writers.clone(),
+                        subsection.icon.clone(),
                     );
                     subsection_list.push(subsection_toc.clone());
                     if let Some(ref title) = subsection.nav_title {
@@ -1024,6 +1041,7 @@ impl Sitemap {
                             true,
                             subsection.readers.clone(),
                             subsection.writers.clone(),
+                            subsection.icon.clone(),
                         );
                         subsection_list.push(subsection_toc.clone());
                         if let Some(ref title) = subsection.nav_title {
@@ -1043,6 +1061,7 @@ impl Sitemap {
                         false,
                         subsection.readers.clone(),
                         subsection.writers.clone(),
+                        subsection.icon.clone(),
                     ));
                 }
             }
@@ -1057,6 +1076,7 @@ impl Sitemap {
                             false,
                             v.readers.clone(),
                             v.writers.clone(),
+                            v.icon.clone(),
                         )
                     },
                 ));
@@ -1106,6 +1126,7 @@ impl Sitemap {
                         is_active || is_open,
                         toc_item.readers.clone(),
                         toc_item.writers.clone(),
+                        toc_item.icon.clone(),
                     );
                     current_toc.children = children;
                     if is_open {
