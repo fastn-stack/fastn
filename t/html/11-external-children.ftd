@@ -1,37 +1,3 @@
--- component foo:
-children c:
-ftd.ui list headers:
-
--- ftd.column:
-
--- ftd.text: Column Text
-
-
--- ftd.column:
-children: $foo.headers
-
--- end: ftd.column
-
-
--- ftd.row:
-children: $foo.c
-
--- end: ftd.row
-
-
--- ftd.row:
-children: $foo.c
-
--- end: ftd.row
-
-
-
--- end: ftd.column
-
-
--- end: foo
-
-
 -- void increment(a):
 integer $a:
 
@@ -47,32 +13,89 @@ $on-click$: $increment($a = $counter.count)
 -- end: counter
 
 
--- boolean flag: true
+
 -- integer $count: 1
 
 
--- foo:
 
--- foo.headers:
 
--- ftd.text: Headers Title
+-- component page:
+ftd.ui list headers:
+children body:
 
 -- ftd.column:
-padding: 30
 
--- ftd.text: Headers
-padding if {$flag}: 40
+-- ftd.text: ...................................................................
+
+-- ftd.column:
+children: $page.headers
 
 -- end: ftd.column
 
--- end: foo.headers
+-- ftd.text: ...................................................................
+
+-- ftd.column:
+padding: 40
+children: $page.body
+
+-- end: ftd.column
+
+-- ftd.text: ...................................................................
+
+-- end: ftd.column
+
+-- end: page
 
 
--- ftd.text: Hello
 
--- ftd.text: World
+
+-- page:
+
+-- page.headers:
+
+-- ftd.text: Headers
+
+-- ftd.row:
+
+-- ftd.text: Header 1
+padding: 2
+
+-- ftd.text: Header 2
+padding: 2
+
+-- ftd.text: Header 3
+padding: 2
+
+-- ftd.text: Header 4
+padding: 2
+
+-- end: ftd.row
+
+
+-- end: page.headers
+
+
+-- ftd.text: Body Text
+
+-- ftd.row:
+
+-- ftd.text: Counter 1:
 
 -- counter:
 $count: $count
 
--- end: foo
+-- end: ftd.row
+
+
+-- ftd.row:
+
+-- ftd.text: Counter 2:
+
+-- counter:
+$count: $count
+
+-- end: ftd.row
+
+
+-- end: page
+
