@@ -54,8 +54,17 @@ pub fn get_clean_url(config: &fpm::Config, url: &str) -> fpm::Result<(Option<Str
         return Ok((None, url::Url::parse(url)?));
     }
 
+    let url = if url.starts_with("/-/") || url.starts_with("-/") {
+        url.to_string()
+    } else {
+        config
+            .get_mountpoint_sanitized_path(&config.package, url)
+            .map(|(u, _, _)| u)
+            .unwrap_or(url.to_string())
+    };
+
     // This is for current package
-    if let Some(remaining_url) = trim_package_name(url, config.package.name.as_str()) {
+    if let Some(remaining_url) = trim_package_name(url.as_str(), config.package.name.as_str()) {
         let end_point = match config.package.endpoint.as_ref() {
             Some(ep) => ep,
             None => {
@@ -74,7 +83,7 @@ pub fn get_clean_url(config: &fpm::Config, url: &str) -> fpm::Result<(Option<Str
     // This is for dependency packages
     let deps_ep = config.package.dep_with_ep();
     for (dep, ep) in deps_ep {
-        if let Some(remaining_url) = trim_package_name(url, dep.name.as_str()) {
+        if let Some(remaining_url) = trim_package_name(url.as_str(), dep.name.as_str()) {
             return Ok((
                 Some(dep.name.to_string()),
                 url::Url::parse(format!("{}{}", ep, remaining_url).as_str())?,

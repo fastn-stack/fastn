@@ -1,5 +1,3 @@
-use fpm::config;
-
 static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
     once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
@@ -171,7 +169,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         // if any package name starts with package-name to redirect it to /mount-point/remaining-url/
         for (mp, dep) in package_dependencies {
             if let Some(remaining_path) =
-                config::utils::trim_package_name(path.as_str(), dep.name.as_str())
+                fpm::config::utils::trim_package_name(path.as_str(), dep.name.as_str())
             {
                 let path = if remaining_path.trim_matches('/').is_empty() {
                     format!("/{}/", mp.trim().trim_matches('/'))
@@ -194,6 +192,9 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
                 return Ok(resp);
             }
         }
+
+        // if request goes with mount-point /todos/api/add-todo/
+        // so it should say not found and pass it to proxy
 
         let file_response = serve_file(&mut config, path.as_path()).await;
 

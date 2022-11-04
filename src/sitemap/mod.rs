@@ -1370,6 +1370,7 @@ impl Sitemap {
 
     /// path: foo/temp/
     /// path: /
+    /// It should return the id as well if document is not available
     pub fn resolve_document(&self, path: &str) -> Option<String> {
         fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> Option<String> {
             if fpm::utils::ids_matches(toc.id.as_str(), path) {
