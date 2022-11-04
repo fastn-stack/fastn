@@ -20,17 +20,28 @@ $on-click$: $increment($a = $counter.count)
 
 
 -- component page:
-ftd.ui list headers:
+ftd.ui list extra-headers:
 children body:
 
 -- ftd.column:
+padding: 80
 
 -- ftd.text: ...................................................................
 
--- ftd.column:
-children: $page.headers
+-- ftd.row:
 
--- end: ftd.column
+-- ftd.text: LOGO
+padding: 2
+
+-- ftd.text: Home
+padding: 2
+
+-- ftd.row:
+children: $page.extra-headers
+
+-- end: ftd.row
+
+-- end: ftd.row
 
 -- ftd.text: ...................................................................
 
@@ -51,11 +62,7 @@ children: $page.body
 
 -- page:
 
--- page.headers:
-
--- ftd.text: Headers
-
--- ftd.row:
+-- page.extra-headers:
 
 -- ftd.text: Header 1
 padding: 2
@@ -69,10 +76,8 @@ padding: 2
 -- ftd.text: Header 4
 padding: 2
 
--- end: ftd.row
 
-
--- end: page.headers
+-- end: page.extra-headers
 
 
 -- ftd.text: Body Text
@@ -99,3 +104,9 @@ $count: $count
 
 -- end: page
 
+
+-- page:
+
+-- ftd.text: Hello
+
+-- end: page
