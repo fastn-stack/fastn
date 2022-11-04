@@ -6,9 +6,9 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#boo:bv:0,0,0": 4,
-"foo#foo:fv:0": 1,
-"foo#moo:mv:0,0": 7
+"foo#flag": true,
+"foo#foo:c:0": [],
+"foo#foo:headers:0": []
 }
 </script>
 <script type="ftd" id="ftd-external-children">
@@ -25,7 +25,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0,0:main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0,0,0:main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0,0,0,0:main" style="text-decoration: none" class="ft_md">boo</div><div data-id="0,0,0,1:main" style="text-decoration: none" class="ft_md">5</div></div><div data-id="0,0,1:main" style="text-decoration: none" class="ft_md">moo</div><div data-id="0,0,2:main" style="text-decoration: none" class="ft_md">1</div><div data-id="0,0,3:main" style="text-decoration: none" class="ft_md">7</div></div><div data-id="0,1:main" style="text-decoration: none" class="ft_md">foo</div><div data-id="0,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:fv:0&quot;}}}]', this)" style="text-decoration: none" class="ft_md">1</div></div></div>
+<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0,0:main" style="text-decoration: none" class="ft_md">Hello</div><div data-id="0,1:main" style="align-items: flex-start; display: flex; flex-direction: row; justify-content: flex-start; text-decoration: none" ><div data-id="0,1,0:main" style="text-decoration: none" class="ft_md">Hello</div></div><div data-id="0,2:main" style="align-items: flex-start; display: flex; flex-direction: row; justify-content: flex-start; text-decoration: none" ><div data-id="0,2,0:main" style="text-decoration: none" class="ft_md">Hello</div></div><div data-id="0,3:main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0,3,0:main" style="text-decoration: none" class="ft_md">Headers</div><div data-id="0,3,1:main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; padding: 30px; text-decoration: none" ><div data-id="0,3,1,0:main" style="padding: 40px; text-decoration: none" class="ft_md">Headers</div></div></div></div></div>
 
 
 <script>
@@ -439,65 +439,16 @@ function isempty(str) {
 return (!str || str.length === 0 );
 }
 
-
-function foo__increment___main(a){
-return (a.value += 1);
-}
-
-
 function node_change_main(data){
-document.querySelector(`[data-id="0,0,0,1:main"]`).innerHTML = data["foo#boo:bv:0,0,0"];
-document.querySelector(`[data-id="0,0,2:main"]`).innerHTML = data["foo#foo:fv:0"];
-document.querySelector(`[data-id="0,0,3:main"]`).innerHTML = data["foo#moo:mv:0,0"];
-document.querySelector(`[data-id="0,2:main"]`).innerHTML = data["foo#foo:fv:0"];
-}
-
-
-window.set_value_main = {};
-window.set_value_main["foo#foo:fv:0"] = function (data, new_value) {
-data["foo#foo:fv:0"] = new_value;
-if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#moo:mv:0,0"]){window["resolve_value_main"]["foo#moo:mv:0,0"](data);
-} else {
-data["foo#moo:mv:0,0"] = data["foo#foo:fv:0"]
-}
-if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:0,0,0"]){window["resolve_value_main"]["foo#boo:bv:0,0,0"](data);
-} else {
-data["foo#boo:bv:0,0,0"] = data["foo#foo:fv:0"]
-}
-};
-
-window.set_value_main["foo#moo:mv:0,0"] = function (data, new_value) {
-data["foo#moo:mv:0,0"] = new_value;
-if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:0,0,0"]){window["resolve_value_main"]["foo#boo:bv:0,0,0"](data);
-} else {
-data["foo#boo:bv:0,0,0"] = data["foo#moo:mv:0,0"]
-}
-};
-
-window.resolve_value_main = {};
-window.resolve_value_main["foo#boo:bv:0,0,0"] = function(data) {
 if(function(){
-return (data["foo#foo:fv:0"]>10);
+return data["foo#flag"];
 }()){
-data["foo#boo:bv:0,0,0"] = 10;
+document.querySelector(`[data-id="0,3,1,0:main"]`).style["padding"] = "{0}px".format(40);
 }
-else if(function(){
-return (data["foo#moo:mv:0,0"]>6);
-}()){
-data["foo#boo:bv:0,0,0"] = 5;
 }
-else {data["foo#boo:bv:0,0,0"] = 4;}
 
-}
-window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
-if(function(){
-return (data["foo#foo:fv:0"]>2);
-}()){
-data["foo#moo:mv:0,0"] = 6;
-}
-else {data["foo#moo:mv:0,0"] = 7;}
 
-}
+
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
 </body>
