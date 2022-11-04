@@ -85,11 +85,11 @@ if TOKEN_URL_GLB.get().is_none(){
     actix_web::HttpResponse::Found().cookie(actix_web::cookie::Cookie::build("testcookie", "test").finish())
     .append_header((actix_web::http::header::LOCATION, authorize_url.0.to_string()))
     .finish()
-   // HttpResponse::Ok().body(format!("username:"))
+
 }
 
 pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    //GITHUB_CLIENT_ID_GLB.
+
 actix_web::HttpResponse::Found()
 .cookie(
     actix_web::cookie::Cookie::build("user_login", "")
@@ -156,7 +156,7 @@ pub async fn get_identity(req: actix_web::HttpRequest,repo_list:&Vec<String>) ->
     let user_fullname = req.cookie("user_fullname");
     match req.cookie("user_login"){
         Some(val)=>{
-            //dbg!(val.value());
+           
             user_login_val=val.value().to_string();
         }
         None=>{
@@ -165,7 +165,7 @@ pub async fn get_identity(req: actix_web::HttpRequest,repo_list:&Vec<String>) ->
     }
     match req.cookie("access_token"){
         Some(val)=>{
-            //dbg!(val.value());
+           
             access_token_val=val.value().to_string();
         }
         None=>{
@@ -174,7 +174,7 @@ pub async fn get_identity(req: actix_web::HttpRequest,repo_list:&Vec<String>) ->
     }
     match req.cookie("user_email"){
         Some(val)=>{
-           // dbg!(val.value());
+           
             user_email_val=val.value().to_string();
         }
         None=>{
@@ -251,14 +251,14 @@ pub async fn auth(
     let code = oauth2::AuthorizationCode::new(params.code.clone());
     let _state = oauth2::CsrfToken::new(params.state.clone());
     let access_token;
-    //let token_res = &data.oauth
+  
     let token_res = client    
     .exchange_code(code)
         .request_async(oauth2::reqwest::async_http_client)
         .await;
         if let Ok(token) = token_res {
             access_token=token.access_token().clone().secret().to_string();
-            //dbg!(access_token.clone());
+            
             let userresp=user_details(access_token.clone()).await;
             match userresp {
                 Ok(userresp) => {
