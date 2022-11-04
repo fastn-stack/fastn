@@ -32,9 +32,9 @@ pub async fn fpm_doc(path: &camino::Utf8Path) -> fpm::Result<ftd::p2::Document> 
 // It will return url with end-point, if package or dependency contains endpoint in them
 // url: /-/<package-name>/api/ => endpoint/api/
 // url: /-/<package-name>/api/ => endpoint/api/
-pub fn get_clean_url(config: &fpm::Config, url: &str) -> fpm::Result<url::Url> {
+pub fn get_clean_url(config: &fpm::Config, url: &str) -> fpm::Result<(Option<String>, url::Url)> {
     if url.starts_with("http") {
-        return Ok(url::Url::parse(url)?);
+        return Ok((None, url::Url::parse(url)?));
     }
 
     // if path starts with /-/package-name or -/package-name, so it trim the package and return the remaining url
@@ -58,18 +58,20 @@ pub fn get_clean_url(config: &fpm::Config, url: &str) -> fpm::Result<url::Url> {
                 )));
             }
         };
-        return Ok(url::Url::parse(
-            format!("{}{}", end_point, remaining_url).as_str(),
-        )?);
+        return Ok((
+            Some(config.package.name.to_string()),
+            url::Url::parse(format!("{}{}", end_point, remaining_url).as_str())?,
+        ));
     }
 
     // This is for dependency packages
     let deps_ep = config.package.dep_with_ep();
     for (dep, ep) in deps_ep {
         if let Some(remaining_url) = path_start_with(url, dep.name.as_str()) {
-            return Ok(url::Url::parse(
-                format!("{}{}", ep, remaining_url).as_str(),
-            )?);
+            return Ok((
+                Some(dep.name.to_string()),
+                url::Url::parse(format!("{}{}", ep, remaining_url).as_str())?,
+            ));
         }
     }
 

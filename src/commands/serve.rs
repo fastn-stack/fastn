@@ -174,7 +174,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
             // Already checked in the above method serve_file
             println!("executing proxy");
-            let url = fpm::config::utils::get_clean_url(&config, path.as_str())?;
+            let (package_name, url) = fpm::config::utils::get_clean_url(&config, path.as_str())?;
             let host = format!("{}://{}", url.scheme(), url.host_str().unwrap());
             let req = if let Some(r) = config.request {
                 r
@@ -182,7 +182,13 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
                 return Ok(fpm::server_error!("request not set"));
             };
 
-            return fpm::proxy::get_out(host.as_str(), req, url.path()).await;
+            return fpm::proxy::get_out(
+                host.as_str(),
+                req,
+                url.path(),
+                package_name.map(|p| format!("/-/{}", p)),
+            )
+            .await;
         }
 
         // Fallback to WASM execution in case of no successful response

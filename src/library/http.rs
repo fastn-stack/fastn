@@ -32,7 +32,7 @@ pub async fn processor<'a>(
         }
     };
 
-    let mut url = fpm::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
+    let (_, mut url) = fpm::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
         ftd::p1::Error::ParseError {
             message: format!("invalid url: {:?}", e),
             doc_id: doc.name.to_string(),
