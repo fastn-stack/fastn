@@ -4,26 +4,33 @@ ftd.ui list headers:
 
 -- ftd.column:
 
--- ftd.text: Hello
+-- ftd.text: Column Text
 
--- ftd.row:
-children: $foo.c
-
--- end: ftd.row
-
--- ftd.row:
-children: $foo.c
-
--- end: ftd.row
 
 -- ftd.column:
 children: $foo.headers
 
 -- end: ftd.column
 
+
+-- ftd.row:
+children: $foo.c
+
+-- end: ftd.row
+
+
+-- ftd.row:
+children: $foo.c
+
+-- end: ftd.row
+
+
+
 -- end: ftd.column
 
+
 -- end: foo
+
 
 -- boolean flag: true
 
@@ -32,7 +39,7 @@ children: $foo.headers
 
 -- foo.headers:
 
--- ftd.text: Headers
+-- ftd.text: Headers Title
 
 -- ftd.column:
 padding: 30
@@ -46,5 +53,7 @@ padding if {$flag}: 40
 
 
 -- ftd.text: Hello
+
+-- ftd.text: World
 
 -- end: foo
