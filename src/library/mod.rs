@@ -71,7 +71,7 @@ impl Library {
                 if name.starts_with(alias) {
                     let package = lib.config.resolve_package(package).await.ok()?;
                     if let Some(r) = get_data_from_package(
-                        name.replacen(&alias, &package.name, 1).as_str(),
+                        name.replacen(alias, &package.name, 1).as_str(),
                         &package,
                         lib,
                     )
@@ -99,7 +99,7 @@ impl Library {
             for (alias, package) in translation_of.aliases() {
                 if name.starts_with(alias) {
                     if let Some(r) = get_data_from_package(
-                        name.replacen(&alias, &package.name, 1).as_str(),
+                        name.replacen(alias, &package.name, 1).as_str(),
                         package,
                         lib,
                     )
@@ -138,8 +138,8 @@ impl Library {
                 .await
                 .ok()?;
             // Explicit check for the current package.
-            if name.starts_with(&package.name.as_str()) {
-                let new_name = name.replacen(&package.name.as_str(), "", 1);
+            if name.starts_with(package.name.as_str()) {
+                let new_name = name.replacen(package.name.as_str(), "", 1);
                 if new_name.as_str().trim_start_matches('/') == "assets" {
                     // Virtual document for getting the assets
                     if let Some(asset_doc) = lib.asset_documents.get(&package.name.clone()) {
@@ -332,7 +332,7 @@ impl Library2 {
             for (alias, package) in package.aliases() {
                 if name.starts_with(alias) {
                     if let Some(r) = get_data_from_package(
-                        name.replacen(&alias, &package.name, 1).as_str(),
+                        name.replacen(alias, &package.name, 1).as_str(),
                         package,
                         lib,
                     )
@@ -358,7 +358,7 @@ impl Library2 {
             for (alias, package) in translation_of.aliases() {
                 if name.starts_with(alias) {
                     if let Some(r) = get_data_from_package(
-                        name.replacen(&alias, &package.name, 1).as_str(),
+                        name.replacen(alias, &package.name, 1).as_str(),
                         package,
                         lib,
                     )
@@ -382,10 +382,10 @@ impl Library2 {
             let packages = lib.config.all_packages.borrow();
             let package = packages.get(package.name.as_str()).unwrap_or(package);
             // Explicit check for the current package.
-            if !name.starts_with(&package.name.as_str()) {
+            if !name.starts_with(package.name.as_str()) {
                 return None;
             }
-            let new_name = name.replacen(&package.name.as_str(), "", 1);
+            let new_name = name.replacen(package.name.as_str(), "", 1);
             let (file_path, data) = package.resolve_by_id(new_name.as_str(), None).await.ok()?;
             if !file_path.ends_with(".ftd") {
                 return None;

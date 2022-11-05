@@ -70,14 +70,12 @@ pub async fn parse<'a>(
                     })?;
 
                     if module.starts_with(current_package.name.as_str()) {
-                        current_package
-                            .get_font_ftd()
-                            .unwrap_or_else(|| "".to_string())
+                        current_package.get_font_ftd().unwrap_or_default()
                     } else {
                         let mut font_ftd = "".to_string();
                         for (alias, package) in current_package.aliases() {
                             if module.starts_with(alias) {
-                                font_ftd = package.get_font_ftd().unwrap_or_else(|| "".to_string());
+                                font_ftd = package.get_font_ftd().unwrap_or_default();
                                 break;
                             }
                         }
@@ -225,7 +223,7 @@ pub async fn resolve_import<'a>(
             lib.push_package_under_process(&current_package).await?;
             lib.get_current_package()?
                 .get_font_ftd()
-                .unwrap_or_else(|| "".to_string())
+                .unwrap_or_default()
         } else {
             let mut font_ftd = "".to_string();
             for (alias, package) in current_package.aliases() {
@@ -238,7 +236,7 @@ pub async fn resolve_import<'a>(
                         .get(package.name.as_str())
                         .unwrap()
                         .get_font_ftd()
-                        .unwrap_or_else(|| "".to_string());
+                        .unwrap_or_default();
                     break;
                 }
             }

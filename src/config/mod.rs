@@ -566,6 +566,7 @@ impl Config {
     // mount-point: /todos/
     // Output
     // -/<todos-package-name>/add-todo/, <todos-package-name>, /add-todo/
+    #[allow(clippy::only_used_in_recursion)]
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
         package: &'a fpm::Package,
@@ -626,16 +627,12 @@ impl Config {
         package.sitemap_temp = fpm_doc.get("fpm#sitemap")?;
         package.dynamic_urls_temp = fpm_doc.get("fpm#dynamic-urls")?;
 
-        let asset_documents = self.get_assets().await?;
-
         package.sitemap = match package.sitemap_temp.as_ref() {
             Some(sitemap_temp) => {
                 let mut s = fpm::sitemap::Sitemap::parse(
                     sitemap_temp.body.as_str(),
                     &package,
                     &mut self.clone(), //TODO: totally wrong
-                    &asset_documents,
-                    "/",
                     false,
                 )
                 .await?;
@@ -1296,8 +1293,6 @@ impl Config {
             path_parameters: vec![],
         };
 
-        let asset_documents = config.get_assets().await?;
-
         // Update global_ids map from the current package files
         config.update_ids_from_package().await?;
 
@@ -1315,8 +1310,6 @@ impl Config {
                         sitemap_temp.body.as_str(),
                         &package,
                         &mut config,
-                        &asset_documents,
-                        "/",
                         resolve_sitemap,
                     )
                     .await?;

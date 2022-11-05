@@ -189,7 +189,7 @@ impl Package {
             }
             Some(format!(
                 "{}\n-- import: {}{}",
-                pre.unwrap_or_else(|| "".to_string()),
+                pre.unwrap_or_default(),
                 &import_doc_path,
                 match &ai.alias {
                     Some(a) => format!(" as {}", a),
@@ -504,7 +504,7 @@ impl Package {
 
         let file_extract_path = package_root.join("FPM.ftd");
         if !file_extract_path.exists() {
-            std::fs::create_dir_all(&package_root)?;
+            std::fs::create_dir_all(package_root)?;
             let fpm_string = self.get_fpm().await?;
             tokio::fs::File::create(&file_extract_path)
                 .await?

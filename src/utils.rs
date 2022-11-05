@@ -382,7 +382,7 @@ pub fn replace_markers(
                 config.package.name.as_str(),
                 &config.package.favicon,
             )
-            .unwrap_or_else(|| "".to_string())
+            .unwrap_or_default()
             .as_str(),
         )
         .replace("__ftd_js__", fpm::ftd_js().as_str())

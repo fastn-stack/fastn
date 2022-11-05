@@ -155,7 +155,7 @@ async fn merge_main_into_cr(
 
         // get corresponding track file
         let track_file_path_str =
-            config.path_without_root(&config.track_dir().join(&cr_file_path))?;
+            config.path_without_root(&config.track_dir().join(cr_file_path))?;
         let track_file_edit = match cr_track_manifest.get(&track_file_path_str) {
             Some(file_edit) => file_edit,
             _ => {
@@ -494,7 +494,7 @@ async fn merge_cr_into_main(
         };
 
         let track_file_path_str =
-            config.path_without_root(&config.track_dir().join(&cr_file_name))?;
+            config.path_without_root(&config.track_dir().join(cr_file_name))?;
         let track_file_edit = match cr_track_manifest.get(&track_file_path_str) {
             Some(file_edit) if !file_edit.is_deleted() => file_edit,
             _ => {

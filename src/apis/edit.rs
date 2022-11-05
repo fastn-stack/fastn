@@ -143,11 +143,7 @@ pub(crate) async fn edit_worker(
     fpm::utils::update1(
         &config.root,
         file_name.as_str(),
-        request
-            .value
-            .unwrap_or_else(|| "".to_string())
-            .into_bytes()
-            .as_slice(),
+        request.value.unwrap_or_default().into_bytes().as_slice(),
     )
     .await?;
 

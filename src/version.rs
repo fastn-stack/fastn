@@ -15,7 +15,7 @@ impl Version {
     }
 
     pub(crate) fn parse(s: &str) -> fpm::Result<fpm::Version> {
-        let v = s.strip_prefix(&['v', 'V']).unwrap_or(s);
+        let v = s.strip_prefix(['v', 'V']).unwrap_or(s);
         let mut minor = None;
         let major = if let Some((major, minor_)) = v.split_once('.') {
             if minor_.contains('.') {

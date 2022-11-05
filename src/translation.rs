@@ -221,7 +221,7 @@ pub(crate) fn get_translation_status_counts(
         last_modified_on: None,
     };
     for (file, timestamp) in snapshots {
-        if !path.join(&file).exists() {
+        if !path.join(file).exists() {
             translation_status_count.missing += 1;
             continue;
         }

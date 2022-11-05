@@ -21,7 +21,7 @@ pub(crate) fn get_tracks(
     }
 
     let lib = fpm::FPMLibrary::default();
-    let doc = std::fs::read_to_string(&path)?;
+    let doc = std::fs::read_to_string(path)?;
     let b = match fpm::doc::parse_ftd(base_path, doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {

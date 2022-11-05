@@ -484,8 +484,6 @@ impl Sitemap {
         s: &str,
         package: &fpm::Package,
         config: &mut fpm::Config,
-        asset_documents: &std::collections::HashMap<String, String>,
-        base_url: &str,
         resolve_sitemap: bool,
     ) -> Result<Self, ParseError> {
         let mut parser = SitemapParser {
@@ -514,7 +512,7 @@ impl Sitemap {
 
         if resolve_sitemap {
             sitemap
-                .resolve(package, config, asset_documents, base_url)
+                .resolve(package, config)
                 .await
                 .map_err(|e| ParseError::InvalidTOCItem {
                     doc_id: package.name.to_string(),
@@ -529,21 +527,11 @@ impl Sitemap {
         &mut self,
         package: &fpm::Package,
         config: &mut fpm::Config,
-        asset_documents: &std::collections::HashMap<String, String>,
-        base_url: &str,
     ) -> fpm::Result<()> {
         let package_root = config.get_root_for_package(package);
         let current_package_root = config.root.to_owned();
         for section in self.sections.iter_mut() {
-            resolve_section(
-                section,
-                &package_root,
-                &current_package_root,
-                asset_documents,
-                base_url,
-                config,
-            )
-            .await?;
+            resolve_section(section, &package_root, &current_package_root, config).await?;
         }
         return Ok(());
 
@@ -551,8 +539,6 @@ impl Sitemap {
             section: &mut section::Section,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            asset_documents: &std::collections::HashMap<String, String>,
-            base_url: &str,
             config: &mut fpm::Config,
         ) -> fpm::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) = config
@@ -608,15 +594,7 @@ impl Sitemap {
             section.translation_file_location = translation_file_location;
 
             for subsection in section.subsections.iter_mut() {
-                resolve_subsection(
-                    subsection,
-                    package_root,
-                    current_package_root,
-                    asset_documents,
-                    base_url,
-                    config,
-                )
-                .await?;
+                resolve_subsection(subsection, package_root, current_package_root, config).await?;
             }
             Ok(())
         }
@@ -625,8 +603,6 @@ impl Sitemap {
             subsection: &mut section::Subsection,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            asset_documents: &std::collections::HashMap<String, String>,
-            base_url: &str,
             config: &mut fpm::Config,
         ) -> fpm::Result<()> {
             if let Some(ref id) = subsection.get_file_id() {
@@ -671,15 +647,7 @@ impl Sitemap {
             }
 
             for toc in subsection.toc.iter_mut() {
-                resolve_toc(
-                    toc,
-                    package_root,
-                    current_package_root,
-                    asset_documents,
-                    base_url,
-                    config,
-                )
-                .await?;
+                resolve_toc(toc, package_root, current_package_root, config).await?;
             }
             Ok(())
         }
@@ -689,8 +657,6 @@ impl Sitemap {
             toc: &mut toc::TocItem,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            asset_documents: &std::collections::HashMap<String, String>,
-            base_url: &str,
             config: &mut fpm::Config,
         ) -> fpm::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) =
@@ -743,15 +709,7 @@ impl Sitemap {
             toc.translation_file_location = translation_file_location;
 
             for toc in toc.children.iter_mut() {
-                resolve_toc(
-                    toc,
-                    package_root,
-                    current_package_root,
-                    asset_documents,
-                    base_url,
-                    config,
-                )
-                .await?;
+                resolve_toc(toc, package_root, current_package_root, config).await?;
             }
             Ok(())
         }

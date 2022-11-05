@@ -37,7 +37,7 @@ pub(crate) fn get_translation_status(
 ) -> fpm::Result<std::collections::BTreeMap<String, TranslationStatus>> {
     let mut translation_status = std::collections::BTreeMap::new();
     for (file, timestamp) in snapshots {
-        if !path.join(&file).exists() {
+        if !path.join(file).exists() {
             translation_status.insert(file.clone(), TranslationStatus::Missing);
             continue;
         }

@@ -411,7 +411,7 @@ pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
 /// Get identities from cli `--identities`
 pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
     let identities = fpm::utils::parse_from_cli("--identities");
-    parse_identities(&identities.unwrap_or_else(|| "".to_string()))
+    parse_identities(&identities.unwrap_or_default())
 }
 
 /*
