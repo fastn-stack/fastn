@@ -1,6 +1,7 @@
+-- import: ftd.dev/workshop
+
 -- ds.page: Row And Columns: Layouting In FTD
 id: ws-layouts
 
 -- container: ws-layouts.wrapper.right-sidebar
--- import: ftd.dev/workshop
 -- workshop.sidebar:

@@ -1,3 +1,5 @@
+-- import: ftd.dev/workshop
+
 -- ds.page: Booleans in FTD
 id: ws-booleans
 
@@ -66,5 +68,4 @@ or back to [the workshop](id: workshop).
 
 
 -- container: ws-booleans.wrapper.right-sidebar
--- import: ftd.dev/workshop
 -- workshop.sidebar:

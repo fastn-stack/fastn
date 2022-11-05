@@ -1,3 +1,5 @@
+-- import: ftd.dev/workshop
+
 -- ds.page: Hello World
 id: ws-hello-world
 
@@ -113,5 +115,4 @@ You have installed fpm and created your first fpm package. Good job!
 
 
 -- container: ws-hello-world.wrapper.right-sidebar
--- import: ftd.dev/workshop
 -- workshop.sidebar:

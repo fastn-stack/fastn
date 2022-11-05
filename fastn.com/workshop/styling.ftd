@@ -1,6 +1,7 @@
+-- import: ftd.dev/workshop
+
 -- ds.page: Basic Styling
 id: ws-styling
 
 -- container: ws-styling.wrapper.right-sidebar
--- import: ftd.dev/workshop
 -- workshop.sidebar:

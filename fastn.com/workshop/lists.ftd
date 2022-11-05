@@ -1,8 +1,9 @@
+-- import: ftd.dev/workshop
+
 -- ds.page: Lists in FTD
 id: ws-lists
 
 -- container: ws-lists.wrapper.right-sidebar
--- import: ftd.dev/workshop
 -- workshop.sidebar:
 
 

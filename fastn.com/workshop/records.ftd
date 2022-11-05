@@ -1,3 +1,5 @@
+-- import: ftd.dev/workshop
+
 -- ds.page: Records
 id: ws-records
 
@@ -8,8 +10,24 @@ Till now we dealt with basic types like [booleans](id: ws-booleans), [numbers
 and strings](id: ws-numbers-and-strings). Now we are moving to more interesting
 stuff: `record`.
 
-Records are like classes or structs in some language. Record contains one or more fields.
 
+-- boolean $what-are-records-understood: false
+
+-- object what-are-records-object:
+function: ls.set-boolean
+variable: $what-are-records-understood
+
+-- workshop.understood what-are-records-button:
+$on-click$: toggle $what-are-records-understood
+$on-click$: message-host $what-are-records-object
+
+-- workshop.lesson: What Are Records?
+$understood: $what-are-records-understood
+button: what-are-records-button:
+
+
+Records are like classes or structs in some language. Record contains one or
+more fields.
 
 An example record looks like this:
 
@@ -30,6 +48,10 @@ lang: ftd
 \-- person john:
 name: John
 age: 20
+
+
+-- container: ws-records
+
 
 -- ds.h1: Task 1: Define and Use A Record
 
@@ -100,7 +122,11 @@ lang: ftd
 
 Elder brother of the notorious Bache Qui.
 
--- ds.markdown:
+-- ds.h1: Task: Use Default Values
+
+Fix the mistakes in [default.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/default.ftd).
+
+-- ds.h1: Default of a field can be another field
 
 The default value of a field can be set to another field as well:
 
@@ -118,10 +144,7 @@ body bio:
 Here we have specified an optional (because it has a default value) `nick-name`.
 If you leave out the `nick-name`, the `name` would be used as the `nick-name`.
 
-
--- ds.h1: Task: Use Default Values
-
-Fix the mistakes in [caption-and-body.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/default.ftd).
+-- ds.h1: Task: Fix
 
 -- ds.h1: Move To Next Chapter
 
@@ -135,6 +158,3 @@ steps](id: workshop).
 
 
 
--- container: ws-records.wrapper.right-sidebar
--- import: ftd.dev/workshop
--- workshop.sidebar:

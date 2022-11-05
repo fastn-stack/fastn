@@ -1,6 +1,7 @@
+-- import: ftd.dev/workshop
+
 -- ds.page: Images In FTD
 id: ws-images
 
 -- container: ws-images.wrapper.right-sidebar
--- import: ftd.dev/workshop
 -- workshop.sidebar:
