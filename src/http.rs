@@ -217,21 +217,39 @@ impl ResponseBuilder {
     // .build
     // response from string, json, bytes etc
 
-    pub async fn from_reqwest(response: reqwest::Response) -> fpm::http::Response {
-        let status = response.status();
+    pub async fn from_reqwest(
+        response: reqwest::Response,
+        package_name: String,
+    ) -> fpm::http::Response {
+        dbg!(&response);
 
-        let mut response_builder = actix_web::HttpResponse::build(status);
-        // TODO
-        // *resp.extensions_mut() = response.extensions().clone();
+        let status = response.status();
 
         // Remove `Connection` as per
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection#Directives
+        let mut response_builder = actix_web::HttpResponse::build(status);
         for header in response
             .headers()
             .iter()
             .filter(|(h, _)| *h != "connection")
         {
             response_builder.insert_header(header);
+        }
+
+        dbg!(&status);
+        if status == actix_web::http::StatusCode::FOUND {
+            response_builder.status(actix_web::http::StatusCode::OK);
+            if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
+                let redirect = location.to_str().unwrap();
+                let path = if redirect.trim_matches('/').is_empty() {
+                    format!("/-/{}/", package_name)
+                } else {
+                    format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
+                };
+                dbg!(&path);
+                let t = serde_json::json!({"redirect": path.as_str()}).to_string();
+                return response_builder.body(t);
+            }
         }
 
         let content = match response.bytes().await {
@@ -242,7 +260,6 @@ impl ResponseBuilder {
                 ))
             }
         };
-        println!("Response {:?}", String::from_utf8(content.to_vec()));
         response_builder.body(content)
     }
 }

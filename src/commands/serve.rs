@@ -156,6 +156,8 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     } else {
         // url is present in config or not
         // If not present than proxy pass it
+
+        let req_method = req.method().to_string();
         let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
@@ -167,29 +169,34 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
 
         let package_dependencies = config.package.deps_contains_mount_point();
         // if any package name starts with package-name to redirect it to /mount-point/remaining-url/
-        for (mp, dep) in package_dependencies {
-            if let Some(remaining_path) =
-                fpm::config::utils::trim_package_name(path.as_str(), dep.name.as_str())
-            {
-                let path = if remaining_path.trim_matches('/').is_empty() {
-                    format!("/{}/", mp.trim().trim_matches('/'))
-                } else {
-                    format!(
-                        "/{}/{}/",
-                        mp.trim().trim_matches('/'),
-                        remaining_path.trim_matches('/')
-                    )
-                };
 
-                dbg!("Send redirect");
-                dbg!(&path);
-                let mut resp =
-                    actix_web::HttpResponse::new(actix_web::http::StatusCode::PERMANENT_REDIRECT);
-                resp.headers_mut().insert(
-                    actix_web::http::header::LOCATION,
-                    actix_web::http::header::HeaderValue::from_str(path.as_str()).unwrap(), // TODO:
-                );
-                return Ok(resp);
+        if req_method.as_str() != "POST" {
+            for (mp, dep) in package_dependencies {
+                if let Some(remaining_path) =
+                    fpm::config::utils::trim_package_name(path.as_str(), dep.name.as_str())
+                {
+                    let path = if remaining_path.trim_matches('/').is_empty() {
+                        format!("/{}/", mp.trim().trim_matches('/'))
+                    } else {
+                        format!(
+                            "/{}/{}/",
+                            mp.trim().trim_matches('/'),
+                            remaining_path.trim_matches('/')
+                        )
+                    };
+
+                    dbg!("Send redirect");
+                    dbg!(&path);
+                    // Method and body not changed. that is why MOVED_PERMANENTLY
+                    let mut resp = actix_web::HttpResponse::new(
+                        actix_web::http::StatusCode::PERMANENT_REDIRECT,
+                    );
+                    resp.headers_mut().insert(
+                        actix_web::http::header::LOCATION,
+                        actix_web::http::header::HeaderValue::from_str(path.as_str()).unwrap(), // TODO:
+                    );
+                    return Ok(resp);
+                }
             }
         }
 
@@ -210,20 +217,19 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             // Already checked in the above method serve_file
             println!("executing proxy");
             let (package_name, url) = fpm::config::utils::get_clean_url(&config, path.as_str())?;
-            let host = format!("{}://{}", url.scheme(), url.host_str().unwrap());
+
+            let host = if let Some(port) = url.port() {
+                format!("{}://{}:{}", url.scheme(), url.host_str().unwrap(), port)
+            } else {
+                format!("{}://{}", url.scheme(), url.host_str().unwrap())
+            };
             let req = if let Some(r) = config.request {
                 r
             } else {
                 return Ok(fpm::server_error!("request not set"));
             };
 
-            return fpm::proxy::get_out(
-                host.as_str(),
-                req,
-                url.path(),
-                package_name.map(|p| format!("/-/{}", p)),
-            )
-            .await;
+            return fpm::proxy::get_out(host.as_str(), req, url.path(), package_name).await;
         }
 
         // Fallback to WASM execution in case of no successful response
