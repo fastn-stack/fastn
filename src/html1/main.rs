@@ -24,8 +24,7 @@ impl HtmlUI {
             ftd::html1::dependencies::DependencyGenerator::new(id, &node_data.node, &tdoc)
                 .get_dependencies()?;
         let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
-        let html =
-            HtmlGenerator::new(id, &tdoc).to_html(node_data.name.as_str(), node_data.node)?;
+        let html = HtmlGenerator::new(id, &tdoc).to_html(node_data.node)?;
 
         Ok(HtmlUI {
             html,
@@ -51,7 +50,7 @@ impl<'a> HtmlGenerator<'a> {
         }
     }
 
-    pub fn to_html(&self, doc_name: &str, node: ftd::node::Node) -> ftd::html1::Result<String> {
+    pub fn to_html(&self, node: ftd::node::Node) -> ftd::html1::Result<String> {
         let style = format!(
             "style=\"{}\"",
             self.style_to_html(&node, /*self.visible*/ true)
@@ -78,7 +77,7 @@ impl<'a> HtmlGenerator<'a> {
             None => node
                 .children
                 .into_iter()
-                .map(|v| self.to_html(doc_name, v))
+                .map(|v| self.to_html(v))
                 .collect::<ftd::html1::Result<Vec<String>>>()?
                 .join(""),
         };
