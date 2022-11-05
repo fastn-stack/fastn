@@ -1,4 +1,4 @@
-name: Build release
+name: Create a new release
 
 on:
   workflow_dispatch:
