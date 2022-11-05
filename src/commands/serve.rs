@@ -381,8 +381,9 @@ async fn auth_auth_route(
 ) -> fpm::Result<fpm::http::Response> {
      //let params: actix_web::web::Query<fpm::auth::github::AuthRequest>;
         //dbg!(params);
+        let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
         let uri_string=req.uri();
-        let final_url:String=format!("{}{}","http://localhost:8000",uri_string.clone().to_string());
+        let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
         let request_url = url::Url::parse(&final_url.to_string()).unwrap();
         let pairs = request_url.query_pairs();
         let mut code=String::from("");
@@ -406,9 +407,11 @@ async fn get_identities_route(
 ) -> fpm::Result<fpm::http::Response> {
      //let params: actix_web::web::Query<fpm::auth::github::AuthRequest>;
         //dbg!(params);
+        let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
+
         let mut repo_list: Vec<String> = Vec::new();
         let uri_string=req.uri();
-    let final_url:String=format!("{}{}","http://localhost:8000",uri_string.clone().to_string());
+    let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
     let request_url = url::Url::parse(&final_url.to_string()).unwrap();
     let pairs = request_url.query_pairs();
     for pair in pairs{
