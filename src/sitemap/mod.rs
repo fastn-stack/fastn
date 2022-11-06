@@ -1370,11 +1370,15 @@ impl Sitemap {
 
     /// path: foo/temp/
     /// path: /
-    /// It should return the id as well if document is not available
+    /// This function can be used for if path exists in sitemap or not
     pub fn resolve_document(&self, path: &str) -> Option<String> {
         fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> Option<String> {
             if fpm::utils::ids_matches(toc.id.as_str(), path) {
-                return toc.document.clone();
+                return if toc.document.is_some() {
+                    toc.document.clone()
+                } else {
+                    Some(toc.id.to_string())
+                };
             }
 
             for child in toc.children.iter() {
@@ -1389,7 +1393,11 @@ impl Sitemap {
         fn resolve_in_sub_section(sub_section: &section::Subsection, path: &str) -> Option<String> {
             if let Some(id) = sub_section.id.as_ref() {
                 if fpm::utils::ids_matches(path, id.as_str()) {
-                    return sub_section.document.clone();
+                    return if sub_section.document.is_some() {
+                        sub_section.document.clone()
+                    } else {
+                        sub_section.id.clone()
+                    };
                 }
             }
 
@@ -1405,7 +1413,11 @@ impl Sitemap {
 
         fn resolve_in_section(section: &section::Section, path: &str) -> Option<String> {
             if fpm::utils::ids_matches(section.id.as_str(), path) {
-                return section.document.clone();
+                return if section.document.is_some() {
+                    section.document.clone()
+                } else {
+                    Some(section.id.to_string())
+                };
             }
 
             for subsection in section.subsections.iter() {
