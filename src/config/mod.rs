@@ -618,6 +618,11 @@ impl Config {
     pub async fn update_sitemap(&self, package: &fpm::Package) -> fpm::Result<fpm::Package> {
         let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
 
+        if !fpm_path.exists() {
+            let package = self.resolve_package(&package).await?;
+            self.add_package(&package);
+        }
+
         dbg!(&fpm_path);
 
         let fpm_doc = utils::fpm_doc(fpm_path).await?;
