@@ -348,7 +348,7 @@ async fn auth_route(
 ) -> fpm::Result<fpm::http::Response> {
 
     let auth_obj=fpm::auth::github::index(req);
-    Ok(auth_obj)
+    Ok(auth_obj.await)
    
 }
 async fn login_route(
@@ -359,28 +359,17 @@ async fn login_route(
     Ok(login_obj.await)
 }
 
-/*async fn index2_route(
-    req: actix_web::HttpRequest,
-    body: actix_web::web::Bytes
-) -> fpm::Result<fpm::http::Response> {
-    let index2_obj=fpm::auth::github::index2(req);
-        //dbg!(index2_obj.cookies();
-    Ok(index2_obj)
-}*/
 async fn logout_route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
     let logout_obj=fpm::auth::github::logout(req);
-        //logout_obj.c
     Ok(logout_obj)
 }
 async fn auth_auth_route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
-     //let params: actix_web::web::Query<fpm::auth::github::AuthRequest>;
-        //dbg!(params);
         let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
         let uri_string=req.uri();
         let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
@@ -398,7 +387,6 @@ async fn auth_auth_route(
         }
         let auth_obj=fpm::auth::github::auth(req,
             fpm::auth::github::AuthRequest{code:code.clone(),state:state.clone()});
-            //auth_obj.await.cookies().collect();
         Ok(auth_obj.await)
 }
 async fn get_identities_route(

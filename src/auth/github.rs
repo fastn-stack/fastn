@@ -8,28 +8,40 @@ pub struct RepoObj {
     pub repo_owner:String,
     pub repo_title:String
 }
-pub fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    dotenv::dotenv();
-    //actix_web::
-    dbg!(req.connection_info());
-    let mut link="";
-    let mut link_title="";
+pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    dotenv::dotenv().ok();
+    let mut link="auth/login/";
+    let mut link_title="Login";
     match req.cookie("access_token"){
         Some(val)=>{
-            //dbg!(val.value());
-            link="auth/logout/";
-            link_title="Logout";
+            if val.value().to_string()!=""
+            {
+                link="auth/logout/";
+                link_title="Logout";
+            }
         }
         None=>{
-            link="auth/login/";
-            link_title="Login";
+            //link="auth/login/";
+           // link_title="Login";
         }
     }
-    let welcome_msg;
-    match req.cookie("user_login"){
+    let mut welcome_msg=String::from("Welcome. Please first login: ");
+
+    match req.cookie("access_token"){
         Some(val)=>{
-            //dbg!(val.value());
-            welcome_msg=format!("{}{}","Hello ",val.value());
+            if val.value().to_string()!=""{
+            let userresp=user_details(val.value().to_string()).await;
+        match userresp {
+            Ok(userresp) => {
+                let user_login=userresp.get("login");
+                if userresp.get("login").is_some(){
+                    welcome_msg=format!("{}{}","Hello ",user_login.clone().unwrap().to_string());
+                }
+            }Err(_) => {
+                
+        }
+       }
+    }
         }
         None=>{
             welcome_msg=String::from("Welcome. Please first login: ");
@@ -85,7 +97,7 @@ if TOKEN_URL_GLB.get().is_none(){
     .add_scope(oauth2::Scope::new("public_repo".to_string()))
     .add_scope(oauth2::Scope::new("user:email".to_string()))
     .url();
-    actix_web::HttpResponse::Found().cookie(actix_web::cookie::Cookie::build("testcookie", "test").finish())
+    actix_web::HttpResponse::Found()
     .append_header((actix_web::http::header::LOCATION, authorize_url.0.to_string()))
     .finish()
 
@@ -94,84 +106,30 @@ if TOKEN_URL_GLB.get().is_none(){
 pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     let connection_obj=req.connection_info().clone();
     let domain;
-    if connection_obj.host().contains("localhost"){
-        domain="localhost";
-    }else{
-        domain=connection_obj.host();
-    }
+    let host_info=connection_obj.host();
+    let domain_parts:Vec<&str>=host_info.split(":").collect();
+    domain=domain_parts.get(0).unwrap();
 actix_web::HttpResponse::Found()
 .cookie(
-    actix_web::cookie::Cookie::build("user_login", "")
-    .domain(domain)
-    .path("/auth/")
-    .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-    .finish())
-.cookie(
-    actix_web::cookie::Cookie::build("user_email", "")
-.domain(domain)
-.path("/auth/")
-.expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-.finish())
-
-.cookie(
-    actix_web::cookie::Cookie::build("user_fullname", "")
-    .domain(domain)
-    .path("/auth/")
-    .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-    .finish())
-.cookie(
     actix_web::cookie::Cookie::build("access_token", "")
-    .domain(domain)
-    .path("/auth/")
+    .domain(domain.clone())
+    .path("/")
     .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
     .finish())
-    .cookie(
-        actix_web::cookie::Cookie::build("user_login", "")
-        .domain(domain)
-        .path("/get-identities/")
-        .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-        .finish())
-    .cookie(
-        actix_web::cookie::Cookie::build("user_email", "")
-    .domain(domain)
-    .path("/get-identities/")
-    .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-.finish())
-
-    .cookie(
-        actix_web::cookie::Cookie::build("user_fullname", "")
-        .domain(domain)
-        .path("/get-identities/")
-        .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-        .finish())
-    .cookie(
-        actix_web::cookie::Cookie::build("access_token", "")
-        .domain(domain)
-        .path("/get-identities/")
-        .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-        .finish())
     .append_header((actix_web::http::header::LOCATION, "/auth/".to_string()))
     .finish()
 }
 
 pub async fn get_identity(req: actix_web::HttpRequest,repo_list:&Vec<String>) -> actix_web::HttpResponse {
    
-    let user_email_val:String;
-    let user_login_val:String;
+    let mut user_email_val:String=String::from("");
+    let mut user_login_val:String=String::from("");
     let access_token_val:String;
     let access_token = req.cookie("access_token");
     let user_login = req.cookie("user_login");
     let user_email = req.cookie("user_email");
     let user_fullname = req.cookie("user_fullname");
-    match req.cookie("user_login"){
-        Some(val)=>{
-           
-            user_login_val=val.value().to_string();
-        }
-        None=>{
-            user_login_val=String::from("");
-        }
-    }
+    
     match req.cookie("access_token"){
         Some(val)=>{
            
@@ -181,23 +139,28 @@ pub async fn get_identity(req: actix_web::HttpRequest,repo_list:&Vec<String>) ->
             access_token_val=String::from("");
         }
     }
-    match req.cookie("user_email"){
-        Some(val)=>{
-           
-            user_email_val=val.value().to_string();
-        }
-        None=>{
-            user_email_val=String::from("");
-        }
-    }
 if !access_token_val.is_empty() {
+    let userresp=user_details(access_token_val.clone()).await;
+    match userresp {
+        Ok(userresp) => {
+            //let user_login=userresp.get("login");
+            if userresp.get("login").is_some(){
+                user_login_val=userresp.get("login").unwrap().to_string();
+            }
+            if userresp.get("email").is_some(){
+                user_email_val=userresp.get("email").unwrap().to_string();
+            }
+            
+        }Err(_) => {
+            
+    }
+}    
 let mut all_found_repo:String=String::from("");
     let reporesp=get_starred_repo(access_token_val.clone(),&repo_list).await;
     match reporesp {
         Ok(reporesp) => {
 if reporesp.len()>0{
     for repo in reporesp{
-        //all_found_repo
         if all_found_repo==""{
             all_found_repo=format!("{}{}","github-starred:",repo);
         }else{
@@ -246,13 +209,11 @@ pub struct AuthRequest {
 pub async fn auth(
     req: actix_web::HttpRequest,params: AuthRequest,
     ) -> actix_web::HttpResponse {
-        let connection_obj=req.connection_info().clone();
+    let connection_obj=req.connection_info().clone();
     let domain;
-    if connection_obj.host().contains("localhost"){
-        domain="localhost";
-    }else{
-        domain=connection_obj.host();
-    }
+    let host_info=connection_obj.host();
+    let domain_parts:Vec<&str>=host_info.split(":").collect();
+    domain=domain_parts.get(0).unwrap();
         let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
         let auth_url=format!("{}{}",base_url,"/auth/auth/");
         let client = oauth2::basic::BasicClient::new(
@@ -275,64 +236,18 @@ pub async fn auth(
         .await;
         if let Ok(token) = token_res {
             access_token_obj=oauth2::TokenResponse::access_token(&token);
-            //dbg!(access_token_obj.clone().secret().to_string());
             access_token=access_token_obj.clone().secret().to_string();
-            //access_token=token.access_token().clone().secret().to_string();
-            
             let userresp=user_details(access_token.clone()).await;
             match userresp {
                 Ok(userresp) => {
                    
                     actix_web::HttpResponse::Found()
                     .cookie(
-                        actix_web::cookie::Cookie::build("user_login", userresp.get("login").clone().unwrap().as_str().unwrap())
-                        .domain(domain)
-                        .path("/auth/")
-                        .permanent()
-                        .finish())
-                    .cookie(
-                        actix_web::cookie::Cookie::build("user_email", userresp.get("email").clone().unwrap().as_str().unwrap())
-                    .domain(domain)
-                    .path("/auth/")
-                    .permanent().finish())
-                   
-                    .cookie(
-                        actix_web::cookie::Cookie::build("user_fullname", userresp.get("name").clone().unwrap().as_str().unwrap())
-                        .domain(domain)
-                        .path("/auth/")
-                        .permanent()
-                        .finish())
-                    .cookie(
                         actix_web::cookie::Cookie::build("access_token", access_token.as_str())
-                        .domain(domain)
-                        .path("/auth/")
+                        .domain(domain.clone())
+                        .path("/")
                         .permanent()
                         .finish())
-                        .cookie(
-                            actix_web::cookie::Cookie::build("user_login", userresp.get("login").clone().unwrap().as_str().unwrap())
-                            .domain(domain)
-                            .path("/get-identities/")
-                            .permanent()
-                            .finish())
-                        .cookie(
-                            actix_web::cookie::Cookie::build("user_email", userresp.get("email").clone().unwrap().as_str().unwrap())
-                        .domain(domain)
-                        .path("/get-identities/")
-                        .permanent().finish())
-                       
-                        .cookie(
-                            actix_web::cookie::Cookie::build("user_fullname", userresp.get("name").clone().unwrap().as_str().unwrap())
-                            .domain(domain)
-                            .path("/get-identities/")
-                            .permanent()
-                            .finish())
-                        .cookie(
-                            actix_web::cookie::Cookie::build("access_token", access_token.as_str())
-                            .domain(domain)
-                            .path("/get-identities/")
-                            .permanent()
-                            .finish())
-                  
                     .append_header((actix_web::http::header::LOCATION, "/auth/".to_string()))
                     .finish()
                 }
