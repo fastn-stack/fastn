@@ -159,7 +159,7 @@ impl Section {
             .to_string()
     }
 
-    // return true if any one does contain path_params
+    // return true if any item in sitemap does contain path_params
     pub fn contains_path_params(sections: &[Section]) -> bool {
         fn check_toc(toc: &fpm::sitemap::toc::TocItem) -> bool {
             if !toc.path_parameters.is_empty() {
