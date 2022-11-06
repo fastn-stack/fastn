@@ -19,7 +19,7 @@ pub(crate) async fn get_out(
     host: &str,
     req: fpm::http::Request,
     path: &str,
-    package_name: Option<String>,
+    package_name: &str,
 ) -> fpm::Result<fpm::http::Response> {
     let headers = req.headers();
     // TODO: It should be part of fpm::Request::uri()
@@ -104,9 +104,11 @@ pub(crate) async fn get_out(
 
     *proxy_request.body_mut() = Some(req.body().to_vec().into());
 
-    Ok(fpm::http::ResponseBuilder::from_reqwest(
-        CLIENT.execute(proxy_request).await?,
-        package_name.unwrap(),
+    Ok(
+        fpm::http::ResponseBuilder::from_reqwest(
+            CLIENT.execute(proxy_request).await?,
+            package_name,
+        )
+        .await,
     )
-    .await)
 }

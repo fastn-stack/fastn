@@ -219,7 +219,7 @@ impl ResponseBuilder {
 
     pub async fn from_reqwest(
         response: reqwest::Response,
-        package_name: String,
+        package_name: &str,
     ) -> fpm::http::Response {
         dbg!(&response);
 

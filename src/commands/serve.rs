@@ -167,7 +167,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
         // Get all the dependencies with mount-point if path_start with any package-name so send redirect to mount-point
 
-        let package_dependencies = config.package.deps_contains_mount_point();
+        let package_dependencies = config.package.deps_contain_mount_point();
         // if any package name starts with package-name to redirect it to /mount-point/remaining-url/
 
         if req_method.as_str() == "GET" {
@@ -216,6 +216,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             // Already checked in the above method serve_file
             println!("executing proxy");
             let (package_name, url) = fpm::config::utils::get_clean_url(&config, path.as_str())?;
+            let package_name = package_name.unwrap_or(config.package.name.to_string());
 
             let host = if let Some(port) = url.port() {
                 format!("{}://{}:{}", url.scheme(), url.host_str().unwrap(), port)
@@ -228,7 +229,8 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
                 return Ok(fpm::server_error!("request not set"));
             };
 
-            return fpm::proxy::get_out(host.as_str(), req, url.path(), package_name).await;
+            return fpm::proxy::get_out(host.as_str(), req, url.path(), package_name.as_str())
+                .await;
         }
 
         // Fallback to WASM execution in case of no successful response
