@@ -216,7 +216,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             // Already checked in the above method serve_file
             println!("executing proxy");
             let (package_name, url) = fpm::config::utils::get_clean_url(&config, path.as_str())?;
-            let package_name = package_name.unwrap_or(config.package.name.to_string());
+            let package_name = package_name.unwrap_or_else(|| config.package.name.to_string());
 
             let host = if let Some(port) = url.port() {
                 format!("{}://{}:{}", url.scheme(), url.host_str().unwrap(), port)

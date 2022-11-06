@@ -60,7 +60,7 @@ pub fn get_clean_url(config: &fpm::Config, url: &str) -> fpm::Result<(Option<Str
         config
             .get_mountpoint_sanitized_path(&config.package, url)
             .map(|(u, _, _)| u)
-            .unwrap_or(url.to_string())
+            .unwrap_or_else(|| url.to_string())
     };
 
     // This is for current package
