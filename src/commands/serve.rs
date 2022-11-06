@@ -170,7 +170,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         let package_dependencies = config.package.deps_contains_mount_point();
         // if any package name starts with package-name to redirect it to /mount-point/remaining-url/
 
-        if req_method.as_str() != "POST" {
+        if req_method.as_str() == "GET" {
             for (mp, dep) in package_dependencies {
                 if let Some(remaining_path) =
                     fpm::config::utils::trim_package_name(path.as_str(), dep.name.as_str())
@@ -187,7 +187,6 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
 
                     dbg!("Send redirect");
                     dbg!(&path);
-                    // Method and body not changed. that is why MOVED_PERMANENTLY
                     let mut resp = actix_web::HttpResponse::new(
                         actix_web::http::StatusCode::PERMANENT_REDIRECT,
                     );
