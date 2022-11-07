@@ -128,7 +128,7 @@ impl State {
             s.header.add(
                 &line_number,
                 name.as_str(),
-                value.unwrap_or_else(|| "".to_string()).as_str(),
+                value.unwrap_or_default().as_str(),
             );
             self.section = Some(s);
         }
@@ -165,7 +165,7 @@ impl State {
             s.header.add(
                 &line_number,
                 name.as_str(),
-                value.unwrap_or_else(|| "".to_string()).as_str(),
+                value.unwrap_or_default().as_str(),
             );
             self.sub_section = Some(s);
         }

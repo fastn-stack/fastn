@@ -66,7 +66,7 @@ impl FunctionGenerator {
     }
 }
 
-struct ExpressionGenerator;
+pub struct ExpressionGenerator;
 
 impl ExpressionGenerator {
     pub fn to_string(

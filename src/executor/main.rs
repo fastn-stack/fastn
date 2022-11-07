@@ -223,7 +223,7 @@ impl<'a> ExecuteDoc<'a> {
             }
             "ftd#row" => {
                 let children = ExecuteDoc::execute_from_instructions(
-                    instruction.children.as_slice(),
+                    instruction.get_children(&doc.itdoc())?.as_slice(),
                     doc,
                     local_container,
                 )?;
@@ -239,7 +239,7 @@ impl<'a> ExecuteDoc<'a> {
             }
             "ftd#column" => {
                 let children = ExecuteDoc::execute_from_instructions(
-                    instruction.children.as_slice(),
+                    instruction.get_children(&doc.itdoc())?.as_slice(),
                     doc,
                     local_container,
                 )?;
@@ -333,29 +333,6 @@ fn update_local_variable_reference_in_condition(
     for reference in condition.references.values_mut() {
         update_local_variable_reference_in_property_value(reference, local_variable);
     }
-    /*match condition {
-        ftd::interpreter2::Boolean::IsNotNull { value, .. } => {
-            update_local_variable_reference_in_property_value(value, local_variable)
-        }
-        ftd::interpreter2::Boolean::IsNull { value, .. } => {
-            update_local_variable_reference_in_property_value(value, local_variable)
-        }
-        ftd::interpreter2::Boolean::IsNotEmpty { value, .. } => {
-            update_local_variable_reference_in_property_value(value, local_variable)
-        }
-        ftd::interpreter2::Boolean::IsEmpty { value, .. } => {
-            update_local_variable_reference_in_property_value(value, local_variable)
-        }
-        ftd::interpreter2::Boolean::Equal { left, right, .. } => {
-            update_local_variable_reference_in_property_value(left, local_variable);
-            update_local_variable_reference_in_property_value(right, local_variable);
-        }
-        ftd::interpreter2::Boolean::NotEqual { left, right, .. } => {
-            update_local_variable_reference_in_property_value(left, local_variable);
-            update_local_variable_reference_in_property_value(right, local_variable);
-        }
-        ftd::interpreter2::Boolean::Literal { .. } => {}
-    }*/
 }
 
 fn update_local_variable_reference_in_property_value(
@@ -371,7 +348,25 @@ fn update_local_variable_reference_in_property_value(
             }
             return;
         }
-        _ => return,
+        ftd::interpreter2::PropertyValue::Value { value, .. } => {
+            return match value {
+                ftd::interpreter2::Value::List { data, .. } => {
+                    for d in data.iter_mut() {
+                        update_local_variable_reference_in_property_value(d, local_variable);
+                    }
+                }
+                ftd::interpreter2::Value::Record { fields, .. }
+                | ftd::interpreter2::Value::Object { values: fields } => {
+                    for d in fields.values_mut() {
+                        update_local_variable_reference_in_property_value(d, local_variable);
+                    }
+                }
+                ftd::interpreter2::Value::UI { component, .. } => {
+                    update_local_variable_references_in_component(component, local_variable)
+                }
+                _ => {}
+            }
+        }
     };
 
     if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {

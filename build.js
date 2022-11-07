@@ -38,8 +38,10 @@ window.ftd = (function () {
     function handle_event(evt, id, action, obj) {
         let function_arguments = [];
         handle_function(evt, id, action, obj, function_arguments);
-        change_value(function_arguments, ftd_data[id]);
-        window["node_change_" + id](ftd_data[id]);
+        change_value(function_arguments, ftd_data[id], id);
+        if (!!window["node_change_" + id]) {
+            window["node_change_" + id](ftd_data[id]);
+        }
     }
     exports.handle_event = function (evt, id, event, obj) {
         console_log(id, event);
@@ -375,12 +377,17 @@ function deepCopy(object) {
     }
     return object;
 }
-function change_value(function_arguments, data) {
+function change_value(function_arguments, data, id) {
     for (const a in function_arguments) {
         if (isFunctionArgument(function_arguments[a])) {
             if (!!function_arguments[a]["reference"]) {
                 let reference = function_arguments[a]["reference"];
-                data[reference] = function_arguments[a]["value"];
+                if (!!window["set_value_" + id] && !!window["set_value_" + id][reference]) {
+                    window["set_value_" + id][reference](data, function_arguments[a]["value"]);
+                }
+                else {
+                    data[reference] = function_arguments[a]["value"];
+                }
             }
         }
     }

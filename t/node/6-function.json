@@ -432,8 +432,8 @@
                   "name": "foo#new-name",
                   "kind": {
                     "kind": "String",
-                    "caption": false,
-                    "body": false
+                    "caption": true,
+                    "body": true
                   },
                   "source": "Global",
                   "is_mutable": false,

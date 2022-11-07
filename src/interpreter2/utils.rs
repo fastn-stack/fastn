@@ -70,7 +70,7 @@ pub(crate) fn kind_eq(
         doc,
         line_number,
     )?;
-    Ok(kind_data.kind.eq(kind))
+    Ok(kind_data.kind.is_same_as(kind))
 }
 
 pub const CLONE: &str = "*$";
@@ -212,4 +212,71 @@ pub fn get_argument_for_reference_and_remaining<'a>(
     }
 
     None
+}
+
+pub fn validate_variable(
+    variable: &ftd::interpreter2::Variable,
+    doc: &ftd::interpreter2::TDoc,
+) -> ftd::interpreter2::Result<()> {
+    if !variable.mutable {
+        return Ok(());
+    }
+    if !variable.conditional_value.is_empty() {
+        return ftd::interpreter2::utils::e2(
+            format!(
+                "conditional properties are not supported for mutable argument `{}`",
+                variable.name,
+            ),
+            doc.name,
+            variable.line_number,
+        );
+    }
+
+    validate_property_value_for_mutable(&variable.value, doc)
+}
+
+pub fn validate_property_value_for_mutable(
+    value: &ftd::interpreter2::PropertyValue,
+    doc: &ftd::interpreter2::TDoc,
+) -> ftd::interpreter2::Result<()> {
+    if let Some(name) = value.reference_name() {
+        if let Ok(ref_variable) = doc.get_variable(name, value.line_number()) {
+            if !ref_variable.mutable {
+                return ftd::interpreter2::utils::e2(
+                    format!(
+                        "Cannot pass immutable reference `{}` to mutable",
+                        ref_variable.name
+                    ),
+                    doc.name,
+                    value.line_number(),
+                );
+            }
+        }
+    } else if let Some(function_call) = value.get_function() {
+        validate_function_call(function_call, doc)?;
+    }
+
+    return Ok(());
+
+    fn validate_function_call(
+        function_call: &ftd::interpreter2::FunctionCall,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<()> {
+        for (key, value) in function_call.values.iter() {
+            if let Some(ref_name) = value.reference_name() {
+                return ftd::interpreter2::utils::e2(
+                    format!(
+                        "Cannot pass reference `{}`:`{}` to mutable: Hint: Use *${} instead.",
+                        key, ref_name, ref_name
+                    ),
+                    doc.name,
+                    value.line_number(),
+                );
+            } else if let Some(function_call) = value.get_function() {
+                validate_function_call(function_call, doc)?;
+            }
+        }
+
+        Ok(())
+    }
 }

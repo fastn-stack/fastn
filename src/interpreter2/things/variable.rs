@@ -27,14 +27,19 @@ impl Variable {
             variable_definition.mutable,
             Some(&kind),
         )?;
-        Ok(Variable {
+
+        let variable = Variable {
             name,
             kind,
             mutable: variable_definition.mutable,
             value,
             conditional_value: vec![],
             line_number: variable_definition.line_number,
-        })
+        };
+
+        ftd::interpreter2::utils::validate_variable(&variable, doc)?;
+
+        Ok(variable)
     }
 
     pub(crate) fn update_from_ast(

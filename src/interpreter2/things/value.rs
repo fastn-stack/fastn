@@ -104,6 +104,13 @@ impl PropertyValue {
         }
     }
 
+    pub(crate) fn get_function(&self) -> Option<&ftd::interpreter2::FunctionCall> {
+        match self {
+            PropertyValue::FunctionCall(f) => Some(f),
+            _ => None,
+        }
+    }
+
     pub fn get_reference_or_clone(&self) -> Option<&String> {
         match self {
             PropertyValue::Reference { name, .. } | PropertyValue::Clone { name, .. } => Some(name),
@@ -222,21 +229,30 @@ impl PropertyValue {
                             value.line_number(),
                         );
                     }
-                    values.push(PropertyValue::from_ast_value(
-                        value,
-                        doc,
-                        is_mutable,
-                        Some(&ftd::interpreter2::KindData {
-                            kind: kind.as_ref().clone(),
-                            caption: expected_kind.caption,
-                            body: expected_kind.body,
-                        }),
-                    )?);
+                    values.push(if kind.is_ui() {
+                        PropertyValue::to_ui_value(
+                            &key,
+                            value,
+                            doc,
+                            definition_name_with_arguments,
+                        )?
+                    } else {
+                        PropertyValue::from_ast_value(
+                            value,
+                            doc,
+                            is_mutable,
+                            Some(&ftd::interpreter2::KindData {
+                                kind: kind.as_ref().clone(),
+                                caption: expected_kind.caption,
+                                body: expected_kind.body,
+                            }),
+                        )?
+                    });
                 }
                 PropertyValue::Value {
                     value: ftd::interpreter2::Value::List {
                         data: values,
-                        kind: expected_kind.clone(),
+                        kind: expected_kind.clone().inner_list(),
                     },
                     is_mutable,
                     line_number,
@@ -244,7 +260,7 @@ impl PropertyValue {
             }
             ftd::interpreter2::Kind::Record { name } if value.is_record() => {
                 let record = doc.get_record(name, value.line_number())?;
-                let (_, caption, headers, body, line_number) = value.get_record(doc.name)?;
+                let (_, caption, headers, body, _, line_number) = value.get_record(doc.name)?;
                 // TODO: Check if the record name and the value kind are same
                 let mut result_field: ftd::Map<PropertyValue> = Default::default();
                 for field in record.fields {
@@ -344,9 +360,33 @@ impl PropertyValue {
                     line_number,
                 }
             }
-            _ => {
-                unimplemented!()
+            t => {
+                unimplemented!("t::{:?}  {:?}", t, value)
             }
+        })
+    }
+
+    fn to_ui_value(
+        key: &str,
+        value: ftd::ast::VariableValue,
+        doc: &ftd::interpreter2::TDoc,
+        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::PropertyValue> {
+        let line_number = value.line_number();
+        let ast_component = ftd::ast::Component::from_variable_value(key, value, doc.name)?;
+        let component = ftd::interpreter2::Component::from_ast_component(
+            ast_component,
+            definition_name_with_arguments,
+            doc,
+        )?;
+        Ok(ftd::interpreter2::PropertyValue::Value {
+            value: ftd::interpreter2::Value::UI {
+                name: component.name.to_string(),
+                kind: ftd::interpreter2::Kind::ui().into_kind_data(),
+                component,
+            },
+            is_mutable: false,
+            line_number,
         })
     }
 
@@ -473,7 +513,7 @@ impl PropertyValue {
 
                 Ok(Some(PropertyValue::Reference {
                     name: reference_full_name,
-                    kind: found_kind,
+                    kind: expected_kind.map(Clone::clone).unwrap_or(found_kind),
                     source,
                     is_mutable: mutable,
                     line_number: value.line_number(),
@@ -611,23 +651,17 @@ impl Value {
 
     pub(crate) fn kind(&self) -> ftd::interpreter2::Kind {
         match self {
-            Value::String { .. } => ftd::interpreter2::Kind::String,
-            Value::Integer { .. } => ftd::interpreter2::Kind::Integer,
-            Value::Decimal { .. } => ftd::interpreter2::Kind::Decimal,
-            Value::Boolean { .. } => ftd::interpreter2::Kind::Boolean,
-            Value::Object { .. } => ftd::interpreter2::Kind::Object,
-            Value::Record { name, .. } => ftd::interpreter2::Kind::Record {
-                name: name.to_string(),
-            },
-            Value::List { kind, .. } => ftd::interpreter2::Kind::List {
-                kind: Box::new(kind.kind.clone()),
-            },
+            Value::String { .. } => ftd::interpreter2::Kind::string(),
+            Value::Integer { .. } => ftd::interpreter2::Kind::integer(),
+            Value::Decimal { .. } => ftd::interpreter2::Kind::decimal(),
+            Value::Boolean { .. } => ftd::interpreter2::Kind::boolean(),
+            Value::Object { .. } => ftd::interpreter2::Kind::object(),
+            Value::Record { name, .. } => ftd::interpreter2::Kind::record(name),
+            Value::List { kind, .. } => kind.kind.clone().into_list(),
             Value::Optional { kind, .. } => ftd::interpreter2::Kind::Optional {
                 kind: Box::new(kind.kind.clone()),
             },
-            Value::UI { name, .. } => ftd::interpreter2::Kind::UI {
-                name: Some(name.to_string()),
-            },
+            Value::UI { name, .. } => ftd::interpreter2::Kind::ui_with_name(name),
         }
     }
 

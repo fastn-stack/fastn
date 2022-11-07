@@ -63,43 +63,90 @@
               },
               "condition": null,
               "line_number": 8
+            },
+            {
+              "value": {
+                "Value": {
+                  "value": {
+                    "List": {
+                      "data": [
+                        {
+                          "Value": {
+                            "value": {
+                              "UI": {
+                                "name": "ftd#text",
+                                "kind": {
+                                  "kind": {
+                                    "UI": {
+                                      "name": null,
+                                      "subsection_source": true
+                                    }
+                                  },
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "component": {
+                                  "name": "ftd#text",
+                                  "properties": [
+                                    {
+                                      "value": {
+                                        "Reference": {
+                                          "name": "foo#print.name",
+                                          "kind": {
+                                            "kind": "String",
+                                            "caption": true,
+                                            "body": true
+                                          },
+                                          "source": {
+                                            "Local": "print"
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 10
+                                        }
+                                      },
+                                      "source": "Caption",
+                                      "condition": null,
+                                      "line_number": 10
+                                    }
+                                  ],
+                                  "iteration": null,
+                                  "condition": null,
+                                  "events": [],
+                                  "children": [],
+                                  "line_number": 10
+                                }
+                              }
+                            },
+                            "is_mutable": false,
+                            "line_number": 10
+                          }
+                        }
+                      ],
+                      "kind": {
+                        "kind": {
+                          "UI": {
+                            "name": null,
+                            "subsection_source": true
+                          }
+                        },
+                        "caption": false,
+                        "body": false
+                      }
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 10
+                }
+              },
+              "source": "Subsection",
+              "condition": null,
+              "line_number": 10
             }
           ],
           "iteration": null,
           "condition": null,
           "events": [],
-          "children": [
-            {
-              "name": "ftd#text",
-              "properties": [
-                {
-                  "value": {
-                    "Reference": {
-                      "name": "foo#print.name",
-                      "kind": {
-                        "kind": "String",
-                        "caption": false,
-                        "body": false
-                      },
-                      "source": {
-                        "Local": "print"
-                      },
-                      "is_mutable": false,
-                      "line_number": 10
-                    }
-                  },
-                  "source": "Caption",
-                  "condition": null,
-                  "line_number": 10
-                }
-              ],
-              "iteration": null,
-              "condition": null,
-              "events": [],
-              "children": [],
-              "line_number": 10
-            }
-          ],
+          "children": [],
           "line_number": 7
         },
         "line_number": 3

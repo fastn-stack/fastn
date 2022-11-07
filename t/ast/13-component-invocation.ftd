@@ -19,5 +19,4 @@ if: $flag
 -- ftd.text: Click Here
 $on-click$: toggle $flag
 
-
 -- end: ftd.column

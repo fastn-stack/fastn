@@ -54,7 +54,9 @@
                           "line_number": 8
                         }
                       },
-                      "line_number": 8
+                      "line_number": 8,
+                      "kind": null,
+                      "condition": null
                     },
                     {
                       "key": "age",
@@ -65,10 +67,13 @@
                           "line_number": 9
                         }
                       },
-                      "line_number": 9
+                      "line_number": 9,
+                      "kind": null,
+                      "condition": null
                     }
                   ],
                   "body": null,
+                  "values": [],
                   "line_number": 7
                 }
               }
@@ -102,7 +107,9 @@
                           "line_number": 17
                         }
                       },
-                      "line_number": 17
+                      "line_number": 17,
+                      "kind": null,
+                      "condition": null
                     },
                     {
                       "key": "age",
@@ -113,10 +120,13 @@
                           "line_number": 18
                         }
                       },
-                      "line_number": 18
+                      "line_number": 18,
+                      "kind": null,
+                      "condition": null
                     }
                   ],
                   "body": null,
+                  "values": [],
                   "line_number": 16
                 }
               }

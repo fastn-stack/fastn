@@ -21,7 +21,6 @@ mod html;
 pub mod html1;
 pub mod interpreter;
 pub mod interpreter2;
-pub mod main;
 pub mod markup;
 pub mod node;
 mod or_type;
@@ -44,7 +43,6 @@ pub use ftd::{
     value_with_default::ValueWithDefault,
 };
 pub use html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
-pub use main::ExampleLibrary;
 pub use or_type::OrType;
 pub use rendered::Rendered;
 pub use rt::RT;
@@ -69,6 +67,25 @@ pub fn html() -> &'static str {
 
 // #[cfg(test)]
 pub type Map<T> = std::collections::BTreeMap<String, T>;
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct VecMap<T> {
+    value: Map<Vec<T>>,
+}
+
+impl<T> VecMap<T> {
+    pub fn insert(&mut self, key: String, value: T) {
+        if let Some(v) = self.value.get_mut(&key) {
+            v.push(value);
+        } else {
+            self.value.insert(key, vec![value]);
+        }
+    }
+
+    pub fn extend(&mut self, key: String, value: Vec<T>) {
+        self.value.insert(key, value);
+    }
+}
 
 // #[cfg(not(test))]
 // pub type Map<T> = std::collections::HashMap<String, T>;
@@ -163,4 +180,77 @@ pub struct Dependencies {
 pub struct ConditionalValueWithDefault {
     pub value: ConditionalValue,
     pub default: Option<ConditionalValue>,
+}
+
+pub struct ExampleLibrary {}
+
+impl ExampleLibrary {
+    pub fn dummy_global_ids_map(&self) -> std::collections::HashMap<String, String> {
+        let mut global_ids: std::collections::HashMap<String, String> =
+            std::collections::HashMap::new();
+
+        global_ids.insert("foo".to_string(), "/foo/bar/#foo".to_string());
+        global_ids.insert("hello".to_string(), "/hello/there/#hello".to_string());
+        global_ids.insert("some id".to_string(), "/some/id/#some-id".to_string());
+
+        // To debug for section
+        global_ids.insert("scp".to_string(), "/foo/bar/#scp".to_string());
+        global_ids.insert("sh".to_string(), "/hello/there/#sh".to_string());
+        global_ids.insert("sb".to_string(), "/some/id/#sb".to_string());
+
+        // To debug for subsection
+        global_ids.insert("sscp".to_string(), "/foo/bar/#sscp".to_string());
+        global_ids.insert("ssh".to_string(), "/hello/there/#ssh".to_string());
+        global_ids.insert("ssb".to_string(), "/some/id/#ssb".to_string());
+
+        // More dummy instances for debugging purposes
+        global_ids.insert("a".to_string(), "/some/#a".to_string());
+        global_ids.insert("b".to_string(), "/some/#b".to_string());
+        global_ids.insert("c".to_string(), "/some/#c".to_string());
+        global_ids.insert("d".to_string(), "/some/#d".to_string());
+
+        // to debug in case of checkboxes
+        global_ids.insert("x".to_string(), "/some/#x".to_string());
+        global_ids.insert("X".to_string(), "/some/#X".to_string());
+
+        global_ids
+    }
+
+    pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
+        std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
+    }
+
+    /// checks if the current processor is a lazy processor
+    /// or not
+    ///
+    /// for more details
+    /// visit www.fpm.dev/glossary/#lazy-processor
+    pub fn is_lazy_processor(
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<bool> {
+        Ok(section
+            .header
+            .str(doc.name, section.line_number, "$processor$")?
+            .eq("page-headings"))
+    }
+
+    pub fn process(
+        &self,
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<ftd::Value> {
+        ftd::p2::utils::unknown_processor_error(
+            format!("unimplemented for section {:?} and doc {:?}", section, doc),
+            doc.name.to_string(),
+            section.line_number,
+        )
+    }
+
+    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
+        match self.get(name, doc) {
+            Some(v) => Ok(v),
+            None => ftd::p2::utils::e2(format!("library not found: {}", name), "", 0),
+        }
+    }
 }

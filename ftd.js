@@ -1345,6 +1345,66 @@ window.ftd.post_init = function () {
         update_theme_color();
     }
 
+
+    window.ftd_warnings_delivered = {};
+
+    window["ls.set_boolean"] = function(_id, resolved_data, reference) {
+        // TODO: we need a better way to detect absence of localStorage
+        if (!isLocalStorageAvailable()) {
+            // we are doing this business so we only show the warning once in console
+            if (window.ftd_warnings_delivered["ls.set_boolean"]) {
+                return;
+            }
+            window.ftd_warnings_delivered["ls.set_boolean"] = true;
+
+            // TODO: we should have `ftd.localStorage-present` or some such, so we can
+            //       show a warning in UI as well, instead of just in console.
+
+            console.warn("localStorage not available, but ls.set-boolean was used");
+            return;
+        }
+
+        // TODO: we are not using id yet.
+        console.log("ls.set-boolean", reference["variable"], resolved_data["variable"]);
+        window.localStorage.setItem(reference["variable"], resolved_data["variable"]);
+    }
+
+    // source: https://stackoverflow.com/questions/16427636/check-if-localstorage-is-available
+    function isLocalStorageAvailable(){
+        if (!window.localStorage) {
+            return false;
+        }
+
+        var test = 'test';
+        try {
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+
+    function scan_local_store() {
+        if (!isLocalStorageAvailable()) {
+            return;
+        }
+
+        Object.keys(window.localStorage).forEach(function(key){
+            let value = window.localStorage.getItem(key);
+            // value would be def string or null
+            // we want to set a boolean variable using `value`
+            // we want to only do if everything is alright
+            if (value === "true" || value === "false") {
+                // TODO: how do we handle id? we are hard-coding main here, which is wrong
+                window.ftd.set_value("main", key,  value === "true");
+            } else {
+                console.log("contract violation, expected boolean", key, "found", value);
+                // TODO: use key prefixes so we can delete the keys safely
+            }
+        });
+    }
+
     function update_theme_color() {
         let theme_color = window.ftd.get_value("main", FTD_THEME_COLOR);
         if (!!theme_color) {
@@ -1422,4 +1482,5 @@ window.ftd.post_init = function () {
     initialise_dark_mode();
     initialise_device();
     update_markdown_colors();
+    scan_local_store();
 };

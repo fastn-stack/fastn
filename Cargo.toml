@@ -74,7 +74,7 @@ default-features = false
 [dev-dependencies]
 diffy = "0.3"
 pretty_assertions = "1.2"
-ron = "0.7.0"
+ron = "0.8.0"
 rand = "0.8.5"
 rand_pcg = "0.3.1"
 

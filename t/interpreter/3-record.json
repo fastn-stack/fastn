@@ -109,12 +109,8 @@
                     ],
                     "kind": {
                       "kind": {
-                        "List": {
-                          "kind": {
-                            "Record": {
-                              "name": "foo#person"
-                            }
-                          }
+                        "Record": {
+                          "name": "foo#person"
                         }
                       },
                       "caption": false,
@@ -169,11 +165,7 @@
                       }
                     ],
                     "kind": {
-                      "kind": {
-                        "List": {
-                          "kind": "String"
-                        }
-                      },
+                      "kind": "String",
                       "caption": false,
                       "body": false
                     }

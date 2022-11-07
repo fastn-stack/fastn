@@ -1,0 +1,112 @@
+-- void increment(a):
+integer $a:
+
+a += 1
+
+
+-- component counter:
+integer $count:
+
+-- ftd.integer: $counter.count
+$on-click$: $increment($a = $counter.count)
+
+-- end: counter
+
+
+
+-- integer $count: 1
+
+
+
+
+-- component page:
+ftd.ui list extra-headers:
+children body:
+
+-- ftd.column:
+padding: 80
+
+-- ftd.text: ...................................................................
+
+-- ftd.row:
+
+-- ftd.text: LOGO
+padding: 2
+
+-- ftd.text: Home
+padding: 2
+
+-- ftd.row:
+children: $page.extra-headers
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.text: ...................................................................
+
+-- ftd.column:
+padding: 40
+children: $page.body
+
+-- end: ftd.column
+
+-- ftd.text: ...................................................................
+
+-- end: ftd.column
+
+-- end: page
+
+
+
+
+-- page:
+
+-- page.extra-headers:
+
+-- ftd.text: Header 1
+padding: 2
+
+-- ftd.text: Header 2
+padding: 2
+
+-- ftd.text: Header 3
+padding: 2
+
+-- ftd.text: Header 4
+padding: 2
+
+
+-- end: page.extra-headers
+
+
+-- ftd.text: Body Text
+
+-- ftd.row:
+
+-- ftd.text: Counter 1:
+
+-- counter:
+$count: $count
+
+-- end: ftd.row
+
+
+-- ftd.row:
+
+-- ftd.text: Counter 2:
+
+-- counter:
+$count: $count
+
+-- end: ftd.row
+
+
+-- end: page
+
+
+-- page:
+
+-- ftd.text: Hello
+
+-- end: page

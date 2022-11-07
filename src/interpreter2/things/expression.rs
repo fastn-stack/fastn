@@ -82,7 +82,6 @@ impl Boolean {
                     .into_evalexpr_value(),
             );
         }
-        // dbg!(&self);
         let node = self.expression.update_node_with_value(&values);
         let mut context = ftd::interpreter2::default::default_context()?;
         Ok(node.eval_boolean_with_context_mut(&mut context)?)
@@ -111,7 +110,7 @@ fn get_variable_identifier_read(node: &ftd::evalexpr::Node) -> Vec<String> {
             }
         }
         for child in node.children().iter() {
-            values.extend(get_variable_identifier_read(child));
+            values.extend(get_variable_identifier_read_(child, write_variable));
         }
         values
     }
@@ -133,6 +132,27 @@ impl ftd::evalexpr::Node {
         let mut children = vec![];
         for child in self.children() {
             children.push(child.update_node_with_value(values));
+        }
+        ftd::evalexpr::Node::new(operator).add_children(children)
+    }
+
+    pub fn update_node_with_variable_reference(
+        &self,
+        references: &ftd::Map<ftd::interpreter2::PropertyValue>,
+    ) -> ftd::evalexpr::Node {
+        let mut operator = self.operator().clone();
+        if let ftd::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
+            if let Some(ftd::interpreter2::PropertyValue::Reference { name, .. }) =
+                references.get(identifier)
+            {
+                operator = ftd::evalexpr::Operator::VariableIdentifierRead {
+                    identifier: format!("data[\"{}\"]", name),
+                }
+            }
+        }
+        let mut children = vec![];
+        for child in self.children() {
+            children.push(child.update_node_with_variable_reference(references));
         }
         ftd::evalexpr::Node::new(operator).add_children(children)
     }

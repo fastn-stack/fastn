@@ -33,54 +33,88 @@ impl<'a> DependencyGenerator<'a> {
     fn get_dependencies_(&self) -> ftd::html1::Result<String> {
         let node_data_id = ftd::html1::utils::full_data_id(self.id, self.node.data_id.as_str());
         let mut result = vec![];
-        let default = self
-            .node
-            .text
-            .properties
-            .iter()
-            .find(|v| v.condition.is_none());
-        if let Some(default) = default {
-            if let Some(value_string) = self.get_formatted_dep_string_from_property_value(
-                &default.value,
-                &self.node.text.pattern,
-            )? {
+
+        let mut expressions = vec![];
+        for property in self.node.text.properties.iter() {
+            let condition = property
+                .condition
+                .as_ref()
+                .map(ftd::html1::utils::get_condition_string);
+            if let Some(value_string) =
+                ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                    self.id,
+                    self.doc,
+                    &property.value,
+                    &self.node.text.pattern,
+                )?
+            {
                 let value = format!(
                     "document.querySelector(`[data-id=\"{}\"]`).innerHTML = {};",
                     node_data_id, value_string
                 );
-                result.push(value);
+                expressions.push((condition, value));
             }
         }
 
+        let value = ftd::html1::utils::js_expression_from_list(expressions);
+        if !value.trim().is_empty() {
+            result.push(value.trim().to_string());
+        }
+
         for (key, attribute) in self.node.attrs.iter() {
-            let default = attribute.properties.iter().find(|v| v.condition.is_none());
-            if let Some(default) = default {
-                if let Some(value_string) = self.get_formatted_dep_string_from_property_value(
-                    &default.value,
-                    &attribute.pattern,
-                )? {
+            let mut expressions = vec![];
+            for property in attribute.properties.iter() {
+                let condition = property
+                    .condition
+                    .as_ref()
+                    .map(ftd::html1::utils::get_condition_string);
+                if let Some(value_string) =
+                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        self.id,
+                        self.doc,
+                        &property.value,
+                        &attribute.pattern,
+                    )?
+                {
                     let value = format!(
                         "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
                         node_data_id, key, value_string
                     );
-                    result.push(value);
+                    expressions.push((condition, value));
                 }
+            }
+            let value = ftd::html1::utils::js_expression_from_list(expressions);
+            if !value.trim().is_empty() {
+                result.push(value.trim().to_string());
             }
         }
 
         for (key, attribute) in self.node.style.iter() {
-            let default = attribute.properties.iter().find(|v| v.condition.is_none());
-            if let Some(default) = default {
-                if let Some(value_string) = self.get_formatted_dep_string_from_property_value(
-                    &default.value,
-                    &attribute.pattern,
-                )? {
+            let mut expressions = vec![];
+            for property in attribute.properties.iter() {
+                let condition = property
+                    .condition
+                    .as_ref()
+                    .map(ftd::html1::utils::get_condition_string);
+                if let Some(value_string) =
+                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        self.id,
+                        self.doc,
+                        &property.value,
+                        &attribute.pattern,
+                    )?
+                {
                     let value = format!(
                         "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = {};",
                         node_data_id, key, value_string
                     );
-                    result.push(value);
+                    expressions.push((condition, value));
                 }
+            }
+
+            let value = ftd::html1::utils::js_expression_from_list(expressions);
+            if !value.trim().is_empty() {
+                result.push(value.trim().to_string());
             }
         }
 
@@ -92,35 +126,5 @@ impl<'a> DependencyGenerator<'a> {
             }
         }
         Ok(result.join("\n"))
-    }
-
-    fn get_formatted_dep_string_from_property_value(
-        &self,
-        property_value: &ftd::interpreter2::PropertyValue,
-        pattern: &Option<String>,
-    ) -> ftd::html1::Result<Option<String>> {
-        let value_string = match property_value {
-            ftd::interpreter2::PropertyValue::Reference { name, .. } => {
-                format!("data[\"{}\"]", name)
-            }
-            ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {
-                let action = serde_json::to_string(&ftd::html1::Action::from_function_call(
-                    function_call,
-                    self.id,
-                    self.doc,
-                )?)
-                .unwrap();
-                format!(
-                    "window.ftd.handle_function(event, '{}', '{}', this)",
-                    self.id, action
-                )
-            }
-            _ => return Ok(None),
-        };
-
-        Ok(Some(match pattern {
-            Some(p) => format!("\"{}\".format({})", p, value_string),
-            None => value_string,
-        }))
     }
 }
