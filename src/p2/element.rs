@@ -320,7 +320,7 @@ pub fn common_from_properties(
         white_space: ftd::p2::utils::string_optional("white-space", properties, doc.name, 0)?,
         border_style: ftd::p2::utils::string_optional("border-style", properties, doc.name, 0)?,
         text_transform: ftd::p2::utils::string_optional("text-transform", properties, doc.name, 0)?,
-        h_number: ftd::p2::utils::string_optional("h-number", properties, doc.name, 0)?,
+        heading_number: ftd::p2::utils::string_optional("heading-number", properties, doc.name, 0)?,
     })
 }
 
@@ -617,7 +617,7 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             ftd::p2::Kind::string().into_optional(),
         ),
         (
-            "h-number".to_string(),
+            "heading-number".to_string(),
             ftd::p2::Kind::string().into_optional(),
         ),
         /*(

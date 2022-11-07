@@ -699,7 +699,7 @@ impl InterpreterState {
                 }
             }
 
-            if child.properties.get("h-number").is_none() {
+            if child.properties.get("heading-number").is_none() {
                 let number_property = ftd::component::Property {
                     default: Some(ftd::PropertyValue::Value {
                         value: (ftd::Value::String {
@@ -711,7 +711,7 @@ impl InterpreterState {
                 };
                 child
                     .properties
-                    .insert("h-number".to_string(), number_property);
+                    .insert("heading-number".to_string(), number_property);
             }
 
             let child_property = child

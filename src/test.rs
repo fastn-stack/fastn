@@ -13814,7 +13814,7 @@ mod interpreter {
                     region: Some(ftd::Region::H0),
                     id: Some(s("one")),
                     data_id: Some(s("one")),
-                    h_number: Some(s("1")),
+                    heading_number: Some(s("1")),
                     ..Default::default()
                 },
             }));
@@ -13855,7 +13855,7 @@ mod interpreter {
                 common: ftd::Common {
                     region: Some(ftd::Region::H0),
                     id: Some(s("heading-01")),
-                    h_number: Some(s("2")),
+                    heading_number: Some(s("2")),
                     ..Default::default()
                 },
             }));

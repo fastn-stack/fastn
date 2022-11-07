@@ -2988,7 +2988,7 @@ fn assert_caption_body_checks(
 pub(crate) fn universal_arguments() -> ftd::Map<ftd::p2::Kind> {
     let mut universal_arguments: ftd::Map<ftd::p2::Kind> = Default::default();
     universal_arguments.insert(
-        "h-number".to_string(),
+        "heading-number".to_string(),
         ftd::p2::Kind::string().into_optional(),
     );
     universal_arguments.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
