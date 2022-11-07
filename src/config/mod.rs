@@ -1215,75 +1215,8 @@ impl Config {
                 )
             }
         };
-
         let fpm_doc = utils::fpm_doc(&root.join("FPM.ftd")).await?;
-
-        let mut deps = {
-            let temp_deps: Vec<fpm::package::dependency::DependencyTemp> =
-                fpm_doc.get("fpm#dependency")?;
-            temp_deps
-                .into_iter()
-                .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Result<fpm::Dependency>>>()
-                .into_iter()
-                .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
-        };
-
-        let mut package = {
-            let mut package = fpm::Package::from_fpm_doc(&fpm_doc)?;
-            if package.name != fpm::FPM_UI_INTERFACE
-                && !deps
-                    .iter()
-                    .any(|dep| dep.implements.contains(&fpm::FPM_UI_INTERFACE.to_string()))
-            {
-                deps.push(fpm::Dependency {
-                    package: fpm::Package::new(fpm::FPM_UI_INTERFACE),
-                    version: None,
-                    notes: None,
-                    alias: None,
-                    implements: Vec::new(),
-                    endpoint: None,
-                    mountpoint: None,
-                });
-            };
-            package.fpm_path = Some(root.join("FPM.ftd"));
-
-            package.dependencies = deps;
-
-            package.auto_import = fpm_doc
-                .get::<Vec<String>>("fpm#auto-import")?
-                .iter()
-                .map(|f| fpm::AutoImport::from_string(f.as_str()))
-                .collect();
-
-            package.ignored_paths = fpm_doc.get::<Vec<String>>("fpm#ignore")?;
-            package.fonts = fpm_doc.get("fpm#font")?;
-            package.sitemap_temp = fpm_doc.get("fpm#sitemap")?;
-            package.dynamic_urls_temp = fpm_doc.get("fpm#dynamic-urls")?;
-            package
-        };
-
-        fpm::utils::validate_base_url(&package)?;
-
-        if package.import_auto_imports_from_original {
-            if let Some(ref original_package) = *package.translation_of {
-                if !package.auto_import.is_empty() {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fpm.auto-import` from the {package_name}/FPM.ftd file", package_name=package.name.as_str()),
-                    });
-                } else {
-                    package.auto_import = original_package.auto_import.clone()
-                }
-            }
-        }
-
-        // TODO: resolve group dependent packages, there may be imported group from foreign package
-        // TODO: We need to make sure to resolve that package as well before moving ahead
-        // TODO: Because in `UserGroup::get_identities` we have to resolve identities of a group
-
-        let user_groups: Vec<crate::user_group::UserGroupTemp> = fpm_doc.get("fpm#user-group")?;
-        let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
-        package.groups = groups;
+        let package = fpm::Package::from_fpm_doc(&root, &fpm_doc)?;
         let mut config = Config {
             package: package.clone(),
             packages_root: root.clone().join(".packages"),
@@ -1301,6 +1234,7 @@ impl Config {
         // Update global_ids map from the current package files
         config.update_ids_from_package().await?;
 
+        // TODO: Major refactor, while parsing sitemap of a package why do we need config in it?
         config.package.sitemap = {
             let sitemap = match package.translation_of.as_ref() {
                 Some(translation) => translation,
