@@ -586,26 +586,21 @@ impl Config {
             ));
         }
 
-        let dependencies = package.deps_contain_mount_point();
-
-        for (mp, dep) in dependencies {
+        for (mp, dep) in package
+            .apps
+            .iter()
+            .map(|x| (&x.mount_point, &x.package.package))
+        {
             if path.starts_with(mp.trim_matches('/')) {
-                let path_without_mp = path.trim_start_matches(mp.trim_start_matches('/'));
-
                 // This is for recursive dependencies mount-point
                 // Note: Currently not working because dependency of package does not contain dependencies
-                let data = self.get_mountpoint_sanitized_path(dep, path_without_mp);
-                if data.is_some() {
-                    return data;
-                } else {
-                    let package_name = dep.name.trim_matches('/');
-                    let sanitized_path = path.trim_start_matches(mp.trim_start_matches('/'));
-                    return Some((
-                        format!("-/{package_name}/{sanitized_path}"),
-                        dep,
-                        sanitized_path.to_string(),
-                    ));
-                }
+                let package_name = dep.name.trim_matches('/');
+                let sanitized_path = path.trim_start_matches(mp.trim_start_matches('/'));
+                return Some((
+                    format!("-/{package_name}/{sanitized_path}"),
+                    dep,
+                    sanitized_path.to_string(),
+                ));
             } else if path.starts_with(format!("-/{}", dep.name.trim_matches('/')).as_str()) {
                 let path_without_package_name =
                     path.trim_start_matches(format!("-/{}", dep.name.trim_matches('/')).as_str());

@@ -167,11 +167,14 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
         // Get all the dependencies with mount-point if path_start with any package-name so send redirect to mount-point
 
-        let package_dependencies = config.package.deps_contain_mount_point();
-        // if any package name starts with package-name to redirect it to /mount-point/remaining-url/
-
         if req_method.as_str() == "GET" {
-            for (mp, dep) in package_dependencies {
+            // if any app name starts with package-name to redirect it to /mount-point/remaining-url/
+            for (mp, dep) in config
+                .package
+                .apps
+                .iter()
+                .map(|x| (&x.mount_point, &x.package.package))
+            {
                 if let Some(remaining_path) =
                     fpm::config::utils::trim_package_name(path.as_str(), dep.name.as_str())
                 {

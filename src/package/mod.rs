@@ -67,7 +67,7 @@ pub struct Package {
 #[derive(Debug, Clone)]
 pub struct App {
     pub name: Option<String>,
-    pub package: String,
+    pub package: fpm::Dependency,
     pub mount_point: String,
     pub end_point: Option<String>,
     pub config: std::collections::HashMap<String, String>,
@@ -610,7 +610,6 @@ impl Package {
         }
 
         // fpm installed Apps
-
         let apps: Vec<fpm::package::AppTemp> = fpm_doc.get("fpm#app")?;
         package.apps = apps
             .into_iter()
@@ -620,18 +619,6 @@ impl Package {
         dbg!(&package.apps);
 
         Ok(package)
-    }
-
-    pub fn deps_contain_mount_point(&self) -> Vec<(&str, &Package)> {
-        self.dependencies
-            .iter()
-            .fold(&mut vec![], |accumulator, dep| {
-                if let Some(mp) = &dep.mountpoint {
-                    accumulator.push((mp.as_str(), &dep.package))
-                }
-                accumulator
-            })
-            .to_owned()
     }
 
     // Dependencies with mount point and end point
@@ -787,7 +774,6 @@ pub struct AppTemp {
 impl AppTemp {
     fn parse_config(config: &[String]) -> fpm::Result<std::collections::HashMap<String, String>> {
         let mut hm = std::collections::HashMap::new();
-
         for key_value in config.iter() {
             // <key>=<value>
             let (key, value): (&str, &str) = match key_value.trim().split_once('=') {
@@ -831,9 +817,19 @@ impl AppTemp {
     }
 
     pub fn into_app(self) -> fpm::Result<App> {
+        let package = fpm::Dependency {
+            package: fpm::Package::new(self.package.trim().trim_matches('/')),
+            version: None,
+            notes: None,
+            alias: None,
+            implements: Vec::new(),
+            endpoint: None,
+            mountpoint: None,
+        };
+
         Ok(App {
             name: self.name,
-            package: self.package,
+            package,
             mount_point: self.mount_point,
             end_point: self.end_point,
             config: Self::parse_config(&self.config)?,
