@@ -609,6 +609,16 @@ impl Package {
             }
         }
 
+        // fpm installed Apps
+
+        let apps: Vec<fpm::package::AppTemp> = fpm_doc.get("fpm#app")?;
+        package.apps = apps
+            .into_iter()
+            .map(|x| x.into_app())
+            .collect::<fpm::Result<_>>()?;
+
+        dbg!(&package.apps);
+
         Ok(package)
     }
 
@@ -717,13 +727,10 @@ pub(crate) struct PackageTemp {
     pub backend: bool,
     #[serde(rename = "backend-headers")]
     pub backend_headers: Option<Vec<BackendHeader>>,
-    //pub apps: Vec<AppTemp>,
 }
 
 impl PackageTemp {
     pub fn into_package(self) -> Package {
-        use itertools::Itertools;
-
         // TODO: change this method to: `validate(self) -> fpm::Result<fpm::Package>` and do all
         //       validations in it. Like a package must not have both translation-of and
         //       `translations` set.
@@ -778,18 +785,58 @@ pub struct AppTemp {
 }
 
 impl AppTemp {
-    pub fn into_app(self) -> App {
+    fn parse_config(config: &[String]) -> fpm::Result<std::collections::HashMap<String, String>> {
         let mut hm = std::collections::HashMap::new();
-        // TODO: parse it and read from the env variable
-        for c in self.config.iter() {
-            hm.insert(c.to_string(), c.to_string());
+
+        for key_value in config.iter() {
+            // <key>=<value>
+            let (key, value): (&str, &str) = match key_value.trim().split_once('=') {
+                Some(x) => x,
+                None => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!(
+                            "package-config-error, wrong header in an fpm app, format is <key>=<value>, config: {}",
+                            key_value
+                        ),
+                    });
+                }
+            };
+            // if value = $ENV.env_var_name
+            // so read env_var_name from std::env
+            let value = value.trim();
+            if value.starts_with("$ENV") {
+                let (_, env_var_name) = match value.trim().split_once('.') {
+                    Some(x) => x,
+                    None => return Err(fpm::Error::PackageError {
+                        message: format!(
+                            "package-config-error, wrong $ENV in an fpm app, format is <key>=$ENV.env_var_name, key: {}, value: {}",
+                            key, value
+                        ),
+                    }),
+                };
+
+                let value =
+                    std::env::var(env_var_name).map_err(|err| fpm::Error::PackageError {
+                        message: format!(
+                            "package-config-error,$ENV {} variable is not set for {}, err: {}",
+                            env_var_name, value, err
+                        ),
+                    })?;
+                hm.insert(key.to_string(), value.to_string());
+            } else {
+                hm.insert(key.to_string(), value.to_string());
+            }
         }
-        App {
+        Ok(hm)
+    }
+
+    pub fn into_app(self) -> fpm::Result<App> {
+        Ok(App {
             name: self.name,
             package: self.package,
             mount_point: self.mount_point,
             end_point: self.end_point,
-            config: hm,
-        }
+            config: Self::parse_config(&self.config)?,
+        })
     }
 }
