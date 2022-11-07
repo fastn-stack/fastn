@@ -400,3 +400,16 @@ option integer self-version:
 
 
 -- tracking-info list tracks:
+
+
+;; FPM Apps Installation
+
+-- record app-data:
+optional caption name:
+string package:
+string mount-point:
+optional string end-point:
+string list config:
+
+
+-- app-data list app:

@@ -59,6 +59,18 @@ pub struct Package {
 
     /// Headers for the WASM backend
     pub backend_headers: Option<Vec<BackendHeader>>,
+
+    /// Installed Apps
+    pub apps: Vec<App>,
+}
+
+#[derive(Debug, Clone)]
+pub struct App {
+    pub name: Option<String>,
+    pub package: String,
+    pub mount_point: String,
+    pub end_point: Option<String>,
+    pub config: std::collections::HashMap<String, String>,
 }
 
 impl Package {
@@ -89,6 +101,7 @@ impl Package {
             endpoint: None,
             backend: false,
             backend_headers: None,
+            apps: vec![],
         }
     }
 
@@ -633,10 +646,13 @@ pub(crate) struct PackageTemp {
     pub backend: bool,
     #[serde(rename = "backend-headers")]
     pub backend_headers: Option<Vec<BackendHeader>>,
+    //pub apps: Vec<AppTemp>,
 }
 
 impl PackageTemp {
     pub fn into_package(self) -> Package {
+        use itertools::Itertools;
+
         // TODO: change this method to: `validate(self) -> fpm::Result<fpm::Package>` and do all
         //       validations in it. Like a package must not have both translation-of and
         //       `translations` set.
@@ -674,6 +690,35 @@ impl PackageTemp {
             endpoint: self.endpoint,
             backend: self.backend,
             backend_headers: self.backend_headers,
+            apps: vec![], //self.apps.into_iter().map(|x| x.into_app()).collect_vec(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Clone)]
+pub struct AppTemp {
+    pub name: Option<String>,
+    pub package: String,
+    #[serde(rename = "mount-point")]
+    pub mount_point: String,
+    #[serde(rename = "end-point")]
+    pub end_point: Option<String>,
+    pub config: Vec<String>,
+}
+
+impl AppTemp {
+    pub fn into_app(self) -> App {
+        let mut hm = std::collections::HashMap::new();
+        // TODO: parse it and read from the env variable
+        for c in self.config.iter() {
+            hm.insert(c.to_string(), c.to_string());
+        }
+        App {
+            name: self.name,
+            package: self.package,
+            mount_point: self.mount_point,
+            end_point: self.end_point,
+            config: hm,
         }
     }
 }
