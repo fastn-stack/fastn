@@ -619,7 +619,7 @@ impl Config {
         let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
 
         if !fpm_path.exists() {
-            let package = self.resolve_package(&package).await?;
+            let package = self.resolve_package(package).await?;
             self.add_package(&package);
         }
 
