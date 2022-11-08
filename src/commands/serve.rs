@@ -181,21 +181,19 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
                 {
                     let path = if remaining_path.trim_matches('/').is_empty() {
                         format!("/{}/", mp.trim().trim_matches('/'))
+                    } else if query_string.is_empty() {
+                        format!(
+                            "/{}/{}/",
+                            mp.trim().trim_matches('/'),
+                            remaining_path.trim_matches('/')
+                        )
                     } else {
-                        if query_string.is_empty() {
-                            format!(
-                                "/{}/{}/",
-                                mp.trim().trim_matches('/'),
-                                remaining_path.trim_matches('/')
-                            )
-                        } else {
-                            format!(
-                                "/{}/{}/?{}",
-                                mp.trim().trim_matches('/'),
-                                remaining_path.trim_matches('/'),
-                                query_string.as_str()
-                            )
-                        }
+                        format!(
+                            "/{}/{}/?{}",
+                            mp.trim().trim_matches('/'),
+                            remaining_path.trim_matches('/'),
+                            query_string.as_str()
+                        )
                     };
 
                     let mut resp = actix_web::HttpResponse::new(

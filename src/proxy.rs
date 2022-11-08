@@ -76,7 +76,7 @@ pub(crate) async fn get_out(
 
     for (header_key, header_value) in req_headers {
         proxy_request.headers_mut().insert(
-            reqwest::header::HeaderName::from_bytes(&header_key.as_bytes()).unwrap(),
+            reqwest::header::HeaderName::from_bytes(header_key.as_bytes()).unwrap(),
             reqwest::header::HeaderValue::from_str(header_value.as_str()).unwrap(),
         );
     }

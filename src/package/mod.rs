@@ -588,8 +588,8 @@ impl Package {
         package.dynamic_urls_temp = fpm_doc.get("fpm#dynamic-urls")?;
 
         // TODO: resolve group dependent packages, there may be imported group from foreign package
-        // TODO: We need to make sure to resolve that package as well before moving ahead
-        // TODO: Because in `UserGroup::get_identities` we have to resolve identities of a group
+        //   We need to make sure to resolve that package as well before moving ahead
+        //   Because in `UserGroup::get_identities` we have to resolve identities of a group
         let user_groups: Vec<crate::user_group::UserGroupTemp> = fpm_doc.get("fpm#user-group")?;
         let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
         package.groups = groups;

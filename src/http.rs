@@ -241,7 +241,7 @@ impl ResponseBuilder {
                     format!("/-/{}/", package_name)
                 } else {
                     // if it contains query-params so url should not end with /
-                    if redirect.contains("?") {
+                    if redirect.contains('?') {
                         format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
                     } else {
                         format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
