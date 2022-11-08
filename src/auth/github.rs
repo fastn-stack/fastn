@@ -67,6 +67,7 @@ pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     actix_web::HttpResponse::Ok().body(html)
 }
 pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    dotenv::dotenv().ok();
     let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
     let auth_url=format!("{}{}",base_url,"/auth/auth/");
      if GITHUB_CLIENT_ID_GLB.get().is_none(){
@@ -304,6 +305,7 @@ pub struct AuthRequest {
 pub async fn auth(
     req: actix_web::HttpRequest,params: AuthRequest,
     ) -> actix_web::HttpResponse {
+    dotenv::dotenv().ok();
     let connection_obj=req.connection_info().clone();
     let domain;
     let host_info=connection_obj.host();

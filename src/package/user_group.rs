@@ -431,7 +431,12 @@ pub async fn access_identities(
     is_read: bool,
 ) -> fpm::Result<Vec<UserIdentity>> {
     use itertools::Itertools;
-    if cfg!(feature = "remote") {
+    dbg!(req.host());
+    dbg!(req.cookies());
+    dbg!(document_name);
+    dbg!(is_read);
+    dbg!(config);
+    //if cfg!(feature = "remote") {
         return fpm::controller::get_remote_identities(
             req.host().as_str(),
             req.cookies(),
@@ -442,7 +447,7 @@ pub async fn access_identities(
                 .as_slice(),
         )
         .await;
-    }
+    //}
 
     Ok(if let Some(identity) = req.cookie("identities") {
         parse_identities(identity.as_str())

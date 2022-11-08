@@ -452,11 +452,8 @@ async fn route(
     }
     else if req.path()=="/auth/get-identities/" {
         return get_identities_route(req.clone(), body).await;
-    }else{
-        return auth_route(req.clone(), body).await;
     }
     let req = fpm::http::Request::from_actix(req, body);
-
     match (req.method(), req.path()) {
         ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
         ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
