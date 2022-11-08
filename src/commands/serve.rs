@@ -368,8 +368,10 @@ async fn logout_route(
 async fn auth_auth_route(
     req: fpm::http::Request
 ) -> fpm::Result<fpm::http::Response> {
+    
     let _lock = LOCK.write().await;
-        let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
+        //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
+        let base_url="http://localhost:8000";
         let uri_string=req.uri();
         let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
         let request_url = url::Url::parse(&final_url.to_string()).unwrap();
@@ -433,22 +435,23 @@ async fn route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
+    let req = fpm::http::Request::from_actix(req, body);
     /*if req.path()=="/auth/" {
-        return auth_route(req.clone(), body).await;
+        return auth_route(req.clone()).await;
     }
     else if req.path()=="/auth/login/" {
-        return login_route(req.clone(), body).await;
+        return login_route(req.clone()).await;
     }
     else if req.path()=="/auth/logout/" {
-        return logout_route(req.clone(), body).await;
+        return logout_route(req.clone()).await;
     }
     else if req.path()=="/auth/auth/" {
-        return auth_auth_route(req.clone(), body).await;
+        return auth_auth_route(req.clone()).await;
     }
     else if req.path()=="/auth/get-identities/" {
-        return get_identities_route(req.clone(), body).await;
+        return get_identities_route(req.clone()).await;
     }*/
-    let req = fpm::http::Request::from_actix(req, body);
+    
     match (req.method(), req.path()) {
         ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
         ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
@@ -460,6 +463,7 @@ async fn route(
         ("post", "/-/create-cr/") => create_cr(req).await,
         ("get", "/-/create-cr-page/") => create_cr_page(req).await,
         ("post", "/-/clear-cache/") => clear_cache(req).await,
+        ("get", "/-/auth/") => auth_route(req).await,
         (_, _) => serve(req).await,
     }
 }

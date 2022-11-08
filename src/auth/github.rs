@@ -13,13 +13,13 @@ pub struct UserIdentity {
     pub key: String,
     pub value: String,
 }
-pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub async fn index(req: fpm::http::Request) -> actix_web::HttpResponse {
     dotenv::dotenv().ok();
     let mut link="auth/login/";
     let mut link_title="Login";
     match req.cookie("access_token"){
         Some(val)=>{
-            if val.value().to_string()!=""
+            if val!=""
             {
                 link="auth/logout/";
                 link_title="Logout";
@@ -34,8 +34,8 @@ pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
 
     match req.cookie("access_token"){
         Some(val)=>{
-            if val.value().to_string()!=""{
-            let userresp=user_details(val.value().to_string()).await;
+            if val!=""{
+            let userresp=user_details(val).await;
         match userresp {
             Ok(userresp) => {
                 let user_login=userresp.get("login");
@@ -66,9 +66,10 @@ pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
 
     actix_web::HttpResponse::Ok().body(html)
 }
-pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub async fn login(req: fpm::http::Request) -> actix_web::HttpResponse {
     dotenv::dotenv().ok();
-    let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
+    //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
+    let base_url="http://localhost:8000";    
     let auth_url=format!("{}{}",base_url,"/auth/auth/");
      if GITHUB_CLIENT_ID_GLB.get().is_none(){
         GITHUB_CLIENT_ID_GLB.set(oauth2::ClientId::new(
@@ -109,12 +110,13 @@ if TOKEN_URL_GLB.get().is_none(){
 
 }
 
-pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    let connection_obj=req.connection_info().clone();
+pub fn logout(req: fpm::http::Request) -> actix_web::HttpResponse {
+    /*let connection_obj=req.connection_info().clone();
     let domain;
     let host_info=connection_obj.host();
     let domain_parts:Vec<&str>=host_info.split(":").collect();
-    domain=domain_parts.get(0).unwrap();
+    domain=domain_parts.get(0).unwrap();*/
+    let domain="localhost";
 actix_web::HttpResponse::Found()
 .cookie(
     actix_web::cookie::Cookie::build("access_token", "")
@@ -126,15 +128,15 @@ actix_web::HttpResponse::Found()
     .finish()
 }
 
-pub async fn get_identity(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub async fn get_identity(req: fpm::http::Request) -> actix_web::HttpResponse {
    
     let mut user_email_val:String=String::from("");
     let mut user_login_val:String=String::from("");
     let access_token_val:String;
     let access_token = req.cookie("access_token");
     
-    let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
-
+    //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
+    let base_url="http://localhost:8000";
         let mut repo_list: Vec<String> = Vec::new();
         let uri_string=req.uri();
     let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
@@ -150,7 +152,8 @@ pub async fn get_identity(req: actix_web::HttpRequest) -> actix_web::HttpRespons
     match req.cookie("access_token"){
         Some(val)=>{
            
-            access_token_val=val.value().to_string();
+            //access_token_val=val.value().to_string();
+            access_token_val=val;
         }
         None=>{
             access_token_val=String::from("");
@@ -303,15 +306,17 @@ pub struct AuthRequest {
     pub state: String,
 }
 pub async fn auth(
-    req: actix_web::HttpRequest,params: AuthRequest,
+    req: fpm::http::Request,params: AuthRequest,
     ) -> actix_web::HttpResponse {
     dotenv::dotenv().ok();
-    let connection_obj=req.connection_info().clone();
+    /*let connection_obj=req.connection_info().clone();
     let domain;
     let host_info=connection_obj.host();
     let domain_parts:Vec<&str>=host_info.split(":").collect();
-    domain=domain_parts.get(0).unwrap();
-        let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
+    domain=domain_parts.get(0).unwrap();*/
+    let domain="localhost";
+        //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
+        let base_url="http://localhost:8000";    
         let auth_url=format!("{}{}",base_url,"/auth/auth/");
         let client = oauth2::basic::BasicClient::new(
             GITHUB_CLIENT_ID_GLB.get().unwrap().to_owned(),
