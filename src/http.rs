@@ -240,7 +240,12 @@ impl ResponseBuilder {
                 let path = if redirect.trim_matches('/').is_empty() {
                     format!("/-/{}/", package_name)
                 } else {
-                    format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
+                    // if it contains query-params so url should not end with /
+                    if redirect.contains("?") {
+                        format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
+                    } else {
+                        format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
+                    }
                 };
                 let t = serde_json::json!({"redirect": path.as_str()}).to_string();
                 return response_builder.body(t);

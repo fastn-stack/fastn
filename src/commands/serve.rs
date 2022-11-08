@@ -158,6 +158,7 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
         // If not present than proxy pass it
 
         let req_method = req.method().to_string();
+        let query_string = req.query_string().to_string();
         let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
@@ -181,15 +182,22 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
                     let path = if remaining_path.trim_matches('/').is_empty() {
                         format!("/{}/", mp.trim().trim_matches('/'))
                     } else {
-                        format!(
-                            "/{}/{}/",
-                            mp.trim().trim_matches('/'),
-                            remaining_path.trim_matches('/')
-                        )
+                        if query_string.is_empty() {
+                            format!(
+                                "/{}/{}/",
+                                mp.trim().trim_matches('/'),
+                                remaining_path.trim_matches('/')
+                            )
+                        } else {
+                            format!(
+                                "/{}/{}/?{}",
+                                mp.trim().trim_matches('/'),
+                                remaining_path.trim_matches('/'),
+                                query_string.as_str()
+                            )
+                        }
                     };
 
-                    dbg!("Send redirect");
-                    dbg!(&path);
                     let mut resp = actix_web::HttpResponse::new(
                         actix_web::http::StatusCode::PERMANENT_REDIRECT,
                     );

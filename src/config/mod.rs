@@ -591,6 +591,7 @@ impl Config {
             .iter()
             .map(|x| (&x.mount_point, &x.package.package))
         {
+            dbg!(&path, mp);
             if path.starts_with(mp.trim_matches('/')) {
                 // This is for recursive dependencies mount-point
                 // Note: Currently not working because dependency of package does not contain dependencies
