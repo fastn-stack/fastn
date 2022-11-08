@@ -77,9 +77,9 @@ pub struct UserGroupTemp {
     pub github: Vec<String>,
     #[serde(rename = "-github")]
     pub excluded_github: Vec<String>,
-    #[serde(rename = "github-like")]
+    #[serde(rename = "github-starred")]
     pub github_like: Vec<String>,
-    #[serde(rename = "-github-like")]
+    #[serde(rename = "-github-starred")]
     pub excluded_github_like: Vec<String>,
     #[serde(rename = "github-team")]
     pub github_team: Vec<String>,
@@ -270,8 +270,11 @@ impl UserGroupTemp {
         ));
         identities.extend(to_user_identity("github", self.github));
         excluded_identities.extend(to_user_identity("-github", self.excluded_github));
-        identities.extend(to_user_identity("github-like", self.github_like));
-        excluded_identities.extend(to_user_identity("-github-like", self.excluded_github_like));
+        identities.extend(to_user_identity("github-starred", self.github_like));
+        excluded_identities.extend(to_user_identity(
+            "-github-starred",
+            self.excluded_github_like,
+        ));
         identities.extend(to_user_identity("github-team", self.github_team));
         excluded_identities.extend(to_user_identity("-github-team", self.excluded_github_team));
         identities.extend(to_user_identity(

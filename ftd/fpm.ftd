@@ -357,8 +357,8 @@ string list telegram-group:
 string list -telegram-group:
 string list github:
 string list -github:
-string list github-like:
-string list -github-like:
+string list github-starred:
+string list -github-starred:
 string list github-team:
 string list -github-team:
 string list github-contributor:
