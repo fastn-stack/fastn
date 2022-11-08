@@ -8,6 +8,11 @@ pub struct RepoObj {
     pub repo_owner:String,
     pub repo_title:String
 }
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct UserIdentity {
+    pub key: String,
+    pub value: String,
+}
 pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     dotenv::dotenv().ok();
     let mut link="auth/login/";
@@ -120,16 +125,27 @@ actix_web::HttpResponse::Found()
     .finish()
 }
 
-pub async fn get_identity(req: actix_web::HttpRequest,repo_list:&Vec<String>) -> actix_web::HttpResponse {
+pub async fn get_identity(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
    
     let mut user_email_val:String=String::from("");
     let mut user_login_val:String=String::from("");
     let access_token_val:String;
     let access_token = req.cookie("access_token");
-    let user_login = req.cookie("user_login");
-    let user_email = req.cookie("user_email");
-    let user_fullname = req.cookie("user_fullname");
     
+    let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
+
+        let mut repo_list: Vec<String> = Vec::new();
+        let uri_string=req.uri();
+    let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
+    let request_url = url::Url::parse(&final_url.to_string()).unwrap();
+    let pairs = request_url.query_pairs();
+    for pair in pairs{
+        if pair.0=="github_starred"{
+            if !repo_list.contains(&pair.1.to_string()){
+                repo_list.push(pair.1.to_string());
+            }
+        }
+    }
     match req.cookie("access_token"){
         Some(val)=>{
            
@@ -200,7 +216,86 @@ if reporesp.len()>0{
 }
 
 }
+/*pub async fn get_identity_fpm(cookies:&std::collections::HashMap<String, String>,identities: &Vec<UserIdentity>) -> actix_web::HttpResponse {
+        let mut user_email_val:String=String::from("");
+        let mut user_login_val:String=String::from("");
+        dbg!(cookies);
+   dbg!(identities);
 
+    let access_token_val:String;
+    let access_token = cookies.get("access_token");
+   
+    match cookies.get("access_token"){
+        Some(val)=>{
+           
+            //access_token_val=val.value().to_string();
+            access_token_val=val.to_owned();
+        }
+        None=>{
+            access_token_val=String::from("");
+        }
+    }
+if !access_token_val.is_empty() {
+    let userresp=user_details(access_token_val.clone()).await;
+    match userresp {
+        Ok(userresp) => {
+            if userresp.get("login").is_some(){
+                user_login_val=userresp.get("login").unwrap().to_string();
+            }
+            if userresp.get("email").is_some(){
+                user_email_val=userresp.get("email").unwrap().to_string();
+            }
+            
+        }Err(_) => {
+            
+    }
+}    
+let mut all_found_repo:String=String::from("");
+    let reporesp=get_starred_repo(access_token_val.clone(),&repo_list).await;
+    //let reporesp;
+    match reporesp {
+        Ok(reporesp) => {
+if reporesp.len()>0{
+    for repo in reporesp{
+        if all_found_repo==""{
+            all_found_repo=format!("{}{}","github-starred:",repo);
+        }else{
+            all_found_repo=format!("{}{}{}",all_found_repo,",",repo);
+        }
+        
+    }
+    
+}else{
+    all_found_repo=String::from("");
+}
+            
+            let html = format!(
+                r#"<html>
+                <head><title>FDM</title></head>
+                <body>
+                github-username:{}<br/>gmail-email:{}<br/>{}
+                </body>
+            </html>"#,
+            user_login_val.clone(),
+            user_email_val.clone(),
+            all_found_repo.clone(),
+            );
+        
+            actix_web::HttpResponse::Ok().body(html)
+        }
+        Err(e) => {
+            return actix_web::HttpResponse::BadRequest().content_type("application/json")
+            .json(e.to_string());
+    }
+    }
+    
+
+}else{
+    return actix_web::HttpResponse::BadRequest().content_type("application/json")
+        .json("No record found.");
+}
+
+}*/
 #[derive(serde::Deserialize)]
 pub struct AuthRequest {
     pub code: String,

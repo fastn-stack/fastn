@@ -389,32 +389,39 @@ async fn auth_auth_route(
             fpm::auth::github::AuthRequest{code:code.clone(),state:state.clone()});
         Ok(auth_obj.await)
 }
+
 async fn get_identities_route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
-     //let params: actix_web::web::Query<fpm::auth::github::AuthRequest>;
-        //dbg!(params);
-        let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
-
-        let mut repo_list: Vec<String> = Vec::new();
+        
+        let identity_obj=fpm::auth::github::get_identity(req);
+        Ok(identity_obj.await)
+}
+/*async fn get_identities_ctrl(
+    req: &fpm::http::Request,
+    body: actix_web::web::Bytes,
+) -> fpm::Result<fpm::http::Response> {
+        let returned_identities=get_dentities(req);
+        let identity_obj=
+        fpm::auth::github::get_identity_fpm(
+        req.cookies(),&returned_identities);
+        Ok(identity_obj.await)
+}*/
+fn get_dentities(req: &fpm::http::Request,)->Vec<fpm::auth::github::UserIdentity>{
+    
+    let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
+    //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
+    let base_url=format!("{}{}{}",req.host(),"://",req.host());
+    let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
         let uri_string=req.uri();
     let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
     let request_url = url::Url::parse(&final_url.to_string()).unwrap();
     let pairs = request_url.query_pairs();
     for pair in pairs{
-        if pair.0=="github_starred"{
-            if !repo_list.contains(&pair.1.to_string()){
-                repo_list.push(pair.1.to_string());
-            }
-           
-        }
+        repo_list.push(fpm::auth::github::UserIdentity{key:pair.0.to_string(),value:1.to_string()});
     }
-        let identity_obj=fpm::auth::github::get_identity(req,
-            &repo_list);
-        //dbg!(index_obj.await.cookies());
-            //let index_obj=fpm::auth::github::index(req);
-        Ok(identity_obj.await)
+    repo_list
 }
 // clone the fpm repo
 // change in the code in serve.rs

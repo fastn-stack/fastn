@@ -179,7 +179,8 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
 }
 
 // This API will be called from can_read and can_write functions
-
+//github-team:fpm-lang/ftd
+//github-starred:fpm-lang/ftd
 pub async fn get_remote_identities(
     remote_host: &str,
     cookies: &std::collections::HashMap<String, String>,
