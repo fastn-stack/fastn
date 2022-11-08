@@ -218,7 +218,8 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
             // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
             // Already checked in the above method serve_file
             println!("executing proxy: {}", &path);
-            let (package_name, url) = fpm::config::utils::get_clean_url(&config, path.as_str())?;
+            let (package_name, url, conf) =
+                fpm::config::utils::get_clean_url(&config, path.as_str())?;
             let package_name = package_name.unwrap_or_else(|| config.package.name.to_string());
 
             let host = if let Some(port) = url.port() {
@@ -232,8 +233,16 @@ async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
                 return Ok(fpm::server_error!("request not set"));
             };
 
-            return fpm::proxy::get_out(host.as_str(), req, url.path(), package_name.as_str())
-                .await;
+            // TODO: read app config and send them to service as header
+
+            return fpm::proxy::get_out(
+                host.as_str(),
+                req,
+                url.path(),
+                package_name.as_str(),
+                &conf,
+            )
+            .await;
         }
 
         // Fallback to WASM execution in case of no successful response

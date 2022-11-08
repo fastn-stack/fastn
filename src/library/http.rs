@@ -32,13 +32,14 @@ pub async fn processor<'a>(
         }
     };
 
-    let (_, mut url) = fpm::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
-        ftd::p1::Error::ParseError {
-            message: format!("invalid url: {:?}", e),
-            doc_id: doc.name.to_string(),
-            line_number: section.line_number,
-        }
-    })?;
+    let (_, mut url, conf) =
+        fpm::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
+            ftd::p1::Error::ParseError {
+                message: format!("invalid url: {:?}", e),
+                doc_id: doc.name.to_string(),
+                line_number: section.line_number,
+            }
+        })?;
 
     for (line, key, value) in section.header.0.iter() {
         if key == "$processor$" || key == "url" || key == "method" {
@@ -61,6 +62,7 @@ pub async fn processor<'a>(
     let response = match crate::http::http_get_with_cookie(
         url.as_str(),
         config.request.as_ref().and_then(|v| v.cookies_string()),
+        &conf,
     )
     .await
     {

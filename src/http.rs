@@ -221,8 +221,6 @@ impl ResponseBuilder {
         response: reqwest::Response,
         package_name: &str,
     ) -> fpm::http::Response {
-        dbg!(&response);
-
         let status = response.status();
 
         // Remove `Connection` as per
@@ -235,8 +233,6 @@ impl ResponseBuilder {
         {
             response_builder.insert_header(header);
         }
-
-        dbg!(&status);
         if status == actix_web::http::StatusCode::FOUND {
             response_builder.status(actix_web::http::StatusCode::OK);
             if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
@@ -246,7 +242,6 @@ impl ResponseBuilder {
                 } else {
                     format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
                 };
-                dbg!(&path);
                 let t = serde_json::json!({"redirect": path.as_str()}).to_string();
                 return response_builder.body(t);
             }
@@ -326,27 +321,35 @@ pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::B
 }
 
 pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
-    http_get_with_cookie(url, None).await
+    http_get_with_cookie(url, None, &std::collections::HashMap::new()).await
 }
 
 pub(crate) async fn http_get_with_cookie(
     url: &str,
     cookie: Option<String>,
+    headers: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<Vec<u8>> {
-    let mut headers = reqwest::header::HeaderMap::new();
-    headers.insert(
+    let mut req_headers = reqwest::header::HeaderMap::new();
+    req_headers.insert(
         reqwest::header::USER_AGENT,
         reqwest::header::HeaderValue::from_static("fpm"),
     );
     if let Some(cookie) = cookie {
-        headers.insert(
+        req_headers.insert(
             reqwest::header::COOKIE,
             reqwest::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
         );
     }
 
+    for (key, value) in headers.iter() {
+        req_headers.insert(
+            reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
+            reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
+        );
+    }
+
     let c = reqwest::Client::builder()
-        .default_headers(headers)
+        .default_headers(req_headers)
         .build()?;
 
     let res = c.get(url).send().await?;

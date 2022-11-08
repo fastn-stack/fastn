@@ -623,21 +623,6 @@ impl Package {
 
     // Dependencies with mount point and end point
     // Output: Package Dependencies
-    // [Package, endpoint]
-    pub fn dep_with_ep(&self) -> Vec<(&Package, &str)> {
-        self.dependencies
-            .iter()
-            .fold(&mut vec![], |accumulator, dep| {
-                if let Some(ep) = &dep.endpoint {
-                    accumulator.push((&dep.package, ep.as_str()))
-                }
-                accumulator
-            })
-            .to_owned()
-    }
-
-    // Dependencies with mount point and end point
-    // Output: Package Dependencies
     // [Package, endpoint, mount-point]
     pub fn dep_with_ep_and_mp(&self) -> Vec<(&Package, &str, &str)> {
         self.dependencies
