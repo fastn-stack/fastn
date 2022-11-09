@@ -23,12 +23,12 @@ pub struct AuthRequest {
     pub state: String,
 }
 
-pub async fn index(req: fpm::http::Request) -> actix_web::HttpResponse {
+pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     let mut link = "auth/login/";
     let mut link_title = "Login";
     match req.cookie("access_token") {
         Some(val) => {
-            if val != "" {
+            if val.value().to_string() != "" {
                 link = "auth/logout/";
                 link_title = "Logout";
             }
@@ -42,8 +42,8 @@ pub async fn index(req: fpm::http::Request) -> actix_web::HttpResponse {
 
     match req.cookie("access_token") {
         Some(val) => {
-            if val != "" {
-                let userresp = user_details(val).await;
+            if val.value().to_string() != "" {
+                let userresp = user_details(val.value().to_string()).await;
                 match userresp {
                     Ok(userresp) => {
                         let user_login = userresp.get("login");
@@ -75,8 +75,8 @@ pub async fn index(req: fpm::http::Request) -> actix_web::HttpResponse {
         .body(html)
 }
 
-pub async fn login(req: fpm::http::Request) -> actix_web::HttpResponse {
-    let auth_url: String = format!("{}://{}/auth/auth/", req.scheme(), req.host());
+pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    let auth_url: String = format!("{}://{}/auth/auth/", req.connection_info().scheme(), req.connection_info().host());
     if GITHUB_CLIENT_ID_GLB.get().is_none() {
         GITHUB_CLIENT_ID_GLB
             .set(oauth2::ClientId::new(
@@ -130,26 +130,25 @@ pub async fn login(req: fpm::http::Request) -> actix_web::HttpResponse {
         .finish()
 }
 
-pub async fn logout(req: fpm::http::Request) -> actix_web::HttpResponse {
-    /*let connection_obj=req.connection_info().clone();
+pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    let connection_obj=req.connection_info().clone();
     let domain;
     let host_info=connection_obj.host();
     let domain_parts:Vec<&str>=host_info.split(":").collect();
-    domain=domain_parts.get(0).unwrap();*/
-    let domain = "localhost";
-    actix_web::HttpResponse::Found()
-        .cookie(
-            actix_web::cookie::Cookie::build("access_token", "")
-                .domain(domain.clone())
-                .path("/")
-                .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-                .finish(),
-        )
-        .append_header((actix_web::http::header::LOCATION, "/auth/".to_string()))
-        .finish()
+    domain=domain_parts.get(0).unwrap();
+    //let domain="localhost";
+actix_web::HttpResponse::Found()
+.cookie(
+    actix_web::cookie::Cookie::build("access_token", "")
+    .domain(domain.clone())
+    .path("/")
+    .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
+    .finish())
+    .append_header((actix_web::http::header::LOCATION, "/auth/".to_string()))
+    .finish()
 }
 
-pub async fn get_identity(req: fpm::http::Request) -> actix_web::HttpResponse {
+/*pub async fn get_identity(req: fpm::http::Request) -> actix_web::HttpResponse {
     let mut user_email_val: String = String::from("");
     let mut user_login_val: String = String::from("");
     let access_token_val: String;
@@ -233,11 +232,17 @@ pub async fn get_identity(req: fpm::http::Request) -> actix_web::HttpResponse {
             .content_type("application/json")
             .json("No record found.");
     }
-}
+}*/
 
-pub async fn auth(req: fpm::http::Request, params: AuthRequest) -> actix_web::HttpResponse {
-    let domain = "localhost";
-    let base_url = "http://localhost:8000";
+pub async fn auth(req: actix_web::HttpRequest, params: AuthRequest) -> actix_web::HttpResponse {
+    //let domain = "localhost";
+    let connection_obj=req.connection_info().clone();
+    let domain;
+    let host_info=connection_obj.host();
+    let domain_parts:Vec<&str>=host_info.split(":").collect();
+    domain=domain_parts.get(0).unwrap();
+    //let base_url = "http://localhost:8000";
+    let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
     let auth_url = format!("{}{}", base_url, "/auth/auth/");
     let client = oauth2::basic::BasicClient::new(
         GITHUB_CLIENT_ID_GLB.get().unwrap().to_owned(),
@@ -298,115 +303,112 @@ async fn user_details(access_token: String) -> Result<serde_json::value::Value, 
     Ok(resp)
 }
 
-async fn get_starred_repo(
-    access_token: String,
-    repo_list: &Vec<String>,
-) -> Result<Vec<String>, reqwest::Error> {
-    let token_val = format!("{}{}", String::from("Bearer "), access_token);
-    let mut starred_repo: Vec<String> = vec![];
-
-    let api_url = format!("{}", String::from("https://api.github.com/user/starred"));
-    let request_obj = reqwest::Client::new()
-        .get(api_url.clone())
-        .header(reqwest::header::AUTHORIZATION, token_val)
-        .header(reqwest::header::ACCEPT, "application/json")
-        .header(
-            reqwest::header::USER_AGENT,
-            reqwest::header::HeaderValue::from_static("fpm"),
-        )
-        .send()
-        .await?;
-    let resp: serde_json::Value = request_obj.json().await?;
-
-    if resp.as_array().unwrap().len() > 0 {
-        for repo in repo_list {
-            for respobj in resp.as_array().unwrap().iter() {
-                if repo == respobj.get("full_name").unwrap() {
-                    starred_repo.push(respobj.get("full_name").unwrap().to_string());
-                }
-            }
-        }
+async fn get_starred_repo(access_token:String,repo_list:&Vec<UserIdentity>) -> Result<Vec<String>,reqwest::Error> {
+    let token_val=format!("{}{}", String::from("Bearer "), access_token);
+    let mut starred_repo:Vec<String>=vec![];
+//dbg!(repo_list);
+    let api_url=format!("{}", String::from("https://api.github.com/user/starred"));
+    let request_obj=reqwest::Client::new()
+    .get(api_url.clone())
+    .header(reqwest::header::AUTHORIZATION, token_val)
+    .header(reqwest::header::ACCEPT, "application/json")
+    .header(reqwest::header::USER_AGENT, reqwest::header::HeaderValue::from_static("fpm"))
+    .send()
+    .await?;
+    let resp:serde_json::Value = request_obj.json().await?;
+   
+    if resp.as_array().unwrap().len()>0
+    {
+    for repo in repo_list{
+    for respobj in resp.as_array().unwrap().iter(){
+    if repo.key.eq("github_starred")&&repo.value.eq(respobj.get("full_name").unwrap()){
+       starred_repo.push(respobj.get("full_name").unwrap().to_string());
+    }
+    }
+    }
     }
     Ok(starred_repo)
+ 
+    
 }
 
-/*pub async fn get_identity_fpm(cookies:&std::collections::HashMap<String, String>,identities: &Vec<UserIdentity>) -> actix_web::HttpResponse {
-        let mut user_email_val:String=String::from("");
-        let mut user_login_val:String=String::from("");
-        dbg!(cookies);
-   dbg!(identities);
+pub async fn get_identity_fpm(req:actix_web::HttpRequest,identities: &Vec<UserIdentity>) -> actix_web::HttpResponse {
+    let mut user_email_val:String=String::from("");
+    let mut user_login_val:String=String::from("");
+    //dbg!(cookies);
+//dbg!(identities);
 
-    let access_token_val:String;
-    let access_token = cookies.get("access_token");
+let access_token_val:String;
+let access_token = req.cookie("access_token");
 
-    match cookies.get("access_token"){
-        Some(val)=>{
-
-            //access_token_val=val.value().to_string();
-            access_token_val=val.to_owned();
-        }
-        None=>{
-            access_token_val=String::from("");
-        }
+match req.cookie("access_token"){
+    Some(val)=>{
+       
+        //access_token_val=val.value().to_string();
+        access_token_val=val.value().to_owned();
     }
+    None=>{
+        access_token_val=String::from("");
+    }
+}
 if !access_token_val.is_empty() {
-    let userresp=user_details(access_token_val.clone()).await;
-    match userresp {
-        Ok(userresp) => {
-            if userresp.get("login").is_some(){
-                user_login_val=userresp.get("login").unwrap().to_string();
-            }
-            if userresp.get("email").is_some(){
-                user_email_val=userresp.get("email").unwrap().to_string();
-            }
-
-        }Err(_) => {
-
-    }
+let userresp=user_details(access_token_val.clone()).await;
+match userresp {
+    Ok(userresp) => {
+        if userresp.get("login").is_some(){
+            user_login_val=userresp.get("login").unwrap().to_string();
+        }
+        if userresp.get("email").is_some(){
+            user_email_val=userresp.get("email").unwrap().to_string();
+        }
+        
+    }Err(_) => {
+        
 }
+}    
 let mut all_found_repo:String=String::from("");
-    let reporesp=get_starred_repo(access_token_val.clone(),&repo_list).await;
-    //let reporesp;
-    match reporesp {
-        Ok(reporesp) => {
+let reporesp=get_starred_repo(access_token_val.clone(),identities).await;
+//let reporesp;
+match reporesp {
+    Ok(reporesp) => {
 if reporesp.len()>0{
-    for repo in reporesp{
-        if all_found_repo==""{
-            all_found_repo=format!("{}{}","github-starred:",repo);
-        }else{
-            all_found_repo=format!("{}{}{}",all_found_repo,",",repo);
-        }
-
+for repo in reporesp{
+    if all_found_repo==""{
+        all_found_repo=format!("{}{}","github-starred:",repo);
+    }else{
+        all_found_repo=format!("{}{}{}",all_found_repo,",",repo);
     }
-
-}else{
-    all_found_repo=String::from("");
+    
 }
 
-            let html = format!(
-                r#"<html>
-                <head><title>FDM</title></head>
-                <body>
-                github-username:{}<br/>gmail-email:{}<br/>{}
-                </body>
-            </html>"#,
-            user_login_val.clone(),
-            user_email_val.clone(),
-            all_found_repo.clone(),
-            );
-
-            actix_web::HttpResponse::Ok().body(html)
-        }
-        Err(e) => {
-            return actix_web::HttpResponse::BadRequest().content_type("application/json")
-            .json(e.to_string());
+}else{
+all_found_repo=String::from("");
+}
+        
+        let html = format!(
+            r#"<html>
+            <head><title>FDM</title></head>
+            <body>
+            github-username:{}<br/>gmail-email:{}<br/>{}
+            </body>
+        </html>"#,
+        user_login_val.clone(),
+        user_email_val.clone(),
+        all_found_repo.clone(),
+        );
+    
+        actix_web::HttpResponse::Ok().body(html)
     }
-    }
+    Err(e) => {
+        return actix_web::HttpResponse::BadRequest().content_type("application/json")
+        .json(e.to_string());
+}
+}
 
 
 }else{
-    return actix_web::HttpResponse::BadRequest().content_type("application/json")
-        .json("No record found.");
+return actix_web::HttpResponse::BadRequest().content_type("application/json")
+    .json("No record found.");
 }
 
-}*/
+}
