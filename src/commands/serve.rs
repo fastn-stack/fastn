@@ -357,14 +357,19 @@ async fn logout_route(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Res
 }
 async fn auth_auth_route(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-        let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
-        //let base_url="http://localhost:8000";
-        let uri_string=req.uri();
-        let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
-        let request_url = url::Url::parse(&final_url.to_string()).unwrap();
-        let pairs = request_url.query_pairs();
-        let mut code=String::from("");
-        let mut state=String::from("");
+    let base_url = format!(
+        "{}{}{}",
+        req.connection_info().scheme(),
+        "://",
+        req.connection_info().host()
+    );
+    //let base_url="http://localhost:8000";
+    let uri_string = req.uri();
+    let final_url: String = format!("{}{}", base_url.clone(), uri_string.clone().to_string());
+    let request_url = url::Url::parse(&final_url.to_string()).unwrap();
+    let pairs = request_url.query_pairs();
+    let mut code = String::from("");
+    let mut state = String::from("");
     for pair in pairs {
         if pair.0 == "code" {
             code = pair.1.to_string();
@@ -383,27 +388,32 @@ async fn auth_auth_route(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::
     Ok(auth_obj.await)
 }
 
-async fn get_identities_route(
-    req: actix_web::HttpRequest,
-) -> fpm::Result<fpm::http::Response> {
+async fn get_identities_route(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    let identities=get_dentities(req.clone());
-        //let identity_obj=fpm::auth::github::get_identity(req);
-        let identity_obj=fpm::auth::github::get_identity_fpm(req,&identities);
-        Ok(identity_obj.await)
+    let identities = get_dentities(req.clone());
+    //let identity_obj=fpm::auth::github::get_identity(req);
+    let identity_obj = fpm::auth::github::get_identity_fpm(req, &identities);
+    Ok(identity_obj.await)
 }
-fn get_dentities(req: actix_web::HttpRequest,)->Vec<fpm::auth::github::UserIdentity>{
-    
+fn get_dentities(req: actix_web::HttpRequest) -> Vec<fpm::auth::github::UserIdentity> {
     //let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
-    let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
+    let base_url = format!(
+        "{}{}{}",
+        req.connection_info().scheme(),
+        "://",
+        req.connection_info().host()
+    );
     //let base_url=format!("{}{}{}",req.host(),"://",req.host());
     let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
-        let uri_string=req.uri();
-    let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
+    let uri_string = req.uri();
+    let final_url: String = format!("{}{}", base_url.clone(), uri_string.clone().to_string());
     let request_url = url::Url::parse(&final_url.to_string()).unwrap();
     let pairs = request_url.query_pairs();
-    for pair in pairs{
-        repo_list.push(fpm::auth::github::UserIdentity{key:pair.0.to_string(),value:pair.1.to_string()});
+    for pair in pairs {
+        repo_list.push(fpm::auth::github::UserIdentity {
+            key: pair.0.to_string(),
+            value: pair.1.to_string(),
+        });
     }
     repo_list
 }
@@ -412,20 +422,15 @@ async fn route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
 ) -> fpm::Result<fpm::http::Response> {
-    
-    if req.path()=="/auth/" {
+    if req.path() == "/auth/" {
         return auth_route(req.clone()).await;
-    }
-    else if req.path()=="/auth/login/" {
+    } else if req.path() == "/auth/login/" {
         return login_route(req.clone()).await;
-    }
-    else if req.path()=="/auth/logout/" {
+    } else if req.path() == "/auth/logout/" {
         return logout_route(req.clone()).await;
-    }
-    else if req.path()=="/auth/auth/" {
+    } else if req.path() == "/auth/auth/" {
         return auth_auth_route(req.clone()).await;
-    }
-    else if req.path()=="/auth/get-identities/" {
+    } else if req.path() == "/auth/get-identities/" {
         return get_identities_route(req.clone()).await;
     }
     let req = fpm::http::Request::from_actix(req, body);
