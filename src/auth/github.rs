@@ -69,10 +69,7 @@ pub async fn index(req: fpm::http::Request) -> actix_web::HttpResponse {
 pub async fn login(req: fpm::http::Request) -> actix_web::HttpResponse {
     // TODO: Need to remove it it should be part of while server is getting started
     dotenv::dotenv().ok();
-    //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
-    // TODO: read it from request
-    let base_url = "http://localhost:8000";
-    let auth_url = format!("{}{}", base_url, "/auth/auth/");
+    let auth_url: String = format!("{}://{}/auth/auth/", req.scheme(), req.host());
     if GITHUB_CLIENT_ID_GLB.get().is_none() {
         GITHUB_CLIENT_ID_GLB
             .set(oauth2::ClientId::new(
@@ -228,86 +225,7 @@ pub async fn get_identity(req: fpm::http::Request) -> actix_web::HttpResponse {
             .json("No record found.");
     }
 }
-/*pub async fn get_identity_fpm(cookies:&std::collections::HashMap<String, String>,identities: &Vec<UserIdentity>) -> actix_web::HttpResponse {
-        let mut user_email_val:String=String::from("");
-        let mut user_login_val:String=String::from("");
-        dbg!(cookies);
-   dbg!(identities);
 
-    let access_token_val:String;
-    let access_token = cookies.get("access_token");
-
-    match cookies.get("access_token"){
-        Some(val)=>{
-
-            //access_token_val=val.value().to_string();
-            access_token_val=val.to_owned();
-        }
-        None=>{
-            access_token_val=String::from("");
-        }
-    }
-if !access_token_val.is_empty() {
-    let userresp=user_details(access_token_val.clone()).await;
-    match userresp {
-        Ok(userresp) => {
-            if userresp.get("login").is_some(){
-                user_login_val=userresp.get("login").unwrap().to_string();
-            }
-            if userresp.get("email").is_some(){
-                user_email_val=userresp.get("email").unwrap().to_string();
-            }
-
-        }Err(_) => {
-
-    }
-}
-let mut all_found_repo:String=String::from("");
-    let reporesp=get_starred_repo(access_token_val.clone(),&repo_list).await;
-    //let reporesp;
-    match reporesp {
-        Ok(reporesp) => {
-if reporesp.len()>0{
-    for repo in reporesp{
-        if all_found_repo==""{
-            all_found_repo=format!("{}{}","github-starred:",repo);
-        }else{
-            all_found_repo=format!("{}{}{}",all_found_repo,",",repo);
-        }
-
-    }
-
-}else{
-    all_found_repo=String::from("");
-}
-
-            let html = format!(
-                r#"<html>
-                <head><title>FDM</title></head>
-                <body>
-                github-username:{}<br/>gmail-email:{}<br/>{}
-                </body>
-            </html>"#,
-            user_login_val.clone(),
-            user_email_val.clone(),
-            all_found_repo.clone(),
-            );
-
-            actix_web::HttpResponse::Ok().body(html)
-        }
-        Err(e) => {
-            return actix_web::HttpResponse::BadRequest().content_type("application/json")
-            .json(e.to_string());
-    }
-    }
-
-
-}else{
-    return actix_web::HttpResponse::BadRequest().content_type("application/json")
-        .json("No record found.");
-}
-
-}*/
 #[derive(serde::Deserialize)]
 pub struct AuthRequest {
     pub code: String,
@@ -315,13 +233,7 @@ pub struct AuthRequest {
 }
 pub async fn auth(req: fpm::http::Request, params: AuthRequest) -> actix_web::HttpResponse {
     dotenv::dotenv().ok();
-    /*let connection_obj=req.connection_info().clone();
-    let domain;
-    let host_info=connection_obj.host();
-    let domain_parts:Vec<&str>=host_info.split(":").collect();
-    domain=domain_parts.get(0).unwrap();*/
     let domain = "localhost";
-    //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
     let base_url = "http://localhost:8000";
     let auth_url = format!("{}{}", base_url, "/auth/auth/");
     let client = oauth2::basic::BasicClient::new(
@@ -412,3 +324,84 @@ async fn get_starred_repo(
     }
     Ok(starred_repo)
 }
+
+/*pub async fn get_identity_fpm(cookies:&std::collections::HashMap<String, String>,identities: &Vec<UserIdentity>) -> actix_web::HttpResponse {
+        let mut user_email_val:String=String::from("");
+        let mut user_login_val:String=String::from("");
+        dbg!(cookies);
+   dbg!(identities);
+
+    let access_token_val:String;
+    let access_token = cookies.get("access_token");
+
+    match cookies.get("access_token"){
+        Some(val)=>{
+
+            //access_token_val=val.value().to_string();
+            access_token_val=val.to_owned();
+        }
+        None=>{
+            access_token_val=String::from("");
+        }
+    }
+if !access_token_val.is_empty() {
+    let userresp=user_details(access_token_val.clone()).await;
+    match userresp {
+        Ok(userresp) => {
+            if userresp.get("login").is_some(){
+                user_login_val=userresp.get("login").unwrap().to_string();
+            }
+            if userresp.get("email").is_some(){
+                user_email_val=userresp.get("email").unwrap().to_string();
+            }
+
+        }Err(_) => {
+
+    }
+}
+let mut all_found_repo:String=String::from("");
+    let reporesp=get_starred_repo(access_token_val.clone(),&repo_list).await;
+    //let reporesp;
+    match reporesp {
+        Ok(reporesp) => {
+if reporesp.len()>0{
+    for repo in reporesp{
+        if all_found_repo==""{
+            all_found_repo=format!("{}{}","github-starred:",repo);
+        }else{
+            all_found_repo=format!("{}{}{}",all_found_repo,",",repo);
+        }
+
+    }
+
+}else{
+    all_found_repo=String::from("");
+}
+
+            let html = format!(
+                r#"<html>
+                <head><title>FDM</title></head>
+                <body>
+                github-username:{}<br/>gmail-email:{}<br/>{}
+                </body>
+            </html>"#,
+            user_login_val.clone(),
+            user_email_val.clone(),
+            all_found_repo.clone(),
+            );
+
+            actix_web::HttpResponse::Ok().body(html)
+        }
+        Err(e) => {
+            return actix_web::HttpResponse::BadRequest().content_type("application/json")
+            .json(e.to_string());
+    }
+    }
+
+
+}else{
+    return actix_web::HttpResponse::BadRequest().content_type("application/json")
+        .json("No record found.");
+}
+
+}*/

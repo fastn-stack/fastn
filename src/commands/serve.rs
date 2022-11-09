@@ -357,10 +357,7 @@ async fn logout_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Respons
 }
 async fn auth_auth_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
-    let base_url = "http://localhost:8000";
-    let uri_string = req.uri();
-    let final_url: String = format!("{}{}", base_url.clone(), uri_string.clone().to_string());
+    let final_url: String = format!("{}://{}{}", req.scheme(), req.host(), req.uri());
     let request_url = url::Url::parse(&final_url.to_string()).unwrap();
     let pairs = request_url.query_pairs();
     let mut code = String::from("");
@@ -385,8 +382,7 @@ async fn auth_auth_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Resp
 
 async fn get_identities_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    let identity_obj = fpm::auth::github::get_identity(req);
-    Ok(identity_obj.await)
+    Ok(fpm::auth::github::get_identity(req).await)
 }
 /*async fn get_identities_ctrl(
     req: &fpm::http::Request,
