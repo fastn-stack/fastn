@@ -115,11 +115,13 @@ pub async fn login(req: fpm::http::Request) -> actix_web::HttpResponse {
         Some(TOKEN_URL_GLB.get().unwrap().to_owned()),
     )
     .set_redirect_uri(oauth2::RedirectUrl::new(auth_url.clone()).expect("Invalid redirect URL"));
+
     let authorize_url = client
         .authorize_url(oauth2::CsrfToken::new_random)
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
         .add_scope(oauth2::Scope::new("user:email".to_string()))
         .url();
+
     actix_web::HttpResponse::Found()
         .append_header((
             actix_web::http::header::LOCATION,
@@ -278,6 +280,7 @@ pub async fn auth(req: fpm::http::Request, params: AuthRequest) -> actix_web::Ht
             .finish()
     }
 }
+
 async fn user_details(access_token: String) -> Result<serde_json::value::Value, reqwest::Error> {
     let token_val = format!("{}{}", String::from("token "), access_token);
 
@@ -294,6 +297,7 @@ async fn user_details(access_token: String) -> Result<serde_json::value::Value, 
     let resp: serde_json::Value = request_obj.json().await?;
     Ok(resp)
 }
+
 async fn get_starred_repo(
     access_token: String,
     repo_list: &Vec<String>,

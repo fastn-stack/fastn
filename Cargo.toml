@@ -14,7 +14,7 @@ repository = "https://github.com/FifthTry/fpm"
 homepage = "https://fpm.dev"
 
 [features]
-
+default = ["auth"]
 # FPM comes with some feature to integrate with fpm controller. FPM controller is a
 # separate software, optional. FPM controller is responsible for creating a new fpm
 # package, and deploying it on some server, backing content up and so on. FPM has to
@@ -32,6 +32,8 @@ controller = ["remote"]
 # is created for every user, and local edits in the workspace is allowed.
 remote = []
 
+auth = ["github-auth"]
+github-auth = ["dep:oauth2"]
 
 [dependencies]
 # Please do not specify a dependency more precisely than needed. If version "1" works, do
@@ -72,7 +74,7 @@ slug = { version = "0.1" }
 sha2 = "0.10"
 thiserror = "1"
 url = "2"
-oauth2 = "4.2.3"
+oauth2 = { version = "4.2.3", optional = true }
 dotenv = "0.15.0"
 # becasue they havent crated a release yet which fixes incompatibility with latest actix-http
 zip = { git = "https://github.com/zip-rs/zip" }
