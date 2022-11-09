@@ -1,3 +1,4 @@
+pub(crate) mod config;
 pub(crate) mod discord;
 pub(crate) mod github;
 pub(crate) mod gmail;

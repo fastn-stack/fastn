@@ -62,7 +62,7 @@ pub async fn index(req: fpm::http::Request) -> actix_web::HttpResponse {
     }
     let html = format!(
         r#"<html>
-        <head><title>FDM</title></head>
+        <head><title>FPM</title></head>
         <body>
             {} <a href="/{}">{}</a>
         </body>
@@ -70,7 +70,9 @@ pub async fn index(req: fpm::http::Request) -> actix_web::HttpResponse {
         welcome_msg, link, link_title
     );
 
-    actix_web::HttpResponse::Ok().body(html)
+    actix_web::HttpResponse::Ok()
+        .content_type("text/html")
+        .body(html)
 }
 
 pub async fn login(req: fpm::http::Request) -> actix_web::HttpResponse {
