@@ -76,11 +76,15 @@ pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
 }
 
 pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    let auth_url: String = format!(
+    // We have to redirect here to set access_token
+    let redirect_url: String = format!(
         "{}://{}/auth/auth/",
         req.connection_info().scheme(),
         req.connection_info().host()
     );
+
+    dbg!(&redirect_url);
+
     if GITHUB_CLIENT_ID_GLB.get().is_none() {
         GITHUB_CLIENT_ID_GLB
             .set(oauth2::ClientId::new(
@@ -95,6 +99,8 @@ pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
             ))
             .unwrap();
     }
+
+    // Why this??
     if AUTH_URL_GLB.get().is_none() {
         AUTH_URL_GLB
             .set(
@@ -103,6 +109,7 @@ pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
             )
             .unwrap();
     }
+    // And Why this??
     if TOKEN_URL_GLB.get().is_none() {
         TOKEN_URL_GLB
             .set(
@@ -118,8 +125,12 @@ pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
         AUTH_URL_GLB.get().unwrap().to_owned(),
         Some(TOKEN_URL_GLB.get().unwrap().to_owned()),
     )
-    .set_redirect_uri(oauth2::RedirectUrl::new(auth_url.clone()).expect("Invalid redirect URL"));
+    .set_redirect_uri(
+        oauth2::RedirectUrl::new(redirect_url.clone()).expect("Invalid redirect URL"),
+    );
 
+    // public_repos user:email all these things are github resources
+    // So we have to tell client who is getting logged in what are we going to access
     let authorize_url = client
         .authorize_url(oauth2::CsrfToken::new_random)
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
@@ -283,7 +294,7 @@ pub async fn auth(req: actix_web::HttpRequest, params: AuthRequest) -> actix_web
                         .permanent()
                         .finish(),
                 )
-                .append_header((actix_web::http::header::LOCATION, "/auth/".to_string()))
+                .append_header((actix_web::http::header::LOCATION, "/".to_string()))
                 .finish(),
             Err(_) => actix_web::HttpResponse::Found()
                 .append_header((actix_web::http::header::LOCATION, "/auth/".to_string()))
@@ -314,12 +325,11 @@ async fn user_details(access_token: String) -> Result<serde_json::value::Value, 
 }
 
 async fn get_starred_repo(
-    access_token: String,
+    access_token: &str,
     repo_list: &Vec<UserIdentity>,
 ) -> Result<Vec<String>, reqwest::Error> {
     let token_val = format!("{}{}", String::from("Bearer "), access_token);
     let mut starred_repo: Vec<String> = vec![];
-    //dbg!(repo_list);
     let api_url = format!("{}", String::from("https://api.github.com/user/starred"));
     let request_obj = reqwest::Client::new()
         .get(api_url.clone())
@@ -331,14 +341,25 @@ async fn get_starred_repo(
         )
         .send()
         .await?;
+
+    // This should parse to Struct
     let resp: serde_json::Value = request_obj.json().await?;
 
+    dbg!(&resp);
+
+    // TODO: remove unwrap, refactor this code
+    dbg!(&repo_list);
     if resp.as_array().unwrap().len() > 0 {
         for repo in repo_list {
             for respobj in resp.as_array().unwrap().iter() {
-                if repo.key.eq("github_starred") && repo.value.eq(respobj.get("full_name").unwrap())
+                dbg!(&repo.value);
+                dbg!(&respobj.get("full_name").unwrap());
+
+                if repo.key.eq("github-starred") && repo.value.eq(respobj.get("full_name").unwrap())
                 {
-                    starred_repo.push(respobj.get("full_name").unwrap().to_string());
+                    let value =
+                        serde_json::from_value(respobj.get("full_name").unwrap().clone()).unwrap();
+                    starred_repo.push(value);
                 }
             }
         }
@@ -350,17 +371,13 @@ pub async fn get_identity_fpm(
     req: actix_web::HttpRequest,
     identities: &Vec<UserIdentity>,
 ) -> actix_web::HttpResponse {
-    let mut user_email_val: String = String::from("");
+    let user_email_val: String = String::from("");
     let mut user_login_val: String = String::from("");
-    //dbg!(cookies);
-    //dbg!(identities);
 
     let access_token_val: String;
-    let access_token = req.cookie("access_token");
 
     match req.cookie("access_token") {
         Some(val) => {
-            //access_token_val=val.value().to_string();
             access_token_val = val.value().to_owned();
         }
         None => {
@@ -368,21 +385,22 @@ pub async fn get_identity_fpm(
         }
     }
     if !access_token_val.is_empty() {
-        let userresp = user_details(access_token_val.clone()).await;
-        match userresp {
-            Ok(userresp) => {
-                if userresp.get("login").is_some() {
-                    user_login_val = userresp.get("login").unwrap().to_string();
-                }
-                if userresp.get("email").is_some() {
-                    user_email_val = userresp.get("email").unwrap().to_string();
-                }
-            }
-            Err(_) => {}
-        }
+        // let userresp = user_details(access_token_val.clone()).await;
+        // match userresp {
+        //     Ok(userresp) => {
+        //         if userresp.get("login").is_some() {
+        //             user_login_val = userresp.get("login").unwrap().to_string();
+        //         }
+        //         if userresp.get("email").is_some() {
+        //             user_email_val = userresp.get("email").unwrap().to_string();
+        //         }
+        //     }
+        //     Err(_) => {}
+        // }
+
         let mut all_found_repo: String = String::from("");
-        let reporesp = get_starred_repo(access_token_val.clone(), identities).await;
-        //let reporesp;
+        let reporesp = get_starred_repo(access_token_val.as_str(), identities).await;
+
         match reporesp {
             Ok(reporesp) => {
                 if reporesp.len() > 0 {
@@ -422,4 +440,36 @@ pub async fn get_identity_fpm(
             .content_type("application/json")
             .json("No record found.");
     }
+}
+
+// TODO: rename the method later
+pub async fn get_auth_identities(
+    cookies: &std::collections::HashMap<String, String>,
+    identities: &[(String, String)],
+) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    dbg!(&cookies);
+
+    let access_token = cookies.get("access_token").ok_or_else(|| {
+        fpm::Error::GenericError("access_token not found in the cookies".to_string())
+    })?;
+
+    let identities = identities
+        .into_iter()
+        .map(|(k, v)| UserIdentity {
+            key: k.to_string(),
+            value: v.to_string(),
+        })
+        .collect();
+
+    let user_starred_repos = get_starred_repo(access_token.as_str(), &identities).await?;
+
+    dbg!(&user_starred_repos);
+
+    Ok(user_starred_repos
+        .into_iter()
+        .map(|repo| fpm::user_group::UserIdentity {
+            key: "github-starred".to_string(),
+            value: repo,
+        })
+        .collect())
 }

@@ -182,22 +182,25 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
 //github-team:fpm-lang/ftd
 //github-starred:fpm-lang/ftd
 pub async fn get_remote_identities(
-    remote_host: &str,
+    _remote_host: &str,
     cookies: &std::collections::HashMap<String, String>,
     identities: &[(String, String)],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
-    use itertools::Itertools;
+    // use itertools::Itertools;
 
-    #[derive(serde::Deserialize)]
-    struct UserIdentities {
-        success: bool,
-        reason: Option<String>,
-        #[serde(rename = "user-identities")]
-        user_identities: Option<Vec<std::collections::HashMap<String, String>>>,
-    }
-    let url = format!("https://{}/-/dj/get-identities/", remote_host);
-    println!("remote url: {}", url);
+    return dbg!(fpm::auth::github::get_auth_identities(cookies, identities).await);
 
+    // #[derive(serde::Deserialize)]
+    // struct UserIdentities {
+    //     success: bool,
+    //     reason: Option<String>,
+    //     #[serde(rename = "user-identities")]
+    //     user_identities: Option<Vec<std::collections::HashMap<String, String>>>,
+    // }
+    // let url = format!("https://{}/-/dj/get-identities/", remote_host);
+    // println!("remote url: {}", url);
+
+    /*
     let cookie = cookies
         .iter()
         .map(|c| format!("{}={}", c.0, c.1))
@@ -238,4 +241,5 @@ pub async fn get_remote_identities(
                 .map(|(key, value)| fpm::user_group::UserIdentity { key, value })
         })
         .collect_vec())
+    */
 }

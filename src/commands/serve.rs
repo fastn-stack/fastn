@@ -455,7 +455,17 @@ pub async fn listen(
     package_download_base_url: Option<String>,
 ) -> fpm::Result<()> {
     use colored::Colorize;
-    dotenv::dotenv().ok();
+    let t = dotenv::dotenv().ok();
+    dbg!(&t);
+    match std::env::var("GITHUB_CLIENT_ID") {
+        Ok(v) => {
+            dbg!(&v);
+        }
+        Err(e) => {
+            dbg!(e);
+        }
+    };
+
     if package_download_base_url.is_some() {
         download_init_package(package_download_base_url).await?;
     }
