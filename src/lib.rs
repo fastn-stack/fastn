@@ -18,6 +18,7 @@ mod history;
 mod package;
 #[macro_use]
 mod http;
+mod auth;
 mod error;
 mod i18n;
 pub mod library;
@@ -32,7 +33,6 @@ mod translation;
 mod version;
 mod wasm;
 mod workspace;
-mod auth;
 
 pub(crate) use auto_import::AutoImport;
 pub use commands::{

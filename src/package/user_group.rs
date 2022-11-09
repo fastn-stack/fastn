@@ -440,16 +440,16 @@ pub async fn access_identities(
     dbg!(is_read);
     dbg!(config);
     //if cfg!(feature = "remote") {
-        return fpm::controller::get_remote_identities(
-            req.host().as_str(),
-            req.cookies(),
-            get_identities(config, document_name, is_read)?
-                .into_iter()
-                .map(|x| (x.key, x.value))
-                .collect_vec()
-                .as_slice(),
-        )
-        .await;
+    return fpm::controller::get_remote_identities(
+        req.host().as_str(),
+        req.cookies(),
+        get_identities(config, document_name, is_read)?
+            .into_iter()
+            .map(|x| (x.key, x.value))
+            .collect_vec()
+            .as_slice(),
+    )
+    .await;
     //}
 
     Ok(if let Some(identity) = req.cookie("identities") {

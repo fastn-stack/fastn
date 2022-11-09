@@ -342,61 +342,54 @@ pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::R
     fpm::apis::cr::create_cr_page(req).await
 }
 
-async fn auth_route(
-    req: fpm::http::Request
-) -> fpm::Result<fpm::http::Response> {
+async fn auth_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    let auth_obj=fpm::auth::github::index(req);
+    let auth_obj = fpm::auth::github::index(req);
     Ok(auth_obj.await)
-   
 }
-async fn login_route(
-    req: fpm::http::Request
-) -> fpm::Result<fpm::http::Response> {
+async fn login_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    let login_obj=fpm::auth::github::login(req);
+    let login_obj = fpm::auth::github::login(req);
     Ok(login_obj.await)
 }
 
-async fn logout_route(
-    req: fpm::http::Request
-) -> fpm::Result<fpm::http::Response> {
+async fn logout_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    let logout_obj=fpm::auth::github::logout(req);
+    let logout_obj = fpm::auth::github::logout(req);
     Ok(logout_obj)
 }
-async fn auth_auth_route(
-    req: fpm::http::Request
-) -> fpm::Result<fpm::http::Response> {
-    
+async fn auth_auth_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-        //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());    
-        let base_url="http://localhost:8000";
-        let uri_string=req.uri();
-        let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
-        let request_url = url::Url::parse(&final_url.to_string()).unwrap();
-        let pairs = request_url.query_pairs();
-        let mut code=String::from("");
-        let mut state=String::from("");
-        for pair in pairs{
-            if pair.0=="code"{
-                code=pair.1.to_string();
-            }
-            if pair.0=="state"{
-                state=pair.1.to_string();
-            }
+    //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
+    let base_url = "http://localhost:8000";
+    let uri_string = req.uri();
+    let final_url: String = format!("{}{}", base_url.clone(), uri_string.clone().to_string());
+    let request_url = url::Url::parse(&final_url.to_string()).unwrap();
+    let pairs = request_url.query_pairs();
+    let mut code = String::from("");
+    let mut state = String::from("");
+    for pair in pairs {
+        if pair.0 == "code" {
+            code = pair.1.to_string();
         }
-        let auth_obj=fpm::auth::github::auth(req,
-            fpm::auth::github::AuthRequest{code:code.clone(),state:state.clone()});
-        Ok(auth_obj.await)
+        if pair.0 == "state" {
+            state = pair.1.to_string();
+        }
+    }
+    let auth_obj = fpm::auth::github::auth(
+        req,
+        fpm::auth::github::AuthRequest {
+            code: code.clone(),
+            state: state.clone(),
+        },
+    );
+    Ok(auth_obj.await)
 }
 
-async fn get_identities_route(
-    req: fpm::http::Request
-) -> fpm::Result<fpm::http::Response> {
+async fn get_identities_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-        let identity_obj=fpm::auth::github::get_identity(req);
-        Ok(identity_obj.await)
+    let identity_obj = fpm::auth::github::get_identity(req);
+    Ok(identity_obj.await)
 }
 /*async fn get_identities_ctrl(
     req: &fpm::http::Request,
@@ -408,18 +401,20 @@ async fn get_identities_route(
         req.cookies(),&returned_identities);
         Ok(identity_obj.await)
 }*/
-fn get_dentities(req: &fpm::http::Request,)->Vec<fpm::auth::github::UserIdentity>{
-    
+fn get_dentities(req: &fpm::http::Request) -> Vec<fpm::auth::github::UserIdentity> {
     let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
     //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
-    let base_url=format!("{}{}{}",req.host(),"://",req.host());
+    let base_url = format!("{}{}{}", req.host(), "://", req.host());
     let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
-        let uri_string=req.uri();
-    let final_url:String=format!("{}{}",base_url.clone(),uri_string.clone().to_string());
+    let uri_string = req.uri();
+    let final_url: String = format!("{}{}", base_url.clone(), uri_string.clone().to_string());
     let request_url = url::Url::parse(&final_url.to_string()).unwrap();
     let pairs = request_url.query_pairs();
-    for pair in pairs{
-        repo_list.push(fpm::auth::github::UserIdentity{key:pair.0.to_string(),value:1.to_string()});
+    for pair in pairs {
+        repo_list.push(fpm::auth::github::UserIdentity {
+            key: pair.0.to_string(),
+            value: 1.to_string(),
+        });
     }
     repo_list
 }
@@ -451,7 +446,7 @@ async fn route(
     else if req.path()=="/auth/get-identities/" {
         return get_identities_route(req.clone()).await;
     }*/
-    
+
     match (req.method(), req.path()) {
         ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
         ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
