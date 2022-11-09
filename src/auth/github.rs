@@ -16,8 +16,14 @@ pub struct UserIdentity {
     pub key: String,
     pub value: String,
 }
+
+#[derive(serde::Deserialize)]
+pub struct AuthRequest {
+    pub code: String,
+    pub state: String,
+}
+
 pub async fn index(req: fpm::http::Request) -> actix_web::HttpResponse {
-    dotenv::dotenv().ok();
     let mut link = "auth/login/";
     let mut link_title = "Login";
     match req.cookie("access_token") {
@@ -66,9 +72,8 @@ pub async fn index(req: fpm::http::Request) -> actix_web::HttpResponse {
 
     actix_web::HttpResponse::Ok().body(html)
 }
+
 pub async fn login(req: fpm::http::Request) -> actix_web::HttpResponse {
-    // TODO: Need to remove it it should be part of while server is getting started
-    dotenv::dotenv().ok();
     let auth_url: String = format!("{}://{}/auth/auth/", req.scheme(), req.host());
     if GITHUB_CLIENT_ID_GLB.get().is_none() {
         GITHUB_CLIENT_ID_GLB
@@ -226,13 +231,7 @@ pub async fn get_identity(req: fpm::http::Request) -> actix_web::HttpResponse {
     }
 }
 
-#[derive(serde::Deserialize)]
-pub struct AuthRequest {
-    pub code: String,
-    pub state: String,
-}
 pub async fn auth(req: fpm::http::Request, params: AuthRequest) -> actix_web::HttpResponse {
-    dotenv::dotenv().ok();
     let domain = "localhost";
     let base_url = "http://localhost:8000";
     let auth_url = format!("{}{}", base_url, "/auth/auth/");
