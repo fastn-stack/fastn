@@ -124,7 +124,7 @@ pub async fn login(req: fpm::http::Request) -> actix_web::HttpResponse {
         .finish()
 }
 
-pub fn logout(req: fpm::http::Request) -> actix_web::HttpResponse {
+pub async fn logout(req: fpm::http::Request) -> actix_web::HttpResponse {
     /*let connection_obj=req.connection_info().clone();
     let domain;
     let host_info=connection_obj.host();

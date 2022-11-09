@@ -344,19 +344,16 @@ pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::R
 
 async fn auth_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    let auth_obj = fpm::auth::github::index(req);
-    Ok(auth_obj.await)
+    Ok(fpm::auth::github::index(req).await)
 }
 async fn login_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    let login_obj = fpm::auth::github::login(req);
-    Ok(login_obj.await)
+    Ok(fpm::auth::github::login(req).await)
 }
 
 async fn logout_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
-    let logout_obj = fpm::auth::github::logout(req);
-    Ok(logout_obj)
+    Ok(fpm::auth::github::logout(req).await)
 }
 async fn auth_auth_route(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.write().await;
@@ -401,10 +398,8 @@ async fn get_identities_route(req: fpm::http::Request) -> fpm::Result<fpm::http:
         req.cookies(),&returned_identities);
         Ok(identity_obj.await)
 }*/
-fn get_dentities(req: &fpm::http::Request) -> Vec<fpm::auth::github::UserIdentity> {
-    let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
-    //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
-    let base_url = format!("{}{}{}", req.host(), "://", req.host());
+fn get_identities(req: &fpm::http::Request) -> Vec<fpm::auth::github::UserIdentity> {
+    let base_url = format!("{}://{}", req.scheme(), req.host());
     let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
     let uri_string = req.uri();
     let final_url: String = format!("{}{}", base_url.clone(), uri_string.clone().to_string());
@@ -418,13 +413,6 @@ fn get_dentities(req: &fpm::http::Request) -> Vec<fpm::auth::github::UserIdentit
     }
     repo_list
 }
-// clone the fpm repo
-// change in the code in serve.rs
-// run command `cargo install --path=.`
-// After that fpm binary will be available to you
-// `fpm serve` or fpm serve --port 8000
-
-// cargo run -- serve, not working even after adding FPM.ftd and index.ftd file
 
 async fn route(
     req: actix_web::HttpRequest,

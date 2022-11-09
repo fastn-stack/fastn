@@ -59,6 +59,8 @@ pub struct Request {
     query: std::collections::HashMap<String, serde_json::Value>,
     body: actix_web::web::Bytes,
     ip: Option<String>,
+    scheme: String,
+    host: String,
     // path_params: Vec<(String, )>
 }
 
@@ -87,6 +89,8 @@ impl Request {
                 ).unwrap().0
             },
             ip: req.peer_addr().map(|x| x.ip().to_string()),
+            scheme: req.connection_info().scheme().to_string(),
+            host: req.connection_info().host().to_string(),
         };
 
         fn get_cookies(
@@ -182,14 +186,14 @@ impl Request {
     }
 
     pub fn host(&self) -> String {
-        use std::borrow::Borrow;
-
-        self.headers
-            .borrow()
-            .get("host")
-            .and_then(|v| v.to_str().ok())
-            .unwrap_or("localhost")
-            .to_string()
+        self.host.to_string()
+        // use std::borrow::Borrow;
+        // self.headers
+        //     .borrow()
+        //     .get("host")
+        //     .and_then(|v| v.to_str().ok())
+        //     .unwrap_or("localhost")
+        //     .to_string()
     }
 
     pub fn headers(&self) -> &reqwest::header::HeaderMap {
@@ -202,6 +206,9 @@ impl Request {
 
     pub fn get_ip(&self) -> Option<String> {
         self.ip.clone()
+    }
+    pub fn scheme(&self) -> String {
+        self.scheme.to_string()
     }
 }
 

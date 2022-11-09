@@ -452,11 +452,11 @@ pub async fn access_identities(
     .await;
     //}
 
-    Ok(if let Some(identity) = req.cookie("identities") {
-        parse_identities(identity.as_str())
-    } else {
-        parse_cli_identities()
-    })
+    // Ok(if let Some(identity) = req.cookie("identities") {
+    //     parse_identities(identity.as_str())
+    // } else {
+    //     parse_cli_identities()
+    // })
 }
 
 pub mod processor {
