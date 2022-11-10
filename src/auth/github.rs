@@ -1,10 +1,31 @@
-static GITHUB_CLIENT_ID_GLB: once_cell::sync::OnceCell<oauth2::ClientId> =
-    once_cell::sync::OnceCell::new();
-static GITHUB_CLIENT_SECRET_GLB: once_cell::sync::OnceCell<oauth2::ClientSecret> =
-    once_cell::sync::OnceCell::new();
-static AUTH_URL_GLB: once_cell::sync::OnceCell<oauth2::AuthUrl> = once_cell::sync::OnceCell::new();
-static TOKEN_URL_GLB: once_cell::sync::OnceCell<oauth2::TokenUrl> =
-    once_cell::sync::OnceCell::new();
+// Lazy means a value which initialize at the first time access
+// we have to access it before using it and make sure to use it while starting a server
+// TODO: Make sure that before accessing in the API the are set
+static GITHUB_CLIENT_ID: once_cell::sync::Lazy<oauth2::ClientId> = {
+    once_cell::sync::Lazy::new(|| {
+        oauth2::ClientId::new(
+            std::env::var("GITHUB_CLIENT_ID").expect("GITHUB_CLIENT_ID not set in env"),
+        )
+    })
+};
+
+static GITHUB_CLIENT_SECRET: once_cell::sync::Lazy<oauth2::ClientSecret> = {
+    once_cell::sync::Lazy::new(|| {
+        oauth2::ClientSecret::new(
+            std::env::var("GITHUB_CLIENT_SECRET").expect("GITHUB_CLIENT_SECRET not set in env"),
+        )
+    })
+};
+
+const TOKEN_URL: once_cell::sync::Lazy<oauth2::TokenUrl> = once_cell::sync::Lazy::new(|| {
+    oauth2::TokenUrl::new("https://github.com/login/oauth/access_token".to_string())
+        .expect("Invalid token endpoint URL")
+});
+
+const AUTH_URL: once_cell::sync::Lazy<oauth2::AuthUrl> = once_cell::sync::Lazy::new(|| {
+    oauth2::AuthUrl::new("https://github.com/login/oauth/authorize".to_string())
+        .expect("GitHub AuthUrl is wrong")
+});
 
 #[derive(Debug)]
 pub struct RepoObj {
@@ -23,58 +44,6 @@ pub struct AuthRequest {
     pub state: String,
 }
 
-pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    let mut link = "auth/login/";
-    let mut link_title = "Login";
-    match req.cookie("access_token") {
-        Some(val) => {
-            if val.value().to_string() != "" {
-                link = "auth/logout/";
-                link_title = "Logout";
-            }
-        }
-        None => {
-            //link="auth/login/";
-            // link_title="Login";
-        }
-    }
-    let mut welcome_msg = String::from("Welcome. Please first login: ");
-
-    match req.cookie("access_token") {
-        Some(val) => {
-            if val.value().to_string() != "" {
-                let userresp = user_details(val.value().to_string()).await;
-                match userresp {
-                    Ok(userresp) => {
-                        let user_login = userresp.get("login");
-                        if userresp.get("login").is_some() {
-                            welcome_msg =
-                                format!("{}{}", "Hello ", user_login.clone().unwrap().to_string());
-                        }
-                    }
-                    Err(_) => {}
-                }
-            }
-        }
-        None => {
-            welcome_msg = String::from("Welcome. Please first login: ");
-        }
-    }
-    let html = format!(
-        r#"<html>
-        <head><title>FPM</title></head>
-        <body>
-            {} <a href="/{}">{}</a>
-        </body>
-    </html>"#,
-        welcome_msg, link, link_title
-    );
-
-    actix_web::HttpResponse::Ok()
-        .content_type("text/html")
-        .body(html)
-}
-
 pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // We have to redirect here to set access_token
     let redirect_url: String = format!(
@@ -83,53 +52,18 @@ pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
         req.connection_info().host()
     );
 
-    dbg!(&redirect_url);
-
-    if GITHUB_CLIENT_ID_GLB.get().is_none() {
-        GITHUB_CLIENT_ID_GLB
-            .set(oauth2::ClientId::new(
-                std::env::var("GITHUB_CLIENT_ID").unwrap(),
-            ))
-            .unwrap();
-    }
-    if GITHUB_CLIENT_SECRET_GLB.get().is_none() {
-        GITHUB_CLIENT_SECRET_GLB
-            .set(oauth2::ClientSecret::new(
-                std::env::var("GITHUB_CLIENT_SECRET").unwrap(),
-            ))
-            .unwrap();
-    }
-
-    // Why this??
-    if AUTH_URL_GLB.get().is_none() {
-        AUTH_URL_GLB
-            .set(
-                oauth2::AuthUrl::new("https://github.com/login/oauth/authorize".to_string())
-                    .expect("Invalid authorization endpoint URL"),
-            )
-            .unwrap();
-    }
-    // And Why this??
-    if TOKEN_URL_GLB.get().is_none() {
-        TOKEN_URL_GLB
-            .set(
-                oauth2::TokenUrl::new("https://github.com/login/oauth/access_token".to_string())
-                    .expect("Invalid token endpoint URL"),
-            )
-            .unwrap();
-    }
     // Set up the config for the Github OAuth2 process.
     let client = oauth2::basic::BasicClient::new(
-        GITHUB_CLIENT_ID_GLB.get().unwrap().to_owned(),
-        Some(GITHUB_CLIENT_SECRET_GLB.get().unwrap().to_owned()),
-        AUTH_URL_GLB.get().unwrap().to_owned(),
-        Some(TOKEN_URL_GLB.get().unwrap().to_owned()),
+        GITHUB_CLIENT_ID.to_owned(),
+        Some(GITHUB_CLIENT_SECRET.to_owned()),
+        AUTH_URL.clone(),
+        Some(TOKEN_URL.clone()),
     )
     .set_redirect_uri(
         oauth2::RedirectUrl::new(redirect_url.clone()).expect("Invalid redirect URL"),
     );
 
-    // public_repos user:email all these things are github resources
+    // Note: public_repos user:email all these things are github resources
     // So we have to tell client who is getting logged in what are we going to access
     let authorize_url = client
         .authorize_url(oauth2::CsrfToken::new_random)
@@ -164,92 +98,6 @@ pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
         .finish()
 }
 
-/*pub async fn get_identity(req: fpm::http::Request) -> actix_web::HttpResponse {
-    let mut user_email_val: String = String::from("");
-    let mut user_login_val: String = String::from("");
-    let access_token_val: String;
-    let access_token = req.cookie("access_token");
-
-    //let base_url=format!("{}{}{}",req.connection_info().scheme(),"://",req.connection_info().host());
-    let base_url = "http://localhost:8000";
-    let mut repo_list: Vec<String> = Vec::new();
-    let uri_string = req.uri();
-    let final_url: String = format!("{}{}", base_url.clone(), uri_string.clone().to_string());
-    let request_url = url::Url::parse(&final_url.to_string()).unwrap();
-    let pairs = request_url.query_pairs();
-    for pair in pairs {
-        if pair.0 == "github_starred" {
-            if !repo_list.contains(&pair.1.to_string()) {
-                repo_list.push(pair.1.to_string());
-            }
-        }
-    }
-    match req.cookie("access_token") {
-        Some(val) => {
-            //access_token_val=val.value().to_string();
-            access_token_val = val;
-        }
-        None => {
-            access_token_val = String::from("");
-        }
-    }
-    if !access_token_val.is_empty() {
-        let userresp = user_details(access_token_val.clone()).await;
-        match userresp {
-            Ok(userresp) => {
-                //let user_login=userresp.get("login");
-                if userresp.get("login").is_some() {
-                    user_login_val = userresp.get("login").unwrap().to_string();
-                }
-                if userresp.get("email").is_some() {
-                    user_email_val = userresp.get("email").unwrap().to_string();
-                }
-            }
-            Err(_) => {}
-        }
-        let mut all_found_repo: String = String::from("");
-        let reporesp = get_starred_repo(access_token_val.clone(), &repo_list).await;
-        match reporesp {
-            Ok(reporesp) => {
-                if reporesp.len() > 0 {
-                    for repo in reporesp {
-                        if all_found_repo == "" {
-                            all_found_repo = format!("{}{}", "github-starred:", repo);
-                        } else {
-                            all_found_repo = format!("{}{}{}", all_found_repo, ",", repo);
-                        }
-                    }
-                } else {
-                    all_found_repo = String::from("");
-                }
-
-                let html = format!(
-                    r#"<html>
-                <head><title>FDM</title></head>
-                <body>
-                github-username:{}<br/>gmail-email:{}<br/>{}
-                </body>
-            </html>"#,
-                    user_login_val.clone(),
-                    user_email_val.clone(),
-                    all_found_repo.clone(),
-                );
-
-                actix_web::HttpResponse::Ok().body(html)
-            }
-            Err(e) => {
-                return actix_web::HttpResponse::BadRequest()
-                    .content_type("application/json")
-                    .json(e.to_string());
-            }
-        }
-    } else {
-        return actix_web::HttpResponse::BadRequest()
-            .content_type("application/json")
-            .json("No record found.");
-    }
-}*/
-
 pub async fn auth(req: actix_web::HttpRequest, params: AuthRequest) -> actix_web::HttpResponse {
     //let domain = "localhost";
     let connection_obj = req.connection_info().clone();
@@ -266,10 +114,10 @@ pub async fn auth(req: actix_web::HttpRequest, params: AuthRequest) -> actix_web
     );
     let auth_url = format!("{}{}", base_url, "/auth/auth/");
     let client = oauth2::basic::BasicClient::new(
-        GITHUB_CLIENT_ID_GLB.get().unwrap().to_owned(),
-        Some(GITHUB_CLIENT_SECRET_GLB.get().unwrap().to_owned()),
-        AUTH_URL_GLB.get().unwrap().to_owned(),
-        Some(TOKEN_URL_GLB.get().unwrap().to_owned()),
+        GITHUB_CLIENT_ID.to_owned(),
+        Some(GITHUB_CLIENT_SECRET.to_owned()),
+        AUTH_URL.clone(),
+        Some(TOKEN_URL.clone()),
     )
     .set_redirect_uri(oauth2::RedirectUrl::new(auth_url.clone()).expect("Invalid redirect URL"));
 
@@ -472,4 +320,56 @@ pub async fn get_auth_identities(
             value: repo,
         })
         .collect())
+}
+
+pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    let mut link = "auth/login/";
+    let mut link_title = "Login";
+    match req.cookie("access_token") {
+        Some(val) => {
+            if val.value().to_string() != "" {
+                link = "auth/logout/";
+                link_title = "Logout";
+            }
+        }
+        None => {
+            //link="auth/login/";
+            // link_title="Login";
+        }
+    }
+    let mut welcome_msg = String::from("Welcome. Please first login: ");
+
+    match req.cookie("access_token") {
+        Some(val) => {
+            if val.value().to_string() != "" {
+                let userresp = user_details(val.value().to_string()).await;
+                match userresp {
+                    Ok(userresp) => {
+                        let user_login = userresp.get("login");
+                        if userresp.get("login").is_some() {
+                            welcome_msg =
+                                format!("{}{}", "Hello ", user_login.clone().unwrap().to_string());
+                        }
+                    }
+                    Err(_) => {}
+                }
+            }
+        }
+        None => {
+            welcome_msg = String::from("Welcome. Please first login: ");
+        }
+    }
+    let html = format!(
+        r#"<html>
+        <head><title>FPM</title></head>
+        <body>
+            {} <a href="/{}">{}</a>
+        </body>
+    </html>"#,
+        welcome_msg, link, link_title
+    );
+
+    actix_web::HttpResponse::Ok()
+        .content_type("text/html")
+        .body(html)
 }

@@ -1,15 +1,3 @@
-async fn auth_route(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
-    Ok(fpm::auth::github::index(req).await)
-}
-
-async fn login_route(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
-    Ok(fpm::auth::github::login(req).await)
-}
-
-async fn logout_route(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
-    Ok(fpm::auth::github::logout(req))
-}
-
 async fn auth_auth_route(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
     let base_url = format!(
         "{}{}{}",
@@ -47,15 +35,14 @@ async fn get_identities_route(req: actix_web::HttpRequest) -> fpm::Result<fpm::h
     let identity_obj = fpm::auth::github::get_identity_fpm(req, &identities);
     Ok(identity_obj.await)
 }
+
 fn get_identities(req: actix_web::HttpRequest) -> Vec<fpm::auth::github::UserIdentity> {
-    //let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
     let base_url = format!(
-        "{}{}{}",
+        "{}://{}",
         req.connection_info().scheme(),
-        "://",
         req.connection_info().host()
     );
-    //let base_url=format!("{}{}{}",req.host(),"://",req.host());
+
     let mut repo_list: Vec<fpm::auth::github::UserIdentity> = Vec::new();
     let uri_string = req.uri();
     let final_url: String = format!("{}{}", base_url.clone(), uri_string.clone().to_string());
@@ -72,11 +59,13 @@ fn get_identities(req: actix_web::HttpRequest) -> Vec<fpm::auth::github::UserIde
 
 pub async fn handle_auth(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
     if req.path() == "/auth/" {
-        return auth_route(req.clone()).await;
+        // TODO: this is not required we can remove it.
+        return Ok(fpm::auth::github::index(req).await);
     } else if req.path() == "/auth/login/" {
-        return login_route(req.clone()).await;
+        // TODO: It need paas a query parameters
+        return Ok(fpm::auth::github::login(req).await);
     } else if req.path() == "/auth/logout/" {
-        return logout_route(req.clone()).await;
+        return Ok(fpm::auth::github::logout(req));
     } else if req.path() == "/auth/auth/" {
         return auth_auth_route(req.clone()).await;
     } else if req.path() == "/auth/get-identities/" {
