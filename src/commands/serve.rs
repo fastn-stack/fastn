@@ -318,7 +318,11 @@ pub async fn clear_cache(req: fpm::http::Request) -> fpm::Result<fpm::http::Resp
     }
 
     let _lock = LOCK.write().await;
-    Ok(fpm::apis::cache::clear(&req).await)
+    fpm::apis::cache::clear(&req).await;
+    // TODO: Redirect to Referrer uri
+    return Ok(actix_web::HttpResponse::Found()
+        .append_header((actix_web::http::header::LOCATION, "/".to_string()))
+        .finish());
 }
 
 // TODO: Move them to routes folder
