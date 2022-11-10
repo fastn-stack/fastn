@@ -27,37 +27,22 @@ const AUTH_URL: once_cell::sync::Lazy<oauth2::AuthUrl> = once_cell::sync::Lazy::
         .expect("GitHub AuthUrl is wrong")
 });
 
-#[derive(Debug)]
-pub struct RepoObj {
-    pub repo_owner: String,
-    pub repo_title: String,
-}
-#[derive(Debug, Clone, serde::Serialize)]
-
-pub struct UserIdentity {
-    pub key: String,
-    pub value: String,
-}
-
-#[derive(serde::Deserialize)]
-pub struct AuthRequest {
-    pub code: String,
-    pub state: String,
-}
+// TODO: This has be set while creating the GitHub OAuth Application
+pub const ACCESS_URL: &str = "/auth/github/access/";
 
 // route: /auth/login/
 pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
     // GitHub will be redirect to this url after login process completed
     let redirect_url: String = format!(
-        "{}://{}/auth/github/access/",
+        "{}://{}{}",
         req.connection_info().scheme(),
-        req.connection_info().host()
+        req.connection_info().host(),
+        ACCESS_URL
     );
 
     // Set up the config for the Github OAuth2 process.
     let client =
         utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(redirect_url.clone())?);
-
     // Note: public_repos user:email all these things are github resources
     // So we have to tell client who is getting logged in what are we going to access
     let (authorize_url, _token) = client
@@ -65,8 +50,6 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
         .add_scope(oauth2::Scope::new("user:email".to_string()))
         .url();
-
-    dbg!(authorize_url.to_string());
     // send redirect to /auth/github/access/
     Ok(actix_web::HttpResponse::Found()
         .append_header((actix_web::http::header::LOCATION, authorize_url.to_string()))
@@ -77,12 +60,18 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
 // In this API we are accessing
 // the token and setting it to cookies
 pub async fn access_token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
-    let query = actix_web::web::Query::<AuthRequest>::from_query(req.query_string())?.0;
+    #[derive(serde::Deserialize)]
+    pub struct AccessRequest {
+        pub code: String,
+        pub state: String,
+    }
+
+    let query = actix_web::web::Query::<AccessRequest>::from_query(req.query_string())?.0;
     let auth_url = format!(
         "{}://{}{}",
         req.connection_info().scheme(),
         req.connection_info().host(),
-        "/auth/github/access/"
+        ACCESS_URL
     );
     let client = utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(auth_url)?);
     match client
@@ -94,11 +83,14 @@ pub async fn access_token(req: actix_web::HttpRequest) -> fpm::Result<actix_web:
             let access_token = oauth2::TokenResponse::access_token(&token).secret();
             return Ok(actix_web::HttpResponse::Found()
                 .cookie(
-                    actix_web::cookie::Cookie::build("access_token", access_token.as_str())
-                        .domain(fpm::auth::utils::domain(req.connection_info().host()))
-                        .path("/")
-                        .permanent()
-                        .finish(),
+                    actix_web::cookie::Cookie::build(
+                        fpm::auth::COOKIE_TOKEN,
+                        access_token.as_str(),
+                    )
+                    .domain(fpm::auth::utils::domain(req.connection_info().host()))
+                    .path("/")
+                    .permanent()
+                    .finish(),
                 )
                 .append_header((actix_web::http::header::LOCATION, "/".to_string()))
                 .finish());
@@ -226,72 +218,4 @@ pub mod utils {
             Some(TOKEN_URL.clone()),
         )
     }
-}
-
-async fn user_details(access_token: String) -> Result<serde_json::value::Value, reqwest::Error> {
-    let token_val = format!("{}{}", String::from("token "), access_token);
-
-    let request_obj = reqwest::Client::new()
-        .get("https://api.github.com/user")
-        .header(reqwest::header::AUTHORIZATION, token_val.clone())
-        .header(reqwest::header::ACCEPT, "application/json")
-        .header(
-            reqwest::header::USER_AGENT,
-            reqwest::header::HeaderValue::from_static("fpm"),
-        )
-        .send()
-        .await?;
-    let resp: serde_json::Value = request_obj.json().await?;
-    Ok(resp)
-}
-pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    let mut link = "auth/login/";
-    let mut link_title = "Login";
-    match req.cookie("access_token") {
-        Some(val) => {
-            if val.value().to_string() != "" {
-                link = "auth/logout/";
-                link_title = "Logout";
-            }
-        }
-        None => {
-            //link="auth/login/";
-            // link_title="Login";
-        }
-    }
-    let mut welcome_msg = String::from("Welcome. Please first login: ");
-
-    match req.cookie("access_token") {
-        Some(val) => {
-            if val.value().to_string() != "" {
-                let userresp = user_details(val.value().to_string()).await;
-                match userresp {
-                    Ok(userresp) => {
-                        let user_login = userresp.get("login");
-                        if userresp.get("login").is_some() {
-                            welcome_msg =
-                                format!("{}{}", "Hello ", user_login.clone().unwrap().to_string());
-                        }
-                    }
-                    Err(_) => {}
-                }
-            }
-        }
-        None => {
-            welcome_msg = String::from("Welcome. Please first login: ");
-        }
-    }
-    let html = format!(
-        r#"<html>
-        <head><title>FPM</title></head>
-        <body>
-            {} <a href="/{}">{}</a>
-        </body>
-    </html>"#,
-        welcome_msg, link, link_title
-    );
-
-    actix_web::HttpResponse::Ok()
-        .content_type("text/html")
-        .body(html)
 }

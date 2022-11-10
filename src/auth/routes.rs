@@ -2,7 +2,7 @@
 pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
     Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build("access_token", "")
+            actix_web::cookie::Cookie::build(fpm::auth::COOKIE_TOKEN, "")
                 .domain(fpm::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
@@ -12,11 +12,9 @@ pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRespons
         .finish())
 }
 
+// handle: if request.url starts with /auth/
 pub async fn handle_auth(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
-    if req.path() == "/auth/" {
-        // TODO: this is not required we can remove it.
-        return Ok(fpm::auth::github::index(req).await);
-    } else if req.path() == "/auth/login/" {
+    if req.path() == "/auth/login/" {
         // TODO: It need paas it as query parameters
         let platform = "github";
         return match platform {
@@ -24,7 +22,7 @@ pub async fn handle_auth(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::
             "discord" => unreachable!(),
             _ => unreachable!(),
         };
-    } else if req.path() == "/auth/github/access/" {
+    } else if req.path() == fpm::auth::github::ACCESS_URL {
         // route will be called from after github login redirected request by passing code and state
         return fpm::auth::github::access_token(req).await;
     } else if req.path() == "/auth/logout/" {

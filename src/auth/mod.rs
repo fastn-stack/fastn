@@ -7,6 +7,8 @@ pub(crate) mod slack;
 pub(crate) mod telegram;
 pub mod utils;
 
+pub const COOKIE_TOKEN: &str = "access_token";
+
 // TODO: rename the method later
 // bridge between fpm to auth to check
 pub async fn get_auth_identities(
@@ -15,7 +17,7 @@ pub async fn get_auth_identities(
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
     dbg!(&cookies);
 
-    let access_token = cookies.get("access_token").ok_or_else(|| {
+    let access_token = cookies.get(COOKIE_TOKEN).ok_or_else(|| {
         fpm::Error::GenericError("access_token not found in the cookies".to_string())
     })?;
 
@@ -24,6 +26,8 @@ pub async fn get_auth_identities(
     let matched_identities = github::matched_identities(access_token.as_str(), identities).await?;
 
     //TODO: Call discord::matched_identities
+    //TODO: Call google::matched_identities
+    //TODO: Call twitter::matched_identities
     dbg!(&matched_identities);
     Ok(matched_identities)
 }
