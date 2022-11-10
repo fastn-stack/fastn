@@ -52,7 +52,7 @@ pub fn ok_with_content_type(data: Vec<u8>, content_type: mime_guess::Mime) -> fp
 pub struct Request {
     method: String,
     uri: String,
-    path: String,
+    pub path: String,
     query_string: String,
     cookies: std::collections::HashMap<String, String>,
     headers: reqwest::header::HeaderMap,

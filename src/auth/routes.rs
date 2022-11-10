@@ -24,8 +24,14 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRe
     };
     match query.platform.as_str() {
         "github" => fpm::auth::github::login(req).await,
-        "discord" => unreachable!(),
-        _ => unreachable!(),
+        // TODO: Remove this after demo
+        _ => {
+            let mut req = fpm::http::Request::from_actix(req, actix_web::web::Bytes::new());
+            req.path = "/sorry/".to_string();
+            fpm::commands::serve::serve(req).await
+        }
+        // "discord" => unreachable!(),
+        // _ => unreachable!(),
     }
 }
 
