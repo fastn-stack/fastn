@@ -225,7 +225,8 @@ pub fn process_sync<'a>(
         }),
         "get-identities" => fpm::user_group::processor::get_identities(section, doc, config),
         "request-data" => fpm::library::http::request_data_processor(section, doc, config),
-
+        // TODO: auth feature flag
+        "user-details" => fpm::auth::processor::user_details(section, doc, config),
         t => Err(ftd::p1::Error::NotFound {
             doc_id: document_id.to_string(),
             line_number: section.line_number,
@@ -475,6 +476,8 @@ impl Library2 {
             "request-data" => {
                 fpm::library::http::request_data_processor(section, doc, &self.config)
             }
+            // TODO: auth feature flag
+            "user-details" => fpm::auth::processor::user_details(section, doc, &self.config),
             t => Err(ftd::p1::Error::NotFound {
                 doc_id: self.document_id.to_string(),
                 line_number: section.line_number,
