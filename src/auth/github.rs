@@ -17,16 +17,6 @@ static GITHUB_CLIENT_SECRET: once_cell::sync::Lazy<oauth2::ClientSecret> = {
     })
 };
 
-const TOKEN_URL: once_cell::sync::Lazy<oauth2::TokenUrl> = once_cell::sync::Lazy::new(|| {
-    oauth2::TokenUrl::new("https://github.com/login/oauth/access_token".to_string())
-        .expect("Invalid token endpoint URL")
-});
-
-const AUTH_URL: once_cell::sync::Lazy<oauth2::AuthUrl> = once_cell::sync::Lazy::new(|| {
-    oauth2::AuthUrl::new("https://github.com/login/oauth/authorize".to_string())
-        .expect("GitHub AuthUrl is wrong")
-});
-
 // TODO: This has be set while creating the GitHub OAuth Application
 pub const ACCESS_URL: &str = "/auth/github/access/";
 
@@ -41,8 +31,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
     );
 
     // Set up the config for the Github OAuth2 process.
-    let client =
-        utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(redirect_url.clone())?);
+    let client = utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(redirect_url)?);
     // Note: public_repos user:email all these things are github resources
     // So we have to tell client who is getting logged in what are we going to access
     let (authorize_url, _token) = client
@@ -61,12 +50,12 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
 // the token and setting it to cookies
 pub async fn access_token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
     #[derive(serde::Deserialize)]
-    pub struct AccessRequest {
+    pub struct QueryParams {
         pub code: String,
         pub state: String,
     }
 
-    let query = actix_web::web::Query::<AccessRequest>::from_query(req.query_string())?.0;
+    let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?.0;
     let auth_url = format!(
         "{}://{}{}",
         req.connection_info().scheme(),
@@ -108,7 +97,7 @@ pub async fn matched_identities(
     identities: &[fpm::user_group::UserIdentity],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
     let github_identities = identities
-        .into_iter()
+        .iter()
         .filter(|identity| identity.key.starts_with("github"))
         .collect::<Vec<&fpm::user_group::UserIdentity>>();
 
@@ -175,7 +164,7 @@ pub mod apis {
             access_token,
         )
         .await?;
-        return Ok(starred_repo.into_iter().map(|x| x.full_name).collect());
+        Ok(starred_repo.into_iter().map(|x| x.full_name).collect())
     }
 
     pub async fn get_api<T: serde::de::DeserializeOwned>(
@@ -209,13 +198,17 @@ pub mod apis {
 }
 
 pub mod utils {
+
     pub fn github_client() -> oauth2::basic::BasicClient {
-        use fpm::auth::github::{AUTH_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, TOKEN_URL};
+        use fpm::auth::github::{GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET};
         oauth2::basic::BasicClient::new(
             GITHUB_CLIENT_ID.to_owned(),
             Some(GITHUB_CLIENT_SECRET.to_owned()),
-            AUTH_URL.clone(),
-            Some(TOKEN_URL.clone()),
+            oauth2::AuthUrl::new("https://github.com/login/oauth/authorize".to_string()).unwrap(),
+            Some(
+                oauth2::TokenUrl::new("https://github.com/login/oauth/access_token".to_string())
+                    .expect("Invalid token endpoint URL"),
+            ),
         )
     }
 }

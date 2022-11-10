@@ -437,19 +437,8 @@ pub async fn access_identities(
     // github-team: fpm-lang/ftd
     // github-starred: fpm-lang/ftd
     // discord-server: abrark.com
-    return fpm::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await;
-    //if cfg!(feature = "remote") {
-    // return fpm::controller::get_remote_identities(
-    //     req.host().as_str(),
-    //     req.cookies(),
-    //
-    //         .into_iter()
-    //         .map(|x| (x.key, x.value))
-    //         .collect_vec()
-    //         .as_slice(),
-    // )
-    // .await;
-    //}
+    // github-watch: fpm-lang/ftd
+    fpm::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await
 
     // Ok(if let Some(identity) = req.cookie("identities") {
     //     parse_identities(identity.as_str())

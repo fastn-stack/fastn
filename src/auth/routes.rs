@@ -1,3 +1,27 @@
+pub fn is_login(req: &actix_web::HttpRequest) -> bool {
+    req.headers().get(fpm::auth::COOKIE_TOKEN).is_some()
+}
+
+// route: /auth/login/
+pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+    if is_login(&req) {
+        return Ok(actix_web::HttpResponse::Found()
+            .append_header((actix_web::http::header::LOCATION, "/".to_string()))
+            .finish());
+    }
+
+    #[derive(serde::Deserialize)]
+    pub struct QueryParams {
+        pub platform: String,
+    }
+    let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?.0;
+    match query.platform.as_str() {
+        "github" => fpm::auth::github::login(req).await,
+        "discord" => unreachable!(),
+        _ => unreachable!(),
+    }
+}
+
 // route: /auth/logout/
 pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
     Ok(actix_web::HttpResponse::Found()
@@ -14,21 +38,16 @@ pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRespons
 
 // handle: if request.url starts with /auth/
 pub async fn handle_auth(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
-    if req.path() == "/auth/login/" {
-        // TODO: It need paas it as query parameters
-        let platform = "github";
-        return match platform {
-            "github" => fpm::auth::github::login(req).await,
-            "discord" => unreachable!(),
-            _ => unreachable!(),
-        };
-    } else if req.path() == fpm::auth::github::ACCESS_URL {
-        // route will be called from after github login redirected request by passing code and state
+    if req.path().eq("/auth/login/") {
+        return login(req).await;
+    } else if req.path().eq(fpm::auth::github::ACCESS_URL) {
+        // this will be called after github OAuth login, to set the access_token
+        // It will redirect user to home after the login
         return fpm::auth::github::access_token(req).await;
-    } else if req.path() == "/auth/logout/" {
+    } else if req.path().eq("/auth/logout/") {
         return logout(req);
     }
-    return Ok(actix_web::HttpResponse::new(
+    Ok(actix_web::HttpResponse::new(
         actix_web::http::StatusCode::NOT_FOUND,
-    ));
+    ))
 }
