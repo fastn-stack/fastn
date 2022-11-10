@@ -49,7 +49,7 @@ pub struct AuthRequest {
 pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
     // GitHub will be redirect to this url after login process completed
     let redirect_url: String = format!(
-        "{}://{}/auth/github/",
+        "{}://{}/auth/github/access/",
         req.connection_info().scheme(),
         req.connection_info().host()
     );
@@ -66,20 +66,21 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
         .add_scope(oauth2::Scope::new("user:email".to_string()))
         .url();
 
-    // send redirect to /auth/github/
+    dbg!(authorize_url.to_string());
+    // send redirect to /auth/github/access/
     Ok(actix_web::HttpResponse::Found()
         .append_header((actix_web::http::header::LOCATION, authorize_url.to_string()))
         .finish())
 }
 
-// handle: /auth/github/
-pub async fn auth(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+// handle: /auth/github/access/
+pub async fn access_token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
     let query = actix_web::web::Query::<AuthRequest>::from_query(req.query_string())?.0;
     let auth_url = format!(
         "{}://{}{}",
         req.connection_info().scheme(),
         req.connection_info().host(),
-        "/auth/github/"
+        "/auth/github/access/"
     );
     let client = utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(auth_url)?);
     match client
@@ -241,78 +242,4 @@ pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     actix_web::HttpResponse::Ok()
         .content_type("text/html")
         .body(html)
-}
-pub async fn get_identity_fpm(
-    req: actix_web::HttpRequest,
-    _identities: &Vec<UserIdentity>,
-) -> actix_web::HttpResponse {
-    let _user_email_val: String = String::from("");
-    let _user_login_val: String = String::from("");
-
-    let access_token_val: String;
-
-    match req.cookie("access_token") {
-        Some(val) => {
-            access_token_val = val.value().to_owned();
-        }
-        None => {
-            access_token_val = String::from("");
-        }
-    }
-    if !access_token_val.is_empty() {
-        // let userresp = user_details(access_token_val.clone()).await;
-        // match userresp {
-        //     Ok(userresp) => {
-        //         if userresp.get("login").is_some() {
-        //             user_login_val = userresp.get("login").unwrap().to_string();
-        //         }
-        //         if userresp.get("email").is_some() {
-        //             user_email_val = userresp.get("email").unwrap().to_string();
-        //         }
-        //     }
-        //     Err(_) => {}
-        // }
-
-        return actix_web::HttpResponse::BadRequest()
-            .content_type("application/json")
-            .json("BAD Request".to_string());
-        // let mut all_found_repo: String = String::from("");
-        // let reporesp = get_starred_repo(access_token_val.as_str(), identities.as_slice()).await;
-        // match reporesp {
-        //     Ok(reporesp) => {
-        //         if reporesp.len() > 0 {
-        //             for repo in reporesp {
-        //                 if all_found_repo == "" {
-        //                     all_found_repo = format!("{}{}", "github-starred:", repo);
-        //                 } else {
-        //                     all_found_repo = format!("{}{}{}", all_found_repo, ",", repo);
-        //                 }
-        //             }
-        //         } else {
-        //             all_found_repo = String::from("");
-        //         }
-        //
-        //         let html = format!(
-        //             r#"<html>
-        //     <head><title>FDM</title></head>
-        //     <body>
-        //     github-username:{}<br/>gmail-email:{}<br/>{}
-        //     </body>
-        // </html>"#,
-        //             user_login_val.clone(),
-        //             user_email_val.clone(),
-        //             all_found_repo.clone(),
-        //         );
-        //
-        //         actix_web::HttpResponse::Ok().body(html)
-        //     }
-        //     Err(e) => {
-        //
-        //     }
-        // }
-    } else {
-        return actix_web::HttpResponse::BadRequest()
-            .content_type("application/json")
-            .json("No record found.");
-    }
 }
