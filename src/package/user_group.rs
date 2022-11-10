@@ -398,7 +398,7 @@ pub fn belongs_to(
 }
 
 /// 'email: abrark.asahi@gmail.com => vec[UId{email: abrark.asahi@gmail.com}]
-pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
+pub fn parse_identities(identities: &str) -> Vec<UserIdentity> {
     use itertools::Itertools;
     let identities = identities.split(',').collect_vec();
     identities
@@ -412,7 +412,7 @@ pub(crate) fn parse_identities(identities: &str) -> Vec<UserIdentity> {
 }
 
 /// Get identities from cli `--identities`
-pub(crate) fn parse_cli_identities() -> Vec<UserIdentity> {
+pub fn parse_cli_identities() -> Vec<UserIdentity> {
     let identities = fpm::utils::parse_from_cli("--identities");
     parse_identities(&identities.unwrap_or_default())
 }
@@ -433,18 +433,21 @@ pub async fn access_identities(
     document_name: &str,
     is_read: bool,
 ) -> fpm::Result<Vec<UserIdentity>> {
-    use itertools::Itertools;
+    let sitemap_identities = get_identities(config, document_name, is_read)?;
+    //github-team:fpm-lang/ftd
+    //github-starred:fpm-lang/ftd
+    return fpm::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await;
     //if cfg!(feature = "remote") {
-    return fpm::controller::get_remote_identities(
-        req.host().as_str(),
-        req.cookies(),
-        get_identities(config, document_name, is_read)?
-            .into_iter()
-            .map(|x| (x.key, x.value))
-            .collect_vec()
-            .as_slice(),
-    )
-    .await;
+    // return fpm::controller::get_remote_identities(
+    //     req.host().as_str(),
+    //     req.cookies(),
+    //
+    //         .into_iter()
+    //         .map(|x| (x.key, x.value))
+    //         .collect_vec()
+    //         .as_slice(),
+    // )
+    // .await;
     //}
 
     // Ok(if let Some(identity) = req.cookie("identities") {

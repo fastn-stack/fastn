@@ -376,26 +376,26 @@ pub(crate) async fn http_get_with_cookie(
     Ok(res.bytes().await?.into())
 }
 
-pub async fn http_get_with_type<T: serde::de::DeserializeOwned>(
-    url: url::Url,
-    headers: reqwest::header::HeaderMap,
-    query: &[(String, String)],
-) -> fpm::Result<T> {
-    let c = reqwest::Client::builder()
-        .default_headers(headers)
-        .build()?;
-
-    let resp = c.get(url.to_string().as_str()).query(query).send().await?;
-    if !resp.status().eq(&reqwest::StatusCode::OK) {
-        return Err(fpm::Error::APIResponseError(format!(
-            "url: {}, response_status: {}, response: {:?}",
-            url,
-            resp.status(),
-            resp.text().await
-        )));
-    }
-    Ok(resp.json::<T>().await?)
-}
+// pub async fn http_get_with_type<T: serde::de::DeserializeOwned>(
+//     url: url::Url,
+//     headers: reqwest::header::HeaderMap,
+//     query: &[(String, String)],
+// ) -> fpm::Result<T> {
+//     let c = reqwest::Client::builder()
+//         .default_headers(headers)
+//         .build()?;
+//
+//     let resp = c.get(url.to_string().as_str()).query(query).send().await?;
+//     if !resp.status().eq(&reqwest::StatusCode::OK) {
+//         return Err(fpm::Error::APIResponseError(format!(
+//             "url: {}, response_status: {}, response: {:?}",
+//             url,
+//             resp.status(),
+//             resp.text().await
+//         )));
+//     }
+//     Ok(resp.json::<T>().await?)
+// }
 
 pub(crate) async fn http_get_str(url: &str) -> fpm::Result<String> {
     let url_f = format!("{:?}", url);

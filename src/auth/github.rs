@@ -33,6 +33,7 @@ pub struct RepoObj {
     pub repo_title: String,
 }
 #[derive(Debug, Clone, serde::Serialize)]
+
 pub struct UserIdentity {
     pub key: String,
     pub value: String,
@@ -119,9 +120,9 @@ pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRespons
         .finish())
 }
 
-async fn get_starred_repo(
+pub async fn get_starred_repo(
     access_token: &str,
-    repo_list: &Vec<UserIdentity>,
+    repo_list: &[fpm::user_group::UserIdentity],
 ) -> Result<Vec<String>, reqwest::Error> {
     let token_val = format!("{}{}", String::from("Bearer "), access_token);
     let mut starred_repo: Vec<String> = vec![];
@@ -160,38 +161,6 @@ async fn get_starred_repo(
         }
     }
     Ok(starred_repo)
-}
-
-// TODO: rename the method later
-pub async fn get_auth_identities(
-    cookies: &std::collections::HashMap<String, String>,
-    identities: &[(String, String)],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
-    dbg!(&cookies);
-
-    let access_token = cookies.get("access_token").ok_or_else(|| {
-        fpm::Error::GenericError("access_token not found in the cookies".to_string())
-    })?;
-
-    let identities = identities
-        .into_iter()
-        .map(|(k, v)| UserIdentity {
-            key: k.to_string(),
-            value: v.to_string(),
-        })
-        .collect();
-
-    let user_starred_repos = get_starred_repo(access_token.as_str(), &identities).await?;
-
-    dbg!(&user_starred_repos);
-
-    Ok(user_starred_repos
-        .into_iter()
-        .map(|repo| fpm::user_group::UserIdentity {
-            key: "github-starred".to_string(),
-            value: repo,
-        })
-        .collect())
 }
 
 pub mod utils {
@@ -275,10 +244,10 @@ pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
 }
 pub async fn get_identity_fpm(
     req: actix_web::HttpRequest,
-    identities: &Vec<UserIdentity>,
+    _identities: &Vec<UserIdentity>,
 ) -> actix_web::HttpResponse {
-    let user_email_val: String = String::from("");
-    let user_login_val: String = String::from("");
+    let _user_email_val: String = String::from("");
+    let _user_login_val: String = String::from("");
 
     let access_token_val: String;
 
@@ -304,43 +273,43 @@ pub async fn get_identity_fpm(
         //     Err(_) => {}
         // }
 
-        let mut all_found_repo: String = String::from("");
-        let reporesp = get_starred_repo(access_token_val.as_str(), identities).await;
-
-        match reporesp {
-            Ok(reporesp) => {
-                if reporesp.len() > 0 {
-                    for repo in reporesp {
-                        if all_found_repo == "" {
-                            all_found_repo = format!("{}{}", "github-starred:", repo);
-                        } else {
-                            all_found_repo = format!("{}{}{}", all_found_repo, ",", repo);
-                        }
-                    }
-                } else {
-                    all_found_repo = String::from("");
-                }
-
-                let html = format!(
-                    r#"<html>
-            <head><title>FDM</title></head>
-            <body>
-            github-username:{}<br/>gmail-email:{}<br/>{}
-            </body>
-        </html>"#,
-                    user_login_val.clone(),
-                    user_email_val.clone(),
-                    all_found_repo.clone(),
-                );
-
-                actix_web::HttpResponse::Ok().body(html)
-            }
-            Err(e) => {
-                return actix_web::HttpResponse::BadRequest()
-                    .content_type("application/json")
-                    .json(e.to_string());
-            }
-        }
+        return actix_web::HttpResponse::BadRequest()
+            .content_type("application/json")
+            .json("BAD Request".to_string());
+        // let mut all_found_repo: String = String::from("");
+        // let reporesp = get_starred_repo(access_token_val.as_str(), identities.as_slice()).await;
+        // match reporesp {
+        //     Ok(reporesp) => {
+        //         if reporesp.len() > 0 {
+        //             for repo in reporesp {
+        //                 if all_found_repo == "" {
+        //                     all_found_repo = format!("{}{}", "github-starred:", repo);
+        //                 } else {
+        //                     all_found_repo = format!("{}{}{}", all_found_repo, ",", repo);
+        //                 }
+        //             }
+        //         } else {
+        //             all_found_repo = String::from("");
+        //         }
+        //
+        //         let html = format!(
+        //             r#"<html>
+        //     <head><title>FDM</title></head>
+        //     <body>
+        //     github-username:{}<br/>gmail-email:{}<br/>{}
+        //     </body>
+        // </html>"#,
+        //             user_login_val.clone(),
+        //             user_email_val.clone(),
+        //             all_found_repo.clone(),
+        //         );
+        //
+        //         actix_web::HttpResponse::Ok().body(html)
+        //     }
+        //     Err(e) => {
+        //
+        //     }
+        // }
     } else {
         return actix_web::HttpResponse::BadRequest()
             .content_type("application/json")

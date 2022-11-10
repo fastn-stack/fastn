@@ -38,7 +38,7 @@ pub async fn handle_auth(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::
             _ => unreachable!(),
         };
     } else if req.path() == "/auth/github/" {
-        // route will be called from after redirect
+        // route will be called from after github login redirected request by passing code and state
         return fpm::auth::github::auth(req).await;
     } else if req.path() == "/auth/logout/" {
         return fpm::auth::github::logout(req);
