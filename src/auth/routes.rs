@@ -1,5 +1,5 @@
 pub fn is_login(req: &actix_web::HttpRequest) -> bool {
-    req.headers().get(fpm::auth::COOKIE_TOKEN).is_some()
+    req.cookie(fpm::auth::COOKIE_TOKEN).is_some()
 }
 
 // route: /auth/login/

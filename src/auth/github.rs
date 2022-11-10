@@ -1,22 +1,3 @@
-// Lazy means a value which initialize at the first time access
-// we have to access it before using it and make sure to use it while starting a server
-// TODO: Make sure that before accessing in the API the are set
-static GITHUB_CLIENT_ID: once_cell::sync::Lazy<oauth2::ClientId> = {
-    once_cell::sync::Lazy::new(|| {
-        oauth2::ClientId::new(
-            std::env::var("GITHUB_CLIENT_ID").expect("GITHUB_CLIENT_ID not set in env"),
-        )
-    })
-};
-
-static GITHUB_CLIENT_SECRET: once_cell::sync::Lazy<oauth2::ClientSecret> = {
-    once_cell::sync::Lazy::new(|| {
-        oauth2::ClientSecret::new(
-            std::env::var("GITHUB_CLIENT_SECRET").expect("GITHUB_CLIENT_SECRET not set in env"),
-        )
-    })
-};
-
 // TODO: This has be set while creating the GitHub OAuth Application
 pub const ACCESS_URL: &str = "/auth/github/access/";
 
@@ -199,8 +180,28 @@ pub mod apis {
 
 pub mod utils {
 
+    // Lazy means a value which initialize at the first time access
+    // we have to access it before using it and make sure to use it while starting a server
+    // TODO: they should be configured with auth feature flag
+    // if feature flag auth is enabled Make sure that before accessing in the API these variable
+    // are set
+    static GITHUB_CLIENT_ID: once_cell::sync::Lazy<oauth2::ClientId> = {
+        once_cell::sync::Lazy::new(|| {
+            oauth2::ClientId::new(
+                std::env::var("GITHUB_CLIENT_ID").expect("GITHUB_CLIENT_ID not set in env"),
+            )
+        })
+    };
+
+    static GITHUB_CLIENT_SECRET: once_cell::sync::Lazy<oauth2::ClientSecret> = {
+        once_cell::sync::Lazy::new(|| {
+            oauth2::ClientSecret::new(
+                std::env::var("GITHUB_CLIENT_SECRET").expect("GITHUB_CLIENT_SECRET not set in env"),
+            )
+        })
+    };
+
     pub fn github_client() -> oauth2::basic::BasicClient {
-        use fpm::auth::github::{GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET};
         oauth2::basic::BasicClient::new(
             GITHUB_CLIENT_ID.to_owned(),
             Some(GITHUB_CLIENT_SECRET.to_owned()),
