@@ -372,7 +372,7 @@ pub async fn get_identity_fpm(
     identities: &Vec<UserIdentity>,
 ) -> actix_web::HttpResponse {
     let user_email_val: String = String::from("");
-    let mut user_login_val: String = String::from("");
+    let user_login_val: String = String::from("");
 
     let access_token_val: String;
 
