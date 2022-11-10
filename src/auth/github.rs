@@ -16,16 +16,16 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
     let client = utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(redirect_url)?);
     // Note: public_repos user:email all these things are github resources
     // So we have to tell client who is getting logged in what are we going to access
-    let (authorize_url, _token) = client
+    let (mut authorize_url, _token) = client
         .authorize_url(oauth2::CsrfToken::new_random)
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
         .add_scope(oauth2::Scope::new("user:email".to_string()))
         .url();
 
     // https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest:~:text=an%20appropriate%20display.-,prompt,-OPTIONAL.%20Space%20delimited
-    // authorize_url
-    //     .query_pairs_mut()
-    //     .append_pair("prompt", "consent");
+    authorize_url
+        .query_pairs_mut()
+        .append_pair("prompt", "consent");
 
     dbg!(&authorize_url);
     // let mut pairs: Vec<(&str, &str)> = vec![("response_type", self.response_type.as_ref())];
