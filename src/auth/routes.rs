@@ -62,8 +62,13 @@ pub async fn handle_auth(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::
         // TODO: this is not required we can remove it.
         return Ok(fpm::auth::github::index(req).await);
     } else if req.path() == "/auth/login/" {
-        // TODO: It need paas a query parameters
-        return fpm::auth::github::login(req).await;
+        // TODO: It need paas it as query parameters
+        let platform = "github";
+        return match platform {
+            "github" => fpm::auth::github::login(req).await,
+            "discord" => unreachable!(),
+            _ => unreachable!(),
+        };
     } else if req.path() == "/auth/logout/" {
         return Ok(fpm::auth::github::logout(req));
     } else if req.path() == "/auth/auth/" {

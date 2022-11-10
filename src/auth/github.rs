@@ -44,6 +44,7 @@ pub struct AuthRequest {
     pub state: String,
 }
 
+// route: /auth/login/
 pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
     // We have to redirect here to set access_token
     let redirect_url: String = format!(
@@ -56,17 +57,14 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
         utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(redirect_url.clone())?);
     // Note: public_repos user:email all these things are github resources
     // So we have to tell client who is getting logged in what are we going to access
-    let authorize_url = client
+    let (authorize_url, _token) = client
         .authorize_url(oauth2::CsrfToken::new_random)
         .add_scope(oauth2::Scope::new("public_repo".to_string()))
         .add_scope(oauth2::Scope::new("user:email".to_string()))
         .url();
 
     Ok(actix_web::HttpResponse::Found()
-        .append_header((
-            actix_web::http::header::LOCATION,
-            authorize_url.0.to_string(),
-        ))
+        .append_header((actix_web::http::header::LOCATION, authorize_url.to_string()))
         .finish())
 }
 
