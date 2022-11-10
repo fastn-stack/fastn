@@ -46,15 +46,17 @@ pub struct AuthRequest {
 
 // route: /auth/login/
 pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
-    // We have to redirect here to set access_token
+    // GitHub will be redirect to this url after login process completed
     let redirect_url: String = format!(
-        "{}://{}/auth/auth/",
+        "{}://{}/auth/github/",
         req.connection_info().scheme(),
         req.connection_info().host()
     );
+
     // Set up the config for the Github OAuth2 process.
     let client =
         utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(redirect_url.clone())?);
+
     // Note: public_repos user:email all these things are github resources
     // So we have to tell client who is getting logged in what are we going to access
     let (authorize_url, _token) = client
@@ -63,9 +65,47 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
         .add_scope(oauth2::Scope::new("user:email".to_string()))
         .url();
 
+    // send redirect to /auth/github/
     Ok(actix_web::HttpResponse::Found()
         .append_header((actix_web::http::header::LOCATION, authorize_url.to_string()))
         .finish())
+}
+
+// handle: /auth/github/
+pub async fn auth(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+    let query = actix_web::web::Query::<AuthRequest>::from_query(req.query_string())?.0;
+    let auth_url = format!(
+        "{}://{}{}",
+        req.connection_info().scheme(),
+        req.connection_info().host(),
+        "/auth/github/"
+    );
+    let client = utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(auth_url)?);
+    match client
+        .exchange_code(oauth2::AuthorizationCode::new(query.code))
+        .request_async(oauth2::reqwest::async_http_client)
+        .await
+    {
+        Ok(token) => {
+            let access_token = oauth2::TokenResponse::access_token(&token).secret();
+            return Ok(actix_web::HttpResponse::Found()
+                .cookie(
+                    actix_web::cookie::Cookie::build("access_token", access_token.as_str())
+                        .domain(fpm::auth::utils::domain(req.connection_info().host()))
+                        .path("/")
+                        .permanent()
+                        .finish(),
+                )
+                .append_header((actix_web::http::header::LOCATION, "/".to_string()))
+                .finish());
+        }
+        Err(_err) => {
+            // TODO: Return Error, Not able to login
+            Ok(actix_web::HttpResponse::Found()
+                .append_header((actix_web::http::header::LOCATION, "/".to_string()))
+                .finish())
+        }
+    }
 }
 
 pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
@@ -74,7 +114,6 @@ pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     let host_info = connection_obj.host();
     let domain_parts: Vec<&str> = host_info.split(":").collect();
     domain = domain_parts.get(0).unwrap();
-    //let domain="localhost";
     actix_web::HttpResponse::Found()
         .cookie(
             actix_web::cookie::Cookie::build("access_token", "")
@@ -83,82 +122,8 @@ pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
-        .append_header((actix_web::http::header::LOCATION, "/auth/".to_string()))
+        .append_header((actix_web::http::header::LOCATION, "/".to_string()))
         .finish()
-}
-
-pub async fn auth(req: actix_web::HttpRequest, params: AuthRequest) -> actix_web::HttpResponse {
-    //let domain = "localhost";
-    let connection_obj = req.connection_info().clone();
-    let domain;
-    let host_info = connection_obj.host();
-    let domain_parts: Vec<&str> = host_info.split(":").collect();
-    domain = domain_parts.get(0).unwrap();
-    //let base_url = "http://localhost:8000";
-    let base_url = format!(
-        "{}{}{}",
-        req.connection_info().scheme(),
-        "://",
-        req.connection_info().host()
-    );
-    let auth_url = format!("{}{}", base_url, "/auth/auth/");
-    let client = oauth2::basic::BasicClient::new(
-        GITHUB_CLIENT_ID.to_owned(),
-        Some(GITHUB_CLIENT_SECRET.to_owned()),
-        AUTH_URL.clone(),
-        Some(TOKEN_URL.clone()),
-    )
-    .set_redirect_uri(oauth2::RedirectUrl::new(auth_url.clone()).expect("Invalid redirect URL"));
-
-    let code = oauth2::AuthorizationCode::new(params.code.clone());
-    let _state = oauth2::CsrfToken::new(params.state.clone());
-    let access_token;
-    let access_token_obj;
-    let token_res = client
-        .exchange_code(code)
-        .request_async(oauth2::reqwest::async_http_client)
-        .await;
-    if let Ok(token) = token_res {
-        access_token_obj = oauth2::TokenResponse::access_token(&token);
-        access_token = access_token_obj.clone().secret().to_string();
-        let userresp = user_details(access_token.clone()).await;
-        match userresp {
-            Ok(userresp) => actix_web::HttpResponse::Found()
-                .cookie(
-                    actix_web::cookie::Cookie::build("access_token", access_token.as_str())
-                        .domain(domain.clone())
-                        .path("/")
-                        .permanent()
-                        .finish(),
-                )
-                .append_header((actix_web::http::header::LOCATION, "/".to_string()))
-                .finish(),
-            Err(_) => actix_web::HttpResponse::Found()
-                .append_header((actix_web::http::header::LOCATION, "/auth/".to_string()))
-                .finish(),
-        }
-    } else {
-        actix_web::HttpResponse::Found()
-            .append_header((actix_web::http::header::LOCATION, "/auth/".to_string()))
-            .finish()
-    }
-}
-
-async fn user_details(access_token: String) -> Result<serde_json::value::Value, reqwest::Error> {
-    let token_val = format!("{}{}", String::from("token "), access_token);
-
-    let request_obj = reqwest::Client::new()
-        .get("https://api.github.com/user")
-        .header(reqwest::header::AUTHORIZATION, token_val.clone())
-        .header(reqwest::header::ACCEPT, "application/json")
-        .header(
-            reqwest::header::USER_AGENT,
-            reqwest::header::HeaderValue::from_static("fpm"),
-        )
-        .send()
-        .await?;
-    let resp: serde_json::Value = request_obj.json().await?;
-    Ok(resp)
 }
 
 async fn get_starred_repo(
@@ -204,6 +169,117 @@ async fn get_starred_repo(
     Ok(starred_repo)
 }
 
+// TODO: rename the method later
+pub async fn get_auth_identities(
+    cookies: &std::collections::HashMap<String, String>,
+    identities: &[(String, String)],
+) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    dbg!(&cookies);
+
+    let access_token = cookies.get("access_token").ok_or_else(|| {
+        fpm::Error::GenericError("access_token not found in the cookies".to_string())
+    })?;
+
+    let identities = identities
+        .into_iter()
+        .map(|(k, v)| UserIdentity {
+            key: k.to_string(),
+            value: v.to_string(),
+        })
+        .collect();
+
+    let user_starred_repos = get_starred_repo(access_token.as_str(), &identities).await?;
+
+    dbg!(&user_starred_repos);
+
+    Ok(user_starred_repos
+        .into_iter()
+        .map(|repo| fpm::user_group::UserIdentity {
+            key: "github-starred".to_string(),
+            value: repo,
+        })
+        .collect())
+}
+
+pub mod utils {
+    pub fn github_client() -> oauth2::basic::BasicClient {
+        use fpm::auth::github::{AUTH_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, TOKEN_URL};
+        oauth2::basic::BasicClient::new(
+            GITHUB_CLIENT_ID.to_owned(),
+            Some(GITHUB_CLIENT_SECRET.to_owned()),
+            AUTH_URL.clone(),
+            Some(TOKEN_URL.clone()),
+        )
+    }
+}
+
+async fn user_details(access_token: String) -> Result<serde_json::value::Value, reqwest::Error> {
+    let token_val = format!("{}{}", String::from("token "), access_token);
+
+    let request_obj = reqwest::Client::new()
+        .get("https://api.github.com/user")
+        .header(reqwest::header::AUTHORIZATION, token_val.clone())
+        .header(reqwest::header::ACCEPT, "application/json")
+        .header(
+            reqwest::header::USER_AGENT,
+            reqwest::header::HeaderValue::from_static("fpm"),
+        )
+        .send()
+        .await?;
+    let resp: serde_json::Value = request_obj.json().await?;
+    Ok(resp)
+}
+pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    let mut link = "auth/login/";
+    let mut link_title = "Login";
+    match req.cookie("access_token") {
+        Some(val) => {
+            if val.value().to_string() != "" {
+                link = "auth/logout/";
+                link_title = "Logout";
+            }
+        }
+        None => {
+            //link="auth/login/";
+            // link_title="Login";
+        }
+    }
+    let mut welcome_msg = String::from("Welcome. Please first login: ");
+
+    match req.cookie("access_token") {
+        Some(val) => {
+            if val.value().to_string() != "" {
+                let userresp = user_details(val.value().to_string()).await;
+                match userresp {
+                    Ok(userresp) => {
+                        let user_login = userresp.get("login");
+                        if userresp.get("login").is_some() {
+                            welcome_msg =
+                                format!("{}{}", "Hello ", user_login.clone().unwrap().to_string());
+                        }
+                    }
+                    Err(_) => {}
+                }
+            }
+        }
+        None => {
+            welcome_msg = String::from("Welcome. Please first login: ");
+        }
+    }
+    let html = format!(
+        r#"<html>
+        <head><title>FPM</title></head>
+        <body>
+            {} <a href="/{}">{}</a>
+        </body>
+    </html>"#,
+        welcome_msg, link, link_title
+    );
+
+    actix_web::HttpResponse::Ok()
+        .content_type("text/html")
+        .body(html)
+}
 pub async fn get_identity_fpm(
     req: actix_web::HttpRequest,
     identities: &Vec<UserIdentity>,
@@ -276,101 +352,5 @@ pub async fn get_identity_fpm(
         return actix_web::HttpResponse::BadRequest()
             .content_type("application/json")
             .json("No record found.");
-    }
-}
-
-// TODO: rename the method later
-pub async fn get_auth_identities(
-    cookies: &std::collections::HashMap<String, String>,
-    identities: &[(String, String)],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
-    dbg!(&cookies);
-
-    let access_token = cookies.get("access_token").ok_or_else(|| {
-        fpm::Error::GenericError("access_token not found in the cookies".to_string())
-    })?;
-
-    let identities = identities
-        .into_iter()
-        .map(|(k, v)| UserIdentity {
-            key: k.to_string(),
-            value: v.to_string(),
-        })
-        .collect();
-
-    let user_starred_repos = get_starred_repo(access_token.as_str(), &identities).await?;
-
-    dbg!(&user_starred_repos);
-
-    Ok(user_starred_repos
-        .into_iter()
-        .map(|repo| fpm::user_group::UserIdentity {
-            key: "github-starred".to_string(),
-            value: repo,
-        })
-        .collect())
-}
-
-pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    let mut link = "auth/login/";
-    let mut link_title = "Login";
-    match req.cookie("access_token") {
-        Some(val) => {
-            if val.value().to_string() != "" {
-                link = "auth/logout/";
-                link_title = "Logout";
-            }
-        }
-        None => {
-            //link="auth/login/";
-            // link_title="Login";
-        }
-    }
-    let mut welcome_msg = String::from("Welcome. Please first login: ");
-
-    match req.cookie("access_token") {
-        Some(val) => {
-            if val.value().to_string() != "" {
-                let userresp = user_details(val.value().to_string()).await;
-                match userresp {
-                    Ok(userresp) => {
-                        let user_login = userresp.get("login");
-                        if userresp.get("login").is_some() {
-                            welcome_msg =
-                                format!("{}{}", "Hello ", user_login.clone().unwrap().to_string());
-                        }
-                    }
-                    Err(_) => {}
-                }
-            }
-        }
-        None => {
-            welcome_msg = String::from("Welcome. Please first login: ");
-        }
-    }
-    let html = format!(
-        r#"<html>
-        <head><title>FPM</title></head>
-        <body>
-            {} <a href="/{}">{}</a>
-        </body>
-    </html>"#,
-        welcome_msg, link, link_title
-    );
-
-    actix_web::HttpResponse::Ok()
-        .content_type("text/html")
-        .body(html)
-}
-
-pub mod utils {
-    pub fn github_client() -> oauth2::basic::BasicClient {
-        use fpm::auth::github::{AUTH_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, TOKEN_URL};
-        oauth2::basic::BasicClient::new(
-            GITHUB_CLIENT_ID.to_owned(),
-            Some(GITHUB_CLIENT_SECRET.to_owned()),
-            AUTH_URL.clone(),
-            Some(TOKEN_URL.clone()),
-        )
     }
 }
