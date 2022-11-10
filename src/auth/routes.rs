@@ -63,7 +63,7 @@ pub async fn handle_auth(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::
         return Ok(fpm::auth::github::index(req).await);
     } else if req.path() == "/auth/login/" {
         // TODO: It need paas a query parameters
-        return Ok(fpm::auth::github::login(req).await);
+        return fpm::auth::github::login(req).await;
     } else if req.path() == "/auth/logout/" {
         return Ok(fpm::auth::github::logout(req));
     } else if req.path() == "/auth/auth/" {

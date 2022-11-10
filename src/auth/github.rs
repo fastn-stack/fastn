@@ -44,25 +44,16 @@ pub struct AuthRequest {
     pub state: String,
 }
 
-pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
     // We have to redirect here to set access_token
     let redirect_url: String = format!(
         "{}://{}/auth/auth/",
         req.connection_info().scheme(),
         req.connection_info().host()
     );
-
     // Set up the config for the Github OAuth2 process.
-    let client = oauth2::basic::BasicClient::new(
-        GITHUB_CLIENT_ID.to_owned(),
-        Some(GITHUB_CLIENT_SECRET.to_owned()),
-        AUTH_URL.clone(),
-        Some(TOKEN_URL.clone()),
-    )
-    .set_redirect_uri(
-        oauth2::RedirectUrl::new(redirect_url.clone()).expect("Invalid redirect URL"),
-    );
-
+    let client =
+        utils::github_client().set_redirect_uri(oauth2::RedirectUrl::new(redirect_url.clone())?);
     // Note: public_repos user:email all these things are github resources
     // So we have to tell client who is getting logged in what are we going to access
     let authorize_url = client
@@ -71,12 +62,12 @@ pub async fn login(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
         .add_scope(oauth2::Scope::new("user:email".to_string()))
         .url();
 
-    actix_web::HttpResponse::Found()
+    Ok(actix_web::HttpResponse::Found()
         .append_header((
             actix_web::http::header::LOCATION,
             authorize_url.0.to_string(),
         ))
-        .finish()
+        .finish())
 }
 
 pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
@@ -372,4 +363,16 @@ pub async fn index(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     actix_web::HttpResponse::Ok()
         .content_type("text/html")
         .body(html)
+}
+
+pub mod utils {
+    pub fn github_client() -> oauth2::basic::BasicClient {
+        use fpm::auth::github::{AUTH_URL, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, TOKEN_URL};
+        oauth2::basic::BasicClient::new(
+            GITHUB_CLIENT_ID.to_owned(),
+            Some(GITHUB_CLIENT_SECRET.to_owned()),
+            AUTH_URL.clone(),
+            Some(TOKEN_URL.clone()),
+        )
+    }
 }
