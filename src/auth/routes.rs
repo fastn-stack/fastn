@@ -14,7 +14,14 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRe
     pub struct QueryParams {
         pub platform: String,
     }
-    let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?.0;
+    let query = match actix_web::web::Query::<QueryParams>::from_query(req.query_string()) {
+        Ok(q) => q,
+        Err(err) => {
+            dbg!(err);
+            return Ok(actix_web::HttpResponse::BadRequest()
+                .body("Please select the platform, by which you want to login"));
+        }
+    };
     match query.platform.as_str() {
         "github" => fpm::auth::github::login(req).await,
         "discord" => unreachable!(),
