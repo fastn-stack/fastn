@@ -8,7 +8,7 @@ pub(crate) mod telegram;
 pub mod utils;
 
 // TODO: rename the method later
-// ridge between fpm to auth to check
+// bridge between fpm to auth to check
 pub async fn get_auth_identities(
     cookies: &std::collections::HashMap<String, String>,
     identities: &[fpm::user_group::UserIdentity],
@@ -21,15 +21,9 @@ pub async fn get_auth_identities(
 
     // TODO: which API to from which platform based on identity
     // identity can be github-*, discord-*, and etc...
-    let user_starred_repos = github::get_starred_repo(access_token.as_str(), identities).await?;
+    let matched_identities = github::matched_identities(access_token.as_str(), identities).await?;
 
-    dbg!(&user_starred_repos);
-
-    Ok(user_starred_repos
-        .into_iter()
-        .map(|repo| fpm::user_group::UserIdentity {
-            key: "github-starred".to_string(),
-            value: repo,
-        })
-        .collect())
+    //TODO: Call discord::matched_identities
+    dbg!(&matched_identities);
+    Ok(matched_identities)
 }

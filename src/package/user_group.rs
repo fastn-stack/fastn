@@ -434,8 +434,9 @@ pub async fn access_identities(
     is_read: bool,
 ) -> fpm::Result<Vec<UserIdentity>> {
     let sitemap_identities = get_identities(config, document_name, is_read)?;
-    //github-team:fpm-lang/ftd
-    //github-starred:fpm-lang/ftd
+    // github-team: fpm-lang/ftd
+    // github-starred: fpm-lang/ftd
+    // discord-server: abrark.com
     return fpm::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await;
     //if cfg!(feature = "remote") {
     // return fpm::controller::get_remote_identities(

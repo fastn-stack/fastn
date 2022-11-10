@@ -73,7 +73,9 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
         .finish())
 }
 
-// handle: /auth/github/access/
+// route: /auth/github/access/
+// In this API we are accessing
+// the token and setting it to cookies
 pub async fn access_token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
     let query = actix_web::web::Query::<AuthRequest>::from_query(req.query_string())?.0;
     let auth_url = format!(
@@ -108,60 +110,110 @@ pub async fn access_token(req: actix_web::HttpRequest) -> fpm::Result<actix_web:
     }
 }
 
-pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
-    Ok(actix_web::HttpResponse::Found()
-        .cookie(
-            actix_web::cookie::Cookie::build("access_token", "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
-                .path("/")
-                .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
-                .finish(),
-        )
-        .append_header((actix_web::http::header::LOCATION, "/".to_string()))
-        .finish())
+// it returns identities which matches to given input
+pub async fn matched_identities(
+    access_token: &str,
+    identities: &[fpm::user_group::UserIdentity],
+) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    let github_identities = identities
+        .into_iter()
+        .filter(|identity| identity.key.starts_with("github"))
+        .collect::<Vec<&fpm::user_group::UserIdentity>>();
+
+    if github_identities.is_empty() {
+        return Ok(vec![]);
+    }
+
+    let mut matched_identities = vec![];
+    // matched_starred_repositories
+    matched_identities
+        .extend(matched_starred_repos(access_token, github_identities.as_slice()).await?);
+
+    // TODO: matched_team
+
+    Ok(matched_identities)
 }
 
-pub async fn get_starred_repo(
+pub async fn matched_starred_repos(
     access_token: &str,
-    repo_list: &[fpm::user_group::UserIdentity],
-) -> Result<Vec<String>, reqwest::Error> {
-    let token_val = format!("{}{}", String::from("Bearer "), access_token);
-    let mut starred_repo: Vec<String> = vec![];
-    let api_url = format!("{}", String::from("https://api.github.com/user/starred"));
-    let request_obj = reqwest::Client::new()
-        .get(api_url.clone())
-        .header(reqwest::header::AUTHORIZATION, token_val)
-        .header(reqwest::header::ACCEPT, "application/json")
-        .header(
-            reqwest::header::USER_AGENT,
-            reqwest::header::HeaderValue::from_static("fpm"),
-        )
-        .send()
-        .await?;
-
-    // This should parse to Struct
-    let resp: serde_json::Value = request_obj.json().await?;
-
-    dbg!(&resp);
-
-    // TODO: remove unwrap, refactor this code
-    dbg!(&repo_list);
-    if resp.as_array().unwrap().len() > 0 {
-        for repo in repo_list {
-            for respobj in resp.as_array().unwrap().iter() {
-                dbg!(&repo.value);
-                dbg!(&respobj.get("full_name").unwrap());
-
-                if repo.key.eq("github-starred") && repo.value.eq(respobj.get("full_name").unwrap())
-                {
-                    let value =
-                        serde_json::from_value(respobj.get("full_name").unwrap().clone()).unwrap();
-                    starred_repo.push(value);
-                }
+    identities: &[&fpm::user_group::UserIdentity],
+) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    use itertools::Itertools;
+    let starred_repos = identities
+        .iter()
+        .filter_map(|i| {
+            if i.key.eq("github-starred") {
+                Some(i.value.as_str())
+            } else {
+                None
             }
-        }
+        })
+        .collect_vec();
+
+    if starred_repos.is_empty() {
+        return Ok(vec![]);
     }
-    Ok(starred_repo)
+    let user_starred_repos = apis::starred_repo(access_token).await?;
+    // filter the user repos with input
+    Ok(user_starred_repos
+        .into_iter()
+        .filter(|user_repo| starred_repos.contains(&user_repo.as_str()))
+        .map(|repo| fpm::user_group::UserIdentity {
+            key: "github-starred".to_string(),
+            value: repo,
+        })
+        .collect())
+}
+
+pub mod apis {
+
+    // TODO: API to starred a repo on behalf of the user
+    // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
+
+    pub async fn starred_repo(access_token: &str) -> fpm::Result<Vec<String>> {
+        // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
+        // TODO: Handle paginated response
+
+        #[derive(Debug, serde::Deserialize)]
+        struct UserRepos {
+            full_name: String,
+        }
+        let starred_repo: Vec<UserRepos> = get_api(
+            format!("{}?per_page=100", "https://api.github.com/user/starred/").as_str(),
+            access_token,
+        )
+        .await?;
+        return Ok(starred_repo.into_iter().map(|x| x.full_name).collect());
+    }
+
+    pub async fn get_api<T: serde::de::DeserializeOwned>(
+        url: &str,
+        access_token: &str,
+    ) -> fpm::Result<T> {
+        let response = reqwest::Client::new()
+            .get(url)
+            .header(
+                reqwest::header::AUTHORIZATION,
+                format!("{}{}", "Bearer ", access_token),
+            )
+            .header(reqwest::header::ACCEPT, "application/json")
+            .header(
+                reqwest::header::USER_AGENT,
+                reqwest::header::HeaderValue::from_static("fpm"),
+            )
+            .send()
+            .await?;
+
+        if !response.status().eq(&reqwest::StatusCode::OK) {
+            dbg!(response.text().await?);
+            return Err(fpm::Error::APIResponseError(format!(
+                "GitHub API ERROR: {}",
+                url
+            )));
+        }
+
+        Ok(response.json().await?)
+    }
 }
 
 pub mod utils {
