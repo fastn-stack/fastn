@@ -171,7 +171,7 @@ pub mod apis {
             full_name: String,
         }
         let starred_repo: Vec<UserRepos> = get_api(
-            format!("{}?per_page=100", "https://api.github.com/user/starred/").as_str(),
+            format!("{}?per_page=100", "https://api.github.com/user/starred").as_str(),
             access_token,
         )
         .await?;
