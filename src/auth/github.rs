@@ -99,31 +99,24 @@ pub async fn auth(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRes
                 .append_header((actix_web::http::header::LOCATION, "/".to_string()))
                 .finish());
         }
-        Err(_err) => {
-            // TODO: Return Error, Not able to login
-            Ok(actix_web::HttpResponse::Found()
-                .append_header((actix_web::http::header::LOCATION, "/".to_string()))
-                .finish())
+        Err(err) => {
+            dbg!(&err);
+            Ok(actix_web::HttpResponse::InternalServerError().body(err.to_string()))
         }
     }
 }
 
-pub fn logout(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
-    let connection_obj = req.connection_info().clone();
-    let domain;
-    let host_info = connection_obj.host();
-    let domain_parts: Vec<&str> = host_info.split(":").collect();
-    domain = domain_parts.get(0).unwrap();
-    actix_web::HttpResponse::Found()
+pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+    Ok(actix_web::HttpResponse::Found()
         .cookie(
             actix_web::cookie::Cookie::build("access_token", "")
-                .domain(domain.clone())
+                .domain(fpm::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .append_header((actix_web::http::header::LOCATION, "/".to_string()))
-        .finish()
+        .finish())
 }
 
 async fn get_starred_repo(

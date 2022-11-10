@@ -41,7 +41,7 @@ pub async fn handle_auth(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::
         // route will be called from after redirect
         return fpm::auth::github::auth(req).await;
     } else if req.path() == "/auth/logout/" {
-        return Ok(fpm::auth::github::logout(req));
+        return fpm::auth::github::logout(req);
     } else if req.path() == "/auth/get-identities/" {
         return get_identities_route(req).await;
     }
