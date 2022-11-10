@@ -57,7 +57,7 @@ pub async fn clear(req: &fpm::http::Request) -> fpm::http::Response {
             err
         );
     }
-
+    dbg!("cache-cleared");
     fpm::http::ok("Done".into())
 }
 
