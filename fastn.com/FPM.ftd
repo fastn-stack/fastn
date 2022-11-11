@@ -167,6 +167,8 @@ email: arpita@fifthtry.com
   url: /processors/get-identities/
 - `$processor$: request-data`
   url: /processors/request-data/
+- `$processor$: fpm-apps`
+  url: /apps/
 
 
 # Development: /journal/
