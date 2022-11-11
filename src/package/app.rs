@@ -1,12 +1,13 @@
-use itertools::Itertools;
-
 #[derive(Debug, Clone)]
 pub struct App {
     pub name: Option<String>,
+    // TODO: Dependency or package??
     pub package: fpm::Dependency,
     pub mount_point: String,
     pub end_point: Option<String>,
     pub config: std::collections::HashMap<String, String>,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 #[derive(serde::Deserialize, Debug, Clone)]
@@ -18,6 +19,8 @@ pub struct AppTemp {
     #[serde(rename = "end-point")]
     pub end_point: Option<String>,
     pub config: Vec<String>,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 impl AppTemp {
@@ -82,6 +85,8 @@ impl AppTemp {
             mount_point: self.mount_point,
             end_point: self.end_point,
             config: Self::parse_config(&self.config)?,
+            readers: self.readers,
+            writers: self.writers,
         })
     }
 }
@@ -91,6 +96,7 @@ pub fn processor<'a>(
     doc: &ftd::p2::TDoc<'a>,
     config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
+    use itertools::Itertools;
     #[derive(Debug, serde::Serialize)]
     struct UiApp {
         name: Option<String>,
@@ -109,4 +115,59 @@ pub fn processor<'a>(
         })
         .collect_vec();
     doc.from_json(&apps, section)
+}
+
+// Takes the path /-/<package-name>/<remaining>/ or /mount-point/<remaining>/
+pub async fn can_read(config: &fpm::Config, path: &str) -> fpm::Result<bool> {
+    use itertools::Itertools;
+    // first get the app
+    let readers_groups = if let Some((_, _, _, Some(app))) =
+        config.get_mountpoint_sanitized_path(&config.package, path)
+    {
+        app.readers.clone()
+    } else {
+        vec![]
+    };
+
+    dbg!("app readers");
+    dbg!(&readers_groups);
+    if readers_groups.is_empty() {
+        return Ok(true);
+    }
+
+    let user_groups = config
+        .package
+        .groups
+        .iter()
+        .filter_map(|(id, g)| {
+            if readers_groups.contains(id) {
+                Some(g)
+            } else {
+                None
+            }
+        })
+        .collect_vec();
+
+    let mut app_identities = vec![];
+    for ug in user_groups.iter() {
+        app_identities.extend(ug.get_identities(config)?)
+    }
+
+    let auth_identities = fpm::auth::get_auth_identities(
+        config.request.as_ref().unwrap().cookies(),
+        app_identities.as_slice(),
+    )
+    .await?;
+
+    return fpm::user_group::belongs_to(
+        config,
+        user_groups.as_slice(),
+        auth_identities.iter().collect_vec().as_slice(),
+    );
+
+    // get the app readers
+    // get the groups
+    // the the access identities
+    // check belongs _to
+    //return Ok(true);
 }

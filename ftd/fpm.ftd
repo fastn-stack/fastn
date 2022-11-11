@@ -410,6 +410,8 @@ string package:
 string mount-point:
 optional string end-point:
 string list config:
+string list readers:
+string list writers:
 
 
 -- app-data list app:

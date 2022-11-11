@@ -18,6 +18,7 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
         } else {
             return fpm::server_error!("request not set");
         };
+
         match config.can_read(req, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
@@ -27,7 +28,18 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
             Err(e) => {
                 return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
             }
-        }
+        };
+
+        match fpm::package::app::can_read(config, path.as_str()).await {
+            Ok(can_read) => {
+                if !can_read {
+                    return fpm::unauthorised!("You are unauthorized to access: {}", path);
+                }
+            }
+            Err(err) => {
+                return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, err);
+            }
+        };
     }
 
     match f {

@@ -566,12 +566,16 @@ impl Config {
     // mount-point: /todos/
     // Output
     // -/<todos-package-name>/add-todo/, <todos-package-name>, /add-todo/
-    #[allow(clippy::only_used_in_recursion)]
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
         package: &'a fpm::Package,
         path: &'a str,
-    ) -> Option<(String, &'a fpm::Package, String)> {
+    ) -> Option<(
+        String,
+        &'a fpm::Package,
+        String,
+        Option<&fpm::package::app::App>,
+    )> {
         // Problem for recursive dependency is that only current package contains dependency,
         // dependent package does not contain dependency
 
@@ -583,13 +587,14 @@ impl Config {
                 path.to_string(),
                 package,
                 path_without_package_name.to_string(),
+                None,
             ));
         }
 
-        for (mp, dep) in package
+        for (mp, dep, app) in package
             .apps
             .iter()
-            .map(|x| (&x.mount_point, &x.package.package))
+            .map(|x| (&x.mount_point, &x.package.package, x))
         {
             if path.starts_with(mp.trim_matches('/')) {
                 // TODO: Need to handle for recursive dependencies mount-point
@@ -600,11 +605,17 @@ impl Config {
                     format!("-/{package_name}/{sanitized_path}"),
                     dep,
                     sanitized_path.to_string(),
+                    Some(app),
                 ));
             } else if path.starts_with(format!("-/{}", dep.name.trim_matches('/')).as_str()) {
                 let path_without_package_name =
                     path.trim_start_matches(format!("-/{}", dep.name.trim_matches('/')).as_str());
-                return Some((path.to_string(), dep, path_without_package_name.to_string()));
+                return Some((
+                    path.to_string(),
+                    dep,
+                    path_without_package_name.to_string(),
+                    Some(app),
+                ));
             }
         }
         None
@@ -669,7 +680,7 @@ impl Config {
         let package1;
         let (path_with_package_name, sanitized_package, sanitized_path) =
             match self.get_mountpoint_sanitized_path(&self.package, path) {
-                Some((new_path, package, remaining_path)) => {
+                Some((new_path, package, remaining_path, _)) => {
                     // Update the sitemap of the package, if it does ot contain the sitemap information
                     dbg!(&new_path, &package.name, &remaining_path);
                     if package.name != self.package.name {
@@ -902,7 +913,7 @@ impl Config {
     pub(crate) async fn find_package_by_id(&self, id: &str) -> fpm::Result<(String, fpm::Package)> {
         let sanitized_id = self
             .get_mountpoint_sanitized_path(&self.package, id)
-            .map(|(x, _, _)| x)
+            .map(|(x, _, _, _)| x)
             .unwrap_or_else(|| id.to_string());
 
         let id = sanitized_id.as_str();
@@ -1369,12 +1380,12 @@ impl Config {
     ) -> fpm::Result<bool> {
         use itertools::Itertools;
         let document_name = self.document_name_with_default(document_path);
-        let access_identities =
-            fpm::user_group::access_identities(self, req, &document_name, false).await?;
-
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
             let document_writers = sitemap.writers(document_name.as_str(), &self.package.groups);
+            let access_identities =
+                fpm::user_group::access_identities(self, req, &document_name, false).await?;
+
             return fpm::user_group::belongs_to(
                 self,
                 document_writers.as_slice(),
