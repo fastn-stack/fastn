@@ -227,6 +227,7 @@ pub fn process_sync<'a>(
         "request-data" => fpm::library::http::request_data_processor(section, doc, config),
         // TODO: auth feature flag
         "user-details" => fpm::auth::processor::user_details(section, doc, config),
+        "fpm-apps" => fpm::package::app::processor(section, doc, config),
         t => Err(ftd::p1::Error::NotFound {
             doc_id: document_id.to_string(),
             line_number: section.line_number,
@@ -478,6 +479,7 @@ impl Library2 {
             }
             // TODO: auth feature flag
             "user-details" => fpm::auth::processor::user_details(section, doc, &self.config),
+            "fpm-apps" => fpm::package::app::processor(section, doc, &self.config),
             t => Err(ftd::p1::Error::NotFound {
                 doc_id: self.document_id.to_string(),
                 line_number: section.line_number,

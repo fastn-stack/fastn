@@ -1,3 +1,4 @@
+// Return the login information of the user
 pub fn user_details<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,

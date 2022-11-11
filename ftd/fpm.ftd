@@ -403,7 +403,7 @@ option integer self-version:
 
 
 ;; FPM Apps Installation
-
+;; for FPM.ftd
 -- record app-data:
 optional caption name:
 string package:
@@ -413,3 +413,10 @@ string list config:
 
 
 -- app-data list app:
+
+;; Send this data from processor
+;; for fpm-apps processor
+-- record app-ui:
+optional caption name:
+string package:
+string url:

@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 #[derive(Debug, Clone)]
 pub struct App {
     pub name: Option<String>,
@@ -82,4 +84,29 @@ impl AppTemp {
             config: Self::parse_config(&self.config)?,
         })
     }
+}
+
+pub fn processor<'a>(
+    section: &ftd::p1::Section,
+    doc: &ftd::p2::TDoc<'a>,
+    config: &fpm::Config,
+) -> ftd::p1::Result<ftd::Value> {
+    #[derive(Debug, serde::Serialize)]
+    struct UiApp {
+        name: Option<String>,
+        package: String,
+        #[serde(rename = "url")]
+        url: String,
+    }
+    let apps = config
+        .package
+        .apps
+        .iter()
+        .map(|a| UiApp {
+            name: a.name.clone(),
+            package: a.package.package.name.clone(),
+            url: a.mount_point.to_string(),
+        })
+        .collect_vec();
+    doc.from_json(&apps, section)
 }
