@@ -10,7 +10,8 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
             return fpm::not_found!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
-
+    dbg!(config.clone());
+    dbg!(path.clone());
     // Auth Stuff
     if !f.is_static() {
         let req = if let Some(ref r) = config.request {
@@ -148,7 +149,7 @@ pub async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> 
 
     // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
-
+    dbg!(path.clone());
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
         static_file(favicon).await
@@ -160,6 +161,7 @@ pub async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> 
         let mut config = fpm::time("Config::read()")
             .it(fpm::Config::read(None, false, Some(&req)).await.unwrap())
             .set_request(req);
+
         serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fpm::cr::get_cr_path_from_url(path.as_str()) {
         let mut config = fpm::time("Config::read()")
@@ -222,7 +224,8 @@ pub async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> 
 
         // if request goes with mount-point /todos/api/add-todo/
         // so it should say not found and pass it to proxy
-
+        dbg!(path.as_path().clone());
+        dbg!(config.clone());
         let file_response = serve_file(&mut config, path.as_path()).await;
 
         // If path is not present in sitemap then pass it to proxy

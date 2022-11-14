@@ -16,7 +16,8 @@ pub async fn get_auth_identities(
     cookies: &std::collections::HashMap<String, String>,
     identities: &[fpm::user_group::UserIdentity],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
-    dbg!(&cookies);
+    //dbg!(&identities);
+    //dbg!(&cookies);
 
     let access_token = cookies.get(COOKIE_TOKEN).ok_or_else(|| {
         fpm::Error::GenericError("access_token not found in the cookies".to_string())

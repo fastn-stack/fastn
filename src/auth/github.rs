@@ -27,7 +27,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
         .query_pairs_mut()
         .append_pair("prompt", "consent");
 
-    dbg!(&authorize_url);
+    //dbg!(&authorize_url);
     // let mut pairs: Vec<(&str, &str)> = vec![("response_type", self.response_type.as_ref())];
 
     // send redirect to /auth/github/access/
@@ -76,7 +76,7 @@ pub async fn access_token(req: actix_web::HttpRequest) -> fpm::Result<actix_web:
                 .finish());
         }
         Err(err) => {
-            dbg!(&err);
+            //dbg!(&err);
             Ok(actix_web::HttpResponse::InternalServerError().body(err.to_string()))
         }
     }
@@ -87,6 +87,7 @@ pub async fn matched_identities(
     access_token: &str,
     identities: &[fpm::user_group::UserIdentity],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    //dbg!("matched identities");
     let github_identities = identities
         .iter()
         .filter(|identity| identity.key.starts_with("github"))
@@ -95,12 +96,13 @@ pub async fn matched_identities(
     if github_identities.is_empty() {
         return Ok(vec![]);
     }
-
+    //dbg!(&github_identities);
     let mut matched_identities = vec![];
     // matched_starred_repositories
     matched_identities
         .extend(matched_starred_repos(access_token, github_identities.as_slice()).await?);
-
+    matched_identities
+        .extend(matched_watched_repos(access_token, github_identities.as_slice()).await?);
     // TODO: matched_team
 
     Ok(matched_identities)
@@ -137,6 +139,37 @@ pub async fn matched_starred_repos(
         .collect())
 }
 
+pub async fn matched_watched_repos(
+    access_token: &str,
+    identities: &[&fpm::user_group::UserIdentity],
+) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    use itertools::Itertools;
+    let watched_repos = identities
+        .iter()
+        .filter_map(|i| {
+            if i.key.eq("github-watch") {
+                Some(i.value.as_str())
+            } else {
+                None
+            }
+        })
+        .collect_vec();
+    //dbg!(&watched_repos);
+    if watched_repos.is_empty() {
+        return Ok(vec![]);
+    }
+    let user_watched_repos = apis::watched_repo(access_token).await?;
+    // filter the user repos with input
+    Ok(user_watched_repos
+        .into_iter()
+        .filter(|user_repo| watched_repos.contains(&user_repo.as_str()))
+        .map(|repo| fpm::user_group::UserIdentity {
+            key: "github-watch".to_string(),
+            value: repo,
+        })
+        .collect())
+}
+
 pub mod apis {
 
     // TODO: API to starred a repo on behalf of the user
@@ -156,6 +189,26 @@ pub mod apis {
         )
         .await?;
         Ok(starred_repo.into_iter().map(|x| x.full_name).collect())
+    }
+    pub async fn watched_repo(access_token: &str) -> fpm::Result<Vec<String>> {
+        // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
+        // TODO: Handle paginated response
+        dbg!("watched_repo");
+        #[derive(Debug, serde::Deserialize)]
+        struct UserRepos {
+            full_name: String,
+        }
+        let watched_repo: Vec<UserRepos> = get_api(
+            format!(
+                "{}?per_page=100",
+                "https://api.github.com/user/subscriptions"
+            )
+            .as_str(),
+            access_token,
+        )
+        .await?;
+        dbg!(&watched_repo);
+        Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
     }
 
     pub async fn get_api<T: serde::de::DeserializeOwned>(
@@ -177,7 +230,7 @@ pub mod apis {
             .await?;
 
         if !response.status().eq(&reqwest::StatusCode::OK) {
-            dbg!(response.text().await?);
+            //dbg!(response.text().await?);
             return Err(fpm::Error::APIResponseError(format!(
                 "GitHub API ERROR: {}",
                 url
