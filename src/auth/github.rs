@@ -193,7 +193,7 @@ pub mod apis {
     pub async fn watched_repo(access_token: &str) -> fpm::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
         // TODO: Handle paginated response
-        dbg!("watched_repo");
+        //dbg!("watched_repo");
         #[derive(Debug, serde::Deserialize)]
         struct UserRepos {
             full_name: String,
@@ -207,7 +207,7 @@ pub mod apis {
             access_token,
         )
         .await?;
-        dbg!(&watched_repo);
+        //dbg!(&watched_repo);
         Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
     }
 
