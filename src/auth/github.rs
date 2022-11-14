@@ -105,7 +105,7 @@ pub async fn matched_identities(
         .extend(matched_watched_repos(access_token, github_identities.as_slice()).await?);
     matched_identities
         .extend(matched_followed_org(access_token, github_identities.as_slice()).await?);
-        
+
     // TODO: matched_team
 
     Ok(matched_identities)
@@ -231,11 +231,7 @@ pub mod apis {
             login: String,
         }
         let watched_repo: Vec<UserRepos> = get_api(
-            format!(
-                "{}?per_page=100",
-                "https://api.github.com/user/following"
-            )
-            .as_str(),
+            format!("{}?per_page=100", "https://api.github.com/user/following").as_str(),
             access_token,
         )
         .await?;
