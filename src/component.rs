@@ -2091,18 +2091,19 @@ pub fn recursive_child_component(
         None,
     )?;
 
-    let recursive_kind = if let ftd::p2::Kind::List { kind, .. } = recursive_property_value.kind() {
-        kind.as_ref().to_owned()
-    } else {
-        return ftd::p2::utils::e2(
-            format!(
-                "expected list for loop, found: {:?}",
-                recursive_property_value.kind(),
-            ),
-            doc.name,
-            sub.line_number,
-        );
-    };
+    let recursive_kind =
+        if let ftd::p2::Kind::List { kind, .. } = recursive_property_value.kind().inner() {
+            kind.as_ref().to_owned()
+        } else {
+            return ftd::p2::utils::e2(
+                format!(
+                    "expected list for loop, found: {:?}",
+                    recursive_property_value.kind(),
+                ),
+                doc.name,
+                sub.line_number,
+            );
+        };
 
     let mut properties: ftd::Map<Property> = Default::default();
 
@@ -2989,7 +2990,7 @@ pub(crate) fn universal_arguments() -> ftd::Map<ftd::p2::Kind> {
     let mut universal_arguments: ftd::Map<ftd::p2::Kind> = Default::default();
     universal_arguments.insert(
         "heading-number".to_string(),
-        ftd::p2::Kind::string().into_optional(),
+        ftd::p2::Kind::list(ftd::p2::Kind::string()).into_optional(),
     );
     universal_arguments.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
     universal_arguments.insert("top".to_string(), ftd::p2::Kind::integer().into_optional());

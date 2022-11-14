@@ -702,9 +702,20 @@ impl InterpreterState {
             if child.properties.get("heading-number").is_none() {
                 let number_property = ftd::component::Property {
                     default: Some(ftd::PropertyValue::Value {
-                        value: (ftd::Value::String {
-                            text: number.to_string(),
-                            source: ftd::TextSource::Header,
+                        value: (ftd::Value::List {
+                            data: {
+                                let mut property_values: Vec<ftd::PropertyValue> = vec![];
+                                for num in number.split('.') {
+                                    property_values.push(ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
+                                            text: num.to_string(),
+                                            source: ftd::TextSource::Default,
+                                        },
+                                    })
+                                }
+                                property_values
+                            },
+                            kind: ftd::p2::Kind::string(),
                         }),
                     }),
                     ..Default::default()

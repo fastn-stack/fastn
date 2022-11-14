@@ -835,6 +835,68 @@ pub fn string_optional(
     }
 }
 
+pub fn string_list_optional(
+    name: &str,
+    properties: &ftd::Map<ftd::Value>,
+    doc: &ftd::p2::TDoc,
+    line_number: usize,
+) -> ftd::p1::Result<Option<Vec<String>>> {
+    match properties.get(name) {
+        Some(ftd::Value::List {
+            data: list_values,
+            kind: ftd::p2::Kind::String { .. },
+        }) => {
+            let mut string_vector: Vec<String> = vec![];
+            for v in list_values {
+                if let ftd::Value::String { text: str, .. } = v.resolve(line_number, doc)? {
+                    string_vector.push(str);
+                }
+            }
+            Ok(Some(string_vector))
+        }
+        Some(ftd::Value::None {
+            kind: ftd::p2::Kind::List { .. },
+        }) => Ok(None),
+        Some(ftd::Value::None { .. }) => Ok(None),
+        Some(ftd::Value::Optional {
+            data: list_data,
+            kind: ftd::p2::Kind::List { kind, .. },
+        }) => {
+            if kind.is_string() {
+                return match list_data.as_ref() {
+                    Some(ftd::Value::List {
+                        data: list_values,
+                        kind: ftd::p2::Kind::String { .. },
+                    }) => {
+                        let mut string_vector: Vec<String> = vec![];
+                        for v in list_values.iter() {
+                            if let ftd::Value::String { text: str, .. } =
+                                v.resolve(line_number, doc)?
+                            {
+                                string_vector.push(str);
+                            }
+                        }
+                        return Ok(Some(string_vector));
+                    }
+                    None => Ok(None),
+                    v => ftd::p2::utils::e2(
+                        format!("expected list of strings, for: `{}` found: {:?}", name, v),
+                        doc.name,
+                        line_number,
+                    ),
+                };
+            }
+            Ok(None)
+        }
+        Some(v) => ftd::p2::utils::e2(
+            format!("expected list of strings, for: `{}` found: {:?}", name, v),
+            doc.name,
+            line_number,
+        ),
+        None => Ok(None),
+    }
+}
+
 pub fn string(
     name: &str,
     properties: &ftd::Map<ftd::Value>,

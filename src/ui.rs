@@ -2329,7 +2329,7 @@ pub struct Common {
     pub border_style: Option<String>,
     pub text_transform: Option<String>,
     pub title: Option<String>,
-    pub heading_number: Option<String>,
+    pub heading_number: Option<Vec<String>>,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
     // TODO: border-{shadow, glow}
