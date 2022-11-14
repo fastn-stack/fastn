@@ -103,6 +103,9 @@ pub async fn matched_identities(
         .extend(matched_starred_repos(access_token, github_identities.as_slice()).await?);
     matched_identities
         .extend(matched_watched_repos(access_token, github_identities.as_slice()).await?);
+    matched_identities
+        .extend(matched_followed_org(access_token, github_identities.as_slice()).await?);
+        
     // TODO: matched_team
 
     Ok(matched_identities)
@@ -169,7 +172,36 @@ pub async fn matched_watched_repos(
         })
         .collect())
 }
-
+pub async fn matched_followed_org(
+    access_token: &str,
+    identities: &[&fpm::user_group::UserIdentity],
+) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    use itertools::Itertools;
+    let followed_orgs = identities
+        .iter()
+        .filter_map(|i| {
+            if i.key.eq("github-follows") {
+                Some(i.value.as_str())
+            } else {
+                None
+            }
+        })
+        .collect_vec();
+    dbg!(&followed_orgs);
+    if followed_orgs.is_empty() {
+        return Ok(vec![]);
+    }
+    let user_followed_orgs = apis::followed_org(access_token).await?;
+    // filter the user repos with input
+    Ok(user_followed_orgs
+        .into_iter()
+        .filter(|user_org| followed_orgs.contains(&user_org.as_str()))
+        .map(|repo| fpm::user_group::UserIdentity {
+            key: "github-follows".to_string(),
+            value: repo,
+        })
+        .collect())
+}
 pub mod apis {
 
     // TODO: API to starred a repo on behalf of the user
@@ -189,6 +221,26 @@ pub mod apis {
         )
         .await?;
         Ok(starred_repo.into_iter().map(|x| x.full_name).collect())
+    }
+    pub async fn followed_org(access_token: &str) -> fpm::Result<Vec<String>> {
+        // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
+        // TODO: Handle paginated response
+        //dbg!("watched_repo");
+        #[derive(Debug, serde::Deserialize)]
+        struct UserRepos {
+            login: String,
+        }
+        let watched_repo: Vec<UserRepos> = get_api(
+            format!(
+                "{}?per_page=100",
+                "https://api.github.com/user/following"
+            )
+            .as_str(),
+            access_token,
+        )
+        .await?;
+        //dbg!(&watched_repo);
+        Ok(watched_repo.into_iter().map(|x| x.login).collect())
     }
     pub async fn watched_repo(access_token: &str) -> fpm::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
@@ -210,7 +262,6 @@ pub mod apis {
         //dbg!(&watched_repo);
         Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
     }
-
     pub async fn get_api<T: serde::de::DeserializeOwned>(
         url: &str,
         access_token: &str,
