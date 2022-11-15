@@ -102,6 +102,14 @@ impl Kind {
         matches!(self, Kind::List { .. })
     }
 
+    pub fn is_string_list(&self) -> bool {
+        let list_kind = self.strict_list_kind();
+        if let Some(inner_kind) = list_kind {
+            return matches!(inner_kind, Kind::String { .. });
+        }
+        false
+    }
+
     pub fn is_record(&self) -> bool {
         matches!(self, Kind::Record { .. })
     }
@@ -424,6 +432,13 @@ impl Kind {
         match self {
             Kind::Optional { kind, .. } => kind,
             _ => self,
+        }
+    }
+
+    pub fn strict_list_kind(&self) -> Option<&Self> {
+        match self {
+            Kind::List { kind, .. } => Some(kind),
+            _ => None,
         }
     }
 

@@ -565,14 +565,14 @@ impl InterpreterState {
                         let header_and_title =
                             extract_title_if_markdown_component(instruction, parent, child, doc);
 
-                        let status = header_and_title
+                        let heading_number = header_and_title
                             .and_then(|(header, title)| {
                                 if let (Some(actual_title), Some(actual_header)) = (title, header) {
                                     return Some((actual_title, actual_header));
                                 }
                                 None
                             })
-                            .and_then(|(title, header)| {
+                            .and_then(|(title, _header)| {
                                 let mut new_item = create_page_heading_item_with_region(
                                     &component_id,
                                     title.as_str(),
@@ -589,18 +589,12 @@ impl InterpreterState {
                                     package_name,
                                 )
                                 .ok()?;
-                                // let numbered_title = format!("{} {}", assigned_number, title);
-                                Some((title, header, assigned_number))
+                                Some(assigned_number)
                             });
 
                         // adjust numbering of the title in the header component
-                        if let Some((title, header, number)) = status {
-                            adjust_title_in_component(
-                                header.as_str(),
-                                child,
-                                title.as_str(),
-                                number.as_str(),
-                            );
+                        if let Some(number) = heading_number {
+                            adjust_heading_number_in_component(child, number.as_str());
                             break;
                         }
                     }
@@ -684,21 +678,7 @@ impl InterpreterState {
             }
         }
 
-        fn adjust_title_in_component(
-            parent_property_name: &str,
-            child: &mut ftd::ChildComponent,
-            title: &str,
-            number: &str,
-        ) {
-            fn set_title_property(new_value: &str, property: &mut ftd::component::Property) {
-                if let Some(ftd::PropertyValue::Value {
-                    value: ftd::Value::String { text, .. },
-                }) = property.default.as_mut()
-                {
-                    *text = new_value.to_string();
-                }
-            }
-
+        fn adjust_heading_number_in_component(child: &mut ftd::ChildComponent, number: &str) {
             if child.properties.get("heading-number").is_none() {
                 let number_property = ftd::component::Property {
                     default: Some(ftd::PropertyValue::Value {
@@ -723,14 +703,6 @@ impl InterpreterState {
                 child
                     .properties
                     .insert("heading-number".to_string(), number_property);
-            }
-
-            let child_property = child
-                .properties
-                .get_mut(parent_property_name.trim_start_matches('$'));
-
-            if let Some(property) = child_property {
-                set_title_property(title, property);
             }
         }
 
