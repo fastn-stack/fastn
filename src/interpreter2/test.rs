@@ -119,8 +119,106 @@ fn evalexpr_test() {
     use ftd::evalexpr::*;
     let mut context = ftd::interpreter2::default::default_context().unwrap();
     dbg!(ftd::evalexpr::build_operator_tree("$a >= $b").unwrap());
+    dbg!(
+        ftd::evalexpr::build_operator_tree("(e = \"\"; isempty(e)) && (d = 4; d > 7) && (6 > 7)")
+            .unwrap()
+    );
+    dbg!(ftd::evalexpr::build_operator_tree("(6 > 7) && (true)").unwrap());
     assert_eq!(
-        eval_with_context_mut("e = \"\"; isempty(e)", &mut context),
+        eval_with_context_mut("(e = \"\"; isempty(e)) && (d = 4; d > 7)", &mut context),
         Ok(Value::from(true))
     );
+
+    /*
+
+        ExprNode {
+        operator: RootNode,
+        children: [
+            ExprNode {
+                operator: And,
+                children: [
+                    ExprNode {
+                        operator: RootNode,
+                        children: [
+                            ExprNode {
+                                operator: Gt,
+                                children: [
+                                    ExprNode {
+                                        operator: Const {
+                                            value: Int(
+                                                6,
+                                            ),
+                                        },
+                                        children: [],
+                                    },
+                                    ExprNode {
+                                        operator: Const {
+                                            value: Int(
+                                                7,
+                                            ),
+                                        },
+                                        children: [],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    ExprNode {
+                        operator: Const {
+                            value: Boolean(
+                                true,
+                            ),
+                        },
+                        children: [],
+                    },
+                ],
+            },
+        ],
+    }
+
+            ExprNode {
+            operator: Add,
+            children: [
+                ExprNode {
+                    operator: RootNode,
+                    children: [
+                        ExprNode {
+                            operator: Gt,
+                            children: [
+                                ExprNode {
+                                    operator: Const {
+                                        value: Int(
+                                            0,
+                                        ),
+                                    },
+                                    children: [],
+                                },
+                                ExprNode {
+                                    operator: Const {
+                                        value: Int(
+                                            2,
+                                        ),
+                                    },
+                                    children: [],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                ExprNode {
+                    operator: RootNode,
+                    children: [
+                        ExprNode {
+                            operator: Const {
+                                value: Boolean(
+                                    true,
+                                ),
+                            },
+                            children: [],
+                        },
+                    ],
+                },
+            ],
+        }
+            */
 }

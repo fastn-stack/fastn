@@ -1,0 +1,426 @@
+{
+  "name": "foo",
+  "aliases": {
+    "ftd": "ftd"
+  },
+  "bag": {
+    "foo#flag": {
+      "Variable": {
+        "name": "foo#flag",
+        "kind": {
+          "kind": "Boolean",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "Boolean": {
+                "value": true
+              }
+            },
+            "is_mutable": true,
+            "line_number": 1
+          }
+        },
+        "conditional_value": [],
+        "line_number": 1,
+        "is_static": false
+      }
+    },
+    "foo#foo": {
+      "Component": {
+        "name": "foo#foo",
+        "arguments": [],
+        "definition": {
+          "name": "ftd#text",
+          "properties": [
+            {
+              "value": {
+                "Value": {
+                  "value": {
+                    "Integer": {
+                      "value": 50
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 8
+                }
+              },
+              "source": {
+                "Header": {
+                  "name": "padding",
+                  "mutable": false
+                }
+              },
+              "condition": {
+                "expression": {
+                  "operator": "RootNode",
+                  "children": [
+                    {
+                      "operator": {
+                        "VariableIdentifierRead": {
+                          "identifier": "flag"
+                        }
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                "references": {
+                  "flag": {
+                    "Reference": {
+                      "name": "foo#flag",
+                      "kind": {
+                        "kind": "Boolean",
+                        "caption": false,
+                        "body": false
+                      },
+                      "source": "Global",
+                      "is_mutable": false,
+                      "line_number": 8
+                    }
+                  }
+                },
+                "line_number": 8
+              },
+              "line_number": 8
+            },
+            {
+              "value": {
+                "Value": {
+                  "value": {
+                    "String": {
+                      "text": "Hello World"
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 7
+                }
+              },
+              "source": "Caption",
+              "condition": null,
+              "line_number": 7
+            }
+          ],
+          "iteration": null,
+          "condition": {
+            "expression": {
+              "operator": "RootNode",
+              "children": [
+                {
+                  "operator": {
+                    "VariableIdentifierRead": {
+                      "identifier": "flag"
+                    }
+                  },
+                  "children": []
+                }
+              ]
+            },
+            "references": {
+              "flag": {
+                "Reference": {
+                  "name": "foo#flag",
+                  "kind": {
+                    "kind": "Boolean",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": false,
+                  "line_number": 9
+                }
+              }
+            },
+            "line_number": 9
+          },
+          "events": [],
+          "children": [],
+          "line_number": 7
+        },
+        "line_number": 5
+      }
+    },
+    "foo#increment": {
+      "Function": {
+        "name": "foo#increment",
+        "return_kind": {
+          "kind": "Void",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 16
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a += 1",
+            "line_number": 20
+          }
+        ],
+        "line_number": 15
+      }
+    },
+    "foo#num": {
+      "Variable": {
+        "name": "foo#num",
+        "kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "Integer": {
+                "value": 0
+              }
+            },
+            "is_mutable": true,
+            "line_number": 3
+          }
+        },
+        "conditional_value": [],
+        "line_number": 3,
+        "is_static": false
+      }
+    },
+    "foo#toggle": {
+      "Function": {
+        "name": "foo#toggle",
+        "return_kind": {
+          "kind": "Void",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "Boolean",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 22
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a = !a;",
+            "line_number": 28
+          }
+        ],
+        "line_number": 21
+      }
+    }
+  },
+  "main": {
+    "container": {
+      "children": [
+        {
+          "Text": {
+            "text": {
+              "value": {
+                "original": "Hello World",
+                "rendered": "Hello World"
+              },
+              "line_number": 7,
+              "properties": [
+                {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "Hello World"
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 7
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 7
+                }
+              ]
+            },
+            "common": {
+              "is_not_visible": true,
+              "event": [],
+              "is_dummy": false,
+              "padding": {
+                "value": 50,
+                "line_number": 8,
+                "properties": [
+                  {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Integer": {
+                            "value": 50
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 8
+                      }
+                    },
+                    "source": {
+                      "Header": {
+                        "name": "padding",
+                        "mutable": false
+                      }
+                    },
+                    "condition": {
+                      "expression": {
+                        "operator": "RootNode",
+                        "children": [
+                          {
+                            "operator": {
+                              "VariableIdentifierRead": {
+                                "identifier": "flag"
+                              }
+                            },
+                            "children": []
+                          }
+                        ]
+                      },
+                      "references": {
+                        "flag": {
+                          "Reference": {
+                            "name": "foo#flag",
+                            "kind": {
+                              "kind": "Boolean",
+                              "caption": false,
+                              "body": false
+                            },
+                            "source": "Global",
+                            "is_mutable": false,
+                            "line_number": 8
+                          }
+                        }
+                      },
+                      "line_number": 8
+                    },
+                    "line_number": 8
+                  }
+                ]
+              },
+              "data_id": "0",
+              "line_number": 7,
+              "condition": {
+                "expression": {
+                  "operator": "RootNode",
+                  "children": [
+                    {
+                      "operator": "And",
+                      "children": [
+                        {
+                          "operator": "RootNode",
+                          "children": [
+                            {
+                              "operator": "Gt",
+                              "children": [
+                                {
+                                  "operator": {
+                                    "VariableIdentifierRead": {
+                                      "identifier": "num"
+                                    }
+                                  },
+                                  "children": []
+                                },
+                                {
+                                  "operator": {
+                                    "Const": {
+                                      "value": {
+                                        "Int": 2
+                                      }
+                                    }
+                                  },
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "operator": "RootNode",
+                          "children": [
+                            {
+                              "operator": {
+                                "VariableIdentifierRead": {
+                                  "identifier": "flag"
+                                }
+                              },
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "references": {
+                  "flag": {
+                    "Reference": {
+                      "name": "foo#flag",
+                      "kind": {
+                        "kind": "Boolean",
+                        "caption": false,
+                        "body": false
+                      },
+                      "source": "Global",
+                      "is_mutable": false,
+                      "line_number": 9
+                    }
+                  },
+                  "num": {
+                    "Reference": {
+                      "name": "foo#num",
+                      "kind": {
+                        "kind": "Integer",
+                        "caption": false,
+                        "body": false
+                      },
+                      "source": "Global",
+                      "is_mutable": false,
+                      "line_number": 30
+                    }
+                  }
+                },
+                "line_number": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "common": {
+      "is_not_visible": false,
+      "event": [],
+      "is_dummy": false,
+      "padding": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "data_id": "",
+      "line_number": 0,
+      "condition": null
+    }
+  }
+}

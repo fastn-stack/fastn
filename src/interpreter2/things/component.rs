@@ -60,7 +60,7 @@ pub struct Component {
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Box<Option<Loop>>,
-    pub condition: Box<Option<ftd::interpreter2::Boolean>>,
+    pub condition: Box<Option<ftd::interpreter2::Expression>>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
     pub line_number: usize,
@@ -145,7 +145,7 @@ impl Component {
         };
 
         let condition = if let Some(v) = ast_component.condition {
-            Some(ftd::interpreter2::Boolean::from_ast_condition(
+            Some(ftd::interpreter2::Expression::from_ast_condition(
                 v,
                 definition_name_with_arguments,
                 &loop_object_name_and_kind,
@@ -227,7 +227,7 @@ impl Default for PropertySource {
 pub struct Property {
     pub value: ftd::interpreter2::PropertyValue,
     pub source: ftd::interpreter2::PropertySource,
-    pub condition: Option<ftd::interpreter2::Boolean>,
+    pub condition: Option<ftd::interpreter2::Expression>,
     pub line_number: usize,
 }
 
@@ -448,7 +448,7 @@ impl Property {
         )?;
 
         let condition = if let Some(ref v) = ast_property.condition {
-            Some(ftd::interpreter2::Boolean::from_ast_condition(
+            Some(ftd::interpreter2::Expression::from_ast_condition(
                 ftd::ast::Condition::new(v, ast_property.line_number),
                 definition_name_with_arguments,
                 loop_object_name_and_kind,

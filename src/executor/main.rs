@@ -85,12 +85,13 @@ impl<'a> ExecuteDoc<'a> {
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
     ) -> ftd::executor::Result<ftd::executor::Element> {
+        dbg!("execute_from_instruction", &instruction);
         if let Some(condition) = instruction.condition.as_ref() {
             if condition.is_static(&doc.itdoc()) && !condition.eval(&doc.itdoc())? {
                 return Ok(ftd::executor::Element::Null);
             }
         }
-
+        dbg!("1", &instruction.name);
         let component_definition = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
@@ -99,6 +100,7 @@ impl<'a> ExecuteDoc<'a> {
                 .unwrap()
         };
 
+        dbg!("2", &instruction.name);
         if component_definition.definition.name.eq("ftd.kernel") {
             return ExecuteDoc::execute_kernel_components(
                 instruction,
@@ -108,6 +110,7 @@ impl<'a> ExecuteDoc<'a> {
             );
         }
 
+        dbg!("3", &instruction.name);
         ExecuteDoc::execute_simple_component(
             instruction,
             doc,
@@ -187,6 +190,13 @@ impl<'a> ExecuteDoc<'a> {
             &local_variable_map,
         );
 
+        if let Some(condition) = instruction.condition.as_ref() {
+            update_condition_in_component(
+                &mut component_definition.definition,
+                condition.to_owned(),
+            );
+        }
+
         ExecuteDoc::execute_from_instruction(&component_definition.definition, doc, local_container)
     }
 
@@ -196,7 +206,7 @@ impl<'a> ExecuteDoc<'a> {
         local_container: &[usize],
         component_definition: &ftd::interpreter2::ComponentDefinition,
     ) -> ftd::executor::Result<ftd::executor::Element> {
-        Ok(match component_definition.name.as_str() {
+        let s = Ok(match component_definition.name.as_str() {
             "ftd#text" => {
                 ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
                     instruction.properties.as_slice(),
@@ -265,7 +275,9 @@ impl<'a> ExecuteDoc<'a> {
                 )?)
             }
             _ => unimplemented!(),
-        })
+        });
+        dbg!("kernel", &s);
+        s
     }
 }
 
@@ -298,6 +310,34 @@ fn update_reference_value(
         }
         _ => {}
     }
+}
+
+fn update_condition_in_component(
+    component: &mut ftd::interpreter2::Component,
+    outer_condition: ftd::interpreter2::Expression,
+) {
+    if let Some(condition) = component.condition.as_mut() {
+        let references = {
+            let mut reference = outer_condition.references;
+            reference.extend(condition.references.to_owned());
+            reference
+        };
+        let new_condition = ftd::interpreter2::Expression {
+            expression: ftd::evalexpr::ExprNode::new(ftd::evalexpr::Operator::RootNode)
+                .add_children(vec![ftd::evalexpr::ExprNode::new(
+                    ftd::evalexpr::Operator::And,
+                )
+                .add_children(vec![
+                    outer_condition.expression,
+                    condition.expression.to_owned(),
+                ])]),
+            references,
+            line_number: 0,
+        };
+        *condition = new_condition;
+        return;
+    }
+    component.condition = Box::new(Some(outer_condition));
 }
 
 fn update_local_variable_references_in_component(
@@ -338,7 +378,7 @@ fn update_local_variable_reference_in_property(
 }
 
 fn update_local_variable_reference_in_condition(
-    condition: &mut ftd::interpreter2::Boolean,
+    condition: &mut ftd::interpreter2::Expression,
     local_variable: &ftd::Map<String>,
 ) {
     for reference in condition.references.values_mut() {

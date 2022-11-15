@@ -1,7 +1,7 @@
-use ftd::evalexpr::Node;
+use ftd::evalexpr::ExprNode;
 use std::fmt::{Display, Error, Formatter};
 
-impl Display for Node {
+impl Display for ExprNode {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         self.operator.fmt(f)?;
         for child in self.children() {

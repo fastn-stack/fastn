@@ -1,13 +1,13 @@
-use ftd::evalexpr::Node;
+use ftd::evalexpr::ExprNode;
 use std::slice::Iter;
 
 /// An iterator that traverses an operator tree in pre-order.
 pub struct NodeIter<'a> {
-    stack: Vec<Iter<'a, Node>>,
+    stack: Vec<Iter<'a, ExprNode>>,
 }
 
 impl<'a> NodeIter<'a> {
-    fn new(node: &'a Node) -> Self {
+    fn new(node: &'a ExprNode) -> Self {
         NodeIter {
             stack: vec![node.children.iter()],
         }
@@ -15,7 +15,7 @@ impl<'a> NodeIter<'a> {
 }
 
 impl<'a> Iterator for NodeIter<'a> {
-    type Item = &'a Node;
+    type Item = &'a ExprNode;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -41,9 +41,9 @@ impl<'a> Iterator for NodeIter<'a> {
     }
 }
 
-impl Node {
+impl ExprNode {
     /// Returns an iterator over all nodes in this tree.
-    pub fn iter(&self) -> impl Iterator<Item = &Node> {
+    pub fn iter(&self) -> impl Iterator<Item = &ExprNode> {
         NodeIter::new(self)
     }
 }

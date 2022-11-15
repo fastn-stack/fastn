@@ -3,7 +3,7 @@ pub struct Node {
     pub classes: Vec<String>,
     pub events: Vec<Event>,
     pub node: String,
-    pub condition: Option<ftd::interpreter2::Boolean>,
+    pub condition: Option<ftd::interpreter2::Expression>,
     pub attrs: ftd::Map<ftd::node::Value>,
     pub style: ftd::Map<ftd::node::Value>,
     pub children: Vec<Node>,

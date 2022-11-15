@@ -1,0 +1,41 @@
+-- boolean $flag: true
+
+-- integer $num: 0
+
+-- component foo:
+
+-- ftd.text: Hello World
+padding if { flag }: 50
+if: { flag }
+
+-- end: foo
+
+
+
+-- void increment(a):
+integer $a:
+
+a += 1
+
+
+-- void toggle(a):
+boolean $a:
+
+a = !a;
+
+
+
+
+-- foo:
+if: { num > 2 }
+
+
+-- ftd.integer: $num
+
+-- ftd.text: Gee
+if: { flag }
+
+
+-- ftd.text: Click here
+$on-click$: $increment($a = $num)
+$on-click$: $toggle($a = $flag)

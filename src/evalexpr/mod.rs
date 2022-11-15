@@ -500,7 +500,7 @@
 //!
 //! // In ron format, strings are surrounded by "
 //! let serialized_free = "\"five * five\"";
-//! match ron::de::from_str::<Node>(serialized_free) {
+//! match ron::de::from_str::<ExprNode>(serialized_free) {
 //!     Ok(free) => assert_eq!(free.eval_with_context(&context), Ok(Value::from(25))),
 //!     Err(error) => {
 //!         () // Handle error
@@ -543,7 +543,7 @@ pub use ftd::evalexpr::{
     interface::*,
     operator::Operator,
     token::PartialToken,
-    tree::Node,
+    tree::ExprNode,
     value::{value_type::ValueType, EmptyType, FloatType, IntType, TupleType, Value, EMPTY_VALUE},
 };
 

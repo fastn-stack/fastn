@@ -78,7 +78,7 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     }))
 }
 
-pub(crate) fn get_condition_string(condition: &ftd::interpreter2::Boolean) -> String {
+pub(crate) fn get_condition_string(condition: &ftd::interpreter2::Expression) -> String {
     let node = condition
         .expression
         .update_node_with_variable_reference(&condition.references);

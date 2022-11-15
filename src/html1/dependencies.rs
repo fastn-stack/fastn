@@ -34,31 +34,60 @@ impl<'a> DependencyGenerator<'a> {
         let node_data_id = ftd::html1::utils::full_data_id(self.id, self.node.data_id.as_str());
         let mut result = vec![];
 
-        let mut expressions = vec![];
-        for property in self.node.text.properties.iter() {
-            let condition = property
+        {
+            let mut expressions = vec![];
+
+            let condition = self
+                .node
                 .condition
                 .as_ref()
                 .map(ftd::html1::utils::get_condition_string);
-            if let Some(value_string) =
-                ftd::html1::utils::get_formatted_dep_string_from_property_value(
-                    self.id,
-                    self.doc,
-                    &property.value,
-                    &self.node.text.pattern,
-                )?
-            {
-                let value = format!(
-                    "document.querySelector(`[data-id=\"{}\"]`).innerHTML = {};",
-                    node_data_id, value_string
+
+            if let Some(condition) = condition {
+                let pos_value = format!(
+                    "document.querySelector(`[data-id=\"{}\"]`).style[\"display\"] = \"flex\";",
+                    node_data_id
                 );
-                expressions.push((condition, value));
+                let neg_value = format!(
+                    "document.querySelector(`[data-id=\"{}\"]`).style[\"display\"] = \"none\";",
+                    node_data_id
+                );
+                expressions.push((Some(condition), pos_value));
+                expressions.push((None, neg_value));
+            }
+
+            let value = ftd::html1::utils::js_expression_from_list(expressions);
+            if !value.trim().is_empty() {
+                result.push(value.trim().to_string());
             }
         }
 
-        let value = ftd::html1::utils::js_expression_from_list(expressions);
-        if !value.trim().is_empty() {
-            result.push(value.trim().to_string());
+        {
+            let mut expressions = vec![];
+            for property in self.node.text.properties.iter() {
+                let condition = property
+                    .condition
+                    .as_ref()
+                    .map(ftd::html1::utils::get_condition_string);
+                if let Some(value_string) =
+                    ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                        self.id,
+                        self.doc,
+                        &property.value,
+                        &self.node.text.pattern,
+                    )?
+                {
+                    let value = format!(
+                        "document.querySelector(`[data-id=\"{}\"]`).innerHTML = {};",
+                        node_data_id, value_string
+                    );
+                    expressions.push((condition, value));
+                }
+            }
+            let value = ftd::html1::utils::js_expression_from_list(expressions);
+            if !value.trim().is_empty() {
+                result.push(value.trim().to_string());
+            }
         }
 
         for (key, attribute) in self.node.attrs.iter() {

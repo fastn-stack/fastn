@@ -1,17 +1,17 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
-pub struct Boolean {
-    pub expression: ftd::evalexpr::Node,
+pub struct Expression {
+    pub expression: ftd::evalexpr::ExprNode,
     pub references: ftd::Map<ftd::interpreter2::PropertyValue>,
     pub line_number: usize,
 }
 
-impl Boolean {
+impl Expression {
     pub fn new(
-        expression: ftd::evalexpr::Node,
+        expression: ftd::evalexpr::ExprNode,
         references: ftd::Map<ftd::interpreter2::PropertyValue>,
         line_number: usize,
-    ) -> Boolean {
-        Boolean {
+    ) -> Expression {
+        Expression {
             expression,
             references,
             line_number,
@@ -23,17 +23,17 @@ impl Boolean {
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<Boolean> {
+    ) -> ftd::interpreter2::Result<Expression> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
             let node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
-            let references = Boolean::get_references(
+            let references = Expression::get_references(
                 &node,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
                 doc,
                 condition.line_number,
             )?;
-            return Ok(Boolean::new(node, references, condition.line_number));
+            return Ok(Expression::new(node, references, condition.line_number));
         }
         ftd::interpreter2::utils::e2(
             format!(
@@ -46,7 +46,7 @@ impl Boolean {
     }
 
     pub(crate) fn get_references(
-        node: &ftd::evalexpr::Node,
+        node: &ftd::evalexpr::ExprNode,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
@@ -84,7 +84,9 @@ impl Boolean {
         }
         let node = self.expression.update_node_with_value(&values);
         let mut context = ftd::interpreter2::default::default_context()?;
-        Ok(node.eval_boolean_with_context_mut(&mut context)?)
+        dbg!(&node, &context);
+        dbg!(&node.eval_with_context_mut(&mut context));
+        Ok(dbg!(node.eval_boolean_with_context_mut(&mut context)?))
     }
 
     pub fn is_static(&self, doc: &ftd::interpreter2::TDoc) -> bool {
@@ -103,11 +105,11 @@ fn get_expression_mode(exp: &str) -> Option<String> {
         .map(ToString::to_string)
 }
 
-fn get_variable_identifier_read(node: &ftd::evalexpr::Node) -> Vec<String> {
+fn get_variable_identifier_read(node: &ftd::evalexpr::ExprNode) -> Vec<String> {
     return get_variable_identifier_read_(node, &mut vec![]);
 
     fn get_variable_identifier_read_(
-        node: &ftd::evalexpr::Node,
+        node: &ftd::evalexpr::ExprNode,
         write_variable: &mut Vec<String>,
     ) -> Vec<String> {
         let mut values = vec![];
@@ -125,11 +127,11 @@ fn get_variable_identifier_read(node: &ftd::evalexpr::Node) -> Vec<String> {
     }
 }
 
-impl ftd::evalexpr::Node {
+impl ftd::evalexpr::ExprNode {
     pub fn update_node_with_value(
         &self,
         values: &ftd::Map<ftd::evalexpr::Value>,
-    ) -> ftd::evalexpr::Node {
+    ) -> ftd::evalexpr::ExprNode {
         let mut operator = self.operator().clone();
         if let ftd::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
             if let Some(value) = values.get(identifier) {
@@ -142,13 +144,13 @@ impl ftd::evalexpr::Node {
         for child in self.children() {
             children.push(child.update_node_with_value(values));
         }
-        ftd::evalexpr::Node::new(operator).add_children(children)
+        ftd::evalexpr::ExprNode::new(operator).add_children(children)
     }
 
     pub fn update_node_with_variable_reference(
         &self,
         references: &ftd::Map<ftd::interpreter2::PropertyValue>,
-    ) -> ftd::evalexpr::Node {
+    ) -> ftd::evalexpr::ExprNode {
         let mut operator = self.operator().clone();
         if let ftd::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator {
             if let Some(ftd::interpreter2::PropertyValue::Reference { name, .. }) =
@@ -163,6 +165,6 @@ impl ftd::evalexpr::Node {
         for child in self.children() {
             children.push(child.update_node_with_variable_reference(references));
         }
-        ftd::evalexpr::Node::new(operator).add_children(children)
+        ftd::evalexpr::ExprNode::new(operator).add_children(children)
     }
 }

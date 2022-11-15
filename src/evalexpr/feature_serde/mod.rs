@@ -1,8 +1,8 @@
-use ftd::evalexpr::{interface::build_operator_tree, Node};
+use ftd::evalexpr::{interface::build_operator_tree, ExprNode};
 use serde::{de, Deserialize, Deserializer};
 use std::fmt;
 
-impl<'de> Deserialize<'de> for Node {
+impl<'de> Deserialize<'de> for ExprNode {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -14,7 +14,7 @@ impl<'de> Deserialize<'de> for Node {
 struct NodeVisitor;
 
 impl<'de> de::Visitor<'de> for NodeVisitor {
-    type Value = Node;
+    type Value = ExprNode;
 
     fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(

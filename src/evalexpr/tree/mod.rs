@@ -34,12 +34,12 @@ mod iter;
 /// ```
 ///
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
-pub struct Node {
+pub struct ExprNode {
     operator: Operator,
-    children: Vec<Node>,
+    children: Vec<ExprNode>,
 }
 
-impl Node {
+impl ExprNode {
     /// Return a node object
     pub fn new(operator: Operator) -> Self {
         Self {
@@ -49,7 +49,7 @@ impl Node {
     }
 
     /// Adds the children in node
-    pub fn add_children(self, children: Vec<Node>) -> Self {
+    pub fn add_children(self, children: Vec<ExprNode>) -> Self {
         let mut new_children = self.children;
         new_children.extend(children);
         Self {
@@ -434,7 +434,7 @@ impl Node {
     }
 
     /// Returns the children of this node as a slice.
-    pub fn children(&self) -> &[Node] {
+    pub fn children(&self) -> &[ExprNode] {
         &self.children
     }
 
@@ -446,7 +446,7 @@ impl Node {
     /// Returns a mutable reference to the vector containing the children of this node.
     ///
     /// WARNING: Writing to this might have unexpected results, as some operators require certain amounts and types of arguments.
-    pub fn children_mut(&mut self) -> &mut Vec<Node> {
+    pub fn children_mut(&mut self) -> &mut Vec<ExprNode> {
         &mut self.children
     }
 
@@ -469,7 +469,11 @@ impl Node {
         }
     }
 
-    fn insert_back_prioritized(&mut self, node: Node, is_root_node: bool) -> EvalexprResult<()> {
+    fn insert_back_prioritized(
+        &mut self,
+        node: ExprNode,
+        is_root_node: bool,
+    ) -> EvalexprResult<()> {
         // println!("Inserting {:?} into {:?}", node.operator, self.operator());
         if self.operator().precedence() < node.operator().precedence() || is_root_node
             // Right-to-left chaining
@@ -543,10 +547,10 @@ impl Node {
 }
 
 fn collapse_root_stack_to(
-    root_stack: &mut Vec<Node>,
-    mut root: Node,
-    collapse_goal: &Node,
-) -> EvalexprResult<Node> {
+    root_stack: &mut Vec<ExprNode>,
+    mut root: ExprNode,
+    collapse_goal: &ExprNode,
+) -> EvalexprResult<ExprNode> {
     loop {
         if let Some(mut potential_higher_root) = root_stack.pop() {
             // TODO I'm not sure about this >, as I have no example for different sequence operators with the same precedence
@@ -567,7 +571,7 @@ fn collapse_root_stack_to(
     Ok(root)
 }
 
-fn collapse_all_sequences(root_stack: &mut Vec<Node>) -> EvalexprResult<()> {
+fn collapse_all_sequences(root_stack: &mut Vec<ExprNode>) -> EvalexprResult<()> {
     // println!("Collapsing all sequences");
     // println!("Initial root stack is: {:?}", root_stack);
     let mut root = if let Some(root) = root_stack.pop() {
@@ -612,8 +616,8 @@ fn collapse_all_sequences(root_stack: &mut Vec<Node>) -> EvalexprResult<()> {
     Ok(())
 }
 
-pub(crate) fn tokens_to_operator_tree(tokens: Vec<Token>) -> EvalexprResult<Node> {
-    let mut root_stack = vec![Node::root_node()];
+pub(crate) fn tokens_to_operator_tree(tokens: Vec<Token>) -> EvalexprResult<ExprNode> {
+    let mut root_stack = vec![ExprNode::root_node()];
     let mut last_token_is_rightsided_value = false;
     let mut token_iter = tokens.iter().peekable();
 
@@ -621,31 +625,31 @@ pub(crate) fn tokens_to_operator_tree(tokens: Vec<Token>) -> EvalexprResult<Node
         let next = token_iter.peek().cloned();
 
         let node = match token.clone() {
-            Token::Plus => Some(Node::new(Operator::Add)),
+            Token::Plus => Some(ExprNode::new(Operator::Add)),
             Token::Minus => {
                 if last_token_is_rightsided_value {
-                    Some(Node::new(Operator::Sub))
+                    Some(ExprNode::new(Operator::Sub))
                 } else {
-                    Some(Node::new(Operator::Neg))
+                    Some(ExprNode::new(Operator::Neg))
                 }
             }
-            Token::Star => Some(Node::new(Operator::Mul)),
-            Token::Slash => Some(Node::new(Operator::Div)),
-            Token::Percent => Some(Node::new(Operator::Mod)),
-            Token::Hat => Some(Node::new(Operator::Exp)),
+            Token::Star => Some(ExprNode::new(Operator::Mul)),
+            Token::Slash => Some(ExprNode::new(Operator::Div)),
+            Token::Percent => Some(ExprNode::new(Operator::Mod)),
+            Token::Hat => Some(ExprNode::new(Operator::Exp)),
 
-            Token::Eq => Some(Node::new(Operator::Eq)),
-            Token::Neq => Some(Node::new(Operator::Neq)),
-            Token::Gt => Some(Node::new(Operator::Gt)),
-            Token::Lt => Some(Node::new(Operator::Lt)),
-            Token::Geq => Some(Node::new(Operator::Geq)),
-            Token::Leq => Some(Node::new(Operator::Leq)),
-            Token::And => Some(Node::new(Operator::And)),
-            Token::Or => Some(Node::new(Operator::Or)),
-            Token::Not => Some(Node::new(Operator::Not)),
+            Token::Eq => Some(ExprNode::new(Operator::Eq)),
+            Token::Neq => Some(ExprNode::new(Operator::Neq)),
+            Token::Gt => Some(ExprNode::new(Operator::Gt)),
+            Token::Lt => Some(ExprNode::new(Operator::Lt)),
+            Token::Geq => Some(ExprNode::new(Operator::Geq)),
+            Token::Leq => Some(ExprNode::new(Operator::Leq)),
+            Token::And => Some(ExprNode::new(Operator::And)),
+            Token::Or => Some(ExprNode::new(Operator::Or)),
+            Token::Not => Some(ExprNode::new(Operator::Not)),
 
             Token::LBrace => {
-                root_stack.push(Node::root_node());
+                root_stack.push(ExprNode::root_node());
                 None
             }
             Token::RBrace => {
@@ -657,38 +661,40 @@ pub(crate) fn tokens_to_operator_tree(tokens: Vec<Token>) -> EvalexprResult<Node
                 }
             }
 
-            Token::Assign => Some(Node::new(Operator::Assign)),
-            Token::PlusAssign => Some(Node::new(Operator::AddAssign)),
-            Token::MinusAssign => Some(Node::new(Operator::SubAssign)),
-            Token::StarAssign => Some(Node::new(Operator::MulAssign)),
-            Token::SlashAssign => Some(Node::new(Operator::DivAssign)),
-            Token::PercentAssign => Some(Node::new(Operator::ModAssign)),
-            Token::HatAssign => Some(Node::new(Operator::ExpAssign)),
-            Token::AndAssign => Some(Node::new(Operator::AndAssign)),
-            Token::OrAssign => Some(Node::new(Operator::OrAssign)),
+            Token::Assign => Some(ExprNode::new(Operator::Assign)),
+            Token::PlusAssign => Some(ExprNode::new(Operator::AddAssign)),
+            Token::MinusAssign => Some(ExprNode::new(Operator::SubAssign)),
+            Token::StarAssign => Some(ExprNode::new(Operator::MulAssign)),
+            Token::SlashAssign => Some(ExprNode::new(Operator::DivAssign)),
+            Token::PercentAssign => Some(ExprNode::new(Operator::ModAssign)),
+            Token::HatAssign => Some(ExprNode::new(Operator::ExpAssign)),
+            Token::AndAssign => Some(ExprNode::new(Operator::AndAssign)),
+            Token::OrAssign => Some(ExprNode::new(Operator::OrAssign)),
 
-            Token::Comma => Some(Node::new(Operator::Tuple)),
-            Token::Semicolon => Some(Node::new(Operator::Chain)),
+            Token::Comma => Some(ExprNode::new(Operator::Tuple)),
+            Token::Semicolon => Some(ExprNode::new(Operator::Chain)),
 
             Token::Identifier(identifier) => {
-                let mut result = Some(Node::new(Operator::variable_identifier_read(
+                let mut result = Some(ExprNode::new(Operator::variable_identifier_read(
                     identifier.clone(),
                 )));
                 if let Some(next) = next {
                     if next.is_assignment() {
-                        result = Some(Node::new(Operator::variable_identifier_write(
+                        result = Some(ExprNode::new(Operator::variable_identifier_write(
                             identifier.clone(),
                         )));
                     } else if next.is_leftsided_value() {
-                        result = Some(Node::new(Operator::function_identifier(identifier)));
+                        result = Some(ExprNode::new(Operator::function_identifier(identifier)));
                     }
                 }
                 result
             }
-            Token::Float(float) => Some(Node::new(Operator::value(Value::Float(float)))),
-            Token::Int(int) => Some(Node::new(Operator::value(Value::Int(int)))),
-            Token::Boolean(boolean) => Some(Node::new(Operator::value(Value::Boolean(boolean)))),
-            Token::String(string) => Some(Node::new(Operator::value(Value::String(string)))),
+            Token::Float(float) => Some(ExprNode::new(Operator::value(Value::Float(float)))),
+            Token::Int(int) => Some(ExprNode::new(Operator::value(Value::Int(int)))),
+            Token::Boolean(boolean) => {
+                Some(ExprNode::new(Operator::value(Value::Boolean(boolean))))
+            }
+            Token::String(string) => Some(ExprNode::new(Operator::value(Value::String(string)))),
         };
 
         if let Some(mut node) = node {
@@ -700,13 +706,13 @@ pub(crate) fn tokens_to_operator_tree(tokens: Vec<Token>) -> EvalexprResult<Node
                     // If root.operator() and node.operator() are of the same variant, ...
                     if mem::discriminant(root.operator()) == mem::discriminant(node.operator()) {
                         // ... we create a new root node for the next expression in the sequence
-                        root.children.push(Node::root_node());
+                        root.children.push(ExprNode::root_node());
                         root_stack.push(root);
                     } else if root.operator() == &Operator::RootNode {
                         // If the current root is an actual root node, we start a new sequence
                         node.children.push(root);
-                        node.children.push(Node::root_node());
-                        root_stack.push(Node::root_node());
+                        node.children.push(ExprNode::root_node());
+                        root_stack.push(ExprNode::root_node());
                         root_stack.push(node);
                     } else {
                         // Otherwise, we combine the sequences based on their precedences
@@ -715,7 +721,7 @@ pub(crate) fn tokens_to_operator_tree(tokens: Vec<Token>) -> EvalexprResult<Node
                             // If the new sequence has a higher precedence, it is part of the last element of the current root sequence
                             if let Some(last_root_child) = root.children.pop() {
                                 node.children.push(last_root_child);
-                                node.children.push(Node::root_node());
+                                node.children.push(ExprNode::root_node());
                                 root_stack.push(root);
                                 root_stack.push(node);
                             } else {

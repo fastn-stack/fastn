@@ -1,6 +1,6 @@
 use ftd::evalexpr::{
     token, tree, value::TupleType, Context, ContextWithMutableVariables, EmptyType, EvalexprError,
-    EvalexprResult, FloatType, HashMapContext, IntType, Node, Value, EMPTY_VALUE,
+    EvalexprResult, ExprNode, FloatType, HashMapContext, IntType, Value, EMPTY_VALUE,
 };
 
 /// Evaluate the given expression string.
@@ -83,7 +83,7 @@ pub fn eval_with_context_mut<C: ContextWithMutableVariables>(
 /// ```
 ///
 /// *See the [crate doc](index.html) for more examples and explanations of the expression format.*
-pub fn build_operator_tree(string: &str) -> EvalexprResult<Node> {
+pub fn build_operator_tree(string: &str) -> EvalexprResult<ExprNode> {
     tree::tokens_to_operator_tree(token::tokenize(string)?)
 }
 

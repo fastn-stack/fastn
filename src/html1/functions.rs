@@ -71,7 +71,7 @@ pub struct ExpressionGenerator;
 impl ExpressionGenerator {
     pub fn to_string(
         &self,
-        node: &ftd::evalexpr::Node,
+        node: &ftd::evalexpr::ExprNode,
         root: bool,
         arguments: &[(String, bool)],
     ) -> String {
