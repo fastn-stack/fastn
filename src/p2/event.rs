@@ -70,9 +70,7 @@ impl Event {
         let mut event: Vec<ftd::Event> = vec![];
         for e in events {
             let target = match &e.action.target {
-                ftd::PropertyValue::Value { value } => {
-                    value.to_string().unwrap_or_else(|| "".to_string())
-                }
+                ftd::PropertyValue::Value { value } => value.to_string().unwrap_or_default(),
                 ftd::PropertyValue::Reference { name, .. }
                 | ftd::PropertyValue::Variable { name, .. } => name.to_string(),
             };

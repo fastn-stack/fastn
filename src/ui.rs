@@ -2539,9 +2539,9 @@ impl ImageSrc {
             .collect::<ftd::p1::Result<ftd::Map<ftd::Value>>>()?;
         Ok(ImageSrc {
             light: ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?
-                .unwrap_or_else(|| "".to_string()),
+                .unwrap_or_default(),
             dark: ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?
-                .unwrap_or_else(|| "".to_string()),
+                .unwrap_or_default(),
             reference,
         })
     }
