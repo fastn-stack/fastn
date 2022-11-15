@@ -52,6 +52,10 @@ impl<'a> HtmlGenerator<'a> {
     }
 
     pub fn to_html(&self, doc_name: &str, node: ftd::node::Node) -> ftd::html1::Result<String> {
+        if node.is_null() {
+            return Ok("".to_string());
+        }
+
         let style = format!(
             "style=\"{}\"",
             self.style_to_html(&node, /*self.visible*/ true)

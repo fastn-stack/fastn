@@ -3,6 +3,7 @@ pub struct Node {
     pub classes: Vec<String>,
     pub events: Vec<Event>,
     pub node: String,
+    pub condition: Option<ftd::interpreter2::Boolean>,
     pub attrs: ftd::Map<ftd::node::Value>,
     pub style: ftd::Map<ftd::node::Value>,
     pub children: Vec<Node>,
@@ -18,6 +19,7 @@ impl Node {
     fn from_common(node: &str, common: &ftd::executor::Common, doc_id: &str) -> Node {
         Node {
             node: s(node),
+            condition: common.condition.to_owned(),
             attrs: common.attrs(),
             style: common.style(doc_id, &mut []),
             children: vec![],
@@ -50,6 +52,7 @@ impl Node {
             attrs,
             style,
             classes,
+            condition: common.condition.to_owned(),
             text: Default::default(),
             children: container
                 .children
@@ -62,6 +65,10 @@ impl Node {
             line_number: common.line_number,
         }
     }
+
+    pub(crate) fn is_null(&self) -> bool {
+        self.null
+    }
 }
 
 impl ftd::executor::Element {
@@ -72,6 +79,19 @@ impl ftd::executor::Element {
             ftd::executor::Element::Text(t) => t.to_node(doc_id),
             ftd::executor::Element::Integer(t) => t.to_node(doc_id),
             ftd::executor::Element::Boolean(t) => t.to_node(doc_id),
+            ftd::executor::Element::Null => Node {
+                classes: vec![],
+                events: vec![],
+                node: "".to_string(),
+                condition: None,
+                attrs: Default::default(),
+                style: Default::default(),
+                children: vec![],
+                text: Default::default(),
+                null: true,
+                data_id: "".to_string(),
+                line_number: 0,
+            },
         }
     }
 }

@@ -108,7 +108,7 @@ impl InterpreterState {
             name: self.id,
             data: self.bag,
             aliases: self.document_stack[0].get_doc_aliases(),
-            instructions: self.document_stack[0].instructions.clone(),
+            tree: self.document_stack[0].instructions.clone(),
         };
 
         Ok(Interpreter::Done { document })
@@ -226,6 +226,6 @@ pub enum Interpreter {
 pub struct Document {
     pub data: ftd::Map<ftd::interpreter2::Thing>,
     pub name: String,
-    pub instructions: Vec<ftd::interpreter2::Component>,
+    pub tree: Vec<ftd::interpreter2::Component>,
     pub aliases: ftd::Map<String>,
 }

@@ -84,7 +84,9 @@ impl<'a> TDoc<'a> {
                 value: default,
                 conditional_value: conditions,
                 line_number,
-            };
+                is_static: true,
+            }
+            .set_static(&self.itdoc());
 
             ftd::interpreter2::utils::validate_variable(&variable, &self.itdoc())?;
 

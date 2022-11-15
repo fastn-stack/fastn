@@ -582,6 +582,7 @@ impl<'a> TDoc<'a> {
                                     },
                                     conditional_value: vec![],
                                     line_number,
+                                    is_static: !mutable,
                                 });
                             if let Some(remaining) = remaining {
                                 return get_thing_(doc, line_number, &remaining, &thing);
@@ -610,6 +611,7 @@ impl<'a> TDoc<'a> {
                             },
                             conditional_value: vec![],
                             line_number: *line_number,
+                            is_static: !mutable,
                         }),
                         Some(ftd::interpreter2::PropertyValue::Reference { name, .. })
                         | Some(ftd::interpreter2::PropertyValue::Clone { name, .. }) => {

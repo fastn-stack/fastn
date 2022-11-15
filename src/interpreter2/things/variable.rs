@@ -6,6 +6,7 @@ pub struct Variable {
     pub value: ftd::interpreter2::PropertyValue,
     pub conditional_value: Vec<ConditionalValue>,
     pub line_number: usize,
+    pub is_static: bool,
 }
 
 impl Variable {
@@ -35,7 +36,9 @@ impl Variable {
             value,
             conditional_value: vec![],
             line_number: variable_definition.line_number,
-        };
+            is_static: true,
+        }
+        .set_static(doc);
 
         ftd::interpreter2::utils::validate_variable(&variable, doc)?;
 
@@ -64,6 +67,32 @@ impl Variable {
             variable_definition.line_number,
         )?;
         Ok(variable)
+    }
+
+    pub fn set_static(self, doc: &ftd::interpreter2::TDoc) -> Self {
+        let mut variable = self;
+        if !variable.is_static {
+            return variable;
+        }
+        if variable.mutable || !variable.value.is_static(doc) {
+            variable.is_static = false;
+            return variable;
+        }
+
+        for cv in variable.conditional_value.iter() {
+            if !cv.value.is_static(doc) {
+                variable.is_static = false;
+                return variable;
+            }
+            for b in cv.condition.references.values() {
+                if !b.is_static(doc) {
+                    variable.is_static = false;
+                    return variable;
+                }
+            }
+        }
+
+        variable
     }
 }
 

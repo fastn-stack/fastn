@@ -5,6 +5,7 @@ pub enum Element {
     Text(Text),
     Integer(Text),
     Boolean(Text),
+    Null,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -53,6 +54,7 @@ pub struct Common {
     pub padding: ftd::executor::Value<Option<i64>>,
     pub data_id: String,
     pub line_number: usize,
+    pub condition: Option<ftd::interpreter2::Boolean>,
 }
 
 pub fn default_column() -> Column {
@@ -64,6 +66,7 @@ pub fn text_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Boolean>,
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -74,6 +77,7 @@ pub fn text_from_properties(
         properties,
         events,
         arguments,
+        condition,
         doc,
         local_container,
         line_number,
@@ -85,6 +89,7 @@ pub fn integer_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Boolean>,
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -109,6 +114,7 @@ pub fn integer_from_properties(
         properties,
         events,
         arguments,
+        condition,
         doc,
         local_container,
         line_number,
@@ -120,6 +126,7 @@ pub fn boolean_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Boolean>,
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -130,6 +137,7 @@ pub fn boolean_from_properties(
         properties,
         events,
         arguments,
+        condition,
         doc,
         local_container,
         line_number,
@@ -141,6 +149,7 @@ pub fn row_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Boolean>,
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -150,6 +159,7 @@ pub fn row_from_properties(
         properties,
         events,
         arguments,
+        condition,
         doc,
         local_container,
         line_number,
@@ -162,6 +172,7 @@ pub fn column_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Boolean>,
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -171,6 +182,7 @@ pub fn column_from_properties(
         properties,
         events,
         arguments,
+        condition,
         doc,
         local_container,
         line_number,
@@ -183,12 +195,19 @@ pub fn common_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
     arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Boolean>,
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
 ) -> ftd::executor::Result<Common> {
+    let is_visible = if let Some(condition) = condition {
+        condition.eval(&doc.itdoc())?
+    } else {
+        true
+    };
+
     Ok(Common {
-        is_not_visible: false,
+        is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
         padding: ftd::executor::value::optional_i64(
@@ -198,6 +217,7 @@ pub fn common_from_properties(
             doc,
             line_number,
         )?,
+        condition: condition.to_owned(),
         data_id: ftd::executor::utils::get_string_container(local_container),
         line_number,
     })

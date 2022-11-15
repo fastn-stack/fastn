@@ -23,7 +23,7 @@ impl<'a> ExecuteDoc<'a> {
             name: document.name.as_str(),
             aliases: &document.aliases,
             bag: &mut document.data,
-            instructions: &document.instructions,
+            instructions: &document.tree,
         }
         .execute(&[])?;
         let mut main = ftd::executor::element::default_column();
@@ -85,6 +85,12 @@ impl<'a> ExecuteDoc<'a> {
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
     ) -> ftd::executor::Result<ftd::executor::Element> {
+        if let Some(condition) = instruction.condition.as_ref() {
+            if condition.is_static(&doc.itdoc()) && !condition.eval(&doc.itdoc())? {
+                return Ok(ftd::executor::Element::Null);
+            }
+        }
+
         let component_definition = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
@@ -196,6 +202,7 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
                     doc,
                     local_container,
                     instruction.line_number,
@@ -206,6 +213,7 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
                     doc,
                     local_container,
                     instruction.line_number,
@@ -216,6 +224,7 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
                     doc,
                     local_container,
                     instruction.line_number,
@@ -231,6 +240,7 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
                     doc,
                     local_container,
                     instruction.line_number,
@@ -247,6 +257,7 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
                     doc,
                     local_container,
                     instruction.line_number,

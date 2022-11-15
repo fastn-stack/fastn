@@ -34,6 +34,30 @@ impl PropertyValue {
         }
     }
 
+    pub(crate) fn is_static(&self, doc: &ftd::interpreter2::TDoc) -> bool {
+        match self {
+            PropertyValue::Clone { .. } => true,
+            PropertyValue::Reference { is_mutable, .. } if *is_mutable => true,
+            PropertyValue::Reference {
+                name, line_number, ..
+            } => doc
+                .get_variable(name, *line_number)
+                .map(|v| v.is_static || !v.mutable)
+                .unwrap_or(true),
+            PropertyValue::Value { value, .. } => value.is_static(doc),
+            PropertyValue::FunctionCall(f) => {
+                let mut is_static = true;
+                for d in f.values.values() {
+                    if !d.is_static(doc) {
+                        is_static = false;
+                        break;
+                    }
+                }
+                is_static
+            }
+        }
+    }
+
     pub(crate) fn line_number(&self) -> usize {
         match self {
             PropertyValue::Value { line_number, .. }
@@ -646,6 +670,36 @@ impl Value {
         match self {
             Value::Optional { data, .. } => data.as_ref().to_owned(),
             t => Some(t.to_owned()),
+        }
+    }
+
+    pub(crate) fn is_static(&self, doc: &ftd::interpreter2::TDoc) -> bool {
+        match self {
+            ftd::interpreter2::Value::Optional { data, .. } if data.is_some() => {
+                data.clone().unwrap().is_static(doc)
+            }
+            ftd::interpreter2::Value::List { data, .. } => {
+                let mut is_static = true;
+                for d in data {
+                    if !d.is_static(doc) {
+                        is_static = false;
+                        break;
+                    }
+                }
+                is_static
+            }
+            ftd::interpreter2::Value::Record { fields, .. }
+            | ftd::interpreter2::Value::Object { values: fields, .. } => {
+                let mut is_static = true;
+                for d in fields.values() {
+                    if !d.is_static(doc) {
+                        is_static = false;
+                        break;
+                    }
+                }
+                is_static
+            }
+            _ => true,
         }
     }
 

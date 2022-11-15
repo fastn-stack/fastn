@@ -86,6 +86,15 @@ impl Boolean {
         let mut context = ftd::interpreter2::default::default_context()?;
         Ok(node.eval_boolean_with_context_mut(&mut context)?)
     }
+
+    pub fn is_static(&self, doc: &ftd::interpreter2::TDoc) -> bool {
+        for val in self.references.values() {
+            if !val.is_static(doc) {
+                return false;
+            }
+        }
+        true
+    }
 }
 
 fn get_expression_mode(exp: &str) -> Option<String> {
