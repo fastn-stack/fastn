@@ -8,6 +8,7 @@ language: en
 -- fpm.dependency: fifthtry.github.io/product-switcher as ps
 -- fpm.dependency: fifthtry.github.io/bling as bling
 -- fpm.dependency: fifthtry.github.io/admonitions as cbox
+-- fpm.dependency: fifthtry.github.io/workshop-page as ws
 -- fpm.dependency: fifthtry.github.io/fifthtry-brand-switcher as fbs
 
 -- fpm.dependency: fifthtry.github.io/dark-mode-switcher as dms

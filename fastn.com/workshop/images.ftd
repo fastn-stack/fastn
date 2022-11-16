@@ -1,7 +1,10 @@
--- import: ftd.dev/workshop
+-- import: fifthtry.github.io/workshop-page as ws
 
--- ds.page: Images In FTD
+-- ws.chapter: Images In FTD
 id: ws-images
+sidebar: true
 
--- container: ws-images.wrapper.right-sidebar
--- workshop.sidebar:
+-- container: ws-images.content-wrap.right-sidebar
+-- ws.sidebar:
+-- container: ws-images.content-wrap.right-sidebar-mobile
+-- ws.sidebar:

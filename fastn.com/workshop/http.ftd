@@ -1,8 +1,12 @@
--- import: ftd.dev/workshop
+-- import: fifthtry.github.io/workshop-page as ws
 
--- ds.page: HTTP Processor
+-- ws.chapter: HTTP Processor
 id: ws-http
+sidebar: true
 
 
--- container: ws-http.wrapper.right-sidebar
--- workshop.sidebar:
+-- container: ws-http.content-wrap.right-sidebar
+-- ws.sidebar:
+-- container: ws-http.content-wrap.right-sidebar-mobile
+-- ws.sidebar:
+

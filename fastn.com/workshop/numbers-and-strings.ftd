@@ -1,7 +1,21 @@
--- import: ftd.dev/workshop
+-- import: fifthtry.github.io/workshop-page as ws
 
--- ds.page: Numbers And Strings
+-- boolean $what-are-task-1-completed: false
+$always-include$: true
+
+-- object what-are-task-1-object:
+function: ls.set-boolean
+variable: $what-are-task-1-completed
+
+-- ws.understood what-are-task-1-button: Done
+$on-click$: $what-are-task-1-completed = true
+$on-click$: message-host $what-are-task-1-object
+$task-status: $what-are-task-1-completed
+
+
+-- ws.chapter: Numbers And Strings
 id: ws-numbers-and-strings
+sidebar: true
 
 In the last exercise we created a boolean, we will now use numbers and strings
 in FTD.
@@ -38,11 +52,16 @@ software before hand (other than your favorite editor).
 
 {ds.highlight: This makes FTD quite suitable for authoring content.}
 
--- ds.h1: Task: Fix FTD files
+-- ws.task: Task: Fix FTD files
+$status: $what-are-task-1-completed
+button: what-are-task-1-button:
+
 
 Go through [numbers.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/03-numbers-and-strings/numbers.ftd)
 and [strings.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/03-numbers-and-strings/strings.ftd) as per
 instructions given in the file.
+
+-- container:ws-numbers-and-strings
 
 -- ds.h1: You Are Done
 
@@ -52,5 +71,10 @@ You have learnt basics of numbers and strings. {ds.highlight: Lets move on to
 [records now](id: ws-records)} or go back to [the workshop page](id: workshop).
 
 
--- container: ws-numbers-and-strings.wrapper.right-sidebar
--- workshop.sidebar:
+-- container: ws-numbers-and-strings.content-wrap.right-sidebar
+
+-- ws.sidebar:
+
+-- container: ws-numbers-and-strings.content-wrap.right-sidebar-mobile
+
+-- ws.sidebar:

@@ -1,7 +1,11 @@
--- import: ftd.dev/workshop
+-- import: fifthtry.github.io/workshop-page as ws
 
--- ds.page: Row And Columns: Layouting In FTD
+-- ws.chapter: Row And Columns: Layouting In FTD
 id: ws-layouts
+sidebar: true
 
--- container: ws-layouts.wrapper.right-sidebar
--- workshop.sidebar:
+-- container: ws-layouts.content-wrap.right-sidebar
+-- ws.sidebar:
+-- container: ws-layouts.content-wrap.right-sidebar-mobile
+-- ws.sidebar:
+

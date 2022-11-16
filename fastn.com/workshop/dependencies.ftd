@@ -1,8 +1,11 @@
--- import: ftd.dev/workshop
+-- import: fifthtry.github.io/workshop-page as ws
 
--- ds.page: Using Reusable FTD Component Libraries: Dependencies
+-- ws.chapter: Using Reusable FTD Component Libraries: Dependencies
 id: ws-dependencies
+sidebar: true
 
+-- container: ws-dependencies.content-wrap.right-sidebar
+-- ws.sidebar:
+-- container: ws-dependencies.content-wrap.right-sidebar-mobile
+-- ws.sidebar:
 
--- container: ws-dependencies.wrapper.right-sidebar
--- workshop.sidebar:

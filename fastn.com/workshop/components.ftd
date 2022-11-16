@@ -1,11 +1,16 @@
--- import: ftd.dev/workshop
+-- import: fifthtry.github.io/workshop-page as ws
 
--- ds.page: Creating Custom Components
+-- ws.chapter: Creating Custom Components
 id: ws-components
+sidebar: true
 
 
 
 
+-- container: ws-components.content-wrap.right-sidebar
 
--- container: ws-components.wrapper.right-sidebar
--- workshop.sidebar:
+-- ws.sidebar:
+
+-- container: ws-components.content-wrap.right-sidebar-mobile
+
+-- ws.sidebar:

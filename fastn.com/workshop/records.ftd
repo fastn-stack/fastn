@@ -1,7 +1,70 @@
--- import: ftd.dev/workshop
+-- import: fifthtry.github.io/workshop-page as ws
 
--- ds.page: Records
+-- boolean $what-are-lesson-completed: false
+$always-include$: true
+
+-- object what-are-lesson-object:
+function: ls.set-boolean
+variable: $what-are-lesson-completed
+
+-- ws.understood what-are-lesson-button: Understood
+$on-click$: $what-are-lesson-completed = true
+$on-click$: message-host $what-are-lesson-object
+$lesson-status: $what-are-lesson-completed
+
+-- boolean $what-are-task-1-completed: false
+$always-include$: true
+
+-- object what-are-task-1-object:
+function: ls.set-boolean
+variable: $what-are-task-1-completed
+
+-- ws.understood what-are-task-1-button: Done
+$on-click$: $what-are-task-1-completed = true
+$on-click$: message-host $what-are-task-1-object
+$task-status: $what-are-task-1-completed
+
+-- boolean $what-are-task-2-completed: false
+$always-include$: true
+
+-- object what-are-task-2-object:
+function: ls.set-boolean
+variable: $what-are-task-2-completed
+
+-- ws.understood what-are-task-2-button: Done
+$on-click$: $what-are-task-2-completed = true
+$on-click$: message-host $what-are-task-2-object
+$task-status: $what-are-task-2-completed
+
+-- boolean $what-are-task-3-completed: false
+$always-include$: true
+
+-- object what-are-task-3-object:
+function: ls.set-boolean
+variable: $what-are-task-3-completed
+
+-- ws.understood what-are-task-3-button: Done
+$on-click$: $what-are-task-3-completed = true
+$on-click$: message-host $what-are-task-3-object
+$task-status: $what-are-task-3-completed
+
+
+
+-- boolean $what-are-task-4-completed: false
+$always-include$: true
+
+-- object what-are-task-4-object:
+function: ls.set-boolean
+variable: $what-are-task-4-completed
+
+-- ws.understood what-are-task-4-button: Done
+$on-click$: $what-are-task-4-completed = true
+$on-click$: message-host $what-are-task-4-object
+$task-status: $what-are-task-4-completed
+
+-- ws.chapter: Records
 id: ws-records
+sidebar: true
 
 
 -- ds.markdown:
@@ -11,19 +74,11 @@ and strings](id: ws-numbers-and-strings). Now we are moving to more interesting
 stuff: `record`.
 
 
--- boolean $what-are-records-understood: false
 
--- object what-are-records-object:
-function: ls.set-boolean
-variable: $what-are-records-understood
 
--- workshop.understood what-are-records-button:
-$on-click$: toggle $what-are-records-understood
-$on-click$: message-host $what-are-records-object
-
--- workshop.lesson: What Are Records?
-$understood: $what-are-records-understood
-button: what-are-records-button:
+-- ws.lesson: What is FPM CLI?
+$status: $what-are-lesson-completed
+button: what-are-lesson-button:
 
 
 Records are like classes or structs in some language. Record contains one or
@@ -52,8 +107,10 @@ age: 20
 
 -- container: ws-records
 
+-- ws.task: Task 1: Define and Use A Record
+$status: $what-are-task-1-completed
+button: what-are-task-1-button:
 
--- ds.h1: Task 1: Define and Use A Record
 
 Open [records.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/records.ftd)
 and define your first record and then an instance of it.
@@ -92,7 +149,12 @@ Note: {ds.highlight: you can only have single caption and single body types in
 a record}. If you want to have more than one multi-line field for a record, you
 can either use a local string variable, or wait for 0.3 syntax to be ready.
 
--- ds.h1: Task 2: Caption And Body Types
+-- container: ws-records
+
+-- ws.task: Task 2: Caption And Body Types
+$status: $what-are-task-2-completed
+button: what-are-task-2-button:
+
 
 Fix the mistakes in [caption-and-body.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/caption-and-body.ftd).
 
@@ -122,7 +184,13 @@ lang: ftd
 
 Elder brother of the notorious Bache Qui.
 
--- ds.h1: Task: Use Default Values
+
+-- container: ws-records
+
+-- ws.task: Task 3: Task: Use Default Values
+$status: $what-are-task-3-completed
+button: what-are-task-3-button:
+
 
 Fix the mistakes in [default.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/default.ftd).
 
@@ -144,7 +212,14 @@ body bio:
 Here we have specified an optional (because it has a default value) `nick-name`.
 If you leave out the `nick-name`, the `name` would be used as the `nick-name`.
 
--- ds.h1: Task: Fix
+-- container: ws-records
+
+-- ws.task: Task 4: Fix
+$status: $what-are-task-4-completed
+button: what-are-task-4-button:
+
+
+-- container: ws-records
 
 -- ds.h1: Move To Next Chapter
 
@@ -158,5 +233,11 @@ steps](id: workshop).
 
 
 
--- container: ws-records.wrapper.right-sidebar
--- workshop.sidebar:
+-- container: ws-records.content-wrap.right-sidebar
+
+-- ws.sidebar:
+
+-- container: ws-records.content-wrap.right-sidebar-mobile
+
+-- ws.sidebar:
+
