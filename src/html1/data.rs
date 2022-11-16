@@ -55,8 +55,11 @@ impl<'a> DataGenerator<'a> {
                 Some(ftd::interpreter2::Value::Record { fields, .. }) => {
                     let mut value_fields = ftd::Map::new();
                     for (k, v) in fields {
-                        let value = v.clone().resolve(doc, v.line_number())?;
-                        value_fields.insert(k, value);
+                        if let Some(value) =
+                            get_value(doc, &v.clone().resolve(doc, v.line_number())?)?
+                        {
+                            value_fields.insert(k, value);
+                        }
                     }
                     serde_json::to_value(value_fields).ok()
                 }

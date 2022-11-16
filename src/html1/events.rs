@@ -18,6 +18,7 @@ impl ftd::html1::Action {
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::html1::Result<ftd::html1::Action> {
         let values = ftd::html1::Action::from_values(function_call, doc)?;
+
         let function_name = ftd::html1::utils::name_with_id(function_call.name.as_str(), id);
         Ok(ftd::html1::Action::new(
             ftd::html1::utils::function_name_to_js_function(function_name.as_str()).as_str(),

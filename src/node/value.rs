@@ -22,12 +22,12 @@ impl Value {
         pattern: Option<String>,
     ) -> Value {
         let mut properties = exec_value.properties;
-        if properties.len() == 1 {
+        /*if properties.len() == 1 {
             let property = properties.first().unwrap();
             if property.value.is_value() && property.condition.is_none() {
                 properties = vec![]
             }
-        }
+        }*/
 
         Value {
             value,

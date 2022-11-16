@@ -6,7 +6,13 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#ss": "https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"
+"foo#src": {
+"dark": "https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png",
+"light": "https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"
+},
+"ftd#dark-mode": false,
+"ftd#follow-system-dark-mode": true,
+"ftd#system-dark-mode": false
 }
 </script>
 <script type="ftd" id="ftd-external-children">
@@ -23,7 +29,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><img data-id="0:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" style="text-decoration: none" ></img></div>
+<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="text-decoration: none" class="ft_md">false</div><img data-id="1:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle_dark_mode___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;ftd#dark-mode&quot;}}}]', this)" style="text-decoration: none" ></img><img data-id="2:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" style="text-decoration: none" ></img></div>
 
 
 <script>
@@ -435,6 +441,24 @@ return formatted;
 
 function isempty(str) {
 return (!str || str.length === 0 );
+}
+
+
+function foo__toggle_dark_mode___main(a){
+a.value = !a.value
+}
+
+
+
+
+function node_change_main(data){
+document.querySelector(`[data-id="0:main"]`).innerHTML = data["ftd#dark-mode"];
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).setAttribute("src", data["foo#src"].light);
+}
+else if(data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).setAttribute("src", data["foo#src"].dark);
+}
 }
 
 

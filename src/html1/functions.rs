@@ -52,13 +52,17 @@ impl FunctionGenerator {
             ftd::html1::utils::name_with_id(function.name.as_str(), self.id.as_str()).as_str(),
         );
 
+        if ftd::html1::utils::is_ftd_function(function.name.as_str()) {
+            return Ok("".to_string());
+        }
+
         Ok(format!(
             indoc::indoc! {"
-                            function {function_name}({arguments}){{
-                                {expressions}
-                            }}
-        
-                        "},
+                function {function_name}({arguments}){{
+                    {expressions}
+                }}
+
+            "},
             function_name = function_name,
             arguments = arguments.iter().map(|(k, _)| k).join(","),
             expressions = expressions

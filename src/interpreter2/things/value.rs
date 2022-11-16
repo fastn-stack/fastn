@@ -725,6 +725,28 @@ impl Value {
         false
     }
 
+    pub fn is_record(&self, rec_name: &str) -> bool {
+        match self {
+            Self::Record { name, .. } if rec_name.eq(name) => true,
+            _ => false,
+        }
+    }
+
+    pub fn record_fields(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::Map<PropertyValue>> {
+        match self {
+            Self::Record { fields, .. } => Ok(fields.to_owned()),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected record, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
     pub fn is_equal(&self, other: &Self) -> bool {
         match (self.to_owned().inner(), other.to_owned().inner()) {
             (Some(Value::String { text: ref a, .. }), Some(Value::String { text: ref b, .. })) => {
@@ -787,11 +809,11 @@ impl Value {
         }
     }
 
-    #[allow(dead_code)]
     pub(crate) fn to_string(
         &self,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
+        field: Option<String>,
     ) -> ftd::interpreter2::Result<String> {
         Ok(match self {
             Value::String { text } => format!("\"{}\"", text),
@@ -801,14 +823,28 @@ impl Value {
             Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
-                    let v = value
-                        .clone()
-                        .resolve(doc, line_number)?
-                        .to_string(doc, value.line_number())?;
+                    let v = value.clone().resolve(doc, line_number)?.to_string(
+                        doc,
+                        value.line_number(),
+                        None,
+                    )?;
                     values.push(v);
                 }
                 format!("({:?})", values.join(","))
             }
+            Value::Record { fields, .. }
+                if field
+                    .as_ref()
+                    .map(|v| fields.contains_key(v))
+                    .unwrap_or(false) =>
+            {
+                let property_value = fields.get(&field.unwrap()).unwrap();
+                property_value
+                    .clone()
+                    .resolve(doc, line_number)?
+                    .to_string(doc, property_value.line_number(), None)?
+            }
+
             t => unimplemented!("{:?}", t),
         })
     }

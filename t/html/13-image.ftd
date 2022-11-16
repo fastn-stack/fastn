@@ -1,4 +1,18 @@
--- string ss: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+-- void toggle-dark-mode(a):
+boolean $a:
+
+a = !a
+
+-- ftd.boolean: $ftd.dark-mode
+
+
+-- ftd.image-src src:
+light: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+dark: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+
+-- ftd.image:
+$on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
+src: $src
 
 -- ftd.image:
 src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg

@@ -92,6 +92,64 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 line_number: 0,
             }),
         ),
+        (
+            "ftd#dark-mode".to_string(),
+            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                name: "ftd#dark-mode".to_string(),
+                kind: ftd::interpreter2::Kind::boolean().into_kind_data(),
+                mutable: true,
+                value: ftd::interpreter2::PropertyValue::Value {
+                    value: ftd::interpreter2::Value::Boolean { value: false },
+                    is_mutable: true,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#system-dark-mode".to_string(),
+            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                name: "ftd#system-dark-mode".to_string(),
+                kind: ftd::interpreter2::Kind::boolean().into_kind_data(),
+                mutable: true,
+                value: ftd::interpreter2::PropertyValue::Value {
+                    value: ftd::interpreter2::Value::Boolean { value: false },
+                    is_mutable: true,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#follow-system-dark-mode".to_string(),
+            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                name: "ftd#follow-system-dark-mode".to_string(),
+                kind: ftd::interpreter2::Kind::boolean().into_kind_data(),
+                mutable: true,
+                value: ftd::interpreter2::PropertyValue::Value {
+                    value: ftd::interpreter2::Value::Boolean { value: true },
+                    is_mutable: true,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#enable-dark-mode".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "ftd#enable-dark-mode".to_string(),
+                return_kind: ftd::interpreter2::Kind::void().into_kind_data(),
+                arguments: vec![],
+                expression: vec![],
+                line_number: 0,
+            }),
+        ),
     ])
     .collect()
 }

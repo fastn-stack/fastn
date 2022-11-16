@@ -179,6 +179,7 @@ impl<'a> VariableDependencyGenerator<'a> {
                     self.doc,
                     &condition.value,
                     &None,
+                    None,
                 )?
             {
                 let value = format!("data[\"{}\"] = {};", variable.name, value_string);
@@ -191,6 +192,7 @@ impl<'a> VariableDependencyGenerator<'a> {
             self.doc,
             &variable.value,
             &None,
+            None,
         )? {
             let value = format!("data[\"{}\"] = {};", variable.name, value_string);
             expressions.push((None, value));

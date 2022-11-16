@@ -26,7 +26,14 @@ pub fn trim_brackets(s: &str) -> String {
 }
 
 pub(crate) fn name_with_id(s: &str, id: &str) -> String {
+    if is_ftd_function(s) {
+        return s.to_string();
+    }
     format!("{}:{}", s, id)
+}
+
+pub(crate) fn is_ftd_function(s: &str) -> bool {
+    s.starts_with("ftd#")
 }
 
 pub(crate) fn function_name_to_js_function(s: &str) -> String {
@@ -49,10 +56,15 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     doc: &ftd::interpreter2::TDoc,
     property_value: &ftd::interpreter2::PropertyValue,
     pattern: &Option<String>,
+    field: Option<String>,
 ) -> ftd::html1::Result<Option<String>> {
     let value_string = match property_value {
         ftd::interpreter2::PropertyValue::Reference { name, .. } => {
-            format!("data[\"{}\"]", name)
+            format!(
+                "data[\"{}\"]{}",
+                name,
+                field.map(|v| format!(".{}", v)).unwrap_or("".to_string())
+            )
         }
         ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {
             let action = serde_json::to_string(&ftd::html1::Action::from_function_call(
@@ -68,7 +80,7 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
         }
         ftd::interpreter2::PropertyValue::Value {
             value, line_number, ..
-        } => value.to_string(doc, *line_number)?,
+        } => value.to_string(doc, *line_number, field)?,
         _ => return Ok(None),
     };
 
@@ -130,4 +142,12 @@ pub(crate) fn js_expression_from_list(expressions: Vec<(Option<String>, String)>
         expressions = conditions.join(" "),
         default = default,
     )
+}
+
+pub(crate) fn is_dark_mode_dependent(
+    value: &ftd::interpreter2::PropertyValue,
+    doc: &ftd::interpreter2::TDoc,
+) -> ftd::html1::Result<bool> {
+    let value = value.clone().resolve(doc, value.line_number())?;
+    Ok(value.is_record("ftd#image-src"))
 }
