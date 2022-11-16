@@ -179,8 +179,8 @@ pub async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> 
         // if start with -/ and mount-point exists so send redirect to mount-point
         // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
         // Get all the dependencies with mount-point if path_start with any package-name so send redirect to mount-point
-
-        if req_method.as_str() == "GET" {
+        // fpm::file::is_static: checking for static file, if file is static no need to redirect it.
+        if req_method.as_str() == "GET" && !fpm::file::is_static(path.as_str())? {
             // if any app name starts with package-name to redirect it to /mount-point/remaining-url/
             for (mp, dep) in config
                 .package
