@@ -126,7 +126,7 @@ fn evalexpr_test() {
     dbg!(ftd::evalexpr::build_operator_tree("(6 > 7) && (true)").unwrap());
     assert_eq!(
         eval_with_context_mut("(e = \"\"; isempty(e)) && (d = 4; d > 7)", &mut context),
-        Ok(Value::from(true))
+        Ok(Value::from(false))
     );
 
     /*

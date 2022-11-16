@@ -21,7 +21,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 20
+        "line_number": 20,
+        "is_static": false
       }
     },
     "foo#f1": {
@@ -45,7 +46,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 21
+        "line_number": 21,
+        "is_static": false
       }
     },
     "foo#n1": {
@@ -69,7 +71,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 19
+        "line_number": 19,
+        "is_static": false
       }
     },
     "foo#print": {
@@ -337,7 +340,7 @@
     }
   },
   "name": "foo",
-  "instructions": [
+  "tree": [
     {
       "name": "foo#print",
       "properties": [

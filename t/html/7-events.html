@@ -8,7 +8,10 @@
 {
 "foo#foo:foo-value:2": 3,
 "foo#name": "FifthTry",
-"foo#value": 3
+"foo#value": 3,
+"ftd#dark-mode": false,
+"ftd#follow-system-dark-mode": true,
+"ftd#system-dark-mode": false
 }
 </script>
 <script type="ftd" id="ftd-external-children">
@@ -458,11 +461,14 @@ a.value = a.value+b+e;
 }
 
 
+
+
 function node_change_main(data){
 document.querySelector(`[data-id="0:main"]`).innerHTML = data["foo#value"];
 document.querySelector(`[data-id="1:main"]`).innerHTML = data["foo#value"];
 document.querySelector(`[data-id="2:main"]`).innerHTML = data["foo#foo:foo-value:2"];
 document.querySelector(`[data-id="3:main"]`).innerHTML = data["foo#name"];
+document.querySelector(`[data-id="4:main"]`).innerHTML = "Why am I running? 🏃🏻‍♀️";
 document.querySelector(`[data-id="4:main"]`).style["padding"] = "{0}px".format(data["foo#value"]);
 }
 

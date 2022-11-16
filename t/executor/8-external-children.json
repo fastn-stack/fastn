@@ -269,7 +269,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 19
+        "line_number": 19,
+        "is_static": true
       }
     }
   },
@@ -317,7 +318,8 @@
                         "properties": []
                       },
                       "data_id": "0,0",
-                      "line_number": 6
+                      "line_number": 6,
+                      "condition": null
                     }
                   }
                 },
@@ -362,7 +364,8 @@
                                 "properties": []
                               },
                               "data_id": "0,1,0",
-                              "line_number": 21
+                              "line_number": 21,
+                              "condition": null
                             }
                           }
                         }
@@ -378,7 +381,8 @@
                         "properties": []
                       },
                       "data_id": "0,1",
-                      "line_number": 8
+                      "line_number": 8,
+                      "condition": null
                     }
                   }
                 }
@@ -394,7 +398,8 @@
                 "properties": []
               },
               "data_id": "0",
-              "line_number": 4
+              "line_number": 4,
+              "condition": null
             }
           }
         }
@@ -410,7 +415,8 @@
         "properties": []
       },
       "data_id": "",
-      "line_number": 0
+      "line_number": 0,
+      "condition": null
     }
   }
 }

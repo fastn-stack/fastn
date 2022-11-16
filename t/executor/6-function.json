@@ -115,7 +115,8 @@
                 "properties": []
               },
               "data_id": "0",
-              "line_number": 7
+              "line_number": 7,
+              "condition": null
             }
           }
         }
@@ -131,7 +132,8 @@
         "properties": []
       },
       "data_id": "",
-      "line_number": 0
+      "line_number": 0,
+      "condition": null
     }
   }
 }

@@ -4,6 +4,7 @@
     "classes": [],
     "events": [],
     "node": "div",
+    "condition": null,
     "attrs": {
       "data-id": {
         "value": "",
@@ -55,6 +56,7 @@
         "classes": [],
         "events": [],
         "node": "div",
+        "condition": null,
         "attrs": {
           "data-id": {
             "value": "0",
@@ -90,7 +92,29 @@
           },
           "padding": {
             "value": "40px",
-            "properties": [],
+            "properties": [
+              {
+                "value": {
+                  "Value": {
+                    "value": {
+                      "Integer": {
+                        "value": 40
+                      }
+                    },
+                    "is_mutable": false,
+                    "line_number": 2
+                  }
+                },
+                "source": {
+                  "Header": {
+                    "name": "padding",
+                    "mutable": false
+                  }
+                },
+                "condition": null,
+                "line_number": 2
+              }
+            ],
             "pattern": "{0}px",
             "line_number": 2
           },
@@ -108,6 +132,7 @@
             ],
             "events": [],
             "node": "div",
+            "condition": null,
             "attrs": {
               "data-id": {
                 "value": "0,0",
@@ -133,7 +158,24 @@
             "children": [],
             "text": {
               "value": "Hello World",
-              "properties": [],
+              "properties": [
+                {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "Hello World"
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 4
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 4
+                }
+              ],
               "pattern": null,
               "line_number": 4
             },
@@ -147,6 +189,7 @@
             ],
             "events": [],
             "node": "div",
+            "condition": null,
             "attrs": {
               "data-id": {
                 "value": "0,1",
@@ -172,7 +215,24 @@
             "children": [],
             "text": {
               "value": "again",
-              "properties": [],
+              "properties": [
+                {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "again"
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 6
+                    }
+                  },
+                  "source": "Caption",
+                  "condition": null,
+                  "line_number": 6
+                }
+              ],
               "pattern": null,
               "line_number": 6
             },

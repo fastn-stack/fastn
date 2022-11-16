@@ -6,7 +6,10 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#flag": true
+"foo#flag": true,
+"ftd#dark-mode": false,
+"ftd#follow-system-dark-mode": true,
+"ftd#system-dark-mode": false
 }
 </script>
 <script type="ftd" id="ftd-external-children">
@@ -437,13 +440,18 @@ function isempty(str) {
 return (!str || str.length === 0 );
 }
 
+
+
 function node_change_main(data){
+document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(40);
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = "Hello World";
 if(function(){
 return data["foo#flag"];
 }()){
 document.querySelector(`[data-id="0,0:main"]`).style["padding"] = "{0}px".format(20);
 }
 else {document.querySelector(`[data-id="0,0:main"]`).style["padding"] = "{0}px".format(2);}
+document.querySelector(`[data-id="0,1:main"]`).innerHTML = "again";
 if(function(){
 return (!data["foo#flag"]);
 }()){

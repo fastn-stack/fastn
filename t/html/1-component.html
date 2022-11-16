@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <title></title>
 <script type="ftd" id="ftd-data">
-{}
+{
+"ftd#dark-mode": false,
+"ftd#follow-system-dark-mode": true,
+"ftd#system-dark-mode": false
+}
 </script>
 <script type="ftd" id="ftd-external-children">
 {}
@@ -433,6 +437,23 @@ return formatted;
 
 function isempty(str) {
 return (!str || str.length === 0 );
+}
+
+
+
+function node_change_main(data){
+document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(40);
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = "Hello World";
+document.querySelector(`[data-id="0,0:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="0,1:main"]`).innerHTML = "again";
+document.querySelector(`[data-id="0,1:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(40);
+document.querySelector(`[data-id="1,0:main"]`).innerHTML = "Hello";
+document.querySelector(`[data-id="1,0:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="1,1:main"]`).innerHTML = "again";
+document.querySelector(`[data-id="1,1:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="2:main"]`).innerHTML = "Hello from text";
+document.querySelector(`[data-id="2:main"]`).style["padding"] = "{0}px".format(40);
 }
 
 

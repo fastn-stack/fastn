@@ -7,7 +7,10 @@
 <script type="ftd" id="ftd-data">
 {
 "foo#flag": true,
-"foo#num": 0
+"foo#num": 0,
+"ftd#dark-mode": false,
+"ftd#follow-system-dark-mode": true,
+"ftd#system-dark-mode": false
 }
 </script>
 <script type="ftd" id="ftd-external-children">
@@ -450,6 +453,8 @@ a.value = !a.value;
 }
 
 
+
+
 function node_change_main(data){
 if(function(){
 return ((data["foo#num"]>2)&&data["foo#flag"]);
@@ -457,6 +462,7 @@ return ((data["foo#num"]>2)&&data["foo#flag"]);
 document.querySelector(`[data-id="0:main"]`).style["display"] = "flex";
 }
 else {document.querySelector(`[data-id="0:main"]`).style["display"] = "none";}
+document.querySelector(`[data-id="0:main"]`).innerHTML = "Hello World";
 if(function(){
 return data["foo#flag"];
 }()){
@@ -469,6 +475,8 @@ return data["foo#flag"];
 document.querySelector(`[data-id="2:main"]`).style["display"] = "flex";
 }
 else {document.querySelector(`[data-id="2:main"]`).style["display"] = "none";}
+document.querySelector(`[data-id="2:main"]`).innerHTML = "Gee";
+document.querySelector(`[data-id="3:main"]`).innerHTML = "Click here";
 }
 
 

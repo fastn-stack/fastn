@@ -179,7 +179,7 @@
     }
   },
   "name": "foo",
-  "instructions": [
+  "tree": [
     {
       "name": "foo#foo",
       "properties": [

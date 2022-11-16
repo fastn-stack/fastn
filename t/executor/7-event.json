@@ -25,7 +25,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 7
+        "line_number": 7,
+        "is_static": false
       }
     },
     "foo#toggle": {
@@ -132,7 +133,8 @@
                 "properties": []
               },
               "data_id": "0",
-              "line_number": 9
+              "line_number": 9,
+              "condition": null
             }
           }
         }
@@ -148,7 +150,8 @@
         "properties": []
       },
       "data_id": "",
-      "line_number": 0
+      "line_number": 0,
+      "condition": null
     }
   }
 }

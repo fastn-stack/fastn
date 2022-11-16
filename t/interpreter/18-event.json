@@ -21,7 +21,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 7
+        "line_number": 7,
+        "is_static": false
       }
     },
     "foo#toggle": {
@@ -56,7 +57,7 @@
     }
   },
   "name": "foo",
-  "instructions": [
+  "tree": [
     {
       "name": "ftd#text",
       "properties": [

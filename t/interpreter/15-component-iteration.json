@@ -75,12 +75,13 @@
           }
         },
         "conditional_value": [],
-        "line_number": 1
+        "line_number": 1,
+        "is_static": true
       }
     }
   },
   "name": "foo",
-  "instructions": [
+  "tree": [
     {
       "name": "ftd#text",
       "properties": [

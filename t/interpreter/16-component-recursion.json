@@ -389,7 +389,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 7
+        "line_number": 7,
+        "is_static": true
       }
     },
     "foo#toc-item": {
@@ -451,7 +452,7 @@
     }
   },
   "name": "foo",
-  "instructions": [
+  "tree": [
     {
       "name": "foo#print-toc-item",
       "properties": [

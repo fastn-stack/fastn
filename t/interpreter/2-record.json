@@ -42,7 +42,7 @@
     }
   },
   "name": "foo",
-  "instructions": [],
+  "tree": [],
   "aliases": {
     "ftd": "ftd"
   }

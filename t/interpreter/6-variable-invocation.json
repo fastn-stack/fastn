@@ -21,7 +21,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 11
+        "line_number": 11,
+        "is_static": false
       }
     },
     "foo#n1": {
@@ -75,7 +76,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 7
+        "line_number": 7,
+        "is_static": false
       }
     },
     "foo#name": {
@@ -101,7 +103,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 5
+        "line_number": 5,
+        "is_static": false
       }
     },
     "foo#person": {
@@ -136,7 +139,7 @@
     }
   },
   "name": "foo",
-  "instructions": [],
+  "tree": [],
   "aliases": {
     "ftd": "ftd"
   }

@@ -49,7 +49,8 @@
           }
         },
         "conditional_value": [],
-        "line_number": 5
+        "line_number": 5,
+        "is_static": false
       }
     },
     "foo#person": {
@@ -84,7 +85,7 @@
     }
   },
   "name": "foo",
-  "instructions": [],
+  "tree": [],
   "aliases": {
     "ftd": "ftd"
   }

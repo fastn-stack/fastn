@@ -43,7 +43,7 @@
     }
   },
   "name": "foo",
-  "instructions": [
+  "tree": [
     {
       "name": "ftd#text",
       "properties": [
