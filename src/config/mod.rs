@@ -1,8 +1,6 @@
 // Document: https://fpm.dev/crate/config/
 // Document: https://fpm.dev/crate/package/
 
-use crate::package::app;
-
 pub(crate) mod utils;
 
 #[derive(Debug, Clone)]
@@ -1280,7 +1278,7 @@ impl Config {
 
         // fpm installed Apps
         config.package.apps = {
-            let apps_temp: Vec<app::AppTemp> = fpm_doc.get("fpm#app")?;
+            let apps_temp: Vec<fpm::package::app::AppTemp> = fpm_doc.get("fpm#app")?;
             let mut apps = vec![];
             for app in apps_temp.into_iter() {
                 apps.push(app.into_app(&config).await?);
