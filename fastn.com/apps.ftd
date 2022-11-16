@@ -28,29 +28,23 @@ How to fetch these apps information using `fpm-apps` processor.
 We have defined a type in `fpm` named `app-ui`, which is record contains below
 fields.
 
--- ft.code: FPM.ftd
+-- ft.code: How to Use `fpm-apps` Processor
 lang: ftd
 
-\-- fpm.app-ui list apps:
+\-- fpm.app-ui apps:
 $processor$: fpm-apps
 
-\;; how to use it
-\-- ftd.column print-app:
-fpm.app-ui app:
+\;; defined types in fpm itself
+\-- record app-ui-item:
+caption name:
+string package:
+string url:
+optional string icon:
 
-\--- ftd.text: $app.name
+\-- record app-indexy-item:
+integer index:
+app-ui-item item:
 
-\--- ftd.text: $app.package
-
-\--- ftd.text: $app.url
-
-\-- print-app:
-$loop$: $all-app as $app
-app: $app
-
-\;; defined in fpm itself
 \-- record app-ui:
- optional caption name:
- string package:
- string url:
-
+integer len:
+app-indexy-item list items:

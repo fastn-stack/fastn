@@ -260,3 +260,41 @@ writers: writers
   document: task-type-1.ftd
   readers: readers
   writers: writers
+
+
+-- ft.h1: `fpm.app`
+
+
+
+-- ft.code: App Type
+lang: ftd
+
+;; FPM Apps Installation
+;; for FPM.ftd
+\-- record app-data:
+caption name:
+string package:
+string mount-point:
+optional string end-point:
+string list config:
+string list readers:
+string list writers:
+
+-- ft.code: App Processor
+
+\-- record app-ui-item:
+caption name:
+string package:
+string url:
+optional string icon:
+
+\-- record app-indexy-item:
+integer index:
+app-ui-item item:
+
+\-- record app-ui:
+integer len:
+app-indexy-item list items:
+
+\-- fpm.app-ui apps:
+$processor$: fpm-apps
