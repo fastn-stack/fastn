@@ -10,7 +10,10 @@
 "foo#page:body:0": [],
 "foo#page:body:1": [],
 "foo#page:extra-headers:0": [],
-"foo#page:extra-headers:1": []
+"foo#page:extra-headers:1": [],
+"ftd#dark-mode": false,
+"ftd#follow-system-dark-mode": true,
+"ftd#system-dark-mode": false
 }
 </script>
 <script type="ftd" id="ftd-external-children">
@@ -447,9 +450,41 @@ return (a.value += 1);
 }
 
 
+
+
 function node_change_main(data){
+document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(80);
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = "...................................................................";
+document.querySelector(`[data-id="0,1,0:main"]`).innerHTML = "LOGO";
+document.querySelector(`[data-id="0,1,0:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="0,1,1:main"]`).innerHTML = "Home";
+document.querySelector(`[data-id="0,1,1:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="0,1,2,0:main"]`).innerHTML = "Header 1";
+document.querySelector(`[data-id="0,1,2,0:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="0,1,2,1:main"]`).innerHTML = "Header 2";
+document.querySelector(`[data-id="0,1,2,1:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="0,1,2,2:main"]`).innerHTML = "Header 3";
+document.querySelector(`[data-id="0,1,2,2:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="0,1,2,3:main"]`).innerHTML = "Header 4";
+document.querySelector(`[data-id="0,1,2,3:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="0,2:main"]`).innerHTML = "...................................................................";
+document.querySelector(`[data-id="0,3:main"]`).style["padding"] = "{0}px".format(40);
+document.querySelector(`[data-id="0,3,0:main"]`).innerHTML = "Body Text";
+document.querySelector(`[data-id="0,3,1,0:main"]`).innerHTML = "Counter 1:";
 document.querySelector(`[data-id="0,3,1,1:main"]`).innerHTML = data["foo#count"];
+document.querySelector(`[data-id="0,3,2,0:main"]`).innerHTML = "Counter 2:";
 document.querySelector(`[data-id="0,3,2,1:main"]`).innerHTML = data["foo#count"];
+document.querySelector(`[data-id="0,4:main"]`).innerHTML = "...................................................................";
+document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(80);
+document.querySelector(`[data-id="1,0:main"]`).innerHTML = "...................................................................";
+document.querySelector(`[data-id="1,1,0:main"]`).innerHTML = "LOGO";
+document.querySelector(`[data-id="1,1,0:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="1,1,1:main"]`).innerHTML = "Home";
+document.querySelector(`[data-id="1,1,1:main"]`).style["padding"] = "{0}px".format(2);
+document.querySelector(`[data-id="1,2:main"]`).innerHTML = "...................................................................";
+document.querySelector(`[data-id="1,3:main"]`).style["padding"] = "{0}px".format(40);
+document.querySelector(`[data-id="1,3,0:main"]`).innerHTML = "Hello";
+document.querySelector(`[data-id="1,4:main"]`).innerHTML = "...................................................................";
 }
 
 

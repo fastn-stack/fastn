@@ -6,7 +6,10 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#g": 1
+"foo#g": 1,
+"ftd#dark-mode": false,
+"ftd#follow-system-dark-mode": true,
+"ftd#system-dark-mode": false
 }
 </script>
 <script type="ftd" id="ftd-external-children">
@@ -449,8 +452,11 @@ return (a.value += 1);
 }
 
 
+
+
 function node_change_main(data){
 document.querySelector(`[data-id="0:main"]`).innerHTML = data["foo#g"];
+document.querySelector(`[data-id="1:main"]`).innerHTML = "Hello FTD";
 if(function(){
 return (data["foo#g"]%2==0);
 }()){
