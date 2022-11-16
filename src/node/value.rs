@@ -21,7 +21,7 @@ impl Value {
         exec_value: ftd::executor::Value<T>,
         pattern: Option<String>,
     ) -> Value {
-        let mut properties = exec_value.properties;
+        let properties = exec_value.properties;
         /*if properties.len() == 1 {
             let property = properties.first().unwrap();
             if property.value.is_value() && property.condition.is_none() {

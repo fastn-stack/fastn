@@ -644,10 +644,7 @@ impl PropertyValueSource {
     }
 
     pub fn is_local(&self, name: &str) -> bool {
-        match self {
-            PropertyValueSource::Local(l_name) if l_name.eq(name) => true,
-            _ => false,
-        }
+        matches!(self, PropertyValueSource::Local(l_name) if l_name.eq(name))
     }
 
     pub fn get_reference_name(&self, name: &str, doc: &ftd::interpreter2::TDoc) -> String {
@@ -726,10 +723,7 @@ impl Value {
     }
 
     pub fn is_record(&self, rec_name: &str) -> bool {
-        match self {
-            Self::Record { name, .. } if rec_name.eq(name) => true,
-            _ => false,
-        }
+        matches!(self, Self::Record { name, .. } if rec_name.eq(name))
     }
 
     pub fn record_fields(

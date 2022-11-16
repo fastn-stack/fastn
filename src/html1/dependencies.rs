@@ -99,7 +99,7 @@ impl<'a> DependencyGenerator<'a> {
                     .as_ref()
                     .map(ftd::html1::utils::get_condition_string);
 
-                if ftd::html1::utils::is_dark_mode_dependent(&property.value, &self.doc)? {
+                if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
                     // Todo: If the property.value is static then resolve it and use
                     /*let value = property
                         .value

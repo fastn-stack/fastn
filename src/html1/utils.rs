@@ -63,7 +63,9 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
             format!(
                 "data[\"{}\"]{}",
                 name,
-                field.map(|v| format!(".{}", v)).unwrap_or("".to_string())
+                field
+                    .map(|v| format!(".{}", v))
+                    .unwrap_or_else(|| "".to_string())
             )
         }
         ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {

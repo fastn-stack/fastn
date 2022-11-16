@@ -239,6 +239,7 @@ pub fn image_from_properties(
     Ok(Image { src, common })
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn row_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
@@ -262,6 +263,7 @@ pub fn row_from_properties(
     Ok(Row { container, common })
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn column_from_properties(
     properties: &[ftd::interpreter2::Property],
     events: &[ftd::interpreter2::Event],
