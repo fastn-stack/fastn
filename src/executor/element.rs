@@ -5,6 +5,7 @@ pub enum Element {
     Text(Text),
     Integer(Text),
     Boolean(Text),
+    Image(Image),
     Null,
 }
 
@@ -30,6 +31,62 @@ pub struct Text {
 pub struct Rendered {
     pub original: String,
     pub rendered: String,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct Image {
+    pub src: ftd::executor::Value<ImageSrc>,
+    pub common: Common,
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct ImageSrc {
+    pub light: ftd::executor::Value<String>,
+    pub dark: ftd::executor::Value<String>,
+}
+
+impl ImageSrc {
+    fn from_values(
+        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ImageSrc> {
+        let light = {
+            let value = values
+                .get("light")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`light` field in ftd.image-src not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                value
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .string(doc.name, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("light"))],
+            )
+        };
+
+        let dark = {
+            let value = values.get("dark").ok_or(ftd::executor::Error::ParseError {
+                message: "`dark` field in ftd.image-src not found".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+            ftd::executor::Value::new(
+                value
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .string(doc.name, line_number)?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("dark"))],
+            )
+        };
+
+        Ok(ImageSrc { light, dark })
+    }
 }
 
 pub fn markup_inline(s: &str) -> Rendered {
@@ -143,6 +200,43 @@ pub fn boolean_from_properties(
         line_number,
     )?;
     Ok(Text { text, common })
+}
+
+pub fn image_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
+    arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Expression>,
+    doc: &ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+) -> ftd::executor::Result<Image> {
+    let src = {
+        let src = ftd::executor::value::record(
+            "src",
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "ftd#image-src",
+        )?;
+        ftd::executor::Value::new(
+            ImageSrc::from_values(src.value, doc, line_number)?,
+            Some(line_number),
+            src.properties,
+        )
+    };
+
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+    )?;
+    Ok(Image { src, common })
 }
 
 pub fn row_from_properties(

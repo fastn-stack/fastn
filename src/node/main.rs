@@ -79,6 +79,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Text(t) => t.to_node(doc_id),
             ftd::executor::Element::Integer(t) => t.to_node(doc_id),
             ftd::executor::Element::Boolean(t) => t.to_node(doc_id),
+            ftd::executor::Element::Image(i) => i.to_node(doc_id),
             ftd::executor::Element::Null => Node {
                 classes: vec![],
                 events: vec![],
@@ -170,6 +171,23 @@ impl ftd::executor::Text {
             Some(self.text.value.rendered.to_string()),
             self.text.clone(),
             None,
+        );
+        n
+    }
+}
+
+impl ftd::executor::Image {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let node = s("img");
+        let mut n = Node::from_common(node.as_str(), &self.common, doc_id);
+        n.classes.extend(self.common.add_class());
+        n.attrs.insert(
+            s("src"),
+            ftd::node::Value::from_executor_value(
+                Some(self.src.value.light.value.to_string()),
+                self.src.to_owned(),
+                None,
+            ),
         );
         n
     }

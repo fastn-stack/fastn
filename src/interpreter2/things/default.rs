@@ -54,10 +54,66 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
         ),
         (
             "ftd#boolean".to_string(),
-            ftd::interpreter2::Thing::Component(integer_function()),
+            ftd::interpreter2::Thing::Component(boolean_function()),
+        ),
+        (
+            "ftd#image".to_string(),
+            ftd::interpreter2::Thing::Component(image_function()),
+        ),
+        (
+            "ftd#image-src".to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: "ftd#image-src".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter2::Field {
+                        name: "light".to_string(),
+                        kind: ftd::interpreter2::Kind::string().into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "dark".to_string(),
+                        kind: ftd::interpreter2::Kind::string().into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter2::PropertyValue::Reference {
+                            name: "ftd#image-src.light".to_string(),
+                            kind: ftd::interpreter2::Kind::string().into_kind_data(),
+                            source: ftd::interpreter2::PropertyValueSource::Local(
+                                "ftd#image-src".to_string(),
+                            ),
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                ])
+                .collect(),
+                line_number: 0,
+            }),
         ),
     ])
     .collect()
+}
+
+pub fn image_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#image".to_string(),
+        arguments: [
+            common_arguments(),
+            vec![ftd::interpreter2::Argument::default(
+                "src",
+                ftd::interpreter2::Kind::record("ftd#image-src")
+                    .into_kind_data()
+                    .caption(),
+            )],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
 }
 
 pub fn boolean_function() -> ftd::interpreter2::ComponentDefinition {

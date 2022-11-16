@@ -84,9 +84,7 @@ impl Expression {
         }
         let node = self.expression.update_node_with_value(&values);
         let mut context = ftd::interpreter2::default::default_context()?;
-        dbg!(&node, &context);
-        dbg!(&node.eval_with_context_mut(&mut context));
-        Ok(dbg!(node.eval_boolean_with_context_mut(&mut context)?))
+        Ok(node.eval_boolean_with_context_mut(&mut context)?)
     }
 
     pub fn is_static(&self, doc: &ftd::interpreter2::TDoc) -> bool {

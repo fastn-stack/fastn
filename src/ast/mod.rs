@@ -16,7 +16,7 @@ pub use component::{
 };
 pub use function::Function;
 pub use import::Import;
-pub use kind::{Condition, VariableKind, VariableModifier, VariableValue};
+pub use kind::{Condition, HeaderValues, VariableKind, VariableModifier, VariableValue};
 pub use main::AST;
 pub use record::{Field, Record};
 pub use variable::{VariableDefinition, VariableInvocation};

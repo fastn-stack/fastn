@@ -85,13 +85,11 @@ impl<'a> ExecuteDoc<'a> {
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
     ) -> ftd::executor::Result<ftd::executor::Element> {
-        dbg!("execute_from_instruction", &instruction);
         if let Some(condition) = instruction.condition.as_ref() {
             if condition.is_static(&doc.itdoc()) && !condition.eval(&doc.itdoc())? {
                 return Ok(ftd::executor::Element::Null);
             }
         }
-        dbg!("1", &instruction.name);
         let component_definition = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
@@ -100,7 +98,6 @@ impl<'a> ExecuteDoc<'a> {
                 .unwrap()
         };
 
-        dbg!("2", &instruction.name);
         if component_definition.definition.name.eq("ftd.kernel") {
             return ExecuteDoc::execute_kernel_components(
                 instruction,
@@ -110,7 +107,6 @@ impl<'a> ExecuteDoc<'a> {
             );
         }
 
-        dbg!("3", &instruction.name);
         ExecuteDoc::execute_simple_component(
             instruction,
             doc,
@@ -206,7 +202,7 @@ impl<'a> ExecuteDoc<'a> {
         local_container: &[usize],
         component_definition: &ftd::interpreter2::ComponentDefinition,
     ) -> ftd::executor::Result<ftd::executor::Element> {
-        let s = Ok(match component_definition.name.as_str() {
+        Ok(match component_definition.name.as_str() {
             "ftd#text" => {
                 ftd::executor::Element::Text(ftd::executor::element::text_from_properties(
                     instruction.properties.as_slice(),
@@ -274,10 +270,19 @@ impl<'a> ExecuteDoc<'a> {
                     children,
                 )?)
             }
+            "ftd#image" => {
+                ftd::executor::Element::Image(ftd::executor::element::image_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                )?)
+            }
             _ => unimplemented!(),
-        });
-        dbg!("kernel", &s);
-        s
+        })
     }
 }
 

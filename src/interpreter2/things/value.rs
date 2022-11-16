@@ -106,6 +106,18 @@ impl PropertyValue {
         matches!(self, ftd::interpreter2::PropertyValue::Value { .. })
     }
 
+    pub fn into_property(
+        &self,
+        source: ftd::interpreter2::PropertySource,
+    ) -> ftd::interpreter2::Property {
+        ftd::interpreter2::Property {
+            value: self.clone(),
+            source,
+            condition: None,
+            line_number: self.line_number(),
+        }
+    }
+
     pub(crate) fn value(
         &self,
         doc_id: &str,
@@ -282,14 +294,30 @@ impl PropertyValue {
                     line_number,
                 }
             }
-            ftd::interpreter2::Kind::Record { name } if value.is_record() => {
+            ftd::interpreter2::Kind::Record { name } if value.is_record() || value.is_string() => {
                 let record = doc.get_record(name, value.line_number())?;
-                let (_, caption, headers, body, _, line_number) = value.get_record(doc.name)?;
+                let (caption, headers, body, line_number) =
+                    if let Ok(val) = value.get_record(doc.name) {
+                        (
+                            val.1.as_ref().to_owned(),
+                            val.2.to_owned(),
+                            val.3.to_owned(),
+                            val.5.to_owned(),
+                        )
+                    } else {
+                        (
+                            Some(value.clone()),
+                            ftd::ast::HeaderValues::new(vec![]),
+                            None,
+                            value.line_number(),
+                        )
+                    };
+
                 // TODO: Check if the record name and the value kind are same
                 let mut result_field: ftd::Map<PropertyValue> = Default::default();
                 for field in record.fields {
                     if field.is_caption() && caption.is_some() {
-                        let caption = caption.as_ref().as_ref().unwrap().clone();
+                        let caption = caption.as_ref().unwrap().clone();
                         result_field.insert(
                             field.name.to_string(),
                             PropertyValue::from_ast_value(
@@ -352,6 +380,39 @@ impl PropertyValue {
                                 Some(&field.kind),
                             )?,
                         );
+                        continue;
+                    }
+
+                    if headers.is_empty() && field.value.is_some() {
+                        let value = field.value.unwrap();
+                        match &value {
+                            ftd::interpreter2::PropertyValue::Reference {
+                                name: refernence,
+                                source,
+                                ..
+                            } if source.is_local(name) => {
+                                if let Some(field_name) =
+                                    refernence.strip_prefix(format!("{}.", name).as_str())
+                                {
+                                    // Todo: field_name is empty throw error
+                                    let property_value = result_field
+                                        .get(field_name)
+                                        .ok_or(ftd::interpreter2::Error::ParseError {
+                                            message: format!(
+                                                "field `{}` not found in record: `{}`",
+                                                field_name, name
+                                            ),
+                                            doc_id: doc.name.to_string(),
+                                            line_number,
+                                        })?
+                                        .clone();
+                                    result_field.insert(field.name.to_string(), property_value);
+                                }
+                            }
+                            t => {
+                                result_field.insert(field.name.to_string(), t.clone());
+                            }
+                        }
                         continue;
                     }
                     if headers.len() != 1 {
@@ -580,6 +641,13 @@ pub enum PropertyValueSource {
 impl PropertyValueSource {
     fn is_global(&self) -> bool {
         PropertyValueSource::Global.eq(self)
+    }
+
+    pub fn is_local(&self, name: &str) -> bool {
+        match self {
+            PropertyValueSource::Local(l_name) if l_name.eq(name) => true,
+            _ => false,
+        }
     }
 
     pub fn get_reference_name(&self, name: &str, doc: &ftd::interpreter2::TDoc) -> String {
@@ -839,6 +907,17 @@ impl Value {
             ftd::interpreter2::Value::Decimal { value } => ftd::evalexpr::Value::Float(value),
             ftd::interpreter2::Value::Boolean { value } => ftd::evalexpr::Value::Boolean(value),
             t => unimplemented!("{:?}", t),
+        }
+    }
+
+    pub fn string(&self, doc_id: &str, line_number: usize) -> ftd::interpreter2::Result<String> {
+        match self {
+            ftd::interpreter2::Value::String { text } => Ok(text.to_string()),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected String, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
         }
     }
 }

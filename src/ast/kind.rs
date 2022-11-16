@@ -126,7 +126,7 @@ impl BodyValue {
 pub struct HeaderValues(pub Vec<HeaderValue>);
 
 impl HeaderValues {
-    fn new(headers: Vec<HeaderValue>) -> HeaderValues {
+    pub fn new(headers: Vec<HeaderValue>) -> HeaderValues {
         HeaderValues(headers)
     }
 
@@ -219,6 +219,10 @@ impl VariableValue {
 
     pub(crate) fn is_record(&self) -> bool {
         matches!(self, VariableValue::Record { .. })
+    }
+
+    pub(crate) fn is_string(&self) -> bool {
+        matches!(self, VariableValue::String { .. })
     }
 
     #[allow(clippy::type_complexity)]

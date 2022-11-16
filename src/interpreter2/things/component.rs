@@ -203,6 +203,13 @@ impl PropertySource {
                } if other_name.eq(name)),
         }
     }
+
+    pub fn header(name: &str) -> PropertySource {
+        PropertySource::Header {
+            name: name.to_string(),
+            mutable: false,
+        }
+    }
 }
 
 impl From<ftd::ast::PropertySource> for PropertySource {
