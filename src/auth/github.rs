@@ -87,7 +87,6 @@ pub async fn matched_identities(
     access_token: &str,
     identities: &[fpm::user_group::UserIdentity],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
-    //dbg!("matched identities");
     let github_identities = identities
         .iter()
         .filter(|identity| identity.key.starts_with("github"))
@@ -97,21 +96,22 @@ pub async fn matched_identities(
         return Ok(vec![]);
     }
 
-    //dbg!(&github_identities);
     let mut matched_identities = vec![];
     // matched_starred_repositories
     matched_identities
         .extend(matched_starred_repos(access_token, github_identities.as_slice()).await?);
+    // matched: github-watch
     matched_identities
         .extend(matched_watched_repos(access_token, github_identities.as_slice()).await?);
+    // matched: github-follows
     matched_identities
         .extend(matched_followed_org(access_token, github_identities.as_slice()).await?);
+    // matched: github-contributor
     matched_identities
         .extend(matched_org_contributors_repos(access_token, github_identities.as_slice()).await?);
+    // matched: github-team
     matched_identities
         .extend(matched_org_collaborators_repos(access_token, github_identities.as_slice()).await?);
-
-    // TODO: matched_team
 
     Ok(matched_identities)
 }
@@ -228,8 +228,6 @@ pub async fn matched_org_contributors_repos(
     if contributed_repos.is_empty() {
         return Ok(vec![]);
     }
-
-    // TODO: How to optimise it
     for repo in &contributed_repos {
         let repo_contributors = apis::repo_contributors(access_token, repo).await?;
 
@@ -341,7 +339,6 @@ pub mod apis {
         .await?;
         Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
     }
-
     pub async fn repo_contributors(
         access_token: &str,
         repo_name: &str,
@@ -365,7 +362,6 @@ pub mod apis {
         .await?;
         Ok(repo_contributor.into_iter().map(|x| x.login).collect())
     }
-
     pub async fn repo_collaborators(
         access_token: &str,
         repo_name: &str,
@@ -401,7 +397,6 @@ pub mod apis {
 
         Ok(String::from(&user_obj.login))
     }
-
     pub async fn get_api<T: serde::de::DeserializeOwned>(
         url: &str,
         access_token: &str,
