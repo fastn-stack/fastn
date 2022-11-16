@@ -19,6 +19,7 @@ mod package;
 #[macro_use]
 mod http;
 mod auth;
+mod ds;
 mod error;
 mod i18n;
 pub mod library;

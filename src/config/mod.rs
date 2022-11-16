@@ -1,6 +1,8 @@
 // Document: https://fpm.dev/crate/config/
 // Document: https://fpm.dev/crate/package/
 
+use crate::package::app;
+
 pub(crate) mod utils;
 
 #[derive(Debug, Clone)]
@@ -591,11 +593,7 @@ impl Config {
             ));
         }
 
-        for (mp, dep, app) in package
-            .apps
-            .iter()
-            .map(|x| (&x.mount_point, &x.package.package, x))
-        {
+        for (mp, dep, app) in package.apps.iter().map(|x| (&x.mount_point, &x.package, x)) {
             if path.starts_with(mp.trim_matches('/')) {
                 // TODO: Need to handle for recursive dependencies mount-point
                 // Note: Currently not working because dependency of package does not contain dependencies
@@ -1279,6 +1277,16 @@ impl Config {
         };
 
         config.add_package(&package);
+
+        // fpm installed Apps
+        config.package.apps = {
+            let apps_temp: Vec<app::AppTemp> = fpm_doc.get("fpm#app")?;
+            let mut apps = vec![];
+            for app in apps_temp.into_iter() {
+                apps.push(app.into_app(&config).await?);
+            }
+            apps
+        };
 
         Ok(config)
     }

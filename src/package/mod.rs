@@ -63,6 +63,9 @@ pub struct Package {
 
     /// Installed Apps
     pub apps: Vec<app::App>,
+
+    /// Package Icon
+    pub icon: Option<String>,
 }
 
 impl Package {
@@ -94,6 +97,7 @@ impl Package {
             backend: false,
             backend_headers: None,
             apps: vec![],
+            icon: None,
         }
     }
 
@@ -601,15 +605,6 @@ impl Package {
             }
         }
 
-        // fpm installed Apps
-        let apps: Vec<app::AppTemp> = fpm_doc.get("fpm#app")?;
-        package.apps = apps
-            .into_iter()
-            .map(|x| x.into_app())
-            .collect::<fpm::Result<_>>()?;
-
-        dbg!(&package.apps);
-
         Ok(package)
     }
 
@@ -691,6 +686,8 @@ pub(crate) struct PackageTemp {
     pub backend: bool,
     #[serde(rename = "backend-headers")]
     pub backend_headers: Option<Vec<BackendHeader>>,
+    #[serde(rename = "icon")]
+    pub icon: Option<String>,
 }
 
 impl PackageTemp {
@@ -732,7 +729,8 @@ impl PackageTemp {
             endpoint: self.endpoint,
             backend: self.backend,
             backend_headers: self.backend_headers,
-            apps: vec![], //self.apps.into_iter().map(|x| x.into_app()).collect_vec(),
+            apps: vec![],
+            icon: self.icon,
         }
     }
 }

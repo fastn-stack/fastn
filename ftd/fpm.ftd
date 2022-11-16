@@ -5,6 +5,7 @@ string header-value:
 -- record package-data:
 caption name:
 boolean versioned: false
+optional string icon:
 optional body about:
 optional string zip:
 optional string download-base-url:
@@ -405,7 +406,7 @@ option integer self-version:
 ;; FPM Apps Installation
 ;; for FPM.ftd
 -- record app-data:
-optional caption name:
+caption name:
 string package:
 string mount-point:
 optional string end-point:
@@ -418,7 +419,16 @@ string list writers:
 
 ;; Send this data from processor
 ;; for fpm-apps processor
--- record app-ui:
-optional caption name:
+-- record app-ui-item:
+caption name:
 string package:
 string url:
+optional string icon:
+
+-- record app-indexy-item:
+integer index:
+app-ui-item item:
+
+-- record app-ui:
+integer len:
+app-indexy-item list items:

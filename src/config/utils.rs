@@ -95,11 +95,10 @@ pub fn get_clean_url(
     // Handle logic for apps
     for app in config.package.apps.iter() {
         if let Some(ep) = &app.end_point {
-            if let Some(remaining_url) =
-                trim_package_name(url.as_str(), app.package.package.name.as_str())
+            if let Some(remaining_url) = trim_package_name(url.as_str(), app.package.name.as_str())
             {
                 return Ok((
-                    Some(app.package.package.name.to_string()),
+                    Some(app.package.name.to_string()),
                     url::Url::parse(format!("{}{}", ep, remaining_url).as_str())?,
                     app.config.clone(),
                 ));

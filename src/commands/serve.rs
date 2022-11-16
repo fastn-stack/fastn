@@ -10,8 +10,6 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
             return fpm::not_found!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
-    dbg!(config.clone());
-    dbg!(path.clone());
     // Auth Stuff
     if !f.is_static() {
         let req = if let Some(ref r) = config.request {
@@ -188,7 +186,7 @@ pub async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> 
                 .package
                 .apps
                 .iter()
-                .map(|x| (&x.mount_point, &x.package.package))
+                .map(|x| (&x.mount_point, &x.package))
             {
                 if let Some(remaining_path) =
                     fpm::config::utils::trim_package_name(path.as_str(), dep.name.as_str())
@@ -224,10 +222,7 @@ pub async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> 
 
         // if request goes with mount-point /todos/api/add-todo/
         // so it should say not found and pass it to proxy
-        dbg!(path.as_path().clone());
-        dbg!(config.clone());
         let file_response = serve_file(&mut config, path.as_path()).await;
-
         // If path is not present in sitemap then pass it to proxy
         // TODO: Need to handle other package URL as well, and that will start from `-`
         // and all the static files starts with `-`

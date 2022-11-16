@@ -1,8 +1,8 @@
 #[derive(Debug, Clone)]
 pub struct App {
-    pub name: Option<String>,
+    pub name: String,
     // TODO: Dependency or package??
-    pub package: fpm::Dependency,
+    pub package: fpm::Package,
     pub mount_point: String,
     pub end_point: Option<String>,
     pub config: std::collections::HashMap<String, String>,
@@ -12,7 +12,7 @@ pub struct App {
 
 #[derive(serde::Deserialize, Debug, Clone)]
 pub struct AppTemp {
-    pub name: Option<String>,
+    pub name: String,
     pub package: String,
     #[serde(rename = "mount-point")]
     pub mount_point: String,
@@ -68,16 +68,10 @@ impl AppTemp {
         Ok(hm)
     }
 
-    pub fn into_app(self) -> fpm::Result<App> {
-        let package = fpm::Dependency {
-            package: fpm::Package::new(self.package.trim().trim_matches('/')),
-            version: None,
-            notes: None,
-            alias: None,
-            implements: Vec::new(),
-            endpoint: None,
-            mountpoint: None,
-        };
+    pub async fn into_app(self, config: &fpm::Config) -> fpm::Result<App> {
+        let package = config
+            .resolve_package(&fpm::Package::new(self.package.trim().trim_matches('/')))
+            .await?;
 
         Ok(App {
             name: self.name,
@@ -99,22 +93,27 @@ pub fn processor<'a>(
     use itertools::Itertools;
     #[derive(Debug, serde::Serialize)]
     struct UiApp {
-        name: Option<String>,
+        name: String,
         package: String,
         #[serde(rename = "url")]
         url: String,
+        icon: Option<String>,
     }
+
     let apps = config
         .package
         .apps
         .iter()
         .map(|a| UiApp {
             name: a.name.clone(),
-            package: a.package.package.name.clone(),
+            package: a.package.name.clone(),
             url: a.mount_point.to_string(),
+            icon: a.package.icon.clone(),
         })
         .collect_vec();
-    doc.from_json(&apps, section)
+
+    let indexy_apps = fpm::ds::LengthList::from_owned(apps);
+    doc.from_json(&indexy_apps, section)
 }
 
 // Takes the path /-/<package-name>/<remaining>/ or /mount-point/<remaining>/
