@@ -2,7 +2,7 @@
 
 Bhut kuch btane k liye par abhi bas important
 
--- ft.h1: How to Define Apps in FPM.ftd
+-- ft.h1: How To Use Apps In FPM.ftd
 
 -- ft.code: FPM.ftd
 lang: ftd
@@ -21,14 +21,14 @@ end-point: http://127.0.0.1:8001
 config: db_url=$ENV.DB_URL
 config: name=Upadhyay Khanadan
 
--- ft.h1: `fpm-apps` processor
+-- ft.h1: `fpm-apps` Processor
 
 How to fetch these apps information using `fpm-apps` processor.
 
 We have defined a type in `fpm` named `app-ui`, which is record contains below
 fields.
 
--- ft.code: How to Use `fpm-apps` Processor
+-- ft.code: How To Use `fpm-apps` Processor
 lang: ftd
 
 \-- fpm.app-ui apps:
