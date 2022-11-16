@@ -96,6 +96,7 @@ pub async fn matched_identities(
     if github_identities.is_empty() {
         return Ok(vec![]);
     }
+
     //dbg!(&github_identities);
     let mut matched_identities = vec![];
     // matched_starred_repositories
@@ -105,6 +106,10 @@ pub async fn matched_identities(
         .extend(matched_watched_repos(access_token, github_identities.as_slice()).await?);
     matched_identities
         .extend(matched_followed_org(access_token, github_identities.as_slice()).await?);
+    matched_identities
+        .extend(matched_org_contributors_repos(access_token, github_identities.as_slice()).await?);
+    matched_identities
+        .extend(matched_org_collaborators_repos(access_token, github_identities.as_slice()).await?);
 
     // TODO: matched_team
 
@@ -116,6 +121,7 @@ pub async fn matched_starred_repos(
     identities: &[&fpm::user_group::UserIdentity],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
     use itertools::Itertools;
+
     let starred_repos = identities
         .iter()
         .filter_map(|i| {
@@ -157,7 +163,6 @@ pub async fn matched_watched_repos(
             }
         })
         .collect_vec();
-    //dbg!(&watched_repos);
     if watched_repos.is_empty() {
         return Ok(vec![]);
     }
@@ -172,6 +177,7 @@ pub async fn matched_watched_repos(
         })
         .collect())
 }
+
 pub async fn matched_followed_org(
     access_token: &str,
     identities: &[&fpm::user_group::UserIdentity],
@@ -187,7 +193,6 @@ pub async fn matched_followed_org(
             }
         })
         .collect_vec();
-    dbg!(&followed_orgs);
     if followed_orgs.is_empty() {
         return Ok(vec![]);
     }
@@ -202,6 +207,86 @@ pub async fn matched_followed_org(
         })
         .collect())
 }
+
+pub async fn matched_org_contributors_repos(
+    access_token: &str,
+    identities: &[&fpm::user_group::UserIdentity],
+) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    use itertools::Itertools;
+    let mut org_repo_contributors: Vec<String> = vec![];
+    let contributed_repos = identities
+        .iter()
+        .filter_map(|i| {
+            if i.key.eq("github-contributor") {
+                Some(i.value.as_str())
+            } else {
+                None
+            }
+        })
+        .collect_vec();
+    let user_name = apis::user_details(access_token).await?;
+    if contributed_repos.is_empty() {
+        return Ok(vec![]);
+    }
+
+    // TODO: How to optimise it
+    for repo in &contributed_repos {
+        let repo_contributors = apis::repo_contributors(access_token, repo).await?;
+
+        if repo_contributors.contains(&user_name) {
+            org_repo_contributors.push(String::from(repo.to_owned()));
+        }
+    }
+    // filter the contributor repos with input
+    Ok(org_repo_contributors
+        .into_iter()
+        .filter(|user_repo| contributed_repos.contains(&user_repo.as_str()))
+        .map(|repo| fpm::user_group::UserIdentity {
+            key: "github-contributor".to_string(),
+            value: repo,
+        })
+        .collect())
+}
+
+pub async fn matched_org_collaborators_repos(
+    access_token: &str,
+    identities: &[&fpm::user_group::UserIdentity],
+) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    use itertools::Itertools;
+    let mut org_repo_collaborator: Vec<String> = vec![];
+    let collaborator_repos = identities
+        .iter()
+        .filter_map(|i| {
+            if i.key.eq("github-team") {
+                Some(i.value.as_str())
+            } else {
+                None
+            }
+        })
+        .collect_vec();
+    let user_name = apis::user_details(access_token).await?;
+    if collaborator_repos.is_empty() {
+        return Ok(vec![]);
+    }
+    for repo in &collaborator_repos {
+        let repo_collaborator = apis::repo_collaborators(access_token, repo).await?;
+
+        if repo_collaborator.contains(&user_name) {
+            dbg!(&access_token);
+            org_repo_collaborator.push(String::from(repo.to_owned()));
+        }
+    }
+    // filter the collaborator repos with input
+    Ok(org_repo_collaborator
+        .into_iter()
+        .filter(|user_repo| collaborator_repos.contains(&user_repo.as_str()))
+        .map(|repo| fpm::user_group::UserIdentity {
+            key: "github-team".to_string(),
+            value: repo,
+        })
+        .collect())
+}
+
 pub mod apis {
 
     // TODO: API to starred a repo on behalf of the user
@@ -222,10 +307,10 @@ pub mod apis {
         .await?;
         Ok(starred_repo.into_iter().map(|x| x.full_name).collect())
     }
+
     pub async fn followed_org(access_token: &str) -> fpm::Result<Vec<String>> {
-        // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
+        // API Docs: https://docs.github.com/en/rest/users/followers#list-followers-of-the-authenticated-user
         // TODO: Handle paginated response
-        //dbg!("watched_repo");
         #[derive(Debug, serde::Deserialize)]
         struct UserRepos {
             login: String,
@@ -235,13 +320,12 @@ pub mod apis {
             access_token,
         )
         .await?;
-        //dbg!(&watched_repo);
         Ok(watched_repo.into_iter().map(|x| x.login).collect())
     }
+
     pub async fn watched_repo(access_token: &str) -> fpm::Result<Vec<String>> {
-        // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
+        // API Docs: https://docs.github.com/en/rest/activity/watching#list-repositories-watched-by-the-authenticated-user
         // TODO: Handle paginated response
-        //dbg!("watched_repo");
         #[derive(Debug, serde::Deserialize)]
         struct UserRepos {
             full_name: String,
@@ -255,9 +339,69 @@ pub mod apis {
             access_token,
         )
         .await?;
-        //dbg!(&watched_repo);
         Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
     }
+
+    pub async fn repo_contributors(
+        access_token: &str,
+        repo_name: &str,
+    ) -> fpm::Result<Vec<String>> {
+        // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
+        // TODO: Handle paginated response
+        #[derive(Debug, serde::Deserialize)]
+        struct UserRepos {
+            login: String,
+        }
+
+        //dbg!(apis::user_details(access_token).await?);
+        let repo_contributor: Vec<UserRepos> = get_api(
+            format!(
+                "{}{}/contributors?per_page=100",
+                "https://api.github.com/repos/", repo_name
+            )
+            .as_str(),
+            access_token,
+        )
+        .await?;
+        Ok(repo_contributor.into_iter().map(|x| x.login).collect())
+    }
+
+    pub async fn repo_collaborators(
+        access_token: &str,
+        repo_name: &str,
+    ) -> fpm::Result<Vec<String>> {
+        // API Docs: https://docs.github.com/en/rest/collaborators/collaborators#list-repository-collaborators
+        // TODO: Handle paginated response
+        #[derive(Debug, serde::Deserialize)]
+        struct UserRepos {
+            login: String,
+        }
+
+        //dbg!(apis::user_details(access_token).await?);
+        let repo_collaborators: Vec<UserRepos> = get_api(
+            format!(
+                "{}{}/collaborators?per_page=100",
+                "https://api.github.com/repos/", repo_name
+            )
+            .as_str(),
+            access_token,
+        )
+        .await?;
+        Ok(repo_collaborators.into_iter().map(|x| x.login).collect())
+    }
+
+    pub async fn user_details(access_token: &str) -> fpm::Result<String> {
+        // API Docs: https://docs.github.com/en/rest/users/users#get-the-authenticated-user
+        // TODO: Handle paginated response
+        #[derive(Debug, serde::Deserialize)]
+        struct UserDetails {
+            login: String,
+        }
+        let user_obj: UserDetails = get_api("https://api.github.com/user", access_token).await?;
+
+        Ok(String::from(&user_obj.login))
+    }
+
     pub async fn get_api<T: serde::de::DeserializeOwned>(
         url: &str,
         access_token: &str,
@@ -277,7 +421,6 @@ pub mod apis {
             .await?;
 
         if !response.status().eq(&reqwest::StatusCode::OK) {
-            //dbg!(response.text().await?);
             return Err(fpm::Error::APIResponseError(format!(
                 "GitHub API ERROR: {}",
                 url
