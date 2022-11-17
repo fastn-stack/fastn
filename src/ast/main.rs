@@ -1,6 +1,7 @@
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum AST {
     Import(ftd::ast::Import),
+    Edition(ftd::ast::Edition),
     Record(ftd::ast::Record),
     VariableDefinition(ftd::ast::VariableDefinition),
     VariableInvocation(ftd::ast::VariableInvocation),
@@ -24,6 +25,8 @@ impl AST {
     pub fn from_section(section: &ftd::p11::Section, doc_id: &str) -> ftd::ast::Result<AST> {
         Ok(if ftd::ast::Import::is_import(section) {
             AST::Import(ftd::ast::Import::from_p1(section, doc_id)?)
+        } else if ftd::ast::Edition::is_edition(section) {
+            AST::Edition(ftd::ast::Edition::from_p1(section, doc_id)?)
         } else if ftd::ast::Record::is_record(section) {
             AST::Record(ftd::ast::Record::from_p1(section, doc_id)?)
         } else if ftd::ast::Function::is_function(section) {
@@ -48,6 +51,7 @@ impl AST {
     pub fn line_number(&self) -> usize {
         match self {
             AST::Import(i) => i.line_number(),
+            AST::Edition(e) => e.line_number(),
             AST::Record(r) => r.line_number(),
             AST::VariableDefinition(v) => v.line_number(),
             AST::VariableInvocation(v) => v.line_number(),

@@ -2,6 +2,7 @@
 #[macro_use]
 mod test;
 
+mod interpreter2021;
 mod main;
 mod tdoc;
 mod things;

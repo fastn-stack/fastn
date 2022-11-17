@@ -3,6 +3,7 @@
 mod test;
 
 mod component;
+mod edition;
 mod function;
 mod import;
 mod kind;
@@ -14,6 +15,7 @@ mod variable;
 pub use component::{
     Argument, Component, ComponentDefinition, Event, Loop, Property, PropertySource,
 };
+pub use edition::Edition;
 pub use function::Function;
 pub use import::Import;
 pub use kind::{Condition, HeaderValues, VariableKind, VariableModifier, VariableValue};

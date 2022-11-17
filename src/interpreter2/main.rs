@@ -9,7 +9,7 @@ pub struct InterpreterState {
 }
 
 impl InterpreterState {
-    fn new(id: String) -> InterpreterState {
+    pub(crate) fn new(id: String) -> InterpreterState {
         InterpreterState {
             id,
             bag: ftd::interpreter2::default::default_bag(),
@@ -23,6 +23,10 @@ impl InterpreterState {
         }
 
         let l = self.document_stack.len() - 1; // Get the top of the stack
+
+        if let Some(ftd::ast::AST::Edition(edition)) = self.document_stack[l].ast.first() {
+            if edition.edition.is_2021() {}
+        }
 
         // beyond this point commented things will no longer exist in the parsed document
 
@@ -219,6 +223,10 @@ pub enum Interpreter {
     },
     Done {
         document: Document,
+    },
+    Edition2021 {
+        module: String,
+        state: InterpreterState,
     },
 }
 
