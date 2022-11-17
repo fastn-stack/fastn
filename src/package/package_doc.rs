@@ -300,6 +300,82 @@ pub(crate) async fn read_ftd(
     base_url: &str,
     download_assets: bool,
 ) -> fpm::Result<Vec<u8>> {
+    match config.ftd_edition {
+        fpm::FTDEdition::FTD2021 => read_ftd_2021(config, main, base_url, download_assets).await,
+        fpm::FTDEdition::FTD2022 => read_ftd_2022(config, main, base_url).await,
+    }
+}
+
+#[allow(clippy::await_holding_refcell_ref)]
+pub(crate) async fn read_ftd_2022(
+    config: &mut fpm::Config,
+    main: &fpm::Document,
+    base_url: &str,
+) -> fpm::Result<Vec<u8>> {
+    let lib_config = config.clone();
+    let mut all_packages = config.all_packages.borrow_mut();
+    let current_package = all_packages
+        .get(main.package_name.as_str())
+        .unwrap_or(&config.package);
+
+    let mut lib = fpm::Library2 {
+        config: lib_config,
+        markdown: None,
+        document_id: main.id.clone(),
+        translated_data: Default::default(),
+        base_url: base_url.to_string(),
+        packages_under_process: vec![current_package.name.to_string()],
+    };
+
+    // Get Prefix Body => [AutoImports + Actual Doc content]
+    let mut doc_content =
+        current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
+    // Fix aliased imports to full path (if any)
+    doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
+
+    let main_ftd_doc = match fpm::time("interpret_helper").it(fpm::doc::interpret_helper(
+        main.id_with_package().as_str(),
+        doc_content.as_str(),
+        &mut lib,
+    )
+    .await)
+    {
+        Ok(v) => v,
+        Err(e) => {
+            return Err(fpm::Error::PackageError {
+                message: format!("failed to parse {:?}", &e),
+            });
+        }
+    };
+
+    let executor =
+        fpm::time("Executor").it(ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?);
+    let node = fpm::time("NodeData").it(ftd::node::NodeData::from_rt(executor));
+    let html_ui = fpm::time("HtmlUI").it(ftd::html1::HtmlUI::from_node_data(node, "main")?);
+
+    all_packages.extend(lib.config.all_packages.into_inner());
+    drop(all_packages);
+
+    config
+        .downloaded_assets
+        .extend(lib.config.downloaded_assets);
+
+    let file_content = fpm::time("replace_markers").it(fpm::utils::replace_markers_2022(
+        ftd::build(),
+        html_ui,
+        ftd::build_js(),
+    ));
+
+    Ok(file_content.into())
+}
+
+#[allow(clippy::await_holding_refcell_ref)]
+pub(crate) async fn read_ftd_2021(
+    config: &mut fpm::Config,
+    main: &fpm::Document,
+    base_url: &str,
+    download_assets: bool,
+) -> fpm::Result<Vec<u8>> {
     let lib_config = config.clone();
     let mut all_packages = config.all_packages.borrow_mut();
     let current_package = all_packages
@@ -351,7 +427,7 @@ pub(crate) async fn read_ftd(
     };
     let ftd_doc = fpm::time("to_rt()").it(main_ftd_doc.to_rt("main", &main.id));
 
-    let file_content = fpm::time("replace_markers").it(fpm::utils::replace_markers(
+    let file_content = fpm::time("replace_markers").it(fpm::utils::replace_markers_2021(
         fpm::ftd_html(),
         config,
         main.id_to_path().as_str(),

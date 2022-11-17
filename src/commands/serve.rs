@@ -139,7 +139,10 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
     }
 }
 
-pub async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
+pub async fn serve(
+    req: fpm::http::Request,
+    edition: Option<String>,
+) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method(), req.path());
     let t = fpm::time(r.as_str());
@@ -152,18 +155,25 @@ pub async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> 
     let response = if path.eq(&favicon) {
         static_file(favicon).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("FPM.ftd")) {
-        let config = fpm::time("Config::read()")
-            .it(fpm::Config::read(None, false, Some(&req)).await.unwrap());
+        let config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
+            .await
+            .unwrap()
+            .add_edition(edition)?);
         serve_fpm_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
         let mut config = fpm::time("Config::read()")
-            .it(fpm::Config::read(None, false, Some(&req)).await.unwrap())
+            .it(fpm::Config::read(None, false, Some(&req))
+                .await
+                .unwrap()
+                .add_edition(edition)?)
             .set_request(req);
 
         serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fpm::cr::get_cr_path_from_url(path.as_str()) {
-        let mut config = fpm::time("Config::read()")
-            .it(fpm::Config::read(None, false, Some(&req)).await.unwrap());
+        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
+            .await
+            .unwrap()
+            .add_edition(edition)?);
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
         // url is present in config or not
@@ -174,6 +184,7 @@ pub async fn serve(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> 
         let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
+            .add_edition(edition)?
             .set_request(req));
 
         // if start with -/ and mount-point exists so send redirect to mount-point
@@ -381,13 +392,19 @@ pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::R
     fpm::apis::cr::create_cr_page(req).await
 }
 
+struct AppData {
+    edition: Option<String>,
+}
+
 async fn route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
+    app_data: actix_web::web::Data<AppData>,
 ) -> fpm::Result<fpm::http::Response> {
     if req.path().starts_with("/auth/") {
-        return fpm::auth::routes::handle_auth(req).await;
+        return fpm::auth::routes::handle_auth(req, app_data.edition.clone()).await;
     }
+
     let req = fpm::http::Request::from_actix(req, body);
     dbg!(req.method(), req.path());
     match (req.method().to_lowercase().as_str(), req.path()) {
@@ -401,7 +418,7 @@ async fn route(
         ("post", "/-/create-cr/") => create_cr(req).await,
         ("get", "/-/create-cr-page/") => create_cr_page(req).await,
         ("get", "/-/clear-cache/") => clear_cache(req).await,
-        (_, _) => serve(req).await,
+        (_, _) => serve(req, app_data.edition.clone()).await,
     }
 }
 
@@ -409,6 +426,7 @@ pub async fn listen(
     bind_address: &str,
     port: Option<u16>,
     package_download_base_url: Option<String>,
+    edition: Option<String>,
 ) -> fpm::Result<()> {
     use colored::Colorize;
     dotenv::dotenv().ok();
@@ -450,7 +468,13 @@ You can try without providing port, it will automatically pick unused port."#,
         }
     };
 
-    let app = move || actix_web::App::new().route("/{path:.*}", actix_web::web::route().to(route));
+    let app = move || {
+        actix_web::App::new()
+            .app_data(actix_web::web::Data::new(AppData {
+                edition: edition.clone(),
+            }))
+            .route("/{path:.*}", actix_web::web::route().to(route))
+    };
 
     println!("### Server Started ###");
     println!(

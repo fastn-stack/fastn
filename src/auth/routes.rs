@@ -3,7 +3,10 @@ pub fn is_login(req: &actix_web::HttpRequest) -> bool {
 }
 
 // route: /auth/login/
-pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+pub async fn login(
+    req: actix_web::HttpRequest,
+    edition: Option<String>,
+) -> fpm::Result<actix_web::HttpResponse> {
     if is_login(&req) {
         return Ok(actix_web::HttpResponse::Found()
             .append_header((actix_web::http::header::LOCATION, "/".to_string()))
@@ -28,7 +31,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRe
         _ => {
             let mut req = fpm::http::Request::from_actix(req, actix_web::web::Bytes::new());
             req.path = "/sorry/".to_string();
-            fpm::commands::serve::serve(req).await
+            fpm::commands::serve::serve(req, edition).await
         }
         // "discord" => unreachable!(),
         // _ => unreachable!(),
@@ -50,9 +53,12 @@ pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRespons
 }
 
 // handle: if request.url starts with /auth/
-pub async fn handle_auth(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
+pub async fn handle_auth(
+    req: actix_web::HttpRequest,
+    edition: Option<String>,
+) -> fpm::Result<fpm::http::Response> {
     if req.path().eq("/auth/login/") {
-        return login(req).await;
+        return login(req, edition).await;
     } else if req.path().eq(fpm::auth::github::ACCESS_URL) {
         // this will be called after github OAuth login, to set the access_token
         // It will redirect user to home after the login

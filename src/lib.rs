@@ -44,7 +44,7 @@ pub use commands::{
     start_tracking::start_tracking, status::status, sync2::sync2,
     translation_status::translation_status, update::update,
 };
-pub use config::Config;
+pub use config::{Config, FTDEdition};
 pub use error::Error;
 pub use file::File;
 pub(crate) use file::{get_file, paths_to_files, Document, Static};

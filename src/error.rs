@@ -15,6 +15,18 @@ pub enum Error {
     #[error("FTDError: {}", _0)]
     FTDError(#[from] ftd::p1::Error),
 
+    #[error("FTDP1Error: {}", _0)]
+    FTDP1Error(#[from] ftd::p11::Error),
+
+    #[error("FTDExecError: {}", _0)]
+    FTDExecError(#[from] ftd::executor::Error),
+
+    #[error("FTDInterpreterError: {}", _0)]
+    FTDInterpreterError(#[from] ftd::interpreter2::Error),
+
+    #[error("FTDHtmlError: {}", _0)]
+    FTDHtmlError(#[from] ftd::html1::Error),
+
     #[error("IgnoreError: {}", _0)]
     IgnoreError(#[from] ignore::Error),
 

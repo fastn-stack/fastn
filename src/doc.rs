@@ -118,6 +118,31 @@ pub async fn parse<'a>(
     Ok(document)
 }
 
+pub async fn interpret_helper<'a>(
+    name: &str,
+    source: &str,
+    lib: &'a mut fpm::Library2,
+) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
+    let mut s = ftd::interpreter2::interpret(name, source)?;
+    let document;
+    loop {
+        match s {
+            ftd::interpreter2::Interpreter::Done { document: doc } => {
+                document = doc;
+                break;
+            }
+            ftd::interpreter2::Interpreter::StuckOnImport {
+                module,
+                state: mut st,
+            } => {
+                let source = resolve_import_2022(lib, &mut st, module.as_str()).await?;
+                s = st.continue_after_import(module.as_str(), source.as_str())?;
+            }
+        }
+    }
+    Ok(document)
+}
+
 pub async fn parse2<'a>(
     name: &str,
     source: &str,
@@ -246,6 +271,17 @@ pub async fn resolve_import<'a>(
         lib.get_with_result(module).await?
     };
 
+    Ok(source)
+}
+
+pub async fn resolve_import_2022<'a>(
+    lib: &'a mut fpm::Library2,
+    state: &mut ftd::interpreter2::InterpreterState,
+    module: &str,
+) -> ftd::interpreter2::Result<String> {
+    lib.packages_under_process
+        .truncate(state.document_stack.len());
+    let source = lib.get_with_result(module).await?;
     Ok(source)
 }
 

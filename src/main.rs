@@ -41,11 +41,13 @@ async fn async_main() -> fpm::Result<()> {
 
         let bind = mark.value_of_("bind").unwrap_or("127.0.0.1").to_string();
         let download_base_url = mark.value_of_("download-base-url");
+        let edition = mark.value_of_("edition");
 
         return fpm::listen(
             bind.as_str(),
             port,
             download_base_url.map(ToString::to_string),
+            edition.map(ToString::to_string),
         )
         .await;
     }
@@ -330,6 +332,7 @@ mod sub_command {
             Read more about it on https://fpm.dev/serve/")
             .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
             .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
+            .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"));
         if cfg!(feature = "remote") {
             serve

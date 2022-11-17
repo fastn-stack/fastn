@@ -4,6 +4,25 @@
 pub(crate) mod utils;
 
 #[derive(Debug, Clone)]
+pub enum FTDEdition {
+    FTD2021,
+    FTD2022,
+}
+
+impl FTDEdition {
+    pub(crate) fn from_string(s: &str) -> fpm::Result<FTDEdition> {
+        match s {
+            "2021" => Ok(FTDEdition::FTD2021),
+            "2022" => Ok(FTDEdition::FTD2022),
+            t => fpm::usage_error(format!(
+                "Unknown edition `{}`. Help use `2021` or `2022` instead",
+                t
+            )),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Config {
     // Global Information
     pub package: fpm::Package,
@@ -18,6 +37,7 @@ pub struct Config {
     pub path_parameters: Vec<(String, ftd::Value)>,
     pub current_document: Option<String>,
     pub request: Option<fpm::http::Request>, // TODO: It should only contain reference
+    pub ftd_edition: FTDEdition,
 }
 
 impl Config {
@@ -1191,6 +1211,17 @@ impl Config {
         }
     }
 
+    pub fn add_edition(self, edition: Option<String>) -> fpm::Result<Self> {
+        match edition {
+            Some(e) => {
+                let mut config = self;
+                config.ftd_edition = FTDEdition::from_string(e.as_str())?;
+                Ok(config)
+            }
+            None => Ok(self),
+        }
+    }
+
     /// `read()` is the way to read a Config.
     pub async fn read(
         root: Option<String>,
@@ -1231,6 +1262,7 @@ impl Config {
             global_ids: Default::default(),
             request: req.map(ToOwned::to_owned),
             path_parameters: vec![],
+            ftd_edition: FTDEdition::FTD2021,
         };
 
         // Update global_ids map from the current package files

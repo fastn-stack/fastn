@@ -362,7 +362,7 @@ fn resolve_favicon(
     Some(favicon_html(&full_fav_path, &fav_mime_content_type))
 }
 
-pub fn replace_markers(
+pub fn replace_markers_2021(
     s: &str,
     config: &fpm::Config,
     main_id: &str,
@@ -413,6 +413,30 @@ pub fn replace_markers(
             format!("{}{}", main_rt.html, config.get_font_style(),).as_str(),
         )
         .replace("__base_url__", base_url)
+}
+
+pub fn replace_markers_2022(s: &str, html_ui: ftd::html1::HtmlUI, ftd_js: &str) -> String {
+    ftd::html1::utils::trim_all_lines(
+        s.replace("__ftd_doc_title__", "")
+            .replace("__ftd_data__", html_ui.variables.as_str())
+            .replace("__ftd_external_children__", "{}")
+            .replace("__ftd__", html_ui.html.as_str())
+            .replace("__ftd_js__", ftd_js)
+            .replace(
+                "__ftd_functions__",
+                format!(
+                    "{}\n{}\n{}",
+                    html_ui.functions.as_str(),
+                    html_ui.dependencies.as_str(),
+                    html_ui.variable_dependencies.as_str(),
+                )
+                .as_str(),
+            )
+            .replace("__ftd_body_events__", "")
+            .replace("__ftd_css__", "")
+            .replace("__ftd_element_css__", "")
+            .as_str(),
+    )
 }
 
 pub fn is_test() -> bool {

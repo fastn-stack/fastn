@@ -57,7 +57,7 @@ pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Resu
             _ => main.id.as_str().to_string(),
         };
         let ftd_doc = main_ftd_doc.to_rt("main", &main.id);
-        Ok(fpm::utils::replace_markers(
+        Ok(fpm::utils::replace_markers_2021(
             fpm::ftd_html(),
             config,
             main.id_to_path().as_str(),
