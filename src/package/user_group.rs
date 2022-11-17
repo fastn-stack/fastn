@@ -89,10 +89,14 @@ pub struct UserGroupTemp {
     pub github_contributor: Vec<String>,
     #[serde(rename = "-github-contributor")]
     pub excluded_github_contributor: Vec<String>,
-    #[serde(rename = "github-watch")]
-    pub github_watch: Vec<String>,
-    #[serde(rename = "-github-watch")]
-    pub excluded_github_watch: Vec<String>,
+    #[serde(rename = "github-collaborator")]
+    pub github_collaborator: Vec<String>,
+    #[serde(rename = "-github-collaborator")]
+    pub excluded_github_collaborator: Vec<String>,
+    #[serde(rename = "github-watches")]
+    pub github_watches: Vec<String>,
+    #[serde(rename = "-github-watches")]
+    pub excluded_github_watches: Vec<String>,
     #[serde(rename = "github-follows")]
     pub github_follows: Vec<String>,
     #[serde(rename = "-github-follows")]
@@ -285,10 +289,18 @@ impl UserGroupTemp {
             "-github-contributor",
             self.excluded_github_contributor,
         ));
-        identities.extend(to_user_identity("github-watch", self.github_watch));
+        identities.extend(to_user_identity(
+            "github-collaborator",
+            self.github_collaborator,
+        ));
         excluded_identities.extend(to_user_identity(
-            "-github-watch",
-            self.excluded_github_watch,
+            "-github-collaborator",
+            self.excluded_github_collaborator,
+        ));
+        identities.extend(to_user_identity("github-watches", self.github_watches));
+        excluded_identities.extend(to_user_identity(
+            "-github-watches",
+            self.excluded_github_watches,
         ));
         identities.extend(to_user_identity("github-follows", self.github_follows));
         excluded_identities.extend(to_user_identity(
@@ -437,7 +449,7 @@ pub async fn access_identities(
     // github-team: fpm-lang/ftd
     // github-starred: fpm-lang/ftd
     // discord-server: abrark.com
-    // github-watch: fpm-lang/ftd
+    // github-watches: fpm-lang/ftd
     fpm::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await
 
     // Ok(if let Some(identity) = req.cookie("identities") {
