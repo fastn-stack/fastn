@@ -65,7 +65,7 @@ pub struct Package {
     pub apps: Vec<app::App>,
 
     /// Package Icon
-    pub icon: Option<String>,
+    pub icon: Option<ftd::ImageSrc>,
 }
 
 impl Package {
@@ -687,7 +687,7 @@ pub(crate) struct PackageTemp {
     #[serde(rename = "backend-headers")]
     pub backend_headers: Option<Vec<BackendHeader>>,
     #[serde(rename = "icon")]
-    pub icon: Option<String>,
+    pub icon: Option<ftd::ImageSrc>,
 }
 
 impl PackageTemp {

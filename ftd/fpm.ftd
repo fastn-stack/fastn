@@ -5,7 +5,7 @@ string header-value:
 -- record package-data:
 caption name:
 boolean versioned: false
-optional string icon:
+optional ftd.image-src icon:
 optional body about:
 optional string zip:
 optional string download-base-url:
@@ -423,7 +423,7 @@ string list writers:
 caption name:
 string package:
 string url:
-optional string icon:
+optional ftd.image-src icon:
 
 -- record app-indexy-item:
 integer index:

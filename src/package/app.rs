@@ -97,7 +97,7 @@ pub fn processor<'a>(
         package: String,
         #[serde(rename = "url")]
         url: String,
-        icon: Option<String>,
+        icon: Option<ftd::ImageSrc>,
     }
 
     let apps = config
