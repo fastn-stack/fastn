@@ -124,6 +124,22 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/kameri-app/main
 - List: /
 
 
+-- ft.h2: `icon`
+
+Package can have a optional icon as well, which is type of ftd.image-src.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.image-src icon:
+dark: dark-image.png
+light: light-image.png
+
+\-- fpm.package: kameri-app.herokuapp.com
+download-base-url: https://raw.githubusercontent.com/fifthtry/kameri-app/main
+icon: $icon
+
+
 -- ft.h1: `fpm.font`
 
 Any custom fonts can be included in FTD generated HTML files by using `font`
