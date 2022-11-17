@@ -65,6 +65,14 @@ pub fn html() -> &'static str {
     include_str!("../ftd.html")
 }
 
+pub fn build() -> &'static str {
+    include_str!("../build.html")
+}
+
+pub fn build_js() -> &'static str {
+    include_str!("../build.js")
+}
+
 // #[cfg(test)]
 pub type Map<T> = std::collections::BTreeMap<String, T>;
 

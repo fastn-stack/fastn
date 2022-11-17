@@ -41,6 +41,7 @@ pub(crate) fn function_name_to_js_function(s: &str) -> String {
         .replace('-', "_")
         .replace(':', "___")
         .replace(',', "$")
+        .replace('/', "_")
 }
 
 pub(crate) fn full_data_id(id: &str, data_id: &str) -> String {

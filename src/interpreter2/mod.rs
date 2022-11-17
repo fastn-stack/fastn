@@ -7,7 +7,7 @@ mod tdoc;
 mod things;
 pub mod utils;
 
-pub use main::{interpret, Document, Interpreter};
+pub use main::{interpret, Document, Interpreter, InterpreterState};
 pub use tdoc::TDoc;
 pub use things::{
     component::{
@@ -27,6 +27,9 @@ pub use things::{
 pub enum Error {
     #[error("P1Error: {}", _0)]
     P1Error(#[from] ftd::p11::Error),
+
+    #[error("OldP1Error: {}", _0)]
+    OldP1Error(#[from] ftd::p1::Error),
 
     #[error("ASTError: {}", _0)]
     ASTError(#[from] ftd::ast::Error),
