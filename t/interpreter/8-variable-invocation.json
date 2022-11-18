@@ -147,7 +147,64 @@
     }
   },
   "name": "foo",
-  "tree": [],
+  "tree": [
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#a1.name",
+              "kind": {
+                "kind": "String",
+                "caption": true,
+                "body": true
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 17
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 17
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 17
+    },
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#n1.name",
+              "kind": {
+                "kind": "String",
+                "caption": true,
+                "body": true
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 18
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 18
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 18
+    }
+  ],
   "aliases": {
     "ftd": "ftd"
   }

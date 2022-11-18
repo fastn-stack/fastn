@@ -9,3 +9,6 @@ age: 10
 -- $foo:
 name: FOO 1
 age: 11
+
+
+-- ftd.text: $foo.name

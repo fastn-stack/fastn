@@ -4,3 +4,7 @@ string name:
 -- ftd.text: $print.name
 
 -- end: print
+
+
+-- print:
+name: FTD

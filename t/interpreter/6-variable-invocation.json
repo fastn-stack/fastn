@@ -139,7 +139,64 @@
     }
   },
   "name": "foo",
-  "tree": [],
+  "tree": [
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#n1.name",
+              "kind": {
+                "kind": "String",
+                "caption": true,
+                "body": true
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 16
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 16
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 16
+    },
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#n",
+              "kind": {
+                "kind": "String",
+                "caption": true,
+                "body": true
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 17
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 17
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 17
+    }
+  ],
   "aliases": {
     "ftd": "ftd"
   }

@@ -25,3 +25,9 @@ age: 9
 -- string: Bengaluru
 
 -- end: company.locations
+
+
+-- company fifthtry:
+name: FifthTry
+
+-- ftd.text: $fifthtry.name

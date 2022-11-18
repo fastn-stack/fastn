@@ -51,7 +51,39 @@
     }
   },
   "name": "foo",
-  "tree": [],
+  "tree": [
+    {
+      "name": "foo#print",
+      "properties": [
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "FTD"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 10
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "name",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 10
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 9
+    }
+  ],
   "aliases": {
     "ftd": "ftd"
   }
