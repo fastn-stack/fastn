@@ -1,3 +1,19 @@
+-- ws.chapter: Records
+id: ws-records
+sidebar: true
+
+-- ds.markdown:
+
+Till now we dealt with basic types like [booleans](id: ws-booleans), [numbers
+and strings](id: ws-numbers-and-strings). Now we are moving to more interesting
+stuff: `record`.
+
+
+
+
+
+
+
 
 -- boolean $what-are-lesson-completed: false
 $always-include$: true
@@ -10,69 +26,6 @@ variable: $what-are-lesson-completed
 $on-click$: $what-are-lesson-completed = true
 $on-click$: message-host $what-are-lesson-object
 $lesson-status: $what-are-lesson-completed
-
--- boolean $what-are-task-1-completed: false
-$always-include$: true
-
--- object what-are-task-1-object:
-function: ls.set-boolean
-variable: $what-are-task-1-completed
-
--- ws.understood what-are-task-1-button: Done
-$on-click$: $what-are-task-1-completed = true
-$on-click$: message-host $what-are-task-1-object
-$task-status: $what-are-task-1-completed
-
--- boolean $what-are-task-2-completed: false
-$always-include$: true
-
--- object what-are-task-2-object:
-function: ls.set-boolean
-variable: $what-are-task-2-completed
-
--- ws.understood what-are-task-2-button: Done
-$on-click$: $what-are-task-2-completed = true
-$on-click$: message-host $what-are-task-2-object
-$task-status: $what-are-task-2-completed
-
--- boolean $what-are-task-3-completed: false
-$always-include$: true
-
--- object what-are-task-3-object:
-function: ls.set-boolean
-variable: $what-are-task-3-completed
-
--- ws.understood what-are-task-3-button: Done
-$on-click$: $what-are-task-3-completed = true
-$on-click$: message-host $what-are-task-3-object
-$task-status: $what-are-task-3-completed
-
-
-
--- boolean $what-are-task-4-completed: false
-$always-include$: true
-
--- object what-are-task-4-object:
-function: ls.set-boolean
-variable: $what-are-task-4-completed
-
--- ws.understood what-are-task-4-button: Done
-$on-click$: $what-are-task-4-completed = true
-$on-click$: message-host $what-are-task-4-object
-$task-status: $what-are-task-4-completed
-
--- ws.chapter: Records
-id: ws-records
-sidebar: true
-
-
--- ds.markdown:
-
-Till now we dealt with basic types like [booleans](id: ws-booleans), [numbers
-and strings](id: ws-numbers-and-strings). Now we are moving to more interesting
-stuff: `record`.
-
-
 
 
 -- ws.lesson: What is FPM CLI?
@@ -106,6 +59,28 @@ age: 20
 
 -- container: ws-records
 
+
+
+
+
+
+
+
+
+
+
+-- boolean $what-are-task-1-completed: false
+$always-include$: true
+
+-- object what-are-task-1-object:
+function: ls.set-boolean
+variable: $what-are-task-1-completed
+
+-- ws.understood what-are-task-1-button: Done
+$on-click$: $what-are-task-1-completed = true
+$on-click$: message-host $what-are-task-1-object
+$task-status: $what-are-task-1-completed
+
 -- ws.task: Task 1: Define and Use A Record
 $status: $what-are-task-1-completed
 button: what-are-task-1-button:
@@ -114,7 +89,30 @@ button: what-are-task-1-button:
 Open [records.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/records.ftd)
 and define your first record and then an instance of it.
 
--- ds.h1: Special Types: `caption` and `body`
+-- container: ws-records
+
+
+
+
+
+
+
+
+-- boolean $special-types-completed: false
+$always-include$: true
+
+-- object special-types-object:
+function: ls.set-boolean
+variable: $special-types-completed
+
+-- ws.understood special-types-button: Understood
+$on-click$: $special-types-completed = true
+$on-click$: message-host $special-types-object
+$lesson-status: $special-types-completed
+
+-- ws.lesson: Special Types: `caption` and `body`
+$status: $special-types-completed
+button: special-types-button:
 
 We take a lot of pride in read-ablity and neatness of our code, so we have
 created the types `caption` and `body`, both of which are aliases for `string`
@@ -150,6 +148,28 @@ can either use a local string variable, or wait for 0.3 syntax to be ready.
 
 -- container: ws-records
 
+
+
+
+
+
+
+
+
+
+
+-- boolean $what-are-task-2-completed: false
+$always-include$: true
+
+-- object what-are-task-2-object:
+function: ls.set-boolean
+variable: $what-are-task-2-completed
+
+-- ws.understood what-are-task-2-button: Done
+$on-click$: $what-are-task-2-completed = true
+$on-click$: message-host $what-are-task-2-object
+$task-status: $what-are-task-2-completed
+
 -- ws.task: Task 2: Caption And Body Types
 $status: $what-are-task-2-completed
 button: what-are-task-2-button:
@@ -157,8 +177,33 @@ button: what-are-task-2-button:
 
 Fix the mistakes in [caption-and-body.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/caption-and-body.ftd).
 
+-- container: ws-records
 
--- ds.h1: Default Values For Fields
+
+
+
+
+
+
+
+
+
+
+-- boolean $default-values-completed: false
+$always-include$: true
+
+-- object default-values-object:
+function: ls.set-boolean
+variable: $default-values-completed
+
+-- ws.understood default-values-button: Understood
+$on-click$: $default-values-completed = true
+$on-click$: message-host $default-values-object
+$lesson-status: $default-values-completed
+
+-- ws.lesson: Default Values For Fields
+$status: $default-values-completed
+button: default-values-button:
 
 Record fields can have default values, eg:
 
@@ -183,8 +228,25 @@ lang: ftd
 
 Elder brother of the notorious Bache Qui.
 
-
 -- container: ws-records
+
+
+
+
+
+
+
+-- boolean $what-are-task-3-completed: false
+$always-include$: true
+
+-- object what-are-task-3-object:
+function: ls.set-boolean
+variable: $what-are-task-3-completed
+
+-- ws.understood what-are-task-3-button: Done
+$on-click$: $what-are-task-3-completed = true
+$on-click$: message-host $what-are-task-3-object
+$task-status: $what-are-task-3-completed
 
 -- ws.task: Task 3: Task: Use Default Values
 $status: $what-are-task-3-completed
@@ -193,7 +255,30 @@ button: what-are-task-3-button:
 
 Fix the mistakes in [default.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/default.ftd).
 
--- ds.h1: Default of a field can be another field
+-- container: ws-records
+
+
+
+
+
+
+
+
+-- boolean $default-another-completed: false
+$always-include$: true
+
+-- object default-another-object:
+function: ls.set-boolean
+variable: $default-another-completed
+
+-- ws.understood default-another-button: Understood
+$on-click$: $default-another-completed = true
+$on-click$: message-host $default-another-object
+$lesson-status: $default-another-completed
+
+-- ws.lesson: Default of a field can be another field
+$status: $default-another-completed
+button: default-another-button:
 
 The default value of a field can be set to another field as well:
 
@@ -213,12 +298,42 @@ If you leave out the `nick-name`, the `name` would be used as the `nick-name`.
 
 -- container: ws-records
 
--- ws.task: Task 4: Fix
+
+
+
+
+
+
+
+
+-- boolean $what-are-task-4-completed: false
+$always-include$: true
+
+-- object what-are-task-4-object:
+function: ls.set-boolean
+variable: $what-are-task-4-completed
+
+-- ws.understood what-are-task-4-button: Done
+$on-click$: $what-are-task-4-completed = true
+$on-click$: message-host $what-are-task-4-object
+$task-status: $what-are-task-4-completed
+
+
+-- ws.task: Task 4: Fix `default.ftd`
 $status: $what-are-task-4-completed
 button: what-are-task-4-button:
 
+Fix the mistakes in [default.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/default.ftd).
 
 -- container: ws-records
+
+
+
+
+
+
+
+
 
 -- ds.h1: Move To Next Chapter
 
@@ -229,6 +344,11 @@ author friendly using caption and body types.
 
 You can move on to [lists](../06-lists/) now, or go back to the [list of
 steps](id: workshop).
+
+
+
+
+
 
 
 
