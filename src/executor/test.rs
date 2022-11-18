@@ -16,6 +16,9 @@ pub fn interpret_helper(
                 let source = "";
                 s = st.continue_after_import(module.as_str(), source)?;
             }
+            ftd::interpreter2::Interpreter::Restart { state: st } => {
+                s = st.continue_()?;
+            }
         }
     }
     Ok(document)

@@ -1,6 +1,6 @@
 use crate::ast::kind::{HeaderValue, HeaderValues};
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ComponentDefinition {
     pub name: String,
     pub arguments: Vec<Argument>,
@@ -72,7 +72,7 @@ impl ComponentDefinition {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Component {
     pub name: String,
     pub properties: Vec<Property>,
@@ -299,7 +299,7 @@ impl Component {
 
 pub type Argument = ftd::ast::Field;
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
     pub value: ftd::ast::VariableValue,
     pub source: PropertySource,
@@ -382,7 +382,7 @@ impl PropertySource {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Loop {
     pub on: String,
     pub alias: String,
@@ -508,7 +508,7 @@ impl Loop {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Event {
     pub name: String,
     pub action: String,

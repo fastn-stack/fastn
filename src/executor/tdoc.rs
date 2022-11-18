@@ -11,6 +11,7 @@ impl<'a> TDoc<'a> {
             name: self.name,
             aliases: self.aliases,
             bag: self.bag,
+            state: None,
         }
     }
 

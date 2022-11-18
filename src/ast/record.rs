@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Record {
     pub name: String,
     pub fields: Vec<Field>,
@@ -41,7 +41,7 @@ impl Record {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Field {
     pub name: String,
     pub kind: ftd::ast::VariableKind,

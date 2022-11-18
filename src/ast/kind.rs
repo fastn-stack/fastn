@@ -1,10 +1,10 @@
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct VariableKind {
     pub modifier: Option<VariableModifier>,
     pub kind: String,
 }
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum VariableModifier {
     List,
     Optional,

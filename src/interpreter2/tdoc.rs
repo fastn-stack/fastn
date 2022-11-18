@@ -3,6 +3,7 @@ pub struct TDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
     pub bag: &'a ftd::Map<ftd::interpreter2::Thing>,
+    pub state: Option<&'a mut ftd::interpreter2::InterpreterState>,
 }
 
 impl<'a> TDoc<'a> {
@@ -26,6 +27,28 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn search_record(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
+    {
+        match self.search_thing(name, line_number)? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Record(r)) => {
+                Ok(ftd::interpreter2::StateWithThing::new_thing(r))
+            }
+            ftd::interpreter2::StateWithThing::Thing(t) => self.err(
+                format!("Expected Record, found: `{:?}`", t).as_str(),
+                name,
+                "search_record",
+                line_number,
+            ),
+        }
+    }
+
     pub fn get_variable(
         &'a self,
         name: &'a str,
@@ -37,6 +60,28 @@ impl<'a> TDoc<'a> {
                 format!("Expected Variable, found: `{:?}`", t).as_str(),
                 name,
                 "get_variable",
+                line_number,
+            ),
+        }
+    }
+
+    pub fn search_variable(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
+    {
+        match self.search_thing(name, line_number)? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Variable(r)) => {
+                Ok(ftd::interpreter2::StateWithThing::new_thing(r))
+            }
+            ftd::interpreter2::StateWithThing::Thing(t) => self.err(
+                format!("Expected Variable, found: `{:?}`", t).as_str(),
+                name,
+                "search_variable",
                 line_number,
             ),
         }
@@ -55,7 +100,7 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter2::Result<String> {
         Ok(if let Some(l) = name.strip_prefix('$') {
             let d =
-                ftd::interpreter2::utils::get_doc_name_and_remaining(l, self.name, line_number)?.0;
+                ftd::interpreter2::utils::get_doc_name_and_remaining(l, self.name, line_number).0;
             if ftd::interpreter2::utils::get_special_variable().contains(&d.as_str()) {
                 return Ok(format!("${}", l));
             }
@@ -383,10 +428,12 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         component_definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-    ) -> ftd::interpreter2::Result<(
-        ftd::interpreter2::PropertyValueSource,
-        ftd::interpreter2::KindData,
-    )> {
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<(
+            ftd::interpreter2::PropertyValueSource,
+            ftd::interpreter2::KindData,
+        )>,
+    > {
         let name = name
             .strip_prefix(ftd::interpreter2::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
@@ -401,65 +448,87 @@ impl<'a> TDoc<'a> {
             )
             .map(|v| (v.0.kind.to_owned(), v.1, v.2));
 
-        let (initial_kind, remaining, source) =
-            if let Some(r) = initial_kind_with_remaining_and_source {
-                r
-            } else {
-                let (initial_thing, remaining) = self.get_initial_thing(name, line_number)?;
-
-                let initial_kind = match initial_thing {
-                    ftd::interpreter2::Thing::Record(r) => ftd::interpreter2::KindData {
-                        kind: ftd::interpreter2::Kind::Record { name: r.name },
-                        caption: true,
-                        body: true,
-                    },
-                    ftd::interpreter2::Thing::Variable(v) => v.kind,
-                    ftd::interpreter2::Thing::Component(c) => ftd::interpreter2::KindData {
-                        kind: ftd::interpreter2::Kind::ui_with_name(c.name.as_str()),
-                        caption: true,
-                        body: true,
-                    },
-                    ftd::interpreter2::Thing::Function(_) => todo!(),
-                };
-
-                (
-                    initial_kind,
-                    remaining,
-                    ftd::interpreter2::PropertyValueSource::Global,
-                )
+        let (initial_kind, remaining, source) = if let Some(r) =
+            initial_kind_with_remaining_and_source
+        {
+            r
+        } else {
+            let (initial_thing, remaining) = match self.search_initial_thing(name, line_number)? {
+                ftd::interpreter2::StateWithThing::State(s) => {
+                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                }
+                ftd::interpreter2::StateWithThing::Thing(fields) => fields,
             };
 
+            let initial_kind = match initial_thing {
+                ftd::interpreter2::Thing::Record(r) => ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::Kind::Record { name: r.name },
+                    caption: true,
+                    body: true,
+                },
+                ftd::interpreter2::Thing::Variable(v) => v.kind,
+                ftd::interpreter2::Thing::Component(c) => ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::Kind::ui_with_name(c.name.as_str()),
+                    caption: true,
+                    body: true,
+                },
+                ftd::interpreter2::Thing::Function(_) => todo!(),
+            };
+
+            (
+                initial_kind,
+                remaining,
+                ftd::interpreter2::PropertyValueSource::Global,
+            )
+        };
+
         if let Some(remaining) = remaining {
-            return Ok((
+            return Ok(ftd::interpreter2::StateWithThing::new_thing((
                 source,
-                get_kind_(initial_kind.kind, remaining.as_str(), self, line_number)?,
-            ));
+                match get_kind_(initial_kind.kind, remaining.as_str(), self, line_number)? {
+                    ftd::interpreter2::StateWithThing::State(s) => {
+                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                    }
+                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+                },
+            )));
         }
 
-        return Ok((source, initial_kind));
+        return Ok(ftd::interpreter2::StateWithThing::new_thing((
+            source,
+            initial_kind,
+        )));
 
         fn get_kind_(
             kind: ftd::interpreter2::Kind,
             name: &str,
             doc: &ftd::interpreter2::TDoc,
             line_number: usize,
-        ) -> ftd::interpreter2::Result<ftd::interpreter2::KindData> {
+        ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::KindData>>
+        {
             let (v, remaining) = ftd::interpreter2::utils::split_at(name, ".");
             match kind {
                 ftd::interpreter2::Kind::Record { name: rec_name } => {
-                    let record = doc.get_record(rec_name.as_str(), line_number)?;
+                    let record = match doc.search_record(rec_name.as_str(), line_number)? {
+                        ftd::interpreter2::StateWithThing::State(s) => {
+                            return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                        }
+                        ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+                    };
                     let field_kind = record.get_field(&v, doc.name, line_number)?.kind.to_owned();
                     if let Some(remaining) = remaining {
                         get_kind_(field_kind.kind, &remaining, doc, line_number)
                     } else {
-                        Ok(field_kind)
+                        Ok(ftd::interpreter2::StateWithThing::new_thing(field_kind))
                     }
                 }
                 ftd::interpreter2::Kind::List { kind } => {
                     if let Some(remaining) = remaining {
                         get_kind_(*kind, &remaining, doc, line_number)
                     } else {
-                        Ok(ftd::interpreter2::KindData::new(*kind))
+                        Ok(ftd::interpreter2::StateWithThing::new_thing(
+                            ftd::interpreter2::KindData::new(*kind),
+                        ))
                     }
                 }
                 t => ftd::interpreter2::utils::e2(
@@ -475,10 +544,16 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::KindData> {
-        Ok(self
-            .get_kind_with_argument(name, line_number, None, &None)?
-            .1)
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::KindData>>
+    {
+        match self.get_kind_with_argument(name, line_number, None, &None)? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => {
+                Ok(ftd::interpreter2::StateWithThing::new_thing(fields.1))
+            }
+        }
     }
 
     pub fn get_component(
@@ -492,6 +567,29 @@ impl<'a> TDoc<'a> {
                 format!("Expected Component, found: `{:?}`", t).as_str(),
                 name,
                 "get_component",
+                line_number,
+            ),
+        }
+    }
+
+    pub fn search_component(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<ftd::interpreter2::ComponentDefinition>,
+    > {
+        match self.search_thing(name, line_number)? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Component(c)) => {
+                Ok(ftd::interpreter2::StateWithThing::new_thing(c))
+            }
+            ftd::interpreter2::StateWithThing::Thing(t) => self.err(
+                format!("Expected Component, found: `{:?}`", t).as_str(),
+                name,
+                "search_component",
                 line_number,
             ),
         }
@@ -654,6 +752,255 @@ impl<'a> TDoc<'a> {
         Ok((initial_thing.variable(self.name, line_number)?, remaining))
     }
 
+    pub fn search_thing(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Thing>>
+    {
+        let name = name
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
+            .unwrap_or(name);
+
+        let (initial_thing, remaining) = match self.search_initial_thing(name, line_number)? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+        };
+
+        if let Some(remaining) = remaining {
+            return search_thing_(self, line_number, remaining.as_str(), &initial_thing);
+        }
+        return Ok(ftd::interpreter2::StateWithThing::new_thing(initial_thing));
+
+        fn search_thing_(
+            doc: &ftd::interpreter2::TDoc,
+            line_number: usize,
+            name: &str,
+            thing: &ftd::interpreter2::Thing,
+        ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Thing>>
+        {
+            let (v, remaining) = ftd::interpreter2::utils::split_at(name, ".");
+            let thing = match thing.clone() {
+                ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                    name,
+                    value,
+                    mutable,
+                    ..
+                }) => {
+                    let value_kind = value.kind();
+                    let fields = match value.resolve(doc, line_number)?.inner() {
+                        Some(ftd::interpreter2::Value::Record { fields, .. }) => fields,
+                        Some(ftd::interpreter2::Value::Object { values }) => values,
+                        Some(ftd::interpreter2::Value::List { data, .. }) => data
+                            .into_iter()
+                            .enumerate()
+                            .map(|(index, v)| (index.to_string(), v))
+                            .collect::<ftd::Map<ftd::interpreter2::PropertyValue>>(),
+                        None => {
+                            let kind_name = match value_kind.get_record_name() {
+                                Some(name) => name,
+                                _ => {
+                                    return doc.err(
+                                        "not an record",
+                                        thing,
+                                        "get_thing",
+                                        line_number,
+                                    );
+                                }
+                            };
+                            let kind_thing = match doc.search_thing(kind_name, line_number)? {
+                                ftd::interpreter2::StateWithThing::State(s) => {
+                                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                                }
+                                ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+                            };
+                            let kind = match kind_thing
+                                .record(doc.name, line_number)?
+                                .fields
+                                .iter()
+                                .find(|f| f.name.eq(&v))
+                                .map(|v| v.kind.to_owned())
+                            {
+                                Some(f) => f,
+                                _ => {
+                                    return doc.err(
+                                        "not an record or or-type",
+                                        thing,
+                                        "get_thing",
+                                        line_number,
+                                    );
+                                }
+                            };
+                            let thing =
+                                ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                                    name,
+                                    kind: kind.to_owned(),
+                                    mutable,
+                                    value: ftd::interpreter2::PropertyValue::Value {
+                                        value: ftd::interpreter2::Value::Optional {
+                                            data: Box::new(None),
+                                            kind,
+                                        },
+                                        is_mutable: mutable,
+                                        line_number,
+                                    },
+                                    conditional_value: vec![],
+                                    line_number,
+                                    is_static: !mutable,
+                                });
+                            if let Some(remaining) = remaining {
+                                return search_thing_(doc, line_number, &remaining, &thing);
+                            }
+                            return Ok(ftd::interpreter2::StateWithThing::new_thing(thing));
+                        }
+                        _ => return doc.err("not an record", thing, "get_thing", line_number),
+                    };
+                    match fields.get(&v) {
+                        Some(ftd::interpreter2::PropertyValue::Value {
+                            value: val,
+                            line_number,
+                            is_mutable,
+                        }) => ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                            name,
+                            kind: ftd::interpreter2::KindData {
+                                kind: val.kind(),
+                                caption: false,
+                                body: false,
+                            },
+                            mutable: false,
+                            value: ftd::interpreter2::PropertyValue::Value {
+                                value: val.to_owned(),
+                                line_number: *line_number,
+                                is_mutable: *is_mutable,
+                            },
+                            conditional_value: vec![],
+                            line_number: *line_number,
+                            is_static: !mutable,
+                        }),
+                        Some(ftd::interpreter2::PropertyValue::Reference { name, .. })
+                        | Some(ftd::interpreter2::PropertyValue::Clone { name, .. }) => {
+                            let (initial_thing, name) =
+                                match doc.search_initial_thing(name, line_number)? {
+                                    ftd::interpreter2::StateWithThing::State(s) => {
+                                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                                    }
+                                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+                                };
+
+                            if let Some(remaining) = name {
+                                match search_thing_(
+                                    doc,
+                                    line_number,
+                                    remaining.as_str(),
+                                    &initial_thing,
+                                )? {
+                                    ftd::interpreter2::StateWithThing::State(s) => {
+                                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                                    }
+                                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+                                }
+                            } else {
+                                initial_thing
+                            }
+                        }
+                        _ => thing.clone(),
+                    }
+                }
+                _ => {
+                    return doc.err("not an or-type", thing, "get_thing", line_number);
+                }
+            };
+            if let Some(remaining) = remaining {
+                return search_thing_(doc, line_number, &remaining, &thing);
+            }
+            Ok(ftd::interpreter2::StateWithThing::new_thing(thing))
+        }
+    }
+
+    pub fn search_initial_thing(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<(ftd::interpreter2::Thing, Option<String>)>,
+    > {
+        use itertools::Itertools;
+
+        let name = name
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
+            .unwrap_or(name);
+
+        if let Ok(thing) = self.get_initial_thing(name, line_number) {
+            return Ok(ftd::interpreter2::StateWithThing::new_thing(thing));
+        }
+
+        let mut state = if let Some(ref state) = self.state {
+            (*state).clone()
+        } else {
+            return self.err("not found", name, "search_thing", line_number);
+        };
+
+        let name = self.resolve_name(name);
+
+        let (doc_name, thing_name, remaining) =
+            ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+                name.as_str(),
+                self.name,
+                line_number,
+            );
+
+        let current_parsed_document = state.parsed_libs.get(self.name).unwrap();
+
+        if doc_name.ne(self.name) {
+            let current_doc_contains_thing = current_parsed_document
+                .ast
+                .iter()
+                .filter(|v| {
+                    !v.is_component() && v.name().eq(&format!("{}.{}", doc_name, thing_name))
+                })
+                .map(|v| v.to_owned())
+                .collect_vec();
+            if !current_doc_contains_thing.is_empty() {
+                state
+                    .to_process
+                    .push((self.name.to_string(), current_doc_contains_thing));
+            }
+        }
+
+        if let Some(parsed_document) = state.parsed_libs.get(doc_name.as_str()) {
+            let ast_for_thing = parsed_document
+                .ast
+                .iter()
+                .filter(|v| !v.is_component() && v.name().eq(&thing_name))
+                .map(|v| v.to_owned())
+                .collect_vec();
+
+            if ast_for_thing.is_empty() {
+                return self.err("not found", name, "search_thing", line_number);
+            }
+
+            state.to_process.push((doc_name, ast_for_thing));
+            return Ok(ftd::interpreter2::StateWithThing::new_state(
+                ftd::interpreter2::Interpreter::Restart { state },
+            ));
+        }
+
+        if doc_name.eq(self.name) {
+            return self.err("not found", name, "search_thing", line_number);
+        }
+
+        return Ok(ftd::interpreter2::StateWithThing::new_state(
+            ftd::interpreter2::Interpreter::StuckOnImport {
+                module: doc_name,
+                state,
+            },
+        ));
+    }
+
     pub fn get_initial_thing(
         &'a self,
         name: &'a str,
@@ -670,7 +1017,7 @@ impl<'a> TDoc<'a> {
             {
                 (function_name, None)
             } else {
-                ftd::interpreter2::utils::get_doc_name_and_remaining(name, self.name, line_number)?
+                ftd::interpreter2::utils::get_doc_name_and_remaining(name, self.name, line_number)
             };
             return match self.bag.get(name.as_str()) {
                 Some(a) => Ok((a.to_owned(), remaining_value)),

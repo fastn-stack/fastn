@@ -2,12 +2,25 @@
 #[macro_use]
 mod test;
 
+#[macro_export]
+macro_rules! try_ready {
+    ($e:expr) => {
+        match $e {
+            $crate::interpreter2::StateWithThing::State(s) => {
+                return Ok($crate::interpreter2::StateWithThing::new_state(s))
+            }
+            $crate::interpreter2::StateWithThing::Thing(t) => t,
+        }
+    };
+}
+
 mod main;
+mod main2;
 mod tdoc;
 mod things;
 pub mod utils;
 
-pub use main::{interpret, Document, Interpreter, InterpreterState};
+pub use main2::{interpret, Document, Interpreter, InterpreterState, StateWithThing};
 pub use tdoc::TDoc;
 pub use things::{
     component::{

@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+/*#![allow(dead_code)]
 
 #[derive(Debug, Default)]
 pub struct InterpreterState {
@@ -229,3 +229,4 @@ pub struct Document {
     pub tree: Vec<ftd::interpreter2::Component>,
     pub aliases: ftd::Map<String>,
 }
+*/

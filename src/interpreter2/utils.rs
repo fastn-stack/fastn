@@ -62,15 +62,17 @@ pub(crate) fn kind_eq(
     kind: &ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc,
     line_number: usize,
-) -> ftd::interpreter2::Result<bool> {
+) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<bool>> {
     let var_kind = ftd::ast::VariableKind::get_kind(key, doc.name, line_number)?;
-    let kind_data = ftd::interpreter2::KindData::from_ast_kind(
+    let kind_data = try_ready!(ftd::interpreter2::KindData::from_ast_kind(
         var_kind,
         &Default::default(),
         doc,
         line_number,
-    )?;
-    Ok(kind_data.kind.is_same_as(kind))
+    )?);
+    Ok(ftd::interpreter2::StateWithThing::new_thing(
+        kind_data.kind.is_same_as(kind),
+    ))
 }
 
 pub const CLONE: &str = "*$";
@@ -115,24 +117,34 @@ pub(crate) fn get_doc_name_and_remaining(
     s: &str,
     doc_id: &str,
     line_number: usize,
-) -> ftd::interpreter2::Result<(String, Option<String>)> {
+) -> (String, Option<String>) {
     let mut part1 = "".to_string();
     let mut pattern_to_split_at = s.to_string();
     if let Some((p1, p2)) = s.split_once('#') {
         part1 = format!("{}#", p1);
         pattern_to_split_at = p2.to_string();
     }
-    Ok(if pattern_to_split_at.contains('.') {
-        let (p1, p2) = ftd::interpreter2::utils::split(
-            pattern_to_split_at.as_str(),
-            ".",
-            doc_id,
-            line_number,
-        )?;
+    if pattern_to_split_at.contains('.') {
+        let (p1, p2) =
+            ftd::interpreter2::utils::split(pattern_to_split_at.as_str(), ".", doc_id, line_number)
+                .unwrap();
         (format!("{}{}", part1, p1), Some(p2))
     } else {
         (s.to_string(), None)
-    })
+    }
+}
+
+pub fn get_doc_name_and_thing_name_and_remaining(
+    s: &str,
+    doc_id: &str,
+    line_number: usize,
+) -> (String, String, Option<String>) {
+    let (doc_name, remaining) = get_doc_name_and_remaining(s, doc_id, line_number);
+    if let Some((doc_name, thing_name)) = doc_name.split_once("#") {
+        (doc_name.to_string(), thing_name.to_string(), remaining)
+    } else {
+        (doc_id.to_string(), doc_name, remaining)
+    }
 }
 
 pub fn split(
