@@ -7,12 +7,7 @@ pub struct TDoc<'a> {
 
 impl<'a> TDoc<'a> {
     pub(crate) fn itdoc(&self) -> ftd::interpreter2::TDoc {
-        ftd::interpreter2::TDoc {
-            name: self.name,
-            aliases: self.aliases,
-            bag: self.bag,
-            state: None,
-        }
+        ftd::interpreter2::TDoc::new(self.name, self.aliases, self.bag)
     }
 
     pub(crate) fn insert_local_variables(
