@@ -10,12 +10,11 @@ pub struct HtmlUI {
 
 impl HtmlUI {
     pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> ftd::html1::Result<HtmlUI> {
-        let tdoc = ftd::interpreter2::TDoc {
-            name: node_data.name.as_str(),
-            aliases: &node_data.aliases,
-            bag: &node_data.bag,
-            state: None,
-        };
+        let tdoc = ftd::interpreter2::TDoc::new(
+            node_data.name.as_str(),
+            &node_data.aliases,
+            &node_data.bag,
+        );
 
         let variable_dependencies =
             ftd::html1::VariableDependencyGenerator::new(id, &tdoc).get_set_functions()?;

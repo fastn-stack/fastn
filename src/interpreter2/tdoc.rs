@@ -2,13 +2,56 @@
 pub struct TDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
-    pub bag: &'a ftd::Map<ftd::interpreter2::Thing>,
-    pub state: Option<&'a mut ftd::interpreter2::InterpreterState>,
+    pub bag: BagOrState<'a>,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum BagOrState<'a> {
+    Bag(&'a ftd::Map<ftd::interpreter2::Thing>),
+    State(&'a mut ftd::interpreter2::InterpreterState),
 }
 
 impl<'a> TDoc<'a> {
+    pub fn new(
+        name: &'a str,
+        aliases: &'a ftd::Map<String>,
+        bag: &'a ftd::Map<ftd::interpreter2::Thing>,
+    ) -> TDoc<'a> {
+        TDoc {
+            name,
+            aliases,
+            bag: BagOrState::Bag(bag),
+        }
+    }
+
+    pub fn new_state(
+        name: &'a str,
+        aliases: &'a ftd::Map<String>,
+        state: &'a mut ftd::interpreter2::InterpreterState,
+    ) -> TDoc<'a> {
+        TDoc {
+            name,
+            aliases,
+            bag: BagOrState::State(state),
+        }
+    }
+
+    pub fn state(&'a self) -> Option<&&'a mut ftd::interpreter2::InterpreterState> {
+        match &self.bag {
+            BagOrState::Bag(_) => None,
+            BagOrState::State(s) => Some(s),
+        }
+    }
+
     pub fn resolve_name(&self, name: &str) -> String {
         ftd::interpreter2::utils::resolve_name(name, self.name, self.aliases)
+    }
+
+    pub fn bag(&'a self) -> &'a ftd::Map<ftd::interpreter2::Thing> {
+        match &self.bag {
+            BagOrState::Bag(b) => b,
+            BagOrState::State(s) => &s.bag,
+        }
     }
 
     pub fn get_record(
@@ -920,7 +963,7 @@ impl<'a> TDoc<'a> {
             return Ok(ftd::interpreter2::StateWithThing::new_thing(thing));
         }
 
-        let mut state = if let Some(ref state) = self.state {
+        let mut state = if let Some(state) = self.state() {
             (*state).clone()
         } else {
             return self.err("not found", name, "search_thing", line_number);
@@ -1001,7 +1044,7 @@ impl<'a> TDoc<'a> {
             } else {
                 ftd::interpreter2::utils::get_doc_name_and_remaining(name, self.name, line_number)
             };
-            return match self.bag.get(name.as_str()) {
+            return match self.bag().get(name.as_str()) {
                 Some(a) => Ok((a.to_owned(), remaining_value)),
                 None => self.err("not found", name, "get_initial_thing", line_number),
             };
@@ -1046,14 +1089,14 @@ impl<'a> TDoc<'a> {
             };
 
             match doc
-                .bag
+                .bag()
                 .get(format!("{}#{}", doc_name, name).as_str())
                 .map(ToOwned::to_owned)
             {
                 Some(a) => Some((a, remaining_value)),
                 None => match doc.aliases.get(doc_name) {
                     Some(g) => doc
-                        .bag
+                        .bag()
                         .get(format!("{}#{}", g, name).as_str())
                         .map(|v| (v.clone(), remaining_value)),
                     None => None,

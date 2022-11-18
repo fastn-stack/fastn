@@ -9,7 +9,7 @@ impl<'a> DataGenerator<'a> {
 
     pub(crate) fn get_data(&self) -> ftd::html1::Result<ftd::Map<serde_json::Value>> {
         let mut d: ftd::Map<serde_json::Value> = Default::default();
-        for (k, v) in self.doc.bag.iter() {
+        for (k, v) in self.doc.bag().iter() {
             if let ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                 value, ..
             }) = v

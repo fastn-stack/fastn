@@ -15,7 +15,7 @@ impl<'a> VariableDependencyGenerator<'a> {
         let mut result: ftd::VecMap<String> = Default::default();
         for variable in self
             .doc
-            .bag
+            .bag()
             .values()
             .filter_map(|v| v.clone().variable(self.doc.name, v.line_number()).ok())
         {

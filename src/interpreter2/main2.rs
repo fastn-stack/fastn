@@ -25,15 +25,9 @@ impl InterpreterState {
             let aliases = parsed_document.doc_aliases.clone();
             if let Some(ast) = ast_to_process.first() {
                 let ast = ast.clone();
-                let bag = self.bag.clone();
                 let state = &mut self;
 
-                let doc = ftd::interpreter2::TDoc {
-                    name: &name,
-                    aliases: &aliases,
-                    bag: &bag,
-                    state: Some(state),
-                };
+                let doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, state);
 
                 if ast.is_record() {
                     match ftd::interpreter2::Record::from_ast(ast, &doc)? {
