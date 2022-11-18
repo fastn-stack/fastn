@@ -562,9 +562,25 @@ dependencies = [
  "pest_derive",
  "regex",
  "shell-words",
- "typed-arena",
+ "typed-arena 1.7.0",
  "unicode_categories",
  "xdg",
+]
+
+[[package]]
+name = "comrak"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c11e55664fcff7f4d37cc2adf3a1996913692f037312f4ab0909047fdd2bf962"
+dependencies = [
+ "entities",
+ "memchr",
+ "once_cell",
+ "pest",
+ "pest_derive",
+ "regex",
+ "typed-arena 2.0.1",
+ "unicode_categories",
 ]
 
 [[package]]
@@ -1214,7 +1230,7 @@ dependencies = [
  "fbt-lib",
  "fluent",
  "fpm-utils",
- "ftd 0.2.0 (git+https://github.com/FifthTry/ftd?rev=021654b)",
+ "ftd 0.2.0 (git+https://github.com/FifthTry/ftd?rev=940dc93)",
  "futures",
  "hyper",
  "ignore",
@@ -1254,9 +1270,9 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.2.0"
-source = "git+https://github.com/FifthTry/ftd?rev=021654b#021654b1fde19e6a41a7601866b7f6e6a086e5b3"
+source = "git+https://github.com/FifthTry/ftd?rev=940dc93#940dc93b63d8314b7af0d67f67a8163e921f0fea"
 dependencies = [
- "comrak",
+ "comrak 0.15.0",
  "css-color-parser",
  "format_num",
  "include_dir",
@@ -1276,7 +1292,7 @@ name = "ftd"
 version = "0.2.0"
 source = "git+https://github.com/FifthTry/ftd?rev=b698bd6#b698bd6acf4b6dfc1557976ef63f378c473e8432"
 dependencies = [
- "comrak",
+ "comrak 0.14.0",
  "css-color-parser",
  "format_num",
  "include_dir",
@@ -3113,6 +3129,12 @@ name = "typed-arena"
 version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a9b2228007eba4120145f785df0f6c92ea538f5a3635a612ecf4e334c8c1446d"
+
+[[package]]
+name = "typed-arena"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0685c84d5d54d1c26f7d3eb96cd41550adb97baed141a761cf335d3d33bcd0ae"
 
 [[package]]
 name = "typenum"
