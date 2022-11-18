@@ -13,6 +13,10 @@ pub struct TocItem {
     pub readers: Vec<String>,
     pub writers: Vec<String>,
     pub document: Option<String>,
+    /// if provided `document` is confidential or not.
+    /// `confidential:true` means totally confidential
+    /// `confidential:false` can be seen some it's data
+    pub confidential: bool,
     /// /books/<string:book_name>/
     /// here book_name is path parameter
     pub path_parameters: Vec<(String, String)>,

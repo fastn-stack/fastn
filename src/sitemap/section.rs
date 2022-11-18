@@ -11,6 +11,7 @@ pub struct Section {
     ///
     /// Here foo/ is store as `id`
     pub id: String,
+    // TODO: It should be ftd::ImageSrc
     pub icon: Option<String>,
 
     /// `title` contains the title of the document. This can be specified inside
@@ -101,13 +102,17 @@ pub struct Section {
     /// ```
     /// default value will be `false`
     pub skip: bool,
+    /// if provided `document` is confidential or not.
+    /// `confidential:true` means totally confidential
+    /// `confidential:false` can be seen some it's data
+    pub confidential: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
     /// In FPM.ftd sitemap, we can use `document` for section, subsection and toc.
     /// # Section: /books/
     ///   document: /books/python/
     pub document: Option<String>,
-    /// If we can define dynamic `url` in section, subsection and toc of a sitemap.
+    /// If we can define dynamic `url` in section, subsection and toc in `dynamic-urls`.
     /// `url: /books/<string:book_name>/<integer:price>/`
     /// here book_name and price are path parameters
     /// path_parameters: [(string, book_name), (integer, price)]
@@ -130,6 +135,10 @@ pub struct Subsection {
     pub readers: Vec<String>,
     pub writers: Vec<String>,
     pub document: Option<String>,
+    /// if provided `document` is confidential or not.
+    /// `confidential:true` means totally confidential
+    /// `confidential:false` can be seen some it's data
+    pub confidential: bool,
     /// /books/<string:book_name>/
     /// here book_name is path parameter
     pub path_parameters: Vec<(String, String)>,
@@ -227,6 +236,7 @@ impl Default for Subsection {
             writers: vec![],
             document: None,
             path_parameters: vec![],
+            confidential: false,
         }
     }
 }
