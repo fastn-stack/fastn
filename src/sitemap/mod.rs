@@ -1190,86 +1190,102 @@ impl Sitemap {
 
     // TODO: need to handle special reader: everyone, writer: everyone
     // readers function should return Vec<UserGroup> or Everyone
+    // it return readers and `confidential`
     pub fn readers<'a>(
         &self,
         doc_path: &str,
         groups: &'a std::collections::BTreeMap<String, fpm::user_group::UserGroup>,
-    ) -> Vec<&'a fpm::user_group::UserGroup> {
+    ) -> (Vec<&'a fpm::user_group::UserGroup>, bool) {
         use itertools::Itertools;
 
         for section in self.sections.iter() {
-            let readers = find_section(section, doc_path);
+            let (readers, confidential) = find_section(section, doc_path);
             if readers.is_empty() {
                 continue;
             }
             let readers: Vec<String> = self.readers.iter().cloned().chain(readers).collect();
-            return readers
-                .iter()
-                .unique()
-                .filter_map(|g| groups.get(g))
-                .chain(self.writers(doc_path, groups))
-                .collect();
+            return (
+                readers
+                    .iter()
+                    .unique()
+                    .filter_map(|g| groups.get(g))
+                    .chain(self.writers(doc_path, groups))
+                    .collect(),
+                confidential,
+            );
         }
 
-        return vec![];
+        return (vec![], false);
 
-        fn find_toc(toc: &toc::TocItem, doc_path: &str) -> Vec<String> {
+        fn find_toc(toc: &toc::TocItem, doc_path: &str) -> (Vec<String>, bool) {
             if toc.id.eq(doc_path) {
-                return toc.readers.clone();
+                return (toc.readers.clone(), toc.confidential);
             }
 
             for child in toc.children.iter() {
-                let readers = find_toc(child, doc_path);
+                let (readers, confidential) = find_toc(child, doc_path);
                 if readers.is_empty() {
                     continue;
                 }
-                return readers
-                    .into_iter()
-                    .chain(toc.readers.iter().cloned())
-                    .collect();
+                return (
+                    readers
+                        .into_iter()
+                        .chain(toc.readers.iter().cloned())
+                        .collect(),
+                    confidential,
+                );
             }
-            vec![]
+            (vec![], false)
         }
 
-        fn find_subsection(subsection: &section::Subsection, doc_path: &str) -> Vec<String> {
+        fn find_subsection(
+            subsection: &section::Subsection,
+            doc_path: &str,
+        ) -> (Vec<String>, bool) {
             if subsection
                 .id
                 .as_ref()
                 .map(|id| id.eq(doc_path))
                 .unwrap_or(false)
             {
-                return subsection.readers.clone();
+                return (subsection.readers.clone(), subsection.confidential);
             }
 
             for toc in subsection.toc.iter() {
-                let readers = find_toc(toc, doc_path);
+                let (readers, confidential) = find_toc(toc, doc_path);
                 if readers.is_empty() {
                     continue;
                 }
-                return readers
-                    .into_iter()
-                    .chain(subsection.readers.iter().cloned())
-                    .collect();
+                return (
+                    readers
+                        .into_iter()
+                        .chain(subsection.readers.iter().cloned())
+                        .collect(),
+                    confidential,
+                );
             }
-            vec![]
+            (vec![], false)
         }
 
-        fn find_section(section: &section::Section, doc_path: &str) -> Vec<String> {
+        fn find_section(section: &section::Section, doc_path: &str) -> (Vec<String>, bool) {
             if section.id.eq(doc_path) {
-                return section.readers.clone();
+                return (section.readers.clone(), section.confidential);
             }
 
             for subsection in section.subsections.iter() {
-                let readers = find_subsection(subsection, doc_path);
+                let (readers, confidential) = find_subsection(subsection, doc_path);
                 if readers.is_empty() {
                     continue;
                 }
-                return readers
-                    .into_iter()
-                    .chain(section.readers.iter().cloned())
-                    .collect();
+                return (
+                    readers
+                        .into_iter()
+                        .chain(section.readers.iter().cloned())
+                        .collect(),
+                    confidential,
+                );
             }
-            vec![]
+            (vec![], false)
         }
     }
 

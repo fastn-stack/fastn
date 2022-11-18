@@ -1391,22 +1391,42 @@ impl Config {
         req: &fpm::http::Request,
         document_path: &str,
     ) -> fpm::Result<bool> {
+        // Function Docs
+        // If user can read the document based on readers, user will have read access to page
+        // If user cannot read the document based on readers, and if confidential is false so user
+        // can access the page, and if confidential is true user will not be able to access the
+        // document
+
+        // can_read: true, confidential: true => true (can access)
+        // can_read: true, confidential: false => true (can access)
+        // can_read: false, confidential: true => false (cannot access)
+        // can_read: false, confidential: false => true (can access)
+
         use itertools::Itertools;
         let document_name = self.document_name_with_default(document_path);
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
-            let document_readers = sitemap.readers(document_name.as_str(), &self.package.groups);
-            dbg!(&document_readers);
+            let (document_readers, confidential) =
+                sitemap.readers(document_name.as_str(), &self.package.groups);
+
+            // TODO: Need to check the confidential logic, if readers are not defined in the sitemap
             if document_readers.is_empty() {
                 return Ok(true);
             }
             let access_identities =
                 fpm::user_group::access_identities(self, req, &document_name, true).await?;
-            return fpm::user_group::belongs_to(
+
+            let can_read = fpm::user_group::belongs_to(
                 self,
                 document_readers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
-            );
+            )?;
+
+            if can_read {
+                return Ok(true);
+            }
+
+            return Ok(!confidential);
         }
         Ok(true)
     }

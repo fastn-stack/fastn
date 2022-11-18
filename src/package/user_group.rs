@@ -346,7 +346,7 @@ pub fn get_identities(
 
     let readers_writers = if let Some(sitemap) = &config.package.sitemap {
         if is_read {
-            sitemap.readers(document_name, &config.package.groups)
+            sitemap.readers(document_name, &config.package.groups).0
         } else {
             sitemap.writers(document_name, &config.package.groups)
         }
