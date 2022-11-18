@@ -16,7 +16,8 @@ impl Record {
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Record> {
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
+    {
         let record = ast.get_record(doc.name)?;
         let name = doc.resolve_name(record.name.as_str());
         let known_kinds = std::iter::IntoIterator::into_iter([(
@@ -26,8 +27,17 @@ impl Record {
             },
         )])
         .collect::<ftd::Map<ftd::interpreter2::Kind>>();
-        let fields = Field::from_ast_fields(record.fields, doc, &known_kinds)?;
-        Ok(Record::new(name.as_str(), fields, record.line_number))
+        let fields = match Field::from_ast_fields(record.fields, doc, &known_kinds)? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+        };
+        Ok(ftd::interpreter2::StateWithThing::new_thing(Record::new(
+            name.as_str(),
+            fields,
+            record.line_number,
+        )))
     }
 
     pub(crate) fn get_field(
@@ -127,36 +137,60 @@ impl Field {
         fields: Vec<ftd::ast::Field>,
         doc: &ftd::interpreter2::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<Vec<Field>> {
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
         let mut result = vec![];
         for field in fields {
-            result.push(Field::from_ast_field(field, doc, known_kinds)?);
+            let field = match Field::from_ast_field(field, doc, known_kinds)? {
+                ftd::interpreter2::StateWithThing::State(s) => {
+                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                }
+                ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+            };
+            result.push(field);
         }
-        Ok(result)
+        Ok(ftd::interpreter2::StateWithThing::new_thing(result))
     }
 
     pub(crate) fn from_ast_field(
         field: ftd::ast::Field,
         doc: &ftd::interpreter2::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-    ) -> ftd::interpreter2::Result<Field> {
-        let kind = ftd::interpreter2::KindData::from_ast_kind(
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Field>> {
+        let kind = match ftd::interpreter2::KindData::from_ast_kind(
             field.kind,
             known_kinds,
             doc,
             field.line_number,
-        )?;
-        let value = field.value.map_or(Ok(None), |v| {
-            ftd::interpreter2::PropertyValue::from_ast_value(v, doc, field.mutable, Some(&kind))
-                .map(Some)
-        })?;
-        Ok(Field {
+        )? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+        };
+
+        let value = if let Some(value) = field.value {
+            match ftd::interpreter2::PropertyValue::from_ast_value(
+                value,
+                doc,
+                field.mutable,
+                Some(&kind),
+            )? {
+                ftd::interpreter2::StateWithThing::State(s) => {
+                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                }
+                ftd::interpreter2::StateWithThing::Thing(fields) => Some(fields),
+            }
+        } else {
+            None
+        };
+
+        Ok(ftd::interpreter2::StateWithThing::new_thing(Field {
             name: field.name.to_string(),
             kind,
             mutable: field.mutable,
             value,
             line_number: field.line_number,
-        })
+        }))
     }
 
     pub fn is_caption(&self) -> bool {
@@ -176,10 +210,20 @@ impl Field {
         definition_name_with_arguments: &Option<(&str, &[Field])>,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<Vec<Field>> {
-        Ok(match definition_name_with_arguments {
-            Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
-            _ => doc.get_component(component_name, line_number)?.arguments,
-        })
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
+        Ok(ftd::interpreter2::StateWithThing::new_thing(
+            match definition_name_with_arguments {
+                Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
+                _ => {
+                    match doc.search_component(component_name, line_number)? {
+                        ftd::interpreter2::StateWithThing::State(s) => {
+                            return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                        }
+                        ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+                    }
+                    .arguments
+                }
+            },
+        ))
     }
 }

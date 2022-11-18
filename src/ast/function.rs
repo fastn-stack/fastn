@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
     pub kind: ftd::ast::VariableKind,

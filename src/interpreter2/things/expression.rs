@@ -23,17 +23,24 @@ impl Expression {
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<Expression> {
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Expression>> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
             let node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
-            let references = Expression::get_references(
+            let references = match Expression::get_references(
                 &node,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
                 doc,
                 condition.line_number,
-            )?;
-            return Ok(Expression::new(node, references, condition.line_number));
+            )? {
+                ftd::interpreter2::StateWithThing::State(s) => {
+                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                }
+                ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+            };
+            return Ok(ftd::interpreter2::StateWithThing::new_thing(
+                Expression::new(node, references, condition.line_number),
+            ));
         }
         ftd::interpreter2::utils::e2(
             format!(
@@ -51,13 +58,15 @@ impl Expression {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::Map<ftd::interpreter2::PropertyValue>> {
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<ftd::Map<ftd::interpreter2::PropertyValue>>,
+    > {
         let variable_identifier_reads = get_variable_identifier_read(node);
         let mut result: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
         for variable in variable_identifier_reads {
             let full_variable_name =
                 doc.resolve_reference_name(format!("${}", variable).as_str(), line_number)?;
-            let value = ftd::interpreter2::PropertyValue::from_string_with_argument(
+            let value = match ftd::interpreter2::PropertyValue::from_string_with_argument(
                 full_variable_name.as_str(),
                 doc,
                 None,
@@ -65,10 +74,15 @@ impl Expression {
                 line_number,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
-            )?;
+            )? {
+                ftd::interpreter2::StateWithThing::State(s) => {
+                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                }
+                ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+            };
             result.insert(variable, value);
         }
-        Ok(result)
+        Ok(ftd::interpreter2::StateWithThing::new_thing(result))
     }
 
     pub fn eval(&self, doc: &ftd::interpreter2::TDoc) -> ftd::interpreter2::Result<bool> {

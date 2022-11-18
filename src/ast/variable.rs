@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct VariableDefinition {
     pub name: String,
     pub kind: ftd::ast::VariableKind,
@@ -70,7 +70,7 @@ impl VariableDefinition {
     }
 }
 
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct VariableInvocation {
     pub name: String,
     pub value: ftd::ast::VariableValue,

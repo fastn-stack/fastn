@@ -14,6 +14,7 @@ impl HtmlUI {
             name: node_data.name.as_str(),
             aliases: &node_data.aliases,
             bag: &node_data.bag,
+            state: None,
         };
 
         let variable_dependencies =

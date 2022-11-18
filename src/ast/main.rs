@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum AST {
     Import(ftd::ast::Import),
     Record(ftd::ast::Record),
@@ -19,6 +19,18 @@ impl AST {
             di_vec.push(AST::from_section(&section, doc_id)?);
         }
         Ok(di_vec)
+    }
+
+    pub fn name(&self) -> String {
+        match self {
+            AST::Import(i) => i.alias.clone(),
+            AST::Record(r) => r.name.clone(),
+            AST::VariableDefinition(v) => v.name.clone(),
+            AST::VariableInvocation(v) => v.name.clone(),
+            AST::ComponentDefinition(c) => c.name.clone(),
+            AST::ComponentInvocation(c) => c.name.clone(),
+            AST::FunctionDefinition(f) => f.name.clone(),
+        }
     }
 
     pub fn from_section(section: &ftd::p11::Section, doc_id: &str) -> ftd::ast::Result<AST> {
@@ -134,6 +146,10 @@ impl AST {
 
     pub fn is_record(&self) -> bool {
         matches!(self, AST::Record(_))
+    }
+
+    pub fn is_import(&self) -> bool {
+        matches!(self, AST::Import(_))
     }
 
     pub fn is_variable_definition(&self) -> bool {

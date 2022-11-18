@@ -224,7 +224,7 @@ impl KindData {
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<KindData> {
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<KindData>> {
         let mut ast_kind = var_kind.kind.clone();
         let (caption, body) = check_for_caption_and_body(&mut ast_kind);
         if ast_kind.is_empty() {
@@ -246,7 +246,7 @@ impl KindData {
                 kind_data = kind_data.into_by_ast_modifier(modifier);
             }
 
-            return Ok(kind_data);
+            return Ok(ftd::interpreter2::StateWithThing::new_thing(kind_data));
         }
         let kind = match ast_kind.as_ref() {
             "string" => Kind::string(),
@@ -269,17 +269,25 @@ impl KindData {
                 }
             }
             k if known_kinds.contains_key(k) => known_kinds.get(k).unwrap().to_owned(),
-            k => match doc.get_thing(k, line_number)? {
-                ftd::interpreter2::Thing::Record(r) => Kind::record(r.name.as_str()),
-                ftd::interpreter2::Thing::Component(_) => Kind::ui(),
-                t => {
-                    return ftd::interpreter2::utils::e2(
-                        format!("Can't get find for `{:?}`", t),
-                        doc.name,
-                        line_number,
-                    )
+            k => {
+                let thing = match doc.search_thing(k, line_number)? {
+                    ftd::interpreter2::StateWithThing::State(s) => {
+                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                    }
+                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+                };
+                match thing {
+                    ftd::interpreter2::Thing::Record(r) => Kind::record(r.name.as_str()),
+                    ftd::interpreter2::Thing::Component(_) => Kind::ui(),
+                    t => {
+                        return ftd::interpreter2::utils::e2(
+                            format!("Can't get find for `{:?}`", t),
+                            doc.name,
+                            line_number,
+                        )
+                    }
                 }
-            },
+            }
         };
 
         let mut kind_data = KindData {
@@ -292,7 +300,7 @@ impl KindData {
             kind_data = kind_data.into_by_ast_modifier(modifier);
         }
 
-        Ok(kind_data)
+        Ok(ftd::interpreter2::StateWithThing::new_thing(kind_data))
     }
 
     fn optional(self) -> KindData {

@@ -13,21 +13,33 @@ impl Variable {
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Variable> {
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
+    {
         let variable_definition = ast.get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
-        let kind = ftd::interpreter2::KindData::from_ast_kind(
+        let kind = match ftd::interpreter2::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
             variable_definition.line_number,
-        )?;
-        let value = ftd::interpreter2::PropertyValue::from_ast_value(
+        )? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+        };
+
+        let value = match ftd::interpreter2::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
             variable_definition.mutable,
             Some(&kind),
-        )?;
+        )? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+        };
 
         let variable = Variable {
             name,
@@ -42,31 +54,43 @@ impl Variable {
 
         ftd::interpreter2::utils::validate_variable(&variable, doc)?;
 
-        Ok(variable)
+        Ok(ftd::interpreter2::StateWithThing::new_thing(variable))
     }
 
     pub(crate) fn update_from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Variable> {
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
+    {
         let variable_definition = ast.get_variable_invocation(doc.name)?;
-        let kind = doc.get_kind(
+        let kind = match doc.get_kind(
             variable_definition.name.as_str(),
             variable_definition.line_number,
-        )?;
+        )? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+        };
 
-        let value = ftd::interpreter2::PropertyValue::from_ast_value(
+        let value = match ftd::interpreter2::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
             true,
             Some(&kind),
-        )?;
+        )? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+        };
+
         let variable = doc.set_value(
             variable_definition.name.as_str(),
             value,
             variable_definition.line_number,
         )?;
-        Ok(variable)
+        Ok(ftd::interpreter2::StateWithThing::new_thing(variable))
     }
 
     pub fn set_static(self, doc: &ftd::interpreter2::TDoc) -> Self {

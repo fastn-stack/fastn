@@ -27,34 +27,45 @@ impl Function {
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::Function> {
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Function>>
+    {
         let function = ast.get_function(doc.name)?;
         let name = doc.resolve_name(function.name.as_str());
-        let arguments = ftd::interpreter2::Argument::from_ast_fields(
+        let arguments = match ftd::interpreter2::Argument::from_ast_fields(
             function.arguments,
             doc,
             &Default::default(),
-        )?;
+        )? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+        };
 
-        let kind = ftd::interpreter2::KindData::from_ast_kind(
+        let kind = match ftd::interpreter2::KindData::from_ast_kind(
             function.kind,
             &Default::default(),
             doc,
             function.line_number,
-        )?;
+        )? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+        };
 
         let expression = vec![Expression {
             expression: function.definition.value.to_string(),
             line_number: function.definition.line_number,
         }];
 
-        Ok(Function::new(
+        Ok(ftd::interpreter2::StateWithThing::new_thing(Function::new(
             name.as_str(),
             kind,
             arguments,
             expression,
             function.line_number,
-        ))
+        )))
     }
 
     pub(crate) fn resolve(
@@ -229,7 +240,8 @@ impl FunctionCall {
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         line_number: usize,
-    ) -> ftd::interpreter2::Result<ftd::interpreter2::FunctionCall> {
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::FunctionCall>>
+    {
         let expression = value
             .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
             .to_string();
@@ -269,7 +281,7 @@ impl FunctionCall {
                         line_number,
                     );
                 }
-                ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
+                match ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
                     ftd::ast::VariableValue::String {
                         value: property,
                         line_number,
@@ -279,7 +291,12 @@ impl FunctionCall {
                     Some(&argument.kind),
                     definition_name_with_arguments,
                     loop_object_name_and_kind,
-                )?
+                )? {
+                    ftd::interpreter2::StateWithThing::State(s) => {
+                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                    }
+                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
+                }
             } else {
                 match argument.value {
                     Some(ref value) => value.clone(),
@@ -308,13 +325,15 @@ impl FunctionCall {
         let reference_full_name = ftd::interpreter2::PropertyValueSource::Global
             .get_reference_name(function_name.as_str(), doc);
 
-        Ok(ftd::interpreter2::FunctionCall::new(
-            reference_full_name.as_str(),
-            function.return_kind,
-            mutable,
-            line_number,
-            values,
-            order,
+        Ok(ftd::interpreter2::StateWithThing::new_thing(
+            ftd::interpreter2::FunctionCall::new(
+                reference_full_name.as_str(),
+                function.return_kind,
+                mutable,
+                line_number,
+                values,
+                order,
+            ),
         ))
     }
 }
