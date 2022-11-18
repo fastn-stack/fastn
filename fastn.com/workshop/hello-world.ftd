@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/workshop-page as ws
+
 
 -- boolean $what-are-task-1-completed: false
 $always-include$: true
@@ -37,6 +37,10 @@ $on-click$: message-host $what-are-task-3-object
 $task-status: $what-are-task-3-completed
 
 
+
+
+
+
 -- ws.chapter: Hello World
 id: ws-hello-world
 sidebar: true
@@ -47,13 +51,9 @@ the package manager and server for FTD.
 In this exercise **we will install FPM, and run a hello world program**.
 
 
-
 -- ws.task: Task 1: Install FPM
 $status: $what-are-task-1-completed
 button: what-are-task-1-button:
-
-
-
 
 To install {ds.highlight: fpm we will use the installation script}:
 
@@ -91,8 +91,6 @@ If you get an error message in chat or speak up.
 -- ws.task: Task 2: FPM.ftd
 $status: $what-are-task-2-completed
 button: what-are-task-2-button:
-
-
 
 -- ds.markdown:
 
@@ -164,7 +162,6 @@ You have installed fpm and created your first fpm package. Good job!
 
 {ds.highlight: Move to learning about [booleans now](id: ws-booleans)} or back to
 [the workshop page](id: workshop).
-
 
 
 -- container: ws-hello-world.content-wrap.right-sidebar

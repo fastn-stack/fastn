@@ -2,7 +2,7 @@
 -- import: ps
 -- import: fbs
 -- import: ftd.dev/assets
-
+-- import: ws
 
 -- fpm.toc-item list empty-toc:
 
@@ -12,10 +12,14 @@
 -- ft.site-url: /
 -- ft.site-name: 
 
+
 -- ft.site-logo:
 light: $assets.files.images.logo-fifthtry-dark.svg.light
 dark: $assets.files.images.logo-fifthtry-dark.svg.dark
 
+-- ws.site-logo:
+light: $assets.files.images.logo-fifthtry-dark.svg.light
+dark: $assets.files.images.logo-fifthtry-dark.svg.dark
 
 
 
@@ -32,15 +36,6 @@ light: $assets.files.images.ftd.png.light
 dark:  $assets.files.images.ftd.png.dark
 
 -- ps.current-product: 2
-
-
--- ft.sections:
-$processor$: toc
-
-- Why FTD?: /why/
-- Docs: /docs/
-- News: /news/
-- Github: https://github.com/fifthtry/ftd/
 
 
 

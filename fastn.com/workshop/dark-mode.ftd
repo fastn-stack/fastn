@@ -1,13 +1,14 @@
--- import: fifthtry.github.io/workshop-page as ws
+
 
 -- ws.chapter: Dark Mode Support
 id: ws-dark-mode
 sidebar: true
 
-
-
 -- container: ws-dark-mode.content-wrap.right-sidebar
+
 -- ws.sidebar:
+
 -- container: ws-dark-mode.content-wrap.right-sidebar-mobile
+
 -- ws.sidebar:
 

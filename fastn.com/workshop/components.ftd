@@ -1,11 +1,8 @@
--- import: fifthtry.github.io/workshop-page as ws
+
 
 -- ws.chapter: Creating Custom Components
 id: ws-components
 sidebar: true
-
-
-
 
 -- container: ws-components.content-wrap.right-sidebar
 

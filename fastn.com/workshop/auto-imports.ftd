@@ -1,12 +1,13 @@
--- import: fifthtry.github.io/workshop-page as ws
+
 
 -- ws.chapter: Auto Imports
 id: ws-auto-imports
 sidebar: true
 
-
-
 -- container: ws-auto-imports.content-wrap.right-sidebar
+
 -- ws.sidebar:
+
 -- container: ws-auto-imports.content-wrap.right-sidebar-mobile
+
 -- ws.sidebar:

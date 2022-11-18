@@ -1,11 +1,14 @@
--- import: fifthtry.github.io/workshop-page as ws
+
 
 -- ws.chapter: Basic Styling
 id: ws-styling
 sidebar: true
 
 -- container: ws-styling.content-wrap.right-sidebar
+
 -- ws.sidebar:
+
 -- container: ws-styling.content-wrap.right-sidebar-mobile
+
 -- ws.sidebar:
 

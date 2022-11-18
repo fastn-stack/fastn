@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/workshop-page as ws
+
 
 -- boolean $what-are-task-1-completed: false
 $always-include$: true

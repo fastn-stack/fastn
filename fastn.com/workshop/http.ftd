@@ -1,12 +1,13 @@
--- import: fifthtry.github.io/workshop-page as ws
 
 -- ws.chapter: HTTP Processor
 id: ws-http
 sidebar: true
 
-
 -- container: ws-http.content-wrap.right-sidebar
+
 -- ws.sidebar:
+
 -- container: ws-http.content-wrap.right-sidebar-mobile
+
 -- ws.sidebar:
 

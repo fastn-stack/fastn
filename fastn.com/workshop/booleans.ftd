@@ -1,4 +1,3 @@
--- import: fifthtry.github.io/workshop-page as ws
 
 
 
@@ -25,6 +24,9 @@ variable: $what-are-task-2-completed
 $on-click$: $what-are-task-2-completed = true
 $on-click$: message-host $what-are-task-2-object
 $task-status: $what-are-task-2-completed
+
+
+
 
 
 -- ws.chapter: Booleans in FTD
@@ -98,10 +100,6 @@ You have learnt how to define a boolean variable and use to control the UI.
 
 {ds.highlight: Move to learning about [numbers and strings](/workshop/numbers-and-strings/)}
 or back to [the workshop](id: workshop).
-
-
-
-
 
 -- container: ws-booleans.content-wrap.right-sidebar
 

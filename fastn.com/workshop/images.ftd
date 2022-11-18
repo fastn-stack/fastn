@@ -1,10 +1,12 @@
--- import: fifthtry.github.io/workshop-page as ws
 
 -- ws.chapter: Images In FTD
 id: ws-images
 sidebar: true
 
 -- container: ws-images.content-wrap.right-sidebar
+
 -- ws.sidebar:
+
 -- container: ws-images.content-wrap.right-sidebar-mobile
+
 -- ws.sidebar:

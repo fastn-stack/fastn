@@ -1,10 +1,13 @@
--- import: fifthtry.github.io/workshop-page as ws
+
 
 -- ws.chapter: Import: Splitting FTD Into Modules
 id: ws-imports
 sidebar: true
 
 -- container: ws-imports.content-wrap.right-sidebar
+
 -- ws.sidebar:
+
 -- container: ws-imports.content-wrap.right-sidebar-mobile
+
 -- ws.sidebar:

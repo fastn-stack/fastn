@@ -1,4 +1,3 @@
--- import: fifthtry.github.io/workshop-page as ws
 
 -- boolean $what-are-lesson-completed: false
 $always-include$: true

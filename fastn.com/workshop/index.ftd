@@ -1,5 +1,4 @@
 -- import: bling/holder
--- import: fifthtry.github.io/workshop-page as ws
 -- import: cbox
 
 
@@ -185,10 +184,8 @@ background-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
 role: $fpm.type.label-big
 color: $fpm.color.main.text-strong
 
-
-
-
 -- container: workshop.wrapper.right-sidebar
+
 -- sidebar:
 
 
