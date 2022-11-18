@@ -114,6 +114,15 @@ impl SitemapElement {
         *skip = flag;
     }
 
+    pub(crate) fn set_confidential(&mut self, flag: bool) {
+        let skip = match self {
+            SitemapElement::Section(s) => &mut s.confidential,
+            SitemapElement::Subsection(s) => &mut s.confidential,
+            SitemapElement::TocItem(s) => &mut s.confidential,
+        };
+        *skip = flag;
+    }
+
     pub(crate) fn set_readers(&mut self, group: &str) {
         let readers = match self {
             SitemapElement::Section(s) => &mut s.readers,
@@ -429,6 +438,7 @@ impl SitemapParser {
                     Some((k, v)) => {
                         let v = v.trim();
                         let id = i.get_id();
+                        // TODO: Later use match
                         if k.eq("url") {
                             i.set_id(Some(v.to_string()));
                             if i.get_title().is_none() {
@@ -463,6 +473,14 @@ impl SitemapParser {
                             i.set_writers(v);
                         } else if k.eq("document") {
                             i.set_document(v);
+                        } else if k.eq("confidential") {
+                            i.set_confidential(v.parse::<bool>().map_err(|e| {
+                                ParseError::InvalidTOCItem {
+                                    doc_id,
+                                    message: e.to_string(),
+                                    row_content: line.to_string(),
+                                }
+                            })?);
                         }
                         i.insert_key_value(k, v);
                     }
@@ -1215,7 +1233,7 @@ impl Sitemap {
             );
         }
 
-        return (vec![], false);
+        return (vec![], true);
 
         fn find_toc(toc: &toc::TocItem, doc_path: &str) -> (Vec<String>, bool) {
             if toc.id.eq(doc_path) {
@@ -1235,7 +1253,7 @@ impl Sitemap {
                     confidential,
                 );
             }
-            (vec![], false)
+            (vec![], true)
         }
 
         fn find_subsection(
@@ -1264,7 +1282,7 @@ impl Sitemap {
                     confidential,
                 );
             }
-            (vec![], false)
+            (vec![], true)
         }
 
         fn find_section(section: &section::Section, doc_path: &str) -> (Vec<String>, bool) {
@@ -1285,7 +1303,7 @@ impl Sitemap {
                     confidential,
                 );
             }
-            (vec![], false)
+            (vec![], true)
         }
     }
 

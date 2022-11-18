@@ -1422,6 +1422,9 @@ impl Config {
                 access_identities.iter().collect_vec().as_slice(),
             )?;
 
+            dbg!(can_read);
+            dbg!(confidential);
+
             if can_read {
                 return Ok(true);
             }

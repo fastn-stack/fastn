@@ -236,7 +236,7 @@ impl Default for Subsection {
             writers: vec![],
             document: None,
             path_parameters: vec![],
-            confidential: false,
+            confidential: true,
         }
     }
 }
