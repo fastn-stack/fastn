@@ -1,15 +1,17 @@
 #[derive(Debug, Default)]
 pub struct InterpreterState {
     pub id: String,
+    pub package_name: Option<String>,
     pub bag: ftd::Map<ftd::p2::Thing>,
     pub document_stack: Vec<ParsedDocument>,
     pub parsed_libs: ftd::Map<Vec<String>>,
 }
 
 impl InterpreterState {
-    fn new(id: String) -> InterpreterState {
+    fn new(id: String, package_name: Option<String>) -> InterpreterState {
         InterpreterState {
             id,
+            package_name,
             bag: ftd::p2::interpreter::default_bag(),
             ..Default::default()
         }
@@ -333,7 +335,7 @@ impl InterpreterState {
                                 },
                             );
                         } else {
-                            let parent = ftd::ChildComponent::from_p1(
+                            let mut parent = ftd::ChildComponent::from_p1(
                                 p1.line_number,
                                 p1.name.as_str(),
                                 &p1.header,
@@ -343,14 +345,13 @@ impl InterpreterState {
                                 &Default::default(),
                             )?;
 
-                            if parsed_document.process_lazy_processors {
-                                ftd::InterpreterState::evaluate_component_for_headings(
-                                    &mut parsed_document.page_headings,
-                                    &c,
-                                    &parent,
-                                    &doc,
-                                )?;
-                            }
+                            ftd::InterpreterState::evaluate_component_for_headings(
+                                &mut parsed_document.page_headings,
+                                &c,
+                                &mut parent,
+                                &doc,
+                                &self.package_name,
+                            )?;
 
                             let mut children = vec![];
 
@@ -444,7 +445,6 @@ impl InterpreterState {
                     ftd::InterpreterState::from_page_heading_list_to_compat(
                         &parsed_document.page_headings,
                         &mut final_list,
-                        None,
                     );
                     let value = doc.from_json(&final_list, &section)?;
                     return self.continue_after_processor(&section, value);
@@ -485,9 +485,8 @@ impl InterpreterState {
     // PageHeadingItemCompat list identical to the
     // record of fpm.toc-item
     pub fn from_page_heading_list_to_compat(
-        page_headings: &Vec<(Option<ftd::Region>, ftd::PageHeadingItem)>,
+        page_headings: &Vec<ftd::PageHeadingItem>,
         target_compat_list: &mut Vec<ftd::PageHeadingItemCompat>,
-        number: Option<String>,
     ) {
         fn make_compat_item(
             title: &Option<String>,
@@ -510,33 +509,23 @@ impl InterpreterState {
             }
         }
 
-        fn get_depth_number(current_depth_index: usize, number: &Option<String>) -> Option<String> {
-            if let Some(number) = number {
-                return Some(format!("{}.{}", number, current_depth_index));
-            }
-            Some(format!("{}", current_depth_index))
-        }
-
-        let mut current_depth_index: usize = 1;
-        for (_region, heading_item) in page_headings {
-            let current_number = get_depth_number(current_depth_index, &number);
+        for heading_item in page_headings {
             let mut start_compat_node =
-                make_compat_item(&heading_item.title, &heading_item.url, &current_number);
+                make_compat_item(&heading_item.title, &heading_item.url, &heading_item.number);
             ftd::InterpreterState::from_page_heading_list_to_compat(
                 &heading_item.children,
                 &mut start_compat_node.children,
-                current_number,
             );
             target_compat_list.push(start_compat_node);
-            current_depth_index += 1;
         }
     }
 
     fn evaluate_component_for_headings(
-        page_headings: &mut Vec<(Option<ftd::Region>, ftd::PageHeadingItem)>,
+        page_headings: &mut Vec<ftd::PageHeadingItem>,
         parent: &ftd::Component,
-        child: &ftd::ChildComponent,
+        child: &mut ftd::ChildComponent,
         doc: &ftd::p2::TDoc,
+        package_name: &Option<String>,
     ) -> ftd::p1::Result<()> {
         // todo: work on all these cases
         // Case 2: Container component (with defined id)
@@ -560,37 +549,53 @@ impl InterpreterState {
                 return Ok(());
             }
 
-            // check if the component has id assigned
-            if let Some(id_property) = child.properties.get("id") {
-                // use user-defined id for linking if specified
-                // todo: otherwise use the auto-generated id for linking
-                let component_id =
-                    id_property.resolve_default_value_string(doc, parent.line_number)?;
+            let component_id = child.properties.get("id").and_then(|id_property| {
+                id_property
+                    .resolve_default_value_string(doc, child.line_number)
+                    .ok()
+            });
 
-                // prioritize finding ftd.text with region title
-                let (container_instructions, region_property) =
-                    find_container_instructions_with_region(parent, doc)?;
-                if let Some(region) = region_property {
-                    let region_value =
-                        region.resolve_default_value_string(doc, parent.line_number)?;
-                    if is_valid_heading_region(region_value.as_str()) {
-                        for instruction in container_instructions.iter() {
-                            let title_text = extract_title_if_markdown_component(
-                                instruction,
-                                parent,
-                                child,
-                                doc,
-                            );
-                            if let Some(title) = title_text {
-                                // Heading list as list of tree nodes -------------------------
-                                let new_item = create_page_heading_item_with_region(
-                                    component_id.as_str(),
-                                    title,
+            // prioritize finding ftd.text with region title
+            let (container_instructions, region_property) =
+                find_container_instructions_with_region(parent, doc)?;
+            if let Some(region) = region_property {
+                let region_value = region.resolve_default_value_string(doc, parent.line_number)?;
+                if is_valid_heading_region(region_value.as_str()) {
+                    for instruction in container_instructions.iter() {
+                        let header_and_title =
+                            extract_title_if_markdown_component(instruction, parent, child, doc);
+
+                        let heading_number = header_and_title
+                            .and_then(|(header, title)| {
+                                if let (Some(actual_title), Some(actual_header)) = (title, header) {
+                                    return Some((actual_title, actual_header));
+                                }
+                                None
+                            })
+                            .and_then(|(title, _header)| {
+                                let mut new_item = create_page_heading_item_with_region(
+                                    &component_id,
+                                    title.as_str(),
                                     doc.name,
                                     region_value.clone(),
-                                )?;
-                                insert_page_heading_in_tree(page_headings, &new_item, doc.name)?;
-                            }
+                                    package_name,
+                                )
+                                .ok()?;
+                                let assigned_number = insert_page_heading_in_tree(
+                                    page_headings,
+                                    &mut new_item,
+                                    &None,
+                                    doc.name,
+                                    package_name,
+                                )
+                                .ok()?;
+                                Some(assigned_number)
+                            });
+
+                        // adjust numbering of the title in the header component
+                        if let Some(number) = heading_number {
+                            adjust_heading_number_in_component(child, number.as_str());
+                            break;
                         }
                     }
                 }
@@ -608,7 +613,7 @@ impl InterpreterState {
             parent: &ftd::Component,
             child: &ftd::ChildComponent,
             doc: &ftd::p2::TDoc,
-        ) -> Option<String> {
+        ) -> Option<(Option<String>, Option<String>)> {
             if let ftd::Instruction::ChildComponent { child: cc } = instruction {
                 if cc.root.eq("ftd#text") {
                     let text_region =
@@ -621,7 +626,7 @@ impl InterpreterState {
                             });
                     if let Some(text_region) = text_region {
                         if text_region.eq("title") {
-                            let title_text = cc
+                            let header_and_title = cc
                                 .properties
                                 .get("text")
                                 .and_then(|text_property| text_property.default.as_ref())
@@ -632,17 +637,10 @@ impl InterpreterState {
                                         &child.properties,
                                         doc,
                                     )
-                                    .ok()?
-                                })
-                                .and_then(|title_header| {
-                                    if title_header.starts_with('$') {
-                                        let stripped_header = title_header.trim_start_matches('$');
-                                        return resolve_title(stripped_header, parent, child, doc)
-                                            .ok()?;
-                                    }
-                                    Some(title_header)
+                                    .ok()
                                 });
-                            return title_text;
+
+                            return header_and_title;
                         }
                     }
                 }
@@ -680,27 +678,32 @@ impl InterpreterState {
             }
         }
 
-        fn resolve_title(
-            parent_property_name: &str,
-            parent: &ftd::Component,
-            child: &ftd::ChildComponent,
-            doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<Option<String>> {
-            Ok(parent
-                .properties
-                .get(parent_property_name)
-                .and_then(|property| property.default.as_ref())
-                .and_then(|property_value| resolve_property_value(property_value).ok()?)
-                .and_then(|value| {
-                    let stripped_value = value.trim_start_matches('$');
-                    child.properties.get(stripped_value)
-                })
-                .and_then(|child_property| {
-                    let title = child_property
-                        .resolve_default_value_string(doc, parent.line_number)
-                        .ok()?;
-                    Some(title)
-                }))
+        fn adjust_heading_number_in_component(child: &mut ftd::ChildComponent, number: &str) {
+            if child.properties.get("heading-number").is_none() {
+                let number_property = ftd::component::Property {
+                    default: Some(ftd::PropertyValue::Value {
+                        value: (ftd::Value::List {
+                            data: {
+                                let mut property_values: Vec<ftd::PropertyValue> = vec![];
+                                for num in number.split('.') {
+                                    property_values.push(ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
+                                            text: num.to_string(),
+                                            source: ftd::TextSource::Default,
+                                        },
+                                    })
+                                }
+                                property_values
+                            },
+                            kind: ftd::p2::Kind::string(),
+                        }),
+                    }),
+                    ..Default::default()
+                };
+                child
+                    .properties
+                    .insert("heading-number".to_string(), number_property);
+            }
         }
 
         fn resolve_title_header_from_container(
@@ -708,16 +711,16 @@ impl InterpreterState {
             current_component: &ftd::Component,
             properties: &ftd::Map<ftd::component::Property>,
             doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<Option<String>> {
+        ) -> ftd::p1::Result<(Option<String>, Option<String>)> {
             if matches!(
                 current_component.full_name.as_str(),
                 "ftd#row" | "ftd#column"
             ) {
-                return resolve_property_value(text_property_value);
+                return Ok((None, resolve_property_value(text_property_value)?));
             }
 
             if current_component.kernel {
-                return Ok(None);
+                return Ok((None, None));
             }
 
             let root_component = doc.get_component(
@@ -725,7 +728,7 @@ impl InterpreterState {
                 current_component.root.as_str(),
             )?;
 
-            let partial_resolved_title = resolve_title_header_from_container(
+            let (_, partial_resolved_title) = resolve_title_header_from_container(
                 text_property_value,
                 &root_component,
                 &root_component.properties,
@@ -739,73 +742,139 @@ impl InterpreterState {
                     .and_then(|property| property.default.as_ref());
 
                 if let Some(value) = property_value {
-                    return resolve_property_value(value);
+                    return Ok((
+                        Some(partial.trim_start_matches('$').to_string()),
+                        resolve_property_value(value)?,
+                    ));
                 }
 
-                return Ok(Some(partial));
+                return Ok((None, Some(partial)));
             }
-            Ok(None)
+            Ok((None, None))
+        }
+
+        fn make_url(
+            doc_name: &str,
+            id: &Option<String>,
+            package_name: &Option<String>,
+        ) -> Option<String> {
+            fn trim_package_from_url(url: String, package_name: &Option<String>) -> String {
+                let trimmed_package = package_name.as_ref().map(|actual_package| {
+                    url.trim_start_matches('/')
+                        .trim_start_matches(actual_package.as_str())
+                });
+                if let Some(res) = trimmed_package {
+                    return res.to_string();
+                }
+                url.trim_start_matches('/').to_string()
+            }
+
+            // remove package name from the url and keep the rest
+            if let Some(actual_id) = id {
+                let document_id = ftd::p2::utils::convert_to_document_id(doc_name);
+                let original_url = format!("{}#{}", document_id, slug::slugify(actual_id));
+                let url = trim_package_from_url(original_url, package_name);
+
+                return Some(url);
+            }
+            None
         }
 
         // creates a new page-heading item along with its region
         fn create_page_heading_item_with_region(
-            id: &str,
-            title: String,
+            id: &Option<String>,
+            title: &str,
             doc_name: &str,
             region: String,
-        ) -> ftd::p1::Result<(Option<ftd::Region>, ftd::PageHeadingItem)> {
-            fn preprocess_url(url: String) -> String {
-                // remove package name from the url and keep the rest
-                return match url.trim_start_matches('/').split_once('/') {
-                    Some((_package_name, rest)) => format!("/{}", rest),
-                    None => url,
-                };
-            }
-
-            let document_id = ftd::p2::utils::convert_to_document_id(doc_name);
-            let original_url = format!("{}#{}", document_id, slug::slugify(id));
-            let url = preprocess_url(original_url);
-
+            package_name: &Option<String>,
+        ) -> ftd::p1::Result<ftd::PageHeadingItem> {
+            let processed_url = make_url(doc_name, id, package_name);
             let ph = ftd::PageHeadingItem {
-                title: Some(title),
-                url: Some(url),
+                title: Some(title.to_string()),
+                url: processed_url,
+                region: ftd::Region::from(Some(region), doc_name)?,
+                number: None,
                 children: vec![],
             };
-            Ok((ftd::Region::from(Some(region), doc_name)?, ph))
+            Ok(ph)
         }
 
         fn insert_page_heading_in_tree(
-            tree_nodes: &mut Vec<(Option<ftd::Region>, ftd::PageHeadingItem)>,
-            new_heading_with_region: &(Option<ftd::Region>, ftd::PageHeadingItem),
+            tree_nodes: &mut Vec<ftd::PageHeadingItem>,
+            new_heading: &mut ftd::PageHeadingItem,
+            heading_number: &Option<String>,
             doc_name: &str,
-        ) -> ftd::p1::Result<()> {
-            if tree_nodes.is_empty() {
-                tree_nodes.push(new_heading_with_region.clone());
-                return Ok(());
+            package_name: &Option<String>,
+        ) -> ftd::p1::Result<String> {
+            fn assign_auto_slug_id(
+                heading: &mut ftd::PageHeadingItem,
+                _assigned_number: &str,
+                doc_name: &str,
+                package_name: &Option<String>,
+            ) {
+                if let Some(title) = &heading.title {
+                    // let auto_component_id = Some(slug::slugify(format!("{} {}", assigned_number, title)));
+                    let auto_component_id = Some(title.clone());
+                    heading.url = make_url(doc_name, &auto_component_id, package_name);
+                }
             }
 
-            if let Some(last_heading_with_region) = tree_nodes.last_mut() {
-                if let Some(last_heading_region) = &last_heading_with_region.0 {
-                    if let Some(current_heading_region) = &new_heading_with_region.0 {
-                        let last_heading_priority =
-                            last_heading_region.heading_priority_value(doc_name)?;
-                        let current_heading_priority =
-                            current_heading_region.heading_priority_value(doc_name)?;
+            fn get_depth_number(current_depth_index: usize, number: &Option<String>) -> String {
+                if let Some(number) = number {
+                    return format!("{}.{}", number, current_depth_index);
+                }
+                format!("{}", current_depth_index)
+            }
 
-                        if current_heading_priority < last_heading_priority {
-                            let last_heading = &mut last_heading_with_region.1;
-                            return insert_page_heading_in_tree(
-                                &mut last_heading.children,
-                                new_heading_with_region,
-                                doc_name,
-                            );
-                        }
+            let current_depth_nodes = tree_nodes.len();
+            let new_heading_number = get_depth_number(current_depth_nodes + 1, heading_number);
+
+            if tree_nodes.is_empty() {
+                new_heading.number = Some(new_heading_number.clone());
+                if new_heading.url.is_none() {
+                    assign_auto_slug_id(
+                        new_heading,
+                        new_heading_number.as_str(),
+                        doc_name,
+                        package_name,
+                    );
+                }
+                tree_nodes.push(new_heading.to_owned());
+                return Ok(new_heading_number);
+            }
+
+            if let Some(last_heading) = tree_nodes.last_mut() {
+                if let (Some(current_heading_region), Some(last_heading_region)) =
+                    (&new_heading.region, &last_heading.region)
+                {
+                    let last_heading_priority =
+                        last_heading_region.heading_priority_value(doc_name)?;
+                    let current_heading_priority =
+                        current_heading_region.heading_priority_value(doc_name)?;
+
+                    if current_heading_priority < last_heading_priority {
+                        return insert_page_heading_in_tree(
+                            &mut last_heading.children,
+                            new_heading,
+                            &last_heading.number,
+                            doc_name,
+                            package_name,
+                        );
                     }
                 }
             }
 
-            tree_nodes.push(new_heading_with_region.clone());
-            Ok(())
+            new_heading.number = Some(new_heading_number.clone());
+            if new_heading.url.is_none() {
+                assign_auto_slug_id(
+                    new_heading,
+                    new_heading_number.as_str(),
+                    doc_name,
+                    package_name,
+                );
+            }
+            tree_nodes.push(new_heading.to_owned());
+            Ok(new_heading_number)
         }
     }
 
@@ -1618,12 +1687,11 @@ pub struct ParsedDocument {
     var_types: Vec<String>,
     foreign_variable_prefix: Vec<String>,
     instructions: Vec<ftd::Instruction>,
-    /// sections which needs to be processed
+    /// sections stored which needs to be processed
     /// after interpretation of the current document is over
     lazy_processor_sections: Vec<ftd::p1::Section>,
-    /// page heading of the current document will be stored here
-    /// as blocks of `[<heading/title>, <url>]`
-    page_headings: Vec<(Option<ftd::Region>, ftd::PageHeadingItem)>,
+    /// page headings of the current document will be stored in this list
+    page_headings: Vec<ftd::PageHeadingItem>,
 }
 
 impl ParsedDocument {
@@ -1738,8 +1806,12 @@ pub enum Interpreter {
     },
 }
 
-pub fn interpret(id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
-    let mut s = InterpreterState::new(id.to_string());
+pub fn interpret(
+    id: &str,
+    source: &str,
+    package_name: &Option<String>,
+) -> ftd::p1::Result<Interpreter> {
+    let mut s = InterpreterState::new(id.to_string(), package_name.clone());
     s.document_stack.push(ParsedDocument::parse(id, source)?);
     s.continue_()
 }

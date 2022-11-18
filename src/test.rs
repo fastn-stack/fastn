@@ -23,7 +23,7 @@ pub fn interpret_helper(
     source: &str,
     lib: &ftd::p2::TestLibrary,
 ) -> ftd::p1::Result<ftd::p2::Document> {
-    let mut s = ftd::p2::interpreter::interpret(name, source)?;
+    let mut s = ftd::p2::interpreter::interpret(name, source, &None)?;
     let document;
     loop {
         match s {
@@ -278,6 +278,37 @@ mod interpreter {
         }
     }
 
+    fn insert_update_default_optional_list_type_by_root(
+        root: &str,
+        kind: ftd::p2::Kind,
+        bag: &mut ftd::Map<ftd::p2::Thing>,
+    ) {
+        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let var_name = root_parts[1];
+
+        let value = ftd::Value::Optional {
+            data: Box::new(Some(ftd::Value::List {
+                data: vec![],
+                kind: kind.clone(),
+            })),
+            kind: ftd::p2::Kind::list(kind),
+        };
+
+        let optional_thing = ftd::p2::Thing::Variable(ftd::Variable {
+            name: format!("{}", var_name),
+            value: ftd::PropertyValue::Value { value },
+            conditions: vec![],
+            flags: Default::default(),
+        });
+
+        if bag.contains_key(root) {
+            bag.entry(root.to_string())
+                .and_modify(|e| *e = optional_thing);
+        } else {
+            bag.insert(root.to_string(), optional_thing);
+        }
+    }
+
     /// inserts decimal variable with the given value in the bag
     fn insert_update_decimal_by_root(root: &str, value: f64, bag: &mut ftd::Map<ftd::p2::Thing>) {
         let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
@@ -354,6 +385,13 @@ mod interpreter {
         for (arg, kind) in universal_arguments_vec.iter() {
             for level in levels.iter() {
                 if kind.is_optional() {
+                    if kind.inner().is_string_list() {
+                        insert_update_default_optional_list_type_by_root(
+                            make_root(arg, doc_id, level).as_str(),
+                            ftd::p2::Kind::string(),
+                            bag,
+                        );
+                    }
                     if kind.inner().is_string() {
                         insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, level).as_str(),
@@ -392,6 +430,13 @@ mod interpreter {
         while count < lim {
             for (arg, kind) in universal_arguments_vec.iter() {
                 if kind.is_optional() {
+                    if kind.inner().is_string_list() {
+                        insert_update_default_optional_list_type_by_root(
+                            make_root(arg, doc_id, count).as_str(),
+                            ftd::p2::Kind::string(),
+                            bag,
+                        );
+                    }
                     if kind.inner().is_string() {
                         insert_update_default_optional_type_by_root(
                             make_root(arg, doc_id, count).as_str(),
@@ -13814,6 +13859,7 @@ mod interpreter {
                     region: Some(ftd::Region::H0),
                     id: Some(s("one")),
                     data_id: Some(s("one")),
+                    heading_number: Some(vec![s("1")]),
                     ..Default::default()
                 },
             }));
@@ -13854,6 +13900,7 @@ mod interpreter {
                 common: ftd::Common {
                     region: Some(ftd::Region::H0),
                     id: Some(s("heading-01")),
+                    heading_number: Some(vec![s("2")]),
                     ..Default::default()
                 },
             }));
