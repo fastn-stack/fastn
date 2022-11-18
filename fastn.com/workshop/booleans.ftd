@@ -1,7 +1,37 @@
--- import: ftd.dev/workshop
 
--- ds.page: Booleans in FTD
+
+
+-- boolean $what-are-task-1-completed: false
+$always-include$: true
+
+-- object what-are-task-1-object:
+function: ls.set-boolean
+variable: $what-are-task-1-completed
+
+-- ws.understood what-are-task-1-button: Done
+$on-click$: $what-are-task-1-completed = true
+$on-click$: message-host $what-are-task-1-object
+$task-status: $what-are-task-1-completed
+
+-- boolean $what-are-task-2-completed: false
+$always-include$: true
+
+-- object what-are-task-2-object:
+function: ls.set-boolean
+variable: $what-are-task-2-completed
+
+-- ws.understood what-are-task-2-button: Done
+$on-click$: $what-are-task-2-completed = true
+$on-click$: message-host $what-are-task-2-object
+$task-status: $what-are-task-2-completed
+
+
+
+
+
+-- ws.chapter: Booleans in FTD
 id: ws-booleans
+sidebar: true
 
 -- ds.markdown:
 
@@ -41,18 +71,26 @@ if: $open
 Only if the variable `open` is true only then text "open is true" would be
 visible.
 
+-- ws.task: Task 1: Fix the `index.ftd` file
+$status: $what-are-task-1-completed
+button: what-are-task-1-button:
 
--- ds.h1: Task 1: Fix the `index.ftd` file
 
 We wanted to create a link in the [index.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/02-boolean/index.ftd) file, but for some
 reason the link is not working, can you find the problem and fix it?
 
--- ds.h1: Task 2: Fix the `boolean.ftd`
+-- container:  ws-booleans
+
+-- ws.task: Task 2: Fix the `boolean.ftd`
+$status: $what-are-task-2-completed
+button: what-are-task-2-button:
 
 If you open `/boolean/` you will see an error. This is because we have not yet
 defined a variable that we are trying to use. [boolean.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/02-boolean/boolean.ftd) is
 buggy! View the `boolean.ftd` and follow the instructions there to create a new
 variable.
+
+-- container:  ws-booleans
 
 -- ds.h1: You Are Done
 
@@ -63,9 +101,10 @@ You have learnt how to define a boolean variable and use to control the UI.
 {ds.highlight: Move to learning about [numbers and strings](/workshop/numbers-and-strings/)}
 or back to [the workshop](id: workshop).
 
+-- container: ws-booleans.content-wrap.right-sidebar
 
+-- ws.sidebar:
 
+-- container: ws-booleans.content-wrap.right-sidebar-mobile
 
-
--- container: ws-booleans.wrapper.right-sidebar
--- workshop.sidebar:
+-- ws.sidebar:

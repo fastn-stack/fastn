@@ -1,7 +1,49 @@
--- import: ftd.dev/workshop
 
--- ds.page: Hello World
+
+-- boolean $what-are-task-1-completed: false
+$always-include$: true
+
+-- object what-are-task-1-object:
+function: ls.set-boolean
+variable: $what-are-task-1-completed
+
+-- ws.understood what-are-task-1-button: Done
+$on-click$: $what-are-task-1-completed = true
+$on-click$: message-host $what-are-task-1-object
+$task-status: $what-are-task-1-completed
+
+-- boolean $what-are-task-2-completed: false
+$always-include$: true
+
+-- object what-are-task-2-object:
+function: ls.set-boolean
+variable: $what-are-task-2-completed
+
+-- ws.understood what-are-task-2-button: Done
+$on-click$: $what-are-task-2-completed = true
+$on-click$: message-host $what-are-task-2-object
+$task-status: $what-are-task-2-completed
+
+-- boolean $what-are-task-3-completed: false
+$always-include$: true
+
+-- object what-are-task-3-object:
+function: ls.set-boolean
+variable: $what-are-task-3-completed
+
+-- ws.understood what-are-task-3-button: Done
+$on-click$: $what-are-task-3-completed = true
+$on-click$: message-host $what-are-task-3-object
+$task-status: $what-are-task-3-completed
+
+
+
+
+
+
+-- ws.chapter: Hello World
 id: ws-hello-world
+sidebar: true
 
 To use [FTD](https://ftd.dev) language we have to use [FPM](https://fpm.dev)
 the package manager and server for FTD.
@@ -9,8 +51,9 @@ the package manager and server for FTD.
 In this exercise **we will install FPM, and run a hello world program**.
 
 
--- ds.h1: Task 1: Install FPM
-
+-- ws.task: Task 1: Install FPM
+$status: $what-are-task-1-completed
+button: what-are-task-1-button:
 
 To install {ds.highlight: fpm we will use the installation script}:
 
@@ -43,8 +86,11 @@ you are done with this step.
 
 If you get an error message in chat or speak up.
 
+-- container: ws-hello-world
 
--- ds.h1: Task 2: FPM.ftd
+-- ws.task: Task 2: FPM.ftd
+$status: $what-are-task-2-completed
+button: what-are-task-2-button:
 
 -- ds.markdown:
 
@@ -83,7 +129,11 @@ server address (http://127.0.0.1:8000 by default), you will see an empty page.
 
 Congrats, you have created your first FPM package!
 
--- ds.h1: Task 3: Hello World
+-- container: ws-hello-world
+
+-- ws.task: Task 3: Hello World
+$status: $what-are-task-3-completed
+button: what-are-task-3-button:
 
 `ftd` has a concept of "[components](https://ftd.dev/component/)". FTD
 components are UI building blocks. FTD comes with a bunch of [kernel
@@ -102,6 +152,7 @@ on top level is `/`. `x/index.ftd` would have been `/x/` and so on.
 This repo comes with an [index.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/01-hello-world/index.ftd)
 file, {ds.highlight: go ahead and view it and modify it as it instructs}.
 
+-- container: ws-hello-world
 
 -- ds.h1: You are Done
 
@@ -113,6 +164,10 @@ You have installed fpm and created your first fpm package. Good job!
 [the workshop page](id: workshop).
 
 
+-- container: ws-hello-world.content-wrap.right-sidebar
 
--- container: ws-hello-world.wrapper.right-sidebar
--- workshop.sidebar:
+-- ws.sidebar:
+
+-- container: ws-hello-world.content-wrap.right-sidebar-mobile
+
+-- ws.sidebar:

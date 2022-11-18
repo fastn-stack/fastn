@@ -1,8 +1,13 @@
--- import: ftd.dev/workshop
 
--- ds.page: Using Reusable FTD Component Libraries: Dependencies
+-- ws.chapter: Using Reusable FTD Component Libraries: Dependencies
 id: ws-dependencies
+sidebar: true
 
+-- container: ws-dependencies.content-wrap.right-sidebar
 
--- container: ws-dependencies.wrapper.right-sidebar
--- workshop.sidebar:
+-- ws.sidebar:
+
+-- container: ws-dependencies.content-wrap.right-sidebar-mobile
+
+-- ws.sidebar:
+

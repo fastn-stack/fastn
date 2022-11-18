@@ -1,7 +1,14 @@
--- import: ftd.dev/workshop
 
--- ds.page: Basic Styling
+
+-- ws.chapter: Basic Styling
 id: ws-styling
+sidebar: true
 
--- container: ws-styling.wrapper.right-sidebar
--- workshop.sidebar:
+-- container: ws-styling.content-wrap.right-sidebar
+
+-- ws.sidebar:
+
+-- container: ws-styling.content-wrap.right-sidebar-mobile
+
+-- ws.sidebar:
+

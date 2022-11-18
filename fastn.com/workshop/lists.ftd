@@ -1,9 +1,15 @@
--- import: ftd.dev/workshop
 
--- ds.page: Lists in FTD
+-- ws.chapter: Lists in FTD
 id: ws-lists
+sidebar: true
 
--- container: ws-lists.wrapper.right-sidebar
--- workshop.sidebar:
+-- container: ws-lists.content-wrap.right-sidebar
+
+-- ws.sidebar:
+
+-- container: ws-lists.content-wrap.right-sidebar-mobile
+
+-- ws.sidebar:
+
 
 

@@ -1,8 +1,13 @@
--- import: ftd.dev/workshop
 
--- ds.page: HTTP Processor
+-- ws.chapter: HTTP Processor
 id: ws-http
+sidebar: true
 
+-- container: ws-http.content-wrap.right-sidebar
 
--- container: ws-http.wrapper.right-sidebar
--- workshop.sidebar:
+-- ws.sidebar:
+
+-- container: ws-http.content-wrap.right-sidebar-mobile
+
+-- ws.sidebar:
+
