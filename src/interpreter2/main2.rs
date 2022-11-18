@@ -230,9 +230,6 @@ pub enum Interpreter {
     Done {
         document: Document,
     },
-    Restart {
-        state: InterpreterState,
-    },
 }
 
 #[derive(Debug, Default, PartialEq, serde::Deserialize, serde::Serialize)]

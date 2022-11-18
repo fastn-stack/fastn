@@ -1016,8 +1016,9 @@ impl<'a> TDoc<'a> {
             }
 
             state.to_process.push((doc_name, ast_for_thing));
+
             return Ok(ftd::interpreter2::StateWithThing::new_state(
-                ftd::interpreter2::Interpreter::Restart { state },
+                state.continue_()?,
             ));
         }
 
