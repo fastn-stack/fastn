@@ -78,7 +78,7 @@ impl<'a> TDoc<'a> {
     {
         match self.search_thing(name, line_number)? {
             ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                Ok(ftd::interpreter2::StateWithThing::new_state(s))
             }
             ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Record(r)) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(r))
@@ -116,7 +116,7 @@ impl<'a> TDoc<'a> {
     {
         match self.search_thing(name, line_number)? {
             ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                Ok(ftd::interpreter2::StateWithThing::new_state(s))
             }
             ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Variable(r)) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(r))
@@ -614,7 +614,7 @@ impl<'a> TDoc<'a> {
     > {
         match self.search_thing(name, line_number)? {
             ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
+                Ok(ftd::interpreter2::StateWithThing::new_state(s))
             }
             ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Component(c)) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(c))
@@ -971,7 +971,7 @@ impl<'a> TDoc<'a> {
 
         let name = self.resolve_name(name);
 
-        let (doc_name, thing_name, remaining) =
+        let (doc_name, thing_name, _remaining) = // Todo: use remaining
             ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
                 name.as_str(),
                 self.name,
@@ -1025,12 +1025,12 @@ impl<'a> TDoc<'a> {
             return self.err("not found", name, "search_thing", line_number);
         }
 
-        return Ok(ftd::interpreter2::StateWithThing::new_state(
+        Ok(ftd::interpreter2::StateWithThing::new_state(
             ftd::interpreter2::Interpreter::StuckOnImport {
                 module: doc_name,
                 state,
             },
-        ));
+        ))
     }
 
     pub fn get_initial_thing(
