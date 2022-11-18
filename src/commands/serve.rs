@@ -18,7 +18,7 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
             return fpm::server_error!("request not set");
         };
 
-        match config.can_read(req, path.as_str()).await {
+        match config.can_read(req, path.as_str(), true).await {
             Ok(can_read) => {
                 if !can_read {
                     return fpm::unauthorised!("You are unauthorized to access: {}", path);
@@ -79,7 +79,7 @@ async fn serve_cr_file(
 
     // Auth Stuff
     if !f.is_static() {
-        match config.can_read(req, path.as_str()).await {
+        match config.can_read(req, path.as_str(), true).await {
             Ok(can_read) => {
                 if !can_read {
                     return fpm::unauthorised!("You are unauthorized to access: {}", path);

@@ -1390,6 +1390,7 @@ impl Config {
         &self,
         req: &fpm::http::Request,
         document_path: &str,
+        with_confidential: bool, // can read should use confidential property or not
     ) -> fpm::Result<bool> {
         // Function Docs
         // If user can read the document based on readers, user will have read access to page
@@ -1416,20 +1417,19 @@ impl Config {
             let access_identities =
                 fpm::user_group::access_identities(self, req, &document_name, true).await?;
 
-            let can_read = fpm::user_group::belongs_to(
+            let belongs_to = fpm::user_group::belongs_to(
                 self,
                 document_readers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
             )?;
 
-            dbg!(can_read);
-            dbg!(confidential);
-
-            if can_read {
-                return Ok(true);
+            if with_confidential {
+                if belongs_to {
+                    return Ok(true);
+                }
+                return Ok(!confidential);
             }
-
-            return Ok(!confidential);
+            return Ok(belongs_to);
         }
         Ok(true)
     }

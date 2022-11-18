@@ -183,6 +183,7 @@ impl Library {
                 .await
             }
             "document-name" => document::processor::document_name(section, doc, &self.config).await,
+            "is-reader" => fpm::user_group::processor::is_reader(section, doc, &self.config).await,
             _ => process_sync(&self.config, section, self.document_id.as_str(), doc),
         }
     }
@@ -480,6 +481,7 @@ impl Library2 {
             // TODO: auth feature flag
             "user-details" => fpm::auth::processor::user_details(section, doc, &self.config),
             "fpm-apps" => fpm::package::app::processor(section, doc, &self.config),
+            "is-reader" => fpm::user_group::processor::is_reader(section, doc, &self.config).await,
             t => Err(ftd::p1::Error::NotFound {
                 doc_id: self.document_id.to_string(),
                 line_number: section.line_number,
