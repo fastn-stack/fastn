@@ -140,7 +140,7 @@ pub fn get_doc_name_and_thing_name_and_remaining(
     line_number: usize,
 ) -> (String, String, Option<String>) {
     let (doc_name, remaining) = get_doc_name_and_remaining(s, doc_id, line_number);
-    if let Some((doc_name, thing_name)) = doc_name.split_once("#") {
+    if let Some((doc_name, thing_name)) = doc_name.split_once('#') {
         (doc_name.to_string(), thing_name.to_string(), remaining)
     } else {
         (doc_id.to_string(), doc_name, remaining)
