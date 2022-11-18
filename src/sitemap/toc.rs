@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Default, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct TocItem {
     pub id: String,
     pub icon: Option<String>,
@@ -20,6 +20,28 @@ pub struct TocItem {
     /// /books/<string:book_name>/
     /// here book_name is path parameter
     pub path_parameters: Vec<(String, String)>,
+}
+
+impl Default for TocItem {
+    fn default() -> Self {
+        Self {
+            id: "".to_string(),
+            icon: None,
+            title: None,
+            file_location: None,
+            translation_file_location: None,
+            extra_data: Default::default(),
+            is_active: false,
+            confidential: true,
+            children: vec![],
+            skip: false,
+            readers: vec![],
+            writers: vec![],
+            nav_title: None,
+            document: None,
+            path_parameters: vec![],
+        }
+    }
 }
 
 impl TocItem {

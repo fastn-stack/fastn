@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Default, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Section {
     /// `id` is the document id (or url) provided in the section
     /// Example:
@@ -117,6 +117,28 @@ pub struct Section {
     /// here book_name and price are path parameters
     /// path_parameters: [(string, book_name), (integer, price)]
     pub path_parameters: Vec<(String, String)>,
+}
+
+impl Default for Section {
+    fn default() -> Self {
+        Self {
+            id: "".to_string(),
+            icon: None,
+            title: None,
+            file_location: None,
+            translation_file_location: None,
+            extra_data: Default::default(),
+            is_active: false,
+            nav_title: None,
+            subsections: vec![],
+            skip: false,
+            confidential: true,
+            readers: vec![],
+            writers: vec![],
+            document: None,
+            path_parameters: vec![],
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
