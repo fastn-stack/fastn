@@ -448,49 +448,44 @@ impl<'a> TDoc<'a> {
             )
             .map(|v| (v.0.kind.to_owned(), v.1, v.2));
 
-        let (initial_kind, remaining, source) = if let Some(r) =
-            initial_kind_with_remaining_and_source
-        {
-            r
-        } else {
-            let (initial_thing, remaining) = match self.search_initial_thing(name, line_number)? {
-                ftd::interpreter2::StateWithThing::State(s) => {
-                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                }
-                ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-            };
+        let (initial_kind, remaining, source) =
+            if let Some(r) = initial_kind_with_remaining_and_source {
+                r
+            } else {
+                let (initial_thing, remaining) =
+                    try_ready!(self.search_initial_thing(name, line_number)?);
 
-            let initial_kind = match initial_thing {
-                ftd::interpreter2::Thing::Record(r) => ftd::interpreter2::KindData {
-                    kind: ftd::interpreter2::Kind::Record { name: r.name },
-                    caption: true,
-                    body: true,
-                },
-                ftd::interpreter2::Thing::Variable(v) => v.kind,
-                ftd::interpreter2::Thing::Component(c) => ftd::interpreter2::KindData {
-                    kind: ftd::interpreter2::Kind::ui_with_name(c.name.as_str()),
-                    caption: true,
-                    body: true,
-                },
-                ftd::interpreter2::Thing::Function(_) => todo!(),
-            };
+                let initial_kind = match initial_thing {
+                    ftd::interpreter2::Thing::Record(r) => ftd::interpreter2::KindData {
+                        kind: ftd::interpreter2::Kind::Record { name: r.name },
+                        caption: true,
+                        body: true,
+                    },
+                    ftd::interpreter2::Thing::Variable(v) => v.kind,
+                    ftd::interpreter2::Thing::Component(c) => ftd::interpreter2::KindData {
+                        kind: ftd::interpreter2::Kind::ui_with_name(c.name.as_str()),
+                        caption: true,
+                        body: true,
+                    },
+                    ftd::interpreter2::Thing::Function(_) => todo!(),
+                };
 
-            (
-                initial_kind,
-                remaining,
-                ftd::interpreter2::PropertyValueSource::Global,
-            )
-        };
+                (
+                    initial_kind,
+                    remaining,
+                    ftd::interpreter2::PropertyValueSource::Global,
+                )
+            };
 
         if let Some(remaining) = remaining {
             return Ok(ftd::interpreter2::StateWithThing::new_thing((
                 source,
-                match get_kind_(initial_kind.kind, remaining.as_str(), self, line_number)? {
-                    ftd::interpreter2::StateWithThing::State(s) => {
-                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                    }
-                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                },
+                try_ready!(get_kind_(
+                    initial_kind.kind,
+                    remaining.as_str(),
+                    self,
+                    line_number
+                )?),
             )));
         }
 
@@ -509,12 +504,7 @@ impl<'a> TDoc<'a> {
             let (v, remaining) = ftd::interpreter2::utils::split_at(name, ".");
             match kind {
                 ftd::interpreter2::Kind::Record { name: rec_name } => {
-                    let record = match doc.search_record(rec_name.as_str(), line_number)? {
-                        ftd::interpreter2::StateWithThing::State(s) => {
-                            return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                        }
-                        ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                    };
+                    let record = try_ready!(doc.search_record(rec_name.as_str(), line_number)?);
                     let field_kind = record.get_field(&v, doc.name, line_number)?.kind.to_owned();
                     if let Some(remaining) = remaining {
                         get_kind_(field_kind.kind, &remaining, doc, line_number)
@@ -775,12 +765,7 @@ impl<'a> TDoc<'a> {
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
             .unwrap_or(name);
 
-        let (initial_thing, remaining) = match self.search_initial_thing(name, line_number)? {
-            ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-            }
-            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-        };
+        let (initial_thing, remaining) = try_ready!(self.search_initial_thing(name, line_number)?);
 
         if let Some(remaining) = remaining {
             return search_thing_(self, line_number, remaining.as_str(), &initial_thing);
@@ -823,12 +808,7 @@ impl<'a> TDoc<'a> {
                                     );
                                 }
                             };
-                            let kind_thing = match doc.search_thing(kind_name, line_number)? {
-                                ftd::interpreter2::StateWithThing::State(s) => {
-                                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                                }
-                                ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                            };
+                            let kind_thing = try_ready!(doc.search_thing(kind_name, line_number)?);
                             let kind = match kind_thing
                                 .record(doc.name, line_number)?
                                 .fields
@@ -895,25 +875,15 @@ impl<'a> TDoc<'a> {
                         Some(ftd::interpreter2::PropertyValue::Reference { name, .. })
                         | Some(ftd::interpreter2::PropertyValue::Clone { name, .. }) => {
                             let (initial_thing, name) =
-                                match doc.search_initial_thing(name, line_number)? {
-                                    ftd::interpreter2::StateWithThing::State(s) => {
-                                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                                    }
-                                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                                };
+                                try_ready!(doc.search_initial_thing(name, line_number)?);
 
                             if let Some(remaining) = name {
-                                match search_thing_(
+                                try_ready!(search_thing_(
                                     doc,
                                     line_number,
                                     remaining.as_str(),
                                     &initial_thing,
-                                )? {
-                                    ftd::interpreter2::StateWithThing::State(s) => {
-                                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                                    }
-                                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                                }
+                                )?)
                             } else {
                                 initial_thing
                             }

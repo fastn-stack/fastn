@@ -529,17 +529,12 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::CLONE)
                     .to_string();
 
-                let (source, found_kind) = match doc.get_kind_with_argument(
+                let (source, found_kind) = try_ready!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
                     loop_object_name_and_kind,
-                )? {
-                    ftd::interpreter2::StateWithThing::State(s) => {
-                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                    }
-                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                };
+                )?);
 
                 match expected_kind {
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
@@ -570,17 +565,12 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
                     .to_string();
 
-                let (source, found_kind) = match doc.get_kind_with_argument(
+                let (source, found_kind) = try_ready!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
                     loop_object_name_and_kind,
-                )? {
-                    ftd::interpreter2::StateWithThing::State(s) => {
-                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                    }
-                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                };
+                )?);
 
                 match expected_kind {
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
@@ -596,13 +586,8 @@ impl PropertyValue {
 
                 if mutable {
                     let is_variable_mutable = if source.is_global() {
-                        match doc.search_variable(reference.as_str(), value.line_number())? {
-                            ftd::interpreter2::StateWithThing::State(s) => {
-                                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                            }
-                            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                        }
-                        .mutable
+                        try_ready!(doc.search_variable(reference.as_str(), value.line_number())?)
+                            .mutable
                     } else {
                         ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
                             reference.as_str(),

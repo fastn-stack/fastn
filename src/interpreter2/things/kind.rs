@@ -269,25 +269,17 @@ impl KindData {
                 }
             }
             k if known_kinds.contains_key(k) => known_kinds.get(k).unwrap().to_owned(),
-            k => {
-                let thing = match doc.search_thing(k, line_number)? {
-                    ftd::interpreter2::StateWithThing::State(s) => {
-                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                    }
-                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                };
-                match thing {
-                    ftd::interpreter2::Thing::Record(r) => Kind::record(r.name.as_str()),
-                    ftd::interpreter2::Thing::Component(_) => Kind::ui(),
-                    t => {
-                        return ftd::interpreter2::utils::e2(
-                            format!("Can't get find for `{:?}`", t),
-                            doc.name,
-                            line_number,
-                        )
-                    }
+            k => match try_ready!(doc.search_thing(k, line_number)?) {
+                ftd::interpreter2::Thing::Record(r) => Kind::record(r.name.as_str()),
+                ftd::interpreter2::Thing::Component(_) => Kind::ui(),
+                t => {
+                    return ftd::interpreter2::utils::e2(
+                        format!("Can't get find for `{:?}`", t),
+                        doc.name,
+                        line_number,
+                    )
                 }
-            }
+            },
         };
 
         let mut kind_data = KindData {
