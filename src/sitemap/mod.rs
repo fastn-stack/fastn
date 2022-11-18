@@ -1241,10 +1241,16 @@ impl Sitemap {
             }
 
             for child in toc.children.iter() {
-                let (readers, confidential) = find_toc(child, doc_path);
+                let (readers, mut confidential) = find_toc(child, doc_path);
                 if readers.is_empty() {
                     continue;
                 }
+                // Inherit from the parent, if parent is not confidential assuming all the children
+                // are not confidential
+                if !toc.confidential {
+                    confidential = false;
+                }
+
                 return (
                     readers
                         .into_iter()
@@ -1270,10 +1276,17 @@ impl Sitemap {
             }
 
             for toc in subsection.toc.iter() {
-                let (readers, confidential) = find_toc(toc, doc_path);
+                let (readers, mut confidential) = find_toc(toc, doc_path);
                 if readers.is_empty() {
                     continue;
                 }
+
+                // Inherit from the parent, if parent is not confidential assuming all the children
+                // are not confidential
+                if !subsection.confidential {
+                    confidential = false;
+                }
+
                 return (
                     readers
                         .into_iter()
@@ -1291,9 +1304,14 @@ impl Sitemap {
             }
 
             for subsection in section.subsections.iter() {
-                let (readers, confidential) = find_subsection(subsection, doc_path);
+                let (readers, mut confidential) = find_subsection(subsection, doc_path);
                 if readers.is_empty() {
                     continue;
+                }
+                // Inherit from the parent, if parent is not confidential assuming all the children
+                // are not confidential
+                if !section.confidential {
+                    confidential = false;
                 }
                 return (
                     readers
