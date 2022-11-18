@@ -450,16 +450,15 @@ pub async fn access_identities(
     // github-starred: fpm-lang/ftd
     // discord-server: abrark.com
     // github-watches: fpm-lang/ftd
-    let auth_identities =
-        match fpm::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await {
-            Ok(ids) => Ok(ids),
-            Err(fpm::Error::GenericError(err)) => {
-                dbg!(err);
-                Ok(vec![])
-            }
-            e => e,
-        };
-    return auth_identities;
+
+    match fpm::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await {
+        Ok(ids) => Ok(ids),
+        Err(fpm::Error::GenericError(err)) => {
+            dbg!(err);
+            Ok(vec![])
+        }
+        e => e,
+    }
 
     // Ok(if let Some(identity) = req.cookie("identities") {
     //     parse_identities(identity.as_str())
