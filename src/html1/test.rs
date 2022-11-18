@@ -14,11 +14,9 @@ pub fn interpret_helper(
             }
             ftd::interpreter2::Interpreter::StuckOnImport { module, state: st } => {
                 let source = "";
-                dbg!("StuckOnImport", &st.to_process);
                 s = st.continue_after_import(module.as_str(), source)?;
             }
             ftd::interpreter2::Interpreter::Restart { state: st } => {
-                dbg!("Restart", &st.to_process);
                 s = st.continue_()?;
             }
         }

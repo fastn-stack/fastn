@@ -27,12 +27,7 @@ impl Record {
             },
         )])
         .collect::<ftd::Map<ftd::interpreter2::Kind>>();
-        let fields = match Field::from_ast_fields(record.fields, doc, &known_kinds)? {
-            ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-            }
-            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-        };
+        let fields = try_ready!(Field::from_ast_fields(record.fields, doc, &known_kinds)?);
         Ok(ftd::interpreter2::StateWithThing::new_thing(Record::new(
             name.as_str(),
             fields,
@@ -140,12 +135,7 @@ impl Field {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
         let mut result = vec![];
         for field in fields {
-            let field = match Field::from_ast_field(field, doc, known_kinds)? {
-                ftd::interpreter2::StateWithThing::State(s) => {
-                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                }
-                ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-            };
+            let field = try_ready!(Field::from_ast_field(field, doc, known_kinds)?);
             result.push(field);
         }
         Ok(ftd::interpreter2::StateWithThing::new_thing(result))
@@ -156,30 +146,22 @@ impl Field {
         doc: &ftd::interpreter2::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Field>> {
-        let kind = match ftd::interpreter2::KindData::from_ast_kind(
+        let kind = try_ready!(ftd::interpreter2::KindData::from_ast_kind(
             field.kind,
             known_kinds,
             doc,
             field.line_number,
-        )? {
-            ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-            }
-            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-        };
+        )?);
 
         let value = if let Some(value) = field.value {
-            match ftd::interpreter2::PropertyValue::from_ast_value(
-                value,
-                doc,
-                field.mutable,
-                Some(&kind),
-            )? {
-                ftd::interpreter2::StateWithThing::State(s) => {
-                    return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                }
-                ftd::interpreter2::StateWithThing::Thing(fields) => Some(fields),
-            }
+            Some(try_ready!(
+                ftd::interpreter2::PropertyValue::from_ast_value(
+                    value,
+                    doc,
+                    field.mutable,
+                    Some(&kind),
+                )?
+            ))
         } else {
             None
         };
@@ -214,15 +196,7 @@ impl Field {
         Ok(ftd::interpreter2::StateWithThing::new_thing(
             match definition_name_with_arguments {
                 Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
-                _ => {
-                    match doc.search_component(component_name, line_number)? {
-                        ftd::interpreter2::StateWithThing::State(s) => {
-                            return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                        }
-                        ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                    }
-                    .arguments
-                }
+                _ => try_ready!(doc.search_component(component_name, line_number)?).arguments,
             },
         ))
     }

@@ -31,28 +31,18 @@ impl Function {
     {
         let function = ast.get_function(doc.name)?;
         let name = doc.resolve_name(function.name.as_str());
-        let arguments = match ftd::interpreter2::Argument::from_ast_fields(
+        let arguments = try_ready!(ftd::interpreter2::Argument::from_ast_fields(
             function.arguments,
             doc,
             &Default::default(),
-        )? {
-            ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-            }
-            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-        };
+        )?);
 
-        let kind = match ftd::interpreter2::KindData::from_ast_kind(
+        let kind = try_ready!(ftd::interpreter2::KindData::from_ast_kind(
             function.kind,
             &Default::default(),
             doc,
             function.line_number,
-        )? {
-            ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-            }
-            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-        };
+        )?);
 
         let expression = vec![Expression {
             expression: function.definition.value.to_string(),
