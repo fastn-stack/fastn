@@ -183,17 +183,12 @@ impl Component {
             None
         };
 
-        let events = match Event::from_ast_events(
+        let events = try_ready!(Event::from_ast_events(
             ast_component.events,
             definition_name_with_arguments,
             &loop_object_name_and_kind,
             doc,
-        )? {
-            ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-            }
-            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-        };
+        )?);
 
         let properties = match Property::from_ast_properties_and_children(
             ast_component.properties,
@@ -769,19 +764,12 @@ impl Event {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Event>>> {
         let mut events = vec![];
         for event in ast_events {
-            events.push(
-                match Event::from_ast_event(
-                    event,
-                    definition_name_with_arguments,
-                    loop_object_name_and_kind,
-                    doc,
-                )? {
-                    ftd::interpreter2::StateWithThing::State(s) => {
-                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                    }
-                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                },
-            );
+            events.push(try_ready!(Event::from_ast_event(
+                event,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+                doc,
+            )?));
         }
         Ok(ftd::interpreter2::StateWithThing::new_thing(events))
     }

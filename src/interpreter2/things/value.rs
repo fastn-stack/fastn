@@ -210,22 +210,17 @@ impl PropertyValue {
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
     > {
-        match PropertyValue::reference_from_ast_value(
+        if let Some(reference) = try_ready!(PropertyValue::reference_from_ast_value(
             &value,
             doc,
             is_mutable,
             expected_kind,
             definition_name_with_arguments,
             loop_object_name_and_kind,
-        )? {
-            ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-            }
-            ftd::interpreter2::StateWithThing::Thing(Some(reference)) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_thing(reference));
-            }
-            _ => {}
+        )?) {
+            return Ok(ftd::interpreter2::StateWithThing::new_thing(reference));
         }
+
         let expected_kind = expected_kind.ok_or(ftd::interpreter2::Error::ParseError {
             message: "Need expected kind".to_string(),
             doc_id: doc.name.to_string(),
@@ -286,19 +281,14 @@ impl PropertyValue {
                         );
                     }
                     values.push(if kind.is_ui() {
-                        match PropertyValue::to_ui_value(
+                        try_ready!(PropertyValue::to_ui_value(
                             &key,
                             value,
                             doc,
                             definition_name_with_arguments,
-                        )? {
-                            ftd::interpreter2::StateWithThing::State(s) => {
-                                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                            }
-                            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                        }
+                        )?)
                     } else {
-                        match PropertyValue::from_ast_value(
+                        try_ready!(PropertyValue::from_ast_value(
                             value,
                             doc,
                             is_mutable,
@@ -307,12 +297,7 @@ impl PropertyValue {
                                 caption: expected_kind.caption,
                                 body: expected_kind.body,
                             }),
-                        )? {
-                            ftd::interpreter2::StateWithThing::State(s) => {
-                                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                            }
-                            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                        }
+                        )?)
                     });
                 }
                 ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
@@ -348,23 +333,18 @@ impl PropertyValue {
                 for field in record.fields {
                     if field.is_caption() && caption.is_some() {
                         let caption = caption.as_ref().unwrap().clone();
-                        let property_value = match PropertyValue::from_ast_value(
+                        let property_value = try_ready!(PropertyValue::from_ast_value(
                             caption,
                             doc,
                             field.mutable,
                             Some(&field.kind),
-                        )? {
-                            ftd::interpreter2::StateWithThing::State(s) => {
-                                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                            }
-                            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                        };
+                        )?);
                         result_field.insert(field.name.to_string(), property_value);
                         continue;
                     }
                     if field.is_body() && body.is_some() {
                         let body = body.as_ref().unwrap();
-                        let property_value = match PropertyValue::from_ast_value(
+                        let property_value = try_ready!(PropertyValue::from_ast_value(
                             ftd::ast::VariableValue::String {
                                 value: body.value.to_string(),
                                 line_number: body.line_number,
@@ -372,12 +352,7 @@ impl PropertyValue {
                             doc,
                             field.mutable,
                             Some(&field.kind),
-                        )? {
-                            ftd::interpreter2::StateWithThing::State(s) => {
-                                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                            }
-                            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                        };
+                        )?);
                         result_field.insert(field.name.to_string(), property_value);
                         continue;
                     }
@@ -404,7 +379,7 @@ impl PropertyValue {
                                 t => vec![(header.key.to_string(), t.to_owned())],
                             });
                         }
-                        let property_value = match PropertyValue::from_ast_value(
+                        let property_value = try_ready!(PropertyValue::from_ast_value(
                             ftd::ast::VariableValue::List {
                                 value: header_list,
                                 line_number: value.line_number(),
@@ -412,12 +387,7 @@ impl PropertyValue {
                             doc,
                             field.mutable,
                             Some(&field.kind),
-                        )? {
-                            ftd::interpreter2::StateWithThing::State(s) => {
-                                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                            }
-                            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                        };
+                        )?);
                         result_field.insert(field.name.to_string(), property_value);
                         continue;
                     }
@@ -465,17 +435,12 @@ impl PropertyValue {
                         );
                     }
                     let first_header = headers.first().unwrap();
-                    let property_value = match PropertyValue::from_ast_value(
+                    let property_value = try_ready!(PropertyValue::from_ast_value(
                         first_header.value.clone(),
                         doc,
                         first_header.mutable,
                         Some(&field.kind),
-                    )? {
-                        ftd::interpreter2::StateWithThing::State(s) => {
-                            return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                        }
-                        ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                    };
+                    )?);
                     result_field.insert(field.name.to_string(), property_value);
                 }
                 ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
@@ -503,16 +468,11 @@ impl PropertyValue {
     > {
         let line_number = value.line_number();
         let ast_component = ftd::ast::Component::from_variable_value(key, value, doc.name)?;
-        let component = match ftd::interpreter2::Component::from_ast_component(
+        let component = try_ready!(ftd::interpreter2::Component::from_ast_component(
             ast_component,
             definition_name_with_arguments,
             doc,
-        )? {
-            ftd::interpreter2::StateWithThing::State(s) => {
-                return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-            }
-            ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-        };
+        )?);
 
         Ok(ftd::interpreter2::StateWithThing::new_thing(
             ftd::interpreter2::PropertyValue::Value {
@@ -551,19 +511,14 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
                     .to_string();
 
-                let function_call = match ftd::interpreter2::FunctionCall::from_string(
+                let function_call = try_ready!(ftd::interpreter2::FunctionCall::from_string(
                     expression.as_str(),
                     doc,
                     mutable,
                     definition_name_with_arguments,
                     loop_object_name_and_kind,
                     value.line_number(),
-                )? {
-                    ftd::interpreter2::StateWithThing::State(s) => {
-                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                    }
-                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                };
+                )?);
 
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     ftd::interpreter2::PropertyValue::FunctionCall(function_call),
