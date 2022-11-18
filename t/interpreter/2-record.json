@@ -1,5 +1,58 @@
 {
   "data": {
+    "foo#a": {
+      "Variable": {
+        "name": "foo#a",
+        "kind": {
+          "kind": {
+            "Record": {
+              "name": "foo#foo"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Record": {
+                "name": "foo#foo",
+                "fields": {
+                  "age": {
+                    "Value": {
+                      "value": {
+                        "Integer": {
+                          "value": 2
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 13
+                    }
+                  },
+                  "details": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "This contains details for record `foo`.\nThis is default text for the field details.\nIt can be overridden by the variable of this type."
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 11
+                    }
+                  }
+                }
+              }
+            },
+            "is_mutable": false,
+            "line_number": 12
+          }
+        },
+        "conditional_value": [],
+        "line_number": 12,
+        "is_static": true
+      }
+    },
     "foo#foo": {
       "Record": {
         "name": "foo#foo",
@@ -31,10 +84,10 @@
                   }
                 },
                 "is_mutable": false,
-                "line_number": 8
+                "line_number": 11
               }
             },
-            "line_number": 8
+            "line_number": 11
           }
         ],
         "line_number": 1
@@ -42,7 +95,36 @@
     }
   },
   "name": "foo",
-  "tree": [],
+  "tree": [
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#a.details",
+              "kind": {
+                "kind": "String",
+                "caption": true,
+                "body": true
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 16
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 16
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 16
+    }
+  ],
   "aliases": {
     "ftd": "ftd"
   }

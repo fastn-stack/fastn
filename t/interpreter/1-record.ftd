@@ -1,3 +1,11 @@
 -- record foo:
 string name:
 integer age: 40
+
+
+-- foo a:
+name: FTD
+age: 2
+
+
+-- ftd.text: $a.name

@@ -11,3 +11,7 @@ gender: f
 -- string $n: sjdh
 
 -- $n1.name: $n
+
+
+-- ftd.text: $n1.name
+-- ftd.text: $n

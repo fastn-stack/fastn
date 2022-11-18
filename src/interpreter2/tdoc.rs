@@ -985,7 +985,10 @@ impl<'a> TDoc<'a> {
                 .ast
                 .iter()
                 .filter(|v| {
-                    !v.is_component() && v.name().eq(&format!("{}.{}", doc_name, thing_name))
+                    !v.is_component()
+                        && (v.name().eq(&format!("{}.{}", doc_name, thing_name))
+                            || v.name()
+                                .starts_with(format!("{}.{}.", doc_name, thing_name).as_str()))
                 })
                 .map(|v| v.to_owned())
                 .collect_vec();
@@ -1000,7 +1003,11 @@ impl<'a> TDoc<'a> {
             let ast_for_thing = parsed_document
                 .ast
                 .iter()
-                .filter(|v| !v.is_component() && v.name().eq(&thing_name))
+                .filter(|v| {
+                    !v.is_component()
+                        && (v.name().eq(&thing_name)
+                            || v.name().starts_with(format!("{}.", thing_name).as_str()))
+                })
                 .map(|v| v.to_owned())
                 .collect_vec();
 

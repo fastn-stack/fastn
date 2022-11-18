@@ -7,3 +7,6 @@ integer age:
 -- person foo:
 name: FOO
 age: 10
+
+
+-- ftd.text: $foo.name
