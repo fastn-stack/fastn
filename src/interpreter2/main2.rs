@@ -19,18 +19,20 @@ impl InterpreterState {
     }
 
     pub fn continue_(mut self) -> ftd::interpreter2::Result<Interpreter> {
-        let mut state = self.clone();
-        if let Some((id, ast_to_process)) = self.to_process.last_mut() {
+        if let Some((id, ast_to_process)) = self.to_process.last() {
             let parsed_document = self.parsed_libs.get(id).unwrap();
-
-            while let Some(ast) = ast_to_process.first() {
+            let name = parsed_document.name.to_string();
+            let aliases = parsed_document.doc_aliases.clone();
+            if let Some(ast) = ast_to_process.first() {
                 let ast = ast.clone();
+                let bag = self.bag.clone();
+                let state = &mut self;
 
                 let doc = ftd::interpreter2::TDoc {
-                    name: &parsed_document.name,
-                    aliases: &parsed_document.doc_aliases,
-                    bag: &self.bag,
-                    state: Some(&mut state),
+                    name: &name,
+                    aliases: &aliases,
+                    bag: &bag,
+                    state: Some(state),
                 };
 
                 if ast.is_record() {
@@ -91,13 +93,17 @@ impl InterpreterState {
                         }
                     }
                 }
-
-                ast_to_process.remove(0);
+                self.remove_last();
             }
+        }
 
-            if ast_to_process.is_empty() {
-                self.to_process.pop();
-            }
+        if self
+            .to_process
+            .last()
+            .map(|v| v.1.is_empty())
+            .unwrap_or(false)
+        {
+            self.to_process.pop();
         }
 
         if self.to_process.is_empty() {
@@ -116,6 +122,21 @@ impl InterpreterState {
             Ok(Interpreter::Done { document })
         } else {
             self.continue_()
+        }
+    }
+
+    pub fn remove_last(&mut self) {
+        let mut pop_last = false;
+        if let Some((_, asts)) = self.to_process.last_mut() {
+            if !asts.is_empty() {
+                asts.remove(0);
+            }
+            if asts.is_empty() {
+                pop_last = true;
+            }
+        }
+        if pop_last {
+            self.to_process.pop();
         }
     }
 

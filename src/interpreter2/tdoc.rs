@@ -743,6 +743,18 @@ impl<'a> TDoc<'a> {
         initial_thing.function(self.name, line_number)
     }
 
+    pub fn search_function(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Function>>
+    {
+        let initial_thing = try_ready!(self.search_initial_thing(name, line_number)?).0;
+        Ok(ftd::interpreter2::StateWithThing::new_thing(
+            initial_thing.function(self.name, line_number)?,
+        ))
+    }
+
     pub fn get_initial_variable(
         &'a self,
         name: &'a str,

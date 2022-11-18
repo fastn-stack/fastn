@@ -252,7 +252,7 @@ impl FunctionCall {
                 doc.name,
                 line_number,
             )?;
-        let function = doc.get_function(function_name.as_str(), line_number)?;
+        let function = try_ready!(doc.search_function(function_name.as_str(), line_number)?);
         let mut values: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
         let mut order = vec![];
 
@@ -281,22 +281,19 @@ impl FunctionCall {
                         line_number,
                     );
                 }
-                match ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
-                    ftd::ast::VariableValue::String {
-                        value: property,
-                        line_number,
-                    },
-                    doc,
-                    mutable,
-                    Some(&argument.kind),
-                    definition_name_with_arguments,
-                    loop_object_name_and_kind,
-                )? {
-                    ftd::interpreter2::StateWithThing::State(s) => {
-                        return Ok(ftd::interpreter2::StateWithThing::new_state(s))
-                    }
-                    ftd::interpreter2::StateWithThing::Thing(fields) => fields,
-                }
+                try_ready!(
+                    ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
+                        ftd::ast::VariableValue::String {
+                            value: property,
+                            line_number,
+                        },
+                        doc,
+                        mutable,
+                        Some(&argument.kind),
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    )?
+                )
             } else {
                 match argument.value {
                     Some(ref value) => value.clone(),
