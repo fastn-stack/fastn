@@ -115,6 +115,7 @@ pub struct PageHeadingItemCompat {
     pub number: Option<String>,
     pub title: Option<String>,
     pub path: Option<String>,
+    pub bury: bool,
     #[serde(rename = "is-heading")]
     pub is_heading: bool,
     // TODO: Font icon mapping to html?

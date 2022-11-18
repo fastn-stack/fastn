@@ -499,6 +499,7 @@ impl InterpreterState {
                 number: number.clone(),
                 title: title.clone(),
                 path: None,
+                bury: false,
                 is_heading: true,
                 font_icon: None,
                 is_disabled: false,
