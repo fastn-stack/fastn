@@ -18,7 +18,7 @@ Create your GitHub account by following simple steps by [GitHub sign-up process]
 Now as you signed into your GitHub account, lets start creating our first `fpm` 
 website project on GitHub.
 
-To start with it, create a repository using `fpm-template` - [Click here](https://github.com/FifthTry/fpm-template/generate)
+To start with it, create a repository using `fpm-template` - [Click here](https://github.com/ftd-lang/fpm-template/generate)
 
 --- ft.image: How to create new repository using `fpm-template`
 src: $assets.files.static.docs.create-new-repository.png
@@ -89,8 +89,32 @@ src: $assets.files.static.docs.about-gone-live-with-url.png
 width: fill
 
 
+--- ft.h3: Updating default theme
+
+Your repository is now ready to use. You are now FTD website user. `FPM.ftd` 
+file contains all dependencies you are using. 
+
+Let's change default theme, by following below step.
+
+--- ft.code: 
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/doc-site as ds
 
 
+--- ft.code: Just replace above line with
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/dash-dash-ds as ds
+
+
+--- ft.markdown:
+
+Commit and Push above changes to your GitHub repository. Our deployment process of 
+these changes will start.
+
+Once deployment is done goto your website, you will see your website theme
+is changed.
 
 
 
