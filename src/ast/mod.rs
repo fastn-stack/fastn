@@ -19,7 +19,7 @@ pub use import::Import;
 pub use kind::{Condition, HeaderValues, VariableKind, VariableModifier, VariableValue};
 pub use main::AST;
 pub use record::{Field, Record};
-pub use variable::{VariableDefinition, VariableInvocation};
+pub use variable::{VariableDefinition, VariableFlags, VariableInvocation};
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
@@ -32,6 +32,9 @@ pub enum Error {
         doc_id: String,
         line_number: usize,
     },
+
+    #[error("ParseBoolError: {}", _0)]
+    ParseBoolError(#[from] std::str::ParseBoolError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

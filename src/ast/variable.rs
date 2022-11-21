@@ -5,6 +5,7 @@ pub struct VariableDefinition {
     pub mutable: bool,
     pub value: ftd::ast::VariableValue,
     pub line_number: usize,
+    pub flags: VariableFlags,
 }
 
 impl VariableDefinition {
@@ -14,6 +15,7 @@ impl VariableDefinition {
         mutable: bool,
         value: ftd::ast::VariableValue,
         line_number: usize,
+        flags: VariableFlags,
     ) -> VariableDefinition {
         VariableDefinition {
             kind,
@@ -21,6 +23,7 @@ impl VariableDefinition {
             mutable,
             value,
             line_number,
+            flags,
         }
     }
 
@@ -56,12 +59,15 @@ impl VariableDefinition {
         let value =
             ftd::ast::VariableValue::from_p1_with_modifier(section, doc_id, &kind.modifier)?;
 
+        let flags = ftd::ast::VariableFlags::from_headers(&section.headers, doc_id);
+
         Ok(VariableDefinition::new(
             section.name.trim_start_matches(ftd::ast::utils::REFERENCE),
             kind,
             ftd::ast::utils::is_variable_mutable(section.name.as_str()),
             value,
             section.line_number,
+            flags,
         ))
     }
 
@@ -116,7 +122,7 @@ impl VariableInvocation {
             );
         }
 
-        let value = ftd::ast::VariableValue::from_p1(section);
+        let value = ftd::ast::VariableValue::from_p1(section, doc_id);
         let condition = ftd::ast::Condition::from_headers(&section.headers, doc_id)?;
 
         Ok(VariableInvocation::new(
@@ -125,5 +131,70 @@ impl VariableInvocation {
             condition,
             section.line_number,
         ))
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, serde::Serialize, Default, serde::Deserialize)]
+pub struct VariableFlags {
+    pub always_include: Option<bool>,
+}
+
+impl VariableFlags {
+    pub fn new() -> VariableFlags {
+        VariableFlags {
+            always_include: None,
+        }
+    }
+
+    pub fn set_always_include(self) -> VariableFlags {
+        let mut variable_flag = self;
+        variable_flag.always_include = Some(true);
+        variable_flag
+    }
+
+    pub fn from_headers(headers: &ftd::p11::Headers, doc_id: &str) -> VariableFlags {
+        for header in headers.0.iter() {
+            if let Ok(flag) = ftd::ast::VariableFlags::from_header(header, doc_id) {
+                return flag;
+            }
+        }
+
+        ftd::ast::VariableFlags::new()
+    }
+
+    pub fn from_header(header: &ftd::p11::Header, doc_id: &str) -> ftd::ast::Result<VariableFlags> {
+        let kv = match header {
+            ftd::p11::Header::KV(kv) => kv,
+            ftd::p11::Header::Section(s) => {
+                return ftd::ast::parse_error(
+                    format!("Expected the boolean value for flag, found: `{:?}`", s),
+                    doc_id,
+                    header.get_line_number(),
+                )
+            }
+        };
+
+        match kv.key.as_str() {
+            "$always-include$" => {
+                let value = kv
+                    .value
+                    .as_ref()
+                    .ok_or(ftd::ast::Error::ParseError {
+                        message: "Value expected for `$always-include$` flag found `null`"
+                            .to_string(),
+                        doc_id: doc_id.to_string(),
+                        line_number: kv.line_number,
+                    })?
+                    .parse::<bool>()?;
+                if value {
+                    Ok(VariableFlags::new().set_always_include())
+                } else {
+                    Ok(VariableFlags::new())
+                }
+            }
+            t => {
+                ftd::ast::parse_error(format!("Unknown flag found`{}`", t), doc_id, kv.line_number)
+            }
+        }
     }
 }

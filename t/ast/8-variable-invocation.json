@@ -13,7 +13,10 @@
           "line_number": 1
         }
       },
-      "line_number": 1
+      "line_number": 1,
+      "flags": {
+        "always_include": null
+      }
     }
   },
   {
@@ -33,8 +36,31 @@
     "VariableInvocation": {
       "name": "score",
       "value": {
-        "String": {
-          "value": "50",
+        "Record": {
+          "name": "$score",
+          "caption": {
+            "String": {
+              "value": "50",
+              "line_number": 5
+            }
+          },
+          "headers": [
+            {
+              "key": "if",
+              "mutable": false,
+              "value": {
+                "String": {
+                  "value": "not $flag",
+                  "line_number": 6
+                }
+              },
+              "line_number": 6,
+              "kind": null,
+              "condition": null
+            }
+          ],
+          "body": null,
+          "values": [],
           "line_number": 5
         }
       },

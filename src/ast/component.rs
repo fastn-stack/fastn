@@ -342,7 +342,7 @@ impl Property {
             );
         }
 
-        let value = ftd::ast::VariableValue::from_p1_header(header);
+        let value = ftd::ast::VariableValue::from_p1_header(header, doc_id);
 
         Ok(Property::new(
             value,

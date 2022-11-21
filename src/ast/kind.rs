@@ -269,7 +269,7 @@ impl VariableValue {
         doc_id: &str,
         modifier: &Option<VariableModifier>,
     ) -> ftd::ast::Result<VariableValue> {
-        let value = VariableValue::from_p1(section);
+        let value = VariableValue::from_p1(section, doc_id);
         value.into_modifier(doc_id, section.line_number, modifier)
     }
 
@@ -278,7 +278,7 @@ impl VariableValue {
         doc_id: &str,
         modifier: &Option<VariableModifier>,
     ) -> ftd::ast::Result<VariableValue> {
-        let value = VariableValue::from_p1_header(header);
+        let value = VariableValue::from_p1_header(header, doc_id);
         value.into_modifier(doc_id, header.get_line_number(), modifier)
     }
 
@@ -311,31 +311,34 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn from_p1(section: &ftd::p11::Section) -> VariableValue {
+    pub(crate) fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> VariableValue {
         use itertools::Itertools;
 
         let values = section
             .sub_sections
             .iter()
-            .map(|v| (v.name.to_string(), VariableValue::from_p1(v)))
+            .map(|v| (v.name.to_string(), VariableValue::from_p1(v, doc_id)))
             .collect_vec();
 
         let caption = section
             .caption
             .as_ref()
-            .and_then(|v| VariableValue::from_p1_header(v).inner());
+            .and_then(|v| VariableValue::from_p1_header(v, doc_id).inner());
 
         let headers = section
             .headers
             .0
             .iter()
-            .filter(|v| !ftd::ast::utils::is_condition(v.get_key().as_str(), &v.get_kind()))
+            .filter(|v| {
+                !ftd::ast::utils::is_condition(v.get_key().as_str(), &v.get_kind())
+                    || ftd::ast::VariableFlags::from_header(v, doc_id).is_err()
+            })
             .map(|header| {
                 let key = header.get_key();
                 HeaderValue::new(
                     key.trim_start_matches(ftd::ast::utils::REFERENCE),
                     ftd::ast::utils::is_variable_mutable(key.as_str()),
-                    VariableValue::from_p1_header(header),
+                    VariableValue::from_p1_header(header, doc_id),
                     header.get_line_number(),
                     header.get_kind(),
                     header.get_condition(),
@@ -381,7 +384,7 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn from_p1_header(header: &ftd::p11::Header) -> VariableValue {
+    pub(crate) fn from_p1_header(header: &ftd::p11::Header, doc_id: &str) -> VariableValue {
         use itertools::Itertools;
 
         match header {
@@ -395,7 +398,7 @@ impl VariableValue {
             }) => VariableValue::List {
                 value: section
                     .iter()
-                    .map(|v| (v.name.to_string(), VariableValue::from_p1(v)))
+                    .map(|v| (v.name.to_string(), VariableValue::from_p1(v, doc_id)))
                     .collect_vec(),
                 line_number: *line_number,
             },
