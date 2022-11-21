@@ -3852,7 +3852,7 @@ checksum = "09041cd90cf85f7f8b2df60c646f853b7f535ce68f85244eb6731cf89fa498ec"
 [[package]]
 name = "zip"
 version = "0.6.3"
-source = "git+https://github.com/zip-rs/zip#5737927dbbd15a8b648c315f2f8e2a39cdc1a430"
+source = "git+https://github.com/zip-rs/zip#f6357c59936b51c52146f35c6cf3c15dd206251d"
 dependencies = [
  "aes",
  "byteorder",
