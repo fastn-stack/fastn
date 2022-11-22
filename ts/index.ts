@@ -43,9 +43,6 @@ window.ftd = (function() {
         let function_arguments: (FunctionArgument | any)[] = [];
         handle_function(evt, id, action, obj, function_arguments);
         change_value(function_arguments, ftd_data[id], id);
-        if (!!window["node_change_" + id]) {
-            window["node_change_" + id](ftd_data[id]);
-        }
     }
 
     exports.handle_event = function (evt: Event, id: string, event: string, obj: Element) {

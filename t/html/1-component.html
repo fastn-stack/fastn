@@ -70,9 +70,6 @@ function handle_event(evt, id, action, obj) {
 let function_arguments = [];
 handle_function(evt, id, action, obj, function_arguments);
 change_value(function_arguments, ftd_data[id], id);
-if (!!window["node_change_" + id]) {
-window["node_change_" + id](ftd_data[id]);
-}
 }
 exports.handle_event = function (evt, id, event, obj) {
 console_log(id, event);
@@ -440,21 +437,6 @@ return (!str || str.length === 0 );
 }
 
 
-
-function node_change_main(data){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(40);
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = "Hello World";
-document.querySelector(`[data-id="0,0:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="0,1:main"]`).innerHTML = "again";
-document.querySelector(`[data-id="0,1:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(40);
-document.querySelector(`[data-id="1,0:main"]`).innerHTML = "Hello";
-document.querySelector(`[data-id="1,0:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="1,1:main"]`).innerHTML = "again";
-document.querySelector(`[data-id="1,1:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="2:main"]`).innerHTML = "Hello from text";
-document.querySelector(`[data-id="2:main"]`).style["padding"] = "{0}px".format(40);
-}
 
 
 

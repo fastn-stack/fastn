@@ -30,6 +30,9 @@ impl<'a> VariableDependencyGenerator<'a> {
                     &variable.name,
                 );
             }
+            if result.value.get(&variable.name).is_none() {
+                result.extend(variable.name.to_string(), vec![]);
+            }
         }
 
         return result;
@@ -39,12 +42,9 @@ impl<'a> VariableDependencyGenerator<'a> {
             value: &ftd::interpreter2::PropertyValue,
             name: &str,
         ) {
-            if let Some(ref_name) = value.reference_name() {
-                result.insert(ref_name.to_string(), name.to_string());
-            } else if let Some(function_call) = value.get_function() {
-                for property_value in function_call.values.values() {
-                    dependencies_from_property_value(result, property_value, name);
-                }
+            let value = ftd::html1::utils::dependencies_from_property_value(value);
+            for v in value {
+                result.insert(v, name.to_string());
             }
         }
     }
@@ -100,8 +100,11 @@ impl<'a> VariableDependencyGenerator<'a> {
         }
     }
 
-    pub(crate) fn get_set_functions(&self) -> ftd::html1::Result<String> {
-        let (set_function, mut dep) = self.js_set_functions();
+    pub(crate) fn get_set_functions(
+        &self,
+        var_dependencies: &ftd::VecMap<String>,
+    ) -> ftd::html1::Result<String> {
+        let (set_function, mut dep) = self.js_set_functions(var_dependencies);
         let mut js_resolve_functions = vec![];
         if !set_function.trim().is_empty() {
             js_resolve_functions.push(format!("window.set_value_{} = {{}};", self.id));
@@ -126,12 +129,14 @@ impl<'a> VariableDependencyGenerator<'a> {
         Ok(js_resolve_functions.join("\n"))
     }
 
-    fn js_set_functions(&self) -> (String, Vec<String>) {
+    fn js_set_functions(&self, var_dependencies: &ftd::VecMap<String>) -> (String, Vec<String>) {
         let order = self.get_variable_order_dependencies();
         let mut result_1 = vec![];
         let mut result_2 = std::collections::HashSet::new();
         for (key, values) in order.value {
+            let mut node_changes = std::collections::HashSet::new();
             let mut v = vec![];
+            node_changes.extend(dbg!(var_dependencies.get_value(dbg!(key.as_str()))));
             for val in values.iter() {
                 v.push(format!(
                     indoc::indoc! {"
@@ -145,20 +150,40 @@ impl<'a> VariableDependencyGenerator<'a> {
                     variable_name = val,
                     set_variable_name = key,
                 ));
+                node_changes.extend(dbg!(var_dependencies.get_value(val)));
             }
 
+            let node_changes_calls = {
+                let mut node_changes_calls = vec![];
+                for key in node_changes.iter() {
+                    node_changes_calls.push(format!(
+                        indoc::indoc! {"
+                            if(!!window[\"node_change_{id}\"] && !!window.node_change_{id}[\"{key}\"]){{\
+                                window.node_change_{id}[\"{key}\"](data);
+                            }}"
+                        },
+                        id = self.id,
+                        key = key,
+                    ))
+                }
+                node_changes_calls
+            };
             result_2.extend(values);
-            result_1.push(format!(
-                indoc::indoc! {"
+            if !v.is_empty() || !node_changes_calls.is_empty() {
+                result_1.push(format!(
+                    indoc::indoc! {"
                      window.set_value_{id}[\"{key}\"] = function (data, new_value) {{
                             data[\"{key}\"] = new_value;
                             {dependencies}
+                            {node_changes_calls}
                      }};
                 "},
-                id = self.id,
-                key = key,
-                dependencies = v.join("\n"),
-            ));
+                    id = self.id,
+                    key = key,
+                    dependencies = v.join("\n"),
+                    node_changes_calls = node_changes_calls.join("\n"),
+                ));
+            }
         }
 
         (result_1.join("\n"), result_2.into_iter().collect())

@@ -91,7 +91,19 @@ impl<T> VecMap<T> {
     }
 
     pub fn extend(&mut self, key: String, value: Vec<T>) {
-        self.value.insert(key, value);
+        if let Some(v) = self.value.get_mut(&key) {
+            v.extend(value);
+        } else {
+            self.value.insert(key, value);
+        }
+    }
+
+    pub fn get_value(&self, key: &str) -> Vec<&T> {
+        let mut values = vec![];
+        if let Some(v) = self.value.get(key) {
+            values.extend(v)
+        }
+        values
     }
 }
 

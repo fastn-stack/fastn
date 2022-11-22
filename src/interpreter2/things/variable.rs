@@ -98,6 +98,10 @@ impl Variable {
 
         variable
     }
+
+    pub fn is_static(&self) -> bool {
+        !self.mutable && self.is_static
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]

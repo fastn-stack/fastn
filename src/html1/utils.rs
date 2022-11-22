@@ -52,6 +52,10 @@ pub(crate) fn full_data_id(id: &str, data_id: &str) -> String {
     }
 }
 
+pub(crate) fn node_change_id(id: &str, attr: &str) -> String {
+    format!("{}__{}", id, attr)
+}
+
 pub(crate) fn get_formatted_dep_string_from_property_value(
     id: &str,
     doc: &ftd::interpreter2::TDoc,
@@ -153,4 +157,20 @@ pub(crate) fn is_dark_mode_dependent(
 ) -> ftd::html1::Result<bool> {
     let value = value.clone().resolve(doc, value.line_number())?;
     Ok(value.is_record("ftd#image-src"))
+}
+
+pub(crate) fn dependencies_from_property_value(
+    value: &ftd::interpreter2::PropertyValue,
+) -> Vec<String> {
+    if let Some(ref_name) = value.reference_name() {
+        vec![ref_name.to_string()]
+    } else if let Some(function_call) = value.get_function() {
+        let mut result = vec![];
+        for property_value in function_call.values.values() {
+            result.extend(dependencies_from_property_value(property_value));
+        }
+        result
+    } else {
+        vec![]
+    }
 }

@@ -72,9 +72,6 @@ function handle_event(evt, id, action, obj) {
 let function_arguments = [];
 handle_function(evt, id, action, obj, function_arguments);
 change_value(function_arguments, ftd_data[id], id);
-if (!!window["node_change_" + id]) {
-window["node_change_" + id](ftd_data[id]);
-}
 }
 exports.handle_event = function (evt, id, event, obj) {
 console_log(id, event);
@@ -455,31 +452,54 @@ a.value = !a.value;
 
 
 
-function node_change_main(data){
+window.node_change_main = {};
+window.node_change_main["0:main__display"] = function(data) {
 if(function(){
 return ((data["foo#num"]>2)&&data["foo#flag"]);
 }()){
 document.querySelector(`[data-id="0:main"]`).style["display"] = "flex";
 }
 else {document.querySelector(`[data-id="0:main"]`).style["display"] = "none";}
-document.querySelector(`[data-id="0:main"]`).innerHTML = "Hello World";
+}
+
+window.node_change_main["0:main__padding"] = function(data) {
 if(function(){
 return data["foo#flag"];
 }()){
 document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(50);
 }
+}
+window.node_change_main["1:main__text"] = function(data) {
 document.querySelector(`[data-id="1:main"]`).innerHTML = data["foo#num"];
+}
+window.node_change_main["2:main__display"] = function(data) {
 if(function(){
 return data["foo#flag"];
 }()){
 document.querySelector(`[data-id="2:main"]`).style["display"] = "flex";
 }
 else {document.querySelector(`[data-id="2:main"]`).style["display"] = "none";}
-document.querySelector(`[data-id="2:main"]`).innerHTML = "Gee";
-document.querySelector(`[data-id="3:main"]`).innerHTML = "Click here";
 }
+window.set_value_main = {};
+window.set_value_main["foo#flag"] = function (data, new_value) {
+data["foo#flag"] = new_value;
 
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
+}
+};
 
+window.set_value_main["foo#num"] = function (data, new_value) {
+data["foo#num"] = new_value;
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+}
+};
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>

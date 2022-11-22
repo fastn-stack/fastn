@@ -73,9 +73,6 @@ function handle_event(evt, id, action, obj) {
 let function_arguments = [];
 handle_function(evt, id, action, obj, function_arguments);
 change_value(function_arguments, ftd_data[id], id);
-if (!!window["node_change_" + id]) {
-window["node_change_" + id](ftd_data[id]);
-}
 }
 exports.handle_event = function (evt, id, event, obj) {
 console_log(id, event);
@@ -450,18 +447,27 @@ return (a.value += 1);
 
 
 
-function node_change_main(data){
-document.querySelector(`[data-id="0,0,0,0:main"]`).innerHTML = "boo";
+window.node_change_main = {};
+window.node_change_main["0,0,0,1:main__text"] = function(data) {
 document.querySelector(`[data-id="0,0,0,1:main"]`).innerHTML = data["foo#boo:bv:0,0,0"];
-document.querySelector(`[data-id="0,0,1:main"]`).innerHTML = "moo";
+}
+window.node_change_main["0,0,2:main__text"] = function(data) {
 document.querySelector(`[data-id="0,0,2:main"]`).innerHTML = data["foo#foo:fv:0"];
+}
+window.node_change_main["0,0,3:main__text"] = function(data) {
 document.querySelector(`[data-id="0,0,3:main"]`).innerHTML = data["foo#moo:mv:0,0"];
-document.querySelector(`[data-id="0,1:main"]`).innerHTML = "foo";
+}
+window.node_change_main["0,2:main__text"] = function(data) {
 document.querySelector(`[data-id="0,2:main"]`).innerHTML = data["foo#foo:fv:0"];
 }
-
-
 window.set_value_main = {};
+window.set_value_main["foo#boo:bv:0,0,0"] = function (data, new_value) {
+data["foo#boo:bv:0,0,0"] = new_value;
+
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
+}
+};
+
 window.set_value_main["foo#foo:fv:0"] = function (data, new_value) {
 data["foo#foo:fv:0"] = new_value;
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#moo:mv:0,0"]){window["resolve_value_main"]["foo#moo:mv:0,0"](data);
@@ -472,6 +478,14 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:
 } else {
 data["foo#boo:bv:0,0,0"] = data["foo#foo:fv:0"]
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__text"]){window.node_change_main["0,0,2:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
+}
 };
 
 window.set_value_main["foo#moo:mv:0,0"] = function (data, new_value) {
@@ -479,6 +493,10 @@ data["foo#moo:mv:0,0"] = new_value;
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:0,0,0"]){window["resolve_value_main"]["foo#boo:bv:0,0,0"](data);
 } else {
 data["foo#boo:bv:0,0,0"] = data["foo#moo:mv:0,0"]
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
 }
 };
 

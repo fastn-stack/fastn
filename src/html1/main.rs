@@ -16,13 +16,12 @@ impl HtmlUI {
             &node_data.bag,
         );
 
-        let variable_dependencies =
-            ftd::html1::VariableDependencyGenerator::new(id, &tdoc).get_set_functions()?;
-
         let functions = ftd::html1::FunctionGenerator::new(id).get_functions(&node_data)?;
-        let dependencies =
+        let (dependencies, var_dependencies) =
             ftd::html1::dependencies::DependencyGenerator::new(id, &node_data.node, &tdoc)
                 .get_dependencies()?;
+        let variable_dependencies = ftd::html1::VariableDependencyGenerator::new(id, &tdoc)
+            .get_set_functions(&var_dependencies)?;
         let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
         let html = HtmlGenerator::new(id, &tdoc).to_html(node_data.node)?;
 

@@ -42,7 +42,7 @@ impl PropertyValue {
                 name, line_number, ..
             } => doc
                 .get_variable(name, *line_number)
-                .map(|v| v.is_static || !v.mutable)
+                .map(|v| v.is_static())
                 .unwrap_or(true),
             PropertyValue::Value { value, .. } => value.is_static(doc),
             PropertyValue::FunctionCall(f) => {
