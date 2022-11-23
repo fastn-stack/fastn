@@ -1061,24 +1061,15 @@ function filter_keys(data, filter_fn) {
 function http(id, request_data, referenced_data) {
     let method = request_data.method? request_data.method.trim().toUpperCase(): "GET";
 
-    // console.log("debugging http");
-    // console.log("req method: ", method);
-    // console.log("request_data: ", request_data);
-    // console.log("typeof request_data: ", typeof request_data);
-    // console.log("referenced_data: ", referenced_data);
-
     if (method == "GET") {
         let query_parameters = new URLSearchParams();
         for (let [header, value] of Object.entries(request_data)) {
-            // console.log(`${header}: ${value}`);
             if (header != "url" && header != "function" && header != "method")
             {
                 query_parameters.set(header, value);
             }
        }
-       // console.log("query string: ", query_parameters.toString());
        let get_url = request_data.url + "?" + query_parameters.toString();
-       console.log("get request string: ", get_url);
        window.location.href = get_url;
        return;
     }
@@ -1100,12 +1091,7 @@ function http(id, request_data, referenced_data) {
             return;
         }
 
-        // console.log("xhr readyState: ", xhr.readyState);
-        // console.log("xhr.status: ")
-        // console.log("xhr response: ", xhr.response);
-
         let response = JSON.parse(xhr.response);
-        // console.log("json parsed response: ", response);
         if (!!response && !!response.redirect) {
             // Warning: we don't handle header location redirect
             window.location.href = response.redirect;
