@@ -1069,16 +1069,12 @@ function http(id, request_data, referenced_data) {
                 query_parameters.set(header, value);
             }
        }
-       console.log("query params: ", query_parameters.toString());
-       console.log("request_data.url: ", request_data.url);
        let query_string = query_parameters.toString();
        if (query_string) {
-           console.log("Some query string: ", query_string);
            let get_url = request_data.url + "?" + query_parameters.toString();
            window.location.href = get_url;
        }
        else{
-           console.log("No query string");
            window.location.href = request_data.url;
        }
        return;
