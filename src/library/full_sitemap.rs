@@ -4,6 +4,7 @@ use itertools::Itertools;
 pub struct TocItemCompat {
     pub id: String,
     pub title: Option<String>,
+    pub bury: bool,
     #[serde(rename = "extra-data")]
     pub extra_data: Vec<KeyValueData>,
     #[serde(rename = "is-active")]
@@ -20,6 +21,7 @@ pub struct TocItemCompat {
 struct SubSectionCompat {
     pub id: Option<String>,
     pub title: Option<String>,
+    pub bury: bool,
     pub visible: bool,
     #[serde(rename = "extra-data")]
     pub extra_data: Vec<KeyValueData>,
@@ -37,6 +39,7 @@ struct SubSectionCompat {
 struct SectionCompat {
     id: String,
     title: Option<String>,
+    bury: bool,
     #[serde(rename = "extra-data")]
     extra_data: Vec<KeyValueData>,
     #[serde(rename = "is-active")]
@@ -90,6 +93,7 @@ fn to_sitemap_compat(sitemap: &fpm::sitemap::Sitemap) -> SiteMapCompat {
         let toc_compat = TocItemCompat {
             id: toc_item.id.clone(),
             title: toc_item.title.clone(),
+            bury: toc_item.bury,
             extra_data: toc_item
                 .extra_data
                 .iter()
@@ -109,6 +113,7 @@ fn to_sitemap_compat(sitemap: &fpm::sitemap::Sitemap) -> SiteMapCompat {
         SubSectionCompat {
             id: subsection.id.clone(),
             title: subsection.title.clone(),
+            bury: subsection.bury,
             visible: subsection.visible,
             extra_data: subsection
                 .extra_data
@@ -128,6 +133,7 @@ fn to_sitemap_compat(sitemap: &fpm::sitemap::Sitemap) -> SiteMapCompat {
         SectionCompat {
             id: section.id.to_string(),
             title: section.title.clone(),
+            bury: section.bury,
             extra_data: section
                 .extra_data
                 .iter()

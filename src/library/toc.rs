@@ -25,6 +25,7 @@ pub struct TocItemCompat {
     pub number: Option<String>,
     pub title: Option<String>,
     pub path: Option<String>,
+    pub bury: bool,
     #[serde(rename = "is-heading")]
     pub is_heading: bool,
     // TODO: Font icon mapping to html?
@@ -48,6 +49,7 @@ pub struct TocItem {
     pub title: Option<String>,
     pub url: Option<String>,
     pub path: Option<String>,
+    pub bury: bool,
     pub number: Vec<u8>,
     pub is_heading: bool,
     pub is_disabled: bool,
@@ -65,6 +67,7 @@ impl TocItem {
             number: Some(self.number.iter().map(|x| format!("{}.", x)).collect()),
             title: self.title.clone(),
             path: self.path.clone(),
+            bury: self.bury,
             is_heading: self.is_heading,
             children: self
                 .children
@@ -362,6 +365,15 @@ impl TocParser {
                             d,
                         ));
                     }
+                    Some(("bury", v)) => {
+                        self.temp_item = Some((
+                            TocItem {
+                                bury: v.trim() == "true",
+                                ..i
+                            },
+                            d,
+                        ));
+                    }
                     Some(("src", v)) => {
                         self.temp_item = Some((
                             TocItem {
@@ -457,6 +469,7 @@ mod test {
                         id: None,
                         url: None,
                         number: vec![],
+                        bury: false,
                         is_disabled: false,
                         img_src: None,
                         is_heading: true,
@@ -470,6 +483,7 @@ mod test {
                         id: None,
                         url: Some("/test-page/".to_string()),
                         number: vec![1],
+                        bury: false,
                         is_heading: false,
                         is_disabled: false,
                         img_src: None,
@@ -483,6 +497,7 @@ mod test {
                         id: None,
                         url: None,
                         number: vec![],
+                        bury: false,
                         is_disabled: false,
                         is_heading: true,
                         img_src: None,
@@ -496,6 +511,7 @@ mod test {
                         id: None,
                         url: Some("/home/".to_string()),
                         number: vec![1],
+                        bury: false,
                         is_disabled: false,
                         is_heading: false,
                         img_src: None,
@@ -508,6 +524,7 @@ mod test {
                                 id: None,
                                 url: None,
                                 number: vec![],
+                                bury: false,
                                 is_heading: true,
                                 is_disabled: false,
                                 img_src: None,
@@ -522,6 +539,7 @@ mod test {
                                 url: Some("/home/nested-link/".to_string(),),
                                 number: vec![1, 1],
                                 is_heading: false,
+                                bury: false,
                                 is_disabled: false,
                                 img_src: None,
                                 font_icon: None,
@@ -534,6 +552,7 @@ mod test {
                                 id: None,
                                 url: None,
                                 number: vec![],
+                                bury: false,
                                 is_heading: true,
                                 is_disabled: false,
                                 img_src: None,
@@ -547,6 +566,7 @@ mod test {
                                 title: Some("Nested Link Two".to_string()),
                                 url: Some("/home/nested-link-two/".to_string()),
                                 number: vec![1, 1],
+                                bury: false,
                                 is_heading: false,
                                 is_disabled: false,
                                 img_src: None,
@@ -561,6 +581,7 @@ mod test {
                                     is_heading: false,
                                     is_disabled: false,
                                     img_src: None,
+                                    bury: false,
                                     font_icon: None,
                                     children: vec![],
                                     path: None,
@@ -574,6 +595,7 @@ mod test {
                                 number: vec![1, 2],
                                 is_heading: false,
                                 is_disabled: false,
+                                bury: false,
                                 img_src: None,
                                 font_icon: None,
                                 children: vec![],
@@ -601,6 +623,7 @@ mod test {
                     id: None,
                     url: None,
                     number: vec![],
+                    bury: false,
                     is_disabled: false,
                     is_heading: true,
                     img_src: None,
@@ -630,6 +653,7 @@ mod test {
                         id: None,
                         url: Some("/home-page/".to_string()),
                         number: vec![1],
+                        bury: false,
                         is_disabled: false,
                         img_src: None,
                         font_icon: None,
@@ -644,6 +668,7 @@ mod test {
                         url: Some("https://test.website.com".to_string()),
                         number: vec![2],
                         is_disabled: false,
+                        bury: false,
                         img_src: None,
                         font_icon: None,
                         children: vec![],

@@ -13,6 +13,7 @@ pub struct Section {
     pub id: String,
     // TODO: It should be ftd::ImageSrc
     pub icon: Option<String>,
+    pub bury: bool,
 
     /// `title` contains the title of the document. This can be specified inside
     /// document itself.
@@ -125,6 +126,7 @@ impl Default for Section {
             id: "".to_string(),
             icon: None,
             title: None,
+            bury: false,
             file_location: None,
             translation_file_location: None,
             extra_data: Default::default(),
@@ -145,6 +147,7 @@ impl Default for Section {
 pub struct Subsection {
     pub id: Option<String>,
     pub icon: Option<String>,
+    pub bury: bool,
     pub title: Option<String>,
     pub file_location: Option<camino::Utf8PathBuf>,
     pub translation_file_location: Option<camino::Utf8PathBuf>,
@@ -246,6 +249,7 @@ impl Default for Subsection {
             id: None,
             title: None,
             icon: None,
+            bury: false,
             file_location: Default::default(),
             translation_file_location: None,
             visible: true,

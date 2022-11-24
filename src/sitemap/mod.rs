@@ -77,6 +77,15 @@ impl SitemapElement {
         *element_icon = path;
     }
 
+    pub(crate) fn set_bury(&mut self, value: bool) {
+        let element_bury = match self {
+            SitemapElement::Section(s) => &mut s.bury,
+            SitemapElement::Subsection(s) => &mut s.bury,
+            SitemapElement::TocItem(s) => &mut s.bury,
+        };
+        *element_bury = value;
+    }
+
     pub(crate) fn set_id(&mut self, id: Option<String>) {
         let id = if let Some(id) = id {
             id
@@ -467,6 +476,14 @@ impl SitemapParser {
                             })?);
                         } else if k.eq("icon") {
                             i.set_icon(Some(v.to_string()));
+                        } else if k.eq("bury") {
+                            i.set_bury(v.parse::<bool>().map_err(|e| {
+                                ParseError::InvalidTOCItem {
+                                    doc_id,
+                                    message: e.to_string(),
+                                    row_content: line.to_string(),
+                                }
+                            })?);
                         } else if k.eq("readers") {
                             i.set_readers(v);
                         } else if k.eq("writers") {
@@ -850,6 +867,7 @@ impl Sitemap {
                             v.readers.clone(),
                             v.writers.clone(),
                             v.icon.clone(),
+                            v.bury,
                         );
                         if active {
                             let mut curr_subsection = toc.clone();
@@ -886,6 +904,7 @@ impl Sitemap {
                     section.readers.clone(),
                     section.writers.clone(),
                     section.icon.clone(),
+                    section.bury,
                 );
                 sections.push(section_toc.clone());
                 if let Some(ref title) = section.nav_title {
@@ -910,6 +929,7 @@ impl Sitemap {
                     section.readers.clone(),
                     section.writers.clone(),
                     section.icon.clone(),
+                    section.bury,
                 );
                 sections.push(section_toc.clone());
                 if let Some(ref title) = section.nav_title {
@@ -928,6 +948,7 @@ impl Sitemap {
                     section.readers.clone(),
                     section.writers.clone(),
                     section.icon.clone(),
+                    section.bury,
                 ));
             }
         }
@@ -944,6 +965,7 @@ impl Sitemap {
                         v.readers.clone(),
                         v.writers.clone(),
                         v.icon.clone(),
+                        v.bury,
                     )
                 }),
         );
@@ -995,6 +1017,7 @@ impl Sitemap {
                         subsection.readers.clone(),
                         subsection.writers.clone(),
                         subsection.icon.clone(),
+                        subsection.bury,
                     );
                     subsection_list.push(subsection_toc.clone());
                     if let Some(ref title) = subsection.nav_title {
@@ -1018,6 +1041,7 @@ impl Sitemap {
                             subsection.readers.clone(),
                             subsection.writers.clone(),
                             subsection.icon.clone(),
+                            subsection.bury,
                         );
                         subsection_list.push(subsection_toc.clone());
                         if let Some(ref title) = subsection.nav_title {
@@ -1038,6 +1062,7 @@ impl Sitemap {
                         subsection.readers.clone(),
                         subsection.writers.clone(),
                         subsection.icon.clone(),
+                        subsection.bury,
                     ));
                 }
             }
@@ -1053,6 +1078,7 @@ impl Sitemap {
                             v.readers.clone(),
                             v.writers.clone(),
                             v.icon.clone(),
+                            v.bury,
                         )
                     },
                 ));
@@ -1103,6 +1129,7 @@ impl Sitemap {
                         toc_item.readers.clone(),
                         toc_item.writers.clone(),
                         toc_item.icon.clone(),
+                        toc_item.bury,
                     );
                     current_toc.children = children;
                     if is_open {
