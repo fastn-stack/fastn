@@ -46,7 +46,7 @@ impl Function {
     }
 
     pub(crate) fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> ftd::ast::Result<Function> {
-        let function_name = Self::function_name(section).ok_or(ftd::ast::Error::ParseError {
+        let function_name = Self::function_name(section).ok_or(ftd::ast::Error::Parse {
             message: format!("Section is not function section, found `{:?}`", section),
             doc_id: doc_id.to_string(),
             line_number: section.line_number,
@@ -57,7 +57,7 @@ impl Function {
             section.line_number,
         )?;
         let fields = ftd::ast::record::get_fields_from_headers(&section.headers, doc_id)?;
-        let definition = section.body.clone().ok_or(ftd::ast::Error::ParseError {
+        let definition = section.body.clone().ok_or(ftd::ast::Error::Parse {
             message: format!(
                 "Function definition not found for function {}",
                 section.name

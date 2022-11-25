@@ -461,7 +461,7 @@ impl Loop {
 
         let loop_statement = loop_header
             .get_value(doc_id)?
-            .ok_or(ftd::ast::Error::ParseError {
+            .ok_or(ftd::ast::Error::Parse {
                 message: "Loop statement is blank".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: loop_header.get_line_number(),
@@ -579,13 +579,11 @@ impl Event {
             return Ok(None);
         };
 
-        let action = header
-            .get_value(doc_id)?
-            .ok_or(ftd::ast::Error::ParseError {
-                message: "Event cannot be empty".to_string(),
-                doc_id: doc_id.to_string(),
-                line_number: header.get_line_number(),
-            })?;
+        let action = header.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
+            message: "Event cannot be empty".to_string(),
+            doc_id: doc_id.to_string(),
+            line_number: header.get_line_number(),
+        })?;
 
         Ok(Some(Event::new(
             event_name.as_str(),

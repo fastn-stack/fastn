@@ -31,13 +31,13 @@ impl Function {
     {
         let function = ast.get_function(doc.name)?;
         let name = doc.resolve_name(function.name.as_str());
-        let arguments = try_ready!(ftd::interpreter2::Argument::from_ast_fields(
+        let arguments = try_ok_state!(ftd::interpreter2::Argument::from_ast_fields(
             function.arguments,
             doc,
             &Default::default(),
         )?);
 
-        let kind = try_ready!(ftd::interpreter2::KindData::from_ast_kind(
+        let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
             function.kind,
             &Default::default(),
             doc,
@@ -242,7 +242,7 @@ impl FunctionCall {
                 doc.name,
                 line_number,
             )?;
-        let function = try_ready!(doc.search_function(function_name.as_str(), line_number)?);
+        let function = try_ok_state!(doc.search_function(function_name.as_str(), line_number)?);
         let mut values: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
         let mut order = vec![];
 
@@ -271,7 +271,7 @@ impl FunctionCall {
                         line_number,
                     );
                 }
-                try_ready!(
+                try_ok_state!(
                     ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
                         ftd::ast::VariableValue::String {
                             value: property,

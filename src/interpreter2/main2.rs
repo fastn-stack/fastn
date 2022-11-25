@@ -253,4 +253,9 @@ impl<T> StateWithThing<T> {
     pub fn new_state(state: Interpreter) -> StateWithThing<T> {
         StateWithThing::State(state)
     }
+
+    pub fn map<U, F: FnOnce(T) -> U>(self, f: F) -> StateWithThing<U> {
+        let thing = try_state!(self);
+        StateWithThing::new_thing(f(thing))
+    }
 }

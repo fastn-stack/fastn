@@ -27,7 +27,7 @@ impl ComponentDefinition {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ComponentDefinition>> {
         let component_definition = ast.get_component_definition(doc.name)?;
         let name = doc.resolve_name(component_definition.name.as_str());
-        let arguments = try_ready!(Argument::from_ast_fields(
+        let arguments = try_ok_state!(Argument::from_ast_fields(
             component_definition.arguments,
             doc,
             &Default::default(),
@@ -35,7 +35,7 @@ impl ComponentDefinition {
 
         let definition_name_with_arguments =
             (component_definition.name.as_str(), arguments.as_slice());
-        let definition = try_ready!(Component::from_ast_component(
+        let definition = try_ok_state!(Component::from_ast_component(
             component_definition.definition,
             Some(definition_name_with_arguments),
             doc,
@@ -141,7 +141,7 @@ impl Component {
         let mut loop_object_name_and_kind = None;
         let iteration = if let Some(v) = ast_component.iteration {
             let iteration =
-                try_ready!(Loop::from_ast_loop(v, definition_name_with_arguments, doc)?);
+                try_ok_state!(Loop::from_ast_loop(v, definition_name_with_arguments, doc)?);
             loop_object_name_and_kind = Some((
                 iteration.alias.to_string(),
                 iteration.loop_object_as_argument(doc)?,
@@ -152,7 +152,7 @@ impl Component {
         };
 
         let condition = if let Some(v) = ast_component.condition {
-            Some(try_ready!(
+            Some(try_ok_state!(
                 ftd::interpreter2::Expression::from_ast_condition(
                     v,
                     definition_name_with_arguments,
@@ -164,14 +164,14 @@ impl Component {
             None
         };
 
-        let events = try_ready!(Event::from_ast_events(
+        let events = try_ok_state!(Event::from_ast_events(
             ast_component.events,
             definition_name_with_arguments,
             &loop_object_name_and_kind,
             doc,
         )?);
 
-        let properties = try_ready!(Property::from_ast_properties_and_children(
+        let properties = try_ok_state!(Property::from_ast_properties_and_children(
             ast_component.properties,
             ast_component.children,
             ast_component.name.as_str(),
@@ -267,7 +267,7 @@ impl Property {
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Property>>> {
-        let mut properties = try_ready!(Property::from_ast_properties(
+        let mut properties = try_ok_state!(Property::from_ast_properties(
             ast_properties,
             component_name,
             definition_name_with_arguments,
@@ -282,7 +282,7 @@ impl Property {
             doc.name,
         )?;
 
-        if let Some(property) = try_ready!(Property::from_ast_children(
+        if let Some(property) = try_ok_state!(Property::from_ast_children(
             ast_children,
             component_name,
             definition_name_with_arguments,
@@ -356,7 +356,7 @@ impl Property {
         }
 
         let line_number = ast_children.first().unwrap().line_number;
-        let component_arguments = try_ready!(Argument::for_component(
+        let component_arguments = try_ok_state!(Argument::for_component(
             component_name,
             &definition_name_with_arguments,
             doc,
@@ -374,7 +374,7 @@ impl Property {
         let children = {
             let mut children = vec![];
             for child in ast_children {
-                children.push(try_ready!(Component::from_ast_component(
+                children.push(try_ok_state!(Component::from_ast_component(
                     child,
                     definition_name_with_arguments,
                     doc
@@ -422,14 +422,14 @@ impl Property {
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Property>>> {
         let mut properties = vec![];
-        let component_arguments = try_ready!(Argument::for_component(
+        let component_arguments = try_ok_state!(Argument::for_component(
             component_name,
             &definition_name_with_arguments,
             doc,
             line_number,
         )?);
         for property in ast_properties {
-            properties.push(try_ready!(Property::from_ast_property(
+            properties.push(try_ok_state!(Property::from_ast_property(
                 property,
                 component_name,
                 component_arguments.as_slice(),
@@ -456,7 +456,7 @@ impl Property {
             doc,
         )?;
 
-        let value = try_ready!(
+        let value = try_ok_state!(
             ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
                 ast_property.value.to_owned(),
                 doc,
@@ -468,7 +468,7 @@ impl Property {
         );
 
         let condition = if let Some(ref v) = ast_property.condition {
-            Some(try_ready!(
+            Some(try_ok_state!(
                 ftd::interpreter2::Expression::from_ast_condition(
                     ftd::ast::Condition::new(v, ast_property.line_number),
                     definition_name_with_arguments,
@@ -609,7 +609,7 @@ impl Loop {
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Loop>> {
-        let on = try_ready!(ftd::interpreter2::PropertyValue::from_string_with_argument(
+        let on = try_ok_state!(ftd::interpreter2::PropertyValue::from_string_with_argument(
             ast_loop.on.as_str(),
             doc,
             None,
@@ -660,7 +660,7 @@ impl Event {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Event>> {
-        let action = try_ready!(ftd::interpreter2::FunctionCall::from_string(
+        let action = try_ok_state!(ftd::interpreter2::FunctionCall::from_string(
             ast_event.action.as_str(),
             doc,
             false,
@@ -690,7 +690,7 @@ impl Event {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Event>>> {
         let mut events = vec![];
         for event in ast_events {
-            events.push(try_ready!(Event::from_ast_event(
+            events.push(try_ok_state!(Event::from_ast_event(
                 event,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,

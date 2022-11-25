@@ -27,7 +27,7 @@ impl Record {
             },
         )])
         .collect::<ftd::Map<ftd::interpreter2::Kind>>();
-        let fields = try_ready!(Field::from_ast_fields(record.fields, doc, &known_kinds)?);
+        let fields = try_ok_state!(Field::from_ast_fields(record.fields, doc, &known_kinds)?);
         Ok(ftd::interpreter2::StateWithThing::new_thing(Record::new(
             name.as_str(),
             fields,
@@ -135,7 +135,7 @@ impl Field {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
         let mut result = vec![];
         for field in fields {
-            let field = try_ready!(Field::from_ast_field(field, doc, known_kinds)?);
+            let field = try_ok_state!(Field::from_ast_field(field, doc, known_kinds)?);
             result.push(field);
         }
         Ok(ftd::interpreter2::StateWithThing::new_thing(result))
@@ -146,7 +146,7 @@ impl Field {
         doc: &ftd::interpreter2::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Field>> {
-        let kind = try_ready!(ftd::interpreter2::KindData::from_ast_kind(
+        let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
             field.kind,
             known_kinds,
             doc,
@@ -154,7 +154,7 @@ impl Field {
         )?);
 
         let value = if let Some(value) = field.value {
-            Some(try_ready!(
+            Some(try_ok_state!(
                 ftd::interpreter2::PropertyValue::from_ast_value(
                     value,
                     doc,
@@ -196,7 +196,7 @@ impl Field {
         Ok(ftd::interpreter2::StateWithThing::new_thing(
             match definition_name_with_arguments {
                 Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
-                _ => try_ready!(doc.search_component(component_name, line_number)?).arguments,
+                _ => try_ok_state!(doc.search_component(component_name, line_number)?).arguments,
             },
         ))
     }

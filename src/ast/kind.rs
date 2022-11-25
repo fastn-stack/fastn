@@ -469,13 +469,11 @@ impl Condition {
             return Ok(None);
         };
 
-        let expression = condition
-            .get_value(doc_id)?
-            .ok_or(ftd::ast::Error::ParseError {
-                message: "`if` condition must contain expression".to_string(),
-                doc_id: doc_id.to_string(),
-                line_number: condition.get_line_number(),
-            })?;
+        let expression = condition.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
+            message: "`if` condition must contain expression".to_string(),
+            doc_id: doc_id.to_string(),
+            line_number: condition.get_line_number(),
+        })?;
 
         Ok(Some(Condition::new(
             expression.as_str(),

@@ -179,7 +179,7 @@ impl VariableFlags {
                 let value = kv
                     .value
                     .as_ref()
-                    .ok_or(ftd::ast::Error::ParseError {
+                    .ok_or(ftd::ast::Error::Parse {
                         message: "Value expected for `$always-include$` flag found `null`"
                             .to_string(),
                         doc_id: doc_id.to_string(),

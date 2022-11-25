@@ -64,7 +64,7 @@ pub(crate) fn kind_eq(
     line_number: usize,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<bool>> {
     let var_kind = ftd::ast::VariableKind::get_kind(key, doc.name, line_number)?;
-    let kind_data = try_ready!(ftd::interpreter2::KindData::from_ast_kind(
+    let kind_data = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
         var_kind,
         &Default::default(),
         doc,

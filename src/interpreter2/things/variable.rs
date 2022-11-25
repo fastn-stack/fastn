@@ -17,14 +17,14 @@ impl Variable {
     {
         let variable_definition = ast.get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
-        let kind = try_ready!(ftd::interpreter2::KindData::from_ast_kind(
+        let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
             variable_definition.line_number,
         )?);
 
-        let value = try_ready!(ftd::interpreter2::PropertyValue::from_ast_value(
+        let value = try_ok_state!(ftd::interpreter2::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
             variable_definition.mutable,
@@ -53,12 +53,12 @@ impl Variable {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
     {
         let variable_definition = ast.get_variable_invocation(doc.name)?;
-        let kind = try_ready!(doc.get_kind(
+        let kind = try_ok_state!(doc.get_kind(
             variable_definition.name.as_str(),
             variable_definition.line_number,
         )?);
 
-        let value = try_ready!(ftd::interpreter2::PropertyValue::from_ast_value(
+        let value = try_ok_state!(ftd::interpreter2::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
             true,

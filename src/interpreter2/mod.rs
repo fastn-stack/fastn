@@ -3,11 +3,23 @@
 mod test;
 
 #[macro_export]
-macro_rules! try_ready {
+macro_rules! try_ok_state {
     ($e:expr) => {
         match $e {
             $crate::interpreter2::StateWithThing::State(s) => {
                 return Ok($crate::interpreter2::StateWithThing::new_state(s))
+            }
+            $crate::interpreter2::StateWithThing::Thing(t) => t,
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! try_state {
+    ($e:expr) => {
+        match $e {
+            $crate::interpreter2::StateWithThing::State(s) => {
+                return $crate::interpreter2::StateWithThing::new_state(s)
             }
             $crate::interpreter2::StateWithThing::Thing(t) => t,
         }

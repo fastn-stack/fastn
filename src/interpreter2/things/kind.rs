@@ -134,6 +134,9 @@ impl Kind {
     pub fn is_optional(&self) -> bool {
         matches!(self, Kind::Optional { .. })
     }
+    pub fn is_record(&self) -> bool {
+        matches!(self, Kind::Record { .. })
+    }
 
     pub fn is_string(&self) -> bool {
         matches!(self, Kind::String { .. })
@@ -269,7 +272,7 @@ impl KindData {
                 }
             }
             k if known_kinds.contains_key(k) => known_kinds.get(k).unwrap().to_owned(),
-            k => match try_ready!(doc.search_thing(k, line_number)?) {
+            k => match try_ok_state!(doc.search_thing(k, line_number)?) {
                 ftd::interpreter2::Thing::Record(r) => Kind::record(r.name.as_str()),
                 ftd::interpreter2::Thing::Component(_) => Kind::ui(),
                 t => {

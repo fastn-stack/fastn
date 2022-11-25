@@ -26,7 +26,7 @@ impl Expression {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Expression>> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
             let node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
-            let references = try_ready!(Expression::get_references(
+            let references = try_ok_state!(Expression::get_references(
                 &node,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
@@ -62,7 +62,7 @@ impl Expression {
         for variable in variable_identifier_reads {
             let full_variable_name =
                 doc.resolve_reference_name(format!("${}", variable).as_str(), line_number)?;
-            let value = try_ready!(ftd::interpreter2::PropertyValue::from_string_with_argument(
+            let value = try_ok_state!(ftd::interpreter2::PropertyValue::from_string_with_argument(
                 full_variable_name.as_str(),
                 doc,
                 None,

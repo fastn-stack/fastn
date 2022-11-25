@@ -49,7 +49,7 @@ impl AST {
         } else if ftd::ast::Component::is_component(section) {
             AST::ComponentInvocation(ftd::ast::Component::from_p1(section, doc_id)?)
         } else {
-            return Err(ftd::ast::Error::ParseError {
+            return Err(ftd::ast::Error::Parse {
                 message: format!("Invalid AST, found: `{:?}`", section),
                 doc_id: doc_id.to_string(),
                 line_number: section.line_number,

@@ -210,17 +210,64 @@ impl PropertyValue {
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
     > {
-        if let Some(reference) = try_ready!(PropertyValue::reference_from_ast_value(
-            &value,
+        if let Some(reference) = try_ok_state!(PropertyValue::reference_from_ast_value(
+            value.clone(),
             doc,
             is_mutable,
             expected_kind,
             definition_name_with_arguments,
             loop_object_name_and_kind,
         )?) {
-            return Ok(ftd::interpreter2::StateWithThing::new_thing(reference));
+            Ok(ftd::interpreter2::StateWithThing::new_thing(reference))
+        } else {
+            PropertyValue::value_from_ast_value(
+                value,
+                doc,
+                is_mutable,
+                expected_kind,
+                definition_name_with_arguments,
+            )
         }
+    }
 
+    fn to_ui_value(
+        key: &str,
+        value: ftd::ast::VariableValue,
+        doc: &ftd::interpreter2::TDoc,
+        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
+    > {
+        let line_number = value.line_number();
+        let ast_component = ftd::ast::Component::from_variable_value(key, value, doc.name)?;
+        let component = try_ok_state!(ftd::interpreter2::Component::from_ast_component(
+            ast_component,
+            definition_name_with_arguments,
+            doc,
+        )?);
+
+        Ok(ftd::interpreter2::StateWithThing::new_thing(
+            ftd::interpreter2::PropertyValue::Value {
+                value: ftd::interpreter2::Value::UI {
+                    name: component.name.to_string(),
+                    kind: ftd::interpreter2::Kind::ui().into_kind_data(),
+                    component,
+                },
+                is_mutable: false,
+                line_number,
+            },
+        ))
+    }
+
+    fn value_from_ast_value(
+        value: ftd::ast::VariableValue,
+        doc: &ftd::interpreter2::TDoc,
+        is_mutable: bool,
+        expected_kind: Option<&ftd::interpreter2::KindData>,
+        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
+    > {
         let expected_kind = expected_kind.ok_or(ftd::interpreter2::Error::ParseError {
             message: "Need expected kind".to_string(),
             doc_id: doc.name.to_string(),
@@ -268,7 +315,7 @@ impl PropertyValue {
                 let value_list = value.into_list(doc.name)?;
                 let mut values = vec![];
                 for (key, value) in value_list {
-                    if !try_ready!(ftd::interpreter2::utils::kind_eq(
+                    if !try_ok_state!(ftd::interpreter2::utils::kind_eq(
                         key.as_str(),
                         kind,
                         doc,
@@ -281,14 +328,14 @@ impl PropertyValue {
                         );
                     }
                     values.push(if kind.is_ui() {
-                        try_ready!(PropertyValue::to_ui_value(
+                        try_ok_state!(PropertyValue::to_ui_value(
                             &key,
                             value,
                             doc,
                             definition_name_with_arguments,
                         )?)
                     } else {
-                        try_ready!(PropertyValue::from_ast_value(
+                        try_ok_state!(PropertyValue::from_ast_value(
                             value,
                             doc,
                             is_mutable,
@@ -333,7 +380,7 @@ impl PropertyValue {
                 for field in record.fields {
                     if field.is_caption() && caption.is_some() {
                         let caption = caption.as_ref().unwrap().clone();
-                        let property_value = try_ready!(PropertyValue::from_ast_value(
+                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
                             caption,
                             doc,
                             field.mutable,
@@ -344,7 +391,7 @@ impl PropertyValue {
                     }
                     if field.is_body() && body.is_some() {
                         let body = body.as_ref().unwrap();
-                        let property_value = try_ready!(PropertyValue::from_ast_value(
+                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
                             ftd::ast::VariableValue::String {
                                 value: body.value.to_string(),
                                 line_number: body.line_number,
@@ -379,7 +426,7 @@ impl PropertyValue {
                                 t => vec![(header.key.to_string(), t.to_owned())],
                             });
                         }
-                        let property_value = try_ready!(PropertyValue::from_ast_value(
+                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
                             ftd::ast::VariableValue::List {
                                 value: header_list,
                                 line_number: value.line_number(),
@@ -435,7 +482,7 @@ impl PropertyValue {
                         );
                     }
                     let first_header = headers.first().unwrap();
-                    let property_value = try_ready!(PropertyValue::from_ast_value(
+                    let property_value = try_ok_state!(PropertyValue::from_ast_value(
                         first_header.value.clone(),
                         doc,
                         first_header.mutable,
@@ -458,37 +505,8 @@ impl PropertyValue {
         })
     }
 
-    fn to_ui_value(
-        key: &str,
-        value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
-    ) -> ftd::interpreter2::Result<
-        ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
-    > {
-        let line_number = value.line_number();
-        let ast_component = ftd::ast::Component::from_variable_value(key, value, doc.name)?;
-        let component = try_ready!(ftd::interpreter2::Component::from_ast_component(
-            ast_component,
-            definition_name_with_arguments,
-            doc,
-        )?);
-
-        Ok(ftd::interpreter2::StateWithThing::new_thing(
-            ftd::interpreter2::PropertyValue::Value {
-                value: ftd::interpreter2::Value::UI {
-                    name: component.name.to_string(),
-                    kind: ftd::interpreter2::Kind::ui().into_kind_data(),
-                    component,
-                },
-                is_mutable: false,
-                line_number,
-            },
-        ))
-    }
-
     fn reference_from_ast_value(
-        value: &ftd::ast::VariableValue,
+        value: ftd::ast::VariableValue,
         doc: &ftd::interpreter2::TDoc,
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
@@ -511,7 +529,7 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
                     .to_string();
 
-                let function_call = try_ready!(ftd::interpreter2::FunctionCall::from_string(
+                let function_call = try_ok_state!(ftd::interpreter2::FunctionCall::from_string(
                     expression.as_str(),
                     doc,
                     mutable,
@@ -529,7 +547,7 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::CLONE)
                     .to_string();
 
-                let (source, found_kind) = try_ready!(doc.get_kind_with_argument(
+                let (source, found_kind) = try_ok_state!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
@@ -565,7 +583,7 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
                     .to_string();
 
-                let (source, found_kind) = try_ready!(doc.get_kind_with_argument(
+                let (source, found_kind) = try_ok_state!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
@@ -573,6 +591,18 @@ impl PropertyValue {
                 )?);
 
                 match expected_kind {
+                    Some(ekind)
+                        if !ekind.kind.is_same_as(&found_kind.kind) && ekind.kind.is_record() =>
+                    {
+                        return Ok(PropertyValue::value_from_ast_value(
+                            value,
+                            doc,
+                            mutable,
+                            expected_kind,
+                            definition_name_with_arguments,
+                        )?
+                        .map(Some));
+                    }
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter2::utils::e2(
                             format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
@@ -586,7 +616,7 @@ impl PropertyValue {
 
                 if mutable {
                     let is_variable_mutable = if source.is_global() {
-                        try_ready!(doc.search_variable(reference.as_str(), value.line_number())?)
+                        try_ok_state!(doc.search_variable(reference.as_str(), value.line_number())?)
                             .mutable
                     } else {
                         ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
