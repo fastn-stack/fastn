@@ -75,9 +75,6 @@ function handle_event(evt, id, action, obj) {
 let function_arguments = [];
 handle_function(evt, id, action, obj, function_arguments);
 change_value(function_arguments, ftd_data[id], id);
-if (!!window["node_change_" + id]) {
-window["node_change_" + id](ftd_data[id]);
-}
 }
 exports.handle_event = function (evt, id, event, obj) {
 console_log(id, event);
@@ -452,42 +449,22 @@ return (a.value += 1);
 
 
 
-function node_change_main(data){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(80);
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = "...................................................................";
-document.querySelector(`[data-id="0,1,0:main"]`).innerHTML = "LOGO";
-document.querySelector(`[data-id="0,1,0:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="0,1,1:main"]`).innerHTML = "Home";
-document.querySelector(`[data-id="0,1,1:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="0,1,2,0:main"]`).innerHTML = "Header 1";
-document.querySelector(`[data-id="0,1,2,0:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="0,1,2,1:main"]`).innerHTML = "Header 2";
-document.querySelector(`[data-id="0,1,2,1:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="0,1,2,2:main"]`).innerHTML = "Header 3";
-document.querySelector(`[data-id="0,1,2,2:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="0,1,2,3:main"]`).innerHTML = "Header 4";
-document.querySelector(`[data-id="0,1,2,3:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="0,2:main"]`).innerHTML = "...................................................................";
-document.querySelector(`[data-id="0,3:main"]`).style["padding"] = "{0}px".format(40);
-document.querySelector(`[data-id="0,3,0:main"]`).innerHTML = "Body Text";
-document.querySelector(`[data-id="0,3,1,0:main"]`).innerHTML = "Counter 1:";
+window.node_change_main = {};
+window.node_change_main["0,3,1,1:main__text"] = function(data) {
 document.querySelector(`[data-id="0,3,1,1:main"]`).innerHTML = data["foo#count"];
-document.querySelector(`[data-id="0,3,2,0:main"]`).innerHTML = "Counter 2:";
-document.querySelector(`[data-id="0,3,2,1:main"]`).innerHTML = data["foo#count"];
-document.querySelector(`[data-id="0,4:main"]`).innerHTML = "...................................................................";
-document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(80);
-document.querySelector(`[data-id="1,0:main"]`).innerHTML = "...................................................................";
-document.querySelector(`[data-id="1,1,0:main"]`).innerHTML = "LOGO";
-document.querySelector(`[data-id="1,1,0:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="1,1,1:main"]`).innerHTML = "Home";
-document.querySelector(`[data-id="1,1,1:main"]`).style["padding"] = "{0}px".format(2);
-document.querySelector(`[data-id="1,2:main"]`).innerHTML = "...................................................................";
-document.querySelector(`[data-id="1,3:main"]`).style["padding"] = "{0}px".format(40);
-document.querySelector(`[data-id="1,3,0:main"]`).innerHTML = "Hello";
-document.querySelector(`[data-id="1,4:main"]`).innerHTML = "...................................................................";
 }
+window.node_change_main["0,3,2,1:main__text"] = function(data) {
+document.querySelector(`[data-id="0,3,2,1:main"]`).innerHTML = data["foo#count"];
+}
+window.set_value_main = {};
+window.set_value_main["foo#count"] = function (data, new_value) {
+data["foo#count"] = new_value;
 
-
+if(!!window["node_change_main"] && !!window.node_change_main["0,3,1,1:main__text"]){window.node_change_main["0,3,1,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,3,2,1:main__text"]){window.node_change_main["0,3,2,1:main__text"](data);
+}
+};
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>

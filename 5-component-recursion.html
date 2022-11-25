@@ -88,9 +88,6 @@ function handle_event(evt, id, action, obj) {
 let function_arguments = [];
 handle_function(evt, id, action, obj, function_arguments);
 change_value(function_arguments, ftd_data[id], id);
-if (!!window["node_change_" + id]) {
-window["node_change_" + id](ftd_data[id]);
-}
 }
 exports.handle_event = function (evt, id, event, obj) {
 console_log(id, event);
@@ -459,18 +456,19 @@ return (!str || str.length === 0 );
 
 
 
-function node_change_main(data){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(30);
+window.node_change_main = {};
+window.node_change_main["0,0:main__text"] = function(data) {
 document.querySelector(`[data-id="0,0:main"]`).innerHTML = data["foo#toc.name"];
-document.querySelector(`[data-id="0,1,0:main"]`).style["padding"] = "{0}px".format(30);
+}
+window.node_change_main["0,1,0,0:main__text"] = function(data) {
 document.querySelector(`[data-id="0,1,0,0:main"]`).innerHTML = data["foo#toc.children.0.name"];
-document.querySelector(`[data-id="0,1,1:main"]`).style["padding"] = "{0}px".format(30);
+}
+window.node_change_main["0,1,1,0:main__text"] = function(data) {
 document.querySelector(`[data-id="0,1,1,0:main"]`).innerHTML = data["foo#toc.children.1.name"];
-document.querySelector(`[data-id="0,1,1,1,0:main"]`).style["padding"] = "{0}px".format(30);
+}
+window.node_change_main["0,1,1,1,0,0:main__text"] = function(data) {
 document.querySelector(`[data-id="0,1,1,1,0,0:main"]`).innerHTML = data["foo#toc.children.1.children.0.name"];
 }
-
-
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>

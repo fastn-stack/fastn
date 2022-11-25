@@ -71,9 +71,6 @@ function handle_event(evt, id, action, obj) {
 let function_arguments = [];
 handle_function(evt, id, action, obj, function_arguments);
 change_value(function_arguments, ftd_data[id], id);
-if (!!window["node_change_" + id]) {
-window["node_change_" + id](ftd_data[id]);
-}
 }
 exports.handle_event = function (evt, id, event, obj) {
 console_log(id, event);
@@ -454,9 +451,11 @@ return (a.value += 1);
 
 
 
-function node_change_main(data){
+window.node_change_main = {};
+window.node_change_main["0:main__text"] = function(data) {
 document.querySelector(`[data-id="0:main"]`).innerHTML = data["foo#g"];
-document.querySelector(`[data-id="1:main"]`).innerHTML = "Hello FTD";
+}
+window.node_change_main["1:main__padding"] = function(data) {
 if(function(){
 return (data["foo#g"]%2==0);
 }()){
@@ -475,8 +474,15 @@ document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(w
 }
 else {document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(2);}
 }
+window.set_value_main = {};
+window.set_value_main["foo#g"] = function (data, new_value) {
+data["foo#g"] = new_value;
 
-
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+};
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>

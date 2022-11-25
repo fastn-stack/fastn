@@ -1742,6 +1742,26 @@ function filter_keys(data, filter_fn) {
 }
 function http(id, request_data, referenced_data) {
     let method = request_data.method? request_data.method.trim().toUpperCase(): "GET";
+
+    if (method == "GET") {
+        let query_parameters = new URLSearchParams();
+        for (let [header, value] of Object.entries(request_data)) {
+            if (header != "url" && header != "function" && header != "method")
+            {
+                query_parameters.set(header, value);
+            }
+       }
+       let query_string = query_parameters.toString();
+       if (query_string) {
+           let get_url = request_data.url + "?" + query_parameters.toString();
+           window.location.href = get_url;
+       }
+       else{
+           window.location.href = request_data.url;
+       }
+       return;
+    }
+
     let xhr = new XMLHttpRequest();
     xhr.open(method, request_data.url);
     xhr.setRequestHeader("Accept", "application/json");
