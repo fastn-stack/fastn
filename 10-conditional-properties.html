@@ -478,11 +478,11 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:
 } else {
 data["foo#boo:bv:0,0,0"] = data["foo#foo:fv:0"]
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__text"]){window.node_change_main["0,0,2:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__text"]){window.node_change_main["0,0,2:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
 }
@@ -494,22 +494,13 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:
 } else {
 data["foo#boo:bv:0,0,0"] = data["foo#moo:mv:0,0"]
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
 }
 };
 
 window.resolve_value_main = {};
-window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
-if(function(){
-return (data["foo#foo:fv:0"]>2);
-}()){
-data["foo#moo:mv:0,0"] = 6;
-}
-else {data["foo#moo:mv:0,0"] = 7;}
-
-}
 window.resolve_value_main["foo#boo:bv:0,0,0"] = function(data) {
 if(function(){
 return (data["foo#foo:fv:0"]>10);
@@ -522,6 +513,15 @@ return (data["foo#moo:mv:0,0"]>6);
 data["foo#boo:bv:0,0,0"] = 5;
 }
 else {data["foo#boo:bv:0,0,0"] = 4;}
+
+}
+window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
+if(function(){
+return (data["foo#foo:fv:0"]>2);
+}()){
+data["foo#moo:mv:0,0"] = 6;
+}
+else {data["foo#moo:mv:0,0"] = 7;}
 
 }
 window.ftd.init("main", "ftd-data", "ftd-external-children");

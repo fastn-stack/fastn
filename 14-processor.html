@@ -6,8 +6,7 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#flag": true,
-"foo#num": 0,
+"foo#value-from-processor": "ftd.name",
 "ftd#dark-mode": false,
 "ftd#follow-system-dark-mode": true,
 "ftd#system-dark-mode": false
@@ -27,7 +26,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="display: none; padding: 50px; text-decoration: none" class="ft_md">Hello World</div><div data-id="1:main" style="text-decoration: none" class="ft_md">0</div><div data-id="2:main" style="text-decoration: none" class="ft_md">Gee</div><div data-id="3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}}},{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="text-decoration: none" class="ft_md">Click here</div></div>
+<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="text-decoration: none" class="ft_md">ftd.name</div></div>
 
 
 <script>
@@ -439,65 +438,16 @@ return (!str || str.length === 0 );
 }
 
 
-function foo__increment___main(a){
-return (a.value += 1);
-}
-
-
-
-function foo__toggle___main(a){
-a.value = !a.value;
-}
-
-
-
 
 window.node_change_main = {};
-window.node_change_main["0:main__display"] = function(data) {
-if(function(){
-return ((data["foo#num"]>2)&&data["foo#flag"]);
-}()){
-document.querySelector(`[data-id="0:main"]`).style["display"] = "flex";
-}
-else {document.querySelector(`[data-id="0:main"]`).style["display"] = "none";}
-}
-
-window.node_change_main["0:main__padding"] = function(data) {
-if(function(){
-return data["foo#flag"];
-}()){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(50);
-}
-}
-window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = data["foo#num"];
-}
-window.node_change_main["2:main__display"] = function(data) {
-if(function(){
-return data["foo#flag"];
-}()){
-document.querySelector(`[data-id="2:main"]`).style["display"] = "flex";
-}
-else {document.querySelector(`[data-id="2:main"]`).style["display"] = "none";}
+window.node_change_main["0:main__text"] = function(data) {
+document.querySelector(`[data-id="0:main"]`).innerHTML = data["foo#value-from-processor"];
 }
 window.set_value_main = {};
-window.set_value_main["foo#flag"] = function (data, new_value) {
-data["foo#flag"] = new_value;
+window.set_value_main["foo#value-from-processor"] = function (data, new_value) {
+data["foo#value-from-processor"] = new_value;
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
-}
-};
-
-window.set_value_main["foo#num"] = function (data, new_value) {
-data["foo#num"] = new_value;
-
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 };
 
