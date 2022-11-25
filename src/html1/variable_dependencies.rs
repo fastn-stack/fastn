@@ -136,7 +136,7 @@ impl<'a> VariableDependencyGenerator<'a> {
         for (key, values) in order.value {
             let mut node_changes = std::collections::HashSet::new();
             let mut v = vec![];
-            node_changes.extend(dbg!(var_dependencies.get_value(dbg!(key.as_str()))));
+            node_changes.extend(var_dependencies.get_value(key.as_str()));
             for val in values.iter() {
                 v.push(format!(
                     indoc::indoc! {"
@@ -150,10 +150,10 @@ impl<'a> VariableDependencyGenerator<'a> {
                     variable_name = val,
                     set_variable_name = key,
                 ));
-                node_changes.extend(dbg!(var_dependencies.get_value(val)));
+                node_changes.extend(var_dependencies.get_value(val));
             }
 
-            let node_changes_calls = {
+            let mut node_changes_calls = {
                 let mut node_changes_calls = vec![];
                 for key in node_changes.iter() {
                     node_changes_calls.push(format!(
@@ -168,6 +168,11 @@ impl<'a> VariableDependencyGenerator<'a> {
                 }
                 node_changes_calls
             };
+
+            if cfg!(test) {
+                node_changes_calls.sort();
+            }
+
             result_2.extend(values);
             if !v.is_empty() || !node_changes_calls.is_empty() {
                 result_1.push(format!(

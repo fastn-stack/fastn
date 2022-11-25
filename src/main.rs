@@ -165,6 +165,14 @@ pub fn ftd_v2_interpret_helper(
                 let source = "";
                 s = st.continue_after_import(module.as_str(), source)?;
             }
+            ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast } => {
+                let variable_definition = ast.get_variable_definition("foo")?;
+                let processor = variable_definition.processor.unwrap();
+                let value = ftd::interpreter2::Value::String {
+                    text: processor.to_string(),
+                };
+                s = state.continue_after_processor(value)?;
+            }
         }
     }
     Ok(document)

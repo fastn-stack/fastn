@@ -36,3 +36,4 @@ pub const REFERENCE: &str = "$";
 pub const LOOP: &str = "$loop$";
 pub const AS: &str = " as ";
 pub const IF: &str = "if";
+pub const PROCESSOR: &str = "$processor$";

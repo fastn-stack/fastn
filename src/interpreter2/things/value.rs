@@ -1000,4 +1000,12 @@ impl Value {
             ),
         }
     }
+
+    pub fn into_property_value(self, is_mutable: bool, line_number: usize) -> PropertyValue {
+        PropertyValue::Value {
+            value: self,
+            is_mutable,
+            line_number,
+        }
+    }
 }

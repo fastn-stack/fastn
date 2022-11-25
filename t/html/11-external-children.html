@@ -7,6 +7,10 @@
 <script type="ftd" id="ftd-data">
 {
 "foo#count": 1,
+"foo#page:body:0": [],
+"foo#page:body:1": [],
+"foo#page:extra-headers:0": [],
+"foo#page:extra-headers:1": [],
 "ftd#dark-mode": false,
 "ftd#follow-system-dark-mode": true,
 "ftd#system-dark-mode": false
@@ -456,9 +460,9 @@ window.set_value_main = {};
 window.set_value_main["foo#count"] = function (data, new_value) {
 data["foo#count"] = new_value;
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,3,2,1:main__text"]){window.node_change_main["0,3,2,1:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,3,1,1:main__text"]){window.node_change_main["0,3,1,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,3,2,1:main__text"]){window.node_change_main["0,3,2,1:main__text"](data);
 }
 };
 

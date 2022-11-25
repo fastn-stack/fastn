@@ -1,0 +1,5 @@
+-- string value-from-processor:
+$processor$: ftd.name
+
+
+-- ftd.text: $value-from-processor

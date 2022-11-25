@@ -143,6 +143,50 @@ impl InterpreterState {
             .insert(id.to_string(), ParsedDocument::parse(id, source)?);
         self.continue_()
     }
+
+    pub fn continue_after_processor(
+        mut self,
+        value: ftd::interpreter2::Value,
+    ) -> ftd::interpreter2::Result<Interpreter> {
+        let (id, ast_to_process) = self.to_process.last().unwrap(); //TODO: remove unwrap & throw error
+        let parsed_document = self.parsed_libs.get(id).unwrap();
+        let name = parsed_document.name.to_string();
+        let aliases = parsed_document.doc_aliases.clone();
+        let ast = ast_to_process.first().unwrap().clone(); // TODO: remove unwrap
+        let doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, &mut self);
+        let variable_definition = ast.get_variable_definition(doc.name)?;
+        let name = doc.resolve_name(variable_definition.name.as_str());
+        let kind = match ftd::interpreter2::KindData::from_ast_kind(
+            variable_definition.kind,
+            &Default::default(),
+            &doc,
+            variable_definition.line_number,
+        )? {
+            StateWithThing::Thing(t) => t,
+            StateWithThing::State(s) => return Ok(s),
+        };
+
+        let value =
+            value.into_property_value(variable_definition.mutable, variable_definition.line_number);
+
+        let variable = ftd::interpreter2::Variable {
+            name,
+            kind,
+            mutable: variable_definition.mutable,
+            value,
+            conditional_value: vec![],
+            line_number: variable_definition.line_number,
+            is_static: true,
+        }
+        .set_static(&doc);
+        ftd::interpreter2::utils::validate_variable(&variable, &doc)?;
+        self.bag.insert(
+            variable.name.to_string(),
+            ftd::interpreter2::Thing::Variable(variable),
+        );
+        self.remove_last();
+        self.continue_()
+    }
 }
 
 pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter2::Result<Interpreter> {
@@ -229,6 +273,10 @@ pub enum Interpreter {
     },
     Done {
         document: Document,
+    },
+    StuckOnProcessor {
+        state: InterpreterState,
+        ast: ftd::ast::AST,
     },
 }
 

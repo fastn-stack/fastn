@@ -4,8 +4,9 @@ pub struct VariableDefinition {
     pub kind: ftd::ast::VariableKind,
     pub mutable: bool,
     pub value: ftd::ast::VariableValue,
-    pub line_number: usize,
+    pub processor: Option<String>,
     pub flags: VariableFlags,
+    pub line_number: usize,
 }
 
 impl VariableDefinition {
@@ -14,16 +15,18 @@ impl VariableDefinition {
         kind: ftd::ast::VariableKind,
         mutable: bool,
         value: ftd::ast::VariableValue,
-        line_number: usize,
+        processor: Option<String>,
         flags: VariableFlags,
+        line_number: usize,
     ) -> VariableDefinition {
         VariableDefinition {
             kind,
             name: name.to_string(),
             mutable,
             value,
-            line_number,
+            processor,
             flags,
+            line_number,
         }
     }
 
@@ -59,6 +62,8 @@ impl VariableDefinition {
         let value =
             ftd::ast::VariableValue::from_p1_with_modifier(section, doc_id, &kind.modifier)?;
 
+        let processor = Processor::from_headers(&section.headers, doc_id)?;
+
         let flags = ftd::ast::VariableFlags::from_headers(&section.headers, doc_id);
 
         Ok(VariableDefinition::new(
@@ -66,8 +71,9 @@ impl VariableDefinition {
             kind,
             ftd::ast::utils::is_variable_mutable(section.name.as_str()),
             value,
-            section.line_number,
+            processor,
             flags,
+            section.line_number,
         ))
     }
 
@@ -196,5 +202,32 @@ impl VariableFlags {
                 ftd::ast::parse_error(format!("Unknown flag found`{}`", t), doc_id, kv.line_number)
             }
         }
+    }
+}
+
+struct Processor;
+
+impl Processor {
+    fn from_headers(headers: &ftd::p11::Headers, doc_id: &str) -> ftd::ast::Result<Option<String>> {
+        let processor_header = headers
+            .0
+            .iter()
+            .find(|v| v.get_key().eq(ftd::ast::utils::PROCESSOR));
+        let processor_header = if let Some(processor_header) = processor_header {
+            processor_header
+        } else {
+            return Ok(None);
+        };
+
+        let processor_statement =
+            processor_header
+                .get_value(doc_id)?
+                .ok_or(ftd::ast::Error::Parse {
+                    message: "Processor statement is blank".to_string(),
+                    doc_id: doc_id.to_string(),
+                    line_number: processor_header.get_line_number(),
+                })?;
+
+        Ok(Some(processor_statement))
     }
 }

@@ -15,7 +15,7 @@ impl Variable {
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
     {
-        let variable_definition = ast.get_variable_definition(doc.name)?;
+        let variable_definition = ast.clone().get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
         let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
             variable_definition.kind,
@@ -23,6 +23,21 @@ impl Variable {
             doc,
             variable_definition.line_number,
         )?);
+
+        if let Some(processor) = variable_definition.processor {
+            let state = if let Some(state) = doc.state() {
+                (*state).clone()
+            } else {
+                return ftd::interpreter2::utils::e2(
+                    format!("Processor: `{}` not found", processor),
+                    doc.name,
+                    variable_definition.line_number,
+                );
+            };
+            return Ok(ftd::interpreter2::StateWithThing::new_state(
+                ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast },
+            ));
+        }
 
         let value = try_ok_state!(ftd::interpreter2::PropertyValue::from_ast_value(
             variable_definition.value,
