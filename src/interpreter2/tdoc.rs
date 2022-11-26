@@ -973,7 +973,7 @@ impl<'a> TDoc<'a> {
 
         let name = self.resolve_name(name);
 
-        let (doc_name, thing_name, _remaining) = // Todo: use remaining
+        let (doc_name, thing_name, remaining) = // Todo: use remaining
             ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
                 name.as_str(),
                 self.name,
@@ -1014,6 +1014,22 @@ impl<'a> TDoc<'a> {
                 .collect_vec();
 
             if ast_for_thing.is_empty() {
+                if parsed_document
+                    .foreign_variable
+                    .iter()
+                    .any(|v| thing_name.eq(v))
+                {
+                    return Ok(ftd::interpreter2::StateWithThing::new_state(
+                        ftd::interpreter2::Interpreter::StuckOnForeignVariable {
+                            module: doc_name,
+                            state,
+                            variable: remaining
+                                .map(|v| format!("{}.{}", thing_name, v))
+                                .unwrap_or(thing_name),
+                        },
+                    ));
+                }
+
                 return self.err("not found", name, "search_thing", line_number);
             }
 
@@ -1047,18 +1063,22 @@ impl<'a> TDoc<'a> {
             .unwrap_or(name);
 
         if name.contains('#') {
-            let (name, remaining_value) = if let Ok(function_name) =
+            let (splited_name, remaining_value) = if let Ok(function_name) =
                 ftd::interpreter2::utils::get_function_name(name, self.name, line_number)
             {
                 (function_name, None)
             } else {
                 ftd::interpreter2::utils::get_doc_name_and_remaining(name, self.name, line_number)
             };
-            return match self.bag().get(name.as_str()) {
-                Some(a) => Ok((a.to_owned(), remaining_value)),
-                None => self.err("not found", name, "get_initial_thing", line_number),
+            return match self.bag().get(name) {
+                Some(a) => Ok((a.to_owned(), None)),
+                None => match self.bag().get(splited_name.as_str()) {
+                    Some(a) => Ok((a.to_owned(), remaining_value)),
+                    None => self.err("not found", splited_name, "get_initial_thing", line_number),
+                },
             };
         }
+
         return Ok(
             match get_initial_thing_(self, self.name, name, line_number) {
                 Some(a) => a,
@@ -1088,7 +1108,26 @@ impl<'a> TDoc<'a> {
             name: &str,
             line_number: usize,
         ) -> Option<(ftd::interpreter2::Thing, Option<String>)> {
-            let (name, remaining_value) = if let Ok(function_name) =
+            match doc
+                .bag()
+                .get(format!("{}#{}", doc_name, name).as_str())
+                .map(ToOwned::to_owned)
+            {
+                Some(a) => return Some((a, None)),
+                None => {
+                    if let Some(g) = doc.aliases.get(doc_name) {
+                        if let Some(a) = doc
+                            .bag()
+                            .get(format!("{}#{}", g, name).as_str())
+                            .map(|v| (v.clone(), None))
+                        {
+                            return Some(a);
+                        }
+                    }
+                }
+            }
+
+            let (splited_name, remaining_value) = if let Ok(function_name) =
                 ftd::interpreter2::utils::get_function_name(name, doc.name, line_number)
             {
                 (function_name, None)
@@ -1100,14 +1139,14 @@ impl<'a> TDoc<'a> {
 
             match doc
                 .bag()
-                .get(format!("{}#{}", doc_name, name).as_str())
+                .get(format!("{}#{}", doc_name, splited_name).as_str())
                 .map(ToOwned::to_owned)
             {
                 Some(a) => Some((a, remaining_value)),
                 None => match doc.aliases.get(doc_name) {
                     Some(g) => doc
                         .bag()
-                        .get(format!("{}#{}", g, name).as_str())
+                        .get(format!("{}#{}", g, splited_name).as_str())
                         .map(|v| (v.clone(), remaining_value)),
                     None => None,
                 },
@@ -1115,7 +1154,7 @@ impl<'a> TDoc<'a> {
         }
     }
 
-    fn err<T, T2: std::fmt::Debug>(
+    pub(crate) fn err<T, T2: std::fmt::Debug>(
         &self,
         msg: &str,
         ctx: T2,

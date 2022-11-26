@@ -186,6 +186,17 @@ impl VariableValue {
         }
     }
 
+    pub fn caption(&self) -> Option<String> {
+        match self {
+            VariableValue::String { value, .. } => Some(value.to_string()),
+            VariableValue::Record { caption: value, .. }
+            | VariableValue::Optional { value, .. } => {
+                value.as_ref().as_ref().and_then(|val| val.caption())
+            }
+            _ => None,
+        }
+    }
+
     pub(crate) fn line_number(&self) -> usize {
         match self {
             VariableValue::Optional { line_number, .. }

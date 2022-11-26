@@ -138,9 +138,13 @@ impl InterpreterState {
         mut self,
         id: &str,
         source: &str,
+        foreign_variable: Vec<String>,
+        foreign_function: Vec<String>,
     ) -> ftd::interpreter2::Result<Interpreter> {
-        self.parsed_libs
-            .insert(id.to_string(), ParsedDocument::parse(id, source)?);
+        let mut document = ParsedDocument::parse(id, source)?;
+        document.add_foreign_function(foreign_function);
+        document.add_foreign_variable(foreign_variable);
+        self.parsed_libs.insert(id.to_string(), document);
         self.continue_()
     }
 
@@ -187,6 +191,35 @@ impl InterpreterState {
         self.remove_last();
         self.continue_()
     }
+
+    pub fn continue_after_variable(
+        mut self,
+        module: &str,
+        variable: &str,
+        value: ftd::interpreter2::Value,
+    ) -> ftd::interpreter2::Result<Interpreter> {
+        let parsed_document = self.parsed_libs.get(module).unwrap();
+        let name = parsed_document.name.to_string();
+        let aliases = parsed_document.doc_aliases.clone();
+        let doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, &mut self);
+        let var_name = doc.resolve_name(variable);
+        let variable = ftd::interpreter2::Variable {
+            name: var_name,
+            kind: value.kind().into_kind_data(),
+            mutable: false,
+            value: value.into_property_value(false, 0),
+            conditional_value: vec![],
+            line_number: 0,
+            is_static: true,
+        }
+        .set_static(&doc);
+        ftd::interpreter2::utils::validate_variable(&variable, &doc)?;
+        self.bag.insert(
+            variable.name.to_string(),
+            ftd::interpreter2::Thing::Variable(variable),
+        );
+        self.continue_()
+    }
 }
 
 pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter2::Result<Interpreter> {
@@ -221,7 +254,8 @@ pub struct ParsedDocument {
     pub ast: Vec<ftd::ast::AST>,
     pub processing_imports: bool,
     pub doc_aliases: ftd::Map<String>,
-    pub foreign_variable_prefix: Vec<String>,
+    pub foreign_variable: Vec<String>,
+    pub foreign_function: Vec<String>,
     pub instructions: Vec<ftd::interpreter2::Component>,
 }
 
@@ -242,7 +276,8 @@ impl ParsedDocument {
             ast,
             processing_imports: true,
             doc_aliases,
-            foreign_variable_prefix: vec![],
+            foreign_variable: vec![],
+            foreign_function: vec![],
             instructions: vec![],
         })
     }
@@ -263,6 +298,14 @@ impl ParsedDocument {
     pub fn get_doc_aliases(&self) -> ftd::Map<String> {
         self.doc_aliases.clone()
     }
+
+    pub fn add_foreign_variable(&mut self, foreign_variable: Vec<String>) {
+        self.foreign_variable.extend(foreign_variable);
+    }
+
+    pub fn add_foreign_function(&mut self, foreign_function: Vec<String>) {
+        self.foreign_function.extend(foreign_function);
+    }
 }
 
 #[derive(Debug)]
@@ -277,6 +320,11 @@ pub enum Interpreter {
     StuckOnProcessor {
         state: InterpreterState,
         ast: ftd::ast::AST,
+    },
+    StuckOnForeignVariable {
+        state: InterpreterState,
+        module: String,
+        variable: String,
     },
 }
 

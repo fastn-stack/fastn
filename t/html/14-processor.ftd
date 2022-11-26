@@ -1,5 +1,7 @@
--- string value-from-processor:
-$processor$: ftd.name
+-- import: test
+
+-- string value-from-processor: Hello
+$processor$: test.fn
 
 
 -- ftd.text: $value-from-processor

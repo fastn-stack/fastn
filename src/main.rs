@@ -163,15 +163,49 @@ pub fn ftd_v2_interpret_helper(
             }
             ftd::interpreter2::Interpreter::StuckOnImport { module, state: st } => {
                 let source = "";
-                s = st.continue_after_import(module.as_str(), source)?;
+                let mut foreign_variable = vec![];
+                let mut foreign_function = vec![];
+                if module.eq("test") {
+                    foreign_variable.push("var".to_string());
+                    foreign_function.push("fn".to_string());
+                }
+                s = st.continue_after_import(
+                    module.as_str(),
+                    source,
+                    foreign_variable,
+                    foreign_function,
+                )?;
             }
             ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast } => {
                 let variable_definition = ast.get_variable_definition("foo")?;
                 let processor = variable_definition.processor.unwrap();
                 let value = ftd::interpreter2::Value::String {
-                    text: processor.to_string(),
+                    text: variable_definition
+                        .value
+                        .caption()
+                        .unwrap_or(processor)
+                        .to_uppercase()
+                        .to_string(),
                 };
                 s = state.continue_after_processor(value)?;
+            }
+            ftd::interpreter2::Interpreter::StuckOnForeignVariable {
+                state,
+                module,
+                variable,
+            } => {
+                if module.eq("test") {
+                    let value = ftd::interpreter2::Value::String {
+                        text: variable.to_uppercase().to_string(),
+                    };
+                    s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
+                } else {
+                    return ftd::interpreter2::utils::e2(
+                        format!("Unknown module {}", module),
+                        module.as_str(),
+                        0,
+                    );
+                }
             }
         }
     }

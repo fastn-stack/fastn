@@ -34,9 +34,41 @@ impl Variable {
                     variable_definition.line_number,
                 );
             };
-            return Ok(ftd::interpreter2::StateWithThing::new_state(
-                ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast },
-            ));
+            let (doc_name, thing_name, _remaining) =
+                ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+                    doc.resolve_name(processor.as_str()).as_str(),
+                    doc.name,
+                    variable_definition.line_number,
+                );
+
+            let parsed_document = match state.parsed_libs.get(doc_name.as_str()) {
+                Some(p) => p,
+                None => {
+                    return Ok(ftd::interpreter2::StateWithThing::new_state(
+                        ftd::interpreter2::Interpreter::StuckOnImport {
+                            module: doc_name,
+                            state,
+                        },
+                    ))
+                }
+            };
+
+            return if parsed_document
+                .foreign_function
+                .iter()
+                .any(|v| thing_name.eq(v))
+            {
+                Ok(ftd::interpreter2::StateWithThing::new_state(
+                    ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast },
+                ))
+            } else {
+                doc.err(
+                    "not found",
+                    processor,
+                    "Variable::from_ast",
+                    variable_definition.line_number,
+                )
+            };
         }
 
         let value = try_ok_state!(ftd::interpreter2::PropertyValue::from_ast_value(
