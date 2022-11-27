@@ -117,6 +117,13 @@ impl Kind {
         }
     }
 
+    pub fn mut_inner(&mut self) -> &mut Kind {
+        match self {
+            Kind::Optional { kind } => kind,
+            t => t,
+        }
+    }
+
     pub fn inner_list(self) -> Kind {
         match self {
             Kind::List { kind } => kind.as_ref().to_owned(),

@@ -93,6 +93,43 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            "ftd#length".to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: "ftd#length".to_string(),
+                variants: vec![
+                    ftd::interpreter2::Record {
+                        name: "px".to_string(),
+                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
+                            name: "value".to_string(),
+                            kind: ftd::interpreter2::Kind::integer()
+                                .into_kind_data()
+                                .caption(),
+                            mutable: false,
+                            value: None,
+                            line_number: 0,
+                        }])
+                        .collect(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Record {
+                        name: "percent".to_string(),
+                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
+                            name: "value".to_string(),
+                            kind: ftd::interpreter2::Kind::decimal()
+                                .into_kind_data()
+                                .caption(),
+                            mutable: false,
+                            value: None,
+                            line_number: 0,
+                        }])
+                        .collect(),
+                        line_number: 0,
+                    },
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             "ftd#dark-mode".to_string(),
             ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                 name: "ftd#dark-mode".to_string(),
@@ -417,7 +454,7 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
         ftd::interpreter2::Argument::default(
             "padding",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type("ftd#length")
                 .into_optional()
                 .into_kind_data(),
         ),
