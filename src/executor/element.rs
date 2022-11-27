@@ -1,3 +1,6 @@
+use crate::interpreter2::PropertyValue;
+use crate::Map;
+
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 pub enum Element {
     Row(Row),
@@ -108,7 +111,7 @@ pub struct Common {
     pub is_not_visible: bool,
     pub event: Vec<Event>,
     pub is_dummy: bool,
-    pub padding: ftd::executor::Value<Option<i64>>,
+    pub padding: ftd::executor::Value<Option<Length>>,
     pub data_id: String,
     pub line_number: usize,
     pub condition: Option<ftd::interpreter2::Expression>,
@@ -306,13 +309,7 @@ pub fn common_from_properties(
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
-        padding: ftd::executor::value::optional_i64(
-            "padding",
-            properties,
-            arguments,
-            doc,
-            line_number,
-        )?,
+        padding: Length::optional_length(properties, arguments, doc, line_number)?,
         condition: condition.to_owned(),
         data_id: ftd::executor::utils::get_string_container(local_container),
         line_number,
@@ -327,4 +324,91 @@ pub fn container_from_properties(
     children: Vec<Element>,
 ) -> ftd::executor::Result<Container> {
     Ok(Container { children })
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum Length {
+    Px(i64),
+    Percent(f64),
+}
+
+impl Default for Length {
+    fn default() -> Length {
+        Length::Px(0)
+    }
+}
+
+impl Length {
+    fn from_optional_values(
+        value: Option<(String, Map<PropertyValue>)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = value {
+            Ok(Some(Length::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        value: (String, Map<PropertyValue>),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match value.0.as_str() {
+            "ftd#length.percent" => Ok(Length::Percent(
+                value
+                    .1
+                    .get("value")
+                    .unwrap()
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
+            )),
+            "ftd#length.px" => Ok(Length::Px(
+                value
+                    .1
+                    .get("value")
+                    .unwrap()
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .integer(doc.name, line_number)?,
+            )),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.length`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    fn optional_length(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Length>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            "padding",
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "ftd#length",
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Length::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_string(&self) -> String {
+        match self {
+            Length::Px(px) => format!("{}px", px),
+            Length::Percent(p) => format!("{}%", p),
+        }
+    }
 }

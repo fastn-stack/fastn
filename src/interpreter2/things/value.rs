@@ -1170,6 +1170,28 @@ impl Value {
         }
     }
 
+    pub fn decimal(&self, doc_id: &str, line_number: usize) -> ftd::interpreter2::Result<f64> {
+        match self {
+            ftd::interpreter2::Value::Decimal { value } => Ok(*value),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected Decimal, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn integer(&self, doc_id: &str, line_number: usize) -> ftd::interpreter2::Result<i64> {
+        match self {
+            ftd::interpreter2::Value::Integer { value } => Ok(*value),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected Integer, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
     pub fn into_property_value(self, is_mutable: bool, line_number: usize) -> PropertyValue {
         PropertyValue::Value {
             value: self,
