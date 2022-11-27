@@ -502,7 +502,7 @@ impl PropertyValue {
             ftd::interpreter2::Kind::OrType { name, variant }
                 if variant.is_some() && (value.is_record() || value.is_string()) =>
             {
-                let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
+                let or_type = dbg!(try_ok_state!(doc.search_or_type(name, value.line_number())?));
                 let (caption, headers, body, line_number) =
                     if let Ok(val) = value.get_record(doc.name) {
                         (
@@ -519,7 +519,7 @@ impl PropertyValue {
                             value.line_number(),
                         )
                     };
-                let variant_name = variant.as_ref().unwrap().clone();
+                let variant_name = dbg!(variant.as_ref().unwrap().clone());
                 let variant = or_type
                     .variants
                     .into_iter()
@@ -748,6 +748,8 @@ impl PropertyValue {
                     definition_name_with_arguments,
                     loop_object_name_and_kind,
                 )?);
+
+                dbg!(&expected_kind, &found_kind);
 
                 match expected_kind {
                     Some(ekind)

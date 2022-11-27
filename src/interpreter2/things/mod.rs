@@ -12,6 +12,10 @@ pub(crate) mod variable;
 pub enum Thing {
     Record(ftd::interpreter2::Record),
     OrType(ftd::interpreter2::OrType),
+    OrTypeWithVariant {
+        or_type: String,
+        variant: ftd::interpreter2::Record,
+    },
     Variable(ftd::interpreter2::Variable),
     Component(ftd::interpreter2::ComponentDefinition),
     Function(ftd::interpreter2::Function),
@@ -25,6 +29,7 @@ impl Thing {
             Thing::Component(c) => c.line_number,
             Thing::Function(f) => f.line_number,
             Thing::OrType(o) => o.line_number,
+            Thing::OrTypeWithVariant { variant, .. } => variant.line_number,
         }
     }
 

@@ -510,6 +510,15 @@ impl<'a> TDoc<'a> {
                             .into_kind_data()
                             .caption_or_body()
                     }
+                    ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant } => {
+                        dbg!("1.. {}, {}", &or_type, &variant.name);
+                        ftd::interpreter2::Kind::or_type_with_variant(
+                            or_type.as_str(),
+                            variant.name.as_str(),
+                        )
+                        .into_kind_data()
+                        .caption_or_body()
+                    }
                     ftd::interpreter2::Thing::Variable(v) => v.kind,
                     ftd::interpreter2::Thing::Component(c) => {
                         ftd::interpreter2::Kind::ui_with_name(c.name.as_str())
@@ -831,16 +840,21 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Thing>>
     {
-        let name = name
+        let name = dbg!(name
             .strip_prefix(ftd::interpreter2::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
-            .unwrap_or(name);
+            .unwrap_or(name));
 
         let (initial_thing, remaining) =
             try_ok_state!(self.search_initial_thing(name, line_number)?);
 
         if let Some(remaining) = remaining {
-            return search_thing_(self, line_number, remaining.as_str(), &initial_thing);
+            return dbg!(search_thing_(
+                self,
+                line_number,
+                remaining.as_str(),
+                initial_thing
+            ));
         }
         return Ok(ftd::interpreter2::StateWithThing::new_thing(initial_thing));
 
@@ -848,7 +862,7 @@ impl<'a> TDoc<'a> {
             doc: &ftd::interpreter2::TDoc,
             line_number: usize,
             name: &str,
-            thing: &ftd::interpreter2::Thing,
+            thing: ftd::interpreter2::Thing,
         ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Thing>>
         {
             let (v, remaining) = ftd::interpreter2::utils::split_at(name, ".");
@@ -875,7 +889,7 @@ impl<'a> TDoc<'a> {
                                     return doc.err(
                                         "not an record",
                                         thing,
-                                        "get_thing",
+                                        "search_thing_",
                                         line_number,
                                     );
                                 }
@@ -894,7 +908,7 @@ impl<'a> TDoc<'a> {
                                     return doc.err(
                                         "not an record or or-type",
                                         thing,
-                                        "get_thing",
+                                        "search_thing_",
                                         line_number,
                                     );
                                 }
@@ -917,11 +931,11 @@ impl<'a> TDoc<'a> {
                                     is_static: !mutable,
                                 });
                             if let Some(remaining) = remaining {
-                                return search_thing_(doc, line_number, &remaining, &thing);
+                                return search_thing_(doc, line_number, &remaining, thing);
                             }
                             return Ok(ftd::interpreter2::StateWithThing::new_thing(thing));
                         }
-                        _ => return doc.err("not an record", thing, "get_thing", line_number),
+                        _ => return doc.err("not an record", thing, "search_thing_", line_number),
                     };
                     match fields.get(&v) {
                         Some(ftd::interpreter2::PropertyValue::Value {
@@ -955,21 +969,53 @@ impl<'a> TDoc<'a> {
                                     doc,
                                     line_number,
                                     remaining.as_str(),
-                                    &initial_thing,
+                                    initial_thing,
                                 )?)
                             } else {
                                 initial_thing
                             }
                         }
-                        _ => thing.clone(),
+                        _ => thing,
+                    }
+                }
+                ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                    name: or_type_name,
+                    variants,
+                    ..
+                }) => {
+                    if let Some(thing) = variants.into_iter().find(|v| {
+                        v.name
+                            .trim_start_matches(format!("{}.", or_type_name).as_str())
+                            .eq(name)
+                    }) {
+                        ftd::interpreter2::Thing::OrTypeWithVariant {
+                            or_type: or_type_name.to_string(),
+                            variant: thing,
+                        }
+                    } else {
+                        return doc.err(
+                            format!(
+                                "Can't find variant `{}` in or-type `{}`",
+                                name, or_type_name
+                            )
+                            .as_str(),
+                            thing,
+                            "search_thing_",
+                            line_number,
+                        );
                     }
                 }
                 _ => {
-                    return doc.err("not an or-type", thing, "get_thing", line_number);
+                    return doc.err(
+                        format!("not an or-type `{}`", name).as_str(),
+                        thing,
+                        "search_thing_",
+                        line_number,
+                    );
                 }
             };
             if let Some(remaining) = remaining {
-                return search_thing_(doc, line_number, &remaining, &thing);
+                return search_thing_(doc, line_number, &remaining, thing);
             }
             Ok(ftd::interpreter2::StateWithThing::new_thing(thing))
         }

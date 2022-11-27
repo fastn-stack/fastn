@@ -6,3 +6,18 @@ padding.px: 20
 
 -- ftd.text: Hello from FTD
 padding.px: $value
+
+
+
+-- ftd.length.px len: 20
+
+-- ftd.text: Hello from FTD
+padding: $len
+
+
+
+-- boolean flag: true
+
+-- ftd.text: Hello from FTD
+padding: $len
+padding.percent if { flag }: 20
