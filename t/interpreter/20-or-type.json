@@ -128,7 +128,7 @@
           },
           "source": {
             "Header": {
-              "name": "padding.px",
+              "name": "padding",
               "mutable": false
             }
           },
@@ -191,7 +191,7 @@
           },
           "source": {
             "Header": {
-              "name": "padding.px",
+              "name": "padding",
               "mutable": false
             }
           },
@@ -284,6 +284,27 @@
       "properties": [
         {
           "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Hello from FTD"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 22
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "text",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 22
+        },
+        {
+          "value": {
             "Reference": {
               "name": "foo#len",
               "kind": {
@@ -302,7 +323,7 @@
               },
               "source": "Global",
               "is_mutable": false,
-              "line_number": 22
+              "line_number": 23
             }
           },
           "source": {
@@ -312,7 +333,7 @@
             }
           },
           "condition": null,
-          "line_number": 22
+          "line_number": 23
         },
         {
           "value": {
@@ -330,19 +351,19 @@
                           }
                         },
                         "is_mutable": false,
-                        "line_number": 23
+                        "line_number": 24
                       }
                     }
                   }
                 }
               },
               "is_mutable": false,
-              "line_number": 23
+              "line_number": 24
             }
           },
           "source": {
             "Header": {
-              "name": "padding.percent",
+              "name": "padding",
               "mutable": false
             }
           },
@@ -371,29 +392,13 @@
                   },
                   "source": "Global",
                   "is_mutable": false,
-                  "line_number": 23
+                  "line_number": 24
                 }
               }
             },
-            "line_number": 23
+            "line_number": 24
           },
-          "line_number": 23
-        },
-        {
-          "value": {
-            "Value": {
-              "value": {
-                "String": {
-                  "text": "Hello from FTD"
-                }
-              },
-              "is_mutable": false,
-              "line_number": 21
-            }
-          },
-          "source": "Caption",
-          "condition": null,
-          "line_number": 21
+          "line_number": 24
         }
       ],
       "iteration": null,

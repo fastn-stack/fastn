@@ -276,6 +276,8 @@ impl Property {
             line_number,
         )?);
 
+        // todo: validate_duplicate_properties() a property cannot be repeat if it's not list
+
         validate_children_kind_property_against_children(
             properties.as_slice(),
             ast_children.as_slice(),
@@ -491,12 +493,22 @@ impl Property {
             );
         }
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(Property {
-            value,
-            source: ast_property.source.into(),
-            condition,
-            line_number: ast_property.line_number,
-        }))
+        let source = {
+            let mut source = ast_property.source.into();
+            if let ftd::interpreter2::PropertySource::Header { name, .. } = &mut source {
+                *name = argument.name;
+            }
+            source
+        };
+
+        Ok(ftd::interpreter2::StateWithThing::new_thing(dbg!(
+            Property {
+                value,
+                source,
+                condition,
+                line_number: ast_property.line_number,
+            }
+        )))
     }
 
     fn get_argument_for_property(

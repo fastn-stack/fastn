@@ -18,6 +18,7 @@ padding: $len
 
 -- boolean flag: true
 
--- ftd.text: Hello from FTD
+-- ftd.text:
+text: Hello from FTD
 padding: $len
 padding.percent if { flag }: 20
