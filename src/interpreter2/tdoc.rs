@@ -499,17 +499,22 @@ impl<'a> TDoc<'a> {
                     try_ok_state!(self.search_initial_thing(name, line_number)?);
 
                 let initial_kind = match initial_thing {
-                    ftd::interpreter2::Thing::Record(r) => ftd::interpreter2::KindData {
-                        kind: ftd::interpreter2::Kind::Record { name: r.name },
-                        caption: true,
-                        body: true,
-                    },
+                    ftd::interpreter2::Thing::Record(r) => {
+                        ftd::interpreter2::Kind::record(r.name.as_str())
+                            .into_kind_data()
+                            .caption_or_body()
+                    }
+                    ftd::interpreter2::Thing::OrType(o) => {
+                        ftd::interpreter2::Kind::or_type(o.name.as_str())
+                            .into_kind_data()
+                            .caption_or_body()
+                    }
                     ftd::interpreter2::Thing::Variable(v) => v.kind,
-                    ftd::interpreter2::Thing::Component(c) => ftd::interpreter2::KindData {
-                        kind: ftd::interpreter2::Kind::ui_with_name(c.name.as_str()),
-                        caption: true,
-                        body: true,
-                    },
+                    ftd::interpreter2::Thing::Component(c) => {
+                        ftd::interpreter2::Kind::ui_with_name(c.name.as_str())
+                            .into_kind_data()
+                            .caption_or_body()
+                    }
                     ftd::interpreter2::Thing::Function(_) => todo!(),
                 };
 

@@ -8,6 +8,10 @@ pub enum Kind {
     Record {
         name: String,
     }, // the full name of the record (full document name.record name)
+    OrType {
+        name: String,
+        variant: Option<String>,
+    },
     List {
         kind: Box<Kind>,
     },
@@ -84,6 +88,13 @@ impl Kind {
     pub fn record(name: &str) -> Kind {
         Kind::Record {
             name: name.to_string(),
+        }
+    }
+
+    pub fn or_type(name: &str) -> Kind {
+        Kind::OrType {
+            name: name.to_string(),
+            variant: None,
         }
     }
 

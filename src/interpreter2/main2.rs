@@ -39,6 +39,16 @@ impl InterpreterState {
                             );
                         }
                     }
+                } else if ast.is_or_type() {
+                    match ftd::interpreter2::OrType::from_ast(ast, &doc)? {
+                        ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                        ftd::interpreter2::StateWithThing::Thing(or_type) => {
+                            self.bag.insert(
+                                or_type.name.to_string(),
+                                ftd::interpreter2::Thing::OrType(or_type),
+                            );
+                        }
+                    }
                 } else if ast.is_function() {
                     match ftd::interpreter2::Function::from_ast(ast, &doc)? {
                         ftd::interpreter2::StateWithThing::State(s) => return Ok(s),

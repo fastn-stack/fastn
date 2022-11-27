@@ -13,12 +13,21 @@ impl Record {
             line_number,
         }
     }
+
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
     {
         let record = ast.get_record(doc.name)?;
+        Record::from_record(record, doc)
+    }
+
+    pub(crate) fn from_record(
+        record: ftd::ast::Record,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
+    {
         let name = doc.resolve_name(record.name.as_str());
         let known_kinds = std::iter::IntoIterator::into_iter([(
             record.name.to_string(),

@@ -7,6 +7,7 @@ mod function;
 mod import;
 mod kind;
 mod main;
+mod or_type;
 mod record;
 pub(crate) mod utils;
 mod variable;
@@ -18,6 +19,7 @@ pub use function::Function;
 pub use import::Import;
 pub use kind::{Condition, HeaderValues, VariableKind, VariableModifier, VariableValue};
 pub use main::AST;
+pub use or_type::OrType;
 pub use record::{Field, Record};
 pub use variable::{VariableDefinition, VariableFlags, VariableInvocation};
 

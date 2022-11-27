@@ -33,6 +33,7 @@ impl VariableDefinition {
     pub fn is_variable_definition(section: &ftd::p11::Section) -> bool {
         !(ftd::ast::Import::is_import(section)
             || ftd::ast::Record::is_record(section)
+            || ftd::ast::OrType::is_or_type(section)
             || ftd::ast::ComponentDefinition::is_component_definition(section)
             || section.kind.is_none()
             || ftd::ast::Function::is_function(section))

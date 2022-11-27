@@ -2,6 +2,7 @@
 pub enum AST {
     Import(ftd::ast::Import),
     Record(ftd::ast::Record),
+    OrType(ftd::ast::OrType),
     VariableDefinition(ftd::ast::VariableDefinition),
     VariableInvocation(ftd::ast::VariableInvocation),
     ComponentDefinition(ftd::ast::ComponentDefinition),
@@ -30,6 +31,7 @@ impl AST {
             AST::ComponentDefinition(c) => c.name.clone(),
             AST::ComponentInvocation(c) => c.name.clone(),
             AST::FunctionDefinition(f) => f.name.clone(),
+            AST::OrType(o) => o.name.clone(),
         }
     }
 
@@ -37,7 +39,9 @@ impl AST {
         Ok(if ftd::ast::Import::is_import(section) {
             AST::Import(ftd::ast::Import::from_p1(section, doc_id)?)
         } else if ftd::ast::Record::is_record(section) {
-            AST::Record(ftd::ast::Record::from_p1(section, doc_id)?)
+            AST::Record(ftd::ast::Record::from_p1_with_check(section, doc_id)?)
+        } else if ftd::ast::OrType::is_or_type(section) {
+            AST::OrType(ftd::ast::OrType::from_p1(section, doc_id)?)
         } else if ftd::ast::Function::is_function(section) {
             AST::FunctionDefinition(ftd::ast::Function::from_p1(section, doc_id)?)
         } else if ftd::ast::VariableDefinition::is_variable_definition(section) {
@@ -66,6 +70,7 @@ impl AST {
             AST::ComponentDefinition(c) => c.line_number(),
             AST::ComponentInvocation(c) => c.line_number(),
             AST::FunctionDefinition(f) => f.line_number(),
+            AST::OrType(o) => o.line_number(),
         }
     }
 
@@ -75,6 +80,17 @@ impl AST {
         }
         ftd::ast::parse_error(
             format!("`{:?}` is not a record", self),
+            doc_id,
+            self.line_number(),
+        )
+    }
+
+    pub fn get_or_type(self, doc_id: &str) -> ftd::ast::Result<ftd::ast::OrType> {
+        if let ftd::ast::AST::OrType(o) = self {
+            return Ok(o);
+        }
+        ftd::ast::parse_error(
+            format!("`{:?}` is not a or-type", self),
             doc_id,
             self.line_number(),
         )
@@ -146,6 +162,10 @@ impl AST {
 
     pub fn is_record(&self) -> bool {
         matches!(self, AST::Record(_))
+    }
+
+    pub fn is_or_type(&self) -> bool {
+        matches!(self, AST::OrType(_))
     }
 
     pub fn is_import(&self) -> bool {

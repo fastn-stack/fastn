@@ -42,6 +42,7 @@ pub use things::{
     expression::Expression,
     function::{Function, FunctionCall},
     kind::{Kind, KindData},
+    or_type::OrType,
     record::{Field, Record},
     value::{PropertyValue, PropertyValueSource, Value},
     variable::{ConditionalValue, Variable},

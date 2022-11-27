@@ -33,6 +33,7 @@ impl Function {
     pub(crate) fn function_name(section: &ftd::p11::Section) -> Option<String> {
         if ftd::ast::Import::is_import(section)
             || ftd::ast::Record::is_record(section)
+            || ftd::ast::OrType::is_or_type(section)
             || ftd::ast::ComponentDefinition::is_component_definition(section)
             || section.kind.is_none()
         {

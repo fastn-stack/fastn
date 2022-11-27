@@ -3,6 +3,7 @@ pub mod default;
 pub(crate) mod expression;
 pub(crate) mod function;
 pub(crate) mod kind;
+pub(crate) mod or_type;
 pub(crate) mod record;
 pub(crate) mod value;
 pub(crate) mod variable;
@@ -10,6 +11,7 @@ pub(crate) mod variable;
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Thing {
     Record(ftd::interpreter2::Record),
+    OrType(ftd::interpreter2::OrType),
     Variable(ftd::interpreter2::Variable),
     Component(ftd::interpreter2::ComponentDefinition),
     Function(ftd::interpreter2::Function),
@@ -22,6 +24,7 @@ impl Thing {
             Thing::Variable(v) => v.line_number,
             Thing::Component(c) => c.line_number,
             Thing::Function(f) => f.line_number,
+            Thing::OrType(o) => o.line_number,
         }
     }
 
