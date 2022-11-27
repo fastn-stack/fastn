@@ -1,5 +1,74 @@
 {
   "data": {
+    "foo#flag": {
+      "Variable": {
+        "name": "foo#flag",
+        "kind": {
+          "kind": "Boolean",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Boolean": {
+                "value": true
+              }
+            },
+            "is_mutable": false,
+            "line_number": 19
+          }
+        },
+        "conditional_value": [],
+        "line_number": 19,
+        "is_static": true
+      }
+    },
+    "foo#len": {
+      "Variable": {
+        "name": "foo#len",
+        "kind": {
+          "kind": {
+            "OrType": {
+              "name": "ftd#length",
+              "variant": "ftd#length.px"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "OrType": {
+                "name": "ftd#length",
+                "variant": "ftd#length.px",
+                "fields": {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "Integer": {
+                          "value": 20
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 12
+                    }
+                  }
+                }
+              }
+            },
+            "is_mutable": false,
+            "line_number": 12
+          }
+        },
+        "conditional_value": [],
+        "line_number": 12,
+        "is_static": true
+      }
+    },
     "foo#value": {
       "Variable": {
         "name": "foo#value",
@@ -37,7 +106,7 @@
               "value": {
                 "OrType": {
                   "name": "ftd#length",
-                  "variant": "px",
+                  "variant": "ftd#length.px",
                   "fields": {
                     "value": {
                       "Value": {
@@ -98,7 +167,7 @@
               "value": {
                 "OrType": {
                   "name": "ftd#length",
-                  "variant": "px",
+                  "variant": "ftd#length.px",
                   "fields": {
                     "value": {
                       "Reference": {
@@ -151,6 +220,222 @@
       "events": [],
       "children": [],
       "line_number": 7
+    },
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#len",
+              "kind": {
+                "kind": {
+                  "Optional": {
+                    "kind": {
+                      "OrType": {
+                        "name": "ftd#length",
+                        "variant": null
+                      }
+                    }
+                  }
+                },
+                "caption": false,
+                "body": false
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 15
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "padding",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 15
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Hello from FTD"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 14
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 14
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 14
+    },
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#len",
+              "kind": {
+                "kind": {
+                  "Optional": {
+                    "kind": {
+                      "OrType": {
+                        "name": "ftd#length",
+                        "variant": null
+                      }
+                    }
+                  }
+                },
+                "caption": false,
+                "body": false
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 22
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "padding",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 22
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "OrType": {
+                  "name": "ftd#length",
+                  "variant": "ftd#length.percent",
+                  "fields": {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Decimal": {
+                            "value": 10.0
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 23
+                      }
+                    }
+                  }
+                }
+              },
+              "is_mutable": false,
+              "line_number": 23
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "padding.percent",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 23
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "OrType": {
+                  "name": "ftd#length",
+                  "variant": "ftd#length.percent",
+                  "fields": {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Decimal": {
+                            "value": 20.0
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 24
+                      }
+                    }
+                  }
+                }
+              },
+              "is_mutable": false,
+              "line_number": 24
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "padding.percent",
+              "mutable": false
+            }
+          },
+          "condition": {
+            "expression": {
+              "operator": "RootNode",
+              "children": [
+                {
+                  "operator": {
+                    "VariableIdentifierRead": {
+                      "identifier": "flag"
+                    }
+                  },
+                  "children": []
+                }
+              ]
+            },
+            "references": {
+              "flag": {
+                "Reference": {
+                  "name": "foo#flag",
+                  "kind": {
+                    "kind": "Boolean",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": false,
+                  "line_number": 24
+                }
+              }
+            },
+            "line_number": 24
+          },
+          "line_number": 24
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Hello from FTD"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 21
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 21
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 21
     }
   ],
   "aliases": {

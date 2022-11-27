@@ -33,6 +33,7 @@ impl Kind {
     pub fn is_same_as(&self, other: &Self) -> bool {
         match (self, other) {
             (Self::UI { name: n1, .. }, Self::UI { name: n2, .. }) => n1.eq(n2),
+            (Self::OrType { name: n1, .. }, Self::OrType { name: n2, .. }) => n1.eq(n2),
             (Self::Optional { kind, .. }, _) => kind.is_same_as(other),
             (_, Self::Optional { kind: other, .. }) => self.is_same_as(other),
             (Self::List { kind: k1 }, Self::List { kind: k2 }) => k1.is_same_as(k2),
@@ -95,6 +96,13 @@ impl Kind {
         Kind::OrType {
             name: name.to_string(),
             variant: None,
+        }
+    }
+
+    pub fn or_type_with_variant(name: &str, variant: &str) -> Kind {
+        Kind::OrType {
+            name: name.to_string(),
+            variant: Some(variant.to_string()),
         }
     }
 
@@ -305,6 +313,11 @@ impl KindData {
             k => match try_ok_state!(doc.search_thing(k, line_number)?) {
                 ftd::interpreter2::Thing::Record(r) => Kind::record(r.name.as_str()),
                 ftd::interpreter2::Thing::Component(_) => Kind::ui(),
+                ftd::interpreter2::Thing::OrType(o) => Kind::or_type(o.name.as_str()),
+                ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant } => {
+                    dbg!("2.. {}, {}", &or_type, &variant.name);
+                    Kind::or_type_with_variant(or_type.as_str(), variant.name.as_str())
+                }
                 t => {
                     return ftd::interpreter2::utils::e2(
                         format!("Can't get find for `{:?}`", t),

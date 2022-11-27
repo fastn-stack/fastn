@@ -218,8 +218,12 @@ impl Field {
         match self.kind.kind.mut_inner() {
             ftd::interpreter2::Kind::OrType { name, variant: v } => {
                 let or_type = try_ok_state!(doc.search_or_type(name, self.line_number)?);
-                if or_type.variants.iter().any(|v| v.name.eq(variant)) {
-                    *v = Some(variant.to_string());
+                if or_type.variants.iter().any(|v| {
+                    v.name
+                        .trim_start_matches(format!("{}.", name).as_str())
+                        .eq(variant)
+                }) {
+                    *v = Some(format!("{}.{}", name, variant));
                     Ok(ftd::interpreter2::StateWithThing::new_thing(()))
                 } else {
                     ftd::interpreter2::utils::e2(

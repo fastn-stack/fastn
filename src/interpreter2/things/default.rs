@@ -98,7 +98,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 name: "ftd#length".to_string(),
                 variants: vec![
                     ftd::interpreter2::Record {
-                        name: "px".to_string(),
+                        name: "ftd#length.px".to_string(),
                         fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
                             name: "value".to_string(),
                             kind: ftd::interpreter2::Kind::integer()
@@ -112,7 +112,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     },
                     ftd::interpreter2::Record {
-                        name: "percent".to_string(),
+                        name: "ftd#length.percent".to_string(),
                         fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
                             name: "value".to_string(),
                             kind: ftd::interpreter2::Kind::decimal()

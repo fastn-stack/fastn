@@ -346,6 +346,7 @@ pub struct Document {
     pub aliases: ftd::Map<String>,
 }
 
+#[derive(Debug)]
 pub enum StateWithThing<T> {
     Thing(T),
     State(Interpreter),

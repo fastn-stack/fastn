@@ -23,6 +23,8 @@ impl OrType {
         let line_number = or_type.line_number();
         let mut variants = vec![];
         for variant in or_type.variants {
+            let mut variant = variant;
+            variant.name = format!("{}.{}", or_type.name, variant.name);
             variants.push(try_ok_state!(ftd::interpreter2::Record::from_record(
                 variant, doc
             )?));
