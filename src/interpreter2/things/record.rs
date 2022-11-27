@@ -209,4 +209,34 @@ impl Field {
             },
         ))
     }
+
+    pub fn update_with_or_type_variant(
+        &mut self,
+        doc: &ftd::interpreter2::TDoc,
+        variant: &str,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<()>> {
+        match self.kind.kind.mut_inner() {
+            ftd::interpreter2::Kind::OrType { name, variant: v } => {
+                let or_type = try_ok_state!(doc.search_or_type(name, self.line_number)?);
+                if or_type.variants.iter().any(|v| v.name.eq(variant)) {
+                    *v = Some(variant.to_string());
+                    Ok(ftd::interpreter2::StateWithThing::new_thing(()))
+                } else {
+                    ftd::interpreter2::utils::e2(
+                        format!("Cannot find variant `{}` for or-type `{}`", variant, name),
+                        doc.name,
+                        self.line_number,
+                    )
+                }
+            }
+            t => ftd::interpreter2::utils::e2(
+                format!(
+                    "Expected or-type for variant `{}`, found: `{:?}`",
+                    variant, t
+                ),
+                doc.name,
+                self.line_number,
+            ),
+        }
+    }
 }

@@ -357,7 +357,7 @@ impl PropertyValue {
                 })
             }
             ftd::interpreter2::Kind::Record { name } if value.is_record() || value.is_string() => {
-                let record = doc.get_record(name, value.line_number())?;
+                let record = try_ok_state!(doc.search_record(name, value.line_number())?);
                 let (caption, headers, body, line_number) =
                     if let Ok(val) = value.get_record(doc.name) {
                         (
@@ -498,6 +498,165 @@ impl PropertyValue {
                     is_mutable,
                     line_number,
                 })
+            }
+            ftd::interpreter2::Kind::OrType { name, variant }
+                if variant.is_some() && (value.is_record() || value.is_string()) =>
+            {
+                let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
+                let (caption, headers, body, line_number) =
+                    if let Ok(val) = value.get_record(doc.name) {
+                        (
+                            val.1.as_ref().to_owned(),
+                            val.2.to_owned(),
+                            val.3.to_owned(),
+                            val.5.to_owned(),
+                        )
+                    } else {
+                        (
+                            Some(value.clone()),
+                            ftd::ast::HeaderValues::new(vec![]),
+                            None,
+                            value.line_number(),
+                        )
+                    };
+                let variant_name = variant.as_ref().unwrap().clone();
+                let variant = or_type
+                    .variants
+                    .into_iter()
+                    .find(|v| v.name.eq(&variant_name))
+                    .ok_or(ftd::interpreter2::Error::ParseError {
+                        message: format!(
+                            "Expected variant `{}` in or-type `{}`",
+                            variant_name, name
+                        ),
+                        doc_id: doc.name.to_string(),
+                        line_number: value.line_number(),
+                    })?;
+
+                // TODO: Check if the record name and the value kind are same
+                let mut result_field: ftd::Map<PropertyValue> = Default::default();
+                for field in variant.fields {
+                    if field.is_caption() && caption.is_some() {
+                        let caption = caption.as_ref().unwrap().clone();
+                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
+                            caption,
+                            doc,
+                            field.mutable,
+                            Some(&field.kind),
+                        )?);
+                        result_field.insert(field.name.to_string(), property_value);
+                        continue;
+                    }
+                    if field.is_body() && body.is_some() {
+                        let body = body.as_ref().unwrap();
+                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
+                            ftd::ast::VariableValue::String {
+                                value: body.value.to_string(),
+                                line_number: body.line_number,
+                            },
+                            doc,
+                            field.mutable,
+                            Some(&field.kind),
+                        )?);
+                        result_field.insert(field.name.to_string(), property_value);
+                        continue;
+                    }
+                    let headers = headers.get_by_key(field.name.as_str());
+                    if headers.is_empty() && field.kind.is_optional() {
+                        result_field.insert(
+                            field.name.to_string(),
+                            PropertyValue::Value {
+                                value: ftd::interpreter2::Value::Optional {
+                                    data: Box::new(None),
+                                    kind: expected_kind.to_owned(),
+                                },
+                                is_mutable,
+                                line_number,
+                            },
+                        );
+                        continue;
+                    }
+                    if field.kind.is_list() {
+                        let mut header_list = vec![];
+                        for header in headers {
+                            header_list.extend(match &header.value {
+                                ftd::ast::VariableValue::List { value, .. } => value.to_owned(),
+                                t => vec![(header.key.to_string(), t.to_owned())],
+                            });
+                        }
+                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
+                            ftd::ast::VariableValue::List {
+                                value: header_list,
+                                line_number: value.line_number(),
+                            },
+                            doc,
+                            field.mutable,
+                            Some(&field.kind),
+                        )?);
+                        result_field.insert(field.name.to_string(), property_value);
+                        continue;
+                    }
+
+                    if headers.is_empty() && field.value.is_some() {
+                        let value = field.value.unwrap();
+                        match &value {
+                            ftd::interpreter2::PropertyValue::Reference {
+                                name: refernence,
+                                source,
+                                ..
+                            } if source.is_local(name) => {
+                                if let Some(field_name) =
+                                    refernence.strip_prefix(format!("{}.", name).as_str())
+                                {
+                                    // Todo: field_name is empty throw error
+                                    let property_value = result_field
+                                        .get(field_name)
+                                        .ok_or(ftd::interpreter2::Error::ParseError {
+                                            message: format!(
+                                                "field `{}` not found in record: `{}`",
+                                                field_name, name
+                                            ),
+                                            doc_id: doc.name.to_string(),
+                                            line_number,
+                                        })?
+                                        .clone();
+                                    result_field.insert(field.name.to_string(), property_value);
+                                }
+                            }
+                            t => {
+                                result_field.insert(field.name.to_string(), t.clone());
+                            }
+                        }
+                        continue;
+                    }
+                    if headers.len() != 1 {
+                        return ftd::interpreter2::utils::e2(
+                            format!(
+                                "Expected `{}` of type `{:?}`, found: `{:?}`",
+                                field.name, field.kind, headers
+                            ),
+                            doc.name,
+                            value.line_number(),
+                        );
+                    }
+                    let first_header = headers.first().unwrap();
+                    let property_value = try_ok_state!(PropertyValue::from_ast_value(
+                        first_header.value.clone(),
+                        doc,
+                        first_header.mutable,
+                        Some(&field.kind),
+                    )?);
+                    result_field.insert(field.name.to_string(), property_value);
+                }
+                ftd::interpreter2::StateWithThing::new_thing(dbg!(PropertyValue::Value {
+                    value: ftd::interpreter2::Value::OrType {
+                        name: name.to_string(),
+                        variant: variant_name,
+                        fields: result_field,
+                    },
+                    is_mutable,
+                    line_number,
+                }))
             }
             t => {
                 unimplemented!("t::{:?}  {:?}", t, value)
@@ -730,6 +889,11 @@ pub enum Value {
         name: String,
         fields: ftd::Map<PropertyValue>,
     },
+    OrType {
+        name: String,
+        variant: String,
+        fields: ftd::Map<PropertyValue>,
+    },
     List {
         data: Vec<PropertyValue>,
         kind: ftd::interpreter2::KindData,
@@ -850,6 +1014,7 @@ impl Value {
                 kind: Box::new(kind.kind.clone()),
             },
             Value::UI { name, .. } => ftd::interpreter2::Kind::ui_with_name(name),
+            Value::OrType { name, .. } => ftd::interpreter2::Kind::or_type(name),
         }
     }
 

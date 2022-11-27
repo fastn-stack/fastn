@@ -1,0 +1,70 @@
+{
+  "data": {},
+  "name": "foo",
+  "tree": [
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "OrType": {
+                  "name": "ftd#length",
+                  "variant": "px",
+                  "fields": {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "Integer": {
+                            "value": 20
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 2
+                      }
+                    }
+                  }
+                }
+              },
+              "is_mutable": false,
+              "line_number": 2
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "padding.px",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 2
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Hello from FTD"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 1
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 1
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 1
+    }
+  ],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}

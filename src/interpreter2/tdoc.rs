@@ -152,6 +152,7 @@ impl<'a> TDoc<'a> {
             name.to_string()
         })
     }
+
     pub(crate) fn resolve(
         &self,
         name: &str,
@@ -622,6 +623,28 @@ impl<'a> TDoc<'a> {
                 Ok(ftd::interpreter2::StateWithThing::new_state(s))
             }
             ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Component(c)) => {
+                Ok(ftd::interpreter2::StateWithThing::new_thing(c))
+            }
+            ftd::interpreter2::StateWithThing::Thing(t) => self.err(
+                format!("Expected Component, found: `{:?}`", t).as_str(),
+                name,
+                "search_component",
+                line_number,
+            ),
+        }
+    }
+
+    pub fn search_or_type(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::OrType>>
+    {
+        match self.search_thing(name, line_number)? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::OrType(c)) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(c))
             }
             ftd::interpreter2::StateWithThing::Thing(t) => self.err(
