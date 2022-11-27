@@ -308,3 +308,81 @@ pub fn optional_string(
         ),
     }
 }
+
+pub fn optional_f64(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<Option<f64>>> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
+            Some(v),
+            value.line_number,
+            value.properties,
+        )),
+        None => Ok(ftd::executor::Value::new(
+            None,
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type optional decimal, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
+pub fn optional_or_type(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+    rec_name: &str,
+) -> ftd::executor::Result<
+    ftd::executor::Value<Option<(String, ftd::Map<ftd::interpreter2::PropertyValue>)>>,
+> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::OrType {
+            name,
+            fields,
+            variant,
+        }) if name.eq(rec_name) => Ok(ftd::executor::Value::new(
+            Some((variant, fields)),
+            value.line_number,
+            value.properties,
+        )),
+        None => Ok(ftd::executor::Value::new(
+            None,
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!(
+                "Expected value of type or-type `{}`, found: {:?}",
+                rec_name, t
+            ),
+            doc.name,
+            line_number,
+        ),
+    }
+}
