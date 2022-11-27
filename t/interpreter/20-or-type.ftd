@@ -1,2 +1,8 @@
 -- ftd.text: Hello from FTD
 padding.px: 20
+
+
+-- integer value: 20
+
+-- ftd.text: Hello from FTD
+padding.px: $value
