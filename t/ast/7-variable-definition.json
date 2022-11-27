@@ -87,10 +87,11 @@
           "line_number": 5
         }
       },
-      "line_number": 5,
+      "processor": null,
       "flags": {
         "always_include": null
-      }
+      },
+      "line_number": 5
     }
   }
 ]
