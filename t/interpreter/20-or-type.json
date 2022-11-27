@@ -326,7 +326,7 @@
                       "Value": {
                         "value": {
                           "Decimal": {
-                            "value": 10.0
+                            "value": 20.0
                           }
                         },
                         "is_mutable": false,
@@ -338,41 +338,6 @@
               },
               "is_mutable": false,
               "line_number": 23
-            }
-          },
-          "source": {
-            "Header": {
-              "name": "padding.percent",
-              "mutable": false
-            }
-          },
-          "condition": null,
-          "line_number": 23
-        },
-        {
-          "value": {
-            "Value": {
-              "value": {
-                "OrType": {
-                  "name": "ftd#length",
-                  "variant": "ftd#length.percent",
-                  "fields": {
-                    "value": {
-                      "Value": {
-                        "value": {
-                          "Decimal": {
-                            "value": 20.0
-                          }
-                        },
-                        "is_mutable": false,
-                        "line_number": 24
-                      }
-                    }
-                  }
-                }
-              },
-              "is_mutable": false,
-              "line_number": 24
             }
           },
           "source": {
@@ -406,13 +371,13 @@
                   },
                   "source": "Global",
                   "is_mutable": false,
-                  "line_number": 24
+                  "line_number": 23
                 }
               }
             },
-            "line_number": 24
+            "line_number": 23
           },
-          "line_number": 24
+          "line_number": 23
         },
         {
           "value": {
