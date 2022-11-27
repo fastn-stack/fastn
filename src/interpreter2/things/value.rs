@@ -716,7 +716,7 @@ impl PropertyValue {
                 match expected_kind {
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter2::utils::e2(
-                            format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
+                            format!("2 Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
                                 .as_str(),
                             doc.name,
                             value.line_number(),
@@ -751,7 +751,9 @@ impl PropertyValue {
 
                 match expected_kind {
                     Some(ekind)
-                        if !ekind.kind.is_same_as(&found_kind.kind) && ekind.kind.is_record() =>
+                        if !ekind.kind.is_same_as(&found_kind.kind)
+                            && (ekind.kind.ref_inner().is_record()
+                                || ekind.kind.ref_inner().is_or_type()) =>
                     {
                         return Ok(PropertyValue::value_from_ast_value(
                             value,
@@ -764,7 +766,7 @@ impl PropertyValue {
                     }
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter2::utils::e2(
-                            format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
+                            format!("3 Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
                                 .as_str(),
                             doc.name,
                             value.line_number(),

@@ -1,5 +1,31 @@
 {
-  "data": {},
+  "data": {
+    "foo#value": {
+      "Variable": {
+        "name": "foo#value",
+        "kind": {
+          "kind": "Integer",
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Integer": {
+                "value": 20
+              }
+            },
+            "is_mutable": false,
+            "line_number": 5
+          }
+        },
+        "conditional_value": [],
+        "line_number": 5,
+        "is_static": true
+      }
+    }
+  },
   "name": "foo",
   "tree": [
     {
@@ -62,6 +88,69 @@
       "events": [],
       "children": [],
       "line_number": 1
+    },
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "OrType": {
+                  "name": "ftd#length",
+                  "variant": "px",
+                  "fields": {
+                    "value": {
+                      "Reference": {
+                        "name": "foo#value",
+                        "kind": {
+                          "kind": "Integer",
+                          "caption": true,
+                          "body": false
+                        },
+                        "source": "Global",
+                        "is_mutable": false,
+                        "line_number": 8
+                      }
+                    }
+                  }
+                }
+              },
+              "is_mutable": false,
+              "line_number": 8
+            }
+          },
+          "source": {
+            "Header": {
+              "name": "padding.px",
+              "mutable": false
+            }
+          },
+          "condition": null,
+          "line_number": 8
+        },
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Hello from FTD"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 7
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 7
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 7
     }
   ],
   "aliases": {

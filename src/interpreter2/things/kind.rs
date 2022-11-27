@@ -124,6 +124,13 @@ impl Kind {
         }
     }
 
+    pub fn ref_inner(&self) -> &Kind {
+        match self {
+            Kind::Optional { kind } => kind,
+            t => t,
+        }
+    }
+
     pub fn inner_list(self) -> Kind {
         match self {
             Kind::List { kind } => kind.as_ref().to_owned(),
@@ -152,8 +159,13 @@ impl Kind {
     pub fn is_optional(&self) -> bool {
         matches!(self, Kind::Optional { .. })
     }
+
     pub fn is_record(&self) -> bool {
         matches!(self, Kind::Record { .. })
+    }
+
+    pub fn is_or_type(&self) -> bool {
+        matches!(self, Kind::OrType { .. })
     }
 
     pub fn is_string(&self) -> bool {
