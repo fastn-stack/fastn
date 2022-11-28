@@ -20,10 +20,20 @@ line-height: 48
 size: 40
 letter-spacing: 0
 
+-- ftd.font-size heading-large-mobile:
+line-height: 48
+size: 40
+letter-spacing: 0
+
+-- ftd.font-size heading-large-xl:
+line-height: 48
+size: 40
+letter-spacing: 0
+
 -- ftd.type heading-large: $font-display
 desktop: $heading-large-desktop
-mobile: $heading-large-desktop
-xl: $heading-large-desktop
+mobile: $heading-large-mobile
+xl: $heading-large-xl
 weight: 400
 
 
@@ -33,10 +43,20 @@ line-height: 44
 size: 32
 letter-spacing: 0
 
+-- ftd.font-size heading-medium-mobile:
+line-height: 44
+size: 32
+letter-spacing: 0
+
+-- ftd.font-size heading-medium-xl:
+line-height: 44
+size: 32
+letter-spacing: 0
+
 -- ftd.type heading-medium: $font-display
 desktop: $heading-medium-desktop
-mobile: $heading-medium-desktop
-xl: $heading-medium-desktop
+mobile: $heading-medium-mobile
+xl: $heading-medium-xl
 weight: 400
 
 
@@ -46,11 +66,23 @@ line-height: 36
 size: 24
 letter-spacing: 0
 
+-- ftd.font-size heading-small-mobile:
+line-height: 36
+size: 24
+letter-spacing: 0
+
+-- ftd.font-size heading-small-xl:
+line-height: 36
+size: 24
+letter-spacing: 0
+
 -- ftd.type heading-small: $font-display
 desktop: $heading-small-desktop
-mobile: $heading-small-desktop
-xl: $heading-small-desktop
+mobile: $heading-small-mobile
+xl: $heading-small-xl
 weight: 400
+
+
 
 
 
@@ -59,14 +91,37 @@ line-height: 60
 size: 48
 letter-spacing: 0
 
+-- ftd.font-size heading-hero-mobile:
+line-height: 60
+size: 48
+letter-spacing: 0
+
+-- ftd.font-size heading-hero-xl:
+line-height: 60
+size: 48
+letter-spacing: 0
+
 -- ftd.type heading-hero: $font-display
 desktop: $heading-hero-desktop
-mobile: $heading-hero-desktop
-xl: $heading-hero-desktop
+mobile: $heading-hero-mobile
+xl: $heading-hero-xl
 weight: 400
 
 
+
+
+
 -- ftd.font-size copy-tight-desktop:
+line-height: 20
+size: 16
+letter-spacing: 0
+
+-- ftd.font-size copy-tight-mobile:
+line-height: 20
+size: 16
+letter-spacing: 0
+
+-- ftd.font-size copy-tight-xl:
 line-height: 20
 size: 16
 letter-spacing: 0
@@ -78,16 +133,31 @@ xl: $copy-tight-desktop
 weight: 400
 
 
+
+
+
 -- ftd.font-size copy-relaxed-desktop:
+line-height: 24
+size: 16
+letter-spacing: 0
+
+-- ftd.font-size copy-relaxed-mobile:
+line-height: 24
+size: 16
+letter-spacing: 0
+
+-- ftd.font-size copy-relaxed-xl:
 line-height: 24
 size: 16
 letter-spacing: 0
 
 -- ftd.type copy-relaxed: $font-copy
 desktop: $copy-relaxed-desktop
-mobile: $copy-relaxed-desktop
-xl: $copy-relaxed-desktop
+mobile: $copy-relaxed-mobile
+xl: $copy-relaxed-xl
 weight: 400
+
+
 
 
 
@@ -96,11 +166,23 @@ line-height: 28
 size: 20
 letter-spacing: 0
 
+-- ftd.font-size copy-large-mobile:
+line-height: 28
+size: 20
+letter-spacing: 0
+
+-- ftd.font-size copy-large-xl:
+line-height: 28
+size: 20
+letter-spacing: 0
+
 -- ftd.type copy-large: $font-copy
 desktop: $copy-large-desktop
-mobile: $copy-large-desktop
-xl: $copy-large-desktop
+mobile: $copy-large-mobile
+xl: $copy-large-xl
 weight: 400
+
+
 
 
 
@@ -109,33 +191,73 @@ line-height: 22
 size: 16
 letter-spacing: 0
 
+-- ftd.font-size label-big-mobile:
+line-height: 22
+size: 16
+letter-spacing: 0
+
+-- ftd.font-size label-big-xl:
+line-height: 22
+size: 16
+letter-spacing: 0
+
 -- ftd.type label-big: $font-display
 desktop: $label-big-desktop
-mobile: $label-big-desktop
-xl: $label-big-desktop
+mobile: $label-big-mobile
+xl: $label-big-xl
 weight: 400
+
+
+
+
 
 -- ftd.font-size label-small-desktop:
 line-height: 16
 size: 14
 letter-spacing: 0
 
+-- ftd.font-size label-small-mobile:
+line-height: 16
+size: 14
+letter-spacing: 0
+
+-- ftd.font-size label-small-xl:
+line-height: 16
+size: 14
+letter-spacing: 0
+
 -- ftd.type label-small: $font-display
 desktop: $label-small-desktop
-mobile: $label-small-desktop
-xl: $label-small-desktop
+mobile: $label-small-mobile
+xl: $label-small-xl
 weight: 400
+
+
+
+
 
 -- ftd.font-size fine-print-desktop:
 line-height: 16
 size: 14
 letter-spacing: 0
 
+-- ftd.font-size fine-print-mobile:
+line-height: 16
+size: 14
+letter-spacing: 0
+
+-- ftd.font-size fine-print-xl:
+line-height: 16
+size: 14
+letter-spacing: 0
+
 -- ftd.type fine-print: $font-code
 desktop: $fine-print-desktop
-mobile: $fine-print-desktop
-xl: $fine-print-desktop
+mobile: $fine-print-mobile
+xl: $fine-print-xl
 weight: 400
+
+
 
 
 
@@ -144,11 +266,22 @@ line-height: 16
 size: 14
 letter-spacing: 0
 
+-- ftd.font-size blockquote-mobile:
+line-height: 16
+size: 14
+letter-spacing: 0
+
+-- ftd.font-size blockquote-xl:
+line-height: 16
+size: 14
+letter-spacing: 0
+
 -- ftd.type blockquote: $font-code
 desktop: $blockquote-desktop
-mobile: $blockquote-desktop
-xl: $blockquote-desktop
+mobile: $blockquote-mobile
+xl: $blockquote-xl
 weight: 400
+
 
 
 
@@ -164,6 +297,9 @@ ftd.type fine-print:
 ftd.type blockquote:
 ftd.type label-big:
 ftd.type label-small:
+
+
+
 
 
 -- type-data type:
