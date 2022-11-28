@@ -159,6 +159,10 @@ pub(crate) fn dependencies_from_property_value(
             result.extend(dependencies_from_property_value(property_value));
         }
         result
+    } else if value.is_value() && value.kind().is_ftd_length() {
+        let value = value.value("", 0).unwrap();
+        let fields = value.or_type_fields("", 0).unwrap();
+        dependencies_from_property_value(fields.get(ftd::interpreter2::FTDLengthValue).unwrap())
     } else {
         vec![]
     }

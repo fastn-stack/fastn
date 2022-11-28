@@ -33,7 +33,7 @@ mod tdoc;
 mod things;
 pub mod utils;
 
-pub use constants::{FTDLength, FTDLengthPX, FTDLengthPercent};
+pub use constants::{FTDLength, FTDLengthPX, FTDLengthPercent, FTDLengthValue};
 pub use main2::{interpret, Document, Interpreter, InterpreterState, StateWithThing};
 pub use tdoc::TDoc;
 pub use things::{

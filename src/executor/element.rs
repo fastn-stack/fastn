@@ -360,7 +360,7 @@ impl Length {
             ftd::interpreter2::FTDLengthPercent => Ok(Length::Percent(
                 value
                     .1
-                    .get("value")
+                    .get(ftd::interpreter2::FTDLengthValue)
                     .unwrap()
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
@@ -369,7 +369,7 @@ impl Length {
             ftd::interpreter2::FTDLengthPX => Ok(Length::Px(
                 value
                     .1
-                    .get("value")
+                    .get(ftd::interpreter2::FTDLengthValue)
                     .unwrap()
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
