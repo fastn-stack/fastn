@@ -2,10 +2,11 @@
 padding.px: 20
 
 
--- integer value: 20
+-- integer $value: 20
 
 -- ftd.text: Hello from FTD
 padding.px: $value
+$on-click$: $increment($a = $value)
 
 
 
@@ -22,3 +23,22 @@ padding: $len
 text: Hello from FTD
 padding: $len
 padding.percent if { flag }: 20
+
+
+
+
+-- void increment(a):
+integer $a:
+
+a += 1
+
+
+/-- or-type length:
+
+-- px:
+caption integer value:
+
+-- percent:
+caption decimal value:
+
+-- end: length

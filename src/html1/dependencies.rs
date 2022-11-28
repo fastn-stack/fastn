@@ -88,7 +88,7 @@ impl<'a> DependencyGenerator<'a> {
                     .as_ref()
                     .map(ftd::html1::utils::get_condition_string);
 
-                if condition.is_some() || !property.value.is_value() {
+                if !is_static_expression(&property.value, &condition) {
                     is_static = false;
                 }
 
@@ -145,7 +145,7 @@ impl<'a> DependencyGenerator<'a> {
                     .as_ref()
                     .map(ftd::html1::utils::get_condition_string);
 
-                if condition.is_some() || !property.value.is_value() {
+                if !is_static_expression(&property.value, &condition) {
                     is_static = false;
                 }
 
@@ -284,6 +284,7 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
+            dbg!(&attribute);
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -291,7 +292,7 @@ impl<'a> DependencyGenerator<'a> {
                     .as_ref()
                     .map(ftd::html1::utils::get_condition_string);
 
-                if condition.is_some() || !property.value.is_value() {
+                if !is_static_expression(&property.value, &condition) {
                     is_static = false;
                 }
 
@@ -304,6 +305,7 @@ impl<'a> DependencyGenerator<'a> {
                         None,
                     )?
                 {
+                    dbg!(&value_string);
                     dependency_map_from_condition(
                         var_dependencies,
                         &property.condition,
@@ -369,4 +371,26 @@ fn dependency_map_from_property_value(
     for v in values {
         var_dependencies.insert(v, node_change_id.to_string());
     }
+}
+
+fn is_static_expression(
+    property_value: &ftd::interpreter2::PropertyValue,
+    condition: &Option<String>,
+) -> bool {
+    if property_value.kind().is_ftd_length() {
+        if let ftd::interpreter2::PropertyValue::Value {
+            value: ftd::interpreter2::Value::OrType { fields, .. },
+            ..
+        } = property_value
+        {
+            if !fields.get("value").map(|v| v.is_value()).unwrap_or(true) {
+                return false;
+            }
+        }
+    }
+    if condition.is_some() || !property_value.is_value() {
+        return false;
+    }
+
+    true
 }
