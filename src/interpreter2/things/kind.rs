@@ -146,6 +146,13 @@ impl Kind {
         }
     }
 
+    pub fn ref_inner_list(&self) -> &Kind {
+        match self {
+            Kind::List { kind } => kind,
+            t => t,
+        }
+    }
+
     pub(crate) fn is_list(&self) -> bool {
         matches!(self, Kind::List { .. })
     }

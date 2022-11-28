@@ -708,14 +708,15 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
                     .to_string();
 
-                let function_call = try_ok_state!(ftd::interpreter2::FunctionCall::from_string(
-                    expression.as_str(),
-                    doc,
-                    mutable,
-                    definition_name_with_arguments,
-                    loop_object_name_and_kind,
-                    value.line_number(),
-                )?);
+                let mut function_call =
+                    try_ok_state!(ftd::interpreter2::FunctionCall::from_string(
+                        expression.as_str(),
+                        doc,
+                        mutable,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                        value.line_number(),
+                    )?);
                 let found_kind = &function_call.kind;
 
                 match expected_kind {
@@ -744,6 +745,8 @@ impl PropertyValue {
                     }
                     _ => {}
                 }
+
+                function_call.kind = get_kind(expected_kind, found_kind);
 
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     ftd::interpreter2::PropertyValue::FunctionCall(function_call),
@@ -793,7 +796,7 @@ impl PropertyValue {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     PropertyValue::Clone {
                         name: reference_full_name,
-                        kind: found_kind,
+                        kind: get_kind(expected_kind, &found_kind),
                         source,
                         is_mutable: mutable,
                         line_number: value.line_number(),
@@ -872,13 +875,7 @@ impl PropertyValue {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     PropertyValue::Reference {
                         name: reference_full_name,
-                        kind: expected_kind
-                            .map(|v| {
-                                let mut v = v.clone();
-                                v.kind = found_kind.kind.clone();
-                                v
-                            })
-                            .unwrap_or(found_kind),
+                        kind: get_kind(expected_kind, &found_kind),
                         source,
                         is_mutable: mutable,
                         line_number: value.line_number(),
@@ -1243,5 +1240,22 @@ impl Value {
             is_mutable,
             line_number,
         }
+    }
+}
+
+fn get_kind(
+    expected_kind: Option<&ftd::interpreter2::KindData>,
+    found_kind: &ftd::interpreter2::KindData,
+) -> ftd::interpreter2::KindData {
+    if let Some(expected_kind) = expected_kind {
+        if expected_kind.kind.ref_inner_list().ref_inner().is_ui() {
+            expected_kind.clone()
+        } else {
+            let mut expected_kind = expected_kind.clone();
+            expected_kind.kind = found_kind.kind.clone();
+            expected_kind
+        }
+    } else {
+        found_kind.clone()
     }
 }
