@@ -1,12 +1,12 @@
 -- or-type entity:
 
--- person:
+-- record person:
 caption name:
 string address:
 body bio:
 integer age:
 
--- company:
+-- record company:
 caption name:
 string industry:
 

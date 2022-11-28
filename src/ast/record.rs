@@ -20,10 +20,7 @@ impl Record {
         section.kind.as_ref().map_or(false, |s| s.eq(RECORD))
     }
 
-    pub(crate) fn from_p1_with_check(
-        section: &ftd::p11::Section,
-        doc_id: &str,
-    ) -> ftd::ast::Result<Record> {
+    pub(crate) fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> ftd::ast::Result<Record> {
         if !Self::is_record(section) {
             return ftd::ast::parse_error(
                 format!("Section is not record section, found `{:?}`", section),
@@ -31,13 +28,7 @@ impl Record {
                 section.line_number,
             );
         }
-        Record::from_p1_without_check(section, doc_id)
-    }
 
-    pub(crate) fn from_p1_without_check(
-        section: &ftd::p11::Section,
-        doc_id: &str,
-    ) -> ftd::ast::Result<Record> {
         let fields = get_fields_from_headers(&section.headers, doc_id)?;
         Ok(Record::new(
             section.name.as_str(),

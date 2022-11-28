@@ -30,7 +30,7 @@ impl OrType {
         }
         let mut variants = vec![];
         for section in section.sub_sections.iter() {
-            variants.push(ftd::ast::Record::from_p1_without_check(section, doc_id)?);
+            variants.push(ftd::ast::Record::from_p1(section, doc_id)?);
         }
 
         Ok(OrType::new(

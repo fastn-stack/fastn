@@ -39,7 +39,7 @@ impl AST {
         Ok(if ftd::ast::Import::is_import(section) {
             AST::Import(ftd::ast::Import::from_p1(section, doc_id)?)
         } else if ftd::ast::Record::is_record(section) {
-            AST::Record(ftd::ast::Record::from_p1_with_check(section, doc_id)?)
+            AST::Record(ftd::ast::Record::from_p1(section, doc_id)?)
         } else if ftd::ast::OrType::is_or_type(section) {
             AST::OrType(ftd::ast::OrType::from_p1(section, doc_id)?)
         } else if ftd::ast::Function::is_function(section) {
