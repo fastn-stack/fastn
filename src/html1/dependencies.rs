@@ -383,7 +383,11 @@ fn is_static_expression(
             ..
         } = property_value
         {
-            if !fields.get("value").map(|v| v.is_value()).unwrap_or(true) {
+            if !fields
+                .get(ftd::interpreter2::FTDLengthValue)
+                .map(|v| v.is_value())
+                .unwrap_or(true)
+            {
                 return false;
             }
         }

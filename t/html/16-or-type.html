@@ -481,6 +481,13 @@ if(!!window["node_change_main"] && !!window.node_change_main["3:main__padding"])
 }
 };
 
+window.set_value_main["foo#value"] = function (data, new_value) {
+data["foo#value"] = new_value;
+
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
+}
+};
+
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
 </body>

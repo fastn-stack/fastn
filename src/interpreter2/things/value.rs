@@ -965,6 +965,21 @@ impl Value {
         }
     }
 
+    pub fn or_type_fields(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::Map<PropertyValue>> {
+        match self {
+            Self::OrType { fields, .. } => Ok(fields.to_owned()),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected or-type, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
     pub fn is_equal(&self, other: &Self) -> bool {
         match (self.to_owned().inner(), other.to_owned().inner()) {
             (Some(Value::String { text: ref a, .. }), Some(Value::String { text: ref b, .. })) => {
