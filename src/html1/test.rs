@@ -68,7 +68,6 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
-    dbg!(&executor.main);
     let node = ftd::node::NodeData::from_rt(executor);
     let html_ui =
         ftd::html1::HtmlUI::from_node_data(node, "main").unwrap_or_else(|e| panic!("{:?}", e));

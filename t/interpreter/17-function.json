@@ -53,8 +53,8 @@
               "name": "foo#append",
               "kind": {
                 "kind": "String",
-                "caption": false,
-                "body": false
+                "caption": true,
+                "body": true
               },
               "is_mutable": false,
               "line_number": 7,

@@ -186,8 +186,6 @@ impl<'a> ExecuteDoc<'a> {
             &local_variable_map,
         );
 
-        dbg!("execute_simple_component", &component_definition.definition);
-
         if let Some(condition) = instruction.condition.as_ref() {
             update_condition_in_component(
                 &mut component_definition.definition,
