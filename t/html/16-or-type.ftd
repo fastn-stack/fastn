@@ -17,12 +17,13 @@ padding: $len
 
 
 
--- boolean flag: true
+-- boolean $flag: true
 
 -- ftd.text:
 text: Hello from FTD
 padding: $len
 padding.percent if { flag }: 20
+$on-click$: $toggle($a = $flag)
 
 
 
@@ -31,6 +32,12 @@ padding.percent if { flag }: 20
 integer $a:
 
 a += 1
+
+
+-- void toggle(a):
+boolean $a:
+
+a = !a
 
 
 /-- or-type length:
