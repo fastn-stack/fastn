@@ -36,10 +36,10 @@ len(a)
 
 
 -- ftd.text: $append(a=hello, b=world)
-padding: $compare(a = $number, b = 20, c = 4, d = 5)
+padding.px: $compare(a = $number, b = 20, c = 4, d = 5)
 
 -- ftd.text: $append(a = $name, b = Jaiswal)
-padding: $sum(a = $number, b = 4)
+padding.px: $sum(a = $number, b = 4)
 
 -- ftd.text: $new-name
-padding: $length(a = $new-name)
+padding.px: $length(a = $new-name)

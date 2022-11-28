@@ -9,7 +9,7 @@ boolean $flag:
 -- ftd.text:
 text if { print.flag }: $print.name
 text: $print.default
-padding if { print.flag }: $print.padding
+padding.px if { print.flag }: $print.padding
 
 -- end: ftd.column
 

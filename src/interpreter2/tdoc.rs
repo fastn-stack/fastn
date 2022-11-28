@@ -511,7 +511,6 @@ impl<'a> TDoc<'a> {
                             .caption_or_body()
                     }
                     ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant } => {
-                        dbg!("1.. {}, {}", &or_type, &variant.name);
                         ftd::interpreter2::Kind::or_type_with_variant(
                             or_type.as_str(),
                             variant.name.as_str(),
@@ -840,21 +839,16 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Thing>>
     {
-        let name = dbg!(name
+        let name = name
             .strip_prefix(ftd::interpreter2::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
-            .unwrap_or(name));
+            .unwrap_or(name);
 
         let (initial_thing, remaining) =
             try_ok_state!(self.search_initial_thing(name, line_number)?);
 
         if let Some(remaining) = remaining {
-            return dbg!(search_thing_(
-                self,
-                line_number,
-                remaining.as_str(),
-                initial_thing
-            ));
+            return search_thing_(self, line_number, remaining.as_str(), initial_thing);
         }
         return Ok(ftd::interpreter2::StateWithThing::new_thing(initial_thing));
 

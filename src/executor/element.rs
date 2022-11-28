@@ -354,19 +354,19 @@ impl Length {
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
         match value.0.as_str() {
-            ftd::interpreter2::FTDLengthPercent => Ok(Length::Percent(
+            ftd::interpreter2::FTD_LENGTH_PERCENT => Ok(Length::Percent(
                 value
                     .1
-                    .get(ftd::interpreter2::FTDLengthValue)
+                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
                     .unwrap()
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
                     .decimal(doc.name, line_number)?,
             )),
-            ftd::interpreter2::FTDLengthPX => Ok(Length::Px(
+            ftd::interpreter2::FTD_LENGTH_PX => Ok(Length::Px(
                 value
                     .1
-                    .get(ftd::interpreter2::FTDLengthValue)
+                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
                     .unwrap()
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
@@ -392,7 +392,7 @@ impl Length {
             arguments,
             doc,
             line_number,
-            ftd::interpreter2::FTDLength,
+            ftd::interpreter2::FTD_LENGTH,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -402,7 +402,7 @@ impl Length {
         ))
     }
 
-    pub fn to_string(&self) -> String {
+    pub fn to_css_string(&self) -> String {
         match self {
             Length::Px(px) => format!("{}px", px),
             Length::Percent(p) => format!("{}%", p),
@@ -415,8 +415,8 @@ impl Length {
         line_number: usize,
     ) -> ftd::executor::Result<&'static str> {
         match variant {
-            ftd::interpreter2::FTDLengthPX => Ok("{0}px"),
-            ftd::interpreter2::FTDLengthPercent => Ok("{0}%"),
+            ftd::interpreter2::FTD_LENGTH_PX => Ok("{0}px"),
+            ftd::interpreter2::FTD_LENGTH_PERCENT => Ok("{0}%"),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.length: `{}`", t),
                 doc_id,

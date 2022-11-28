@@ -9,7 +9,6 @@
       "data-id": {
         "value": "",
         "properties": [],
-        "pattern": null,
         "line_number": null
       }
     },
@@ -17,37 +16,31 @@
       "align-items": {
         "value": "flex-start",
         "properties": [],
-        "pattern": null,
         "line_number": null
       },
       "display": {
         "value": "flex",
         "properties": [],
-        "pattern": null,
         "line_number": null
       },
       "flex-direction": {
         "value": "column",
         "properties": [],
-        "pattern": null,
         "line_number": null
       },
       "justify-content": {
         "value": "flex-start",
         "properties": [],
-        "pattern": null,
         "line_number": null
       },
       "padding": {
         "value": null,
         "properties": [],
-        "pattern": "{0}px",
         "line_number": null
       },
       "text-decoration": {
         "value": "none",
         "properties": [],
-        "pattern": null,
         "line_number": null
       }
     },
@@ -63,7 +56,6 @@
           "data-id": {
             "value": "0",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -72,89 +64,104 @@
             "value": "5px",
             "properties": [
               {
-                "value": {
-                  "FunctionCall": {
-                    "name": "foo#compare",
-                    "kind": {
-                      "kind": "Integer",
-                      "caption": false,
-                      "body": false
-                    },
-                    "is_mutable": false,
-                    "line_number": 39,
-                    "values": {
-                      "a": {
-                        "Reference": {
-                          "name": "foo#number",
-                          "kind": {
-                            "kind": "Integer",
-                            "caption": false,
-                            "body": false
-                          },
-                          "source": "Global",
-                          "is_mutable": false,
-                          "line_number": 39
+                "property": {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "OrType": {
+                          "name": "ftd#length",
+                          "variant": "ftd#length.px",
+                          "fields": {
+                            "value": {
+                              "FunctionCall": {
+                                "name": "foo#compare",
+                                "kind": {
+                                  "kind": "Integer",
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "is_mutable": false,
+                                "line_number": 39,
+                                "values": {
+                                  "a": {
+                                    "Reference": {
+                                      "name": "foo#number",
+                                      "kind": {
+                                        "kind": "Integer",
+                                        "caption": false,
+                                        "body": false
+                                      },
+                                      "source": "Global",
+                                      "is_mutable": false,
+                                      "line_number": 39
+                                    }
+                                  },
+                                  "b": {
+                                    "Value": {
+                                      "value": {
+                                        "Integer": {
+                                          "value": 20
+                                        }
+                                      },
+                                      "is_mutable": false,
+                                      "line_number": 39
+                                    }
+                                  },
+                                  "c": {
+                                    "Value": {
+                                      "value": {
+                                        "Integer": {
+                                          "value": 4
+                                        }
+                                      },
+                                      "is_mutable": false,
+                                      "line_number": 39
+                                    }
+                                  },
+                                  "d": {
+                                    "Value": {
+                                      "value": {
+                                        "Integer": {
+                                          "value": 5
+                                        }
+                                      },
+                                      "is_mutable": false,
+                                      "line_number": 39
+                                    }
+                                  }
+                                },
+                                "order": [
+                                  "a",
+                                  "b",
+                                  "c",
+                                  "d"
+                                ]
+                              }
+                            }
+                          }
                         }
                       },
-                      "b": {
-                        "Value": {
-                          "value": {
-                            "Integer": {
-                              "value": 20
-                            }
-                          },
-                          "is_mutable": false,
-                          "line_number": 39
-                        }
-                      },
-                      "c": {
-                        "Value": {
-                          "value": {
-                            "Integer": {
-                              "value": 4
-                            }
-                          },
-                          "is_mutable": false,
-                          "line_number": 39
-                        }
-                      },
-                      "d": {
-                        "Value": {
-                          "value": {
-                            "Integer": {
-                              "value": 5
-                            }
-                          },
-                          "is_mutable": false,
-                          "line_number": 39
-                        }
-                      }
-                    },
-                    "order": [
-                      "a",
-                      "b",
-                      "c",
-                      "d"
-                    ]
-                  }
+                      "is_mutable": false,
+                      "line_number": 39
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "padding",
+                      "mutable": false
+                    }
+                  },
+                  "condition": null,
+                  "line_number": 39
                 },
-                "source": {
-                  "Header": {
-                    "name": "padding",
-                    "mutable": false
-                  }
-                },
-                "condition": null,
-                "line_number": 39
+                "pattern": "{0}px"
               }
             ],
-            "pattern": "{0}px",
             "line_number": 39
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -163,52 +170,54 @@
           "value": "hello world",
           "properties": [
             {
-              "value": {
-                "FunctionCall": {
-                  "name": "foo#append",
-                  "kind": {
-                    "kind": "String",
-                    "caption": false,
-                    "body": false
-                  },
-                  "is_mutable": false,
-                  "line_number": 38,
-                  "values": {
-                    "a": {
-                      "Value": {
-                        "value": {
-                          "String": {
-                            "text": "hello"
-                          }
-                        },
-                        "is_mutable": false,
-                        "line_number": 38
+              "property": {
+                "value": {
+                  "FunctionCall": {
+                    "name": "foo#append",
+                    "kind": {
+                      "kind": "String",
+                      "caption": false,
+                      "body": false
+                    },
+                    "is_mutable": false,
+                    "line_number": 38,
+                    "values": {
+                      "a": {
+                        "Value": {
+                          "value": {
+                            "String": {
+                              "text": "hello"
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 38
+                        }
+                      },
+                      "b": {
+                        "Value": {
+                          "value": {
+                            "String": {
+                              "text": "world"
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 38
+                        }
                       }
                     },
-                    "b": {
-                      "Value": {
-                        "value": {
-                          "String": {
-                            "text": "world"
-                          }
-                        },
-                        "is_mutable": false,
-                        "line_number": 38
-                      }
-                    }
-                  },
-                  "order": [
-                    "a",
-                    "b"
-                  ]
-                }
+                    "order": [
+                      "a",
+                      "b"
+                    ]
+                  }
+                },
+                "source": "Caption",
+                "condition": null,
+                "line_number": 38
               },
-              "source": "Caption",
-              "condition": null,
-              "line_number": 38
+              "pattern": null
             }
           ],
-          "pattern": null,
           "line_number": 38
         },
         "null": false,
@@ -226,7 +235,6 @@
           "data-id": {
             "value": "1",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -235,39 +243,122 @@
             "value": "14px",
             "properties": [
               {
+                "property": {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "OrType": {
+                          "name": "ftd#length",
+                          "variant": "ftd#length.px",
+                          "fields": {
+                            "value": {
+                              "FunctionCall": {
+                                "name": "foo#sum",
+                                "kind": {
+                                  "kind": "Integer",
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "is_mutable": false,
+                                "line_number": 42,
+                                "values": {
+                                  "a": {
+                                    "Reference": {
+                                      "name": "foo#number",
+                                      "kind": {
+                                        "kind": "Integer",
+                                        "caption": false,
+                                        "body": false
+                                      },
+                                      "source": "Global",
+                                      "is_mutable": false,
+                                      "line_number": 42
+                                    }
+                                  },
+                                  "b": {
+                                    "Value": {
+                                      "value": {
+                                        "Integer": {
+                                          "value": 4
+                                        }
+                                      },
+                                      "is_mutable": false,
+                                      "line_number": 42
+                                    }
+                                  }
+                                },
+                                "order": [
+                                  "a",
+                                  "b"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 42
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "padding",
+                      "mutable": false
+                    }
+                  },
+                  "condition": null,
+                  "line_number": 42
+                },
+                "pattern": "{0}px"
+              }
+            ],
+            "line_number": 42
+          },
+          "text-decoration": {
+            "value": "none",
+            "properties": [],
+            "line_number": null
+          }
+        },
+        "children": [],
+        "text": {
+          "value": "Arpita Jaiswal",
+          "properties": [
+            {
+              "property": {
                 "value": {
                   "FunctionCall": {
-                    "name": "foo#sum",
+                    "name": "foo#append",
                     "kind": {
-                      "kind": "Integer",
+                      "kind": "String",
                       "caption": false,
                       "body": false
                     },
                     "is_mutable": false,
-                    "line_number": 42,
+                    "line_number": 41,
                     "values": {
                       "a": {
                         "Reference": {
-                          "name": "foo#number",
+                          "name": "foo#name",
                           "kind": {
-                            "kind": "Integer",
+                            "kind": "String",
                             "caption": false,
                             "body": false
                           },
                           "source": "Global",
                           "is_mutable": false,
-                          "line_number": 42
+                          "line_number": 41
                         }
                       },
                       "b": {
                         "Value": {
                           "value": {
-                            "Integer": {
-                              "value": 4
+                            "String": {
+                              "text": "Jaiswal"
                             }
                           },
                           "is_mutable": false,
-                          "line_number": 42
+                          "line_number": 41
                         }
                       }
                     },
@@ -277,79 +368,13 @@
                     ]
                   }
                 },
-                "source": {
-                  "Header": {
-                    "name": "padding",
-                    "mutable": false
-                  }
-                },
+                "source": "Caption",
                 "condition": null,
-                "line_number": 42
-              }
-            ],
-            "pattern": "{0}px",
-            "line_number": 42
-          },
-          "text-decoration": {
-            "value": "none",
-            "properties": [],
-            "pattern": null,
-            "line_number": null
-          }
-        },
-        "children": [],
-        "text": {
-          "value": "Arpita Jaiswal",
-          "properties": [
-            {
-              "value": {
-                "FunctionCall": {
-                  "name": "foo#append",
-                  "kind": {
-                    "kind": "String",
-                    "caption": false,
-                    "body": false
-                  },
-                  "is_mutable": false,
-                  "line_number": 41,
-                  "values": {
-                    "a": {
-                      "Reference": {
-                        "name": "foo#name",
-                        "kind": {
-                          "kind": "String",
-                          "caption": false,
-                          "body": false
-                        },
-                        "source": "Global",
-                        "is_mutable": false,
-                        "line_number": 41
-                      }
-                    },
-                    "b": {
-                      "Value": {
-                        "value": {
-                          "String": {
-                            "text": "Jaiswal"
-                          }
-                        },
-                        "is_mutable": false,
-                        "line_number": 41
-                      }
-                    }
-                  },
-                  "order": [
-                    "a",
-                    "b"
-                  ]
-                }
+                "line_number": 41
               },
-              "source": "Caption",
-              "condition": null,
-              "line_number": 41
+              "pattern": null
             }
           ],
-          "pattern": null,
           "line_number": 41
         },
         "null": false,
@@ -367,7 +392,6 @@
           "data-id": {
             "value": "2",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -376,53 +400,68 @@
             "value": "15px",
             "properties": [
               {
-                "value": {
-                  "FunctionCall": {
-                    "name": "foo#length",
-                    "kind": {
-                      "kind": "Integer",
-                      "caption": false,
-                      "body": false
-                    },
-                    "is_mutable": false,
-                    "line_number": 45,
-                    "values": {
-                      "a": {
-                        "Reference": {
-                          "name": "foo#new-name",
-                          "kind": {
-                            "kind": "String",
-                            "caption": false,
-                            "body": false
-                          },
-                          "source": "Global",
-                          "is_mutable": false,
-                          "line_number": 45
+                "property": {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "OrType": {
+                          "name": "ftd#length",
+                          "variant": "ftd#length.px",
+                          "fields": {
+                            "value": {
+                              "FunctionCall": {
+                                "name": "foo#length",
+                                "kind": {
+                                  "kind": "Integer",
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "is_mutable": false,
+                                "line_number": 45,
+                                "values": {
+                                  "a": {
+                                    "Reference": {
+                                      "name": "foo#new-name",
+                                      "kind": {
+                                        "kind": "String",
+                                        "caption": false,
+                                        "body": false
+                                      },
+                                      "source": "Global",
+                                      "is_mutable": false,
+                                      "line_number": 45
+                                    }
+                                  }
+                                },
+                                "order": [
+                                  "a"
+                                ]
+                              }
+                            }
+                          }
                         }
-                      }
-                    },
-                    "order": [
-                      "a"
-                    ]
-                  }
+                      },
+                      "is_mutable": false,
+                      "line_number": 45
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "padding",
+                      "mutable": false
+                    }
+                  },
+                  "condition": null,
+                  "line_number": 45
                 },
-                "source": {
-                  "Header": {
-                    "name": "padding",
-                    "mutable": false
-                  }
-                },
-                "condition": null,
-                "line_number": 45
+                "pattern": "{0}px"
               }
             ],
-            "pattern": "{0}px",
             "line_number": 45
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -431,25 +470,27 @@
           "value": "Arpita FifthTry",
           "properties": [
             {
-              "value": {
-                "Reference": {
-                  "name": "foo#new-name",
-                  "kind": {
-                    "kind": "String",
-                    "caption": true,
-                    "body": true
-                  },
-                  "source": "Global",
-                  "is_mutable": false,
-                  "line_number": 44
-                }
+              "property": {
+                "value": {
+                  "Reference": {
+                    "name": "foo#new-name",
+                    "kind": {
+                      "kind": "String",
+                      "caption": true,
+                      "body": true
+                    },
+                    "source": "Global",
+                    "is_mutable": false,
+                    "line_number": 44
+                  }
+                },
+                "source": "Caption",
+                "condition": null,
+                "line_number": 44
               },
-              "source": "Caption",
-              "condition": null,
-              "line_number": 44
+              "pattern": null
             }
           ],
-          "pattern": null,
           "line_number": 44
         },
         "null": false,
@@ -460,7 +501,6 @@
     "text": {
       "value": null,
       "properties": [],
-      "pattern": null,
       "line_number": null
     },
     "null": false,

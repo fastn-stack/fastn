@@ -9,7 +9,6 @@
       "data-id": {
         "value": "",
         "properties": [],
-        "pattern": null,
         "line_number": null
       }
     },
@@ -17,37 +16,31 @@
       "align-items": {
         "value": "flex-start",
         "properties": [],
-        "pattern": null,
         "line_number": null
       },
       "display": {
         "value": "flex",
         "properties": [],
-        "pattern": null,
         "line_number": null
       },
       "flex-direction": {
         "value": "column",
         "properties": [],
-        "pattern": null,
         "line_number": null
       },
       "justify-content": {
         "value": "flex-start",
         "properties": [],
-        "pattern": null,
         "line_number": null
       },
       "padding": {
         "value": null,
         "properties": [],
-        "pattern": "{0}px",
         "line_number": null
       },
       "text-decoration": {
         "value": "none",
         "properties": [],
-        "pattern": null,
         "line_number": null
       }
     },
@@ -61,7 +54,6 @@
           "data-id": {
             "value": "0",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -69,59 +61,70 @@
           "align-items": {
             "value": "flex-start",
             "properties": [],
-            "pattern": null,
             "line_number": null
           },
           "display": {
             "value": "flex",
             "properties": [],
-            "pattern": null,
             "line_number": null
           },
           "flex-direction": {
             "value": "row",
             "properties": [],
-            "pattern": null,
             "line_number": null
           },
           "justify-content": {
             "value": "flex-start",
             "properties": [],
-            "pattern": null,
             "line_number": null
           },
           "padding": {
             "value": "40px",
             "properties": [
               {
-                "value": {
-                  "Value": {
-                    "value": {
-                      "Integer": {
-                        "value": 40
-                      }
-                    },
-                    "is_mutable": false,
-                    "line_number": 2
-                  }
+                "property": {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "OrType": {
+                          "name": "ftd#length",
+                          "variant": "ftd#length.px",
+                          "fields": {
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Integer": {
+                                    "value": 40
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 2
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 2
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "padding",
+                      "mutable": false
+                    }
+                  },
+                  "condition": null,
+                  "line_number": 2
                 },
-                "source": {
-                  "Header": {
-                    "name": "padding",
-                    "mutable": false
-                  }
-                },
-                "condition": null,
-                "line_number": 2
+                "pattern": "{0}px"
               }
             ],
-            "pattern": "{0}px",
             "line_number": 2
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -137,7 +140,6 @@
               "data-id": {
                 "value": "0,0",
                 "properties": [],
-                "pattern": null,
                 "line_number": null
               }
             },
@@ -146,34 +148,49 @@
                 "value": "2px",
                 "properties": [
                   {
-                    "value": {
-                      "Value": {
-                        "value": {
-                          "Integer": {
-                            "value": 2
-                          }
-                        },
-                        "is_mutable": false,
-                        "line_number": 5
-                      }
+                    "property": {
+                      "value": {
+                        "Value": {
+                          "value": {
+                            "OrType": {
+                              "name": "ftd#length",
+                              "variant": "ftd#length.px",
+                              "fields": {
+                                "value": {
+                                  "Value": {
+                                    "value": {
+                                      "Integer": {
+                                        "value": 2
+                                      }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 5
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 5
+                        }
+                      },
+                      "source": {
+                        "Header": {
+                          "name": "padding",
+                          "mutable": false
+                        }
+                      },
+                      "condition": null,
+                      "line_number": 5
                     },
-                    "source": {
-                      "Header": {
-                        "name": "padding",
-                        "mutable": false
-                      }
-                    },
-                    "condition": null,
-                    "line_number": 5
+                    "pattern": "{0}px"
                   }
                 ],
-                "pattern": "{0}px",
                 "line_number": 5
               },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
-                "pattern": null,
                 "line_number": null
               }
             },
@@ -182,23 +199,25 @@
               "value": "Hello World",
               "properties": [
                 {
-                  "value": {
-                    "Value": {
-                      "value": {
-                        "String": {
-                          "text": "Hello World"
-                        }
-                      },
-                      "is_mutable": false,
-                      "line_number": 4
-                    }
+                  "property": {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "String": {
+                            "text": "Hello World"
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 4
+                      }
+                    },
+                    "source": "Caption",
+                    "condition": null,
+                    "line_number": 4
                   },
-                  "source": "Caption",
-                  "condition": null,
-                  "line_number": 4
+                  "pattern": null
                 }
               ],
-              "pattern": null,
               "line_number": 4
             },
             "null": false,
@@ -216,7 +235,6 @@
               "data-id": {
                 "value": "0,1",
                 "properties": [],
-                "pattern": null,
                 "line_number": null
               }
             },
@@ -225,34 +243,49 @@
                 "value": "2px",
                 "properties": [
                   {
-                    "value": {
-                      "Value": {
-                        "value": {
-                          "Integer": {
-                            "value": 2
-                          }
-                        },
-                        "is_mutable": false,
-                        "line_number": 8
-                      }
+                    "property": {
+                      "value": {
+                        "Value": {
+                          "value": {
+                            "OrType": {
+                              "name": "ftd#length",
+                              "variant": "ftd#length.px",
+                              "fields": {
+                                "value": {
+                                  "Value": {
+                                    "value": {
+                                      "Integer": {
+                                        "value": 2
+                                      }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 8
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 8
+                        }
+                      },
+                      "source": {
+                        "Header": {
+                          "name": "padding",
+                          "mutable": false
+                        }
+                      },
+                      "condition": null,
+                      "line_number": 8
                     },
-                    "source": {
-                      "Header": {
-                        "name": "padding",
-                        "mutable": false
-                      }
-                    },
-                    "condition": null,
-                    "line_number": 8
+                    "pattern": "{0}px"
                   }
                 ],
-                "pattern": "{0}px",
                 "line_number": 8
               },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
-                "pattern": null,
                 "line_number": null
               }
             },
@@ -261,23 +294,25 @@
               "value": "again",
               "properties": [
                 {
-                  "value": {
-                    "Value": {
-                      "value": {
-                        "String": {
-                          "text": "again"
-                        }
-                      },
-                      "is_mutable": false,
-                      "line_number": 7
-                    }
+                  "property": {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "String": {
+                            "text": "again"
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 7
+                      }
+                    },
+                    "source": "Caption",
+                    "condition": null,
+                    "line_number": 7
                   },
-                  "source": "Caption",
-                  "condition": null,
-                  "line_number": 7
+                  "pattern": null
                 }
               ],
-              "pattern": null,
               "line_number": 7
             },
             "null": false,
@@ -288,7 +323,6 @@
         "text": {
           "value": null,
           "properties": [],
-          "pattern": null,
           "line_number": null
         },
         "null": false,
@@ -304,7 +338,6 @@
           "data-id": {
             "value": "1",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -312,59 +345,70 @@
           "align-items": {
             "value": "flex-start",
             "properties": [],
-            "pattern": null,
             "line_number": null
           },
           "display": {
             "value": "flex",
             "properties": [],
-            "pattern": null,
             "line_number": null
           },
           "flex-direction": {
             "value": "row",
             "properties": [],
-            "pattern": null,
             "line_number": null
           },
           "justify-content": {
             "value": "flex-start",
             "properties": [],
-            "pattern": null,
             "line_number": null
           },
           "padding": {
             "value": "40px",
             "properties": [
               {
-                "value": {
-                  "Value": {
-                    "value": {
-                      "Integer": {
-                        "value": 40
-                      }
-                    },
-                    "is_mutable": false,
-                    "line_number": 14
-                  }
+                "property": {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "OrType": {
+                          "name": "ftd#length",
+                          "variant": "ftd#length.px",
+                          "fields": {
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Integer": {
+                                    "value": 40
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 14
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 14
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "padding",
+                      "mutable": false
+                    }
+                  },
+                  "condition": null,
+                  "line_number": 14
                 },
-                "source": {
-                  "Header": {
-                    "name": "padding",
-                    "mutable": false
-                  }
-                },
-                "condition": null,
-                "line_number": 14
+                "pattern": "{0}px"
               }
             ],
-            "pattern": "{0}px",
             "line_number": 14
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -380,7 +424,6 @@
               "data-id": {
                 "value": "1,0",
                 "properties": [],
-                "pattern": null,
                 "line_number": null
               }
             },
@@ -389,34 +432,49 @@
                 "value": "2px",
                 "properties": [
                   {
-                    "value": {
-                      "Value": {
-                        "value": {
-                          "Integer": {
-                            "value": 2
-                          }
-                        },
-                        "is_mutable": false,
-                        "line_number": 17
-                      }
+                    "property": {
+                      "value": {
+                        "Value": {
+                          "value": {
+                            "OrType": {
+                              "name": "ftd#length",
+                              "variant": "ftd#length.px",
+                              "fields": {
+                                "value": {
+                                  "Value": {
+                                    "value": {
+                                      "Integer": {
+                                        "value": 2
+                                      }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 17
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 17
+                        }
+                      },
+                      "source": {
+                        "Header": {
+                          "name": "padding",
+                          "mutable": false
+                        }
+                      },
+                      "condition": null,
+                      "line_number": 17
                     },
-                    "source": {
-                      "Header": {
-                        "name": "padding",
-                        "mutable": false
-                      }
-                    },
-                    "condition": null,
-                    "line_number": 17
+                    "pattern": "{0}px"
                   }
                 ],
-                "pattern": "{0}px",
                 "line_number": 17
               },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
-                "pattern": null,
                 "line_number": null
               }
             },
@@ -425,23 +483,25 @@
               "value": "Hello",
               "properties": [
                 {
-                  "value": {
-                    "Value": {
-                      "value": {
-                        "String": {
-                          "text": "Hello"
-                        }
-                      },
-                      "is_mutable": false,
-                      "line_number": 16
-                    }
+                  "property": {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "String": {
+                            "text": "Hello"
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 16
+                      }
+                    },
+                    "source": "Caption",
+                    "condition": null,
+                    "line_number": 16
                   },
-                  "source": "Caption",
-                  "condition": null,
-                  "line_number": 16
+                  "pattern": null
                 }
               ],
-              "pattern": null,
               "line_number": 16
             },
             "null": false,
@@ -459,7 +519,6 @@
               "data-id": {
                 "value": "1,1",
                 "properties": [],
-                "pattern": null,
                 "line_number": null
               }
             },
@@ -468,34 +527,49 @@
                 "value": "2px",
                 "properties": [
                   {
-                    "value": {
-                      "Value": {
-                        "value": {
-                          "Integer": {
-                            "value": 2
-                          }
-                        },
-                        "is_mutable": false,
-                        "line_number": 20
-                      }
+                    "property": {
+                      "value": {
+                        "Value": {
+                          "value": {
+                            "OrType": {
+                              "name": "ftd#length",
+                              "variant": "ftd#length.px",
+                              "fields": {
+                                "value": {
+                                  "Value": {
+                                    "value": {
+                                      "Integer": {
+                                        "value": 2
+                                      }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 20
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 20
+                        }
+                      },
+                      "source": {
+                        "Header": {
+                          "name": "padding",
+                          "mutable": false
+                        }
+                      },
+                      "condition": null,
+                      "line_number": 20
                     },
-                    "source": {
-                      "Header": {
-                        "name": "padding",
-                        "mutable": false
-                      }
-                    },
-                    "condition": null,
-                    "line_number": 20
+                    "pattern": "{0}px"
                   }
                 ],
-                "pattern": "{0}px",
                 "line_number": 20
               },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
-                "pattern": null,
                 "line_number": null
               }
             },
@@ -504,23 +578,25 @@
               "value": "again",
               "properties": [
                 {
-                  "value": {
-                    "Value": {
-                      "value": {
-                        "String": {
-                          "text": "again"
-                        }
-                      },
-                      "is_mutable": false,
-                      "line_number": 19
-                    }
+                  "property": {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "String": {
+                            "text": "again"
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 19
+                      }
+                    },
+                    "source": "Caption",
+                    "condition": null,
+                    "line_number": 19
                   },
-                  "source": "Caption",
-                  "condition": null,
-                  "line_number": 19
+                  "pattern": null
                 }
               ],
-              "pattern": null,
               "line_number": 19
             },
             "null": false,
@@ -531,7 +607,6 @@
         "text": {
           "value": null,
           "properties": [],
-          "pattern": null,
           "line_number": null
         },
         "null": false,
@@ -549,7 +624,6 @@
           "data-id": {
             "value": "2",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -558,34 +632,49 @@
             "value": "40px",
             "properties": [
               {
-                "value": {
-                  "Value": {
-                    "value": {
-                      "Integer": {
-                        "value": 40
-                      }
-                    },
-                    "is_mutable": false,
-                    "line_number": 26
-                  }
+                "property": {
+                  "value": {
+                    "Value": {
+                      "value": {
+                        "OrType": {
+                          "name": "ftd#length",
+                          "variant": "ftd#length.px",
+                          "fields": {
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Integer": {
+                                    "value": 40
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 26
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 26
+                    }
+                  },
+                  "source": {
+                    "Header": {
+                      "name": "padding",
+                      "mutable": false
+                    }
+                  },
+                  "condition": null,
+                  "line_number": 26
                 },
-                "source": {
-                  "Header": {
-                    "name": "padding",
-                    "mutable": false
-                  }
-                },
-                "condition": null,
-                "line_number": 26
+                "pattern": "{0}px"
               }
             ],
-            "pattern": "{0}px",
             "line_number": 26
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "pattern": null,
             "line_number": null
           }
         },
@@ -594,23 +683,25 @@
           "value": "Hello from text",
           "properties": [
             {
-              "value": {
-                "Value": {
-                  "value": {
-                    "String": {
-                      "text": "Hello from text"
-                    }
-                  },
-                  "is_mutable": false,
-                  "line_number": 25
-                }
+              "property": {
+                "value": {
+                  "Value": {
+                    "value": {
+                      "String": {
+                        "text": "Hello from text"
+                      }
+                    },
+                    "is_mutable": false,
+                    "line_number": 25
+                  }
+                },
+                "source": "Caption",
+                "condition": null,
+                "line_number": 25
               },
-              "source": "Caption",
-              "condition": null,
-              "line_number": 25
+              "pattern": null
             }
           ],
-          "pattern": null,
           "line_number": 25
         },
         "null": false,
@@ -621,7 +712,6 @@
     "text": {
       "value": null,
       "properties": [],
-      "pattern": null,
       "line_number": null
     },
     "null": false,

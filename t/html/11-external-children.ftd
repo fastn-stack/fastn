@@ -24,17 +24,17 @@ ftd.ui list extra-headers:
 children body:
 
 -- ftd.column:
-padding: 80
+padding.px: 80
 
 -- ftd.text: ...................................................................
 
 -- ftd.row:
 
 -- ftd.text: LOGO
-padding: 2
+padding.px: 2
 
 -- ftd.text: Home
-padding: 2
+padding.px: 2
 
 -- ftd.row:
 children: $page.extra-headers
@@ -46,7 +46,7 @@ children: $page.extra-headers
 -- ftd.text: ...................................................................
 
 -- ftd.column:
-padding: 40
+padding.px: 40
 children: $page.body
 
 -- end: ftd.column
@@ -65,16 +65,16 @@ children: $page.body
 -- page.extra-headers:
 
 -- ftd.text: Header 1
-padding: 2
+padding.px: 2
 
 -- ftd.text: Header 2
-padding: 2
+padding.px: 2
 
 -- ftd.text: Header 3
-padding: 2
+padding.px: 2
 
 -- ftd.text: Header 4
-padding: 2
+padding.px: 2
 
 
 -- end: page.extra-headers
@@ -105,7 +105,7 @@ $count: $count
 -- end: page
 
 
--- page:
+/-- page:
 
 -- ftd.text: Hello
 

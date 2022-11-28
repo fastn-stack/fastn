@@ -241,6 +241,7 @@ pub fn bool(
     }
 }
 
+#[allow(dead_code)]
 pub fn optional_i64(
     key: &str,
     properties: &[ftd::interpreter2::Property],
@@ -309,6 +310,7 @@ pub fn optional_string(
     }
 }
 
+#[allow(dead_code)]
 pub fn optional_f64(
     key: &str,
     properties: &[ftd::interpreter2::Property],
@@ -343,6 +345,7 @@ pub fn optional_f64(
     }
 }
 
+#[allow(clippy::type_complexity)]
 pub fn optional_or_type(
     key: &str,
     properties: &[ftd::interpreter2::Property],

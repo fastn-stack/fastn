@@ -1,5 +1,5 @@
 -- ftd.column:
-padding: 40
+padding.px: 40
 
 -- ftd.text: Hello World
 

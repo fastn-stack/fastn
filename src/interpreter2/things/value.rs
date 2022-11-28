@@ -226,6 +226,7 @@ impl PropertyValue {
                 is_mutable,
                 expected_kind,
                 definition_name_with_arguments,
+                loop_object_name_and_kind,
             )
         }
     }
@@ -265,6 +266,7 @@ impl PropertyValue {
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
     > {
@@ -380,26 +382,32 @@ impl PropertyValue {
                 for field in record.fields {
                     if field.is_caption() && caption.is_some() {
                         let caption = caption.as_ref().unwrap().clone();
-                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
-                            caption,
-                            doc,
-                            field.mutable,
-                            Some(&field.kind),
-                        )?);
+                        let property_value =
+                            try_ok_state!(PropertyValue::from_ast_value_with_argument(
+                                caption,
+                                doc,
+                                field.mutable,
+                                Some(&field.kind),
+                                definition_name_with_arguments,
+                                loop_object_name_and_kind
+                            )?);
                         result_field.insert(field.name.to_string(), property_value);
                         continue;
                     }
                     if field.is_body() && body.is_some() {
                         let body = body.as_ref().unwrap();
-                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
-                            ftd::ast::VariableValue::String {
-                                value: body.value.to_string(),
-                                line_number: body.line_number,
-                            },
-                            doc,
-                            field.mutable,
-                            Some(&field.kind),
-                        )?);
+                        let property_value =
+                            try_ok_state!(PropertyValue::from_ast_value_with_argument(
+                                ftd::ast::VariableValue::String {
+                                    value: body.value.to_string(),
+                                    line_number: body.line_number,
+                                },
+                                doc,
+                                field.mutable,
+                                Some(&field.kind),
+                                definition_name_with_arguments,
+                                loop_object_name_and_kind
+                            )?);
                         result_field.insert(field.name.to_string(), property_value);
                         continue;
                     }
@@ -426,15 +434,18 @@ impl PropertyValue {
                                 t => vec![(header.key.to_string(), t.to_owned())],
                             });
                         }
-                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
-                            ftd::ast::VariableValue::List {
-                                value: header_list,
-                                line_number: value.line_number(),
-                            },
-                            doc,
-                            field.mutable,
-                            Some(&field.kind),
-                        )?);
+                        let property_value =
+                            try_ok_state!(PropertyValue::from_ast_value_with_argument(
+                                ftd::ast::VariableValue::List {
+                                    value: header_list,
+                                    line_number: value.line_number(),
+                                },
+                                doc,
+                                field.mutable,
+                                Some(&field.kind),
+                                definition_name_with_arguments,
+                                loop_object_name_and_kind
+                            )?);
                         result_field.insert(field.name.to_string(), property_value);
                         continue;
                     }
@@ -502,7 +513,7 @@ impl PropertyValue {
             ftd::interpreter2::Kind::OrType { name, variant }
                 if variant.is_some() && (value.is_record() || value.is_string()) =>
             {
-                let or_type = dbg!(try_ok_state!(doc.search_or_type(name, value.line_number())?));
+                let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
                 let (caption, headers, body, line_number) =
                     if let Ok(val) = value.get_record(doc.name) {
                         (
@@ -519,7 +530,7 @@ impl PropertyValue {
                             value.line_number(),
                         )
                     };
-                let variant_name = dbg!(variant.as_ref().unwrap().clone());
+                let variant_name = variant.as_ref().unwrap().clone();
                 let variant = or_type
                     .variants
                     .into_iter()
@@ -538,26 +549,32 @@ impl PropertyValue {
                 for field in variant.fields {
                     if field.is_caption() && caption.is_some() {
                         let caption = caption.as_ref().unwrap().clone();
-                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
-                            caption,
-                            doc,
-                            field.mutable,
-                            Some(&field.kind),
-                        )?);
+                        let property_value =
+                            try_ok_state!(PropertyValue::from_ast_value_with_argument(
+                                caption,
+                                doc,
+                                field.mutable,
+                                Some(&field.kind),
+                                definition_name_with_arguments,
+                                loop_object_name_and_kind
+                            )?);
                         result_field.insert(field.name.to_string(), property_value);
                         continue;
                     }
                     if field.is_body() && body.is_some() {
                         let body = body.as_ref().unwrap();
-                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
-                            ftd::ast::VariableValue::String {
-                                value: body.value.to_string(),
-                                line_number: body.line_number,
-                            },
-                            doc,
-                            field.mutable,
-                            Some(&field.kind),
-                        )?);
+                        let property_value =
+                            try_ok_state!(PropertyValue::from_ast_value_with_argument(
+                                ftd::ast::VariableValue::String {
+                                    value: body.value.to_string(),
+                                    line_number: body.line_number,
+                                },
+                                doc,
+                                field.mutable,
+                                Some(&field.kind),
+                                definition_name_with_arguments,
+                                loop_object_name_and_kind
+                            )?);
                         result_field.insert(field.name.to_string(), property_value);
                         continue;
                     }
@@ -584,15 +601,18 @@ impl PropertyValue {
                                 t => vec![(header.key.to_string(), t.to_owned())],
                             });
                         }
-                        let property_value = try_ok_state!(PropertyValue::from_ast_value(
-                            ftd::ast::VariableValue::List {
-                                value: header_list,
-                                line_number: value.line_number(),
-                            },
-                            doc,
-                            field.mutable,
-                            Some(&field.kind),
-                        )?);
+                        let property_value =
+                            try_ok_state!(PropertyValue::from_ast_value_with_argument(
+                                ftd::ast::VariableValue::List {
+                                    value: header_list,
+                                    line_number: value.line_number(),
+                                },
+                                doc,
+                                field.mutable,
+                                Some(&field.kind),
+                                definition_name_with_arguments,
+                                loop_object_name_and_kind
+                            )?);
                         result_field.insert(field.name.to_string(), property_value);
                         continue;
                     }
@@ -648,7 +668,7 @@ impl PropertyValue {
                     )?);
                     result_field.insert(field.name.to_string(), property_value);
                 }
-                ftd::interpreter2::StateWithThing::new_thing(dbg!(PropertyValue::Value {
+                ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
                     value: ftd::interpreter2::Value::OrType {
                         name: name.to_string(),
                         variant: variant_name,
@@ -656,7 +676,7 @@ impl PropertyValue {
                     },
                     is_mutable,
                     line_number,
-                }))
+                })
             }
             t => {
                 unimplemented!("t::{:?}  {:?}", t, value)
@@ -696,6 +716,34 @@ impl PropertyValue {
                     loop_object_name_and_kind,
                     value.line_number(),
                 )?);
+                let found_kind = &function_call.kind;
+
+                match expected_kind {
+                    Some(ekind)
+                        if !ekind.kind.is_same_as(&found_kind.kind)
+                            && (ekind.kind.ref_inner().is_record()
+                                || ekind.kind.ref_inner().is_or_type()) =>
+                    {
+                        return Ok(PropertyValue::value_from_ast_value(
+                            value,
+                            doc,
+                            mutable,
+                            expected_kind,
+                            definition_name_with_arguments,
+                            loop_object_name_and_kind,
+                        )?
+                        .map(Some));
+                    }
+                    Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
+                        return ftd::interpreter2::utils::e2(
+                            format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
+                                .as_str(),
+                            doc.name,
+                            value.line_number(),
+                        )
+                    }
+                    _ => {}
+                }
 
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     ftd::interpreter2::PropertyValue::FunctionCall(function_call),
@@ -714,9 +762,24 @@ impl PropertyValue {
                 )?);
 
                 match expected_kind {
+                    Some(ekind)
+                        if !ekind.kind.is_same_as(&found_kind.kind)
+                            && (ekind.kind.ref_inner().is_record()
+                                || ekind.kind.ref_inner().is_or_type()) =>
+                    {
+                        return Ok(PropertyValue::value_from_ast_value(
+                            value,
+                            doc,
+                            mutable,
+                            expected_kind,
+                            definition_name_with_arguments,
+                            loop_object_name_and_kind,
+                        )?
+                        .map(Some));
+                    }
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter2::utils::e2(
-                            format!("2 Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
+                            format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
                                 .as_str(),
                             doc.name,
                             value.line_number(),
@@ -749,8 +812,6 @@ impl PropertyValue {
                     loop_object_name_and_kind,
                 )?);
 
-                dbg!(&expected_kind, &found_kind);
-
                 match expected_kind {
                     Some(ekind)
                         if !ekind.kind.is_same_as(&found_kind.kind)
@@ -763,6 +824,7 @@ impl PropertyValue {
                             mutable,
                             expected_kind,
                             definition_name_with_arguments,
+                            loop_object_name_and_kind,
                         )?
                         .map(Some));
                     }

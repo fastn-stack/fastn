@@ -48,7 +48,7 @@ impl Value {
                     ftd::interpreter2::Kind::OrType {
                         name,
                         variant: Some(variant),
-                    } if name.eq(ftd::interpreter2::FTDLength) => {
+                    } if name.eq(ftd::interpreter2::FTD_LENGTH) => {
                         pattern = ftd::executor::Length::pattern_from_variant_str(
                             variant.as_str(),
                             doc_id,

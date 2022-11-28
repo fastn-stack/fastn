@@ -307,13 +307,9 @@
                         "name": "foo#len",
                         "kind": {
                           "kind": {
-                            "Optional": {
-                              "kind": {
-                                "OrType": {
-                                  "name": "ftd#length",
-                                  "variant": null
-                                }
-                              }
+                            "OrType": {
+                              "name": "ftd#length",
+                              "variant": "ftd#length.px"
                             }
                           },
                           "caption": false,
@@ -389,13 +385,9 @@
                         "name": "foo#len",
                         "kind": {
                           "kind": {
-                            "Optional": {
-                              "kind": {
-                                "OrType": {
-                                  "name": "ftd#length",
-                                  "variant": null
-                                }
-                              }
+                            "OrType": {
+                              "name": "ftd#length",
+                              "variant": "ftd#length.px"
                             }
                           },
                           "caption": false,

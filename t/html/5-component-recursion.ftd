@@ -29,7 +29,7 @@ name: TOC title 4
 toc-item item:
 
 -- ftd.column:
-padding: 30
+padding.px: 30
 
 -- ftd.text: $print-toc-item.item.name
 

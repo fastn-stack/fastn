@@ -65,15 +65,31 @@
               "event": [],
               "is_dummy": false,
               "padding": {
-                "value": 40,
+                "value": {
+                  "Px": 40
+                },
                 "line_number": 4,
                 "properties": [
                   {
                     "value": {
                       "Value": {
                         "value": {
-                          "Integer": {
-                            "value": 40
+                          "OrType": {
+                            "name": "ftd#length",
+                            "variant": "ftd#length.px",
+                            "fields": {
+                              "value": {
+                                "Value": {
+                                  "value": {
+                                    "Integer": {
+                                      "value": 40
+                                    }
+                                  },
+                                  "is_mutable": false,
+                                  "line_number": 4
+                                }
+                              }
+                            }
                           }
                         },
                         "is_mutable": false,
@@ -123,8 +139,22 @@
                     "value": {
                       "Value": {
                         "value": {
-                          "Integer": {
-                            "value": 30
+                          "OrType": {
+                            "name": "ftd#length",
+                            "variant": "ftd#length.px",
+                            "fields": {
+                              "value": {
+                                "Value": {
+                                  "value": {
+                                    "Integer": {
+                                      "value": 30
+                                    }
+                                  },
+                                  "is_mutable": false,
+                                  "line_number": 5
+                                }
+                              }
+                            }
                           }
                         },
                         "is_mutable": false,
