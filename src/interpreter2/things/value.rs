@@ -1030,57 +1030,6 @@ impl Value {
         }
     }
 
-    pub(crate) fn to_string(
-        &self,
-        doc: &ftd::interpreter2::TDoc,
-        line_number: usize,
-        field: Option<String>,
-    ) -> ftd::interpreter2::Result<String> {
-        Ok(match self {
-            Value::String { text } => format!("\"{}\"", text),
-            Value::Integer { value } => value.to_string(),
-            Value::Decimal { value } => value.to_string(),
-            Value::Boolean { value } => value.to_string(),
-            Value::List { data, .. } => {
-                let mut values = vec![];
-                for value in data {
-                    let v = value.clone().resolve(doc, line_number)?.to_string(
-                        doc,
-                        value.line_number(),
-                        None,
-                    )?;
-                    values.push(v);
-                }
-                format!("({:?})", values.join(","))
-            }
-            Value::Record { fields, .. }
-                if field
-                    .as_ref()
-                    .map(|v| fields.contains_key(v))
-                    .unwrap_or(false) =>
-            {
-                let property_value = fields.get(&field.unwrap()).unwrap();
-                property_value
-                    .clone()
-                    .resolve(doc, line_number)?
-                    .to_string(doc, property_value.line_number(), None)?
-            }
-            Value::OrType { fields, .. }
-                if field
-                    .as_ref()
-                    .map(|v| fields.contains_key(v))
-                    .unwrap_or(false) =>
-            {
-                let property_value = fields.get(&field.unwrap()).unwrap();
-                property_value
-                    .clone()
-                    .resolve(doc, line_number)?
-                    .to_string(doc, property_value.line_number(), None)?
-            }
-            t => unimplemented!("{:?}", t),
-        })
-    }
-
     pub(crate) fn to_evalexpr_value(
         &self,
         doc: &ftd::interpreter2::TDoc,

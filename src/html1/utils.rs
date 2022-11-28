@@ -68,33 +68,16 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
         Some(a) => Some(a),
         None => None,
     };
+    dbg!(
+        "get_formatted_dep_string_from_property_value",
+        &property_value,
+        &field
+    );
 
-    let value_string = match property_value {
-        ftd::interpreter2::PropertyValue::Reference { name, .. } => {
-            format!(
-                "data[\"{}\"]{}",
-                name,
-                field
-                    .map(|v| format!(".{}", v))
-                    .unwrap_or_else(|| "".to_string())
-            )
-        }
-        ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {
-            let action = serde_json::to_string(&ftd::html1::Action::from_function_call(
-                function_call,
-                id,
-                doc,
-            )?)
-            .unwrap();
-            format!(
-                "window.ftd.handle_function(event, '{}', '{}', this)",
-                id, action
-            )
-        }
-        ftd::interpreter2::PropertyValue::Value {
-            value, line_number, ..
-        } => value.to_string(doc, *line_number, field)?,
-        _ => return Ok(None),
+    let value_string = if let Some(value_string) = property_value.to_string(doc, field, id)? {
+        dbg!(value_string)
+    } else {
+        return Ok(None);
     };
 
     Ok(Some(match pattern {
@@ -178,5 +161,97 @@ pub(crate) fn dependencies_from_property_value(
         result
     } else {
         vec![]
+    }
+}
+
+impl ftd::interpreter2::PropertyValue {
+    pub(crate) fn to_string(
+        &self,
+        doc: &ftd::interpreter2::TDoc,
+        field: Option<String>,
+        id: &str,
+    ) -> ftd::html1::Result<Option<String>> {
+        Ok(match self {
+            ftd::interpreter2::PropertyValue::Reference { name, .. } => Some(format!(
+                "data[\"{}\"]{}",
+                name,
+                field
+                    .map(|v| format!(".{}", v))
+                    .unwrap_or_else(|| "".to_string())
+            )),
+            ftd::interpreter2::PropertyValue::FunctionCall(function_call) => {
+                let action = serde_json::to_string(&ftd::html1::Action::from_function_call(
+                    function_call,
+                    id,
+                    doc,
+                )?)
+                .unwrap();
+                Some(format!(
+                    "window.ftd.handle_function(event, '{}', '{}', this)",
+                    id, action
+                ))
+            }
+            ftd::interpreter2::PropertyValue::Value {
+                value, line_number, ..
+            } => value.to_string(doc, *line_number, field, id)?,
+            _ => None,
+        })
+    }
+}
+
+impl ftd::interpreter2::Value {
+    pub(crate) fn to_string(
+        &self,
+        doc: &ftd::interpreter2::TDoc,
+        line_number: usize,
+        field: Option<String>,
+        id: &str,
+    ) -> ftd::html1::Result<Option<String>> {
+        Ok(match self {
+            ftd::interpreter2::Value::String { text } => Some(format!("\"{}\"", text)),
+            ftd::interpreter2::Value::Integer { value } => Some(value.to_string()),
+            ftd::interpreter2::Value::Decimal { value } => Some(value.to_string()),
+            ftd::interpreter2::Value::Boolean { value } => Some(value.to_string()),
+            ftd::interpreter2::Value::List { data, .. } => {
+                let mut values = vec![];
+                for value in data {
+                    let v = if let Some(v) = value.clone().resolve(doc, line_number)?.to_string(
+                        doc,
+                        value.line_number(),
+                        None,
+                        id,
+                    )? {
+                        v
+                    } else {
+                        continue;
+                    };
+                    values.push(v);
+                }
+                Some(format!("({:?})", values.join(",")))
+            }
+            ftd::interpreter2::Value::Record { fields, .. }
+                if field
+                    .as_ref()
+                    .map(|v| fields.contains_key(v))
+                    .unwrap_or(false) =>
+            {
+                fields
+                    .get(&field.unwrap())
+                    .unwrap()
+                    .to_string(doc, None, id)?
+            }
+            ftd::interpreter2::Value::OrType { fields, .. }
+                if field
+                    .as_ref()
+                    .map(|v| fields.contains_key(v))
+                    .unwrap_or(false) =>
+            {
+                fields
+                    .get(&field.unwrap())
+                    .unwrap()
+                    .to_string(doc, None, id)?
+            }
+            t => unimplemented!("{:?}", t),
+        })
     }
 }
