@@ -93,12 +93,12 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            "ftd#length".to_string(),
+            ftd::interpreter2::FTDLength.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
-                name: "ftd#length".to_string(),
+                name: ftd::interpreter2::FTDLength.to_string(),
                 variants: vec![
                     ftd::interpreter2::Record {
-                        name: "ftd#length.px".to_string(),
+                        name: ftd::interpreter2::FTDLengthPX.to_string(),
                         fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
                             name: "value".to_string(),
                             kind: ftd::interpreter2::Kind::integer()
@@ -112,7 +112,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         line_number: 0,
                     },
                     ftd::interpreter2::Record {
-                        name: "ftd#length.percent".to_string(),
+                        name: ftd::interpreter2::FTDLengthPercent.to_string(),
                         fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
                             name: "value".to_string(),
                             kind: ftd::interpreter2::Kind::decimal()
@@ -454,7 +454,7 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
         ftd::interpreter2::Argument::default(
             "padding",
-            ftd::interpreter2::Kind::or_type("ftd#length")
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTDLength)
                 .into_optional()
                 .into_kind_data(),
         ),

@@ -81,7 +81,8 @@ impl<'a> DependencyGenerator<'a> {
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), "text");
             let mut expressions = vec![];
             let mut is_static = true;
-            for property in self.node.text.properties.iter() {
+            for property_with_pattern in self.node.text.properties.iter() {
+                let property = &property_with_pattern.property;
                 let condition = property
                     .condition
                     .as_ref()
@@ -96,7 +97,7 @@ impl<'a> DependencyGenerator<'a> {
                         self.id,
                         self.doc,
                         &property.value,
-                        &self.node.text.pattern,
+                        &property_with_pattern.pattern,
                         None,
                     )?
                 {
@@ -137,7 +138,8 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
-            for property in attribute.properties.iter() {
+            for property_with_pattern in attribute.properties.iter() {
+                let property = &property_with_pattern.property;
                 let condition = property
                     .condition
                     .as_ref()
@@ -169,7 +171,7 @@ impl<'a> DependencyGenerator<'a> {
                             self.id,
                             self.doc,
                             &property.value,
-                            &attribute.pattern,
+                            &property_with_pattern.pattern,
                             Some("light".to_string()),
                         )?
                     {
@@ -191,7 +193,7 @@ impl<'a> DependencyGenerator<'a> {
                             self.id,
                             self.doc,
                             &property.value,
-                            &attribute.pattern,
+                            &property_with_pattern.pattern,
                             Some("dark".to_string()),
                         )?
                     {
@@ -242,7 +244,7 @@ impl<'a> DependencyGenerator<'a> {
                         self.id,
                         self.doc,
                         &property.value,
-                        &attribute.pattern,
+                        &property_with_pattern.pattern,
                         None,
                     )?
                 {
@@ -282,7 +284,8 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
-            for property in attribute.properties.iter() {
+            for property_with_pattern in attribute.properties.iter() {
+                let property = &property_with_pattern.property;
                 let condition = property
                     .condition
                     .as_ref()
@@ -297,7 +300,7 @@ impl<'a> DependencyGenerator<'a> {
                         self.id,
                         self.doc,
                         &property.value,
-                        &attribute.pattern,
+                        &property_with_pattern.pattern,
                         None,
                     )?
                 {

@@ -357,7 +357,7 @@ impl Length {
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
         match value.0.as_str() {
-            "ftd#length.percent" => Ok(Length::Percent(
+            ftd::interpreter2::FTDLengthPercent => Ok(Length::Percent(
                 value
                     .1
                     .get("value")
@@ -366,7 +366,7 @@ impl Length {
                     .resolve(&doc.itdoc(), line_number)?
                     .decimal(doc.name, line_number)?,
             )),
-            "ftd#length.px" => Ok(Length::Px(
+            ftd::interpreter2::FTDLengthPX => Ok(Length::Px(
                 value
                     .1
                     .get("value")
@@ -395,7 +395,7 @@ impl Length {
             arguments,
             doc,
             line_number,
-            "ftd#length",
+            ftd::interpreter2::FTDLength,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -409,6 +409,22 @@ impl Length {
         match self {
             Length::Px(px) => format!("{}px", px),
             Length::Percent(p) => format!("{}%", p),
+        }
+    }
+
+    pub fn pattern_from_variant_str(
+        variant: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::executor::Result<&'static str> {
+        match variant {
+            ftd::interpreter2::FTDLengthPX => Ok("{0}px"),
+            ftd::interpreter2::FTDLengthPercent => Ok("{0}%"),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant found for ftd.length: `{}`", t),
+                doc_id,
+                line_number,
+            ),
         }
     }
 }

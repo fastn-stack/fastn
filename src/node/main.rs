@@ -171,6 +171,7 @@ impl ftd::executor::Text {
             Some(self.text.value.rendered.to_string()),
             self.text.clone(),
             None,
+            doc_id,
         );
         n
     }
@@ -187,6 +188,7 @@ impl ftd::executor::Image {
                 Some(self.src.value.light.value.to_string()),
                 self.src.to_owned(),
                 None,
+                doc_id,
             ),
         );
         n
@@ -203,7 +205,7 @@ impl ftd::executor::Common {
         .collect()
     }
 
-    fn style(&self, _doc_id: &str, _classes: &mut [String]) -> ftd::Map<ftd::node::Value> {
+    fn style(&self, doc_id: &str, _classes: &mut [String]) -> ftd::Map<ftd::node::Value> {
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
         d.insert(s("text-decoration"), ftd::node::Value::from_string("none"));
@@ -217,7 +219,8 @@ impl ftd::executor::Common {
             ftd::node::Value::from_executor_value(
                 self.padding.value.as_ref().map(|v| v.to_string()),
                 self.padding.to_owned(),
-                Some(s("{0}px")),
+                None,
+                doc_id,
             ),
         );
 

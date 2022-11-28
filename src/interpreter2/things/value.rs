@@ -810,7 +810,13 @@ impl PropertyValue {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     PropertyValue::Reference {
                         name: reference_full_name,
-                        kind: expected_kind.map(Clone::clone).unwrap_or(found_kind),
+                        kind: expected_kind
+                            .map(|v| {
+                                let mut v = v.clone();
+                                v.kind = found_kind.kind.clone();
+                                v
+                            })
+                            .unwrap_or(found_kind),
                         source,
                         is_mutable: mutable,
                         line_number: value.line_number(),
@@ -1018,7 +1024,9 @@ impl Value {
                 kind: Box::new(kind.kind.clone()),
             },
             Value::UI { name, .. } => ftd::interpreter2::Kind::ui_with_name(name),
-            Value::OrType { name, .. } => ftd::interpreter2::Kind::or_type(name),
+            Value::OrType { name, variant, .. } => {
+                ftd::interpreter2::Kind::or_type_with_variant(name, variant)
+            }
         }
     }
 
@@ -1057,7 +1065,18 @@ impl Value {
                     .resolve(doc, line_number)?
                     .to_string(doc, property_value.line_number(), None)?
             }
-
+            Value::OrType { fields, .. }
+                if field
+                    .as_ref()
+                    .map(|v| fields.contains_key(v))
+                    .unwrap_or(false) =>
+            {
+                let property_value = fields.get(&field.unwrap()).unwrap();
+                property_value
+                    .clone()
+                    .resolve(doc, line_number)?
+                    .to_string(doc, property_value.line_number(), None)?
+            }
             t => unimplemented!("{:?}", t),
         })
     }

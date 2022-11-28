@@ -172,6 +172,13 @@ impl Kind {
         matches!(self, Kind::Record { .. })
     }
 
+    pub fn is_ftd_length(&self) -> bool {
+        match self {
+            Kind::OrType { name, .. } if name.eq(ftd::interpreter2::FTDLength) => true,
+            _ => false,
+        }
+    }
+
     pub fn is_or_type(&self) -> bool {
         matches!(self, Kind::OrType { .. })
     }
