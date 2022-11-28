@@ -52,7 +52,8 @@ impl<'a> DataGenerator<'a> {
                 Some(ftd::interpreter2::Value::String { text: value, .. }) => {
                     serde_json::to_value(value).ok()
                 }
-                Some(ftd::interpreter2::Value::Record { fields, .. }) => {
+                Some(ftd::interpreter2::Value::Record { fields, .. })
+                | Some(ftd::interpreter2::Value::OrType { fields, .. }) => {
                     let mut value_fields = ftd::Map::new();
                     for (k, v) in fields {
                         if let Some(value) =

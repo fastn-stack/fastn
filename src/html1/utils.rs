@@ -63,6 +63,12 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     pattern: &Option<String>,
     field: Option<String>,
 ) -> ftd::html1::Result<Option<String>> {
+    let field = match field {
+        None if property_value.kind().is_ftd_length() => Some("value".to_string()),
+        Some(a) => Some(a),
+        None => None,
+    };
+
     let value_string = match property_value {
         ftd::interpreter2::PropertyValue::Reference { name, .. } => {
             format!(
