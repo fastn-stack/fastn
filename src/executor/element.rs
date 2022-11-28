@@ -1,6 +1,3 @@
-use crate::interpreter2::PropertyValue;
-use crate::Map;
-
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 pub enum Element {
     Row(Row),
@@ -340,7 +337,7 @@ impl Default for Length {
 
 impl Length {
     fn from_optional_values(
-        value: Option<(String, Map<PropertyValue>)>,
+        value: Option<(String, ftd::Map<ftd::interpreter2::PropertyValue>)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -352,7 +349,7 @@ impl Length {
     }
 
     fn from_values(
-        value: (String, Map<PropertyValue>),
+        value: (String, ftd::Map<ftd::interpreter2::PropertyValue>),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
