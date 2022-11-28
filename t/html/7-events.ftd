@@ -50,6 +50,6 @@ $on-click$: $append($a = $name, b = FTD)
 
 
 -- ftd.text: Why am I running? 🏃🏻‍♀️
-padding: $value
+padding.px: $value
 
 

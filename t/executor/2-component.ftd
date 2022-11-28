@@ -1,5 +1,5 @@
 -- boolean flag: true
 
 -- ftd.text: Hello World
-padding if { flag }: 40
-padding: 30
+padding.px if { flag }: 40
+padding.px: 30

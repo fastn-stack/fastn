@@ -68,14 +68,9 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
         Some(a) => Some(a),
         None => None,
     };
-    dbg!(
-        "get_formatted_dep_string_from_property_value",
-        &property_value,
-        &field
-    );
 
     let value_string = if let Some(value_string) = property_value.to_string(doc, field, id)? {
-        dbg!(value_string)
+        value_string
     } else {
         return Ok(None);
     };
@@ -162,7 +157,7 @@ pub(crate) fn dependencies_from_property_value(
     } else if value.is_value() && value.kind().is_ftd_length() {
         let value = value.value("", 0).unwrap();
         let fields = value.or_type_fields("", 0).unwrap();
-        dependencies_from_property_value(fields.get(ftd::interpreter2::FTDLengthValue).unwrap())
+        dependencies_from_property_value(fields.get(ftd::interpreter2::FTD_LENGTH_VALUE).unwrap())
     } else {
         vec![]
     }

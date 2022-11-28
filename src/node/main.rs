@@ -217,7 +217,7 @@ impl ftd::executor::Common {
         d.insert(
             s("padding"),
             ftd::node::Value::from_executor_value(
-                self.padding.value.as_ref().map(|v| v.to_string()),
+                self.padding.value.as_ref().map(|v| v.to_css_string()),
                 self.padding.to_owned(),
                 None,
                 doc_id,

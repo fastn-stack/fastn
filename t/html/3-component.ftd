@@ -1,14 +1,14 @@
 -- boolean flag: true
 
 -- ftd.row:
-padding: 40
+padding.px: 40
 
 -- ftd.text: Hello World
-padding if {flag}: 20
-padding: 2
+padding.px if {flag}: 20
+padding.px: 2
 
 -- ftd.text: again
-padding if {!flag}: 20
-padding: 2
+padding.px if {!flag}: 20
+padding.px: 2
 
 -- end: ftd.row

@@ -501,14 +501,12 @@ impl Property {
             source
         };
 
-        Ok(ftd::interpreter2::StateWithThing::new_thing(dbg!(
-            Property {
-                value,
-                source,
-                condition,
-                line_number: ast_property.line_number,
-            }
-        )))
+        Ok(ftd::interpreter2::StateWithThing::new_thing(Property {
+            value,
+            source,
+            condition,
+            line_number: ast_property.line_number,
+        }))
     }
 
     fn get_argument_for_property(
@@ -547,7 +545,7 @@ impl Property {
                     .map(ToOwned::to_owned)?,
             )),
             ftd::ast::PropertySource::Header { name, mutable } => {
-                let (name, remaining) = dbg!(ftd::interpreter2::utils::split_at(name, "."));
+                let (name, remaining) = ftd::interpreter2::utils::split_at(name, ".");
                 let mut argument = component_argument
                     .iter()
                     .find(|v| v.name.eq(name.as_str()))
@@ -577,7 +575,7 @@ impl Property {
                     try_ok_state!(argument.update_with_or_type_variant(doc, variant.as_str())?);
                 }
 
-                Ok(ftd::interpreter2::StateWithThing::new_thing(dbg!(argument)))
+                Ok(ftd::interpreter2::StateWithThing::new_thing(argument))
             }
         }
     }

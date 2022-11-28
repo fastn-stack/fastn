@@ -22,7 +22,7 @@ $on-click$: $toggle($a = $flag)
 -- component foo:
 
 -- ftd.text: Hello World
-padding if { flag }: 50
+padding.px if { flag }: 50
 if: { flag }
 
 -- end: foo

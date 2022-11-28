@@ -284,7 +284,7 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
-            dbg!(&attribute);
+
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -305,7 +305,6 @@ impl<'a> DependencyGenerator<'a> {
                         None,
                     )?
                 {
-                    dbg!(&value_string);
                     dependency_map_from_condition(
                         var_dependencies,
                         &property.condition,
@@ -384,7 +383,7 @@ fn is_static_expression(
         } = property_value
         {
             if !fields
-                .get(ftd::interpreter2::FTDLengthValue)
+                .get(ftd::interpreter2::FTD_LENGTH_VALUE)
                 .map(|v| v.is_value())
                 .unwrap_or(true)
             {

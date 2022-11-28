@@ -173,10 +173,7 @@ impl Kind {
     }
 
     pub fn is_ftd_length(&self) -> bool {
-        match self {
-            Kind::OrType { name, .. } if name.eq(ftd::interpreter2::FTDLength) => true,
-            _ => false,
-        }
+        matches!(self, Kind::OrType { name, .. } if name.eq(ftd::interpreter2::FTD_LENGTH))
     }
 
     pub fn is_or_type(&self) -> bool {
@@ -322,7 +319,6 @@ impl KindData {
                 ftd::interpreter2::Thing::Component(_) => Kind::ui(),
                 ftd::interpreter2::Thing::OrType(o) => Kind::or_type(o.name.as_str()),
                 ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant } => {
-                    dbg!("2.. {}, {}", &or_type, &variant.name);
                     Kind::or_type_with_variant(or_type.as_str(), variant.name.as_str())
                 }
                 t => {
