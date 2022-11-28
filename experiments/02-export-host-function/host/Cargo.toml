@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-wasmtime = "1"
+wasmtime = "2"
 anyhow = "1"
