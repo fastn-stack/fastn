@@ -18,3 +18,8 @@ mod fpm_lib {
         unsafe { super::from_host1() }
     }
 }
+
+#[no_mangle]
+pub extern "C" fn difference(x: i32) -> i32 {
+    x - 10
+}

@@ -8,8 +8,9 @@ Note: we do not use wasi in this, we are planning to do manual memory management
 
 Install wasm32 target: `rustup target add wasm32-unknown-unknown`.
 
-Build `guest` using: `cargo build --target wasm32-unknown-unknown`. This creates a wasm file
-`target/wasm32-unknown-unknown/debug/guest.wasm`, which exports a function `sum`.
+Build `guest` using: `cargo build --target wasm32-unknown-unknown`. This creates
+a wasm file `target/wasm32-unknown-unknown/debug/guest.wasm`, which exports a 
+function `sum`.
 
 ```rust
 #[no_mangle]

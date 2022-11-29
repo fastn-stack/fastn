@@ -4,8 +4,5 @@ extern "C" {
 
 #[no_mangle]
 pub extern "C" fn sum(x: i32) -> i32 {
-    x + unsafe {
-        from_host(10, 20);
-        10
-    }
+    x + unsafe { 10 + from_host(10, 20) }
 }

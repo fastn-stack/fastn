@@ -25,9 +25,14 @@ fn main() -> anyhow::Result<()> {
     let instance =
         wasmtime::Instance::new(&mut store, &module, &[from_host2.into(), from_host1.into()])?;
     let sum = instance.get_typed_func::<(i32,), i32, _>(&mut store, "sum")?;
+    let difference = instance.get_typed_func::<(i32,), i32, _>(&mut store, "difference")?;
 
     // And finally we can call the wasm!
-    println!("wasm said: {}", sum.call(&mut store, (1,))?);
+    println!("wasm sum said: {}", sum.call(&mut store, (1,))?);
+    println!(
+        "wasm difference said: {}",
+        difference.call(&mut store, (100,))?
+    );
 
     Ok(())
 }
