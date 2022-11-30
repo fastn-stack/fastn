@@ -27,11 +27,11 @@
             },
             "source": "Global",
             "is_mutable": true,
-            "line_number": 11
+            "line_number": 12
           }
         },
         "conditional_value": [],
-        "line_number": 11,
+        "line_number": 12,
         "is_static": false
       }
     },
@@ -61,21 +61,19 @@
                           "text": "f"
                         }
                       },
-                      "is_mutable": false,
-                      "line_number": 9
+                      "is_mutable": true,
+                      "line_number": 10
                     }
                   },
                   "name": {
-                    "Reference": {
-                      "name": "foo#name",
-                      "kind": {
-                        "kind": "String",
-                        "caption": false,
-                        "body": false
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "Name1"
+                        }
                       },
-                      "source": "Global",
-                      "is_mutable": false,
-                      "line_number": 8
+                      "is_mutable": true,
+                      "line_number": 15
                     }
                   }
                 }
@@ -103,11 +101,11 @@
           "Value": {
             "value": {
               "String": {
-                "text": "Name1"
+                "text": "Name0"
               }
             },
             "is_mutable": true,
-            "line_number": 14
+            "line_number": 5
           }
         },
         "conditional_value": [],
@@ -162,19 +160,19 @@
               },
               "source": "Global",
               "is_mutable": false,
-              "line_number": 17
+              "line_number": 18
             }
           },
           "source": "Caption",
           "condition": null,
-          "line_number": 17
+          "line_number": 18
         }
       ],
       "iteration": null,
       "condition": null,
       "events": [],
       "children": [],
-      "line_number": 17
+      "line_number": 18
     },
     {
       "name": "ftd#text",
@@ -190,19 +188,19 @@
               },
               "source": "Global",
               "is_mutable": false,
-              "line_number": 18
+              "line_number": 19
             }
           },
           "source": "Caption",
           "condition": null,
-          "line_number": 18
+          "line_number": 19
         }
       ],
       "iteration": null,
       "condition": null,
       "events": [],
       "children": [],
-      "line_number": 18
+      "line_number": 19
     }
   ],
   "aliases": {

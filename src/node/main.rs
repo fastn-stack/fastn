@@ -206,19 +206,116 @@ impl ftd::executor::Common {
     }
 
     fn style(&self, doc_id: &str, _classes: &mut [String]) -> ftd::Map<ftd::node::Value> {
+        use ftd::node::utils::CheckMap;
+
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
-        d.insert(s("text-decoration"), ftd::node::Value::from_string("none"));
+        d.check_and_insert("text-decoration", ftd::node::Value::from_string("none"));
 
         if self.is_not_visible {
-            d.insert(s("display"), ftd::node::Value::from_string("none"));
+            d.check_and_insert("display", ftd::node::Value::from_string("none"));
         }
 
-        d.insert(
-            s("padding"),
+        d.check_and_insert(
+            "padding",
             ftd::node::Value::from_executor_value(
                 self.padding.value.as_ref().map(|v| v.to_css_string()),
                 self.padding.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "padding-left",
+            ftd::node::Value::from_executor_value(
+                self.padding_horizontal
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.padding_horizontal.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "padding-right",
+            ftd::node::Value::from_executor_value(
+                self.padding_horizontal
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.padding_horizontal.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "padding-top",
+            ftd::node::Value::from_executor_value(
+                self.padding_vertical
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.padding_vertical.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "padding-bottom",
+            ftd::node::Value::from_executor_value(
+                self.padding_vertical
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.padding_vertical.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "padding-top",
+            ftd::node::Value::from_executor_value(
+                self.padding_top.value.as_ref().map(|v| v.to_css_string()),
+                self.padding_top.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "padding-bottom",
+            ftd::node::Value::from_executor_value(
+                self.padding_bottom
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.padding_bottom.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "padding-left",
+            ftd::node::Value::from_executor_value(
+                self.padding_left.value.as_ref().map(|v| v.to_css_string()),
+                self.padding_left.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "padding-right",
+            ftd::node::Value::from_executor_value(
+                self.padding_right.value.as_ref().map(|v| v.to_css_string()),
+                self.padding_right.to_owned(),
                 None,
                 doc_id,
             ),

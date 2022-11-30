@@ -5,7 +5,8 @@ string gender:
 -- string $name: Name0
 
 -- person $n1:
-$name: $name
+/$name: $name
+name: *$name
 gender: f
 
 -- person $a1: $n1

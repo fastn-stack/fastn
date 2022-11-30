@@ -1,0 +1,22 @@
+-- boolean $flag: true
+
+-- ftd.text: Click me
+$on-click$: $toggle($a = $flag)
+
+-- ftd.text: Hello
+padding-left.px: 40
+padding-right.percent: 10
+padding-top.px: 50
+padding-bottom.percent: 7.9
+
+
+-- ftd.text: Hello
+padding-vertical.px: 40
+padding-horizontal.percent if { flag } : 10
+
+
+
+-- void toggle(a):
+boolean $a:
+
+a = !a

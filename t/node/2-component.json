@@ -33,11 +33,6 @@
         "properties": [],
         "line_number": null
       },
-      "padding": {
-        "value": null,
-        "properties": [],
-        "line_number": null
-      },
       "text-decoration": {
         "value": "none",
         "properties": [],
@@ -144,11 +139,6 @@
               }
             },
             "style": {
-              "padding": {
-                "value": null,
-                "properties": [],
-                "line_number": null
-              },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
@@ -200,11 +190,6 @@
               }
             },
             "style": {
-              "padding": {
-                "value": null,
-                "properties": [],
-                "line_number": null
-              },
               "text-decoration": {
                 "value": "none",
                 "properties": [],

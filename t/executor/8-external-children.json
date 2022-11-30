@@ -317,6 +317,36 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "padding_left": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_right": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_top": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_bottom": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_horizontal": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_vertical": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "data_id": "0,0",
                       "line_number": 6,
                       "condition": null
@@ -363,6 +393,36 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "padding_left": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "padding_right": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "padding_top": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "padding_bottom": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "padding_horizontal": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "padding_vertical": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "data_id": "0,1,0",
                               "line_number": 21,
                               "condition": null
@@ -376,6 +436,36 @@
                       "event": [],
                       "is_dummy": false,
                       "padding": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_left": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_right": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_top": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_bottom": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_horizontal": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "padding_vertical": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -397,6 +487,36 @@
                 "line_number": null,
                 "properties": []
               },
+              "padding_left": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_right": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_top": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_bottom": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_horizontal": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_vertical": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 4,
               "condition": null
@@ -410,6 +530,36 @@
       "event": [],
       "is_dummy": false,
       "padding": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_left": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_right": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_top": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_bottom": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_horizontal": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_vertical": {
         "value": null,
         "line_number": null,
         "properties": []

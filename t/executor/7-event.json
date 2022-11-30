@@ -132,6 +132,36 @@
                 "line_number": null,
                 "properties": []
               },
+              "padding_left": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_right": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_top": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_bottom": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_horizontal": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_vertical": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 9,
               "condition": null
@@ -145,6 +175,36 @@
       "event": [],
       "is_dummy": false,
       "padding": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_left": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_right": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_top": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_bottom": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_horizontal": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_vertical": {
         "value": null,
         "line_number": null,
         "properties": []

@@ -460,37 +460,37 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ),
         ftd::interpreter2::Argument::default(
             "padding-vertical",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "padding-horizontal",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "padding-left",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "padding-right",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "padding-top",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "padding-bottom",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),

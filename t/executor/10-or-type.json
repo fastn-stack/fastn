@@ -176,6 +176,36 @@
                   }
                 ]
               },
+              "padding_left": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_right": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_top": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_bottom": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_horizontal": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_vertical": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 1,
               "condition": null
@@ -258,6 +288,36 @@
                   }
                 ]
               },
+              "padding_left": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_right": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_top": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_bottom": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_horizontal": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_vertical": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "1",
               "line_number": 7,
               "condition": null
@@ -330,6 +390,36 @@
                     "line_number": 15
                   }
                 ]
+              },
+              "padding_left": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_right": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_top": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_bottom": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_horizontal": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_vertical": {
+                "value": null,
+                "line_number": null,
+                "properties": []
               },
               "data_id": "2",
               "line_number": 14,
@@ -474,6 +564,36 @@
                   }
                 ]
               },
+              "padding_left": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_right": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_top": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_bottom": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_horizontal": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "padding_vertical": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "3",
               "line_number": 21,
               "condition": null
@@ -487,6 +607,36 @@
       "event": [],
       "is_dummy": false,
       "padding": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_left": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_right": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_top": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_bottom": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_horizontal": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "padding_vertical": {
         "value": null,
         "line_number": null,
         "properties": []
