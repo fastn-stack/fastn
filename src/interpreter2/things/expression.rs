@@ -160,7 +160,7 @@ impl ftd::evalexpr::ExprNode {
                 references.get(identifier)
             {
                 operator = ftd::evalexpr::Operator::VariableIdentifierRead {
-                    identifier: format!("data[\"{}\"]", name),
+                    identifier: format!("resolve_reference(\"{}\", data)", name),
                 }
             }
         }

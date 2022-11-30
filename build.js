@@ -366,7 +366,35 @@ function isObject(obj) {
     return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 function resolve_reference(reference, data) {
-    return data[reference];
+    let [var_name, remaining] = get_name_and_remaining(reference);
+    let initial_value = data[var_name];
+    while (!!remaining) {
+        let [p1, p2] = split_once(remaining, ".");
+        initial_value = initial_value[p1];
+        remaining = p2;
+    }
+    return deepCopy(initial_value);
+}
+function get_name_and_remaining(name) {
+    let part1 = "";
+    let pattern_to_split_at = name;
+    let parent_split = split_once(name, "#");
+    if (parent_split.length === 2) {
+        part1 = parent_split[0] + "#";
+        pattern_to_split_at = parent_split[1];
+    }
+    parent_split = split_once(pattern_to_split_at, ".");
+    if (parent_split.length === 2) {
+        return [part1 + parent_split[0], parent_split[1]];
+    }
+    return [name, null];
+}
+function split_once(name, split_at) {
+    const i = name.indexOf(split_at);
+    if (i === -1) {
+        return [name];
+    }
+    return [name.slice(0, i), name.slice(i + 1)];
 }
 function deepCopy(object) {
     if (isObject(object)) {
@@ -379,11 +407,12 @@ function change_value(function_arguments, data, id) {
         if (isFunctionArgument(function_arguments[a])) {
             if (!!function_arguments[a]["reference"]) {
                 let reference = function_arguments[a]["reference"];
-                if (!!window["set_value_" + id] && !!window["set_value_" + id][reference]) {
-                    window["set_value_" + id][reference](data, function_arguments[a]["value"]);
+                let [var_name, remaining] = get_name_and_remaining(reference);
+                if (!!window["set_value_" + id] && !!window["set_value_" + id][var_name]) {
+                    window["set_value_" + id][var_name](data, function_arguments[a]["value"], remaining);
                 }
                 else {
-                    data[reference] = function_arguments[a]["value"];
+                    set_data_value(data, reference, function_arguments[a]["value"]);
                 }
             }
         }
@@ -400,3 +429,17 @@ String.prototype.format = function () {
     }
     return formatted;
 };
+function set_data_value(data, name, value) {
+    let [var_name, remaining] = get_name_and_remaining(name);
+    let initial_value = data[var_name];
+    data[var_name] = deepCopy(set(initial_value, remaining, value));
+    // tslint:disable-next-line:no-shadowed-variable
+    function set(initial_value, remaining, value) {
+        if (!remaining) {
+            return value;
+        }
+        let [p1, p2] = split_once(remaining, ".");
+        initial_value[p1] = set(initial_value[p1], p2, value);
+        return initial_value;
+    }
+}

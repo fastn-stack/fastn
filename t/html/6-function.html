@@ -400,7 +400,35 @@ function isObject(obj) {
 return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 function resolve_reference(reference, data) {
-return data[reference];
+let [var_name, remaining] = get_name_and_remaining(reference);
+let initial_value = data[var_name];
+while (!!remaining) {
+let [p1, p2] = split_once(remaining, ".");
+initial_value = initial_value[p1];
+remaining = p2;
+}
+return deepCopy(initial_value);
+}
+function get_name_and_remaining(name) {
+let part1 = "";
+let pattern_to_split_at = name;
+let parent_split = split_once(name, "#");
+if (parent_split.length === 2) {
+part1 = parent_split[0] + "#";
+pattern_to_split_at = parent_split[1];
+}
+parent_split = split_once(pattern_to_split_at, ".");
+if (parent_split.length === 2) {
+return [part1 + parent_split[0], parent_split[1]];
+}
+return [name, null];
+}
+function split_once(name, split_at) {
+const i = name.indexOf(split_at);
+if (i === -1) {
+return [name];
+}
+return [name.slice(0, i), name.slice(i + 1)];
 }
 function deepCopy(object) {
 if (isObject(object)) {
@@ -413,11 +441,12 @@ for (const a in function_arguments) {
 if (isFunctionArgument(function_arguments[a])) {
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
-if (!!window["set_value_" + id] && !!window["set_value_" + id][reference]) {
-window["set_value_" + id][reference](data, function_arguments[a]["value"]);
+let [var_name, remaining] = get_name_and_remaining(reference);
+if (!!window["set_value_" + id] && !!window["set_value_" + id][var_name]) {
+window["set_value_" + id][var_name](data, function_arguments[a]["value"], remaining);
 }
 else {
-data[reference] = function_arguments[a]["value"];
+set_data_value(data, reference, function_arguments[a]["value"]);
 }
 }
 }
@@ -434,6 +463,20 @@ formatted = formatted.replace(regexp, arguments[i]);
 }
 return formatted;
 };
+function set_data_value(data, name, value) {
+let [var_name, remaining] = get_name_and_remaining(name);
+let initial_value = data[var_name];
+data[var_name] = deepCopy(set(initial_value, remaining, value));
+// tslint:disable-next-line:no-shadowed-variable
+function set(initial_value, remaining, value) {
+if (!remaining) {
+return value;
+}
+let [p1, p2] = split_once(remaining, ".");
+initial_value[p1] = set(initial_value[p1], p2, value);
+return initial_value;
+}
+}
 
 function isempty(str) {
 return (!str || str.length === 0 );
@@ -482,18 +525,23 @@ window.node_change_main["1:main__padding"] = function(data) {
 document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":4}}', this));
 }
 window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = data["foo#new-name"];
+document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data);
 }
 
 window.node_change_main["2:main__padding"] = function(data) {
 document.querySelector(`[data-id="2:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":{"a":{"mutable":false,"reference":"foo#new-name"}}}', this));
 }
 window.set_value_main = {};
-window.set_value_main["foo#name"] = function (data, new_value) {
-data["foo#name"] = new_value;
+window.set_value_main["foo#name"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#name" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#name", new_value);
+}
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#new-name"]){window["resolve_value_main"]["foo#new-name"](data);
 } else {
-data["foo#new-name"] = data["foo#name"]
+let value = resolve_reference("foo#name", data);
+set_data_value(data, "foo#new-name", value);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
 }
@@ -503,8 +551,12 @@ if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){wi
 }
 };
 
-window.set_value_main["foo#new-name"] = function (data, new_value) {
-data["foo#new-name"] = new_value;
+window.set_value_main["foo#new-name"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#new-name" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#new-name", new_value);
+}
 
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
 }
@@ -512,8 +564,12 @@ if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){wi
 }
 };
 
-window.set_value_main["foo#number"] = function (data, new_value) {
-data["foo#number"] = new_value;
+window.set_value_main["foo#number"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#number" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#number", new_value);
+}
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
 }

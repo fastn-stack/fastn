@@ -51,13 +51,13 @@
                           "text": "f"
                         }
                       },
-                      "is_mutable": false,
+                      "is_mutable": true,
                       "line_number": 9
                     }
                   },
                   "name": {
                     "Reference": {
-                      "name": "foo#name",
+                      "name": "foo#n",
                       "kind": {
                         "kind": "String",
                         "caption": false,
@@ -65,7 +65,7 @@
                       },
                       "source": "Global",
                       "is_mutable": true,
-                      "line_number": 8
+                      "line_number": 13
                     }
                   }
                 }
@@ -90,16 +90,14 @@
         },
         "mutable": true,
         "value": {
-          "Reference": {
-            "name": "foo#n",
-            "kind": {
-              "kind": "String",
-              "caption": false,
-              "body": false
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Name0"
+              }
             },
-            "source": "Global",
             "is_mutable": true,
-            "line_number": 13
+            "line_number": 5
           }
         },
         "conditional_value": [],

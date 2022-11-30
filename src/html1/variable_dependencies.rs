@@ -143,7 +143,8 @@ impl<'a> VariableDependencyGenerator<'a> {
                         if(!!window[\"resolve_value_{id}\"] && !!window[\"resolve_value_{id}\"][\"{variable_name}\"]){{\
                             window[\"resolve_value_{id}\"][\"{variable_name}\"](data);
                         }} else {{
-                            data[\"{variable_name}\"] = data[\"{set_variable_name}\"]
+                            let value = resolve_reference(\"{set_variable_name}\", data);
+                            set_data_value(data, \"{variable_name}\", value);
                         }}"
                     },
                     id = self.id,
@@ -177,8 +178,12 @@ impl<'a> VariableDependencyGenerator<'a> {
             if !v.is_empty() || !node_changes_calls.is_empty() {
                 result_1.push(format!(
                     indoc::indoc! {"
-                     window.set_value_{id}[\"{key}\"] = function (data, new_value) {{
-                            data[\"{key}\"] = new_value;
+                     window.set_value_{id}[\"{key}\"] = function (data, new_value, remaining) {{
+                            if (!!remaining) {{
+                            set_data_value(data, \"{key}\" + \".\" + remaining, new_value);
+                            }} else {{
+                            set_data_value(data, \"{key}\", new_value);
+                            }}
                             {dependencies}
                             {node_changes_calls}
                      }};
@@ -212,7 +217,10 @@ impl<'a> VariableDependencyGenerator<'a> {
                     None,
                 )?
             {
-                let value = format!("data[\"{}\"] = {};", variable.name, value_string);
+                let value = format!(
+                    "set_data_value(data, \"{}\", {});",
+                    variable.name, value_string
+                );
                 expressions.push((Some(condition_str), value));
             }
         }
@@ -224,7 +232,10 @@ impl<'a> VariableDependencyGenerator<'a> {
             &None,
             None,
         )? {
-            let value = format!("data[\"{}\"] = {};", variable.name, value_string);
+            let value = format!(
+                "set_data_value(data, \"{}\", {});",
+                variable.name, value_string
+            );
             expressions.push((None, value));
         }
         let value = ftd::html1::utils::js_expression_from_list(expressions);

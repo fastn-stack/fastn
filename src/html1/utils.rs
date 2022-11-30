@@ -172,7 +172,7 @@ impl ftd::interpreter2::PropertyValue {
     ) -> ftd::html1::Result<Option<String>> {
         Ok(match self {
             ftd::interpreter2::PropertyValue::Reference { name, .. } => Some(format!(
-                "data[\"{}\"]{}",
+                "resolve_reference(\"{}\", data){}",
                 name,
                 field
                     .map(|v| format!(".{}", v))

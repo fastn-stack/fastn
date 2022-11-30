@@ -246,7 +246,47 @@ pub fn validate_variable(
         );
     }
 
+    validate_record_value(&variable.value, doc)?;
     validate_property_value_for_mutable(&variable.value, doc)
+}
+
+pub fn validate_record_value(
+    value: &ftd::interpreter2::PropertyValue,
+    doc: &ftd::interpreter2::TDoc,
+) -> ftd::interpreter2::Result<()> {
+    if let ftd::interpreter2::PropertyValue::Value { value, .. } = value {
+        if let Some(ftd::interpreter2::Value::Record { fields, .. }) = value.ref_inner() {
+            validate_fields(fields.values().collect(), doc)?;
+        }
+    }
+    return Ok(());
+
+    fn validate_fields(
+        fields: Vec<&ftd::interpreter2::PropertyValue>,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<()> {
+        for value in fields.iter() {
+            if let Some(reference_name) = value.reference_name() {
+                return ftd::interpreter2::utils::e2(format!(
+                    "Currently, reference `{}` to record field  is not supported. Use clone (*) instead", reference_name
+                ), doc.name, value.line_number());
+            }
+
+            if let ftd::interpreter2::PropertyValue::Value { value, .. } = value {
+                match value.ref_inner() {
+                    Some(ftd::interpreter2::Value::Record { fields, .. })
+                    | Some(ftd::interpreter2::Value::OrType { fields, .. }) => {
+                        validate_fields(fields.values().collect(), doc)?;
+                    }
+                    Some(ftd::interpreter2::Value::List { data, .. }) => {
+                        validate_fields(data.iter().collect(), doc)?;
+                    }
+                    _ => {}
+                }
+            }
+        }
+        Ok(())
+    }
 }
 
 pub fn validate_property_value_for_mutable(

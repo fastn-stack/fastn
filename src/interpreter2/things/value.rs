@@ -386,7 +386,7 @@ impl PropertyValue {
                             try_ok_state!(PropertyValue::from_ast_value_with_argument(
                                 caption,
                                 doc,
-                                field.mutable,
+                                field.mutable || is_mutable,
                                 Some(&field.kind),
                                 definition_name_with_arguments,
                                 loop_object_name_and_kind
@@ -403,7 +403,7 @@ impl PropertyValue {
                                     line_number: body.line_number,
                                 },
                                 doc,
-                                field.mutable,
+                                field.mutable || is_mutable,
                                 Some(&field.kind),
                                 definition_name_with_arguments,
                                 loop_object_name_and_kind
@@ -420,7 +420,7 @@ impl PropertyValue {
                                     data: Box::new(None),
                                     kind: expected_kind.to_owned(),
                                 },
-                                is_mutable,
+                                is_mutable: field.mutable || is_mutable,
                                 line_number,
                             },
                         );
@@ -441,7 +441,7 @@ impl PropertyValue {
                                     line_number: value.line_number(),
                                 },
                                 doc,
-                                field.mutable,
+                                field.mutable || is_mutable,
                                 Some(&field.kind),
                                 definition_name_with_arguments,
                                 loop_object_name_and_kind
@@ -493,12 +493,27 @@ impl PropertyValue {
                         );
                     }
                     let first_header = headers.first().unwrap();
-                    let property_value = try_ok_state!(PropertyValue::from_ast_value(
-                        first_header.value.clone(),
-                        doc,
-                        first_header.mutable,
-                        Some(&field.kind),
-                    )?);
+
+                    if field.mutable.ne(&first_header.mutable) {
+                        return ftd::interpreter2::utils::e2(
+                            format!(
+                                "Mutability conflict in field `{}` for record `{}`",
+                                field.name, name
+                            ),
+                            doc.name,
+                            first_header.line_number,
+                        );
+                    }
+
+                    let property_value =
+                        try_ok_state!(PropertyValue::from_ast_value_with_argument(
+                            first_header.value.clone(),
+                            doc,
+                            field.mutable || is_mutable,
+                            Some(&field.kind),
+                            definition_name_with_arguments,
+                            loop_object_name_and_kind
+                        )?);
                     result_field.insert(field.name.to_string(), property_value);
                 }
                 ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
@@ -553,7 +568,7 @@ impl PropertyValue {
                             try_ok_state!(PropertyValue::from_ast_value_with_argument(
                                 caption,
                                 doc,
-                                field.mutable,
+                                field.mutable || is_mutable,
                                 Some(&field.kind),
                                 definition_name_with_arguments,
                                 loop_object_name_and_kind
@@ -570,7 +585,7 @@ impl PropertyValue {
                                     line_number: body.line_number,
                                 },
                                 doc,
-                                field.mutable,
+                                field.mutable || is_mutable,
                                 Some(&field.kind),
                                 definition_name_with_arguments,
                                 loop_object_name_and_kind
@@ -587,7 +602,7 @@ impl PropertyValue {
                                     data: Box::new(None),
                                     kind: expected_kind.to_owned(),
                                 },
-                                is_mutable,
+                                is_mutable: field.mutable || is_mutable,
                                 line_number,
                             },
                         );
@@ -608,7 +623,7 @@ impl PropertyValue {
                                     line_number: value.line_number(),
                                 },
                                 doc,
-                                field.mutable,
+                                field.mutable || is_mutable,
                                 Some(&field.kind),
                                 definition_name_with_arguments,
                                 loop_object_name_and_kind
@@ -660,12 +675,28 @@ impl PropertyValue {
                         );
                     }
                     let first_header = headers.first().unwrap();
-                    let property_value = try_ok_state!(PropertyValue::from_ast_value(
-                        first_header.value.clone(),
-                        doc,
-                        first_header.mutable,
-                        Some(&field.kind),
-                    )?);
+
+                    if field.mutable.ne(&first_header.mutable) {
+                        return ftd::interpreter2::utils::e2(
+                            format!(
+                                "Mutability conflict in field `{}` for record `{}`",
+                                field.name, name
+                            ),
+                            doc.name,
+                            first_header.line_number,
+                        );
+                    }
+
+                    let property_value =
+                        try_ok_state!(PropertyValue::from_ast_value_with_argument(
+                            first_header.value.clone(),
+                            doc,
+                            field.mutable || is_mutable,
+                            Some(&field.kind),
+                            definition_name_with_arguments,
+                            loop_object_name_and_kind
+                        )?);
+
                     result_field.insert(field.name.to_string(), property_value);
                 }
                 ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
@@ -1052,6 +1083,13 @@ impl Value {
         match self {
             Value::Optional { data, .. } => data.as_ref().to_owned(),
             t => Some(t.to_owned()),
+        }
+    }
+
+    pub(crate) fn ref_inner(&self) -> Option<&Self> {
+        match self {
+            Value::Optional { data, .. } => data.as_ref().as_ref(),
+            t => Some(t),
         }
     }
 

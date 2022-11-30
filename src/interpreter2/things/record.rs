@@ -37,6 +37,7 @@ impl Record {
         )])
         .collect::<ftd::Map<ftd::interpreter2::Kind>>();
         let fields = try_ok_state!(Field::from_ast_fields(record.fields, doc, &known_kinds)?);
+        validate_record_fields(name.as_str(), &fields, doc.name)?;
         Ok(ftd::interpreter2::StateWithThing::new_thing(Record::new(
             name.as_str(),
             fields,
@@ -243,4 +244,23 @@ impl Field {
             ),
         }
     }
+}
+
+fn validate_record_fields(
+    rec_name: &str,
+    fields: &[Field],
+    doc_id: &str,
+) -> ftd::interpreter2::Result<()> {
+    if let Some(field) = fields.iter().find(|v| v.mutable) {
+        return ftd::interpreter2::utils::e2(
+            format!(
+                "Currently, mutable field `{}` in record `{}` is not supported.",
+                field.name, rec_name
+            )
+            .as_str(),
+            doc_id,
+            field.line_number,
+        );
+    }
+    Ok(())
 }

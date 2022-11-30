@@ -1,39 +1,465 @@
--- record full-name:
-caption first-name:
-optional string middle-name:
-optional string last-name:
-
-
--- record person:
-full-name name:
-integer age:
-
-
--- string $name: Arpita
-
--- person $arpita:
-name: $name
-age: 20
-
-
--- ftd.text: $arpita.name.first-name
-
--- ftd.text: $name
-
-
--- ftd.text: Change arpita.name.first-name
-$on-click$: $append(a = $arpita.name.first-name, b = FifthTry)
-
--- ftd.text: Change name
-$on-click$: $append($a = $name, b = FifthTry)
-
-
-
-
--- void append(a,b):
-string $a:
-string b:
-
-a = a + " " + b
-
-
+{
+  "data": {
+    "foo#append": {
+      "Function": {
+        "name": "foo#append",
+        "return_kind": {
+          "kind": "Void",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 34
+          },
+          {
+            "name": "b",
+            "kind": {
+              "kind": "String",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 35
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a = a + \" \" + b",
+            "line_number": 37
+          }
+        ],
+        "line_number": 33
+      }
+    },
+    "foo#arpita": {
+      "Variable": {
+        "name": "foo#arpita",
+        "kind": {
+          "kind": {
+            "Record": {
+              "name": "foo#person"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "Record": {
+                "name": "foo#person",
+                "fields": {
+                  "age": {
+                    "Value": {
+                      "value": {
+                        "Integer": {
+                          "value": 20
+                        }
+                      },
+                      "is_mutable": true,
+                      "line_number": 16
+                    }
+                  },
+                  "name": {
+                    "Value": {
+                      "value": {
+                        "Record": {
+                          "name": "foo#full-name",
+                          "fields": {
+                            "first-name": {
+                              "Clone": {
+                                "name": "foo#name",
+                                "kind": {
+                                  "kind": "String",
+                                  "caption": true,
+                                  "body": false
+                                },
+                                "source": "Global",
+                                "is_mutable": true,
+                                "line_number": 15
+                              }
+                            },
+                            "last-name": {
+                              "Value": {
+                                "value": {
+                                  "Optional": {
+                                    "data": null,
+                                    "kind": {
+                                      "kind": {
+                                        "Record": {
+                                          "name": "foo#full-name"
+                                        }
+                                      },
+                                      "caption": false,
+                                      "body": false
+                                    }
+                                  }
+                                },
+                                "is_mutable": true,
+                                "line_number": 15
+                              }
+                            },
+                            "middle-name": {
+                              "Value": {
+                                "value": {
+                                  "Optional": {
+                                    "data": null,
+                                    "kind": {
+                                      "kind": {
+                                        "Record": {
+                                          "name": "foo#full-name"
+                                        }
+                                      },
+                                      "caption": false,
+                                      "body": false
+                                    }
+                                  }
+                                },
+                                "is_mutable": true,
+                                "line_number": 15
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "is_mutable": true,
+                      "line_number": 15
+                    }
+                  }
+                }
+              }
+            },
+            "is_mutable": true,
+            "line_number": 14
+          }
+        },
+        "conditional_value": [],
+        "line_number": 14,
+        "is_static": false
+      }
+    },
+    "foo#full-name": {
+      "Record": {
+        "name": "foo#full-name",
+        "fields": [
+          {
+            "name": "first-name",
+            "kind": {
+              "kind": "String",
+              "caption": true,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 2
+          },
+          {
+            "name": "middle-name",
+            "kind": {
+              "kind": {
+                "Optional": {
+                  "kind": "String"
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 3
+          },
+          {
+            "name": "last-name",
+            "kind": {
+              "kind": {
+                "Optional": {
+                  "kind": "String"
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 4
+          }
+        ],
+        "line_number": 1
+      }
+    },
+    "foo#name": {
+      "Variable": {
+        "name": "foo#name",
+        "kind": {
+          "kind": "String",
+          "caption": false,
+          "body": false
+        },
+        "mutable": true,
+        "value": {
+          "Value": {
+            "value": {
+              "String": {
+                "text": "Arpita"
+              }
+            },
+            "is_mutable": true,
+            "line_number": 12
+          }
+        },
+        "conditional_value": [],
+        "line_number": 12,
+        "is_static": false
+      }
+    },
+    "foo#person": {
+      "Record": {
+        "name": "foo#person",
+        "fields": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": {
+                "Record": {
+                  "name": "foo#full-name"
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 8
+          },
+          {
+            "name": "age",
+            "kind": {
+              "kind": "Integer",
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 9
+          }
+        ],
+        "line_number": 7
+      }
+    }
+  },
+  "name": "foo",
+  "tree": [
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#arpita.name.first-name",
+              "kind": {
+                "kind": "String",
+                "caption": true,
+                "body": true
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 19
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 19
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 19
+    },
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#name",
+              "kind": {
+                "kind": "String",
+                "caption": true,
+                "body": true
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 21
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 21
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "line_number": 21
+    },
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Change arpita.name.first-name"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 24
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 24
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [
+        {
+          "name": "Click",
+          "action": {
+            "name": "foo#append",
+            "kind": {
+              "kind": "Void",
+              "caption": false,
+              "body": false
+            },
+            "is_mutable": false,
+            "line_number": 25,
+            "values": {
+              "a": {
+                "Reference": {
+                  "name": "foo#arpita.name.first-name",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": true,
+                  "line_number": 25
+                }
+              },
+              "b": {
+                "Value": {
+                  "value": {
+                    "String": {
+                      "text": "FifthTry"
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 25
+                }
+              }
+            },
+            "order": [
+              "a",
+              "b"
+            ]
+          },
+          "line_number": 25
+        }
+      ],
+      "children": [],
+      "line_number": 24
+    },
+    {
+      "name": "ftd#text",
+      "properties": [
+        {
+          "value": {
+            "Value": {
+              "value": {
+                "String": {
+                  "text": "Change name"
+                }
+              },
+              "is_mutable": false,
+              "line_number": 27
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 27
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [
+        {
+          "name": "Click",
+          "action": {
+            "name": "foo#append",
+            "kind": {
+              "kind": "Void",
+              "caption": false,
+              "body": false
+            },
+            "is_mutable": false,
+            "line_number": 28,
+            "values": {
+              "a": {
+                "Reference": {
+                  "name": "foo#name",
+                  "kind": {
+                    "kind": "String",
+                    "caption": false,
+                    "body": false
+                  },
+                  "source": "Global",
+                  "is_mutable": true,
+                  "line_number": 28
+                }
+              },
+              "b": {
+                "Value": {
+                  "value": {
+                    "String": {
+                      "text": "FifthTry"
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 28
+                }
+              }
+            },
+            "order": [
+              "a",
+              "b"
+            ]
+          },
+          "line_number": 28
+        }
+      ],
+      "children": [],
+      "line_number": 27
+    }
+  ],
+  "aliases": {
+    "ftd": "ftd"
+  }
+}

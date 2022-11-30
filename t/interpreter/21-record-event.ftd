@@ -12,7 +12,7 @@ integer age:
 -- string $name: Arpita
 
 -- person $arpita:
-name: $name
+name: *$name
 age: 20
 
 
@@ -22,7 +22,7 @@ age: 20
 
 
 -- ftd.text: Change arpita.name.first-name
-$on-click$: $append(a = $arpita.name.first-name, b = FifthTry)
+$on-click$: $append($a = $arpita.name.first-name, b = FifthTry)
 
 -- ftd.text: Change name
 $on-click$: $append($a = $name, b = FifthTry)
