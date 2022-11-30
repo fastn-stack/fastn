@@ -238,7 +238,7 @@ impl<'a> VariableDependencyGenerator<'a> {
             );
             expressions.push((None, value));
         }
-        let value = ftd::html1::utils::js_expression_from_list(expressions);
+        let value = ftd::html1::utils::js_expression_from_list(expressions, None);
         Ok(format!(
             indoc::indoc! {"
                  window.resolve_value_{id}[\"{key}\"] = function(data) {{

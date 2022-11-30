@@ -49,20 +49,19 @@ impl<'a> DependencyGenerator<'a> {
                 .as_ref()
                 .map(ftd::html1::utils::get_condition_string);
 
+            let key = format!(
+                "document.querySelector(`[data-id=\"{}\"]`).style[\"display\"]",
+                node_data_id
+            );
+
             if let Some(condition) = condition {
-                let pos_value = format!(
-                    "document.querySelector(`[data-id=\"{}\"]`).style[\"display\"] = \"flex\";",
-                    node_data_id
-                );
-                let neg_value = format!(
-                    "document.querySelector(`[data-id=\"{}\"]`).style[\"display\"] = \"none\";",
-                    node_data_id
-                );
+                let pos_value = format!("{} = \"flex\";", key);
+                let neg_value = format!("{} = \"none\";", key);
                 expressions.push((Some(condition), pos_value));
                 expressions.push((None, neg_value));
             }
 
-            let value = ftd::html1::utils::js_expression_from_list(expressions);
+            let value = ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()));
             if !value.trim().is_empty() {
                 result.push(format!(
                     indoc::indoc! {"
@@ -81,6 +80,10 @@ impl<'a> DependencyGenerator<'a> {
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), "text");
             let mut expressions = vec![];
             let mut is_static = true;
+            let key = format!(
+                "document.querySelector(`[data-id=\"{}\"]`).innerHTML",
+                node_data_id,
+            );
             for property_with_pattern in self.node.text.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -112,14 +115,11 @@ impl<'a> DependencyGenerator<'a> {
                         node_change_id.as_str(),
                     );
 
-                    let value = format!(
-                        "document.querySelector(`[data-id=\"{}\"]`).innerHTML = {};",
-                        node_data_id, value_string
-                    );
+                    let value = format!("{} = {};", key, value_string);
                     expressions.push((condition, value));
                 }
             }
-            let value = ftd::html1::utils::js_expression_from_list(expressions);
+            let value = ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()));
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"
@@ -210,7 +210,7 @@ impl<'a> DependencyGenerator<'a> {
                     }
 
                     if !light_value_string.eq(&dark_value_string) {
-                        let value = ftd::html1::utils::js_expression_from_list(expressions);
+                        let value = ftd::html1::utils::js_expression_from_list(expressions, None);
                         if !value.trim().is_empty() {
                             dependency_map_from_condition(
                                 var_dependencies,
@@ -265,7 +265,7 @@ impl<'a> DependencyGenerator<'a> {
                     expressions.push((condition, value));
                 }
             }
-            let value = ftd::html1::utils::js_expression_from_list(expressions);
+            let value = ftd::html1::utils::js_expression_from_list(expressions, None);
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"
@@ -284,7 +284,10 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
-
+            let key = format!(
+                "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
+                node_data_id, key
+            );
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -315,15 +318,12 @@ impl<'a> DependencyGenerator<'a> {
                         &property.value,
                         node_change_id.as_str(),
                     );
-                    let value = format!(
-                        "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"] = {};",
-                        node_data_id, key, value_string
-                    );
+                    let value = format!("{} = {};", key, value_string);
                     expressions.push((condition, value));
                 }
             }
 
-            let value = ftd::html1::utils::js_expression_from_list(expressions);
+            let value = ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()));
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"

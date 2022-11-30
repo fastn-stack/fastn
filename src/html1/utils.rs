@@ -96,7 +96,10 @@ pub(crate) fn get_condition_string(condition: &ftd::interpreter2::Expression) ->
     )
 }
 
-pub(crate) fn js_expression_from_list(expressions: Vec<(Option<String>, String)>) -> String {
+pub(crate) fn js_expression_from_list(
+    expressions: Vec<(Option<String>, String)>,
+    key: Option<&str>,
+) -> String {
     let mut conditions = vec![];
     let mut default = None;
     for (condition, expression) in expressions {
@@ -123,6 +126,9 @@ pub(crate) fn js_expression_from_list(expressions: Vec<(Option<String>, String)>
     let default = match default {
         Some(d) if conditions.is_empty() => d,
         Some(d) => format!("else {{{}}}", d),
+        None if !conditions.is_empty() && key.is_some() => {
+            format!("else {{ {} = null; }}", key.unwrap())
+        }
         None => "".to_string(),
     };
 
