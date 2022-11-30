@@ -5,7 +5,22 @@ pub fn user_details<'a>(
     config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     let is_login = match &config.request {
-        Some(req) => req.cookie(fpm::auth::COOKIE_TOKEN).is_some(),
+        Some(req) => {
+            req.cookie(fpm::auth::AuthProviders::GitHub.as_str())
+                .is_some()
+                || req
+                    .cookie(fpm::auth::AuthProviders::TeleGram.as_str())
+                    .is_some()
+                || req
+                    .cookie(fpm::auth::AuthProviders::Discord.as_str())
+                    .is_some()
+                || req
+                    .cookie(fpm::auth::AuthProviders::Slack.as_str())
+                    .is_some()
+                || req
+                    .cookie(fpm::auth::AuthProviders::Google.as_str())
+                    .is_some()
+        }
         None => false,
     };
 

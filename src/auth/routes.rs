@@ -1,5 +1,18 @@
 pub fn is_login(req: &actix_web::HttpRequest) -> bool {
-    req.cookie(fpm::auth::COOKIE_TOKEN).is_some()
+    req.cookie(fpm::auth::AuthProviders::GitHub.as_str())
+        .is_some()
+        || req
+            .cookie(fpm::auth::AuthProviders::TeleGram.as_str())
+            .is_some()
+        || req
+            .cookie(fpm::auth::AuthProviders::Discord.as_str())
+            .is_some()
+        || req
+            .cookie(fpm::auth::AuthProviders::Slack.as_str())
+            .is_some()
+        || req
+            .cookie(fpm::auth::AuthProviders::Google.as_str())
+            .is_some()
 }
 
 // route: /auth/login/
@@ -27,6 +40,7 @@ pub async fn login(
     };
     match query.platform.as_str() {
         "github" => fpm::auth::github::login(req).await,
+        "telegram" => fpm::auth::telegram::login(req).await,
         // TODO: Remove this after demo
         _ => {
             let mut req = fpm::http::Request::from_actix(req, actix_web::web::Bytes::new());
@@ -40,9 +54,43 @@ pub async fn login(
 
 // route: /auth/logout/
 pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+    // TODO: Refactor, Not happy with this code, too much of repetition of similar code
+    // It is logging out from all the platforms
+
+    // Ideally it should capture the platform in the request and then logged out
+    // only from that platform
+
     Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::COOKIE_TOKEN, "")
+            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::GitHub.as_str(), "")
+                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+                .path("/")
+                .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
+                .finish(),
+        )
+        .cookie(
+            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::TeleGram.as_str(), "")
+                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+                .path("/")
+                .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
+                .finish(),
+        )
+        .cookie(
+            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Slack.as_str(), "")
+                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+                .path("/")
+                .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
+                .finish(),
+        )
+        .cookie(
+            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Discord.as_str(), "")
+                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+                .path("/")
+                .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
+                .finish(),
+        )
+        .cookie(
+            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Google.as_str(), "")
                 .domain(fpm::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
@@ -57,16 +105,13 @@ pub async fn handle_auth(
     req: actix_web::HttpRequest,
     edition: Option<String>,
 ) -> fpm::Result<fpm::http::Response> {
-    if req.path().eq("/auth/login/") {
-        return login(req, edition).await;
-    } else if req.path().eq(fpm::auth::github::ACCESS_URL) {
-        // this will be called after github OAuth login, to set the access_token
-        // It will redirect user to home after the login
-        return fpm::auth::github::access_token(req).await;
-    } else if req.path().eq("/auth/logout/") {
-        return logout(req);
+    match req.path() {
+        "/auth/login/" => login(req, edition).await,
+        fpm::auth::github::CALLBACK_URL => fpm::auth::github::token(req).await,
+        fpm::auth::telegram::CALLBACK_URL => fpm::auth::telegram::token(req).await,
+        "/auth/logout/" => logout(req),
+        _ => Ok(actix_web::HttpResponse::new(
+            actix_web::http::StatusCode::NOT_FOUND,
+        )),
     }
-    Ok(actix_web::HttpResponse::new(
-        actix_web::http::StatusCode::NOT_FOUND,
-    ))
 }

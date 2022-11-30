@@ -371,8 +371,8 @@ string list github-watches:
 string list -github-watches:
 string list github-follows:
 string list -github-follows:
-string list github-sponsors:
-string list -github-sponsors:
+string list github-sponsor:
+string list -github-sponsor:
 string list discord-server:
 string list -discord-server:
 string list discord-role:

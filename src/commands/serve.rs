@@ -150,7 +150,6 @@ pub async fn serve(
 
     // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
-    dbg!(path.clone());
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
         static_file(favicon).await
@@ -314,7 +313,21 @@ pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Resul
 
 pub async fn clear_cache(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
     fn is_login(req: &fpm::http::Request) -> bool {
-        dbg!(req.cookie(fpm::auth::COOKIE_TOKEN)).is_some()
+        // TODO: Need refactor not happy with this
+        req.cookie(fpm::auth::AuthProviders::GitHub.as_str())
+            .is_some()
+            || req
+                .cookie(fpm::auth::AuthProviders::TeleGram.as_str())
+                .is_some()
+            || req
+                .cookie(fpm::auth::AuthProviders::Discord.as_str())
+                .is_some()
+            || req
+                .cookie(fpm::auth::AuthProviders::Slack.as_str())
+                .is_some()
+            || req
+                .cookie(fpm::auth::AuthProviders::Google.as_str())
+                .is_some()
     }
 
     // TODO: Remove After Demo, Need to think about refresh content from github
@@ -404,7 +417,7 @@ async fn route(
     if req.path().starts_with("/auth/") {
         return fpm::auth::routes::handle_auth(req, app_data.edition.clone()).await;
     }
-
+    //dbg!(req.cookies());
     let req = fpm::http::Request::from_actix(req, body);
     dbg!(req.method(), req.path());
     match (req.method().to_lowercase().as_str(), req.path()) {

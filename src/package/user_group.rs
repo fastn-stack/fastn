@@ -101,9 +101,9 @@ pub struct UserGroupTemp {
     pub github_follows: Vec<String>,
     #[serde(rename = "-github-follows")]
     pub excluded_github_follows: Vec<String>,
-    #[serde(rename = "github-sponsors")]
+    #[serde(rename = "github-sponsor")]
     pub github_sponsors: Vec<String>,
-    #[serde(rename = "-github-sponsors")]
+    #[serde(rename = "-github-sponsor")]
     pub excluded_github_sponsors: Vec<String>,
     #[serde(rename = "discord-server")]
     pub discord_server: Vec<String>,
@@ -307,9 +307,9 @@ impl UserGroupTemp {
             "-github-follows",
             self.excluded_github_follows,
         ));
-        identities.extend(to_user_identity("github-sponsors", self.github_sponsors));
+        identities.extend(to_user_identity("github-sponsor", self.github_sponsors));
         excluded_identities.extend(to_user_identity(
-            "-github-sponsors",
+            "-github-sponsor",
             self.excluded_github_sponsors,
         ));
         identities.extend(to_user_identity("discord-server", self.discord_server));
@@ -450,21 +450,11 @@ pub async fn access_identities(
     // github-starred: fpm-lang/ftd
     // discord-server: abrark.com
     // github-watches: fpm-lang/ftd
-
     match fpm::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await {
         Ok(ids) => Ok(ids),
-        Err(fpm::Error::GenericError(err)) => {
-            dbg!(err);
-            Ok(vec![])
-        }
+        Err(fpm::Error::GenericError(_err)) => Ok(vec![]),
         e => e,
     }
-
-    // Ok(if let Some(identity) = req.cookie("identities") {
-    //     parse_identities(identity.as_str())
-    // } else {
-    //     parse_cli_identities()
-    // })
 }
 
 pub mod processor {
