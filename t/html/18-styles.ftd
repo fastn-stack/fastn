@@ -18,6 +18,8 @@ padding-horizontal.percent if { flag } : 10
 -- ftd.row:
 spacing.px: 20
 spacing.px if { flag }: 40
+wrap: true
+wrap if { flag }: false
 
 -- ftd.text: Hello
 -- ftd.text: World

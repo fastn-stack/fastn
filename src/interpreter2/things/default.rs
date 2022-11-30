@@ -388,19 +388,10 @@ pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {
 pub fn row_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#row".to_string(),
-        arguments: [
-            container_arguments(),
-            common_arguments(),
-            vec![ftd::interpreter2::Argument::default(
-                "spacing",
-                ftd::interpreter2::Kind::string()
-                    .into_optional()
-                    .into_kind_data(),
-            )],
-        ]
-        .concat()
-        .into_iter()
-        .collect(),
+        arguments: [container_arguments(), common_arguments()]
+            .concat()
+            .into_iter()
+            .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         line_number: 0,
     }
@@ -409,19 +400,10 @@ pub fn row_function() -> ftd::interpreter2::ComponentDefinition {
 pub fn column_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#column".to_string(),
-        arguments: [
-            container_arguments(),
-            common_arguments(),
-            vec![ftd::interpreter2::Argument::default(
-                "spacing",
-                ftd::interpreter2::Kind::string()
-                    .into_optional()
-                    .into_kind_data(),
-            )],
-        ]
-        .concat()
-        .into_iter()
-        .collect(),
+        arguments: [container_arguments(), common_arguments()]
+            .concat()
+            .into_iter()
+            .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         line_number: 0,
     }
@@ -432,12 +414,6 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "spacing",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "align",
-            ftd::interpreter2::Kind::string()
                 .into_optional()
                 .into_kind_data(),
         ),

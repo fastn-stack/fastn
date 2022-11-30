@@ -100,7 +100,7 @@ impl<'a> DependencyGenerator<'a> {
                         self.id,
                         self.doc,
                         &property.value,
-                        &property_with_pattern.pattern,
+                        &property_with_pattern.pattern_with_eval,
                         None,
                     )?
                 {
@@ -171,7 +171,7 @@ impl<'a> DependencyGenerator<'a> {
                             self.id,
                             self.doc,
                             &property.value,
-                            &property_with_pattern.pattern,
+                            &property_with_pattern.pattern_with_eval,
                             Some("light".to_string()),
                         )?
                     {
@@ -193,7 +193,7 @@ impl<'a> DependencyGenerator<'a> {
                             self.id,
                             self.doc,
                             &property.value,
-                            &property_with_pattern.pattern,
+                            &property_with_pattern.pattern_with_eval,
                             Some("dark".to_string()),
                         )?
                     {
@@ -244,7 +244,7 @@ impl<'a> DependencyGenerator<'a> {
                         self.id,
                         self.doc,
                         &property.value,
-                        &property_with_pattern.pattern,
+                        &property_with_pattern.pattern_with_eval,
                         None,
                     )?
                 {
@@ -304,7 +304,7 @@ impl<'a> DependencyGenerator<'a> {
                         self.id,
                         self.doc,
                         &property.value,
-                        &property_with_pattern.pattern,
+                        &property_with_pattern.pattern_with_eval,
                         None,
                     )?
                 {

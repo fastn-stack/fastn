@@ -60,7 +60,7 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     id: &str,
     doc: &ftd::interpreter2::TDoc,
     property_value: &ftd::interpreter2::PropertyValue,
-    pattern: &Option<String>,
+    pattern_with_eval: &Option<(String, bool)>,
     field: Option<String>,
 ) -> ftd::html1::Result<Option<String>> {
     let field = match field {
@@ -75,8 +75,14 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
         return Ok(None);
     };
 
-    Ok(Some(match pattern {
-        Some(p) => format!("\"{}\".format({})", p, value_string),
+    Ok(Some(match pattern_with_eval {
+        Some((p, eval)) => {
+            let mut pattern = format!("`{}`.format({})", p, value_string);
+            if *eval {
+                pattern = format!("eval({})", pattern)
+            }
+            pattern
+        }
         None => value_string,
     }))
 }

@@ -99,6 +99,7 @@ pub fn markup_inline(s: &str) -> Rendered {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Container {
     pub spacing: ftd::executor::Value<Option<Length>>,
+    pub wrap: ftd::executor::Value<Option<bool>>,
     pub children: Vec<Element>,
 }
 
@@ -371,6 +372,7 @@ pub fn container_from_properties(
 ) -> ftd::executor::Result<Container> {
     Ok(Container {
         spacing: Length::optional_length(properties, arguments, doc, line_number, "spacing")?,
+        wrap: ftd::executor::value::optional_bool("wrap", properties, arguments, doc, line_number)?,
         children,
     })
 }

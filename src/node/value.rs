@@ -8,12 +8,18 @@ pub struct Value {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct PropertyWithPattern {
     pub property: ftd::interpreter2::Property,
-    pub pattern: Option<String>,
+    pub pattern_with_eval: Option<(String, bool)>,
 }
 
 impl PropertyWithPattern {
-    fn new(property: ftd::interpreter2::Property, pattern: Option<String>) -> PropertyWithPattern {
-        PropertyWithPattern { property, pattern }
+    fn new(
+        property: ftd::interpreter2::Property,
+        pattern_with_eval: Option<(String, bool)>,
+    ) -> PropertyWithPattern {
+        PropertyWithPattern {
+            property,
+            pattern_with_eval,
+        }
     }
 }
 
@@ -29,21 +35,21 @@ impl Value {
     pub fn from_executor_value<T>(
         value: Option<String>,
         exec_value: ftd::executor::Value<T>,
-        pattern: Option<String>,
+        pattern_with_eval: Option<(String, bool)>,
         doc_id: &str,
     ) -> Value {
         use itertools::Itertools;
 
-        let properties = if pattern.is_some() {
+        let properties = if pattern_with_eval.is_some() {
             exec_value
                 .properties
                 .into_iter()
-                .map(|v| PropertyWithPattern::new(v, pattern.clone()))
+                .map(|v| PropertyWithPattern::new(v, pattern_with_eval.clone()))
                 .collect_vec()
         } else {
             let mut properties = vec![];
             for property in exec_value.properties {
-                let mut pattern = pattern.clone();
+                let mut pattern = pattern_with_eval.clone();
                 match property.value.kind() {
                     ftd::interpreter2::Kind::OrType {
                         name,
@@ -55,7 +61,7 @@ impl Value {
                             0,
                         )
                         .ok()
-                        .map(ToString::to_string);
+                        .map(|v| (v.to_string(), false));
                     }
                     _ => {}
                 }

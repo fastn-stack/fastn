@@ -360,6 +360,19 @@ impl ftd::executor::Container {
             ),
         );
 
+        d.check_and_insert(
+            "flex-wrap",
+            ftd::node::Value::from_executor_value(
+                self.wrap
+                    .value
+                    .as_ref()
+                    .map(|v| ftd::node::utils::wrap_to_css(*v)),
+                self.wrap.to_owned(),
+                Some((s("if ({0}) {\"wrap\"} else {\"nowrap\"}"), true)),
+                doc_id,
+            ),
+        );
+
         d
     }
 }

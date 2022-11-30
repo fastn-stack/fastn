@@ -21,3 +21,11 @@ impl CheckMap for ftd::Map<ftd::node::Value> {
         }
     }
 }
+
+pub(crate) fn wrap_to_css(wrap: bool) -> String {
+    if wrap {
+        "wrap".to_string()
+    } else {
+        "nowrap".to_string()
+    }
+}

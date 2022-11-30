@@ -310,6 +310,40 @@ pub fn optional_string(
     }
 }
 
+pub fn optional_bool(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<Option<bool>>> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
+            Some(v),
+            value.line_number,
+            value.properties,
+        )),
+        None => Ok(ftd::executor::Value::new(
+            None,
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type optional boolean, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
 #[allow(dead_code)]
 pub fn optional_f64(
     key: &str,
