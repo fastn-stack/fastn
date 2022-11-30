@@ -551,7 +551,7 @@ impl Property {
                     .find(|v| v.name.eq(name.as_str()))
                     .ok_or(ftd::interpreter2::Error::ParseError {
                         message: format!(
-                            "Header type {} {} argument not found for component `{}`",
+                            "Header type `{}` mutable: `{}` argument not found for component `{}`",
                             name, mutable, component_name
                         ),
                         doc_id: doc.name.to_string(),

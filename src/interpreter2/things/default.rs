@@ -430,6 +430,12 @@ pub fn column_function() -> ftd::interpreter2::ComponentDefinition {
 fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
         ftd::interpreter2::Argument::default(
+            "spacing",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "align",
             ftd::interpreter2::Kind::string()
                 .into_optional()

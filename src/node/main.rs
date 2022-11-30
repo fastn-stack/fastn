@@ -43,7 +43,7 @@ impl Node {
         attrs.extend(container.attrs());
         let mut classes = container.add_class();
         let mut style = common.style(doc_id, &mut classes);
-        style.extend(container.style());
+        style.extend(container.style(doc_id));
 
         let node = common.node();
 
@@ -345,9 +345,22 @@ impl ftd::executor::Container {
         Default::default()
     }
 
-    fn style(&self) -> ftd::Map<ftd::node::Value> {
-        // TODO: Implement style
-        Default::default()
+    fn style(&self, doc_id: &str) -> ftd::Map<ftd::node::Value> {
+        use ftd::node::utils::CheckMap;
+
+        let mut d: ftd::Map<ftd::node::Value> = Default::default();
+
+        d.check_and_insert(
+            "gap",
+            ftd::node::Value::from_executor_value(
+                self.spacing.value.as_ref().map(|v| v.to_css_string()),
+                self.spacing.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d
     }
 }
 

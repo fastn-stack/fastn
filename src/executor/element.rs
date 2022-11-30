@@ -98,6 +98,7 @@ pub fn markup_inline(s: &str) -> Rendered {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Container {
+    pub spacing: ftd::executor::Value<Option<Length>>,
     pub children: Vec<Element>,
 }
 
@@ -362,13 +363,16 @@ pub fn common_from_properties(
 }
 
 pub fn container_from_properties(
-    _properties: &[ftd::interpreter2::Property],
-    _arguments: &[ftd::interpreter2::Argument],
-    _doc: &ftd::executor::TDoc,
-    _line_number: usize,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
     children: Vec<Element>,
 ) -> ftd::executor::Result<Container> {
-    Ok(Container { children })
+    Ok(Container {
+        spacing: Length::optional_length(properties, arguments, doc, line_number, "spacing")?,
+        children,
+    })
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]

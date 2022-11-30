@@ -15,6 +15,16 @@ padding-vertical.px: 40
 padding-horizontal.percent if { flag } : 10
 
 
+-- ftd.row:
+spacing.px: 20
+spacing.px if { flag }: 40
+
+-- ftd.text: Hello
+-- ftd.text: World
+
+-- end: ftd.row
+
+
 
 -- void toggle(a):
 boolean $a:
