@@ -26,7 +26,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="text-decoration: none" class="ft_md">Click me</div><div data-id="1:main" style="padding-bottom: 7.9%; padding-left: 40px; padding-right: 10%; padding-top: 50px; text-decoration: none" class="ft_md">Hello</div><div data-id="2:main" style="padding-bottom: 40px; padding-left: 10%; padding-right: 10%; padding-top: 40px; text-decoration: none" class="ft_md">Hello</div><div data-id="3:main" style="align-items: flex-start; display: flex; flex-direction: row; flex-wrap: nowrap; gap: 40px; justify-content: flex-start; text-decoration: none" ><div data-id="3,0:main" style="text-decoration: none" class="ft_md">Hello</div><div data-id="3,1:main" style="text-decoration: none" class="ft_md">World</div></div></div>
+<div data-id="main" style="align-items: flex-start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="border-style: solid; border-width: 0px; text-decoration: none" class="ft_md">Click me</div><div data-id="1:main" style="border-style: solid; border-top-left-radius: 18%; border-width: 2px; padding-bottom: 7.9%; padding-left: 40px; padding-right: 10%; padding-top: 50px; text-decoration: none" class="ft_md">Hello</div><div data-id="2:main" style="border-style: solid; border-width: 0px; padding-bottom: 40px; padding-left: 10%; padding-right: 10%; padding-top: 40px; text-decoration: none" class="ft_md">Hello</div><div data-id="3:main" style="align-items: flex-start; border-radius: 18%; border-style: solid; border-width: 2px; display: flex; flex-direction: row; flex-wrap: nowrap; gap: 40px; justify-content: flex-start; text-decoration: none" ><div data-id="3,0:main" style="border-style: solid; border-width: 0px; text-decoration: none" class="ft_md">Hello</div><div data-id="3,1:main" style="border-style: solid; border-width: 0px; text-decoration: none" class="ft_md">World</div></div></div>
 
 
 <script>
@@ -489,6 +489,14 @@ a.value = !a.value
 
 
 window.node_change_main = {};
+window.node_change_main["1:main__border-top-left-radius"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = `{0}%`.format(18);
+}
+else { document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = null; }
+}
 window.node_change_main["2:main__padding-left"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
@@ -506,6 +514,15 @@ document.querySelector(`[data-id="2:main"]`).style["padding-right"] = `{0}%`.for
 }
 else { document.querySelector(`[data-id="2:main"]`).style["padding-right"] = null; }
 }
+window.node_change_main["3:main__border-width"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["border-width"] = `{0}px`.format(2);
+}
+else {document.querySelector(`[data-id="3:main"]`).style["border-width"] = `{0}px`.format(4);}
+}
+
 window.node_change_main["3:main__flex-wrap"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
@@ -533,11 +550,15 @@ set_data_value(data, "foo#flag", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding-left"]){window.node_change_main["2:main__padding-left"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding-right"]){window.node_change_main["2:main__padding-right"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__gap"]){window.node_change_main["3:main__gap"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__border-top-left-radius"]){window.node_change_main["1:main__border-top-left-radius"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding-right"]){window.node_change_main["2:main__padding-right"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__flex-wrap"]){window.node_change_main["3:main__flex-wrap"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__border-width"]){window.node_change_main["3:main__border-width"](data);
 }
 };
 

@@ -26,7 +26,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="text-decoration: none" class="ft_md">1</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#g&quot;}}}]', this)" style="padding: 2px; text-decoration: none" class="ft_md">Hello FTD</div></div>
+<div data-id="main" style="align-items: flex-start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="border-style: solid; border-width: 0px; text-decoration: none" class="ft_md">1</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#g&quot;}}}]', this)" style="border-style: solid; border-width: 0px; padding: 2px; text-decoration: none" class="ft_md">Hello FTD</div></div>
 
 
 <script>
@@ -525,9 +525,9 @@ set_data_value(data, "foo#g" + "." + remaining, new_value);
 set_data_value(data, "foo#g", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
 

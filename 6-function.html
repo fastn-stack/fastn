@@ -28,7 +28,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="padding: 5px; text-decoration: none" class="ft_md">hello world</div><div data-id="1:main" style="padding: 14px; text-decoration: none" class="ft_md">Arpita Jaiswal</div><div data-id="2:main" style="padding: 15px; text-decoration: none" class="ft_md">Arpita FifthTry</div></div>
+<div data-id="main" style="align-items: flex-start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="border-style: solid; border-width: 0px; padding: 5px; text-decoration: none" class="ft_md">hello world</div><div data-id="1:main" style="border-style: solid; border-width: 0px; padding: 14px; text-decoration: none" class="ft_md">Arpita Jaiswal</div><div data-id="2:main" style="border-style: solid; border-width: 0px; padding: 15px; text-decoration: none" class="ft_md">Arpita FifthTry</div></div>
 
 
 <script>
@@ -543,11 +543,11 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#new-nam
 let value = resolve_reference("foo#name", data);
 set_data_value(data, "foo#new-name", value);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
 };
 
@@ -571,9 +571,9 @@ set_data_value(data, "foo#number" + "." + remaining, new_value);
 set_data_value(data, "foo#number", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
 
