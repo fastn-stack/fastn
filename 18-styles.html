@@ -26,7 +26,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="text-decoration: none" class="ft_md">Click me</div><div data-id="1:main" style="padding-bottom: 7.9%; padding-left: 40px; padding-right: 10%; padding-top: 50px; text-decoration: none" class="ft_md">Hello</div><div data-id="2:main" style="padding-bottom: 40px; padding-left: 10%; padding-right: 10%; padding-top: 40px; text-decoration: none" class="ft_md">Hello</div><div data-id="3:main" style="align-items: flex-start; display: flex; flex-direction: row; gap: 40px; justify-content: flex-start; text-decoration: none" ><div data-id="3,0:main" style="text-decoration: none" class="ft_md">Hello</div><div data-id="3,1:main" style="text-decoration: none" class="ft_md">World</div></div></div>
+<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="text-decoration: none" class="ft_md">Click me</div><div data-id="1:main" style="padding-bottom: 7.9%; padding-left: 40px; padding-right: 10%; padding-top: 50px; text-decoration: none" class="ft_md">Hello</div><div data-id="2:main" style="padding-bottom: 40px; padding-left: 10%; padding-right: 10%; padding-top: 40px; text-decoration: none" class="ft_md">Hello</div><div data-id="3:main" style="align-items: flex-start; display: flex; flex-direction: row; flex-wrap: nowrap; gap: 40px; justify-content: flex-start; text-decoration: none" ><div data-id="3,0:main" style="text-decoration: none" class="ft_md">Hello</div><div data-id="3,1:main" style="text-decoration: none" class="ft_md">World</div></div></div>
 
 
 <script>
@@ -493,7 +493,7 @@ window.node_change_main["2:main__padding-left"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["padding-left"] = "{0}%".format(10);
+document.querySelector(`[data-id="2:main"]`).style["padding-left"] = `{0}%`.format(10);
 }
 else { document.querySelector(`[data-id="2:main"]`).style["padding-left"] = null; }
 }
@@ -502,17 +502,26 @@ window.node_change_main["2:main__padding-right"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["padding-right"] = "{0}%".format(10);
+document.querySelector(`[data-id="2:main"]`).style["padding-right"] = `{0}%`.format(10);
 }
 else { document.querySelector(`[data-id="2:main"]`).style["padding-right"] = null; }
 }
+window.node_change_main["3:main__flex-wrap"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="3:main"]`).style["flex-wrap"] = eval(`if ({0}) {"wrap"} else {"nowrap"}`.format(false));
+}
+else {document.querySelector(`[data-id="3:main"]`).style["flex-wrap"] = eval(`if ({0}) {"wrap"} else {"nowrap"}`.format(true));}
+}
+
 window.node_change_main["3:main__gap"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["gap"] = "{0}px".format(40);
+document.querySelector(`[data-id="3:main"]`).style["gap"] = `{0}px`.format(40);
 }
-else {document.querySelector(`[data-id="3:main"]`).style["gap"] = "{0}px".format(20);}
+else {document.querySelector(`[data-id="3:main"]`).style["gap"] = `{0}px`.format(20);}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
@@ -522,11 +531,13 @@ set_data_value(data, "foo#flag" + "." + remaining, new_value);
 set_data_value(data, "foo#flag", new_value);
 }
 
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding-left"]){window.node_change_main["2:main__padding-left"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding-right"]){window.node_change_main["2:main__padding-right"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__gap"]){window.node_change_main["3:main__gap"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding-left"]){window.node_change_main["2:main__padding-left"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__flex-wrap"]){window.node_change_main["3:main__flex-wrap"](data);
 }
 };
 
