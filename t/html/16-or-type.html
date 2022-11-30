@@ -30,7 +30,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="padding: 20px; text-decoration: none" class="ft_md">Hello from FTD</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;}}}]', this)" style="padding: 20px; text-decoration: none" class="ft_md">Hello from FTD</div><div data-id="2:main" style="padding: 20px; text-decoration: none" class="ft_md">Hello from FTD</div><div data-id="3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="padding: 20%; text-decoration: none" class="ft_md">Hello from FTD</div></div>
+<div data-id="main" style="align-items: flex-start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="border-style: solid; border-width: 0px; padding: 20px; text-decoration: none" class="ft_md">Hello from FTD</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;}}}]', this)" style="border-style: solid; border-width: 0px; padding: 20px; text-decoration: none" class="ft_md">Hello from FTD</div><div data-id="2:main" style="border-style: solid; border-width: 0px; padding: 20px; text-decoration: none" class="ft_md">Hello from FTD</div><div data-id="3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="border-style: solid; border-width: 0px; padding: 20%; text-decoration: none" class="ft_md">Hello from FTD</div></div>
 
 
 <script>
@@ -500,18 +500,18 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(resolve_reference("foo#value", data));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(resolve_reference("foo#value", data));
 }
 window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = "{0}px".format(resolve_reference("foo#len", data).value);
+document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}px`.format(resolve_reference("foo#len", data).value);
 }
 window.node_change_main["3:main__padding"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["padding"] = "{0}%".format(20);
+document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}%`.format(20);
 }
-else {document.querySelector(`[data-id="3:main"]`).style["padding"] = "{0}px".format(resolve_reference("foo#len", data).value);}
+else {document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}px`.format(resolve_reference("foo#len", data).value);}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {

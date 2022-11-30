@@ -276,10 +276,30 @@
   },
   "main": {
     "container": {
+      "spacing": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "wrap": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "children": [
         {
           "Row": {
             "container": {
+              "spacing": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "wrap": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "children": [
                 {
                   "Text": {
@@ -347,6 +367,38 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "border_width": {
+                        "value": {
+                          "Px": 0
+                        },
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_top_left_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_top_right_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_bottom_left_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_bottom_right_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "data_id": "0,0",
                       "line_number": 6,
                       "condition": null
@@ -356,6 +408,16 @@
                 {
                   "Row": {
                     "container": {
+                      "spacing": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "wrap": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "children": [
                         {
                           "Text": {
@@ -423,6 +485,38 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "border_width": {
+                                "value": {
+                                  "Px": 0
+                                },
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_radius": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_top_left_radius": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_top_right_radius": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_bottom_left_radius": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "border_bottom_right_radius": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "data_id": "0,1,0",
                               "line_number": 21,
                               "condition": null
@@ -466,6 +560,38 @@
                         "properties": []
                       },
                       "padding_vertical": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_width": {
+                        "value": {
+                          "Px": 0
+                        },
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_top_left_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_top_right_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_bottom_left_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_bottom_right_radius": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -517,6 +643,38 @@
                 "line_number": null,
                 "properties": []
               },
+              "border_width": {
+                "value": {
+                  "Px": 0
+                },
+                "line_number": null,
+                "properties": []
+              },
+              "border_radius": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_top_left_radius": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_top_right_radius": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_bottom_left_radius": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "border_bottom_right_radius": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 4,
               "condition": null
@@ -560,6 +718,38 @@
         "properties": []
       },
       "padding_vertical": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_width": {
+        "value": {
+          "Px": 0
+        },
+        "line_number": null,
+        "properties": []
+      },
+      "border_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_top_left_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_top_right_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_bottom_left_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_bottom_right_radius": {
         "value": null,
         "line_number": null,
         "properties": []

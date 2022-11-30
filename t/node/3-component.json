@@ -18,6 +18,16 @@
         "properties": [],
         "line_number": null
       },
+      "border-style": {
+        "value": "solid",
+        "properties": [],
+        "line_number": null
+      },
+      "border-width": {
+        "value": "0px",
+        "properties": [],
+        "line_number": null
+      },
       "display": {
         "value": "flex",
         "properties": [],
@@ -55,6 +65,16 @@
         "style": {
           "align-items": {
             "value": "flex-start",
+            "properties": [],
+            "line_number": null
+          },
+          "border-style": {
+            "value": "solid",
+            "properties": [],
+            "line_number": null
+          },
+          "border-width": {
+            "value": "0px",
             "properties": [],
             "line_number": null
           },
@@ -112,7 +132,10 @@
                   "condition": null,
                   "line_number": 4
                 },
-                "pattern": "{0}px"
+                "pattern_with_eval": [
+                  "{0}px",
+                  false
+                ]
               }
             ],
             "line_number": 4
@@ -139,6 +162,16 @@
               }
             },
             "style": {
+              "border-style": {
+                "value": "solid",
+                "properties": [],
+                "line_number": null
+              },
+              "border-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "padding": {
                 "value": "20px",
                 "properties": [
@@ -208,7 +241,10 @@
                       },
                       "line_number": 7
                     },
-                    "pattern": "{0}px"
+                    "pattern_with_eval": [
+                      "{0}px",
+                      false
+                    ]
                   },
                   {
                     "property": {
@@ -246,7 +282,10 @@
                       "condition": null,
                       "line_number": 8
                     },
-                    "pattern": "{0}px"
+                    "pattern_with_eval": [
+                      "{0}px",
+                      false
+                    ]
                   }
                 ],
                 "line_number": 7
@@ -278,7 +317,7 @@
                     "condition": null,
                     "line_number": 6
                   },
-                  "pattern": null
+                  "pattern_with_eval": null
                 }
               ],
               "line_number": 6
@@ -302,6 +341,16 @@
               }
             },
             "style": {
+              "border-style": {
+                "value": "solid",
+                "properties": [],
+                "line_number": null
+              },
+              "border-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "padding": {
                 "value": "2px",
                 "properties": [
@@ -376,7 +425,10 @@
                       },
                       "line_number": 11
                     },
-                    "pattern": "{0}px"
+                    "pattern_with_eval": [
+                      "{0}px",
+                      false
+                    ]
                   },
                   {
                     "property": {
@@ -414,7 +466,10 @@
                       "condition": null,
                       "line_number": 12
                     },
-                    "pattern": "{0}px"
+                    "pattern_with_eval": [
+                      "{0}px",
+                      false
+                    ]
                   }
                 ],
                 "line_number": 12
@@ -446,7 +501,7 @@
                     "condition": null,
                     "line_number": 10
                   },
-                  "pattern": null
+                  "pattern_with_eval": null
                 }
               ],
               "line_number": 10

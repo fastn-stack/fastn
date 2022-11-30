@@ -321,6 +321,93 @@ impl ftd::executor::Common {
             ),
         );
 
+        d.check_and_insert(
+            "border-style",
+            ftd::node::Value::from_executor_value(
+                Some(s("solid")),
+                ftd::executor::Value::new(None::<String>, None, vec![]),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-width",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.border_width
+                        .to_owned()
+                        .map(|v| v.to_css_string())
+                        .value,
+                ),
+                self.border_width.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-radius",
+            ftd::node::Value::from_executor_value(
+                self.border_radius.value.as_ref().map(|v| v.to_css_string()),
+                self.border_radius.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-top-left-radius",
+            ftd::node::Value::from_executor_value(
+                self.border_top_left_radius
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.border_top_left_radius.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-top-right-radius",
+            ftd::node::Value::from_executor_value(
+                self.border_top_right_radius
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.border_top_right_radius.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-bottom-left-radius",
+            ftd::node::Value::from_executor_value(
+                self.border_bottom_left_radius
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.border_bottom_left_radius.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-bottom-right-radius",
+            ftd::node::Value::from_executor_value(
+                self.border_bottom_right_radius
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.border_bottom_right_radius.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
         d
     }
 

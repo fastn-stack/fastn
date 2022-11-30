@@ -18,6 +18,16 @@
         "properties": [],
         "line_number": null
       },
+      "border-style": {
+        "value": "solid",
+        "properties": [],
+        "line_number": null
+      },
+      "border-width": {
+        "value": "0px",
+        "properties": [],
+        "line_number": null
+      },
       "display": {
         "value": "flex",
         "properties": [],
@@ -58,6 +68,16 @@
             "properties": [],
             "line_number": null
           },
+          "border-style": {
+            "value": "solid",
+            "properties": [],
+            "line_number": null
+          },
+          "border-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
           "display": {
             "value": "flex",
             "properties": [],
@@ -95,6 +115,16 @@
               }
             },
             "style": {
+              "border-style": {
+                "value": "solid",
+                "properties": [],
+                "line_number": null
+              },
+              "border-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
@@ -126,7 +156,7 @@
                     "condition": null,
                     "line_number": 6
                   },
-                  "pattern": null
+                  "pattern_with_eval": null
                 }
               ],
               "line_number": 6
@@ -160,6 +190,16 @@
         "style": {
           "align-items": {
             "value": "flex-start",
+            "properties": [],
+            "line_number": null
+          },
+          "border-style": {
+            "value": "solid",
+            "properties": [],
+            "line_number": null
+          },
+          "border-width": {
+            "value": "0px",
             "properties": [],
             "line_number": null
           },
@@ -200,6 +240,16 @@
               }
             },
             "style": {
+              "border-style": {
+                "value": "solid",
+                "properties": [],
+                "line_number": null
+              },
+              "border-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
@@ -231,7 +281,7 @@
                     "condition": null,
                     "line_number": 6
                   },
-                  "pattern": null
+                  "pattern_with_eval": null
                 }
               ],
               "line_number": 6

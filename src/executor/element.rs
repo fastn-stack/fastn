@@ -117,6 +117,12 @@ pub struct Common {
     pub padding_bottom: ftd::executor::Value<Option<Length>>,
     pub padding_horizontal: ftd::executor::Value<Option<Length>>,
     pub padding_vertical: ftd::executor::Value<Option<Length>>,
+    pub border_width: ftd::executor::Value<Length>,
+    pub border_radius: ftd::executor::Value<Option<Length>>,
+    pub border_top_left_radius: ftd::executor::Value<Option<Length>>,
+    pub border_top_right_radius: ftd::executor::Value<Option<Length>>,
+    pub border_bottom_left_radius: ftd::executor::Value<Option<Length>>,
+    pub border_bottom_right_radius: ftd::executor::Value<Option<Length>>,
     pub data_id: String,
     pub line_number: usize,
     pub condition: Option<ftd::interpreter2::Expression>,
@@ -357,6 +363,49 @@ pub fn common_from_properties(
             line_number,
             "padding-vertical",
         )?,
+        border_width: Length::length_with_default(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "border-width",
+            Length::Px(0),
+        )?,
+        border_radius: Length::optional_length(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "border-radius",
+        )?,
+        border_top_left_radius: Length::optional_length(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "border-top-left-radius",
+        )?,
+        border_top_right_radius: Length::optional_length(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "border-top-right-radius",
+        )?,
+        border_bottom_left_radius: Length::optional_length(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "border-bottom-left-radius",
+        )?,
+        border_bottom_right_radius: Length::optional_length(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "border-bottom-right-radius",
+        )?,
         condition: condition.to_owned(),
         data_id: ftd::executor::utils::get_string_container(local_container),
         line_number,
@@ -452,6 +501,30 @@ impl Length {
 
         Ok(ftd::executor::Value::new(
             Length::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    fn length_with_default(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+        default: Length,
+    ) -> ftd::executor::Result<ftd::executor::Value<Length>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_LENGTH,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Length::from_optional_values(or_type_value.value, doc, line_number)?.unwrap_or(default),
             or_type_value.line_number,
             or_type_value.properties,
         ))

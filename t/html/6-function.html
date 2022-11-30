@@ -28,7 +28,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: flex-start; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="padding: 5px; text-decoration: none" class="ft_md">hello world</div><div data-id="1:main" style="padding: 14px; text-decoration: none" class="ft_md">Arpita Jaiswal</div><div data-id="2:main" style="padding: 15px; text-decoration: none" class="ft_md">Arpita FifthTry</div></div>
+<div data-id="main" style="align-items: flex-start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; justify-content: flex-start; text-decoration: none" ><div data-id="0:main" style="border-style: solid; border-width: 0px; padding: 5px; text-decoration: none" class="ft_md">hello world</div><div data-id="1:main" style="border-style: solid; border-width: 0px; padding: 14px; text-decoration: none" class="ft_md">Arpita Jaiswal</div><div data-id="2:main" style="border-style: solid; border-width: 0px; padding: 15px; text-decoration: none" class="ft_md">Arpita FifthTry</div></div>
 
 
 <script>
@@ -515,21 +515,21 @@ document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_funct
 }
 
 window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":20,"c":4,"d":5}}', this));
+document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}px`.format(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":20,"c":4,"d":5}}', this));
 }
 window.node_change_main["1:main__text"] = function(data) {
 document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":{"mutable":false,"reference":"foo#name"},"b":"Jaiswal"}}', this);
 }
 
 window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":4}}', this));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":4}}', this));
 }
 window.node_change_main["2:main__text"] = function(data) {
 document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data);
 }
 
 window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = "{0}px".format(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":{"a":{"mutable":false,"reference":"foo#new-name"}}}', this));
+document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}px`.format(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":{"a":{"mutable":false,"reference":"foo#new-name"}}}', this));
 }
 window.set_value_main = {};
 window.set_value_main["foo#name"] = function (data, new_value, remaining) {

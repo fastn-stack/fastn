@@ -18,6 +18,16 @@
         "properties": [],
         "line_number": null
       },
+      "border-style": {
+        "value": "solid",
+        "properties": [],
+        "line_number": null
+      },
+      "border-width": {
+        "value": "0px",
+        "properties": [],
+        "line_number": null
+      },
       "display": {
         "value": "flex",
         "properties": [],
@@ -55,6 +65,16 @@
         "style": {
           "align-items": {
             "value": "flex-start",
+            "properties": [],
+            "line_number": null
+          },
+          "border-style": {
+            "value": "solid",
+            "properties": [],
+            "line_number": null
+          },
+          "border-width": {
+            "value": "0px",
             "properties": [],
             "line_number": null
           },
@@ -112,7 +132,10 @@
                   "condition": null,
                   "line_number": 2
                 },
-                "pattern": "{0}px"
+                "pattern_with_eval": [
+                  "{0}px",
+                  false
+                ]
               }
             ],
             "line_number": 2
@@ -139,6 +162,16 @@
               }
             },
             "style": {
+              "border-style": {
+                "value": "solid",
+                "properties": [],
+                "line_number": null
+              },
+              "border-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "padding": {
                 "value": "2px",
                 "properties": [
@@ -178,7 +211,10 @@
                       "condition": null,
                       "line_number": 5
                     },
-                    "pattern": "{0}px"
+                    "pattern_with_eval": [
+                      "{0}px",
+                      false
+                    ]
                   }
                 ],
                 "line_number": 5
@@ -210,7 +246,7 @@
                     "condition": null,
                     "line_number": 4
                   },
-                  "pattern": null
+                  "pattern_with_eval": null
                 }
               ],
               "line_number": 4
@@ -234,6 +270,16 @@
               }
             },
             "style": {
+              "border-style": {
+                "value": "solid",
+                "properties": [],
+                "line_number": null
+              },
+              "border-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "padding": {
                 "value": "2px",
                 "properties": [
@@ -273,7 +319,10 @@
                       "condition": null,
                       "line_number": 8
                     },
-                    "pattern": "{0}px"
+                    "pattern_with_eval": [
+                      "{0}px",
+                      false
+                    ]
                   }
                 ],
                 "line_number": 8
@@ -305,7 +354,7 @@
                     "condition": null,
                     "line_number": 7
                   },
-                  "pattern": null
+                  "pattern_with_eval": null
                 }
               ],
               "line_number": 7
@@ -339,6 +388,16 @@
         "style": {
           "align-items": {
             "value": "flex-start",
+            "properties": [],
+            "line_number": null
+          },
+          "border-style": {
+            "value": "solid",
+            "properties": [],
+            "line_number": null
+          },
+          "border-width": {
+            "value": "0px",
             "properties": [],
             "line_number": null
           },
@@ -396,7 +455,10 @@
                   "condition": null,
                   "line_number": 14
                 },
-                "pattern": "{0}px"
+                "pattern_with_eval": [
+                  "{0}px",
+                  false
+                ]
               }
             ],
             "line_number": 14
@@ -423,6 +485,16 @@
               }
             },
             "style": {
+              "border-style": {
+                "value": "solid",
+                "properties": [],
+                "line_number": null
+              },
+              "border-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "padding": {
                 "value": "2px",
                 "properties": [
@@ -462,7 +534,10 @@
                       "condition": null,
                       "line_number": 17
                     },
-                    "pattern": "{0}px"
+                    "pattern_with_eval": [
+                      "{0}px",
+                      false
+                    ]
                   }
                 ],
                 "line_number": 17
@@ -494,7 +569,7 @@
                     "condition": null,
                     "line_number": 16
                   },
-                  "pattern": null
+                  "pattern_with_eval": null
                 }
               ],
               "line_number": 16
@@ -518,6 +593,16 @@
               }
             },
             "style": {
+              "border-style": {
+                "value": "solid",
+                "properties": [],
+                "line_number": null
+              },
+              "border-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "padding": {
                 "value": "2px",
                 "properties": [
@@ -557,7 +642,10 @@
                       "condition": null,
                       "line_number": 20
                     },
-                    "pattern": "{0}px"
+                    "pattern_with_eval": [
+                      "{0}px",
+                      false
+                    ]
                   }
                 ],
                 "line_number": 20
@@ -589,7 +677,7 @@
                     "condition": null,
                     "line_number": 19
                   },
-                  "pattern": null
+                  "pattern_with_eval": null
                 }
               ],
               "line_number": 19
@@ -623,6 +711,16 @@
           }
         },
         "style": {
+          "border-style": {
+            "value": "solid",
+            "properties": [],
+            "line_number": null
+          },
+          "border-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
           "padding": {
             "value": "40px",
             "properties": [
@@ -662,7 +760,10 @@
                   "condition": null,
                   "line_number": 26
                 },
-                "pattern": "{0}px"
+                "pattern_with_eval": [
+                  "{0}px",
+                  false
+                ]
               }
             ],
             "line_number": 26
@@ -694,7 +795,7 @@
                 "condition": null,
                 "line_number": 25
               },
-              "pattern": null
+              "pattern_with_eval": null
             }
           ],
           "line_number": 25

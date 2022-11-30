@@ -8,6 +8,8 @@ padding-left.px: 40
 padding-right.percent: 10
 padding-top.px: 50
 padding-bottom.percent: 7.9
+border-width.px: 2
+border-top-left-radius.percent if { flag }: 18
 
 
 -- ftd.text: Hello
@@ -20,6 +22,9 @@ spacing.px: 20
 spacing.px if { flag }: 40
 wrap: true
 wrap if { flag }: false
+border-width.px: 4
+border-width.px if { flag }: 2
+border-radius.percent: 18
 
 -- ftd.text: Hello
 -- ftd.text: World

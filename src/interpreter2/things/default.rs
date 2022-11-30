@@ -477,26 +477,38 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
-            "border-top-radius",
-            ftd::interpreter2::Kind::integer()
+            "border-width",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
-            "border-bottom-radius",
-            ftd::interpreter2::Kind::integer()
+            "border-radius",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
-            "border-left-radius",
-            ftd::interpreter2::Kind::integer()
+            "border-top-left-radius",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
-            "border-right-radius",
-            ftd::interpreter2::Kind::integer()
+            "border-top-right-radius",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "border-bottom-left-radius",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "border-bottom-right-radius",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -559,18 +571,6 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "border-color",
             ftd::interpreter2::Kind::record("ftd#color")
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "border-width",
-            ftd::interpreter2::Kind::integer()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "border-radius",
-            ftd::interpreter2::Kind::integer()
                 .into_optional()
                 .into_kind_data(),
         ),
