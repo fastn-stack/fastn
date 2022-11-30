@@ -1,17 +1,34 @@
 [
   {
     "name": "foo",
+    "kind": null,
+    "caption": null,
     "headers": [
       {
         "type": "KV",
+        "line_number": 0,
         "key": "k",
-        "value": "v"
+        "kind": null,
+        "value": "v",
+        "condition": null
       }
     ],
+    "body": null,
     "sub_sections": [
       {
-        "name": "bar"
+        "name": "bar",
+        "kind": null,
+        "caption": null,
+        "headers": [],
+        "body": null,
+        "sub_sections": [],
+        "is_commented": false,
+        "line_number": 0,
+        "block_body": false
       }
-    ]
+    ],
+    "is_commented": false,
+    "line_number": 0,
+    "block_body": false
   }
 ]

@@ -1,0 +1,39 @@
+-- record full-name:
+caption first-name:
+optional string middle-name:
+optional string last-name:
+
+
+-- record person:
+full-name name:
+integer age:
+
+
+-- string $name: Arpita
+
+-- person $arpita:
+name: $name
+age: 20
+
+
+-- ftd.text: $arpita.name.first-name
+
+-- ftd.text: $name
+
+
+-- ftd.text: Change arpita.name.first-name
+$on-click$: $append(a = $arpita.name.first-name, b = FifthTry)
+
+-- ftd.text: Change name
+$on-click$: $append(a = $name, b = FifthTry)
+
+
+
+
+-- string append(a,b):
+string a:
+string b:
+
+a + " " + b
+
+

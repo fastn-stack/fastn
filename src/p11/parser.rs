@@ -235,7 +235,7 @@ impl State {
 
         let (name_with_kind, value) =
             colon_separated_values(self.line_number, line, self.doc_id.as_str())?;
-        let (key, kind, condition) = get_name_kind_and_condition(name_with_kind.as_str());
+        let (key, kind) = get_name_and_kind(name_with_kind.as_str());
 
         let key = if let Some(key) = key.strip_prefix(format!("{}.", section.name).as_str()) {
             key
@@ -247,6 +247,12 @@ impl State {
         self.line_number += scan_line_number + 1;
         self.content = rest_lines;
         section.block_body = true;
+
+        let condition = get_block_header_condition(
+            &mut self.content,
+            &mut self.line_number,
+            self.doc_id.as_str(),
+        )?;
 
         if is_caption(key) && kind.is_none() && section.caption.is_some() {
             return Err(ftd::p11::Error::MoreThanOneCaption {
@@ -557,12 +563,13 @@ fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
 }
 
 fn get_name_kind_and_condition(name_with_kind: &str) -> (String, Option<String>, Option<String>) {
-    let (name_with_kind, condition) =
-        if let Some((name_with_kind, condition)) = name_with_kind.split_once(ftd::p11::utils::IF) {
-            (name_with_kind.to_string(), Some(condition.to_string()))
-        } else {
-            (name_with_kind.to_string(), None)
-        };
+    let (name_with_kind, condition) = if let Some((name_with_kind, condition)) =
+        name_with_kind.split_once(ftd::p11::utils::INLINE_IF)
+    {
+        (name_with_kind.to_string(), Some(condition.to_string()))
+    } else {
+        (name_with_kind.to_string(), None)
+    };
     if let Some((kind, name)) = name_with_kind.rsplit_once(' ') {
         return (name.to_string(), Some(kind.to_string()), condition);
     }
@@ -610,4 +617,35 @@ fn content_index(content: &str, line_number: Option<usize>) -> String {
         Some(line_number) if content.len() > line_number => content[line_number..].join("\n"),
         _ => "".to_string(),
     }
+}
+
+pub(crate) fn get_block_header_condition(
+    content: &mut String,
+    line_number: &mut usize,
+    doc_id: &str,
+) -> ftd::p11::Result<Option<String>> {
+    let mut condition = None;
+    let mut new_line_number = None;
+    for (line_number, line) in content.split('\n').enumerate() {
+        if !valid_line(line) {
+            continue;
+        }
+        let line = clean_line(line);
+        if let Ok((name_with_kind, caption)) =
+            colon_separated_values(line_number, line.as_str(), doc_id)
+        {
+            if name_with_kind.eq(ftd::p11::utils::IF) {
+                condition = caption;
+                new_line_number = Some(line_number + 1);
+            }
+        }
+        break;
+    }
+
+    if let Some(new_line_number) = new_line_number {
+        *content = content_index(content.as_str(), Some(new_line_number));
+        *line_number += new_line_number;
+    }
+
+    Ok(condition)
 }

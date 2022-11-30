@@ -1,0 +1,11 @@
+-- foo:
+c if flagC: The C
+
+-- foo.a: The A
+if: flagA
+
+-- foo.b:
+if: flagB
+
+The B
+

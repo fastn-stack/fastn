@@ -12,7 +12,7 @@ fn p(s: &str, t: &Vec<ftd::p11::Section>) {
 }
 
 #[track_caller]
-fn p1(s: &str, t: &Vec<ftd::p11::Section>, fix: bool, file_location: &std::path::PathBuf) {
+fn p1(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let data = super::parse(s, "foo")
         .unwrap_or_else(|e| panic!("{:?}", e))
         .iter()
@@ -23,7 +23,9 @@ fn p1(s: &str, t: &Vec<ftd::p11::Section>, fix: bool, file_location: &std::path:
         std::fs::write(file_location, expected_json).unwrap();
         return;
     }
-    assert_eq!(t, &data, "Expected JSON: {}", expected_json)
+    let t: Vec<ftd::p11::Section> = serde_json::from_str(t)
+        .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
+    assert_eq!(&t, &data, "Expected JSON: {}", expected_json)
 }
 
 #[track_caller]
@@ -58,15 +60,14 @@ fn p1_test_all() {
     let fix = cli_args.iter().any(|v| v.eq("fix=true"));
     let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
     for (files, json) in find_file_groups() {
-        let t: Vec<ftd::p11::Section> =
-            serde_json::from_str(std::fs::read_to_string(&json).unwrap().as_str()).unwrap();
+        let t = std::fs::read_to_string(&json).unwrap();
         for f in files {
             match path {
                 Some(path) if !f.to_str().unwrap().contains(path) => continue,
                 _ => {}
             }
             let s = std::fs::read_to_string(&f).unwrap();
-            println!("testing {}", f.display());
+            println!("{} {}", if fix { "fixing" } else { "testing" }, f.display());
             p1(&s, &t, fix, &json);
         }
     }

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "foo",
+    "kind": null,
+    "caption": null,
+    "headers": [
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "c",
+        "kind": null,
+        "value": "The C",
+        "condition": "flagC"
+      },
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "a",
+        "kind": null,
+        "value": "The A",
+        "condition": "flagA"
+      },
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "b",
+        "kind": null,
+        "value": "The B",
+        "condition": "flagB"
+      }
+    ],
+    "body": null,
+    "sub_sections": [],
+    "is_commented": false,
+    "line_number": 0,
+    "block_body": false
+  }
+]
