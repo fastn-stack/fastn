@@ -5,3 +5,4 @@ pub const FTD_LENGTH_VALUE: &str = "value";
 
 pub const FTD_ALIGNMENT: &str = "ftd#alignment";
 pub const FTD_ALIGNMENT_TOP_LEFT: &str = "ftd#alignment.top-left";
+pub const FTD_ALIGNMENT_TOP_CENTER: &str = "ftd#alignment.top-center";

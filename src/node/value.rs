@@ -49,22 +49,11 @@ impl Value {
         } else {
             let mut properties = vec![];
             for property in exec_value.properties {
-                let mut pattern = pattern_with_eval.clone();
-                match property.value.kind() {
-                    ftd::interpreter2::Kind::OrType {
-                        name,
-                        variant: Some(variant),
-                    } if name.eq(ftd::interpreter2::FTD_LENGTH) => {
-                        pattern = ftd::executor::Length::pattern_from_variant_str(
-                            variant.as_str(),
-                            doc_id,
-                            0,
-                        )
-                        .ok()
-                        .map(|v| (v.to_string(), false));
-                    }
-                    _ => {}
-                }
+                let pattern = property
+                    .value
+                    .kind()
+                    .pattern(doc_id)
+                    .or(pattern_with_eval.clone());
                 properties.push(PropertyWithPattern::new(property, pattern));
             }
             properties
@@ -80,6 +69,22 @@ impl Value {
             value,
             properties,
             line_number: exec_value.line_number,
+        }
+    }
+}
+
+impl ftd::interpreter2::Kind {
+    fn pattern(&self, doc_id: &str) -> Option<(String, bool)> {
+        match self {
+            ftd::interpreter2::Kind::OrType {
+                name,
+                variant: Some(variant),
+            } if name.eq(ftd::interpreter2::FTD_LENGTH) => {
+                ftd::executor::Length::pattern_from_variant_str(variant.as_str(), doc_id, 0)
+                    .ok()
+                    .map(|v| (v.to_string(), false))
+            }
+            _ => None,
         }
     }
 }
