@@ -42,6 +42,11 @@
         "line_number": null,
         "properties": []
       },
+      "align": {
+        "value": "TopLeft",
+        "line_number": null,
+        "properties": []
+      },
       "children": [
         {
           "Text": {
@@ -87,17 +92,28 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.px",
-                            "fields": {
-                              "value": {
-                                "Value": {
-                                  "value": {
-                                    "Integer": {
-                                      "value": 40
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "ftd#length.px",
+                                    "fields": {
+                                      "value": {
+                                        "Value": {
+                                          "value": {
+                                            "Integer": {
+                                              "value": 40
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 4
+                                        }
+                                      }
                                     }
-                                  },
-                                  "is_mutable": false,
-                                  "line_number": 4
-                                }
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 4
                               }
                             }
                           }
@@ -152,17 +168,28 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.px",
-                            "fields": {
-                              "value": {
-                                "Value": {
-                                  "value": {
-                                    "Integer": {
-                                      "value": 30
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "ftd#length.px",
+                                    "fields": {
+                                      "value": {
+                                        "Value": {
+                                          "value": {
+                                            "Integer": {
+                                              "value": 30
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 5
+                                        }
+                                      }
                                     }
-                                  },
-                                  "is_mutable": false,
-                                  "line_number": 5
-                                }
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 5
                               }
                             }
                           }
