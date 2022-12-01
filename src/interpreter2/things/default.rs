@@ -97,7 +97,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_LENGTH.to_string(),
                 variants: vec![
-                    ftd::interpreter2::Record {
+                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
                         name: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
                         fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
                             name: "value".to_string(),
@@ -110,8 +110,8 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         }])
                         .collect(),
                         line_number: 0,
-                    },
-                    ftd::interpreter2::Record {
+                    }),
+                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
                         name: ftd::interpreter2::FTD_LENGTH_PERCENT.to_string(),
                         fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
                             name: "value".to_string(),
@@ -124,7 +124,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         }])
                         .collect(),
                         line_number: 0,
-                    },
+                    }),
                 ],
                 line_number: 0,
             }),

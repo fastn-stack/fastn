@@ -513,7 +513,7 @@ impl<'a> TDoc<'a> {
                     ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant } => {
                         ftd::interpreter2::Kind::or_type_with_variant(
                             or_type.as_str(),
-                            variant.name.as_str(),
+                            variant.name().as_str(),
                         )
                         .into_kind_data()
                         .caption_or_body()
@@ -977,10 +977,11 @@ impl<'a> TDoc<'a> {
                     variants,
                     ..
                 }) => {
-                    if let Some(thing) = variants.into_iter().find(|v| {
-                        v.name
+                    if let Some(thing) = variants.into_iter().find(|or_type_variant| {
+                        or_type_variant
+                            .name()
                             .trim_start_matches(format!("{}.", or_type_name).as_str())
-                            .eq(name)
+                            .eq(&v)
                     }) {
                         ftd::interpreter2::Thing::OrTypeWithVariant {
                             or_type: or_type_name.to_string(),

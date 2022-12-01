@@ -549,7 +549,7 @@ impl PropertyValue {
                 let variant = or_type
                     .variants
                     .into_iter()
-                    .find(|v| v.name.eq(&variant_name))
+                    .find(|v| v.name().eq(&variant_name))
                     .ok_or(ftd::interpreter2::Error::ParseError {
                         message: format!(
                             "Expected variant `{}` in or-type `{}`",
@@ -561,7 +561,7 @@ impl PropertyValue {
 
                 // TODO: Check if the record name and the value kind are same
                 let mut result_field: ftd::Map<PropertyValue> = Default::default();
-                for field in variant.fields {
+                for field in variant.fields() {
                     if field.is_caption() && caption.is_some() {
                         let caption = caption.as_ref().unwrap().clone();
                         let property_value =
@@ -633,8 +633,8 @@ impl PropertyValue {
                     }
 
                     if headers.is_empty() && field.value.is_some() {
-                        let value = field.value.unwrap();
-                        match &value {
+                        let value = field.value.as_ref().unwrap();
+                        match value {
                             ftd::interpreter2::PropertyValue::Reference {
                                 name: refernence,
                                 source,

@@ -219,20 +219,29 @@ impl Field {
         match self.kind.kind.mut_inner() {
             ftd::interpreter2::Kind::OrType { name, variant: v } => {
                 let or_type = try_ok_state!(doc.search_or_type(name, self.line_number)?);
-                if or_type.variants.iter().any(|v| {
-                    v.name
-                        .trim_start_matches(format!("{}.", name).as_str())
-                        .eq(variant)
-                }) {
-                    *v = Some(format!("{}.{}", name, variant));
-                    Ok(ftd::interpreter2::StateWithThing::new_thing(()))
-                } else {
-                    ftd::interpreter2::utils::e2(
-                        format!("Cannot find variant `{}` for or-type `{}`", variant, name),
-                        doc.name,
-                        self.line_number,
-                    )
-                }
+                let (variant_name, remaining) =
+                    ftd::p2::utils::get_doc_name_and_remaining(variant)?;
+                let or_variant = or_type
+                    .variants
+                    .iter()
+                    .find(|v| {
+                        v.name()
+                            .trim_start_matches(format!("{}.", name).as_str())
+                            .eq(variant_name.as_str())
+                    })
+                    .ok_or(ftd::interpreter2::Error::ParseError {
+                        message: format!(
+                            "Cannot find variant `{}` for or-type `{}`",
+                            variant, name
+                        ),
+                        doc_id: doc.name.to_string(),
+                        line_number: self.line_number,
+                    })?;
+
+                check_variant_if_constant(&or_variant, remaining, doc)?;
+
+                *v = Some(format!("{}.{}", name, variant));
+                Ok(ftd::interpreter2::StateWithThing::new_thing(()))
             }
             t => ftd::interpreter2::utils::e2(
                 format!(
@@ -261,6 +270,25 @@ fn validate_record_fields(
             doc_id,
             field.line_number,
         );
+    }
+    Ok(())
+}
+
+fn check_variant_if_constant(
+    or_variant: &ftd::interpreter2::OrTypeVariant,
+    _remaining: Option<String>,
+    doc: &ftd::interpreter2::TDoc,
+) -> ftd::interpreter2::Result<()> {
+    match or_variant {
+        ftd::interpreter2::OrTypeVariant::AnonymousRecord(_r) => {} // Todo: check on remaining for constant and throw error if found
+        ftd::interpreter2::OrTypeVariant::Regular(_r) => {} // Todo: check on remaining for constant and throw error if found
+        ftd::interpreter2::OrTypeVariant::Constant(c) => {
+            return ftd::interpreter2::utils::e2(
+                format!("Cannot pass deconstructed constant variant `{}`", c.name),
+                doc.name,
+                c.line_number,
+            );
+        }
     }
     Ok(())
 }
