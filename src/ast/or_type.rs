@@ -141,7 +141,7 @@ impl OrTypeVariant {
             )?))
         } else {
             Ok(OrTypeVariant::new_constant(ftd::ast::Field::from_p1(
-                &section, doc_id,
+                section, doc_id,
             )?))
         }
     }
