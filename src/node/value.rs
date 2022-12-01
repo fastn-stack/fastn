@@ -53,7 +53,7 @@ impl Value {
                     .value
                     .kind()
                     .pattern(doc_id)
-                    .or(pattern_with_eval.clone());
+                    .or_else(|| pattern_with_eval.clone());
                 properties.push(PropertyWithPattern::new(property, pattern));
             }
             properties

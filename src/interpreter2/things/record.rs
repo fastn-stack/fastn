@@ -238,7 +238,7 @@ impl Field {
                         line_number: self.line_number,
                     })?;
 
-                check_variant_if_constant(&or_variant, remaining, doc)?;
+                check_variant_if_constant(or_variant, remaining, doc)?;
 
                 *v = Some(format!("{}.{}", name, variant));
                 Ok(ftd::interpreter2::StateWithThing::new_thing(()))

@@ -571,7 +571,7 @@ impl PropertyValue {
                     let value = match &variant {
                         ftd::interpreter2::OrTypeVariant::Constant(c) => return ftd::interpreter2::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
                         ftd::interpreter2::OrTypeVariant::AnonymousRecord(record) => try_ok_state!(ftd::interpreter2::PropertyValue::from_record(
-                            &record,
+                            record,
                             value,
                             doc,
                             is_mutable,
@@ -978,7 +978,7 @@ impl Value {
                 if let ftd::interpreter2::Value::Record { fields, .. } =
                     value.clone().resolve(doc, line_number)?
                 {
-                    Ok(fields.to_owned())
+                    Ok(fields)
                 } else {
                     ftd::interpreter2::utils::e2(
                         format!("Expected record variant for or-type, found: `{:?}`", t),
