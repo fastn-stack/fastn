@@ -157,19 +157,23 @@ pub(crate) fn is_dark_mode_dependent(
 
 pub(crate) fn dependencies_from_property_value(
     value: &ftd::interpreter2::PropertyValue,
+    doc: &ftd::interpreter2::TDoc,
 ) -> Vec<String> {
     if let Some(ref_name) = value.reference_name() {
         vec![ref_name.to_string()]
     } else if let Some(function_call) = value.get_function() {
         let mut result = vec![];
         for property_value in function_call.values.values() {
-            result.extend(dependencies_from_property_value(property_value));
+            result.extend(dependencies_from_property_value(property_value, doc));
         }
         result
     } else if value.is_value() && value.kind().is_ftd_length() {
         let value = value.value("", 0).unwrap();
-        let fields = value.or_type_fields("", 0).unwrap();
-        dependencies_from_property_value(fields.get(ftd::interpreter2::FTD_LENGTH_VALUE).unwrap())
+        let fields = value.or_type_fields(doc, 0).unwrap();
+        dependencies_from_property_value(
+            fields.get(ftd::interpreter2::FTD_LENGTH_VALUE).unwrap(),
+            doc,
+        )
     } else {
         vec![]
     }
@@ -251,17 +255,7 @@ impl ftd::interpreter2::Value {
                     .unwrap()
                     .to_string(doc, None, id)?
             }
-            ftd::interpreter2::Value::OrType { fields, .. }
-                if field
-                    .as_ref()
-                    .map(|v| fields.contains_key(v))
-                    .unwrap_or(false) =>
-            {
-                fields
-                    .get(&field.unwrap())
-                    .unwrap()
-                    .to_string(doc, None, id)?
-            }
+            ftd::interpreter2::Value::OrType { value, .. } => value.to_string(doc, field, id)?,
             t => unimplemented!("{:?}", t),
         })
     }

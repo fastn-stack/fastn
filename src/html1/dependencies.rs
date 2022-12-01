@@ -41,6 +41,7 @@ impl<'a> DependencyGenerator<'a> {
                 var_dependencies,
                 &self.node.condition,
                 node_change_id.as_str(),
+                self.doc,
             );
 
             let condition = self
@@ -91,7 +92,7 @@ impl<'a> DependencyGenerator<'a> {
                     .as_ref()
                     .map(ftd::html1::utils::get_condition_string);
 
-                if !is_static_expression(&property.value, &condition) {
+                if !is_static_expression(&property.value, &condition, self.doc) {
                     is_static = false;
                 }
 
@@ -108,11 +109,13 @@ impl<'a> DependencyGenerator<'a> {
                         var_dependencies,
                         &property.condition,
                         node_change_id.as_str(),
+                        self.doc,
                     );
                     dependency_map_from_property_value(
                         var_dependencies,
                         &property.value,
                         node_change_id.as_str(),
+                        self.doc,
                     );
 
                     let value = format!("{} = {};", key, value_string);
@@ -145,7 +148,7 @@ impl<'a> DependencyGenerator<'a> {
                     .as_ref()
                     .map(ftd::html1::utils::get_condition_string);
 
-                if !is_static_expression(&property.value, &condition) {
+                if !is_static_expression(&property.value, &condition, self.doc) {
                     is_static = false;
                 }
 
@@ -216,11 +219,13 @@ impl<'a> DependencyGenerator<'a> {
                                 var_dependencies,
                                 &property.condition,
                                 node_change_id.as_str(),
+                                self.doc,
                             );
                             dependency_map_from_property_value(
                                 var_dependencies,
                                 &property.value,
                                 node_change_id.as_str(),
+                                self.doc,
                             );
                             var_dependencies
                                 .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
@@ -252,11 +257,13 @@ impl<'a> DependencyGenerator<'a> {
                         var_dependencies,
                         &property.condition,
                         node_change_id.as_str(),
+                        self.doc,
                     );
                     dependency_map_from_property_value(
                         var_dependencies,
                         &property.value,
                         node_change_id.as_str(),
+                        self.doc,
                     );
                     let value = format!(
                         "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
@@ -295,7 +302,7 @@ impl<'a> DependencyGenerator<'a> {
                     .as_ref()
                     .map(ftd::html1::utils::get_condition_string);
 
-                if !is_static_expression(&property.value, &condition) {
+                if !is_static_expression(&property.value, &condition, self.doc) {
                     is_static = false;
                 }
 
@@ -312,11 +319,13 @@ impl<'a> DependencyGenerator<'a> {
                         var_dependencies,
                         &property.condition,
                         node_change_id.as_str(),
+                        self.doc,
                     );
                     dependency_map_from_property_value(
                         var_dependencies,
                         &property.value,
                         node_change_id.as_str(),
+                        self.doc,
                     );
                     let value = format!("{} = {};", key, value_string);
                     expressions.push((condition, value));
@@ -353,10 +362,11 @@ fn dependency_map_from_condition(
     var_dependencies: &mut ftd::VecMap<String>,
     condition: &Option<ftd::interpreter2::Expression>,
     node_change_id: &str,
+    doc: &ftd::interpreter2::TDoc,
 ) {
     if let Some(condition) = condition.as_ref() {
         for reference in condition.references.values() {
-            dependency_map_from_property_value(var_dependencies, reference, node_change_id)
+            dependency_map_from_property_value(var_dependencies, reference, node_change_id, doc)
         }
     }
 }
@@ -365,8 +375,9 @@ fn dependency_map_from_property_value(
     var_dependencies: &mut ftd::VecMap<String>,
     property_value: &ftd::interpreter2::PropertyValue,
     node_change_id: &str,
+    doc: &ftd::interpreter2::TDoc,
 ) {
-    let values = ftd::html1::utils::dependencies_from_property_value(property_value);
+    let values = ftd::html1::utils::dependencies_from_property_value(property_value, doc);
     for v in values {
         var_dependencies.insert(v, node_change_id.to_string());
     }
@@ -375,19 +386,21 @@ fn dependency_map_from_property_value(
 fn is_static_expression(
     property_value: &ftd::interpreter2::PropertyValue,
     condition: &Option<String>,
+    doc: &ftd::interpreter2::TDoc,
 ) -> bool {
     if property_value.kind().is_ftd_length() {
         if let ftd::interpreter2::PropertyValue::Value {
-            value: ftd::interpreter2::Value::OrType { fields, .. },
-            ..
+            value, line_number, ..
         } = property_value
         {
-            if !fields
-                .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                .map(|v| v.is_value())
-                .unwrap_or(true)
-            {
-                return false;
+            if let Ok(fields) = value.or_type_fields(doc, *line_number) {
+                if !fields
+                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
+                    .map(|v| v.is_value())
+                    .unwrap_or(true)
+                {
+                    return false;
+                }
             }
         }
     }

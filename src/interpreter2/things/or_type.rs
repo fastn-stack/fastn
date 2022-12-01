@@ -52,7 +52,11 @@ impl OrTypeVariant {
         OrTypeVariant::AnonymousRecord(record)
     }
 
-    pub fn new_variant(variant: ftd::interpreter2::Field) -> OrTypeVariant {
+    pub fn new_constant(variant: ftd::interpreter2::Field) -> OrTypeVariant {
+        OrTypeVariant::Constant(variant)
+    }
+
+    pub fn new_regular(variant: ftd::interpreter2::Field) -> OrTypeVariant {
         OrTypeVariant::Regular(variant)
     }
 
@@ -65,6 +69,20 @@ impl OrTypeVariant {
             OrTypeVariant::AnonymousRecord(ar) => ar.name.to_string(),
             OrTypeVariant::Regular(r) => r.name.to_string(),
             OrTypeVariant::Constant(c) => c.name.to_string(),
+        }
+    }
+
+    pub fn ok_constant(
+        &self,
+        doc_id: &str,
+    ) -> ftd::interpreter2::Result<&ftd::interpreter2::Field> {
+        match self {
+            ftd::interpreter2::OrTypeVariant::Constant(c) => Ok(c),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected constant, found: {:?}", t),
+                doc_id,
+                t.line_number(),
+            ),
         }
     }
 
@@ -90,7 +108,7 @@ impl OrTypeVariant {
             }
             ftd::ast::OrTypeVariant::Regular(variant) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(
-                    ftd::interpreter2::OrTypeVariant::new_variant(try_ok_state!(
+                    ftd::interpreter2::OrTypeVariant::new_regular(try_ok_state!(
                         ftd::interpreter2::Field::from_ast_field(
                             variant,
                             doc,
@@ -107,7 +125,7 @@ impl OrTypeVariant {
                 )?);
                 validate_constant_variant(&variant, doc)?;
                 Ok(ftd::interpreter2::StateWithThing::new_thing(
-                    ftd::interpreter2::OrTypeVariant::new_variant(variant),
+                    ftd::interpreter2::OrTypeVariant::new_regular(variant),
                 ))
             }
         }
