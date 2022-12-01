@@ -286,6 +286,11 @@
         "line_number": null,
         "properties": []
       },
+      "align": {
+        "value": "TopLeft",
+        "line_number": null,
+        "properties": []
+      },
       "children": [
         {
           "Row": {
@@ -297,6 +302,11 @@
               },
               "wrap": {
                 "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "align": {
+                "value": "TopLeft",
                 "line_number": null,
                 "properties": []
               },
@@ -415,6 +425,11 @@
                       },
                       "wrap": {
                         "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "align": {
+                        "value": "TopLeft",
                         "line_number": null,
                         "properties": []
                       },

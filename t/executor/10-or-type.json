@@ -49,17 +49,28 @@
               "OrType": {
                 "name": "ftd#length",
                 "variant": "ftd#length.px",
-                "fields": {
-                  "value": {
-                    "Value": {
-                      "value": {
-                        "Integer": {
-                          "value": 20
+                "value": {
+                  "Value": {
+                    "value": {
+                      "Record": {
+                        "name": "ftd#length.px",
+                        "fields": {
+                          "value": {
+                            "Value": {
+                              "value": {
+                                "Integer": {
+                                  "value": 20
+                                }
+                              },
+                              "is_mutable": false,
+                              "line_number": 12
+                            }
+                          }
                         }
-                      },
-                      "is_mutable": false,
-                      "line_number": 12
-                    }
+                      }
+                    },
+                    "is_mutable": false,
+                    "line_number": 12
                   }
                 }
               }
@@ -111,6 +122,11 @@
         "line_number": null,
         "properties": []
       },
+      "align": {
+        "value": "TopLeft",
+        "line_number": null,
+        "properties": []
+      },
       "children": [
         {
           "Text": {
@@ -156,17 +172,28 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.px",
-                            "fields": {
-                              "value": {
-                                "Value": {
-                                  "value": {
-                                    "Integer": {
-                                      "value": 20
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "ftd#length.px",
+                                    "fields": {
+                                      "value": {
+                                        "Value": {
+                                          "value": {
+                                            "Integer": {
+                                              "value": 20
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 2
+                                        }
+                                      }
                                     }
-                                  },
-                                  "is_mutable": false,
-                                  "line_number": 2
-                                }
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 2
                               }
                             }
                           }
@@ -298,19 +325,30 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.px",
-                            "fields": {
-                              "value": {
-                                "Reference": {
-                                  "name": "foo#value",
-                                  "kind": {
-                                    "kind": "Integer",
-                                    "caption": true,
-                                    "body": false
-                                  },
-                                  "source": "Global",
-                                  "is_mutable": false,
-                                  "line_number": 8
-                                }
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "ftd#length.px",
+                                    "fields": {
+                                      "value": {
+                                        "Reference": {
+                                          "name": "foo#value",
+                                          "kind": {
+                                            "kind": "Integer",
+                                            "caption": true,
+                                            "body": false
+                                          },
+                                          "source": "Global",
+                                          "is_mutable": false,
+                                          "line_number": 8
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 8
                               }
                             }
                           }
@@ -610,17 +648,28 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.percent",
-                            "fields": {
-                              "value": {
-                                "Value": {
-                                  "value": {
-                                    "Decimal": {
-                                      "value": 20.0
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "ftd#length.percent",
+                                    "fields": {
+                                      "value": {
+                                        "Value": {
+                                          "value": {
+                                            "Decimal": {
+                                              "value": 20.0
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 24
+                                        }
+                                      }
                                     }
-                                  },
-                                  "is_mutable": false,
-                                  "line_number": 24
-                                }
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 24
                               }
                             }
                           }

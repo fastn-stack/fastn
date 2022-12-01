@@ -467,6 +467,11 @@
         "line_number": null,
         "properties": []
       },
+      "align": {
+        "value": "TopLeft",
+        "line_number": null,
+        "properties": []
+      },
       "children": [
         {
           "Column": {
@@ -478,6 +483,11 @@
               },
               "wrap": {
                 "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "align": {
+                "value": "TopLeft",
                 "line_number": null,
                 "properties": []
               },
@@ -600,6 +610,11 @@
                       },
                       "wrap": {
                         "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "align": {
+                        "value": "TopLeft",
                         "line_number": null,
                         "properties": []
                       },
@@ -804,6 +819,11 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "align": {
+                        "value": "TopLeft",
+                        "line_number": null,
+                        "properties": []
+                      },
                       "children": [
                         {
                           "Text": {
@@ -923,6 +943,11 @@
                               },
                               "wrap": {
                                 "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "align": {
+                                "value": "TopLeft",
                                 "line_number": null,
                                 "properties": []
                               },

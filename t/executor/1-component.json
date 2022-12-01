@@ -16,6 +16,11 @@
         "line_number": null,
         "properties": []
       },
+      "align": {
+        "value": "TopLeft",
+        "line_number": null,
+        "properties": []
+      },
       "children": [
         {
           "Text": {

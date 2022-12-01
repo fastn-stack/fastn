@@ -4,76 +4,80 @@
       "name": "entity",
       "variants": [
         {
-          "name": "person",
-          "fields": [
-            {
-              "name": "name",
-              "kind": {
-                "modifier": null,
-                "kind": "caption"
+          "AnonymousRecord": {
+            "name": "person",
+            "fields": [
+              {
+                "name": "name",
+                "kind": {
+                  "modifier": null,
+                  "kind": "caption"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 4
               },
-              "mutable": false,
-              "value": null,
-              "line_number": 4
-            },
-            {
-              "name": "address",
-              "kind": {
-                "modifier": null,
-                "kind": "string"
+              {
+                "name": "address",
+                "kind": {
+                  "modifier": null,
+                  "kind": "string"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 5
               },
-              "mutable": false,
-              "value": null,
-              "line_number": 5
-            },
-            {
-              "name": "bio",
-              "kind": {
-                "modifier": null,
-                "kind": "body"
+              {
+                "name": "bio",
+                "kind": {
+                  "modifier": null,
+                  "kind": "body"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 6
               },
-              "mutable": false,
-              "value": null,
-              "line_number": 6
-            },
-            {
-              "name": "age",
-              "kind": {
-                "modifier": null,
-                "kind": "integer"
-              },
-              "mutable": false,
-              "value": null,
-              "line_number": 7
-            }
-          ],
-          "line_number": 3
+              {
+                "name": "age",
+                "kind": {
+                  "modifier": null,
+                  "kind": "integer"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 7
+              }
+            ],
+            "line_number": 3
+          }
         },
         {
-          "name": "company",
-          "fields": [
-            {
-              "name": "name",
-              "kind": {
-                "modifier": null,
-                "kind": "caption"
+          "AnonymousRecord": {
+            "name": "company",
+            "fields": [
+              {
+                "name": "name",
+                "kind": {
+                  "modifier": null,
+                  "kind": "caption"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 10
               },
-              "mutable": false,
-              "value": null,
-              "line_number": 10
-            },
-            {
-              "name": "industry",
-              "kind": {
-                "modifier": null,
-                "kind": "string"
-              },
-              "mutable": false,
-              "value": null,
-              "line_number": 11
-            }
-          ],
-          "line_number": 9
+              {
+                "name": "industry",
+                "kind": {
+                  "modifier": null,
+                  "kind": "string"
+                },
+                "mutable": false,
+                "value": null,
+                "line_number": 11
+              }
+            ],
+            "line_number": 9
+          }
         }
       ],
       "line_number": 1

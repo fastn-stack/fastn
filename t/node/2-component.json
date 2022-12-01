@@ -14,7 +14,7 @@
     },
     "style": {
       "align-items": {
-        "value": "flex-start",
+        "value": "start",
         "properties": [],
         "line_number": null
       },
@@ -39,7 +39,7 @@
         "line_number": null
       },
       "justify-content": {
-        "value": "flex-start",
+        "value": "start",
         "properties": [],
         "line_number": null
       },
@@ -64,7 +64,7 @@
         },
         "style": {
           "align-items": {
-            "value": "flex-start",
+            "value": "start",
             "properties": [],
             "line_number": null
           },
@@ -89,7 +89,7 @@
             "line_number": null
           },
           "justify-content": {
-            "value": "flex-start",
+            "value": "start",
             "properties": [],
             "line_number": null
           },
@@ -104,17 +104,28 @@
                         "OrType": {
                           "name": "ftd#length",
                           "variant": "ftd#length.px",
-                          "fields": {
-                            "value": {
-                              "Value": {
-                                "value": {
-                                  "Integer": {
-                                    "value": 40
+                          "value": {
+                            "Value": {
+                              "value": {
+                                "Record": {
+                                  "name": "ftd#length.px",
+                                  "fields": {
+                                    "value": {
+                                      "Value": {
+                                        "value": {
+                                          "Integer": {
+                                            "value": 40
+                                          }
+                                        },
+                                        "is_mutable": false,
+                                        "line_number": 2
+                                      }
+                                    }
                                   }
-                                },
-                                "is_mutable": false,
-                                "line_number": 2
-                              }
+                                }
+                              },
+                              "is_mutable": false,
+                              "line_number": 2
                             }
                           }
                         }

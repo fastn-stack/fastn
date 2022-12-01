@@ -240,21 +240,32 @@
                                             "OrType": {
                                               "name": "ftd#length",
                                               "variant": "ftd#length.px",
-                                              "fields": {
-                                                "value": {
-                                                  "Reference": {
-                                                    "name": "foo#print.padding",
-                                                    "kind": {
-                                                      "kind": "Integer",
-                                                      "caption": true,
-                                                      "body": false
-                                                    },
-                                                    "source": {
-                                                      "Local": "print"
-                                                    },
-                                                    "is_mutable": false,
-                                                    "line_number": 12
-                                                  }
+                                              "value": {
+                                                "Value": {
+                                                  "value": {
+                                                    "Record": {
+                                                      "name": "ftd#length.px",
+                                                      "fields": {
+                                                        "value": {
+                                                          "Reference": {
+                                                            "name": "foo#print.padding",
+                                                            "kind": {
+                                                              "kind": "Integer",
+                                                              "caption": true,
+                                                              "body": false
+                                                            },
+                                                            "source": {
+                                                              "Local": "print"
+                                                            },
+                                                            "is_mutable": false,
+                                                            "line_number": 12
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "is_mutable": false,
+                                                  "line_number": 12
                                                 }
                                               }
                                             }
