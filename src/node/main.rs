@@ -286,6 +286,36 @@ impl ftd::executor::Common {
         }
 
         d.check_and_insert(
+            "width",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.horizontal_resizing
+                        .to_owned()
+                        .map(|v| v.to_css_string())
+                        .value,
+                ),
+                self.vertical_resizing.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "height",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.vertical_resizing
+                        .to_owned()
+                        .map(|v| v.to_css_string())
+                        .value,
+                ),
+                self.vertical_resizing.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "padding",
             ftd::node::Value::from_executor_value(
                 self.padding.value.as_ref().map(|v| v.to_css_string()),

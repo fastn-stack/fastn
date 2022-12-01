@@ -57,7 +57,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
     {
         return ftd::executor::utils::parse_error(
             format!(
-                "1 Expected kind {:?}, found: `{:?}`",
+                "Expected kind {:?}, found: `{:?}`",
                 expected_kind, argument.kind.kind
             ),
             doc.name,
@@ -395,6 +395,8 @@ pub fn optional_or_type(
         doc,
         line_number,
     )?;
+
+    dbg!("optional_or_type", &rec_name, &value, &properties);
 
     match value.value.and_then(|v| v.inner()) {
         Some(ftd::interpreter2::Value::OrType {

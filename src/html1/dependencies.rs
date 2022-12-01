@@ -388,7 +388,7 @@ fn is_static_expression(
     condition: &Option<String>,
     doc: &ftd::interpreter2::TDoc,
 ) -> bool {
-    if property_value.kind().is_ftd_length() {
+    if property_value.kind().is_ftd_length() || dbg!(property_value).kind().is_ftd_resizing() {
         if let ftd::interpreter2::PropertyValue::Value {
             value, line_number, ..
         } = property_value
@@ -404,6 +404,7 @@ fn is_static_expression(
             }
         }
     }
+
     if condition.is_some() || !property_value.is_value() {
         return false;
     }
