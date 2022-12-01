@@ -186,6 +186,15 @@ impl Kind {
         matches!(self, Kind::OrType { name, .. } if name.eq(ftd::interpreter2::FTD_LENGTH))
     }
 
+    pub fn is_ftd_resizing(&self) -> bool {
+        dbg!(&self);
+        matches!(self, Kind::OrType { name, .. } if name.eq(ftd::interpreter2::FTD_RESIZING))
+    }
+
+    pub fn is_ftd_resizing_fixed(&self) -> bool {
+        matches!(self, Kind::OrType { name, variant } if name.eq(ftd::interpreter2::FTD_RESIZING) && variant.is_some() && variant.as_ref().unwrap().starts_with(ftd::interpreter2::FTD_RESIZING_FIXED))
+    }
+
     pub fn is_or_type(&self) -> bool {
         matches!(self, Kind::OrType { .. })
     }
@@ -222,6 +231,13 @@ impl Kind {
                 doc_name,
                 line_number,
             ),
+        }
+    }
+
+    pub fn get_or_type(&self) -> Option<(String, Option<String>)> {
+        match self {
+            Kind::OrType { name, variant } => Some((name.to_owned(), variant.to_owned())),
+            _ => None,
         }
     }
 
@@ -378,6 +394,9 @@ impl KindData {
         self.kind.is_list()
     }
 
+    pub fn is_or_type(&self) -> bool {
+        self.kind.is_or_type()
+    }
     pub fn is_optional(&self) -> bool {
         self.kind.is_optional()
     }

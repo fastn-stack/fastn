@@ -559,7 +559,10 @@ impl PropertyValue {
                     let variant = or_type
                         .variants
                         .into_iter()
-                        .find(|v| v.name().eq(variant_name))
+                        .find(|v| {
+                            v.name().eq(variant_name)
+                                || variant_name.starts_with(format!("{}.", v.name()).as_str())
+                        })
                         .ok_or(ftd::interpreter2::Error::ParseError {
                             message: format!(
                                 "Expected variant `{}` in or-type `{}`",
@@ -579,7 +582,30 @@ impl PropertyValue {
                             definition_name_with_arguments,
                             loop_object_name_and_kind,
                         )?),
-                        ftd::interpreter2::OrTypeVariant::Regular(regular) => try_ok_state!(ftd::interpreter2::PropertyValue::value_from_ast_value(value, doc, is_mutable, Some(&regular.kind), definition_name_with_arguments, loop_object_name_and_kind)?)
+                        ftd::interpreter2::OrTypeVariant::Regular(regular) => {
+                            dbg!(&variant);
+                            let variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
+                            dbg!(&variant_name);
+                            let kind = if regular.kind.kind.ref_inner().is_or_type() && !variant_name.is_empty() {
+                                let (name, variant) = regular.kind.kind.get_or_type().unwrap();
+                                let variant_name = format!("{}.{}", name, variant_name);
+                                ftd::interpreter2::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or(variant_name).as_str()).into_kind_data()
+                            } else {
+                                regular.kind.to_owned()
+                            };
+                            dbg!(&kind, &value);
+
+                            try_ok_state!(
+                                ftd::interpreter2::PropertyValue::value_from_ast_value(
+                                    value,
+                                    doc,
+                                    is_mutable,
+                                    Some(&kind),
+                                    definition_name_with_arguments,
+                                    loop_object_name_and_kind
+                                )?
+                            )
+                        }
                     };
                     ftd::interpreter2::StateWithThing::new_thing(
                         ftd::interpreter2::Value::new_or_type(name, variant.name().as_str(), value)
@@ -990,6 +1016,25 @@ impl Value {
             t => ftd::interpreter2::utils::e2(
                 format!("Expected or-type, found: `{:?}`", t),
                 doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn get_or_type(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<(&String, &String, &ftd::interpreter2::PropertyValue)> {
+        match self {
+            Self::OrType {
+                name,
+                variant,
+                value,
+            } => Ok((name, variant, value)),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected or-type, found: `{:?}`", t),
+                doc_id,
                 line_number,
             ),
         }

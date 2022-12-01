@@ -126,6 +126,47 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            ftd::interpreter2::FTD_RESIZING.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_RESIZING.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_RESIZING_HUG_CONTENT,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string(
+                                ftd::interpreter2::FTD_RESIZING_HUG_CONTENT,
+                            )
+                            .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string(
+                                ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER,
+                            )
+                            .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_RESIZING_FIXED,
+                        ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter2::FTD_LENGTH.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_LENGTH.to_string(),
@@ -455,6 +496,18 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
+        ftd::interpreter2::Argument::default(
+            "horizontal-resizing",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_RESIZING)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "vertical-resizing",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_RESIZING)
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter2::Argument::default(
             "padding",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)

@@ -12,7 +12,7 @@ mod value;
 
 pub use element::{Column, Common, Container, Element, Event, Image, Row, Text};
 pub use main::{ExecuteDoc, RT};
-pub use styles::{Alignment, Length};
+pub use styles::{Alignment, Length, Resizing};
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;
 

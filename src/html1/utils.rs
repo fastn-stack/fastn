@@ -64,7 +64,11 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     field: Option<String>,
 ) -> ftd::html1::Result<Option<String>> {
     let field = match field {
-        None if property_value.kind().is_ftd_length() => Some("value".to_string()),
+        None if property_value.kind().is_ftd_length()
+            || property_value.kind().is_ftd_resizing_fixed() =>
+        {
+            Some("value".to_string())
+        }
         Some(a) => Some(a),
         None => None,
     };
@@ -167,7 +171,9 @@ pub(crate) fn dependencies_from_property_value(
             result.extend(dependencies_from_property_value(property_value, doc));
         }
         result
-    } else if value.is_value() && value.kind().is_ftd_length() {
+    } else if value.is_value()
+        && (value.kind().is_ftd_length() || value.kind().is_ftd_resizing_fixed())
+    {
         let value = value.value("", 0).unwrap();
         let fields = value.or_type_fields(doc, 0).unwrap();
         dependencies_from_property_value(

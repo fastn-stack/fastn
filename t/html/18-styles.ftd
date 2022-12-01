@@ -44,6 +44,16 @@ align: ftd.alignment.top-center
 -- end: ftd.row
 
 
+-- ftd.row:
+spacing.px: 20
+horizontal-resizing.fixed.px: 20
+
+-- ftd.text: Hello
+-- ftd.text: World
+
+-- end: ftd.row
+
+
 
 -- void toggle(a):
 boolean $a:
