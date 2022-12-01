@@ -3,6 +3,7 @@
 mod test;
 
 mod component;
+mod constants;
 mod function;
 mod import;
 mod kind;
@@ -19,7 +20,7 @@ pub use function::Function;
 pub use import::Import;
 pub use kind::{Condition, HeaderValues, VariableKind, VariableModifier, VariableValue};
 pub use main::AST;
-pub use or_type::OrType;
+pub use or_type::{OrType, OrTypeVariant};
 pub use record::{Field, Record};
 pub use variable::{VariableDefinition, VariableFlags, VariableInvocation};
 

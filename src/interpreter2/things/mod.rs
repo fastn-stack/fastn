@@ -14,7 +14,7 @@ pub enum Thing {
     OrType(ftd::interpreter2::OrType),
     OrTypeWithVariant {
         or_type: String,
-        variant: ftd::interpreter2::Record,
+        variant: ftd::interpreter2::OrTypeVariant,
     },
     Variable(ftd::interpreter2::Variable),
     Component(ftd::interpreter2::ComponentDefinition),
@@ -29,7 +29,7 @@ impl Thing {
             Thing::Component(c) => c.line_number,
             Thing::Function(f) => f.line_number,
             Thing::OrType(o) => o.line_number,
-            Thing::OrTypeWithVariant { variant, .. } => variant.line_number,
+            Thing::OrTypeWithVariant { variant, .. } => variant.line_number(),
         }
     }
 

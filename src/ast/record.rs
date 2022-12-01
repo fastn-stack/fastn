@@ -5,8 +5,6 @@ pub struct Record {
     pub line_number: usize,
 }
 
-pub const RECORD: &str = "record";
-
 impl Record {
     fn new(name: &str, fields: Vec<Field>, line_number: usize) -> Record {
         Record {
@@ -17,7 +15,10 @@ impl Record {
     }
 
     pub(crate) fn is_record(section: &ftd::p11::Section) -> bool {
-        section.kind.as_ref().map_or(false, |s| s.eq(RECORD))
+        section
+            .kind
+            .as_ref()
+            .map_or(false, |s| s.eq(ftd::ast::constants::RECORD))
     }
 
     pub(crate) fn from_p1(section: &ftd::p11::Section, doc_id: &str) -> ftd::ast::Result<Record> {
@@ -86,7 +87,7 @@ impl Field {
         ))
     }
 
-    fn new(
+    pub(crate) fn new(
         name: &str,
         kind: ftd::ast::VariableKind,
         mutable: bool,

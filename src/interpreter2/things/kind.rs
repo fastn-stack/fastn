@@ -22,6 +22,9 @@ pub enum Kind {
         name: Option<String>,
         subsection_source: bool,
     },
+    Constant {
+        kind: Box<Kind>,
+    },
     Void,
 }
 
@@ -326,7 +329,7 @@ impl KindData {
                 ftd::interpreter2::Thing::Component(_) => Kind::ui(),
                 ftd::interpreter2::Thing::OrType(o) => Kind::or_type(o.name.as_str()),
                 ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant } => {
-                    Kind::or_type_with_variant(or_type.as_str(), variant.name.as_str())
+                    Kind::or_type_with_variant(or_type.as_str(), variant.name().as_str())
                 }
                 t => {
                     return ftd::interpreter2::utils::e2(
