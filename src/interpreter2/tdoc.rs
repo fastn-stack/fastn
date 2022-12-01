@@ -656,9 +656,34 @@ impl<'a> TDoc<'a> {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(c))
             }
             ftd::interpreter2::StateWithThing::Thing(t) => self.err(
-                format!("Expected Component, found: `{:?}`", t).as_str(),
+                format!("Expected OrType, found: `{:?}`", t).as_str(),
                 name,
-                "search_component",
+                "search_or_type",
+                line_number,
+            ),
+        }
+    }
+
+    pub fn search_or_type_with_variant(
+        &'a self,
+        name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<
+        ftd::interpreter2::StateWithThing<(String, ftd::interpreter2::OrTypeVariant)>,
+    > {
+        match self.search_thing(name, line_number)? {
+            ftd::interpreter2::StateWithThing::State(s) => {
+                Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Thing(
+                ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant },
+            ) => Ok(ftd::interpreter2::StateWithThing::new_thing((
+                or_type, variant,
+            ))),
+            ftd::interpreter2::StateWithThing::Thing(t) => self.err(
+                format!("Expected OrTypeWithVariant, found: `{:?}`", t).as_str(),
+                name,
+                "search_or_type_with_variant",
                 line_number,
             ),
         }
@@ -983,6 +1008,7 @@ impl<'a> TDoc<'a> {
                             .trim_start_matches(format!("{}.", or_type_name).as_str())
                             .eq(&v)
                     }) {
+                        // Todo: Handle remaining
                         ftd::interpreter2::Thing::OrTypeWithVariant {
                             or_type: or_type_name.to_string(),
                             variant: thing,

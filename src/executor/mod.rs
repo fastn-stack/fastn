@@ -5,12 +5,14 @@ mod test;
 mod element;
 mod main;
 mod markup;
+mod styles;
 mod tdoc;
 mod utils;
 mod value;
 
-pub use element::{Column, Common, Container, Element, Event, Image, Length, Row, Text};
+pub use element::{Column, Common, Container, Element, Event, Image, Row, Text};
 pub use main::{ExecuteDoc, RT};
+pub use styles::{Alignment, Length};
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;
 

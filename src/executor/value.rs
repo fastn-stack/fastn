@@ -387,9 +387,8 @@ pub fn optional_or_type(
     doc: &ftd::executor::TDoc,
     line_number: usize,
     rec_name: &str,
-) -> ftd::executor::Result<
-    ftd::executor::Value<Option<(String, ftd::Map<ftd::interpreter2::PropertyValue>)>>,
-> {
+) -> ftd::executor::Result<ftd::executor::Value<Option<(String, ftd::interpreter2::PropertyValue)>>>
+{
     let value = get_value_from_properties_using_key_and_arguments(
         key,
         properties,
@@ -401,10 +400,10 @@ pub fn optional_or_type(
     match value.value.and_then(|v| v.inner()) {
         Some(ftd::interpreter2::Value::OrType {
             name,
-            fields,
+            value: property_value,
             variant,
         }) if name.eq(rec_name) => Ok(ftd::executor::Value::new(
-            Some((variant, fields)),
+            Some((variant, property_value.as_ref().to_owned())),
             value.line_number,
             value.properties,
         )),

@@ -19,15 +19,26 @@ impl<'a> VariableDependencyGenerator<'a> {
             .values()
             .filter_map(|v| v.clone().variable(self.doc.name, v.line_number()).ok())
         {
-            dependencies_from_property_value(&mut result, &variable.value, &variable.name);
+            dependencies_from_property_value(
+                &mut result,
+                &variable.value,
+                &variable.name,
+                self.doc,
+            );
             for conditional_value in variable.conditional_value.iter() {
                 for condition in conditional_value.condition.references.values() {
-                    dependencies_from_property_value(&mut result, condition, &variable.name);
+                    dependencies_from_property_value(
+                        &mut result,
+                        condition,
+                        &variable.name,
+                        self.doc,
+                    );
                 }
                 dependencies_from_property_value(
                     &mut result,
                     &conditional_value.value,
                     &variable.name,
+                    self.doc,
                 );
             }
             if result.value.get(&variable.name).is_none() {
@@ -41,8 +52,9 @@ impl<'a> VariableDependencyGenerator<'a> {
             result: &mut ftd::VecMap<String>,
             value: &ftd::interpreter2::PropertyValue,
             name: &str,
+            doc: &ftd::interpreter2::TDoc,
         ) {
-            let value = ftd::html1::utils::dependencies_from_property_value(value);
+            let value = ftd::html1::utils::dependencies_from_property_value(value, doc);
             for v in value {
                 result.insert(v, name.to_string());
             }

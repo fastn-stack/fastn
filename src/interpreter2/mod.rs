@@ -33,7 +33,10 @@ mod tdoc;
 mod things;
 pub mod utils;
 
-pub use constants::{FTD_LENGTH, FTD_LENGTH_PERCENT, FTD_LENGTH_PX, FTD_LENGTH_VALUE};
+pub use constants::{
+    FTD_ALIGNMENT, FTD_ALIGNMENT_TOP_LEFT, FTD_LENGTH, FTD_LENGTH_PERCENT, FTD_LENGTH_PX,
+    FTD_LENGTH_VALUE,
+};
 pub use main2::{interpret, Document, Interpreter, InterpreterState, StateWithThing};
 pub use tdoc::TDoc;
 pub use things::{

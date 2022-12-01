@@ -52,8 +52,7 @@ impl<'a> DataGenerator<'a> {
                 Some(ftd::interpreter2::Value::String { text: value, .. }) => {
                     serde_json::to_value(value).ok()
                 }
-                Some(ftd::interpreter2::Value::Record { fields, .. })
-                | Some(ftd::interpreter2::Value::OrType { fields, .. }) => {
+                Some(ftd::interpreter2::Value::Record { fields, .. }) => {
                     let mut value_fields = ftd::Map::new();
                     for (k, v) in fields {
                         if let Some(value) =
@@ -63,6 +62,9 @@ impl<'a> DataGenerator<'a> {
                         }
                     }
                     serde_json::to_value(value_fields).ok()
+                }
+                Some(ftd::interpreter2::Value::OrType { value, .. }) => {
+                    get_value(doc, &value.clone().resolve(doc, value.line_number())?)?
                 }
                 _ => None,
             })

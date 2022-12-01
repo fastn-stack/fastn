@@ -412,7 +412,6 @@ fn update_local_variable_reference_in_property_value(
                     }
                 }
                 ftd::interpreter2::Value::Record { fields, .. }
-                | ftd::interpreter2::Value::OrType { fields, .. }
                 | ftd::interpreter2::Value::Object { values: fields } => {
                     for d in fields.values_mut() {
                         update_local_variable_reference_in_property_value(d, local_variable);
@@ -420,6 +419,9 @@ fn update_local_variable_reference_in_property_value(
                 }
                 ftd::interpreter2::Value::UI { component, .. } => {
                     update_local_variable_references_in_component(component, local_variable)
+                }
+                ftd::interpreter2::Value::OrType { value, .. } => {
+                    update_local_variable_reference_in_property_value(value, local_variable);
                 }
                 _ => {}
             }

@@ -274,9 +274,11 @@ pub fn validate_record_value(
 
             if let ftd::interpreter2::PropertyValue::Value { value, .. } = value {
                 match value.ref_inner() {
-                    Some(ftd::interpreter2::Value::Record { fields, .. })
-                    | Some(ftd::interpreter2::Value::OrType { fields, .. }) => {
+                    Some(ftd::interpreter2::Value::Record { fields, .. }) => {
                         validate_fields(fields.values().collect(), doc)?;
+                    }
+                    Some(ftd::interpreter2::Value::OrType { value, .. }) => {
+                        validate_fields(vec![value], doc)?;
                     }
                     Some(ftd::interpreter2::Value::List { data, .. }) => {
                         validate_fields(data.iter().collect(), doc)?;
