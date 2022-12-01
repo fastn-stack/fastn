@@ -135,6 +135,7 @@ impl Length {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Alignment {
     TopLeft,
+    TopCenter,
 }
 
 impl Default for Alignment {
@@ -142,15 +143,44 @@ impl Default for Alignment {
         Alignment::TopLeft
     }
 }
-/*
+
 impl Alignment {
-    pub(crate) fn optional_alignment(
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(Alignment::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT => Ok(Alignment::TopLeft),
+            ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER => Ok(Alignment::TopCenter),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.alignment`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn alignment_with_default(
         properties: &[ftd::interpreter2::Property],
         arguments: &[ftd::interpreter2::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
-    ) -> ftd::executor::Result<ftd::executor::Value<Option<Length>>> {
+        default: ftd::executor::Alignment,
+    ) -> ftd::executor::Result<ftd::executor::Value<Alignment>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
             properties,
@@ -161,9 +191,114 @@ impl Alignment {
         )?;
 
         Ok(ftd::executor::Value::new(
-            Length::from_optional_values(or_type_value.value, doc, line_number)?,
+            Alignment::from_optional_values(or_type_value.value, doc, line_number)?
+                .unwrap_or(default),
             or_type_value.line_number,
             or_type_value.properties,
         ))
     }
-}*/
+
+    #[allow(dead_code)]
+    pub(crate) fn optional_alignment(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Alignment>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_ALIGNMENT,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Alignment::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_justify_content(&self, is_horizontal_direction: bool) -> String {
+        if is_horizontal_direction {
+            match self {
+                Alignment::TopLeft => "start".to_string(),
+                Alignment::TopCenter => "center".to_string(),
+            }
+        } else {
+            match self {
+                Alignment::TopLeft => "start".to_string(),
+                Alignment::TopCenter => "start".to_string(),
+            }
+        }
+    }
+
+    pub fn to_css_align_items(&self, is_horizontal_direction: bool) -> String {
+        if is_horizontal_direction {
+            match self {
+                Alignment::TopLeft => "start".to_string(),
+                Alignment::TopCenter => "start".to_string(),
+            }
+        } else {
+            match self {
+                Alignment::TopLeft => "start".to_string(),
+                Alignment::TopCenter => "center".to_string(),
+            }
+        }
+    }
+
+    pub fn justify_content_pattern(is_horizontal_direction: bool) -> (String, bool) {
+        if is_horizontal_direction {
+            (
+                format!(
+                    indoc::indoc! {"
+                if (\"{{0}}\" == \"{top_left}\") {{\"start\"}} else if (\"{{0}}\" == \"{top_center}\") {{\"center\"}} else {{null}}
+                "},
+                    top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
+                    top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                ),
+                true,
+            )
+        } else {
+            (
+                format!(
+                    indoc::indoc! {"
+                if (\"{{0}}\" == \"{top_left}\") {{\"start\"}} else if (\"{{0}}\" == \"{top_center}\") {{\"start\"}} else {{null}}
+                "},
+                    top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
+                    top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                ),
+                true,
+            )
+        }
+    }
+
+    pub fn align_item_pattern(is_horizontal_direction: bool) -> (String, bool) {
+        if is_horizontal_direction {
+            (
+                format!(
+                    indoc::indoc! {"
+                if (\"{{0}}\" == \"{top_left}\") {{\"start\"}} else if (\"{{0}}\" == \"{top_center}\") {{\"start\"}} else {{null}}
+                "},
+                    top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
+                    top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                ),
+                true,
+            )
+        } else {
+            (
+                format!(
+                    indoc::indoc! {"
+                if (\"{{0}}\" == \"{top_left}\") {{\"start\"}} else if (\"{{0}}\" == \"{top_center}\") {{\"center\"}} else {{null}}
+                "},
+                    top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
+                    top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                ),
+                true,
+            )
+        }
+    }
+}

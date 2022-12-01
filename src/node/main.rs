@@ -99,11 +99,14 @@ impl ftd::executor::Element {
 
 impl ftd::executor::Row {
     pub fn to_node(&self, doc_id: &str) -> Node {
+        use ftd::node::utils::CheckMap;
+
         let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
             n.style
                 .insert(s("display"), ftd::node::Value::from_string("flex"));
         }
+
         n.style
             .insert(s("flex-direction"), ftd::node::Value::from_string("row"));
 
@@ -115,6 +118,38 @@ impl ftd::executor::Row {
         n.style.insert(
             s("justify-content"),
             ftd::node::Value::from_string("flex-start"),
+        );
+
+        n.style.check_and_insert(
+            "justify-content",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.container
+                        .align
+                        .to_owned()
+                        .map(|v| v.to_css_justify_content(true))
+                        .value,
+                ),
+                self.container.align.to_owned(),
+                Some(ftd::executor::Alignment::justify_content_pattern(true)),
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "align-items",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.container
+                        .align
+                        .to_owned()
+                        .map(|v| v.to_css_align_items(true))
+                        .value,
+                ),
+                self.container.align.to_owned(),
+                Some(ftd::executor::Alignment::align_item_pattern(true)),
+                doc_id,
+            ),
         );
 
         n.children = {
@@ -131,6 +166,8 @@ impl ftd::executor::Row {
 
 impl ftd::executor::Column {
     pub fn to_node(&self, doc_id: &str) -> Node {
+        use ftd::node::utils::CheckMap;
+
         let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
             n.style
@@ -147,6 +184,38 @@ impl ftd::executor::Column {
         n.style.insert(
             s("justify-content"),
             ftd::node::Value::from_string("flex-start"),
+        );
+
+        n.style.check_and_insert(
+            "justify-content",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.container
+                        .align
+                        .to_owned()
+                        .map(|v| v.to_css_justify_content(false))
+                        .value,
+                ),
+                self.container.align.to_owned(),
+                Some(ftd::executor::Alignment::justify_content_pattern(false)),
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "align-items",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.container
+                        .align
+                        .to_owned()
+                        .map(|v| v.to_css_align_items(false))
+                        .value,
+                ),
+                self.container.align.to_owned(),
+                Some(ftd::executor::Alignment::align_item_pattern(false)),
+                doc_id,
+            ),
         );
 
         n.children = {

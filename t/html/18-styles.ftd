@@ -33,6 +33,18 @@ border-radius.percent: 18
 
 
 
+-- ftd.row:
+spacing.px: 20
+align if { flag }: ftd.alignment.top-left
+align: ftd.alignment.top-center
+
+-- ftd.text: Hello
+-- ftd.text: World
+
+-- end: ftd.row
+
+
+
 -- void toggle(a):
 boolean $a:
 

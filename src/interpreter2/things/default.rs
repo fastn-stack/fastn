@@ -96,8 +96,8 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::FTD_ALIGNMENT.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_ALIGNMENT.to_string(),
-                variants: vec![ftd::interpreter2::OrTypeVariant::new_constant(
-                    ftd::interpreter2::Field::new(
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
                         ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
@@ -108,8 +108,20 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                             .into_property_value(false, 0),
                         ),
                         0,
-                    ),
-                )],
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string(
+                                ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                            )
+                            .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                ],
                 line_number: 0,
             }),
         ),
