@@ -132,8 +132,22 @@ pub struct Common {
 }
 
 pub fn default_column() -> Column {
-    // TODO:
-    Default::default()
+    ftd::executor::Column {
+        container: Default::default(),
+        common: ftd::executor::Common {
+            horizontal_resizing: ftd::executor::Value::new(
+                ftd::executor::Resizing::FillContainer,
+                None,
+                vec![],
+            ),
+            vertical_resizing: ftd::executor::Value::new(
+                ftd::executor::Resizing::FillContainer,
+                None,
+                vec![],
+            ),
+            ..Default::default()
+        },
+    }
 }
 
 pub fn text_from_properties(

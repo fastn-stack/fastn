@@ -47,11 +47,26 @@ border-width.px: 1
 -- end: ftd.row
 
 
+-- ftd.column:
+spacing.px: 2
+align if { flag }: ftd.alignment.top-left
+align: ftd.alignment.top-center
+horizontal-resizing.fixed.px: 400
+vertical-resizing.fixed.px: 100
+border-width.px: 1
+
+-- ftd.text: Hello
+-- ftd.text: World
+
+-- end: ftd.column
+
+
 -- ftd.row:
 spacing.px: 20
 horizontal-resizing.fixed.px: 400
 horizontal-resizing if { flag }: ftd.resizing.hug-content
-vertical-resizing.fixed.px: 100
+vertical-resizing.fixed.percent: 20
+vertical-resizing if { flag }: ftd.resizing.fill-container
 align: ftd.alignment.top-center
 border-width.px: 1
 
