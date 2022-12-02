@@ -28,7 +28,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: fit-content; justify-content: start; text-decoration: none; width: fit-content" ><div data-id="0:main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: fit-content; justify-content: start; text-decoration: none; width: fit-content" ><div data-id="0,0:main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: fit-content; justify-content: start; text-decoration: none; width: fit-content" ><div data-id="0,0,0:main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: fit-content; justify-content: start; text-decoration: none; width: fit-content" ><div data-id="0,0,0,0:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">boo</div><div data-id="0,0,0,1:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">5</div></div><div data-id="0,0,1:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">moo</div><div data-id="0,0,2:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">1</div><div data-id="0,0,3:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">7</div></div><div data-id="0,1:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">foo</div><div data-id="0,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:fv:0&quot;}}}]', this)" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">1</div></div></div>
+<div data-id="main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: fit-content; justify-content: start; text-decoration: none; width: fit-content" ><div data-id="0,0:main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: fit-content; justify-content: start; text-decoration: none; width: fit-content" ><div data-id="0,0,0:main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: fit-content; justify-content: start; text-decoration: none; width: fit-content" ><div data-id="0,0,0,0:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">boo</div><div data-id="0,0,0,1:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">5</div></div><div data-id="0,0,1:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">moo</div><div data-id="0,0,2:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">1</div><div data-id="0,0,3:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">7</div></div><div data-id="0,1:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">foo</div><div data-id="0,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:fv:0&quot;}}}]', this)" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">1</div></div></div>
 
 
 <script>
@@ -531,11 +531,11 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:
 let value = resolve_reference("foo#foo:fv:0", data);
 set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__text"]){window.node_change_main["0,0,2:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
 }
@@ -552,22 +552,13 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:
 let value = resolve_reference("foo#moo:mv:0,0", data);
 set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
 }
 };
 
 window.resolve_value_main = {};
-window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
-if(function(){
-return (resolve_reference("foo#foo:fv:0", data)>2);
-}()){
-set_data_value(data, "foo#moo:mv:0,0", 6);
-}
-else {set_data_value(data, "foo#moo:mv:0,0", 7);}
-
-}
 window.resolve_value_main["foo#boo:bv:0,0,0"] = function(data) {
 if(function(){
 return (resolve_reference("foo#foo:fv:0", data)>10);
@@ -580,6 +571,15 @@ return (resolve_reference("foo#moo:mv:0,0", data)>6);
 set_data_value(data, "foo#boo:bv:0,0,0", 5);
 }
 else {set_data_value(data, "foo#boo:bv:0,0,0", 4);}
+
+}
+window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
+if(function(){
+return (resolve_reference("foo#foo:fv:0", data)>2);
+}()){
+set_data_value(data, "foo#moo:mv:0,0", 6);
+}
+else {set_data_value(data, "foo#moo:mv:0,0", 7);}
 
 }
 window.ftd.init("main", "ftd-data", "ftd-external-children");
