@@ -46,6 +46,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
     );
     Ok(actix_web::HttpResponse::Ok().body(telegram_body))
 }
+
 // route: /auth/telegram/callback/
 // In this API we are accessing
 // the token and setting it to cookies
