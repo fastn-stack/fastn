@@ -587,7 +587,7 @@ impl PropertyValue {
                             let kind = if regular.kind.kind.ref_inner().is_or_type() && !variant_name.is_empty() {
                                 let (name, variant, _full_variant) = regular.kind.kind.get_or_type().unwrap();
                                 let variant_name = format!("{}.{}", name, variant_name);
-                                ftd::interpreter2::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or(variant_name.clone()).as_str(), variant_name.as_str()).into_kind_data()
+                                ftd::interpreter2::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or_else(|| variant_name.clone()).as_str(), variant_name.as_str()).into_kind_data()
                             } else {
                                 regular.kind.to_owned()
                             };
