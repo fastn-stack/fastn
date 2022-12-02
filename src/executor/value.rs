@@ -396,13 +396,12 @@ pub fn optional_or_type(
         line_number,
     )?;
 
-    dbg!("optional_or_type", &rec_name, &value, &properties);
-
     match value.value.and_then(|v| v.inner()) {
         Some(ftd::interpreter2::Value::OrType {
             name,
             value: property_value,
             variant,
+            ..
         }) if name.eq(rec_name) => Ok(ftd::executor::Value::new(
             Some((variant, property_value.as_ref().to_owned())),
             value.line_number,

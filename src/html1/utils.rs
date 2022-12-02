@@ -160,26 +160,40 @@ pub(crate) fn is_dark_mode_dependent(
 }
 
 pub(crate) fn dependencies_from_property_value(
-    value: &ftd::interpreter2::PropertyValue,
+    property_value: &ftd::interpreter2::PropertyValue,
     doc: &ftd::interpreter2::TDoc,
 ) -> Vec<String> {
-    if let Some(ref_name) = value.reference_name() {
+    if let Some(ref_name) = property_value.reference_name() {
         vec![ref_name.to_string()]
-    } else if let Some(function_call) = value.get_function() {
+    } else if let Some(function_call) = property_value.get_function() {
         let mut result = vec![];
         for property_value in function_call.values.values() {
             result.extend(dependencies_from_property_value(property_value, doc));
         }
         result
-    } else if value.is_value()
-        && (value.kind().is_ftd_length() || value.kind().is_ftd_resizing_fixed())
-    {
-        let value = value.value("", 0).unwrap();
+    } else if property_value.is_value() && property_value.kind().is_ftd_length() {
+        let value = property_value.value("", 0).unwrap();
         let fields = value.or_type_fields(doc, 0).unwrap();
         dependencies_from_property_value(
             fields.get(ftd::interpreter2::FTD_LENGTH_VALUE).unwrap(),
             doc,
         )
+    } else if property_value.is_value() && property_value.kind().is_ftd_resizing_fixed() {
+        let value = property_value.value("", 0).unwrap();
+        let property_value = value
+            .get_or_type(doc.name, property_value.line_number())
+            .unwrap()
+            .2;
+        if property_value.is_value() && property_value.kind().is_ftd_length() {
+            let value = property_value.value("", 0).unwrap();
+            let fields = value.or_type_fields(doc, 0).unwrap();
+            dependencies_from_property_value(
+                fields.get(ftd::interpreter2::FTD_LENGTH_VALUE).unwrap(),
+                doc,
+            )
+        } else {
+            vec![]
+        }
     } else {
         vec![]
     }

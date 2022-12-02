@@ -514,6 +514,7 @@ impl<'a> TDoc<'a> {
                         ftd::interpreter2::Kind::or_type_with_variant(
                             or_type.as_str(),
                             variant.name().as_str(),
+                            variant.name().as_str(),
                         )
                         .into_kind_data()
                         .caption_or_body()

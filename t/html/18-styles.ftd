@@ -46,7 +46,9 @@ align: ftd.alignment.top-center
 
 -- ftd.row:
 spacing.px: 20
-horizontal-resizing.fixed.px: 20
+horizontal-resizing.fixed.px: 100
+horizontal-resizing if { flag }: ftd.resizing.fill-container
+
 
 -- ftd.text: Hello
 -- ftd.text: World
