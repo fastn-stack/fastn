@@ -294,7 +294,7 @@ impl ftd::executor::Common {
                         .map(|v| v.to_css_string())
                         .value,
                 ),
-                self.vertical_resizing.to_owned(),
+                self.horizontal_resizing.to_owned(),
                 None,
                 doc_id,
             ),

@@ -217,7 +217,11 @@ impl Field {
         variant: &str,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<()>> {
         match self.kind.kind.mut_inner() {
-            ftd::interpreter2::Kind::OrType { name, variant: v } => {
+            ftd::interpreter2::Kind::OrType {
+                name,
+                variant: v,
+                full_variant,
+            } => {
                 let or_type = try_ok_state!(doc.search_or_type(name, self.line_number)?);
                 let (variant_name, remaining) =
                     ftd::p2::utils::get_doc_name_and_remaining(variant)?;
@@ -239,8 +243,10 @@ impl Field {
                     })?;
 
                 check_variant_if_constant(or_variant, remaining, doc)?;
+                let variant = Some(format!("{}.{}", name, variant));
 
-                *v = Some(format!("{}.{}", name, variant));
+                *v = variant.clone();
+                *full_variant = variant;
                 Ok(ftd::interpreter2::StateWithThing::new_thing(()))
             }
             t => ftd::interpreter2::utils::e2(

@@ -10,7 +10,9 @@ pub struct NodeData {
 
 impl NodeData {
     pub fn from_rt(rt: ftd::executor::RT) -> NodeData {
+        dbg!(&rt.main);
         let node = rt.main.to_node("foo");
+        dbg!(&node);
         NodeData {
             name: rt.name.to_string(),
             node,

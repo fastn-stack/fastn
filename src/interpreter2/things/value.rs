@@ -552,7 +552,11 @@ impl PropertyValue {
                     loop_object_name_and_kind,
                 )?
             }
-            ftd::interpreter2::Kind::OrType { name, variant } => {
+            ftd::interpreter2::Kind::OrType {
+                name,
+                variant,
+                full_variant,
+            } => {
                 let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
                 let line_number = value.line_number();
                 if let Some(variant_name) = variant {
@@ -583,17 +587,16 @@ impl PropertyValue {
                             loop_object_name_and_kind,
                         )?),
                         ftd::interpreter2::OrTypeVariant::Regular(regular) => {
-                            dbg!(&variant);
+                            dbg!("Regular",&variant_name, &full_variant);
                             let variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
-                            dbg!(&variant_name);
                             let kind = if regular.kind.kind.ref_inner().is_or_type() && !variant_name.is_empty() {
-                                let (name, variant) = regular.kind.kind.get_or_type().unwrap();
+                                let (name, variant, full_variant) = regular.kind.kind.get_or_type().unwrap();
                                 let variant_name = format!("{}.{}", name, variant_name);
-                                ftd::interpreter2::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or(variant_name).as_str()).into_kind_data()
+                                dbg!(&variant, &variant_name, &full_variant);
+                                ftd::interpreter2::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or(variant_name.clone()).as_str(), variant_name.as_str()).into_kind_data()
                             } else {
                                 regular.kind.to_owned()
                             };
-                            dbg!(&kind, &value);
 
                             try_ok_state!(
                                 ftd::interpreter2::PropertyValue::value_from_ast_value(
@@ -607,9 +610,15 @@ impl PropertyValue {
                             )
                         }
                     };
+                    dbg!("2", &variant_name, &variant, &value);
                     ftd::interpreter2::StateWithThing::new_thing(
-                        ftd::interpreter2::Value::new_or_type(name, variant.name().as_str(), value)
-                            .into_property_value(false, line_number),
+                        ftd::interpreter2::Value::new_or_type(
+                            name,
+                            variant.name().as_str(),
+                            variant_name,
+                            value,
+                        )
+                        .into_property_value(false, line_number),
                     )
                 } else {
                     let value_str = value.string(doc.name)?;
@@ -643,8 +652,13 @@ impl PropertyValue {
                             })?;
 
                     ftd::interpreter2::StateWithThing::new_thing(
-                        ftd::interpreter2::Value::new_or_type(name, constant.name.as_str(), value)
-                            .into_property_value(false, line_number),
+                        ftd::interpreter2::Value::new_or_type(
+                            name,
+                            constant.name.as_str(),
+                            constant.name.as_str(),
+                            value,
+                        )
+                        .into_property_value(false, line_number),
                     )
                 }
             }
@@ -931,6 +945,7 @@ pub enum Value {
     OrType {
         name: String,
         variant: String,
+        full_variant: String,
         value: Box<PropertyValue>,
     },
     List {
@@ -1031,6 +1046,7 @@ impl Value {
                 name,
                 variant,
                 value,
+                ..
             } => Ok((name, variant, value)),
             t => ftd::interpreter2::utils::e2(
                 format!("Expected or-type, found: `{:?}`", t),
@@ -1106,9 +1122,12 @@ impl Value {
                 kind: Box::new(kind.kind.clone()),
             },
             Value::UI { name, .. } => ftd::interpreter2::Kind::ui_with_name(name),
-            Value::OrType { name, variant, .. } => {
-                ftd::interpreter2::Kind::or_type_with_variant(name, variant)
-            }
+            Value::OrType {
+                name,
+                variant,
+                full_variant,
+                ..
+            } => ftd::interpreter2::Kind::or_type_with_variant(name, variant, full_variant),
         }
     }
 
@@ -1208,11 +1227,13 @@ impl Value {
     pub(crate) fn new_or_type(
         name: &str,
         variant: &str,
+        full_variant: &str,
         value: ftd::interpreter2::PropertyValue,
     ) -> ftd::interpreter2::Value {
         ftd::interpreter2::Value::OrType {
             name: name.to_string(),
             variant: variant.to_string(),
+            full_variant: full_variant.to_string(),
             value: Box::new(value),
         }
     }

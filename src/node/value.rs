@@ -49,8 +49,7 @@ impl Value {
         } else {
             let mut properties = vec![];
             for property in exec_value.properties {
-                let pattern = property
-                    .value
+                let pattern = dbg!(&property.value)
                     .kind()
                     .pattern(doc_id)
                     .or_else(|| pattern_with_eval.clone());
@@ -79,10 +78,26 @@ impl ftd::interpreter2::Kind {
             ftd::interpreter2::Kind::OrType {
                 name,
                 variant: Some(variant),
+                ..
             } if name.eq(ftd::interpreter2::FTD_LENGTH) => {
                 ftd::executor::Length::pattern_from_variant_str(variant.as_str(), doc_id, 0)
                     .ok()
                     .map(|v| (v.to_string(), false))
+            }
+            ftd::interpreter2::Kind::OrType {
+                name,
+                variant: Some(variant),
+                full_variant,
+            } if name.eq(ftd::interpreter2::FTD_RESIZING) => {
+                dbg!("pattern", &variant, full_variant);
+                dbg!(ftd::executor::Resizing::pattern_from_variant_str(
+                    variant,
+                    full_variant.as_ref().unwrap_or(variant),
+                    doc_id,
+                    0,
+                ))
+                .ok()
+                .map(|v| (v.to_string(), false))
             }
             _ => None,
         }

@@ -11,6 +11,7 @@ pub enum Kind {
     OrType {
         name: String,
         variant: Option<String>,
+        full_variant: Option<String>,
     },
     List {
         kind: Box<Kind>,
@@ -99,13 +100,15 @@ impl Kind {
         Kind::OrType {
             name: name.to_string(),
             variant: None,
+            full_variant: None,
         }
     }
 
-    pub fn or_type_with_variant(name: &str, variant: &str) -> Kind {
+    pub fn or_type_with_variant(name: &str, variant: &str, full_variant: &str) -> Kind {
         Kind::OrType {
             name: name.to_string(),
             variant: Some(variant.to_string()),
+            full_variant: Some(full_variant.to_string()),
         }
     }
 
@@ -187,12 +190,11 @@ impl Kind {
     }
 
     pub fn is_ftd_resizing(&self) -> bool {
-        dbg!(&self);
         matches!(self, Kind::OrType { name, .. } if name.eq(ftd::interpreter2::FTD_RESIZING))
     }
 
     pub fn is_ftd_resizing_fixed(&self) -> bool {
-        matches!(self, Kind::OrType { name, variant } if name.eq(ftd::interpreter2::FTD_RESIZING) && variant.is_some() && variant.as_ref().unwrap().starts_with(ftd::interpreter2::FTD_RESIZING_FIXED))
+        matches!(self, Kind::OrType { name, variant, .. } if name.eq(ftd::interpreter2::FTD_RESIZING) && variant.is_some() && variant.as_ref().unwrap().starts_with(ftd::interpreter2::FTD_RESIZING_FIXED))
     }
 
     pub fn is_or_type(&self) -> bool {
@@ -234,9 +236,13 @@ impl Kind {
         }
     }
 
-    pub fn get_or_type(&self) -> Option<(String, Option<String>)> {
+    pub fn get_or_type(&self) -> Option<(String, Option<String>, Option<String>)> {
         match self {
-            Kind::OrType { name, variant } => Some((name.to_owned(), variant.to_owned())),
+            Kind::OrType {
+                name,
+                variant,
+                full_variant,
+            } => Some((name.to_owned(), variant.to_owned(), full_variant.to_owned())),
             _ => None,
         }
     }
@@ -345,7 +351,11 @@ impl KindData {
                 ftd::interpreter2::Thing::Component(_) => Kind::ui(),
                 ftd::interpreter2::Thing::OrType(o) => Kind::or_type(o.name.as_str()),
                 ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant } => {
-                    Kind::or_type_with_variant(or_type.as_str(), variant.name().as_str())
+                    Kind::or_type_with_variant(
+                        or_type.as_str(),
+                        variant.name().as_str(),
+                        variant.name().as_str(),
+                    )
                 }
                 t => {
                     return ftd::interpreter2::utils::e2(
