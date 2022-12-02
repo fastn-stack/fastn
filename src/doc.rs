@@ -136,8 +136,55 @@ pub async fn interpret_helper<'a>(
                 module,
                 state: mut st,
             } => {
-                let source = resolve_import_2022(lib, &mut st, module.as_str()).await?;
-                s = st.continue_after_import(module.as_str(), source.as_str())?;
+                let (source, foreign_variable, foreign_function) =
+                    resolve_import_2022(lib, &mut st, module.as_str()).await?;
+                s = st.continue_after_import(
+                    module.as_str(),
+                    source.as_str(),
+                    foreign_variable,
+                    foreign_function,
+                )?;
+            }
+            ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast, module } => {
+                let variable_definition = ast.get_variable_definition(module.as_str())?;
+                let processor = variable_definition.processor.unwrap();
+                let value = ftd::interpreter2::Value::String {
+                    text: variable_definition
+                        .value
+                        .caption()
+                        .unwrap_or(processor)
+                        .to_uppercase()
+                        .to_string(),
+                };
+                s = state.continue_after_processor(value)?;
+            }
+            ftd::interpreter2::Interpreter::StuckOnForeignVariable {
+                state,
+                module,
+                variable,
+            } => {
+                /*let value = resolve_foreign_variable2022(
+                    variable.as_str(),
+                    name,
+                    &state,
+                    lib,
+                    base_url,
+                    download_assets,
+                )
+                .await?;
+                s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;*/
+                if module.eq("test") {
+                    let value = ftd::interpreter2::Value::String {
+                        text: variable.to_uppercase().to_string(),
+                    };
+                    s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
+                } else {
+                    return ftd::interpreter2::utils::e2(
+                        format!("Unknown module {}", module),
+                        module.as_str(),
+                        0,
+                    );
+                }
             }
         }
     }
@@ -278,12 +325,47 @@ pub async fn resolve_import<'a>(
 
 pub async fn resolve_import_2022<'a>(
     lib: &'a mut fpm::Library2,
-    state: &mut ftd::interpreter2::InterpreterState,
+    _state: &mut ftd::interpreter2::InterpreterState,
     module: &str,
-) -> ftd::interpreter2::Result<String> {
-    lib.packages_under_process
-        .truncate(state.document_stack.len());
-    let source = lib.get_with_result(module).await?;
+) -> ftd::interpreter2::Result<(String, Vec<String>, Vec<String>)> {
+    let source = if module.eq("fpm/time") {
+        ("".to_string(), vec!["time".to_string()], vec![])
+    } else if module.ends_with("assets") {
+        let foreign_variable = vec!["files".to_string()];
+        ("".to_string(), foreign_variable, vec![])
+    } else {
+        (
+            lib.get_with_result(module).await?,
+            vec![],
+            vec![
+                "http".to_string(),
+                "package-query".to_string(),
+                "toc".to_string(),
+                "include".to_string(),
+                "get-data".to_string(),
+                "sitemap".to_string(),
+                "full-sitemap".to_string(),
+                "user-groups".to_string(),
+                "document-readers".to_string(),
+                "document-writers".to_string(),
+                "user-group-by-id".to_string(),
+                "get-identities".to_string(),
+                "document-id".to_string(),
+                "document-full-id".to_string(),
+                "document-name".to_string(),
+                "document-suffix".to_string(),
+                "package-id".to_string(),
+                "package-tree".to_string(),
+                "fetch-file".to_string(),
+                "get-version-data".to_string(),
+                "cr-meta".to_string(),
+                "request-data".to_string(),
+                "user-details".to_string(),
+                "fpm-apps".to_string(),
+                "is-reader".to_string(),
+            ],
+        )
+    };
     Ok(source)
 }
 
