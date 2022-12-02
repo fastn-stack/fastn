@@ -27,8 +27,8 @@ pub fn interpret_helper(
                     foreign_function,
                 )?;
             }
-            ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast } => {
-                let variable_definition = ast.get_variable_definition("foo")?;
+            ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast, module } => {
+                let variable_definition = ast.get_variable_definition(module.as_str())?;
                 let processor = variable_definition.processor.unwrap();
                 let value = ftd::interpreter2::Value::String {
                     text: variable_definition

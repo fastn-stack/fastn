@@ -281,12 +281,12 @@
         "properties": []
       },
       "horizontal_resizing": {
-        "value": "HugContent",
+        "value": "FillContainer",
         "line_number": null,
         "properties": []
       },
       "vertical_resizing": {
-        "value": "HugContent",
+        "value": "FillContainer",
         "line_number": null,
         "properties": []
       },

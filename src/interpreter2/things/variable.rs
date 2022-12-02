@@ -59,7 +59,11 @@ impl Variable {
                 .any(|v| thing_name.eq(v))
             {
                 Ok(ftd::interpreter2::StateWithThing::new_state(
-                    ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast },
+                    ftd::interpreter2::Interpreter::StuckOnProcessor {
+                        state,
+                        ast,
+                        module: doc_name,
+                    },
                 ))
             } else {
                 doc.err(

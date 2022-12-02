@@ -330,6 +330,7 @@ pub enum Interpreter {
     StuckOnProcessor {
         state: InterpreterState,
         ast: ftd::ast::AST,
+        module: String,
     },
     StuckOnForeignVariable {
         state: InterpreterState,
