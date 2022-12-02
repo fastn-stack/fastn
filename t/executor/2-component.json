@@ -92,6 +92,7 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.px",
+                            "full_variant": "ftd#length.px",
                             "value": {
                               "Value": {
                                 "value": {
@@ -168,6 +169,7 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.px",
+                            "full_variant": "ftd#length.px",
                             "value": {
                               "Value": {
                                 "value": {
@@ -271,6 +273,16 @@
                 "line_number": null,
                 "properties": []
               },
+              "horizontal_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
+              "vertical_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 3,
               "condition": null
@@ -347,6 +359,16 @@
       },
       "border_bottom_right_radius": {
         "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "horizontal_resizing": {
+        "value": "HugContent",
+        "line_number": null,
+        "properties": []
+      },
+      "vertical_resizing": {
+        "value": "HugContent",
         "line_number": null,
         "properties": []
       },

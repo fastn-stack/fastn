@@ -552,11 +552,7 @@ impl PropertyValue {
                     loop_object_name_and_kind,
                 )?
             }
-            ftd::interpreter2::Kind::OrType {
-                name,
-                variant,
-                full_variant,
-            } => {
+            ftd::interpreter2::Kind::OrType { name, variant, .. } => {
                 let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
                 let line_number = value.line_number();
                 if let Some(variant_name) = variant {
@@ -587,12 +583,10 @@ impl PropertyValue {
                             loop_object_name_and_kind,
                         )?),
                         ftd::interpreter2::OrTypeVariant::Regular(regular) => {
-                            dbg!("Regular",&variant_name, &full_variant);
                             let variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
                             let kind = if regular.kind.kind.ref_inner().is_or_type() && !variant_name.is_empty() {
-                                let (name, variant, full_variant) = regular.kind.kind.get_or_type().unwrap();
+                                let (name, variant, _full_variant) = regular.kind.kind.get_or_type().unwrap();
                                 let variant_name = format!("{}.{}", name, variant_name);
-                                dbg!(&variant, &variant_name, &full_variant);
                                 ftd::interpreter2::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or(variant_name.clone()).as_str(), variant_name.as_str()).into_kind_data()
                             } else {
                                 regular.kind.to_owned()
@@ -610,7 +604,6 @@ impl PropertyValue {
                             )
                         }
                     };
-                    dbg!("2", &variant_name, &variant, &value);
                     ftd::interpreter2::StateWithThing::new_thing(
                         ftd::interpreter2::Value::new_or_type(
                             name,

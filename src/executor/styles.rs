@@ -393,14 +393,12 @@ impl Resizing {
         doc_id: &str,
         line_number: usize,
     ) -> ftd::executor::Result<&'static str> {
-        dbg!("resizing pattern_from_variant_str", &variant, &full_variant);
         match variant {
             ftd::interpreter2::FTD_RESIZING_FIXED => {
                 let remaining = full_variant
                     .trim_start_matches(format!("{}.", variant).as_str())
                     .to_string();
                 let variant = format!("{}.{}", ftd::interpreter2::FTD_LENGTH, remaining);
-                dbg!("FTD_RESIZING_FIXED", &variant);
                 Length::pattern_from_variant_str(variant.as_str(), doc_id, line_number)
             }
             ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok("100%"),

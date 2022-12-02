@@ -409,6 +409,16 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "horizontal_resizing": {
+                        "value": "HugContent",
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "vertical_resizing": {
+                        "value": "HugContent",
+                        "line_number": null,
+                        "properties": []
+                      },
                       "data_id": "0,0",
                       "line_number": 6,
                       "condition": null
@@ -532,6 +542,16 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "horizontal_resizing": {
+                                "value": "HugContent",
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "vertical_resizing": {
+                                "value": "HugContent",
+                                "line_number": null,
+                                "properties": []
+                              },
                               "data_id": "0,1,0",
                               "line_number": 21,
                               "condition": null
@@ -608,6 +628,16 @@
                       },
                       "border_bottom_right_radius": {
                         "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "horizontal_resizing": {
+                        "value": "HugContent",
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "vertical_resizing": {
+                        "value": "HugContent",
                         "line_number": null,
                         "properties": []
                       },
@@ -690,6 +720,16 @@
                 "line_number": null,
                 "properties": []
               },
+              "horizontal_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
+              "vertical_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 4,
               "condition": null
@@ -766,6 +806,16 @@
       },
       "border_bottom_right_radius": {
         "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "horizontal_resizing": {
+        "value": "HugContent",
+        "line_number": null,
+        "properties": []
+      },
+      "vertical_resizing": {
+        "value": "HugContent",
         "line_number": null,
         "properties": []
       },

@@ -32,7 +32,8 @@
           "kind": {
             "OrType": {
               "name": "ftd#length",
-              "variant": "ftd#length.px"
+              "variant": "ftd#length.px",
+              "full_variant": "ftd#length.px"
             }
           },
           "caption": false,
@@ -45,6 +46,7 @@
               "OrType": {
                 "name": "ftd#length",
                 "variant": "ftd#length.px",
+                "full_variant": "ftd#length.px",
                 "value": {
                   "Value": {
                     "value": {
@@ -118,6 +120,7 @@
                 "OrType": {
                   "name": "ftd#length",
                   "variant": "ftd#length.px",
+                  "full_variant": "ftd#length.px",
                   "value": {
                     "Value": {
                       "value": {
@@ -190,6 +193,7 @@
                 "OrType": {
                   "name": "ftd#length",
                   "variant": "ftd#length.px",
+                  "full_variant": "ftd#length.px",
                   "value": {
                     "Value": {
                       "value": {
@@ -265,7 +269,8 @@
                 "kind": {
                   "OrType": {
                     "name": "ftd#length",
-                    "variant": "ftd#length.px"
+                    "variant": "ftd#length.px",
+                    "full_variant": "ftd#length.px"
                   }
                 },
                 "caption": false,
@@ -340,7 +345,8 @@
                 "kind": {
                   "OrType": {
                     "name": "ftd#length",
-                    "variant": "ftd#length.px"
+                    "variant": "ftd#length.px",
+                    "full_variant": "ftd#length.px"
                   }
                 },
                 "caption": false,
@@ -367,6 +373,7 @@
                 "OrType": {
                   "name": "ftd#length",
                   "variant": "ftd#length.percent",
+                  "full_variant": "ftd#length.percent",
                   "value": {
                     "Value": {
                       "value": {

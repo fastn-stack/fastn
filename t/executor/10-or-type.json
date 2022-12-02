@@ -36,7 +36,8 @@
           "kind": {
             "OrType": {
               "name": "ftd#length",
-              "variant": "ftd#length.px"
+              "variant": "ftd#length.px",
+              "full_variant": "ftd#length.px"
             }
           },
           "caption": false,
@@ -49,6 +50,7 @@
               "OrType": {
                 "name": "ftd#length",
                 "variant": "ftd#length.px",
+                "full_variant": "ftd#length.px",
                 "value": {
                   "Value": {
                     "value": {
@@ -172,6 +174,7 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.px",
+                            "full_variant": "ftd#length.px",
                             "value": {
                               "Value": {
                                 "value": {
@@ -275,6 +278,16 @@
                 "line_number": null,
                 "properties": []
               },
+              "horizontal_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
+              "vertical_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 1,
               "condition": null
@@ -325,6 +338,7 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.px",
+                            "full_variant": "ftd#length.px",
                             "value": {
                               "Value": {
                                 "value": {
@@ -430,6 +444,16 @@
                 "line_number": null,
                 "properties": []
               },
+              "horizontal_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
+              "vertical_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "1",
               "line_number": 7,
               "condition": null
@@ -481,7 +505,8 @@
                           "kind": {
                             "OrType": {
                               "name": "ftd#length",
-                              "variant": "ftd#length.px"
+                              "variant": "ftd#length.px",
+                              "full_variant": "ftd#length.px"
                             }
                           },
                           "caption": false,
@@ -565,6 +590,16 @@
                 "line_number": null,
                 "properties": []
               },
+              "horizontal_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
+              "vertical_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "2",
               "line_number": 14,
               "condition": null
@@ -621,7 +656,8 @@
                           "kind": {
                             "OrType": {
                               "name": "ftd#length",
-                              "variant": "ftd#length.px"
+                              "variant": "ftd#length.px",
+                              "full_variant": "ftd#length.px"
                             }
                           },
                           "caption": false,
@@ -648,6 +684,7 @@
                           "OrType": {
                             "name": "ftd#length",
                             "variant": "ftd#length.percent",
+                            "full_variant": "ftd#length.percent",
                             "value": {
                               "Value": {
                                 "value": {
@@ -781,6 +818,16 @@
                 "line_number": null,
                 "properties": []
               },
+              "horizontal_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
+              "vertical_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "3",
               "line_number": 21,
               "condition": null
@@ -857,6 +904,16 @@
       },
       "border_bottom_right_radius": {
         "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "horizontal_resizing": {
+        "value": "HugContent",
+        "line_number": null,
+        "properties": []
+      },
+      "vertical_resizing": {
+        "value": "HugContent",
         "line_number": null,
         "properties": []
       },

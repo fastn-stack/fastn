@@ -38,6 +38,11 @@
         "properties": [],
         "line_number": null
       },
+      "height": {
+        "value": "fit-content",
+        "properties": [],
+        "line_number": null
+      },
       "justify-content": {
         "value": "start",
         "properties": [],
@@ -45,6 +50,11 @@
       },
       "text-decoration": {
         "value": "none",
+        "properties": [],
+        "line_number": null
+      },
+      "width": {
+        "value": "fit-content",
         "properties": [],
         "line_number": null
       }
@@ -88,6 +98,11 @@
             "properties": [],
             "line_number": null
           },
+          "height": {
+            "value": "fit-content",
+            "properties": [],
+            "line_number": null
+          },
           "justify-content": {
             "value": "start",
             "properties": [],
@@ -104,6 +119,7 @@
                         "OrType": {
                           "name": "ftd#length",
                           "variant": "ftd#length.px",
+                          "full_variant": "ftd#length.px",
                           "value": {
                             "Value": {
                               "value": {
@@ -155,6 +171,11 @@
             "value": "none",
             "properties": [],
             "line_number": null
+          },
+          "width": {
+            "value": "fit-content",
+            "properties": [],
+            "line_number": null
           }
         },
         "children": [
@@ -183,8 +204,18 @@
                 "properties": [],
                 "line_number": null
               },
+              "height": {
+                "value": "fit-content",
+                "properties": [],
+                "line_number": null
+              },
               "text-decoration": {
                 "value": "none",
+                "properties": [],
+                "line_number": null
+              },
+              "width": {
+                "value": "fit-content",
                 "properties": [],
                 "line_number": null
               }
@@ -261,6 +292,11 @@
                 "properties": [],
                 "line_number": null
               },
+              "height": {
+                "value": "fit-content",
+                "properties": [],
+                "line_number": null
+              },
               "justify-content": {
                 "value": "start",
                 "properties": [],
@@ -277,6 +313,7 @@
                             "OrType": {
                               "name": "ftd#length",
                               "variant": "ftd#length.px",
+                              "full_variant": "ftd#length.px",
                               "value": {
                                 "Value": {
                                   "value": {
@@ -328,6 +365,11 @@
                 "value": "none",
                 "properties": [],
                 "line_number": null
+              },
+              "width": {
+                "value": "fit-content",
+                "properties": [],
+                "line_number": null
               }
             },
             "children": [
@@ -356,8 +398,18 @@
                     "properties": [],
                     "line_number": null
                   },
+                  "height": {
+                    "value": "fit-content",
+                    "properties": [],
+                    "line_number": null
+                  },
                   "text-decoration": {
                     "value": "none",
+                    "properties": [],
+                    "line_number": null
+                  },
+                  "width": {
+                    "value": "fit-content",
                     "properties": [],
                     "line_number": null
                   }
@@ -444,6 +496,11 @@
                 "properties": [],
                 "line_number": null
               },
+              "height": {
+                "value": "fit-content",
+                "properties": [],
+                "line_number": null
+              },
               "justify-content": {
                 "value": "start",
                 "properties": [],
@@ -460,6 +517,7 @@
                             "OrType": {
                               "name": "ftd#length",
                               "variant": "ftd#length.px",
+                              "full_variant": "ftd#length.px",
                               "value": {
                                 "Value": {
                                   "value": {
@@ -511,6 +569,11 @@
                 "value": "none",
                 "properties": [],
                 "line_number": null
+              },
+              "width": {
+                "value": "fit-content",
+                "properties": [],
+                "line_number": null
               }
             },
             "children": [
@@ -539,8 +602,18 @@
                     "properties": [],
                     "line_number": null
                   },
+                  "height": {
+                    "value": "fit-content",
+                    "properties": [],
+                    "line_number": null
+                  },
                   "text-decoration": {
                     "value": "none",
+                    "properties": [],
+                    "line_number": null
+                  },
+                  "width": {
+                    "value": "fit-content",
                     "properties": [],
                     "line_number": null
                   }
@@ -617,6 +690,11 @@
                     "properties": [],
                     "line_number": null
                   },
+                  "height": {
+                    "value": "fit-content",
+                    "properties": [],
+                    "line_number": null
+                  },
                   "justify-content": {
                     "value": "start",
                     "properties": [],
@@ -633,6 +711,7 @@
                                 "OrType": {
                                   "name": "ftd#length",
                                   "variant": "ftd#length.px",
+                                  "full_variant": "ftd#length.px",
                                   "value": {
                                     "Value": {
                                       "value": {
@@ -684,6 +763,11 @@
                     "value": "none",
                     "properties": [],
                     "line_number": null
+                  },
+                  "width": {
+                    "value": "fit-content",
+                    "properties": [],
+                    "line_number": null
                   }
                 },
                 "children": [
@@ -712,8 +796,18 @@
                         "properties": [],
                         "line_number": null
                       },
+                      "height": {
+                        "value": "fit-content",
+                        "properties": [],
+                        "line_number": null
+                      },
                       "text-decoration": {
                         "value": "none",
+                        "properties": [],
+                        "line_number": null
+                      },
+                      "width": {
+                        "value": "fit-content",
                         "properties": [],
                         "line_number": null
                       }
@@ -823,6 +917,7 @@
                     "OrType": {
                       "name": "ftd#length",
                       "variant": "ftd#length.px",
+                      "full_variant": "ftd#length.px",
                       "value": {
                         "Value": {
                           "value": {
