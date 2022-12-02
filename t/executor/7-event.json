@@ -209,6 +209,16 @@
                 "line_number": null,
                 "properties": []
               },
+              "horizontal_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
+              "vertical_resizing": {
+                "value": "HugContent",
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 9,
               "condition": null
@@ -285,6 +295,16 @@
       },
       "border_bottom_right_radius": {
         "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "horizontal_resizing": {
+        "value": "HugContent",
+        "line_number": null,
+        "properties": []
+      },
+      "vertical_resizing": {
+        "value": "HugContent",
         "line_number": null,
         "properties": []
       },

@@ -240,6 +240,7 @@
                                             "OrType": {
                                               "name": "ftd#length",
                                               "variant": "ftd#length.px",
+                                              "full_variant": "ftd#length.px",
                                               "value": {
                                                 "Value": {
                                                   "value": {

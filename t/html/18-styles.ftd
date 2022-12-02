@@ -37,6 +37,9 @@ border-radius.percent: 18
 spacing.px: 20
 align if { flag }: ftd.alignment.top-left
 align: ftd.alignment.top-center
+horizontal-resizing.fixed.px: 400
+vertical-resizing.fixed.px: 100
+border-width.px: 1
 
 -- ftd.text: Hello
 -- ftd.text: World
@@ -46,8 +49,11 @@ align: ftd.alignment.top-center
 
 -- ftd.row:
 spacing.px: 20
-horizontal-resizing.fixed.px: 100
-horizontal-resizing if { flag }: ftd.resizing.fill-container
+horizontal-resizing.fixed.px: 400
+horizontal-resizing if { flag }: ftd.resizing.hug-content
+vertical-resizing.fixed.px: 100
+align: ftd.alignment.top-center
+border-width.px: 1
 
 
 -- ftd.text: Hello
