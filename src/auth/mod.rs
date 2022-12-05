@@ -37,20 +37,44 @@ pub async fn get_auth_identities(
         Ok(val) => val,
         Err(e) => format!("{}{}", "SECRET_KEY not set in env ", e),
     };
-    let mc_obj = magic_crypt::new_magic_crypt!(secret_key, 256);
-
+    let mc_obj = magic_crypt::new_magic_crypt!(&secret_key, 256);
     let mut matched_identities: Vec<fpm::user_group::UserIdentity> = vec![];
 
     let github_ud_encrypted = cookies
         .get(fpm::auth::AuthProviders::GitHub.as_str())
         .ok_or_else(|| {
             fpm::Error::GenericError("user detail not found in the cookies".to_string())
-        })?;
-    if let Ok(github_ud_decrypted) = mc_obj.decrypt_base64_to_string(github_ud_encrypted) {
-        let github_ud: github::UserDetail = serde_json::from_str(github_ud_decrypted.as_str())?;
-        matched_identities.extend(github::matched_identities(github_ud, identities).await?);
-    }
-
+        });
+    match github_ud_encrypted {
+        Ok(encrypt_str) => {
+            if let Ok(github_ud_decrypted) = mc_obj.decrypt_base64_to_string(encrypt_str) {
+                let github_ud: github::UserDetail =
+                    serde_json::from_str(github_ud_decrypted.as_str())?;
+                matched_identities.extend(github::matched_identities(github_ud, identities).await?);
+            }
+        }
+        Err(err) => {
+            format!("{}{}", "user detail not found in the cookies", err);
+        }
+    };
+    let telegram_ud_encrypted = cookies
+        .get(fpm::auth::AuthProviders::TeleGram.as_str())
+        .ok_or_else(|| {
+            fpm::Error::GenericError("user detail not found in the cookies".to_string())
+        });
+    match telegram_ud_encrypted {
+        Ok(encrypt_str) => {
+            if let Ok(telegram_ud_decrypted) = mc_obj.decrypt_base64_to_string(encrypt_str) {
+                let telegram_ud: telegram::UserDetail =
+                    serde_json::from_str(telegram_ud_decrypted.as_str())?;
+                matched_identities
+                    .extend(telegram::matched_identities(telegram_ud, identities).await?);
+            }
+        }
+        Err(err) => {
+            format!("{}{}", "user detail not found in the cookies", err);
+        }
+    };
     // TODO: which API to from which platform based on identity
     // identity can be github-*, discord-*, and etc...
     //let matched_identities = github::matched_identities(token.as_str(), identities).await?;

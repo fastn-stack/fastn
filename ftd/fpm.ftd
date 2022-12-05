@@ -357,6 +357,8 @@ string list telegram-admin:
 string list -telegram-admin:
 string list telegram-group:
 string list -telegram-group:
+string list telegram-channel:
+string list -telegram-channel:
 string list github:
 string list -github:
 string list github-starred:
