@@ -495,6 +495,7 @@ You can try without providing port, it will automatically pick unused port."#,
         bind_address,
         tcp_listener.local_addr()?.port()
     );
+
     actix_web::HttpServer::new(app)
         .listen(tcp_listener)?
         .run()

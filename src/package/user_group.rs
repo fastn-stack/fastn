@@ -73,6 +73,11 @@ pub struct UserGroupTemp {
     pub telegram_group: Vec<String>,
     #[serde(rename = "-telegram-group")]
     pub excluded_telegram_group: Vec<String>,
+    #[serde(rename = "telegram-channel")]
+    pub telegram_channel: Vec<String>,
+    #[serde(rename = "-telegram-channel")]
+    pub excluded_telegram_channel: Vec<String>,
+
     #[serde(rename = "github")]
     pub github: Vec<String>,
     #[serde(rename = "-github")]
@@ -272,6 +277,11 @@ impl UserGroupTemp {
             "-telegram-group",
             self.excluded_telegram_group,
         ));
+        identities.extend(to_user_identity("telegram-channel", self.telegram_channel));
+        excluded_identities.extend(to_user_identity(
+            "-telegram-channel",
+            self.excluded_telegram_channel,
+        ));
         identities.extend(to_user_identity("github", self.github));
         excluded_identities.extend(to_user_identity("-github", self.excluded_github));
         identities.extend(to_user_identity("github-starred", self.github_like));
@@ -446,6 +456,7 @@ pub async fn access_identities(
     is_read: bool,
 ) -> fpm::Result<Vec<UserIdentity>> {
     let sitemap_identities = get_identities(config, document_name, is_read)?;
+    dbg!(&sitemap_identities);
     // github-team: fpm-lang/ftd
     // github-starred: fpm-lang/ftd
     // discord-server: abrark.com

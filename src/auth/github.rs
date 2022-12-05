@@ -52,11 +52,8 @@ pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::Htt
         pub state: String,
     }
 
-    let secret_key = match std::env::var("SECRET_KEY") {
-        Ok(val) => val,
-        Err(e) => format!("{}{}", "SECRET_KEY not set in env ", e),
-    };
-    let mc_obj = magic_crypt::new_magic_crypt!(secret_key, 256);
+    let secret_key = fpm::auth::secret_key();
+    let mc_obj = magic_crypt::new_magic_crypt!(secret_key.as_str(), 256);
 
     let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?.0;
     let auth_url = format!(
