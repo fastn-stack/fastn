@@ -107,7 +107,7 @@ pub async fn handle_auth(
 ) -> fpm::Result<fpm::http::Response> {
     match req.path() {
         "/auth/login/" => login(req, edition).await,
-        fpm::auth::github::CALLBACK_URL => fpm::auth::github::token(req).await,
+        fpm::auth::github::CALLBACK_URL => fpm::auth::github::callback(req).await,
         fpm::auth::telegram::CALLBACK_URL => fpm::auth::telegram::token(req).await,
         "/auth/logout/" => logout(req),
         _ => Ok(actix_web::HttpResponse::new(

@@ -44,7 +44,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
 // route: /auth/github/callback/
 // In this API we are accessing
 // the token and setting it to cookies
-pub async fn token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
     use magic_crypt::MagicCryptTrait;
     #[derive(serde::Deserialize)]
     pub struct QueryParams {
