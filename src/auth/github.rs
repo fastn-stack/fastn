@@ -565,8 +565,9 @@ pub mod apis {
 
         if !response.status().eq(&reqwest::StatusCode::OK) {
             return Err(fpm::Error::APIResponseError(format!(
-                "GitHub API ERROR: {}",
-                url
+                "GitHub-API-ERROR: {}, Error: {}",
+                url,
+                response.text().await?
             )));
         }
 

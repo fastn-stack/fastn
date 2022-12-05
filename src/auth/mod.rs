@@ -48,6 +48,7 @@ pub async fn get_auth_identities(
         })?;
     if let Ok(github_ud_decrypted) = mc_obj.decrypt_base64_to_string(github_ud_encrypted) {
         let github_ud: github::UserDetail = serde_json::from_str(github_ud_decrypted.as_str())?;
+        dbg!(&github_ud);
         matched_identities.extend(github::matched_identities(github_ud, identities).await?);
     }
 
