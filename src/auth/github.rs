@@ -88,7 +88,9 @@ pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::Htt
                     .domain(fpm::auth::utils::domain(req.connection_info().host()))
                     .path("/")
                     .permanent()
-                    .secure(true)
+                    // TODO: AbrarK is running on http,
+                    // will remove it later
+                    // .secure(true)
                     .finish(),
                 )
                 .append_header((actix_web::http::header::LOCATION, "/".to_string()))
