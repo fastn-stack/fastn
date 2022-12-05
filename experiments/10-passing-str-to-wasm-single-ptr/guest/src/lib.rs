@@ -32,9 +32,10 @@ pub fn guest_only_ptr(ptr: u32) -> u32 {
         // std::ptr::read()
         let memory_pointer = Vec::from_raw_parts(ptr as *mut u8, 8 as usize, 8 as usize);
 
-        // let data_pointer: utils::SizedData = utils::SizedData::from_pointer();
+        let data_pointer: utils::SizedData = utils::SizedData::from_pointer(memory_pointer);
         // This is returning wrong length of the data
-        return memory_pointer.iter().sum::<u8>() as u32;
+        // data_pointer.iter().sum::<u8>() as u32;
+        return data_pointer.len;
     }
 }
 

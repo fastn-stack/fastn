@@ -17,47 +17,7 @@ async fn main() -> anyhow::Result<()> {
     )?;
     let mut store = wasmtime::Store::new(&engine, ());
 
-    // TODO: Can not use async can only pass the I32 but need to pass the u32
-    let _from_host = wasmtime::Func::new_async(
-        &mut store,
-        wasmtime::FuncType::new(
-            vec![wasmtime::ValType::I32, wasmtime::ValType::I32],
-            Some(wasmtime::ValType::I32),
-        ),
-        |_caller, params, results| {
-            // TODO:How to pass a pointer of u32, memory address to read the data
-            // Not able to access the memory of the wasm
-            // println!(
-            //     "wasm => pointer: {}, value: {}",
-            //     r,
-            //     utils::read_string(
-            //         r as usize, // upward cast never panics
-            //         instance.get_memory(&mut store, "memory").unwrap(),
-            //         &mut store
-            //     )
-            // );
-
-            // Garbage
-            Box::new(async move {
-                println!("called from wasm: {:?}", params);
-                results[0] = wasmtime::Val::I32(
-                    tokio::fs::read_to_string("Cargo.toml").await.unwrap().len() as i32,
-                );
-                Ok(())
-            })
-        },
-    );
-
-    let from_host = wasmtime::Func::wrap(&mut store, |ptr: u32, len: u32| {
-        println!("wasm sent: {}, {}", ptr, len);
-        // No way to access memory
-        // let mut buf = Vec::with_capacity::<>(len as usize);
-        // https://stackoverflow.com/questions/60199564/rust-wasm-how-to-access-webassembly-memory-of-current-instance-from-rust#:~:text=From%20the%20Rust%20side%20you,property%20should%20you%20need%20it.
-        // wasmtime::Memory::read(&store, ptr as usize, )
-        10 as u32
-    });
-
-    let instance = wasmtime::Instance::new_async(&mut store, &module, &[from_host.into()]).await?;
+    let instance = wasmtime::Instance::new_async(&mut store, &module, &[]).await?;
 
     // Calling Guest Function
     call_guest(&mut store, &instance, "Hello From Host").await?;
@@ -107,9 +67,6 @@ async fn call_guest(
         .call_async(&mut store, guest_data_bytes.len() as u32)
         .await?;
 
-    // Panicking here
-    // println!("{}", guest_data_bytes.iter().sum::<u8>());
-
     println!("Writing Rust Data to WASM memory: {}", guest_data);
     memory.write(&mut store, memory_address as usize, guest_data_bytes)?;
     println!(
@@ -117,22 +74,11 @@ async fn call_guest(
         memory_address
     );
 
-    // Here Guest will return the Wasm memory address
-    // let call_guest = instance.get_typed_func::<(u32, u32), u32, _>(&mut store, "call_guest")?;
-    // let guest_memory_offset = call_guest
-    //     .call_async(&mut store, (memory_address, guest_data_bytes.len() as u32))
-    //     .await?;
-    // println!("Guest Memory Address: {}", guest_memory_offset);
-
     let data_pointer = utils::SizedData {
-        len: guest_data_bytes.len() as u32,
         data: memory_address,
+        len: guest_data_bytes.len() as u32,
     };
 
-    // println!("Should be equal to {}", &data_pointer.len);
-    // println!("Should be equal to {}", &data_pointer.data);
-    //
-    //
     println!("Convert memory address and data len to pointer array");
     let data_pointer_bytes = data_pointer.to_bytes();
 
@@ -154,17 +100,10 @@ async fn call_guest(
     )?;
 
     let call_guest = instance.get_typed_func::<(u32), u32, _>(&mut store, "guest_only_ptr")?;
-    let guest_memory_offset = call_guest
-        .call_async(&mut store, (memory_address as u32))
+    let tell_me_the_length = call_guest
+        .call_async(&mut store, (data_pointer_address as u32))
         .await?;
-    println!("Guest Return: {}", guest_memory_offset);
-
-    // TODO: Read the data from memory address which is returned from wasm
-    // let guest_response  = utils::read_string(guest_memory_offset as usize, &memory, &mut store);
-    // println!("Guest Response: {}", guest_response);
-
-    // TODO: Need to de-allocate the memory address of wasm
-    // Which is allocated twice in the above case
+    println!("Guest Return: {}", tell_me_the_length);
 
     Ok(())
 }
@@ -172,46 +111,12 @@ async fn call_guest(
 // This utility can be shared at the both end
 mod utils {
 
-    pub fn read_string(
-        offset: usize,
-        mem: &wasmtime::Memory,
-        store: &mut wasmtime::Store<()>,
-    ) -> String {
-        let mem = mem.data(&store);
-
-        // in this function we have used unchecked indexing into mem, so if the offset is out of bounds
-        // say because wasm is trying to be funny, we will panic. This is fine for now, but in the future
-        // we will want to handle this more gracefully.
-
-        // experiment 06 was to prove that using 4 here is fine
-        let size = u32::from_ne_bytes(mem[offset..offset + 4].try_into().unwrap()) as usize;
-        let str_offset =
-            u32::from_ne_bytes(mem[offset + 4..offset + 8].try_into().unwrap()) as usize;
-
-        std::str::from_utf8(&mem[str_offset..str_offset + size])
-            .unwrap_or("oops")
-            .to_string()
-    }
-
     pub struct SizedData {
-        pub len: u32,
         pub data: u32,
+        pub len: u32,
     }
 
     impl SizedData {
-        pub fn from_string(s: String) -> Self {
-            let mut data: Vec<u8> = s.into_bytes();
-            let len = data.len() as u32;
-            let data_ptr = data.as_mut_ptr() as u32;
-            // While returning from here rust will not free the memory
-            // Otherwise rust will free the memory while returning because of the ownership
-            // of the variable
-            std::mem::forget(data);
-            return SizedData {
-                data: data_ptr,
-                len,
-            };
-        }
         pub fn to_bytes(self) -> [u8; 8] {
             // pointer array which contains 64 bits
             // in this array we will store the data pointer and len value
@@ -220,8 +125,8 @@ mod utils {
 
             // Return the memory representation of this integer as a byte array in native byte order.
             // Note: Wasm follows little endian architecture
-            let data_pointer_bytes = self.data.to_le_bytes();
-            let len_value_bytes = self.len.to_le_bytes();
+            let data_pointer_bytes = self.data.to_ne_bytes();
+            let len_value_bytes = self.len.to_ne_bytes();
 
             // Now we will store both the values in the pointer array and
             // will return that array pointer to rust
@@ -244,5 +149,26 @@ mod utils {
             // pointer.as_ptr() as u32
             pointer
         }
+    }
+
+    pub fn read_string(
+        offset: usize,
+        mem: &wasmtime::Memory,
+        store: &mut wasmtime::Store<()>,
+    ) -> String {
+        let mem = mem.data(&store);
+
+        // in this function we have used unchecked indexing into mem, so if the offset is out of bounds
+        // say because wasm is trying to be funny, we will panic. This is fine for now, but in the future
+        // we will want to handle this more gracefully.
+
+        // experiment 06 was to prove that using 4 here is fine
+        let size = u32::from_ne_bytes(mem[offset..offset + 4].try_into().unwrap()) as usize;
+        let str_offset =
+            u32::from_ne_bytes(mem[offset + 4..offset + 8].try_into().unwrap()) as usize;
+
+        std::str::from_utf8(&mem[str_offset..str_offset + size])
+            .unwrap_or("oops")
+            .to_string()
     }
 }
