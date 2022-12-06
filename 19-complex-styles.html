@@ -7,10 +7,11 @@
 <script type="ftd" id="ftd-data">
 {
 "foo#flag": true,
-"foo#len": {
-"value": "20px"
+"foo#foo:align:1": "ftd#alignment.top-center",
+"foo#foo:px:1": 40,
+"foo#foo:resize:1": {
+"value": "50px"
 },
-"foo#value": 20,
 "ftd#dark-mode": false,
 "ftd#follow-system-dark-mode": true,
 "ftd#system-dark-mode": false
@@ -30,7 +31,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-style: solid; border-width: 0px; height: fit-content; padding: 20px; text-decoration: none; width: fit-content" class="ft_md">Hello from FTD</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;}}}]', this)" style="border-style: solid; border-width: 0px; height: fit-content; padding: 20px; text-decoration: none; width: fit-content" class="ft_md">Hello from FTD</div><div data-id="2:main" style="border-style: solid; border-width: 0px; height: fit-content; padding: 20px; text-decoration: none; width: fit-content" class="ft_md">Hello from FTD</div><div data-id="3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="border-style: solid; border-width: 0px; height: fit-content; padding: 20%; text-decoration: none; width: fit-content" class="ft_md">Hello from FTD</div></div>
+<div data-id="main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Click me</div><div data-id="1:main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: fit-content; justify-content: start; text-decoration: none; width: fit-content" ><div data-id="1,0:main" style="border-style: solid; border-width: 0px; height: 30px; text-decoration: none; width: fit-content" class="ft_md">Hello</div><div data-id="1,1:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">World</div></div></div>
 
 
 <script>
@@ -493,12 +494,6 @@ return (!str || str.length === 0 );
 }
 
 
-function foo__increment___main(a){
-return (a.value += 1);
-}
-
-
-
 function foo__toggle___main(a){
 a.value = !a.value
 }
@@ -507,19 +502,32 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#value", data)))})));
+window.node_change_main["1:main__align-items"] = function(data) {
+document.querySelector(`[data-id="1:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#alignment.top-left") {"start"} else if ("{0}" == "ftd#alignment.top-center") {"center"} else {null}
+`.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
 }
-window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify(resolve_reference("foo#len", data))));
+
+window.node_change_main["1:main__justify-content"] = function(data) {
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#alignment.top-left") {"start"} else if ("{0}" == "ftd#alignment.top-center") {"start"} else {null}
+`.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
 }
-window.node_change_main["3:main__padding"] = function(data) {
+
+window.node_change_main["1:main__width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}%`.format(JSONstringify(20))})));
+document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`!!({0}).value ? ({0}).value : ({0})`.format(JSONstringify(resolve_reference("foo#foo:resize:1", data))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify(resolve_reference("foo#len", data))));}
+else {document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))})));}
+}
+
+window.node_change_main["1,0:main__height"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="1,0:main"]`).style["height"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))})));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["height"] = eval(`!!({0}).value ? ({0}).value : ({0})`.format(JSONstringify(resolve_reference("foo#foo:resize:1", data))));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
@@ -528,35 +536,98 @@ set_data_value(data, "foo#flag" + "." + remaining, new_value);
 } else {
 set_data_value(data, "foo#flag", new_value);
 }
-
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__padding"]){window.node_change_main["3:main__padding"](data);
-}
-};
-
-window.set_value_main["foo#len"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#len" + "." + remaining, new_value);
+if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:align:1"]){window["resolve_value_main"]["foo#foo:align:1"](data);
 } else {
-set_data_value(data, "foo#len", new_value);
+let value = resolve_reference("foo#flag", data);
+set_data_value(data, "foo#foo:align:1", value);
 }
-
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__padding"]){window.node_change_main["3:main__padding"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
-}
-};
-
-window.set_value_main["foo#value"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#value" + "." + remaining, new_value);
+if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:px:1"]){window["resolve_value_main"]["foo#foo:px:1"](data);
 } else {
-set_data_value(data, "foo#value", new_value);
+let value = resolve_reference("foo#flag", data);
+set_data_value(data, "foo#foo:px:1", value);
 }
-
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
+if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:resize:1"]){window["resolve_value_main"]["foo#foo:resize:1"](data);
+} else {
+let value = resolve_reference("foo#flag", data);
+set_data_value(data, "foo#foo:resize:1", value);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
 }
 };
 
+window.set_value_main["foo#foo:align:1"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#foo:align:1" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#foo:align:1", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
+}
+};
+
+window.set_value_main["foo#foo:px:1"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#foo:px:1" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#foo:px:1", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
+}
+};
+
+window.set_value_main["foo#foo:resize:1"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#foo:resize:1" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#foo:resize:1", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+}
+};
+
+window.resolve_value_main = {};
+window.resolve_value_main["foo#foo:px:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:px:1", 30);
+}
+else {set_data_value(data, "foo#foo:px:1", 40);}
+
+}
+window.resolve_value_main["foo#foo:align:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:align:1", "ftd#alignment.top-left");
+}
+else {set_data_value(data, "foo#foo:align:1", "ftd#alignment.top-center");}
+
+}
+window.resolve_value_main["foo#foo:resize:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSONstringify("ftd#resizing.hug-content")));
+}
+else {set_data_value(data, "foo#foo:resize:1", {"value": `{0}px`.format(JSONstringify(50))});}
+
+}
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
 </body>
