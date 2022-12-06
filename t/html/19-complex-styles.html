@@ -6,9 +6,12 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#name": "Arpita",
-"foo#new-name": "Arpita FifthTry",
-"foo#number": 10,
+"foo#flag": true,
+"foo#foo:align:1": "ftd#alignment.top-center",
+"foo#foo:px:1": 40,
+"foo#foo:resize:1": {
+"value": "50px"
+},
 "ftd#dark-mode": false,
 "ftd#follow-system-dark-mode": true,
 "ftd#system-dark-mode": false
@@ -28,7 +31,7 @@
 </head>
 <body style="height: 100%;">
 
-<div data-id="main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-style: solid; border-width: 0px; height: fit-content; padding: 5px; text-decoration: none; width: fit-content" class="ft_md">hello world</div><div data-id="1:main" style="border-style: solid; border-width: 0px; height: fit-content; padding: 14px; text-decoration: none; width: fit-content" class="ft_md">Arpita Jaiswal</div><div data-id="2:main" style="border-style: solid; border-width: 0px; height: fit-content; padding: 15px; text-decoration: none; width: fit-content" class="ft_md">Arpita FifthTry</div></div>
+<div data-id="main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}}}]', this)" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Click me</div><div data-id="1:main" style="align-items: start; border-style: solid; border-width: 0px; display: flex; flex-direction: column; height: fit-content; justify-content: start; text-decoration: none; width: fit-content" ><div data-id="1,0:main" style="border-style: solid; border-width: 0px; height: 30px; text-decoration: none; width: fit-content" class="ft_md">Hello</div><div data-id="1,1:main" style="border-style: solid; border-width: 0px; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">World</div></div></div>
 
 
 <script>
@@ -491,100 +494,140 @@ return (!str || str.length === 0 );
 }
 
 
-function foo__append___main(a,b){
-return (a+" "+b);
-}
-
-
-
-function foo__compare___main(a,b,c,d){
-let e = a+c;
-return (if((e>b),c,d));
-}
-
-
-
-function foo__length___main(a){
-return (lena);
-}
-
-
-
-function foo__sum___main(a,b){
-return (a+b);
+function foo__toggle___main(a){
+a.value = !a.value
 }
 
 
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":"hello","b":"world"}}', this);
+window.node_change_main["1:main__align-items"] = function(data) {
+document.querySelector(`[data-id="1:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#alignment.top-left") {"start"} else if ("{0}" == "ftd#alignment.top-center") {"center"} else {null}
+`.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
 }
 
-window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":20,"c":4,"d":5}}', this)))})));
-}
-window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":{"mutable":false,"reference":"foo#name"},"b":"Jaiswal"}}', this);
+window.node_change_main["1:main__justify-content"] = function(data) {
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#alignment.top-left") {"start"} else if ("{0}" == "ftd#alignment.top-center") {"start"} else {null}
+`.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
 }
 
-window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":4}}', this)))})));
+window.node_change_main["1:main__width"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`!!({0}).value ? ({0}).value : ({0})`.format(JSONstringify(resolve_reference("foo#foo:resize:1", data))));
 }
-window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data);
+else {document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))})));}
 }
 
-window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":{"a":{"mutable":false,"reference":"foo#new-name"}}}', this)))})));
+window.node_change_main["1,0:main__height"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="1,0:main"]`).style["height"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))})));
+}
+else {document.querySelector(`[data-id="1,0:main"]`).style["height"] = eval(`!!({0}).value ? ({0}).value : ({0})`.format(JSONstringify(resolve_reference("foo#foo:resize:1", data))));}
 }
 window.set_value_main = {};
-window.set_value_main["foo#name"] = function (data, new_value, remaining) {
+window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#name" + "." + remaining, new_value);
+set_data_value(data, "foo#flag" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#name", new_value);
+set_data_value(data, "foo#flag", new_value);
 }
-if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#new-name"]){window["resolve_value_main"]["foo#new-name"](data);
+if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:align:1"]){window["resolve_value_main"]["foo#foo:align:1"](data);
 } else {
-let value = resolve_reference("foo#name", data);
-set_data_value(data, "foo#new-name", value);
+let value = resolve_reference("foo#flag", data);
+set_data_value(data, "foo#foo:align:1", value);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:px:1"]){window["resolve_value_main"]["foo#foo:px:1"](data);
+} else {
+let value = resolve_reference("foo#flag", data);
+set_data_value(data, "foo#foo:px:1", value);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
+if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:resize:1"]){window["resolve_value_main"]["foo#foo:resize:1"](data);
+} else {
+let value = resolve_reference("foo#flag", data);
+set_data_value(data, "foo#foo:resize:1", value);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
 }
 };
 
-window.set_value_main["foo#new-name"] = function (data, new_value, remaining) {
+window.set_value_main["foo#foo:align:1"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#new-name" + "." + remaining, new_value);
+set_data_value(data, "foo#foo:align:1" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#new-name", new_value);
+set_data_value(data, "foo#foo:align:1", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
 }
 };
 
-window.set_value_main["foo#number"] = function (data, new_value, remaining) {
+window.set_value_main["foo#foo:px:1"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#number" + "." + remaining, new_value);
+set_data_value(data, "foo#foo:px:1" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#number", new_value);
+set_data_value(data, "foo#foo:px:1", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
 }
 };
 
+window.set_value_main["foo#foo:resize:1"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#foo:resize:1" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#foo:resize:1", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+}
+};
+
+window.resolve_value_main = {};
+window.resolve_value_main["foo#foo:align:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:align:1", "ftd#alignment.top-left");
+}
+else {set_data_value(data, "foo#foo:align:1", "ftd#alignment.top-center");}
+
+}
+window.resolve_value_main["foo#foo:px:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:px:1", 30);
+}
+else {set_data_value(data, "foo#foo:px:1", 40);}
+
+}
+window.resolve_value_main["foo#foo:resize:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSONstringify("ftd#resizing.hug-content")));
+}
+else {set_data_value(data, "foo#foo:resize:1", {"value": `{0}px`.format(JSONstringify(50))});}
+
+}
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
 </body>

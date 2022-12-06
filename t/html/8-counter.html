@@ -475,6 +475,14 @@ initial_value[p1] = set(initial_value[p1], p2, value);
 return initial_value;
 }
 }
+function JSONstringify(f) {
+if (typeof f === 'object') {
+return JSON.stringify(f);
+}
+else {
+return f;
+}
+}
 
 function isempty(str) {
 return (!str || str.length === 0 );
@@ -515,7 +523,7 @@ return (a.value += b);
 
 window.node_change_main = {};
 window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}px`.format(window.ftd.handle_function(event, 'main', '{"name":"foo__rmultiple___main","values":{"a":{"mutable":false,"reference":"foo#value"},"b":2}}', this));
+document.querySelector(`[data-id="0:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__rmultiple___main","values":{"a":{"mutable":false,"reference":"foo#value"},"b":2}}', this)))})));
 }
 
 window.node_change_main["0,3:main__text"] = function(data) {

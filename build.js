@@ -443,3 +443,11 @@ function set_data_value(data, name, value) {
         return initial_value;
     }
 }
+function JSONstringify(f) {
+    if (typeof f === 'object') {
+        return JSON.stringify(f);
+    }
+    else {
+        return f;
+    }
+}

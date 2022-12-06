@@ -98,3 +98,11 @@ function set_data_value(data: any, name: string, value: any) {
         return initial_value;
     }
 }
+
+function JSONstringify(f: any) {
+    if(typeof f === 'object') {
+        return JSON.stringify(f);
+    } else {
+        return f;
+    }
+}

@@ -492,6 +492,14 @@ initial_value[p1] = set(initial_value[p1], p2, value);
 return initial_value;
 }
 }
+function JSONstringify(f) {
+if (typeof f === 'object') {
+return JSON.stringify(f);
+}
+else {
+return f;
+}
+}
 
 function isempty(str) {
 return (!str || str.length === 0 );

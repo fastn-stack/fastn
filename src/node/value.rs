@@ -81,23 +81,33 @@ impl ftd::interpreter2::Kind {
                 variant: Some(variant),
                 ..
             } if name.eq(ftd::interpreter2::FTD_LENGTH) => {
-                ftd::executor::Length::pattern_from_variant_str(variant.as_str(), doc_id, 0)
+                ftd::executor::Length::get_pattern_from_variant_str(variant.as_str(), doc_id, 0)
                     .ok()
-                    .map(|v| (v.to_string(), false))
+                    .map(|v| (v.to_string(), true))
             }
             ftd::interpreter2::Kind::OrType {
                 name,
                 variant: Some(variant),
                 full_variant,
             } if name.eq(ftd::interpreter2::FTD_RESIZING) => {
-                ftd::executor::Resizing::pattern_from_variant_str(
+                ftd::executor::Resizing::get_pattern_from_variant_str(
                     variant,
                     full_variant.as_ref().unwrap_or(variant),
                     doc_id,
                     0,
                 )
                 .ok()
-                .map(|v| (v.to_string(), false))
+                .map(|v| (v.0.to_string(), v.1))
+            }
+            ftd::interpreter2::Kind::OrType { name, .. }
+                if name.eq(ftd::interpreter2::FTD_LENGTH) =>
+            {
+                Some(("!!({0}).value ? ({0}).value : ({0})".to_string(), true))
+            }
+            ftd::interpreter2::Kind::OrType { name, .. }
+                if name.eq(ftd::interpreter2::FTD_RESIZING) =>
+            {
+                Some(("!!({0}).value ? ({0}).value : ({0})".to_string(), true))
             }
             _ => None,
         }

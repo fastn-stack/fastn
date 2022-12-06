@@ -8,7 +8,7 @@
 {
 "foo#flag": true,
 "foo#len": {
-"value": 20
+"value": "20px"
 },
 "foo#value": 20,
 "ftd#dark-mode": false,
@@ -479,6 +479,14 @@ initial_value[p1] = set(initial_value[p1], p2, value);
 return initial_value;
 }
 }
+function JSONstringify(f) {
+if (typeof f === 'object') {
+return JSON.stringify(f);
+}
+else {
+return f;
+}
+}
 
 function isempty(str) {
 return (!str || str.length === 0 );
@@ -500,18 +508,18 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(resolve_reference("foo#value", data));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#value", data)))})));
 }
 window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}px`.format(resolve_reference("foo#len", data).value);
+document.querySelector(`[data-id="2:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify(resolve_reference("foo#len", data))));
 }
 window.node_change_main["3:main__padding"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}%`.format(20);
+document.querySelector(`[data-id="3:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}%`.format(JSONstringify(20))})));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}px`.format(resolve_reference("foo#len", data).value);}
+else {document.querySelector(`[data-id="3:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify(resolve_reference("foo#len", data))));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {

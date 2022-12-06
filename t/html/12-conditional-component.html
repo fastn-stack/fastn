@@ -476,6 +476,14 @@ initial_value[p1] = set(initial_value[p1], p2, value);
 return initial_value;
 }
 }
+function JSONstringify(f) {
+if (typeof f === 'object') {
+return JSON.stringify(f);
+}
+else {
+return f;
+}
+}
 
 function isempty(str) {
 return (!str || str.length === 0 );
@@ -509,7 +517,7 @@ window.node_change_main["0:main__padding"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}px`.format(50);
+document.querySelector(`[data-id="0:main"]`).style["padding"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(50))})));
 }
 else { document.querySelector(`[data-id="0:main"]`).style["padding"] = null; }
 }

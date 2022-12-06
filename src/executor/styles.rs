@@ -115,7 +115,24 @@ impl Length {
         }
     }
 
-    pub fn pattern_from_variant_str(
+    pub fn get_pattern_from_variant_str(
+        variant: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::executor::Result<&'static str> {
+        match variant {
+            ftd::interpreter2::FTD_LENGTH_PX | ftd::interpreter2::FTD_LENGTH_PERCENT => {
+                Ok("({0}).value")
+            }
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant found for ftd.length: `{}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn set_pattern_from_variant_str(
         variant: &str,
         doc_id: &str,
         line_number: usize,
@@ -123,6 +140,23 @@ impl Length {
         match variant {
             ftd::interpreter2::FTD_LENGTH_PX => Ok("{0}px"),
             ftd::interpreter2::FTD_LENGTH_PERCENT => Ok("{0}%"),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant found for ftd.length: `{}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn set_value_from_variant(
+        variant: &str,
+        value: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::executor::Result<String> {
+        match variant {
+            ftd::interpreter2::FTD_LENGTH_PX => Ok(format!("{}px", value)),
+            ftd::interpreter2::FTD_LENGTH_PERCENT => Ok(format!("{}%", value)),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.length: `{}`", t),
                 doc_id,
@@ -387,7 +421,34 @@ impl Resizing {
         }
     }
 
-    pub fn pattern_from_variant_str(
+    pub fn get_pattern_from_variant_str(
+        variant: &str,
+        full_variant: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::executor::Result<(&'static str, bool)> {
+        match variant {
+            ftd::interpreter2::FTD_RESIZING_FIXED => {
+                let remaining = full_variant
+                    .trim_start_matches(format!("{}.", variant).as_str())
+                    .to_string();
+                let variant = format!("{}.{}", ftd::interpreter2::FTD_LENGTH, remaining);
+                Ok((
+                    Length::get_pattern_from_variant_str(variant.as_str(), doc_id, line_number)?,
+                    true,
+                ))
+            }
+            ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok(("100%", false)),
+            ftd::interpreter2::FTD_RESIZING_HUG_CONTENT => Ok(("fit-content", false)),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant found for ftd.resizing: `{}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn set_pattern_from_variant_str(
         variant: &str,
         full_variant: &str,
         doc_id: &str,
@@ -399,10 +460,35 @@ impl Resizing {
                     .trim_start_matches(format!("{}.", variant).as_str())
                     .to_string();
                 let variant = format!("{}.{}", ftd::interpreter2::FTD_LENGTH, remaining);
-                Length::pattern_from_variant_str(variant.as_str(), doc_id, line_number)
+                Length::set_pattern_from_variant_str(variant.as_str(), doc_id, line_number)
             }
             ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok("100%"),
             ftd::interpreter2::FTD_RESIZING_HUG_CONTENT => Ok("fit-content"),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant found for ftd.resizing: `{}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn set_value_from_variant(
+        variant: &str,
+        full_variant: &str,
+        doc_id: &str,
+        value: &str,
+        line_number: usize,
+    ) -> ftd::executor::Result<String> {
+        match variant {
+            ftd::interpreter2::FTD_RESIZING_FIXED => {
+                let remaining = full_variant
+                    .trim_start_matches(format!("{}.", variant).as_str())
+                    .to_string();
+                let variant = format!("{}.{}", ftd::interpreter2::FTD_LENGTH, remaining);
+                Length::set_value_from_variant(variant.as_str(), value, doc_id, line_number)
+            }
+            ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok("100%".to_string()),
+            ftd::interpreter2::FTD_RESIZING_HUG_CONTENT => Ok("fit-content".to_string()),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.resizing: `{}`", t),
                 doc_id,

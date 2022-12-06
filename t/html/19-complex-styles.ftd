@@ -1,0 +1,42 @@
+-- boolean $flag: true
+
+-- ftd.text: Click me
+$on-click$: $toggle($a = $flag)
+
+
+-- foo:
+px if { flag }: 30
+px: 40
+resize if { flag }: ftd.resizing.hug-content
+resize.fixed.px: 50
+align if { flag }: ftd.alignment.top-left
+align: ftd.alignment.top-center
+
+
+
+-- component foo:
+integer px:
+ftd.resizing resize:
+ftd.alignment align:
+
+-- ftd.column:
+horizontal-resizing if { flag }: $foo.resize
+horizontal-resizing.fixed.px: $foo.px
+align: $foo.align
+
+-- ftd.text: Hello
+vertical-resizing.fixed.px if { flag }: $foo.px
+vertical-resizing: $foo.resize
+
+-- ftd.text: World
+
+-- end: ftd.column
+
+-- end: foo
+
+
+
+-- void toggle(a):
+boolean $a:
+
+a = !a
