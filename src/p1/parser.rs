@@ -24,7 +24,7 @@ fn colon_separated_values(
 ) -> Result<(String, Option<String>)> {
     if !line.contains(':') {
         return Err(ftd::p1::Error::ParseError {
-            message: format!(": is missing in: {}", line),
+            message: format!("`:` is missing in: {}", line),
             // TODO: context should be a few lines before and after the input
             doc_id: doc_id.to_string(),
             line_number,
