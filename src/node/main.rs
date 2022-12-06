@@ -20,7 +20,7 @@ impl Node {
         Node {
             node: s(node),
             condition: common.condition.to_owned(),
-            attrs: common.attrs(),
+            attrs: common.attrs(doc_id),
             style: common.style(doc_id, &mut []),
             children: vec![],
             text: Default::default(),
@@ -39,7 +39,7 @@ impl Node {
     ) -> Node {
         use itertools::Itertools;
 
-        let mut attrs = common.attrs();
+        let mut attrs = common.attrs(doc_id);
         attrs.extend(container.attrs());
         let mut classes = container.add_class();
         let mut style = common.style(doc_id, &mut classes);
@@ -248,30 +248,59 @@ impl ftd::executor::Text {
 
 impl ftd::executor::Image {
     pub fn to_node(&self, doc_id: &str) -> Node {
-        let node = s("img");
-        let mut n = Node::from_common(node.as_str(), &self.common, doc_id);
-        n.classes.extend(self.common.add_class());
-        n.attrs.insert(
-            s("src"),
-            ftd::node::Value::from_executor_value(
-                Some(self.src.value.light.value.to_string()),
-                self.src.to_owned(),
-                None,
-                doc_id,
-            ),
-        );
-        n
+        return if self.common.link.value.is_some() {
+            let mut n = Node::from_common("a", &self.common, doc_id);
+            n.attrs.insert(
+                s("data-id"),
+                ftd::node::Value::from_string(format!("{}:parent", self.common.data_id).as_str()),
+            );
+
+            let img = update_img(self, doc_id);
+            n.children.push(img);
+            n
+        } else {
+            update_img(self, doc_id)
+        };
+
+        fn update_img(image: &ftd::executor::Image, doc_id: &str) -> Node {
+            let mut n = Node::from_common("img", &image.common, doc_id);
+            n.classes.extend(image.common.add_class());
+            n.attrs.insert(
+                s("src"),
+                ftd::node::Value::from_executor_value(
+                    Some(image.src.value.light.value.to_string()),
+                    image.src.to_owned(),
+                    None,
+                    doc_id,
+                ),
+            );
+            n
+        }
     }
 }
 
 impl ftd::executor::Common {
-    fn attrs(&self) -> ftd::Map<ftd::node::Value> {
-        // TODO: Implement attributes
-        std::iter::IntoIterator::into_iter([(
-            "data-id".to_string(),
+    fn attrs(&self, doc_id: &str) -> ftd::Map<ftd::node::Value> {
+        use ftd::node::utils::CheckMap;
+
+        let mut d: ftd::Map<ftd::node::Value> = Default::default();
+
+        d.check_and_insert(
+            "data-id",
             ftd::node::Value::from_string(self.data_id.as_str()),
-        )])
-        .collect()
+        );
+
+        d.check_and_insert(
+            "href",
+            ftd::node::Value::from_executor_value(
+                self.link.value.as_ref().map(ToString::to_string),
+                self.link.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d
     }
 
     fn style(&self, doc_id: &str, _classes: &mut [String]) -> ftd::Map<ftd::node::Value> {
@@ -516,7 +545,11 @@ impl ftd::executor::Common {
     }
 
     fn node(&self) -> String {
-        s("div")
+        if self.link.value.is_some() {
+            s("a")
+        } else {
+            s("div")
+        }
     }
 }
 

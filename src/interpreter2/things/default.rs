@@ -587,6 +587,12 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
+            "link",
+            ftd::interpreter2::Kind::string()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "width",
             ftd::interpreter2::Kind::string()
                 .into_optional()
@@ -735,12 +741,6 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "margin-right",
             ftd::interpreter2::Kind::integer()
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
-            "link",
-            ftd::interpreter2::Kind::string()
                 .into_optional()
                 .into_kind_data(),
         ),
