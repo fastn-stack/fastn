@@ -17,43 +17,37 @@ async fn main() -> anyhow::Result<()> {
     )?;
     let mut store = wasmtime::Store::new(&engine, ());
 
-    let memory_ty = wasmtime::MemoryType::new(1, None);
-    let memory = wasmtime::Memory::new(&mut store, memory_ty)?;
-
     // How to access the memory in host function
-    let from_host = wasmtime::Func::wrap(&mut store, |_caller: wasmtime::Caller<'_, ()>| {
-        let mut buffer = Vec::with_capacity(10);
-        memory.read(&store, 1 as usize, &mut buffer).unwrap();
-        println!("called from wasm");
-    });
+    let from_host = wasmtime::Func::wrap(
+        &mut store,
+        |mut caller: wasmtime::Caller<'_, ()>, ptr: u32, len: u32| {
+            let mem = match caller.get_export("memory") {
+                Some(wasmtime::Extern::Memory(mem)) => mem,
+                _ => anyhow::bail!("failed to find host memory"),
+            };
 
-    // let instance = wasmtime::Instance::new(&mut store, &module, &[])?;
+            let data = mem
+                .data(&caller)
+                .get(ptr as u32 as usize..)
+                .and_then(|arr| arr.get(..len as u32 as usize));
+            let string = match data {
+                Some(data) => match std::str::from_utf8(data) {
+                    Ok(s) => s,
+                    Err(_) => anyhow::bail!("invalid utf-8"),
+                },
+                None => anyhow::bail!("pointer/length out of bounds"),
+            };
+            assert_eq!(string, "Hello, world!");
+            println!("{}", string);
+            Ok(())
+        },
+    );
 
-    // Calling Guest Function
-    // call_guest(&mut store, &instance, "Hello From Host").await?;
+    let instance = wasmtime::Instance::new(&mut store, &module, &[from_host.into()])?;
+    let sum = instance.get_typed_func::<(i32,), i32, _>(&mut store, "sum")?;
 
-    // let alloc = instance.get_typed_func::<u32, u32, _>(&mut store, "alloc")?;
-    // let size = 10;
-    // let memory_address = alloc.call_async(&mut store, size as u32).await?;
-    // println!("Wasm Memory address: {}", memory_address);
-    // let input = vec![1 as u8, 2, 3, 4, 5, 6, 7, 8 ,9, 10];
-    // println!("Coping the data into the wasm memory");
-    // memory.write(&mut store, memory_address as usize, input.as_ref()).unwrap();
-    // println!("data copied successfully");
-    //
-    // let array_sum = instance.get_typed_func::<(u32, u32), u32, _>(&mut store, "array_sum")?;
-    // let sum_of_array = array_sum.call_async(&mut store, (memory_address, size)).await?;
-    // println!("Array Sum: {}", sum_of_array);
-    //
-    // // println!("Deallocating from the wasm memory");
-    // // println!("Coping the data into the wasm memory");
-    //
-    // // let sum_of_array = array_sum.call_async(&mut store, (memory_address, size)).await?;
-    // // println!("Array Sum: {}", sum_of_array);
-    //
-    // let dealloc = instance.get_typed_func::<(u32, u32), (), _>(&mut store, "dealloc")?;
-    // dealloc.call_async(&mut store, (memory_address, size)).await?;
-    // println!("Memory deallocated");
+    // And finally we can call the wasm!
+    println!("wasm said: {}", sum.call(&mut store, (1,))?);
 
     Ok(())
 }
