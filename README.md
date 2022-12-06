@@ -1,7 +1,7 @@
-
 <div align="center">
 
 ![Contributors](https://img.shields.io/github/contributors/ftd-lang/ftd?color=dark-green) ![Issues](https://img.shields.io/github/issues/ftd-lang/ftd) ![License](https://img.shields.io/github/license/ftd-lang/ftd) [![Discord](https://img.shields.io/discord/793929082483769345)](https://discord.com/channels/793929082483769345/)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fftd-lang%2Fftd.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fftd-lang%2Fftd?ref=badge_shield)
 
 </div>
 
@@ -33,3 +33,7 @@ License: BSD
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fftd-lang%2Fftd.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fftd-lang%2Fftd?ref=badge_large)
