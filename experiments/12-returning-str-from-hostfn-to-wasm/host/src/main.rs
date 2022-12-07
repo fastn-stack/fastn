@@ -5,7 +5,6 @@ Problem statement:
 - rust::call_host function will read this string and print it simply
 */
 
-#[derive(Debug, serde::Serialize)]
 pub enum State {
     AllocateMemory(u32),       // in that case u32 is len
     MemoryAllocated(u32, u32), // data pointer and len of the memory
