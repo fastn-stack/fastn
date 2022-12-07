@@ -149,11 +149,15 @@ impl State {
         let start_line = start_line.trim();
 
         if !start_line.starts_with("-- ") && !start_line.starts_with("/-- ") {
-            return Err(ftd::p11::Error::SectionNotFound {
-                // TODO: context should be a few lines before and after the input
-                doc_id: self.doc_id.to_string(),
-                line_number: self.line_number + scan_line_number + 1,
-            });
+            return if start_line.is_empty() {
+                Ok(())
+            } else {
+                Err(ftd::p11::Error::SectionNotFound {
+                    // TODO: context should be a few lines before and after the input
+                    doc_id: self.doc_id.to_string(),
+                    line_number: self.line_number + scan_line_number + 1,
+                })
+            };
         }
 
         let start_line = clean_line(start_line);
