@@ -9,3 +9,5 @@ edition = "2021"
 wasmtime = { version = "3.0.1", features = ["async"] }
 anyhow = "1"
 tokio = { version ="1", features = ["rt-multi-thread", "macros", "fs"] }
+serde = "1.0.149"
+serde_json = "1.0.89"
