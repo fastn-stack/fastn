@@ -604,6 +604,16 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "link": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "fill": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "data_id": "0,0",
                       "line_number": 36,
                       "condition": null
@@ -741,6 +751,16 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "link": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "fill": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "data_id": "0,1,0,0",
                               "line_number": 36,
                               "condition": null
@@ -827,6 +847,16 @@
                       },
                       "vertical_resizing": {
                         "value": "HugContent",
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "link": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "fill": {
+                        "value": null,
                         "line_number": null,
                         "properties": []
                       },
@@ -967,6 +997,16 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "link": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "fill": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "data_id": "0,1,1,0",
                               "line_number": 36,
                               "condition": null
@@ -1104,6 +1144,16 @@
                                         "line_number": null,
                                         "properties": []
                                       },
+                                      "link": {
+                                        "value": null,
+                                        "line_number": null,
+                                        "properties": []
+                                      },
+                                      "fill": {
+                                        "value": null,
+                                        "line_number": null,
+                                        "properties": []
+                                      },
                                       "data_id": "0,1,1,1,0,0",
                                       "line_number": 36,
                                       "condition": null
@@ -1190,6 +1240,16 @@
                               },
                               "vertical_resizing": {
                                 "value": "HugContent",
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "link": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "fill": {
+                                "value": null,
                                 "line_number": null,
                                 "properties": []
                               },
@@ -1282,6 +1342,16 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "link": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "fill": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "data_id": "0,1,1",
                       "line_number": 34,
                       "condition": null
@@ -1371,6 +1441,16 @@
                 "line_number": null,
                 "properties": []
               },
+              "link": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "fill": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 34,
               "condition": null
@@ -1457,6 +1537,16 @@
       },
       "vertical_resizing": {
         "value": "FillContainer",
+        "line_number": null,
+        "properties": []
+      },
+      "link": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "fill": {
+        "value": null,
         "line_number": null,
         "properties": []
       },

@@ -18,6 +18,11 @@
         "properties": [],
         "line_number": null
       },
+      "background-color": {
+        "value": null,
+        "properties": [],
+        "line_number": null
+      },
       "border-style": {
         "value": "solid",
         "properties": [],
@@ -75,6 +80,11 @@
         "style": {
           "align-items": {
             "value": "start",
+            "properties": [],
+            "line_number": null
+          },
+          "background-color": {
+            "value": null,
             "properties": [],
             "line_number": null
           },
@@ -160,8 +170,8 @@
                   "line_number": 4
                 },
                 "pattern_with_eval": [
-                  "{0}px",
-                  false
+                  "({0}).value",
+                  true
                 ]
               }
             ],
@@ -291,8 +301,8 @@
                       "line_number": 7
                     },
                     "pattern_with_eval": [
-                      "{0}px",
-                      false
+                      "({0}).value",
+                      true
                     ]
                   },
                   {
@@ -344,8 +354,8 @@
                       "line_number": 8
                     },
                     "pattern_with_eval": [
-                      "{0}px",
-                      false
+                      "({0}).value",
+                      true
                     ]
                   }
                 ],
@@ -509,8 +519,8 @@
                       "line_number": 11
                     },
                     "pattern_with_eval": [
-                      "{0}px",
-                      false
+                      "({0}).value",
+                      true
                     ]
                   },
                   {
@@ -562,8 +572,8 @@
                       "line_number": 12
                     },
                     "pattern_with_eval": [
-                      "{0}px",
-                      false
+                      "({0}).value",
+                      true
                     ]
                   }
                 ],

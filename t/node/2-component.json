@@ -18,6 +18,11 @@
         "properties": [],
         "line_number": null
       },
+      "background-color": {
+        "value": null,
+        "properties": [],
+        "line_number": null
+      },
       "border-style": {
         "value": "solid",
         "properties": [],
@@ -75,6 +80,11 @@
         "style": {
           "align-items": {
             "value": "start",
+            "properties": [],
+            "line_number": null
+          },
+          "background-color": {
+            "value": null,
             "properties": [],
             "line_number": null
           },
@@ -160,8 +170,8 @@
                   "line_number": 2
                 },
                 "pattern_with_eval": [
-                  "{0}px",
-                  false
+                  "({0}).value",
+                  true
                 ]
               }
             ],

@@ -130,6 +130,16 @@
                 "line_number": null,
                 "properties": []
               },
+              "link": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "fill": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 1,
               "condition": null
@@ -216,6 +226,16 @@
       },
       "vertical_resizing": {
         "value": "FillContainer",
+        "line_number": null,
+        "properties": []
+      },
+      "link": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "fill": {
+        "value": null,
         "line_number": null,
         "properties": []
       },
