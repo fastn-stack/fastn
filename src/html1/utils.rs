@@ -156,7 +156,9 @@ pub(crate) fn is_dark_mode_dependent(
     doc: &ftd::interpreter2::TDoc,
 ) -> ftd::html1::Result<bool> {
     let value = value.clone().resolve(doc, value.line_number())?;
-    Ok(value.is_record("ftd#image-src"))
+    Ok(value.is_record(ftd::interpreter2::FTD_IMAGE_SRC)
+        || value.is_record(ftd::interpreter2::FTD_COLOR)
+        || value.is_or_type_variant(ftd::interpreter2::FTD_FILL_SOLID))
 }
 
 pub(crate) fn dependencies_from_property_value(

@@ -127,6 +127,7 @@ pub struct Common {
     pub horizontal_resizing: ftd::executor::Value<ftd::executor::Resizing>,
     pub vertical_resizing: ftd::executor::Value<ftd::executor::Resizing>,
     pub link: ftd::executor::Value<Option<String>>,
+    pub fill: ftd::executor::Value<Option<ftd::executor::Fill>>,
     pub data_id: String,
     pub line_number: usize,
     pub condition: Option<ftd::interpreter2::Expression>,
@@ -250,7 +251,7 @@ pub fn image_from_properties(
             arguments,
             doc,
             line_number,
-            "ftd#image-src",
+            ftd::interpreter2::FTD_IMAGE_SRC,
         )?;
         ftd::executor::Value::new(
             ImageSrc::from_values(src.value, doc, line_number)?,
@@ -456,6 +457,7 @@ pub fn common_from_properties(
         condition: condition.to_owned(),
         data_id: ftd::executor::utils::get_string_container(local_container),
         line_number,
+        fill: ftd::executor::Fill::optional_fill(properties, arguments, doc, line_number, "fill")?,
     })
 }
 

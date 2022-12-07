@@ -1,0 +1,53 @@
+-- ftd.boolean: $ftd.dark-mode
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 40
+vertical-resizing.fixed.px: 40
+fill.solid: red
+$on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
+
+-- ftd.text: Hello
+-- ftd.text: World
+
+-- end: ftd.column
+
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 40
+vertical-resizing.fixed.px: 40
+fill.solid: $bgcolor
+$on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
+
+-- ftd.text: Hello
+-- ftd.text: World
+
+-- end: ftd.column
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 40
+vertical-resizing.fixed.px: 40
+fill: $fill
+$on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
+
+-- ftd.text: Hello
+-- ftd.text: World
+
+-- end: ftd.column
+
+
+
+
+-- ftd.fill.solid fill:
+light: pink
+dark: purple
+
+
+-- ftd.color bgcolor:
+light: green
+dark: blue
+
+
+-- void toggle-dark-mode(a):
+boolean $a:
+
+a = !a

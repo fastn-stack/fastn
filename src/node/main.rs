@@ -44,6 +44,19 @@ impl Node {
         let mut classes = container.add_class();
         let mut style = common.style(doc_id, &mut classes);
         style.extend(container.style(doc_id));
+        style.insert(
+            "background-color".to_string(),
+            ftd::node::Value::from_executor_value(
+                common
+                    .fill
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                common.fill.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
 
         let node = common.node();
 

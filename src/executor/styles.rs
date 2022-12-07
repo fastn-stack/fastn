@@ -497,3 +497,234 @@ impl Resizing {
         }
     }
 }
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum Fill {
+    Solid(Color),
+}
+
+impl Fill {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(Fill::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_FILL_SOLID => Ok(Fill::Solid(Color::from_value(
+                or_type_value.1,
+                doc,
+                line_number,
+            )?)),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.length`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_fill(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Fill>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_FILL,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Fill::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            Fill::Solid(c) => c.light.value.color(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct Color {
+    pub light: ftd::executor::Value<ColorValue>,
+    pub dark: ftd::executor::Value<ColorValue>,
+}
+
+impl Color {
+    fn from_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Color> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        let fields = match value.inner() {
+            Some(ftd::interpreter2::Value::Record { name, fields })
+                if name.eq(ftd::interpreter2::FTD_COLOR) =>
+            {
+                fields
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter2::FTD_COLOR,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        Color::from_values(fields, doc, line_number)
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Color> {
+        let light = {
+            let value = values
+                .get("light")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`light` field in ftd.image-src not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            ftd::executor::Value::new(
+                ColorValue::color_from(
+                    value
+                        .clone()
+                        .resolve(&doc.itdoc(), line_number)?
+                        .string(doc.name, line_number)?,
+                    doc.name,
+                    line_number,
+                )?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("light"))],
+            )
+        };
+
+        let dark = {
+            let value = values.get("dark").ok_or(ftd::executor::Error::ParseError {
+                message: "`dark` field in ftd.image-src not found".to_string(),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+            ftd::executor::Value::new(
+                ColorValue::color_from(
+                    value
+                        .clone()
+                        .resolve(&doc.itdoc(), line_number)?
+                        .string(doc.name, line_number)?,
+                    doc.name,
+                    line_number,
+                )?,
+                Some(line_number),
+                vec![value.into_property(ftd::interpreter2::PropertySource::header("dark"))],
+            )
+        };
+
+        Ok(Color { light, dark })
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct ColorValue {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+    pub alpha: f32,
+}
+
+impl ColorValue {
+    pub fn color_from(
+        l: String,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::executor::Result<ColorValue> {
+        use std::str::FromStr;
+
+        let v = l.trim().to_string();
+
+        // Remove all whitespace, not compliant, but should just be more accepting.
+        let mut string = v.replace(' ', "");
+        string.make_ascii_lowercase();
+        if v.starts_with('#') && v.len() == 9 {
+            let (_, value_string) = string.split_at(1);
+
+            let iv = u64::from_str_radix(value_string, 16).map_err(|e| {
+                ftd::executor::Error::ParseError {
+                    message: e.to_string(),
+                    doc_id: doc_id.to_string(),
+                    line_number: 0,
+                }
+            })?;
+
+            // (7thSigil) unlike original js code, NaN is impossible
+            if iv > 0xffffffff {
+                return ftd::executor::utils::parse_error(
+                    format!("{} is not a valid color", v),
+                    doc_id,
+                    line_number,
+                );
+            }
+
+            //Code for accepting 6-digit hexa-color code
+            Ok(ColorValue {
+                r: ((iv & 0xff000000) >> 24) as u8,
+                g: ((iv & 0xff0000) >> 16) as u8,
+                b: ((iv & 0xff00) >> 8) as u8,
+                alpha: round_1p((iv & 0xff) as f32 / 255_f32) as f32,
+            })
+        } else {
+            match css_color_parser::Color::from_str(v.as_str()) {
+                Ok(v) => Ok(ColorValue {
+                    r: v.r,
+                    g: v.g,
+                    b: v.b,
+                    alpha: v.a,
+                }),
+                Err(e) => ftd::executor::utils::parse_error(
+                    format!("{} is not a valid color: {:?}", v, e),
+                    doc_id,
+                    line_number,
+                ),
+            }
+        }
+    }
+
+    pub fn color(&self) -> String {
+        format!("rgba({},{},{},{})", self.r, self.g, self.b, self.alpha)
+    }
+}
+
+fn round_1p(n: f32) -> f32 {
+    // 1234.56
+    let temp = (n * 10_f32) as u32;
+    let last = (temp % 10) as f32;
+    let front = n as u32;
+
+    front as f32 + last / 10_f32
+}

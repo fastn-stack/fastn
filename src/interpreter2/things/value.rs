@@ -592,8 +592,19 @@ impl PropertyValue {
                                 regular.kind.to_owned()
                             };
 
-                            try_ok_state!(
+                            /*try_ok_state!(
                                 ftd::interpreter2::PropertyValue::value_from_ast_value(
+                                    value,
+                                    doc,
+                                    is_mutable,
+                                    Some(&kind),
+                                    definition_name_with_arguments,
+                                    loop_object_name_and_kind
+                                )?
+                            );*/
+
+                            try_ok_state!(
+                                ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
                                     value,
                                     doc,
                                     is_mutable,
@@ -985,6 +996,10 @@ impl Value {
 
     pub fn is_record(&self, rec_name: &str) -> bool {
         matches!(self, Self::Record { name, .. } if rec_name.eq(name))
+    }
+
+    pub fn is_or_type_variant(&self, or_variant: &str) -> bool {
+        matches!(self, Self::OrType { variant, .. } if or_variant.eq(variant))
     }
 
     pub fn record_fields(

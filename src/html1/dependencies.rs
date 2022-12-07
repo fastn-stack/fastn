@@ -306,6 +306,92 @@ impl<'a> DependencyGenerator<'a> {
                     is_static = false;
                 }
 
+                if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
+                    // Todo: If the property.value is static then resolve it and use
+                    /*let value = property
+                        .value
+                        .clone()
+                        .resolve(&self.doc, property.value.line_number())?
+                        .record_fields(self.doc.name, property.line_number)?;
+
+                    let light = value.get("light").unwrap();
+                    let dark = value.get("dark").unwrap();
+
+                    if condition.is_none() && dark.eq(light) {
+                        dbg!("condition.is_none()", &dark);
+                        continue;
+                    }*/
+                    let mut expressions = vec![];
+                    let mut light_value_string = "".to_string();
+                    if let Some(value_string) =
+                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                            self.id,
+                            self.doc,
+                            &property.value,
+                            &property_with_pattern.pattern_with_eval,
+                            Some("light".to_string()),
+                        )?
+                    {
+                        let value = format!("{} = {};", key, value_string);
+                        let condition = Some(match condition {
+                            Some(ref c) => format!("{} && !data[\"ftd#dark-mode\"]", c),
+                            None => "!data[\"ftd#dark-mode\"]".to_string(),
+                        });
+                        expressions.push((condition, value));
+                        light_value_string = value_string;
+                    }
+
+                    let mut dark_value_string = "".to_string();
+                    if let Some(value_string) =
+                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                            self.id,
+                            self.doc,
+                            &property.value,
+                            &property_with_pattern.pattern_with_eval,
+                            Some("dark".to_string()),
+                        )?
+                    {
+                        let value = format!("{} = {};", key, value_string);
+                        let condition = Some(match condition {
+                            Some(ref c) => format!("{} && data[\"ftd#dark-mode\"]", c),
+                            None => "data[\"ftd#dark-mode\"]".to_string(),
+                        });
+                        expressions.push((condition, value));
+                        dark_value_string = value_string;
+                    }
+
+                    if !light_value_string.eq(&dark_value_string) {
+                        let value = ftd::html1::utils::js_expression_from_list(expressions, None);
+                        if !value.trim().is_empty() {
+                            dependency_map_from_condition(
+                                var_dependencies,
+                                &property.condition,
+                                node_change_id.as_str(),
+                                self.doc,
+                            );
+                            dependency_map_from_property_value(
+                                var_dependencies,
+                                &property.value,
+                                node_change_id.as_str(),
+                                self.doc,
+                            );
+                            var_dependencies
+                                .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
+                            result.push(format!(
+                                indoc::indoc! {"
+                                     window.node_change_{id}[\"{key}\"] = function(data) {{
+                                            {value}
+                                     }}
+                                "},
+                                id = self.id,
+                                key = node_change_id,
+                                value = value.trim(),
+                            ));
+                        }
+                    }
+                    continue;
+                }
+
                 if let Some(value_string) =
                     ftd::html1::utils::get_formatted_dep_string_from_property_value(
                         self.id,
