@@ -129,6 +129,7 @@ pub struct Common {
     pub vertical_resizing: ftd::executor::Value<ftd::executor::Resizing>,
     pub link: ftd::executor::Value<Option<String>>,
     pub background: ftd::executor::Value<Option<ftd::executor::Background>>,
+    pub color: ftd::executor::Value<Option<ftd::executor::Color>>,
     pub data_id: String,
     pub line_number: usize,
     pub condition: Option<ftd::interpreter2::Expression>,
@@ -464,6 +465,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "background",
+        )?,
+        color: ftd::executor::Color::optional_color(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "color",
         )?,
     })
 }

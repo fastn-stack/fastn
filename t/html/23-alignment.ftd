@@ -4,6 +4,7 @@
 spacing.px: 20
 
 -- ftd.text: Click Here!!
+color: red
 $on-click$: $increment($a=$num)
 
 

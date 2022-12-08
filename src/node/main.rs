@@ -44,19 +44,6 @@ impl Node {
         let mut classes = container.add_class();
         let mut style = common.style(doc_id, &mut classes);
         style.extend(container.style(doc_id));
-        style.insert(
-            "background-color".to_string(),
-            ftd::node::Value::from_executor_value(
-                common
-                    .background
-                    .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
-                    .value,
-                common.background.to_owned(),
-                None,
-                doc_id,
-            ),
-        );
 
         let node = common.node();
 
@@ -365,6 +352,32 @@ impl ftd::executor::Common {
                         .value,
                 ),
                 self.horizontal_resizing.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "background-color",
+            ftd::node::Value::from_executor_value(
+                self.background
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.background.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "color",
+            ftd::node::Value::from_executor_value(
+                self.color
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.color.to_owned(),
                 None,
                 doc_id,
             ),

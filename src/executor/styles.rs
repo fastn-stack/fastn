@@ -654,7 +654,7 @@ impl Background {
 
     pub fn to_css_string(&self) -> String {
         match self {
-            Background::Solid(c) => c.light.value.color(),
+            Background::Solid(c) => c.light.value.to_css_string(),
         }
     }
 }
@@ -742,6 +742,45 @@ impl Color {
 
         Ok(Color { light, dark })
     }
+
+    fn from_optional_values(
+        or_type_value: Option<ftd::Map<ftd::interpreter2::PropertyValue>>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(Color::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    pub(crate) fn optional_color(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Color>>> {
+        let record_values = ftd::executor::value::optional_record(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_COLOR,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Color::from_optional_values(record_values.value, doc, line_number)?,
+            record_values.line_number,
+            record_values.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        self.light.value.to_css_string()
+    }
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
@@ -809,7 +848,7 @@ impl ColorValue {
         }
     }
 
-    pub fn color(&self) -> String {
+    pub fn to_css_string(&self) -> String {
         format!("rgba({},{},{},{})", self.r, self.g, self.b, self.alpha)
     }
 }

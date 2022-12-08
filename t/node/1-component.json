@@ -18,11 +18,6 @@
         "properties": [],
         "line_number": null
       },
-      "background-color": {
-        "value": null,
-        "properties": [],
-        "line_number": null
-      },
       "border-style": {
         "value": "solid",
         "properties": [],
@@ -80,11 +75,6 @@
         "style": {
           "align-items": {
             "value": "start",
-            "properties": [],
-            "line_number": null
-          },
-          "background-color": {
-            "value": null,
             "properties": [],
             "line_number": null
           },
@@ -474,11 +464,6 @@
         "style": {
           "align-items": {
             "value": "start",
-            "properties": [],
-            "line_number": null
-          },
-          "background-color": {
-            "value": null,
             "properties": [],
             "line_number": null
           },

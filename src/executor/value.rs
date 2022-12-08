@@ -379,6 +379,43 @@ pub fn optional_f64(
     }
 }
 
+pub fn optional_record(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+    rec_name: &str,
+) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::Map<ftd::interpreter2::PropertyValue>>>>
+{
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::Record { name, fields }) if name.eq(rec_name) => Ok(
+            ftd::executor::Value::new(Some(fields), value.line_number, value.properties),
+        ),
+        None => Ok(ftd::executor::Value::new(
+            None,
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!(
+                "Expected value of type record `{}`, found: {:?}",
+                rec_name, t
+            ),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
 pub fn optional_or_type(
     key: &str,
     properties: &[ftd::interpreter2::Property],

@@ -179,6 +179,11 @@
         "line_number": null,
         "properties": []
       },
+      "spacing_mode": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "children": [
         {
           "Column": {
@@ -195,6 +200,11 @@
               },
               "align_content": {
                 "value": "TopLeft",
+                "line_number": null,
+                "properties": []
+              },
+              "spacing_mode": {
+                "value": null,
                 "line_number": null,
                 "properties": []
               },
@@ -316,7 +326,12 @@
                         "line_number": null,
                         "properties": []
                       },
-                      "fill": {
+                      "background": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "color": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -415,7 +430,12 @@
                 "line_number": null,
                 "properties": []
               },
-              "fill": {
+              "background": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "color": {
                 "value": null,
                 "line_number": null,
                 "properties": []
@@ -441,6 +461,11 @@
               },
               "align_content": {
                 "value": "TopLeft",
+                "line_number": null,
+                "properties": []
+              },
+              "spacing_mode": {
+                "value": null,
                 "line_number": null,
                 "properties": []
               },
@@ -562,7 +587,12 @@
                         "line_number": null,
                         "properties": []
                       },
-                      "fill": {
+                      "background": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "color": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -661,7 +691,12 @@
                 "line_number": null,
                 "properties": []
               },
-              "fill": {
+              "background": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "color": {
                 "value": null,
                 "line_number": null,
                 "properties": []
@@ -760,7 +795,12 @@
         "line_number": null,
         "properties": []
       },
-      "fill": {
+      "background": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "color": {
         "value": null,
         "line_number": null,
         "properties": []

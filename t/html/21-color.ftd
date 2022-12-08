@@ -1,4 +1,5 @@
 -- ftd.boolean: $ftd.dark-mode
+color: $bgcolor
 
 -- ftd.column:
 horizontal-resizing.fixed.px: 40
