@@ -593,18 +593,18 @@ impl Resizing {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
-pub enum Fill {
+pub enum Background {
     Solid(Color),
 }
 
-impl Fill {
+impl Background {
     fn from_optional_values(
         or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
         if let Some(value) = or_type_value {
-            Ok(Some(Fill::from_values(value, doc, line_number)?))
+            Ok(Some(Background::from_values(value, doc, line_number)?))
         } else {
             Ok(None)
         }
@@ -616,7 +616,7 @@ impl Fill {
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
         match or_type_value.0.as_str() {
-            ftd::interpreter2::FTD_FILL_SOLID => Ok(Fill::Solid(Color::from_value(
+            ftd::interpreter2::FTD_BACKGROUND_SOLID => Ok(Background::Solid(Color::from_value(
                 or_type_value.1,
                 doc,
                 line_number,
@@ -635,18 +635,18 @@ impl Fill {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
-    ) -> ftd::executor::Result<ftd::executor::Value<Option<Fill>>> {
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Background>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
             properties,
             arguments,
             doc,
             line_number,
-            ftd::interpreter2::FTD_FILL,
+            ftd::interpreter2::FTD_BACKGROUND,
         )?;
 
         Ok(ftd::executor::Value::new(
-            Fill::from_optional_values(or_type_value.value, doc, line_number)?,
+            Background::from_optional_values(or_type_value.value, doc, line_number)?,
             or_type_value.line_number,
             or_type_value.properties,
         ))
@@ -654,7 +654,7 @@ impl Fill {
 
     pub fn to_css_string(&self) -> String {
         match self {
-            Fill::Solid(c) => c.light.value.color(),
+            Background::Solid(c) => c.light.value.color(),
         }
     }
 }

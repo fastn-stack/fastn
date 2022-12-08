@@ -48,11 +48,11 @@ impl Node {
             "background-color".to_string(),
             ftd::node::Value::from_executor_value(
                 common
-                    .fill
+                    .background
                     .to_owned()
                     .map(|v| v.map(|v| v.to_css_string()))
                     .value,
-                common.fill.to_owned(),
+                common.background.to_owned(),
                 None,
                 doc_id,
             ),

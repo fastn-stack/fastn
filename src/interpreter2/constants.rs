@@ -23,8 +23,8 @@ pub const FTD_COLOR: &str = "ftd#color";
 pub const FTD_COLOR_LIGHT: &str = "ftd#color.light";
 pub const FTD_COLOR_DARK: &str = "ftd#color.dark";
 
-pub const FTD_FILL: &str = "ftd#fill";
-pub const FTD_FILL_SOLID: &str = "ftd#fill.solid";
+pub const FTD_BACKGROUND: &str = "ftd#background";
+pub const FTD_BACKGROUND_SOLID: &str = "ftd#background.solid";
 
 pub const FTD_IMAGE_SRC: &str = "ftd#image-src";
 pub const FTD_IMAGE_SRC_LIGHT: &str = "ftd#image-src.light";

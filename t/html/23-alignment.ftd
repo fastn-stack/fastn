@@ -21,7 +21,7 @@ align-content if { num % 9 == 5 }: ftd.align.right
 align-content if { num % 9 == 6 }: ftd.align.bottom-left
 align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
-fill.solid: red
+background.solid: red
 horizontal-resizing.fixed.px: 200
 vertical-resizing.fixed.px: 200
 border-width.px: 1
@@ -29,7 +29,7 @@ border-width.px: 1
 -- ftd.column:
 horizontal-resizing.fixed.px: 20
 vertical-resizing.fixed.px: 20
-fill.solid: yellow
+background.solid: yellow
 border-width.px: 1
 
 -- end: ftd.column
@@ -38,7 +38,7 @@ border-width.px: 1
 -- ftd.column:
 horizontal-resizing.fixed.px: 20
 vertical-resizing.fixed.px: 20
-fill.solid: orange
+background.solid: orange
 border-width.px: 1
 
 -- end: ftd.column
@@ -63,7 +63,7 @@ align-content if { num % 9 == 5 }: ftd.align.right
 align-content if { num % 9 == 6 }: ftd.align.bottom-left
 align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
-fill.solid: red
+background.solid: red
 horizontal-resizing.fixed.px: 200
 vertical-resizing.fixed.px: 200
 border-width.px: 1
@@ -71,7 +71,7 @@ border-width.px: 1
 -- ftd.column:
 horizontal-resizing.fixed.px: 20
 vertical-resizing.fixed.px: 20
-fill.solid: yellow
+background.solid: yellow
 border-width.px: 1
 
 -- end: ftd.column
@@ -80,7 +80,7 @@ border-width.px: 1
 -- ftd.column:
 horizontal-resizing.fixed.px: 20
 vertical-resizing.fixed.px: 20
-fill.solid: orange
+background.solid: orange
 border-width.px: 1
 
 -- end: ftd.column
@@ -107,7 +107,7 @@ align-content if { num % 9 == 6 }: ftd.align.bottom-left
 align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
 spacing-mode: ftd.spacing-mode.space-between
-fill.solid: green
+background.solid: green
 horizontal-resizing.fixed.px: 200
 vertical-resizing.fixed.px: 200
 border-width.px: 1
@@ -115,7 +115,7 @@ border-width.px: 1
 -- ftd.column:
 horizontal-resizing.fixed.px: 20
 vertical-resizing.fixed.px: 20
-fill.solid: yellow
+background.solid: yellow
 border-width.px: 1
 
 -- end: ftd.column
@@ -124,7 +124,7 @@ border-width.px: 1
 -- ftd.column:
 horizontal-resizing.fixed.px: 20
 vertical-resizing.fixed.px: 20
-fill.solid: orange
+background.solid: orange
 border-width.px: 1
 
 -- end: ftd.column
@@ -148,7 +148,7 @@ align-content if { num % 9 == 6 }: ftd.align.bottom-left
 align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
 spacing-mode: ftd.spacing-mode.space-between
-fill.solid: green
+background.solid: green
 horizontal-resizing.fixed.px: 200
 vertical-resizing.fixed.px: 200
 border-width.px: 1
@@ -156,7 +156,7 @@ border-width.px: 1
 -- ftd.column:
 horizontal-resizing.fixed.px: 20
 vertical-resizing.fixed.px: 20
-fill.solid: yellow
+background.solid: yellow
 border-width.px: 1
 
 -- end: ftd.column
@@ -165,7 +165,7 @@ border-width.px: 1
 -- ftd.column:
 horizontal-resizing.fixed.px: 20
 vertical-resizing.fixed.px: 20
-fill.solid: orange
+background.solid: orange
 border-width.px: 1
 
 -- end: ftd.column

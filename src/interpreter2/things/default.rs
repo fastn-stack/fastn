@@ -125,12 +125,12 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            ftd::interpreter2::FTD_FILL.to_string(),
+            ftd::interpreter2::FTD_BACKGROUND.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
-                name: ftd::interpreter2::FTD_FILL.to_string(),
+                name: ftd::interpreter2::FTD_BACKGROUND.to_string(),
                 variants: vec![ftd::interpreter2::OrTypeVariant::Regular(
                     ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_FILL_SOLID,
+                        ftd::interpreter2::FTD_BACKGROUND_SOLID,
                         ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
                             .into_kind_data(),
                         false,
@@ -655,8 +655,8 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
         ftd::interpreter2::Argument::default(
-            "fill",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_FILL)
+            "background",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BACKGROUND)
                 .into_optional()
                 .into_kind_data(),
         ),

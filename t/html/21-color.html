@@ -6,13 +6,13 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#background-fill": {
+"dark": "purple",
+"light": "pink"
+},
 "foo#bgcolor": {
 "dark": "blue",
 "light": "green"
-},
-"foo#fill": {
-"dark": "purple",
-"light": "pink"
 },
 "ftd#dark-mode": false,
 "ftd#follow-system-dark-mode": true,
@@ -517,18 +517,18 @@ document.querySelector(`[data-id="2:main"]`).style["background-color"] = resolve
 }
 window.node_change_main["3:main__background-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="3:main"]`).style["background-color"] = resolve_reference("foo#fill", data).light;
+document.querySelector(`[data-id="3:main"]`).style["background-color"] = resolve_reference("foo#background-fill", data).light;
 }
 else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="3:main"]`).style["background-color"] = resolve_reference("foo#fill", data).dark;
+document.querySelector(`[data-id="3:main"]`).style["background-color"] = resolve_reference("foo#background-fill", data).dark;
 }
 }
 window.set_value_main = {};
-window.set_value_main["foo#fill"] = function (data, new_value, remaining) {
+window.set_value_main["foo#background-fill"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#fill" + "." + remaining, new_value);
+set_data_value(data, "foo#background-fill" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#fill", new_value);
+set_data_value(data, "foo#background-fill", new_value);
 }
 
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__background-color"]){window.node_change_main["3:main__background-color"](data);

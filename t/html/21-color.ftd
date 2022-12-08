@@ -3,7 +3,7 @@
 -- ftd.column:
 horizontal-resizing.fixed.px: 40
 vertical-resizing.fixed.px: 40
-fill.solid: red
+background.solid: red
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 
 -- ftd.text: Hello
@@ -15,7 +15,7 @@ $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 -- ftd.column:
 horizontal-resizing.fixed.px: 40
 vertical-resizing.fixed.px: 40
-fill.solid: $bgcolor
+background.solid: $bgcolor
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 
 -- ftd.text: Hello
@@ -26,7 +26,7 @@ $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 -- ftd.column:
 horizontal-resizing.fixed.px: 40
 vertical-resizing.fixed.px: 40
-fill: $fill
+background: $background-fill
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 
 -- ftd.text: Hello
@@ -37,7 +37,7 @@ $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 
 
 
--- ftd.fill.solid fill:
+-- ftd.background.solid background-fill:
 light: pink
 dark: purple
 

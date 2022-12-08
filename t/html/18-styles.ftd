@@ -37,7 +37,7 @@ border-radius.percent: 18
 spacing.px: 20
 align-content if { flag }: ftd.align.top-left
 align-content: ftd.align.top-center
-fill.solid: red
+background.solid: red
 horizontal-resizing.fixed.px: 400
 vertical-resizing.fixed.px: 100
 border-width.px: 1
