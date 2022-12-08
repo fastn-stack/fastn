@@ -32,3 +32,5 @@ pub const FTD_IMAGE_SRC_DARK: &str = "ftd#image-src.dark";
 
 pub const FTD_SPACING_MODE: &str = "ftd#spacing-mode";
 pub const FTD_SPACING_MODE_SPACE_BETWEEN: &str = "ftd#spacing-mode.space-between";
+pub const FTD_SPACING_MODE_SPACE_AROUND: &str = "ftd#spacing-mode.space-around";
+pub const FTD_SPACING_MODE_SPACE_EVENLY: &str = "ftd#spacing-mode.space-evenly";

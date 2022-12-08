@@ -10,6 +10,9 @@ $on-click$: $increment($a=$num)
 -- ftd.integer: $num
 
 
+-- ftd.row:
+spacing.px: 20
+
 -- ftd.column:
 spacing.px: 20
 align-content if { num % 9 == 0 }: ftd.align.top-left
@@ -147,7 +150,7 @@ align-content if { num % 9 == 5 }: ftd.align.right
 align-content if { num % 9 == 6 }: ftd.align.bottom-left
 align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
-spacing-mode: ftd.spacing-mode.space-between
+spacing-mode: ftd.spacing-mode.space-evenly
 background.solid: green
 horizontal-resizing.fixed.px: 200
 vertical-resizing.fixed.px: 200
@@ -176,7 +179,7 @@ border-width.px: 1
 
 
 
-
+-- end: ftd.row
 -- end: ftd.column
 
 

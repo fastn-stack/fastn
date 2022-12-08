@@ -826,6 +826,8 @@ fn round_1p(n: f32) -> f32 {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum SpacingMode {
     SpaceBetween,
+    SpaceEvenly,
+    SpaceAround,
 }
 
 impl SpacingMode {
@@ -848,6 +850,8 @@ impl SpacingMode {
     ) -> ftd::executor::Result<Self> {
         match or_type_value.0.as_str() {
             ftd::interpreter2::FTD_SPACING_MODE_SPACE_BETWEEN => Ok(SpacingMode::SpaceBetween),
+            ftd::interpreter2::FTD_SPACING_MODE_SPACE_EVENLY => Ok(SpacingMode::SpaceEvenly),
+            ftd::interpreter2::FTD_SPACING_MODE_SPACE_AROUND => Ok(SpacingMode::SpaceAround),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.spacing-mode`", t),
                 doc.name,
@@ -882,6 +886,8 @@ impl SpacingMode {
     pub fn to_css_string(&self) -> String {
         match self {
             SpacingMode::SpaceBetween => "space-between".to_string(),
+            SpacingMode::SpaceEvenly => "space-evenly".to_string(),
+            SpacingMode::SpaceAround => "space-around".to_string(),
         }
     }
 }
