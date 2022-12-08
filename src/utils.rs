@@ -57,6 +57,17 @@ impl<'a> Timer<'a> {
 
         a
     }
+
+    pub(crate) fn it_with_params<T>(&self, a: T, args: &str) -> T {
+        use colored::Colorize;
+
+        if !fpm::utils::is_test() {
+            let duration = format!("{:?}", self.start.elapsed());
+            println!("{} in {}, args: {}", self.msg.green(), duration.red(), args);
+        }
+
+        a
+    }
 }
 
 pub trait HasElements {
