@@ -149,6 +149,20 @@ impl ftd::executor::Row {
             ),
         );
 
+        n.style.upsert(
+            "justify-content",
+            ftd::node::Value::from_executor_value(
+                self.container
+                    .spacing_mode
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.container.spacing_mode.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
         n.style.check_and_insert(
             "align-items",
             ftd::node::Value::from_executor_value(
@@ -211,6 +225,20 @@ impl ftd::executor::Column {
                 ),
                 self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::justify_content_pattern(false)),
+                doc_id,
+            ),
+        );
+
+        n.style.upsert(
+            "justify-content",
+            ftd::node::Value::from_executor_value(
+                self.container
+                    .spacing_mode
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.container.spacing_mode.to_owned(),
+                None,
                 doc_id,
             ),
         );

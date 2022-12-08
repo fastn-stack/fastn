@@ -29,3 +29,6 @@ pub const FTD_FILL_SOLID: &str = "ftd#fill.solid";
 pub const FTD_IMAGE_SRC: &str = "ftd#image-src";
 pub const FTD_IMAGE_SRC_LIGHT: &str = "ftd#image-src.light";
 pub const FTD_IMAGE_SRC_DARK: &str = "ftd#image-src.dark";
+
+pub const FTD_SPACING_MODE: &str = "ftd#spacing-mode";
+pub const FTD_SPACING_MODE_SPACE_BETWEEN: &str = "ftd#spacing-mode.space-between";

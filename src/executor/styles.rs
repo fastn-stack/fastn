@@ -822,3 +822,66 @@ fn round_1p(n: f32) -> f32 {
 
     front as f32 + last / 10_f32
 }
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum SpacingMode {
+    SpaceBetween,
+}
+
+impl SpacingMode {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(SpacingMode::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_SPACING_MODE_SPACE_BETWEEN => Ok(SpacingMode::SpaceBetween),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.spacing-mode`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_spacing_mode(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<SpacingMode>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_SPACING_MODE,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            SpacingMode::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            SpacingMode::SpaceBetween => "space-between".to_string(),
+        }
+    }
+}

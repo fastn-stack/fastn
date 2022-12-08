@@ -22,7 +22,7 @@ align-content if { num % 9 == 6 }: ftd.align.bottom-left
 align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
 fill.solid: red
-horizontal-resizing.fixed.px: 400
+horizontal-resizing.fixed.px: 200
 vertical-resizing.fixed.px: 200
 border-width.px: 1
 
@@ -50,6 +50,8 @@ border-width.px: 1
 
 
 
+
+
 -- ftd.row:
 spacing.px: 20
 align-content if { num % 9 == 0 }: ftd.align.top-left
@@ -62,7 +64,7 @@ align-content if { num % 9 == 6 }: ftd.align.bottom-left
 align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
 fill.solid: red
-horizontal-resizing.fixed.px: 400
+horizontal-resizing.fixed.px: 200
 vertical-resizing.fixed.px: 200
 border-width.px: 1
 
@@ -85,6 +87,93 @@ border-width.px: 1
 
 
 -- end: ftd.row
+
+
+
+
+
+
+
+
+-- ftd.row:
+spacing.px: 20
+align-content if { num % 9 == 0 }: ftd.align.top-left
+align-content if { num % 9 == 1 }: ftd.align.top-center
+align-content if { num % 9 == 2 }: ftd.align.top-right
+align-content if { num % 9 == 3 }: ftd.align.left
+align-content if { num % 9 == 4 }: ftd.align.center
+align-content if { num % 9 == 5 }: ftd.align.right
+align-content if { num % 9 == 6 }: ftd.align.bottom-left
+align-content if { num % 9 == 7 }: ftd.align.bottom-center
+align-content if { num % 9 == 8 }: ftd.align.bottom-right
+spacing-mode: ftd.spacing-mode.space-between
+fill.solid: green
+horizontal-resizing.fixed.px: 200
+vertical-resizing.fixed.px: 200
+border-width.px: 1
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+fill.solid: yellow
+border-width.px: 1
+
+-- end: ftd.column
+
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+fill.solid: orange
+border-width.px: 1
+
+-- end: ftd.column
+
+
+-- end: ftd.row
+
+
+
+
+
+-- ftd.column:
+spacing.px: 20
+align-content if { num % 9 == 0 }: ftd.align.top-left
+align-content if { num % 9 == 1 }: ftd.align.top-center
+align-content if { num % 9 == 2 }: ftd.align.top-right
+align-content if { num % 9 == 3 }: ftd.align.left
+align-content if { num % 9 == 4 }: ftd.align.center
+align-content if { num % 9 == 5 }: ftd.align.right
+align-content if { num % 9 == 6 }: ftd.align.bottom-left
+align-content if { num % 9 == 7 }: ftd.align.bottom-center
+align-content if { num % 9 == 8 }: ftd.align.bottom-right
+spacing-mode: ftd.spacing-mode.space-between
+fill.solid: green
+horizontal-resizing.fixed.px: 200
+vertical-resizing.fixed.px: 200
+border-width.px: 1
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+fill.solid: yellow
+border-width.px: 1
+
+-- end: ftd.column
+
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+fill.solid: orange
+border-width.px: 1
+
+-- end: ftd.column
+
+
+-- end: ftd.column
+
+
 
 
 

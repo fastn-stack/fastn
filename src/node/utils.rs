@@ -1,5 +1,6 @@
 pub trait CheckMap {
     fn check_and_insert(&mut self, key: &str, value: ftd::node::Value);
+    fn upsert(&mut self, key: &str, value: ftd::node::Value);
 }
 
 impl CheckMap for ftd::Map<ftd::node::Value> {
@@ -16,6 +17,12 @@ impl CheckMap for ftd::Map<ftd::node::Value> {
             value
         };
 
+        if value.value.is_some() || !value.properties.is_empty() {
+            self.insert(key.to_string(), value);
+        }
+    }
+
+    fn upsert(&mut self, key: &str, value: ftd::node::Value) {
         if value.value.is_some() || !value.properties.is_empty() {
             self.insert(key.to_string(), value);
         }
