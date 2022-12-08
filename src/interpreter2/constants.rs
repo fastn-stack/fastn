@@ -3,16 +3,16 @@ pub const FTD_LENGTH_PX: &str = "ftd#length.px";
 pub const FTD_LENGTH_PERCENT: &str = "ftd#length.percent";
 pub const FTD_LENGTH_VALUE: &str = "value";
 
-pub const FTD_ALIGNMENT: &str = "ftd#alignment";
-pub const FTD_ALIGNMENT_TOP_LEFT: &str = "ftd#alignment.top-left";
-pub const FTD_ALIGNMENT_TOP_CENTER: &str = "ftd#alignment.top-center";
-pub const FTD_ALIGNMENT_TOP_RIGHT: &str = "ftd#alignment.top-right";
-pub const FTD_ALIGNMENT_RIGHT: &str = "ftd#alignment.right";
-pub const FTD_ALIGNMENT_LEFT: &str = "ftd#alignment.left";
-pub const FTD_ALIGNMENT_CENTER: &str = "ftd#alignment.center";
-pub const FTD_ALIGNMENT_BOTTOM_LEFT: &str = "ftd#alignment.bottom-left";
-pub const FTD_ALIGNMENT_BOTTOM_CENTER: &str = "ftd#alignment.bottom-center";
-pub const FTD_ALIGNMENT_BOTTOM_RIGHT: &str = "ftd#alignment.bottom-right";
+pub const FTD_ALIGN: &str = "ftd#align";
+pub const FTD_ALIGN_TOP_LEFT: &str = "ftd#align.top-left";
+pub const FTD_ALIGN_TOP_CENTER: &str = "ftd#align.top-center";
+pub const FTD_ALIGN_TOP_RIGHT: &str = "ftd#align.top-right";
+pub const FTD_ALIGN_RIGHT: &str = "ftd#align.right";
+pub const FTD_ALIGN_LEFT: &str = "ftd#align.left";
+pub const FTD_ALIGN_CENTER: &str = "ftd#align.center";
+pub const FTD_ALIGN_BOTTOM_LEFT: &str = "ftd#align.bottom-left";
+pub const FTD_ALIGN_BOTTOM_CENTER: &str = "ftd#align.bottom-center";
+pub const FTD_ALIGN_BOTTOM_RIGHT: &str = "ftd#align.bottom-right";
 
 pub const FTD_RESIZING: &str = "ftd#resizing";
 pub const FTD_RESIZING_HUG_CONTENT: &str = "ftd#resizing.hug-content";

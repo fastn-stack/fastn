@@ -204,15 +204,15 @@ impl Alignment {
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
         match or_type_value.0.as_str() {
-            ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT => Ok(Alignment::TopLeft),
-            ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER => Ok(Alignment::TopCenter),
-            ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT => Ok(Alignment::TopRight),
-            ftd::interpreter2::FTD_ALIGNMENT_LEFT => Ok(Alignment::Left),
-            ftd::interpreter2::FTD_ALIGNMENT_CENTER => Ok(Alignment::Center),
-            ftd::interpreter2::FTD_ALIGNMENT_RIGHT => Ok(Alignment::Right),
-            ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT => Ok(Alignment::BottomLeft),
-            ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER => Ok(Alignment::BottomCenter),
-            ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT => Ok(Alignment::BottomRight),
+            ftd::interpreter2::FTD_ALIGN_TOP_LEFT => Ok(Alignment::TopLeft),
+            ftd::interpreter2::FTD_ALIGN_TOP_CENTER => Ok(Alignment::TopCenter),
+            ftd::interpreter2::FTD_ALIGN_TOP_RIGHT => Ok(Alignment::TopRight),
+            ftd::interpreter2::FTD_ALIGN_LEFT => Ok(Alignment::Left),
+            ftd::interpreter2::FTD_ALIGN_CENTER => Ok(Alignment::Center),
+            ftd::interpreter2::FTD_ALIGN_RIGHT => Ok(Alignment::Right),
+            ftd::interpreter2::FTD_ALIGN_BOTTOM_LEFT => Ok(Alignment::BottomLeft),
+            ftd::interpreter2::FTD_ALIGN_BOTTOM_CENTER => Ok(Alignment::BottomCenter),
+            ftd::interpreter2::FTD_ALIGN_BOTTOM_RIGHT => Ok(Alignment::BottomRight),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.alignment`", t),
                 doc.name,
@@ -235,7 +235,7 @@ impl Alignment {
             arguments,
             doc,
             line_number,
-            ftd::interpreter2::FTD_ALIGNMENT,
+            ftd::interpreter2::FTD_ALIGN,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -260,7 +260,7 @@ impl Alignment {
             arguments,
             doc,
             line_number,
-            ftd::interpreter2::FTD_ALIGNMENT,
+            ftd::interpreter2::FTD_ALIGN,
         )?;
 
         Ok(ftd::executor::Value::new(
@@ -333,15 +333,15 @@ impl Alignment {
                             null
                         }}
                     "},
-                    top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
-                    top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
-                    top_right = ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
-                    left = ftd::interpreter2::FTD_ALIGNMENT_LEFT,
-                    center = ftd::interpreter2::FTD_ALIGNMENT_CENTER,
-                    right = ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
-                    bottom_left = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
-                    bottom_center = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
-                    bottom_right = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
+                    top_left = ftd::interpreter2::FTD_ALIGN_TOP_LEFT,
+                    top_center = ftd::interpreter2::FTD_ALIGN_TOP_CENTER,
+                    top_right = ftd::interpreter2::FTD_ALIGN_TOP_RIGHT,
+                    left = ftd::interpreter2::FTD_ALIGN_LEFT,
+                    center = ftd::interpreter2::FTD_ALIGN_CENTER,
+                    right = ftd::interpreter2::FTD_ALIGN_RIGHT,
+                    bottom_left = ftd::interpreter2::FTD_ALIGN_BOTTOM_LEFT,
+                    bottom_center = ftd::interpreter2::FTD_ALIGN_BOTTOM_CENTER,
+                    bottom_right = ftd::interpreter2::FTD_ALIGN_BOTTOM_RIGHT,
                 ),
                 true,
             )
@@ -359,15 +359,15 @@ impl Alignment {
                     null
                 }}
                 "},
-                    top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
-                    top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
-                    top_right = ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
-                    left = ftd::interpreter2::FTD_ALIGNMENT_LEFT,
-                    center = ftd::interpreter2::FTD_ALIGNMENT_CENTER,
-                    right = ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
-                    bottom_left = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
-                    bottom_center = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
-                    bottom_right = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
+                    top_left = ftd::interpreter2::FTD_ALIGN_TOP_LEFT,
+                    top_center = ftd::interpreter2::FTD_ALIGN_TOP_CENTER,
+                    top_right = ftd::interpreter2::FTD_ALIGN_TOP_RIGHT,
+                    left = ftd::interpreter2::FTD_ALIGN_LEFT,
+                    center = ftd::interpreter2::FTD_ALIGN_CENTER,
+                    right = ftd::interpreter2::FTD_ALIGN_RIGHT,
+                    bottom_left = ftd::interpreter2::FTD_ALIGN_BOTTOM_LEFT,
+                    bottom_center = ftd::interpreter2::FTD_ALIGN_BOTTOM_CENTER,
+                    bottom_right = ftd::interpreter2::FTD_ALIGN_BOTTOM_RIGHT,
                 ),
                 true,
             )
@@ -389,15 +389,15 @@ impl Alignment {
                     null
                 }}
                 "},
-                    top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
-                    top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
-                    top_right = ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
-                    left = ftd::interpreter2::FTD_ALIGNMENT_LEFT,
-                    center = ftd::interpreter2::FTD_ALIGNMENT_CENTER,
-                    right = ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
-                    bottom_left = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
-                    bottom_center = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
-                    bottom_right = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
+                    top_left = ftd::interpreter2::FTD_ALIGN_TOP_LEFT,
+                    top_center = ftd::interpreter2::FTD_ALIGN_TOP_CENTER,
+                    top_right = ftd::interpreter2::FTD_ALIGN_TOP_RIGHT,
+                    left = ftd::interpreter2::FTD_ALIGN_LEFT,
+                    center = ftd::interpreter2::FTD_ALIGN_CENTER,
+                    right = ftd::interpreter2::FTD_ALIGN_RIGHT,
+                    bottom_left = ftd::interpreter2::FTD_ALIGN_BOTTOM_LEFT,
+                    bottom_center = ftd::interpreter2::FTD_ALIGN_BOTTOM_CENTER,
+                    bottom_right = ftd::interpreter2::FTD_ALIGN_BOTTOM_RIGHT,
                 ),
                 true,
             )
@@ -415,15 +415,15 @@ impl Alignment {
                             null
                         }}
                     "},
-                    top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
-                    top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
-                    top_right = ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
-                    left = ftd::interpreter2::FTD_ALIGNMENT_LEFT,
-                    center = ftd::interpreter2::FTD_ALIGNMENT_CENTER,
-                    right = ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
-                    bottom_left = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
-                    bottom_center = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
-                    bottom_right = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
+                    top_left = ftd::interpreter2::FTD_ALIGN_TOP_LEFT,
+                    top_center = ftd::interpreter2::FTD_ALIGN_TOP_CENTER,
+                    top_right = ftd::interpreter2::FTD_ALIGN_TOP_RIGHT,
+                    left = ftd::interpreter2::FTD_ALIGN_LEFT,
+                    center = ftd::interpreter2::FTD_ALIGN_CENTER,
+                    right = ftd::interpreter2::FTD_ALIGN_RIGHT,
+                    bottom_left = ftd::interpreter2::FTD_ALIGN_BOTTOM_LEFT,
+                    bottom_center = ftd::interpreter2::FTD_ALIGN_BOTTOM_CENTER,
+                    bottom_right = ftd::interpreter2::FTD_ALIGN_BOTTOM_RIGHT,
                 ),
                 true,
             )

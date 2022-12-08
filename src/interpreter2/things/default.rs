@@ -142,113 +142,111 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            ftd::interpreter2::FTD_ALIGNMENT.to_string(),
+            ftd::interpreter2::FTD_ALIGN.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
-                name: ftd::interpreter2::FTD_ALIGNMENT.to_string(),
+                name: ftd::interpreter2::FTD_ALIGN.to_string(),
                 variants: vec![
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
+                        ftd::interpreter2::FTD_ALIGN_TOP_LEFT,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
                             ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
+                                ftd::interpreter2::FTD_ALIGN_TOP_LEFT,
                             )
                             .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                        ftd::interpreter2::FTD_ALIGN_TOP_CENTER,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
                             ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                                ftd::interpreter2::FTD_ALIGN_TOP_CENTER,
                             )
                             .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
+                        ftd::interpreter2::FTD_ALIGN_TOP_RIGHT,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
                             ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
+                                ftd::interpreter2::FTD_ALIGN_TOP_RIGHT,
                             )
                             .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_ALIGNMENT_LEFT,
+                        ftd::interpreter2::FTD_ALIGN_LEFT,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string(ftd::interpreter2::FTD_ALIGN_LEFT)
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_ALIGN_CENTER,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
                             ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_ALIGNMENT_LEFT,
+                                ftd::interpreter2::FTD_ALIGN_CENTER,
                             )
                             .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_ALIGNMENT_CENTER,
+                        ftd::interpreter2::FTD_ALIGN_RIGHT,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
                             ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_ALIGNMENT_CENTER,
+                                ftd::interpreter2::FTD_ALIGN_RIGHT,
                             )
                             .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
+                        ftd::interpreter2::FTD_ALIGN_BOTTOM_LEFT,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
                             ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
+                                ftd::interpreter2::FTD_ALIGN_BOTTOM_LEFT,
                             )
                             .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
+                        ftd::interpreter2::FTD_ALIGN_BOTTOM_CENTER,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
                             ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
+                                ftd::interpreter2::FTD_ALIGN_BOTTOM_CENTER,
                             )
                             .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
+                        ftd::interpreter2::FTD_ALIGN_BOTTOM_RIGHT,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
                             ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
-                            )
-                            .into_property_value(false, 0),
-                        ),
-                        0,
-                    )),
-                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
-                        ftd::interpreter2::Kind::string().into_kind_data(),
-                        false,
-                        Some(
-                            ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
+                                ftd::interpreter2::FTD_ALIGN_BOTTOM_RIGHT,
                             )
                             .into_property_value(false, 0),
                         ),
@@ -614,7 +612,7 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
         ),
         ftd::interpreter2::Argument::default(
             "align-content",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_ALIGNMENT)
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_ALIGN)
                 .into_optional()
                 .into_kind_data(),
         ),

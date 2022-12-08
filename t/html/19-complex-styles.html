@@ -7,7 +7,7 @@
 <script type="ftd" id="ftd-data">
 {
 "foo#flag": true,
-"foo#foo:align:1": "ftd#alignment.top-center",
+"foo#foo:align:1": "ftd#align.top-center",
 "foo#foo:px:1": 40,
 "foo#foo:resize:1": {
 "value": "50px"
@@ -503,11 +503,11 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["1:main__align-items"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#alignment.top-left" || "{0}" == "ftd#alignment.left" || "{0}" == "ftd#alignment.bottom-left") {
+document.querySelector(`[data-id="1:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.left" || "{0}" == "ftd#align.bottom-left") {
 "start"
-} else if ("{0}" == "ftd#alignment.top-center" || "{0}" == "ftd#alignment.center" || "{0}" == "ftd#alignment.bottom-center") {
+} else if ("{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.bottom-center") {
 "center"
-} else if ("{0}" == "ftd#alignment.top-right" || "{0}" == "ftd#alignment.right" || "{0}" == "ftd#alignment.bottom-right") {
+} else if ("{0}" == "ftd#align.top-right" || "{0}" == "ftd#align.right" || "{0}" == "ftd#align.bottom-right") {
 "end"
 } else {
 null
@@ -516,11 +516,11 @@ null
 }
 
 window.node_change_main["1:main__justify-content"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#alignment.top-left" || "{0}" == "ftd#alignment.top-center" || "{0}" == "ftd#alignment.top-right") {
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#align.top-left" || "{0}" == "ftd#align.top-center" || "{0}" == "ftd#align.top-right") {
 "start"
-} else if ("{0}" == "ftd#alignment.left" || "{0}" == "ftd#alignment.center" || "{0}" == "ftd#alignment.right") {
+} else if ("{0}" == "ftd#align.left" || "{0}" == "ftd#align.center" || "{0}" == "ftd#align.right") {
 "center"
-} else if ("{0}" == "ftd#alignment.bottom-left" || "{0}" == "ftd#alignment.bottom-center" || "{0}" == "ftd#alignment.bottom-right") {
+} else if ("{0}" == "ftd#align.bottom-left" || "{0}" == "ftd#align.bottom-center" || "{0}" == "ftd#align.bottom-right") {
 "end"
 } else {
 null
@@ -621,9 +621,9 @@ window.resolve_value_main["foo#foo:align:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-set_data_value(data, "foo#foo:align:1", "ftd#alignment.top-left");
+set_data_value(data, "foo#foo:align:1", "ftd#align.top-left");
 }
-else {set_data_value(data, "foo#foo:align:1", "ftd#alignment.top-center");}
+else {set_data_value(data, "foo#foo:align:1", "ftd#align.top-center");}
 
 }
 window.resolve_value_main["foo#foo:px:1"] = function(data) {

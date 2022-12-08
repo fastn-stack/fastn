@@ -9,15 +9,15 @@ px if { flag }: 30
 px: 40
 resize if { flag }: ftd.resizing.hug-content
 resize.fixed.px: 50
-align if { flag }: ftd.alignment.top-left
-align: ftd.alignment.top-center
+align if { flag }: ftd.align.top-left
+align: ftd.align.top-center
 
 
 
 -- component foo:
 integer px:
 ftd.resizing resize:
-ftd.alignment align:
+ftd.align align:
 
 -- ftd.column:
 horizontal-resizing if { flag }: $foo.resize

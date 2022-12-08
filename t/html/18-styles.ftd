@@ -35,8 +35,8 @@ border-radius.percent: 18
 
 -- ftd.row:
 spacing.px: 20
-align-content if { flag }: ftd.alignment.top-left
-align-content: ftd.alignment.top-center
+align-content if { flag }: ftd.align.top-left
+align-content: ftd.align.top-center
 fill.solid: red
 horizontal-resizing.fixed.px: 400
 vertical-resizing.fixed.px: 100
@@ -50,8 +50,8 @@ border-width.px: 1
 
 -- ftd.column:
 spacing.px: 2
-align-content if { flag }: ftd.alignment.top-left
-align-content: ftd.alignment.top-center
+align-content if { flag }: ftd.align.top-left
+align-content: ftd.align.top-center
 horizontal-resizing.fixed.px: 400
 vertical-resizing.fixed.px: 100
 border-width.px: 1
@@ -68,7 +68,7 @@ horizontal-resizing.fixed.px: 400
 horizontal-resizing if { flag }: ftd.resizing.hug-content
 vertical-resizing.fixed.percent: 20
 vertical-resizing if { flag }: ftd.resizing.fill-container
-align-content: ftd.alignment.top-center
+align-content: ftd.align.top-center
 border-width.px: 1
 
 
