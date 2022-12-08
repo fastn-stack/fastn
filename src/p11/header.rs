@@ -209,9 +209,7 @@ impl Header {
         }
 
         match &mut header {
-            Header::KV(ftd::p11::header::KV { value, .. }) => {
-                ftd::p11::utils::remove_value_comment(value)
-            }
+            Header::KV(ftd::p11::header::KV { .. }) => {}
             Header::Section(ftd::p11::header::Section { section, .. }) => {
                 *section = section
                     .iter_mut()
