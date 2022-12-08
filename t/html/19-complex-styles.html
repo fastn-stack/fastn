@@ -503,12 +503,28 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["1:main__align-items"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#alignment.top-left") {"start"} else if ("{0}" == "ftd#alignment.top-center") {"center"} else {null}
+document.querySelector(`[data-id="1:main"]`).style["align-items"] = eval(`if ("{0}" == "ftd#alignment.top-left" || "{0}" == "ftd#alignment.left" || "{0}" == "ftd#alignment.bottom-left") {
+"start"
+} else if ("{0}" == "ftd#alignment.top-center" || "{0}" == "ftd#alignment.center" || "{0}" == "ftd#alignment.bottom-center") {
+"center"
+} else if ("{0}" == "ftd#alignment.top-right" || "{0}" == "ftd#alignment.right" || "{0}" == "ftd#alignment.bottom-right") {
+"end"
+} else {
+null
+}
 `.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
 }
 
 window.node_change_main["1:main__justify-content"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#alignment.top-left") {"start"} else if ("{0}" == "ftd#alignment.top-center") {"start"} else {null}
+document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if ("{0}" == "ftd#alignment.top-left" || "{0}" == "ftd#alignment.top-center" || "{0}" == "ftd#alignment.top-right") {
+"start"
+} else if ("{0}" == "ftd#alignment.left" || "{0}" == "ftd#alignment.center" || "{0}" == "ftd#alignment.right") {
+"center"
+} else if ("{0}" == "ftd#alignment.bottom-left" || "{0}" == "ftd#alignment.bottom-center" || "{0}" == "ftd#alignment.bottom-right") {
+"end"
+} else {
+null
+}
 `.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
 }
 

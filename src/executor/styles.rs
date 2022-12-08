@@ -170,6 +170,13 @@ impl Length {
 pub enum Alignment {
     TopLeft,
     TopCenter,
+    TopRight,
+    Left,
+    Center,
+    Right,
+    BottomLeft,
+    BottomCenter,
+    BottomRight,
 }
 
 impl Default for Alignment {
@@ -199,6 +206,13 @@ impl Alignment {
         match or_type_value.0.as_str() {
             ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT => Ok(Alignment::TopLeft),
             ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER => Ok(Alignment::TopCenter),
+            ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT => Ok(Alignment::TopRight),
+            ftd::interpreter2::FTD_ALIGNMENT_LEFT => Ok(Alignment::Left),
+            ftd::interpreter2::FTD_ALIGNMENT_CENTER => Ok(Alignment::Center),
+            ftd::interpreter2::FTD_ALIGNMENT_RIGHT => Ok(Alignment::Right),
+            ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT => Ok(Alignment::BottomLeft),
+            ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER => Ok(Alignment::BottomCenter),
+            ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT => Ok(Alignment::BottomRight),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.alignment`", t),
                 doc.name,
@@ -259,13 +273,23 @@ impl Alignment {
     pub fn to_css_justify_content(&self, is_horizontal_direction: bool) -> String {
         if is_horizontal_direction {
             match self {
-                Alignment::TopLeft => "start".to_string(),
-                Alignment::TopCenter => "center".to_string(),
+                Alignment::TopLeft | Alignment::Left | Alignment::BottomLeft => "start".to_string(),
+                Alignment::TopCenter | Alignment::Center | Alignment::BottomCenter => {
+                    "center".to_string()
+                }
+                Alignment::TopRight | Alignment::Right | Alignment::BottomRight => {
+                    "end".to_string()
+                }
             }
         } else {
             match self {
-                Alignment::TopLeft => "start".to_string(),
-                Alignment::TopCenter => "start".to_string(),
+                Alignment::TopLeft | Alignment::TopCenter | Alignment::TopRight => {
+                    "start".to_string()
+                }
+                Alignment::Left | Alignment::Center | Alignment::Right => "center".to_string(),
+                Alignment::BottomLeft | Alignment::BottomCenter | Alignment::BottomRight => {
+                    "end".to_string()
+                }
             }
         }
     }
@@ -273,13 +297,23 @@ impl Alignment {
     pub fn to_css_align_items(&self, is_horizontal_direction: bool) -> String {
         if is_horizontal_direction {
             match self {
-                Alignment::TopLeft => "start".to_string(),
-                Alignment::TopCenter => "start".to_string(),
+                Alignment::TopLeft | Alignment::TopCenter | Alignment::TopRight => {
+                    "start".to_string()
+                }
+                Alignment::Left | Alignment::Center | Alignment::Right => "center".to_string(),
+                Alignment::BottomLeft | Alignment::BottomCenter | Alignment::BottomRight => {
+                    "end".to_string()
+                }
             }
         } else {
             match self {
-                Alignment::TopLeft => "start".to_string(),
-                Alignment::TopCenter => "center".to_string(),
+                Alignment::TopLeft | Alignment::Left | Alignment::BottomLeft => "start".to_string(),
+                Alignment::TopCenter | Alignment::Center | Alignment::BottomCenter => {
+                    "center".to_string()
+                }
+                Alignment::TopRight | Alignment::Right | Alignment::BottomRight => {
+                    "end".to_string()
+                }
             }
         }
     }
@@ -289,10 +323,25 @@ impl Alignment {
             (
                 format!(
                     indoc::indoc! {"
-                if (\"{{0}}\" == \"{top_left}\") {{\"start\"}} else if (\"{{0}}\" == \"{top_center}\") {{\"center\"}} else {{null}}
-                "},
+                        if (\"{{0}}\" == \"{top_left}\" || \"{{0}}\" == \"{left}\" || \"{{0}}\" == \"{bottom_left}\") {{
+                            \"start\"
+                        }} else if (\"{{0}}\" == \"{top_center}\" || \"{{0}}\" == \"{center}\" || \"{{0}}\" == \"{bottom_center}\") {{
+                            \"center\"
+                        }} else if (\"{{0}}\" == \"{top_right}\" || \"{{0}}\" == \"{right}\" || \"{{0}}\" == \"{bottom_right}\") {{
+                            \"end\"
+                        }} else {{
+                            null
+                        }}
+                    "},
                     top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
                     top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                    top_right = ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
+                    left = ftd::interpreter2::FTD_ALIGNMENT_LEFT,
+                    center = ftd::interpreter2::FTD_ALIGNMENT_CENTER,
+                    right = ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
+                    bottom_left = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
+                    bottom_center = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
+                    bottom_right = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
                 ),
                 true,
             )
@@ -300,10 +349,25 @@ impl Alignment {
             (
                 format!(
                     indoc::indoc! {"
-                if (\"{{0}}\" == \"{top_left}\") {{\"start\"}} else if (\"{{0}}\" == \"{top_center}\") {{\"start\"}} else {{null}}
+                if (\"{{0}}\" == \"{top_left}\" || \"{{0}}\" == \"{top_center}\" || \"{{0}}\" == \"{top_right}\") {{
+                    \"start\"
+                }} else if (\"{{0}}\" == \"{left}\" || \"{{0}}\" == \"{center}\" || \"{{0}}\" == \"{right}\") {{
+                    \"center\"
+                }} else if (\"{{0}}\" == \"{bottom_left}\" || \"{{0}}\" == \"{bottom_center}\" || \"{{0}}\" == \"{bottom_right}\") {{
+                    \"end\"
+                }} else {{
+                    null
+                }}
                 "},
                     top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
                     top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                    top_right = ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
+                    left = ftd::interpreter2::FTD_ALIGNMENT_LEFT,
+                    center = ftd::interpreter2::FTD_ALIGNMENT_CENTER,
+                    right = ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
+                    bottom_left = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
+                    bottom_center = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
+                    bottom_right = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
                 ),
                 true,
             )
@@ -315,10 +379,25 @@ impl Alignment {
             (
                 format!(
                     indoc::indoc! {"
-                if (\"{{0}}\" == \"{top_left}\") {{\"start\"}} else if (\"{{0}}\" == \"{top_center}\") {{\"start\"}} else {{null}}
+               if (\"{{0}}\" == \"{top_left}\" || \"{{0}}\" == \"{top_center}\" || \"{{0}}\" == \"{top_right}\") {{
+                    \"start\"
+                }} else if (\"{{0}}\" == \"{left}\" || \"{{0}}\" == \"{center}\" || \"{{0}}\" == \"{right}\") {{
+                    \"center\"
+                }} else if (\"{{0}}\" == \"{bottom_left}\" || \"{{0}}\" == \"{bottom_center}\" || \"{{0}}\" == \"{bottom_right}\") {{
+                    \"end\"
+                }} else {{
+                    null
+                }}
                 "},
                     top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
                     top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                    top_right = ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
+                    left = ftd::interpreter2::FTD_ALIGNMENT_LEFT,
+                    center = ftd::interpreter2::FTD_ALIGNMENT_CENTER,
+                    right = ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
+                    bottom_left = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
+                    bottom_center = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
+                    bottom_right = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
                 ),
                 true,
             )
@@ -326,10 +405,25 @@ impl Alignment {
             (
                 format!(
                     indoc::indoc! {"
-                if (\"{{0}}\" == \"{top_left}\") {{\"start\"}} else if (\"{{0}}\" == \"{top_center}\") {{\"center\"}} else {{null}}
-                "},
+                        if (\"{{0}}\" == \"{top_left}\" || \"{{0}}\" == \"{left}\" || \"{{0}}\" == \"{bottom_left}\") {{
+                            \"start\"
+                        }} else if (\"{{0}}\" == \"{top_center}\" || \"{{0}}\" == \"{center}\" || \"{{0}}\" == \"{bottom_center}\") {{
+                            \"center\"
+                        }} else if (\"{{0}}\" == \"{top_right}\" || \"{{0}}\" == \"{right}\" || \"{{0}}\" == \"{bottom_right}\") {{
+                            \"end\"
+                        }} else {{
+                            null
+                        }}
+                    "},
                     top_left = ftd::interpreter2::FTD_ALIGNMENT_TOP_LEFT,
                     top_center = ftd::interpreter2::FTD_ALIGNMENT_TOP_CENTER,
+                    top_right = ftd::interpreter2::FTD_ALIGNMENT_TOP_RIGHT,
+                    left = ftd::interpreter2::FTD_ALIGNMENT_LEFT,
+                    center = ftd::interpreter2::FTD_ALIGNMENT_CENTER,
+                    right = ftd::interpreter2::FTD_ALIGNMENT_RIGHT,
+                    bottom_left = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_LEFT,
+                    bottom_center = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_CENTER,
+                    bottom_right = ftd::interpreter2::FTD_ALIGNMENT_BOTTOM_RIGHT,
                 ),
                 true,
             )

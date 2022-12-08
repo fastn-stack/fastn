@@ -1,0 +1,98 @@
+-- integer $num: 0
+
+-- ftd.column:
+spacing.px: 20
+
+-- ftd.text: Click Here!!
+$on-click$: $increment($a=$num)
+
+
+-- ftd.integer: $num
+
+
+-- ftd.column:
+spacing.px: 20
+align-content if { num % 9 == 0 }: ftd.alignment.top-left
+align-content if { num % 9 == 1 }: ftd.alignment.top-center
+align-content if { num % 9 == 2 }: ftd.alignment.top-right
+align-content if { num % 9 == 3 }: ftd.alignment.left
+align-content if { num % 9 == 4 }: ftd.alignment.center
+align-content if { num % 9 == 5 }: ftd.alignment.right
+align-content if { num % 9 == 6 }: ftd.alignment.bottom-left
+align-content if { num % 9 == 7 }: ftd.alignment.bottom-center
+align-content if { num % 9 == 8 }: ftd.alignment.bottom-right
+fill.solid: red
+horizontal-resizing.fixed.px: 400
+vertical-resizing.fixed.px: 200
+border-width.px: 1
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+fill.solid: yellow
+border-width.px: 1
+
+-- end: ftd.column
+
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+fill.solid: orange
+border-width.px: 1
+
+-- end: ftd.column
+
+
+-- end: ftd.column
+
+
+
+
+
+-- ftd.row:
+spacing.px: 20
+align-content if { num % 9 == 0 }: ftd.alignment.top-left
+align-content if { num % 9 == 1 }: ftd.alignment.top-center
+align-content if { num % 9 == 2 }: ftd.alignment.top-right
+align-content if { num % 9 == 3 }: ftd.alignment.left
+align-content if { num % 9 == 4 }: ftd.alignment.center
+align-content if { num % 9 == 5 }: ftd.alignment.right
+align-content if { num % 9 == 6 }: ftd.alignment.bottom-left
+align-content if { num % 9 == 7 }: ftd.alignment.bottom-center
+align-content if { num % 9 == 8 }: ftd.alignment.bottom-right
+fill.solid: red
+horizontal-resizing.fixed.px: 400
+vertical-resizing.fixed.px: 200
+border-width.px: 1
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+fill.solid: yellow
+border-width.px: 1
+
+-- end: ftd.column
+
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+fill.solid: orange
+border-width.px: 1
+
+-- end: ftd.column
+
+
+-- end: ftd.row
+
+
+
+-- end: ftd.column
+
+
+
+-- void increment(a):
+integer $a:
+
+a += 1;

@@ -6,6 +6,13 @@ pub const FTD_LENGTH_VALUE: &str = "value";
 pub const FTD_ALIGNMENT: &str = "ftd#alignment";
 pub const FTD_ALIGNMENT_TOP_LEFT: &str = "ftd#alignment.top-left";
 pub const FTD_ALIGNMENT_TOP_CENTER: &str = "ftd#alignment.top-center";
+pub const FTD_ALIGNMENT_TOP_RIGHT: &str = "ftd#alignment.top-right";
+pub const FTD_ALIGNMENT_RIGHT: &str = "ftd#alignment.right";
+pub const FTD_ALIGNMENT_LEFT: &str = "ftd#alignment.left";
+pub const FTD_ALIGNMENT_CENTER: &str = "ftd#alignment.center";
+pub const FTD_ALIGNMENT_BOTTOM_LEFT: &str = "ftd#alignment.bottom-left";
+pub const FTD_ALIGNMENT_BOTTOM_CENTER: &str = "ftd#alignment.bottom-center";
+pub const FTD_ALIGNMENT_BOTTOM_RIGHT: &str = "ftd#alignment.bottom-right";
 
 pub const FTD_RESIZING: &str = "ftd#resizing";
 pub const FTD_RESIZING_HUG_CONTENT: &str = "ftd#resizing.hug-content";
