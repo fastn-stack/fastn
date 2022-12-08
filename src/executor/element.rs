@@ -100,7 +100,7 @@ pub fn markup_inline(s: &str) -> Rendered {
 pub struct Container {
     pub spacing: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub wrap: ftd::executor::Value<Option<bool>>,
-    pub align: ftd::executor::Value<ftd::executor::Alignment>,
+    pub align_content: ftd::executor::Value<ftd::executor::Alignment>,
     pub children: Vec<Element>,
 }
 
@@ -477,12 +477,12 @@ pub fn container_from_properties(
             "spacing",
         )?,
         wrap: ftd::executor::value::optional_bool("wrap", properties, arguments, doc, line_number)?,
-        align: ftd::executor::Alignment::alignment_with_default(
+        align_content: ftd::executor::Alignment::alignment_with_default(
             properties,
             arguments,
             doc,
             line_number,
-            "align",
+            "align-content",
             ftd::executor::Alignment::TopLeft,
         )?,
         children,

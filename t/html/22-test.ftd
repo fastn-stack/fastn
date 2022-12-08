@@ -1,0 +1,28 @@
+-- ftd.text: Hello World
+
+-- ftd.row:
+padding.px: 40
+
+-- ftd.text: Hello World
+padding.px: 2
+
+-- ftd.text: again
+padding.px: 2
+
+-- end: ftd.row
+
+
+-- integer num: 20
+
+-- ftd.row:
+padding.px: 40
+
+-- ftd.text: Hello World
+padding.px if {num > 20}: 20
+padding.px: 2
+
+-- ftd.text: again
+padding.px if {num == 20}: 20
+padding.px: 2
+
+-- end: ftd.row

@@ -22,7 +22,7 @@ ftd.alignment align:
 -- ftd.column:
 horizontal-resizing if { flag }: $foo.resize
 horizontal-resizing.fixed.px: $foo.px
-align: $foo.align
+align-content: $foo.align
 
 -- ftd.text: Hello
 vertical-resizing.fixed.px if { flag }: $foo.px

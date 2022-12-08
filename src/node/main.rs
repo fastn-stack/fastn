@@ -138,12 +138,12 @@ impl ftd::executor::Row {
             ftd::node::Value::from_executor_value(
                 Some(
                     self.container
-                        .align
+                        .align_content
                         .to_owned()
                         .map(|v| v.to_css_justify_content(true))
                         .value,
                 ),
-                self.container.align.to_owned(),
+                self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::justify_content_pattern(true)),
                 doc_id,
             ),
@@ -154,12 +154,12 @@ impl ftd::executor::Row {
             ftd::node::Value::from_executor_value(
                 Some(
                     self.container
-                        .align
+                        .align_content
                         .to_owned()
                         .map(|v| v.to_css_align_items(true))
                         .value,
                 ),
-                self.container.align.to_owned(),
+                self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::align_item_pattern(true)),
                 doc_id,
             ),
@@ -204,12 +204,12 @@ impl ftd::executor::Column {
             ftd::node::Value::from_executor_value(
                 Some(
                     self.container
-                        .align
+                        .align_content
                         .to_owned()
                         .map(|v| v.to_css_justify_content(false))
                         .value,
                 ),
-                self.container.align.to_owned(),
+                self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::justify_content_pattern(false)),
                 doc_id,
             ),
@@ -220,12 +220,12 @@ impl ftd::executor::Column {
             ftd::node::Value::from_executor_value(
                 Some(
                     self.container
-                        .align
+                        .align_content
                         .to_owned()
                         .map(|v| v.to_css_align_items(false))
                         .value,
                 ),
-                self.container.align.to_owned(),
+                self.container.align_content.to_owned(),
                 Some(ftd::executor::Alignment::align_item_pattern(false)),
                 doc_id,
             ),

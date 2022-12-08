@@ -529,7 +529,7 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
-            "align",
+            "align-content",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_ALIGNMENT)
                 .into_optional()
                 .into_kind_data(),
