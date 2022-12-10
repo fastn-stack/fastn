@@ -7,6 +7,7 @@ impl fpm::Package {
         let package_root = if let Some(package_root) = package_root {
             package_root.to_owned()
         } else {
+            dbg!(&self.fpm_path);
             match self.fpm_path.as_ref() {
                 Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
                 _ => {
@@ -16,7 +17,9 @@ impl fpm::Package {
                 }
             }
         };
-        Ok(tokio::fs::read(package_root.join(name)).await?)
+
+        // Issue 1: Need to remove / from the start of the name
+        Ok(tokio::fs::read(package_root.join(name.trim_start_matches('/'))).await?)
     }
 
     pub(crate) async fn fs_fetch_by_id(
@@ -24,14 +27,26 @@ impl fpm::Package {
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fpm::Result<(String, Vec<u8>)> {
-        for name in file_id_to_names(id) {
-            if let Ok(data) = self
-                .fs_fetch_by_file_name(name.as_str(), package_root)
-                .await
+        if fpm::file::is_static(id)? {
+            dbg!("Reading file", id);
+
+            if let Ok(data) = fpm::time("fs_fetch_by_file_name")
+                .it(self.fs_fetch_by_file_name(id, package_root).await)
             {
-                return Ok((name, data));
+                return Ok((id.to_string(), data));
+            }
+        } else {
+            for name in file_id_to_names(id) {
+                dbg!("Reading file in loop", &name);
+                if let Ok(data) = self
+                    .fs_fetch_by_file_name(name.as_str(), package_root)
+                    .await
+                {
+                    return Ok((name, data));
+                }
             }
         }
+
         Err(fpm::Error::PackageError {
             message: format!(
                 "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
@@ -202,11 +217,15 @@ impl fpm::Package {
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fpm::Result<(String, Vec<u8>)> {
+        let time = std::time::Instant::now();
+
         if let Ok(response) = self.fs_fetch_by_id(id, package_root).await {
+            println!("Time elapsed fs_fetch_by_id: {:?}", time.elapsed());
             return Ok(response);
         }
 
         if let Ok(response) = self.http_download_by_id(id, package_root).await {
+            println!("Time elapsed http_download_by_id: {:?}", time.elapsed());
             return Ok(response);
         }
 
@@ -236,20 +255,6 @@ impl fpm::Package {
                 })
             }
         };
-
-        /*let root = if let Some(package_root) = package_root {
-            package_root.to_owned()
-        } else {
-            match self.fpm_path.as_ref() {
-                Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
-                _ => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("package root not found. Package: {}", &self.name),
-                    })
-                }
-            }
-        };
-        let id = id.trim_matches('/');*/
 
         if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root).await {
             // fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
