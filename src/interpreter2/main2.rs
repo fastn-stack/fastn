@@ -18,6 +18,10 @@ impl InterpreterState {
         }
     }
 
+    pub fn get_current_processing_module(&self) -> Option<String> {
+        self.to_process.last().map(|v| v.0.clone())
+    }
+
     pub fn continue_(mut self) -> ftd::interpreter2::Result<Interpreter> {
         if let Some((id, ast_to_process)) = self.to_process.last() {
             let parsed_document = self.parsed_libs.get(id).unwrap();
