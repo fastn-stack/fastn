@@ -431,6 +431,7 @@ async fn route(
         ("post", "/-/create-cr/") => create_cr(req).await,
         ("get", "/-/create-cr-page/") => create_cr_page(req).await,
         ("get", "/-/clear-cache/") => clear_cache(req).await,
+        ("get", "/-/poll/") => fpm::watcher::poll().await,
         (_, _) => serve(req, app_data.edition.clone()).await,
     }
 }

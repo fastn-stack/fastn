@@ -16,6 +16,7 @@ mod file;
 mod font;
 mod history;
 mod package;
+pub(crate) mod watcher;
 #[macro_use]
 mod http;
 mod auth;

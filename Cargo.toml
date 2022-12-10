@@ -125,6 +125,8 @@ features = [
 [dependencies.tokio]
 version = "1"
 features = [
+    "sync",
+
     # We are currently using the "heavier" schedule.
     #
     # > rt: Enables tokio::spawn, the basic (current thread) scheduler, and non-scheduler utilities.
