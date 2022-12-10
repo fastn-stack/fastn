@@ -118,6 +118,7 @@ impl Library2022 {
             None
         }
 
+        #[allow(clippy::await_holding_refcell_ref)]
         async fn get_data_from_package(
             name: &str,
             package: &fpm::Package,

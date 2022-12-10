@@ -123,6 +123,8 @@ pub async fn interpret_helper<'a>(
     name: &str,
     source: &str,
     lib: &'a mut fpm::Library2022,
+    base_url: &str,
+    download_assets: bool,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
     let mut s = ftd::interpreter2::interpret(name, source)?;
     lib.module_package_map
@@ -181,11 +183,16 @@ pub async fn interpret_helper<'a>(
                     };
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
                 } else {
-                    return ftd::interpreter2::utils::e2(
-                        format!("Unknown module {}", module),
+                    let value = resolve_foreign_variable2022(
+                        variable.as_str(),
                         module.as_str(),
-                        0,
-                    );
+                        &state,
+                        lib,
+                        base_url,
+                        download_assets,
+                    )
+                    .await?;
+                    s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
                 }
             }
         }
@@ -332,7 +339,7 @@ pub async fn resolve_import_2022<'a>(
 ) -> ftd::interpreter2::Result<(String, Vec<String>, Vec<String>)> {
     let current_processing_module = state.get_current_processing_module().ok_or_else(|| {
         ftd::interpreter2::Error::ParseError {
-            message: "The processing document stack is empty 1".to_string(),
+            message: "The processing document stack is empty".to_string(),
             doc_id: "".to_string(),
             line_number: 0,
         }
@@ -403,6 +410,233 @@ pub async fn resolve_import_2022<'a>(
         )
     };
     Ok(source)
+}
+
+pub async fn resolve_foreign_variable2022(
+    variable: &str,
+    doc_name: &str,
+    state: &ftd::interpreter2::InterpreterState,
+    lib: &mut fpm::Library2022,
+    base_url: &str,
+    download_assets: bool,
+) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+    let current_processing_module = state.get_current_processing_module().ok_or_else(|| {
+        ftd::interpreter2::Error::ParseError {
+            message: "The processing document stack is empty".to_string(),
+            doc_id: "".to_string(),
+            line_number: 0,
+        }
+    })?;
+    let package = lib.get_current_package(current_processing_module.as_str())?;
+    if let Ok(value) = resolve_ftd_foreign_variable_2022(variable, doc_name) {
+        return Ok(value);
+    }
+
+    if variable.starts_with("files.") {
+        let files = variable.trim_start_matches("files.").to_string();
+        let package_name = doc_name.to_string();
+        if package.name.eq(&package_name) {
+            if let Ok(value) = get_assets_value(
+                doc_name,
+                &package,
+                files.as_str(),
+                lib,
+                base_url,
+                download_assets,
+            )
+            .await
+            {
+                return Ok(value);
+            }
+        }
+        for (alias, package) in package.aliases() {
+            if alias.eq(&package_name) {
+                if let Ok(value) = get_assets_value(
+                    doc_name,
+                    package,
+                    files.as_str(),
+                    lib,
+                    base_url,
+                    download_assets,
+                )
+                .await
+                {
+                    return Ok(value);
+                }
+            }
+        }
+    }
+
+    return ftd::interpreter2::utils::e2(format!("{} not found 2", variable).as_str(), doc_name, 0);
+
+    async fn get_assets_value(
+        module: &str,
+        package: &fpm::Package,
+        files: &str,
+        lib: &mut fpm::Library2022,
+        base_url: &str,
+        download_assets: bool, // true: in case of `fpm build`
+    ) -> ftd::p1::Result<ftd::interpreter2::Value> {
+        lib.push_package_under_process(module, package).await?;
+        let base_url = base_url.trim_end_matches('/');
+        let mut files = files.to_string();
+        let light = {
+            if let Some(f) = files.strip_suffix(".light") {
+                files = f.to_string();
+                true
+            } else {
+                false
+            }
+        };
+        let dark = {
+            if light {
+                false
+            } else if let Some(f) = files.strip_suffix(".dark") {
+                files = f.to_string();
+                true
+            } else {
+                false
+            }
+        };
+
+        match files.rsplit_once('.') {
+            Some((file, ext))
+                if mime_guess::MimeGuess::from_ext(ext)
+                    .first_or_octet_stream()
+                    .to_string()
+                    .starts_with("image/") =>
+            {
+                let light_mode = format!(
+                    "{base_url}/-/{}/{}.{}",
+                    package.name,
+                    file.replace('.', "/"),
+                    ext
+                );
+
+                let light_path = format!("{}.{}", file.replace('.', "/"), ext);
+                if download_assets
+                    && !lib
+                        .config
+                        .downloaded_assets
+                        .contains_key(&format!("{}/{}", package.name, light_path))
+                {
+                    let start = std::time::Instant::now();
+                    let light = package
+                        .resolve_by_file_name(light_path.as_str(), None, false)
+                        .await
+                        .map_err(|e| ftd::p1::Error::ParseError {
+                            message: e.to_string(),
+                            doc_id: lib.document_id.to_string(),
+                            line_number: 0,
+                        })?;
+                    fpm::utils::write(
+                        &lib.config.build_dir().join("-").join(package.name.as_str()),
+                        light_path.as_str(),
+                        light.as_slice(),
+                    )
+                    .await
+                    .map_err(|e| ftd::p1::Error::ParseError {
+                        message: e.to_string(),
+                        doc_id: lib.document_id.to_string(),
+                        line_number: 0,
+                    })?;
+                    lib.config.downloaded_assets.insert(
+                        format!("{}/{}", package.name, light_path),
+                        light_mode.to_string(),
+                    );
+                    fpm::utils::print_end(
+                        format!("Processed {}/{}", package.name.as_str(), light_path).as_str(),
+                        start,
+                    );
+                }
+
+                if light {
+                    return Ok(ftd::interpreter2::Value::String { text: light_mode });
+                }
+
+                let mut dark_mode = if file.ends_with("-dark") {
+                    light_mode.clone()
+                } else {
+                    format!(
+                        "{base_url}/-/{}/{}-dark.{}",
+                        package.name,
+                        file.replace('.', "/"),
+                        ext
+                    )
+                };
+
+                let dark_path = format!("{}-dark.{}", file.replace('.', "/"), ext);
+                if download_assets && !file.ends_with("-dark") {
+                    let start = std::time::Instant::now();
+                    if let Some(dark) = lib
+                        .config
+                        .downloaded_assets
+                        .get(&format!("{}/{}", package.name, dark_path))
+                    {
+                        dark_mode = dark.to_string();
+                    } else if let Ok(dark) = package
+                        .resolve_by_file_name(dark_path.as_str(), None, false)
+                        .await
+                    {
+                        fpm::utils::write(
+                            &lib.config.build_dir().join("-").join(package.name.as_str()),
+                            dark_path.as_str(),
+                            dark.as_slice(),
+                        )
+                        .await
+                        .map_err(|e| ftd::p1::Error::ParseError {
+                            message: e.to_string(),
+                            doc_id: lib.document_id.to_string(),
+                            line_number: 0,
+                        })?;
+                        fpm::utils::print_end(
+                            format!("Processed {}/{}", package.name.as_str(), dark_path).as_str(),
+                            start,
+                        );
+                    } else {
+                        dark_mode = light_mode.clone();
+                    }
+                    lib.config.downloaded_assets.insert(
+                        format!("{}/{}", package.name, dark_path),
+                        dark_mode.to_string(),
+                    );
+                }
+
+                if dark {
+                    return Ok(ftd::interpreter2::Value::String { text: dark_mode });
+                }
+                #[allow(deprecated)]
+                Ok(ftd::interpreter2::Value::Record {
+                    name: "ftd#image-src".to_string(),
+                    fields: std::array::IntoIter::new([
+                        (
+                            "light".to_string(),
+                            ftd::interpreter2::PropertyValue::Value {
+                                value: ftd::interpreter2::Value::String { text: light_mode },
+                                is_mutable: false,
+                                line_number: 0,
+                            },
+                        ),
+                        (
+                            "dark".to_string(),
+                            ftd::interpreter2::PropertyValue::Value {
+                                value: ftd::interpreter2::Value::String { text: dark_mode },
+                                is_mutable: false,
+                                line_number: 0,
+                            },
+                        ),
+                    ])
+                    .collect(),
+                })
+            }
+            Some((file, ext)) => Ok(ftd::interpreter2::Value::String {
+                text: format!("/-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
+            }),
+            None => Ok(ftd::interpreter2::Value::String {
+                text: format!("/-/{}/{}", package.name, files),
+            }),
+        }
+    }
 }
 
 pub async fn resolve_foreign_variable2(
@@ -818,6 +1052,26 @@ fn resolve_ftd_foreign_variable(variable: &str, doc_name: &str) -> ftd::p1::Resu
             .unwrap()
             .to_string(),
             source: ftd::TextSource::Header,
+        }),
+        _ => ftd::p2::utils::e2(format!("{} not found 3", variable).as_str(), doc_name, 0),
+    }
+}
+
+fn resolve_ftd_foreign_variable_2022(
+    variable: &str,
+    doc_name: &str,
+) -> ftd::p1::Result<ftd::interpreter2::Value> {
+    match variable.strip_prefix("fpm/time#") {
+        Some("now-str") => Ok(ftd::interpreter2::Value::String {
+            text: std::str::from_utf8(
+                std::process::Command::new("date")
+                    .output()
+                    .expect("failed to execute process")
+                    .stdout
+                    .as_slice(),
+            )
+            .unwrap()
+            .to_string(),
         }),
         _ => ftd::p2::utils::e2(format!("{} not found 3", variable).as_str(), doc_name, 0),
     }

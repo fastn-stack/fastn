@@ -297,7 +297,7 @@ pub(crate) async fn read_ftd(
 ) -> fpm::Result<Vec<u8>> {
     match config.ftd_edition {
         fpm::FTDEdition::FTD2021 => read_ftd_2021(config, main, base_url, download_assets).await,
-        fpm::FTDEdition::FTD2022 => read_ftd_2022(config, main, base_url).await,
+        fpm::FTDEdition::FTD2022 => read_ftd_2022(config, main, base_url, download_assets).await,
     }
 }
 
@@ -306,6 +306,7 @@ pub(crate) async fn read_ftd_2022(
     config: &mut fpm::Config,
     main: &fpm::Document,
     base_url: &str,
+    download_assets: bool,
 ) -> fpm::Result<Vec<u8>> {
     let lib_config = config.clone();
     let mut all_packages = config.all_packages.borrow_mut();
@@ -332,6 +333,8 @@ pub(crate) async fn read_ftd_2022(
         main.id_with_package().as_str(),
         doc_content.as_str(),
         &mut lib,
+        base_url,
+        download_assets,
     )
     .await)
     {
