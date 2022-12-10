@@ -756,13 +756,10 @@ impl Config {
         } else {
             // -/fifthtry.github.io/todos/add-todo/
             // -/fifthtry.github.io/doc-site/add-todo/
-            let file_name = fpm::time("get_file_path_and_resolve")
-                .it_with_params(self.get_file_path_and_resolve(path).await?, path);
-
+            let file_name = self.get_file_path_and_resolve(path).await?;
             // .packages/todos/add-todo.ftd
             // .packages/fifthtry.github.io/doc-site/add-todo.ftd
 
-            dbg!(&file_name);
             let package = self.find_package_by_id(path).await?.1;
             let mut file = fpm::get_file(
                 package.name.to_string(),
@@ -831,16 +828,9 @@ impl Config {
     }
 
     pub(crate) async fn get_file_and_resolve(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
-        let time = std::time::Instant::now();
-
         let (package_name, package) = self.find_package_by_id(id).await?;
 
-        println!("find_package_by_id: {:?}", time.elapsed());
-
         let package = self.resolve_package(&package).await?;
-
-        println!("resolve_package: {:?}", time.elapsed());
-
         self.add_package(&package);
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
@@ -865,9 +855,7 @@ impl Config {
             }
             id
         };
-
         let (file_name, content) = package.resolve_by_id(id, None).await?;
-        println!("resolve_by_id: {:?}", time.elapsed());
         Ok((format!("{}{}", add_packages, file_name), content))
     }
 
