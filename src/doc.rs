@@ -167,16 +167,6 @@ pub async fn interpret_helper<'a>(
                 module,
                 variable,
             } => {
-                /*let value = resolve_foreign_variable2022(
-                    variable.as_str(),
-                    name,
-                    &state,
-                    lib,
-                    base_url,
-                    download_assets,
-                )
-                .await?;
-                s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;*/
                 if module.eq("test") {
                     let value = ftd::interpreter2::Value::String {
                         text: variable.to_uppercase().to_string(),
@@ -434,7 +424,7 @@ pub async fn resolve_foreign_variable2022(
 
     if variable.starts_with("files.") {
         let files = variable.trim_start_matches("files.").to_string();
-        let package_name = doc_name.to_string();
+        let package_name = doc_name.trim_end_matches("/assets").to_string();
         if package.name.eq(&package_name) {
             if let Ok(value) = get_assets_value(
                 doc_name,
