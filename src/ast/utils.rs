@@ -13,7 +13,7 @@ pub(crate) fn get_import_alias(input: &str) -> (String, String) {
     }
 
     match input.rsplit_once('/') {
-        Some((_, alias)) if alias.trim().is_empty() => return (module, alias.trim().to_string()),
+        Some((_, alias)) if !alias.trim().is_empty() => return (module, alias.trim().to_string()),
         _ => {}
     }
 
