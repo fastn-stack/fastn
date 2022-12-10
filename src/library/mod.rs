@@ -7,6 +7,7 @@ mod get_data;
 mod get_version_data;
 pub(crate) mod http;
 mod include;
+mod new_library;
 mod package_tree;
 mod sitemap;
 mod sqlite;
@@ -14,6 +15,7 @@ mod toc;
 
 pub use document::convert_to_document_id;
 pub use full_sitemap::KeyValueData;
+pub use new_library::Library2022;
 
 #[derive(Debug)]
 pub struct Library {

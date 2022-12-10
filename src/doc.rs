@@ -122,9 +122,11 @@ pub async fn parse<'a>(
 pub async fn interpret_helper<'a>(
     name: &str,
     source: &str,
-    lib: &'a mut fpm::Library2,
+    lib: &'a mut fpm::Library2022,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
     let mut s = ftd::interpreter2::interpret(name, source)?;
+    lib.module_package_map
+        .insert(name.to_string(), lib.config.package.name.to_string());
     let document;
     loop {
         match s {
@@ -324,18 +326,52 @@ pub async fn resolve_import<'a>(
 }
 
 pub async fn resolve_import_2022<'a>(
-    lib: &'a mut fpm::Library2,
-    _state: &mut ftd::interpreter2::InterpreterState,
+    lib: &'a mut fpm::Library2022,
+    state: &mut ftd::interpreter2::InterpreterState,
     module: &str,
 ) -> ftd::interpreter2::Result<(String, Vec<String>, Vec<String>)> {
+    let current_processing_module = state.get_current_processing_module().ok_or_else(|| {
+        ftd::interpreter2::Error::ParseError {
+            message: "The processing document stack is empty 1".to_string(),
+            doc_id: "".to_string(),
+            line_number: 0,
+        }
+    })?;
+
+    let current_package = lib.get_current_package(current_processing_module.as_str())?;
     let source = if module.eq("fpm/time") {
         ("".to_string(), vec!["time".to_string()], vec![])
     } else if module.ends_with("assets") {
         let foreign_variable = vec!["files".to_string()];
-        ("".to_string(), foreign_variable, vec![])
+
+        if module.starts_with(current_package.name.as_str()) {
+            (
+                current_package.get_font_ftd().unwrap_or_default(),
+                foreign_variable,
+                vec![],
+            )
+        } else {
+            let mut font_ftd = "".to_string();
+            for (alias, package) in current_package.aliases() {
+                if module.starts_with(alias) {
+                    lib.push_package_under_process(module, package).await?;
+                    font_ftd = lib
+                        .config
+                        .all_packages
+                        .borrow()
+                        .get(package.name.as_str())
+                        .unwrap()
+                        .get_font_ftd()
+                        .unwrap_or_default();
+                    break;
+                }
+            }
+            (font_ftd, foreign_variable, vec![])
+        }
     } else {
         (
-            lib.get_with_result(module).await?,
+            lib.get_with_result(module, current_processing_module.as_str())
+                .await?,
             vec![],
             vec![
                 "http".to_string(),

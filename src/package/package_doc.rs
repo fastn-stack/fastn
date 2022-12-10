@@ -313,13 +313,13 @@ pub(crate) async fn read_ftd_2022(
         .get(main.package_name.as_str())
         .unwrap_or(&config.package);
 
-    let mut lib = fpm::Library2 {
+    let mut lib = fpm::Library2022 {
         config: lib_config,
         markdown: None,
         document_id: main.id.clone(),
         translated_data: Default::default(),
         base_url: base_url.to_string(),
-        packages_under_process: vec![current_package.name.to_string()],
+        module_package_map: Default::default(),
     };
 
     // Get Prefix Body => [AutoImports + Actual Doc content]
