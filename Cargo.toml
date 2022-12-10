@@ -52,6 +52,7 @@ github-auth = ["dep:oauth2"]
 antidote = "1"
 async-lock = "2"
 async-recursion = "1"
+actix-web = "4"
 camino = "1"
 clap = "4"
 colored = "2"
@@ -68,7 +69,6 @@ mime_guess = "2"
 realm-lang = "0.1"
 regex = "1"
 serde = { version = "1", features = ["derive"] }
-serde_derive = "1"
 serde_json = "1"
 slug = { version = "0.1" }
 sha2 = "0.10"
@@ -76,20 +76,20 @@ thiserror = "1.0.37"
 url = "2"
 oauth2 = { version = "4.3.0", optional = true }
 dotenv = "0.15.0"
-# becasue they havent crated a release yet which fixes incompatibility with latest actix-http
-zip = { git = "https://github.com/zip-rs/zip" }
+zip = "0.6"
 
 #wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev = "45604f58336afaa23a79ed619ef50b69de473688" }
 #fpm-utils = { git = "https://github.com/ftd-lang/fpm-utils", rev = "0ce396db408b413f5a4eb6b2c5b87db3829cf879" }
 # fpm-utils = { path = "../fpm-utils/crates/fpm-utils-host"}
+
 [dependencies.magic-crypt]
 version = "3.1.12"
 default-features = false
+
 [dependencies.hyper]
 version = "0.14"
 default-features = false
 features = ["http1", "server"]
-
 
 [dependencies.ftd]
 # We are currently using the git version of ftd as we are not publishing every change
@@ -121,8 +121,7 @@ features = [
     "json",
     "blocking",
 ]
-[dependencies.actix-web]
-version = "4.2.1"
+
 [dependencies.tokio]
 version = "1"
 features = [
@@ -143,6 +142,7 @@ features = [
     # We may be suffering from this problem, we do a lot of reads, each read becomes a task.
     "fs",
 ]
+
 [dependencies.rusqlite]
 version = "0.28"
 features = [
