@@ -91,6 +91,15 @@ version = "0.14"
 default-features = false
 features = ["http1", "server"]
 
+[dependencies.notify]
+# Read the following why we disable the default feature:
+# https://docs.rs/notify/5.0.0/notify/index.html#crossbeam-channel--tokio
+version = "5.0.0"
+default-features = false
+features=["macos_kqueue"]
+
+
+
 [dependencies.ftd]
 # We are currently using the git version of ftd as we are not publishing every change
 # to ftd for now. We are currently in active development, and we are not using proper
@@ -126,6 +135,7 @@ features = [
 version = "1"
 features = [
     "sync",
+    "macros", # tokio::select! macro
 
     # We are currently using the "heavier" schedule.
     #
