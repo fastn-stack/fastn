@@ -1,33 +1,18 @@
 static WATCHER: once_cell::sync::Lazy<tokio::sync::mpsc::Sender<tokio::sync::mpsc::Sender<()>>> =
     once_cell::sync::Lazy::new(watcher);
-
 const POLL_TIMEOUT: std::time::Duration = std::time::Duration::from_millis(30 * 1000); // 30 seconds
 
 fn watcher() -> tokio::sync::mpsc::Sender<tokio::sync::mpsc::Sender<()>> {
-    use notify::Watcher;
-
     let (tx, mut rx) = tokio::sync::mpsc::channel::<tokio::sync::mpsc::Sender<()>>(32);
     let (f_tx, mut f_rx) = tokio::sync::mpsc::channel::<()>(32);
 
-    let mut watcher = notify::recommended_watcher(move |res| {
-        println!("watcher: {:?}", res);
-        if let Err(e) = f_tx.blocking_send(()) {
-            eprintln!("watcher: failed to send signal: {}", e);
-        }
-    })
-    .expect("watcher: failed to create watcher");
-
-    let to_watch = std::path::PathBuf::from("t/");
-    watcher
-        .watch(&to_watch, notify::RecursiveMode::Recursive)
-        .expect("watcher: failed to watch");
-
-    println!("watching: {:?}", to_watch.canonicalize());
-
-    // watcher stops watching when it gets dropped. easiest way to keep it alive is to forget it.
-    std::mem::forget(watcher);
+    if fpm::utils::is_test() {
+        // we do not want to run the watcher in tests
+        return tx;
+    }
 
     tokio::spawn(async move {
+        let _watcher = create_watcher(f_tx); // watcher only works as long as it is not dropped
         let mut polls = vec![];
 
         loop {
@@ -54,7 +39,28 @@ fn watcher() -> tokio::sync::mpsc::Sender<tokio::sync::mpsc::Sender<()>> {
             }
         }
     });
+
     tx
+}
+
+fn create_watcher(f_tx: tokio::sync::mpsc::Sender<()>) -> notify::RecommendedWatcher {
+    use notify::Watcher;
+
+    let mut watcher = notify::recommended_watcher(move |_res| {
+        if let Err(e) = f_tx.blocking_send(()) {
+            eprintln!("watcher: failed to send signal: {}", e);
+        }
+    })
+    .expect("watcher: failed to create watcher");
+
+    watcher
+        .watch(
+            &std::path::PathBuf::from(""),
+            notify::RecursiveMode::Recursive,
+        )
+        .expect("watcher: failed to watch");
+
+    watcher
 }
 
 pub async fn poll() -> fpm::Result<fpm::http::Response> {

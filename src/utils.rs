@@ -440,7 +440,7 @@ pub fn replace_markers_2022(s: &str, html_ui: ftd::html1::HtmlUI, ftd_js: &str) 
 }
 
 pub fn is_test() -> bool {
-    std::env::args().any(|e| e == "--test")
+    cfg!(test) || std::env::args().any(|e| e == "--test")
 }
 
 pub(crate) async fn write(
