@@ -10,8 +10,6 @@ fn watcher() -> tokio::sync::mpsc::Sender<tokio::sync::mpsc::Sender<()>> {
     let (f_tx, mut f_rx) = tokio::sync::mpsc::channel::<()>(32);
 
     let mut watcher = notify::recommended_watcher(move |res| {
-        // TODO: these are never getting fired, why?
-
         println!("watcher: {:?}", res);
         if let Err(e) = f_tx.blocking_send(()) {
             eprintln!("watcher: failed to send signal: {}", e);
@@ -25,6 +23,9 @@ fn watcher() -> tokio::sync::mpsc::Sender<tokio::sync::mpsc::Sender<()>> {
         .expect("watcher: failed to watch");
 
     println!("watching: {:?}", to_watch.canonicalize());
+
+    // watcher stops watching when it gets dropped. easiest way to keep it alive is to forget it.
+    std::mem::forget(watcher);
 
     tokio::spawn(async move {
         let mut polls = vec![];
