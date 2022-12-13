@@ -44,13 +44,15 @@ spacing: 15
 lang: ftd
 slot: left
 
-\--- ftd.text: Hello World!
+\-- boolean $current: true
+
+\-- ftd.text: Hello World!
 align: center
 slot: right
 $on-click$: toggle $current
 padding: 20
 text-align: center
-color if $current: $fpm.color.main.cta-primary.base
+color if { current } : $fpm.color.main.cta-primary.base
 color: $fpm.color.main.cta-primary.text
 background-color: $fpm.color.main.text
 
@@ -69,7 +71,7 @@ background-color: $fpm.color.main.text
 -- ft.markdown:
 
 We can define variables in FTD. FTD is strongly typed. We can do event handling.
-Since we are targetting "human beings" we have created a lot of "actions" that
+Since we are targeting "human beings" we have created a lot of "actions" that
 we believe one will be invoking on a day to day basis, like `toggle`, which can
 be used to create simple event handling.
 
@@ -81,16 +83,16 @@ slots: left right
 slot-widths: 70% auto
 spacing: 15
 
---- ft.code: creating a custom component
+--- ft.code: Creating a custom component
 lang: ftd
 slot: left
 
 \-- ftd.text toggle-text: $title
-boolean current: false
+boolean $current: false
 caption title:
 $on-click$: toggle $current
 text-align: center
-color if $current: $fpm.color.main.cta-primary.base
+color if { current }: $fpm.color.main.cta-primary.base
 color: $fpm.color.main.cta-primary.text
 background-color: $fpm.color.main.text
 padding: 20
@@ -120,7 +122,7 @@ writing without "polluting" the prose with noise.
 
 FTD is also a good first class data language. You can define and use records:
 
--- ft.code: data modelling in `ftd`
+-- ft.code: Data Modelling in `ftd`
 lang: ftd
 
 \-- record person:
@@ -135,7 +137,7 @@ the value can come in the "caption" position, after the `:` of the "section line
 eg lines that start with `--` or `---`. If a field is optional, it must be marked
 as such.
 
--- ft.code: creating a variable
+-- ft.code: Creating a variable
 lang: ftd
 
 \-- person amitu: Amit Upadhyay
@@ -151,25 +153,27 @@ becoming a professional starer of the trees.
 Here we have defined a variable `amitu`. You can also define a list:
 
 
--- ft.code: creating a list
+-- ft.code: Creating a list
 lang: ftd
 
 \-- person list employees:
 
-\-- employees: Sourabh Garg
+\-- person: Sourabh Garg
 location: Ranchi, India
 
-\-- employees: Arpita Jaiswal
+\-- person: Arpita Jaiswal
 location: Lucknow, India
 
 Arpita is the primary author of FTD language.
+
+\-- end: employees
 
 -- ft.markdown:
 
 We can then create a component that can render such record and loop over a list
 to show all members of the list:
 
--- ft.code: looping over a list
+-- ft.code: Looping over a list
 lang: ftd
 
 \-- render-person:
@@ -181,7 +185,7 @@ $loop$: $employees as $p
 This way we can have clean separation of data from presentation. The data
 defined in FTD documents can be easily read from say Rust:
 
--- ft.code: reading data from `ftd` files
+-- ft.code: Reading Data from `ftd` files
 lang: rs
 
 #[derive(serde::Deserialize)]
