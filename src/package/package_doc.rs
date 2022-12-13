@@ -236,7 +236,6 @@ impl fpm::Package {
             return Ok(response);
         }
 
-        println!("file system and http failed: {}", id);
         let new_id = match id.rsplit_once('.') {
             Some((remaining, ext))
                 if mime_guess::MimeGuess::from_ext(ext)
@@ -264,13 +263,11 @@ impl fpm::Package {
             }
         };
 
-        println!("Calling file system again: {}", &new_id);
         if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root).await {
             // fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
             return Ok(response);
         }
 
-        println!("Calling http again: {}", &new_id);
         match self
             .http_download_by_id(new_id.as_str(), package_root)
             .await
