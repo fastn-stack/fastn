@@ -59,7 +59,7 @@ After the "section line" (the first line that starts with `-- `, zero or more
 section headers can be passed. In our example, the first section has two headers,
 `header-1` and `hello`, with values `some header value` and `world` respectively.
 
-An empty newline or the start of a new section (or `sub-section` described below) 
+An empty newline or the start of a new section
 marks the end of the headers.
 
 Leading and trailing whitespaces of both header name and header value are ignored.
@@ -67,13 +67,13 @@ Leading and trailing whitespaces of both header name and header value are ignore
 -- ft.h2: `section body`
 
 After the first empty line that comes after the section header, till the start
-of next section (or `sub-section`) is considered the body of the section.
+of next section is considered the body of the section.
 
 The body is optional.
 
 Leading and trailing newlines are not considered part of the body.
 
--- ft.h1: `sub-section`
+/-- ft.h1: `sub-section`
 
 A section can contain zero or more `sub-sections`:
 
@@ -84,14 +84,9 @@ lang: ftd
 
 optional body of "some-section"
 
-\--- sub-section-1: yo yo
-sub-section-header-1: 111
-
-\--- lalala:
-
 this one has a body
 
--- ft.markdown:
+/-- ft.markdown:
 
 `sub-section` starts with `--- `. If `section` has `body`, body comes before any
 of the `sub-section`s.
@@ -104,7 +99,7 @@ In our example, `some-section` `section` has two `sub-section`s, with names
 and the second doesn't. First `sub-section-1` has one header, and no body, `lalala`
 has no header but has a body: `this one has a body`.
 
--- ft.h1: Philosophy, and why there is no `sub-sub-section`
+/-- ft.h1: Philosophy, and why there is no `sub-sub-section`
 
 Check out our [philosophy guide](philosophy/) to understand why we 
 have taken some of these decisions.
