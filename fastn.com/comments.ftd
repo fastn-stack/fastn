@@ -1,9 +1,8 @@
 -- ft.page: Comments In `ftd` Files
 
--- ft.markdown: 
+-- ft.h1: Block comment
 
-Writing `/` before any section or subsection will "comment out" the entire section
-or sub-section.
+Writing `/` before any section will "comment out" that entire section.
 
 
 -- ft.code:
@@ -15,7 +14,7 @@ lang: ftd
 fooo
 
 
--- ft.markdown:
+-- ft.h1: Header comment
 
 Similarly any attribute can be commented out by prefixing it with `/`:
 
@@ -34,10 +33,12 @@ fooo
 
 Here we have commented out the `color: red` header.
 
+/-- ft.markdown:
+
 Also we can comment out the entire body of a section or a subsection:
 
 
--- ft.code:
+/-- ft.code:
 lang: ftd
 
 \-- ft.code:
@@ -48,7 +49,7 @@ lang: ftd
 print "hello world"
 
 
--- ft.markdown:
+/-- ft.markdown:
 
 Here the entire body would be considered commented out.
 
@@ -56,7 +57,7 @@ If we want the body to start with `/`, we can write `\/`, and `\` will be stripp
 out by the `p1` parser and body will start with `/`.
 
 
--- ft.code:
+/-- ft.code:
 lang: ftd
 
 \-- ft.code:
@@ -67,12 +68,12 @@ lang: ftd
 print "hello world"
 
 
--- ft.markdown:
+/-- ft.markdown:
 
 In this case the body would be: `/import os\n\nprint "hello world"`.
 
 
--- ft.markdown:
+-- ft.h1: Comment using `;`
 
 Similarly any attribute can be commented out by following with `;`:
 
@@ -89,7 +90,8 @@ lang: ftd
 
 Here we have commented out the `color: red` header.
 
-we can put `;` anywhere between section and header follows by it.
+`Note`: We can use `;` at the start of the line anywhere in FTD
+and it will comment out that line.
 
 
 
