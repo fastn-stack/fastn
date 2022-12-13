@@ -45,16 +45,11 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
 // In this API we are accessing
 // the token and setting it to cookies
 pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
-    use magic_crypt::MagicCryptTrait;
     #[derive(serde::Deserialize)]
     pub struct QueryParams {
         pub code: String,
         pub state: String,
     }
-
-    let secret_key = fpm::auth::secret_key();
-    let mc_obj = magic_crypt::new_magic_crypt!(secret_key.as_str(), 256);
-
     let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?.0;
     let auth_url = format!(
         "{}://{}{}",
@@ -80,10 +75,7 @@ pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::Htt
                 .cookie(
                     actix_web::cookie::Cookie::build(
                         fpm::auth::AuthProviders::GitHub.as_str(),
-                        mc_obj
-                            .encrypt_to_base64(&user_detail_str)
-                            .as_str()
-                            .to_owned(),
+                        fpm::auth::utils::encrypt_str(&user_detail_str).await,
                     )
                     .domain(fpm::auth::utils::domain(req.connection_info().host()))
                     .path("/")
@@ -403,9 +395,9 @@ pub mod apis {
         struct UserRepos {
             full_name: String,
         }
-        let starred_repo: Vec<UserRepos> = get_api(
+        let starred_repo: Vec<UserRepos> = fpm::auth::utils::get_api(
             format!("{}?per_page=100", "https://api.github.com/user/starred").as_str(),
-            token,
+            format!("{} {}", "Bearer", token).as_str(),
         )
         .await?;
         Ok(starred_repo.into_iter().map(|x| x.full_name).collect())
@@ -418,9 +410,9 @@ pub mod apis {
         struct FollowedOrg {
             login: String,
         }
-        let watched_repo: Vec<FollowedOrg> = get_api(
+        let watched_repo: Vec<FollowedOrg> = fpm::auth::utils::get_api(
             format!("{}?per_page=100", "https://api.github.com/user/following").as_str(),
-            token,
+            format!("{} {}", "Bearer", token).as_str(),
         )
         .await?;
         Ok(watched_repo.into_iter().map(|x| x.login).collect())
@@ -438,13 +430,13 @@ pub mod apis {
             login: String,
         }
 
-        let user_orgs: Vec<TeamMembers> = get_api(
+        let user_orgs: Vec<TeamMembers> = fpm::auth::utils::get_api(
             format!(
                 "{}{}{}{}/members?per_page=100",
                 "https://api.github.com/orgs/", org_title, "/teams/", team_slug
             )
             .as_str(),
-            token,
+            format!("{} {}", "Bearer", token).as_str(),
         )
         .await?;
         Ok(user_orgs.into_iter().map(|x| x.login).collect())
@@ -457,13 +449,13 @@ pub mod apis {
         struct UserRepos {
             full_name: String,
         }
-        let watched_repo: Vec<UserRepos> = get_api(
+        let watched_repo: Vec<UserRepos> = fpm::auth::utils::get_api(
             format!(
                 "{}?per_page=100",
                 "https://api.github.com/user/subscriptions"
             )
             .as_str(),
-            token,
+            format!("{} {}", "Bearer", token).as_str(),
         )
         .await?;
         Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
@@ -475,13 +467,13 @@ pub mod apis {
         struct RepoContributor {
             login: String,
         }
-        let repo_contributor: Vec<RepoContributor> = get_api(
+        let repo_contributor: Vec<RepoContributor> = fpm::auth::utils::get_api(
             format!(
                 "{}{}/contributors?per_page=100",
                 "https://api.github.com/repos/", repo_name
             )
             .as_str(),
-            token,
+            format!("{} {}", "Bearer", token).as_str(),
         )
         .await?;
         Ok(repo_contributor.into_iter().map(|x| x.login).collect())
@@ -493,13 +485,13 @@ pub mod apis {
         struct RepoCollaborator {
             login: String,
         }
-        let repo_collaborators_list: Vec<RepoCollaborator> = get_api(
+        let repo_collaborators_list: Vec<RepoCollaborator> = fpm::auth::utils::get_api(
             format!(
                 "{}{}/collaborators?per_page=100",
                 "https://api.github.com/repos/", repo_name
             )
             .as_str(),
-            token,
+            format!("{} {}", "Bearer", token).as_str(),
         )
         .await?;
         Ok(repo_collaborators_list
@@ -543,35 +535,15 @@ pub mod apis {
         struct UserDetails {
             login: String,
         }
-        let user_obj: UserDetails = get_api("https://api.github.com/user", token).await?;
+        let user_obj: UserDetails = fpm::auth::utils::get_api(
+            "https://api.github.com/user",
+            format!("{} {}", "Bearer", token).as_str(),
+        )
+        .await?;
 
         Ok(String::from(&user_obj.login))
     }
-    pub async fn get_api<T: serde::de::DeserializeOwned>(url: &str, token: &str) -> fpm::Result<T> {
-        let response = reqwest::Client::new()
-            .get(url)
-            .header(
-                reqwest::header::AUTHORIZATION,
-                format!("{}{}", "Bearer ", token),
-            )
-            .header(reqwest::header::ACCEPT, "application/json")
-            .header(
-                reqwest::header::USER_AGENT,
-                reqwest::header::HeaderValue::from_static("fpm"),
-            )
-            .send()
-            .await?;
 
-        if !response.status().eq(&reqwest::StatusCode::OK) {
-            return Err(fpm::Error::APIResponseError(format!(
-                "GitHub-API-ERROR: {}, Error: {}",
-                url,
-                response.text().await?
-            )));
-        }
-
-        Ok(response.json().await?)
-    }
     pub async fn graphql_sponsor_api(
         url: &str,
         query_str: &str,
@@ -585,7 +557,7 @@ pub mod apis {
             .json(&map)
             .header(
                 reqwest::header::AUTHORIZATION,
-                format!("{}{}", "Bearer ", token),
+                format!("{} {}", "Bearer", token),
             )
             .header(reqwest::header::ACCEPT, "application/json")
             .header(

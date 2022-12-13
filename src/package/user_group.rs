@@ -114,10 +114,26 @@ pub struct UserGroupTemp {
     pub discord_server: Vec<String>,
     #[serde(rename = "-discord-server")]
     pub excluded_discord_server: Vec<String>,
+    #[serde(rename = "discord-channel")]
+    pub discord_channel: Vec<String>,
+    #[serde(rename = "-discord-channel")]
+    pub excluded_discord_channel: Vec<String>,
     #[serde(rename = "discord-role")]
     pub discord_role: Vec<String>,
     #[serde(rename = "-discord-role")]
     pub excluded_discord_role: Vec<String>,
+    #[serde(rename = "discord-thread")]
+    pub discord_thread: Vec<String>,
+    #[serde(rename = "-discord-thread")]
+    pub excluded_discord_thread: Vec<String>,
+    #[serde(rename = "discord-permission")]
+    pub discord_permission: Vec<String>,
+    #[serde(rename = "-discord-permission")]
+    pub excluded_discord_permission: Vec<String>,
+    #[serde(rename = "discord-event")]
+    pub discord_event: Vec<String>,
+    #[serde(rename = "-discord-event")]
+    pub excluded_discord_event: Vec<String>,
 }
 
 #[derive(Debug, serde::Serialize)]
@@ -327,10 +343,34 @@ impl UserGroupTemp {
             "-discord-server",
             self.excluded_discord_server,
         ));
+
+        identities.extend(to_user_identity("discord-channel", self.discord_channel));
+        excluded_identities.extend(to_user_identity(
+            "-discord-channel",
+            self.excluded_discord_channel,
+        ));
         identities.extend(to_user_identity("discord-role", self.discord_role));
         excluded_identities.extend(to_user_identity(
             "-discord-role",
             self.excluded_discord_role,
+        ));
+        identities.extend(to_user_identity("discord-thread", self.discord_thread));
+        excluded_identities.extend(to_user_identity(
+            "-discord-thread",
+            self.excluded_discord_thread,
+        ));
+        identities.extend(to_user_identity(
+            "discord-permission",
+            self.discord_permission,
+        ));
+        excluded_identities.extend(to_user_identity(
+            "-discord-permission",
+            self.excluded_discord_permission,
+        ));
+        identities.extend(to_user_identity("discord-event", self.discord_event));
+        excluded_identities.extend(to_user_identity(
+            "-discord-event",
+            self.excluded_discord_event,
         ));
 
         Ok(UserGroup {

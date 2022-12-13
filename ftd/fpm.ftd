@@ -377,6 +377,14 @@ string list github-sponsor:
 string list -github-sponsor:
 string list discord-server:
 string list -discord-server:
+string list discord-channel:
+string list -discord-channel:
+string list discord-thread:
+string list -discord-thread:
+string list discord-permission:
+string list -discord-permission:
+string list discord-event:
+string list -discord-event:
 string list discord-role:
 string list -discord-role:
 

@@ -45,19 +45,16 @@ pub async fn get_auth_identities(
     cookies: &std::collections::HashMap<String, String>,
     identities: &[fpm::user_group::UserIdentity],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
-    use magic_crypt::MagicCryptTrait;
-    let secret_key = fpm::auth::secret_key();
-    let mc_obj = magic_crypt::new_magic_crypt!(&secret_key, 256);
     let mut matched_identities: Vec<fpm::user_group::UserIdentity> = vec![];
 
     let github_ud_encrypted = cookies
         .get(fpm::auth::AuthProviders::GitHub.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("user detail not found in the cookies".to_string())
+            fpm::Error::GenericError("github user detail not found in the cookies".to_string())
         });
     match github_ud_encrypted {
         Ok(encrypt_str) => {
-            if let Ok(github_ud_decrypted) = mc_obj.decrypt_base64_to_string(encrypt_str) {
+            if let Ok(github_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
                 let github_ud: github::UserDetail =
                     serde_json::from_str(github_ud_decrypted.as_str())?;
                 matched_identities.extend(github::matched_identities(github_ud, identities).await?);
@@ -65,17 +62,20 @@ pub async fn get_auth_identities(
         }
         Err(err) => {
             // TODO: What to do with this error
-            dbg!(format!("{}{}", "user detail not found in the cookies", err));
+            dbg!(format!(
+                "{}{}",
+                "github user detail not found in the cookies", err
+            ));
         }
     };
     let telegram_ud_encrypted = cookies
         .get(fpm::auth::AuthProviders::TeleGram.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("user detail not found in the cookies".to_string())
+            fpm::Error::GenericError("telegram user detail not found in the cookies".to_string())
         });
     match telegram_ud_encrypted {
         Ok(encrypt_str) => {
-            if let Ok(telegram_ud_decrypted) = mc_obj.decrypt_base64_to_string(encrypt_str) {
+            if let Ok(telegram_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
                 let telegram_ud: telegram::UserDetail =
                     serde_json::from_str(telegram_ud_decrypted.as_str())?;
                 matched_identities
@@ -83,7 +83,25 @@ pub async fn get_auth_identities(
             }
         }
         Err(err) => {
-            format!("{}{}", "user detail not found in the cookies", err);
+            format!("{}{}", "telegram user detail not found in the cookies", err);
+        }
+    };
+    let discord_ud_encrypted = cookies
+        .get(fpm::auth::AuthProviders::Discord.as_str())
+        .ok_or_else(|| {
+            fpm::Error::GenericError("discord user detail not found in the cookies".to_string())
+        });
+    match discord_ud_encrypted {
+        Ok(encrypt_str) => {
+            if let Ok(discord_ud_decrypted) = utils::decrypt_str(encrypt_str).await {
+                let discord_ud: discord::UserDetail =
+                    serde_json::from_str(discord_ud_decrypted.as_str())?;
+                matched_identities
+                    .extend(discord::matched_identities(discord_ud, identities).await?);
+            }
+        }
+        Err(err) => {
+            format!("{}{}", "discord user detail not found in the cookies", err);
         }
     };
     // TODO: which API to from which platform based on identity

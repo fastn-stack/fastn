@@ -41,7 +41,6 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
 // In this API we are accessing
 // the token and setting it to cookies
 pub async fn token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
-    use magic_crypt::MagicCryptTrait;
     #[derive(Debug, serde::Deserialize)]
     pub struct QueryParams {
         pub id: String,
@@ -51,8 +50,6 @@ pub async fn token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRe
         pub auth_date: String,
         pub hash: String,
     }
-    let mc_obj = magic_crypt::new_magic_crypt!(fpm::auth::secret_key().as_str(), 256);
-
     let query = actix_web::web::Query::<QueryParams>::from_query(req.query_string())?.0;
     let user_detail_obj: UserDetail = UserDetail {
         user_id: query.id,
@@ -64,10 +61,7 @@ pub async fn token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRe
         .cookie(
             actix_web::cookie::Cookie::build(
                 fpm::auth::AuthProviders::TeleGram.as_str(),
-                mc_obj
-                    .encrypt_to_base64(&user_detail_str)
-                    .as_str()
-                    .to_owned(),
+                fpm::auth::utils::encrypt_str(&user_detail_str).await,
             )
             .domain(fpm::auth::utils::domain(req.connection_info().host()))
             .path("/")
