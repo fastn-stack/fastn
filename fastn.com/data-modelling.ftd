@@ -14,9 +14,9 @@ indentation etc.
 lang: ftd
 
 \-- record person:
-name: caption
-location: string
-bio: optional body
+caption name:
+string location:
+optional body bio:
 
 \-- person amitu: Amit Upadhyay
 location: Banglore, India

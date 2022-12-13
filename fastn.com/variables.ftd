@@ -52,15 +52,30 @@ lang: ftd
 \-- integer y: $x
 
 
--- ft.h1: Updating a Variable
+-- ft.h1: Accessing the value of a Variable
 
-Once a variable has been defined it can be updated too:
+A value of the variable can be accessed by de-referencing the variable reference.
 
 
 -- ft.code:
 lang: ftd
 
 \-- integer x: 10
+
+\-- integer y: *$x
+
+
+-- ft.h1: Updating a Variable
+
+Once a `mutable` variable has been defined it can be updated too.
+Any variable can be made `mutable` by prefixing it with `$`.
+
+Note: By default, `ftd variables` are `immutable` (can't be changed once initialized).
+
+-- ft.code:
+lang: ftd
+
+\-- integer $x: 10
 
 \-- $x: 20
 
