@@ -167,6 +167,10 @@ features = [
     "bundled",
 ]
 
+[dependencies.exec_time]
+git = "https://github.com/AbrarNitk/exec_time"
+rev = "00c315bdb6ea5aca9c629fbe0d5baabdcb6ba9f0"
+
 [dev-dependencies]
 indoc = "1"
 pretty_assertions = "1"

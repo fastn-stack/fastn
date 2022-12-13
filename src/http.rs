@@ -366,6 +366,11 @@ pub(crate) async fn http_get_with_cookie(
 
     let res = c.get(url).send().await?;
     if !res.status().eq(&reqwest::StatusCode::OK) {
+        eprintln!(
+            "http:failed status: {}, path: {}",
+            res.status().as_str(),
+            url
+        );
         return Err(fpm::Error::APIResponseError(format!(
             "url: {}, response_status: {}, response: {:?}",
             url,

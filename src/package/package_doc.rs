@@ -1,4 +1,5 @@
 impl fpm::Package {
+    #[exec_time::exec_time(prefix = "package/package_doc")]
     pub(crate) async fn fs_fetch_by_file_name(
         &self,
         name: &str,
@@ -17,10 +18,18 @@ impl fpm::Package {
             }
         };
 
+        let file_path = package_root.join(name.trim_start_matches('/'));
         // Issue 1: Need to remove / from the start of the name
-        Ok(tokio::fs::read(package_root.join(name.trim_start_matches('/'))).await?)
+        match tokio::fs::read(&file_path).await {
+            Ok(content) => Ok(content),
+            Err(err) => {
+                println!("fs:file-not-found => {}", file_path);
+                Err(Err(err)?)
+            }
+        }
     }
 
+    #[exec_time::exec_time(prefix = "package/package_doc")]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
@@ -65,10 +74,17 @@ impl fpm::Package {
         .await
     }
 
+    #[exec_time::exec_time(prefix = "package/package_doc")]
     async fn http_fetch_by_id(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
-        for name in file_id_to_names(id) {
-            if let Ok(data) = self.http_fetch_by_file_name(name.as_str()).await {
-                return Ok((name, data));
+        if fpm::file::is_static(id)? {
+            if let Ok(data) = self.http_fetch_by_file_name(id).await {
+                return Ok((id.to_string(), data));
+            }
+        } else {
+            for name in file_id_to_names(id) {
+                if let Ok(data) = self.http_fetch_by_file_name(name.as_str()).await {
+                    return Ok((name, data));
+                }
             }
         }
 
@@ -206,6 +222,7 @@ impl fpm::Package {
         }
     }
 
+    #[exec_time::exec_time(prefix = "package/package_doc")]
     pub(crate) async fn resolve_by_id(
         &self,
         id: &str,
@@ -219,6 +236,7 @@ impl fpm::Package {
             return Ok(response);
         }
 
+        println!("file system and http failed: {}", id);
         let new_id = match id.rsplit_once('.') {
             Some((remaining, ext))
                 if mime_guess::MimeGuess::from_ext(ext)
@@ -246,11 +264,13 @@ impl fpm::Package {
             }
         };
 
+        println!("Calling file system again: {}", &new_id);
         if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root).await {
             // fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
             return Ok(response);
         }
 
+        println!("Calling http again: {}", &new_id);
         match self
             .http_download_by_id(new_id.as_str(), package_root)
             .await
