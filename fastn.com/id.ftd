@@ -28,6 +28,8 @@ id: row-id
 
 \-- ftd.text: Hello again
 
+\-- end: ftd.row
+
 
 -- ft.markdown:
 
@@ -41,9 +43,10 @@ lang: ftd
 \--  component foo:
 component: ftd.column
 
-\--- ftd.text: hello
+\-- ftd.text: hello
 id: hello
 
+\-- end: foo
 
 -- ft.markdown:
 
@@ -68,11 +71,13 @@ Consider the following code:
 -- ft.code:
 lang: ftd
 
-\--  component foo:
+\-- component foo:
 component: ftd.column
 
-\--- ftd.text: Hello
+\-- ftd.text: Hello
 id: hello
+
+\-- end: foo
 
 \-- foo:
 
@@ -150,23 +155,26 @@ id: page-id
 \-- component page:
 component: ftd.column
 
-\--- inside-page:
+\-- inside-page:
 id: inside-page-id
 
+\-- end: page
 
 \-- component inside-page:
 component: ftd.column
 
-\--- display-text:
+\-- display-text:
 id: display-text-id
 
+\-- end: inside-page
 
 \-- component display-text:
 component: ftd.column
 
-\--- ftd.text: Hello
+\-- ftd.text: Hello
 id: hello-id
 
+\-- end: display-text
 
 -- ft.markdown:
 
