@@ -859,10 +859,11 @@ border-color: $fpm.color.main.text
 padding: 10
 cursor: pointer
 
-
 \-- ftd.text: this row has pointer as cursor
 align: center
 width: fill
+
+\-- end: ftd.row
 
 
 
@@ -1031,6 +1032,8 @@ height: 200
 gradient-direction: left to right
 gradient-colors: red , blue
 
+\-- end: ftd.row
+
 
 -- ft.output:
 
@@ -1059,7 +1062,9 @@ lang: ftd
 width: 400
 height: 200
 gradient-direction: bottom-left to top-right
-gradient-colors: yellow, organge
+gradient-colors: yellow, orange
+
+\-- end: ftd.row
 
 
 -- ft.output:
@@ -1089,6 +1094,8 @@ height: 200
 gradient-direction: left to right
 gradient-colors: red, green, blue, yellow, black
 
+\-- end: ftd.row
+
 
 -- ft.output:
 
@@ -1116,6 +1123,8 @@ width: 400
 height: 200
 gradient-direction: center
 gradient-colors: red, green
+
+\-- end: ftd.row
 
 
 -- ft.output:
@@ -1147,6 +1156,8 @@ height: 200
 gradient-direction: angle 90
 gradient-colors: red, green
 
+\-- end: ftd.row
+
 
 -- ft.output:
 
@@ -1174,6 +1185,8 @@ width: 400
 height: 200
 gradient-direction: angle 45
 gradient-colors: red, green
+
+\-- end: ftd.row
 
 
 -- ft.output:
@@ -1207,6 +1220,8 @@ background-image: https://imgur.com/oCHWQQF.jpg
 role: $fpm.type.heading-large
 align: center
 color: $fpm.color.main.text
+
+\-- end: ftd.row
 
 
 -- ft.output:
@@ -1247,13 +1262,14 @@ height: 300
 background-image: https://imgur.com/LnJ4ziC.png
 background-repeat: true
 
-
 \-- ftd.text: Sample Text
 role: $fpm.type.heading-large
 align: center
 color: $fpm.color.main.text
 width: fill
 height: fill
+
+\-- end: ftd.row
 
 
 -- ft.output:
@@ -1297,6 +1313,7 @@ role: $fpm.type.heading-large
 align: center
 color: $fpm.color.main.text
 
+\-- end: ftd.row
 
 -- ft.output:
 
@@ -1487,6 +1504,8 @@ left: 40
 top: 40
 padding: 40
 anchor: parent
+
+\-- end: ftd.column
 
 
 -- ft.output:
