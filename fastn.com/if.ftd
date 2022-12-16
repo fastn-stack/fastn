@@ -35,12 +35,14 @@ lang: ftd
 string src:
 optional caption caption:
 
-\--- ft.image:
+\-- ft.image:
 src: $src
 
-\--- ft.text:
+\-- ft.text:
 if: $caption is not null
 text: $caption
+
+\-- end: image
 
 -- ft.markdown:
 
