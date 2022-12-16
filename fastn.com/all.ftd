@@ -809,3 +809,324 @@ status: In Progress
 
 `footer` will be used in a `ds` package. 
 
+-- package-list: `ForestTheme`
+package-url: https://fifthtry.github.io/ForestTheme
+package-name: fifthtry.github.io/ForestTheme
+github-url: https://github.com/FifthTry/ForestTheme
+package-type: FT
+licence-url: https://github.com/FifthTry/ForestTheme/blob/main/LICENSE
+licence-name: BSD-3-Clause
+status: Documented
+
+`ForestTheme` is ready to use color scheme.
+
+-- package-list: `Docusaurus-theme`
+package-url: https://fifthtry.github.io/Docusaurus-theme
+package-name: fifthtry.github.io/Docusaurus-theme
+github-url: https://github.com/FifthTry/Docusaurus-theme
+package-type: DT
+licence-url: https://github.com/FifthTry/Docusaurus-theme/blob/main/LICENSE
+licence-name: BSD-3-Clause
+status: Outdated
+
+`Docusaurus-theme` allows you to get started with a FPM powered blog.
+
+-- package-list: `blog-theme`
+package-url: https://fifthtry.github.io/blog-theme
+package-name: fifthtry.github.io/blog-theme
+github-url: https://github.com/FifthTry/blog-theme
+package-type: BT
+licence-url: https://github.com/FifthTry/blog-theme/blob/main/LICENSE
+licence-name: BSD-3-Clause
+status: Outdated
+
+`blog-theme` is a simple blog theme for fpm packages.
+
+-- package-list: `Green-theme`
+package-url: https://fifthtry.github.io/Green-theme
+package-name: fifthtry.github.io/Green-theme
+github-url: https://github.com/FifthTry/Green-theme
+package-type: GT
+licence-url: https://github.com/FifthTry/Green-theme/blob/main/LICENSE
+licence-name: BSD-3-Clause
+status: Outdated
+
+`Green-theme` is a theme for creating FPM powered open source project page.
+
+-- package-list: `Jupiter-theme`
+package-url: https://fifthtry.github.io/Jupiter-theme
+package-name: fifthtry.github.io/Jupiter-theme
+github-url: https://github.com/FifthTry/Jupiter-theme
+package-type: JT
+licence-url: https://github.com/FifthTry/Jupiter-theme/blob/main/LICENSE
+licence-name: BSD-3-Clause
+status: Outdated
+
+`Jupiter-theme` is a part of `Flash-theme`. Template for book written as FPM Package.
+
+-- package-list: `Flash-theme`
+package-url: https://fifthtry.github.io/Flash-theme
+package-name: fifthtry.github.io/Flash-theme
+github-url: https://github.com/FifthTry/Flash-theme
+package-type: DS
+licence-url: https://github.com/FifthTry/Flash-theme/blob/main/LICENSE
+licence-name: BSD-3-Clause
+status: Outdated
+
+`Flash-theme` is a template for book written as FPM Package.
+
+-- package-list: `spider-book-ds`
+package-url: https://fifthtry.github.io/spider-book-ds
+package-name: fifthtry.github.io/spider-book-ds
+github-url: https://github.com/FifthTry/spider-book-ds
+package-type: DS
+licence-url: https://github.com/FifthTry/spider-book-ds/blob/main/LICENSE
+licence-name: BSD-3-Clause
+status: Documented
+
+`spider-book-ds` is a chrome book documentation site.
+
+-- package-list: `dash-dash-cs`
+package-url: https://fifthtry.github.io/dash-dash-cs
+package-name: fifthtry.github.io/dash-dash-cs
+github-url: https://github.com/FifthTry/dash-dash-cs
+package-type: CS
+licence-url: 
+licence-name:
+status: Documented
+
+Color scheme for `dash-dash-cs`.
+
+-- package-list: `spider-book-cs`
+package-url: https://fifthtry.github.io/spider-book-cs
+package-name: fifthtry.github.io/spider-book-cs
+github-url: https://github.com/FifthTry/spider-book-cs
+package-type: CS
+licence-url: 
+licence-name:
+status: Documented
+
+`spider-book-cs` Chrome book Color Scheme is a light color scheme used for chrome-book-ds.
+
+-- package-list: `simple-light-slides`
+package-url: https://fifthtry.github.io/simple-light-slides
+package-name: fifthtry.github.io/simple-light-slides
+github-url: https://github.com/FifthTry/simple-light-slides
+package-type: Slides
+licence-url: https://github.com/FifthTry/simple-light-slides/blob/main/LICENSE
+licence-name: BSD 3-Clause
+status: Documented
+
+`simple-light-slides` is a `slides` presentation theme.
+
+-- package-list: `Forest-Template`
+package-url: https://fifthtry.github.io/Forest-Template
+package-name: fifthtry.github.io/Forest-Template
+github-url: https://github.com/FifthTry/Forest-Template
+package-type: DS
+licence-url: https://github.com/FifthTry/Forest-Template/blob/main/LICENSE
+licence-name: BSD 3-Clause
+status: Documented
+
+`DS` means documentation site. `Forest-Template` is ready to use template for your `FTD` web sites, blogs etc.
+
+-- package-list: `texty-ps`
+package-url: https://fifthtry.github.io/texty-ps
+package-name: fifthtry.github.io/texty-ps
+github-url: https://github.com/FifthTry/texty-ps
+package-type: Personal Site
+licence-url: 
+licence-name: 
+status: Coded
+
+`texty-ps` is a personal site help you to create your personal websites.
+
+-- package-list: `jony-ps`
+package-url: https://fifthtry.github.io/jony-ps
+package-name: fifthtry.github.io/jony-ps
+github-url: https://github.com/FifthTry/jony-ps
+package-type: Personal Site
+licence-url:
+licence-name:
+status: Coded
+
+`jony-ps` is a personal site help you to create your personal websites.
+
+-- package-list: `images`
+package-url: https://fifthtry.github.io/images
+package-name: fifthtry.github.io/images
+github-url: https://github.com/FifthTry/images
+package-type: Personal Site
+licence-url: https://github.com/FifthTry/images/blob/main/LICENSE
+licence-name: BSD 3-Clause
+status: DS
+
+A collection `images` components for FTD web package.
+
+-- package-list: `tiro-devnagari-marathi-font`
+package-url: https://github.com/FifthTry/tiro-devnagari-marathi-font
+package-name: https://github.com/FifthTry/tiro-devnagari-marathi-font
+github-url: https://github.com/FifthTry/tiro-devnagari-marathi-font
+package-type: Font
+licence-url: https://github.com/FifthTry/tiro-devnagari-marathi-font/blob/main/LICENSE
+licence-name: SIL-1.1
+status: Documented
+
+`tiro-devnagari-marathi-font` is included in `FTD`. `tiro-devnagari-marathi-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
+
+-- package-list: `karma-font`
+package-url: https://github.com/FifthTry/karma-font
+package-name: https://github.com/FifthTry/karma-font
+github-url: https://github.com/FifthTry/karma-font
+package-type: Font
+licence-url: https://github.com/FifthTry/karma-font/blob/main/LICENSE
+licence-name: SIL-1.1
+status: Documented
+
+`karma-font` is included in `FTD`. `karma-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
+
+-- package-list: `pragati-narrow-font`
+package-url: https://github.com/FifthTry/pragati-narrow-font
+package-name: https://github.com/FifthTry/pragati-narrow-font
+github-url: https://github.com/FifthTry/pragati-narrow-font
+package-type: Font
+licence-url: https://github.com/FifthTry/pragati-narrow-font/blob/main/LICENSE
+licence-name: SIL-1.1
+status: Documented
+
+`pragati-narrow-font` is included in `FTD`. `pragati-narrow-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
+
+-- package-list: `khand-font`
+package-url: https://github.com/FifthTry/khand-font
+package-name: https://github.com/FifthTry/khand-font
+github-url: https://github.com/FifthTry/khand-font
+package-type: Font
+licence-url: https://github.com/FifthTry/khand-font/blob/main/LICENSE
+licence-name: SIL-1.1
+status: Documented
+
+`khand-font` is included in `FTD`. `khand-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
+
+-- package-list: `arya-font`
+package-url: https://github.com/FifthTry/arya-font
+package-name: https://github.com/FifthTry/arya-font
+github-url: https://github.com/FifthTry/arya-font
+package-type: Font
+licence-url: https://github.com/FifthTry/arya-font/blob/main/LICENSE
+licence-name: SIL-1.1
+status: Documented
+
+`arya-font` is included in `FTD`. `arya-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
+
+-- package-list: `form`
+package-url: https://fifthtry.github.io/form
+package-name: fifthtry.github.io/form
+github-url: https://github.com/FifthTry/form
+package-type: Form
+licence-url: 
+licence-name: 
+status: Documented
+
+`form` can be used on your web-page as a form component.
+
+-- package-list: `cards`
+package-url: https://fifthtry.github.io/cards
+package-name: fifthtry.github.io/cards
+github-url: https://github.com/FifthTry/cards
+package-type: Form
+licence-url: 
+licence-name: 
+status: Documented
+
+`cards` can be used on your web-page as a cards component.
+
+-- package-list: `package-doc`
+package-url: https://fifthtry.github.io/package-doc
+package-name: fifthtry.github.io/package-doc
+github-url: https://github.com/FifthTry/package-doc
+package-type: PD
+licence-url: https://github.com/FifthTry/package-doc/blob/main/LICENSE
+licence-name: BSD 2-Clause
+status: Documented
+
+`package-doc` is a FPM Package Documentation Helpers.
+
+-- package-list: `demo-day`
+package-url: https://github.com/FifthTry/demo-day
+package-name: https://github.com/FifthTry/demo-day
+github-url: https://github.com/FifthTry/demo-day
+package-type: DD
+licence-url: 
+licence-name:
+status: Documented
+
+`DD` stands for `demo-day`. Template for Demo Day.
+
+-- package-list: `subscription-app`
+package-url: https://fifthtry.github.io/subscription-app
+package-name: fifthtry.github.io/subscription-app
+github-url: https://github.com/FifthTry/subscription-app
+package-type: SA
+licence-url: 
+licence-name:
+status: Documented
+
+`SA` stands for `subscription-app`. This FTD subscription app template 
+helps your FTD website users to subscribe.
+
+-- package-list: `app-switcher`
+package-url: https://fifthtry.github.io/app-switcher
+package-name: fifthtry.github.io/app-switcher
+github-url: https://github.com/FifthTry/app-switcher
+package-type: AS
+licence-url: 
+licence-name:
+status: Documented
+
+`AS` stands for `app-switcher`. App Switcher FTD component is used to 
+switch between apps of FTD web-site.
+
+-- package-list: `workshop-page`
+package-url: https://fifthtry.github.io/workshop-page
+package-name: fifthtry.github.io/workshop-page
+github-url: https://github.com/FifthTry/workshop-page
+package-type: WS
+licence-url: 
+licence-name:
+status: Documented
+
+`WS` stands for `workshop-page`. Workshop page is -- ws component for 
+workshop workbook.
+
+-- package-list: `event`
+package-url: https://fifthtry.github.io/event
+package-name: fifthtry.github.io/event
+github-url: https://github.com/FifthTry/event
+package-type: E
+licence-url: https://github.com/FifthTry/event/blob/main/LICENSE
+licence-name: BSD 3-Clause
+status: Documented
+
+`E` stands for `event`. This will help you to create different events.
+
+-- package-list: `key-value-table`
+package-url: https://fifthtry.github.io/key-value-table
+package-name: fifthtry.github.io/key-value-table
+github-url: https://github.com/FifthTry/key-value-table
+package-type: KVT
+licence-url: 
+licence-name: 
+status: Documented
+
+`key-value-table` to be called as `kvt` is a data table with tooltip feature.
+
+-- package-list: `toc`
+package-url: https://fifthtry.github.io/toc
+package-name: fifthtry.github.io/toc
+github-url: https://github.com/FifthTry/toc
+package-type: TOC
+licence-url: https://github.com/FifthTry/toc/blob/main/LICENSE
+licence-name: BSD 2-Clause
+status: Documented
+
+`TOC` is a toc component help you to create table of content in you website.
