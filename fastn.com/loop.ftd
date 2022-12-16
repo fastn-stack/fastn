@@ -14,11 +14,13 @@ lang: ftd
 
 \-- string list people:
 
-\-- people: Arpita
+\-- string: Arpita
 
-\-- people: Asit
+\-- string: Asit
 
-\-- people: Sourabh
+\-- string: Sourabh
+
+\-- end: people
 
 -- ft.markdown:
 
@@ -68,6 +70,8 @@ lang: ftd
 
 \-- ftd.column:
 
-\--- foo: $obj.name
+\-- foo: $obj.name
 $loop$: $people as $obj
 body: $obj.bio
+
+\-- end: ftd.column
