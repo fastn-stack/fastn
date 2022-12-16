@@ -145,18 +145,18 @@ boolean read_more: true
 integer max_lines:
 spacing: 20
 
-\--- ftd.text: $text
+\-- ftd.text: $text
 line-clamp if $read_more: $max_lines
 
-
-\--- ftd.text: Read More
+\-- ftd.text: Read More
 $on-click$: toggle $read_more
 if: $read_more
 
-\--- ftd.text: Read Less
+\-- ftd.text: Read Less
 $on-click$: toggle $read_more
 if: not $read_more
 
+\-- end: card
 
 \-- card:
 max_lines: 1
