@@ -43,4 +43,10 @@ Integer accepts the below attributes along with the
 - `id`
 - `placeholder`
 - `position`
+- `value`: sets the current value
+- `default-value`: sets the defaultValue Property with the specified value
+
+-- ft.h3: Note:
+
+Either use value or default-value, using both is not allowed.
 
