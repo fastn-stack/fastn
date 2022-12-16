@@ -18,11 +18,12 @@ lang: ftd
 
 \-- ftd.column show-name:
 
-
-\--- ftd.text: Get My Name
+\-- ftd.text: Get My Name
 $on-click$: message-host $get-name-api
 
-\--- ftd.text: $name
+\-- ftd.text: $name
+
+\-- end: show-name
 
 \-- object get-name-api:
 function: http
