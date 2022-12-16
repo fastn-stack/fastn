@@ -57,7 +57,6 @@ padding-vertical: $fpm.space.space-2
 padding-horizontal: $fpm.space.space-3
 min-height: 140
 max-height: 140
-overflow-y: auto
 background-color: $fpm.color.main.background.step-1
 border-radius: 6
 
@@ -210,7 +209,7 @@ width: fill
 --- ftd.column:
 width: fill
 margin-top: $fpm.space.space-1
-
+overflow-y: auto
 --- ftd.text: 
 text: $body
 role: $fpm.type.copy-tight
