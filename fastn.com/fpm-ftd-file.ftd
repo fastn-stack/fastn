@@ -297,6 +297,7 @@ string list readers:
 string list writers:
 
 -- ft.code: App Processor
+lang: ftd
 
 \-- record app-ui-item:
 caption name:

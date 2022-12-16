@@ -64,5 +64,7 @@ integer number:
 width: fill
 background-color: $fpm.color.main.background.base
 
+\-- end: my-ftd-component
+
 
 

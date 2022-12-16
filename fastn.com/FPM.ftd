@@ -48,7 +48,6 @@ email: arpita@fifthtry.com
   - Online Editor: /editor/
   - Color Scheme : /cs/
   - Authentication and fine grained access control: /acl/
-- Open Source: /open-source/
 - Featured Packages: /featured/-/home/
 - Why Not To Use `fpm`?: /why-not/
 - Open Source: /open-source/
@@ -123,7 +122,6 @@ email: arpita@fifthtry.com
 - Responsive Themes: /theme/responsive/
 - Dark Mode: /theme/dark-mode/
 - Components: /theme/header/
-  - Dark Mode: /theme/header/
 - FPM Typography: /theme/type/
 - FPM Color: /theme/color/
 - FPM Space: /theme/space/

@@ -25,7 +25,7 @@ lang: ftd
 
 \-- ftd.text heading:
 size: 48
-size if $ft.is-mobile: 32
+size if { ft.is-mobile }: 32
 
 -- ft.markdown:
 
@@ -51,11 +51,13 @@ lang: ftd
 \-- ftd.column heading:
 caption title:
 
-\--- heading-desktop: $title
-if: not $ft.is-mobile
+\-- heading-desktop: $title
+if: { !ft.is-mobile }
 
-\--- heading-mobile: $title
-if: $ft.is-mobile
+\-- heading-mobile: $title
+if: { ft.is-mobile }
+
+\-- end: heading
 
 -- ft.markdown:
 

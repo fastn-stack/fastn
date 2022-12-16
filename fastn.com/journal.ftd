@@ -3027,7 +3027,7 @@ We are importing `fifthtry.github.io/blog-theme` by importing `theme`.
 
 Note: We can also import the full package name if we wanted.
 
-[1]: In case you are wondering why would anyone in their sane mind want to include
+\[1]: In case you are wondering why would anyone in their sane mind want to include
      a music player theme in their blog? Say you are discussing the UI of the
      player, say you want to show how the UI works, what would you do? Take a
      screenshot? And you call that action of a sane mind? What will happen if that

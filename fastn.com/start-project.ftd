@@ -2,12 +2,12 @@
 
 -- ft.markdown:
 
-`fpm start-project <package-name> [package-path]` is used to generate a template project under the given
+`fpm start-project <package-name> \[package-path]` is used to generate a template project under the given
 package name at the specific path if provided.
 
 `-n, --name: <package-name>` is a required field for package name.
 
-`-p, --path: [package-path]` is an optional field for package path, if not specified it will generate a template in the current working directory.
+`-p, --path: \[package-path]` is an optional field for package path, if not specified it will generate a template in the current working directory.
 
 -- ft.h1: Usage
 
