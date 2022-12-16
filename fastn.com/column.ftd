@@ -4,12 +4,21 @@
 
 A column is a container component that stacks a list of children vertically.
 
+`Note`: Make sure to close your column container using the `end`
+syntax. This is mandatory.
+
+`-- end: <container-name>`
+
 -- ft.h3: Usage
 
 -- ft.code:
 lang: ftd
 
 \-- ftd.column:
+
+\;; <Child components>
+
+\-- end: ftd.column
 
 -- ft.h3: Attributes
 
