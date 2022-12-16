@@ -27,18 +27,24 @@ width: fill
 margin-bottom: 20
 padding: 5
 
-\--- ftd.column:
+\-- ftd.column:
 id: r1
 color: $fpm.color.main.background.base.on-warning
 
-\--- ftd.text: r1 element 1
+\-- ftd.text: r1 element 1
 
-\--- ftd.column:
+\-- end: ftd.column
+
+\-- ftd.column:
 id: r2
 padding-left: 20
 color: $fpm.color.main.success.text
 
-\--- ftd.text: r2 element 1
+\-- ftd.text: r2 element 1
+
+\-- end: ftd.column
+
+\-- end: foo
 
 \-- foo:
 id: foo-1
@@ -52,7 +58,7 @@ id: foo-2
 
 \-- container: foo-2.r2
 
-\-- ftd.text: r1 element 2
+\-- ftd.text: r2 element 2
 
 
 -- container: foo
@@ -101,4 +107,4 @@ id: foo-2
 -- container: foo-2.r2
 
 
--- ftd.text: r1 element 2
+-- ftd.text: r2 element 2
