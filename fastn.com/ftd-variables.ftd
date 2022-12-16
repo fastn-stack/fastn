@@ -6,7 +6,7 @@
 -- ft.code:
 lang: ftd
 
-\--record color:
+\-- record color:
 caption light:
 string dark:
 
@@ -19,7 +19,7 @@ string dark:
 -- ft.code:
 lang: ftd
 
-\--record markdown-color-data:
+\-- record markdown-color-data:
 color link:
 color code:
 color link-visited:
@@ -35,7 +35,7 @@ color ul-ol-li-before:
 -- ft.code:
 lang: ftd
 
-\--record markdown-background-color-data:
+\-- record markdown-background-color-data:
 color link:
 color code:
 color link-visited:

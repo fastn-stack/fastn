@@ -18,39 +18,54 @@ lang: ftd
 Here we have declared a new variable called `primes`, which is a `list` of
 `integer`s. When the list is created it is empty.
 
--- ft.h1: Adding values to list
+`Note`: By default, lists are `immutable`. The user can make the list `mutable`
+by prefixing it with `$` like this `-- integer list $primes:`
 
-The name of `list` can be used to insert more values in that list:
+-- ft.h1: Initializing values to a list
+
+We can add elements to the list during initialization
+by mentioning the `list-type` like this:
+
+`-- <list-type>: <value>`.
+
+`Note`: Also make sure to use the end syntax `-- end: <list-name>` to mark
+the end of the list during initialization.
 
 -- ft.code:
 lang: ftd
 
-\-- primes: 1
-\-- primes: 3
-\-- primes: 5
-\-- primes: 7
-\-- primes: 11
+\-- integer list primes:
+
+\-- integer: 1
+\-- integer: 3
+\-- integer: 5
+\-- integer: 7
+\-- integer: 11
+
+\-- end: primes
 
 -- ft.markdown:
 
-We have inserted 5 `integer`s to our `list` named `primes`.
+We have inserted 5 `integers` to our `list` named `primes`.
 
 -- ft.code:
 lang: ftd
 
 \-- record person:
-name: caption
-bio: body
+caption name:
+body bio:
 
 \-- person list people:
 
-\-- people: Amit Upadhyay
+\-- person: Amit Upadhyay
 
 Amit is CEO of FifthTry.
 
-\-- people: Shobhit Sharma
+\-- person: Shobhit Sharma
 
 Shobhit is a developer at FifthTry.
+
+\-- end: people
 
 -- ft.markdown:
 
