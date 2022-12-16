@@ -42,8 +42,7 @@ print(os)
 -- ft.code: source of the example shown above
 lang: ftd
 
-\-- boolean open: true
-
+\-- boolean $open: true
 
 \-- ftd.column:
 padding: 20
@@ -52,12 +51,12 @@ border-radius: 5
 width: fill
 margin-bottom: 20
 
-\--- ftd.text: the heading (click to toggle)
+\-- ftd.text: the heading (click to toggle)
 $on-click$: toggle $open
 color: $fpm.color.main.text
 role: $fpm.type.copy-tight
 
-\--- ftd.text:
+\-- ftd.text:
 if: $open
 color: $fpm.color.main.text
 role: $fpm.type.copy-tight
@@ -65,13 +64,15 @@ margin-top: $fpm.space.space-2
 
 This is some **markdown text**.
 
-\--- ft.code:
+\-- ft.code:
 if: $open
 lang: py
 
 import os
 
 print(os)
+
+\-- end: ftd.column
 
 
 -- ft.h1: `$on-<event-name>$: <action> <action-arguments>`
@@ -80,7 +81,7 @@ FTD supports a few events, like `click`, which is mapped to an "action", eg
 there is an action `toggle`, which toggles a Boolean variable. Actions take data
 also, say `toggle` needs to know what variable to toggle. 
 
-This gives us: `$on-click$: toggle open`. Here we are using a variable named 
+This gives us: `$on-click$: toggle $open`. Here we are using a mutable variable named
 `open` to keep track of if the component is in the "open state" or not.
 
 More than one event handler can be assigned to same event, and more than one event
