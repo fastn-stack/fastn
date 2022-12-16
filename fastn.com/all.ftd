@@ -61,6 +61,7 @@ overflow-y: auto
 background-color: $fpm.color.main.background.step-1
 border-radius: 6
 
+
 --- ftd.column:
 width: fill
 
@@ -957,10 +958,10 @@ status: Coded
 package-url: https://fifthtry.github.io/images
 package-name: fifthtry.github.io/images
 github-url: https://github.com/FifthTry/images
-package-type: Personal Site
+package-type: DS
 licence-url: https://github.com/FifthTry/images/blob/main/LICENSE
 licence-name: BSD 3-Clause
-status: DS
+status: Documented
 
 A collection `images` components for FTD web package.
 
@@ -1131,3 +1132,14 @@ licence-name: BSD 2-Clause
 status: Documented
 
 `TOC` is a toc component help you to create table of content in you website.
+
+-- package-list: `flat-resume`
+package-url: https://fifthtry.github.io/resume
+package-name: fifthtry.github.io/resume
+github-url: https://github.com/FifthTry/flat-resume
+package-type: Resume
+licence-url: 
+licence-name: 
+status: In Progress
+
+`flat-resume` is a resume theme. `resume` template is required as default resume data template.
