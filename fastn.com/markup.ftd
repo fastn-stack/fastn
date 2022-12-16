@@ -91,7 +91,7 @@ lang: ftd
 
 \-- ftd.text: Click {orange: me}
 
-\-- boolean shown: true
+\-- boolean $shown: true
 
 \-- ftd.text orange: Show/Hide orange background color
 background-color if $shown: $orange-color
