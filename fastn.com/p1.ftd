@@ -150,7 +150,11 @@ a very poor editing experience.
     "http://.." is the "value".
   - `section header` ends after first empty line
 - `section body`: any text that comes after `section header` till the next
-  `section` or `sub-section` is the "body" of that section.
+  `section` is the "body" of that section.
+
+/-- ft.markdown:
+
+Deprecated subsection:
 - `sub-section`: `sub-sections` look like `section`, but they start with `--- `
   instead of `-- `.
   - A `section` can have zero or more `sub-sections.
@@ -158,9 +162,9 @@ a very poor editing experience.
   - `sub-sections` also have `sub-section name`, optional `sub-section captions`,
     optional `sub-section headers` and optional `sub-section body`.
 
-A sample p1 file:
 
--- ft.code:
+
+-- ft.code: A sample p1 file
 lang: ftd
 
 \-- some-section: the caption of the section (optional)
@@ -169,13 +173,6 @@ section-header-2: any number of section header possible
 
 optional body. note there is a single empty line to trigger end
 of "header"
-
-\--- sub-section-1: optional caption of subsection
-sub-section-header: they too can have headers
-
-optional body.
-
-\--- sub-section-2: any number of subsections can exist
 
 \-- some-other-section: same file can have any number of sections
 
@@ -194,19 +191,7 @@ pub struct Section {
     pub caption: Option<String>,
     pub header: Header,
     pub body: Option<String>,
-    pub sub_sections: SubSections,
 }
-
-#[derive(Debug, PartialEq, Default)]
-pub struct SubSection {
-    pub name: String,
-    pub caption: Option<String>,
-    pub header: Header,
-    pub body: Option<String>,
-}
-
-#[derive(Debug, PartialEq, Default)]
-pub struct SubSections(pub Vec<SubSection>);
 
 #[derive(Debug, PartialEq, Default)]
 pub struct Header(pub(crate) Vec<(String, String)>);
