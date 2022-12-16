@@ -37,8 +37,8 @@ lang: ftd
 \-- ftd.text foo:
 caption name:
 color: $fpm.color.main.text
-color if $present: $fpm.color.main.cta-primary.text
-color if not $present: $fpm.color.main.cta-secondary.text
+color if { present }: $fpm.color.main.cta-primary.text
+color if { !present }: $fpm.color.main.error.text
 text: $name
 
 \-- foo: hello
@@ -67,8 +67,8 @@ width: fill
 -- ftd.text foo1:
 caption name:
 color: $fpm.color.main.text
-color if $present: $fpm.color.main.text
-color if not $present: $fpm.color.main.text
+color if $present: $fpm.color.main.cta-primary.text
+color if not $present: $fpm.color.main.error.text
 text: $name
 
 
@@ -98,8 +98,10 @@ lang: ftd
 caption name:
 component: ftd.text
 color: $fpm.color.main.text
-color if $present: $fpm.color.main.text
+color if { present }: $fpm.color.main.error.text
 text: $name
+
+\-- end: foo
 
 \-- foo: hello
 
@@ -124,7 +126,7 @@ width: fill
 -- ftd.text foo2:
 caption name:
 color: $fpm.color.main.text
-color if $present: $fpm.color.main.text
+color if $present: $fpm.color.main.error.text
 text: $name
 
 
@@ -150,7 +152,7 @@ lang: ftd
 caption name:
 optional string yes:
 color: $fpm.color.main.text
-color if $yes is not null: $fpm.color.main.text
+color if { yes != null }: $fpm.color.main.cta-secondary.base
 text: $name
 
 \-- foo: hello
@@ -178,7 +180,7 @@ width: fill
 caption name:
 optional string yes:
 color: $fpm.color.main.text
-color if $yes is not null: $fpm.color.main.text
+color if $yes is not null: $fpm.color.main.cta-secondary.base
 text: $name
 
 
@@ -208,9 +210,9 @@ lang: ftd
 caption name:
 optional string yes:
 color: $fpm.color.main.text
-color if $present: $fpm.color.main.cta-primary.text
-color if not $present: $fpm.color.main.cta-secondary.text
-color if $yes is not null: $fpm.color.main.success.text
+color if { present }: $fpm.color.main.cta-primary.text
+color if { !present }: $fpm.color.main.cta-secondary.base
+color if { yes != null }: $fpm.color.main.success.text
 text: $name
 
 \-- foo: hello
@@ -233,13 +235,14 @@ border-color: $fpm.color.main.text
 padding: 10
 width: fill
 
-
+;; This one is not working as expected
+;; Text color should be green but showing blue
 -- ftd.text foo4:
 caption name:
 optional string yes:
 color: $fpm.color.main.text
 color if $present: $fpm.color.main.cta-primary.text
-color if not $present: $fpm.color.main.cta-secondary.text
+color if not $present: $fpm.color.main.cta-secondary.base
 color if $yes is not null: $fpm.color.main.success.text
 text: $name
 
@@ -253,11 +256,11 @@ yes: world
 
 -- ft.markdown:
 
-Here, in above sample code, both `color if not present: red` and 
-`color if $yes is not null: blue` are satisfied, so according to the precedence 
+Here, in above sample code, both `color if not present: blue` and
+`color if $yes is not null: green` are satisfied, so according to the precedence
 rule, the value of attribute/style is set to value in last satisfied condition, 
-i.e., `color if $yes is not null: blue` has highest priority. So the `color` gets 
-set to `blue`.
+i.e., `color if $yes is not null: green` has highest priority. So the `color` gets
+set to `green`.
 
 
 -- ft.h1: Note: Does not yet work well with event handling
