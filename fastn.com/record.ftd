@@ -10,18 +10,71 @@
 
 Before a record can be used it must be declared using the `record` syntax:
 
--- ft.code: declaring a record
+-- ft.code: Declaring a Person record
 lang: ftd
 
 \-- record person:
-name: caption
-age: integer
-bio: optional body
+caption name:
+integer age:
+optional body bio:
 
 -- ft.markdown:
 
 Here we are creating a record. The name of the record is `person`. It has three
 fields: `name`, `age` and `bio`.
+
+-- ft.code: Declaring a Company record
+lang: ftd
+
+\-- record company:
+caption name:
+person list employees:
+
+-- ft.markdown:
+
+In this case, the name of the record is `company`. It has two fields:
+caption `name` and list of `employees` of `person` type.
+
+-- ft.h1: Declaring a `record` with default values
+
+Sometimes, the programmer might want to provide default values to the record
+fields, in case if he/she doesn't specify those during initialization.
+
+-- ft.code: Declaring a Person record with default field values
+lang: ftd
+
+\-- record person:
+caption name: Undefined
+integer age:
+optional body bio: Not specified
+
+\;; << Alternative way >>
+\-- record person:
+caption name: Undefined
+integer age:
+
+\-- optional body person.bio:
+
+No bio is specified for this person.
+
+-- ft.code: Declaring a Company record with default field values
+lang: ftd
+
+\-- record company:
+string name: FifthTry
+
+\-- person list company.employees:
+
+\-- person:
+name: Arpita
+age: 22
+
+\-- person:
+name: Abrar
+age: 24
+
+\-- end: company.employees
+
 
 -- ft.h1: Field Types
 
@@ -49,19 +102,20 @@ so it's not a problem. Had it been `body` the above would not have been valid.
 
 -- ft.h1: Record Field Update Syntax
 
+The field which needs to be updated has to be mutable before updating its value.
 An individual field of a record can be updated using a syntax like this:
 
 -- ft.code:
 lang: ftd
 
-\-- person john-snow: John Snow
-age: 14
+\-- person $john-snow: John Snow
+$age: 14
 
-\-- john-snow.age: 15
+\-- $john-snow.age: 15
 
 -- ft.markdown:
 
-Here we have used `-- john-snow.age: 15` to update a single field of a record.
+Here we have used `-- $john-snow.age: 15` to update a single field of a record.
 
 This also works if the field is a list:
 
@@ -72,12 +126,12 @@ lang: ftd
 caption name:
 string list alias:
 
-\-- person john-snow: John Snow
+\-- person $john-snow: John Snow
 
-\-- john-snow.alias: Aegon Targaryen
-\-- john-snow.alias: Lord Crow
-\-- john-snow.alias: The White Wolf
-\-- john-snow.alias: The Prince That Was Promised
+\-- $john-snow.alias: Aegon Targaryen
+\-- $john-snow.alias: Lord Crow
+\-- $john-snow.alias: The White Wolf
+\-- $john-snow.alias: The Prince That Was Promised
 
 
 -- ft.h1: Reading A Record From Rust
