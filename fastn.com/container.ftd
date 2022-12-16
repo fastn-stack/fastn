@@ -24,17 +24,19 @@ border-width: 2
 padding: 20
 wrap: true
 
-\--- items: 1
+\-- items: 1
 
-\--- items: 2
+\-- items: 2
 
-\--- items: 3
+\-- items: 3
 
-\--- items: 4
+\-- items: 4
 
-\--- items: 5
+\-- items: 5
 
-\--- items: 6
+\-- items: 6
+
+\-- end: ftd.column
 
 \-- ftd.text items: $title
 caption title:
