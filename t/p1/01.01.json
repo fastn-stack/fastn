@@ -1,0 +1,24 @@
+[{
+  "name": "foo",
+  "kind": null,
+  "caption": null,
+  "headers": [],
+  "body": null,
+  "sub_sections": [
+    {
+      "name": "bar",
+      "kind": null,
+      "caption": null,
+      "headers": [],
+      "body": null,
+      "sub_sections": [],
+      "is_commented": false,
+      "line_number": 0,
+      "block_body": false
+    }
+  ],
+  "is_commented": false,
+  "line_number": 0,
+  "block_body": false
+}
+]

@@ -12,20 +12,20 @@ fn p(s: &str, t: &Vec<ftd::p11::Section>) {
 }
 
 #[track_caller]
-fn p1(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
+fn p1(s: &str, t: &str, fix: bool, file_location: &std::path::Path) {
     let data = super::parse(s, "foo")
         .unwrap_or_else(|e| panic!("{:?}", e))
         .iter()
         .map(|v| v.without_line_number())
         .collect::<Vec<ftd::p11::Section>>();
-    let expected_json = serde_json::to_string_pretty(&data).unwrap();
+    let parser_output = serde_json::to_string_pretty(&data).unwrap();
     if fix {
-        std::fs::write(file_location, expected_json).unwrap();
+        std::fs::write(file_location, parser_output).unwrap();
         return;
     }
     let t: Vec<ftd::p11::Section> = serde_json::from_str(t)
-        .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
-    assert_eq!(&t, &data, "Expected JSON: {}", expected_json)
+        .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, parser_output));
+    assert_eq!(&t, &data, "Expected JSON: {}", parser_output)
 }
 
 #[track_caller]
@@ -52,81 +52,58 @@ fn f(s: &str, m: &str) {
     }
 }
 
+//  cargo test p11::test::p1_test_all -- --nocapture
 #[test]
 fn p1_test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test
     let cli_args: Vec<String> = std::env::args().collect();
     let fix = cli_args.iter().any(|v| v.eq("fix=true"));
-    let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
-    for (files, json) in find_file_groups() {
-        let t = std::fs::read_to_string(&json).unwrap();
-        for f in files {
-            match path {
-                Some(path) if !f.to_str().unwrap().contains(path) => continue,
-                _ => {}
-            }
-            let s = std::fs::read_to_string(&f).unwrap();
-            println!("{} {}", if fix { "fixing" } else { "testing" }, f.display());
-            p1(&s, &t, fix, &json);
-        }
+    for (ftd_file, json_file) in read_test_files(std::path::Path::new("t/p1"), "ftd") {
+        let ftd_source = std::fs::read_to_string(&ftd_file).unwrap();
+        let json_output = std::fs::read_to_string(&json_file).unwrap();
+        p1(ftd_source.as_str(), json_output.as_str(), fix, &json_file)
     }
 }
 
-fn find_all_files_matching_extension_recursively(
-    dir: impl AsRef<std::path::Path>,
+// cargo test p11::test::p1_test -- --nocapture path=t/p1/01.ftd
+#[test]
+fn p1_test() {
+    let cli_args: Vec<String> = std::env::args().collect();
+    let fix = cli_args.iter().any(|v| v.eq("fix=true"));
+    let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
+    if let Some(path) = path {
+        let ftd_source = std::fs::read_to_string(&path).unwrap();
+        let json_path = path.replace(".ftd", ".json");
+        let json_op_file = std::path::Path::new(json_path.as_str());
+        if !json_op_file.exists() {
+            std::fs::File::create(&json_op_file).unwrap();
+        }
+        let json_output = std::fs::read_to_string(&json_op_file).unwrap();
+        p1(ftd_source.as_str(), json_output.as_str(), fix, json_op_file)
+    }
+    assert!(true);
+}
+
+fn read_test_files(
+    dir: &std::path::Path,
     extension: &str,
-) -> Vec<std::path::PathBuf> {
+) -> Vec<(std::path::PathBuf, std::path::PathBuf)> {
     let mut files = vec![];
     for entry in std::fs::read_dir(dir).unwrap() {
         let entry = entry.unwrap();
         let path = entry.path();
-        if path.is_dir() {
-            files.extend(find_all_files_matching_extension_recursively(
-                &path, extension,
-            ));
-        } else {
-            match path.extension() {
-                Some(ext) if ext == extension => files.push(path),
-                _ => continue,
+        if path.extension().eq(&Some(std::ffi::OsStr::new(extension))) {
+            let json_file = std::path::PathBuf::from(
+                &path.to_str().unwrap().to_string().replace(".ftd", ".json"),
+            );
+            if !json_file.exists() {
+                std::fs::File::create(&json_file).unwrap();
             }
+            files.push((path, json_file));
         }
     }
     files
-}
-
-fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
-    let files = {
-        let mut f = find_all_files_matching_extension_recursively("t/p1", "ftd");
-        f.sort();
-        f
-    };
-
-    let mut o: Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> = vec![];
-
-    for f in files {
-        let json = filename_with_second_last_extension_replaced_with_json(&f);
-        match o.last_mut() {
-            Some((v, j)) if j == &json => v.push(f),
-            _ => o.push((vec![f], json)),
-        }
-    }
-
-    o
-}
-
-fn filename_with_second_last_extension_replaced_with_json(
-    path: &std::path::Path,
-) -> std::path::PathBuf {
-    let stem = path.file_stem().unwrap().to_str().unwrap();
-
-    path.with_file_name(format!(
-        "{}.json",
-        match stem.split_once('.') {
-            Some((b, _)) => b,
-            None => stem,
-        }
-    ))
 }
 
 #[test]
