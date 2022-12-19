@@ -1,5 +1,4 @@
 impl fpm::Package {
-    #[exec_time::exec_time(prefix = "package/package_doc")]
     pub(crate) async fn fs_fetch_by_file_name(
         &self,
         name: &str,
@@ -23,13 +22,12 @@ impl fpm::Package {
         match tokio::fs::read(&file_path).await {
             Ok(content) => Ok(content),
             Err(err) => {
-                println!("fs:file-not-found => {}", file_path);
+                // println!("fs:file-not-found => {}", file_path);
                 Err(Err(err)?)
             }
         }
     }
 
-    #[exec_time::exec_time(prefix = "package/package_doc")]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
@@ -74,7 +72,6 @@ impl fpm::Package {
         .await
     }
 
-    #[exec_time::exec_time(prefix = "package/package_doc")]
     async fn http_fetch_by_id(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
         if fpm::file::is_static(id)? {
             if let Ok(data) = self.http_fetch_by_file_name(id).await {
@@ -222,7 +219,6 @@ impl fpm::Package {
         }
     }
 
-    #[exec_time::exec_time(prefix = "package/package_doc")]
     pub(crate) async fn resolve_by_id(
         &self,
         id: &str,
