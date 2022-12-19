@@ -2,9 +2,14 @@
 color: $bgcolor
 
 -- ftd.column:
+spacing.px: 40
+
+-- ftd.column:
 horizontal-resizing.fixed.px: 40
 vertical-resizing.fixed.px: 40
 background.solid: red
+border-width.px: 3
+border-color: $bgcolor
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 
 -- ftd.text: Hello
@@ -18,6 +23,8 @@ horizontal-resizing.fixed.px: 40
 vertical-resizing.fixed.px: 40
 background.solid: $bgcolor
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
+border-color: red
+border-width.px: 3
 
 -- ftd.text: Hello
 -- ftd.text: World
@@ -29,9 +36,13 @@ horizontal-resizing.fixed.px: 40
 vertical-resizing.fixed.px: 40
 background: $background-fill
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
+border-color: $bgcolor
+border-width.px: 3
 
 -- ftd.text: Hello
 -- ftd.text: World
+
+-- end: ftd.column
 
 -- end: ftd.column
 

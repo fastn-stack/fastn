@@ -121,6 +121,7 @@ pub struct Common {
     pub padding_vertical: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_width: ftd::executor::Value<ftd::executor::Length>,
     pub border_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
+    pub border_color: ftd::executor::Value<Option<ftd::executor::Color>>,
     pub border_top_left_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_top_right_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_bottom_left_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
@@ -409,6 +410,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "border-radius",
+        )?,
+        border_color: ftd::executor::Color::optional_color(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "border-color",
         )?,
         border_top_left_radius: ftd::executor::Length::optional_length(
             properties,

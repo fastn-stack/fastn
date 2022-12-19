@@ -397,6 +397,19 @@ impl ftd::executor::Common {
         );
 
         d.check_and_insert(
+            "border-color",
+            ftd::node::Value::from_executor_value(
+                self.border_color
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.border_color.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
                 Some(

@@ -724,6 +724,12 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
+            "border-color",
+            ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "color",
             ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
                 .into_optional()

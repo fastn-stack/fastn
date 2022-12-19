@@ -282,6 +282,11 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "border_color": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "border_top_left_radius": {
                         "value": null,
                         "line_number": null,
@@ -460,6 +465,11 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "border_color": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "border_top_left_radius": {
                                 "value": null,
                                 "line_number": null,
@@ -614,6 +624,11 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "border_color": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "border_top_left_radius": {
                                 "value": null,
                                 "line_number": null,
@@ -739,6 +754,11 @@
                         "properties": []
                       },
                       "border_radius": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_color": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -872,6 +892,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "border_color": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "border_top_left_radius": {
                 "value": null,
                 "line_number": null,
@@ -997,6 +1022,11 @@
         "properties": []
       },
       "border_radius": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_color": {
         "value": null,
         "line_number": null,
         "properties": []
