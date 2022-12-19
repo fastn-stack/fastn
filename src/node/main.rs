@@ -358,6 +358,19 @@ impl ftd::executor::Common {
         );
 
         d.check_and_insert(
+            "align-self",
+            ftd::node::Value::from_executor_value(
+                self.align_self
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.align_self.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "background-color",
             ftd::node::Value::from_executor_value(
                 self.background

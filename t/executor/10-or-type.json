@@ -328,6 +328,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "align_self": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 1,
               "condition": null
@@ -529,6 +534,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "align_self": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "1",
               "line_number": 7,
               "condition": null
@@ -706,6 +716,11 @@
                 "properties": []
               },
               "color": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "align_self": {
                 "value": null,
                 "line_number": null,
                 "properties": []
@@ -973,6 +988,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "align_self": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "3",
               "line_number": 21,
               "condition": null
@@ -1093,6 +1113,11 @@
         "properties": []
       },
       "color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "align_self": {
         "value": null,
         "line_number": null,
         "properties": []

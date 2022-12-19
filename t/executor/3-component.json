@@ -347,6 +347,11 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "align_self": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "data_id": "0,0",
                       "line_number": 5,
                       "condition": null
@@ -520,6 +525,11 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "align_self": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "data_id": "0,1,0",
                               "line_number": 11,
                               "condition": null
@@ -669,6 +679,11 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "align_self": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "data_id": "0,1,1",
                               "line_number": 13,
                               "condition": null
@@ -789,6 +804,11 @@
                         "properties": []
                       },
                       "color": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "align_self": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -917,6 +937,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "align_self": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 3,
               "condition": null
@@ -1037,6 +1062,11 @@
         "properties": []
       },
       "color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "align_self": {
         "value": null,
         "line_number": null,
         "properties": []

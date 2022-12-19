@@ -649,6 +649,11 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "align_self": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "data_id": "0,0",
                       "line_number": 36,
                       "condition": null
@@ -826,6 +831,11 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "align_self": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "data_id": "0,1,0,0",
                               "line_number": 36,
                               "condition": null
@@ -946,6 +956,11 @@
                         "properties": []
                       },
                       "color": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "align_self": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -1127,6 +1142,11 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "align_self": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "data_id": "0,1,1,0",
                               "line_number": 36,
                               "condition": null
@@ -1304,6 +1324,11 @@
                                         "line_number": null,
                                         "properties": []
                                       },
+                                      "align_self": {
+                                        "value": null,
+                                        "line_number": null,
+                                        "properties": []
+                                      },
                                       "data_id": "0,1,1,1,0,0",
                                       "line_number": 36,
                                       "condition": null
@@ -1424,6 +1449,11 @@
                                 "properties": []
                               },
                               "color": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "align_self": {
                                 "value": null,
                                 "line_number": null,
                                 "properties": []
@@ -1552,6 +1582,11 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "align_self": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "data_id": "0,1,1",
                       "line_number": 34,
                       "condition": null
@@ -1676,6 +1711,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "align_self": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 34,
               "condition": null
@@ -1796,6 +1836,11 @@
         "properties": []
       },
       "color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "align_self": {
         "value": null,
         "line_number": null,
         "properties": []

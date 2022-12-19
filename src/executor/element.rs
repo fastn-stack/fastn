@@ -134,6 +134,7 @@ pub struct Common {
     pub link: ftd::executor::Value<Option<String>>,
     pub background: ftd::executor::Value<Option<ftd::executor::Background>>,
     pub color: ftd::executor::Value<Option<ftd::executor::Color>>,
+    pub align_self: ftd::executor::Value<Option<ftd::executor::AlignSelf>>,
     pub data_id: String,
     pub line_number: usize,
     pub condition: Option<ftd::interpreter2::Expression>,
@@ -504,6 +505,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "color",
+        )?,
+        align_self: ftd::executor::AlignSelf::optional_align_self(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "align-self",
         )?,
     })
 }

@@ -34,3 +34,8 @@ pub const FTD_SPACING_MODE: &str = "ftd#spacing-mode";
 pub const FTD_SPACING_MODE_SPACE_BETWEEN: &str = "ftd#spacing-mode.space-between";
 pub const FTD_SPACING_MODE_SPACE_AROUND: &str = "ftd#spacing-mode.space-around";
 pub const FTD_SPACING_MODE_SPACE_EVENLY: &str = "ftd#spacing-mode.space-evenly";
+
+pub const FTD_ALIGN_SELF: &str = "ftd#align-self";
+pub const FTD_ALIGN_SELF_START: &str = "ftd#align-self.start";
+pub const FTD_ALIGN_SELF_CENTER: &str = "ftd#align-self.center";
+pub const FTD_ALIGN_SELF_END: &str = "ftd#align-self.end";

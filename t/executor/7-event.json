@@ -259,6 +259,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "align_self": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "data_id": "0",
               "line_number": 9,
               "condition": null
@@ -379,6 +384,11 @@
         "properties": []
       },
       "color": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "align_self": {
         "value": null,
         "line_number": null,
         "properties": []

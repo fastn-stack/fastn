@@ -266,10 +266,8 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_SPACING_MODE_SPACE_BETWEEN,
-                            )
-                            .into_property_value(false, 0),
+                            ftd::interpreter2::Value::new_string("space-between")
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
@@ -278,10 +276,8 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_SPACING_MODE_SPACE_EVENLY,
-                            )
-                            .into_property_value(false, 0),
+                            ftd::interpreter2::Value::new_string("space-evenly")
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
@@ -290,10 +286,47 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            ftd::interpreter2::Value::new_string(
-                                ftd::interpreter2::FTD_SPACING_MODE_SPACE_AROUND,
-                            )
-                            .into_property_value(false, 0),
+                            ftd::interpreter2::Value::new_string("space-around")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_ALIGN_SELF.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_ALIGN_SELF.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_ALIGN_SELF_START,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string("start")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_ALIGN_SELF_CENTER,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string("center")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_ALIGN_SELF_END,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string("end")
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
@@ -678,6 +711,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
+        ftd::interpreter2::Argument::default(
+            "align-self",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_ALIGN_SELF)
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter2::Argument::default(
             "background",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BACKGROUND)
