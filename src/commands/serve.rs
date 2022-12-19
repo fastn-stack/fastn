@@ -44,7 +44,7 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
     match f {
         fpm::File::Ftd(main_document) => {
             match fpm::package::package_doc::read_ftd(config, &main_document, "/", false).await {
-                Ok(r) => fpm::http::ok(r),
+                Ok(r) => fpm::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8),
                 Err(e) => {
                     fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
