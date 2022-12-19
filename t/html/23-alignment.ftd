@@ -13,6 +13,9 @@ $on-click$: $increment($a=$num)
 
 -- ftd.row:
 spacing.px: 20
+wrap: true
+
+
 
 -- ftd.column:
 spacing.px: 20
@@ -243,6 +246,31 @@ border-width.px: 1
 
 -- end: ftd.row
 
+
+
+-- ftd.row:
+spacing.px: 20
+background.solid: pink
+horizontal-resizing.fixed.px: 200
+vertical-resizing.fixed.px: 200
+border-width.px: 1
+
+-- ftd.text:
+background.solid: yellow
+horizontal-resizing: ftd.resizing.fill-container
+vertical-resizing: ftd.resizing.fill-container
+text-align if { num % 4 == 0 }: ftd.text-align.start
+text-align if { num % 4 == 1 }: ftd.text-align.center
+text-align if { num % 4 == 2 }: ftd.text-align.end
+text-align if { num % 4 == 3 }: ftd.text-align.justify
+
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at
+erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam,
+consequat gravida libero rhoncus ut.
+
+
+-- end: ftd.row
 
 
 

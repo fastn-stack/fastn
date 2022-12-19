@@ -335,6 +335,55 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            ftd::interpreter2::FTD_TEXT_ALIGN.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_TEXT_ALIGN.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TEXT_ALIGN_START,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string("start")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TEXT_ALIGN_CENTER,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string("center")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TEXT_ALIGN_END,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string("end")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TEXT_ALIGN_JUSTIFY,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string("justify")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter2::FTD_RESIZING.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_RESIZING.to_string(),
@@ -498,6 +547,7 @@ pub fn boolean_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#boolean".to_string(),
         arguments: [
+            text_arguments(),
             common_arguments(),
             vec![
                 ftd::interpreter2::Argument::default(
@@ -550,6 +600,7 @@ pub fn integer_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#integer".to_string(),
         arguments: [
+            text_arguments(),
             common_arguments(),
             vec![
                 ftd::interpreter2::Argument::default(
@@ -602,6 +653,7 @@ pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#text".to_string(),
         arguments: [
+            text_arguments(),
             common_arguments(),
             vec![
                 ftd::interpreter2::Argument::default(
@@ -1262,6 +1314,15 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
             ftd::interpreter2::Kind::string().into_optional().into_kind_data(),
         ),*/
     ]
+}
+
+fn text_arguments() -> Vec<ftd::interpreter2::Argument> {
+    vec![ftd::interpreter2::Argument::default(
+        "text-align",
+        ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TEXT_ALIGN)
+            .into_optional()
+            .into_kind_data(),
+    )]
 }
 
 /*fn kernel_component() -> ftd::interpreter2::ComponentDefinition {

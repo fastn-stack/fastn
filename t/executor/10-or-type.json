@@ -162,6 +162,11 @@
                 }
               ]
             },
+            "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
             "common": {
               "is_not_visible": false,
               "event": [],
@@ -410,6 +415,11 @@
                   "line_number": 7
                 }
               ]
+            },
+            "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             },
             "common": {
               "is_not_visible": false,
@@ -662,6 +672,11 @@
                 }
               ]
             },
+            "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
+            },
             "common": {
               "is_not_visible": false,
               "event": [],
@@ -897,6 +912,11 @@
                   "line_number": 22
                 }
               ]
+            },
+            "text_align": {
+              "value": null,
+              "line_number": null,
+              "properties": []
             },
             "common": {
               "is_not_visible": false,

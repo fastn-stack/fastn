@@ -240,6 +240,11 @@
                         }
                       ]
                     },
+                    "text_align": {
+                      "value": null,
+                      "line_number": null,
+                      "properties": []
+                    },
                     "common": {
                       "is_not_visible": false,
                       "event": [],
@@ -640,6 +645,11 @@
                           "line_number": 8
                         }
                       ]
+                    },
+                    "text_align": {
+                      "value": null,
+                      "line_number": null,
+                      "properties": []
                     },
                     "common": {
                       "is_not_visible": false,

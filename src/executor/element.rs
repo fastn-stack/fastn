@@ -24,6 +24,7 @@ pub struct Column {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Text {
     pub text: ftd::executor::Value<Rendered>,
+    pub text_align: ftd::executor::Value<Option<ftd::executor::TextAlign>>,
     pub common: Common,
 }
 
@@ -188,7 +189,17 @@ pub fn text_from_properties(
         local_container,
         line_number,
     )?;
-    Ok(Text { text, common })
+    Ok(Text {
+        text,
+        text_align: ftd::executor::TextAlign::optional_text_align(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-align",
+        )?,
+        common,
+    })
 }
 
 pub fn integer_from_properties(
@@ -225,7 +236,17 @@ pub fn integer_from_properties(
         local_container,
         line_number,
     )?;
-    Ok(Text { text, common })
+    Ok(Text {
+        text,
+        common,
+        text_align: ftd::executor::TextAlign::optional_text_align(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-align",
+        )?,
+    })
 }
 
 pub fn boolean_from_properties(
@@ -248,7 +269,17 @@ pub fn boolean_from_properties(
         local_container,
         line_number,
     )?;
-    Ok(Text { text, common })
+    Ok(Text {
+        text,
+        common,
+        text_align: ftd::executor::TextAlign::optional_text_align(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-align",
+        )?,
+    })
 }
 
 pub fn image_from_properties(

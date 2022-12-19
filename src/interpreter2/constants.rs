@@ -39,3 +39,9 @@ pub const FTD_ALIGN_SELF: &str = "ftd#align-self";
 pub const FTD_ALIGN_SELF_START: &str = "ftd#align-self.start";
 pub const FTD_ALIGN_SELF_CENTER: &str = "ftd#align-self.center";
 pub const FTD_ALIGN_SELF_END: &str = "ftd#align-self.end";
+
+pub const FTD_TEXT_ALIGN: &str = "ftd#text-align";
+pub const FTD_TEXT_ALIGN_START: &str = "ftd#text-align.start";
+pub const FTD_TEXT_ALIGN_CENTER: &str = "ftd#text-align.center";
+pub const FTD_TEXT_ALIGN_END: &str = "ftd#text-align.end";
+pub const FTD_TEXT_ALIGN_JUSTIFY: &str = "ftd#text-align.justify";
