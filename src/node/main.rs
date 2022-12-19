@@ -504,6 +504,46 @@ impl ftd::executor::Common {
         );
 
         d.check_and_insert(
+            "min-width",
+            ftd::node::Value::from_executor_value(
+                self.min_width.value.as_ref().map(|v| v.to_css_string()),
+                self.min_width.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "max-width",
+            ftd::node::Value::from_executor_value(
+                self.max_width.value.as_ref().map(|v| v.to_css_string()),
+                self.max_width.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "min-height",
+            ftd::node::Value::from_executor_value(
+                self.min_height.value.as_ref().map(|v| v.to_css_string()),
+                self.min_height.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "max-height",
+            ftd::node::Value::from_executor_value(
+                self.max_height.value.as_ref().map(|v| v.to_css_string()),
+                self.max_height.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "border-style",
             ftd::node::Value::from_executor_value(
                 Some(s("solid")),
