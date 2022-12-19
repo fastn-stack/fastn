@@ -36,8 +36,14 @@ horizontal-resizing.fixed.px: 40
 vertical-resizing.fixed.px: 40
 background: $background-fill
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
-border-color: $bgcolor
-border-width.px: 3
+border-left-color: $bgcolor
+border-left-width.px: 3
+border-top-color: red
+border-top-width.px: 4
+border-right-color: blue
+border-right-width.px: 1
+border-bottom-color: orange
+border-bottom-width.px: 2
 
 -- ftd.text: Hello
 -- ftd.text: World
