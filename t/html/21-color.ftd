@@ -5,8 +5,8 @@ color: $bgcolor
 spacing.px: 40
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 40
-vertical-resizing.fixed.px: 40
+width.fixed.px: 40
+height.fixed.px: 40
 background.solid: red
 border-width.px: 3
 border-color: $bgcolor
@@ -19,8 +19,8 @@ $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 40
-vertical-resizing.fixed.px: 40
+width.fixed.px: 40
+height.fixed.px: 40
 background.solid: $bgcolor
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 border-color: red
@@ -32,8 +32,8 @@ border-width.px: 3
 -- end: ftd.column
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 40
-vertical-resizing.fixed.px: 40
+width.fixed.px: 40
+height.fixed.px: 40
 background: $background-fill
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 border-left-color: $bgcolor

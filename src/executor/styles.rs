@@ -1001,21 +1001,21 @@ impl AlignSelf {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
-pub enum OverFlow {
+pub enum Overflow {
     Scroll,
     Visible,
     Hidden,
     Auto,
 }
 
-impl OverFlow {
+impl Overflow {
     fn from_optional_values(
         or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
         if let Some(value) = or_type_value {
-            Ok(Some(OverFlow::from_values(value, doc, line_number)?))
+            Ok(Some(Overflow::from_values(value, doc, line_number)?))
         } else {
             Ok(None)
         }
@@ -1027,10 +1027,10 @@ impl OverFlow {
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
         match or_type_value.0.as_str() {
-            ftd::interpreter2::FTD_OVERFLOW_SCROLL => Ok(OverFlow::Scroll),
-            ftd::interpreter2::FTD_OVERFLOW_VISIBLE => Ok(OverFlow::Visible),
-            ftd::interpreter2::FTD_OVERFLOW_HIDDEN => Ok(OverFlow::Hidden),
-            ftd::interpreter2::FTD_OVERFLOW_AUTO => Ok(OverFlow::Auto),
+            ftd::interpreter2::FTD_OVERFLOW_SCROLL => Ok(Overflow::Scroll),
+            ftd::interpreter2::FTD_OVERFLOW_VISIBLE => Ok(Overflow::Visible),
+            ftd::interpreter2::FTD_OVERFLOW_HIDDEN => Ok(Overflow::Hidden),
+            ftd::interpreter2::FTD_OVERFLOW_AUTO => Ok(Overflow::Auto),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.overflow`", t),
                 doc.name,
@@ -1045,7 +1045,7 @@ impl OverFlow {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
-    ) -> ftd::executor::Result<ftd::executor::Value<Option<OverFlow>>> {
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Overflow>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
             properties,
@@ -1056,7 +1056,7 @@ impl OverFlow {
         )?;
 
         Ok(ftd::executor::Value::new(
-            OverFlow::from_optional_values(or_type_value.value, doc, line_number)?,
+            Overflow::from_optional_values(or_type_value.value, doc, line_number)?,
             or_type_value.line_number,
             or_type_value.properties,
         ))
@@ -1064,10 +1064,82 @@ impl OverFlow {
 
     pub fn to_css_string(&self) -> String {
         match self {
-            OverFlow::Scroll => "scroll".to_string(),
-            OverFlow::Visible => "visible".to_string(),
-            OverFlow::Hidden => "hidden".to_string(),
-            OverFlow::Auto => "auto".to_string(),
+            Overflow::Scroll => "scroll".to_string(),
+            Overflow::Visible => "visible".to_string(),
+            Overflow::Hidden => "hidden".to_string(),
+            Overflow::Auto => "auto".to_string(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum OverflowX {
+    Scroll,
+    Visible,
+    Hidden,
+    Auto,
+}
+
+impl OverflowX {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(OverflowX::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_OVERFLOW_X_SCROLL => Ok(OverflowX::Scroll),
+            ftd::interpreter2::FTD_OVERFLOW_X_VISIBLE => Ok(OverflowX::Visible),
+            ftd::interpreter2::FTD_OVERFLOW_X_HIDDEN => Ok(OverflowX::Hidden),
+            ftd::interpreter2::FTD_OVERFLOW_X_AUTO => Ok(OverflowX::Auto),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.overflow-x`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_overflow(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<OverflowX>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_OVERFLOW_X,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            OverflowX::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            OverflowX::Scroll => "scroll".to_string(),
+            OverflowX::Visible => "visible".to_string(),
+            OverflowX::Hidden => "hidden".to_string(),
+            OverflowX::Auto => "auto".to_string(),
         }
     }
 }

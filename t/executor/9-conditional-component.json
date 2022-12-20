@@ -541,12 +541,12 @@
                 "line_number": null,
                 "properties": []
               },
-              "horizontal_resizing": {
+              "width": {
                 "value": "HugContent",
                 "line_number": null,
                 "properties": []
               },
-              "vertical_resizing": {
+              "height": {
                 "value": "HugContent",
                 "line_number": null,
                 "properties": []
@@ -676,6 +676,11 @@
                 "line_number": 0
               },
               "overflow": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "overflow_x": {
                 "value": null,
                 "line_number": null,
                 "properties": []
@@ -836,12 +841,12 @@
         "line_number": null,
         "properties": []
       },
-      "horizontal_resizing": {
+      "width": {
         "value": "FillContainer",
         "line_number": null,
         "properties": []
       },
-      "vertical_resizing": {
+      "height": {
         "value": "FillContainer",
         "line_number": null,
         "properties": []
@@ -890,6 +895,11 @@
       "line_number": 0,
       "condition": null,
       "overflow": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "overflow_x": {
         "value": null,
         "line_number": null,
         "properties": []

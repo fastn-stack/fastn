@@ -372,13 +372,8 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.horizontal_resizing
-                        .to_owned()
-                        .map(|v| v.to_css_string())
-                        .value,
-                ),
-                self.horizontal_resizing.to_owned(),
+                Some(self.width.to_owned().map(|v| v.to_css_string()).value),
+                self.width.to_owned(),
                 None,
                 doc_id,
             ),
@@ -406,6 +401,20 @@ impl ftd::executor::Common {
                     .map(|v| v.map(|v| v.to_css_string()))
                     .value,
                 self.overflow.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        // html and css name only
+        d.check_and_insert(
+            "overflow-x",
+            ftd::node::Value::from_executor_value(
+                self.overflow_x
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.overflow_x.to_owned(),
                 None,
                 doc_id,
             ),
@@ -453,13 +462,8 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.vertical_resizing
-                        .to_owned()
-                        .map(|v| v.to_css_string())
-                        .value,
-                ),
-                self.vertical_resizing.to_owned(),
+                Some(self.height.to_owned().map(|v| v.to_css_string()).value),
+                self.height.to_owned(),
                 None,
                 doc_id,
             ),

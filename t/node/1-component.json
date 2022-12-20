@@ -18,13 +18,33 @@
         "properties": [],
         "line_number": null
       },
+      "border-bottom-width": {
+        "value": "0px",
+        "properties": [],
+        "line_number": null
+      },
+      "border-left-width": {
+        "value": "0px",
+        "properties": [],
+        "line_number": null
+      },
+      "border-right-width": {
+        "value": "0px",
+        "properties": [],
+        "line_number": null
+      },
       "border-style": {
         "value": "solid",
         "properties": [],
         "line_number": null
       },
-      "border-width": {
+      "border-top-width": {
         "value": "0px",
+        "properties": [],
+        "line_number": null
+      },
+      "box-sizing": {
+        "value": "border-box",
         "properties": [],
         "line_number": null
       },
@@ -78,13 +98,33 @@
             "properties": [],
             "line_number": null
           },
+          "border-bottom-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
+          "border-left-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
+          "border-right-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
           "border-style": {
             "value": "solid",
             "properties": [],
             "line_number": null
           },
-          "border-width": {
+          "border-top-width": {
             "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
+          "box-sizing": {
+            "value": "border-box",
             "properties": [],
             "line_number": null
           },
@@ -194,13 +234,33 @@
               }
             },
             "style": {
+              "border-bottom-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "border-left-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "border-right-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "border-style": {
                 "value": "solid",
                 "properties": [],
                 "line_number": null
               },
-              "border-width": {
+              "border-top-width": {
                 "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "box-sizing": {
+                "value": "border-box",
                 "properties": [],
                 "line_number": null
               },
@@ -324,13 +384,33 @@
               }
             },
             "style": {
+              "border-bottom-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "border-left-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "border-right-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "border-style": {
                 "value": "solid",
                 "properties": [],
                 "line_number": null
               },
-              "border-width": {
+              "border-top-width": {
                 "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "box-sizing": {
+                "value": "border-box",
                 "properties": [],
                 "line_number": null
               },
@@ -467,13 +547,33 @@
             "properties": [],
             "line_number": null
           },
+          "border-bottom-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
+          "border-left-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
+          "border-right-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
           "border-style": {
             "value": "solid",
             "properties": [],
             "line_number": null
           },
-          "border-width": {
+          "border-top-width": {
             "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
+          "box-sizing": {
+            "value": "border-box",
             "properties": [],
             "line_number": null
           },
@@ -583,13 +683,33 @@
               }
             },
             "style": {
+              "border-bottom-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "border-left-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "border-right-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "border-style": {
                 "value": "solid",
                 "properties": [],
                 "line_number": null
               },
-              "border-width": {
+              "border-top-width": {
                 "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "box-sizing": {
+                "value": "border-box",
                 "properties": [],
                 "line_number": null
               },
@@ -713,13 +833,33 @@
               }
             },
             "style": {
+              "border-bottom-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "border-left-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "border-right-width": {
+                "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
               "border-style": {
                 "value": "solid",
                 "properties": [],
                 "line_number": null
               },
-              "border-width": {
+              "border-top-width": {
                 "value": "0px",
+                "properties": [],
+                "line_number": null
+              },
+              "box-sizing": {
+                "value": "border-box",
                 "properties": [],
                 "line_number": null
               },
@@ -853,13 +993,33 @@
           }
         },
         "style": {
+          "border-bottom-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
+          "border-left-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
+          "border-right-width": {
+            "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
           "border-style": {
             "value": "solid",
             "properties": [],
             "line_number": null
           },
-          "border-width": {
+          "border-top-width": {
             "value": "0px",
+            "properties": [],
+            "line_number": null
+          },
+          "box-sizing": {
+            "value": "border-box",
             "properties": [],
             "line_number": null
           },

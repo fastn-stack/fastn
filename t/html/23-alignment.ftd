@@ -29,13 +29,13 @@ align-content if { num % 9 == 6 }: ftd.align.bottom-left
 align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
 background.solid: red
-horizontal-resizing.fixed.px: 200
-vertical-resizing.fixed.px: 200
+width.fixed.px: 200
+height.fixed.px: 200
 border-width.px: 1
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: yellow
 border-width.px: 1
 
@@ -43,8 +43,8 @@ border-width.px: 1
 
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: orange
 border-width.px: 1
 
@@ -71,13 +71,13 @@ align-content if { num % 9 == 6 }: ftd.align.bottom-left
 align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
 background.solid: red
-horizontal-resizing.fixed.px: 200
-vertical-resizing.fixed.px: 200
+width.fixed.px: 200
+height.fixed.px: 200
 border-width.px: 1
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: yellow
 border-width.px: 1
 
@@ -85,8 +85,8 @@ border-width.px: 1
 
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: orange
 border-width.px: 1
 
@@ -115,13 +115,13 @@ align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
 spacing-mode: ftd.spacing-mode.space-between
 background.solid: green
-horizontal-resizing.fixed.px: 200
-vertical-resizing.fixed.px: 200
+width.fixed.px: 200
+height.fixed.px: 200
 border-width.px: 1
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: yellow
 border-width.px: 1
 
@@ -129,8 +129,8 @@ border-width.px: 1
 
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: orange
 border-width.px: 1
 
@@ -156,13 +156,13 @@ align-content if { num % 9 == 7 }: ftd.align.bottom-center
 align-content if { num % 9 == 8 }: ftd.align.bottom-right
 spacing-mode: ftd.spacing-mode.space-evenly
 background.solid: green
-horizontal-resizing.fixed.px: 200
-vertical-resizing.fixed.px: 200
+width.fixed.px: 200
+height.fixed.px: 200
 border-width.px: 1
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: yellow
 border-width.px: 1
 
@@ -170,8 +170,8 @@ border-width.px: 1
 
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: orange
 border-width.px: 1
 
@@ -187,13 +187,13 @@ border-width.px: 1
 -- ftd.column:
 spacing.px: 20
 background.solid: blue
-horizontal-resizing.fixed.px: 200
-vertical-resizing.fixed.px: 200
+width.fixed.px: 200
+height.fixed.px: 200
 border-width.px: 1
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: yellow
 border-width.px: 1
 align-self if { num % 3 == 0 }: ftd.align-self.start
@@ -204,8 +204,8 @@ align-self if { num % 3 == 2 }: ftd.align-self.end
 
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: orange
 border-width.px: 1
 
@@ -219,13 +219,13 @@ border-width.px: 1
 -- ftd.row:
 spacing.px: 20
 background.solid: blue
-horizontal-resizing.fixed.px: 200
-vertical-resizing.fixed.px: 200
+width.fixed.px: 200
+height.fixed.px: 200
 border-width.px: 1
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: yellow
 border-width.px: 1
 align-self if { num % 3 == 0 }: ftd.align-self.start
@@ -236,8 +236,8 @@ align-self if { num % 3 == 2 }: ftd.align-self.end
 
 
 -- ftd.column:
-horizontal-resizing.fixed.px: 20
-vertical-resizing.fixed.px: 20
+width.fixed.px: 20
+height.fixed.px: 20
 background.solid: orange
 border-width.px: 1
 
@@ -251,14 +251,14 @@ border-width.px: 1
 -- ftd.row:
 spacing.px: 20
 background.solid: pink
-horizontal-resizing.fixed.px: 200
-vertical-resizing.fixed.px: 200
+width.fixed.px: 200
+height.fixed.px: 200
 border-width.px: 1
 
 -- ftd.text:
 background.solid: yellow
-horizontal-resizing: ftd.resizing.fill-container
-vertical-resizing: ftd.resizing.fill-container
+width: ftd.resizing.fill-container
+height: ftd.resizing.fill-container
 text-align if { num % 4 == 0 }: ftd.text-align.start
 text-align if { num % 4 == 1 }: ftd.text-align.center
 text-align if { num % 4 == 2 }: ftd.text-align.end

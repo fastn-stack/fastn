@@ -1,6 +1,6 @@
 -- ftd.column:
 padding-vertical.px: 100
-horizontal-resizing: ftd.resizing.fill-container
+width: ftd.resizing.fill-container
 align-content: ftd.align.top-center
 min-height.percent: 100
 spacing.px: 40
@@ -73,11 +73,11 @@ boolean $open: true
 
 -- ftd.column:
 border-width.px: 1
-horizontal-resizing.fixed.percent: 50
+width.fixed.percent: 50
 
 
 -- ftd.row:
-horizontal-resizing: ftd.resizing.fill-container
+width: ftd.resizing.fill-container
 border-color: black
 spacing-mode: ftd.spacing-mode.space-between
 padding-vertical.px: 15
@@ -101,7 +101,7 @@ if: {!box.open}
 -- ftd.text:
 if: { box.open }
 padding.px: 20
-vertical-resizing: ftd.resizing.hug-content
+height: ftd.resizing.hug-content
 
 $box.body
 

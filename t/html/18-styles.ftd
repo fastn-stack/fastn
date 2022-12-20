@@ -38,8 +38,8 @@ spacing.px: 20
 align-content if { flag }: ftd.align.top-left
 align-content: ftd.align.top-center
 background.solid: red
-horizontal-resizing.fixed.px: 400
-vertical-resizing.fixed.px: 100
+width.fixed.px: 400
+height.fixed.px: 100
 border-width.px: 1
 
 -- ftd.text: Hello
@@ -52,8 +52,8 @@ border-width.px: 1
 spacing.px: 2
 align-content if { flag }: ftd.align.top-left
 align-content: ftd.align.top-center
-horizontal-resizing.fixed.px: 400
-vertical-resizing.fixed.px: 100
+width.fixed.px: 400
+height.fixed.px: 100
 border-width.px: 1
 
 -- ftd.text: Hello
@@ -64,10 +64,10 @@ border-width.px: 1
 
 -- ftd.row:
 spacing.px: 20
-horizontal-resizing.fixed.px: 400
-horizontal-resizing if { flag }: ftd.resizing.hug-content
-vertical-resizing.fixed.percent: 20
-vertical-resizing if { flag }: ftd.resizing.fill-container
+width.fixed.px: 400
+width if { flag }: ftd.resizing.hug-content
+height.fixed.percent: 20
+height if { flag }: ftd.resizing.fill-container
 align-content: ftd.align.top-center
 border-width.px: 1
 

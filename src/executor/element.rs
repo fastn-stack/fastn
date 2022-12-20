@@ -142,8 +142,8 @@ pub struct Common {
     pub border_top_right_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_bottom_left_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_bottom_right_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
-    pub horizontal_resizing: ftd::executor::Value<ftd::executor::Resizing>,
-    pub vertical_resizing: ftd::executor::Value<ftd::executor::Resizing>,
+    pub width: ftd::executor::Value<ftd::executor::Resizing>,
+    pub height: ftd::executor::Value<ftd::executor::Resizing>,
     pub min_width: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub max_width: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub min_height: ftd::executor::Value<Option<ftd::executor::Length>>,
@@ -155,23 +155,16 @@ pub struct Common {
     pub data_id: String,
     pub line_number: usize,
     pub condition: Option<ftd::interpreter2::Expression>,
-    pub overflow: ftd::executor::Value<Option<ftd::executor::OverFlow>>,
+    pub overflow: ftd::executor::Value<Option<ftd::executor::Overflow>>,
+    pub overflow_x: ftd::executor::Value<Option<ftd::executor::OverflowX>>,
 }
 
 pub fn default_column() -> Column {
     ftd::executor::Column {
         container: Default::default(),
         common: ftd::executor::Common {
-            horizontal_resizing: ftd::executor::Value::new(
-                ftd::executor::Resizing::FillContainer,
-                None,
-                vec![],
-            ),
-            vertical_resizing: ftd::executor::Value::new(
-                ftd::executor::Resizing::FillContainer,
-                None,
-                vec![],
-            ),
+            width: ftd::executor::Value::new(ftd::executor::Resizing::FillContainer, None, vec![]),
+            height: ftd::executor::Value::new(ftd::executor::Resizing::FillContainer, None, vec![]),
             ..Default::default()
         },
     }
@@ -598,20 +591,20 @@ pub fn common_from_properties(
             line_number,
             "border-bottom-right-radius",
         )?,
-        horizontal_resizing: ftd::executor::Resizing::resizing_with_default(
+        width: ftd::executor::Resizing::resizing_with_default(
             properties,
             arguments,
             doc,
             line_number,
-            "horizontal-resizing",
+            "width",
             ftd::executor::Resizing::default(),
         )?,
-        vertical_resizing: ftd::executor::Resizing::resizing_with_default(
+        height: ftd::executor::Resizing::resizing_with_default(
             properties,
             arguments,
             doc,
             line_number,
-            "vertical-resizing",
+            "height",
             ftd::executor::Resizing::default(),
         )?,
         min_width: ftd::executor::Length::optional_length(
@@ -673,12 +666,19 @@ pub fn common_from_properties(
             line_number,
             "align-self",
         )?,
-        overflow: ftd::executor::OverFlow::optional_overflow(
+        overflow: ftd::executor::Overflow::optional_overflow(
             properties,
             arguments,
             doc,
             line_number,
             "overflow",
+        )?,
+        overflow_x: ftd::executor::OverflowX::optional_overflow(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "overflow-x",
         )?,
     })
 }
