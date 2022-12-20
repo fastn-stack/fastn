@@ -1,0 +1,14 @@
+-- ds.page: FTD Properties
+
+-- ds.h1: Styling Properties
+
+-- ds.h2: `overflow`
+
+-- ds.h3: Values
+
+- visible
+- hidden
+- scroll
+- auto
+
+[More Info](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow)
