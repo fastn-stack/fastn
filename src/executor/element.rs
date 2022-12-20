@@ -155,6 +155,7 @@ pub struct Common {
     pub data_id: String,
     pub line_number: usize,
     pub condition: Option<ftd::interpreter2::Expression>,
+    pub overflow: ftd::executor::Value<Option<ftd::executor::OverFlow>>,
 }
 
 pub fn default_column() -> Column {
@@ -671,6 +672,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "align-self",
+        )?,
+        overflow: ftd::executor::OverFlow::optional_overflow(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "overflow",
         )?,
     })
 }
