@@ -438,13 +438,8 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.vertical_resizing
-                        .to_owned()
-                        .map(|v| v.to_css_string())
-                        .value,
-                ),
-                self.vertical_resizing.to_owned(),
+                Some(self.height.to_owned().map(|v| v.to_css_string()).value),
+                self.height.to_owned(),
                 None,
                 doc_id,
             ),
