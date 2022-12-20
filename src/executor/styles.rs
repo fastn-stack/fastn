@@ -1003,7 +1003,9 @@ impl AlignSelf {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum OverFlow {
     Scroll,
-    Visible, // TODO: Add remaining
+    Visible,
+    Hidden,
+    Auto,
 }
 
 impl OverFlow {
@@ -1027,6 +1029,8 @@ impl OverFlow {
         match or_type_value.0.as_str() {
             ftd::interpreter2::FTD_OVERFLOW_SCROLL => Ok(OverFlow::Scroll),
             ftd::interpreter2::FTD_OVERFLOW_VISIBLE => Ok(OverFlow::Visible),
+            ftd::interpreter2::FTD_OVERFLOW_HIDDEN => Ok(OverFlow::Hidden),
+            ftd::interpreter2::FTD_OVERFLOW_AUTO => Ok(OverFlow::Auto),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.overflow`", t),
                 doc.name,
@@ -1062,6 +1066,8 @@ impl OverFlow {
         match self {
             OverFlow::Scroll => "scroll".to_string(),
             OverFlow::Visible => "visible".to_string(),
+            OverFlow::Hidden => "hidden".to_string(),
+            OverFlow::Auto => "auto".to_string(),
         }
     }
 }
