@@ -157,6 +157,7 @@ pub struct Common {
     pub condition: Option<ftd::interpreter2::Expression>,
     pub overflow: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_x: ftd::executor::Value<Option<ftd::executor::Overflow>>,
+    pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
 }
 
 pub fn default_column() -> Column {
@@ -679,6 +680,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "overflow-x",
+        )?,
+        overflow_y: ftd::executor::Overflow::optional_overflow(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "overflow-y",
         )?,
     })
 }

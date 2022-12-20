@@ -825,6 +825,12 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
+            "overflow-y",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_OVERFLOW)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "align-self",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_ALIGN_SELF)
                 .into_optional()
