@@ -508,7 +508,7 @@ window.node_change_main["0:main__display"] = function(data) {
 if(function(){
 return (resolve_reference("foo#num", data)>2);
 }()){
-document.querySelector(`[data-id="0:main"]`).style["display"] = "flex";
+document.querySelector(`[data-id="0:main"]`).style["display"] = "block";
 }
 else {document.querySelector(`[data-id="0:main"]`).style["display"] = "none";}
 }
@@ -528,7 +528,7 @@ window.node_change_main["2:main__display"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["display"] = "flex";
+document.querySelector(`[data-id="2:main"]`).style["display"] = "block";
 }
 else {document.querySelector(`[data-id="2:main"]`).style["display"] = "none";}
 }

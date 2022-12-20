@@ -56,7 +56,7 @@ impl<'a> DependencyGenerator<'a> {
             );
 
             if let Some(condition) = condition {
-                let pos_value = format!("{} = \"flex\";", key);
+                let pos_value = format!("{} = \"{}\";", key, self.node.display);
                 let neg_value = format!("{} = \"none\";", key);
                 expressions.push((Some(condition), pos_value));
                 expressions.push((None, neg_value));

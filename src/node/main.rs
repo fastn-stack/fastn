@@ -3,6 +3,7 @@ pub struct Node {
     pub classes: Vec<String>,
     pub events: Vec<Event>,
     pub node: String,
+    pub display: String,
     pub condition: Option<ftd::interpreter2::Expression>,
     pub attrs: ftd::Map<ftd::node::Value>,
     pub style: ftd::Map<ftd::node::Value>,
@@ -16,9 +17,15 @@ pub struct Node {
 pub type Event = ftd::executor::Event;
 
 impl Node {
-    fn from_common(node: &str, common: &ftd::executor::Common, doc_id: &str) -> Node {
+    fn from_common(
+        node: &str,
+        display: &str,
+        common: &ftd::executor::Common,
+        doc_id: &str,
+    ) -> Node {
         Node {
             node: s(node),
+            display: s(display),
             condition: common.condition.to_owned(),
             attrs: common.attrs(doc_id),
             style: common.style(doc_id, &mut []),
@@ -36,6 +43,7 @@ impl Node {
         common: &ftd::executor::Common,
         container: &ftd::executor::Container,
         doc_id: &str,
+        display: &str,
     ) -> Node {
         use itertools::Itertools;
 
@@ -63,6 +71,7 @@ impl Node {
             events: common.event.clone(),
             data_id: common.data_id.to_string(),
             line_number: common.line_number,
+            display: s(display),
         }
     }
 
@@ -84,6 +93,7 @@ impl ftd::executor::Element {
                 classes: vec![],
                 events: vec![],
                 node: "".to_string(),
+                display: "".to_string(),
                 condition: None,
                 attrs: Default::default(),
                 style: Default::default(),
@@ -101,7 +111,7 @@ impl ftd::executor::Row {
     pub fn to_node(&self, doc_id: &str) -> Node {
         use ftd::node::utils::CheckMap;
 
-        let mut n = Node::from_container(&self.common, &self.container, doc_id);
+        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex");
         if !self.common.is_not_visible {
             n.style
                 .insert(s("display"), ftd::node::Value::from_string("flex"));
@@ -182,7 +192,7 @@ impl ftd::executor::Column {
     pub fn to_node(&self, doc_id: &str) -> Node {
         use ftd::node::utils::CheckMap;
 
-        let mut n = Node::from_container(&self.common, &self.container, doc_id);
+        let mut n = Node::from_container(&self.common, &self.container, doc_id, "flex");
         if !self.common.is_not_visible {
             n.style
                 .insert(s("display"), ftd::node::Value::from_string("flex"));
@@ -263,7 +273,7 @@ impl ftd::executor::Text {
         use ftd::node::utils::CheckMap;
 
         let node = self.common.node();
-        let mut n = Node::from_common(node.as_str(), &self.common, doc_id);
+        let mut n = Node::from_common(node.as_str(), "block", &self.common, doc_id);
 
         n.style.check_and_insert(
             "text-align",
@@ -292,7 +302,7 @@ impl ftd::executor::Text {
 impl ftd::executor::Image {
     pub fn to_node(&self, doc_id: &str) -> Node {
         return if self.common.link.value.is_some() {
-            let mut n = Node::from_common("a", &self.common, doc_id);
+            let mut n = Node::from_common("a", "block", &self.common, doc_id);
             n.attrs.insert(
                 s("data-id"),
                 ftd::node::Value::from_string(format!("{}:parent", self.common.data_id).as_str()),
@@ -306,7 +316,7 @@ impl ftd::executor::Image {
         };
 
         fn update_img(image: &ftd::executor::Image, doc_id: &str) -> Node {
-            let mut n = Node::from_common("img", &image.common, doc_id);
+            let mut n = Node::from_common("img", "block", &image.common, doc_id);
             n.classes.extend(image.common.add_class());
             n.attrs.insert(
                 s("src"),
