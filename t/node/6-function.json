@@ -4,6 +4,7 @@
     "classes": [],
     "events": [],
     "node": "div",
+    "display": "flex",
     "condition": null,
     "attrs": {
       "data-id": {
@@ -86,6 +87,7 @@
         ],
         "events": [],
         "node": "div",
+        "display": "block",
         "condition": null,
         "attrs": {
           "data-id": {
@@ -320,6 +322,7 @@
         ],
         "events": [],
         "node": "div",
+        "display": "block",
         "condition": null,
         "attrs": {
           "data-id": {
@@ -532,6 +535,7 @@
         ],
         "events": [],
         "node": "div",
+        "display": "block",
         "condition": null,
         "attrs": {
           "data-id": {
