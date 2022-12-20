@@ -52,3 +52,13 @@ pub const FTD_OVERFLOW_SCROLL: &str = "ftd#overflow.scroll";
 pub const FTD_OVERFLOW_VISIBLE: &str = "ftd#overflow.visible";
 pub const FTD_OVERFLOW_HIDDEN: &str = "ftd#overflow.hidden";
 pub const FTD_OVERFLOW_AUTO: &str = "ftd#overflow.auto";
+
+// FTD overflow-x(todo docs link)
+pub const FTD_OVERFLOW_X: &str = "ftd#overflow-x";
+pub const FTD_OVERFLOW_X_SCROLL: &str = "ftd#overflow-x.scroll";
+pub const FTD_OVERFLOW_X_VISIBLE: &str = "ftd#overflow-x.visible";
+pub const FTD_OVERFLOW_X_HIDDEN: &str = "ftd#overflow-x.hidden";
+pub const FTD_OVERFLOW_X_AUTO: &str = "ftd#overflow-x.auto";
+
+// FTD cursor(todo docs link)
+// pub const FTD_CURSOR: &str = "ftd#cursor";
