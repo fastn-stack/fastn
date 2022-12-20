@@ -21,10 +21,7 @@ impl fpm::Package {
         // Issue 1: Need to remove / from the start of the name
         match tokio::fs::read(&file_path).await {
             Ok(content) => Ok(content),
-            Err(err) => {
-                // println!("fs:file-not-found => {}", file_path);
-                Err(Err(err)?)
-            }
+            Err(err) => Err(Err(err)?),
         }
     }
 
