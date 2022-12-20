@@ -1,7 +1,7 @@
 
 -- ftd.column:
 padding-vertical.px: 100
-horizontal-resizing: ftd.resizing.fill-container
+width: ftd.resizing.fill-container
 vertical-resizing: ftd.resizing.fill-container
 align-content: ftd.align.top-center
 spacing.px: 40
@@ -61,11 +61,11 @@ boolean $open: true
 
 -- ftd.column:
 border-width.px: 2
-horizontal-resizing.fixed.percent: 50
+width.fixed.percent: 50
 
 
 -- ftd.row:
-horizontal-resizing: ftd.resizing.fill-container
+width: ftd.resizing.fill-container
 border-color: black
 spacing-mode: ftd.spacing-mode.space-between
 padding.px: 20

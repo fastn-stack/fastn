@@ -20,8 +20,8 @@ ftd.resizing resize:
 ftd.align align:
 
 -- ftd.column:
-horizontal-resizing if { flag }: $foo.resize
-horizontal-resizing.fixed.px: $foo.px
+width if { flag }: $foo.resize
+width.fixed.px: $foo.px
 align-content: $foo.align
 
 -- ftd.text: Hello

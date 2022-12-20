@@ -142,7 +142,7 @@ pub struct Common {
     pub border_top_right_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_bottom_left_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub border_bottom_right_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
-    pub horizontal_resizing: ftd::executor::Value<ftd::executor::Resizing>,
+    pub width: ftd::executor::Value<ftd::executor::Resizing>,
     pub vertical_resizing: ftd::executor::Value<ftd::executor::Resizing>,
     pub min_width: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub max_width: ftd::executor::Value<Option<ftd::executor::Length>>,
@@ -162,11 +162,7 @@ pub fn default_column() -> Column {
     ftd::executor::Column {
         container: Default::default(),
         common: ftd::executor::Common {
-            horizontal_resizing: ftd::executor::Value::new(
-                ftd::executor::Resizing::FillContainer,
-                None,
-                vec![],
-            ),
+            width: ftd::executor::Value::new(ftd::executor::Resizing::FillContainer, None, vec![]),
             vertical_resizing: ftd::executor::Value::new(
                 ftd::executor::Resizing::FillContainer,
                 None,
@@ -598,12 +594,12 @@ pub fn common_from_properties(
             line_number,
             "border-bottom-right-radius",
         )?,
-        horizontal_resizing: ftd::executor::Resizing::resizing_with_default(
+        width: ftd::executor::Resizing::resizing_with_default(
             properties,
             arguments,
             doc,
             line_number,
-            "horizontal-resizing",
+            "width",
             ftd::executor::Resizing::default(),
         )?,
         vertical_resizing: ftd::executor::Resizing::resizing_with_default(

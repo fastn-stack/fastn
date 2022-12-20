@@ -362,13 +362,8 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
-                Some(
-                    self.horizontal_resizing
-                        .to_owned()
-                        .map(|v| v.to_css_string())
-                        .value,
-                ),
-                self.horizontal_resizing.to_owned(),
+                Some(self.width.to_owned().map(|v| v.to_css_string()).value),
+                self.width.to_owned(),
                 None,
                 doc_id,
             ),
