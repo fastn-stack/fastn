@@ -1088,7 +1088,7 @@ impl<'a> TDoc<'a> {
                             || v.name()
                                 .starts_with(format!("{}.{}.", doc_name, thing_name).as_str()))
                 })
-                .map(|v| v.to_owned())
+                .map(|v| (0, v.to_owned()))
                 .collect_vec();
             if !current_doc_contains_thing.is_empty() {
                 state
@@ -1106,7 +1106,7 @@ impl<'a> TDoc<'a> {
                         && (v.name().eq(&thing_name)
                             || v.name().starts_with(format!("{}.", thing_name).as_str()))
                 })
-                .map(|v| v.to_owned())
+                .map(|v| (0, v.to_owned()))
                 .collect_vec();
 
             if ast_for_thing.is_empty() {
@@ -1139,6 +1139,10 @@ impl<'a> TDoc<'a> {
         if doc_name.eq(self.name) {
             return self.err("not found", name, "search_thing", line_number);
         }
+
+        state
+            .pending_imports
+            .unique_insert(doc_name.to_string(), (name, line_number));
 
         Ok(ftd::interpreter2::StateWithThing::new_state(
             ftd::interpreter2::Interpreter::StuckOnImport {

@@ -4,7 +4,8 @@
 pub struct InterpreterState {
     pub id: String,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
-    pub to_process: Vec<(String, Vec<ftd::ast::AST>)>,
+    pub to_process: Vec<(String, Vec<(usize, ftd::ast::AST)>)>,
+    pub pending_imports: ftd::VecMap<(String, usize)>,
     pub parsed_libs: ftd::Map<ParsedDocument>,
     pub instructions: Vec<ftd::interpreter2::Component>,
 }
@@ -22,13 +23,25 @@ impl InterpreterState {
         self.to_process.last().map(|v| v.0.clone())
     }
 
+    pub fn increase_scan_count(&mut self) {
+        if let Some((_, asts)) = self.to_process.last_mut() {
+            if let Some((number_of_scan, _)) = asts.first_mut() {
+                *number_of_scan += 1;
+            }
+        }
+    }
+
     pub fn continue_(mut self) -> ftd::interpreter2::Result<Interpreter> {
+        if let Some(interpreter) = self.resolve_pending_imports()? {
+            return Ok(interpreter);
+        }
         if let Some((id, ast_to_process)) = self.to_process.last() {
             let parsed_document = self.parsed_libs.get(id).unwrap();
             let name = parsed_document.name.to_string();
             let aliases = parsed_document.doc_aliases.clone();
-            if let Some(ast) = ast_to_process.first() {
+            if let Some((number_of_scan, ast)) = ast_to_process.first() {
                 let ast = ast.clone();
+                self.increase_scan_count();
                 let state = &mut self;
 
                 let doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, state);
@@ -148,17 +161,82 @@ impl InterpreterState {
         }
     }
 
+    pub fn resolve_pending_imports(&mut self) -> ftd::interpreter2::Result<Option<Interpreter>> {
+        for module in self.pending_imports.value.keys().cloned() {
+            if self.parsed_libs.contains_key(module.as_str()) {
+                return Ok(Some(self.resolve_import_things(module.as_str())?));
+            }
+            return Ok(Some(ftd::interpreter2::Interpreter::StuckOnImport {
+                module: module.to_string(),
+                state: self.clone(),
+            }));
+        }
+
+        Ok(None)
+    }
+
+    pub fn resolve_import_things(
+        &mut self,
+        module: &str,
+    ) -> ftd::interpreter2::Result<Interpreter> {
+        use itertools::Itertools;
+        let document = self.parsed_libs.get(module).unwrap();
+        if let Some(thing_names) = self.pending_imports.value.get_mut(module) {
+            while let Some((name, line_number)) = thing_names.last() {
+                let (doc_name, thing_name, remaining) = // Todo: use remaining
+                    ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+                        name.as_str(),
+                        module,
+                        *line_number,
+                    );
+                let ast_for_thing = document
+                    .ast
+                    .iter()
+                    .filter(|v| {
+                        !v.is_component()
+                            && (v.name().eq(&thing_name)
+                                || v.name().starts_with(format!("{}.", thing_name).as_str()))
+                    })
+                    .map(|v| (0, v.to_owned()))
+                    .collect_vec();
+
+                if ast_for_thing.is_empty() {
+                    if document.foreign_variable.iter().any(|v| thing_name.eq(v)) {
+                        return Ok(ftd::interpreter2::Interpreter::StuckOnForeignVariable {
+                            module: doc_name,
+                            state: self.clone(),
+                            variable: remaining
+                                .map(|v| format!("{}.{}", thing_name, v))
+                                .unwrap_or(thing_name),
+                        });
+                    }
+
+                    return ftd::interpreter2::utils::e2(
+                        format!("`{}` not found", name),
+                        name,
+                        *line_number,
+                    );
+                }
+
+                self.to_process.push((doc_name, ast_for_thing));
+                thing_names.pop();
+            }
+        }
+
+        self.clone().continue_()
+    }
+
     pub fn continue_after_import(
         mut self,
-        id: &str,
+        module: &str,
         source: &str,
         foreign_variable: Vec<String>,
         foreign_function: Vec<String>,
     ) -> ftd::interpreter2::Result<Interpreter> {
-        let mut document = ParsedDocument::parse(id, source)?;
+        let mut document = ParsedDocument::parse(module, source)?;
         document.add_foreign_function(foreign_function);
         document.add_foreign_variable(foreign_variable);
-        self.parsed_libs.insert(id.to_string(), document);
+        self.parsed_libs.insert(module.to_string(), document);
         self.continue_()
     }
 
@@ -170,7 +248,7 @@ impl InterpreterState {
         let parsed_document = self.parsed_libs.get(id).unwrap();
         let name = parsed_document.name.to_string();
         let aliases = parsed_document.doc_aliases.clone();
-        let ast = ast_to_process.first().unwrap().clone(); // TODO: remove unwrap
+        let ast = ast_to_process.first().unwrap().clone().1; // TODO: remove unwrap
         let doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, &mut self);
         let variable_definition = ast.get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
@@ -251,7 +329,7 @@ pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter2::Result<
             .iter()
             .filter_map(|v| {
                 if v.is_component() {
-                    Some(v.to_owned())
+                    Some((0, v.to_owned()))
                 } else {
                     None
                 }

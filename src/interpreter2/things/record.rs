@@ -14,6 +14,13 @@ impl Record {
         }
     }
 
+    // pub(crate) fn scan_ast(
+    //     ast: ftd::ast::AST,
+    //     doc: &ftd::interpreter2::TDoc,
+    // ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
+    // {
+    // }
+
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
