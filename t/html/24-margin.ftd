@@ -1,4 +1,9 @@
 -- ftd.column:
+horizontal-resizing: ftd.resizing.fill-container
+vertical-resizing: ftd.resizing.fill-container
+background.solid: red
+
+-- ftd.column:
 horizontal-resizing.fixed.px: 20
 vertical-resizing.fixed.px: 20
 background.solid: yellow
@@ -23,6 +28,8 @@ vertical-resizing.fixed.px: 20
 background.solid: green
 border-width.px: 1
 margin.px: 100
+
+-- end: ftd.column
 
 -- end: ftd.column
 
