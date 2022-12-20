@@ -12,3 +12,32 @@
 - auto
 
 [More Info](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow)
+
+-- ds.h2: `cursor`
+
+-- ds.h3: Values
+
+- pointer
+- etc...
+
+-- ds.h2: `border-style`
+
+-- ds.h3: Values
+
+- dashed
+- solid
+- dotted
+- etc...
+
+-- ds.h2: `font-style`
+
+-- ds.h3: Values
+
+- normal
+- etc
+
+-- ds.h2: `font-weight`
+
+-- ds.h2: `font-size`
+
+-- ds.h2: `font-variant`
