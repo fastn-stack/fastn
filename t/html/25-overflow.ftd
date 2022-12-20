@@ -1,0 +1,20 @@
+-- boolean $flag: true
+
+
+
+-- ftd.text:
+horizontal-resizing.fixed.px: 100
+vertical-resizing.fixed.px: 100
+background.solid: yellow
+overflow if { flag }: ftd.overflow.scroll
+$on-click$: $toggle($a=$flag)
+
+The overflow property is specified as one or two keywords chosen from the list
+of values below. If two keywords are specified, the first applies to overflow-x
+and the second to overflow-y. Otherwise, both overflow-x and overflow-y are set
+to the same value.
+
+-- void toggle(a):
+boolean $a:
+
+a = !a
