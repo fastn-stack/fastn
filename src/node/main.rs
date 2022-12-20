@@ -387,6 +387,20 @@ impl ftd::executor::Common {
             ),
         );
 
+        // html and css name only
+        d.check_and_insert(
+            "overflow",
+            ftd::node::Value::from_executor_value(
+                self.overflow
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.overflow.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
         d.check_and_insert(
             "background-color",
             ftd::node::Value::from_executor_value(
