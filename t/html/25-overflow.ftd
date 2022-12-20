@@ -13,7 +13,7 @@ width: ftd.resizing.fill-container
 
 -- ftd.text:
 width.fixed.px: 100
-vertical-resizing.fixed.px: 100
+height.fixed.px: 100
 background.solid: yellow
 overflow if { flag }: ftd.overflow.scroll
 $on-click$: $toggle($a=$flag)
@@ -25,7 +25,7 @@ to the same value.
 
 -- ftd.text:
 width.fixed.px: 100
-vertical-resizing.fixed.px: 100
+height.fixed.px: 100
 background.solid: yellow
 overflow: ftd.overflow.visible
 
@@ -36,7 +36,7 @@ to the same value.
 
 -- ftd.text:
 width.fixed.px: 100
-vertical-resizing.fixed.px: 100
+height.fixed.px: 100
 background.solid: yellow
 overflow: ftd.overflow.hidden
 
@@ -48,7 +48,7 @@ to the same value.
 
 -- ftd.text:
 width.fixed.px: 100
-vertical-resizing.fixed.px: 100
+height.fixed.px: 100
 background.solid: yellow
 overflow: ftd.overflow.auto
 
