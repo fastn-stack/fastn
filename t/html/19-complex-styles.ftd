@@ -25,8 +25,8 @@ width.fixed.px: $foo.px
 align-content: $foo.align
 
 -- ftd.text: Hello
-vertical-resizing.fixed.px if { flag }: $foo.px
-vertical-resizing: $foo.resize
+height.fixed.px if { flag }: $foo.px
+height: $foo.resize
 
 -- ftd.text: World
 

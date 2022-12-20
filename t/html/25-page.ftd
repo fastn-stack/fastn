@@ -2,7 +2,7 @@
 -- ftd.column:
 padding-vertical.px: 100
 width: ftd.resizing.fill-container
-vertical-resizing: ftd.resizing.fill-container
+height: ftd.resizing.fill-container
 align-content: ftd.align.top-center
 spacing.px: 40
 
@@ -88,7 +88,7 @@ if: {!box.open}
 -- ftd.text:
 if: { box.open }
 padding.px: 20
-vertical-resizing: ftd.resizing.hug-content
+height: ftd.resizing.hug-content
 
 $box.body
 
