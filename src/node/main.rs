@@ -357,6 +357,8 @@ impl ftd::executor::Common {
             d.check_and_insert("display", ftd::node::Value::from_string("none"));
         }
 
+        d.check_and_insert("box-sizing", ftd::node::Value::from_string("border-box"));
+
         d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
@@ -713,6 +715,66 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "border-bottom-width",
             ftd::node::Value::from_executor_value(
+                Some(
+                    self.border_width
+                        .to_owned()
+                        .map(|v| v.to_css_string())
+                        .value,
+                ),
+                self.border_width.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-top-width",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.border_width
+                        .to_owned()
+                        .map(|v| v.to_css_string())
+                        .value,
+                ),
+                self.border_width.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-left-width",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.border_width
+                        .to_owned()
+                        .map(|v| v.to_css_string())
+                        .value,
+                ),
+                self.border_width.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-right-width",
+            ftd::node::Value::from_executor_value(
+                Some(
+                    self.border_width
+                        .to_owned()
+                        .map(|v| v.to_css_string())
+                        .value,
+                ),
+                self.border_width.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "border-bottom-width",
+            ftd::node::Value::from_executor_value(
                 self.border_bottom_width
                     .to_owned()
                     .map(|v| v.map(|v| v.to_css_string()))
@@ -809,21 +871,6 @@ impl ftd::executor::Common {
                     .map(|v| v.map(|v| v.to_css_string()))
                     .value,
                 self.border_right_color.to_owned(),
-                None,
-                doc_id,
-            ),
-        );
-
-        d.check_and_insert(
-            "border-width",
-            ftd::node::Value::from_executor_value(
-                Some(
-                    self.border_width
-                        .to_owned()
-                        .map(|v| v.to_css_string())
-                        .value,
-                ),
-                self.border_width.to_owned(),
                 None,
                 doc_id,
             ),
