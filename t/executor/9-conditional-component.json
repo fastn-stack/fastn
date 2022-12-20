@@ -674,6 +674,11 @@
                   }
                 },
                 "line_number": 0
+              },
+              "overflow": {
+                "value": null,
+                "line_number": null,
+                "properties": []
               }
             }
           }
@@ -883,7 +888,12 @@
       },
       "data_id": "",
       "line_number": 0,
-      "condition": null
+      "condition": null,
+      "overflow": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      }
     }
   }
 }
