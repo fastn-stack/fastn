@@ -81,10 +81,20 @@ pub struct VecMap<T> {
     value: Map<Vec<T>>,
 }
 
-impl<T> VecMap<T> {
+impl<T: std::cmp::PartialEq> VecMap<T> {
     pub fn insert(&mut self, key: String, value: T) {
         if let Some(v) = self.value.get_mut(&key) {
             v.push(value);
+        } else {
+            self.value.insert(key, vec![value]);
+        }
+    }
+
+    pub fn unique_insert(&mut self, key: String, value: T) {
+        if let Some(v) = self.value.get_mut(&key) {
+            if !v.contains(&value) {
+                v.push(value);
+            }
         } else {
             self.value.insert(key, vec![value]);
         }
