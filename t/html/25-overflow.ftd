@@ -6,6 +6,15 @@ boolean $a:
 a = !a
 
 -- ftd.row:
+align-content: ftd.align.center
+
+-- ftd.text: overflow
+
+-- end: ftd.row
+
+
+-- ftd.row:
+margin-bottom.px: 100
 padding.px: 40
 spacing.px: 40
 width: ftd.resizing.fill-container
@@ -59,3 +68,67 @@ to the same value.
 
 -- end: ftd.row
 
+-- boolean $flag: true
+
+
+-- ftd.row:
+align-content: ftd.align.center
+
+-- ftd.text: overflow-x
+
+-- end: ftd.row
+
+
+-- ftd.row:
+margin-top.px: 40
+padding.px: 40
+spacing.px: 40
+width: ftd.resizing.fill-container
+
+
+-- ftd.text:
+width.fixed.px: 100
+height.fixed.px: 100
+background.solid: yellow
+overflow-x: ftd.overflow-x.scroll
+
+The overflow property is specified as one or two keywords chosen from the list
+of values below. If two keywords are specified, the first applies to overflow-x
+and the second to overflow-y. Otherwise, both overflow-x and overflow-y are set
+to the same value.
+
+-- ftd.text:
+width.fixed.px: 100
+height.fixed.px: 100
+background.solid: yellow
+overflow-x: ftd.overflow-x.visible
+
+The overflow property is specified as one or two keywords chosen from the list
+of values below. If two keywords are specified, the first applies to overflow-x
+and the second to overflow-y. Otherwise, both overflow-x and overflow-y are set
+to the same value.
+
+-- ftd.text:
+width.fixed.px: 100
+height.fixed.px: 100
+background.solid: yellow
+overflow-x: ftd.overflow-x.hidden
+
+The overflow property is specified as one or two keywords chosen from the list
+of values below. If two keywords are specified, the first applies to overflow-x
+and the second to overflow-y. Otherwise, both overflow-x and overflow-y are set
+to the same value.
+
+
+-- ftd.text:
+width.fixed.px: 100
+height.fixed.px: 100
+background.solid: yellow
+overflow-x: ftd.overflow-x.auto
+
+The overflow property is specified as one or two keywords chosen from the list
+of values below. If two keywords are specified, the first applies to overflow-x
+and the second to overflow-y. Otherwise, both overflow-x and overflow-y are set
+to the same value.
+
+-- end: ftd.row
