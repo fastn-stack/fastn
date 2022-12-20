@@ -320,6 +320,26 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         ),
                         0,
                     )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_OVERFLOW_HIDDEN,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string("hidden")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_OVERFLOW_AUTO,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string("auto")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
                 ],
                 line_number: 0,
             }),

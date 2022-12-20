@@ -50,4 +50,5 @@ pub const FTD_TEXT_ALIGN_JUSTIFY: &str = "ftd#text-align.justify";
 pub const FTD_OVERFLOW: &str = "ftd#overflow";
 pub const FTD_OVERFLOW_SCROLL: &str = "ftd#overflow.scroll";
 pub const FTD_OVERFLOW_VISIBLE: &str = "ftd#overflow.visible";
-// pub const FTD_OVERFLOW: &str = "ftd#overflow";
+pub const FTD_OVERFLOW_HIDDEN: &str = "ftd#overflow.hidden";
+pub const FTD_OVERFLOW_AUTO: &str = "ftd#overflow.auto";
