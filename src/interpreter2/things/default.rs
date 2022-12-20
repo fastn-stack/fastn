@@ -867,7 +867,7 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
-            "horizontal-resizing",
+            "width",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),

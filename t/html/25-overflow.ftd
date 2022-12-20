@@ -8,11 +8,11 @@ a = !a
 -- ftd.row:
 padding.px: 40
 spacing.px: 40
-horizontal-resizing: ftd.resizing.fill-container
+width: ftd.resizing.fill-container
 
 
 -- ftd.text:
-horizontal-resizing.fixed.px: 100
+width.fixed.px: 100
 vertical-resizing.fixed.px: 100
 background.solid: yellow
 overflow if { flag }: ftd.overflow.scroll
@@ -24,7 +24,7 @@ and the second to overflow-y. Otherwise, both overflow-x and overflow-y are set
 to the same value.
 
 -- ftd.text:
-horizontal-resizing.fixed.px: 100
+width.fixed.px: 100
 vertical-resizing.fixed.px: 100
 background.solid: yellow
 overflow: ftd.overflow.visible
@@ -35,7 +35,7 @@ and the second to overflow-y. Otherwise, both overflow-x and overflow-y are set
 to the same value.
 
 -- ftd.text:
-horizontal-resizing.fixed.px: 100
+width.fixed.px: 100
 vertical-resizing.fixed.px: 100
 background.solid: yellow
 overflow: ftd.overflow.hidden
@@ -47,7 +47,7 @@ to the same value.
 
 
 -- ftd.text:
-horizontal-resizing.fixed.px: 100
+width.fixed.px: 100
 vertical-resizing.fixed.px: 100
 background.solid: yellow
 overflow: ftd.overflow.auto
