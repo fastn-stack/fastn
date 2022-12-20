@@ -545,6 +545,108 @@ impl ftd::executor::Common {
         );
 
         d.check_and_insert(
+            "margin",
+            ftd::node::Value::from_executor_value(
+                self.margin.value.as_ref().map(|v| v.to_css_string()),
+                self.margin.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "margin-left",
+            ftd::node::Value::from_executor_value(
+                self.margin_horizontal
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.margin_horizontal.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "margin-right",
+            ftd::node::Value::from_executor_value(
+                self.margin_horizontal
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.margin_horizontal.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "margin-top",
+            ftd::node::Value::from_executor_value(
+                self.margin_vertical
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.margin_vertical.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "margin-bottom",
+            ftd::node::Value::from_executor_value(
+                self.margin_vertical
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_css_string()),
+                self.margin_vertical.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "margin-top",
+            ftd::node::Value::from_executor_value(
+                self.margin_top.value.as_ref().map(|v| v.to_css_string()),
+                self.margin_top.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "margin-bottom",
+            ftd::node::Value::from_executor_value(
+                self.margin_bottom.value.as_ref().map(|v| v.to_css_string()),
+                self.margin_bottom.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "margin-left",
+            ftd::node::Value::from_executor_value(
+                self.margin_left.value.as_ref().map(|v| v.to_css_string()),
+                self.margin_left.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "margin-right",
+            ftd::node::Value::from_executor_value(
+                self.margin_right.value.as_ref().map(|v| v.to_css_string()),
+                self.margin_right.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "min-width",
             ftd::node::Value::from_executor_value(
                 self.min_width.value.as_ref().map(|v| v.to_css_string()),

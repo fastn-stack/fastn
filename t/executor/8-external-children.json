@@ -392,6 +392,41 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "margin": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_left": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_right": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_top": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_bottom": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_horizontal": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_vertical": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "border_width": {
                         "value": {
                           "Px": 0
@@ -620,6 +655,41 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "margin": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "margin_left": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "margin_right": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "margin_top": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "margin_bottom": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "margin_horizontal": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
+                              "margin_vertical": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "border_width": {
                                 "value": {
                                   "Px": 0
@@ -790,6 +860,41 @@
                         "properties": []
                       },
                       "padding_vertical": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_left": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_right": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_top": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_bottom": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_horizontal": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "margin_vertical": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -968,6 +1073,41 @@
                 "line_number": null,
                 "properties": []
               },
+              "margin": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "margin_left": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "margin_right": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "margin_top": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "margin_bottom": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "margin_horizontal": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "margin_vertical": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "border_width": {
                 "value": {
                   "Px": 0
@@ -1138,6 +1278,41 @@
         "properties": []
       },
       "padding_vertical": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_left": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_right": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_top": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_bottom": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_horizontal": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "margin_vertical": {
         "value": null,
         "line_number": null,
         "properties": []

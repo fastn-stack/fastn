@@ -866,6 +866,48 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
+            "margin",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "margin-vertical",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "margin-horizontal",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "margin-left",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "margin-right",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "margin-top",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "margin-bottom",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "border-width",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
                 .into_optional()

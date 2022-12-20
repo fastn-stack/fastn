@@ -1,0 +1,28 @@
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+background.solid: yellow
+border-width.px: 1
+margin-horizontal.px: 60
+
+-- end: ftd.column
+
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+background.solid: yellow
+border-width.px: 1
+margin-top.px: 40
+
+-- end: ftd.column
+
+-- ftd.column:
+horizontal-resizing.fixed.px: 20
+vertical-resizing.fixed.px: 20
+background.solid: green
+border-width.px: 1
+margin.px: 100
+
+-- end: ftd.column
+
