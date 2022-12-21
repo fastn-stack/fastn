@@ -11,6 +11,33 @@
 - scroll
 - auto
 
+-- ds.h3: Values
+
+- visible
+- hidden
+- scroll
+- auto
+
+
+-- ds.h2: `overflow-x`
+
+-- ds.h3: Values
+
+- auto
+- hidden
+- scroll
+- visible
+
+-- ds.h2: `overflow-y`
+
+-- ds.h3: Values
+
+- auto
+- hidden
+- scroll
+- visible
+
+
 [More Info](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow)
 
 -- ds.h2: `cursor`
