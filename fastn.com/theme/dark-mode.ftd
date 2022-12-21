@@ -73,12 +73,12 @@ lang: ftd
 
 \-- ftd.text highlight: $title
 caption title:
-color if $ftd.dark-mode: yellow
-background-color if not $ftd.dark-mode: yellow
+color if { ftd.dark-mode }: yellow
+background-color if { !ftd.dark-mode }: yellow
 
 -- ft.markdown:
 
-We have used `$ftd.dark-mode` to change color and background colors here.
+We have used `ftd.dark-mode` to change color and background colors here.
 
 
 -- ft.h1: `fpm.follow-system-dark-mode` and `fpm.system-dark-mode`

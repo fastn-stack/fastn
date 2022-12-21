@@ -40,7 +40,7 @@ company: FifthTry, Inc
 industry: Developer Tools
 start-date: 2020-August
 
-\--- resume.role: CEO
+\-- resume.role: CEO
 start-date: 2020-August
 
 -- ft.markdown:
