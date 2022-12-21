@@ -429,7 +429,7 @@ status: Outdated
 package-url: https://fifthtry.github.io/bling
 package-name: fifthtry.github.io/bling
 github-url: https://github.com/FifthTry/bling/blob
-package-type: BL
+package-type: CL
 licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Featured
@@ -473,7 +473,7 @@ status: Featured
 package-url: https://fifthtry.github.io/typography
 package-name: fifthtry.github.io/typography
 github-url: https://github.com/FifthTry/typography
-package-type: TF
+package-type: CL
 licence-url: https://github.com/FifthTry/typography/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Documented
@@ -484,7 +484,7 @@ status: Documented
 package-url: https://fifthtry.github.io/header
 package-name: fifthtry.github.io/header
 github-url: https://github.com/FifthTry/header
-package-type: H
+package-type: CL
 licence-url: https://github.com/FifthTry/header/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Documented
@@ -495,7 +495,7 @@ status: Documented
 package-url: https://fifthtry.github.io/admonitions
 package-name: fifthtry.github.io/admonitions
 github-url: https://github.com/FifthTry/admonitions
-package-type: cbox
+package-type: CL
 licence-url: https://github.com/FifthTry/admonitions/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Documented
@@ -506,7 +506,7 @@ status: Documented
 package-url: https://fifthtry.github.io/code-block
 package-name: fifthtry.github.io/code-block
 github-url: https://github.com/FifthTry/code-block
-package-type: CB
+package-type: CL
 licence-url: https://github.com/FifthTry/code-block/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Documented
@@ -517,7 +517,7 @@ status: Documented
 package-url: https://fifthtry.github.io/language-switcher
 package-name: fifthtry.github.io/language-switcher
 github-url: https://github.com/FifthTry/language-switcher
-package-type: LS
+package-type: CL
 licence-url: https://github.com/FifthTry/language-switcher/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Documented
@@ -594,7 +594,7 @@ status: Documented
 package-url: https://fifthtry.github.io/dark-mode-switcher
 package-name: fifthtry.github.io/dark-mode-switcher
 github-url: https://github.com/FifthTry/dark-mode-switcher
-package-type: DMS
+package-type: CL
 licence-url: https://github.com/FifthTry/dark-mode-switcher/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Documented
@@ -605,7 +605,7 @@ status: Documented
 package-url: https://fifthtry.github.io/button
 package-name: fifthtry.github.io/button
 github-url: https://github.com/FifthTry/button
-package-type: BT
+package-type: CL
 licence-url: https://github.com/FifthTry/button/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Documented
@@ -616,7 +616,7 @@ status: Documented
 package-url: https://fifthtry.github.io/octicon
 package-name: fifthtry.github.io/octicon
 github-url: https://github.com/FifthTry/octicon
-package-type: IC
+package-type: CL
 licence-url: https://github.com/FifthTry/octicon/blob/main/LICENSE
 licence-name: Apache-2.0
 status: Documented
@@ -726,7 +726,7 @@ status: In Progress
 package-url: https://fifthtry.github.io/simple-blog
 package-name: fifthtry.github.io/simple-blog
 github-url: https://github.com/FifthTry/simple-blog
-package-type: Blog
+package-type: CL
 licence-url: https://github.com/FifthTry/simple-blog/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
@@ -737,7 +737,7 @@ status: Outdated
 package-url: https://fifthtry.github.io/blog-components
 package-name: fifthtry.github.io/blog-components
 github-url: https://github.com/FifthTry/blog-components
-package-type: Blog
+package-type: CL
 licence-url: https://github.com/FifthTry/blog-components/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
@@ -748,7 +748,7 @@ status: Outdated
 package-url: https://fifthtry.github.io/Rocky-Blog-Theme
 package-name: fifthtry.github.io/Rocky-Blog-Theme
 github-url: https://github.com/FifthTry/Rocky-Blog-Theme
-package-type: Blog
+package-type: DS
 licence-url: https://github.com/FifthTry/Rocky-Blog-Theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
@@ -759,7 +759,7 @@ status: Outdated
 package-url: https://fifthtry.github.io/Rocky-Blog-Template
 package-name: fifthtry.github.io/Rocky-Blog-Template
 github-url: https://github.com/FifthTry/Rocky-Blog-Template
-package-type: Blog
+package-type: CL
 licence-url: https://github.com/FifthTry/Rocky-Blog-Template/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
@@ -803,7 +803,7 @@ status: Outdated
 package-url: https://fifthtry.github.io/footer
 package-name: fifthtry.github.io/footer
 github-url: https://github.com/FifthTry/footer
-package-type: Footer
+package-type: CL
 licence-url: https://github.com/FifthTry/footer/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: In Progress
@@ -814,7 +814,7 @@ status: In Progress
 package-url: https://fifthtry.github.io/ForestTheme
 package-name: fifthtry.github.io/ForestTheme
 github-url: https://github.com/FifthTry/ForestTheme
-package-type: FT
+package-type: CL
 licence-url: https://github.com/FifthTry/ForestTheme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Documented
@@ -825,7 +825,7 @@ status: Documented
 package-url: https://fifthtry.github.io/Docusaurus-theme
 package-name: fifthtry.github.io/Docusaurus-theme
 github-url: https://github.com/FifthTry/Docusaurus-theme
-package-type: DT
+package-type: CL
 licence-url: https://github.com/FifthTry/Docusaurus-theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
@@ -836,7 +836,7 @@ status: Outdated
 package-url: https://fifthtry.github.io/blog-theme
 package-name: fifthtry.github.io/blog-theme
 github-url: https://github.com/FifthTry/blog-theme
-package-type: BT
+package-type: DS
 licence-url: https://github.com/FifthTry/blog-theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
@@ -847,7 +847,7 @@ status: Outdated
 package-url: https://fifthtry.github.io/Green-theme
 package-name: fifthtry.github.io/Green-theme
 github-url: https://github.com/FifthTry/Green-theme
-package-type: GT
+package-type: DS
 licence-url: https://github.com/FifthTry/Green-theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
@@ -858,7 +858,7 @@ status: Outdated
 package-url: https://fifthtry.github.io/Jupiter-theme
 package-name: fifthtry.github.io/Jupiter-theme
 github-url: https://github.com/FifthTry/Jupiter-theme
-package-type: JT
+package-type: DS
 licence-url: https://github.com/FifthTry/Jupiter-theme/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
@@ -935,7 +935,7 @@ status: Documented
 package-url: https://fifthtry.github.io/texty-ps
 package-name: fifthtry.github.io/texty-ps
 github-url: https://github.com/FifthTry/texty-ps
-package-type: Personal Site
+package-type: CL
 licence-url: https://github.com/FifthTry/texty-ps/blob/main/LICENSE
 licence-name: BSD 3-Clause
 status: Coded
@@ -946,7 +946,7 @@ status: Coded
 package-url: https://fifthtry.github.io/jony-ps
 package-name: fifthtry.github.io/jony-ps
 github-url: https://github.com/FifthTry/jony-ps
-package-type: Personal Site
+package-type: CL
 licence-url: https://github.com/FifthTry/jony-ps/blob/main/LICENSE
 licence-name: BSD 3-Clause
 status: Coded
@@ -1045,7 +1045,7 @@ status: Documented
 package-url: https://fifthtry.github.io/package-doc
 package-name: fifthtry.github.io/package-doc
 github-url: https://github.com/FifthTry/package-doc
-package-type: PD
+package-type: CL
 licence-url: https://github.com/FifthTry/package-doc/blob/main/LICENSE
 licence-name: BSD 2-Clause
 status: Documented
@@ -1056,7 +1056,7 @@ status: Documented
 package-url: https://github.com/FifthTry/demo-day
 package-name: https://github.com/FifthTry/demo-day
 github-url: https://github.com/FifthTry/demo-day
-package-type: DD
+package-type: CL
 licence-url: https://github.com/FifthTry/demo-day/blob/main/LICENSE
 licence-name: BSD 3-Clause
 status: Documented
@@ -1067,7 +1067,7 @@ status: Documented
 package-url: https://fifthtry.github.io/subscription-app
 package-name: fifthtry.github.io/subscription-app
 github-url: https://github.com/FifthTry/subscription-app
-package-type: SA
+package-type: CL
 licence-url: https://github.com/FifthTry/subscription-app/blob/main/LICENSE
 licence-name: BSD 3-Clause
 status: Documented
@@ -1079,7 +1079,7 @@ helps your FTD website users to subscribe.
 package-url: https://fifthtry.github.io/app-switcher
 package-name: fifthtry.github.io/app-switcher
 github-url: https://github.com/FifthTry/app-switcher
-package-type: AS
+package-type: CL
 licence-url: https://github.com/FifthTry/app-switcher/blob/main/LICENSE
 licence-name: BSD 3-Clause
 status: Documented
@@ -1091,7 +1091,7 @@ switch between apps of FTD web-site.
 package-url: https://fifthtry.github.io/workshop-page
 package-name: fifthtry.github.io/workshop-page
 github-url: https://github.com/FifthTry/workshop-page
-package-type: WS
+package-type: CL
 licence-url: https://github.com/FifthTry/workshop-page/blob/main/LICENSE
 licence-name: BSD 3-Clause
 status: Documented
@@ -1103,7 +1103,7 @@ workshop workbook.
 package-url: https://fifthtry.github.io/event
 package-name: fifthtry.github.io/event
 github-url: https://github.com/FifthTry/event
-package-type: E
+package-type: CL
 licence-url: https://github.com/FifthTry/event/blob/main/LICENSE
 licence-name: BSD 3-Clause
 status: Documented
@@ -1114,7 +1114,7 @@ status: Documented
 package-url: https://fifthtry.github.io/key-value-table
 package-name: fifthtry.github.io/key-value-table
 github-url: https://github.com/FifthTry/key-value-table
-package-type: KVT
+package-type: CL
 licence-url: https://github.com/FifthTry/key-value-table/blob/main/LICENSE
 licence-name: BSD 3-Clause
 status: Documented
@@ -1125,7 +1125,7 @@ status: Documented
 package-url: https://fifthtry.github.io/toc
 package-name: fifthtry.github.io/toc
 github-url: https://github.com/FifthTry/toc
-package-type: TOC
+package-type: CL
 licence-url: https://github.com/FifthTry/toc/blob/main/LICENSE
 licence-name: BSD 2-Clause
 status: Documented
