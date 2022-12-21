@@ -892,8 +892,8 @@ package-url: https://fifthtry.github.io/dash-dash-cs
 package-name: fifthtry.github.io/dash-dash-cs
 github-url: https://github.com/FifthTry/dash-dash-cs
 package-type: CS
-licence-url: 
-licence-name:
+licence-url: https://github.com/FifthTry/dash-dash-cs/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Documented
 
 Color scheme for `dash-dash-cs`.
@@ -903,8 +903,8 @@ package-url: https://fifthtry.github.io/spider-book-cs
 package-name: fifthtry.github.io/spider-book-cs
 github-url: https://github.com/FifthTry/spider-book-cs
 package-type: CS
-licence-url: 
-licence-name:
+licence-url: https://github.com/FifthTry/spider-book-cs/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Documented
 
 `spider-book-cs` Chrome book Color Scheme is a light color scheme used for chrome-book-ds.
@@ -936,8 +936,8 @@ package-url: https://fifthtry.github.io/texty-ps
 package-name: fifthtry.github.io/texty-ps
 github-url: https://github.com/FifthTry/texty-ps
 package-type: Personal Site
-licence-url: 
-licence-name: 
+licence-url: https://github.com/FifthTry/texty-ps/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Coded
 
 `texty-ps` is a personal site help you to create your personal websites.
@@ -947,8 +947,8 @@ package-url: https://fifthtry.github.io/jony-ps
 package-name: fifthtry.github.io/jony-ps
 github-url: https://github.com/FifthTry/jony-ps
 package-type: Personal Site
-licence-url:
-licence-name:
+licence-url: https://github.com/FifthTry/jony-ps/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Coded
 
 `jony-ps` is a personal site help you to create your personal websites.
@@ -1024,8 +1024,8 @@ package-url: https://fifthtry.github.io/form
 package-name: fifthtry.github.io/form
 github-url: https://github.com/FifthTry/form
 package-type: Form
-licence-url: 
-licence-name: 
+licence-url: https://github.com/FifthTry/form/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Documented
 
 `form` can be used on your web-page as a form component.
@@ -1035,8 +1035,8 @@ package-url: https://fifthtry.github.io/cards
 package-name: fifthtry.github.io/cards
 github-url: https://github.com/FifthTry/cards
 package-type: Form
-licence-url: 
-licence-name: 
+licence-url: https://github.com/FifthTry/cards/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Documented
 
 `cards` can be used on your web-page as a cards component.
@@ -1057,8 +1057,8 @@ package-url: https://github.com/FifthTry/demo-day
 package-name: https://github.com/FifthTry/demo-day
 github-url: https://github.com/FifthTry/demo-day
 package-type: DD
-licence-url: 
-licence-name:
+licence-url: https://github.com/FifthTry/demo-day/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Documented
 
 `DD` stands for `demo-day`. Template for Demo Day.
@@ -1068,8 +1068,8 @@ package-url: https://fifthtry.github.io/subscription-app
 package-name: fifthtry.github.io/subscription-app
 github-url: https://github.com/FifthTry/subscription-app
 package-type: SA
-licence-url: 
-licence-name:
+licence-url: https://github.com/FifthTry/subscription-app/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Documented
 
 `SA` stands for `subscription-app`. This FTD subscription app template 
@@ -1080,8 +1080,8 @@ package-url: https://fifthtry.github.io/app-switcher
 package-name: fifthtry.github.io/app-switcher
 github-url: https://github.com/FifthTry/app-switcher
 package-type: AS
-licence-url: 
-licence-name:
+licence-url: https://github.com/FifthTry/app-switcher/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Documented
 
 `AS` stands for `app-switcher`. App Switcher FTD component is used to 
@@ -1092,8 +1092,8 @@ package-url: https://fifthtry.github.io/workshop-page
 package-name: fifthtry.github.io/workshop-page
 github-url: https://github.com/FifthTry/workshop-page
 package-type: WS
-licence-url: 
-licence-name:
+licence-url: https://github.com/FifthTry/workshop-page/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Documented
 
 `WS` stands for `workshop-page`. Workshop page is -- ws component for 
@@ -1115,8 +1115,8 @@ package-url: https://fifthtry.github.io/key-value-table
 package-name: fifthtry.github.io/key-value-table
 github-url: https://github.com/FifthTry/key-value-table
 package-type: KVT
-licence-url: 
-licence-name: 
+licence-url: https://github.com/FifthTry/key-value-table/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: Documented
 
 `key-value-table` to be called as `kvt` is a data table with tooltip feature.
@@ -1137,8 +1137,8 @@ package-url: https://fifthtry.github.io/resume
 package-name: fifthtry.github.io/resume
 github-url: https://github.com/FifthTry/flat-resume
 package-type: Resume
-licence-url: 
-licence-name: 
+licence-url: https://github.com/FifthTry/flat-resume/blob/main/LICENSE
+licence-name: BSD 3-Clause
 status: In Progress
 
 `flat-resume` is a resume theme. `resume` template is required as default resume data template.
