@@ -134,6 +134,26 @@ pub struct UserGroupTemp {
     pub discord_event: Vec<String>,
     #[serde(rename = "-discord-event")]
     pub excluded_discord_event: Vec<String>,
+    #[serde(rename = "twitter-liking")]
+    pub twitter_liking: Vec<String>,
+    #[serde(rename = "-twitter-liking")]
+    pub excluded_twitter_liking: Vec<String>,
+    #[serde(rename = "twitter-followers")]
+    pub twitter_followers: Vec<String>,
+    #[serde(rename = "-twitter-followers")]
+    pub excluded_twitter_followers: Vec<String>,
+    #[serde(rename = "twitter-follows")]
+    pub twitter_follows: Vec<String>,
+    #[serde(rename = "-twitter-follows")]
+    pub excluded_twitter_follows: Vec<String>,
+    #[serde(rename = "twitter-space")]
+    pub twitter_space: Vec<String>,
+    #[serde(rename = "-twitter-space")]
+    pub excluded_twitter_space: Vec<String>,
+    #[serde(rename = "twitter-retweet")]
+    pub twitter_retweet: Vec<String>,
+    #[serde(rename = "-twitter-retweet")]
+    pub excluded_twitter_retweet: Vec<String>,
 }
 
 #[derive(Debug, serde::Serialize)]
@@ -372,6 +392,34 @@ impl UserGroupTemp {
             "-discord-event",
             self.excluded_discord_event,
         ));
+        identities.extend(to_user_identity("twitter-liking", self.twitter_liking));
+        excluded_identities.extend(to_user_identity(
+            "-twitter-liking",
+            self.excluded_twitter_liking,
+        ));
+        identities.extend(to_user_identity(
+            "twitter-followers",
+            self.twitter_followers,
+        ));
+        excluded_identities.extend(to_user_identity(
+            "-twitter-followers",
+            self.excluded_twitter_followers,
+        ));
+        identities.extend(to_user_identity("twitter-follows", self.twitter_follows));
+        excluded_identities.extend(to_user_identity(
+            "-twitter-follows",
+            self.excluded_twitter_follows,
+        ));
+        identities.extend(to_user_identity("twitter-space", self.twitter_space));
+        excluded_identities.extend(to_user_identity(
+            "-twitter-space",
+            self.excluded_twitter_space,
+        ));
+        identities.extend(to_user_identity("twitter-retweet", self.twitter_retweet));
+        excluded_identities.extend(to_user_identity(
+            "-twitter-retweet",
+            self.excluded_twitter_retweet,
+        ));
 
         Ok(UserGroup {
             id: self.id,
@@ -496,7 +544,7 @@ pub async fn access_identities(
     is_read: bool,
 ) -> fpm::Result<Vec<UserIdentity>> {
     let sitemap_identities = get_identities(config, document_name, is_read)?;
-    dbg!(&sitemap_identities);
+    //dbg!(&sitemap_identities);
     // github-team: fpm-lang/ftd
     // github-starred: fpm-lang/ftd
     // discord-server: abrark.com

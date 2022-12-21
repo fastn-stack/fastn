@@ -8,12 +8,12 @@ pub async fn matched_identities(
     _ud: UserDetail,
     _identities: &[fpm::user_group::UserIdentity],
 ) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
-    /*let gmail_identities = identities
+    /*let digitalocean_identities = identities
         .iter()
-        .filter(|identity| identity.key.starts_with("gmail"))
+        .filter(|identity| identity.key.starts_with("digitalocean"))
         .collect::<Vec<&fpm::user_group::UserIdentity>>();
 
-    if gmail_identities.is_empty() {
+    if digitalocean_identities.is_empty() {
         return Ok(vec![]);
     }*/
 

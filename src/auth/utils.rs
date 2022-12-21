@@ -44,3 +44,13 @@ pub async fn decrypt_str(encrypted_str: &String) -> Result<String, MagicCryptErr
     let mc_obj = magic_crypt::new_magic_crypt!(&secret_key, 256);
     mc_obj.decrypt_base64_to_string(encrypted_str)
 }
+pub fn is_login(req: &actix_web::HttpRequest) -> bool {
+    let mut found_cookie = false;
+    for auth_provider in fpm::auth::AuthProviders::AUTH_ITER.iter() {
+        dbg!(&auth_provider);
+        if req.cookie(auth_provider.as_str()).is_some() {
+            found_cookie = true;
+        }
+    }
+    found_cookie
+}
