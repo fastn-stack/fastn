@@ -186,7 +186,13 @@ impl ExpressionGenerator {
             return format!("{}{}", operator.trim(), result.join(" "));
         }
 
-        let value = node.operator().to_string();
+        let value = if self.is_null(node.operator()) {
+            "null".to_string()
+        } else {
+            node.operator().to_string()
+        };
+
+        dbg!(&node.operator(), &value);
         format!(
             "{}{}",
             value,
@@ -224,6 +230,15 @@ impl ExpressionGenerator {
 
     pub fn is_tuple(&self, operator: &ftd::evalexpr::Operator) -> bool {
         matches!(operator, ftd::evalexpr::Operator::Tuple)
+    }
+
+    pub fn is_null(&self, operator: &ftd::evalexpr::Operator) -> bool {
+        matches!(
+            operator,
+            ftd::evalexpr::Operator::Const {
+                value: ftd::evalexpr::Value::Empty,
+            }
+        )
     }
 
     pub fn function_name(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {

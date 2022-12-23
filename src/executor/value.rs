@@ -123,6 +123,7 @@ pub(crate) fn find_value_by_argument(
     Ok(ftd::executor::Value::new(value, line_number, properties))
 }
 
+#[allow(dead_code)]
 pub fn string(
     key: &str,
     properties: &[ftd::interpreter2::Property],

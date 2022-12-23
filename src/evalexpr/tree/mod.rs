@@ -438,6 +438,11 @@ impl ExprNode {
         &self.children
     }
 
+    /// Returns the children of this node as a mutable slice.
+    pub fn mut_children(&mut self) -> &mut [ExprNode] {
+        &mut self.children
+    }
+
     /// Returns the operator associated with this node.
     pub fn operator(&self) -> &Operator {
         &self.operator
