@@ -192,7 +192,6 @@ impl ExpressionGenerator {
             node.operator().to_string()
         };
 
-        dbg!(&node.operator(), &value);
         format!(
             "{}{}",
             value,

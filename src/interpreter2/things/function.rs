@@ -243,8 +243,8 @@ impl FunctionCall {
     pub(crate) fn scan_string(
         value: &str,
         doc: &mut ftd::interpreter2::TDoc,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
         line_number: usize,
     ) -> ftd::interpreter2::Result<()> {
         let expression = value
@@ -261,12 +261,10 @@ impl FunctionCall {
         doc.scan_initial_thing(function_name.as_str(), line_number)?;
 
         for (_, value) in properties.iter() {
-            ftd::interpreter2::PropertyValue::scan_ast_value_with_argument(
-                ftd::ast::VariableValue::String {
-                    value: value.to_string(),
-                    line_number,
-                },
+            ftd::interpreter2::PropertyValue::scan_string_with_argument(
+                value,
                 doc,
+                line_number,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
             )?;

@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> String {
     let name = name
         .trim_start_matches(ftd::interpreter2::utils::CLONE)
@@ -183,6 +185,36 @@ pub(crate) fn get_special_variable() -> Vec<&'static str> {
         "CHILDREN-COUNT-MINUS-ONE",
         "PARENT",
     ]
+}
+
+pub fn is_argument_in_component_or_loop<'a>(
+    name: &'a str,
+    doc_id: &'a str,
+    component_definition_name_with_arguments: Option<(&'a str, &'a [String])>,
+    loop_object_name_and_kind: &'a Option<String>,
+) -> bool {
+    if let Some((component_name, arguments)) = component_definition_name_with_arguments {
+        if let Some(referenced_argument) = name
+            .strip_prefix(format!("{}.", component_name).as_str())
+            .or_else(|| name.strip_prefix(format!("{}#{}.", doc_id, component_name).as_str()))
+        {
+            let (p1, _p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
+            if arguments.iter().contains(&p1) {
+                return true;
+            }
+        }
+    }
+    if let Some(loop_name) = loop_object_name_and_kind {
+        if name.starts_with(format!("{}.", loop_name).as_str())
+            || name.starts_with(format!("{}#{}.", doc_id, loop_name).as_str())
+            || name.eq(loop_name)
+            || name.eq(format!("{}#{}", doc_id, loop_name).as_str())
+        {
+            return true;
+        }
+    }
+
+    false
 }
 
 pub fn get_argument_for_reference_and_remaining<'a>(

@@ -31,15 +31,7 @@ impl ComponentDefinition {
         let arguments = component_definition
             .arguments
             .iter()
-            .map(|v| {
-                Argument::new(
-                    v.name.as_str(),
-                    ftd::interpreter2::KindData::new(ftd::interpreter2::Kind::string()),
-                    false,
-                    None,
-                    v.line_number,
-                )
-            })
+            .map(|v| v.name.to_string())
             .collect_vec();
 
         Argument::scan_ast_fields(component_definition.arguments, doc, &Default::default())?;
@@ -168,11 +160,12 @@ impl Component {
 
     pub(crate) fn scan_ast_component(
         ast_component: ftd::ast::Component,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
         let mut loop_object_name_and_kind = None;
         if let Some(v) = ast_component.iteration {
+            loop_object_name_and_kind = Some(v.alias.to_string());
             Loop::scan_ast_loop(v, definition_name_with_arguments, doc)?;
         };
 
@@ -341,8 +334,8 @@ impl Property {
     fn scan_ast_properties_and_children(
         ast_properties: Vec<ftd::ast::Property>,
         ast_children: Vec<ftd::ast::Component>,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
         Property::scan_ast_properties(
@@ -516,7 +509,7 @@ impl Property {
 
     fn scan_ast_children(
         ast_children: Vec<ftd::ast::Component>,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
         if ast_children.is_empty() {
@@ -532,8 +525,8 @@ impl Property {
 
     fn scan_ast_properties(
         ast_properties: Vec<ftd::ast::Property>,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
         for property in ast_properties {
@@ -549,8 +542,8 @@ impl Property {
 
     fn scan_ast_property(
         ast_property: ftd::ast::Property,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
         ftd::interpreter2::PropertyValue::scan_ast_value_with_argument(
@@ -785,7 +778,7 @@ impl Loop {
 
     fn scan_ast_loop(
         ast_loop: ftd::ast::Loop,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
         ftd::interpreter2::PropertyValue::scan_string_with_argument(
@@ -897,8 +890,8 @@ impl Event {
 
     fn scan_ast_events(
         ast_events: Vec<ftd::ast::Event>,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
         for event in ast_events {
@@ -914,8 +907,8 @@ impl Event {
 
     fn scan_ast_event(
         ast_event: ftd::ast::Event,
-        definition_name_with_arguments: Option<(&str, &[Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
         ftd::interpreter2::FunctionCall::scan_string(
