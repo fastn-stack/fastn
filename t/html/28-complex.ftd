@@ -1,0 +1,222 @@
+-- ftd.background.solid base:
+light: #18181b
+dark: #18181b
+
+-- ftd.background.solid step-1:
+light: #141414
+dark: #141414
+
+-- ftd.background.solid step-2:
+light: #585656
+dark: #585656
+
+-- ftd.background.solid overlay:
+light: rgba(0, 0, 0, 0.8)
+dark: rgba(0, 0, 0, 0.8)
+
+-- ftd.background.solid code:
+light: #2B303B
+dark: #2B303B
+
+-- ftd.color text:
+light: #a8a29e
+dark: #a8a29e
+
+-- ftd.color text-strong:
+light: #ffffff
+dark: #ffffff
+
+
+-- string site: FithTry Doc
+
+
+
+
+-- component page:
+body mytext:
+toc-item sections:
+
+
+-- ftd.column:
+width: ftd.resizing.fill-container
+height.fixed.percent: 100
+background: $step-2
+
+
+-- ftd.column:
+width: ftd.resizing.fill-container
+padding.px: 24
+
+-- header:
+sections: $page.sections
+site-name: Logo
+
+-- end: ftd.column
+
+
+
+-- ftd.column:
+width: ftd.resizing.fill-container
+
+-- ftd.row:
+width: ftd.resizing.fill-container
+
+
+-- ftd.row:
+width.fixed.percent: 25
+
+-- ftd.column:
+height: ftd.resizing.fill-container
+background: $step-1
+
+-- ftd.text: table of contents
+color: $text
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+
+-- ftd.row:
+width.fixed.percent: 50
+
+-- ftd.text:
+text: $page.mytext
+
+-- end: ftd.row
+
+
+-- ftd.row:
+width.fixed.percent: 25
+
+-- ftd.text: Sidebar
+color: $text
+
+-- end: ftd.row
+
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+
+-- end: ftd.column
+
+-- end: page
+
+
+
+
+
+
+
+
+
+
+-- page:
+sections: $toc
+
+some body here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- record toc-item:
+string name:
+string link:
+toc-item list children:
+
+
+-- toc-item toc:
+name: Header Item 1
+link: /
+
+-- toc.children:
+
+-- toc-item:
+name: Header Item 2
+link: /
+
+-- toc-item:
+name: Header Item 3
+link: /
+
+-- toc-item.children:
+
+-- toc-item:
+name: Header Item 4
+link: /
+
+-- end: toc-item.children
+
+-- end: toc.children
+
+
+
+-- component header-links:
+toc-item item:
+
+-- ftd.row:
+
+-- ftd.text: $header-links.item.name
+link: $header-links.item.link
+color: $text-strong
+
+-- header-links:
+item: $obj
+$loop$: $header-links.item.children as $obj
+
+-- end: ftd.row
+
+-- end: header-links
+
+
+
+
+
+
+
+
+
+
+-- component header:
+toc-item sections:
+string site-name: SiteName
+
+-- ftd.row:
+width: ftd.resizing.fill-container
+
+-- ftd.row:
+width: ftd.resizing.fill-container
+
+-- ftd.text: $header.site-name
+color: $text-strong
+
+-- end: ftd.row
+
+-- ftd.row:
+width: ftd.resizing.hug-content
+
+-- header-links:
+item: $header.sections
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: header
