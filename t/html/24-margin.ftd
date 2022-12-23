@@ -1,11 +1,10 @@
 -- ftd.column:
 width: ftd.resizing.fill-container
 height: ftd.resizing.fill-container
-background.solid: red
 
 -- ftd.column:
-width.fixed.px: 20
-height.fixed.px: 20
+width.fixed.px: 60
+height.fixed.px: 60
 background.solid: yellow
 border-width.px: 1
 margin-horizontal.px: 60
@@ -14,8 +13,8 @@ margin-horizontal.px: 60
 
 
 -- ftd.column:
-width.fixed.px: 20
-height.fixed.px: 20
+width.fixed.px: 60
+height.fixed.px: 60
 background.solid: yellow
 border-width.px: 1
 margin-top.px: 40
@@ -23,8 +22,8 @@ margin-top.px: 40
 -- end: ftd.column
 
 -- ftd.column:
-width.fixed.px: 20
-height.fixed.px: 20
+width.fixed.px: 60
+height.fixed.px: 60
 background.solid: green
 border-width.px: 1
 margin.px: 100
