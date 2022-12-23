@@ -1,0 +1,16 @@
+
+-- optional string $name: NULL
+
+
+-- ftd.text: Hello
+if: { isempty($name) }
+$on-click$: $append($a = $name, b = FifthTry)
+
+
+
+
+-- void append(a,b):
+optional string $a:
+string b:
+
+a = a + " " + b

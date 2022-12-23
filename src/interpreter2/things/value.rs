@@ -457,121 +457,164 @@ impl PropertyValue {
             doc_id: doc.name.to_string(),
             line_number: value.line_number(),
         })?;
-        Ok(match &expected_kind.kind.clone().inner() {
-            ftd::interpreter2::Kind::String => {
-                ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
-                    value: Value::String {
-                        text: value.string(doc.name)?,
-                    },
-                    is_mutable,
-                    line_number: value.line_number(),
-                })
-            }
-            ftd::interpreter2::Kind::Integer => {
-                ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
-                    value: Value::Integer {
-                        value: value.string(doc.name)?.parse()?,
-                    },
-                    is_mutable,
-                    line_number: value.line_number(),
-                })
-            }
-            ftd::interpreter2::Kind::Decimal => {
-                ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
-                    value: Value::Decimal {
-                        value: value.string(doc.name)?.parse()?,
-                    },
-                    is_mutable,
-                    line_number: value.line_number(),
-                })
-            }
-            ftd::interpreter2::Kind::Boolean => {
-                ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
-                    value: Value::Boolean {
-                        value: value.string(doc.name)?.parse()?,
-                    },
-                    is_mutable,
-                    line_number: value.line_number(),
-                })
-            }
-            ftd::interpreter2::Kind::List { kind } if value.is_list() => {
-                let line_number = value.line_number();
-                let value_list = value.into_list(doc.name)?;
-                let mut values = vec![];
-                for (key, value) in value_list {
-                    if !try_ok_state!(ftd::interpreter2::utils::kind_eq(
-                        key.as_str(),
-                        kind,
-                        doc,
-                        value.line_number(),
-                    )?) {
-                        return ftd::interpreter2::utils::e2(
-                            format!("Expected list of `{:?}`, found: `{}`", kind, key),
-                            doc.name,
-                            value.line_number(),
-                        );
-                    }
-                    values.push(if kind.is_ui() {
-                        try_ok_state!(PropertyValue::to_ui_value(
-                            &key,
-                            value,
-                            doc,
-                            definition_name_with_arguments,
-                        )?)
+        return get_property_value(
+            value,
+            doc,
+            is_mutable,
+            expected_kind,
+            definition_name_with_arguments,
+            loop_object_name_and_kind,
+        );
+
+        fn get_property_value(
+            value: ftd::ast::VariableValue,
+            doc: &ftd::interpreter2::TDoc,
+            is_mutable: bool,
+            expected_kind: &ftd::interpreter2::KindData,
+            definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+            loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        ) -> ftd::interpreter2::Result<
+            ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
+        > {
+            Ok(match &expected_kind.kind.clone() {
+                ftd::interpreter2::Kind::Optional { kind } => {
+                    let kind = kind.clone().into_kind_data();
+                    if value.is_null() {
+                        ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
+                            value: Value::Optional {
+                                data: Box::new(None),
+                                kind,
+                            },
+                            is_mutable,
+                            line_number: value.line_number(),
+                        })
                     } else {
-                        try_ok_state!(PropertyValue::from_ast_value(
+                        get_property_value(
                             value,
                             doc,
                             is_mutable,
-                            Some(&ftd::interpreter2::KindData {
-                                kind: kind.as_ref().clone(),
-                                caption: expected_kind.caption,
-                                body: expected_kind.body,
-                            }),
-                        )?)
-                    });
+                            &kind,
+                            definition_name_with_arguments,
+                            loop_object_name_and_kind,
+                        )?
+                    }
                 }
-                ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
-                    value: ftd::interpreter2::Value::List {
-                        data: values,
-                        kind: expected_kind.clone().inner_list(),
-                    },
-                    is_mutable,
-                    line_number,
-                })
-            }
-            ftd::interpreter2::Kind::Record { name } if value.is_record() || value.is_string() => {
-                let record = try_ok_state!(doc.search_record(name, value.line_number())?);
-                ftd::interpreter2::PropertyValue::from_record(
-                    &record,
-                    value,
-                    doc,
-                    is_mutable,
-                    expected_kind,
-                    definition_name_with_arguments,
-                    loop_object_name_and_kind,
-                )?
-            }
-            ftd::interpreter2::Kind::OrType { name, variant, .. } => {
-                let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
-                let line_number = value.line_number();
-                if let Some(variant_name) = variant {
-                    let variant = or_type
-                        .variants
-                        .into_iter()
-                        .find(|v| {
-                            v.name().eq(variant_name)
-                                || variant_name.starts_with(format!("{}.", v.name()).as_str())
-                        })
-                        .ok_or(ftd::interpreter2::Error::ParseError {
-                            message: format!(
-                                "Expected variant `{}` in or-type `{}`",
-                                variant_name, name
-                            ),
-                            doc_id: doc.name.to_string(),
-                            line_number: value.line_number(),
-                        })?;
-                    let value = match &variant {
+                ftd::interpreter2::Kind::String => {
+                    ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
+                        value: Value::String {
+                            text: value.string(doc.name)?,
+                        },
+                        is_mutable,
+                        line_number: value.line_number(),
+                    })
+                }
+                ftd::interpreter2::Kind::Integer => {
+                    ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
+                        value: Value::Integer {
+                            value: value.string(doc.name)?.parse()?,
+                        },
+                        is_mutable,
+                        line_number: value.line_number(),
+                    })
+                }
+                ftd::interpreter2::Kind::Decimal => {
+                    ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
+                        value: Value::Decimal {
+                            value: value.string(doc.name)?.parse()?,
+                        },
+                        is_mutable,
+                        line_number: value.line_number(),
+                    })
+                }
+                ftd::interpreter2::Kind::Boolean => {
+                    ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
+                        value: Value::Boolean {
+                            value: value.string(doc.name)?.parse()?,
+                        },
+                        is_mutable,
+                        line_number: value.line_number(),
+                    })
+                }
+                ftd::interpreter2::Kind::List { kind } if value.is_list() => {
+                    let line_number = value.line_number();
+                    let value_list = value.into_list(doc.name)?;
+                    let mut values = vec![];
+                    for (key, value) in value_list {
+                        if !try_ok_state!(ftd::interpreter2::utils::kind_eq(
+                            key.as_str(),
+                            kind,
+                            doc,
+                            value.line_number(),
+                        )?) {
+                            return ftd::interpreter2::utils::e2(
+                                format!("Expected list of `{:?}`, found: `{}`", kind, key),
+                                doc.name,
+                                value.line_number(),
+                            );
+                        }
+                        values.push(if kind.is_ui() {
+                            try_ok_state!(PropertyValue::to_ui_value(
+                                &key,
+                                value,
+                                doc,
+                                definition_name_with_arguments,
+                            )?)
+                        } else {
+                            try_ok_state!(PropertyValue::from_ast_value(
+                                value,
+                                doc,
+                                is_mutable,
+                                Some(&ftd::interpreter2::KindData {
+                                    kind: kind.as_ref().clone(),
+                                    caption: expected_kind.caption,
+                                    body: expected_kind.body,
+                                }),
+                            )?)
+                        });
+                    }
+                    ftd::interpreter2::StateWithThing::new_thing(PropertyValue::Value {
+                        value: ftd::interpreter2::Value::List {
+                            data: values,
+                            kind: expected_kind.clone().inner_list(),
+                        },
+                        is_mutable,
+                        line_number,
+                    })
+                }
+                ftd::interpreter2::Kind::Record { name }
+                    if value.is_record() || value.is_string() =>
+                {
+                    let record = try_ok_state!(doc.search_record(name, value.line_number())?);
+                    ftd::interpreter2::PropertyValue::from_record(
+                        &record,
+                        value,
+                        doc,
+                        is_mutable,
+                        expected_kind,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    )?
+                }
+                ftd::interpreter2::Kind::OrType { name, variant, .. } => {
+                    let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
+                    let line_number = value.line_number();
+                    if let Some(variant_name) = variant {
+                        let variant = or_type
+                            .variants
+                            .into_iter()
+                            .find(|v| {
+                                v.name().eq(variant_name)
+                                    || variant_name.starts_with(format!("{}.", v.name()).as_str())
+                            })
+                            .ok_or(ftd::interpreter2::Error::ParseError {
+                                message: format!(
+                                    "Expected variant `{}` in or-type `{}`",
+                                    variant_name, name
+                                ),
+                                doc_id: doc.name.to_string(),
+                                line_number: value.line_number(),
+                            })?;
+                        let value = match &variant {
                         ftd::interpreter2::OrTypeVariant::Constant(c) => return ftd::interpreter2::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
                         ftd::interpreter2::OrTypeVariant::AnonymousRecord(record) => try_ok_state!(ftd::interpreter2::PropertyValue::from_record(
                             record,
@@ -615,61 +658,64 @@ impl PropertyValue {
                             )
                         }
                     };
-                    ftd::interpreter2::StateWithThing::new_thing(
-                        ftd::interpreter2::Value::new_or_type(
-                            name,
-                            variant.name().as_str(),
-                            variant_name,
-                            value,
+                        ftd::interpreter2::StateWithThing::new_thing(
+                            ftd::interpreter2::Value::new_or_type(
+                                name,
+                                variant.name().as_str(),
+                                variant_name,
+                                value,
+                            )
+                            .into_property_value(false, line_number),
                         )
-                        .into_property_value(false, line_number),
-                    )
-                } else {
-                    let value_str = value.string(doc.name)?;
-                    let (found_or_type_name, or_type_variant) = try_ok_state!(
-                        doc.search_or_type_with_variant(value_str.as_str(), value.line_number())?
-                    );
+                    } else {
+                        let value_str = value.string(doc.name)?;
+                        let (found_or_type_name, or_type_variant) = try_ok_state!(doc
+                            .search_or_type_with_variant(
+                                value_str.as_str(),
+                                value.line_number()
+                            )?);
 
-                    if or_type.name.ne(&found_or_type_name) {
-                        return ftd::interpreter2::utils::e2(
-                            format!(
-                                "Expected or-type is `{}`, found: `{}`",
-                                or_type.name, found_or_type_name
-                            ),
-                            doc.name,
-                            value.line_number(),
-                        );
-                    }
-
-                    let constant = or_type_variant.ok_constant(doc.name)?;
-                    let value =
-                        constant
-                            .value
-                            .clone()
-                            .ok_or(ftd::interpreter2::Error::ParseError {
-                                message: format!(
-                                    "Expected value for constant variant `{}`",
-                                    constant.name
+                        if or_type.name.ne(&found_or_type_name) {
+                            return ftd::interpreter2::utils::e2(
+                                format!(
+                                    "Expected or-type is `{}`, found: `{}`",
+                                    or_type.name, found_or_type_name
                                 ),
-                                doc_id: doc.name.to_string(),
-                                line_number: constant.line_number,
-                            })?;
+                                doc.name,
+                                value.line_number(),
+                            );
+                        }
 
-                    ftd::interpreter2::StateWithThing::new_thing(
-                        ftd::interpreter2::Value::new_or_type(
-                            name,
-                            constant.name.as_str(),
-                            constant.name.as_str(),
-                            value,
+                        let constant = or_type_variant.ok_constant(doc.name)?;
+                        let value =
+                            constant
+                                .value
+                                .clone()
+                                .ok_or(ftd::interpreter2::Error::ParseError {
+                                    message: format!(
+                                        "Expected value for constant variant `{}`",
+                                        constant.name
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number: constant.line_number,
+                                })?;
+
+                        ftd::interpreter2::StateWithThing::new_thing(
+                            ftd::interpreter2::Value::new_or_type(
+                                name,
+                                constant.name.as_str(),
+                                constant.name.as_str(),
+                                value,
+                            )
+                            .into_property_value(false, line_number),
                         )
-                        .into_property_value(false, line_number),
-                    )
+                    }
                 }
-            }
-            t => {
-                unimplemented!("t::{:?}  {:?}", t, value)
-            }
-        })
+                t => {
+                    unimplemented!("t::{:?}  {:?}", t, value)
+                }
+            })
+        }
     }
 
     fn reference_from_ast_value(
@@ -1252,6 +1298,13 @@ impl Value {
             ftd::interpreter2::Value::Integer { value } => ftd::evalexpr::Value::Int(value),
             ftd::interpreter2::Value::Decimal { value } => ftd::evalexpr::Value::Float(value),
             ftd::interpreter2::Value::Boolean { value } => ftd::evalexpr::Value::Boolean(value),
+            ftd::interpreter2::Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    data.clone().into_evalexpr_value()
+                } else {
+                    ftd::evalexpr::Value::Empty
+                }
+            }
             t => unimplemented!("{:?}", t),
         }
     }
