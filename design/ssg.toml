@@ -1,0 +1,8 @@
+[REQ-ssg]
+partof = 'REQ-purpose'
+text = '''
+FPM can be used as a static site generator.
+
+FPM converts a bunch of ftd and markdown files to HTML. FPM also copies static files like images, font files etc to the destination folder.
+
+FPM has a concept of package dependencies, so if your package needs images, fonts etc from other packages, the static site generator will download those packages and copy them over as needed.'''

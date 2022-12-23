@@ -1,0 +1,13 @@
+[REQ-design_system]
+partof = 'REQ-purpose'
+text = '''
+FPM comes with a design system for ensuring websites authors can use our color scheme packages, font pairing packages etc to quickly create good looking website.
+
+You can think of FPM design system as an alternative to material design system.'''
+
+[REQ-design_system-color_scheme]
+text = 'FPM lets you create color scheme packages, used to distribute color schemes.'
+
+[REQ-design_system-font_pairings]
+partof = 'REQ-font'
+text = 'Font Pairings are packages to distribute font pairings. They use one or more [[REQ-font]]s as package dependency.'

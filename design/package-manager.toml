@@ -1,0 +1,23 @@
+[REQ-package_manager]
+partof = 'REQ-purpose'
+text = 'FPM acts as a package manager for FTD files. FPM packages can be used to distribute ftd files, as well as to distribute static assets like images, icons, font files, and so on.'
+
+[REQ-package_manager-fpm_ftd]
+partof = [
+    'REQ-package_manager-main',
+    'REQ-package_manager-package',
+]
+text = '''
+Every [[REQ-package_manager-package]] contains a `FPM.ftd` file.
+
+This file contains `fpm.package` declaration. It also contains [[REQ-package_manager-dependency]], [[REQ-package_manager-auto_import]], [[REQ-sitemap]], [[REQ-app]], [[REQ-dynamic]] URLs, [[REQ-auth-group]] specifications.'''
+
+[REQ-package_manager-main]
+partof = 'REQ-cli-serve'
+text = '''
+When FPM is running, there is always a main package, which corresponds to the folder in which the [[REQ-cli-serve]] was launched from.
+
+This folder must be a valid [[REQ-package_manager-package]].'''
+
+[REQ-package_manager-package]
+text = 'A FPM package must contain at least one file: `FPM.ftd` [[REQ-package_manager-fpm_ftd]]. Packages usually also contain `index.ftd` file.'

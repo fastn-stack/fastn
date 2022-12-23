@@ -1,0 +1,31 @@
+[REQ-routes]
+partof = [
+    'REQ-cli-build',
+    'REQ-cli-serve',
+    'REQ-dynamic',
+    'REQ-ssg',
+]
+text = '''
+FPM serve or build handle a bunch of "routes". 
+
+- [[REQ-routes-self_ftd]]
+- [[REQ-routes-dep_ftd]]
+- [[REQ-routes-self_md]]
+- [[REQ-routes-dep_md]]
+- [[REQ-routes-self_media]]
+- [[REQ-routes-dep_media]]
+- [[REQ-routes-self_dynamic]]
+- [[REQ-routes-dep_dynamic]]
+- [[REQ-routes-mountpoint]]'''
+
+[REQ-routes-self_ftd]
+text = '''
+Any ftd file in the [[REQ-package_manager-main]] is served. Exception, any ftd file that is target of [[REQ-routes-self_dynamic]] is not served on their "natural url".
+
+# [[.natural_url]]
+
+If a file is foo.ftd, the natural URL is `/foo/`. If the file name is `index.ftd` it is omitted, eg `index.ftd` is served on `/`, and `foo/index.ftd` is served on `/foo/`.
+
+# [[.index_conflict]]
+
+If both `foo.ftd` and `foo/index.ftd` are present it is an error.'''

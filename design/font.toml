@@ -1,0 +1,13 @@
+[REQ-font]
+partof = [
+    'REQ-purpose',
+    'REQ-server',
+    'REQ-ssg',
+]
+text = '''
+Websites powered by FPM need fonts. Normally people link to Google Fonts for serving fonts. FPM instead has a concept of font packages. 
+
+Anyone can create a font package from a Google Font using [[REQ-font-import_script]].'''
+
+[REQ-font-import_script]
+text = 'We have a script which can convert any Google Font file to a fpm package.'
