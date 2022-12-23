@@ -48,7 +48,7 @@ impl Variable {
             if !state.parsed_libs.contains_key(doc_name.as_str()) {
                 state
                     .pending_imports
-                    .unique_insert(doc_name.to_string(), (name, ast.line_number()));
+                    .unique_insert(doc_name, (name, ast.line_number()));
             }
 
             return Ok(());
