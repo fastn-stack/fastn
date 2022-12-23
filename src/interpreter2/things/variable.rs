@@ -10,6 +10,53 @@ pub struct Variable {
 }
 
 impl Variable {
+    pub(crate) fn scan_ast(
+        ast: ftd::ast::AST,
+        doc: &mut ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<()> {
+        let variable_definition = ast.clone().get_variable_definition(doc.name)?;
+        ftd::interpreter2::KindData::scan_ast_kind(
+            variable_definition.kind,
+            &Default::default(),
+            doc,
+            variable_definition.line_number,
+        )?;
+
+        if let Some(processor) = variable_definition.processor {
+            let name = doc.resolve_name(processor.as_str());
+            let state = if let Some(state) = {
+                match &mut doc.bag {
+                    ftd::interpreter2::tdoc::BagOrState::Bag(_) => None,
+                    ftd::interpreter2::tdoc::BagOrState::State(s) => Some(s),
+                }
+            } {
+                state
+            } else {
+                return ftd::interpreter2::utils::e2(
+                    format!("Processor: `{}` not found", processor),
+                    doc.name,
+                    variable_definition.line_number,
+                );
+            };
+            let (doc_name, _thing_name, _remaining) =
+                ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+                    name.as_str(),
+                    doc.name,
+                    variable_definition.line_number,
+                );
+
+            if !state.parsed_libs.contains_key(doc_name.as_str()) {
+                state
+                    .pending_imports
+                    .unique_insert(doc_name.to_string(), (name, ast.line_number()));
+            }
+
+            return Ok(());
+        }
+
+        ftd::interpreter2::PropertyValue::scan_ast_value(variable_definition.value, doc)
+    }
+
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,

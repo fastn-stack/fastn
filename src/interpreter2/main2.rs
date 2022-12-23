@@ -65,34 +65,49 @@ impl InterpreterState {
                         return (*doc.state().unwrap()).clone().continue_();
                     }
                 } else if ast.is_or_type() {
-                    match ftd::interpreter2::OrType::from_ast(ast, &doc)? {
-                        ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
-                        ftd::interpreter2::StateWithThing::Thing(or_type) => {
-                            self.bag.insert(
-                                or_type.name.to_string(),
-                                ftd::interpreter2::Thing::OrType(or_type),
-                            );
+                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                        match ftd::interpreter2::OrType::from_ast(ast, &doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                            ftd::interpreter2::StateWithThing::Thing(or_type) => {
+                                self.bag.insert(
+                                    or_type.name.to_string(),
+                                    ftd::interpreter2::Thing::OrType(or_type),
+                                );
+                            }
                         }
+                    } else {
+                        ftd::interpreter2::OrType::scan_ast(ast, &mut doc)?;
+                        return (*doc.state().unwrap()).clone().continue_();
                     }
                 } else if ast.is_function() {
-                    match ftd::interpreter2::Function::from_ast(ast, &doc)? {
-                        ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
-                        ftd::interpreter2::StateWithThing::Thing(function) => {
-                            self.bag.insert(
-                                function.name.to_string(),
-                                ftd::interpreter2::Thing::Function(function),
-                            );
+                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                        match ftd::interpreter2::Function::from_ast(ast, &doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                            ftd::interpreter2::StateWithThing::Thing(function) => {
+                                self.bag.insert(
+                                    function.name.to_string(),
+                                    ftd::interpreter2::Thing::Function(function),
+                                );
+                            }
                         }
+                    } else {
+                        ftd::interpreter2::Function::scan_ast(ast, &mut doc)?;
+                        return (*doc.state().unwrap()).clone().continue_();
                     }
                 } else if ast.is_variable_definition() {
-                    match ftd::interpreter2::Variable::from_ast(ast, &doc)? {
-                        ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
-                        ftd::interpreter2::StateWithThing::Thing(variable) => {
-                            self.bag.insert(
-                                variable.name.to_string(),
-                                ftd::interpreter2::Thing::Variable(variable),
-                            );
+                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                        match ftd::interpreter2::Variable::from_ast(ast, &doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                            ftd::interpreter2::StateWithThing::Thing(variable) => {
+                                self.bag.insert(
+                                    variable.name.to_string(),
+                                    ftd::interpreter2::Thing::Variable(variable),
+                                );
+                            }
                         }
+                    } else {
+                        ftd::interpreter2::Variable::scan_ast(ast, &mut doc)?;
+                        return (*doc.state().unwrap()).clone().continue_();
                     }
                 } else if ast.is_variable_invocation() {
                     match ftd::interpreter2::Variable::update_from_ast(ast, &doc)? {

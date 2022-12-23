@@ -24,6 +24,23 @@ impl Function {
         }
     }
 
+    pub(crate) fn scan_ast(
+        ast: ftd::ast::AST,
+        doc: &mut ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<()> {
+        let function = ast.get_function(doc.name)?;
+        ftd::interpreter2::Argument::scan_ast_fields(function.arguments, doc, &Default::default())?;
+
+        ftd::interpreter2::KindData::scan_ast_kind(
+            function.kind,
+            &Default::default(),
+            doc,
+            function.line_number,
+        )?;
+
+        Ok(())
+    }
+
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
