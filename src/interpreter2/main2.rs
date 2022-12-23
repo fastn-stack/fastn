@@ -47,10 +47,10 @@ impl InterpreterState {
                 }
                 let state = &mut self;
 
-                let doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, state);
+                let mut doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, state);
 
                 if ast.is_record() {
-                    if number_of_scan.le(&0) || number_of_scan.gt(&1) {
+                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
                         match ftd::interpreter2::Record::from_ast(ast, &doc)? {
                             ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
                             ftd::interpreter2::StateWithThing::Thing(record) => {
@@ -61,6 +61,8 @@ impl InterpreterState {
                             }
                         }
                     } else {
+                        ftd::interpreter2::Record::scan_ast(ast, &mut doc)?;
+                        return (*doc.state().unwrap()).clone().continue_();
                     }
                 } else if ast.is_or_type() {
                     match ftd::interpreter2::OrType::from_ast(ast, &doc)? {
@@ -187,6 +189,7 @@ impl InterpreterState {
     ) -> ftd::interpreter2::Result<Interpreter> {
         use itertools::Itertools;
         let document = self.parsed_libs.get(module).unwrap();
+        let mut is_all_thing_resolved = false;
         if let Some(thing_names) = self.pending_imports.value.get_mut(module) {
             while let Some((name, line_number)) = thing_names.last() {
                 let (doc_name, thing_name, remaining) = // Todo: use remaining
@@ -206,8 +209,12 @@ impl InterpreterState {
                     .map(|v| (0, v.to_owned()))
                     .collect_vec();
 
-                if ast_for_thing.is_empty() {
-                    if document.foreign_variable.iter().any(|v| thing_name.eq(v)) {
+                if !ast_for_thing.is_empty() {
+                    self.to_process.push((doc_name, ast_for_thing));
+                } else {
+                    let found_foreign_variable =
+                        document.foreign_variable.iter().any(|v| thing_name.eq(v));
+                    if found_foreign_variable && !self.bag.contains_key(name.as_str()) {
                         return Ok(ftd::interpreter2::Interpreter::StuckOnForeignVariable {
                             module: doc_name,
                             state: self.clone(),
@@ -215,18 +222,22 @@ impl InterpreterState {
                                 .map(|v| format!("{}.{}", thing_name, v))
                                 .unwrap_or(thing_name),
                         });
+                    } else if !found_foreign_variable {
+                        return ftd::interpreter2::utils::e2(
+                            format!("`{}` not found", name),
+                            name,
+                            *line_number,
+                        );
                     }
-
-                    return ftd::interpreter2::utils::e2(
-                        format!("`{}` not found", name),
-                        name,
-                        *line_number,
-                    );
                 }
-
-                self.to_process.push((doc_name, ast_for_thing));
                 thing_names.pop();
             }
+            if thing_names.is_empty() {
+                is_all_thing_resolved = true;
+            }
+        }
+        if is_all_thing_resolved {
+            self.pending_imports.value.remove(module);
         }
 
         self.clone().continue_()
