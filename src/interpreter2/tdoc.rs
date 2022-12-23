@@ -859,6 +859,81 @@ impl<'a> TDoc<'a> {
         Ok((initial_thing.variable(self.name, line_number)?, remaining))
     }
 
+    pub fn scan_thing(&mut self, name: &str, line_number: usize) -> ftd::interpreter2::Result<()> {
+        let name = name
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
+            .unwrap_or(name);
+
+        self.scan_initial_thing(name, line_number)
+    }
+
+    pub fn scan_initial_thing(
+        &mut self,
+        name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<()> {
+        use itertools::Itertools;
+
+        let name = name
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+            .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
+            .unwrap_or(name);
+
+        if let Ok(_) = self.get_initial_thing(name, line_number) {
+            return Ok(());
+        }
+
+        let name = self.resolve_name(name);
+
+        let state = if let Some(state) = {
+            match &mut self.bag {
+                BagOrState::Bag(_) => None,
+                BagOrState::State(s) => Some(s),
+            }
+        } {
+            state
+        } else {
+            return self.err("not found", name, "search_thing", line_number);
+        };
+
+        let (doc_name, thing_name, remaining) = // Todo: use remaining
+            ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+                name.as_str(),
+                self.name,
+                line_number,
+            );
+
+        let current_parsed_document = state.parsed_libs.get(self.name).unwrap();
+
+        if doc_name.ne(self.name) {
+            let current_doc_contains_thing = current_parsed_document
+                .ast
+                .iter()
+                .filter(|v| {
+                    !v.is_component()
+                        && (v.name().eq(&format!("{}.{}", doc_name, thing_name))
+                            || v.name()
+                                .starts_with(format!("{}.{}.", doc_name, thing_name).as_str()))
+                })
+                .map(|v| (0, v.to_owned()))
+                .collect_vec();
+            if !current_doc_contains_thing.is_empty() {
+                state
+                    .to_process
+                    .push((self.name.to_string(), current_doc_contains_thing));
+            }
+        }
+
+        if !state.parsed_libs.contains_key(doc_name.as_str()) {
+            state
+                .pending_imports
+                .unique_insert(doc_name.to_string(), (name, line_number));
+        }
+
+        Ok(())
+    }
+
     pub fn search_thing(
         &'a self,
         name: &'a str,

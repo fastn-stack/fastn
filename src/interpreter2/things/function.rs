@@ -223,6 +223,41 @@ impl FunctionCall {
         }
     }
 
+    pub(crate) fn scan_string(
+        value: &str,
+        doc: &mut ftd::interpreter2::TDoc,
+        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<()> {
+        let expression = value
+            .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
+            .to_string();
+
+        let (function_name, properties) =
+            ftd::interpreter2::utils::get_function_name_and_properties(
+                expression.as_str(),
+                doc.name,
+                line_number,
+            )?;
+
+        doc.scan_initial_thing(function_name.as_str(), line_number)?;
+
+        for (_, value) in properties.iter() {
+            ftd::interpreter2::PropertyValue::scan_ast_value_with_argument(
+                ftd::ast::VariableValue::String {
+                    value: value.to_string(),
+                    line_number,
+                },
+                doc,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            )?;
+        }
+
+        Ok(())
+    }
+
     pub(crate) fn from_string(
         value: &str,
         doc: &ftd::interpreter2::TDoc,

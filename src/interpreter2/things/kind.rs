@@ -296,6 +296,22 @@ impl KindData {
             ftd::ast::VariableModifier::List => self.list(),
         }
     }
+
+    pub(crate) fn scan_ast_kind(
+        var_kind: ftd::ast::VariableKind,
+        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
+        doc: &mut ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<()> {
+        let mut ast_kind = var_kind.kind.clone();
+        match ast_kind.as_ref() {
+            "string" | "object" | "integer" | "decimal" | "boolean" | "void" | "ftd.ui"
+            | "children" => Ok(()),
+            k if known_kinds.contains_key(k) => Ok(()),
+            k => doc.scan_thing(k, line_number),
+        }
+    }
+
     pub(crate) fn from_ast_kind(
         var_kind: ftd::ast::VariableKind,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
