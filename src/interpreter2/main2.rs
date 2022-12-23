@@ -41,20 +41,26 @@ impl InterpreterState {
             let aliases = parsed_document.doc_aliases.clone();
             if let Some((number_of_scan, ast)) = ast_to_process.first() {
                 let ast = ast.clone();
-                self.increase_scan_count();
+                let number_of_scan = *number_of_scan;
+                if !number_of_scan.gt(&1) {
+                    self.increase_scan_count();
+                }
                 let state = &mut self;
 
                 let doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, state);
 
                 if ast.is_record() {
-                    match ftd::interpreter2::Record::from_ast(ast, &doc)? {
-                        ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
-                        ftd::interpreter2::StateWithThing::Thing(record) => {
-                            self.bag.insert(
-                                record.name.to_string(),
-                                ftd::interpreter2::Thing::Record(record),
-                            );
+                    if number_of_scan.le(&0) || number_of_scan.gt(&1) {
+                        match ftd::interpreter2::Record::from_ast(ast, &doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                            ftd::interpreter2::StateWithThing::Thing(record) => {
+                                self.bag.insert(
+                                    record.name.to_string(),
+                                    ftd::interpreter2::Thing::Record(record),
+                                );
+                            }
                         }
+                    } else {
                     }
                 } else if ast.is_or_type() {
                     match ftd::interpreter2::OrType::from_ast(ast, &doc)? {

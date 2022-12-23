@@ -18,6 +18,34 @@ impl Expression {
         }
     }
 
+    pub(crate) fn scan_ast_condition(
+        condition: ftd::ast::Condition,
+        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        doc: &mut ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<()> {
+        if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
+            let node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
+            Expression::scan_references(
+                &node,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+                doc,
+                condition.line_number,
+            )?;
+
+            return Ok(());
+        }
+        ftd::interpreter2::utils::e2(
+            format!(
+                "Expected condition in expression mode, found: {}",
+                condition.expression
+            ),
+            doc.name,
+            condition.line_number,
+        )
+    }
+
     pub(crate) fn from_ast_condition(
         condition: ftd::ast::Condition,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
@@ -49,6 +77,28 @@ impl Expression {
             doc.name,
             condition.line_number,
         )
+    }
+
+    pub(crate) fn scan_references(
+        node: &ftd::evalexpr::ExprNode,
+        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        doc: &mut ftd::interpreter2::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<()> {
+        let variable_identifier_reads = get_variable_identifier_read(node);
+        for variable in variable_identifier_reads {
+            let full_variable_name =
+                doc.resolve_reference_name(format!("${}", variable).as_str(), line_number)?;
+            ftd::interpreter2::PropertyValue::scan_string_with_argument(
+                full_variable_name.as_str(),
+                doc,
+                line_number,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            )?;
+        }
+        Ok(())
     }
 
     pub(crate) fn get_references(

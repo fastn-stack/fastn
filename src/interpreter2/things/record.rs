@@ -14,12 +14,29 @@ impl Record {
         }
     }
 
-    // pub(crate) fn scan_ast(
-    //     ast: ftd::ast::AST,
-    //     doc: &ftd::interpreter2::TDoc,
-    // ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
-    // {
-    // }
+    pub(crate) fn scan_ast(
+        ast: ftd::ast::AST,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
+    {
+        let record = ast.get_record(doc.name)?;
+        Record::from_record(record, doc)
+    }
+
+    pub(crate) fn scan_record(
+        record: ftd::ast::Record,
+        doc: &mut ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<()> {
+        let name = doc.resolve_name(record.name.as_str());
+        let known_kinds = std::iter::IntoIterator::into_iter([(
+            record.name.to_string(),
+            ftd::interpreter2::Kind::Record {
+                name: name.to_string(),
+            },
+        )])
+        .collect::<ftd::Map<ftd::interpreter2::Kind>>();
+        Field::scan_ast_fields(record.fields, doc, &known_kinds)
+    }
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
@@ -145,6 +162,17 @@ impl Field {
         }
     }
 
+    pub(crate) fn scan_ast_fields(
+        fields: Vec<ftd::ast::Field>,
+        doc: &mut ftd::interpreter2::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
+    ) -> ftd::interpreter2::Result<()> {
+        for field in fields {
+            Field::scan_ast_field(field, doc, known_kinds)?;
+        }
+        Ok(())
+    }
+
     pub(crate) fn from_ast_fields(
         fields: Vec<ftd::ast::Field>,
         doc: &ftd::interpreter2::TDoc,
@@ -156,6 +184,25 @@ impl Field {
             result.push(field);
         }
         Ok(ftd::interpreter2::StateWithThing::new_thing(result))
+    }
+
+    pub(crate) fn scan_ast_field(
+        field: ftd::ast::Field,
+        doc: &mut ftd::interpreter2::TDoc,
+        known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
+    ) -> ftd::interpreter2::Result<()> {
+        ftd::interpreter2::KindData::scan_ast_kind(
+            field.kind,
+            known_kinds,
+            doc,
+            field.line_number,
+        )?;
+
+        if let Some(value) = field.value {
+            ftd::interpreter2::PropertyValue::scan_ast_value(value, doc)?;
+        }
+
+        Ok(())
     }
 
     pub(crate) fn from_ast_field(
