@@ -43,12 +43,15 @@ FPM can be used for distributing images, and fonts as packages.
 
 - Web Server(fpm serve)
 - FPM CLI
-- Import FTD
-- Packages and Dependencies
-  - VCS
-  - Translation
-  - Inter package dependencies
-  - etc...
+  - static site generator
+  - fpm serve
+  - fpm version
+- FTD
+  - Packages and Dependencies
+    - VCS
+    - Translation
+    - Inter package dependencies
+    - etc...
 - Sitemap
   - Sections, subsections, toc, and theirs headers
 - Dynamic Urls
