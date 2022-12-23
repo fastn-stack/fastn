@@ -145,6 +145,14 @@ impl Variable {
         Ok(ftd::interpreter2::StateWithThing::new_thing(variable))
     }
 
+    pub(crate) fn scan_update_from_ast(
+        ast: ftd::ast::AST,
+        doc: &mut ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<()> {
+        let variable_definition = ast.get_variable_invocation(doc.name)?;
+        ftd::interpreter2::PropertyValue::scan_ast_value(variable_definition.value, doc)
+    }
+
     pub(crate) fn update_from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
