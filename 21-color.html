@@ -568,11 +568,11 @@ set_data_value(data, "foo#bgcolor" + "." + remaining, new_value);
 set_data_value(data, "foo#bgcolor", new_value);
 }
 
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__border-color"]){window.node_change_main["1,0:main__border-color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__border-left-color"]){window.node_change_main["1,2:main__border-left-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__border-color"]){window.node_change_main["1,0:main__border-color"](data);
 }
 };
 
@@ -583,17 +583,17 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-color"]){window.node_change_main["1,2:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__border-left-color"]){window.node_change_main["1,2:main__border-left-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__background-color"]){window.node_change_main["1,2:main__background-color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["1,1:main__background-color"]){window.node_change_main["1,1:main__background-color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__border-color"]){window.node_change_main["1,0:main__border-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1,2:main__border-left-color"]){window.node_change_main["1,2:main__border-left-color"](data);
 }
 };
 
