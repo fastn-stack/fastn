@@ -221,7 +221,7 @@ impl InterpreterState {
     }
 
     pub fn resolve_pending_imports(&mut self) -> ftd::interpreter2::Result<Option<Interpreter>> {
-        for module in self.pending_imports.value.keys().cloned() {
+        if let Some(module) = self.pending_imports.value.keys().next().cloned() {
             if self.parsed_libs.contains_key(module.as_str()) {
                 return Ok(Some(self.resolve_import_things(module.as_str())?));
             }

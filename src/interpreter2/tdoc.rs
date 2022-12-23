@@ -871,7 +871,7 @@ impl<'a> TDoc<'a> {
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
             .unwrap_or(name);
 
-        if let Ok(_) = self.get_initial_thing(name, line_number) {
+        if self.get_initial_thing(name, line_number).is_ok() {
             return Ok(());
         }
 
@@ -909,20 +909,20 @@ impl<'a> TDoc<'a> {
                 })
                 .map(|v| (0, v.to_owned()))
                 .collect_vec();
-            if !current_doc_contains_thing.is_empty() {
-                if !state.to_process.contains.contains(&(
+            if !current_doc_contains_thing.is_empty()
+                && !state.to_process.contains.contains(&(
                     self.name.to_string(),
                     format!("{}#{}", doc_name, thing_name),
-                )) {
-                    state
-                        .to_process
-                        .stack
-                        .push((self.name.to_string(), current_doc_contains_thing));
-                    state.to_process.contains.insert((
-                        self.name.to_string(),
-                        format!("{}#{}", doc_name, thing_name),
-                    ));
-                }
+                ))
+            {
+                state
+                    .to_process
+                    .stack
+                    .push((self.name.to_string(), current_doc_contains_thing));
+                state.to_process.contains.insert((
+                    self.name.to_string(),
+                    format!("{}#{}", doc_name, thing_name),
+                ));
             }
         }
 
@@ -946,7 +946,7 @@ impl<'a> TDoc<'a> {
                 {
                     state
                         .pending_imports
-                        .unique_insert(doc_name.to_string(), (name.to_string(), line_number));
+                        .unique_insert(doc_name.to_string(), (name, line_number));
                 }
 
                 return Ok(());
@@ -1203,20 +1203,20 @@ impl<'a> TDoc<'a> {
                 })
                 .map(|v| (0, v.to_owned()))
                 .collect_vec();
-            if !current_doc_contains_thing.is_empty() {
-                if !state.to_process.contains.contains(&(
+            if !current_doc_contains_thing.is_empty()
+                && !state.to_process.contains.contains(&(
                     self.name.to_string(),
                     format!("{}#{}", doc_name, thing_name),
-                )) {
-                    state
-                        .to_process
-                        .stack
-                        .push((self.name.to_string(), current_doc_contains_thing));
-                    state.to_process.contains.insert((
-                        self.name.to_string(),
-                        format!("{}#{}", doc_name, thing_name),
-                    ));
-                }
+                ))
+            {
+                state
+                    .to_process
+                    .stack
+                    .push((self.name.to_string(), current_doc_contains_thing));
+                state.to_process.contains.insert((
+                    self.name.to_string(),
+                    format!("{}#{}", doc_name, thing_name),
+                ));
             }
         }
 

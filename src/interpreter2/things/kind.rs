@@ -303,7 +303,7 @@ impl KindData {
         doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<()> {
-        let ast_kind = var_kind.kind.clone();
+        let ast_kind = var_kind.kind;
         match ast_kind.as_ref() {
             "string" | "object" | "integer" | "decimal" | "boolean" | "void" | "ftd.ui"
             | "children" => Ok(()),

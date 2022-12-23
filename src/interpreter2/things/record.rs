@@ -29,9 +29,7 @@ impl Record {
         let name = doc.resolve_name(record.name.as_str());
         let known_kinds = std::iter::IntoIterator::into_iter([(
             record.name.to_string(),
-            ftd::interpreter2::Kind::Record {
-                name: name.to_string(),
-            },
+            ftd::interpreter2::Kind::record(name.as_str()),
         )])
         .collect::<ftd::Map<ftd::interpreter2::Kind>>();
         Field::scan_ast_fields(record.fields, doc, &known_kinds)
