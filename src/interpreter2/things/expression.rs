@@ -53,14 +53,17 @@ impl Expression {
         doc: &ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Expression>> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
-            let node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
+            let mut node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
+            dbg!(&node);
             let references = try_ok_state!(Expression::get_references(
-                &node,
+                &mut node,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
                 doc,
                 condition.line_number,
             )?);
+
+            dbg!(&node, &references);
 
             return Ok(ftd::interpreter2::StateWithThing::new_thing(
                 Expression::new(node, references, condition.line_number),
@@ -99,7 +102,7 @@ impl Expression {
     }
 
     pub(crate) fn get_references(
-        node: &ftd::evalexpr::ExprNode,
+        node: &mut ftd::evalexpr::ExprNode,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &ftd::interpreter2::TDoc,
@@ -128,6 +131,7 @@ impl Expression {
 
     pub fn eval(&self, doc: &ftd::interpreter2::TDoc) -> ftd::interpreter2::Result<bool> {
         let mut values: ftd::Map<ftd::evalexpr::Value> = Default::default();
+        dbg!(&self.references);
         for (key, property_value) in self.references.iter() {
             values.insert(
                 key.to_string(),
@@ -158,22 +162,27 @@ fn get_expression_mode(exp: &str) -> Option<String> {
         .map(ToString::to_string)
 }
 
-fn get_variable_identifier_read(node: &ftd::evalexpr::ExprNode) -> Vec<String> {
+fn get_variable_identifier_read(node: &mut ftd::evalexpr::ExprNode) -> Vec<String> {
     return get_variable_identifier_read_(node, &mut vec![]);
 
     fn get_variable_identifier_read_(
-        node: &ftd::evalexpr::ExprNode,
+        node: &mut ftd::evalexpr::ExprNode,
         write_variable: &mut Vec<String>,
     ) -> Vec<String> {
         let mut values = vec![];
         if let Some(operator) = node.operator().get_variable_identifier_write() {
             write_variable.push(operator);
+            // TODO: if operator.eq(ftd::ast::NULL) throw error
         } else if let Some(operator) = node.operator().get_variable_identifier_read() {
-            if !write_variable.contains(&operator) {
+            if operator.eq(ftd::ast::NULL) {
+                *node.operator_mut() = ftd::evalexpr::Operator::Const {
+                    value: ftd::evalexpr::Value::Empty,
+                };
+            } else if !write_variable.contains(&operator) {
                 values.push(operator);
             }
         }
-        for child in node.children().iter() {
+        for child in node.mut_children().iter_mut() {
             values.extend(get_variable_identifier_read_(child, write_variable));
         }
         values

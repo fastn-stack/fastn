@@ -159,7 +159,7 @@ impl<'a> TDoc<'a> {
         kind: &ftd::interpreter2::KindData,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
-        let (value, var_name, var_line_number, remaining) =
+        let (value, _var_name, _var_line_number, remaining) =
             if let Ok(v) = self.get_initial_variable(name, line_number) {
                 let mut value = v.0.value;
                 for conditional in v.0.conditional_value.iter() {
@@ -187,16 +187,7 @@ impl<'a> TDoc<'a> {
                     line_number,
                 );
             };
-        let value = value.resolve(self, line_number)?.inner().ok_or(
-            ftd::interpreter2::Error::ParseError {
-                message: format!(
-                    "Expected value for variable {} in line number {}",
-                    var_name, var_line_number
-                ),
-                doc_id: self.name.to_string(),
-                line_number,
-            },
-        )?;
+        let value = value.resolve(self, line_number)?;
         if let Some(remaining) = remaining {
             return resolve_(remaining.as_str(), &value, line_number, self);
         }

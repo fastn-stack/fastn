@@ -180,8 +180,17 @@ pub fn text_from_properties(
     local_container: &[usize],
     line_number: usize,
 ) -> ftd::executor::Result<Text> {
-    let text = ftd::executor::value::string("text", properties, arguments, doc, line_number)?
-        .map(|v| ftd::executor::element::markup_inline(v.as_str()));
+    let text =
+        ftd::executor::value::optional_string("text", properties, arguments, doc, line_number)?;
+    if text.value.is_none() && condition.is_none() {
+        // TODO: Check condition if `value is not null` is there
+        return ftd::executor::utils::parse_error(
+            "Expected string for text property",
+            doc.name,
+            line_number,
+        );
+    }
+    let text = text.map(|v| ftd::executor::element::markup_inline(v.unwrap_or_default().as_str()));
     let common = common_from_properties(
         properties,
         events,

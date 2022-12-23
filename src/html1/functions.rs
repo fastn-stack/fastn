@@ -137,6 +137,14 @@ impl ExpressionGenerator {
             return format!("({})", result.join(","));
         }
 
+        if let Some(function_name) = self.function_name(node.operator()) {
+            let mut result = vec![];
+            for children in node.children() {
+                result.push(self.to_string(children, false, arguments));
+            }
+            return format!("{}({})", function_name, result.join(","));
+        }
+
         if self.is_assignment(node.operator()) {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
@@ -178,7 +186,13 @@ impl ExpressionGenerator {
             return format!("{}{}", operator.trim(), result.join(" "));
         }
 
-        let value = node.operator().to_string();
+        let value = if self.is_null(node.operator()) {
+            "null".to_string()
+        } else {
+            node.operator().to_string()
+        };
+
+        dbg!(&node.operator(), &value);
         format!(
             "{}{}",
             value,
@@ -216,6 +230,23 @@ impl ExpressionGenerator {
 
     pub fn is_tuple(&self, operator: &ftd::evalexpr::Operator) -> bool {
         matches!(operator, ftd::evalexpr::Operator::Tuple)
+    }
+
+    pub fn is_null(&self, operator: &ftd::evalexpr::Operator) -> bool {
+        matches!(
+            operator,
+            ftd::evalexpr::Operator::Const {
+                value: ftd::evalexpr::Value::Empty,
+            }
+        )
+    }
+
+    pub fn function_name(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {
+        if let ftd::evalexpr::Operator::FunctionIdentifier { identifier } = operator {
+            Some(identifier.to_string())
+        } else {
+            None
+        }
     }
 
     pub fn has_operator(&self, operator: &ftd::evalexpr::Operator) -> Option<String> {
