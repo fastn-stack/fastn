@@ -1,0 +1,42 @@
+[REQ-app]
+partof = [
+    'REQ-package_manager-fpm_ftd',
+    'REQ-package_manager-main',
+    'REQ-purpose',
+]
+text = '''
+A [[REQ-package_manager-dependency]] can be installed in a [[REQ-package_manager-main]] as an "app".
+
+To do an `fpm.app` entry has to be added to [[REQ-package_manager-fpm_ftd]].
+
+FPM has a feature for installing applications. A user can use a fpm package as
+fpm apps also. An app can be installed multiple times on different urls. Each application are be isolated from each other. 
+
+
+Consider a todo app, same app I can use for different purpose. 
+
+- abrark.com/family-todos/
+- abrark.com/work-todos/
+- abrark.com/personal-todos/
+
+
+FPM Apps feature will support to use fpm package as dependency while installing 
+the application.
+
+FPM Apps will support authentication with FPM `auth groups` and `identity`.
+
+FPM Apps will support mount point url, where the app should be mounted in the 
+browser.
+
+While implementing FPM Apps feature we have to give a fpm processor to access 
+the `apps`.
+
+FPM Apps will support the `endpoint` in it, where the data will be 
+stored of the different application.
+
+FPM Apps will support the config
+
+Questions: Will there be any difference b/w fpm dependency and fpm package to 
+use in the application.
+
+'''
