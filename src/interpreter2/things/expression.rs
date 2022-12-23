@@ -20,14 +20,14 @@ impl Expression {
 
     pub(crate) fn scan_ast_condition(
         condition: ftd::ast::Condition,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
-            let node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
+            let mut node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
             Expression::scan_references(
-                &node,
+                &mut node,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
                 doc,
@@ -54,7 +54,6 @@ impl Expression {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Expression>> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
             let mut node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
-            dbg!(&node);
             let references = try_ok_state!(Expression::get_references(
                 &mut node,
                 definition_name_with_arguments,
@@ -62,8 +61,6 @@ impl Expression {
                 doc,
                 condition.line_number,
             )?);
-
-            dbg!(&node, &references);
 
             return Ok(ftd::interpreter2::StateWithThing::new_thing(
                 Expression::new(node, references, condition.line_number),
@@ -80,9 +77,9 @@ impl Expression {
     }
 
     pub(crate) fn scan_references(
-        node: &ftd::evalexpr::ExprNode,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        node: &mut ftd::evalexpr::ExprNode,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<()> {
@@ -131,7 +128,6 @@ impl Expression {
 
     pub fn eval(&self, doc: &ftd::interpreter2::TDoc) -> ftd::interpreter2::Result<bool> {
         let mut values: ftd::Map<ftd::evalexpr::Value> = Default::default();
-        dbg!(&self.references);
         for (key, property_value) in self.references.iter() {
             values.insert(
                 key.to_string(),

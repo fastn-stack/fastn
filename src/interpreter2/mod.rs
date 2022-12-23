@@ -46,7 +46,7 @@ pub use constants::{
     FTD_TEXT_ALIGN, FTD_TEXT_ALIGN_CENTER, FTD_TEXT_ALIGN_END, FTD_TEXT_ALIGN_JUSTIFY,
     FTD_TEXT_ALIGN_START,
 };
-pub use main2::{interpret, Document, Interpreter, InterpreterState, StateWithThing};
+pub use main2::{interpret, Document, Interpreter, InterpreterState, StateWithThing, ToProcess};
 pub use tdoc::TDoc;
 pub use things::{
     component::{

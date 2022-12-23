@@ -167,8 +167,8 @@ impl PropertyValue {
         value: &str,
         doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
     ) -> ftd::interpreter2::Result<()> {
         let value = ftd::ast::VariableValue::String {
             value: value.to_string(),
@@ -219,8 +219,8 @@ impl PropertyValue {
     pub(crate) fn scan_ast_value_with_argument(
         value: ftd::ast::VariableValue,
         doc: &mut ftd::interpreter2::TDoc,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
     ) -> ftd::interpreter2::Result<()> {
         if PropertyValue::scan_reference_from_ast_value(
             value.clone(),
@@ -242,8 +242,8 @@ impl PropertyValue {
     fn scan_reference_from_ast_value(
         value: ftd::ast::VariableValue,
         doc: &mut ftd::interpreter2::TDoc,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
     ) -> ftd::interpreter2::Result<bool> {
         match value.string(doc.name) {
             Ok(expression)
@@ -269,21 +269,24 @@ impl PropertyValue {
 
                 Ok(true)
             }
-            Ok(reference) if reference.starts_with(ftd::interpreter2::utils::CLONE) => {
+            Ok(reference)
+                if reference.starts_with(ftd::interpreter2::utils::CLONE)
+                    || reference.starts_with(ftd::interpreter2::utils::REFERENCE) =>
+            {
                 let reference = reference
                     .strip_prefix(ftd::interpreter2::utils::REFERENCE)
                     .or_else(|| reference.strip_prefix(ftd::interpreter2::utils::CLONE))
                     .map_or(reference.to_string(), ToString::to_string);
 
                 let initial_kind_with_remaining_and_source =
-                    ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
+                    ftd::interpreter2::utils::is_argument_in_component_or_loop(
                         reference.as_str(),
                         doc.name,
                         definition_name_with_arguments,
                         loop_object_name_and_kind,
                     );
 
-                if initial_kind_with_remaining_and_source.is_none() {
+                if !initial_kind_with_remaining_and_source {
                     doc.scan_thing(reference.as_str(), value.line_number())?;
                 }
                 Ok(true)
@@ -548,8 +551,8 @@ impl PropertyValue {
     fn scan_value_from_ast_value(
         value: ftd::ast::VariableValue,
         doc: &mut ftd::interpreter2::TDoc,
-        definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
     ) -> ftd::interpreter2::Result<()> {
         match value {
             ftd::ast::VariableValue::Optional { value, .. } if value.is_some() => {
@@ -571,12 +574,11 @@ impl PropertyValue {
                 }
             }
             ftd::ast::VariableValue::Record {
-                name,
                 caption,
                 headers,
                 body,
                 values,
-                line_number,
+                ..
             } => {
                 if let Some(caption) = caption.as_ref() {
                     PropertyValue::scan_ast_value_with_argument(

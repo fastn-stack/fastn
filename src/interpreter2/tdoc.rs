@@ -888,7 +888,7 @@ impl<'a> TDoc<'a> {
             return self.err("not found", name, "search_thing", line_number);
         };
 
-        let (doc_name, thing_name, remaining) = // Todo: use remaining
+        let (doc_name, thing_name, _remaining) = // Todo: use remaining
             ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
                 name.as_str(),
                 self.name,
@@ -910,13 +910,60 @@ impl<'a> TDoc<'a> {
                 .map(|v| (0, v.to_owned()))
                 .collect_vec();
             if !current_doc_contains_thing.is_empty() {
-                state
-                    .to_process
-                    .push((self.name.to_string(), current_doc_contains_thing));
+                if !state.to_process.contains.contains(&(
+                    self.name.to_string(),
+                    format!("{}#{}", doc_name, thing_name),
+                )) {
+                    state
+                        .to_process
+                        .stack
+                        .push((self.name.to_string(), current_doc_contains_thing));
+                    state.to_process.contains.insert((
+                        self.name.to_string(),
+                        format!("{}#{}", doc_name, thing_name),
+                    ));
+                }
             }
         }
 
-        if !state.parsed_libs.contains_key(doc_name.as_str()) {
+        if let Some(parsed_document) = state.parsed_libs.get(doc_name.as_str()) {
+            let ast_for_thing = parsed_document
+                .ast
+                .iter()
+                .filter(|v| {
+                    !v.is_component()
+                        && (v.name().eq(&thing_name)
+                            || v.name().starts_with(format!("{}.", thing_name).as_str()))
+                })
+                .map(|v| (0, v.to_owned()))
+                .collect_vec();
+
+            if ast_for_thing.is_empty() {
+                if parsed_document
+                    .foreign_variable
+                    .iter()
+                    .any(|v| thing_name.eq(v))
+                {
+                    state
+                        .pending_imports
+                        .unique_insert(doc_name.to_string(), (name.to_string(), line_number));
+                }
+
+                return Ok(());
+            }
+
+            if !state
+                .to_process
+                .contains
+                .contains(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)))
+            {
+                state
+                    .to_process
+                    .contains
+                    .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+                state.to_process.stack.push((doc_name, ast_for_thing));
+            }
+        } else {
             state
                 .pending_imports
                 .unique_insert(doc_name.to_string(), (name, line_number));
@@ -1157,9 +1204,19 @@ impl<'a> TDoc<'a> {
                 .map(|v| (0, v.to_owned()))
                 .collect_vec();
             if !current_doc_contains_thing.is_empty() {
-                state
-                    .to_process
-                    .push((self.name.to_string(), current_doc_contains_thing));
+                if !state.to_process.contains.contains(&(
+                    self.name.to_string(),
+                    format!("{}#{}", doc_name, thing_name),
+                )) {
+                    state
+                        .to_process
+                        .stack
+                        .push((self.name.to_string(), current_doc_contains_thing));
+                    state.to_process.contains.insert((
+                        self.name.to_string(),
+                        format!("{}#{}", doc_name, thing_name),
+                    ));
+                }
             }
         }
 
@@ -1195,7 +1252,17 @@ impl<'a> TDoc<'a> {
                 return self.err("not found", name, "search_thing", line_number);
             }
 
-            state.to_process.push((doc_name, ast_for_thing));
+            if !state
+                .to_process
+                .contains
+                .contains(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)))
+            {
+                state
+                    .to_process
+                    .contains
+                    .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+                state.to_process.stack.push((doc_name, ast_for_thing));
+            }
 
             return Ok(ftd::interpreter2::StateWithThing::new_state(
                 state.continue_()?,

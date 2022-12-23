@@ -4,10 +4,16 @@
 pub struct InterpreterState {
     pub id: String,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
-    pub to_process: Vec<(String, Vec<(usize, ftd::ast::AST)>)>,
+    pub to_process: ToProcess,
     pub pending_imports: ftd::VecMap<(String, usize)>,
     pub parsed_libs: ftd::Map<ParsedDocument>,
     pub instructions: Vec<ftd::interpreter2::Component>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct ToProcess {
+    pub stack: Vec<(String, Vec<(usize, ftd::ast::AST)>)>,
+    pub contains: std::collections::HashSet<(String, String)>,
 }
 
 impl InterpreterState {
@@ -20,11 +26,11 @@ impl InterpreterState {
     }
 
     pub fn get_current_processing_module(&self) -> Option<String> {
-        self.to_process.last().map(|v| v.0.clone())
+        self.to_process.stack.last().map(|v| v.0.clone())
     }
 
     pub fn increase_scan_count(&mut self) {
-        if let Some((_, asts)) = self.to_process.last_mut() {
+        if let Some((_, asts)) = self.to_process.stack.last_mut() {
             if let Some((number_of_scan, _)) = asts.first_mut() {
                 *number_of_scan += 1;
             }
@@ -35,7 +41,7 @@ impl InterpreterState {
         if let Some(interpreter) = self.resolve_pending_imports()? {
             return Ok(interpreter);
         }
-        if let Some((id, ast_to_process)) = self.to_process.last() {
+        if let Some((id, ast_to_process)) = self.to_process.stack.last() {
             let parsed_document = self.parsed_libs.get(id).unwrap();
             let name = parsed_document.name.to_string();
             let aliases = parsed_document.doc_aliases.clone();
@@ -45,69 +51,81 @@ impl InterpreterState {
                 if !number_of_scan.gt(&1) {
                     self.increase_scan_count();
                 }
+                let ast_full_name =
+                    ftd::interpreter2::utils::resolve_name(ast.name().as_str(), &name, &aliases);
+                let is_in_bag = self.bag.contains_key(&ast_full_name);
+
                 let state = &mut self;
 
                 let mut doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, state);
 
                 if ast.is_record() {
-                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
-                        match ftd::interpreter2::Record::from_ast(ast, &doc)? {
-                            ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
-                            ftd::interpreter2::StateWithThing::Thing(record) => {
-                                self.bag.insert(
-                                    record.name.to_string(),
-                                    ftd::interpreter2::Thing::Record(record),
-                                );
+                    if !is_in_bag {
+                        if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                            match ftd::interpreter2::Record::from_ast(ast, &doc)? {
+                                ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                                ftd::interpreter2::StateWithThing::Thing(record) => {
+                                    self.bag.insert(
+                                        record.name.to_string(),
+                                        ftd::interpreter2::Thing::Record(record),
+                                    );
+                                }
                             }
+                        } else {
+                            ftd::interpreter2::Record::scan_ast(ast, &mut doc)?;
+                            return self.continue_();
                         }
-                    } else {
-                        ftd::interpreter2::Record::scan_ast(ast, &mut doc)?;
-                        return self.continue_();
                     }
                 } else if ast.is_or_type() {
-                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
-                        match ftd::interpreter2::OrType::from_ast(ast, &doc)? {
-                            ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
-                            ftd::interpreter2::StateWithThing::Thing(or_type) => {
-                                self.bag.insert(
-                                    or_type.name.to_string(),
-                                    ftd::interpreter2::Thing::OrType(or_type),
-                                );
+                    if !is_in_bag {
+                        if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                            match ftd::interpreter2::OrType::from_ast(ast, &doc)? {
+                                ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                                ftd::interpreter2::StateWithThing::Thing(or_type) => {
+                                    self.bag.insert(
+                                        or_type.name.to_string(),
+                                        ftd::interpreter2::Thing::OrType(or_type),
+                                    );
+                                }
                             }
+                        } else {
+                            ftd::interpreter2::OrType::scan_ast(ast, &mut doc)?;
+                            return self.continue_();
                         }
-                    } else {
-                        ftd::interpreter2::OrType::scan_ast(ast, &mut doc)?;
-                        return self.continue_();
                     }
                 } else if ast.is_function() {
-                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
-                        match ftd::interpreter2::Function::from_ast(ast, &doc)? {
-                            ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
-                            ftd::interpreter2::StateWithThing::Thing(function) => {
-                                self.bag.insert(
-                                    function.name.to_string(),
-                                    ftd::interpreter2::Thing::Function(function),
-                                );
+                    if !is_in_bag {
+                        if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                            match ftd::interpreter2::Function::from_ast(ast, &doc)? {
+                                ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                                ftd::interpreter2::StateWithThing::Thing(function) => {
+                                    self.bag.insert(
+                                        function.name.to_string(),
+                                        ftd::interpreter2::Thing::Function(function),
+                                    );
+                                }
                             }
+                        } else {
+                            ftd::interpreter2::Function::scan_ast(ast, &mut doc)?;
+                            return self.continue_();
                         }
-                    } else {
-                        ftd::interpreter2::Function::scan_ast(ast, &mut doc)?;
-                        return self.continue_();
                     }
                 } else if ast.is_variable_definition() {
-                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
-                        match ftd::interpreter2::Variable::from_ast(ast, &doc)? {
-                            ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
-                            ftd::interpreter2::StateWithThing::Thing(variable) => {
-                                self.bag.insert(
-                                    variable.name.to_string(),
-                                    ftd::interpreter2::Thing::Variable(variable),
-                                );
+                    if !is_in_bag {
+                        if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                            match ftd::interpreter2::Variable::from_ast(ast, &doc)? {
+                                ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                                ftd::interpreter2::StateWithThing::Thing(variable) => {
+                                    self.bag.insert(
+                                        variable.name.to_string(),
+                                        ftd::interpreter2::Thing::Variable(variable),
+                                    );
+                                }
                             }
+                        } else {
+                            ftd::interpreter2::Variable::scan_ast(ast, &mut doc)?;
+                            return self.continue_();
                         }
-                    } else {
-                        ftd::interpreter2::Variable::scan_ast(ast, &mut doc)?;
-                        return self.continue_();
                     }
                 } else if ast.is_variable_invocation() {
                     if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
@@ -125,19 +143,21 @@ impl InterpreterState {
                         return self.continue_();
                     }
                 } else if ast.is_component_definition() {
-                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
-                        match ftd::interpreter2::ComponentDefinition::from_ast(ast, &doc)? {
-                            ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
-                            ftd::interpreter2::StateWithThing::Thing(component) => {
-                                self.bag.insert(
-                                    component.name.to_string(),
-                                    ftd::interpreter2::Thing::Component(component),
-                                );
+                    if !is_in_bag {
+                        if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                            match ftd::interpreter2::ComponentDefinition::from_ast(ast, &doc)? {
+                                ftd::interpreter2::StateWithThing::State(s) => return Ok(s),
+                                ftd::interpreter2::StateWithThing::Thing(component) => {
+                                    self.bag.insert(
+                                        component.name.to_string(),
+                                        ftd::interpreter2::Thing::Component(component),
+                                    );
+                                }
                             }
+                        } else {
+                            ftd::interpreter2::ComponentDefinition::scan_ast(ast, &mut doc)?;
+                            return self.continue_();
                         }
-                    } else {
-                        ftd::interpreter2::ComponentDefinition::from_ast(ast, &mut doc)?;
-                        return self.continue_();
                     }
                 } else if ast.is_component() {
                     if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
@@ -158,14 +178,15 @@ impl InterpreterState {
 
         if self
             .to_process
+            .stack
             .last()
             .map(|v| v.1.is_empty())
             .unwrap_or(false)
         {
-            self.to_process.pop();
+            self.to_process.stack.pop();
         }
 
-        if self.to_process.is_empty() {
+        if self.to_process.stack.is_empty() {
             let document = Document {
                 data: self.bag,
                 aliases: self
@@ -186,7 +207,7 @@ impl InterpreterState {
 
     pub fn remove_last(&mut self) {
         let mut pop_last = false;
-        if let Some((_, asts)) = self.to_process.last_mut() {
+        if let Some((_, asts)) = self.to_process.stack.last_mut() {
             if !asts.is_empty() {
                 asts.remove(0);
             }
@@ -195,7 +216,7 @@ impl InterpreterState {
             }
         }
         if pop_last {
-            self.to_process.pop();
+            self.to_process.stack.pop();
         }
     }
 
@@ -240,7 +261,7 @@ impl InterpreterState {
                     .collect_vec();
 
                 if !ast_for_thing.is_empty() {
-                    self.to_process.push((doc_name, ast_for_thing));
+                    self.to_process.stack.push((doc_name, ast_for_thing));
                 } else {
                     let found_foreign_variable =
                         document.foreign_variable.iter().any(|v| thing_name.eq(v));
@@ -291,7 +312,7 @@ impl InterpreterState {
         mut self,
         value: ftd::interpreter2::Value,
     ) -> ftd::interpreter2::Result<Interpreter> {
-        let (id, ast_to_process) = self.to_process.last().unwrap(); //TODO: remove unwrap & throw error
+        let (id, ast_to_process) = self.to_process.stack.last().unwrap(); //TODO: remove unwrap & throw error
         let parsed_document = self.parsed_libs.get(id).unwrap();
         let name = parsed_document.name.to_string();
         let aliases = parsed_document.doc_aliases.clone();
@@ -367,7 +388,7 @@ pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter2::Result<
     let mut s = InterpreterState::new(id.to_string());
     s.parsed_libs
         .insert(id.to_string(), ParsedDocument::parse(id, source)?);
-    s.to_process.push((
+    s.to_process.stack.push((
         id.to_string(),
         s.parsed_libs
             .get(id)
