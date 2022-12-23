@@ -37,3 +37,31 @@ Learn mode about [remixing packages here](/remixing/).
 
 FPM can be used for distributing images, and fonts as packages.
 
+
+
+-- ds.h1: Features
+
+- Web Server(fpm serve)
+- FPM CLI
+- Import FTD
+- Packages and Dependencies
+  - VCS
+  - Translation
+  - Inter package dependencies
+  - etc...
+- Sitemap
+  - Sections, subsections, toc, and theirs headers
+- Dynamic Urls
+  - Sections, subsections, toc, and theirs headers
+- Processors
+  - http, sitemap and all
+- HTTP Proxy
+- Auth
+  - User Groups and Identities
+  - readers and writers
+- Apps
+- Wasm Hosting
+- Sync and all
+- Editor
+- Database and Cache
+- Logs(Observer)
