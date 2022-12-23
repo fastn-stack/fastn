@@ -273,6 +273,9 @@ impl InterpreterState {
                                 .map(|v| format!("{}.{}", thing_name, v))
                                 .unwrap_or(thing_name),
                         });
+                    } else if document.foreign_function.iter().any(|v| thing_name.eq(v)) {
+                        thing_names.pop();
+                        continue;
                     } else if !found_foreign_variable {
                         return ftd::interpreter2::utils::e2(
                             format!("`{}` not found", name),
