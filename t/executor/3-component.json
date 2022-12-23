@@ -449,6 +449,11 @@
                         "value": null,
                         "line_number": null,
                         "properties": []
+                      },
+                      "overflow_y": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
                       }
                     }
                   }
@@ -722,6 +727,11 @@
                                 "value": null,
                                 "line_number": null,
                                 "properties": []
+                              },
+                              "overflow_y": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
                               }
                             }
                           }
@@ -971,6 +981,11 @@
                                 "value": null,
                                 "line_number": null,
                                 "properties": []
+                              },
+                              "overflow_y": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
                               }
                             }
                           }
@@ -1187,6 +1202,11 @@
                         "properties": []
                       },
                       "overflow_x": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "overflow_y": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -1409,6 +1429,11 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
+              },
+              "overflow_y": {
+                "value": null,
+                "line_number": null,
+                "properties": []
               }
             }
           }
@@ -1625,6 +1650,11 @@
         "properties": []
       },
       "overflow_x": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "overflow_y": {
         "value": null,
         "line_number": null,
         "properties": []

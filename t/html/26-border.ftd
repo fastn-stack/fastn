@@ -1,0 +1,29 @@
+-- ftd.column:
+margin.px: 50
+width.fixed.px: 200
+height.fixed.px: 200
+background.solid: yellow
+border-bottom-width.px: 11
+border-top-width.px: 5
+border-left-width.px: 7
+border-right-width.px: 9
+border-bottom-color: red
+border-top-color: blue
+border-left-color: green
+border-right-color: purple
+
+-- end: ftd.column
+
+
+-- ftd.column:
+margin.px: 50
+width.fixed.px: 200
+height.fixed.px: 200
+background.solid: yellow
+border-width.px: 10
+border-bottom-color: red
+border-top-color: blue
+border-left-color: green
+border-right-color: purple
+
+-- end: ftd.column
