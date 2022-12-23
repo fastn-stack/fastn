@@ -18,6 +18,18 @@ impl OrType {
         }
     }
 
+    pub(crate) fn scan_ast(
+        ast: ftd::ast::AST,
+        doc: &mut ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<()> {
+        let or_type = ast.get_or_type(doc.name)?;
+        for mut variant in or_type.variants {
+            variant.set_name(format!("{}.{}", or_type.name, variant.name()).as_str());
+            ftd::interpreter2::OrTypeVariant::scan_ast(variant, doc)?;
+        }
+        Ok(())
+    }
+
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &ftd::interpreter2::TDoc,
@@ -91,6 +103,23 @@ impl OrTypeVariant {
             OrTypeVariant::AnonymousRecord(ar) => ar.line_number,
             OrTypeVariant::Regular(r) => r.line_number,
             OrTypeVariant::Constant(c) => c.line_number,
+        }
+    }
+
+    pub fn scan_ast(
+        ast_variant: ftd::ast::OrTypeVariant,
+        doc: &mut ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<()> {
+        match ast_variant {
+            ftd::ast::OrTypeVariant::AnonymousRecord(record) => {
+                ftd::interpreter2::Record::scan_record(record, doc)
+            }
+            ftd::ast::OrTypeVariant::Regular(variant) => {
+                ftd::interpreter2::Field::scan_ast_field(variant, doc, &Default::default())
+            }
+            ftd::ast::OrTypeVariant::Constant(variant) => {
+                ftd::interpreter2::Field::scan_ast_field(variant, doc, &Default::default())
+            }
         }
     }
 
