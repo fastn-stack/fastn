@@ -259,3 +259,12 @@ email: arpita@fifthtry.com
 - how to use fpm site as a blog
 - Competitor
   - swimm.io
+
+
+## FPM Auth: /how-to/oauth/
+
+- GitHub OAuth: /how-to/oauth/gh/
+  - Install GitHub OAuth App: /how-to/oauth/gh-app/
+  - Login Flow: /how-to/oauth/gh-login/
+  - GitHub FPM Identities: /how-to/oauth/gh-ids/
+  - Access Control With Identities: /how-to/oauth/gh-acl/
