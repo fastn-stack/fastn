@@ -315,7 +315,7 @@ impl KindData {
     pub(crate) fn from_ast_kind(
         var_kind: ftd::ast::VariableKind,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<KindData>> {
         let mut ast_kind = var_kind.kind.clone();

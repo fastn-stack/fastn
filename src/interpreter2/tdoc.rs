@@ -71,14 +71,17 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn search_record(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
     {
         match self.search_thing(name, line_number)? {
             ftd::interpreter2::StateWithThing::State(s) => {
                 Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Continue => {
+                Ok(ftd::interpreter2::StateWithThing::new_continue())
             }
             ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Record(r)) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(r))
@@ -109,14 +112,17 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn search_variable(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
     {
         match self.search_thing(name, line_number)? {
             ftd::interpreter2::StateWithThing::State(s) => {
                 Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Continue => {
+                Ok(ftd::interpreter2::StateWithThing::new_continue())
             }
             ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Variable(r)) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(r))
@@ -458,8 +464,8 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn get_kind_with_argument(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
         component_definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
@@ -546,7 +552,7 @@ impl<'a> TDoc<'a> {
         fn get_kind_(
             kind: ftd::interpreter2::Kind,
             name: &str,
-            doc: &ftd::interpreter2::TDoc,
+            doc: &mut ftd::interpreter2::TDoc,
             line_number: usize,
         ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::KindData>>
         {
@@ -580,14 +586,17 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn get_kind(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::KindData>>
     {
         match self.get_kind_with_argument(name, line_number, None, &None)? {
             ftd::interpreter2::StateWithThing::State(s) => {
                 Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Continue => {
+                Ok(ftd::interpreter2::StateWithThing::new_continue())
             }
             ftd::interpreter2::StateWithThing::Thing(fields) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(fields.1))
@@ -612,8 +621,8 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn search_component(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::ComponentDefinition>,
@@ -621,6 +630,9 @@ impl<'a> TDoc<'a> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter2::StateWithThing::State(s) => {
                 Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Continue => {
+                Ok(ftd::interpreter2::StateWithThing::new_continue())
             }
             ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::Component(c)) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(c))
@@ -635,14 +647,17 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn search_or_type(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::OrType>>
     {
         match self.search_thing(name, line_number)? {
             ftd::interpreter2::StateWithThing::State(s) => {
                 Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Continue => {
+                Ok(ftd::interpreter2::StateWithThing::new_continue())
             }
             ftd::interpreter2::StateWithThing::Thing(ftd::interpreter2::Thing::OrType(c)) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(c))
@@ -657,8 +672,8 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn search_or_type_with_variant(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<(String, ftd::interpreter2::OrTypeVariant)>,
@@ -666,6 +681,9 @@ impl<'a> TDoc<'a> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter2::StateWithThing::State(s) => {
                 Ok(ftd::interpreter2::StateWithThing::new_state(s))
+            }
+            ftd::interpreter2::StateWithThing::Continue => {
+                Ok(ftd::interpreter2::StateWithThing::new_continue())
             }
             ftd::interpreter2::StateWithThing::Thing(
                 ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant },
@@ -830,8 +848,8 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn search_function(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Function>>
     {
@@ -973,8 +991,8 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn search_thing(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Thing>>
     {
@@ -992,7 +1010,7 @@ impl<'a> TDoc<'a> {
         return Ok(ftd::interpreter2::StateWithThing::new_thing(initial_thing));
 
         fn search_thing_(
-            doc: &ftd::interpreter2::TDoc,
+            doc: &mut ftd::interpreter2::TDoc,
             line_number: usize,
             name: &str,
             thing: ftd::interpreter2::Thing,
@@ -1157,8 +1175,8 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn search_initial_thing(
-        &'a self,
-        name: &'a str,
+        &mut self,
+        name: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<(ftd::interpreter2::Thing, Option<String>)>,
@@ -1174,13 +1192,18 @@ impl<'a> TDoc<'a> {
             return Ok(ftd::interpreter2::StateWithThing::new_thing(thing));
         }
 
-        let mut state = if let Some(state) = self.state() {
-            (*state).clone()
+        let name = self.resolve_name(name);
+
+        let state = if let Some(state) = {
+            match &mut self.bag {
+                BagOrState::Bag(_) => None,
+                BagOrState::State(s) => Some(s),
+            }
+        } {
+            state
         } else {
             return self.err("not found", name, "search_thing", line_number);
         };
-
-        let name = self.resolve_name(name);
 
         let (doc_name, thing_name, remaining) = // Todo: use remaining
             ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
@@ -1239,9 +1262,8 @@ impl<'a> TDoc<'a> {
                     .any(|v| thing_name.eq(v))
                 {
                     return Ok(ftd::interpreter2::StateWithThing::new_state(
-                        ftd::interpreter2::Interpreter::StuckOnForeignVariable {
+                        ftd::interpreter2::InterpreterWithoutState::StuckOnForeignVariable {
                             module: doc_name,
-                            state,
                             variable: remaining
                                 .map(|v| format!("{}.{}", thing_name, v))
                                 .unwrap_or(thing_name),
@@ -1264,9 +1286,7 @@ impl<'a> TDoc<'a> {
                 state.to_process.stack.push((doc_name, ast_for_thing));
             }
 
-            return Ok(ftd::interpreter2::StateWithThing::new_state(
-                state.continue_()?,
-            ));
+            return Ok(ftd::interpreter2::StateWithThing::new_continue());
         }
 
         if doc_name.eq(self.name) {
@@ -1278,10 +1298,7 @@ impl<'a> TDoc<'a> {
             .unique_insert(doc_name.to_string(), (name, line_number));
 
         Ok(ftd::interpreter2::StateWithThing::new_state(
-            ftd::interpreter2::Interpreter::StuckOnImport {
-                module: doc_name,
-                state,
-            },
+            ftd::interpreter2::InterpreterWithoutState::StuckOnImport { module: doc_name },
         ))
     }
 

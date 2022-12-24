@@ -41,6 +41,196 @@ impl InterpreterState {
         if let Some(interpreter) = self.resolve_pending_imports()? {
             return Ok(interpreter);
         }
+
+        if let Some((doc_name, number_of_scan, ast)) = self.get_next_ast() {
+            dbg!(&number_of_scan, &ast);
+            if !number_of_scan.gt(&1) {
+                self.increase_scan_count();
+            }
+            let parsed_document = self.parsed_libs.get(doc_name.as_str()).unwrap();
+            let name = parsed_document.name.to_string();
+            let aliases = parsed_document.doc_aliases.clone();
+
+            let ast_full_name = ftd::interpreter2::utils::resolve_name(
+                ast.name().as_str(),
+                &parsed_document.name,
+                &parsed_document.doc_aliases,
+            );
+            let is_in_bag = self.bag.contains_key(&ast_full_name);
+
+            let state = &mut self;
+
+            let mut doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, state);
+            if ast.is_record() {
+                if !is_in_bag {
+                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                        match ftd::interpreter2::Record::from_ast(ast, &mut doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => {
+                                return Ok(s.into_interpreter(self))
+                            }
+                            ftd::interpreter2::StateWithThing::Thing(record) => {
+                                self.bag.insert(
+                                    record.name.to_string(),
+                                    ftd::interpreter2::Thing::Record(record),
+                                );
+                            }
+                            ftd::interpreter2::StateWithThing::Continue => return self.continue_(),
+                        }
+                    } else {
+                        ftd::interpreter2::Record::scan_ast(ast, &mut doc)?;
+                        return self.continue_();
+                    }
+                }
+            } else if ast.is_or_type() {
+                if !is_in_bag {
+                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                        match ftd::interpreter2::OrType::from_ast(ast, &mut doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => {
+                                return Ok(s.into_interpreter(self))
+                            }
+                            ftd::interpreter2::StateWithThing::Thing(or_type) => {
+                                self.bag.insert(
+                                    or_type.name.to_string(),
+                                    ftd::interpreter2::Thing::OrType(or_type),
+                                );
+                            }
+                            ftd::interpreter2::StateWithThing::Continue => return self.continue_(),
+                        }
+                    } else {
+                        ftd::interpreter2::OrType::scan_ast(ast, &mut doc)?;
+                        return self.continue_();
+                    }
+                }
+            } else if ast.is_function() {
+                if !is_in_bag {
+                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                        match ftd::interpreter2::Function::from_ast(ast, &mut doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => {
+                                return Ok(s.into_interpreter(self))
+                            }
+                            ftd::interpreter2::StateWithThing::Thing(function) => {
+                                self.bag.insert(
+                                    function.name.to_string(),
+                                    ftd::interpreter2::Thing::Function(function),
+                                );
+                            }
+                            ftd::interpreter2::StateWithThing::Continue => return self.continue_(),
+                        }
+                    } else {
+                        ftd::interpreter2::Function::scan_ast(ast, &mut doc)?;
+                        return self.continue_();
+                    }
+                }
+            } else if ast.is_variable_definition() {
+                if !is_in_bag {
+                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                        match ftd::interpreter2::Variable::from_ast(ast, &mut doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => {
+                                return Ok(s.into_interpreter(self))
+                            }
+                            ftd::interpreter2::StateWithThing::Thing(variable) => {
+                                self.bag.insert(
+                                    variable.name.to_string(),
+                                    ftd::interpreter2::Thing::Variable(variable),
+                                );
+                            }
+                            ftd::interpreter2::StateWithThing::Continue => return self.continue_(),
+                        }
+                    } else {
+                        ftd::interpreter2::Variable::scan_ast(ast, &mut doc)?;
+                        return self.continue_();
+                    }
+                }
+            } else if ast.is_variable_invocation() {
+                if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                    match ftd::interpreter2::Variable::update_from_ast(ast, &mut doc)? {
+                        ftd::interpreter2::StateWithThing::State(s) => {
+                            return Ok(s.into_interpreter(self))
+                        }
+                        ftd::interpreter2::StateWithThing::Thing(variable) => {
+                            self.bag.insert(
+                                variable.name.to_string(),
+                                ftd::interpreter2::Thing::Variable(variable),
+                            );
+                        }
+                        ftd::interpreter2::StateWithThing::Continue => return self.continue_(),
+                    }
+                } else {
+                    ftd::interpreter2::Variable::scan_update_from_ast(ast, &mut doc)?;
+                    return self.continue_();
+                }
+            } else if ast.is_component_definition() {
+                if !is_in_bag {
+                    if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                        match ftd::interpreter2::ComponentDefinition::from_ast(ast, &mut doc)? {
+                            ftd::interpreter2::StateWithThing::State(s) => {
+                                return Ok(s.into_interpreter(self))
+                            }
+                            ftd::interpreter2::StateWithThing::Thing(component) => {
+                                self.bag.insert(
+                                    component.name.to_string(),
+                                    ftd::interpreter2::Thing::Component(component),
+                                );
+                            }
+                            ftd::interpreter2::StateWithThing::Continue => return self.continue_(),
+                        }
+                    } else {
+                        ftd::interpreter2::ComponentDefinition::scan_ast(ast, &mut doc)?;
+                        return self.continue_();
+                    }
+                }
+            } else if ast.is_component() {
+                if number_of_scan.eq(&0) || number_of_scan.gt(&1) {
+                    match ftd::interpreter2::Component::from_ast(ast, &mut doc)? {
+                        ftd::interpreter2::StateWithThing::State(s) => {
+                            return Ok(s.into_interpreter(self))
+                        }
+                        ftd::interpreter2::StateWithThing::Thing(component) => {
+                            self.instructions.push(component);
+                        }
+                        ftd::interpreter2::StateWithThing::Continue => return self.continue_(),
+                    }
+                } else {
+                    ftd::interpreter2::Component::scan_ast(ast, &mut doc)?;
+                    return self.continue_();
+                }
+            }
+            self.remove_last();
+        }
+
+        if self
+            .to_process
+            .stack
+            .last()
+            .map(|v| v.1.is_empty())
+            .unwrap_or(false)
+        {
+            self.to_process.stack.pop();
+        }
+
+        if self.to_process.stack.is_empty() {
+            let document = Document {
+                data: self.bag,
+                aliases: self
+                    .parsed_libs
+                    .get(self.id.as_str())
+                    .unwrap()
+                    .doc_aliases
+                    .clone(),
+                tree: self.instructions,
+                name: self.id,
+            };
+
+            Ok(Interpreter::Done { document })
+        } else {
+            self.continue_()
+        }
+    }
+
+    /*pub fn continue_(mut self) -> ftd::interpreter2::Result<Interpreter> {
+        if let Some(interpreter) = self.resolve_pending_imports()? {
+            return Ok(interpreter);
+        }
         if let Some((id, ast_to_process)) = self.to_process.stack.last() {
             let parsed_document = self.parsed_libs.get(id).unwrap();
             let name = parsed_document.name.to_string();
@@ -203,6 +393,16 @@ impl InterpreterState {
         } else {
             self.continue_()
         }
+    }*/
+
+    // (doc_name, number_of_scan, last_ast)
+    pub fn get_next_ast(&self) -> Option<(String, usize, ftd::ast::AST)> {
+        if let Some((doc_name, asts)) = self.to_process.stack.last() {
+            if let Some((number_of_scan, ast)) = asts.first() {
+                return Some((doc_name.to_string(), *number_of_scan, ast.clone()));
+            }
+        }
+        None
     }
 
     pub fn remove_last(&mut self) {
@@ -336,17 +536,18 @@ impl InterpreterState {
         let name = parsed_document.name.to_string();
         let aliases = parsed_document.doc_aliases.clone();
         let ast = ast_to_process.first().unwrap().clone().1; // TODO: remove unwrap
-        let doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, &mut self);
+        let mut doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, &mut self);
         let variable_definition = ast.get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
         let kind = match ftd::interpreter2::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
-            &doc,
+            &mut doc,
             variable_definition.line_number,
         )? {
             StateWithThing::Thing(t) => t,
-            StateWithThing::State(s) => return Ok(s),
+            StateWithThing::State(s) => return Ok(s.into_interpreter(self)),
+            StateWithThing::Continue => return Ok(self.continue_()?),
         };
 
         let value =
@@ -508,6 +709,35 @@ pub enum Interpreter {
     },
 }
 
+#[derive(Debug)]
+pub enum InterpreterWithoutState {
+    StuckOnImport { module: String },
+    Done { document: Document },
+    StuckOnProcessor { ast: ftd::ast::AST, module: String },
+    StuckOnForeignVariable { module: String, variable: String },
+}
+
+impl InterpreterWithoutState {
+    pub fn into_interpreter(self, state: InterpreterState) -> Interpreter {
+        match self {
+            InterpreterWithoutState::StuckOnImport { module } => {
+                Interpreter::StuckOnImport { module, state }
+            }
+            InterpreterWithoutState::Done { document } => Interpreter::Done { document },
+            InterpreterWithoutState::StuckOnProcessor { ast, module } => {
+                Interpreter::StuckOnProcessor { ast, module, state }
+            }
+            InterpreterWithoutState::StuckOnForeignVariable { module, variable } => {
+                Interpreter::StuckOnForeignVariable {
+                    variable,
+                    module,
+                    state,
+                }
+            }
+        }
+    }
+}
+
 #[derive(Debug, Default, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Document {
     pub data: ftd::Map<ftd::interpreter2::Thing>,
@@ -519,7 +749,8 @@ pub struct Document {
 #[derive(Debug)]
 pub enum StateWithThing<T> {
     Thing(T),
-    State(Interpreter),
+    State(InterpreterWithoutState),
+    Continue,
 }
 
 impl<T> StateWithThing<T> {
@@ -527,8 +758,12 @@ impl<T> StateWithThing<T> {
         StateWithThing::Thing(thing)
     }
 
-    pub fn new_state(state: Interpreter) -> StateWithThing<T> {
+    pub fn new_state(state: InterpreterWithoutState) -> StateWithThing<T> {
         StateWithThing::State(state)
+    }
+
+    pub fn new_continue() -> StateWithThing<T> {
+        StateWithThing::Continue
     }
 
     pub fn map<U, F: FnOnce(T) -> U>(self, f: F) -> StateWithThing<U> {

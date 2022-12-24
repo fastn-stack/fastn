@@ -50,7 +50,7 @@ impl Expression {
         condition: ftd::ast::Condition,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Expression>> {
         if let Some(expression_mode) = get_expression_mode(condition.expression.as_str()) {
             let mut node = ftd::evalexpr::build_operator_tree(expression_mode.as_str())?;
@@ -102,7 +102,7 @@ impl Expression {
         node: &mut ftd::evalexpr::ExprNode,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::Map<ftd::interpreter2::PropertyValue>>,

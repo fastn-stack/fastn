@@ -9,6 +9,9 @@ macro_rules! try_ok_state {
             $crate::interpreter2::StateWithThing::State(s) => {
                 return Ok($crate::interpreter2::StateWithThing::new_state(s))
             }
+            $crate::interpreter2::StateWithThing::Continue => {
+                return Ok($crate::interpreter2::StateWithThing::new_continue())
+            }
             $crate::interpreter2::StateWithThing::Thing(t) => t,
         }
     };
@@ -20,6 +23,9 @@ macro_rules! try_state {
         match $e {
             $crate::interpreter2::StateWithThing::State(s) => {
                 return $crate::interpreter2::StateWithThing::new_state(s)
+            }
+            $crate::interpreter2::StateWithThing::Continue => {
+                return $crate::interpreter2::StateWithThing::new_continue()
             }
             $crate::interpreter2::StateWithThing::Thing(t) => t,
         }
@@ -46,7 +52,10 @@ pub use constants::{
     FTD_TEXT_ALIGN, FTD_TEXT_ALIGN_CENTER, FTD_TEXT_ALIGN_END, FTD_TEXT_ALIGN_JUSTIFY,
     FTD_TEXT_ALIGN_START,
 };
-pub use main2::{interpret, Document, Interpreter, InterpreterState, StateWithThing, ToProcess};
+pub use main2::{
+    interpret, Document, Interpreter, InterpreterState, InterpreterWithoutState, StateWithThing,
+    ToProcess,
+};
 pub use tdoc::TDoc;
 pub use things::{
     component::{

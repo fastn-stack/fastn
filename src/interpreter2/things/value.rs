@@ -185,7 +185,7 @@ impl PropertyValue {
 
     pub(crate) fn from_string_with_argument(
         value: &str,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         mutable: bool,
         line_number: usize,
@@ -297,7 +297,7 @@ impl PropertyValue {
 
     pub(crate) fn from_ast_value(
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
     ) -> ftd::interpreter2::Result<
@@ -308,7 +308,7 @@ impl PropertyValue {
 
     pub(crate) fn from_ast_value_with_argument(
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
@@ -340,7 +340,7 @@ impl PropertyValue {
     fn to_ui_value(
         key: &str,
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
@@ -369,7 +369,7 @@ impl PropertyValue {
     fn from_record(
         record: &ftd::interpreter2::Record,
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
         expected_kind: &ftd::interpreter2::KindData,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
@@ -630,7 +630,7 @@ impl PropertyValue {
 
     fn value_from_ast_value(
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
@@ -654,7 +654,7 @@ impl PropertyValue {
 
         fn get_property_value(
             value: ftd::ast::VariableValue,
-            doc: &ftd::interpreter2::TDoc,
+            doc: &mut ftd::interpreter2::TDoc,
             is_mutable: bool,
             expected_kind: &ftd::interpreter2::KindData,
             definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
@@ -906,7 +906,7 @@ impl PropertyValue {
 
     fn reference_from_ast_value(
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,

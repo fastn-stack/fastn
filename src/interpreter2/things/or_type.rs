@@ -32,7 +32,7 @@ impl OrType {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<OrType>> {
         let or_type = ast.get_or_type(doc.name)?;
         let name = doc.resolve_name(or_type.name.as_str());
@@ -125,7 +125,7 @@ impl OrTypeVariant {
 
     pub fn from_ast(
         ast_variant: ftd::ast::OrTypeVariant,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<OrTypeVariant>> {
         match ast_variant {
             ftd::ast::OrTypeVariant::AnonymousRecord(record) => {

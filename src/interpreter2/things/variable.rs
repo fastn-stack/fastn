@@ -59,7 +59,7 @@ impl Variable {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
     {
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
@@ -72,7 +72,12 @@ impl Variable {
         )?);
 
         if let Some(processor) = variable_definition.processor {
-            let state = if let Some(state) = doc.state() {
+            let state = if let Some(state) = {
+                match &mut doc.bag {
+                    ftd::interpreter2::tdoc::BagOrState::Bag(_) => None,
+                    ftd::interpreter2::tdoc::BagOrState::State(s) => Some(s),
+                }
+            } {
                 (*state).clone()
             } else {
                 return ftd::interpreter2::utils::e2(
@@ -92,9 +97,8 @@ impl Variable {
                 Some(p) => p,
                 None => {
                     return Ok(ftd::interpreter2::StateWithThing::new_state(
-                        ftd::interpreter2::Interpreter::StuckOnImport {
+                        ftd::interpreter2::InterpreterWithoutState::StuckOnImport {
                             module: doc_name,
-                            state,
                         },
                     ))
                 }
@@ -106,8 +110,7 @@ impl Variable {
                 .any(|v| thing_name.eq(v))
             {
                 Ok(ftd::interpreter2::StateWithThing::new_state(
-                    ftd::interpreter2::Interpreter::StuckOnProcessor {
-                        state,
+                    ftd::interpreter2::InterpreterWithoutState::StuckOnProcessor {
                         ast,
                         module: doc_name,
                     },
@@ -155,7 +158,7 @@ impl Variable {
 
     pub(crate) fn update_from_ast(
         ast: ftd::ast::AST,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
     {
         let variable_definition = ast.get_variable_invocation(doc.name)?;
