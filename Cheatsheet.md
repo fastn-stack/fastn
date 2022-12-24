@@ -387,7 +387,7 @@ string dark: $color.light
 -- constant string center: center
 -- constant string end: end
 
--- end: fill
+-- end: align-self
 ```
 
 ### `overflow`: `optional ftd.overflow`
@@ -404,3 +404,41 @@ string dark: $color.light
 
 -- end: overflow
 ```
+
+
+## Container Attributes
+
+### `spacing`: `optional ftd.length`
+### `wrap`: `optional boolean`
+
+### `align-content`: `optional ftd.align`
+
+```ftd
+-- or-type align:
+
+-- constant string top-left: top-left
+-- constant string top-center: top-center
+-- constant string top-right: top-right
+-- constant string right: right
+-- constant string left: left
+-- constant string center: center
+-- constant string bottom-left: bottom-left
+-- constant string bottom-center: bottom-center
+-- constant string bottom-right: bottom-right
+
+-- end: align
+```
+
+
+### `spacing-mode`: `optional ftd.spacing-mode`
+
+```ftd
+-- or-type spacing-mode:
+
+-- constant string space-between: space-between
+-- constant string space-around: space-around
+-- constant string space-evenly: space-evenly
+
+-- end: spacing-mode
+```
+
