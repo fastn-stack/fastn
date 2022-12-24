@@ -1314,49 +1314,26 @@ impl<'a> TDoc<'a> {
 
         // dbg!("get_initial_thing", &name);
 
-        if name.contains('#') {
-            let (splited_name, remaining_value) = if let Ok(function_name) =
-                ftd::interpreter2::utils::get_function_name(name, self.name, line_number)
-            {
-                (function_name, None)
-            } else {
-                ftd::interpreter2::utils::get_doc_name_and_remaining(name, self.name, line_number)
-            };
-            return match self.bag().get(name) {
-                Some(a) => Ok((a.to_owned(), None)),
-                None => match self.bag().get(splited_name.as_str()) {
-                    Some(a) => Ok((a.to_owned(), remaining_value)),
-                    None => self.err("not found", splited_name, "get_initial_thing", line_number),
-                },
-            };
-        }
-
         let name = self.resolve_name(name);
 
-        return Ok(match get_initial_thing_(self, name.as_str(), line_number) {
-            Some(a) => a,
-            None => return self.err("not found", name.as_str(), "get_initial_thing", line_number),
-        });
+        let (splited_name, remaining_value) = if let Ok(function_name) =
+            ftd::interpreter2::utils::get_function_name(name.as_str(), self.name, line_number)
+        {
+            (function_name, None)
+        } else {
+            ftd::interpreter2::utils::get_doc_name_and_remaining(
+                name.as_str(),
+                self.name,
+                line_number,
+            )
+        };
 
-        fn get_initial_thing_(
-            doc: &ftd::interpreter2::TDoc,
-            name: &str,
-            line_number: usize,
-        ) -> Option<(ftd::interpreter2::Thing, Option<String>)> {
-            let (splited_name, remaining_value) = if let Ok(function_name) =
-                ftd::interpreter2::utils::get_function_name(name, doc.name, line_number)
-            {
-                (function_name, None)
-            } else if let Some((v, remaining_value)) = name.split_once('.') {
-                (v.to_string(), Some(remaining_value.to_string()))
-            } else {
-                (name.to_string(), None)
-            };
-
-            match doc.bag().get(splited_name.as_str()).map(ToOwned::to_owned) {
-                Some(a) => Some((a, remaining_value)),
-                None => doc.bag().get(name).map(|v| (v.to_owned(), None)),
-            }
+        match self.bag().get(splited_name.as_str()).map(ToOwned::to_owned) {
+            Some(a) => Ok((a, remaining_value)),
+            None => match self.bag().get(name.as_str()).map(|v| (v.to_owned(), None)) {
+                Some(a) => Ok(a),
+                None => self.err("not found", splited_name, "get_initial_thing", line_number),
+            },
         }
     }
 
