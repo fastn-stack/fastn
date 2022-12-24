@@ -1312,6 +1312,8 @@ impl<'a> TDoc<'a> {
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
             .unwrap_or(name);
 
+        // dbg!("get_initial_thing", &name);
+
         if name.contains('#') {
             let (splited_name, remaining_value) = if let Ok(function_name) =
                 ftd::interpreter2::utils::get_function_name(name, self.name, line_number)
@@ -1329,54 +1331,18 @@ impl<'a> TDoc<'a> {
             };
         }
 
-        return Ok(
-            match get_initial_thing_(self, self.name, name, line_number) {
-                Some(a) => a,
-                None => {
-                    if let Some((m, v)) = name.split_once('.') {
-                        match get_initial_thing_(self, m, v, line_number) {
-                            None => {
-                                return self.err(
-                                    "not found",
-                                    name,
-                                    "get_initial_thing",
-                                    line_number,
-                                )
-                            }
-                            Some(a) => a,
-                        }
-                    } else {
-                        return self.err("not found", name, "get_initial_thing", line_number);
-                    }
-                }
-            },
-        );
+        let name = self.resolve_name(name);
+
+        return Ok(match get_initial_thing_(self, name.as_str(), line_number) {
+            Some(a) => a,
+            None => return self.err("not found", name.as_str(), "get_initial_thing", line_number),
+        });
 
         fn get_initial_thing_(
             doc: &ftd::interpreter2::TDoc,
-            doc_name: &str,
             name: &str,
             line_number: usize,
         ) -> Option<(ftd::interpreter2::Thing, Option<String>)> {
-            match doc
-                .bag()
-                .get(format!("{}#{}", doc_name, name).as_str())
-                .map(ToOwned::to_owned)
-            {
-                Some(a) => return Some((a, None)),
-                None => {
-                    if let Some(g) = doc.aliases.get(doc_name) {
-                        if let Some(a) = doc
-                            .bag()
-                            .get(format!("{}#{}", g, name).as_str())
-                            .map(|v| (v.clone(), None))
-                        {
-                            return Some(a);
-                        }
-                    }
-                }
-            }
-
             let (splited_name, remaining_value) = if let Ok(function_name) =
                 ftd::interpreter2::utils::get_function_name(name, doc.name, line_number)
             {
@@ -1387,19 +1353,9 @@ impl<'a> TDoc<'a> {
                 (name.to_string(), None)
             };
 
-            match doc
-                .bag()
-                .get(format!("{}#{}", doc_name, splited_name).as_str())
-                .map(ToOwned::to_owned)
-            {
+            match doc.bag().get(splited_name.as_str()).map(ToOwned::to_owned) {
                 Some(a) => Some((a, remaining_value)),
-                None => match doc.aliases.get(doc_name) {
-                    Some(g) => doc
-                        .bag()
-                        .get(format!("{}#{}", g, splited_name).as_str())
-                        .map(|v| (v.clone(), remaining_value)),
-                    None => None,
-                },
+                None => doc.bag().get(name).map(|v| (v.to_owned(), None)),
             }
         }
     }

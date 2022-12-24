@@ -43,6 +43,7 @@ impl InterpreterState {
         }
 
         if let Some((doc_name, number_of_scan, ast)) = self.get_next_ast() {
+            // dbg!("1", &ast, &number_of_scan);
             if !number_of_scan.gt(&1) {
                 self.increase_scan_count();
             }

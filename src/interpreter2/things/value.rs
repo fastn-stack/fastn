@@ -316,6 +316,7 @@ impl PropertyValue {
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
     > {
+        // dbg!("**11111");
         if let Some(reference) = try_ok_state!(PropertyValue::reference_from_ast_value(
             value.clone(),
             doc,
@@ -324,8 +325,10 @@ impl PropertyValue {
             definition_name_with_arguments,
             loop_object_name_and_kind,
         )?) {
+            // dbg!("**22222");
             Ok(ftd::interpreter2::StateWithThing::new_thing(reference))
         } else {
+            // dbg!("**33333");
             PropertyValue::value_from_ast_value(
                 value,
                 doc,
@@ -643,6 +646,7 @@ impl PropertyValue {
             doc_id: doc.name.to_string(),
             line_number: value.line_number(),
         })?;
+        // dbg!("###11111", &expected_kind);
         return get_property_value(
             value,
             doc,
@@ -662,6 +666,7 @@ impl PropertyValue {
         ) -> ftd::interpreter2::Result<
             ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
         > {
+            // dbg!("###22222");
             Ok(match &expected_kind.kind.clone() {
                 ftd::interpreter2::Kind::Optional { kind } => {
                     let kind = kind.clone().into_kind_data();
