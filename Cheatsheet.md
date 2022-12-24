@@ -288,6 +288,119 @@ This is a body text.
 ```ftd
 -- or-type text-align:
 -- constant string start: start
+-- constant string center: center
 -- constant string end: end
+-- constant string justify: justify
 -- end: text-align
+```
+
+## Common Attributes
+
+### `padding`: `optional ftd.length`
+### `padding`: `optional ftd.length`
+### `padding`: `optional ftd.length`
+### `padding-left`: `optional ftd.length`
+### `padding-right`: `optional ftd.length`
+### `padding-top`: `optional ftd.length`
+### `padding-bottom`: `optional ftd.length`
+### `padding-horizontal`: `optional ftd.length`
+### `padding-vertical`: `optional ftd.length`
+### `margin`: `optional ftd.length`
+### `margin-left`: `optional ftd.length`
+### `margin-right`: `optional ftd.length`
+### `margin-top`: `optional ftd.length`
+### `margin-bottom`: `optional ftd.length`
+### `margin-horizontal`: `optional ftd.length`
+### `margin-vertical`: `optional ftd.length`
+### `border-width`: `optional ftd.length`
+### `border-radius`: `optional ftd.length`
+### `border-bottom-width`: `optional ftd.length`
+### `border-top-width`: `optional ftd.length`
+### `border-left-width`: `optional ftd.length`
+### `border-right-width`: `optional ftd.length`
+### `border-top-left-radius`: `optional ftd.length`
+### `border-top-right-radius`: `optional ftd.length`
+### `border-bottom-left-radius`: `optional ftd.length`
+### `border-bottom-right-radius`: `optional ftd.length`
+### `min-width`: `optional ftd.length`
+### `max-width`: `optional ftd.length`
+### `min-height`: `optional ftd.length`
+### `max-height`: `optional ftd.length`
+
+```ftd
+-- or-type length:
+
+-- record px:
+caption integer value:
+
+-- record percent:
+caption decimal value:
+
+-- end: length
+```
+
+### `border-color`: `optional ftd.color`
+### `border-bottom-color`: `optional ftd.color`
+### `border-top-color`: `optional ftd.color`
+### `border-left-color`: `optional ftd.color`
+### `border-right-color`: `optional ftd.color`
+### `color`: `optional ftd.color`
+
+```ftd
+-- record color:
+caption light:
+string dark: $color.light
+```
+
+### `width`: `optional ftd.resizing`
+### `height`: `optional ftd.resizing`
+
+
+```ftd
+-- or-type resizing:
+
+-- constant string fill-container: fill-container
+-- constant string hug-content: hug-content
+-- ftd.length fixed:
+
+-- end: resizing
+```
+
+### `link`: `string`
+
+### `background`: `optional ftd.fill`
+
+```ftd
+-- or-type fill:
+
+-- ftd.color solid:
+
+-- end: fill
+```
+
+### `align-self`: `optional ftd.align-self`
+
+```ftd
+-- or-type align-self:
+
+-- constant string start: start
+-- constant string center: center
+-- constant string end: end
+
+-- end: fill
+```
+
+### `overflow`: `optional ftd.overflow`
+### `overflow-x`: `optional ftd.overflow`
+### `overflow-y`: `optional ftd.overflow`
+
+```ftd
+-- or-type overflow:
+
+-- constant string scroll: scroll
+-- constant string visible: visible
+-- constant string hidden: hidden
+-- constant string auto: auto
+
+-- end: overflow
 ```
