@@ -207,9 +207,25 @@ impl InterpreterState {
 
     pub fn remove_last(&mut self) {
         let mut pop_last = false;
-        if let Some((_, asts)) = self.to_process.stack.last_mut() {
+        if let Some((doc_name, asts)) = self.to_process.stack.last_mut() {
             if !asts.is_empty() {
-                asts.remove(0);
+                let (_, ast) = asts.remove(0);
+                let document = self.parsed_libs.get(doc_name).unwrap();
+                let ast_full_name = ftd::interpreter2::utils::resolve_name(
+                    ast.name().as_str(),
+                    document.name.as_str(),
+                    &document.doc_aliases,
+                );
+                let (doc_name, thing_name, _remaining) = // Todo: use remaining
+                    ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
+                        ast_full_name.as_str(),
+                        doc_name,
+                        ast.line_number(),
+                    );
+                self.to_process.contains.remove(&(
+                    document.name.to_string(),
+                    format!("{}#{}", doc_name, thing_name),
+                ));
             }
             if asts.is_empty() {
                 pop_last = true;
