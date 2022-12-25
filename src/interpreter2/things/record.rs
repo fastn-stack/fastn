@@ -37,7 +37,7 @@ impl Record {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
     {
         let record = ast.get_record(doc.name)?;
@@ -46,7 +46,7 @@ impl Record {
 
     pub(crate) fn from_record(
         record: ftd::ast::Record,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Record>>
     {
         let name = doc.resolve_name(record.name.as_str());
@@ -172,7 +172,7 @@ impl Field {
 
     pub(crate) fn from_ast_fields(
         fields: Vec<ftd::ast::Field>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
         let mut result = vec![];
@@ -204,7 +204,7 @@ impl Field {
 
     pub(crate) fn from_ast_field(
         field: ftd::ast::Field,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Field>> {
         let kind = try_ok_state!(ftd::interpreter2::KindData::from_ast_kind(
@@ -251,7 +251,7 @@ impl Field {
     pub(crate) fn for_component(
         component_name: &str,
         definition_name_with_arguments: &Option<(&str, &[Field])>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Field>>> {
         Ok(ftd::interpreter2::StateWithThing::new_thing(
@@ -264,7 +264,7 @@ impl Field {
 
     pub fn update_with_or_type_variant(
         &mut self,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         variant: &str,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<()>> {
         match self.kind.kind.mut_inner() {

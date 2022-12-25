@@ -185,7 +185,7 @@ impl PropertyValue {
 
     pub(crate) fn from_string_with_argument(
         value: &str,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         mutable: bool,
         line_number: usize,
@@ -297,7 +297,7 @@ impl PropertyValue {
 
     pub(crate) fn from_ast_value(
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
     ) -> ftd::interpreter2::Result<
@@ -308,7 +308,7 @@ impl PropertyValue {
 
     pub(crate) fn from_ast_value_with_argument(
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
@@ -316,6 +316,7 @@ impl PropertyValue {
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
     > {
+        // dbg!("**11111");
         if let Some(reference) = try_ok_state!(PropertyValue::reference_from_ast_value(
             value.clone(),
             doc,
@@ -324,8 +325,10 @@ impl PropertyValue {
             definition_name_with_arguments,
             loop_object_name_and_kind,
         )?) {
+            // dbg!("**22222");
             Ok(ftd::interpreter2::StateWithThing::new_thing(reference))
         } else {
+            // dbg!("**33333");
             PropertyValue::value_from_ast_value(
                 value,
                 doc,
@@ -340,7 +343,7 @@ impl PropertyValue {
     fn to_ui_value(
         key: &str,
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
@@ -369,7 +372,7 @@ impl PropertyValue {
     fn from_record(
         record: &ftd::interpreter2::Record,
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
         expected_kind: &ftd::interpreter2::KindData,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
@@ -630,7 +633,7 @@ impl PropertyValue {
 
     fn value_from_ast_value(
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
@@ -643,6 +646,7 @@ impl PropertyValue {
             doc_id: doc.name.to_string(),
             line_number: value.line_number(),
         })?;
+        // dbg!("###11111", &expected_kind);
         return get_property_value(
             value,
             doc,
@@ -654,7 +658,7 @@ impl PropertyValue {
 
         fn get_property_value(
             value: ftd::ast::VariableValue,
-            doc: &ftd::interpreter2::TDoc,
+            doc: &mut ftd::interpreter2::TDoc,
             is_mutable: bool,
             expected_kind: &ftd::interpreter2::KindData,
             definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
@@ -662,6 +666,7 @@ impl PropertyValue {
         ) -> ftd::interpreter2::Result<
             ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
         > {
+            // dbg!("###22222");
             Ok(match &expected_kind.kind.clone() {
                 ftd::interpreter2::Kind::Optional { kind } => {
                     let kind = kind.clone().into_kind_data();
@@ -906,7 +911,7 @@ impl PropertyValue {
 
     fn reference_from_ast_value(
         value: ftd::ast::VariableValue,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         mutable: bool,
         expected_kind: Option<&ftd::interpreter2::KindData>,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,

@@ -50,7 +50,7 @@ impl ComponentDefinition {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ComponentDefinition>> {
         let component_definition = ast.get_component_definition(doc.name)?;
         let name = doc.resolve_name(component_definition.name.as_str());
@@ -198,7 +198,7 @@ impl Component {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Component>> {
         let component_invocation = ast.get_component_invocation(doc.name)?;
         Component::from_ast_component(component_invocation, None, doc)
@@ -207,9 +207,11 @@ impl Component {
     pub(crate) fn from_ast_component(
         ast_component: ftd::ast::Component,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Component>> {
+        // dbg!("2");
         let name = doc.resolve_name(ast_component.name.as_str());
+        // dbg!("3");
 
         let mut loop_object_name_and_kind = None;
         let iteration = if let Some(v) = ast_component.iteration {
@@ -244,6 +246,8 @@ impl Component {
             doc,
         )?);
 
+        // dbg!("4");
+
         let properties = try_ok_state!(Property::from_ast_properties_and_children(
             ast_component.properties,
             ast_component.children,
@@ -253,6 +257,8 @@ impl Component {
             doc,
             ast_component.line_number,
         )?);
+
+        // dbg!("5");
 
         Ok(ftd::interpreter2::StateWithThing::new_thing(Component {
             name,
@@ -356,9 +362,10 @@ impl Property {
         component_name: &str,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Property>>> {
+        // dbg!("11");
         let mut properties = try_ok_state!(Property::from_ast_properties(
             ast_properties,
             component_name,
@@ -367,6 +374,8 @@ impl Property {
             doc,
             line_number,
         )?);
+
+        // dbg!("12");
 
         // todo: validate_duplicate_properties() a property cannot be repeat if it's not list
 
@@ -443,7 +452,7 @@ impl Property {
         ast_children: Vec<ftd::ast::Component>,
         component_name: &str,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Option<Property>>> {
         if ast_children.is_empty() {
             return Ok(ftd::interpreter2::StateWithThing::new_thing(None));
@@ -570,17 +579,20 @@ impl Property {
         component_name: &str,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Property>>> {
         let mut properties = vec![];
+        // dbg!("111");
         let component_arguments = try_ok_state!(Argument::for_component(
             component_name,
             &definition_name_with_arguments,
             doc,
             line_number,
         )?);
+        // dbg!("112");
         for property in ast_properties {
+            // dbg!("113", &property.source);
             properties.push(try_ok_state!(Property::from_ast_property(
                 property,
                 component_name,
@@ -589,6 +601,7 @@ impl Property {
                 loop_object_name_and_kind,
                 doc,
             )?));
+            // dbg!("114");
         }
         Ok(ftd::interpreter2::StateWithThing::new_thing(properties))
     }
@@ -599,14 +612,17 @@ impl Property {
         component_arguments: &[Argument],
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Property>> {
+        // dbg!("1111");
         let argument = try_ok_state!(Property::get_argument_for_property(
             &ast_property,
             component_name,
             component_arguments,
             doc,
         )?);
+
+        // dbg!("1112");
 
         let value = try_ok_state!(
             ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
@@ -618,6 +634,8 @@ impl Property {
                 loop_object_name_and_kind,
             )?
         );
+
+        // dbg!("1113");
 
         let condition = if let Some(ref v) = ast_property.condition {
             Some(try_ok_state!(
@@ -631,6 +649,8 @@ impl Property {
         } else {
             None
         };
+
+        // dbg!("1114");
 
         if ast_property.value.is_null() && !argument.kind.is_optional() {
             return ftd::interpreter2::utils::e2(
@@ -651,6 +671,8 @@ impl Property {
             source
         };
 
+        // dbg!("1115");
+
         Ok(ftd::interpreter2::StateWithThing::new_thing(Property {
             value,
             source,
@@ -663,7 +685,7 @@ impl Property {
         ast_property: &ftd::ast::Property,
         component_name: &str,
         component_argument: &[Argument],
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Argument>> {
         match &ast_property.source {
             ftd::ast::PropertySource::Caption => Ok(ftd::interpreter2::StateWithThing::new_thing(
@@ -795,7 +817,7 @@ impl Loop {
     fn from_ast_loop(
         ast_loop: ftd::ast::Loop,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Loop>> {
         let on = try_ok_state!(ftd::interpreter2::PropertyValue::from_string_with_argument(
             ast_loop.on.as_str(),
@@ -846,7 +868,7 @@ impl Event {
         ast_event: ftd::ast::Event,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Event>> {
         let action = try_ok_state!(ftd::interpreter2::FunctionCall::from_string(
             ast_event.action.as_str(),
@@ -874,7 +896,7 @@ impl Event {
         ast_events: Vec<ftd::ast::Event>,
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Event>>> {
         let mut events = vec![];
         for event in ast_events {

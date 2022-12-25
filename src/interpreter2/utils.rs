@@ -62,7 +62,7 @@ where
 pub(crate) fn kind_eq(
     key: &str,
     kind: &ftd::interpreter2::Kind,
-    doc: &ftd::interpreter2::TDoc,
+    doc: &mut ftd::interpreter2::TDoc,
     line_number: usize,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<bool>> {
     let var_kind = ftd::ast::VariableKind::get_kind(key, doc.name, line_number)?;

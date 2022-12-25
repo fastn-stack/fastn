@@ -43,7 +43,7 @@ impl Function {
 
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Function>>
     {
         let function = ast.get_function(doc.name)?;
@@ -275,7 +275,7 @@ impl FunctionCall {
 
     pub(crate) fn from_string(
         value: &str,
-        doc: &ftd::interpreter2::TDoc,
+        doc: &mut ftd::interpreter2::TDoc,
         mutable: bool,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
