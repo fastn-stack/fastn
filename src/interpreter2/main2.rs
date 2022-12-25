@@ -547,7 +547,7 @@ impl InterpreterState {
         )? {
             StateWithThing::Thing(t) => t,
             StateWithThing::State(s) => return Ok(s.into_interpreter(self)),
-            StateWithThing::Continue => return Ok(self.continue_()?),
+            StateWithThing::Continue => return self.continue_(),
         };
 
         let value =
