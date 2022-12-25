@@ -39,7 +39,7 @@ FPM can be used for distributing images, and fonts as packages.
 
 
 
--- ds.h1: Features
+-- ft.h1: Features
 
 - Web Server(fpm serve)
 - FPM CLI
