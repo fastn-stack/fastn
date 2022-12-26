@@ -382,6 +382,7 @@ string dark: $color.light
 ```
 
 ### `link`: `string`
+### `open-in-new-tab`: `optional boolean`
 
 ### `background`: `optional ftd.fill`
 
@@ -469,6 +470,3 @@ string dark: $color.light
 - Run `cargo run`
 - Run `cd docs`
 - Run `python3 -m http.server 8000`
-
-
-

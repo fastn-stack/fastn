@@ -1,5 +1,3 @@
-use crate::p2::Boolean;
-
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 pub enum Element {
     Row(Row),

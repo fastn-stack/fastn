@@ -7,4 +7,5 @@
 
 ## 26th December 2022
 
-- Added more variants in `ftd.length` (calc, vh, vw, em, rem)
+- [Added more variants in `ftd.length` (calc, vh, vw, em, rem)](https://github.com/ftd-lang/ftd/commit/60bd50c5a9306be1b305601c037e39810ef6206a)
+- [Added `open-in-new-tab`](https://github.com/ftd-lang/ftd/commit/048024c468f8cc5a47f72dabdd2454499aaca314)
