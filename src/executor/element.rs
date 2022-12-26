@@ -1,3 +1,5 @@
+use crate::p2::Boolean;
+
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 pub enum Element {
     Row(Row),
@@ -149,6 +151,7 @@ pub struct Common {
     pub min_height: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub max_height: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub link: ftd::executor::Value<Option<String>>,
+    pub open_in_new_tab: ftd::executor::Value<Option<bool>>,
     pub background: ftd::executor::Value<Option<ftd::executor::Background>>,
     pub color: ftd::executor::Value<Option<ftd::executor::Color>>,
     pub align_self: ftd::executor::Value<Option<ftd::executor::AlignSelf>>,
@@ -647,6 +650,13 @@ pub fn common_from_properties(
         )?,
         link: ftd::executor::value::optional_string(
             "link",
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
+        open_in_new_tab: ftd::executor::value::optional_bool(
+            "open-in-new-tab",
             properties,
             arguments,
             doc,

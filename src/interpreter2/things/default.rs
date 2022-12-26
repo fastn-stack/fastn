@@ -881,6 +881,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
         ftd::interpreter2::Argument::default(
+            "open-in-new-tab",
+            ftd::interpreter2::Kind::boolean()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "overflow",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_OVERFLOW)
                 .into_optional()

@@ -353,6 +353,18 @@ impl ftd::executor::Common {
             ),
         );
 
+        if self.open_in_new_tab.value.is_some() && self.open_in_new_tab.value.unwrap() {
+            d.check_and_insert(
+                "target",
+                ftd::node::Value::from_executor_value(
+                    Some(ftd::node::utils::escape("_blank")),
+                    self.open_in_new_tab.to_owned(),
+                    Some((s("if ({0}) {\"_blank\"} else {null}"), true)),
+                    doc_id,
+                ),
+            );
+        }
+
         d
     }
 

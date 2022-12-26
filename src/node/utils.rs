@@ -36,3 +36,9 @@ pub(crate) fn wrap_to_css(wrap: bool) -> String {
         "nowrap".to_string()
     }
 }
+
+pub(crate) fn escape(s: &str) -> String {
+    let s = s.replace('>', "\\u003E");
+    let s = s.replace('<', "\\u003C");
+    s.replace('&', "\\u0026")
+}
