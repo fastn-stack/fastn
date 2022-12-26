@@ -442,3 +442,18 @@ string dark: $color.light
 -- end: spacing-mode
 ```
 
+
+
+## How to run examples for FTD: 0.3
+
+- Create empty files `<number>-<name>.ftd` and `<number>-<name>.html` in `t/html` 
+  folder.
+- Run `cargo test html_test_all -- --nocapture fix=true <optional: path=<prefix of the file name>>`
+
+### Optional commands to check html in examples
+- Run `cargo run`
+- Run `cd docs`
+- Run `python3 -m http.server 8000`
+
+
+
