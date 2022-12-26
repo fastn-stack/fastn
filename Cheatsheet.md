@@ -336,6 +336,21 @@ caption integer value:
 -- record percent:
 caption decimal value:
 
+-- record calc:
+caption value:
+
+-- record vh:
+caption integer value:
+
+-- record vw:
+caption integer value:
+
+-- record em:
+caption decimal value:
+
+-- record rem:
+caption decimal value:
+
 -- end: length
 ```
 

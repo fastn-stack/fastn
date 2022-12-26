@@ -1,6 +1,11 @@
 pub const FTD_LENGTH: &str = "ftd#length";
 pub const FTD_LENGTH_PX: &str = "ftd#length.px";
 pub const FTD_LENGTH_PERCENT: &str = "ftd#length.percent";
+pub const FTD_LENGTH_CALC: &str = "ftd#length.calc";
+pub const FTD_LENGTH_VH: &str = "ftd#length.vh";
+pub const FTD_LENGTH_VW: &str = "ftd#length.vw";
+pub const FTD_LENGTH_EM: &str = "ftd#length.em";
+pub const FTD_LENGTH_REM: &str = "ftd#length.rem";
 pub const FTD_LENGTH_VALUE: &str = "value";
 
 pub const FTD_ALIGN: &str = "ftd#align";

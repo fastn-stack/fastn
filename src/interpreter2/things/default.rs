@@ -481,7 +481,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
                         name: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
                         fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
-                            name: "value".to_string(),
+                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
                             kind: ftd::interpreter2::Kind::integer()
                                 .into_kind_data()
                                 .caption(),
@@ -495,7 +495,75 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
                         name: ftd::interpreter2::FTD_LENGTH_PERCENT.to_string(),
                         fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
-                            name: "value".to_string(),
+                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
+                            kind: ftd::interpreter2::Kind::decimal()
+                                .into_kind_data()
+                                .caption(),
+                            mutable: false,
+                            value: None,
+                            line_number: 0,
+                        }])
+                        .collect(),
+                        line_number: 0,
+                    }),
+                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
+                        name: ftd::interpreter2::FTD_LENGTH_CALC.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
+                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
+                            kind: ftd::interpreter2::Kind::string().into_kind_data().caption(),
+                            mutable: false,
+                            value: None,
+                            line_number: 0,
+                        }])
+                        .collect(),
+                        line_number: 0,
+                    }),
+                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
+                        name: ftd::interpreter2::FTD_LENGTH_VH.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
+                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
+                            kind: ftd::interpreter2::Kind::decimal()
+                                .into_kind_data()
+                                .caption(),
+                            mutable: false,
+                            value: None,
+                            line_number: 0,
+                        }])
+                        .collect(),
+                        line_number: 0,
+                    }),
+                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
+                        name: ftd::interpreter2::FTD_LENGTH_VW.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
+                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
+                            kind: ftd::interpreter2::Kind::decimal()
+                                .into_kind_data()
+                                .caption(),
+                            mutable: false,
+                            value: None,
+                            line_number: 0,
+                        }])
+                        .collect(),
+                        line_number: 0,
+                    }),
+                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
+                        name: ftd::interpreter2::FTD_LENGTH_EM.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
+                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
+                            kind: ftd::interpreter2::Kind::decimal()
+                                .into_kind_data()
+                                .caption(),
+                            mutable: false,
+                            value: None,
+                            line_number: 0,
+                        }])
+                        .collect(),
+                        line_number: 0,
+                    }),
+                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
+                        name: ftd::interpreter2::FTD_LENGTH_REM.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
+                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
                             kind: ftd::interpreter2::Kind::decimal()
                                 .into_kind_data()
                                 .caption(),

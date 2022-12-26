@@ -2,6 +2,11 @@
 pub enum Length {
     Px(i64),
     Percent(f64),
+    Calc(String),
+    Vh(f64),
+    Vw(f64),
+    Em(f64),
+    Rem(f64),
 }
 
 impl Default for Length {
@@ -52,6 +57,66 @@ impl Length {
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
                     .integer(doc.name, line_number)?,
+            )),
+            ftd::interpreter2::FTD_LENGTH_CALC => Ok(Length::Calc(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .record_fields(doc.name, line_number)?
+                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
+                    .unwrap()
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .string(doc.name, line_number)?,
+            )),
+            ftd::interpreter2::FTD_LENGTH_VH => Ok(Length::Vh(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .record_fields(doc.name, line_number)?
+                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
+                    .unwrap()
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
+            )),
+            ftd::interpreter2::FTD_LENGTH_VW => Ok(Length::Vw(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .record_fields(doc.name, line_number)?
+                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
+                    .unwrap()
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
+            )),
+            ftd::interpreter2::FTD_LENGTH_EM => Ok(Length::Em(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .record_fields(doc.name, line_number)?
+                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
+                    .unwrap()
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
+            )),
+            ftd::interpreter2::FTD_LENGTH_REM => Ok(Length::Rem(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .record_fields(doc.name, line_number)?
+                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
+                    .unwrap()
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
             )),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.length`", t),
@@ -112,6 +177,11 @@ impl Length {
         match self {
             Length::Px(px) => format!("{}px", px),
             Length::Percent(p) => format!("{}%", p),
+            Length::Calc(calc) => format!("calc({})", calc),
+            Length::Vh(vh) => format!("{}vh", vh),
+            Length::Vw(vw) => format!("{}vw", vw),
+            Length::Em(em) => format!("{}em", em),
+            Length::Rem(rem) => format!("{}rem", rem),
         }
     }
 
@@ -121,9 +191,13 @@ impl Length {
         line_number: usize,
     ) -> ftd::executor::Result<&'static str> {
         match variant {
-            ftd::interpreter2::FTD_LENGTH_PX | ftd::interpreter2::FTD_LENGTH_PERCENT => {
-                Ok("({0}).value")
-            }
+            ftd::interpreter2::FTD_LENGTH_PX
+            | ftd::interpreter2::FTD_LENGTH_PERCENT
+            | ftd::interpreter2::FTD_LENGTH_CALC
+            | ftd::interpreter2::FTD_LENGTH_VH
+            | ftd::interpreter2::FTD_LENGTH_VW
+            | ftd::interpreter2::FTD_LENGTH_EM
+            | ftd::interpreter2::FTD_LENGTH_REM => Ok("({0}).value"),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.length: `{}`", t),
                 doc_id,
@@ -140,6 +214,11 @@ impl Length {
         match variant {
             ftd::interpreter2::FTD_LENGTH_PX => Ok("{0}px"),
             ftd::interpreter2::FTD_LENGTH_PERCENT => Ok("{0}%"),
+            ftd::interpreter2::FTD_LENGTH_CALC => Ok("calc({0})"),
+            ftd::interpreter2::FTD_LENGTH_VH => Ok("{0}vh"),
+            ftd::interpreter2::FTD_LENGTH_VW => Ok("{0}vw"),
+            ftd::interpreter2::FTD_LENGTH_EM => Ok("{0}em"),
+            ftd::interpreter2::FTD_LENGTH_REM => Ok("{0}rem"),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.length: `{}`", t),
                 doc_id,
@@ -157,6 +236,11 @@ impl Length {
         match variant {
             ftd::interpreter2::FTD_LENGTH_PX => Ok(format!("{}px", value)),
             ftd::interpreter2::FTD_LENGTH_PERCENT => Ok(format!("{}%", value)),
+            ftd::interpreter2::FTD_LENGTH_CALC => Ok(format!("calc({})", value)),
+            ftd::interpreter2::FTD_LENGTH_VH => Ok(format!("{}vh", value)),
+            ftd::interpreter2::FTD_LENGTH_VW => Ok(format!("{}vw", value)),
+            ftd::interpreter2::FTD_LENGTH_EM => Ok(format!("{}em", value)),
+            ftd::interpreter2::FTD_LENGTH_REM => Ok(format!("{}rem", value)),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.length: `{}`", t),
                 doc_id,
