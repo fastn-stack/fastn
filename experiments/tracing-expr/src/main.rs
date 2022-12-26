@@ -1,4 +1,4 @@
-use actix_web::{error, middleware, web, App, Error, HttpRequest, HttpResponse, HttpServer};
+use actix_web::{error, web, App, Error, HttpRequest, HttpResponse, HttpServer};
 use futures_util::StreamExt as _;
 use json::JsonValue;
 use serde::{Deserialize, Serialize};
@@ -27,10 +27,10 @@ async fn foo() {
 }
 
 /// This handler uses json extractor
-#[instrument(skip_all)]
+#[instrument]
 async fn index(item: web::Json<MyObj>) -> HttpResponse {
     event!(Level::INFO, "inside index function!");
-    println!("model: {:?}", &item);
+    // println!("model: {:?}", &item);
     event!(Level::INFO, "calling function foo!");
     foo().await;
     HttpResponse::Ok().json(item.0) // <- send response
