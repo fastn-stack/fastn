@@ -316,7 +316,6 @@ impl PropertyValue {
     ) -> ftd::interpreter2::Result<
         ftd::interpreter2::StateWithThing<ftd::interpreter2::PropertyValue>,
     > {
-        // dbg!("**11111");
         if let Some(reference) = try_ok_state!(PropertyValue::reference_from_ast_value(
             value.clone(),
             doc,
@@ -1077,7 +1076,8 @@ impl PropertyValue {
                             doc.name,
                             definition_name_with_arguments,
                             loop_object_name_and_kind,
-                        )
+                            value.line_number(),
+                        )?
                         .unwrap()
                         .0
                         .mutable

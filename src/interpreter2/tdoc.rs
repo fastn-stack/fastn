@@ -486,7 +486,8 @@ impl<'a> TDoc<'a> {
                 self.name,
                 component_definition_name_with_arguments,
                 loop_object_name_and_kind,
-            )
+                line_number,
+            )?
             .map(|v| (v.0.kind.to_owned(), v.1, v.2));
 
         let (initial_kind, remaining, source) =

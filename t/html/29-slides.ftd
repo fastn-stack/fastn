@@ -1,0 +1,61 @@
+-- void set-false(a):
+boolean $a:
+
+a = false;
+
+-- ftd.color base: #18181b
+
+-- ftd.color step-1: #141414
+
+-- ftd.color text-strong: #ffffff
+
+
+-- presentation:
+
+
+
+
+
+-- component presentation:
+boolean $show: false
+ftd.color bg-color: $base
+ftd.color overlay-bg-color: $step-1
+optional ftd.image-src bg-image:
+
+-- ftd.column:
+background.solid: $presentation.bg-color
+width: ftd.resizing.fill-container
+
+-- mobile-overlay:
+if: { presentation.show }
+overlay-bg-color: $presentation.overlay-bg-color
+$on-click$: $set-false($a = $presentation.show)
+
+-- end: ftd.column
+
+-- end: presentation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component mobile-overlay:
+ftd.color overlay-bg-color:
+
+-- ftd.column:
+height.fixed.calc: 100% - 0px
+width: ftd.resizing.fill-container
+background.solid: $mobile-overlay.overlay-bg-color
+
+-- end: ftd.column
+
+-- end: mobile-overlay

@@ -222,24 +222,33 @@ pub fn get_argument_for_reference_and_remaining<'a>(
     doc_id: &'a str,
     component_definition_name_with_arguments: Option<(&'a str, &'a [ftd::interpreter2::Argument])>,
     loop_object_name_and_kind: &'a Option<(String, ftd::interpreter2::Argument)>,
-) -> Option<(
-    &'a ftd::interpreter2::Argument,
-    Option<String>,
-    ftd::interpreter2::PropertyValueSource,
-)> {
+    line_number: usize,
+) -> ftd::interpreter2::Result<
+    Option<(
+        &'a ftd::interpreter2::Argument,
+        Option<String>,
+        ftd::interpreter2::PropertyValueSource,
+    )>,
+> {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
             .or_else(|| name.strip_prefix(format!("{}#{}.", doc_id, component_name).as_str()))
         {
             let (p1, p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
-            if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
-                return Some((
+            return if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
+                Ok(Some((
                     argument,
                     p2,
                     ftd::interpreter2::PropertyValueSource::Local(component_name.to_string()),
-                ));
-            }
+                )))
+            } else {
+                ftd::interpreter2::utils::e2(
+                    format!("{} is not the argument in {}", p1, component_name),
+                    doc_id,
+                    line_number,
+                )
+            };
         }
     }
     if let Some((loop_name, loop_argument)) = loop_object_name_and_kind {
@@ -249,15 +258,15 @@ pub fn get_argument_for_reference_and_remaining<'a>(
             || name.eq(format!("{}#{}", doc_id, loop_name).as_str())
         {
             let p2 = ftd::interpreter2::utils::split_at(name, ".").1;
-            return Some((
+            return Ok(Some((
                 loop_argument,
                 p2,
                 ftd::interpreter2::PropertyValueSource::Loop(loop_name.to_string()),
-            ));
+            )));
         }
     }
 
-    None
+    Ok(None)
 }
 
 pub fn validate_variable(
