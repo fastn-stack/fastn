@@ -1,0 +1,234 @@
+-- ds.page: Tracing Logging
+
+As a web developer we have to deal with errors, warnings, events that are
+occurring in software system.
+
+-- ds.h1: Why TO Log
+
+Imagine that you have 50K users on your website and everything is working fine,
+suddenly your working code start breaking. It was well tested but it is start
+breaking. So that means software can't be perfect, they can break.
+
+So, how do know what happened? If you had placed some more code in your
+application to do errors and logging, you would have easily referred to that
+data, and figured out what message was recorded before stop the application.
+
+In Rust, there is log library to do this job, check the below example this is
+how we can do the logging.
+
+-- ds.code:
+lang: rs
+
+use log::{ info, warn, error, debug, };
+
+debug!("Something weird occured: {}", someDebugVariable);
+error!("{}", "And error occured");
+info!("{:?}", "Take note");
+warn!("{:#?}", "This is important");
+
+-- ds.code:
+lang: sh
+
+RUST_LOG=info cargo run
+
+-- ds.code: Example
+lang: rs
+
+use log::{ info, error, debug, warn };
+fn main() {
+    // Initialize the env_logger before using the logs macro
+    env_logger::init();
+    error!("{}", "And error occured");
+    warn!("{:#?}", "This is important");
+    info!("{:?}", "Take note");
+    debug!("Something weird occured: {}", "Error");
+}
+
+
+-- ds.h1: `log`
+
+A lightweight logging facade.
+
+The log crate provides a single logging API that abstracts over the actual
+logging implementation.
+
+A log request consists of a target, a level, and a body. A target is a string
+which defaults to the module path of the location of the log request, though
+that default may be overridden. Logger implementations typically use the target
+to filter requests based on some user configuration.
+
+-- ds.h2: `Usage`
+
+The basic use of the log crate is through the five logging macros: error!,
+warn!, info!, debug! and trace! where error! represents the highest-priority
+log messages and trace! the lowest. The log messages are filtered by configuring
+the log level to exclude messages with a lower priority. Each of these macros
+accept format strings similarly to println!.
+
+
+
+-- ds.h1: `env_logger`
+
+simple logger that can be configured via environment variables, for use with
+the logging facade exposed by the log crate.
+
+[More...](https://docs.rs/env_logger/latest/env_logger/)
+[Example](https://github.com/rust-cli/env_logger/tree/main/examples)
+
+-- ds.h1: `log4rs`
+
+[Docs](https://docs.rs/log4rs/1.2.0/log4rs/)
+
+
+-- ds.h1: Tracing in Rust
+
+In software engineering, tracing involves a specialized use of logging to record
+information about the program execution. - Wiki
+
+Tracing involves monitoring your code from starting to finish during the
+execution process. So if you are designing the large application where too many
+things could go wrong and debugging could be a pain; tracing gives a you
+systematic overview of the activities in your code.
+
+So Rust tracing library leverages tracing and provides devs with a full scale
+framework that allow you collect structured, event-based diagnostic information
+from your Rust program.
+
+Code tracing involves three different stages:
+
+- Instrumentation: This is where you add tracing code to your source code
+application.
+
+- Actual Tracing: at this point during execution, the activities written to the
+target platform for analysis.
+
+- Analysis: the stage where you analyze and evaluate the information your
+tracing system has gathered to find and understand problem in the application.
+This is also allows where you can plug in tools like LogRocket, Sentry, or Grafana
+to allow you to visualize your entire system workflow, performance, errors, and
+things you could improve.
+
+There are several libraries to work with tracing. Find in the tracing [docs](https://crates.io/crates/tracing).
+
+
+-- ds.h1: `tracing` explained
+
+-- ds.h2: Core Concepts
+
+The core of tracing’s API is composed of spans, events and subscribers. We’ll
+cover these in turn.
+
+-- ds.h2: Spans
+
+To record the flow of execution through a program, tracing introduces the
+concept of spans. Unlike a log line that represents a moment in time, a span
+represents a period of time with a beginning and an end. When a program begins
+executing in a context or performing a unit of work, it enters that context’s
+span, and when it stops executing in that context, it exits the span. The span
+in which a thread is currently executing is referred to as that thread’s current
+span.
+
+
+-- ds.code:
+lang: rs
+
+use tracing::{span, Level};
+let span = span!(Level::TRACE, "my_span");
+// `enter` returns a RAII guard which, when dropped, exits the span. this
+// indicates that we are in the span for the current lexical scope.
+let _enter = span.enter();
+// perform some work in the context of `my_span`...
+
+-- ds.h2: Events
+
+An Event represents a moment in time. It signifies something that happened
+while a trace was being recorded. Events are comparable to the log records
+emitted by unstructured logging code, but unlike a typical log line, an Event
+may occur within the context of a span.
+
+-- ds.code:
+lang: rs
+
+use tracing::{event, span, Level};
+
+// records an event outside of any span context:
+event!(Level::INFO, "something happened");
+
+let span = span!(Level::INFO, "my_span");
+let _guard = span.enter();
+
+// records an event within "my_span".
+event!(Level::DEBUG, "something happened inside my_span");
+
+-- ds.h2: Subscribers
+
+As Spans and Events occur, they are recorded or aggregated by implementations of
+the Subscriber trait. Subscribers are notified when an Event takes place and
+when a Span is entered or exited. These notifications are represented by the
+following Subscriber trait methods:
+
+- `event`, called when an Event takes place,
+- `enter`, called when execution enters a Span,
+- `exit`, called when execution exits a Span
+
+
+In addition, subscribers may implement the `enabled` function to filter the
+notifications they receive based on metadata describing each Span or Event. If a
+call to Subscriber::enabled returns false for a given set of metadata, that
+Subscriber will not be notified about the corresponding Span or Event. For
+performance reasons, if no currently active subscribers express interest in a
+given set of metadata by returning true, then the corresponding Span or Event
+will never be constructed.
+
+-- ds.h2: Usage
+
+-- ds.h3: Span
+
+The span! macro expands to a Span struct which is used to record a span.
+The Span::enter method on that struct records that the span has been entered,
+and returns a RAII guard object, which will exit the span when dropped.
+
+For example:
+
+-- ds.code:
+lang: rs
+
+use tracing::{span, Level};
+// Construct a new span named "my span" with trace log level.
+let span = span!(Level::TRACE, "my span");
+
+// Enter the span, returning a guard object.
+let _enter = span.enter();
+
+// Any trace events that occur before the guard is dropped will occur
+// within the span.
+
+// Dropping the guard will exit the span.
+
+-- ds.markdown:
+
+The `#[instrument]` attribute provides an easy way to add tracing spans to
+functions. A function annotated with `#[instrument]` will create and enter a span
+with that function’s name every time the function is called, with arguments to
+that function will be recorded as fields using fmt::Debug.
+
+-- ds.code:
+lang: rs
+
+use tracing::{Level, event, instrument};
+
+#[instrument]
+pub fn my_function(my_arg: usize) {
+    // This event will be recorded inside a span named `my_function` with the
+    // field `my_arg`.
+    event!(Level::INFO, "inside my_function!");
+    // ...
+}
+
+-- ds.h1: Reference
+
+
+- [Article](https://blog.logrocket.com/comparing-logging-tracing-rust/)
+- [Rust Log Trait](https://crates.io/crates/log)
+- [Rust Tracing Trait](https://crates.io/crates/tracing)
+- [Open Telemetry](https://crates.io/crates/opentelemetry)
