@@ -3,7 +3,7 @@
 As a web developer we have to deal with errors, warnings, events that are
 occurring in software system.
 
--- ds.h1: Why TO Log
+-- ds.h1: Why To Log
 
 Imagine that you have 50K users on your website and everything is working fine,
 suddenly your working code start breaking. It was well tested but it is start

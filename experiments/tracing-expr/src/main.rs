@@ -2,6 +2,7 @@ use actix_web::{error, middleware, web, App, Error, HttpRequest, HttpResponse, H
 use futures_util::StreamExt as _;
 use json::JsonValue;
 use serde::{Deserialize, Serialize};
+use tracing::{event, instrument, Level};
 
 #[derive(Debug, Serialize, Deserialize)]
 struct MyObj {
@@ -9,9 +10,29 @@ struct MyObj {
     number: i32,
 }
 
+#[instrument]
+async fn foo1() {
+    event!(Level::INFO, "inside foo1 function!");
+    std::thread::sleep(std::time::Duration::from_secs(5));
+    event!(Level::INFO, "foo1 function! ends");
+}
+
+#[instrument]
+async fn foo() {
+    event!(Level::INFO, "inside foo function!");
+    event!(Level::INFO, "calling foo1 function!");
+    foo1().await;
+    std::thread::sleep(std::time::Duration::from_secs(5));
+    event!(Level::INFO, "foo function! ends");
+}
+
 /// This handler uses json extractor
+#[instrument(skip_all)]
 async fn index(item: web::Json<MyObj>) -> HttpResponse {
+    event!(Level::INFO, "inside index function!");
     println!("model: {:?}", &item);
+    event!(Level::INFO, "calling function foo!");
+    foo().await;
     HttpResponse::Ok().json(item.0) // <- send response
 }
 
@@ -19,13 +40,13 @@ async fn index(item: web::Json<MyObj>) -> HttpResponse {
 async fn extract_item(item: web::Json<MyObj>, req: HttpRequest) -> HttpResponse {
     println!("request: {req:?}");
     println!("model: {item:?}");
-
     HttpResponse::Ok().json(item.0) // <- send json response
 }
 
 const MAX_SIZE: usize = 262_144; // max payload size is 256k
 
 /// This handler manually load request payload and parse json object
+///
 async fn index_manual(mut payload: web::Payload) -> Result<HttpResponse, Error> {
     // payload is a stream of Bytes objects
     let mut body = web::BytesMut::new();
@@ -61,6 +82,16 @@ async fn main() -> std::io::Result<()> {
     // env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     // log::info!("starting HTTP server at http://localhost:8080");
+
+    let subscriber = tracing_subscriber::FmtSubscriber::builder()
+        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
+        // will be written to stdout.
+        .with_max_level(Level::INFO)
+        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::FULL)
+        // completes the builder.
+        .finish();
+
+    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
 
     HttpServer::new(|| {
         App::new()
