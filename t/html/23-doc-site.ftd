@@ -1,0 +1,483 @@
+
+-- page: PAGE TITLE
+section-item: $item
+subsection-item: $sub-item
+toc: $toc
+navtitle: Section-one
+nav-subtitle: Subsection-one 
+current-title: Toc Title 1
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+-- image: Image 1
+src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+
+-- image: Image 1
+src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+
+-- image: Image 1
+src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+
+-- image: Image 1
+src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+
+-- image: Image 1
+src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+
+
+-- image: Image 1
+src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+
+-- end: page
+
+
+
+
+
+
+
+
+
+
+-- component page:
+optional caption title:
+toc-item list section-item:
+toc-item list subsection-item:
+toc-items list toc:
+optional body body:
+string navtitle:
+string nav-subtitle:
+string current-title:
+children container:
+
+-- ftd.column:
+background.solid: $base
+width.fixed.percent: 100
+
+
+
+-- header:
+section-item: $page.section-item
+subsection-item:$page.subsection-item
+toc: $page.toc
+navtitle: $page.navtitle
+nav-subtitle: $page.nav-subtitle
+current-title: $page.current-title
+
+
+-- ftd.row:
+padding.px: 48
+spacing.px: 48
+width.fixed.percent: 100
+
+-- ftd.column:
+background.solid: $step-1
+padding.px: 24
+min-height.percent: 100
+width.fixed.percent: 20
+
+-- print-toc:
+item: $page.toc
+
+-- end: ftd.column
+
+-- ftd.column:
+spacing.px: 32
+width.fixed.percent: 80
+
+-- ftd.text: $page.title
+color: $text-strong
+
+-- ftd.text: $page.body
+color: $text-strong
+
+-- ftd.column:
+children: $page.container
+spacing.px: 32
+width.fixed.percent: 100
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: page
+
+
+
+
+
+
+
+
+
+
+-- component print-toc-item:
+toc-item list item:
+
+-- ftd.row:
+padding-left.px: 30
+
+-- print-toc-item-one:
+item: $obj.name
+url: $obj.url
+$loop$: $print-toc-item.item as $obj
+
+-- end: ftd.row
+
+-- end: print-toc-item
+
+
+
+
+
+
+
+
+
+
+
+-- component print-toc-item-one:
+caption item:
+string url:
+
+-- ftd.row:
+padding-left.px: 30
+align-content: ftd.align.center
+
+-- ftd.text: 
+text:$print-toc-item-one.item
+link:$print-toc-item-one.url
+color: $text-strong
+
+-- end: ftd.row
+
+-- end: print-toc-item-one
+
+
+
+
+
+
+
+
+
+
+-- component print-toc:
+toc-items list item:
+
+-- ftd.column:
+
+-- print-toc-one:
+item: $obj.name
+children: $obj.children
+$loop$: $print-toc.item as $obj
+
+-- end: ftd.column
+
+-- end: print-toc
+
+
+
+
+
+
+
+
+
+
+-- component print-toc-one:
+string item:
+toc-items list children:
+
+-- ftd.column:
+
+-- ftd.column:
+
+-- ftd.text: 
+text:$print-toc-one.item
+padding-bottom.px: 8
+color: $text-strong
+
+-- end: ftd.column
+
+-- ftd.column:
+padding-left.px: 12
+
+-- print-toc-one:
+item: $obj.name
+children: $obj.children
+$loop$: $print-toc-one.children as $obj
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: print-toc-one
+
+
+
+
+
+
+
+
+
+
+-- component image:
+optional caption title:
+ftd.image-src src:
+ftd.align aaa: ftd.align.center
+
+-- ftd.column: 
+width.fixed.percent: 100
+align-content: $image.aaa
+spacing.px: 12
+
+-- ftd.column:
+width.fixed.percent: 100
+align-content: ftd.align.center
+
+-- ftd.image:
+src: $image.src
+width.fixed.px: 400
+height.fixed.px: 100
+
+-- end: ftd.column
+
+-- ftd.text:
+text: $image.title
+color: $text-strong
+
+-- end: ftd.column
+
+-- end: image
+
+
+
+
+
+
+
+
+
+
+
+-- component header:
+toc-item list section-item:
+toc-item list subsection-item:
+toc-items list toc:
+string navtitle:
+string nav-subtitle:
+string current-title:
+
+-- ftd.column:
+width.fixed.percent: 100
+
+-- ftd.row:
+width.fixed.percent: 100
+padding.px: 32
+
+-- ftd.row:
+width.fixed.percent: 26
+
+-- ftd.image:
+src: $src
+
+-- end: ftd.row
+
+-- ftd.row:
+width.fixed.percent: 74
+align-content: ftd.align.right
+
+-- print-toc-item:
+item: $header.section-item
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.row:
+background.solid: $step-1
+width.fixed.percent: 100
+padding-vertical.px: 24
+padding-horizontal.px: 32
+
+-- ftd.column:
+width.fixed.percent: 26
+spacing.px: 12
+
+-- ftd.text: $header.navtitle
+color: $text-strong
+
+-- ftd.row:
+spacing.px: 8
+
+-- ftd.text: $header.nav-subtitle
+color: $text-strong
+-- ftd.row:
+
+-- ftd.text: \-
+color: $text-strong
+
+-- ftd.text: \>
+color: $text-strong
+padding-top.percent: 10.7
+
+-- end: ftd.row
+
+-- ftd.text: $header.current-title
+color: $text-strong
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+align-content: ftd.align.right
+width.fixed.percent: 100
+align-self: ftd.align-self.center
+
+-- ftd.row:
+width.fixed.percent: 100
+align-content: ftd.align.right
+
+
+-- ftd.column:
+align-content: ftd.align.center
+
+
+-- ftd.column:
+align-content: ftd.align.center
+
+
+-- print-toc-item:
+item: $header.subsection-item
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: header
+
+
+
+
+
+
+
+
+
+
+-- ftd.color base:
+light: #18181b
+dark: #18181b
+
+-- ftd.color step-1:
+light: #141414
+dark: #141414
+
+-- ftd.color text-strong:
+light: #ffffff
+dark: #ffffff
+
+
+
+
+
+-- record toc-item:
+caption name:
+string url:
+
+-- toc-item list item:
+
+-- toc-item: Section-one
+url: /
+
+-- toc-item: Section-two
+url: /
+
+-- toc-item: Section-three
+url: /
+
+-- toc-item: Section-four
+url: /
+
+-- end: item
+
+
+
+
+
+
+-- toc-item list sub-item:
+
+-- toc-item: Subsection-one
+url: /
+
+-- toc-item: Subsection-two
+url: /
+
+-- toc-item: Subsection-three
+url: /
+
+-- toc-item: subsection-four
+url: /
+
+-- end: sub-item
+
+
+
+
+
+-- record toc-items:
+string name:
+toc-items list children:
+
+-- toc-items list toc:
+
+-- toc-items:
+name: TOC title 1
+
+-- toc-items.children:
+
+-- toc-items:
+name: TOC children 1.1
+
+-- toc-items.children:
+
+-- toc-items:
+name: TOC children 1.1.1
+
+-- end: toc-items.children
+
+-- end: toc-items.children
+
+-- toc-items:
+name: TOC title 2
+
+-- toc-items:
+name: TOC title 3
+
+-- toc-items:
+name: TOC title 4
+
+-- end: toc
+
+
+
+
+
+
+-- ftd.image-src src:
+light: https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry-dark.svg
+dark: https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry-dark.svg
