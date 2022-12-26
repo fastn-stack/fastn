@@ -1,0 +1,288 @@
+-- void set-false(a):
+boolean $a:
+
+a = false
+
+-- void set-true(b):
+boolean $b:
+
+b = true
+
+-- ftd.color base:
+light: #18181b
+dark: #18181b
+
+-- ftd.color step-1:
+light: #141414
+dark: #141414
+
+-- ftd.color step-2:
+light: #141414
+dark: #141414
+
+-- ftd.color text:
+light: #CCCCCC
+dark: #CCCCCC
+
+-- ftd.color text-strong:
+light: #ffffff
+dark: #ffffff
+
+
+-- presentation:
+
+
+
+
+-- component presentation:
+integer current: 1	
+integer CHILDREN-COUNT: 1
+boolean embed: false
+boolean show-full-screen: false
+ftd.color bgcolor: $base	
+ftd.color overlayBgColor: $step-1
+ftd.color panelBgColor: $base
+optional ftd.image-src bgimage:
+
+-- ftd.column:	
+background.solid: $text-strong
+width.fixed.percent: 100	
+height.fixed.percent: 100
+
+-- ftd.column:	
+width.fixed.percent: 100
+height.fixed.percent: 100
+background.solid: $step-1
+/background-image if {presentation.bgimage != NULL}: $presentation.bgimage
+/background-color if {presentation.bgimage = NULL}: $presentation.bgcolor
+id: hidden-screen-container	
+
+-- ftd.column:
+align-self: ftd.align-self.center
+
+-- ftd.column:	
+width.fixed.percent: 100
+height.fixed.px: 350
+/height.fixed.percent if {!presentation.embed}: 100
+/height.fixed.px if {presentation.embed}: 350
+
+-- ftd.text: slides Content should appear here...
+color: $text-strong
+align-self: ftd.align-self.center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:	
+width.fixed.percent: 100
+height.fixed.percent: 350
+max-width.px: 1200
+align-self: ftd.align-self.center
+id: content
+
+-- panel:
+bgcolor: $presentation.panelBgColor
+currentNew: $presentation.current
+children-count: $presentation.CHILDREN-COUNT
+showFullScreen: $presentation.show-full-screen
+
+
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: presentation
+
+
+
+
+
+
+
+
+
+
+
+-- component panel:
+integer currentNew:
+integer children-count:
+ftd.color bgcolor: $step-2
+boolean active: false	
+boolean showLeft: false	
+boolean showRight: false
+boolean showFullScreen: false
+
+-- ftd.column:
+background.solid: $text
+width.fixed.percent: 100
+align-content: ftd.align.center
+
+-- ftd.column:	
+if: {!panel.showFullScreen}
+id: full-screen	
+/align: center	
+anchor: parent	
+right: 16
+bottom: 8
+
+-- ftd.image:	
+if: {!panel.active}
+src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/full-screen-dark.svg
+/$on-click$: $show-full-screen = true	
+/$on-global-key[ctrl-f]$: $show-full-screen = true	
+/$on-mouse-enter$: $active = true	
+/$on-mouse-leave$: $active = false	
+
+-- ftd.image:	
+if: {panel.active}
+src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/full-screen-dark.svg
+/$on-click$: $set-true($b = $panel.showFullScreen)
+/$on-global-key[ctrl-f]$: $show-full-screen = true	
+/$on-mouse-enter$: $active = true	
+/$on-mouse-leave$: $active = false	
+
+
+-- end: ftd.column
+
+-- ftd.column:	
+if: {panel.showFullScreen}
+/align: center	
+anchor: parent	
+right: 16	
+bottom: 8	
+id: full-screen	
+
+-- ftd.image:	
+if:{!panel.active}
+src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/full-screen-mode-dark.svg
+/$on-click$: $show-full-screen = false	
+/$on-global-key[esc]$: $show-full-screen = true	
+/$on-mouse-enter$: $active = true	
+/$on-mouse-leave$: $active = false	
+
+-- ftd.image:	
+if: {panel.active}
+src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/full-screen-mode-dark.svg
+/$on-click$: $show-full-screen = false
+/$on-global-key[esc]$: $show-full-screen = false	
+/$on-mouse-enter$: $active = true	
+/$on-mouse-leave$: $active = false	
+
+-- end: ftd.column
+
+-- ftd.row:	
+align-content: ftd.align.center	
+id: slots	
+
+-- ftd.row:	
+id: left-arrow	
+align-content: ftd.align.center	
+
+-- ftd.image:	
+if: {!panel.showLeft}
+src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/left-dark.svg
+/$on-click$: decrement $current clamp 1 $children-count	
+width.fixed.px: 24	
+height.fixed.px: 24	
+/align: center	
+/$on-mouse-enter$: $show-left = true	
+/$on-mouse-leave$: $show-left = false
+
+-- ftd.image:	
+if: {panel.showLeft}
+src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/left-dark.svg
+/$on-click$: decrement $current clamp 1 $children-count	
+width.fixed.px: 24	
+height.fixed.px: 24	
+/align: center	
+/$on-mouse-enter$: $show-left = true	
+/$on-mouse-leave$: $show-left = false
+
+-- ftd.row:	
+width.fixed.percent: 100
+/$on-global-key[left]$: decrement $current clamp 1 $children-count	
+align-content: ftd.align.center	
+
+-- show-controls:	
+total: $panel.children-count	
+current: $panel.currentNew
+/align: center	
+
+-- ftd.row:	
+id: right-arrow	
+align-content: ftd.align.center	
+
+-- ftd.image:	
+if:{!panel.showRight}
+src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/right-dark.svg
+/$on-click$: increment $current clamp 1 $children-count	
+width.fixed.px: 24	
+/align: center	
+/$on-mouse-enter$: $show-right = true	
+/$on-mouse-leave$: $show-right = false
+
+-- ftd.image:	
+if:{panel.showRight}
+src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/right-dark.svg
+/$on-click$: increment $current clamp 1 $children-count
+width.fixed.px: 24	
+/align: center	
+/$on-mouse-enter$: $show-right = true	
+/$on-mouse-leave$: $show-right = false	
+
+-- ftd.row:	
+/$on-global-key[right]$: increment $current clamp 1 $children-count	
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: panel
+
+
+
+
+
+
+
+
+-- component show-controls:
+integer total:
+integer current:
+
+-- ftd.row:
+padding.px: 11
+border-radius.px: 10
+spacing.px: 8
+min-width.px: 90
+
+-- ftd.integer: $show-controls.current
+/align: center
+width.fixed.percent: 100
+/text-align: ftd.center
+
+-- ftd.text: of 
+/align: center
+width.fixed.percent: 100
+/text-align: center
+
+-- ftd.integer: $show-controls.total
+/align: center
+width.fixed.percent: 100
+/text-align: center
+
+-- end: ftd.row
+
+-- end: show-controls
