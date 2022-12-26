@@ -1,0 +1,170 @@
+-- ftd.color base:
+light: #18181b
+dark: #18181b
+
+-- ftd.color step-1:
+light: #141414
+dark: #141414
+
+-- ftd.color step-2:
+light: #141414
+dark: #141414
+
+-- ftd.color text:
+light: #CCCCCC
+dark: #CCCCCC
+
+-- ftd.color text-strong:
+light: #ffffff
+dark: #ffffff
+
+-- ftd.color border-color:
+light: #CCCCCC
+dark: #CCCCCC
+
+-- ftd.column:
+width.fixed.percent: 100
+height.fixed.percent: 100
+background.solid: $base
+padding.px: 100
+
+-- ftd.column:
+width.fixed.px: 500
+align-self: ftd.align-self.center
+
+-- messageleft: Hey Buddy!
+
+-- messageright: How are you Buddy?
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- component messageleft:
+optional caption title:
+ftd.image-src avatar: https://fifthtry.github.io/bling/-/fifthtry.github.io/bling/static/amitu.jpg
+boolean roundavatar: true
+integer pulltop: 0
+
+-- ftd.column:
+margin-bottom.px: 16 
+/append-at: msg-container
+id: message
+
+-- ftd.column:
+width.fixed.percent: 100
+
+-- ftd.row:
+width.fixed.percent: 100
+id: chat-right
+
+-- ftd.image:
+if: {!messageleft.roundavatar}
+src: $messageleft.avatar
+width.fixed.px: 32
+margin-right.px: 16
+
+-- ftd.image:
+if: {messageleft.roundavatar}
+src: $messageleft.avatar
+width.fixed.px: 32
+margin-right.px: 16
+border-radius.px: 32
+
+-- ftd.column:
+border-width.px: 1
+border-color: $border-color
+background-color: $step-1
+padding.px: 12
+border-radius.px: 4
+width.fixed.percent: 100
+id: msg-container
+
+-- ftd.text:
+text: $messageleft.title
+color: $text
+/role: $fpm.type.label-big
+width.fixed.percent: 100
+/text-align: left
+align-self: ftd.align-self.center
+margin-top.px: $messageleft.pulltop
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: messageleft
+
+
+
+
+
+
+
+
+
+
+-- component messageright:
+optional caption title:
+ftd.image-src avatar: https://fifthtry.github.io/bling/-/fifthtry.github.io/bling/static/ganeshs.jpeg
+boolean roundavatar: true
+integer pulltop: 0
+
+-- ftd.column:
+margin-bottom.px: 16 
+/append-at: msg-container
+id: message
+align-self: ftd.align-self.end
+
+-- ftd.column:
+width.fixed.percent: 100
+
+-- ftd.row:
+width.fixed.percent: 100
+id: chat-right
+
+-- ftd.column:
+border-width.px: 1
+border-color: $border-color
+background-color: $step-1
+padding.px: 12
+border-radius.px: 4
+width.fixed.percent: 100
+id: msg-container
+
+-- ftd.text:
+text: $messageright.title
+color: $text
+/role: $fpm.type.label-big
+width.fixed.percent: 100
+/text-align: left
+align-self: ftd.align-self.center
+margin-top.px: $messageright.pulltop
+
+-- end: ftd.column
+
+-- ftd.image:
+if: {!messageright.roundavatar}
+src: $messageright.avatar
+width.fixed.px: 32
+margin-left.px: 16
+
+-- ftd.image:
+if: {messageright.roundavatar}
+src: $messageright.avatar
+width.fixed.px: 32
+margin-left.px: 16
+border-radius.px: 32
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: messageright
