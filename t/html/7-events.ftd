@@ -16,7 +16,7 @@ a = a + " " + b
 -- boolean is-empty(a):
 optional string a:
 
-isempty(a)
+is_empty(a)
 
 
 -- component foo:
@@ -51,5 +51,3 @@ $on-click$: $append($a = $name, b = FTD)
 
 -- ftd.text: Why am I running? 🏃🏻‍♀️
 padding.px: $value
-
-

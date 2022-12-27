@@ -269,11 +269,5 @@ impl ExpressionGenerator {
 
 fn from_default_functions() -> Vec<String> {
     // todo: check ftd::interpreter2::default::default_functions()
-    let value = indoc::indoc! {"
-        function isempty(str) {
-            return (!str || str.length === 0 );
-        }
-    "}
-    .to_string();
-    vec![value]
+    vec!["".to_string()]
 }
