@@ -24,18 +24,20 @@ impl State {
     fn next(&mut self) -> ftd::p11::Result<()> {
         use itertools::Itertools;
 
-        self.end()?;
+        self.reading_section()?;
 
-        if self.content.trim().is_empty() {
-            let sections = self.state.iter().map(|(v, _)| v.clone()).collect_vec();
-            self.state = vec![];
-            self.sections.extend(sections);
+        while let Some((_, state)) = self.get_latest_state() {
+            self.end()?;
 
-            return Ok(());
-        }
+            if self.content.trim().is_empty() {
+                let sections = self.state.iter().map(|(v, _)| v.clone()).collect_vec();
+                self.state = vec![];
+                self.sections.extend(sections);
 
-        if let Some((_, state)) = self.get_latest_state() {
-            match state.clone() {
+                continue;
+            }
+
+            match state {
                 ParsingStateReading::Section => {
                     self.reading_block_headers()?;
                 }
@@ -56,8 +58,6 @@ impl State {
                     self.reading_section()?;
                 }
             }
-        } else {
-            self.reading_section()?;
         }
 
         Ok(())
@@ -201,7 +201,7 @@ impl State {
             .push((section, vec![ParsingStateReading::Section]));
         self.content = rest_lines;
         self.reading_inline_headers()?;
-        self.next()
+        Ok(())
     }
 
     fn reading_block_headers(&mut self) -> ftd::p11::Result<()> {
@@ -227,7 +227,7 @@ impl State {
 
         if !start_line.starts_with("-- ") && !start_line.starts_with("/-- ") {
             parsing_states.push(header_not_found_next_state);
-            return self.next();
+            return Ok(());
         }
 
         let is_commented = start_line.starts_with("/-- ");
@@ -245,7 +245,7 @@ impl State {
             key
         } else {
             parsing_states.push(header_not_found_next_state);
-            return self.next();
+            return Ok(());
         };
 
         self.line_number += scan_line_number + 1;
@@ -285,7 +285,7 @@ impl State {
                 }
             });
         }
-        self.next()
+        Ok(())
     }
 
     fn reading_header_value(
@@ -339,7 +339,7 @@ impl State {
                 header_condition,
             ));
         }
-        self.next()
+        Ok(())
     }
 
     fn reading_caption_value(&mut self) -> ftd::p11::Result<()> {
@@ -381,7 +381,7 @@ impl State {
 
         let value = value.join("\n").trim().to_string();
         section.caption = Some(ftd::p11::Header::from_caption(value.as_str(), line_number));
-        self.next()
+        Ok(())
     }
 
     fn reading_body_value(&mut self) -> ftd::p11::Result<()> {
@@ -429,7 +429,7 @@ impl State {
         if !section.block_body {
             parsing_state.push(ParsingStateReading::Subsection);
         }
-        self.next()
+        Ok(())
     }
 
     // There should not be no new line in the headers
@@ -488,10 +488,10 @@ impl State {
         None
     }
 
-    fn get_latest_state(&self) -> Option<(&ftd::p11::Section, &ParsingStateReading)> {
+    fn get_latest_state(&self) -> Option<(ftd::p11::Section, ParsingStateReading)> {
         if let Some((section, state)) = self.state.last() {
             if let Some(state) = state.last() {
-                return Some((section, state));
+                return Some((section.to_owned(), state.to_owned()));
             }
         }
         None
