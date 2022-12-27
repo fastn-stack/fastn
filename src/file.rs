@@ -228,7 +228,7 @@ pub(crate) async fn get_file(
 pub fn is_static(path: &str) -> fpm::Result<bool> {
     Ok(match path.rsplit_once('.') {
         Some((_, "ftd")) | Some((_, "md")) => false,
-        Some((_, "svg")) => true,
+        Some((_, "svg")) | Some((_, "woff")) | Some((_, "woff2")) => true,
         Some((_, ext)) if ftd::code::KNOWN_EXTENSIONS.contains(ext) => false,
         None => false,
         _ => true,

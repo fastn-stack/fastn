@@ -468,9 +468,18 @@ pub(crate) async fn update1(
         ("".to_string(), file_path.to_string())
     };
 
+    dbg!(root);
+    dbg!(&file_root);
+    dbg!(&file_name);
+
+    dbg!(root.join(&file_root));
+
     if !root.join(&file_root).exists() {
         tokio::fs::create_dir_all(root.join(&file_root)).await?;
     }
+
+    dbg!(root.join(&file_root));
+    dbg!(root.join(&file_root).join(&file_name));
 
     Ok(
         tokio::fs::File::create(root.join(file_root).join(file_name))
