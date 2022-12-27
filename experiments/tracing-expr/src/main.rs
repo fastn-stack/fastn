@@ -20,7 +20,7 @@ async fn foo1() {
 
 #[instrument(name = "i-am-foo", skip_all)]
 async fn foo(_item: &web::Json<MyObj>, _p1: &str, _p2: &str) {
-    event!(Level::INFO, "inside foo function!");
+    event!(Level::INFO, msg = "inside foo function!", param1 = _p1,);
     event!(Level::INFO, "calling foo1 function!");
     foo1().await;
     std::thread::sleep(std::time::Duration::from_secs(5));
@@ -31,13 +31,8 @@ async fn foo(_item: &web::Json<MyObj>, _p1: &str, _p2: &str) {
 #[instrument(skip(item, _req), ret)]
 async fn index(_req: actix_web::HttpRequest, item: web::Json<MyObj>) -> HttpResponse {
     event!(Level::INFO, "inside index function!");
-    let result = 4 + 5;
-    // Record the result as part of the current span.
-    tracing::Span::current().record("result", &result);
-
-    // println!("model: {:?}", &item);
-    // event!(Level::INFO, "calling function foo!");
-    // foo(&item, "param1", "param2").await;
+    event!(Level::INFO, "calling function foo!");
+    foo(&item, "param1", "param2").await;
     HttpResponse::Ok().json(item.0) // <- send response
 }
 
@@ -70,7 +65,10 @@ async fn main() -> std::io::Result<()> {
         // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
         // will be written to stdout.
         .with_max_level(Level::INFO)
-        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::FULL)
+        .with_level(false)
+        .event_format(tracing_subscriber::fmt::format().compact())
+        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::ACTIVE)
+        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::CLOSE)
         // completes the builder.
         .finish();
 

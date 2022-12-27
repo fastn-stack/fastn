@@ -490,6 +490,39 @@ INFO index{http.path="/" http.method="POST" result=9}: tracing_expr: close time.
 Adding the `ret` argument to #[instrument] will emit an event with the
 function’s return value when the function returns:
 
+-- ds.code:
+lang: rs
+
+#[instrument(ret)]
+fn my_function() -> i32 {
+    42
+}
+
+#[instrument(ret(Display))]
+fn my_function() -> i32 {
+    42
+}
+
+-- ds.h3: `err`
+
+If the function returns a Result<T, E> and E implements std::fmt::Display,
+you can add err or err(Display) to emit error events when the function returns
+Err:
+
+-- ds.code:
+lang: rs
+
+#[instrument(err)]
+fn my_function(arg: usize) -> Result<(), std::io::Error> {
+    Ok(())
+}
+
+
+#[instrument(err, ret)]
+fn my_function(arg: usize) -> Result<(), std::io::Error> {
+    Ok(())
+}
+
 -- ds.code: Usage
 lang: rs
 
@@ -525,3 +558,83 @@ Response HTTP/1.1 200 OK
 2022-12-27T13:36:08.181237Z  INFO index: tracing_expr: exit
 2022-12-27T13:36:08.181272Z  INFO index: tracing_expr: close time.busy=127µs time.idle=90.8µs
 
+
+-- ds.h2: Subscribers
+
+In order to record trace events, executables have to use a Subscriber
+implementation compatible with tracing. A Subscriber implements a way of
+collecting trace data, such as by logging it to standard output.
+
+A subscriber is responsible for the following:
+
+- Registering new spans as they are created, and providing them with span IDs.
+Implicitly, this means the subscriber may determine the strategy for determining
+span equality.
+- Recording the attachment of field values and follows-from
+annotations to spans. Filtering spans and events, and determining when those
+filters must be invalidated.
+- Observing spans as they are entered, exited, and
+closed, and events as they occur.
+
+[More...](https://docs.rs/tracing/latest/tracing/trait.Subscriber.html)
+
+-- ds.code: fmt subscriber
+lang: rs
+
+#[instrument(skip(item, _req), ret)]
+async fn index(_req: actix_web::HttpRequest, item: web::Json<MyObj>) -> HttpResponse {
+    event!(Level::INFO, "inside index function!");
+    event!(Level::INFO, "calling function foo!");
+    foo(&item, "param1", "param2").await;
+    HttpResponse::Ok().json(item.0) // <- send response
+}
+
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    let subscriber = tracing_subscriber::FmtSubscriber::builder()
+        // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
+        // will be written to stdout.
+        .with_max_level(Level::INFO)
+        .with_level(false)
+        .event_format(tracing_subscriber::fmt::format().compact())
+        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::ACTIVE)
+        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::CLOSE)
+        // completes the builder.
+        .finish();
+
+    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
+
+    HttpServer::new(|| {
+        App::new()
+            .app_data(web::JsonConfig::default().limit(4096)) // <- limit size of the payload (global configuration)
+            .service(web::resource("/m").route(web::post().to(index_manual)))
+            .service(web::resource("/").route(web::post().to(index)))
+    })
+    .bind(("127.0.0.1", 8000))?
+    .run()
+    .await
+}
+
+-- ds.code: Log Output
+lang: sh
+
+
+2022-12-27T14:31:40.749687Z  INFO actix_server::builder: Starting 8 workers
+2022-12-27T14:31:40.749827Z  INFO actix_server::server: Actix runtime found; starting in Actix runtime
+2022-12-27T14:31:41.579778Z  INFO index: tracing_expr: inside index function!
+2022-12-27T14:31:41.579833Z  INFO index: tracing_expr: calling function foo!
+2022-12-27T14:31:41.579869Z  INFO index:i-am-foo: tracing_expr: msg="inside foo function!" param1="param1"
+2022-12-27T14:31:41.579906Z  INFO index:i-am-foo: tracing_expr: calling foo1 function!
+2022-12-27T14:31:41.579940Z  INFO index:i-am-foo:i-am-foo1: tracing_expr: inside foo1 function!
+2022-12-27T14:31:46.585007Z  INFO index:i-am-foo:i-am-foo1: tracing_expr: foo1 function! ends
+2022-12-27T14:31:46.585486Z  INFO index:i-am-foo:i-am-foo1: tracing_expr: close time.busy=5.01s time.idle=67.6µs
+2022-12-27T14:31:51.590625Z  INFO index:i-am-foo: tracing_expr: foo function! ends
+2022-12-27T14:31:51.590755Z  INFO index:i-am-foo: tracing_expr: close time.busy=10.0s time.idle=9.04µs
+2022-12-27T14:31:51.590978Z  INFO index: tracing_expr: return=HttpResponse { error: None, res:
+Response HTTP/1.1 200 OK
+  headers:
+    "content-type": "application/json"
+  body: Sized(27)
+ }
+2022-12-27T14:31:51.591043Z  INFO index: tracing_expr: close time.busy=10.0s time.idle=12.0µs
