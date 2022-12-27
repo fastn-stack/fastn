@@ -1,3 +1,5 @@
+-- import: 6-function as fun
+
 -- ftd.text: FifthTry!! Click here
 link: https://www.fifthtry.com/
 
@@ -8,6 +10,6 @@ link: https://www.fifthtry.com/
 -- ftd.text: FifthTry!! Click here
 link: /k/
 
--- ftd.text: FifthTry!! Click here
+-- ftd.text: $fun.append(a = FifthTry, b = Click here)
 link: https://www.fifthtry.com/
 open-in-new-tab: true
