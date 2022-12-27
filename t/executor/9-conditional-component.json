@@ -576,6 +576,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "open_in_new_tab": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "background": {
                 "value": null,
                 "line_number": null,
@@ -877,6 +882,11 @@
         "properties": []
       },
       "link": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "open_in_new_tab": {
         "value": null,
         "line_number": null,
         "properties": []
