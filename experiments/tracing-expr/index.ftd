@@ -482,3 +482,46 @@ INFO index{http.path="/" http.method="POST"}: tracing_expr: enter
 INFO index{http.path="/" http.method="POST"}: tracing_expr: inside index function!
 INFO index{http.path="/" http.method="POST" result=9}: tracing_expr: exit
 INFO index{http.path="/" http.method="POST" result=9}: tracing_expr: close time.busy=87.3µs time.idle=66.8µs
+
+-- ds.h3: `instrument` Remaining Options
+
+-- ds.h3: `ret`
+
+Adding the `ret` argument to #[instrument] will emit an event with the
+function’s return value when the function returns:
+
+-- ds.code: Usage
+lang: rs
+
+/// This handler uses json extractor
+#[instrument(
+  skip(item, _req),
+  ret
+)]
+async fn index(_req: actix_web::HttpRequest, item: web::Json<MyObj>) -> HttpResponse {
+    event!(Level::INFO, "inside index function!");
+    let result = 4 + 5;
+    // Record the result as part of the current span.
+    tracing::Span::current().record("result", &result);
+
+    // println!("model: {:?}", &item);
+    // event!(Level::INFO, "calling function foo!");
+    // foo(&item, "param1", "param2").await;
+    HttpResponse::Ok().json(item.0) // <- send response
+}
+
+-- ds.code: Output
+lang: ftd
+
+2022-12-27T13:36:08.181063Z  INFO index: tracing_expr: new
+2022-12-27T13:36:08.181110Z  INFO index: tracing_expr: enter
+2022-12-27T13:36:08.181130Z  INFO index: tracing_expr: inside index function!
+2022-12-27T13:36:08.181197Z  INFO index: tracing_expr: return=HttpResponse { error: None, res:
+Response HTTP/1.1 200 OK
+  headers:
+    "content-type": "application/json"
+  body: Sized(27)
+ }
+2022-12-27T13:36:08.181237Z  INFO index: tracing_expr: exit
+2022-12-27T13:36:08.181272Z  INFO index: tracing_expr: close time.busy=127µs time.idle=90.8µs
+

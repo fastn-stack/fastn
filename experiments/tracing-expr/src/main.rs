@@ -28,14 +28,7 @@ async fn foo(_item: &web::Json<MyObj>, _p1: &str, _p2: &str) {
 }
 
 /// This handler uses json extractor
-#[instrument(
-  skip(item, _req),
-  fields(
-    http.path = _req.uri().path(),
-    http.method = _req.method().as_str(),
-    result
-  )
-)]
+#[instrument(skip(item, _req), ret)]
 async fn index(_req: actix_web::HttpRequest, item: web::Json<MyObj>) -> HttpResponse {
     event!(Level::INFO, "inside index function!");
     let result = 4 + 5;
