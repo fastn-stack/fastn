@@ -802,6 +802,51 @@ pub fn record_optional(
     }
 }
 
+#[allow(clippy::type_complexity)]
+pub fn string_optional_with_ref(
+    name: &str,
+    properties: &ftd::Map<ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
+    line_number: usize,
+) -> ftd::p1::Result<(Option<String>, Option<String>)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    match properties.get(name) {
+        Some((ftd::Value::String { text: v, .. }, reference)) => {
+            Ok((Some(v.to_string()), (*reference).to_owned()))
+        }
+        Some((
+            ftd::Value::None {
+                kind: ftd::p2::Kind::String { .. },
+            },
+            _,
+        )) => Ok((None, None)),
+        Some((ftd::Value::None { .. }, _)) => Ok((None, None)),
+        Some((
+            ftd::Value::Optional {
+                data,
+                kind: ftd::p2::Kind::String { .. },
+            },
+            reference,
+        )) => match data.as_ref() {
+            Some(ftd::Value::String { text: v, .. }) => {
+                Ok((Some(v.to_string()), (*reference).to_owned()))
+            }
+            None => Ok((None, (*reference).to_owned())),
+            v => ftd::p2::utils::e2(
+                format!("expected string, for: `{}` found: {:?}", name, v),
+                doc.name,
+                line_number,
+            ),
+        },
+        Some(v) => ftd::p2::utils::e2(
+            format!("expected string, for: `{}` found: {:?}", name, v),
+            doc.name,
+            line_number,
+        ),
+        None => Ok((None, None)),
+    }
+}
+
 pub fn string_optional(
     name: &str,
     properties: &ftd::Map<ftd::Value>,

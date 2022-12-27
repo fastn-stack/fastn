@@ -892,19 +892,41 @@ pub fn iframe_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::IFrame> {
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let src = match (
-        ftd::p2::utils::string_optional("src", properties, doc.name, 0)?,
-        ftd::p2::utils::string_optional("youtube", properties, doc.name, 0)?
-            .and_then(|id| ftd::youtube_id::from_raw(id.as_str())),
+        ftd::p2::utils::string_optional_with_ref("src", unresolved_properties, doc, 0)?,
+        {
+            let (youtube, reference) =
+                ftd::p2::utils::string_optional_with_ref("youtube", unresolved_properties, doc, 0)?;
+            (
+                youtube.and_then(|id| ftd::youtube_id::from_raw(id.as_str())),
+                reference,
+            )
+        },
     ) {
-        (Some(src), None) => src,
-        (None, Some(id)) => id,
-        (Some(_), Some(_)) => {
+        ((Some(src), _), (None, _)) => src,
+        ((None, _), (Some(id), _)) => id,
+        ((Some(_), _), (Some(_), _)) => {
             return ftd::p2::utils::e2("both src and youtube id provided", doc.name, 0)
         }
-        (None, None) => return ftd::p2::utils::e2("src or youtube id is required", doc.name, 0),
+        ((None, Some(reference)), (None, None)) | ((None, None), (None, Some(reference))) => {
+            if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                match value {
+                    ftd::PropertyValue::Reference { name, .. }
+                    | ftd::PropertyValue::Variable { name, .. }
+                        if name.eq(&reference) =>
+                    {
+                        "".to_string()
+                    }
+                    _ => return ftd::p2::utils::e2("src or youtube id is required", doc.name, 0),
+                }
+            } else {
+                return ftd::p2::utils::e2("src or youtube id is required", doc.name, 0);
+            }
+        }
+        (_, _) => return ftd::p2::utils::e2("src or youtube id is required", doc.name, 0),
     };
+
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
 
     Ok(ftd::IFrame {
         src,

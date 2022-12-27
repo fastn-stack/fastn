@@ -17,3 +17,10 @@ if: $foo
 
 -- ft.youtube:
 id: jcn0R-UfA_k
+
+
+-- optional string new-id:
+
+
+-- ft.youtube:
+id: $new-id
