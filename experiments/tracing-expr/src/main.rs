@@ -11,15 +11,15 @@ struct MyObj {
     number: i32,
 }
 
-#[instrument]
+#[instrument(name = "i-am-foo1")]
 async fn foo1() {
     event!(Level::INFO, "inside foo1 function!");
     std::thread::sleep(std::time::Duration::from_secs(5));
     event!(Level::INFO, "foo1 function! ends");
 }
 
-#[instrument]
-async fn foo() {
+#[instrument(name = "i-am-foo", skip_all)]
+async fn foo(_item: &web::Json<MyObj>, _p1: &str, _p2: &str) {
     event!(Level::INFO, "inside foo function!");
     event!(Level::INFO, "calling foo1 function!");
     foo1().await;
@@ -28,12 +28,13 @@ async fn foo() {
 }
 
 /// This handler uses json extractor
-#[instrument(skip_all)]
+#[instrument(skip(item))]
 async fn index(item: web::Json<MyObj>) -> HttpResponse {
+    event!(Level::TRACE, "inside index function!");
     event!(Level::INFO, "inside index function!");
     // println!("model: {:?}", &item);
     event!(Level::INFO, "calling function foo!");
-    foo().await;
+    foo(&item, "param1", "param2").await;
     HttpResponse::Ok().json(item.0) // <- send response
 }
 

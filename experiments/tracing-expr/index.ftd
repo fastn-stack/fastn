@@ -240,15 +240,102 @@ pub fn my_function(my_arg: usize) {
 
 Code: /src/main.rs
 
-
-
-
 -- ds.h2: `tracing::instrument`
 
+- `tracing_expr: new`: when span is creating
+- `tracing_expr: enter`: entering into a span
+- `index{params}:foo:foo1`: logs trace for path
+- `tracing_expr: close`: closing the span, giving `time.busy` and `time.idle`
 
--- ds.h3: Rust Code
 
--- ds.code:
+-- ds.h3: `instrument` Span Attributes
+
+- for span name: #[instrument(name = "my_span")]
+- override target: #[instrument(target = "my_crate::some_special_target")]
+- level: #[instrument(level = "trace")]
+
+
+-- ds.code: Code Example
+lang: rs
+
+#[instrument(
+    name = "index_rename",
+    target = "my_crate::some_special_target",
+    level = "trace"
+)]
+async fn index(item: web::Json<MyObj>) -> HttpResponse {
+    event!(Level::TRACE, "inside index function!");
+    event!(Level::INFO, "inside index function!");
+    // println!("model: {:?}", &item);
+    event!(Level::INFO, "calling function foo!");
+    foo().await;
+    HttpResponse::Ok().json(item.0) // <- send response
+}
+
+
+
+-- ds.code: Output
+lang: sh
+
+cargo run
+
+curl --header "Content-type: application/json" -d '{"name": "Abrar", "number": 1}' "http://127.0.0.1:8000/"
+
+
+INFO tracing_expr: inside index function!
+INFO tracing_expr: calling function foo!
+INFO i-am-foo: tracing_expr: new
+INFO i-am-foo: tracing_expr: enter
+INFO i-am-foo: tracing_expr: inside foo function!
+INFO i-am-foo: tracing_expr: calling foo1 function!
+INFO i-am-foo:i-am-foo1: tracing_expr: new
+INFO i-am-foo:i-am-foo1: tracing_expr: enter
+INFO i-am-foo:i-am-foo1: tracing_expr: inside foo1 function!
+INFO i-am-foo:i-am-foo1: tracing_expr: foo1 function! ends
+INFO i-am-foo:i-am-foo1: tracing_expr: exit
+INFO i-am-foo:i-am-foo1: tracing_expr: close time.busy=5.01s time.idle=149µs
+INFO i-am-foo: tracing_expr: foo function! ends
+INFO i-am-foo: tracing_expr: exit
+INFO i-am-foo: tracing_expr: close time.busy=10.0s time.idle=93.9µs
+
+
+
+-- ds.h3: `instrument` Skipping Fields
+
+- multiple args can be passed to skip
+- args passed to skip do not need to implement fmt::Debug
+- use `skip_all` for skipping all
+
+-- ds.code: Examples
+lang: rs
+
+// This type doesn't implement `fmt::Debug`!
+struct NonDebug;
+#[instrument(skip(non_debug))]
+fn my_function(arg: usize, non_debug: NonDebug) {
+    // ...
+}
+
+
+// These arguments are huge
+#[instrument(skip_all)]
+fn my_big_data_function(large: Vec<u8>, also_large: HashMap<String, String>) {
+    // ...
+}
+
+
+// skip trait self
+impl MyType {
+    // Suppose we don't want to print an entire kilobyte of `data`
+    // every time this is called...
+    #[instrument(skip(self))]
+    pub fn my_method(&mut self, an_interesting_argument: usize) {
+         // ... do something (hopefully, using all that `data`!)
+    }
+}
+
+
+-- ds.code: Code Example
 lang: rs
 
 #[instrument]
@@ -278,13 +365,7 @@ async fn index(item: web::Json<MyObj>) -> HttpResponse {
 }
 
 
--- ds.h3: Output
-
-`tracing_expr: new`: when span is creating
-`tracing_expr: enter`: entering into a span
-`index{params}:foo:foo1`: logs trace for path
-`tracing_expr: close`: closing the span, giving `time.busy` and `time.idle`
--- ds.code:
+-- ds.code: Output
 lang: sh
 
 curl --header "Content-type: application/json" -d '{"name": "Abrar", "number": 1}' "http://127.0.0.1:8000/"
@@ -292,67 +373,24 @@ curl --header "Content-type: application/json" -d '{"name": "Abrar", "number": 1
 -- ds.code:
 lang: sh
 
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: new
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: enter
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: inside index function!
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: calling function foo!
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: new
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: enter
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: inside foo function!
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: calling foo1 function!
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: new
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: enter
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: inside foo1 function!
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: foo1 function! ends
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: exit
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: close time.busy=5.00s time.idle=203µs
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: foo function! ends
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: exit
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: close time.busy=10.0s time.idle=125µs
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: exit
-INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: close time.busy=10.0s time.idle=139µs
-
-
--- ds.h2: `tracing::instrument[skip_all]`
-
-
-In this case it is skipping the argument of index function
-
--- ds.h3: Rust Code
-
--- ds.code: Code
-lang: rs
-
-/// This handler uses json extractor
-#[instrument(skip_all)]
-async fn index(item: web::Json<MyObj>) -> HttpResponse {
-    event!(Level::INFO, "inside index function!");
-    // println!("model: {:?}", &item);
-    event!(Level::INFO, "calling function foo!");
-    foo().await;
-    HttpResponse::Ok().json(item.0) // <- send response
-}
-
-
--- ds.code: Output
-lang: sh
-
 INFO index: tracing_expr: new
 INFO index: tracing_expr: enter
 INFO index: tracing_expr: inside index function!
 INFO index: tracing_expr: calling function foo!
-INFO index:foo: tracing_expr: new
-INFO index:foo: tracing_expr: enter
-INFO index:foo: tracing_expr: inside foo function!
-INFO index:foo: tracing_expr: calling foo1 function!
-INFO index:foo:foo1: tracing_expr: new
-INFO index:foo:foo1: tracing_expr: enter
-INFO index:foo:foo1: tracing_expr: inside foo1 function!
-INFO index:foo:foo1: tracing_expr: foo1 function! ends
-INFO index:foo:foo1: tracing_expr: exit
-INFO index:foo:foo1: tracing_expr: close time.busy=5.00s time.idle=182µs
-INFO index:foo: tracing_expr: foo function! ends
-INFO index:foo: tracing_expr: exit
-INFO index:foo: tracing_expr: close time.busy=10.0s time.idle=112µs
+INFO index:i-am-foo: tracing_expr: new
+INFO index:i-am-foo: tracing_expr: enter
+INFO index:i-am-foo: tracing_expr: inside foo function!
+INFO index:i-am-foo: tracing_expr: calling foo1 function!
+INFO index:i-am-foo:i-am-foo1: tracing_expr: new
+INFO index:i-am-foo:i-am-foo1: tracing_expr: enter
+INFO index:i-am-foo:i-am-foo1: tracing_expr: inside foo1 function!
+INFO index:i-am-foo:i-am-foo1: tracing_expr: foo1 function! ends
+INFO index:i-am-foo:i-am-foo1: tracing_expr: exit
+INFO index:i-am-foo:i-am-foo1: tracing_expr: close time.busy=5.01s time.idle=172µs
+INFO index:i-am-foo: tracing_expr: foo function! ends
+INFO index:i-am-foo: tracing_expr: exit
+INFO index:i-am-foo: tracing_expr: close time.busy=10.0s time.idle=104µs
 INFO index: tracing_expr: exit
-INFO index: tracing_expr: close time.busy=10.0s time.idle=135µs
+INFO index: tracing_expr: close time.busy=10.0s time.idle=113µs
+
+
