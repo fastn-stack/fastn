@@ -296,36 +296,39 @@ This is a body text.
 
 ## Common Attributes
 
-### `padding`: `optional ftd.length`
-### `padding`: `optional ftd.length`
-### `padding`: `optional ftd.length`
-### `padding-left`: `optional ftd.length`
-### `padding-right`: `optional ftd.length`
-### `padding-top`: `optional ftd.length`
-### `padding-bottom`: `optional ftd.length`
-### `padding-horizontal`: `optional ftd.length`
-### `padding-vertical`: `optional ftd.length`
-### `margin`: `optional ftd.length`
-### `margin-left`: `optional ftd.length`
-### `margin-right`: `optional ftd.length`
-### `margin-top`: `optional ftd.length`
-### `margin-bottom`: `optional ftd.length`
-### `margin-horizontal`: `optional ftd.length`
-### `margin-vertical`: `optional ftd.length`
-### `border-width`: `optional ftd.length`
-### `border-radius`: `optional ftd.length`
-### `border-bottom-width`: `optional ftd.length`
-### `border-top-width`: `optional ftd.length`
-### `border-left-width`: `optional ftd.length`
-### `border-right-width`: `optional ftd.length`
-### `border-top-left-radius`: `optional ftd.length`
-### `border-top-right-radius`: `optional ftd.length`
-### `border-bottom-left-radius`: `optional ftd.length`
-### `border-bottom-right-radius`: `optional ftd.length`
-### `min-width`: `optional ftd.length`
-### `max-width`: `optional ftd.length`
-### `min-height`: `optional ftd.length`
-### `max-height`: `optional ftd.length`
+- `padding`: `optional ftd.length`
+- `padding`: `optional ftd.length`
+- `padding`: `optional ftd.length`
+- `padding-left`: `optional ftd.length`
+- `padding-right`: `optional ftd.length`
+- `padding-top`: `optional ftd.length`
+- `padding-bottom`: `optional ftd.length`
+- `padding-horizontal`: `optional ftd.length`
+- `padding-vertical`: `optional ftd.length`
+- `margin`: `optional ftd.length`
+- `margin-left`: `optional ftd.length`
+- `margin-right`: `optional ftd.length`
+- `margin-top`: `optional ftd.length`
+- `margin-bottom`: `optional ftd.length`
+- `margin-horizontal`: `optional ftd.length`
+- `margin-vertical`: `optional ftd.length`
+- `border-width`: `optional ftd.length`
+- `border-radius`: `optional ftd.length`
+- `border-bottom-width`: `optional ftd.length`
+- `border-top-width`: `optional ftd.length`
+- `border-left-width`: `optional ftd.length`
+- `border-right-width`: `optional ftd.length`
+- `border-top-left-radius`: `optional ftd.length`
+- `border-top-right-radius`: `optional ftd.length`
+- `border-bottom-left-radius`: `optional ftd.length`
+- `border-bottom-right-radius`: `optional ftd.length`
+- `min-width`: `optional ftd.length`
+- `max-width`: `optional ftd.length`
+- `min-height`: `optional ftd.length`
+- `max-height`: `optional ftd.length`
+
+
+**`ftd.length`**
 
 ```ftd
 -- or-type length:
@@ -354,12 +357,15 @@ caption decimal value:
 -- end: length
 ```
 
-### `border-color`: `optional ftd.color`
-### `border-bottom-color`: `optional ftd.color`
-### `border-top-color`: `optional ftd.color`
-### `border-left-color`: `optional ftd.color`
-### `border-right-color`: `optional ftd.color`
-### `color`: `optional ftd.color`
+- `border-color`: `optional ftd.color`
+- `border-bottom-color`: `optional ftd.color`
+- `border-top-color`: `optional ftd.color`
+- `border-left-color`: `optional ftd.color`
+- `border-right-color`: `optional ftd.color`
+- `color`: `optional ftd.color`
+
+**`ftd.color`**
+
 
 ```ftd
 -- record color:
@@ -367,9 +373,11 @@ caption light:
 string dark: $color.light
 ```
 
-### `width`: `optional ftd.resizing`
-### `height`: `optional ftd.resizing`
+- `width`: `optional ftd.resizing`
+- `height`: `optional ftd.resizing`
 
+
+**`ftd.resizing`**
 
 ```ftd
 -- or-type resizing:
@@ -381,10 +389,13 @@ string dark: $color.light
 -- end: resizing
 ```
 
-### `link`: `string`
-### `open-in-new-tab`: `optional boolean`
+- `link`: `string`
+- `open-in-new-tab`: `optional boolean`
 
-### `background`: `optional ftd.fill`
+- `background`: `optional ftd.fill`
+
+
+**`ftd.fill`**
 
 ```ftd
 -- or-type fill:
@@ -394,7 +405,9 @@ string dark: $color.light
 -- end: fill
 ```
 
-### `align-self`: `optional ftd.align-self`
+- `align-self`: `optional ftd.align-self`
+
+**`ftd.align-self`**
 
 ```ftd
 -- or-type align-self:
@@ -406,9 +419,11 @@ string dark: $color.light
 -- end: align-self
 ```
 
-### `overflow`: `optional ftd.overflow`
-### `overflow-x`: `optional ftd.overflow`
-### `overflow-y`: `optional ftd.overflow`
+- `overflow`: `optional ftd.overflow`
+- `overflow-x`: `optional ftd.overflow`
+- `overflow-y`: `optional ftd.overflow`
+
+**`ftd.overflow`**
 
 ```ftd
 -- or-type overflow:
@@ -424,10 +439,12 @@ string dark: $color.light
 
 ## Container Attributes
 
-### `spacing`: `optional ftd.length`
-### `wrap`: `optional boolean`
+- `spacing`: `optional ftd.length`
+- `wrap`: `optional boolean`
 
-### `align-content`: `optional ftd.align`
+- `align-content`: `optional ftd.align`
+
+**`ftd.align`**
 
 ```ftd
 -- or-type align:
@@ -446,7 +463,9 @@ string dark: $color.light
 ```
 
 
-### `spacing-mode`: `optional ftd.spacing-mode`
+- `spacing-mode`: `optional ftd.spacing-mode`
+
+**`ftd.spacing-mode`**
 
 ```ftd
 -- or-type spacing-mode:
@@ -457,6 +476,66 @@ string dark: $color.light
 
 -- end: spacing-mode
 ```
+
+# Default functions
+
+## `is_empty(a: any)`
+
+This is FScript function. It gives if the value passed to argument `a` is null or empty.
+
+
+```ftd
+-- optional string name:
+
+-- ftd.text: $name
+if: { !is_empty(name) }
+
+-- string list names:
+
+-- display-name:
+if: { !is_empty(names) }
+```
+
+## `enable_dark_mode()`
+
+This is FScript function. This function enables the dark mode.
+
+```ftd
+-- ftd.text: Dark Mode
+$on-click$: $set-dark()
+
+-- void set-dark():
+
+enable_dark_mode()
+```
+
+## `enable_light_mode()`
+
+This is FScript function. This function enables the light mode.
+
+```ftd
+-- ftd.text: Light Mode
+$on-click$: $set-light()
+
+-- void set-light():
+
+enable_light_mode()
+```
+
+## `enable_system_mode()`
+
+This is FScript function. This function enables the system mode.
+
+```ftd
+-- ftd.text: System Mode
+$on-click$: $set-system()
+
+-- void set-system():
+
+enable_system_mode()
+```
+
+
 
 
 
