@@ -1,14 +1,48 @@
+-- ftd.row:
+spacing.px: 20
+
+-- ftd.row:
+spacing.px: 5
+
+-- ftd.text: ftd.dark-mode:
+
 -- ftd.boolean: $ftd.dark-mode
 color: $bgcolor
+
+-- end: ftd.row
+
+
+
+-- ftd.row:
+spacing.px: 5
+
+-- ftd.text: ftd.system-dark-mode:
 
 -- ftd.boolean: $ftd.system-dark-mode
 color: $bgcolor
 
+-- end: ftd.row
+
+
+-- ftd.row:
+spacing.px: 5
+
+-- ftd.text: ftd.follow-system-dark-mode:
+
 -- ftd.boolean: $ftd.follow-system-dark-mode
 color: $bgcolor
 
+-- end: ftd.row
+
+
+
+-- end: ftd.row
+
 -- ftd.column:
 spacing.px: 40
+
+-- ftd.row:
+spacing.px: 20
 
 -- ftd.text: Dark Mode
 $on-click$: $set-dark()
@@ -19,9 +53,12 @@ $on-click$: $set-light()
 -- ftd.text: System Mode
 $on-click$: $set-system()
 
+-- end: ftd.row
+
 -- ftd.column:
-width.fixed.px: 40
-height.fixed.px: 40
+width.fixed.px: 60
+height.fixed.px: 60
+align-content: ftd.align.center
 background.solid: red
 border-width.px: 3
 border-color: $bgcolor
@@ -33,8 +70,9 @@ border-color: $bgcolor
 
 
 -- ftd.column:
-width.fixed.px: 40
-height.fixed.px: 40
+width.fixed.px: 60
+height.fixed.px: 60
+align-content: ftd.align.center
 background.solid: $bgcolor
 border-color: red
 border-width.px: 3
@@ -45,8 +83,9 @@ border-width.px: 3
 -- end: ftd.column
 
 -- ftd.column:
-width.fixed.px: 40
-height.fixed.px: 40
+width.fixed.px: 60
+height.fixed.px: 60
+align-content: ftd.align.center
 background: $background-fill
 border-left-color: $bgcolor
 border-left-width.px: 3

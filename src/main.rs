@@ -190,16 +190,19 @@ pub fn ftd_v2_interpret_helper(
                 break;
             }
             ftd::interpreter2::Interpreter::StuckOnImport { module, state: st } => {
-                let source = "";
+                let mut source = "".to_string();
                 let mut foreign_variable = vec![];
                 let mut foreign_function = vec![];
                 if module.eq("test") {
                     foreign_variable.push("var".to_string());
                     foreign_function.push("fn".to_string());
                 }
+                if let Ok(value) = std::fs::read_to_string(format!("./t/html/{}.ftd", module)) {
+                    source = value;
+                }
                 s = st.continue_after_import(
                     module.as_str(),
-                    source,
+                    source.as_str(),
                     foreign_variable,
                     foreign_function,
                 )?;
