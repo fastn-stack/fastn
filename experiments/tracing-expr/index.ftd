@@ -205,10 +205,11 @@ let _enter = span.enter();
 
 // Dropping the guard will exit the span.
 
+
 -- ds.markdown:
 
-The `#[instrument]` attribute provides an easy way to add tracing spans to
-functions. A function annotated with `#[instrument]` will create and enter a span
+The `instrument` attribute provides an easy way to add tracing spans to
+functions. A function annotated with `instrument` will create and enter a span
 with that function’s name every time the function is called, with arguments to
 that function will be recorded as fields using fmt::Debug.
 
@@ -232,3 +233,126 @@ pub fn my_function(my_arg: usize) {
 - [Rust Log Trait](https://crates.io/crates/log)
 - [Rust Tracing Trait](https://crates.io/crates/tracing)
 - [Open Telemetry](https://crates.io/crates/opentelemetry)
+
+
+-- ds.h1: `tracing` Experiment
+
+
+Code: /src/main.rs
+
+
+
+
+-- ds.h2: `tracing::instrument`
+
+
+-- ds.h3: Rust Code
+
+-- ds.code:
+lang: rs
+
+#[instrument]
+async fn foo1() {
+    event!(Level::INFO, "inside foo1 function!");
+    std::thread::sleep(std::time::Duration::from_secs(5));
+    event!(Level::INFO, "foo1 function! ends");
+}
+
+#[instrument]
+async fn foo() {
+    event!(Level::INFO, "inside foo function!");
+    event!(Level::INFO, "calling foo1 function!");
+    foo1().await;
+    std::thread::sleep(std::time::Duration::from_secs(5));
+    event!(Level::INFO, "foo function! ends");
+}
+
+/// This handler uses json extractor
+#[instrument]
+async fn index(item: web::Json<MyObj>) -> HttpResponse {
+    event!(Level::INFO, "inside index function!");
+    // println!("model: {:?}", &item);
+    event!(Level::INFO, "calling function foo!");
+    foo().await;
+    HttpResponse::Ok().json(item.0) // <- send response
+}
+
+
+-- ds.h3: Output
+
+`tracing_expr: new`: when span is creating
+`tracing_expr: enter`: entering into a span
+`index{params}:foo:foo1`: logs trace for path
+`tracing_expr: close`: closing the span, giving `time.busy` and `time.idle`
+-- ds.code:
+lang: sh
+
+curl --header "Content-type: application/json" -d '{"name": "Abrar", "number": 1}' "http://127.0.0.1:8000/"
+
+-- ds.code:
+lang: sh
+
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: new
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: enter
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: inside index function!
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: calling function foo!
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: new
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: enter
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: inside foo function!
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: calling foo1 function!
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: new
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: enter
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: inside foo1 function!
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: foo1 function! ends
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: exit
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo:foo1: tracing_expr: close time.busy=5.00s time.idle=203µs
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: foo function! ends
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: exit
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}:foo: tracing_expr: close time.busy=10.0s time.idle=125µs
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: exit
+INFO index{item=Json(MyObj { name: "Abrar", number: 1 })}: tracing_expr: close time.busy=10.0s time.idle=139µs
+
+
+-- ds.h2: `tracing::instrument[skip_all]`
+
+
+In this case it is skipping the argument of index function
+
+-- ds.h3: Rust Code
+
+-- ds.code: Code
+lang: rs
+
+/// This handler uses json extractor
+#[instrument(skip_all)]
+async fn index(item: web::Json<MyObj>) -> HttpResponse {
+    event!(Level::INFO, "inside index function!");
+    // println!("model: {:?}", &item);
+    event!(Level::INFO, "calling function foo!");
+    foo().await;
+    HttpResponse::Ok().json(item.0) // <- send response
+}
+
+
+-- ds.code: Output
+lang: sh
+
+INFO index: tracing_expr: new
+INFO index: tracing_expr: enter
+INFO index: tracing_expr: inside index function!
+INFO index: tracing_expr: calling function foo!
+INFO index:foo: tracing_expr: new
+INFO index:foo: tracing_expr: enter
+INFO index:foo: tracing_expr: inside foo function!
+INFO index:foo: tracing_expr: calling foo1 function!
+INFO index:foo:foo1: tracing_expr: new
+INFO index:foo:foo1: tracing_expr: enter
+INFO index:foo:foo1: tracing_expr: inside foo1 function!
+INFO index:foo:foo1: tracing_expr: foo1 function! ends
+INFO index:foo:foo1: tracing_expr: exit
+INFO index:foo:foo1: tracing_expr: close time.busy=5.00s time.idle=182µs
+INFO index:foo: tracing_expr: foo function! ends
+INFO index:foo: tracing_expr: exit
+INFO index:foo: tracing_expr: close time.busy=10.0s time.idle=112µs
+INFO index: tracing_expr: exit
+INFO index: tracing_expr: close time.busy=10.0s time.idle=135µs

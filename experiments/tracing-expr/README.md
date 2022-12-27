@@ -32,15 +32,16 @@ async fn main() -> std::io::Result<()> {
             // enable logger
             // .wrap(middleware::Logger::default())
             .app_data(web::JsonConfig::default().limit(4096)) // <- limit size of the payload (global configuration)
-            .service(web::resource("/extractor").route(web::post().to(index)))
-            .service(
-                web::resource("/extractor2")
-                    .app_data(web::JsonConfig::default().limit(1024)) // <- limit size of the payload (resource level)
-                    .route(web::post().to(extract_item)),
-            )
-            .service(web::resource("/manual").route(web::post().to(index_manual)))
-            .service(web::resource("/mjsonrust").route(web::post().to(index_mjsonrust)))
+            .service(web::resource("/m").route(web::post().to(index_manual)))
             .service(web::resource("/").route(web::post().to(index)))
+
+        // .service(web::resource("/extractor").route(web::post().to(index)))
+            // .service(
+            //     web::resource("/extractor2")
+            //         .app_data(web::JsonConfig::default().limit(1024)) // <- limit size of the payload (resource level)
+            //         .route(web::post().to(extract_item)),
+            // )
+            // .service(web::resource("/mjsonrust").route(web::post().to(index_mjsonrust)))
     })
         .bind(("127.0.0.1", 8080))?
         .run()
