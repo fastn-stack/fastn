@@ -7,7 +7,7 @@ window.ftd = (function() {
         let element = document.getElementById(data);
         if (!!element) {
             ftd_data[id] = JSON.parse(element.innerText);
-            // window.ftd.post_init();
+            window.ftd.post_init();
         }
     };
 
@@ -59,6 +59,45 @@ window.ftd = (function() {
         let function_arguments: (FunctionArgument | any)[] = [];
         return handle_function(evt, id, actions, obj, function_arguments);
     };
+
+    exports.get_value = function (id, variable) {
+        let data = ftd_data[id];
+
+        let [var_name, _] = get_name_and_remaining(variable);
+
+        if (data[var_name] === undefined) {
+            console_log(variable, "is not in data, ignoring");
+            return;
+        }
+        return get_data_value(data, variable);
+    }
+
+
+    exports.set_bool_for_all = function (variable, value) {
+        for (let id in ftd_data) {
+            if (!ftd_data.hasOwnProperty(id)) {
+                continue;
+            }
+
+            // @ts-ignore
+            exports.set_bool(id, variable, value);
+        }
+    }
+
+    exports.set_bool = function (id, variable, value) {
+        let data = ftd_data[id];
+
+        let [var_name, remaining] = get_name_and_remaining(variable);
+
+        if (data[var_name] === undefined) {
+            console_log(variable, "is not in data, ignoring");
+            return;
+        }
+
+        if (!!window.set_value_main[var_name]) {
+            window.set_value_main[var_name](data, value, remaining);
+        }
+    }
 
     return exports;
 })();

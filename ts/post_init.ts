@@ -1,4 +1,3 @@
-/*
 window.ftd.post_init = function () {
     const DARK_MODE = "ftd#dark-mode";
     const SYSTEM_DARK_MODE = "ftd#system-dark-mode";
@@ -20,7 +19,7 @@ window.ftd.post_init = function () {
     const MARKDOWN_BACKGROUND_COLOR = "ftd#markdown-background-color";
     let last_device: string;
 
-    function initialise_device() {
+    /*function initialise_device() {
         last_device = get_device();
         console_log("last_device", last_device);
         window.ftd.set_bool_for_all(FTD_DEVICE, last_device);
@@ -141,9 +140,9 @@ window.ftd.post_init = function () {
             document.body.classList.remove(XL_CLASS);
         }
         return "desktop";
-    }
+    }*/
 
-    /!*
+    /*
         ftd.dark-mode behaviour:
 
         ftd.dark-mode is a boolean, default false, it tells the UI to show
@@ -177,7 +176,7 @@ window.ftd.post_init = function () {
         users preferences up front and renders the HTML on service wide
         following user's preference.
 
-     *!/
+     */
 
     window.enable_dark_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
@@ -297,6 +296,6 @@ window.ftd.post_init = function () {
         );
     }
     initialise_dark_mode();
-    initialise_device();
-    update_markdown_colors();
-};*/
+    // initialise_device();
+    // update_markdown_colors();
+};

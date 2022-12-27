@@ -7,20 +7,34 @@ pub fn default_aliases() -> ftd::Map<String> {
 pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
     use ftd::evalexpr::*;
 
-    std::iter::IntoIterator::into_iter([(
-        "isempty".to_string(),
-        Function::new(|argument| {
-            if argument.as_empty().is_ok() {
-                Ok(Value::Boolean(true))
-            } else if let Ok(s) = argument.as_string() {
-                Ok(Value::Boolean(s.is_empty()))
-            } else if let Ok(s) = argument.as_tuple() {
-                Ok(Value::Boolean(s.is_empty()))
-            } else {
-                Ok(Value::Boolean(false)) //todo: throw error
-            }
-        }),
-    )])
+    std::iter::IntoIterator::into_iter([
+        (
+            "isempty".to_string(),
+            Function::new(|argument| {
+                if argument.as_empty().is_ok() {
+                    Ok(Value::Boolean(true))
+                } else if let Ok(s) = argument.as_string() {
+                    Ok(Value::Boolean(s.is_empty()))
+                } else if let Ok(s) = argument.as_tuple() {
+                    Ok(Value::Boolean(s.is_empty()))
+                } else {
+                    Ok(Value::Boolean(false)) //todo: throw error
+                }
+            }),
+        ),
+        (
+            "enable_dark_mode".to_string(),
+            Function::new(|_| Ok(Value::Empty)),
+        ),
+        (
+            "enable_light_mode".to_string(),
+            Function::new(|_| Ok(Value::Empty)),
+        ),
+        (
+            "enable_system_mode".to_string(),
+            Function::new(|_| Ok(Value::Empty)),
+        ),
+    ])
     .collect()
 }
 

@@ -1,8 +1,23 @@
 -- ftd.boolean: $ftd.dark-mode
 color: $bgcolor
 
+-- ftd.boolean: $ftd.system-dark-mode
+color: $bgcolor
+
+-- ftd.boolean: $ftd.follow-system-dark-mode
+color: $bgcolor
+
 -- ftd.column:
 spacing.px: 40
+
+-- ftd.text: Dark Mode
+$on-click$: $set-dark()
+
+-- ftd.text: Light Mode
+$on-click$: $set-light()
+
+-- ftd.text: System Mode
+$on-click$: $set-system()
 
 -- ftd.column:
 width.fixed.px: 40
@@ -10,7 +25,6 @@ height.fixed.px: 40
 background.solid: red
 border-width.px: 3
 border-color: $bgcolor
-$on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 
 -- ftd.text: Hello
 -- ftd.text: World
@@ -22,7 +36,6 @@ $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 width.fixed.px: 40
 height.fixed.px: 40
 background.solid: $bgcolor
-$on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 border-color: red
 border-width.px: 3
 
@@ -35,7 +48,6 @@ border-width.px: 3
 width.fixed.px: 40
 height.fixed.px: 40
 background: $background-fill
-$on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
 border-left-color: $bgcolor
 border-left-width.px: 3
 border-top-color: red
@@ -69,3 +81,19 @@ dark: blue
 boolean $a:
 
 a = !a
+
+
+
+-- void set-dark():
+
+enable_dark_mode()
+
+
+-- void set-light():
+
+enable_light_mode()
+
+
+-- void set-system():
+
+enable_system_mode()

@@ -59,7 +59,13 @@ function change_value(function_arguments: (FunctionArgument | any)[], data: {
             if (!!function_arguments[a]["reference"]) {
                 let reference: string = <string>function_arguments[a]["reference"];
                 let [var_name, remaining] = get_name_and_remaining(reference);
-                if (!!window["set_value_" + id] && !!window["set_value_" + id][var_name]) {
+                if (var_name === "ftd#dark-mode") {
+                    if (!!function_arguments[a]["value"]) {
+                        window.enable_dark_mode();
+                    } else {
+                        window.enable_light_mode();
+                    }
+                } else if (!!window["set_value_" + id] && !!window["set_value_" + id][var_name]) {
                     window["set_value_" + id][var_name](data, function_arguments[a]["value"], remaining);
                 } else {
                     set_data_value(data, reference, function_arguments[a]["value"]);
@@ -97,6 +103,17 @@ function set_data_value(data: any, name: string, value: any) {
         initial_value[p1] = set(initial_value[p1], p2, value);
         return initial_value;
     }
+}
+
+function get_data_value(data: any, name: string) {
+    let [var_name, remaining] = get_name_and_remaining(name);
+    let initial_value = data[var_name];
+    while (!!remaining) {
+        let [p1, p2] = split_once(remaining, ".");
+        initial_value = initial_value[p1];
+        remaining = p2;
+    }
+    return deepCopy(initial_value);
 }
 
 function JSONstringify(f: any) {

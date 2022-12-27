@@ -1,4 +1,13 @@
 "use strict";
+function enable_dark_mode() {
+    window.enable_system_mode();
+}
+function enable_light_mode() {
+    window.enable_system_mode();
+}
+function enable_system_mode() {
+    window.enable_system_mode();
+}
 window.ftd = (function () {
     let ftd_data = {};
     let exports = {};
@@ -6,7 +15,7 @@ window.ftd = (function () {
         let element = document.getElementById(data);
         if (!!element) {
             ftd_data[id] = JSON.parse(element.innerText);
-            // window.ftd.post_init();
+            window.ftd.post_init();
         }
     };
     function handle_function(evt, id, action, obj, function_arguments) {
@@ -53,9 +62,37 @@ window.ftd = (function () {
         let function_arguments = [];
         return handle_function(evt, id, actions, obj, function_arguments);
     };
+    exports.get_value = function (id, variable) {
+        let data = ftd_data[id];
+        let [var_name, _] = get_name_and_remaining(variable);
+        if (data[var_name] === undefined) {
+            console_log(variable, "is not in data, ignoring");
+            return;
+        }
+        return get_data_value(data, variable);
+    };
+    exports.set_bool_for_all = function (variable, value) {
+        for (let id in ftd_data) {
+            if (!ftd_data.hasOwnProperty(id)) {
+                continue;
+            }
+            // @ts-ignore
+            exports.set_bool(id, variable, value);
+        }
+    };
+    exports.set_bool = function (id, variable, value) {
+        let data = ftd_data[id];
+        let [var_name, remaining] = get_name_and_remaining(variable);
+        if (data[var_name] === undefined) {
+            console_log(variable, "is not in data, ignoring");
+            return;
+        }
+        if (!!window.set_value_main[var_name]) {
+            window.set_value_main[var_name](data, value, remaining);
+        }
+    };
     return exports;
 })();
-/*
 window.ftd.post_init = function () {
     const DARK_MODE = "ftd#dark-mode";
     const SYSTEM_DARK_MODE = "ftd#system-dark-mode";
@@ -75,9 +112,8 @@ window.ftd.post_init = function () {
     const THEME_COLOR_META = "theme-color";
     const MARKDOWN_COLOR = "ftd#markdown-color";
     const MARKDOWN_BACKGROUND_COLOR = "ftd#markdown-background-color";
-    let last_device: string;
-
-    function initialise_device() {
+    let last_device;
+    /*function initialise_device() {
         last_device = get_device();
         console_log("last_device", last_device);
         window.ftd.set_bool_for_all(FTD_DEVICE, last_device);
@@ -198,9 +234,8 @@ window.ftd.post_init = function () {
             document.body.classList.remove(XL_CLASS);
         }
         return "desktop";
-    }
-
-    /!*
+    }*/
+    /*
         ftd.dark-mode behaviour:
 
         ftd.dark-mode is a boolean, default false, it tells the UI to show
@@ -234,8 +269,7 @@ window.ftd.post_init = function () {
         users preferences up front and renders the HTML on service wide
         following user's preference.
 
-     *!/
-
+     */
     window.enable_dark_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
@@ -246,7 +280,6 @@ window.ftd.post_init = function () {
         set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
         update_theme_color();
     };
-
     window.enable_light_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
@@ -259,7 +292,6 @@ window.ftd.post_init = function () {
         set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
         update_theme_color();
     };
-
     window.enable_system_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
@@ -269,7 +301,8 @@ window.ftd.post_init = function () {
             window.ftd.set_bool_for_all(DARK_MODE, true);
             document.body.classList.add(DARK_MODE_CLASS);
             set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK);
-        } else {
+        }
+        else {
             window.ftd.set_bool_for_all(DARK_MODE, false);
             if (document.body.classList.contains(DARK_MODE_CLASS)) {
                 document.body.classList.remove(DARK_MODE_CLASS);
@@ -278,59 +311,52 @@ window.ftd.post_init = function () {
         }
         update_theme_color();
     };
-
     function update_theme_color() {
         let theme_color = window.ftd.get_value("main", FTD_THEME_COLOR);
         if (!!theme_color) {
             document.body.style.backgroundColor = FTD_THEME_COLOR;
             set_meta(THEME_COLOR_META, theme_color);
-        } else {
+        }
+        else {
             document.body.style.backgroundColor = FTD_THEME_COLOR;
             delete_meta(THEME_COLOR_META);
         }
     }
-
-    function set_meta(name: string, value: string) {
-        let meta: HTMLMetaElement | null = document.querySelector("meta[name=" + name + "]");
+    function set_meta(name, value) {
+        let meta = document.querySelector("meta[name=" + name + "]");
         if (!!meta) {
             meta.content = value;
-        } else {
+        }
+        else {
             meta = document.createElement('meta');
             meta.name = name;
             meta.content = value;
             document.getElementsByTagName('head')[0].appendChild(meta);
         }
     }
-
-    function delete_meta(name: string) {
+    function delete_meta(name) {
         let meta = document.querySelector("meta[name=" + name + "]");
         if (!!meta) {
             meta.remove();
         }
     }
-
-    function set_cookie(name: string, value: string) {
+    function set_cookie(name, value) {
         document.cookie = name + "=" + value + "; path=/";
     }
-
     function system_dark_mode() {
         return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
     }
-
     function initialise_dark_mode() {
         update_dark_mode();
         start_watching_dark_mode_system_preference();
     }
-
-    function get_cookie(name: string, def: string) {
+    function get_cookie(name, def) {
         // source: https://stackoverflow.com/questions/5639346/
         let regex = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
         return regex !== null ? regex.pop() : def;
     }
-
     function update_dark_mode() {
         let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
-
         switch (current_dark_mode_cookie) {
             case COOKIE_SYSTEM_LIGHT:
             case COOKIE_SYSTEM_DARK:
@@ -347,16 +373,13 @@ window.ftd.post_init = function () {
                 window.enable_system_mode();
         }
     }
-
     function start_watching_dark_mode_system_preference() {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener(
-            "change", update_dark_mode
-        );
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", update_dark_mode);
     }
     initialise_dark_mode();
-    initialise_device();
-    update_markdown_colors();
-};*/
+    // initialise_device();
+    // update_markdown_colors();
+};
 function console_log(...message) {
     if (true) { // false
         console.log(...message);
@@ -408,7 +431,15 @@ function change_value(function_arguments, data, id) {
             if (!!function_arguments[a]["reference"]) {
                 let reference = function_arguments[a]["reference"];
                 let [var_name, remaining] = get_name_and_remaining(reference);
-                if (!!window["set_value_" + id] && !!window["set_value_" + id][var_name]) {
+                if (var_name === "ftd#dark-mode") {
+                    if (!!function_arguments[a]["value"]) {
+                        window.enable_dark_mode();
+                    }
+                    else {
+                        window.enable_light_mode();
+                    }
+                }
+                else if (!!window["set_value_" + id] && !!window["set_value_" + id][var_name]) {
                     window["set_value_" + id][var_name](data, function_arguments[a]["value"], remaining);
                 }
                 else {
@@ -442,6 +473,16 @@ function set_data_value(data, name, value) {
         initial_value[p1] = set(initial_value[p1], p2, value);
         return initial_value;
     }
+}
+function get_data_value(data, name) {
+    let [var_name, remaining] = get_name_and_remaining(name);
+    let initial_value = data[var_name];
+    while (!!remaining) {
+        let [p1, p2] = split_once(remaining, ".");
+        initial_value = initial_value[p1];
+        remaining = p2;
+    }
+    return deepCopy(initial_value);
 }
 function JSONstringify(f) {
     if (typeof f === 'object') {
