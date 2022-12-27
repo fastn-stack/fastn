@@ -54,9 +54,6 @@ impl fpm::Package {
     }
 
     async fn http_fetch_by_file_name(&self, name: &str) -> fpm::Result<Vec<u8>> {
-        dbg!("http_fetch_by_file_name");
-        dbg!(&self.download_base_url, name);
-
         let base = self.download_base_url.as_ref().ok_or_else(|| {
             let message = format!(
                 "package base not found. Package: {}, File: {}",
@@ -85,11 +82,8 @@ impl fpm::Package {
     }
 
     async fn http_fetch_by_id(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
-        dbg!("http_fetch_by_id", id);
         if fpm::file::is_static(id)? {
-            dbg!("http_fetch_by_id is static", id);
             if let Ok(data) = self.http_fetch_by_file_name(id).await {
-                dbg!("returning", id);
                 return Ok((id.to_string(), data));
             }
         } else {
@@ -126,21 +120,13 @@ impl fpm::Package {
             }
         };
 
-        dbg!("http_download_by_id", id);
-
         let (file_path, data) = self.http_fetch_by_id(id).await?;
-        dbg!("writing data to file", &package_root, &file_path);
-        if let Err(e) = fpm::utils::write(
+        fpm::utils::write(
             &package_root,
             file_path.trim_start_matches('/'),
             data.as_slice(),
         )
-        .await
-        {
-            dbg!("Write error", &e);
-            return Err(e);
-        };
-        dbg!("writing data to file success");
+        .await?;
 
         Ok((file_path, data))
     }

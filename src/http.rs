@@ -333,8 +333,6 @@ pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::B
 }
 
 pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
-    dbg!("http_get", url);
-
     http_get_with_cookie(url, None, &std::collections::HashMap::new()).await
 }
 
@@ -367,8 +365,6 @@ pub(crate) async fn http_get_with_cookie(
         .build()?;
 
     let res = c.get(url).send().await?;
-
-    dbg!(res.status());
 
     if !res.status().eq(&reqwest::StatusCode::OK) {
         eprintln!(
