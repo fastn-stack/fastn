@@ -42,6 +42,34 @@ pub fn main() {
 
     let id = std::env::args().nth(1);
 
+    if id.is_some() && id.as_ref().unwrap().eq("bm") {
+        use std::io::Write;
+
+        let mut log = "".to_string();
+        let benchmark_dir = std::path::Path::new("./benchmark-2022/");
+        for entry in std::fs::read_dir(benchmark_dir)
+            .unwrap_or_else(|_| panic!("{:?} is not a directory", benchmark_dir.to_str()))
+        {
+            let path = entry.expect("no files inside ./benchmark-2022").path();
+            let source = path
+                .to_str()
+                .unwrap_or_else(|| panic!("Path {:?} cannot be convert to string", path));
+            let split: Vec<_> = source.split('/').collect();
+            let id = split.last().expect("Filename should be present");
+            if id.contains(".ftd") {
+                let start = std::time::Instant::now();
+                log = format!("{}Processing: {} ... ", log, id);
+                let doc = std::fs::read_to_string(source).expect("cant read file");
+                ftd_v2_write(id, doc.as_str());
+                log = format!("{}Done {:?}\n", log, start.elapsed());
+            }
+        }
+        let mut f =
+            std::fs::File::create("./benchmark-2022/.log").expect("failed to create .html file");
+        f.write_all(log.as_bytes())
+            .expect("failed to write to .log file");
+        return;
+    }
     let dir = std::path::Path::new("./examples/");
     let new_ftd_dir = std::path::Path::new("./t/html/");
 

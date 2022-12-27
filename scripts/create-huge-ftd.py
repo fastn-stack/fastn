@@ -1,6 +1,6 @@
 
-open("../t/html/new-test.ftd", "w").write("\n\n".join(["-- ftd.text: hello "
+number = 10000
+open("../benchmark-2022/h-%s.ftd" % number, "w").write("\n\n".join(["-- "
+                                                                  "ftd.text: hello "
                                                        "world " + str(i) for
-                                                       i in range(1000)]))
-
-f = open("../t/html/new-test.html", "a")
+                                                       i in range(number)]))
