@@ -198,7 +198,7 @@ toc-items list children:
 -- ftd.column:
 
 -- ftd.text: 
-text:$print-toc-one.item
+text: $print-toc-one.item
 padding-bottom.px: 8
 color: $text-strong
 

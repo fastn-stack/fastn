@@ -34,8 +34,6 @@ impl ComponentDefinition {
             .map(|v| v.name.to_string())
             .collect_vec();
 
-        Argument::scan_ast_fields(component_definition.arguments, doc, &Default::default())?;
-
         let definition_name_with_arguments =
             (component_definition.name.as_str(), arguments.as_slice());
 
@@ -44,6 +42,8 @@ impl ComponentDefinition {
             Some(definition_name_with_arguments),
             doc,
         )?;
+
+        Argument::scan_ast_fields(component_definition.arguments, doc, &Default::default())?;
 
         Ok(())
     }
@@ -163,6 +163,12 @@ impl Component {
         definition_name_with_arguments: Option<(&str, &[String])>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<()> {
+        Property::scan_ast_children(ast_component.children, definition_name_with_arguments, doc)?;
+        match definition_name_with_arguments {
+            Some((definition, _)) if ast_component.name.eq(definition) => {}
+            _ => doc.scan_thing(ast_component.name.as_str(), ast_component.line_number)?,
+        }
+
         let mut loop_object_name_and_kind = None;
         if let Some(v) = ast_component.iteration {
             loop_object_name_and_kind = Some(v.alias.to_string());
@@ -185,9 +191,8 @@ impl Component {
             doc,
         )?;
 
-        Property::scan_ast_properties_and_children(
+        Property::scan_ast_properties(
             ast_component.properties,
-            ast_component.children,
             definition_name_with_arguments,
             &loop_object_name_and_kind,
             doc,
@@ -209,9 +214,7 @@ impl Component {
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Component>> {
-        // dbg!("2");
         let name = doc.resolve_name(ast_component.name.as_str());
-        // dbg!("3");
 
         let mut loop_object_name_and_kind = None;
         let iteration = if let Some(v) = ast_component.iteration {
@@ -246,8 +249,6 @@ impl Component {
             doc,
         )?);
 
-        // dbg!("4");
-
         let properties = try_ok_state!(Property::from_ast_properties_and_children(
             ast_component.properties,
             ast_component.children,
@@ -257,8 +258,6 @@ impl Component {
             doc,
             ast_component.line_number,
         )?);
-
-        // dbg!("5");
 
         Ok(ftd::interpreter2::StateWithThing::new_thing(Component {
             name,
@@ -337,25 +336,6 @@ impl Property {
         })
     }
 
-    fn scan_ast_properties_and_children(
-        ast_properties: Vec<ftd::ast::Property>,
-        ast_children: Vec<ftd::ast::Component>,
-        definition_name_with_arguments: Option<(&str, &[String])>,
-        loop_object_name_and_kind: &Option<String>,
-        doc: &mut ftd::interpreter2::TDoc,
-    ) -> ftd::interpreter2::Result<()> {
-        Property::scan_ast_properties(
-            ast_properties,
-            definition_name_with_arguments,
-            loop_object_name_and_kind,
-            doc,
-        )?;
-
-        Property::scan_ast_children(ast_children, definition_name_with_arguments, doc)?;
-
-        Ok(())
-    }
-
     fn from_ast_properties_and_children(
         ast_properties: Vec<ftd::ast::Property>,
         ast_children: Vec<ftd::ast::Component>,
@@ -365,7 +345,6 @@ impl Property {
         doc: &mut ftd::interpreter2::TDoc,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Property>>> {
-        // dbg!("11");
         let mut properties = try_ok_state!(Property::from_ast_properties(
             ast_properties,
             component_name,
@@ -374,8 +353,6 @@ impl Property {
             doc,
             line_number,
         )?);
-
-        // dbg!("12");
 
         // todo: validate_duplicate_properties() a property cannot be repeat if it's not list
 
@@ -583,16 +560,13 @@ impl Property {
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Vec<Property>>> {
         let mut properties = vec![];
-        // dbg!("111");
         let component_arguments = try_ok_state!(Argument::for_component(
             component_name,
             &definition_name_with_arguments,
             doc,
             line_number,
         )?);
-        // dbg!("112");
         for property in ast_properties {
-            // dbg!("113", &property.source);
             properties.push(try_ok_state!(Property::from_ast_property(
                 property,
                 component_name,
@@ -601,7 +575,6 @@ impl Property {
                 loop_object_name_and_kind,
                 doc,
             )?));
-            // dbg!("114");
         }
         Ok(ftd::interpreter2::StateWithThing::new_thing(properties))
     }
@@ -614,15 +587,12 @@ impl Property {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Property>> {
-        // dbg!("1111");
         let argument = try_ok_state!(Property::get_argument_for_property(
             &ast_property,
             component_name,
             component_arguments,
             doc,
         )?);
-
-        // dbg!("1112");
 
         let value = try_ok_state!(
             ftd::interpreter2::PropertyValue::from_ast_value_with_argument(
@@ -634,8 +604,6 @@ impl Property {
                 loop_object_name_and_kind,
             )?
         );
-
-        // dbg!("1113");
 
         let condition = if let Some(ref v) = ast_property.condition {
             Some(try_ok_state!(
@@ -649,8 +617,6 @@ impl Property {
         } else {
             None
         };
-
-        // dbg!("1114");
 
         if ast_property.value.is_null() && !argument.kind.is_optional() {
             return ftd::interpreter2::utils::e2(
@@ -670,8 +636,6 @@ impl Property {
             }
             source
         };
-
-        // dbg!("1115");
 
         Ok(ftd::interpreter2::StateWithThing::new_thing(Property {
             value,

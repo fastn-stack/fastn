@@ -1313,8 +1313,6 @@ impl<'a> TDoc<'a> {
             .or_else(|| name.strip_prefix(ftd::interpreter2::utils::CLONE))
             .unwrap_or(name);
 
-        // dbg!("get_initial_thing", &name);
-
         let name = self.resolve_name(name);
 
         let (splited_name, remaining_value) = if let Ok(function_name) =
