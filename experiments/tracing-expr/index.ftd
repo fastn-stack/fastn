@@ -394,3 +394,91 @@ INFO index: tracing_expr: exit
 INFO index: tracing_expr: close time.busy=10.0s time.idle=113µs
 
 
+-- ds.h3: `instrument` Adding Fields
+
+Additional fields (key-value pairs with arbitrary data) may be added to the
+generated span using the `fields` argument.
+
+Any Rust expression can be used as a field value in this manner.
+
+These expressions will be evaluated at the beginning of the function’s body.
+
+
+-- ds.code: Examples
+lang: rs
+
+// This will record a field named "i" with the value of `i` *and* a field
+// named "next" with the value of `i` + 1.
+#[instrument(fields(next = i + 1))]
+pub fn my_function(i: usize) {
+    // ...
+}
+
+// This will record the request's URI and HTTP method as their own separate
+// fields.
+#[instrument(fields(http.uri = req.uri(), http.method = req.method()))]
+pub fn handle_request<B>(req: http::Request<B>) -> http::Response<B> {
+    // ... handle the request ...
+}
+
+
+impl MyType {
+    // This will skip the `data` field, but will include `self.name`,
+    // formatted using `fmt::Display`.
+    #[instrument(skip(self), fields(self.name = %self.name))]
+    pub fn my_method(&mut self, an_interesting_argument: usize) {
+         // ... do something (hopefully, using all that `data`!)
+    }
+}
+
+// This function does a very interesting and important mathematical calculation.
+// Suppose we want to record both the inputs to the calculation *and* its result...
+#[instrument(fields(result))]
+pub fn do_calculation(input_1: usize, input_2: usize) -> usize {
+    // Rerform the calculation.
+    let result = input_1 + input_2;
+
+    // Record the result as part of the current span.
+    tracing::Span::current().record("result", &result);
+
+    // Now, the result will also be included on this event!
+    tracing::info!("calculation complete!");
+
+    // ... etc ...
+}
+
+-- ds.code: Code Example
+lang: rs
+
+/// This handler uses json extractor
+#[instrument(
+  skip(item, _req),
+  fields(
+    http.path = _req.uri().path(),
+    http.method = _req.method().as_str(),
+    result
+  )
+)]
+async fn index(_req: actix_web::HttpRequest, item: web::Json<MyObj>) -> HttpResponse {
+    event!(Level::INFO, "inside index function!");
+    let result = 4 + 5;
+    // Record the result as part of the current span.
+    tracing::Span::current().record("result", &result);
+
+    // println!("model: {:?}", &item);
+    // event!(Level::INFO, "calling function foo!");
+    // foo(&item, "param1", "param2").await;
+    HttpResponse::Ok().json(item.0) // <- send response
+}
+
+
+-- ds.code: Console Output
+lang: sh
+
+INFO actix_server::builder: Starting 8 workers
+INFO actix_server::server: Actix runtime found; starting in Actix runtime
+INFO index{http.path="/" http.method="POST"}: tracing_expr: new
+INFO index{http.path="/" http.method="POST"}: tracing_expr: enter
+INFO index{http.path="/" http.method="POST"}: tracing_expr: inside index function!
+INFO index{http.path="/" http.method="POST" result=9}: tracing_expr: exit
+INFO index{http.path="/" http.method="POST" result=9}: tracing_expr: close time.busy=87.3µs time.idle=66.8µs
