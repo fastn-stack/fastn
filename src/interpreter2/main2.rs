@@ -402,7 +402,8 @@ impl InterpreterState {
         }
 
         if self.to_process.stack.is_empty() {
-        None} else {
+            None
+        } else {
             self.get_next_ast()
         }
     }
