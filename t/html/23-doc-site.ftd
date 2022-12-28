@@ -73,7 +73,7 @@ width.fixed.percent: 100
 -- ftd.column:
 background.solid: $step-1
 padding.px: 24
-min-height.percent: 100
+min-height.fixed.percent: 100
 width.fixed.percent: 20
 
 -- print-toc:

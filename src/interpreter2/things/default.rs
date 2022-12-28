@@ -944,25 +944,25 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ),
         ftd::interpreter2::Argument::default(
             "max-width",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "min-width",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "min-height",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "max-height",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),

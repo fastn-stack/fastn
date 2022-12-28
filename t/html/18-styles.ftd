@@ -79,8 +79,8 @@ border-width.px: 1
 
 
 -- ftd.text: Hello World
-max-width.px: 20
-min-height.px: 60
+max-width.fixed.px: 20
+min-height.fixed.px: 60
 background.solid: yellow
 
 

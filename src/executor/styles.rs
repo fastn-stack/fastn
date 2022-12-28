@@ -566,6 +566,29 @@ impl Resizing {
         }
     }
 
+    pub(crate) fn optional_resizing(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Resizing>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_RESIZING,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Resizing::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
     pub(crate) fn resizing_with_default(
         properties: &[ftd::interpreter2::Property],
         arguments: &[ftd::interpreter2::Argument],

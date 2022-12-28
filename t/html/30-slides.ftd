@@ -77,7 +77,7 @@ align-self: center
 -- ftd.column:	
 width.fixed.percent: 100
 height.fixed.percent: 350
-max-width.px: 1200
+max-width.fixed.px: 1200
 align-self: center
 id: content
 
@@ -266,7 +266,7 @@ integer current:
 padding.px: 11
 border-radius.px: 10
 spacing.px: 8
-min-width.px: 90
+min-width.fixed.px: 90
 
 -- ftd.integer: $show-controls.current
 /align: center

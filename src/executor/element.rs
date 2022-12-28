@@ -144,10 +144,10 @@ pub struct Common {
     pub border_bottom_right_radius: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub width: ftd::executor::Value<ftd::executor::Resizing>,
     pub height: ftd::executor::Value<ftd::executor::Resizing>,
-    pub min_width: ftd::executor::Value<Option<ftd::executor::Length>>,
-    pub max_width: ftd::executor::Value<Option<ftd::executor::Length>>,
-    pub min_height: ftd::executor::Value<Option<ftd::executor::Length>>,
-    pub max_height: ftd::executor::Value<Option<ftd::executor::Length>>,
+    pub min_width: ftd::executor::Value<Option<ftd::executor::Resizing>>,
+    pub max_width: ftd::executor::Value<Option<ftd::executor::Resizing>>,
+    pub min_height: ftd::executor::Value<Option<ftd::executor::Resizing>>,
+    pub max_height: ftd::executor::Value<Option<ftd::executor::Resizing>>,
     pub link: ftd::executor::Value<Option<String>>,
     pub open_in_new_tab: ftd::executor::Value<Option<bool>>,
     pub background: ftd::executor::Value<Option<ftd::executor::Background>>,
@@ -618,28 +618,28 @@ pub fn common_from_properties(
             "height",
             ftd::executor::Resizing::default(),
         )?,
-        min_width: ftd::executor::Length::optional_length(
+        min_width: ftd::executor::Resizing::optional_resizing(
             properties,
             arguments,
             doc,
             line_number,
             "min-width",
         )?,
-        max_width: ftd::executor::Length::optional_length(
+        max_width: ftd::executor::Resizing::optional_resizing(
             properties,
             arguments,
             doc,
             line_number,
             "max-width",
         )?,
-        min_height: ftd::executor::Length::optional_length(
+        min_height: ftd::executor::Resizing::optional_resizing(
             properties,
             arguments,
             doc,
             line_number,
             "min-height",
         )?,
-        max_height: ftd::executor::Length::optional_length(
+        max_height: ftd::executor::Resizing::optional_resizing(
             properties,
             arguments,
             doc,
