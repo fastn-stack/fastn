@@ -398,7 +398,11 @@ pub fn replace_markers_2021(
         .replace("__fpm_js__", fpm::fpm_js())
         .replace(
             "__extra_js__",
-            get_inject_js_html(config.ftd_inject_js.as_slice()).as_str(),
+            get_extra_js(
+                config.ftd_inject_js.as_slice(),
+                config.ftd_inline_js.as_slice(),
+            )
+            .as_str(),
         )
         .replace(
             "__ftd_data_main__",
