@@ -109,32 +109,25 @@ email: arpita@fifthtry.com
 
 ## FPM Auth: /how-to/oauth/
 
-- Create GitHub OAuth App: /how-to/oauth/gh-app/
-document: /how-to/oauth/github/gh-app/
-  - Login Flow: /how-to/oauth/gh-login/
-  document: /how-to/oauth/github/gh-login/
-  - GitHub FPM Identities: /how-to/oauth/gh-ids/
-  document: /how-to/oauth/github/gh-ids/
-- Create Discord OAuth App: /how-to/oauth/dc-app/
-  document: /how-to/oauth/discord/dc-app/
-  - Login Flow: /how-to/oauth/dc-login/
-  document: /how-to/oauth/discord/dc-login/
-  - Discord FPM Identities: /how-to/oauth/dc-ids/
-  document: /how-to/oauth/discord/dc-ids/
-- Create Twitter OAuth App: /how-to/oauth/tw-app/
-document: /how-to/oauth/twitter/tw-app/
-  - Login Flow: /how-to/oauth/tw-login/
-  document: /how-to/oauth/twitter/tw-login/
-  - Twitter FPM Identities: /how-to/oauth/tw-ids/
-  document: /how-to/oauth/twitter/tw-ids/
-- Create Telegram OAuth App: /how-to/oauth/tl-app/
-document: /how-to/oauth/telegram/tl-app/
-  - How to Create Bot: /how-to/oauth/tl-bot/
-  document: /how-to/oauth/telegram/tl-bot/
-  - Login Flow: /how-to/oauth/tl-login/
-  document: /how-to/oauth/telegram/tl-login/
-  - Telegram FPM Identities: /how-to/oauth/tl-ids/
-  document: /how-to/oauth/telegram/tl-ids/
+
+;; fpm build is failing , with document
+;; in the below case it is still looking for the document
+;; `/how-to/oauth/gh-app/` while it should look for the
+;; /how-to/oauth/github/gh-app/
+
+- Create GitHub OAuth App: /how-to/oauth/github/gh-app/
+  - Login Flow: /how-to/oauth/github/gh-login/
+  - GitHub FPM Identities: /how-to/oauth/github/gh-ids/
+- Create Discord OAuth App: /how-to/oauth/discord/dc-app/
+  - Login Flow: /how-to/oauth/discord/dc-login/
+  - Discord FPM Identities: /how-to/oauth/discord/dc-ids/
+- Create Twitter OAuth App: /how-to/oauth/twitter/tw-app/
+  - Login Flow: /how-to/oauth/twitter/tw-login/
+  - Twitter FPM Identities: /how-to/oauth/twitter/tw-ids/
+- Create Telegram OAuth App: /how-to/oauth/telegram/tl-app/
+  - How to Create Bot: /how-to/oauth/telegram/tl-bot/
+  - Login Flow: /how-to/oauth/telegram/tl-login/
+  - Telegram FPM Identities: /how-to/oauth/telegram/tl-ids/
 
 # Builder Manual: /themes/
 
