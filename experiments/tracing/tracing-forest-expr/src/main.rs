@@ -1,6 +1,5 @@
 use tracing::{debug, error, info, warn};
-use tracing_forest::ForestLayer;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, Registry};
+use tracing_subscriber::{layer::SubscriberExt, Registry};
 
 #[tracing::instrument]
 fn recursive(param: i32) {
@@ -9,8 +8,7 @@ fn recursive(param: i32) {
     if param < 0 {
         return;
     }
-    // This span is not recording the param is not getting logged
-    recursive(param - 1);
+    recursive(param - 1)
 }
 
 #[tracing::instrument]
@@ -48,16 +46,14 @@ async fn main() {
     // });
 
     tracing_forest::worker_task()
-        // .set_tag("tracing_forest::foo-tag")
-        // .set_global(true)
-        .build_on(|subscriber| subscriber.with(tracing_forest::util::LevelFilter::INFO))
-        .on(async {
-            info!("Hello, world!");
-
-            info_span!("my_span").in_scope(|| {
-                info!("Relevant information");
-            })
+        .set_global(true)
+        .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
+            Registry::default()
+                .with(tracing_forest::ForestLayer::default())
+                .with(tracing_forest::util::LevelFilter::INFO)
         })
+        // .build_on(|subscriber| subscriber.with(tracing_forest::util::LevelFilter::INFO))
+        .on(async {}) // this statement is needed, without this logs are getting printed
         .await;
 
     // Registry::default().with(ForestLayer::default()).init();
