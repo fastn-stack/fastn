@@ -1,0 +1,52 @@
+use tracing::{debug, error, info, warn};
+use tracing_forest::ForestLayer;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, Registry};
+
+#[tracing::instrument]
+async fn recursive(param: i32) -> std::pin::Pin<Box<dyn std::future::Future<Output = ()>>> {
+    Box::pin(async move {
+        if param < 0 {
+            return;
+        }
+        tracing::Span::current().in_scope(|| async {
+            recursive(param - 1).await;
+        });
+    })
+}
+
+#[tracing::instrument]
+async fn some_expensive_operation(id: u32) {
+    debug!("starting from `some_expensive_operation`");
+    std::thread::sleep(std::time::Duration::from_secs(1));
+    recursive(5).await;
+    error!("exiting from `some_expensive_operation`");
+}
+
+#[tracing::instrument(fields(id))]
+async fn conn(id: u32) {
+    for i in 0..3 {
+        some_expensive_operation(id).await;
+        info!(id, "step {}", i);
+    }
+}
+
+#[tokio::main(flavor = "multi_thread")]
+async fn main() {
+    // tracing_subscriber::init(|builder| {
+    //     builder
+    //         .with_max_level(tracing::Level::DEBUG)
+    //         // .with_env_filter("my_app_name=debug")
+    //         .with_format(|buf, record, _| {
+    //             writeln!(
+    //                 buf,
+    //                 "[{}][{}] {}",
+    //                 record.level(),
+    //                 record.target(),
+    //                 record.args(),
+    //             )
+    //         })
+    // });
+
+    Registry::default().with(ForestLayer::default()).init();
+    conn(5).await;
+}
