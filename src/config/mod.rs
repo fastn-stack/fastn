@@ -40,6 +40,8 @@ pub struct Config {
     pub ftd_edition: FTDEdition,
     pub ftd_external_js: Vec<String>,
     pub ftd_inline_js: Vec<String>,
+    pub ftd_external_css: Vec<String>,
+    pub ftd_inline_css: Vec<String>,
 }
 
 impl Config {
@@ -1232,6 +1234,18 @@ impl Config {
         config
     }
 
+    pub fn add_external_css(self, external_css: Vec<String>) -> Self {
+        let mut config = self;
+        config.ftd_external_css = external_css;
+        config
+    }
+
+    pub fn add_inline_css(self, inline_css: Vec<String>) -> Self {
+        let mut config = self;
+        config.ftd_inline_css = inline_css;
+        config
+    }
+
     /// `read()` is the way to read a Config.
     pub async fn read(
         root: Option<String>,
@@ -1275,6 +1289,8 @@ impl Config {
             ftd_edition: FTDEdition::FTD2021,
             ftd_external_js: Default::default(),
             ftd_inline_js: Default::default(),
+            ftd_external_css: Default::default(),
+            ftd_inline_css: Default::default(),
         };
 
         // Update global_ids map from the current package files
