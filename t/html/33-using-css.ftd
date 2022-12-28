@@ -17,6 +17,7 @@ $on-click$: $toggle($a = $open)
 -- ftd.column.classes:
 if: { open }
 
+-- string: animated-div-1
 -- string: blue-block
 
 -- end: ftd.column.classes

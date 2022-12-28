@@ -276,7 +276,10 @@ impl ftd::interpreter2::Value {
                     };
                     values.push(v);
                 }
-                Some(format!("{:?}", values.join(", ")))
+                Some(format!(
+                    "{:?}",
+                    values.join(if string_needs_no_quotes { " " } else { ", " })
+                ))
             }
             ftd::interpreter2::Value::Record { fields, .. }
                 if field
@@ -336,7 +339,7 @@ impl ftd::interpreter2::Value {
                     values.push(format!("\"{}\": {}", k, value));
                 }
 
-                Some(format!("{{{}}}", values.join(",")))
+                Some(format!("{{{}}}", values.join(", ")))
             }
             t => unimplemented!("{:?}", t),
         })

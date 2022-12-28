@@ -130,6 +130,9 @@ impl<'a> HtmlGenerator<'a> {
         node.attrs
             .iter()
             .filter_map(|(k, v)| {
+                if k.eq("class") {
+                    return None;
+                }
                 v.value.as_ref().map(|v| {
                     let v = if k.eq("data-id") {
                         ftd::html1::utils::full_data_id(self.id.as_str(), v)

@@ -7,6 +7,11 @@
     "display": "flex",
     "condition": null,
     "attrs": {
+      "class": {
+        "value": "",
+        "properties": [],
+        "line_number": null
+      },
       "data-id": {
         "value": "",
         "properties": [],
@@ -88,6 +93,11 @@
         "display": "flex",
         "condition": null,
         "attrs": {
+          "class": {
+            "value": "",
+            "properties": [],
+            "line_number": null
+          },
           "data-id": {
             "value": "0",
             "properties": [],
@@ -230,6 +240,11 @@
             "display": "block",
             "condition": null,
             "attrs": {
+              "class": {
+                "value": "",
+                "properties": [],
+                "line_number": null
+              },
               "data-id": {
                 "value": "0,0",
                 "properties": [],
@@ -381,6 +396,11 @@
             "display": "block",
             "condition": null,
             "attrs": {
+              "class": {
+                "value": "",
+                "properties": [],
+                "line_number": null
+              },
               "data-id": {
                 "value": "0,1",
                 "properties": [],
@@ -540,6 +560,11 @@
         "display": "flex",
         "condition": null,
         "attrs": {
+          "class": {
+            "value": "",
+            "properties": [],
+            "line_number": null
+          },
           "data-id": {
             "value": "1",
             "properties": [],
@@ -682,6 +707,11 @@
             "display": "block",
             "condition": null,
             "attrs": {
+              "class": {
+                "value": "",
+                "properties": [],
+                "line_number": null
+              },
               "data-id": {
                 "value": "1,0",
                 "properties": [],
@@ -833,6 +863,11 @@
             "display": "block",
             "condition": null,
             "attrs": {
+              "class": {
+                "value": "",
+                "properties": [],
+                "line_number": null
+              },
               "data-id": {
                 "value": "1,1",
                 "properties": [],
@@ -994,6 +1029,11 @@
         "display": "block",
         "condition": null,
         "attrs": {
+          "class": {
+            "value": "",
+            "properties": [],
+            "line_number": null
+          },
           "data-id": {
             "value": "2",
             "properties": [],

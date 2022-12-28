@@ -50,6 +50,7 @@ impl Node {
         let mut attrs = common.attrs(doc_id);
         attrs.extend(container.attrs());
         let mut classes = container.add_class();
+        classes.extend(common.classes());
         let mut style = common.style(doc_id, &mut classes);
         style.extend(container.style(doc_id));
 
@@ -350,7 +351,7 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "class",
             ftd::node::Value::from_executor_value(
-                Some(self.classes.to_owned().value.join(",")),
+                Some(self.classes.to_owned().value.join(", ")),
                 self.classes.to_owned(),
                 None,
                 doc_id,

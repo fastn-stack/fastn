@@ -1230,7 +1230,7 @@ impl ftd::Common {
         self.classes
             .clone()
             .unwrap_or_default()
-            .split(",")
+            .split(',')
             .map(|v| v.trim().to_string())
             .collect()
     }
