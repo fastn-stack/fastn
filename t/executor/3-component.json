@@ -113,6 +113,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "classes": {
+                        "value": [],
+                        "line_number": null,
+                        "properties": []
+                      },
                       "padding": {
                         "value": {
                           "Px": 40
@@ -528,6 +533,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "classes": {
+                                "value": [],
+                                "line_number": null,
+                                "properties": []
+                              },
                               "padding": {
                                 "value": null,
                                 "line_number": null,
@@ -792,6 +802,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "classes": {
+                                "value": [],
+                                "line_number": null,
+                                "properties": []
+                              },
                               "padding": {
                                 "value": null,
                                 "line_number": null,
@@ -1026,6 +1041,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "classes": {
+                        "value": [],
+                        "line_number": null,
+                        "properties": []
+                      },
                       "padding": {
                         "value": null,
                         "line_number": null,
@@ -1260,6 +1280,11 @@
               "is_not_visible": false,
               "event": [],
               "is_dummy": false,
+              "classes": {
+                "value": [],
+                "line_number": null,
+                "properties": []
+              },
               "padding": {
                 "value": null,
                 "line_number": null,
@@ -1494,6 +1519,11 @@
       "is_not_visible": false,
       "event": [],
       "is_dummy": false,
+      "classes": {
+        "value": [],
+        "line_number": null,
+        "properties": []
+      },
       "padding": {
         "value": null,
         "line_number": null,
