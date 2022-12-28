@@ -1,0 +1,58 @@
+-- import: fpm.dev/assets
+
+-- ft.page: FPM Login Flow with Discord
+
+-- ft.markdown:
+
+User Authorization link for authorization on discord.
+
+https://discord.com/oauth2/authorize
+
+-- ft.code:
+lang: ftd
+
+\-- ft.code:
+lang: rust
+Url: https://discord.com/oauth2/authorize?client_id={client_id}&redirect_uri={redirect_url}&response_type=code&scope={scope_1} {scope_2}
+Method: Get
+
+-- ft.markdown:
+
+Remember there must be space between multiple scopes.
+
+On successful login it redirects to give a redirect url with `code` 
+as query parameter.
+
+-- ft.h1: `How to get Access Token?`
+
+-- ft.markdown:
+
+Use token url to get access token on discord.
+
+-- ft.code:
+lang: ftd
+
+Url: https://discord.com/api/oauth2/token
+Method: Post
+Parameters
+client_secret : {client_secret}
+client_id : {client_id}
+grant_type : `authorization_code`
+code:{code}
+redirect_url:{redirect_url}
+
+-- ft.markdown:
+
+On success it gives `access_token` as a response that we can save in 
+cookies/session or in a database that will be used for other Http Apis.
+
+-- ft.h1: `Get Logged-in user details`
+
+-- ft.code:
+lang: ftd
+
+Url: https://discord.com/api/users/@me
+Method: Get
+
+
+

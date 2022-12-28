@@ -1,0 +1,37 @@
+-- import: fpm.dev/assets
+
+-- ft.page: How To Create New Bot On Telegram
+
+-- ft.markdown:
+
+Start a new conversation with BotFather. https://telegram.me/botfather.
+Login using your telegram registered phone number.
+
+-- ft.markdown:
+
+Send `/newbot` to create a new Telegram bot.
+
+-- ft.image:
+src: $assets.files.static.images.auth.telegram.telegram-bot-1.png
+align: center
+
+-- ft.markdown:
+
+Enter name of Bot
+
+-- ft.image:
+src: $assets.files.static.images.auth.telegram.telegram-bot-2.png
+align: center
+
+-- ft.markdown:
+
+Enter username for bot
+
+-- ft.image:
+src: $assets.files.static.images.auth.telegram.telegram-bot-3.png
+align: center
+
+-- ft.markdown:
+
+In result it will give `Telegram Token`. Please save 
+`Telegram Token` and `Telegram Bot` user name to access Http API.

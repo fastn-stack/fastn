@@ -1,0 +1,45 @@
+-- import: fpm.dev/assets
+
+-- ft.page: How To Create Developer App On Twitter
+
+-- ft.markdown:
+
+For Oauth Authentication using Twitter first of all a developer needs to 
+create a new app on twitter. Follow steps given below to create a 
+new app on twitter.
+
+-- ft.markdown:
+
+Click on Twitter Developer Link.https://developer.twitter.com/
+
+Click on Project link on left menu
+
+-- ft.image:
+src: $assets.files.static.images.auth.twitter.twitter-app-1.png
+align: center
+
+-- ft.markdown:
+
+Then click on `Add App` button 
+
+
+-- ft.image:
+src: $assets.files.static.images.auth.twitter.twitter-app-2.png
+align: center
+
+-- ft.markdown:
+
+Select `App Environment`
+
+-- ft.image:
+src: $assets.files.static.images.auth.twitter.twitter-app-3.png
+align: center
+
+-- ft.markdown:
+
+Then give App Name and It give `Keys` & `Tokens`
+
+-- ft.image:
+src: $assets.files.static.images.auth.twitter.twitter-app-4.png
+align: center
+

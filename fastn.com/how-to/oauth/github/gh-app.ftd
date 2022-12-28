@@ -1,0 +1,50 @@
+-- import: fpm.dev/assets
+
+-- ft.page: How To Create Developer App On Github
+
+-- ft.markdown:
+
+For Oauth Authentication using Github first of all a developer needs to 
+create a new app on github. Follow steps given below to create a new 
+app on github.
+
+-- ft.markdown:
+
+From the right side of your github top bar. Click on profile picture 
+then it will open drop down. From the drop down click on `Settings`.
+
+-- ft.image:
+src: $assets.files.static.images.auth.github.github-app-1.png
+align: center
+
+-- ft.markdown:
+
+From your Settings page. Scroll down and on your left side menu click on 
+`Developer Settings` given at the end.
+
+-- ft.image:
+src: $assets.files.static.images.auth.github.github-app-2.png
+align: center
+
+-- ft.markdown:
+
+From Developer Setting page click on `OAuth Apps` to create new App
+
+-- ft.image:
+src: $assets.files.static.images.auth.github.github-app-3.png
+align: center
+
+-- ft.markdown:
+
+Here you can get Client Id and Client Secret that you can save in somewhere 
+that will be used to access the application.
+
+-- ft.markdown:
+
+Also fill in the Homepage Url and Authorization callback url. 
+Authorization callback url is the url where github will redirect users 
+with code and state after login.
+
+-- ft.image:
+src: $assets.files.static.images.auth.github.github-app-4.png
+align: center

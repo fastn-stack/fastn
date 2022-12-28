@@ -1,0 +1,31 @@
+-- import: fpm.dev/assets
+
+-- ft.page: How To Create Developer App On Telegram
+
+-- ft.markdown:
+
+For Telegram Oauth Authentication first of all you need to create a 
+Telegram App.
+To create a Telegram App click on https://my.telegram.org/.
+Login using your telegram registered phone number.
+
+-- ft.image:
+src: $assets.files.static.images.auth.telegram.telegram-app-1.png
+align: center
+
+-- ft.image:
+src: $assets.files.static.images.auth.telegram.telegram-app-2.png
+align: center
+
+-- ft.markdown:
+
+Once logged in please click on `API development tools`.
+
+-- ft.image:
+src: $assets.files.static.images.auth.telegram.telegram-app-3.png
+align: center
+
+-- ft.markdown:
+
+Create the application in response it will give you `App Id` and 
+`App Secret` please save it in a secure file.
