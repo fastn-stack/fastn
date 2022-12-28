@@ -325,7 +325,8 @@ impl Node {
     ) -> Self {
         let mut attrs = common.attrs();
         attrs.extend(container.attrs());
-        let mut classes = container.add_class();
+        let mut classes = common.add_class();
+        classes.extend(container.add_class());
         let mut style = common.style(doc_id, collector, &mut classes);
         style.extend(container.style());
 
@@ -869,7 +870,6 @@ impl ftd::Text {
         // TODO: if format is not markup use pre
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
-        n.classes.extend(self.common.add_class());
         n.classes.push("ft_md".to_string());
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
@@ -916,7 +916,6 @@ impl ftd::TextBlock {
         // TODO: if format is not markup use pre
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
-        n.classes.extend(self.common.add_class());
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -1082,7 +1081,6 @@ impl ftd::Markups {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
-        n.classes.extend(self.common.add_class());
         n.classes.push("ft_md".to_string());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -1182,7 +1180,6 @@ impl ftd::Input {
             n.classes.push(collector.insert_class_font(font));
         }
 
-        n.classes.extend(self.common.add_class());
         if let Some(ref p) = self.placeholder {
             n.attrs.insert(s("placeholder"), escape(p));
         }
