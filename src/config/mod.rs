@@ -38,7 +38,7 @@ pub struct Config {
     pub current_document: Option<String>,
     pub request: Option<fpm::http::Request>, // TODO: It should only contain reference
     pub ftd_edition: FTDEdition,
-    pub ftd_inject_js: Vec<String>,
+    pub ftd_external_js: Vec<String>,
     pub ftd_inline_js: Vec<String>,
 }
 
@@ -1220,9 +1220,9 @@ impl Config {
         }
     }
 
-    pub fn add_inject_js(self, inject_js: Vec<String>) -> Self {
+    pub fn add_external_js(self, external_js: Vec<String>) -> Self {
         let mut config = self;
-        config.ftd_inject_js = inject_js;
+        config.ftd_external_js = external_js;
         config
     }
 
@@ -1273,7 +1273,7 @@ impl Config {
             request: req.map(ToOwned::to_owned),
             path_parameters: vec![],
             ftd_edition: FTDEdition::FTD2021,
-            ftd_inject_js: Default::default(),
+            ftd_external_js: Default::default(),
             ftd_inline_js: Default::default(),
         };
 

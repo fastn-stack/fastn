@@ -142,7 +142,7 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
 pub async fn serve(
     req: fpm::http::Request,
     edition: Option<String>,
-    inject_js: Vec<String>,
+    external_js: Vec<String>,
     inline_js: Vec<String>,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
@@ -160,7 +160,7 @@ pub async fn serve(
             .await
             .unwrap()
             .add_edition(edition)?
-            .add_inject_js(inject_js)
+            .add_external_js(external_js)
             .add_inline_js(inline_js));
         serve_fpm_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
@@ -169,7 +169,7 @@ pub async fn serve(
                 .await
                 .unwrap()
                 .add_edition(edition)?
-                .add_inject_js(inject_js)
+                .add_external_js(external_js)
                 .add_inline_js(inline_js))
             .set_request(req);
 
@@ -179,7 +179,7 @@ pub async fn serve(
             .await
             .unwrap()
             .add_edition(edition)?
-            .add_inject_js(inject_js)
+            .add_external_js(external_js)
             .add_inline_js(inline_js));
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
@@ -192,7 +192,7 @@ pub async fn serve(
             .await
             .unwrap()
             .add_edition(edition)?
-            .add_inject_js(inject_js)
+            .add_external_js(external_js)
             .add_inline_js(inline_js)
             .set_request(req));
 
@@ -417,7 +417,7 @@ pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::R
 
 struct AppData {
     edition: Option<String>,
-    inject_js: Vec<String>,
+    external_js: Vec<String>,
     inline_js: Vec<String>,
 }
 
@@ -430,7 +430,7 @@ async fn route(
         return fpm::auth::routes::handle_auth(
             req,
             app_data.edition.clone(),
-            app_data.inject_js.clone(),
+            app_data.external_js.clone(),
             app_data.inline_js.clone(),
         )
         .await;
@@ -454,7 +454,7 @@ async fn route(
             serve(
                 req,
                 app_data.edition.clone(),
-                app_data.inject_js.clone(),
+                app_data.external_js.clone(),
                 app_data.inline_js.clone(),
             )
             .await
@@ -467,7 +467,7 @@ pub async fn listen(
     port: Option<u16>,
     package_download_base_url: Option<String>,
     edition: Option<String>,
-    inject_js: Vec<String>,
+    external_js: Vec<String>,
     inline_js: Vec<String>,
 ) -> fpm::Result<()> {
     use colored::Colorize;
@@ -514,7 +514,7 @@ You can try without providing port, it will automatically pick unused port."#,
         actix_web::App::new()
             .app_data(actix_web::web::Data::new(AppData {
                 edition: edition.clone(),
-                inject_js: inject_js.clone(),
+                external_js: external_js.clone(),
                 inline_js: inline_js.clone(),
             }))
             .route("/{path:.*}", actix_web::web::route().to(route))

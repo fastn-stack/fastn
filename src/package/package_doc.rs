@@ -389,7 +389,7 @@ pub(crate) async fn read_ftd_2022(
         ftd::build(),
         html_ui,
         ftd::build_js(),
-        config.ftd_inject_js.as_slice(),
+        config.ftd_external_js.as_slice(),
         config.ftd_inline_js.as_slice(),
     ));
 

@@ -399,7 +399,7 @@ pub fn replace_markers_2021(
         .replace(
             "__extra_js__",
             get_extra_js(
-                config.ftd_inject_js.as_slice(),
+                config.ftd_external_js.as_slice(),
                 config.ftd_inline_js.as_slice(),
             )
             .as_str(),
@@ -429,9 +429,9 @@ pub fn replace_markers_2021(
         .replace("__base_url__", base_url)
 }
 
-pub fn get_inject_js_html(inject_js: &[String]) -> String {
+pub fn get_external_js_html(external_js: &[String]) -> String {
     let mut result = "".to_string();
-    for js in inject_js {
+    for js in external_js {
         result = format!("{}<script src=\"{}\"></script>", result, js);
     }
     result
@@ -449,10 +449,10 @@ pub fn get_inline_js_html(inline_js: &[String]) -> String {
     result
 }
 
-fn get_extra_js(inject_js: &[String], inline_js: &[String]) -> String {
+fn get_extra_js(external_js: &[String], inline_js: &[String]) -> String {
     format!(
         "{}{}",
-        get_inject_js_html(inject_js),
+        get_external_js_html(external_js),
         get_inline_js_html(inline_js)
     )
 }
@@ -461,7 +461,7 @@ pub fn replace_markers_2022(
     s: &str,
     html_ui: ftd::html1::HtmlUI,
     ftd_js: &str,
-    inject_js: &[String],
+    external_js: &[String],
     inline_js: &[String],
 ) -> String {
     ftd::html1::utils::trim_all_lines(
@@ -470,7 +470,10 @@ pub fn replace_markers_2022(
             .replace("__ftd_external_children__", "{}")
             .replace("__ftd__", html_ui.html.as_str())
             .replace("__ftd_js__", ftd_js)
-            .replace("__extra_js__", get_extra_js(inject_js, inline_js).as_str())
+            .replace(
+                "__extra_js__",
+                get_extra_js(external_js, inline_js).as_str(),
+            )
             .replace(
                 "__ftd_functions__",
                 format!(
