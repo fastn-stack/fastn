@@ -478,6 +478,7 @@ async fn route(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn listen(
     bind_address: &str,
     port: Option<u16>,
