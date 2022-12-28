@@ -64,7 +64,7 @@ async fn main() -> std::io::Result<()> {
     let subscriber = tracing_subscriber::FmtSubscriber::builder()
         // all spans/events with a level higher than TRACE (e.g, debug, info, warn, etc.)
         // will be written to stdout.
-        .with_max_level(Level::INFO)
+        .with_max_level(tracing::Level::INFO)
         .with_level(false)
         .event_format(tracing_subscriber::fmt::format().compact())
         .with_span_events(tracing_subscriber::fmt::format::FmtSpan::ACTIVE)
