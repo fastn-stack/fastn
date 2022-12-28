@@ -15,6 +15,9 @@ pub fn a_unit_of_work(first_parameter: u64) {
 #[instrument]
 pub fn a_sub_unit_of_work(sub_parameter: u64) {
     info!("Events have the full context of their parent span!");
+    info!("going to sleep");
+    std::thread::sleep(std::time::Duration::from_secs(1));
+    info!("function waked up");
 }
 
 fn main() {
