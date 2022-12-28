@@ -71,6 +71,111 @@ INFO     ┕━ ｉ [info]: step 2 | id: 5
 
 ```
 
+# Current Span not recording the fields
+
+In the below function current span "recursive-span" is not recording the param
+
+```rust
+fn recursive(param: i32) {
+    std::thread::sleep(std::time::Duration::from_secs(1));
+    if param < 0 {
+        return;
+    }
+    // This span is not recording the param is not getting logged
+    tracing::info_span!("recursive-span").in_scope(|| {
+        recursive(param - 1);
+    });
+}
+
+```
+
+# Recursion Without async
+
+## Code Example
+
+```rust
+
+#[tracing::instrument]
+fn recursive(param: i32) {
+    info!(msg = "inside recursive", param = param);
+    std::thread::sleep(std::time::Duration::from_secs(1));
+    if param < 0 {
+        return;
+    }
+    recursive(param - 1);
+}
+
+#[tracing::instrument]
+async fn some_expensive_operation(id: u32) {
+    tracing::Span::current().record("id", id);
+    debug!("starting from `some_expensive_operation`");
+    recursive(5);
+    error!("exiting from `some_expensive_operation`");
+}
+
+#[tracing::instrument(fields(id))]
+async fn conn(id: u32) {
+    for i in 0..2 {
+        info!(id, "running step {}", i);
+        some_expensive_operation(id).await;
+        info!(id, "ending step {}", i);
+    }
+}
+
+#[tokio::main(flavor = "multi_thread")]
+async fn main() {
+    Registry::default().with(ForestLayer::default()).init();
+    conn(5).await;
+}
+
+```
+
+## Console Output
+
+```text
+
+INFO     conn [ 14.1s | 0.00% / 100.00% ]
+INFO     ┝━ ｉ [info]: running step 0 | id: 5
+INFO     ┝━ some_expensive_operation [ 7.04s | 0.00% / 50.04% ]
+DEBUG    │  ┝━ 🐛 [debug]: starting from `some_expensive_operation`
+INFO     │  ┝━ recursive [ 7.04s | 7.15% / 50.04% ]
+INFO     │  │  ┝━ ｉ [info]:  | msg: "inside recursive" | param: 5
+INFO     │  │  ┕━ recursive [ 6.03s | 7.15% / 42.89% ]
+INFO     │  │     ┝━ ｉ [info]:  | msg: "inside recursive" | param: 4
+INFO     │  │     ┕━ recursive [ 5.02s | 7.15% / 35.74% ]
+INFO     │  │        ┝━ ｉ [info]:  | msg: "inside recursive" | param: 3
+INFO     │  │        ┕━ recursive [ 4.02s | 7.15% / 28.59% ]
+INFO     │  │           ┝━ ｉ [info]:  | msg: "inside recursive" | param: 2
+INFO     │  │           ┕━ recursive [ 3.01s | 7.15% / 21.44% ]
+INFO     │  │              ┝━ ｉ [info]:  | msg: "inside recursive" | param: 1
+INFO     │  │              ┕━ recursive [ 2.01s | 7.14% / 14.29% ]
+INFO     │  │                 ┝━ ｉ [info]:  | msg: "inside recursive" | param: 0
+INFO     │  │                 ┕━ recursive [ 1.01s | 7.15% ]
+INFO     │  │                    ┕━ ｉ [info]:  | msg: "inside recursive" | param: -1
+ERROR    │  ┕━ 🚨 [error]: exiting from `some_expensive_operation`
+INFO     ┝━ ｉ [info]: ending step 0 | id: 5
+INFO     ┝━ ｉ [info]: running step 1 | id: 5
+INFO     ┝━ some_expensive_operation [ 7.02s | 0.00% / 49.96% ]
+DEBUG    │  ┝━ 🐛 [debug]: starting from `some_expensive_operation`
+INFO     │  ┝━ recursive [ 7.02s | 7.15% / 49.96% ]
+INFO     │  │  ┝━ ｉ [info]:  | msg: "inside recursive" | param: 5
+INFO     │  │  ┕━ recursive [ 6.02s | 7.12% / 42.81% ]
+INFO     │  │     ┝━ ｉ [info]:  | msg: "inside recursive" | param: 4
+INFO     │  │     ┕━ recursive [ 5.02s | 7.12% / 35.68% ]
+INFO     │  │        ┝━ ｉ [info]:  | msg: "inside recursive" | param: 3
+INFO     │  │        ┕━ recursive [ 4.02s | 7.13% / 28.56% ]
+INFO     │  │           ┝━ ｉ [info]:  | msg: "inside recursive" | param: 2
+INFO     │  │           ┕━ recursive [ 3.01s | 7.14% / 21.44% ]
+INFO     │  │              ┝━ ｉ [info]:  | msg: "inside recursive" | param: 1
+INFO     │  │              ┕━ recursive [ 2.01s | 7.15% / 14.30% ]
+INFO     │  │                 ┝━ ｉ [info]:  | msg: "inside recursive" | param: 0
+INFO     │  │                 ┕━ recursive [ 1.01s | 7.15% ]
+INFO     │  │                    ┕━ ｉ [info]:  | msg: "inside recursive" | param: -1
+ERROR    │  ┕━ 🚨 [error]: exiting from `some_expensive_operation`
+INFO     ┕━ ｉ [info]: ending step 1 | id: 5
+
+```
+
 # With HierarchicalLayer
 
 We can instead use tracing-forest as a drop-in replacement for tracing-tree.
