@@ -2,6 +2,7 @@
 
 ## 28th December 2022
 
+- [Change min-height, min-width, max-width, max-height type from ftd.length to ftd.resizing](https://github.com/ftd-lang/ftd/commit/edad6b2899d940c11bd30c47fb15b08c6c04ad78)
 - [or-type constant construction shorthand (only short-hand allowed)](https://github.com/ftd-lang/ftd/commit/a1ae3726eef848554ccf81a7f4270aeb6daa37ce)
 
 ## 27th December 2022

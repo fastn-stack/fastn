@@ -322,10 +322,6 @@ This is a body text.
 - `border-top-right-radius`: `optional ftd.length`
 - `border-bottom-left-radius`: `optional ftd.length`
 - `border-bottom-right-radius`: `optional ftd.length`
-- `min-width`: `optional ftd.length`
-- `max-width`: `optional ftd.length`
-- `min-height`: `optional ftd.length`
-- `max-height`: `optional ftd.length`
 
 
 **`ftd.length`**
@@ -373,6 +369,10 @@ caption light:
 string dark: $color.light
 ```
 
+- `min-width`: `optional ftd.resizing`
+- `max-width`: `optional ftd.resizing`
+- `min-height`: `optional ftd.resizing`
+- `max-height`: `optional ftd.resizing`
 - `width`: `optional ftd.resizing`
 - `height`: `optional ftd.resizing`
 
