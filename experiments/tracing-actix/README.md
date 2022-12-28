@@ -2,6 +2,17 @@
 
 ## Example1 Code
 
+### For Running the Example
+
+```shell
+
+cargo run
+
+# Open Different Shell 
+curl -v http://localhost:8080/hello/my-name
+
+```
+
 ### Middleware
 
 ```rust
