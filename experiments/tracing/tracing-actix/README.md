@@ -115,7 +115,7 @@ async fn personal_hello(root_span: RootSpan, name: web::Path<String>) -> String 
 2022-12-28T04:43:49.807514Z  INFO HTTP request: tracing_actix: close time.busy=10.0s time.idle=104µs http.method=GET http.route=/hello/{name} http.flavor=1.1 http.scheme=http http.host=localhost:8080 http.client_ip=127.0.0.1 http.user_agent=curl/7.84.0 http.target=/hello/my-name otel.name=HTTP GET /hello/{name} otel.kind="server" request_id=4311588b-a76d-49cb-8a03-c96bb01ba8d1 n_headers=3 cloud_provider="localhost" caller_name="my-name" http.status_code=200 otel.status_code="OK"
 ```
 
-## Example2: With Different Formatter
+## Example2: With JSON Formatter
 
 ```rust
 fn subscriber() {
