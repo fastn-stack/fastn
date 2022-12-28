@@ -15,15 +15,119 @@ FTD is an open source programming language for writing prose.
 -- box:
 title: We are adding text of header using title
 
-Here is a FTD document that is importing a library, lib, and has a heading of level 1, "Hello World".
-FTD language is designed for human beings, not just programmers, we have taken precautions like not
-requiring quoting for strings, not relying on indentation nor on braces that most programming
+Here is a FTD document that is importing a library, lib, and has a heading of
+level 1, "Hello World". FTD language is designed for human beings, not just
+programmers, we have taken precautions like not requiring quoting for strings,
+not relying on indentation nor on braces that most programming
 languages require.
-It is not verbose like HTML, and not simplistic like Markdown.
-We can define variables in FTD. FTD is strongly typed. We can do event handling.
-Since we are targeting "human beings" we have created a lot of "actions" that we believe
-one will be invoking on a day to day basis, like toggle, which can be used to create simple event handling.
 
+It is not verbose like HTML, and not simplistic like Markdown. We can define
+variables in FTD. FTD is strongly typed. We can do event handling. Since we are
+targeting "human beings" we have created a lot of "actions" that we believe one
+will be invoking on a day to day basis, like toggle, which can be used to create
+simple event handling.
+
+-- box: Rust Language
+
+Rust is a multi-paradigm, general-purpose programming language. Rust emphasizes
+performance, type safety, and concurrency. Rust enforces memory safety—that is,
+that all references point to valid memory—without requiring the use of a garbage
+collector or reference counting present in other memory-safe languages.[11] To
+simultaneously enforce memory safety and prevent concurrent data races, Rust's
+"borrow checker" tracks the object lifetime of all references in a program
+during compilation. Rust is popular for systems programming but also offers
+high-level features including some functional programming constructs.[12]
+
+Software developer Graydon Hoare created Rust as a personal project while
+working at Mozilla Research in 2006. Mozilla officially sponsored the project in
+2009. Since the first stable release in May 2015, Rust has been adopted by
+companies including Amazon, Discord, Dropbox, Facebook (Meta), Google
+(Alphabet), and Microsoft.
+
+Rust has been noted for its growth as a newer language[13][14] and has been the
+subject of academic programming languages research.[15][16][17]
+
+-- box: Rust Language
+
+Rust is a multi-paradigm, general-purpose programming language. Rust emphasizes
+performance, type safety, and concurrency. Rust enforces memory safety—that is,
+that all references point to valid memory—without requiring the use of a garbage
+collector or reference counting present in other memory-safe languages.[11] To
+simultaneously enforce memory safety and prevent concurrent data races, Rust's
+"borrow checker" tracks the object lifetime of all references in a program
+during compilation. Rust is popular for systems programming but also offers
+high-level features including some functional programming constructs.[12]
+
+Software developer Graydon Hoare created Rust as a personal project while
+working at Mozilla Research in 2006. Mozilla officially sponsored the project in
+2009. Since the first stable release in May 2015, Rust has been adopted by
+companies including Amazon, Discord, Dropbox, Facebook (Meta), Google
+(Alphabet), and Microsoft.
+
+Rust has been noted for its growth as a newer language[13][14] and has been the
+subject of academic programming languages research.[15][16][17]
+
+-- box: Rust Language
+
+Rust is a multi-paradigm, general-purpose programming language. Rust emphasizes
+performance, type safety, and concurrency. Rust enforces memory safety—that is,
+that all references point to valid memory—without requiring the use of a garbage
+collector or reference counting present in other memory-safe languages.[11] To
+simultaneously enforce memory safety and prevent concurrent data races, Rust's
+"borrow checker" tracks the object lifetime of all references in a program
+during compilation. Rust is popular for systems programming but also offers
+high-level features including some functional programming constructs.[12]
+
+Software developer Graydon Hoare created Rust as a personal project while
+working at Mozilla Research in 2006. Mozilla officially sponsored the project in
+2009. Since the first stable release in May 2015, Rust has been adopted by
+companies including Amazon, Discord, Dropbox, Facebook (Meta), Google
+(Alphabet), and Microsoft.
+
+Rust has been noted for its growth as a newer language[13][14] and has been the
+subject of academic programming languages research.[15][16][17]
+
+
+-- box: Rust Language
+
+Rust is a multi-paradigm, general-purpose programming language. Rust emphasizes
+performance, type safety, and concurrency. Rust enforces memory safety—that is,
+that all references point to valid memory—without requiring the use of a garbage
+collector or reference counting present in other memory-safe languages.[11] To
+simultaneously enforce memory safety and prevent concurrent data races, Rust's
+"borrow checker" tracks the object lifetime of all references in a program
+during compilation. Rust is popular for systems programming but also offers
+high-level features including some functional programming constructs.[12]
+
+Software developer Graydon Hoare created Rust as a personal project while
+working at Mozilla Research in 2006. Mozilla officially sponsored the project in
+2009. Since the first stable release in May 2015, Rust has been adopted by
+companies including Amazon, Discord, Dropbox, Facebook (Meta), Google
+(Alphabet), and Microsoft.
+
+Rust has been noted for its growth as a newer language[13][14] and has been the
+subject of academic programming languages research.[15][16][17]
+
+
+-- box: Rust Language
+
+Rust is a multi-paradigm, general-purpose programming language. Rust emphasizes
+performance, type safety, and concurrency. Rust enforces memory safety—that is,
+that all references point to valid memory—without requiring the use of a garbage
+collector or reference counting present in other memory-safe languages.[11] To
+simultaneously enforce memory safety and prevent concurrent data races, Rust's
+"borrow checker" tracks the object lifetime of all references in a program
+during compilation. Rust is popular for systems programming but also offers
+high-level features including some functional programming constructs.[12]
+
+Software developer Graydon Hoare created Rust as a personal project while
+working at Mozilla Research in 2006. Mozilla officially sponsored the project in
+2009. Since the first stable release in May 2015, Rust has been adopted by
+companies including Amazon, Discord, Dropbox, Facebook (Meta), Google
+(Alphabet), and Microsoft.
+
+Rust has been noted for its growth as a newer language[13][14] and has been the
+subject of academic programming languages research.[15][16][17]
 
 -- box:
 
@@ -58,7 +162,9 @@ if: {$box.open}
 -- ftd.text:
 if: { $box.open }
 padding.px: 10
-height: hug-content
+height.fixed.px: 200
+overflow-y: auto
+
 
 $box.body
 
