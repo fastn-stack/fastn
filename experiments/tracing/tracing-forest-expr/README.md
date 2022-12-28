@@ -51,7 +51,7 @@ async fn main() {
 
 ## Console Output
 
-```shell
+```text
 INFO     conn [ 3.01s | 0.01% / 100.00% ]
 INFO     ┝━ some_expensive_operation [ 1.00s | 33.34% / 33.34% ]
 DEBUG    │  ┝━ 🐛 [debug]: starting from `some_expensive_operation`
@@ -68,5 +68,54 @@ DEBUG    │  ┝━ 🐛 [debug]: starting from `some_expensive_operation`
 INFO     │  ┝━ recursive [ 40.7µs | 0.00% ]
 ERROR    │  ┕━ 🚨 [error]: exiting from `some_expensive_operation`
 INFO     ┕━ ｉ [info]: step 2 | id: 5
+
+```
+
+# With HierarchicalLayer
+
+We can instead use tracing-forest as a drop-in replacement for tracing-tree.
+
+## Code
+
+```rust
+#[tokio::main(flavor = "multi_thread")]
+async fn main() {
+    use tracing_tree::HierarchicalLayer;
+    Registry::default()
+        .with(HierarchicalLayer::default())
+        .init();
+    conn(5).await;
+}
+
+```
+
+## Console Output
+
+```shell
+conn 
+  0ms  INFO running step 0, id=5
+  some_expensive_operation id=5
+    0ms DEBUG starting from `some_expensive_operation`
+    recursive param=5
+    
+    1004ms ERROR exiting from `some_expensive_operation`
+  
+  1004ms  INFO ending step 0, id=5
+  1004ms  INFO running step 1, id=5
+  some_expensive_operation id=5
+    0ms DEBUG starting from `some_expensive_operation`
+    recursive param=5
+    
+    1003ms ERROR exiting from `some_expensive_operation`
+  
+  2008ms  INFO ending step 1, id=5
+  2008ms  INFO running step 2, id=5
+  some_expensive_operation id=5
+    0ms DEBUG starting from `some_expensive_operation`
+    recursive param=5
+    
+    1001ms ERROR exiting from `some_expensive_operation`
+  
+  3009ms  INFO ending step 2, id=5
 
 ```

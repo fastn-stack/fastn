@@ -8,14 +8,18 @@ async fn recursive(param: i32) -> std::pin::Pin<Box<dyn std::future::Future<Outp
         if param < 0 {
             return;
         }
-        tracing::Span::current().in_scope(|| async {
-            recursive(param - 1).await;
-        });
+        // This recursion is not getting logged
+        tracing::Span::current()
+            .in_scope(|| async {
+                recursive(param - 1).await;
+            })
+            .await;
     })
 }
 
 #[tracing::instrument]
 async fn some_expensive_operation(id: u32) {
+    tracing::Span::current().record("id", id);
     debug!("starting from `some_expensive_operation`");
     std::thread::sleep(std::time::Duration::from_secs(1));
     recursive(5).await;
@@ -25,13 +29,15 @@ async fn some_expensive_operation(id: u32) {
 #[tracing::instrument(fields(id))]
 async fn conn(id: u32) {
     for i in 0..3 {
+        info!(id, "running step {}", i);
         some_expensive_operation(id).await;
-        info!(id, "step {}", i);
+        info!(id, "ending step {}", i);
     }
 }
 
 #[tokio::main(flavor = "multi_thread")]
 async fn main() {
+    use tracing_tree::HierarchicalLayer;
     // tracing_subscriber::init(|builder| {
     //     builder
     //         .with_max_level(tracing::Level::DEBUG)
@@ -47,6 +53,8 @@ async fn main() {
     //         })
     // });
 
-    Registry::default().with(ForestLayer::default()).init();
+    Registry::default()
+        .with(HierarchicalLayer::default())
+        .init();
     conn(5).await;
 }
