@@ -254,7 +254,7 @@ fn ftd_v2_write(id: &str, s: &str) {
     let html_ui =
         ftd::html1::HtmlUI::from_node_data(node, "main").unwrap_or_else(|e| panic!("{:?}", e));
     let ftd_js = std::fs::read_to_string("build.js").expect("build.js not found");
-    let test_css = std::fs::read_to_string("t/test.css").expect("build.js not found");
+    let test_css = std::fs::read_to_string("t/test.css").expect("t/test.css not found");
     let html_str = ftd::html1::utils::trim_all_lines(
         std::fs::read_to_string("build.html")
             .expect("cant read ftd.html")
@@ -312,6 +312,7 @@ fn write(id: &str, doc: String) {
     let doc = b.to_rt("main", id);
 
     let ftd_js = std::fs::read_to_string("ftd.js").expect("ftd.js not found");
+    let test_css = std::fs::read_to_string("t/test.css").expect("t/test.css not found");
 
     let doc_title = match &b.title() {
         Some(x) => x.original.clone(),
@@ -333,6 +334,10 @@ fn write(id: &str, doc: String) {
                 serde_json::to_string_pretty(&doc.external_children)
                     .expect("failed to convert document to json")
                     .as_str(),
+            )
+            .replace(
+                "__extra_css__",
+                format!("<style>{}</style>", test_css).as_str(),
             )
             .replace("__ftd__", doc.html.as_str())
             .replace("__ftd_js__", ftd_js.as_str())

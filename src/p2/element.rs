@@ -94,6 +94,7 @@ pub fn common_from_properties(
             doc.name,
             0,
         )?,
+        classes: ftd::p2::utils::string_optional("classes", properties, doc.name, 0)?,
         padding_left: ftd::p2::utils::int_optional("padding-left", properties, doc.name, 0)?,
         padding_right: ftd::p2::utils::int_optional("padding-right", properties, doc.name, 0)?,
         padding_top: ftd::p2::utils::int_optional("padding-top", properties, doc.name, 0)?,
@@ -326,6 +327,10 @@ pub fn common_from_properties(
 
 fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
     vec![
+        (
+            "classes".to_string(),
+            ftd::p2::Kind::string().into_optional(),
+        ),
         (
             "padding".to_string(),
             ftd::p2::Kind::integer().into_optional(),

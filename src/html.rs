@@ -299,7 +299,7 @@ impl Node {
         doc_id: &str,
         collector: &mut ftd::Collector,
     ) -> Self {
-        let mut classes = vec![];
+        let mut classes = common.add_class();
         Node {
             condition: common.condition.clone(),
             node: s(node),
@@ -1225,12 +1225,17 @@ impl ftd::Common {
         .to_string()
     }
 
-    fn add_class(&self) -> Vec<String> {
+    fn children_style(&self) -> ftd::Map<String> {
         Default::default()
     }
 
-    fn children_style(&self) -> ftd::Map<String> {
-        Default::default()
+    fn add_class(&self) -> Vec<String> {
+        self.classes
+            .clone()
+            .unwrap_or_default()
+            .split(",")
+            .map(|v| v.trim().to_string())
+            .collect()
     }
 
     fn style(

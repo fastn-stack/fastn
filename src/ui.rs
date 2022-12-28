@@ -2253,6 +2253,7 @@ pub struct Common {
     pub events: Vec<ftd::Event>,
     pub reference: Option<String>,
     pub region: Option<Region>,
+    pub classes: Option<String>,
     pub padding: Option<i64>,
     pub padding_vertical: Option<i64>,
     pub padding_horizontal: Option<i64>,
