@@ -83,6 +83,7 @@ fn recursive(param: i32) {
     }
     // This span is not recording the param is not getting logged
     tracing::info_span!("recursive-span").in_scope(|| {
+        tracing::Span::current_span().record("param", param);
         recursive(param - 1);
     });
 }
@@ -224,3 +225,15 @@ conn
   3009ms  INFO ending step 2, id=5
 
 ```
+
+# `tracing_forest::runtime::worker_task`
+
+## Nonblocking log processing with worker_task
+tracing-forest collects trace data into trees, and can sometimes produce large 
+trees that need to be processed. To avoid blocking the main task in these cases,
+a common strategy is to send this data to a worker task for formatting and writing.
+
+The worker_task function provides this behavior as a first-class feature of this
+crate, and handles the configuration, initialization, and graceful shutdown of a
+subscriber with an associated worker task for formatting and writing.
+

@@ -47,6 +47,19 @@ async fn main() {
     //         })
     // });
 
-    Registry::default().with(ForestLayer::default()).init();
+    tracing_forest::worker_task()
+        // .set_tag("tracing_forest::foo-tag")
+        // .set_global(true)
+        .build_on(|subscriber| subscriber.with(tracing_forest::util::LevelFilter::INFO))
+        .on(async {
+            info!("Hello, world!");
+
+            info_span!("my_span").in_scope(|| {
+                info!("Relevant information");
+            })
+        })
+        .await;
+
+    // Registry::default().with(ForestLayer::default()).init();
     conn(5).await;
 }
