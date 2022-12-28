@@ -374,3 +374,75 @@ async fn some_expensive_operation(id: u32) {
 7880e5c5-2118-4772-adba-b823726ba944 2022-12-28T07:56:36.154996+00:00     INFO     ┕━ ｉ [info]: ending step 1 | id: 5
 
 ```
+
+## Spans Time Format
+
+More: https://docs.rs/tracing-forest/0.1.5/tracing_forest/printer/struct.Pretty.html
+
+```text
+/// Format logs for pretty printing.
+///
+/// # Interpreting span times
+///
+/// Spans have the following format:
+/// ```txt
+/// <NAME> [ <DURATION> | <BODY> / <ROOT> ]
+/// ```
+/// * `DURATION` represents the total time the span was entered for. If the span
+/// was used to instrument a `Future` that sleeps, then that time won't be counted
+/// since the `Future` won't be polled during that time, and so the span won't enter.
+/// * `BODY` represents the percent time the span is entered relative to the root
+/// span, *excluding* time that any child spans are entered.
+/// * `ROOT` represents the percent time the span is entered relative to the root
+/// span, *including* time that any child spans are entered.
+///
+/// As a mental model, look at `ROOT` to quickly narrow down which branches are
+/// costly, and look at `BASE` to pinpoint exactly which spans are expensive.
+///
+/// Spans without any child spans would have the same `BASE` and `ROOT`, so the
+/// redundency is omitted.
+```
+
+# Formatted Output
+
+- We can omit fields from log output based on features to use
+
+`Cargo.toml`
+
+```toml
+tracing-forest = { version = "0.1.5", features = [
+    "smallvec",
+    "tokio",
+    "serde",
+    "ansi", # This is for printing the ColorLevel in the events
+    # "uuid",  # This is for printing uuid for every request
+    # "chrono", # This is for printing the time of the event
+    # "env-filter",
+]}
+
+```
+
+## Console Output
+
+```text
+INFO     conn [ 14.0s | 0.00% / 100.00% ]
+INFO     ┝━ ｉ [info]: running step 0 | id: 5
+INFO     ┝━ some_expensive_operation [ 7.03s | 0.00% / 50.01% ]
+INFO     │  ┝━ recursive [ 7.03s | 7.14% / 50.01% ]
+INFO     │  │  ┝━ ｉ [info]:  | msg: "inside recursive" | param: 5
+INFO     │  │  ┕━ recursive [ 6.02s | 7.16% / 42.87% ]
+INFO     │  │     ┝━ ｉ [info]:  | msg: "inside recursive" | param: 4
+INFO     │  │     ┕━ recursive [ 5.02s | 7.13% / 35.71% ]
+INFO     │  │        ┝━ ｉ [info]:  | msg: "inside recursive" | param: 3
+INFO     │  │        ┕━ recursive [ 4.02s | 7.14% / 28.58% ]
+INFO     │  │           ┝━ ｉ [info]:  | msg: "inside recursive" | param: 2
+INFO     │  │           ┕━ recursive [ 3.01s | 7.13% / 21.44% ]
+INFO     │  │              ┝━ ｉ [info]:  | msg: "inside recursive" | param: 1
+INFO     │  │              ┕━ recursive [ 2.01s | 7.16% / 14.31% ]
+INFO     │  │                 ┝━ ｉ [info]:  | msg: "inside recursive" | param: 0
+INFO     │  │                 ┕━ recursive [ 1.01s | 7.16% ]
+INFO     │  │                    ┕━ ｉ [info]:  | msg: "inside recursive" | param: -1
+ERROR    │  ┕━ 🚨 [error]: exiting from `some_expensive_operation`
+...
+```
+
