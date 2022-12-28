@@ -410,15 +410,15 @@ if (buffer.join(',').includes(" ,-")) {
     return;
 }
 
-if (global_keys["Control"] && global_keys["a"] && buffer.join(',').includes("Control,a")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Arpita","reference":null},{"value":"string","reference":null}]}}]', this);
+if (global_keys["Control"] && global_keys["s"] && buffer.join(',').includes("Control,s")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Ayushi","reference":null},{"value":"string","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
 }
 
-if (global_keys["Control"] && global_keys["s"] && buffer.join(',').includes("Control,s")) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Ayushi","reference":null},{"value":"string","reference":null}]}}]', this);
+if (global_keys["Control"] && global_keys["a"] && buffer.join(',').includes("Control,a")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Arpita","reference":null},{"value":"string","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
     return;
@@ -610,6 +610,25 @@ body.fpm-dark .ft_md a {
     55% {transform: rotate(0deg);left:500px;}
     70% {transform: rotate(0deg);left:500px;background:#1ec7e6;}
     100% {transform: rotate(-360deg);left:0px;}
+}
+
+.animated-div-1 {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    animation-name: animated-div-1;
+    animation-duration: 4s;
+    animation-iteration-count: 2;
+    animation-direction: alternate;
+}
+
+@keyframes animated-div-1 {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:yellow; left:200px; top:0px;}
+    50%  {background-color:blue; left:200px; top:200px;}
+    75%  {background-color:green; left:0px; top:200px;}
+    100% {background-color:red; left:0px; top:0px;}
 }
 </style>
 

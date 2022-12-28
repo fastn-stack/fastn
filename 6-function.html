@@ -73,12 +73,31 @@ border-radius:5px;
 70% {transform: rotate(0deg);left:500px;background:#1ec7e6;}
 100% {transform: rotate(-360deg);left:0px;}
 }
+
+.animated-div-1 {
+width: 100px;
+height: 100px;
+background-color: red;
+position: relative;
+animation-name: animated-div-1;
+animation-duration: 4s;
+animation-iteration-count: 2;
+animation-direction: alternate;
+}
+
+@keyframes animated-div-1 {
+0%   {background-color:red; left:0px; top:0px;}
+25%  {background-color:yellow; left:200px; top:0px;}
+50%  {background-color:blue; left:200px; top:200px;}
+75%  {background-color:green; left:0px; top:200px;}
+100% {background-color:red; left:0px; top:0px;}
+}
 </style>
 
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div class="" data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div class="" data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 5px; text-decoration: none; width: fit-content" class="ft_md">hello world</div><div class="" data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 14px; text-decoration: none; width: fit-content" class="ft_md">Arpita Jaiswal</div><div class="" data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 15px; text-decoration: none; width: fit-content" class="ft_md">Arpita FifthTry</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 5px; text-decoration: none; width: fit-content" class="ft_md">hello world</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 14px; text-decoration: none; width: fit-content" class="ft_md">Arpita Jaiswal</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 15px; text-decoration: none; width: fit-content" class="ft_md">Arpita FifthTry</div></div>
 
 
 <script>
@@ -650,9 +669,9 @@ set_data_value(data, "foo#new-name", value);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
 }
 };
 
@@ -676,9 +695,9 @@ set_data_value(data, "foo#number" + "." + remaining, new_value);
 set_data_value(data, "foo#number", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
 

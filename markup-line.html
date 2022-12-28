@@ -1263,6 +1263,25 @@ body.fpm-dark .c_0 {
     70% {transform: rotate(0deg);left:500px;background:#1ec7e6;}
     100% {transform: rotate(-360deg);left:0px;}
 }
+
+.animated-div-1 {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    animation-name: animated-div-1;
+    animation-duration: 4s;
+    animation-iteration-count: 2;
+    animation-direction: alternate;
+}
+
+@keyframes animated-div-1 {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:yellow; left:200px; top:0px;}
+    50%  {background-color:blue; left:200px; top:200px;}
+    75%  {background-color:green; left:0px; top:200px;}
+    100% {background-color:red; left:0px; top:0px;}
+}
 </style>
 
 </head>
