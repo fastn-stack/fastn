@@ -9,6 +9,11 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
+            tracing::error!(
+                msg = "fpm-error path not found",
+                path = path.as_str(),
+                error = %e
+            );
             return fpm::not_found!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
@@ -23,10 +28,15 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
         match config.can_read(req, path.as_str(), true).await {
             Ok(can_read) => {
                 if !can_read {
+                    tracing::error!(
+                        msg = "unauthorized-error: can not read",
+                        path = path.as_str()
+                    );
                     return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(e) => {
+                tracing::error!(msg = "can_read-error", path = path.as_str());
                 return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
             }
         };
@@ -34,10 +44,18 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
         match fpm::package::app::can_read(config, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
+                    tracing::error!(
+                        msg = "unauthorized-error: can not access app",
+                        path = path.as_str()
+                    );
                     return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(err) => {
+                tracing::error!(
+                    msg = "app::can_read-error: can not access app",
+                    path = path.as_str()
+                );
                 return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, err);
             }
         };
@@ -132,12 +150,18 @@ async fn serve_fpm_file(config: &fpm::Config) -> fpm::http::Response {
 #[tracing::instrument(skip_all)]
 async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
     if !file_path.exists() {
+        tracing::error!(msg = "no such static file ({})", path = file_path.as_str());
         return fpm::not_found!("no such static file ({})", file_path);
     }
 
     match tokio::fs::read(file_path.as_path()).await {
         Ok(r) => fpm::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
         Err(e) => {
+            tracing::error!(
+                msg = "file-system-error ({})",
+                path = file_path.as_str(),
+                error = e.to_string()
+            );
             fpm::not_found!("FPM-Error: path: {:?}, error: {:?}", file_path, e)
         }
     }
@@ -149,27 +173,22 @@ pub async fn serve(
     edition: Option<String>,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
-    let r = format!("{} {}", req.method(), req.path());
-    let t = fpm::time(r.as_str());
-    println!("{r} started");
-
     // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
         static_file(favicon).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("FPM.ftd")) {
-        let config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
+        let config = fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
-            .add_edition(edition)?);
+            .add_edition(edition)?;
         serve_fpm_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        let mut config = fpm::time("Config::read()")
-            .it(fpm::Config::read(None, false, Some(&req))
-                .await
-                .unwrap()
-                .add_edition(edition)?)
+        let mut config = fpm::Config::read(None, false, Some(&req))
+            .await
+            .unwrap()
+            .add_edition(edition)?
             .set_request(req);
 
         serve_file(&mut config, &path.join("/")).await
@@ -297,7 +316,7 @@ pub async fn serve(
 
         file_response
     };
-    t.it(Ok(response))
+    Ok(response)
 }
 
 pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
@@ -420,7 +439,7 @@ async fn route(
     body: actix_web::web::Bytes,
     app_data: actix_web::web::Data<AppData>,
 ) -> fpm::Result<fpm::http::Response> {
-    tracing::info!(http.uri = req.path(), http.method = req.method().as_str());
+    tracing::info!(method = req.method().as_str(), uri = req.path());
     if req.path().starts_with("/auth/") {
         return fpm::auth::routes::handle_auth(req, app_data.edition.clone()).await;
     }

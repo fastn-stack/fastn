@@ -1228,7 +1228,7 @@ impl Config {
     }
 
     /// `read()` is the way to read a Config.
-    #[tracing::instrument(skip_all)]
+    #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
         root: Option<String>,
         resolve_sitemap: bool,
@@ -1394,6 +1394,7 @@ impl Config {
         ))
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn can_read(
         &self,
         req: &fpm::http::Request,

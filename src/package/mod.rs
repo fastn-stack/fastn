@@ -463,13 +463,19 @@ impl Package {
         crate::http::construct_url_and_get_str(format!("{}/FPM.ftd", self.name).as_str()).await
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn resolve(&mut self, fpm_path: &camino::Utf8PathBuf) -> fpm::Result<()> {
+        tracing::info!(path = fpm_path.as_str());
         let fpm_document = {
             let doc = tokio::fs::read_to_string(fpm_path).await?;
             let lib = fpm::FPMLibrary::default();
             match fpm::doc::parse_ftd("FPM", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
+                    tracing::error!(
+                        msg = "failed to pare FPM.ftd file",
+                        path = fpm_path.as_str()
+                    );
                     return Err(fpm::Error::PackageError {
                         message: format!("failed to parse FPM.ftd: {:?}", &e),
                     });
