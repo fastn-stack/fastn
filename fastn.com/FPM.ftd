@@ -4,7 +4,7 @@
 download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 language: en
 
--- fpm.dependency: fifthtry.github.io/doc-site as ds
+-- fpm.dependency: fifthtry.github.io/doc-site as ft
 -- fpm.dependency: fifthtry.github.io/product-switcher as ps
 -- fpm.dependency: fifthtry.github.io/bling as bling
 -- fpm.dependency: fifthtry.github.io/admonitions as cbox
@@ -16,12 +16,11 @@ language: en
 -- fpm.dependency: fpm.dev
 -- fpm.dependency: fifthtry.github.io/roboto-mono as mono
 
--- fpm.auto-import: ds as ft
+-- fpm.auto-import: ft as ds
 -- fpm.auto-import: ws
 -- fpm.auto-import: fpm
 -- fpm.auto-import: ftd.dev/FPM/config
 -- fpm.auto-import: dms
--- fpm.auto-import: ds
 
 
 -- fpm.sitemap:
@@ -139,18 +138,19 @@ language: en
   - 8 - Package Dependencies: /workshop/dependencies/
   - 9 - Auto Import: /workshop/auto-imports/
 
+## Crash Course: /expander/
 
-
-## Course: /c1/
-- Chapter 1: FPM Intro
-  url: -/arjaupashak.com/c1/intro/
-  - Installation Instruction: -/fpm.dev/how-to/install/
-- Chapter 2: P1 Grammar
-  url: -/arjaupashak.com/c1/p1/
-  - P1 Grammar Docs: /p1-grammar/-/c1/
-- Chapter 3: Adding dependencies
-  url: -/arjaupashak.com/c1/deps/
-
+- Overview: /expander/
+- Part 1: Hello World
+  url: /expander/hello-world/
+- Part 2: Basic UI
+  url: /expander/basic-ui/
+- Part 3: Components
+  url: /expander/components/
+- Part 4: Event Handling
+  url: /expander/events/
+- Bonus Video: Layout
+  url: /expander/layout/
 
 
 # News: /news/
