@@ -227,6 +227,7 @@ impl<'a> VariableDependencyGenerator<'a> {
                     &condition.value,
                     &None,
                     None,
+                    false,
                 )?
             {
                 let value = format!(
@@ -243,6 +244,7 @@ impl<'a> VariableDependencyGenerator<'a> {
             &variable.value,
             &None,
             None,
+            false,
         )? {
             let value = format!(
                 "set_data_value(data, \"{}\", {});",

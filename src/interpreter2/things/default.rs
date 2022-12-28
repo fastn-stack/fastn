@@ -934,6 +934,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
         ftd::interpreter2::Argument::default(
+            "classes",
+            ftd::interpreter2::Kind::string()
+                .into_list()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "open-in-new-tab",
             ftd::interpreter2::Kind::boolean()
                 .into_optional()

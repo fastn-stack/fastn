@@ -52,7 +52,7 @@ pub(crate) fn validate_properties_and_set_default(
                 condition: None,
                 line_number: argument.line_number,
             });
-        } else if !expected_kind.is_optional() {
+        } else if !expected_kind.is_optional() && !expected_kind.is_list() {
             return ftd::executor::utils::parse_error(
                 format!(
                     "Need value of kind: `{:?}` for `{}`",

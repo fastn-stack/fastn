@@ -113,6 +113,7 @@ pub struct Common {
     pub is_not_visible: bool,
     pub event: Vec<Event>,
     pub is_dummy: bool,
+    pub classes: ftd::executor::Value<Vec<String>>,
     pub padding: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub padding_left: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub padding_right: ftd::executor::Value<Option<ftd::executor::Length>>,
@@ -399,6 +400,13 @@ pub fn common_from_properties(
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
+        classes: ftd::executor::value::string_list(
+            "classes",
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
         padding: ftd::executor::Length::optional_length(
             properties,
             arguments,

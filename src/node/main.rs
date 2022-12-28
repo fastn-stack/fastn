@@ -31,7 +31,7 @@ impl Node {
             style: common.style(doc_id, &mut []),
             children: vec![],
             text: Default::default(),
-            classes: vec![],
+            classes: common.classes(),
             null: common.is_dummy,
             events: common.event.clone(),
             data_id: common.data_id.clone(),
@@ -333,6 +333,10 @@ impl ftd::executor::Image {
 }
 
 impl ftd::executor::Common {
+    fn classes(&self) -> Vec<String> {
+        self.classes.to_owned().value
+    }
+
     fn attrs(&self, doc_id: &str) -> ftd::Map<ftd::node::Value> {
         use ftd::node::utils::CheckMap;
 
@@ -341,6 +345,16 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "data-id",
             ftd::node::Value::from_string(self.data_id.as_str()),
+        );
+
+        d.check_and_insert(
+            "class",
+            ftd::node::Value::from_executor_value(
+                Some(self.classes.to_owned().value.join(",")),
+                self.classes.to_owned(),
+                None,
+                doc_id,
+            ),
         );
 
         d.check_and_insert(

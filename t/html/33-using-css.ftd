@@ -1,0 +1,32 @@
+-- boolean $open: true
+
+
+-- ftd.column:
+width.fixed.px: 100
+height.fixed.px: 100
+$on-click$: $toggle($a = $open)
+
+-- ftd.column.classes:
+
+-- string: red-block
+-- string: animated-div
+
+-- end: ftd.column.classes
+
+
+-- ftd.column.classes:
+if: { open }
+
+-- string: blue-block
+
+-- end: ftd.column.classes
+
+-- ftd.text: Hello World
+
+-- end: ftd.column
+
+
+-- void toggle(a):
+boolean $a:
+
+a = !a

@@ -123,6 +123,49 @@ pub(crate) fn find_value_by_argument(
     Ok(ftd::executor::Value::new(value, line_number, properties))
 }
 
+pub fn string_list(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<Vec<String>>> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::List { data, kind }) if kind.is_string() => {
+            let mut values = vec![];
+            for d in data {
+                values.push(
+                    d.resolve(&doc.itdoc(), line_number)?
+                        .string(doc.name, line_number)?,
+                );
+            }
+            Ok(ftd::executor::Value::new(
+                values,
+                value.line_number,
+                value.properties,
+            ))
+        }
+        None => Ok(ftd::executor::Value::new(
+            vec![],
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type string list, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
 #[allow(dead_code)]
 pub fn string(
     key: &str,

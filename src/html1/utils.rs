@@ -62,6 +62,7 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     property_value: &ftd::interpreter2::PropertyValue,
     pattern_with_eval: &Option<(String, bool)>,
     field: Option<String>,
+    string_needs_no_quotes: bool,
 ) -> ftd::html1::Result<Option<String>> {
     /*let field = match field {
         None if property_value.kind().is_ftd_length()
@@ -73,7 +74,9 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
         None => None,
     };*/
 
-    let value_string = if let Some(value_string) = property_value.to_string(doc, field, id)? {
+    let value_string = if let Some(value_string) =
+        property_value.to_string(doc, field, id, string_needs_no_quotes)?
+    {
         value_string
     } else {
         return Ok(None);
@@ -207,6 +210,7 @@ impl ftd::interpreter2::PropertyValue {
         doc: &ftd::interpreter2::TDoc,
         field: Option<String>,
         id: &str,
+        string_needs_no_quotes: bool,
     ) -> ftd::html1::Result<Option<String>> {
         Ok(match self {
             ftd::interpreter2::PropertyValue::Reference { name, .. } => Some(format!(
@@ -230,22 +234,29 @@ impl ftd::interpreter2::PropertyValue {
             }
             ftd::interpreter2::PropertyValue::Value {
                 value, line_number, ..
-            } => value.to_string(doc, *line_number, field, id)?,
+            } => value.to_string(doc, *line_number, field, id, string_needs_no_quotes)?,
             _ => None,
         })
     }
 }
 
 impl ftd::interpreter2::Value {
+    // string_needs_no_quotes: for class attribute the value should be red-block not "red-block"
     pub(crate) fn to_string(
         &self,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
         field: Option<String>,
         id: &str,
+        string_needs_no_quotes: bool,
     ) -> ftd::html1::Result<Option<String>> {
         Ok(match self {
-            ftd::interpreter2::Value::String { text } => Some(format!("\"{}\"", text)),
+            ftd::interpreter2::Value::String { text } if !string_needs_no_quotes => {
+                Some(format!("\"{}\"", text))
+            }
+            ftd::interpreter2::Value::String { text } if string_needs_no_quotes => {
+                Some(text.to_string())
+            }
             ftd::interpreter2::Value::Integer { value } => Some(value.to_string()),
             ftd::interpreter2::Value::Decimal { value } => Some(value.to_string()),
             ftd::interpreter2::Value::Boolean { value } => Some(value.to_string()),
@@ -257,6 +268,7 @@ impl ftd::interpreter2::Value {
                         value.line_number(),
                         None,
                         id,
+                        string_needs_no_quotes,
                     )? {
                         v
                     } else {
@@ -264,7 +276,7 @@ impl ftd::interpreter2::Value {
                     };
                     values.push(v);
                 }
-                Some(format!("({:?})", values.join(",")))
+                Some(format!("{:?}", values.join(", ")))
             }
             ftd::interpreter2::Value::Record { fields, .. }
                 if field
@@ -272,10 +284,12 @@ impl ftd::interpreter2::Value {
                     .map(|v| fields.contains_key(v))
                     .unwrap_or(false) =>
             {
-                fields
-                    .get(&field.unwrap())
-                    .unwrap()
-                    .to_string(doc, None, id)?
+                fields.get(&field.unwrap()).unwrap().to_string(
+                    doc,
+                    None,
+                    id,
+                    string_needs_no_quotes,
+                )?
             }
             ftd::interpreter2::Value::OrType {
                 value,
@@ -283,7 +297,7 @@ impl ftd::interpreter2::Value {
                 full_variant,
                 ..
             } => {
-                let value = value.to_string(doc, field, id)?;
+                let value = value.to_string(doc, field, id, string_needs_no_quotes)?;
                 match value {
                     Some(value) if variant.ne(ftd::interpreter2::FTD_RESIZING_FIXED) => {
                         if let Ok(pattern) = ftd::executor::Resizing::set_pattern_from_variant_str(
@@ -304,7 +318,9 @@ impl ftd::interpreter2::Value {
             ftd::interpreter2::Value::Record { fields, name } => {
                 let mut values = vec![];
                 for (k, v) in fields {
-                    let value = if let Some(v) = v.to_string(doc, field.clone(), id)? {
+                    let value = if let Some(v) =
+                        v.to_string(doc, field.clone(), id, string_needs_no_quotes)?
+                    {
                         if let Ok(pattern) = ftd::executor::Length::set_pattern_from_variant_str(
                             name,
                             doc.name,

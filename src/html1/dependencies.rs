@@ -103,6 +103,7 @@ impl<'a> DependencyGenerator<'a> {
                         &property.value,
                         &property_with_pattern.pattern_with_eval,
                         None,
+                        false,
                     )?
                 {
                     dependency_map_from_condition(
@@ -176,6 +177,7 @@ impl<'a> DependencyGenerator<'a> {
                             &property.value,
                             &property_with_pattern.pattern_with_eval,
                             Some("light".to_string()),
+                            key.eq("class"),
                         )?
                     {
                         let value = format!(
@@ -198,6 +200,7 @@ impl<'a> DependencyGenerator<'a> {
                             &property.value,
                             &property_with_pattern.pattern_with_eval,
                             Some("dark".to_string()),
+                            key.eq("class"),
                         )?
                     {
                         let value = format!(
@@ -251,6 +254,7 @@ impl<'a> DependencyGenerator<'a> {
                         &property.value,
                         &property_with_pattern.pattern_with_eval,
                         None,
+                        key.eq("class"),
                     )?
                 {
                     dependency_map_from_condition(
@@ -330,6 +334,7 @@ impl<'a> DependencyGenerator<'a> {
                             &property.value,
                             &property_with_pattern.pattern_with_eval,
                             Some("light".to_string()),
+                            false,
                         )?
                     {
                         let value = format!("{} = {};", key, value_string);
@@ -349,6 +354,7 @@ impl<'a> DependencyGenerator<'a> {
                             &property.value,
                             &property_with_pattern.pattern_with_eval,
                             Some("dark".to_string()),
+                            false,
                         )?
                     {
                         let value = format!("{} = {};", key, value_string);
@@ -399,6 +405,7 @@ impl<'a> DependencyGenerator<'a> {
                         &property.value,
                         &property_with_pattern.pattern_with_eval,
                         None,
+                        false,
                     )?
                 {
                     dependency_map_from_condition(
