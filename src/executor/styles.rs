@@ -1180,6 +1180,75 @@ impl Overflow {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum Resize {
+    Both,
+    Horizontal,
+    Vertical,
+}
+
+impl Resize {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(Resize::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_RESIZE_HORIZONTAL => Ok(Resize::Horizontal),
+            ftd::interpreter2::FTD_RESIZE_VERTICAL => Ok(Resize::Vertical),
+            ftd::interpreter2::FTD_RESIZE_BOTH => Ok(Resize::Both),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.resize`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_resize(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Resize>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_RESIZE,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Resize::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            Resize::Horizontal => "horizontal".to_string(),
+            Resize::Vertical => "vertical".to_string(),
+            Resize::Both => "both".to_string(),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum TextAlign {
     Start,
     Center,

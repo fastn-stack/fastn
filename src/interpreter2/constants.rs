@@ -58,5 +58,10 @@ pub const FTD_OVERFLOW_VISIBLE: &str = "ftd#overflow.visible";
 pub const FTD_OVERFLOW_HIDDEN: &str = "ftd#overflow.hidden";
 pub const FTD_OVERFLOW_AUTO: &str = "ftd#overflow.auto";
 
+pub const FTD_RESIZE: &str = "ftd#resize";
+pub const FTD_RESIZE_HORIZONTAL: &str = "ftd#resize.horizontal";
+pub const FTD_RESIZE_VERTICAL: &str = "ftd#resize.vertical";
+pub const FTD_RESIZE_BOTH: &str = "ftd#resize.both";
+
 // FTD cursor(todo docs link)
 // pub const FTD_CURSOR: &str = "ftd#cursor";

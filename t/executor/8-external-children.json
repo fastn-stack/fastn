@@ -576,6 +576,11 @@
                         "value": null,
                         "line_number": null,
                         "properties": []
+                      },
+                      "resize": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
                       }
                     }
                   }
@@ -859,6 +864,11 @@
                                 "value": null,
                                 "line_number": null,
                                 "properties": []
+                              },
+                              "resize": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
                               }
                             }
                           }
@@ -1085,6 +1095,11 @@
                         "properties": []
                       },
                       "overflow_y": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "resize": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -1317,6 +1332,11 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
+              },
+              "resize": {
+                "value": null,
+                "line_number": null,
+                "properties": []
               }
             }
           }
@@ -1543,6 +1563,11 @@
         "properties": []
       },
       "overflow_y": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "resize": {
         "value": null,
         "line_number": null,
         "properties": []

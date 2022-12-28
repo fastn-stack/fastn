@@ -404,6 +404,19 @@ impl ftd::executor::Common {
             ),
         );
 
+        d.check_and_insert(
+            "resize",
+            ftd::node::Value::from_executor_value(
+                self.resize
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.resize.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
         // html and css name only
         d.check_and_insert(
             "overflow",
@@ -413,6 +426,19 @@ impl ftd::executor::Common {
                     .map(|v| v.map(|v| v.to_css_string()))
                     .value,
                 self.overflow.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "overflow",
+            ftd::node::Value::from_executor_value(
+                self.resize
+                    .to_owned()
+                    .map(|v| v.map(|_| "auto".to_string()))
+                    .value,
+                self.resize.to_owned(),
                 None,
                 doc_id,
             ),

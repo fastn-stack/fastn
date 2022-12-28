@@ -159,6 +159,7 @@ pub struct Common {
     pub overflow: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_x: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
+    pub resize: ftd::executor::Value<Option<ftd::executor::Resize>>,
 }
 
 pub fn default_column() -> Column {
@@ -704,6 +705,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "overflow-y",
+        )?,
+        resize: ftd::executor::Resize::optional_resize(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "resize",
         )?,
     })
 }

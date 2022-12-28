@@ -203,4 +203,13 @@ of values below. If two keywords are specified, the first applies to overflow-x
 and the second to overflow-y. Otherwise, both overflow-x and overflow-y are set
 to the same value.
 
+
+-- ftd.column:
+width.fixed.px: 100
+height.fixed.px: 100
+background.solid: yellow
+resize: both
+
+-- end: ftd.column
+
 -- end: ftd.row

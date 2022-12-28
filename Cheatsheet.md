@@ -477,6 +477,21 @@ string dark: $color.light
 -- end: spacing-mode
 ```
 
+- `resize`: `optional ftd.resize`
+
+
+**`ftd.fill`**
+
+```ftd
+-- or-type resize:
+
+-- constant string both: both
+-- constant string horizontal: horizontal
+-- constant string vertical: vertical
+
+-- end: fill
+```
+
 # Default functions
 
 ## `is_empty(a: any)`
