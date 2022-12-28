@@ -63,22 +63,10 @@ impl fpm::Package {
             fpm::Error::PackageError { message }
         })?;
 
-        dbg!(format!("{}/{}", base.trim_end_matches('/'), name.trim_matches('/')).as_str());
-
-        match crate::http::construct_url_and_get(
+        crate::http::construct_url_and_get(
             format!("{}/{}", base.trim_end_matches('/'), name.trim_matches('/')).as_str(),
         )
         .await
-        {
-            Ok(c) => {
-                dbg!("Response Okay from http");
-                Ok(c)
-            }
-            Err(e) => {
-                dbg!("Error", &e);
-                Err(e)
-            }
-        }
     }
 
     async fn http_fetch_by_id(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
