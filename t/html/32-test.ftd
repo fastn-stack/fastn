@@ -1,3 +1,18 @@
--- ftd.text: Hello
-width: fill-container
-padding.px: 40
+-- integer $x: 0
+
+-- ftd.integer: $x
+$on-click$: $increment($a = $x)
+
+-- ftd.text: Call function
+$on-click$: $call-function(a = $x)
+
+
+-- void increment(a):
+integer $a:
+
+a += 1;
+
+-- void call-function(a):
+integer a:
+
+show(a)
