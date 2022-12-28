@@ -11,6 +11,15 @@ bunyan: https://github.com/trentm/node-bunyan
   upon entering a span, existing a span and event creation.
 
 
+The main benefit of this
+- giving structured logs
+- event and span status
+- hostname
+- pid
+- time
+- event line
+- args
+
 ## Console Output
 
 ```shell
