@@ -3,6 +3,7 @@ pub async fn login(
     req: actix_web::HttpRequest,
     edition: Option<String>,
     inject_js: Vec<String>,
+    inline_js: Vec<String>,
 ) -> fpm::Result<actix_web::HttpResponse> {
     if fpm::auth::utils::is_login(&req) {
         return Ok(actix_web::HttpResponse::Found()
@@ -31,7 +32,7 @@ pub async fn login(
         _ => {
             let mut req = fpm::http::Request::from_actix(req, actix_web::web::Bytes::new());
             req.path = "/sorry/".to_string();
-            fpm::commands::serve::serve(req, edition, inject_js).await
+            fpm::commands::serve::serve(req, edition, inject_js, inline_js).await
         } // _ => unreachable!(),
     }
 }
@@ -228,9 +229,10 @@ pub async fn handle_auth(
     req: actix_web::HttpRequest,
     edition: Option<String>,
     inject_js: Vec<String>,
+    inline_js: Vec<String>,
 ) -> fpm::Result<fpm::http::Response> {
     match req.path() {
-        "/auth/login/" => login(req, edition, inject_js).await,
+        "/auth/login/" => login(req, edition, inject_js, inline_js).await,
         fpm::auth::github::CALLBACK_URL => fpm::auth::github::callback(req).await,
         fpm::auth::telegram::CALLBACK_URL => fpm::auth::telegram::token(req).await,
         fpm::auth::discord::CALLBACK_URL => fpm::auth::discord::callback(req).await,

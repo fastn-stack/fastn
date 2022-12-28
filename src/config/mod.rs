@@ -39,6 +39,7 @@ pub struct Config {
     pub request: Option<fpm::http::Request>, // TODO: It should only contain reference
     pub ftd_edition: FTDEdition,
     pub ftd_inject_js: Vec<String>,
+    pub ftd_inline_js: Vec<String>,
 }
 
 impl Config {
@@ -1225,6 +1226,12 @@ impl Config {
         config
     }
 
+    pub fn add_inline_js(self, inline_js: Vec<String>) -> Self {
+        let mut config = self;
+        config.ftd_inline_js = inline_js;
+        config
+    }
+
     /// `read()` is the way to read a Config.
     pub async fn read(
         root: Option<String>,
@@ -1267,6 +1274,7 @@ impl Config {
             path_parameters: vec![],
             ftd_edition: FTDEdition::FTD2021,
             ftd_inject_js: Default::default(),
+            ftd_inline_js: Default::default(),
         };
 
         // Update global_ids map from the current package files

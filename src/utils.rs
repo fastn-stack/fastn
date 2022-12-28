@@ -433,11 +433,32 @@ pub fn get_inject_js_html(inject_js: &[String]) -> String {
     result
 }
 
+pub fn get_inline_js_html(inline_js: &[String]) -> String {
+    let mut result = "".to_string();
+    for path in inline_js {
+        if camino::Utf8Path::new(path).exists() {
+            if let Ok(content) = std::fs::read_to_string(path) {
+                result = format!("{}<script>{}</script>", result, content);
+            }
+        }
+    }
+    result
+}
+
+fn get_extra_js(inject_js: &[String], inline_js: &[String]) -> String {
+    format!(
+        "{}{}",
+        get_inject_js_html(inject_js),
+        get_inline_js_html(inline_js)
+    )
+}
+
 pub fn replace_markers_2022(
     s: &str,
     html_ui: ftd::html1::HtmlUI,
     ftd_js: &str,
     inject_js: &[String],
+    inline_js: &[String],
 ) -> String {
     ftd::html1::utils::trim_all_lines(
         s.replace("__ftd_doc_title__", "")
@@ -445,7 +466,7 @@ pub fn replace_markers_2022(
             .replace("__ftd_external_children__", "{}")
             .replace("__ftd__", html_ui.html.as_str())
             .replace("__ftd_js__", ftd_js)
-            .replace("__extra_js__", get_inject_js_html(inject_js).as_str())
+            .replace("__extra_js__", get_extra_js(inject_js, inline_js).as_str())
             .replace(
                 "__ftd_functions__",
                 format!(
