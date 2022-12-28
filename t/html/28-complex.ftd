@@ -38,13 +38,13 @@ toc-item sections:
 
 
 -- ftd.column:
-width: ftd.resizing.fill-container
+width: fill-container
 height.fixed.percent: 100
 background: $step-2
 
 
 -- ftd.column:
-width: ftd.resizing.fill-container
+width: fill-container
 padding.px: 24
 
 -- header:
@@ -56,17 +56,17 @@ site-name: Logo
 
 
 -- ftd.column:
-width: ftd.resizing.fill-container
+width: fill-container
 
 -- ftd.row:
-width: ftd.resizing.fill-container
+width: fill-container
 
 
 -- ftd.row:
 width.fixed.percent: 25
 
 -- ftd.column:
-height: ftd.resizing.fill-container
+height: fill-container
 background: $step-1
 
 -- ftd.text: table of contents
@@ -199,10 +199,10 @@ toc-item sections:
 string site-name: SiteName
 
 -- ftd.row:
-width: ftd.resizing.fill-container
+width: fill-container
 
 -- ftd.row:
-width: ftd.resizing.fill-container
+width: fill-container
 
 -- ftd.text: $header.site-name
 color: $text-strong
@@ -210,7 +210,7 @@ color: $text-strong
 -- end: ftd.row
 
 -- ftd.row:
-width: ftd.resizing.hug-content
+width: hug-content
 
 -- header-links:
 item: $header.sections

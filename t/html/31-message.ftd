@@ -30,7 +30,7 @@ padding.px: 100
 
 -- ftd.column:
 width.fixed.px: 500
-align-self: ftd.align-self.center
+align-self: center
 
 -- messageleft: Hey Buddy!
 
@@ -86,7 +86,7 @@ color: $text
 /role: $fpm.type.label-big
 width.fixed.percent: 100
 /text-align: left
-align-self: ftd.align-self.center
+align-self: center
 margin-top.px: $messageleft.pulltop
 
 -- end: ftd.column
@@ -119,7 +119,7 @@ integer pulltop: 0
 margin-bottom.px: 16 
 /append-at: msg-container
 id: message
-align-self: ftd.align-self.end
+align-self: end
 
 -- ftd.column:
 width.fixed.percent: 100
@@ -143,7 +143,7 @@ color: $text
 /role: $fpm.type.label-big
 width.fixed.percent: 100
 /text-align: left
-align-self: ftd.align-self.center
+align-self: center
 margin-top.px: $messageright.pulltop
 
 -- end: ftd.column

@@ -146,7 +146,7 @@ string url:
 
 -- ftd.row:
 padding-left.px: 30
-align-content: ftd.align.center
+align-content: center
 
 -- ftd.text: 
 text:$print-toc-item-one.item
@@ -230,7 +230,7 @@ $loop$: $print-toc-one.children as $obj
 -- component image:
 optional caption title:
 ftd.image-src src:
-ftd.align aaa: ftd.align.center
+ftd.align aaa: center
 
 -- ftd.column: 
 width.fixed.percent: 100
@@ -239,7 +239,7 @@ spacing.px: 12
 
 -- ftd.column:
 width.fixed.percent: 100
-align-content: ftd.align.center
+align-content: center
 
 -- ftd.image:
 src: $image.src
@@ -291,7 +291,7 @@ src: $src
 
 -- ftd.row:
 width.fixed.percent: 74
-align-content: ftd.align.right
+align-content: right
 
 -- print-toc-item:
 item: $header.section-item
@@ -337,21 +337,21 @@ color: $text-strong
 -- end: ftd.column
 
 -- ftd.column:
-align-content: ftd.align.right
+align-content: right
 width.fixed.percent: 100
-align-self: ftd.align-self.center
+align-self: center
 
 -- ftd.row:
 width.fixed.percent: 100
-align-content: ftd.align.right
+align-content: right
 
 
 -- ftd.column:
-align-content: ftd.align.center
+align-content: center
 
 
 -- ftd.column:
-align-content: ftd.align.center
+align-content: center
 
 
 -- print-toc-item:

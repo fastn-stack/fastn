@@ -1,6 +1,6 @@
 -- ftd.column:
-width: ftd.resizing.fill-container
-height: ftd.resizing.fill-container
+width: fill-container
+height: fill-container
 
 -- ftd.column:
 width.fixed.px: 60
@@ -31,4 +31,3 @@ margin.px: 100
 -- end: ftd.column
 
 -- end: ftd.column
-

@@ -24,7 +24,7 @@ optional ftd.image-src bg-image:
 
 -- ftd.column:
 background.solid: $presentation.bg-color
-width: ftd.resizing.fill-container
+width: fill-container
 
 -- mobile-overlay:
 if: { presentation.show }
@@ -53,7 +53,7 @@ ftd.color overlay-bg-color:
 
 -- ftd.column:
 height.fixed.calc: 100% - 0px
-width: ftd.resizing.fill-container
+width: fill-container
 background.solid: $mobile-overlay.overlay-bg-color
 
 -- end: ftd.column

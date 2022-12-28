@@ -35,8 +35,8 @@ border-radius.percent: 18
 
 -- ftd.row:
 spacing.px: 20
-align-content if { flag }: ftd.align.top-left
-align-content: ftd.align.top-center
+align-content if { flag }: top-left
+align-content: top-center
 background.solid: red
 width.fixed.px: 400
 height.fixed.px: 100
@@ -50,8 +50,8 @@ border-width.px: 1
 
 -- ftd.column:
 spacing.px: 2
-align-content if { flag }: ftd.align.top-left
-align-content: ftd.align.top-center
+align-content if { flag }: top-left
+align-content: top-center
 width.fixed.px: 400
 height.fixed.px: 100
 border-width.px: 1
@@ -65,10 +65,10 @@ border-width.px: 1
 -- ftd.row:
 spacing.px: 20
 width.fixed.px: 400
-width if { flag }: ftd.resizing.hug-content
+width if { flag }: hug-content
 height.fixed.percent: 20
-height if { flag }: ftd.resizing.fill-container
-align-content: ftd.align.top-center
+height if { flag }: fill-container
+align-content: top-center
 border-width.px: 1
 
 

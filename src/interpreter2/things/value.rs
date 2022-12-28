@@ -854,7 +854,7 @@ impl PropertyValue {
                             .into_property_value(false, line_number),
                         )
                     } else {
-                        let value_str = value.string(doc.name)?;
+                        let value_str = format!("{}.{}", name, value.string(doc.name)?);
                         let (found_or_type_name, or_type_variant) = try_ok_state!(doc
                             .search_or_type_with_variant(
                                 value_str.as_str(),

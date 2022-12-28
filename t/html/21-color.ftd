@@ -58,7 +58,7 @@ $on-click$: $set-system()
 -- ftd.column:
 width.fixed.px: 60
 height.fixed.px: 60
-align-content: ftd.align.center
+align-content: center
 background.solid: red
 border-width.px: 3
 border-color: $bgcolor
@@ -72,7 +72,7 @@ border-color: $bgcolor
 -- ftd.column:
 width.fixed.px: 60
 height.fixed.px: 60
-align-content: ftd.align.center
+align-content: center
 background.solid: $bgcolor
 border-color: red
 border-width.px: 3
@@ -85,7 +85,7 @@ border-width.px: 3
 -- ftd.column:
 width.fixed.px: 60
 height.fixed.px: 60
-align-content: ftd.align.center
+align-content: center
 background: $background-fill
 border-left-color: $bgcolor
 border-left-width.px: 3

@@ -19,15 +19,15 @@ wrap: true
 
 -- ftd.column:
 spacing.px: 20
-align-content if { num % 9 == 0 }: ftd.align.top-left
-align-content if { num % 9 == 1 }: ftd.align.top-center
-align-content if { num % 9 == 2 }: ftd.align.top-right
-align-content if { num % 9 == 3 }: ftd.align.left
-align-content if { num % 9 == 4 }: ftd.align.center
-align-content if { num % 9 == 5 }: ftd.align.right
-align-content if { num % 9 == 6 }: ftd.align.bottom-left
-align-content if { num % 9 == 7 }: ftd.align.bottom-center
-align-content if { num % 9 == 8 }: ftd.align.bottom-right
+align-content if { num % 9 == 0 }: top-left
+align-content if { num % 9 == 1 }: top-center
+align-content if { num % 9 == 2 }: top-right
+align-content if { num % 9 == 3 }: left
+align-content if { num % 9 == 4 }: center
+align-content if { num % 9 == 5 }: right
+align-content if { num % 9 == 6 }: bottom-left
+align-content if { num % 9 == 7 }: bottom-center
+align-content if { num % 9 == 8 }: bottom-right
 background.solid: red
 width.fixed.px: 200
 height.fixed.px: 200
@@ -61,15 +61,15 @@ border-width.px: 1
 
 -- ftd.row:
 spacing.px: 20
-align-content if { num % 9 == 0 }: ftd.align.top-left
-align-content if { num % 9 == 1 }: ftd.align.top-center
-align-content if { num % 9 == 2 }: ftd.align.top-right
-align-content if { num % 9 == 3 }: ftd.align.left
-align-content if { num % 9 == 4 }: ftd.align.center
-align-content if { num % 9 == 5 }: ftd.align.right
-align-content if { num % 9 == 6 }: ftd.align.bottom-left
-align-content if { num % 9 == 7 }: ftd.align.bottom-center
-align-content if { num % 9 == 8 }: ftd.align.bottom-right
+align-content if { num % 9 == 0 }: top-left
+align-content if { num % 9 == 1 }: top-center
+align-content if { num % 9 == 2 }: top-right
+align-content if { num % 9 == 3 }: left
+align-content if { num % 9 == 4 }: center
+align-content if { num % 9 == 5 }: right
+align-content if { num % 9 == 6 }: bottom-left
+align-content if { num % 9 == 7 }: bottom-center
+align-content if { num % 9 == 8 }: bottom-right
 background.solid: red
 width.fixed.px: 200
 height.fixed.px: 200
@@ -104,16 +104,16 @@ border-width.px: 1
 
 -- ftd.row:
 spacing.px: 20
-align-content if { num % 9 == 0 }: ftd.align.top-left
-align-content if { num % 9 == 1 }: ftd.align.top-center
-align-content if { num % 9 == 2 }: ftd.align.top-right
-align-content if { num % 9 == 3 }: ftd.align.left
-align-content if { num % 9 == 4 }: ftd.align.center
-align-content if { num % 9 == 5 }: ftd.align.right
-align-content if { num % 9 == 6 }: ftd.align.bottom-left
-align-content if { num % 9 == 7 }: ftd.align.bottom-center
-align-content if { num % 9 == 8 }: ftd.align.bottom-right
-spacing-mode: ftd.spacing-mode.space-between
+align-content if { num % 9 == 0 }: top-left
+align-content if { num % 9 == 1 }: top-center
+align-content if { num % 9 == 2 }: top-right
+align-content if { num % 9 == 3 }: left
+align-content if { num % 9 == 4 }: center
+align-content if { num % 9 == 5 }: right
+align-content if { num % 9 == 6 }: bottom-left
+align-content if { num % 9 == 7 }: bottom-center
+align-content if { num % 9 == 8 }: bottom-right
+spacing-mode: space-between
 background.solid: green
 width.fixed.px: 200
 height.fixed.px: 200
@@ -145,16 +145,16 @@ border-width.px: 1
 
 -- ftd.column:
 spacing.px: 20
-align-content if { num % 9 == 0 }: ftd.align.top-left
-align-content if { num % 9 == 1 }: ftd.align.top-center
-align-content if { num % 9 == 2 }: ftd.align.top-right
-align-content if { num % 9 == 3 }: ftd.align.left
-align-content if { num % 9 == 4 }: ftd.align.center
-align-content if { num % 9 == 5 }: ftd.align.right
-align-content if { num % 9 == 6 }: ftd.align.bottom-left
-align-content if { num % 9 == 7 }: ftd.align.bottom-center
-align-content if { num % 9 == 8 }: ftd.align.bottom-right
-spacing-mode: ftd.spacing-mode.space-evenly
+align-content if { num % 9 == 0 }: top-left
+align-content if { num % 9 == 1 }: top-center
+align-content if { num % 9 == 2 }: top-right
+align-content if { num % 9 == 3 }: left
+align-content if { num % 9 == 4 }: center
+align-content if { num % 9 == 5 }: right
+align-content if { num % 9 == 6 }: bottom-left
+align-content if { num % 9 == 7 }: bottom-center
+align-content if { num % 9 == 8 }: bottom-right
+spacing-mode: space-evenly
 background.solid: green
 width.fixed.px: 200
 height.fixed.px: 200
@@ -196,9 +196,9 @@ width.fixed.px: 20
 height.fixed.px: 20
 background.solid: yellow
 border-width.px: 1
-align-self if { num % 3 == 0 }: ftd.align-self.start
-align-self if { num % 3 == 1 }: ftd.align-self.center
-align-self if { num % 3 == 2 }: ftd.align-self.end
+align-self if { num % 3 == 0 }: start
+align-self if { num % 3 == 1 }: center
+align-self if { num % 3 == 2 }: end
 
 -- end: ftd.column
 
@@ -228,9 +228,9 @@ width.fixed.px: 20
 height.fixed.px: 20
 background.solid: yellow
 border-width.px: 1
-align-self if { num % 3 == 0 }: ftd.align-self.start
-align-self if { num % 3 == 1 }: ftd.align-self.center
-align-self if { num % 3 == 2 }: ftd.align-self.end
+align-self if { num % 3 == 0 }: start
+align-self if { num % 3 == 1 }: center
+align-self if { num % 3 == 2 }: end
 
 -- end: ftd.column
 
@@ -257,12 +257,12 @@ border-width.px: 1
 
 -- ftd.text:
 background.solid: yellow
-width: ftd.resizing.fill-container
-height: ftd.resizing.fill-container
-text-align if { num % 4 == 0 }: ftd.text-align.start
-text-align if { num % 4 == 1 }: ftd.text-align.center
-text-align if { num % 4 == 2 }: ftd.text-align.end
-text-align if { num % 4 == 3 }: ftd.text-align.justify
+width: fill-container
+height: fill-container
+text-align if { num % 4 == 0 }: start
+text-align if { num % 4 == 1 }: center
+text-align if { num % 4 == 2 }: end
+text-align if { num % 4 == 3 }: justify
 
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at

@@ -3,9 +3,9 @@ padding.px: 20
 border-width.px: 1
 spacing.px: 50
 background.solid: #eee
-width: ftd.resizing.fill-container
-height: ftd.resizing.fill-container
-align-content: ftd.align.top-center
+width: fill-container
+height: fill-container
+align-content: top-center
 
 
 -- box: What is FTD?
@@ -42,8 +42,8 @@ width.fixed.percent: 60
 -- ftd.row:
 padding.px: 10
 border-width.px: 1
-width: ftd.resizing.fill-container
-spacing-mode: ftd.spacing-mode.space-between
+width: fill-container
+spacing-mode: space-between
 $on-click$: $toggle($value=$box.open)
 
 -- ftd.text: $box.title
@@ -58,7 +58,7 @@ if: {$box.open}
 -- ftd.text:
 if: { $box.open }
 padding.px: 10
-height: ftd.resizing.hug-content
+height: hug-content
 
 $box.body
 
