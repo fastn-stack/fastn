@@ -38,6 +38,7 @@ pub struct Config {
     pub current_document: Option<String>,
     pub request: Option<fpm::http::Request>, // TODO: It should only contain reference
     pub ftd_edition: FTDEdition,
+    pub ftd_inject_js: Vec<String>,
 }
 
 impl Config {
@@ -1218,6 +1219,12 @@ impl Config {
         }
     }
 
+    pub fn add_inject_js(self, inject_js: Vec<String>) -> Self {
+        let mut config = self;
+        config.ftd_inject_js = inject_js;
+        config
+    }
+
     /// `read()` is the way to read a Config.
     pub async fn read(
         root: Option<String>,
@@ -1259,6 +1266,7 @@ impl Config {
             request: req.map(ToOwned::to_owned),
             path_parameters: vec![],
             ftd_edition: FTDEdition::FTD2021,
+            ftd_inject_js: Default::default(),
         };
 
         // Update global_ids map from the current package files

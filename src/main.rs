@@ -42,12 +42,14 @@ async fn async_main() -> fpm::Result<()> {
         let bind = mark.value_of_("bind").unwrap_or("127.0.0.1").to_string();
         let download_base_url = mark.value_of_("download-base-url");
         let edition = mark.value_of_("edition");
+        let inject_js = mark.values_of_("inject-js");
 
         return fpm::listen(
             bind.as_str(),
             port,
             download_base_url.map(ToString::to_string),
             edition.map(ToString::to_string),
+            inject_js,
         )
         .await;
     }
@@ -333,6 +335,10 @@ mod sub_command {
             .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
             .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
             .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
+            .arg(clap::Arg::new("inject-js")
+                .action(clap::ArgAction::Set)
+                .num_args(0..)
+                .help("Script added in ftd files"))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"));
         if cfg!(feature = "remote") {
             serve

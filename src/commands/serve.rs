@@ -142,6 +142,7 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
 pub async fn serve(
     req: fpm::http::Request,
     edition: Option<String>,
+    inject_js: Vec<String>,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
     let r = format!("{} {}", req.method(), req.path());
@@ -157,14 +158,16 @@ pub async fn serve(
         let config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
-            .add_edition(edition)?);
+            .add_edition(edition)?
+            .add_inject_js(inject_js));
         serve_fpm_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
         let mut config = fpm::time("Config::read()")
             .it(fpm::Config::read(None, false, Some(&req))
                 .await
                 .unwrap()
-                .add_edition(edition)?)
+                .add_edition(edition)?
+                .add_inject_js(inject_js))
             .set_request(req);
 
         serve_file(&mut config, &path.join("/")).await
@@ -172,7 +175,8 @@ pub async fn serve(
         let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
-            .add_edition(edition)?);
+            .add_edition(edition)?
+            .add_inject_js(inject_js));
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
         // url is present in config or not
@@ -184,6 +188,7 @@ pub async fn serve(
             .await
             .unwrap()
             .add_edition(edition)?
+            .add_inject_js(inject_js)
             .set_request(req));
 
         // if start with -/ and mount-point exists so send redirect to mount-point
@@ -407,6 +412,7 @@ pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::R
 
 struct AppData {
     edition: Option<String>,
+    inject_js: Vec<String>,
 }
 
 async fn route(
@@ -415,7 +421,12 @@ async fn route(
     app_data: actix_web::web::Data<AppData>,
 ) -> fpm::Result<fpm::http::Response> {
     if req.path().starts_with("/auth/") {
-        return fpm::auth::routes::handle_auth(req, app_data.edition.clone()).await;
+        return fpm::auth::routes::handle_auth(
+            req,
+            app_data.edition.clone(),
+            app_data.inject_js.clone(),
+        )
+        .await;
     }
     //dbg!(req.cookies());
     let req = fpm::http::Request::from_actix(req, body);
@@ -432,7 +443,7 @@ async fn route(
         ("get", "/-/create-cr-page/") => create_cr_page(req).await,
         ("get", "/-/clear-cache/") => clear_cache(req).await,
         ("get", "/-/poll/") => fpm::watcher::poll().await,
-        (_, _) => serve(req, app_data.edition.clone()).await,
+        (_, _) => serve(req, app_data.edition.clone(), app_data.inject_js.clone()).await,
     }
 }
 
@@ -441,6 +452,7 @@ pub async fn listen(
     port: Option<u16>,
     package_download_base_url: Option<String>,
     edition: Option<String>,
+    inject_js: Vec<String>,
 ) -> fpm::Result<()> {
     use colored::Colorize;
     dotenv::dotenv().ok();
@@ -486,6 +498,7 @@ You can try without providing port, it will automatically pick unused port."#,
         actix_web::App::new()
             .app_data(actix_web::web::Data::new(AppData {
                 edition: edition.clone(),
+                inject_js: inject_js.clone(),
             }))
             .route("/{path:.*}", actix_web::web::route().to(route))
     };

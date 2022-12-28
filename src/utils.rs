@@ -1,10 +1,16 @@
 pub trait ValueOf {
     fn value_of_(&self, name: &str) -> Option<&str>;
+    fn values_of_(&self, name: &str) -> Vec<String>;
 }
 
 impl ValueOf for clap::ArgMatches {
     fn value_of_(&self, name: &str) -> Option<&str> {
         self.get_one::<String>(name).map(|v| v.as_str())
+    }
+    fn values_of_(&self, name: &str) -> Vec<String> {
+        self.get_many(name)
+            .map(|v| v.cloned().collect::<Vec<String>>())
+            .unwrap_or_default()
     }
 }
 
@@ -391,6 +397,10 @@ pub fn replace_markers_2021(
         .replace("__ftd_element_css__", main_rt.css_collector.as_str())
         .replace("__fpm_js__", fpm::fpm_js())
         .replace(
+            "__extra_js__",
+            get_inject_js_html(config.ftd_inject_js.as_slice()).as_str(),
+        )
+        .replace(
             "__ftd_data_main__",
             fpm::font::escape(
                 serde_json::to_string_pretty(&main_rt.data)
@@ -415,13 +425,27 @@ pub fn replace_markers_2021(
         .replace("__base_url__", base_url)
 }
 
-pub fn replace_markers_2022(s: &str, html_ui: ftd::html1::HtmlUI, ftd_js: &str) -> String {
+pub fn get_inject_js_html(inject_js: &[String]) -> String {
+    let mut result = "".to_string();
+    for js in inject_js {
+        result = format!("{}<script src=\"{}\"></script>", result, js);
+    }
+    result
+}
+
+pub fn replace_markers_2022(
+    s: &str,
+    html_ui: ftd::html1::HtmlUI,
+    ftd_js: &str,
+    inject_js: &[String],
+) -> String {
     ftd::html1::utils::trim_all_lines(
         s.replace("__ftd_doc_title__", "")
             .replace("__ftd_data__", html_ui.variables.as_str())
             .replace("__ftd_external_children__", "{}")
             .replace("__ftd__", html_ui.html.as_str())
             .replace("__ftd_js__", ftd_js)
+            .replace("__extra_js__", get_inject_js_html(inject_js).as_str())
             .replace(
                 "__ftd_functions__",
                 format!(
