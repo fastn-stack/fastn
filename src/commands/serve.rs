@@ -3,6 +3,8 @@ static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
 
 /// path: /-/<package-name>/<file-name>/
 /// path: /<file-name>/
+///
+#[tracing::instrument(skip_all)]
 async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::http::Response {
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
@@ -115,6 +117,7 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
     mime_guess::from_path(path).first_or_octet_stream()
 }
 
+#[tracing::instrument(skip_all)]
 async fn serve_fpm_file(config: &fpm::Config) -> fpm::http::Response {
     let response =
         match tokio::fs::read(config.get_root_for_package(&config.package).join("FPM.ftd")).await {
@@ -126,6 +129,7 @@ async fn serve_fpm_file(config: &fpm::Config) -> fpm::http::Response {
     fpm::http::ok_with_content_type(response, mime_guess::mime::APPLICATION_OCTET_STREAM)
 }
 
+#[tracing::instrument(skip_all)]
 async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
     if !file_path.exists() {
         return fpm::not_found!("no such static file ({})", file_path);
@@ -139,6 +143,7 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
     }
 }
 
+#[tracing::instrument(skip_all)]
 pub async fn serve(
     req: fpm::http::Request,
     edition: Option<String>,
@@ -169,10 +174,10 @@ pub async fn serve(
 
         serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fpm::cr::get_cr_path_from_url(path.as_str()) {
-        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
+        let mut config = fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
-            .add_edition(edition)?);
+            .add_edition(edition)?;
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
         // url is present in config or not
@@ -180,11 +185,11 @@ pub async fn serve(
 
         let req_method = req.method().to_string();
         let query_string = req.query_string().to_string();
-        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
+        let mut config = fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
             .add_edition(edition)?
-            .set_request(req));
+            .set_request(req);
 
         // if start with -/ and mount-point exists so send redirect to mount-point
         // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
@@ -409,18 +414,17 @@ struct AppData {
     edition: Option<String>,
 }
 
-#[tracing::instrument(skip_all, fields(http.uri = req.path(), http.method = req.method().as_str()))]
+#[tracing::instrument(skip_all)]
 async fn route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
     app_data: actix_web::web::Data<AppData>,
 ) -> fpm::Result<fpm::http::Response> {
+    tracing::info!(http.uri = req.path(), http.method = req.method().as_str());
     if req.path().starts_with("/auth/") {
         return fpm::auth::routes::handle_auth(req, app_data.edition.clone()).await;
     }
-    //dbg!(req.cookies());
     let req = fpm::http::Request::from_actix(req, body);
-    dbg!(req.method(), req.path());
     match (req.method().to_lowercase().as_str(), req.path()) {
         ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
         ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,

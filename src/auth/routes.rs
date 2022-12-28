@@ -223,6 +223,7 @@ pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRespons
 }
 
 // handle: if request.url starts with /auth/
+#[tracing::instrument(skip_all)]
 pub async fn handle_auth(
     req: actix_web::HttpRequest,
     edition: Option<String>,

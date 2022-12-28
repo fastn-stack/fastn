@@ -25,6 +25,7 @@ impl fpm::Package {
         }
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
@@ -90,6 +91,7 @@ impl fpm::Package {
         })
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn http_download_by_id(
         &self,
         id: &str,
@@ -221,11 +223,13 @@ impl fpm::Package {
         }
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn resolve_by_id(
         &self,
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fpm::Result<(String, Vec<u8>)> {
+        tracing::info!(id = id);
         if let Ok(response) = self.fs_fetch_by_id(id, package_root).await {
             return Ok(response);
         }

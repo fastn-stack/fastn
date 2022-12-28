@@ -586,6 +586,7 @@ impl Config {
     // mount-point: /todos/
     // Output
     // -/<todos-package-name>/add-todo/, <todos-package-name>, /add-todo/
+    #[tracing::instrument(skip_all)]
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
         package: &'a fpm::Package,
@@ -600,6 +601,7 @@ impl Config {
         // dependent package does not contain dependency
 
         // For similar package
+        tracing::info!(path = path);
         if path.starts_with(format!("-/{}", package.name.trim_matches('/')).as_str()) {
             let path_without_package_name =
                 path.trim_start_matches(format!("-/{}", package.name.trim_matches('/')).as_str());
@@ -686,7 +688,9 @@ impl Config {
 
     // -/kameri-app.herokuapp.com/
     // .packages/kameri-app.heroku.com/index.ftd
+    #[tracing::instrument(skip_all)]
     pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
+        tracing::info!(path = path);
         // This function will return file and package by given path
         // path can be mounted(mount-point) with other dependencies
         //
@@ -823,10 +827,13 @@ impl Config {
         ))
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn get_file_path_and_resolve(&self, id: &str) -> fpm::Result<String> {
+        tracing::info!(id = id);
         Ok(self.get_file_and_resolve(id).await?.0)
     }
 
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn get_file_and_resolve(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
         let (package_name, package) = self.find_package_by_id(id).await?;
 
@@ -922,7 +929,9 @@ impl Config {
     }
 
     /// Return (package name or alias, package)
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn find_package_by_id(&self, id: &str) -> fpm::Result<(String, fpm::Package)> {
+        tracing::info!(id = id);
         let sanitized_id = self
             .get_mountpoint_sanitized_path(&self.package, id)
             .map(|(x, _, _, _)| x)
@@ -1219,6 +1228,7 @@ impl Config {
     }
 
     /// `read()` is the way to read a Config.
+    #[tracing::instrument(skip_all)]
     pub async fn read(
         root: Option<String>,
         resolve_sitemap: bool,
@@ -1322,10 +1332,12 @@ impl Config {
         self
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn resolve_package(
         &self,
         package: &fpm::Package,
     ) -> fpm::Result<fpm::Package> {
+        tracing::info!(package = package.name);
         if self.package.name.eq(package.name.as_str()) {
             return Ok(self.package.clone());
         }

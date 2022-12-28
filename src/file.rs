@@ -156,11 +156,13 @@ pub fn ignore_path(
     overrides.build()
 }
 
+#[tracing::instrument(skip_all)]
 pub(crate) async fn get_file(
     package_name: String,
     doc_path: &camino::Utf8Path,
     base_path: &camino::Utf8Path,
 ) -> fpm::Result<File> {
+    tracing::info!(package = package_name, doc_path = doc_path.as_str());
     if doc_path.is_dir() {
         return Err(fpm::Error::UsageError {
             message: format!("{} should be a file", doc_path.as_str()),

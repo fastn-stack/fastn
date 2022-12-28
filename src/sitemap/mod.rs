@@ -1450,7 +1450,9 @@ impl Sitemap {
     /// path: foo/temp/
     /// path: /
     /// This function can be used for if path exists in sitemap or not
+    #[tracing::instrument(skip_all)]
     pub fn resolve_document(&self, path: &str) -> Option<String> {
+        tracing::info!(path = path);
         fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> Option<String> {
             if fpm::utils::ids_matches(toc.id.as_str(), path) {
                 return toc.document.clone();
