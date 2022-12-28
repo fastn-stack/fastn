@@ -4,7 +4,7 @@
 download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 language: en
 
--- fpm.dependency: fifthtry.github.io/doc-site as ft
+-- fpm.dependency: fifthtry.github.io/doc-site as ds
 -- fpm.dependency: fifthtry.github.io/product-switcher as ps
 -- fpm.dependency: fifthtry.github.io/bling as bling
 -- fpm.dependency: fifthtry.github.io/admonitions as cbox
@@ -16,28 +16,23 @@ language: en
 -- fpm.dependency: fpm.dev
 -- fpm.dependency: fifthtry.github.io/roboto-mono as mono
 
--- fpm.auto-import: ft
+-- fpm.auto-import: ds as ft
 -- fpm.auto-import: ws
 -- fpm.auto-import: fpm
 -- fpm.auto-import: ftd.dev/FPM/config
 -- fpm.auto-import: dms
--- fpm.auto-import: ft as ds
+-- fpm.auto-import: ds
 
 
 -- fpm.sitemap:
 
 # Home: /
 
-# Why FTD?: /why/
-## Overview: /why/
-
+- Home: /
+- Learn FTD In Y Minutes: /y/
 - Why FTD?: /why/
 - Philosophy: /philosophy/
-
-## Alternatives: /alternatives/
-
 - Why not MDX?: /why/not-mdx/
-
 
 
 

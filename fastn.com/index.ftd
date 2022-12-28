@@ -1,14 +1,8 @@
--- ft.page:
-toc: $config.empty-toc
+-- ft.page: FTD: Programming Language For Prose
 
 
--- ft.content:
 
--- ft.h0: FTD: Programming Language For Prose
-
--- ft.markdown:
-
-
+[Learn FTD in Y Minutes](/y/).
 
 FTD is an open source programming language for writing prose.
 
@@ -26,6 +20,7 @@ level 1, "Hello World". FTD language is designed for human beings, not just
 programmers, we have taken precautions like not requiring quoting for strings,
 not relying on indentation nor on braces that most programming languages require.
 It is not verbose like HTML, and not simplistic like Markdown.
+
 
 FTD can be compared with Markdown, but in FTD you can do the following for
 example:
