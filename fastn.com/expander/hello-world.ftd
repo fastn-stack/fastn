@@ -1,4 +1,14 @@
+-- import: ftd.dev/assets
+
 -- ds.page: Part 1: Hello World
 
 -- ds.youtube:
 v: MdsnBfsyzUg
+
+-- ds.image: 
+src: $assets.files.images.column-row-layout.png
+
+
+-- ds.h3: 1.1.B: Resource section
+
+[Get latest release](https://github.com/ftd-lang/fpm/releases)
