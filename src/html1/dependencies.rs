@@ -142,6 +142,7 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
+            let length = attribute.properties.len();
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -168,7 +169,6 @@ impl<'a> DependencyGenerator<'a> {
                         dbg!("condition.is_none()", &dark);
                         continue;
                     }*/
-                    let mut expressions = vec![];
                     let mut light_value_string = "".to_string();
                     if let Some(value_string) =
                         ftd::html1::utils::get_formatted_dep_string_from_property_value(
@@ -215,34 +215,24 @@ impl<'a> DependencyGenerator<'a> {
                         dark_value_string = value_string;
                     }
 
-                    if !light_value_string.eq(&dark_value_string) {
-                        let value = ftd::html1::utils::js_expression_from_list(expressions, None);
-                        if !value.trim().is_empty() {
-                            dependency_map_from_condition(
-                                var_dependencies,
-                                &property.condition,
-                                node_change_id.as_str(),
-                                self.doc,
-                            );
-                            dependency_map_from_property_value(
-                                var_dependencies,
-                                &property.value,
-                                node_change_id.as_str(),
-                                self.doc,
-                            );
-                            var_dependencies
-                                .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
-                            result.push(format!(
-                                indoc::indoc! {"
-                                     window.node_change_{id}[\"{key}\"] = function(data) {{
-                                            {value}
-                                     }}
-                                "},
-                                id = self.id,
-                                key = node_change_id,
-                                value = value.trim(),
-                            ));
-                        }
+                    if !light_value_string.eq(&dark_value_string)
+                        || condition.is_some()
+                        || length > 0
+                    {
+                        dependency_map_from_condition(
+                            var_dependencies,
+                            &property.condition,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        dependency_map_from_property_value(
+                            var_dependencies,
+                            &property.value,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        var_dependencies
+                            .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
                     }
                     continue;
                 }
@@ -299,6 +289,7 @@ impl<'a> DependencyGenerator<'a> {
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
                 node_data_id, key
             );
+            let length = attribute.properties.len();
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -325,7 +316,6 @@ impl<'a> DependencyGenerator<'a> {
                         dbg!("condition.is_none()", &dark);
                         continue;
                     }*/
-                    let mut expressions = vec![];
                     let mut light_value_string = "".to_string();
                     if let Some(value_string) =
                         ftd::html1::utils::get_formatted_dep_string_from_property_value(
@@ -366,34 +356,24 @@ impl<'a> DependencyGenerator<'a> {
                         dark_value_string = value_string;
                     }
 
-                    if !light_value_string.eq(&dark_value_string) {
-                        let value = ftd::html1::utils::js_expression_from_list(expressions, None);
-                        if !value.trim().is_empty() {
-                            dependency_map_from_condition(
-                                var_dependencies,
-                                &property.condition,
-                                node_change_id.as_str(),
-                                self.doc,
-                            );
-                            dependency_map_from_property_value(
-                                var_dependencies,
-                                &property.value,
-                                node_change_id.as_str(),
-                                self.doc,
-                            );
-                            var_dependencies
-                                .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
-                            result.push(format!(
-                                indoc::indoc! {"
-                                     window.node_change_{id}[\"{key}\"] = function(data) {{
-                                            {value}
-                                     }}
-                                "},
-                                id = self.id,
-                                key = node_change_id,
-                                value = value.trim(),
-                            ));
-                        }
+                    if !light_value_string.eq(&dark_value_string)
+                        || condition.is_some()
+                        || length > 0
+                    {
+                        dependency_map_from_condition(
+                            var_dependencies,
+                            &property.condition,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        dependency_map_from_property_value(
+                            var_dependencies,
+                            &property.value,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        var_dependencies
+                            .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
                     }
                     continue;
                 }

@@ -13,6 +13,7 @@ declare global {
         init: object;
         handle_event(evt: Event, id: string, event: string, obj: Element): void;
         handle_function(evt: Event, id: string, event: string, obj: Element): any;
+        set_string_for_all(variable: string, value: string): any;
         set_bool_for_all(variable: string, value: boolean): any;
         set_bool(id: string, variable: string, value: boolean): any;
         set_value(id: string, variable: string, value: any): any;

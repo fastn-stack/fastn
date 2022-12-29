@@ -689,6 +689,56 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 line_number: 0,
             }),
         ),
+        (
+            "ftd#device".to_string(),
+            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                name: "ftd#device".to_string(),
+                kind: ftd::interpreter2::Kind::string().into_kind_data(),
+                mutable: true,
+                value: ftd::interpreter2::PropertyValue::Value {
+                    value: ftd::interpreter2::Value::String {
+                        text: "desktop".to_string(),
+                    },
+                    is_mutable: true,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#mobile-breakpoint".to_string(),
+            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                name: "ftd#mobile-breakpoint".to_string(),
+                kind: ftd::interpreter2::Kind::integer().into_kind_data(),
+                mutable: true,
+                value: ftd::interpreter2::PropertyValue::Value {
+                    value: ftd::interpreter2::Value::Integer { value: 768 },
+                    is_mutable: true,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
+        (
+            "ftd#desktop-breakpoint".to_string(),
+            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                name: "ftd#desktop-breakpoint".to_string(),
+                kind: ftd::interpreter2::Kind::integer().into_kind_data(),
+                mutable: true,
+                value: ftd::interpreter2::PropertyValue::Value {
+                    value: ftd::interpreter2::Value::Integer { value: 1440 },
+                    is_mutable: true,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
+            }),
+        ),
     ])
     .collect()
 }

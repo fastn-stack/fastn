@@ -1,0 +1,16 @@
+
+-- ftd.text: Hello World
+color if { ftd.device == "desktop" }: $red
+color: $green
+padding.px if { ftd.device == "mobile" }: 40
+padding.percent: 10
+
+
+-- ftd.color red:
+light: pink
+dark: red
+
+
+-- ftd.color green:
+light: green
+dark: blue

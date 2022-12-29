@@ -72,6 +72,17 @@ window.ftd = (function() {
         return get_data_value(data, variable);
     }
 
+    exports.set_string_for_all = function (variable, value) {
+        for (let id in ftd_data) {
+            if (!ftd_data.hasOwnProperty(id)) {
+                continue;
+            }
+
+            // @ts-ignore
+            exports.set_value(id, variable, value);
+        }
+    }
+
 
     exports.set_bool_for_all = function (variable, value) {
         for (let id in ftd_data) {
