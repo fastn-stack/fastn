@@ -42,12 +42,20 @@ async fn async_main() -> fpm::Result<()> {
         let bind = mark.value_of_("bind").unwrap_or("127.0.0.1").to_string();
         let download_base_url = mark.value_of_("download-base-url");
         let edition = mark.value_of_("edition");
+        let external_js = mark.values_of_("external-js");
+        let inline_js = mark.values_of_("js");
+        let external_css = mark.values_of_("external-css");
+        let inline_css = mark.values_of_("css");
 
         return fpm::listen(
             bind.as_str(),
             port,
             download_base_url.map(ToString::to_string),
             edition.map(ToString::to_string),
+            external_js,
+            inline_js,
+            external_css,
+            inline_css,
         )
         .await;
     }
@@ -94,6 +102,19 @@ async fn async_main() -> fpm::Result<()> {
         if matches.get_flag("verbose") {
             println!("{}", fpm::debug_env_vars());
         }
+
+        let edition = build.value_of_("edition").map(ToString::to_string);
+        let external_js = build.values_of_("external-js");
+        let inline_js = build.values_of_("js");
+        let external_css = build.values_of_("external-css");
+        let inline_css = build.values_of_("css");
+
+        config = config
+            .add_edition(edition)?
+            .add_external_js(external_js)
+            .add_inline_js(inline_js)
+            .add_external_css(external_css)
+            .add_inline_css(inline_css);
 
         return fpm::build(
             &mut config,
@@ -194,6 +215,15 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
                 .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
                 .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
+                .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--"js" <URL> "Script text added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--"external-css" <URL> "CSS added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
+                    .action(clap::ArgAction::Append))
+                .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
         )
         .subcommand(
             clap::Command::new("mark-resolved")
@@ -333,6 +363,14 @@ mod sub_command {
             .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
             .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
             .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
+            .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
+                .action(clap::ArgAction::Append))
+            .arg(clap::arg!(--"js" <URL> "Script text added in ftd files")
+                .action(clap::ArgAction::Append))
+            .arg(clap::arg!(--"external-css" <URL> "CSS added in ftd files")
+                .action(clap::ArgAction::Append))
+            .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
+                .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"));
         if cfg!(feature = "remote") {
             serve

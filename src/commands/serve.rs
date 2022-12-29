@@ -171,6 +171,10 @@ async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
 pub async fn serve(
     req: fpm::http::Request,
     edition: Option<String>,
+    external_js: Vec<String>,
+    inline_js: Vec<String>,
+    external_css: Vec<String>,
+    inline_css: Vec<String>,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
     // TODO: remove unwrap
@@ -182,21 +186,33 @@ pub async fn serve(
         let config = fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
-            .add_edition(edition)?;
+            .add_edition(edition)?
+            .add_external_js(external_js)
+            .add_inline_js(inline_js)
+            .add_external_css(external_css)
+            .add_inline_css(inline_css);
         serve_fpm_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
         let mut config = fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
             .add_edition(edition)?
-            .set_request(req);
+            .set_request(req)
+            .add_external_js(external_js)
+            .add_inline_js(inline_js)
+            .add_external_css(external_css)
+            .add_inline_css(inline_css);
 
         serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fpm::cr::get_cr_path_from_url(path.as_str()) {
         let mut config = fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
-            .add_edition(edition)?;
+            .add_edition(edition)?
+            .add_external_js(external_js)
+            .add_inline_js(inline_js)
+            .add_external_css(external_css)
+            .add_inline_css(inline_css);
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
         // url is present in config or not
@@ -208,6 +224,10 @@ pub async fn serve(
             .await
             .unwrap()
             .add_edition(edition)?
+            .add_external_js(external_js)
+            .add_inline_js(inline_js)
+            .add_external_css(external_css)
+            .add_inline_css(inline_css)
             .set_request(req);
 
         // if start with -/ and mount-point exists so send redirect to mount-point
@@ -431,6 +451,10 @@ pub async fn create_cr_page(req: fpm::http::Request) -> fpm::Result<fpm::http::R
 
 struct AppData {
     edition: Option<String>,
+    external_js: Vec<String>,
+    inline_js: Vec<String>,
+    external_css: Vec<String>,
+    inline_css: Vec<String>,
 }
 
 #[tracing::instrument(skip_all)]
@@ -441,7 +465,15 @@ async fn route(
 ) -> fpm::Result<fpm::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
     if req.path().starts_with("/auth/") {
-        return fpm::auth::routes::handle_auth(req, app_data.edition.clone()).await;
+        return fpm::auth::routes::handle_auth(
+            req,
+            app_data.edition.clone(),
+            app_data.external_js.clone(),
+            app_data.inline_js.clone(),
+            app_data.external_css.clone(),
+            app_data.inline_css.clone(),
+        )
+        .await;
     }
     let req = fpm::http::Request::from_actix(req, body);
     match (req.method().to_lowercase().as_str(), req.path()) {
@@ -456,15 +488,30 @@ async fn route(
         ("get", "/-/create-cr-page/") => create_cr_page(req).await,
         ("get", "/-/clear-cache/") => clear_cache(req).await,
         ("get", "/-/poll/") => fpm::watcher::poll().await,
-        (_, _) => serve(req, app_data.edition.clone()).await,
+        (_, _) => {
+            serve(
+                req,
+                app_data.edition.clone(),
+                app_data.external_js.clone(),
+                app_data.inline_js.clone(),
+                app_data.external_css.clone(),
+                app_data.inline_css.clone(),
+            )
+            .await
+        }
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn listen(
     bind_address: &str,
     port: Option<u16>,
     package_download_base_url: Option<String>,
     edition: Option<String>,
+    external_js: Vec<String>,
+    inline_js: Vec<String>,
+    external_css: Vec<String>,
+    inline_css: Vec<String>,
 ) -> fpm::Result<()> {
     use colored::Colorize;
     dotenv::dotenv().ok();
@@ -510,6 +557,10 @@ You can try without providing port, it will automatically pick unused port."#,
         actix_web::App::new()
             .app_data(actix_web::web::Data::new(AppData {
                 edition: edition.clone(),
+                external_js: external_js.clone(),
+                inline_js: inline_js.clone(),
+                external_css: external_css.clone(),
+                inline_css: inline_css.clone(),
             }))
             .route("/{path:.*}", actix_web::web::route().to(route))
     };

@@ -38,6 +38,10 @@ pub struct Config {
     pub current_document: Option<String>,
     pub request: Option<fpm::http::Request>, // TODO: It should only contain reference
     pub ftd_edition: FTDEdition,
+    pub ftd_external_js: Vec<String>,
+    pub ftd_inline_js: Vec<String>,
+    pub ftd_external_css: Vec<String>,
+    pub ftd_inline_css: Vec<String>,
 }
 
 impl Config {
@@ -1227,6 +1231,30 @@ impl Config {
         }
     }
 
+    pub fn add_external_js(self, external_js: Vec<String>) -> Self {
+        let mut config = self;
+        config.ftd_external_js = external_js;
+        config
+    }
+
+    pub fn add_inline_js(self, inline_js: Vec<String>) -> Self {
+        let mut config = self;
+        config.ftd_inline_js = inline_js;
+        config
+    }
+
+    pub fn add_external_css(self, external_css: Vec<String>) -> Self {
+        let mut config = self;
+        config.ftd_external_css = external_css;
+        config
+    }
+
+    pub fn add_inline_css(self, inline_css: Vec<String>) -> Self {
+        let mut config = self;
+        config.ftd_inline_css = inline_css;
+        config
+    }
+
     /// `read()` is the way to read a Config.
     #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
@@ -1269,6 +1297,10 @@ impl Config {
             request: req.map(ToOwned::to_owned),
             path_parameters: vec![],
             ftd_edition: FTDEdition::FTD2021,
+            ftd_external_js: Default::default(),
+            ftd_inline_js: Default::default(),
+            ftd_external_css: Default::default(),
+            ftd_inline_css: Default::default(),
         };
 
         // Update global_ids map from the current package files

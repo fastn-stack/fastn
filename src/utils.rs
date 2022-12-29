@@ -1,10 +1,16 @@
 pub trait ValueOf {
     fn value_of_(&self, name: &str) -> Option<&str>;
+    fn values_of_(&self, name: &str) -> Vec<String>;
 }
 
 impl ValueOf for clap::ArgMatches {
     fn value_of_(&self, name: &str) -> Option<&str> {
         self.get_one::<String>(name).map(|v| v.as_str())
+    }
+    fn values_of_(&self, name: &str) -> Vec<String> {
+        self.get_many(name)
+            .map(|v| v.cloned().collect::<Vec<String>>())
+            .unwrap_or_default()
     }
 }
 
@@ -391,6 +397,22 @@ pub fn replace_markers_2021(
         .replace("__ftd_element_css__", main_rt.css_collector.as_str())
         .replace("__fpm_js__", fpm::fpm_js())
         .replace(
+            "__extra_js__",
+            get_extra_js(
+                config.ftd_external_js.as_slice(),
+                config.ftd_inline_js.as_slice(),
+            )
+            .as_str(),
+        )
+        .replace(
+            "__extra_css__",
+            get_extra_css(
+                config.ftd_external_css.as_slice(),
+                config.ftd_inline_css.as_slice(),
+            )
+            .as_str(),
+        )
+        .replace(
             "__ftd_data_main__",
             fpm::font::escape(
                 serde_json::to_string_pretty(&main_rt.data)
@@ -415,13 +437,85 @@ pub fn replace_markers_2021(
         .replace("__base_url__", base_url)
 }
 
-pub fn replace_markers_2022(s: &str, html_ui: ftd::html1::HtmlUI, ftd_js: &str) -> String {
+pub fn get_external_js_html(external_js: &[String]) -> String {
+    let mut result = "".to_string();
+    for js in external_js {
+        result = format!("{}<script src=\"{}\"></script>", result, js);
+    }
+    result
+}
+
+pub fn get_external_css_html(external_js: &[String]) -> String {
+    let mut result = "".to_string();
+    for js in external_js {
+        result = format!("{}<link rel=\"stylesheet\" href=\"{}.css\">", result, js);
+    }
+    result
+}
+
+pub fn get_inline_js_html(inline_js: &[String]) -> String {
+    let mut result = "".to_string();
+    for path in inline_js {
+        if camino::Utf8Path::new(path).exists() {
+            if let Ok(content) = std::fs::read_to_string(path) {
+                result = format!("{}<script>{}</script>", result, content);
+            }
+        }
+    }
+    result
+}
+
+pub fn get_inline_css_html(inline_js: &[String]) -> String {
+    let mut result = "".to_string();
+    for path in inline_js {
+        if camino::Utf8Path::new(path).exists() {
+            if let Ok(content) = std::fs::read_to_string(path) {
+                result = format!("{}<style>{}</style>", result, content);
+            }
+        }
+    }
+    result
+}
+
+fn get_extra_js(external_js: &[String], inline_js: &[String]) -> String {
+    format!(
+        "{}{}",
+        get_external_js_html(external_js),
+        get_inline_js_html(inline_js)
+    )
+}
+
+fn get_extra_css(external_css: &[String], inline_css: &[String]) -> String {
+    format!(
+        "{}{}",
+        get_external_css_html(external_css),
+        get_inline_css_html(inline_css)
+    )
+}
+
+pub fn replace_markers_2022(
+    s: &str,
+    html_ui: ftd::html1::HtmlUI,
+    ftd_js: &str,
+    external_js: &[String],
+    inline_js: &[String],
+    external_css: &[String],
+    inline_css: &[String],
+) -> String {
     ftd::html1::utils::trim_all_lines(
         s.replace("__ftd_doc_title__", "")
             .replace("__ftd_data__", html_ui.variables.as_str())
             .replace("__ftd_external_children__", "{}")
             .replace("__ftd__", html_ui.html.as_str())
             .replace("__ftd_js__", ftd_js)
+            .replace(
+                "__extra_js__",
+                get_extra_js(external_js, inline_js).as_str(),
+            )
+            .replace(
+                "__extra_css__",
+                get_extra_css(external_css, inline_css).as_str(),
+            )
             .replace(
                 "__ftd_functions__",
                 format!(
