@@ -1,18 +1,25 @@
 impl fpm::Package {
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn fs_fetch_by_file_name(
         &self,
         name: &str,
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fpm::Result<Vec<u8>> {
+        tracing::info!(document = name);
         let package_root = if let Some(package_root) = package_root {
             package_root.to_owned()
         } else {
             match self.fpm_path.as_ref() {
                 Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
                 _ => {
+                    tracing::error!(
+                        msg = "package root not found. Package: {}",
+                        package = self.name,
+                        document = name,
+                    );
                     return Err(fpm::Error::PackageError {
                         message: format!("package root not found. Package: {}", &self.name),
-                    })
+                    });
                 }
             }
         };
@@ -21,10 +28,17 @@ impl fpm::Package {
         // Issue 1: Need to remove / from the start of the name
         match tokio::fs::read(&file_path).await {
             Ok(content) => Ok(content),
-            Err(err) => Err(Err(err)?),
+            Err(err) => {
+                tracing::error!(
+                    msg = "file-read-error: file not found",
+                    path = file_path.as_str()
+                );
+                Err(Err(err)?)
+            }
         }
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
@@ -45,6 +59,11 @@ impl fpm::Package {
             }
         }
 
+        tracing::error!(
+            msg = "fs-error: file not found",
+            document = id,
+            package = self.name
+        );
         Err(fpm::Error::PackageError {
             message: format!(
                 "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
@@ -53,34 +72,24 @@ impl fpm::Package {
         })
     }
 
+    #[tracing::instrument(skip_all)]
     async fn http_fetch_by_file_name(&self, name: &str) -> fpm::Result<Vec<u8>> {
         let base = self.download_base_url.as_ref().ok_or_else(|| {
             let message = format!(
                 "package base not found. Package: {}, File: {}",
                 &self.name, name
             );
-            eprintln!("{}", message);
+            tracing::error!(msg = message);
             fpm::Error::PackageError { message }
         })?;
 
-        dbg!(format!("{}/{}", base.trim_end_matches('/'), name.trim_matches('/')).as_str());
-
-        match crate::http::construct_url_and_get(
+        crate::http::construct_url_and_get(
             format!("{}/{}", base.trim_end_matches('/'), name.trim_matches('/')).as_str(),
         )
         .await
-        {
-            Ok(c) => {
-                dbg!("Response Okay from http");
-                Ok(c)
-            }
-            Err(e) => {
-                dbg!("Error", &e);
-                Err(e)
-            }
-        }
     }
 
+    #[tracing::instrument(skip_all)]
     async fn http_fetch_by_id(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
         if fpm::file::is_static(id)? {
             if let Ok(data) = self.http_fetch_by_file_name(id).await {
@@ -94,19 +103,21 @@ impl fpm::Package {
             }
         }
 
-        Err(fpm::Error::PackageError {
-            message: format!(
-                "http_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
-                id, &self.name
-            ),
-        })
+        let message = format!(
+            "http-error: file not found for id: {}. package: {}",
+            id, &self.name
+        );
+        tracing::error!(document = id, msg = message);
+        Err(fpm::Error::PackageError { message })
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn http_download_by_id(
         &self,
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fpm::Result<(String, Vec<u8>)> {
+        tracing::info!(document = id);
         let package_root = if let Some(package_root) = package_root {
             package_root.to_owned()
         } else {
@@ -131,6 +142,7 @@ impl fpm::Package {
         Ok((file_path, data))
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn http_download_by_file_name(
         &self,
         file_path: &str,
@@ -233,11 +245,13 @@ impl fpm::Package {
         }
     }
 
+    #[tracing::instrument(skip_all)]
     pub(crate) async fn resolve_by_id(
         &self,
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
     ) -> fpm::Result<(String, Vec<u8>)> {
+        tracing::info!(id = id);
         if let Ok(response) = self.fs_fetch_by_id(id, package_root).await {
             return Ok(response);
         }
@@ -264,12 +278,13 @@ impl fpm::Package {
                 }
             }
             _ => {
+                tracing::error!(id = id, msg = "id error: can not get the dark");
                 return Err(fpm::Error::PackageError {
                     message: format!(
                         "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                         id, &self.name
                     ),
-                })
+                });
             }
         };
 
@@ -316,12 +331,14 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
 }
 
 #[allow(clippy::await_holding_refcell_ref)]
+#[tracing::instrument(skip_all)]
 pub(crate) async fn read_ftd(
     config: &mut fpm::Config,
     main: &fpm::Document,
     base_url: &str,
     download_assets: bool,
 ) -> fpm::Result<Vec<u8>> {
+    tracing::info!(document = main.id);
     match config.ftd_edition {
         fpm::FTDEdition::FTD2021 => read_ftd_2021(config, main, base_url, download_assets).await,
         fpm::FTDEdition::FTD2022 => read_ftd_2022(config, main, base_url, download_assets).await,

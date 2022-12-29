@@ -78,6 +78,18 @@ oauth2 = { version = "4.3.0", optional = true }
 dotenv = "0.15.0"
 zip = "0.6"
 
+tracing-forest = { version = "0.1", features = [
+    "smallvec",
+    "tokio",
+    "serde",
+    "ansi", # This is for printing the ColorLevel in the events
+    # "uuid",  # This is for printing uuid for every request
+    # "chrono", # This is for printing the time of the event
+    # "env-filter",
+]}
+tracing = "0.1"
+tracing-subscriber = "0.3"
+
 #wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev = "45604f58336afaa23a79ed619ef50b69de473688" }
 #fpm-utils = { git = "https://github.com/ftd-lang/fpm-utils", rev = "0ce396db408b413f5a4eb6b2c5b87db3829cf879" }
 # fpm-utils = { path = "../fpm-utils/crates/fpm-utils-host"}

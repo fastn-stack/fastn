@@ -336,11 +336,13 @@ pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
     http_get_with_cookie(url, None, &std::collections::HashMap::new()).await
 }
 
+#[tracing::instrument(skip_all)]
 pub(crate) async fn http_get_with_cookie(
     url: &str,
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<Vec<u8>> {
+    tracing::info!(url = url);
     let mut req_headers = reqwest::header::HeaderMap::new();
     req_headers.insert(
         reqwest::header::USER_AGENT,
@@ -367,18 +369,16 @@ pub(crate) async fn http_get_with_cookie(
     let res = c.get(url).send().await?;
 
     if !res.status().eq(&reqwest::StatusCode::OK) {
-        eprintln!(
-            "http:failed status: {}, path: {}",
-            res.status().as_str(),
-            url
-        );
-        return Err(fpm::Error::APIResponseError(format!(
+        let message = format!(
             "url: {}, response_status: {}, response: {:?}",
             url,
             res.status(),
             res.text().await
-        )));
+        );
+        tracing::error!(url = url, msg = message);
+        return Err(fpm::Error::APIResponseError(message));
     }
+    tracing::info!(msg = "returning success", url = url);
     Ok(res.bytes().await?.into())
 }
 

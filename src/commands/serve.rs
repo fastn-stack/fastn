@@ -3,10 +3,17 @@ static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
 
 /// path: /-/<package-name>/<file-name>/
 /// path: /<file-name>/
+///
+#[tracing::instrument(skip_all)]
 async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::http::Response {
     let f = match config.get_file_and_package_by_id(path.as_str()).await {
         Ok(f) => f,
         Err(e) => {
+            tracing::error!(
+                msg = "fpm-error path not found",
+                path = path.as_str(),
+                error = %e
+            );
             return fpm::not_found!("FPM-Error: path: {}, {:?}", path, e);
         }
     };
@@ -21,10 +28,15 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
         match config.can_read(req, path.as_str(), true).await {
             Ok(can_read) => {
                 if !can_read {
+                    tracing::error!(
+                        msg = "unauthorized-error: can not read",
+                        path = path.as_str()
+                    );
                     return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(e) => {
+                tracing::error!(msg = "can_read-error", path = path.as_str());
                 return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, e);
             }
         };
@@ -32,10 +44,18 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
         match fpm::package::app::can_read(config, path.as_str()).await {
             Ok(can_read) => {
                 if !can_read {
+                    tracing::error!(
+                        msg = "unauthorized-error: can not access app",
+                        path = path.as_str()
+                    );
                     return fpm::unauthorised!("You are unauthorized to access: {}", path);
                 }
             }
             Err(err) => {
+                tracing::error!(
+                    msg = "app::can_read-error: can not access app",
+                    path = path.as_str()
+                );
                 return fpm::server_error!("FPM-Error: can_read error: {}, {:?}", path, err);
             }
         };
@@ -115,6 +135,7 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
     mime_guess::from_path(path).first_or_octet_stream()
 }
 
+#[tracing::instrument(skip_all)]
 async fn serve_fpm_file(config: &fpm::Config) -> fpm::http::Response {
     let response =
         match tokio::fs::read(config.get_root_for_package(&config.package).join("FPM.ftd")).await {
@@ -126,19 +147,27 @@ async fn serve_fpm_file(config: &fpm::Config) -> fpm::http::Response {
     fpm::http::ok_with_content_type(response, mime_guess::mime::APPLICATION_OCTET_STREAM)
 }
 
+#[tracing::instrument(skip_all)]
 async fn static_file(file_path: camino::Utf8PathBuf) -> fpm::http::Response {
     if !file_path.exists() {
+        tracing::error!(msg = "no such static file ({})", path = file_path.as_str());
         return fpm::not_found!("no such static file ({})", file_path);
     }
 
     match tokio::fs::read(file_path.as_path()).await {
         Ok(r) => fpm::http::ok_with_content_type(r, guess_mime_type(file_path.as_str())),
         Err(e) => {
+            tracing::error!(
+                msg = "file-system-error ({})",
+                path = file_path.as_str(),
+                error = e.to_string()
+            );
             fpm::not_found!("FPM-Error: path: {:?}, error: {:?}", file_path, e)
         }
     }
 }
 
+#[tracing::instrument(skip_all)]
 pub async fn serve(
     req: fpm::http::Request,
     edition: Option<String>,
@@ -148,47 +177,42 @@ pub async fn serve(
     inline_css: Vec<String>,
 ) -> fpm::Result<fpm::http::Response> {
     let _lock = LOCK.read().await;
-    let r = format!("{} {}", req.method(), req.path());
-    let t = fpm::time(r.as_str());
-    println!("{r} started");
-
     // TODO: remove unwrap
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse().unwrap();
     let favicon = camino::Utf8PathBuf::new().join("favicon.ico");
     let response = if path.eq(&favicon) {
         static_file(favicon).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("FPM.ftd")) {
-        let config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
+        let config = fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
             .add_edition(edition)?
             .add_external_js(external_js)
             .add_inline_js(inline_js)
             .add_external_css(external_css)
-            .add_inline_css(inline_css));
+            .add_inline_css(inline_css);
         serve_fpm_file(&config).await
     } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
-        let mut config = fpm::time("Config::read()")
-            .it(fpm::Config::read(None, false, Some(&req))
-                .await
-                .unwrap()
-                .add_edition(edition)?
-                .add_external_js(external_js)
-                .add_inline_js(inline_js)
-                .add_external_css(external_css)
-                .add_inline_css(inline_css))
-            .set_request(req);
+        let mut config = fpm::Config::read(None, false, Some(&req))
+            .await
+            .unwrap()
+            .add_edition(edition)?
+            .set_request(req)
+            .add_external_js(external_js)
+            .add_inline_js(inline_js)
+            .add_external_css(external_css)
+            .add_inline_css(inline_css);
 
         serve_file(&mut config, &path.join("/")).await
     } else if let Some(cr_number) = fpm::cr::get_cr_path_from_url(path.as_str()) {
-        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
+        let mut config = fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
             .add_edition(edition)?
             .add_external_js(external_js)
             .add_inline_js(inline_js)
             .add_external_css(external_css)
-            .add_inline_css(inline_css));
+            .add_inline_css(inline_css);
         serve_cr_file(&req, &mut config, &path, cr_number).await
     } else {
         // url is present in config or not
@@ -196,7 +220,7 @@ pub async fn serve(
 
         let req_method = req.method().to_string();
         let query_string = req.query_string().to_string();
-        let mut config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(&req))
+        let mut config = fpm::Config::read(None, false, Some(&req))
             .await
             .unwrap()
             .add_edition(edition)?
@@ -204,7 +228,7 @@ pub async fn serve(
             .add_inline_js(inline_js)
             .add_external_css(external_css)
             .add_inline_css(inline_css)
-            .set_request(req));
+            .set_request(req);
 
         // if start with -/ and mount-point exists so send redirect to mount-point
         // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
@@ -312,7 +336,7 @@ pub async fn serve(
 
         file_response
     };
-    t.it(Ok(response))
+    Ok(response)
 }
 
 pub(crate) async fn download_init_package(url: Option<String>) -> std::io::Result<()> {
@@ -433,11 +457,13 @@ struct AppData {
     inline_css: Vec<String>,
 }
 
+#[tracing::instrument(skip_all)]
 async fn route(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
     app_data: actix_web::web::Data<AppData>,
 ) -> fpm::Result<fpm::http::Response> {
+    tracing::info!(method = req.method().as_str(), uri = req.path());
     if req.path().starts_with("/auth/") {
         return fpm::auth::routes::handle_auth(
             req,
@@ -449,9 +475,7 @@ async fn route(
         )
         .await;
     }
-    //dbg!(req.cookies());
     let req = fpm::http::Request::from_actix(req, body);
-    dbg!(req.method(), req.path());
     match (req.method().to_lowercase().as_str(), req.path()) {
         ("post", "/-/sync/") if cfg!(feature = "remote") => sync(req).await,
         ("post", "/-/sync2/") if cfg!(feature = "remote") => sync2(req).await,
@@ -548,11 +572,28 @@ You can try without providing port, it will automatically pick unused port."#,
         tcp_listener.local_addr()?.port()
     );
 
+    tracing().await;
+    println!("### Configured tracing ###");
+
     actix_web::HttpServer::new(app)
         .listen(tcp_listener)?
         .run()
         .await?;
     Ok(())
+}
+
+async fn tracing() {
+    use tracing_subscriber::layer::SubscriberExt;
+    tracing_forest::worker_task()
+        .set_global(true)
+        .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
+            tracing_subscriber::Registry::default()
+                .with(tracing_forest::ForestLayer::default())
+                .with(tracing_forest::util::LevelFilter::INFO)
+        })
+        // .build_on(|subscriber| subscriber.with(tracing_forest::util::LevelFilter::INFO))
+        .on(async {}) // this statement is needed, without this logs are getting printed
+        .await;
 }
 
 // cargo install --features controller --path=.

@@ -128,8 +128,6 @@ pub async fn can_read(config: &fpm::Config, path: &str) -> fpm::Result<bool> {
         vec![]
     };
 
-    dbg!("app readers");
-    dbg!(&readers_groups);
     if readers_groups.is_empty() {
         return Ok(true);
     }

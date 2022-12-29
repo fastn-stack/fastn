@@ -119,6 +119,7 @@ pub async fn parse<'a>(
     Ok(document)
 }
 
+#[tracing::instrument(skip_all)]
 pub async fn interpret_helper<'a>(
     name: &str,
     source: &str,
@@ -126,6 +127,7 @@ pub async fn interpret_helper<'a>(
     base_url: &str,
     download_assets: bool,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
+    tracing::info!(document = name);
     let mut s = ftd::interpreter2::interpret(name, source)?;
     lib.module_package_map
         .insert(name.to_string(), lib.config.package.name.to_string());
