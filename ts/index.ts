@@ -79,7 +79,7 @@ window.ftd = (function() {
             }
 
             // @ts-ignore
-            exports.set_value(id, variable, value);
+            exports.set_value_by_id(id, variable, value);
         }
     }
 
@@ -96,10 +96,14 @@ window.ftd = (function() {
     }
 
     exports.set_bool = function (id, variable, value) {
-        window.ftd.set_value(id, variable, value);
+        window.ftd.set_value_by_id(id, variable, value);
     }
 
-    exports.set_value = function (id, variable, value) {
+    exports.set_value = function (variable, value) {
+        window.ftd.set_value_by_id("main", variable, value)
+    }
+
+    exports.set_value_by_id = function (id, variable, value) {
         let data = ftd_data[id];
 
         let [var_name, remaining] = get_name_and_remaining(variable);

@@ -16,7 +16,8 @@ declare global {
         set_string_for_all(variable: string, value: string): any;
         set_bool_for_all(variable: string, value: boolean): any;
         set_bool(id: string, variable: string, value: boolean): any;
-        set_value(id: string, variable: string, value: any): any;
+        set_value(variable: string, value: any): any;
+        set_value_by_id(id: string, variable: string, value: any): any;
         get_value(id: string, variable: string): any;
     }
 
