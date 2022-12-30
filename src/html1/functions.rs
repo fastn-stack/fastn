@@ -139,8 +139,19 @@ impl ExpressionGenerator {
 
         if let Some(function_name) = self.function_name(node.operator()) {
             let mut result = vec![];
-            for children in node.children() {
-                result.push(self.to_string(children, false, arguments));
+            if let Some(child) = node.children().first() {
+                for children in child.children() {
+                    let mut value = self.to_string(children, false, arguments);
+                    if self.is_tuple(children.operator()) {
+                        value = value
+                            .strip_prefix("(")
+                            .unwrap()
+                            .strip_suffix(")")
+                            .unwrap()
+                            .to_string();
+                    }
+                    result.push(value);
+                }
             }
             return format!("{}({})", function_name, result.join(","));
         }
