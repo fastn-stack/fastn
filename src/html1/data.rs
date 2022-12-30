@@ -52,22 +52,13 @@ impl<'a> DataGenerator<'a> {
                 Some(ftd::interpreter2::Value::String { text: value, .. }) => {
                     serde_json::to_value(value).ok()
                 }
-                Some(ftd::interpreter2::Value::Record { fields, name }) => {
+                Some(ftd::interpreter2::Value::Record { fields, .. }) => {
                     let mut value_fields = ftd::Map::new();
                     for (k, v) in fields {
                         if let Some(value) =
                             get_value(doc, &v.clone().resolve(doc, v.line_number())?)?
                         {
-                            if let Ok(pattern) = ftd::executor::Length::set_value_from_variant(
-                                name.as_str(),
-                                value.to_string().as_str(),
-                                doc.name,
-                                0,
-                            ) {
-                                value_fields.insert(k, serde_json::to_value(pattern).unwrap());
-                            } else {
-                                value_fields.insert(k, value);
-                            }
+                            value_fields.insert(k, value);
                         }
                     }
                     serde_json::to_value(value_fields).ok()
@@ -76,11 +67,27 @@ impl<'a> DataGenerator<'a> {
                     value,
                     variant,
                     full_variant,
+                    name,
                     ..
                 }) => {
                     let value = get_value(doc, &value.clone().resolve(doc, value.line_number())?)?;
                     match value {
-                        Some(value) if variant.ne(ftd::interpreter2::FTD_RESIZING_FIXED) => {
+                        Some(value) if name.eq(ftd::interpreter2::FTD_LENGTH) => {
+                            if let Ok(pattern) = ftd::executor::Length::set_value_from_variant(
+                                variant.as_str(),
+                                value.to_string().as_str(),
+                                doc.name,
+                                0,
+                            ) {
+                                serde_json::to_value(pattern).ok()
+                            } else {
+                                Some(value)
+                            }
+                        }
+                        Some(value)
+                            if name.eq(ftd::interpreter2::FTD_RESIZING_FIXED)
+                                && variant.ne(ftd::interpreter2::FTD_RESIZING_FIXED) =>
+                        {
                             if let Ok(pattern) = ftd::executor::Resizing::set_value_from_variant(
                                 variant.as_str(),
                                 full_variant.as_str(),

@@ -9,9 +9,7 @@
 "foo#flag": true,
 "foo#foo:align:1": "ftd#align.top-center",
 "foo#foo:px:1": 40,
-"foo#foo:resize:1": {
-"value": "50px"
-},
+"foo#foo:resize:1": "50px",
 "ftd#dark-mode": false,
 "ftd#desktop-breakpoint": 1440,
 "ftd#device": "desktop",
@@ -657,18 +655,18 @@ window.node_change_main["1:main__width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`!!({0}).value ? ({0}).value : ({0})`.format(JSONstringify(resolve_reference("foo#foo:resize:1", data))));
+document.querySelector(`[data-id="1:main"]`).style["width"] = resolve_reference("foo#foo:resize:1", data);
 }
-else {document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))})));}
+else {document.querySelector(`[data-id="1:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))));}
 }
 
 window.node_change_main["1,0:main__height"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1,0:main"]`).style["height"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))})));
+document.querySelector(`[data-id="1,0:main"]`).style["height"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))));
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["height"] = eval(`!!({0}).value ? ({0}).value : ({0})`.format(JSONstringify(resolve_reference("foo#foo:resize:1", data))));}
+else {document.querySelector(`[data-id="1,0:main"]`).style["height"] = resolve_reference("foo#foo:resize:1", data);}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
@@ -766,7 +764,7 @@ return resolve_reference("foo#flag", data);
 }()){
 set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSONstringify("ftd#resizing.hug-content")));
 }
-else {set_data_value(data, "foo#foo:resize:1", {"value": `{0}px`.format(JSONstringify(50))});}
+else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSONstringify(50)));}
 
 }
 window.ftd.init("main", "ftd-data", "ftd-external-children");

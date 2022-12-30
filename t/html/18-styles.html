@@ -633,7 +633,7 @@ window.node_change_main["1:main__border-top-left-radius"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}%`.format(JSONstringify(18))})));
+document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(18))));
 }
 else { document.querySelector(`[data-id="1:main"]`).style["border-top-left-radius"] = null; }
 }
@@ -641,7 +641,7 @@ window.node_change_main["2:main__padding-left"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["padding-left"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}%`.format(JSONstringify(10))})));
+document.querySelector(`[data-id="2:main"]`).style["padding-left"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(10))));
 }
 else { document.querySelector(`[data-id="2:main"]`).style["padding-left"] = null; }
 }
@@ -650,7 +650,7 @@ window.node_change_main["2:main__padding-right"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["padding-right"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}%`.format(JSONstringify(10))})));
+document.querySelector(`[data-id="2:main"]`).style["padding-right"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(10))));
 }
 else { document.querySelector(`[data-id="2:main"]`).style["padding-right"] = null; }
 }
@@ -658,36 +658,36 @@ window.node_change_main["3:main__border-bottom-width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(2))})));
+document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(4))})));}
+else {document.querySelector(`[data-id="3:main"]`).style["border-bottom-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
 }
 
 window.node_change_main["3:main__border-left-width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(2))})));
+document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(4))})));}
+else {document.querySelector(`[data-id="3:main"]`).style["border-left-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
 }
 
 window.node_change_main["3:main__border-right-width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(2))})));
+document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(4))})));}
+else {document.querySelector(`[data-id="3:main"]`).style["border-right-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
 }
 
 window.node_change_main["3:main__border-top-width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(2))})));
+document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(4))})));}
+else {document.querySelector(`[data-id="3:main"]`).style["border-top-width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(4))));}
 }
 
 window.node_change_main["3:main__flex-wrap"] = function(data) {
@@ -703,9 +703,9 @@ window.node_change_main["3:main__gap"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(40))})));
+document.querySelector(`[data-id="3:main"]`).style["gap"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(40))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["gap"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(20))})));}
+else {document.querySelector(`[data-id="3:main"]`).style["gap"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(20))));}
 }
 window.node_change_main["4:main__align-items"] = function(data) {
 if(function(){
@@ -819,7 +819,7 @@ return resolve_reference("foo#flag", data);
 }()){
 document.querySelector(`[data-id="6:main"]`).style["height"] = `100%`.format(JSONstringify(`100%`.format(JSONstringify("ftd#resizing.fill-container"))));
 }
-else {document.querySelector(`[data-id="6:main"]`).style["height"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}%`.format(JSONstringify(20))})));}
+else {document.querySelector(`[data-id="6:main"]`).style["height"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(20))));}
 }
 
 window.node_change_main["6:main__width"] = function(data) {
@@ -828,43 +828,43 @@ return resolve_reference("foo#flag", data);
 }()){
 document.querySelector(`[data-id="6:main"]`).style["width"] = `fit-content`.format(JSONstringify(`fit-content`.format(JSONstringify("ftd#resizing.hug-content"))));
 }
-else {document.querySelector(`[data-id="6:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(400))})));}
+else {document.querySelector(`[data-id="6:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(400))));}
 }
 window.node_change_main["8:main__width"] = function(data) {
 if(function(){
 return (resolve_reference("foo#num", data)%7==0);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(20))})));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==1);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}%`.format(JSONstringify(20))})));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==2);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `calc({0})`.format(JSONstringify("20"))})));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`calc({0})`.format(JSONstringify("20"))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==3);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}vh`.format(JSONstringify(20))})));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}vh`.format(JSONstringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==4);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}vw`.format(JSONstringify(20))})));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}vw`.format(JSONstringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==5);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}em`.format(JSONstringify(20))})));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}em`.format(JSONstringify(20))));
 }
 else if(function(){
 return (resolve_reference("foo#num", data)%7==6);
 }()){
-document.querySelector(`[data-id="8:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}rem`.format(JSONstringify(20))})));
+document.querySelector(`[data-id="8:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}rem`.format(JSONstringify(20))));
 }
 else { document.querySelector(`[data-id="8:main"]`).style["width"] = null; }
 }

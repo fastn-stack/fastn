@@ -178,11 +178,8 @@ pub(crate) fn dependencies_from_property_value(
         result
     } else if property_value.is_value() && property_value.kind().is_ftd_length() {
         let value = property_value.value("", 0).unwrap();
-        let fields = value.or_type_fields(doc, 0).unwrap();
-        dependencies_from_property_value(
-            fields.get(ftd::interpreter2::FTD_LENGTH_VALUE).unwrap(),
-            doc,
-        )
+        let property_value = value.get_or_type(doc.name, 0).unwrap().2;
+        dependencies_from_property_value(property_value, doc)
     } else if property_value.is_value() && property_value.kind().is_ftd_resizing_fixed() {
         let value = property_value.value("", 0).unwrap();
         let property_value = value
@@ -191,11 +188,8 @@ pub(crate) fn dependencies_from_property_value(
             .2;
         if property_value.is_value() && property_value.kind().is_ftd_length() {
             let value = property_value.value("", 0).unwrap();
-            let fields = value.or_type_fields(doc, 0).unwrap();
-            dependencies_from_property_value(
-                fields.get(ftd::interpreter2::FTD_LENGTH_VALUE).unwrap(),
-                doc,
-            )
+            let property_value = value.get_or_type(doc.name, 0).unwrap().2;
+            dependencies_from_property_value(property_value, doc)
         } else {
             vec![]
         }
@@ -298,11 +292,26 @@ impl ftd::interpreter2::Value {
                 value,
                 variant,
                 full_variant,
+                name,
                 ..
             } => {
                 let value = value.to_string(doc, field, id, string_needs_no_quotes)?;
                 match value {
-                    Some(value) if variant.ne(ftd::interpreter2::FTD_RESIZING_FIXED) => {
+                    Some(value) if name.eq(ftd::interpreter2::FTD_LENGTH) => {
+                        if let Ok(pattern) = ftd::executor::Length::set_pattern_from_variant_str(
+                            variant,
+                            doc.name,
+                            line_number,
+                        ) {
+                            Some(format!("`{}`.format(JSONstringify({}))", pattern, value))
+                        } else {
+                            Some(value)
+                        }
+                    }
+                    Some(value)
+                        if name.eq(ftd::interpreter2::FTD_RESIZING)
+                            && variant.ne(ftd::interpreter2::FTD_RESIZING_FIXED) =>
+                    {
                         if let Ok(pattern) = ftd::executor::Resizing::set_pattern_from_variant_str(
                             variant,
                             full_variant,
@@ -318,21 +327,13 @@ impl ftd::interpreter2::Value {
                     None => None,
                 }
             }
-            ftd::interpreter2::Value::Record { fields, name } => {
+            ftd::interpreter2::Value::Record { fields, .. } => {
                 let mut values = vec![];
                 for (k, v) in fields {
                     let value = if let Some(v) =
                         v.to_string(doc, field.clone(), id, string_needs_no_quotes)?
                     {
-                        if let Ok(pattern) = ftd::executor::Length::set_pattern_from_variant_str(
-                            name,
-                            doc.name,
-                            line_number,
-                        ) {
-                            format!("`{}`.format(JSONstringify({}))", pattern, v)
-                        } else {
-                            v
-                        }
+                        v
                     } else {
                         "null".to_string()
                     };

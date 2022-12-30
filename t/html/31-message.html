@@ -687,7 +687,7 @@ else { document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["color"] =
 }
 
 window.node_change_main["0,0,0,0,0,2,0:main__margin-top"] = function(data) {
-document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["margin-top"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#messageleft:pulltop:0,0,0", data)))})));
+document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["margin-top"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#messageleft:pulltop:0,0,0", data)))));
 }
 window.node_change_main["0,0,1,0,0,0:main__border-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
@@ -714,7 +714,7 @@ else { document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["color"] =
 }
 
 window.node_change_main["0,0,1,0,0,0,0:main__margin-top"] = function(data) {
-document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["margin-top"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#messageright:pulltop:0,0,1", data)))})));
+document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["margin-top"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#messageright:pulltop:0,0,1", data)))));
 }
 window.node_change_main["0,0,1,0,0,2:main__display"] = function(data) {
 if(function(){

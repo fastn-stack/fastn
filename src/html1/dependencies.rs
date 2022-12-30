@@ -466,14 +466,12 @@ fn is_static_expression(
             value, line_number, ..
         } = property_value
         {
-            if let Ok(fields) = value.or_type_fields(doc, *line_number) {
-                if !fields
-                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                    .map(|v| v.is_value())
-                    .unwrap_or(true)
-                {
-                    return false;
-                }
+            if !value
+                .get_or_type(doc.name, *line_number)
+                .map(|v| v.2.is_value())
+                .unwrap_or(false)
+            {
+                return false;
             }
         }
     }
@@ -489,14 +487,12 @@ fn is_static_expression(
                     value, line_number, ..
                 } = property_value
                 {
-                    if let Ok(fields) = value.or_type_fields(doc, *line_number) {
-                        if !fields
-                            .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                            .map(|v| v.is_value())
-                            .unwrap_or(true)
-                        {
-                            return false;
-                        }
+                    if !value
+                        .get_or_type(doc.name, *line_number)
+                        .map(|v| v.2.is_value())
+                        .unwrap_or(false)
+                    {
+                        return false;
                     }
                 }
             }

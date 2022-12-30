@@ -531,102 +531,67 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_LENGTH.to_string(),
                 variants: vec![
-                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
-                        name: ftd::interpreter2::FTD_LENGTH_PX.to_string(),
-                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
-                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
-                            kind: ftd::interpreter2::Kind::integer()
-                                .into_kind_data()
-                                .caption(),
-                            mutable: false,
-                            value: None,
-                            line_number: 0,
-                        }])
-                        .collect(),
-                        line_number: 0,
-                    }),
-                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
-                        name: ftd::interpreter2::FTD_LENGTH_PERCENT.to_string(),
-                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
-                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
-                            kind: ftd::interpreter2::Kind::decimal()
-                                .into_kind_data()
-                                .caption(),
-                            mutable: false,
-                            value: None,
-                            line_number: 0,
-                        }])
-                        .collect(),
-                        line_number: 0,
-                    }),
-                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
-                        name: ftd::interpreter2::FTD_LENGTH_CALC.to_string(),
-                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
-                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
-                            kind: ftd::interpreter2::Kind::string().into_kind_data().caption(),
-                            mutable: false,
-                            value: None,
-                            line_number: 0,
-                        }])
-                        .collect(),
-                        line_number: 0,
-                    }),
-                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
-                        name: ftd::interpreter2::FTD_LENGTH_VH.to_string(),
-                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
-                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
-                            kind: ftd::interpreter2::Kind::decimal()
-                                .into_kind_data()
-                                .caption(),
-                            mutable: false,
-                            value: None,
-                            line_number: 0,
-                        }])
-                        .collect(),
-                        line_number: 0,
-                    }),
-                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
-                        name: ftd::interpreter2::FTD_LENGTH_VW.to_string(),
-                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
-                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
-                            kind: ftd::interpreter2::Kind::decimal()
-                                .into_kind_data()
-                                .caption(),
-                            mutable: false,
-                            value: None,
-                            line_number: 0,
-                        }])
-                        .collect(),
-                        line_number: 0,
-                    }),
-                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
-                        name: ftd::interpreter2::FTD_LENGTH_EM.to_string(),
-                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
-                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
-                            kind: ftd::interpreter2::Kind::decimal()
-                                .into_kind_data()
-                                .caption(),
-                            mutable: false,
-                            value: None,
-                            line_number: 0,
-                        }])
-                        .collect(),
-                        line_number: 0,
-                    }),
-                    ftd::interpreter2::OrTypeVariant::new_record(ftd::interpreter2::Record {
-                        name: ftd::interpreter2::FTD_LENGTH_REM.to_string(),
-                        fields: std::iter::IntoIterator::into_iter([ftd::interpreter2::Field {
-                            name: ftd::interpreter2::FTD_LENGTH_VALUE.to_string(),
-                            kind: ftd::interpreter2::Kind::decimal()
-                                .into_kind_data()
-                                .caption(),
-                            mutable: false,
-                            value: None,
-                            line_number: 0,
-                        }])
-                        .collect(),
-                        line_number: 0,
-                    }),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LENGTH_PX,
+                        ftd::interpreter2::Kind::integer()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LENGTH_PERCENT,
+                        ftd::interpreter2::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LENGTH_CALC,
+                        ftd::interpreter2::Kind::string().into_kind_data().caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LENGTH_VH,
+                        ftd::interpreter2::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LENGTH_VW,
+                        ftd::interpreter2::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LENGTH_EM,
+                        ftd::interpreter2::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LENGTH_REM,
+                        ftd::interpreter2::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
                 ],
                 line_number: 0,
             }),

@@ -83,7 +83,7 @@ impl ftd::interpreter2::Kind {
             } if name.eq(ftd::interpreter2::FTD_LENGTH) => {
                 ftd::executor::Length::get_pattern_from_variant_str(variant.as_str(), doc_id, 0)
                     .ok()
-                    .map(|v| (v.to_string(), true))
+                    .map(|v| (v.to_string(), false))
             }
             ftd::interpreter2::Kind::OrType {
                 name,
@@ -98,16 +98,6 @@ impl ftd::interpreter2::Kind {
                 )
                 .ok()
                 .map(|v| (v.0.to_string(), v.1))
-            }
-            ftd::interpreter2::Kind::OrType { name, .. }
-                if name.eq(ftd::interpreter2::FTD_LENGTH) =>
-            {
-                Some(("!!({0}).value ? ({0}).value : ({0})".to_string(), true))
-            }
-            ftd::interpreter2::Kind::OrType { name, .. }
-                if name.eq(ftd::interpreter2::FTD_RESIZING) =>
-            {
-                Some(("!!({0}).value ? ({0}).value : ({0})".to_string(), true))
             }
             _ => None,
         }

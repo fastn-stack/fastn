@@ -143,12 +143,7 @@ impl ExpressionGenerator {
                 for children in child.children() {
                     let mut value = self.to_string(children, false, arguments);
                     if self.is_tuple(children.operator()) {
-                        value = value
-                            .strip_prefix("(")
-                            .unwrap()
-                            .strip_suffix(")")
-                            .unwrap()
-                            .to_string();
+                        value = value[1..value.len() - 1].to_string();
                     }
                     result.push(value);
                 }

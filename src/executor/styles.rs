@@ -39,21 +39,11 @@ impl Length {
                     .1
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
-                    .record_fields(doc.name, line_number)?
-                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                    .unwrap()
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
                     .decimal(doc.name, line_number)?,
             )),
             ftd::interpreter2::FTD_LENGTH_PX => Ok(Length::Px(
                 or_type_value
                     .1
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
-                    .record_fields(doc.name, line_number)?
-                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                    .unwrap()
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
                     .integer(doc.name, line_number)?,
@@ -63,21 +53,11 @@ impl Length {
                     .1
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
-                    .record_fields(doc.name, line_number)?
-                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                    .unwrap()
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
                     .string(doc.name, line_number)?,
             )),
             ftd::interpreter2::FTD_LENGTH_VH => Ok(Length::Vh(
                 or_type_value
                     .1
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
-                    .record_fields(doc.name, line_number)?
-                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                    .unwrap()
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
                     .decimal(doc.name, line_number)?,
@@ -87,11 +67,6 @@ impl Length {
                     .1
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
-                    .record_fields(doc.name, line_number)?
-                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                    .unwrap()
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
                     .decimal(doc.name, line_number)?,
             )),
             ftd::interpreter2::FTD_LENGTH_EM => Ok(Length::Em(
@@ -99,21 +74,11 @@ impl Length {
                     .1
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
-                    .record_fields(doc.name, line_number)?
-                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                    .unwrap()
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
                     .decimal(doc.name, line_number)?,
             )),
             ftd::interpreter2::FTD_LENGTH_REM => Ok(Length::Rem(
                 or_type_value
                     .1
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
-                    .record_fields(doc.name, line_number)?
-                    .get(ftd::interpreter2::FTD_LENGTH_VALUE)
-                    .unwrap()
                     .clone()
                     .resolve(&doc.itdoc(), line_number)?
                     .decimal(doc.name, line_number)?,
@@ -197,7 +162,7 @@ impl Length {
             | ftd::interpreter2::FTD_LENGTH_VH
             | ftd::interpreter2::FTD_LENGTH_VW
             | ftd::interpreter2::FTD_LENGTH_EM
-            | ftd::interpreter2::FTD_LENGTH_REM => Ok("({0}).value"),
+            | ftd::interpreter2::FTD_LENGTH_REM => Ok("{0}"),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.length: `{}`", t),
                 doc_id,
@@ -636,7 +601,7 @@ impl Resizing {
                 let variant = format!("{}.{}", ftd::interpreter2::FTD_LENGTH, remaining);
                 Ok((
                     Length::get_pattern_from_variant_str(variant.as_str(), doc_id, line_number)?,
-                    true,
+                    false,
                 ))
             }
             ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok(("100%", false)),
