@@ -1,5 +1,10 @@
 # FTD Change Log
 
+## 30th December 2022
+
+- [FTD.LENGTH VARIANT FROM RECORD TO REGULAR](https://github.com/ftd-lang/ftd/commit/c4e7e591e515c5dfef1647e3f447e77a2f94c538)
+- [Added set_value_by_id in js](https://github.com/ftd-lang/ftd/commit/e6f65267cbe57888e0fd510dd15bb56032bf8e7a)
+
 ## 29th December 2022
 
 - Added CSS and JS

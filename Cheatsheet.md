@@ -329,26 +329,19 @@ This is a body text.
 ```ftd
 -- or-type length:
 
--- record px:
-caption integer value:
+-- integer px:
 
--- record percent:
-caption decimal value:
+-- decimal percent:
 
--- record calc:
-caption value:
+-- string calc:
 
--- record vh:
-caption integer value:
+-- integer vh:
 
--- record vw:
-caption integer value:
+-- integer vw:
 
--- record em:
-caption decimal value:
+-- decimal em:
 
--- record rem:
-caption decimal value:
+-- decimal rem:
 
 -- end: length
 ```
