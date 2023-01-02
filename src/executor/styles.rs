@@ -1284,3 +1284,168 @@ impl TextAlign {
         }
     }
 }
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum Cursor {
+    Default,
+    None,
+    ContextMenu,
+    Help,
+    Pointer,
+    Progress,
+    Wait,
+    Cell,
+    CrossHair,
+    Text,
+    VerticalText,
+    Alias,
+    Copy,
+    Move,
+    NoDrop,
+    NotAllowed,
+    Grab,
+    Grabbing,
+    EResize,
+    NResize,
+    NeResize,
+    NwResize,
+    SResize,
+    SeResize,
+    SwResize,
+    WResize,
+    EwResize,
+    NsResize,
+    NeswResize,
+    NwseResize,
+    ColResize,
+    RowResize,
+    AllScroll,
+    ZoomIn,
+    ZoomOut,
+}
+
+impl Cursor {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(Cursor::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_CURSOR_DEFAULT => Ok(Cursor::Default),
+            ftd::interpreter2::FTD_CURSOR_NONE => Ok(Cursor::None),
+            ftd::interpreter2::FTD_CURSOR_CONTEXT_MENU => Ok(Cursor::ContextMenu),
+            ftd::interpreter2::FTD_CURSOR_HELP => Ok(Cursor::Help),
+            ftd::interpreter2::FTD_CURSOR_POINTER => Ok(Cursor::Pointer),
+            ftd::interpreter2::FTD_CURSOR_PROGRESS => Ok(Cursor::Progress),
+            ftd::interpreter2::FTD_CURSOR_WAIT => Ok(Cursor::Wait),
+            ftd::interpreter2::FTD_CURSOR_CELL => Ok(Cursor::Cell),
+            ftd::interpreter2::FTD_CURSOR_CROSSHAIR => Ok(Cursor::CrossHair),
+            ftd::interpreter2::FTD_CURSOR_TEXT => Ok(Cursor::Text),
+            ftd::interpreter2::FTD_CURSOR_VERTICAL_TEXT => Ok(Cursor::VerticalText),
+            ftd::interpreter2::FTD_CURSOR_ALIAS => Ok(Cursor::Alias),
+            ftd::interpreter2::FTD_CURSOR_COPY => Ok(Cursor::Copy),
+            ftd::interpreter2::FTD_CURSOR_MOVE => Ok(Cursor::Move),
+            ftd::interpreter2::FTD_CURSOR_NO_DROP => Ok(Cursor::NoDrop),
+            ftd::interpreter2::FTD_CURSOR_NOT_ALLOWED => Ok(Cursor::NotAllowed),
+            ftd::interpreter2::FTD_CURSOR_GRAB => Ok(Cursor::Grab),
+            ftd::interpreter2::FTD_CURSOR_GRABBING => Ok(Cursor::Grabbing),
+            ftd::interpreter2::FTD_CURSOR_E_RESIZE => Ok(Cursor::EResize),
+            ftd::interpreter2::FTD_CURSOR_N_RESIZE => Ok(Cursor::NResize),
+            ftd::interpreter2::FTD_CURSOR_NE_RESIZE => Ok(Cursor::NeResize),
+            ftd::interpreter2::FTD_CURSOR_NW_RESIZE => Ok(Cursor::NwResize),
+            ftd::interpreter2::FTD_CURSOR_S_RESIZE => Ok(Cursor::SResize),
+            ftd::interpreter2::FTD_CURSOR_SE_RESIZE => Ok(Cursor::SeResize),
+            ftd::interpreter2::FTD_CURSOR_SW_RESIZE => Ok(Cursor::SwResize),
+            ftd::interpreter2::FTD_CURSOR_W_RESIZE => Ok(Cursor::WResize),
+            ftd::interpreter2::FTD_CURSOR_EW_RESIZE => Ok(Cursor::EwResize),
+            ftd::interpreter2::FTD_CURSOR_NS_RESIZE => Ok(Cursor::NsResize),
+            ftd::interpreter2::FTD_CURSOR_NESW_RESIZE => Ok(Cursor::NeswResize),
+            ftd::interpreter2::FTD_CURSOR_NWSE_RESIZE => Ok(Cursor::NwseResize),
+            ftd::interpreter2::FTD_CURSOR_COL_RESIZE => Ok(Cursor::ColResize),
+            ftd::interpreter2::FTD_CURSOR_ROW_RESIZE => Ok(Cursor::RowResize),
+            ftd::interpreter2::FTD_CURSOR_ALL_SCROLL => Ok(Cursor::AllScroll),
+            ftd::interpreter2::FTD_CURSOR_ZOOM_IN => Ok(Cursor::ZoomIn),
+            ftd::interpreter2::FTD_CURSOR_ZOOM_OUT => Ok(Cursor::ZoomOut),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.align-self`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_cursor(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Cursor>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_CURSOR,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Cursor::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            Cursor::Default => "default".to_string(),
+            Cursor::None => "none".to_string(),
+            Cursor::ContextMenu => "context-menu".to_string(),
+            Cursor::Help => "help".to_string(),
+            Cursor::Pointer => "pointer".to_string(),
+            Cursor::Progress => "progress".to_string(),
+            Cursor::Wait => "wait".to_string(),
+            Cursor::Cell => "cell".to_string(),
+            Cursor::CrossHair => "crosshair".to_string(),
+            Cursor::Text => "text".to_string(),
+            Cursor::VerticalText => "vertical-text".to_string(),
+            Cursor::Alias => "alias".to_string(),
+            Cursor::Copy => "copy".to_string(),
+            Cursor::Move => "move".to_string(),
+            Cursor::NoDrop => "no-drop".to_string(),
+            Cursor::NotAllowed => "not-allowed".to_string(),
+            Cursor::Grab => "grab".to_string(),
+            Cursor::Grabbing => "grabbing".to_string(),
+            Cursor::EResize => "e-resize".to_string(),
+            Cursor::NResize => "n-resize".to_string(),
+            Cursor::NeResize => "ne-resize".to_string(),
+            Cursor::NwResize => "nw-resize".to_string(),
+            Cursor::SResize => "s-resize".to_string(),
+            Cursor::SeResize => "se-resize".to_string(),
+            Cursor::SwResize => "sw-resize".to_string(),
+            Cursor::WResize => "w-resize".to_string(),
+            Cursor::EwResize => "ew-resize".to_string(),
+            Cursor::NsResize => "ns-resize".to_string(),
+            Cursor::NeswResize => "nesw-resize".to_string(),
+            Cursor::NwseResize => "nwse-resize".to_string(),
+            Cursor::ColResize => "col-resize".to_string(),
+            Cursor::RowResize => "row-resize".to_string(),
+            Cursor::AllScroll => "all-scroll".to_string(),
+            Cursor::ZoomIn => "zoom-in".to_string(),
+            Cursor::ZoomOut => "zoom-out".to_string(),
+        }
+    }
+}

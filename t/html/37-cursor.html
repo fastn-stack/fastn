@@ -6,11 +6,7 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#new-src": "https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png",
-"foo#src": {
-"dark": "https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png",
-"light": "https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"
-},
+"foo#num": 0,
 "ftd#dark-mode": false,
 "ftd#desktop-breakpoint": 1440,
 "ftd#device": "desktop",
@@ -102,7 +98,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">false</div><img data-id="1:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle_dark_mode___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;ftd#dark-mode&quot;}}}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" ></img><img data-id="2:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; text-decoration: none; width: fit-content" ></img><img data-id="3:main" src="https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; text-decoration: none; width: fit-content" ></img></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}}}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Click here and move cursor in red area</div><div data-id="1:main" style="align-items: start; background-color: rgba(255,0,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: default; display: flex; flex-direction: column; height: 200px; justify-content: start; text-decoration: none; width: 200px" ></div></div>
 
 
 <script>
@@ -723,34 +719,201 @@ return f;
 
 
 
-function foo__toggle_dark_mode___main(a){
-a.value = !a.value
+function foo__increment___main(a){
+return (a.value += 1);
 }
 
 
 
 
 window.node_change_main = {};
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("ftd#dark-mode", data);
+window.node_change_main["1:main__cursor"] = function(data) {
+if(function(){
+return (resolve_reference("foo#num", data)%35==0);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "default";
 }
-window.node_change_main["1:main__src"] = function(data) {
-if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1:main"]`).setAttribute("src", resolve_reference("foo#src", data).light);
+else if(function(){
+return (resolve_reference("foo#num", data)%35==1);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "none";
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1:main"]`).setAttribute("src", resolve_reference("foo#src", data).dark);
+else if(function(){
+return (resolve_reference("foo#num", data)%35==2);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "context-menu";
 }
+else if(function(){
+return (resolve_reference("foo#num", data)%35==3);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "help";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==4);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "pointer";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==5);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "progress";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==6);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "wait";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==7);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "cell";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==8);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "crosshair";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==9);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "text";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==10);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "vertical-text";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==11);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "alias";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==12);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "copy";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==13);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "move";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==14);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "no-drop";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==15);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "not-allowed";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==16);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "grab";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==17);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "grabbing";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==18);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "e-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==19);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "n-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==20);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "ne-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==21);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "nw-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==22);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "s-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==23);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "se-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==24);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "sw-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==25);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "w-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==26);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "ew-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==27);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "ns-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==28);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "nesw-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==29);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "nwse-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==30);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "col-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==31);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "row-resize";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==32);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "all-scroll";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==33);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "zoom-in";
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%35==34);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["cursor"] = "zoom-out";
+}
+else { document.querySelector(`[data-id="1:main"]`).style["cursor"] = null; }
 }
 window.set_value_main = {};
-window.set_value_main["foo#src"] = function (data, new_value, remaining) {
+window.set_value_main["foo#num"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#src" + "." + remaining, new_value);
+set_data_value(data, "foo#num" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#src", new_value);
+set_data_value(data, "foo#num", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__src"]){window.node_change_main["1:main__src"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__cursor"]){window.node_change_main["1:main__cursor"](data);
 }
 };
 
@@ -761,13 +924,7 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__src"]){window.node_change_main["1:main__src"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__src"]){window.node_change_main["2:main__src"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__src"]){window.node_change_main["3:main__src"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
 }
 };
 

@@ -542,6 +542,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "cursor": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "classes": {
                         "value": [],
                         "line_number": null,
@@ -839,6 +844,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "cursor": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "classes": {
                                 "value": [],
                                 "line_number": null,
@@ -1078,6 +1088,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "cursor": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "classes": {
                         "value": [],
                         "line_number": null,
@@ -1375,6 +1390,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "cursor": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "classes": {
                                 "value": [],
                                 "line_number": null,
@@ -1672,6 +1692,11 @@
                                       "is_not_visible": false,
                                       "event": [],
                                       "is_dummy": false,
+                                      "cursor": {
+                                        "value": null,
+                                        "line_number": null,
+                                        "properties": []
+                                      },
                                       "classes": {
                                         "value": [],
                                         "line_number": null,
@@ -1911,6 +1936,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "cursor": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "classes": {
                                 "value": [],
                                 "line_number": null,
@@ -2150,6 +2180,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "cursor": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "classes": {
                         "value": [],
                         "line_number": null,
@@ -2389,6 +2424,11 @@
               "is_not_visible": false,
               "event": [],
               "is_dummy": false,
+              "cursor": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "classes": {
                 "value": [],
                 "line_number": null,
@@ -2628,6 +2668,11 @@
       "is_not_visible": false,
       "event": [],
       "is_dummy": false,
+      "cursor": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "classes": {
         "value": [],
         "line_number": null,

@@ -1,0 +1,52 @@
+-- integer $num: 0
+
+-- ftd.text: Click here and move cursor in red area
+$on-click$: $increment($a = $num)
+
+-- ftd.column:
+width.fixed.px: 200
+height.fixed.px: 200
+background.solid: red
+cursor if { num % 35 == 0 }: default
+cursor if { num % 35 == 1 }: none
+cursor if { num % 35 == 2 }: context-menu
+cursor if { num % 35 == 3 }: help
+cursor if { num % 35 == 4 }: pointer
+cursor if { num % 35 == 5 }: progress
+cursor if { num % 35 == 6 }: wait
+cursor if { num % 35 == 7 }: cell
+cursor if { num % 35 == 8 }: crosshair
+cursor if { num % 35 == 9 }: text
+cursor if { num % 35 == 10 }: vertical-text
+cursor if { num % 35 == 11 }: alias
+cursor if { num % 35 == 12 }: copy
+cursor if { num % 35 == 13 }: move
+cursor if { num % 35 == 14 }: no-drop
+cursor if { num % 35 == 15 }: not-allowed
+cursor if { num % 35 == 16 }: grab
+cursor if { num % 35 == 17 }: grabbing
+cursor if { num % 35 == 18 }: e-resize
+cursor if { num % 35 == 19 }: n-resize
+cursor if { num % 35 == 20 }: ne-resize
+cursor if { num % 35 == 21 }: nw-resize
+cursor if { num % 35 == 22 }: s-resize
+cursor if { num % 35 == 23 }: se-resize
+cursor if { num % 35 == 24 }: sw-resize
+cursor if { num % 35 == 25 }: w-resize
+cursor if { num % 35 == 26 }: ew-resize
+cursor if { num % 35 == 27 }: ns-resize
+cursor if { num % 35 == 28 }: nesw-resize
+cursor if { num % 35 == 29 }: nwse-resize
+cursor if { num % 35 == 30 }: col-resize
+cursor if { num % 35 == 31 }: row-resize
+cursor if { num % 35 == 32 }: all-scroll
+cursor if { num % 35 == 33 }: zoom-in
+cursor if { num % 35 == 34 }: zoom-out
+
+-- end: ftd.column
+
+
+-- void increment(a):
+integer $a:
+
+a += 1

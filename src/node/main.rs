@@ -388,6 +388,10 @@ impl ftd::executor::Common {
 
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
+        if !self.event.is_empty() {
+            d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
+        }
+
         d.check_and_insert("text-decoration", ftd::node::Value::from_string("none"));
 
         if self.is_not_visible {
@@ -521,6 +525,19 @@ impl ftd::executor::Common {
                     .map(|v| v.map(|v| v.to_css_string()))
                     .value,
                 self.border_color.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "cursor",
+            ftd::node::Value::from_executor_value(
+                self.cursor
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.cursor.to_owned(),
                 None,
                 doc_id,
             ),
