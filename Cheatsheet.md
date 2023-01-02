@@ -429,7 +429,54 @@ string dark: $color.light
 -- end: overflow
 ```
 
-- `classes`: string list (class are created in css)
+- `cursor`: `optional ftd.cursor`
+
+
+**`ftd.cursor`**
+
+```ftd
+-- or-type cursor:
+
+-- constant string default: default
+-- constant string none: none
+-- constant string context-menu: context-menu
+-- constant string help: help
+-- constant string pointer: pointer
+-- constant string progress: progress
+-- constant string wait: wait
+-- constant string cell: cell
+-- constant string crosshair: crosshair
+-- constant string text: text
+-- constant string vertical-text: vertical-text
+-- constant string alias: alias
+-- constant string copy: copy
+-- constant string move: move
+-- constant string no-drop: no-drop
+-- constant string not-allowed: not-allowed
+-- constant string grab: grab
+-- constant string grabbing: grabbing
+-- constant string e-resize: e-resize
+-- constant string n-resize: n-resize
+-- constant string ne-resize: ne-resize
+-- constant string nw-resize: nw-resize
+-- constant string s-resize: s-resize
+-- constant string se-resize: se-resize
+-- constant string sw-resize: sw-resize
+-- constant string w-resize: w-resize
+-- constant string ew-resize: ew-resize
+-- constant string ns-resize: ns-resize
+-- constant string nesw-resize: nesw-resize
+-- constant string nwse-resize: nwse-resize
+-- constant string col-resize: col-resize
+-- constant string row-resize: row-resize
+-- constant string all-scroll: all-scroll
+-- constant string zoom-in: zoom-in
+-- constant string zoom-out: zoom-out
+
+-- end: cursor
+```
+
+- `classes`: string list (classes are created in css)
 
 
 ## Container Attributes

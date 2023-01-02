@@ -2,6 +2,7 @@
 
 ## 2nd December 2023
 
+- [Added cursor property and cursor as pointer in event](https://github.com/ftd-lang/ftd/commit/64aa657a13ab24d932d56a2ddf9bcb77982a7752)
 - [Added http and copy_to_clipboard in build.js](https://github.com/ftd-lang/ftd/commit/7eb9e879ff94ced3ed53d7d1584d63975b1a6b2f)
 
 
