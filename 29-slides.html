@@ -193,7 +193,7 @@ if (!ftd_data.hasOwnProperty(id)) {
 continue;
 }
 // @ts-ignore
-exports.set_value(id, variable, value);
+exports.set_value_by_id(id, variable, value);
 }
 };
 exports.set_bool_for_all = function (variable, value) {
@@ -206,9 +206,12 @@ exports.set_bool(id, variable, value);
 }
 };
 exports.set_bool = function (id, variable, value) {
-window.ftd.set_value(id, variable, value);
+window.ftd.set_value_by_id(id, variable, value);
 };
-exports.set_value = function (id, variable, value) {
+exports.set_value = function (variable, value) {
+window.ftd.set_value_by_id("main", variable, value);
+};
+exports.set_value_by_id = function (id, variable, value) {
 let data = ftd_data[id];
 let [var_name, remaining] = get_name_and_remaining(variable);
 if (data[var_name] === undefined) {
@@ -628,6 +631,13 @@ a.value = false;
 
 
 window.node_change_main = {};
+window.node_change_main["0:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).light;
+}
+else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).dark;}
+}
+
 window.node_change_main["0,0:main__display"] = function(data) {
 if(function(){
 return resolve_reference("foo#presentation:show:0", data);
@@ -635,6 +645,13 @@ return resolve_reference("foo#presentation:show:0", data);
 document.querySelector(`[data-id="0,0:main"]`).style["display"] = "flex";
 }
 else {document.querySelector(`[data-id="0,0:main"]`).style["display"] = "none";}
+}
+
+window.node_change_main["0,0:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).light;
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).dark;}
 }
 window.set_value_main = {};
 window.set_value_main["foo#presentation:show:0"] = function (data, new_value, remaining) {

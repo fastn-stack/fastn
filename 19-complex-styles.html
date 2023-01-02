@@ -9,9 +9,7 @@
 "foo#flag": true,
 "foo#foo:align:1": "ftd#align.top-center",
 "foo#foo:px:1": 40,
-"foo#foo:resize:1": {
-"value": "50px"
-},
+"foo#foo:resize:1": "50px",
 "ftd#dark-mode": false,
 "ftd#desktop-breakpoint": 1440,
 "ftd#device": "desktop",
@@ -189,7 +187,7 @@ if (!ftd_data.hasOwnProperty(id)) {
 continue;
 }
 // @ts-ignore
-exports.set_value(id, variable, value);
+exports.set_value_by_id(id, variable, value);
 }
 };
 exports.set_bool_for_all = function (variable, value) {
@@ -202,9 +200,12 @@ exports.set_bool(id, variable, value);
 }
 };
 exports.set_bool = function (id, variable, value) {
-window.ftd.set_value(id, variable, value);
+window.ftd.set_value_by_id(id, variable, value);
 };
-exports.set_value = function (id, variable, value) {
+exports.set_value = function (variable, value) {
+window.ftd.set_value_by_id("main", variable, value);
+};
+exports.set_value_by_id = function (id, variable, value) {
 let data = ftd_data[id];
 let [var_name, remaining] = get_name_and_remaining(variable);
 if (data[var_name] === undefined) {
@@ -654,18 +655,18 @@ window.node_change_main["1:main__width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`!!({0}).value ? ({0}).value : ({0})`.format(JSONstringify(resolve_reference("foo#foo:resize:1", data))));
+document.querySelector(`[data-id="1:main"]`).style["width"] = resolve_reference("foo#foo:resize:1", data);
 }
-else {document.querySelector(`[data-id="1:main"]`).style["width"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))})));}
+else {document.querySelector(`[data-id="1:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))));}
 }
 
 window.node_change_main["1,0:main__height"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1,0:main"]`).style["height"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))})));
+document.querySelector(`[data-id="1,0:main"]`).style["height"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))));
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["height"] = eval(`!!({0}).value ? ({0}).value : ({0})`.format(JSONstringify(resolve_reference("foo#foo:resize:1", data))));}
+else {document.querySelector(`[data-id="1,0:main"]`).style["height"] = resolve_reference("foo#foo:resize:1", data);}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
@@ -689,13 +690,13 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:res
 let value = resolve_reference("foo#flag", data);
 set_data_value(data, "foo#foo:resize:1", value);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
 }
 };
 
@@ -706,9 +707,9 @@ set_data_value(data, "foo#foo:align:1" + "." + remaining, new_value);
 set_data_value(data, "foo#foo:align:1", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__align-items"]){window.node_change_main["1:main__align-items"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__justify-content"]){window.node_change_main["1:main__justify-content"](data);
 }
 };
 
@@ -719,9 +720,9 @@ set_data_value(data, "foo#foo:px:1" + "." + remaining, new_value);
 set_data_value(data, "foo#foo:px:1", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__width"]){window.node_change_main["1:main__width"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);
 }
 };
 
@@ -739,15 +740,6 @@ if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]
 };
 
 window.resolve_value_main = {};
-window.resolve_value_main["foo#foo:align:1"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-set_data_value(data, "foo#foo:align:1", "ftd#align.top-left");
-}
-else {set_data_value(data, "foo#foo:align:1", "ftd#align.top-center");}
-
-}
 window.resolve_value_main["foo#foo:px:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
@@ -763,7 +755,16 @@ return resolve_reference("foo#flag", data);
 }()){
 set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSONstringify("ftd#resizing.hug-content")));
 }
-else {set_data_value(data, "foo#foo:resize:1", {"value": `{0}px`.format(JSONstringify(50))});}
+else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSONstringify(50)));}
+
+}
+window.resolve_value_main["foo#foo:align:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:align:1", "ftd#align.top-left");
+}
+else {set_data_value(data, "foo#foo:align:1", "ftd#align.top-center");}
 
 }
 window.ftd.init("main", "ftd-data", "ftd-external-children");

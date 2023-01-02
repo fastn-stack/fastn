@@ -213,7 +213,7 @@ if (!ftd_data.hasOwnProperty(id)) {
 continue;
 }
 // @ts-ignore
-exports.set_value(id, variable, value);
+exports.set_value_by_id(id, variable, value);
 }
 };
 exports.set_bool_for_all = function (variable, value) {
@@ -226,9 +226,12 @@ exports.set_bool(id, variable, value);
 }
 };
 exports.set_bool = function (id, variable, value) {
-window.ftd.set_value(id, variable, value);
+window.ftd.set_value_by_id(id, variable, value);
 };
-exports.set_value = function (id, variable, value) {
+exports.set_value = function (variable, value) {
+window.ftd.set_value_by_id("main", variable, value);
+};
+exports.set_value_by_id = function (id, variable, value) {
 let data = ftd_data[id];
 let [var_name, remaining] = get_name_and_remaining(variable);
 if (data[var_name] === undefined) {
@@ -642,6 +645,13 @@ return f;
 
 
 window.node_change_main = {};
+window.node_change_main["0:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).light;
+}
+else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).dark;}
+}
+
 window.node_change_main["0,0,0,0,0,1:main__display"] = function(data) {
 if(function(){
 return resolve_reference("foo#messageleft:roundavatar:0,0,0", data);
@@ -663,10 +673,7 @@ window.node_change_main["0,0,0,0,0,2:main__border-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,0,0,0,2:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).light;
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,0,0,2:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).dark;
-}
-else { document.querySelector(`[data-id="0,0,0,0,0,2:main"]`).style["border-color"] = null; }
+else {document.querySelector(`[data-id="0,0,0,0,0,2:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).dark;}
 }
 
 window.node_change_main["0,0,0,0,0,2,0:main__text"] = function(data) {
@@ -677,23 +684,17 @@ window.node_change_main["0,0,0,0,0,2,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data).light;
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;
-}
-else { document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["color"] = null; }
+else {document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;}
 }
 
 window.node_change_main["0,0,0,0,0,2,0:main__margin-top"] = function(data) {
-document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["margin-top"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#messageleft:pulltop:0,0,0", data)))})));
+document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["margin-top"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#messageleft:pulltop:0,0,0", data)))));
 }
 window.node_change_main["0,0,1,0,0,0:main__border-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,1,0,0,0:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).light;
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,1,0,0,0:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).dark;
-}
-else { document.querySelector(`[data-id="0,0,1,0,0,0:main"]`).style["border-color"] = null; }
+else {document.querySelector(`[data-id="0,0,1,0,0,0:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).dark;}
 }
 
 window.node_change_main["0,0,1,0,0,0,0:main__text"] = function(data) {
@@ -704,14 +705,11 @@ window.node_change_main["0,0,1,0,0,0,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data).light;
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;
-}
-else { document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["color"] = null; }
+else {document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;}
 }
 
 window.node_change_main["0,0,1,0,0,0,0:main__margin-top"] = function(data) {
-document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["margin-top"] = eval(`({0}).value`.format(JSONstringify({"value": `{0}px`.format(JSONstringify(resolve_reference("foo#messageright:pulltop:0,0,1", data)))})));
+document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["margin-top"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#messageright:pulltop:0,0,1", data)))));
 }
 window.node_change_main["0,0,1,0,0,2:main__display"] = function(data) {
 if(function(){
@@ -738,9 +736,9 @@ set_data_value(data, "foo#border-color" + "." + remaining, new_value);
 set_data_value(data, "foo#border-color", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,0,0:main__border-color"]){window.node_change_main["0,0,1,0,0,0:main__border-color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0,2:main__border-color"]){window.node_change_main["0,0,0,0,0,2:main__border-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,0,0:main__border-color"]){window.node_change_main["0,0,1,0,0,0:main__border-color"](data);
 }
 };
 
@@ -839,9 +837,9 @@ set_data_value(data, "foo#text" + "." + remaining, new_value);
 set_data_value(data, "foo#text", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0,2,0:main__color"]){window.node_change_main["0,0,0,0,0,2,0:main__color"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,0,0,0:main__color"]){window.node_change_main["0,0,1,0,0,0,0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0,2,0:main__color"]){window.node_change_main["0,0,0,0,0,2,0:main__color"](data);
 }
 };
 
@@ -852,19 +850,19 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0,1:main__src"]){window.node_change_main["0,0,0,0,0,1:main__src"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,0,0:main__border-color"]){window.node_change_main["0,0,1,0,0,0:main__border-color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,0,0,0:main__color"]){window.node_change_main["0,0,1,0,0,0,0:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0,2:main__border-color"]){window.node_change_main["0,0,0,0,0,2:main__border-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0,2,0:main__color"]){window.node_change_main["0,0,0,0,0,2,0:main__color"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,0,0,0:main__color"]){window.node_change_main["0,0,1,0,0,0,0:main__color"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,0,2:main__src"]){window.node_change_main["0,0,1,0,0,2:main__src"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0,1:main__src"]){window.node_change_main["0,0,0,0,0,1:main__src"](data);
 }
 };
 

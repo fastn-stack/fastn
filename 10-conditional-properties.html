@@ -186,7 +186,7 @@ if (!ftd_data.hasOwnProperty(id)) {
 continue;
 }
 // @ts-ignore
-exports.set_value(id, variable, value);
+exports.set_value_by_id(id, variable, value);
 }
 };
 exports.set_bool_for_all = function (variable, value) {
@@ -199,9 +199,12 @@ exports.set_bool(id, variable, value);
 }
 };
 exports.set_bool = function (id, variable, value) {
-window.ftd.set_value(id, variable, value);
+window.ftd.set_value_by_id(id, variable, value);
 };
-exports.set_value = function (id, variable, value) {
+exports.set_value = function (variable, value) {
+window.ftd.set_value_by_id("main", variable, value);
+};
+exports.set_value_by_id = function (id, variable, value) {
 let data = ftd_data[id];
 let [var_name, remaining] = get_name_and_remaining(variable);
 if (data[var_name] === undefined) {
@@ -661,9 +664,9 @@ if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:
 let value = resolve_reference("foo#foo:fv:0", data);
 set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__text"]){window.node_change_main["0,0,2:main__text"](data);
 }
@@ -689,15 +692,6 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text
 };
 
 window.resolve_value_main = {};
-window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
-if(function(){
-return (resolve_reference("foo#foo:fv:0", data)>2);
-}()){
-set_data_value(data, "foo#moo:mv:0,0", 6);
-}
-else {set_data_value(data, "foo#moo:mv:0,0", 7);}
-
-}
 window.resolve_value_main["foo#boo:bv:0,0,0"] = function(data) {
 if(function(){
 return (resolve_reference("foo#foo:fv:0", data)>10);
@@ -710,6 +704,15 @@ return (resolve_reference("foo#moo:mv:0,0", data)>6);
 set_data_value(data, "foo#boo:bv:0,0,0", 5);
 }
 else {set_data_value(data, "foo#boo:bv:0,0,0", 4);}
+
+}
+window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
+if(function(){
+return (resolve_reference("foo#foo:fv:0", data)>2);
+}()){
+set_data_value(data, "foo#moo:mv:0,0", 6);
+}
+else {set_data_value(data, "foo#moo:mv:0,0", 7);}
 
 }
 window.ftd.init("main", "ftd-data", "ftd-external-children");
