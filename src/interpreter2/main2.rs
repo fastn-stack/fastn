@@ -724,6 +724,7 @@ pub enum Interpreter {
         state: InterpreterState,
         ast: ftd::ast::AST,
         module: String,
+        processor: String,
     },
     StuckOnForeignVariable {
         state: InterpreterState,
@@ -734,10 +735,21 @@ pub enum Interpreter {
 
 #[derive(Debug)]
 pub enum InterpreterWithoutState {
-    StuckOnImport { module: String },
-    Done { document: Document },
-    StuckOnProcessor { ast: ftd::ast::AST, module: String },
-    StuckOnForeignVariable { module: String, variable: String },
+    StuckOnImport {
+        module: String,
+    },
+    Done {
+        document: Document,
+    },
+    StuckOnProcessor {
+        ast: ftd::ast::AST,
+        module: String,
+        processor: String,
+    },
+    StuckOnForeignVariable {
+        module: String,
+        variable: String,
+    },
 }
 
 impl InterpreterWithoutState {
@@ -747,9 +759,16 @@ impl InterpreterWithoutState {
                 Interpreter::StuckOnImport { module, state }
             }
             InterpreterWithoutState::Done { document } => Interpreter::Done { document },
-            InterpreterWithoutState::StuckOnProcessor { ast, module } => {
-                Interpreter::StuckOnProcessor { ast, module, state }
-            }
+            InterpreterWithoutState::StuckOnProcessor {
+                ast,
+                module,
+                processor,
+            } => Interpreter::StuckOnProcessor {
+                ast,
+                module,
+                state,
+                processor,
+            },
             InterpreterWithoutState::StuckOnForeignVariable { module, variable } => {
                 Interpreter::StuckOnForeignVariable {
                     variable,

@@ -207,7 +207,9 @@ pub fn ftd_v2_interpret_helper(
                     foreign_function,
                 )?;
             }
-            ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast, module } => {
+            ftd::interpreter2::Interpreter::StuckOnProcessor {
+                state, ast, module, ..
+            } => {
                 let variable_definition = ast.get_variable_definition(module.as_str())?;
                 let processor = variable_definition.processor.unwrap();
                 let value = ftd::interpreter2::Value::String {

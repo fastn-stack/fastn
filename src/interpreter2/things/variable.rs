@@ -22,6 +22,8 @@ impl Variable {
             variable_definition.line_number,
         )?;
 
+        ftd::interpreter2::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
+
         if let Some(processor) = variable_definition.processor {
             let name = doc.resolve_name(processor.as_str());
             let state = if let Some(state) = {
@@ -54,7 +56,7 @@ impl Variable {
             return Ok(());
         }
 
-        ftd::interpreter2::PropertyValue::scan_ast_value(variable_definition.value, doc)
+        Ok(())
     }
 
     pub(crate) fn from_ast(
@@ -86,7 +88,7 @@ impl Variable {
                     variable_definition.line_number,
                 );
             };
-            let (doc_name, thing_name, _remaining) =
+            let (doc_name, thing_name, remaining) =
                 ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
                     doc.resolve_name(processor.as_str()).as_str(),
                     doc.name,
@@ -113,6 +115,11 @@ impl Variable {
                     ftd::interpreter2::InterpreterWithoutState::StuckOnProcessor {
                         ast,
                         module: doc_name,
+                        processor: if let Some(remaining) = remaining {
+                            format!("{}.{}", thing_name, remaining)
+                        } else {
+                            thing_name
+                        },
                     },
                 ))
             } else {

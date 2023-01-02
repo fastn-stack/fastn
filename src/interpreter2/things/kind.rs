@@ -312,7 +312,7 @@ impl KindData {
         }
     }
 
-    pub(crate) fn from_ast_kind(
+    pub fn from_ast_kind(
         var_kind: ftd::ast::VariableKind,
         known_kinds: &ftd::Map<ftd::interpreter2::Kind>,
         doc: &mut ftd::interpreter2::TDoc,
