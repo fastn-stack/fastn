@@ -12,3 +12,8 @@ src: $assets.files.images.column-row-layout.png
 -- ds.h3: 1.1.B: Resource section
 
 [Get latest release](https://github.com/ftd-lang/fpm/releases)
+
+
+-- ds.markdown:
+
+Continue with the [part 2 now](/expander/basic-ui/)
