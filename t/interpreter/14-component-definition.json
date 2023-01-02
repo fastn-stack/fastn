@@ -242,28 +242,15 @@
                                               "variant": "ftd#length.px",
                                               "full_variant": "ftd#length.px",
                                               "value": {
-                                                "Value": {
-                                                  "value": {
-                                                    "Record": {
-                                                      "name": "ftd#length.px",
-                                                      "fields": {
-                                                        "value": {
-                                                          "Reference": {
-                                                            "name": "foo#print.padding",
-                                                            "kind": {
-                                                              "kind": "Integer",
-                                                              "caption": true,
-                                                              "body": false
-                                                            },
-                                                            "source": {
-                                                              "Local": "print"
-                                                            },
-                                                            "is_mutable": false,
-                                                            "line_number": 12
-                                                          }
-                                                        }
-                                                      }
-                                                    }
+                                                "Reference": {
+                                                  "name": "foo#print.padding",
+                                                  "kind": {
+                                                    "kind": "Integer",
+                                                    "caption": true,
+                                                    "body": false
+                                                  },
+                                                  "source": {
+                                                    "Local": "print"
                                                   },
                                                   "is_mutable": false,
                                                   "line_number": 12

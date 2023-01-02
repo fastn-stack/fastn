@@ -18,6 +18,17 @@ macro_rules! try_ok_state {
 }
 
 #[macro_export]
+macro_rules! optional_state {
+    ($e:expr) => {
+        match $e {
+            $crate::interpreter2::StateWithThing::State(s) => None,
+            $crate::interpreter2::StateWithThing::Continue => None,
+            $crate::interpreter2::StateWithThing::Thing(t) => Some(t),
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! try_state {
     ($e:expr) => {
         match $e {
@@ -116,6 +127,12 @@ pub enum Error {
 
     #[error("EvalexprError: {}", _0)]
     EvalexprError(#[from] ftd::evalexpr::EvalexprError),
+
+    #[error("serde error: {source}")]
+    Serde {
+        #[from]
+        source: serde_json::Error,
+    },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

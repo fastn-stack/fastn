@@ -54,21 +54,8 @@
                 "value": {
                   "Value": {
                     "value": {
-                      "Record": {
-                        "name": "ftd#length.px",
-                        "fields": {
-                          "value": {
-                            "Value": {
-                              "value": {
-                                "Integer": {
-                                  "value": 20
-                                }
-                              },
-                              "is_mutable": false,
-                              "line_number": 12
-                            }
-                          }
-                        }
+                      "Integer": {
+                        "value": 20
                       }
                     },
                     "is_mutable": false,
@@ -193,21 +180,8 @@
                             "value": {
                               "Value": {
                                 "value": {
-                                  "Record": {
-                                    "name": "ftd#length.px",
-                                    "fields": {
-                                      "value": {
-                                        "Value": {
-                                          "value": {
-                                            "Integer": {
-                                              "value": 20
-                                            }
-                                          },
-                                          "is_mutable": false,
-                                          "line_number": 2
-                                        }
-                                      }
-                                    }
+                                  "Integer": {
+                                    "value": 20
                                   }
                                 },
                                 "is_mutable": false,
@@ -510,27 +484,14 @@
                             "variant": "ftd#length.px",
                             "full_variant": "ftd#length.px",
                             "value": {
-                              "Value": {
-                                "value": {
-                                  "Record": {
-                                    "name": "ftd#length.px",
-                                    "fields": {
-                                      "value": {
-                                        "Reference": {
-                                          "name": "foo#value",
-                                          "kind": {
-                                            "kind": "Integer",
-                                            "caption": true,
-                                            "body": false
-                                          },
-                                          "source": "Global",
-                                          "is_mutable": false,
-                                          "line_number": 8
-                                        }
-                                      }
-                                    }
-                                  }
+                              "Reference": {
+                                "name": "foo#value",
+                                "kind": {
+                                  "kind": "Integer",
+                                  "caption": true,
+                                  "body": false
                                 },
+                                "source": "Global",
                                 "is_mutable": false,
                                 "line_number": 8
                               }
@@ -1168,21 +1129,8 @@
                             "value": {
                               "Value": {
                                 "value": {
-                                  "Record": {
-                                    "name": "ftd#length.percent",
-                                    "fields": {
-                                      "value": {
-                                        "Value": {
-                                          "value": {
-                                            "Decimal": {
-                                              "value": 20.0
-                                            }
-                                          },
-                                          "is_mutable": false,
-                                          "line_number": 24
-                                        }
-                                      }
-                                    }
+                                  "Decimal": {
+                                    "value": 20.0
                                   }
                                 },
                                 "is_mutable": false,

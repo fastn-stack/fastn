@@ -175,21 +175,8 @@
                           "value": {
                             "Value": {
                               "value": {
-                                "Record": {
-                                  "name": "ftd#length.px",
-                                  "fields": {
-                                    "value": {
-                                      "Value": {
-                                        "value": {
-                                          "Integer": {
-                                            "value": 40
-                                          }
-                                        },
-                                        "is_mutable": false,
-                                        "line_number": 4
-                                      }
-                                    }
-                                  }
+                                "Integer": {
+                                  "value": 40
                                 }
                               },
                               "is_mutable": false,
@@ -212,8 +199,8 @@
                   "line_number": 4
                 },
                 "pattern_with_eval": [
-                  "({0}).value",
-                  true
+                  "{0}",
+                  false
                 ]
               }
             ],
@@ -302,21 +289,8 @@
                               "value": {
                                 "Value": {
                                   "value": {
-                                    "Record": {
-                                      "name": "ftd#length.px",
-                                      "fields": {
-                                        "value": {
-                                          "Value": {
-                                            "value": {
-                                              "Integer": {
-                                                "value": 20
-                                              }
-                                            },
-                                            "is_mutable": false,
-                                            "line_number": 7
-                                          }
-                                        }
-                                      }
+                                    "Integer": {
+                                      "value": 20
                                     }
                                   },
                                   "is_mutable": false,
@@ -369,8 +343,8 @@
                       "line_number": 7
                     },
                     "pattern_with_eval": [
-                      "({0}).value",
-                      true
+                      "{0}",
+                      false
                     ]
                   },
                   {
@@ -385,21 +359,8 @@
                               "value": {
                                 "Value": {
                                   "value": {
-                                    "Record": {
-                                      "name": "ftd#length.px",
-                                      "fields": {
-                                        "value": {
-                                          "Value": {
-                                            "value": {
-                                              "Integer": {
-                                                "value": 2
-                                              }
-                                            },
-                                            "is_mutable": false,
-                                            "line_number": 8
-                                          }
-                                        }
-                                      }
+                                    "Integer": {
+                                      "value": 2
                                     }
                                   },
                                   "is_mutable": false,
@@ -422,8 +383,8 @@
                       "line_number": 8
                     },
                     "pattern_with_eval": [
-                      "({0}).value",
-                      true
+                      "{0}",
+                      false
                     ]
                   }
                 ],
@@ -541,21 +502,8 @@
                               "value": {
                                 "Value": {
                                   "value": {
-                                    "Record": {
-                                      "name": "ftd#length.px",
-                                      "fields": {
-                                        "value": {
-                                          "Value": {
-                                            "value": {
-                                              "Integer": {
-                                                "value": 20
-                                              }
-                                            },
-                                            "is_mutable": false,
-                                            "line_number": 11
-                                          }
-                                        }
-                                      }
+                                    "Integer": {
+                                      "value": 20
                                     }
                                   },
                                   "is_mutable": false,
@@ -613,8 +561,8 @@
                       "line_number": 11
                     },
                     "pattern_with_eval": [
-                      "({0}).value",
-                      true
+                      "{0}",
+                      false
                     ]
                   },
                   {
@@ -629,21 +577,8 @@
                               "value": {
                                 "Value": {
                                   "value": {
-                                    "Record": {
-                                      "name": "ftd#length.px",
-                                      "fields": {
-                                        "value": {
-                                          "Value": {
-                                            "value": {
-                                              "Integer": {
-                                                "value": 2
-                                              }
-                                            },
-                                            "is_mutable": false,
-                                            "line_number": 12
-                                          }
-                                        }
-                                      }
+                                    "Integer": {
+                                      "value": 2
                                     }
                                   },
                                   "is_mutable": false,
@@ -666,8 +601,8 @@
                       "line_number": 12
                     },
                     "pattern_with_eval": [
-                      "({0}).value",
-                      true
+                      "{0}",
+                      false
                     ]
                   }
                 ],

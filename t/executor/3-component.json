@@ -135,21 +135,8 @@
                                     "value": {
                                       "Value": {
                                         "value": {
-                                          "Record": {
-                                            "name": "ftd#length.px",
-                                            "fields": {
-                                              "value": {
-                                                "Value": {
-                                                  "value": {
-                                                    "Integer": {
-                                                      "value": 40
-                                                    }
-                                                  },
-                                                  "is_mutable": false,
-                                                  "line_number": 6
-                                                }
-                                              }
-                                            }
+                                          "Integer": {
+                                            "value": 40
                                           }
                                         },
                                         "is_mutable": false,
@@ -212,21 +199,8 @@
                                     "value": {
                                       "Value": {
                                         "value": {
-                                          "Record": {
-                                            "name": "ftd#length.px",
-                                            "fields": {
-                                              "value": {
-                                                "Value": {
-                                                  "value": {
-                                                    "Integer": {
-                                                      "value": 30
-                                                    }
-                                                  },
-                                                  "is_mutable": false,
-                                                  "line_number": 7
-                                                }
-                                              }
-                                            }
+                                          "Integer": {
+                                            "value": 30
                                           }
                                         },
                                         "is_mutable": false,

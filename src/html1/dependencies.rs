@@ -289,7 +289,6 @@ impl<'a> DependencyGenerator<'a> {
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
                 node_data_id, key
             );
-            let length = attribute.properties.len();
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property

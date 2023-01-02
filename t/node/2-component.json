@@ -175,21 +175,8 @@
                           "value": {
                             "Value": {
                               "value": {
-                                "Record": {
-                                  "name": "ftd#length.px",
-                                  "fields": {
-                                    "value": {
-                                      "Value": {
-                                        "value": {
-                                          "Integer": {
-                                            "value": 40
-                                          }
-                                        },
-                                        "is_mutable": false,
-                                        "line_number": 2
-                                      }
-                                    }
-                                  }
+                                "Integer": {
+                                  "value": 40
                                 }
                               },
                               "is_mutable": false,
@@ -212,8 +199,8 @@
                   "line_number": 2
                 },
                 "pattern_with_eval": [
-                  "({0}).value",
-                  true
+                  "{0}",
+                  false
                 ]
               }
             ],

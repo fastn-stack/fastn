@@ -155,82 +155,69 @@
                           "variant": "ftd#length.px",
                           "full_variant": "ftd#length.px",
                           "value": {
-                            "Value": {
-                              "value": {
-                                "Record": {
-                                  "name": "ftd#length.px",
-                                  "fields": {
+                            "FunctionCall": {
+                              "name": "foo#compare",
+                              "kind": {
+                                "kind": "Integer",
+                                "caption": true,
+                                "body": false
+                              },
+                              "is_mutable": false,
+                              "line_number": 39,
+                              "values": {
+                                "a": {
+                                  "Reference": {
+                                    "name": "foo#number",
+                                    "kind": {
+                                      "kind": "Integer",
+                                      "caption": false,
+                                      "body": false
+                                    },
+                                    "source": "Global",
+                                    "is_mutable": false,
+                                    "line_number": 39
+                                  }
+                                },
+                                "b": {
+                                  "Value": {
                                     "value": {
-                                      "FunctionCall": {
-                                        "name": "foo#compare",
-                                        "kind": {
-                                          "kind": "Integer",
-                                          "caption": true,
-                                          "body": false
-                                        },
-                                        "is_mutable": false,
-                                        "line_number": 39,
-                                        "values": {
-                                          "a": {
-                                            "Reference": {
-                                              "name": "foo#number",
-                                              "kind": {
-                                                "kind": "Integer",
-                                                "caption": false,
-                                                "body": false
-                                              },
-                                              "source": "Global",
-                                              "is_mutable": false,
-                                              "line_number": 39
-                                            }
-                                          },
-                                          "b": {
-                                            "Value": {
-                                              "value": {
-                                                "Integer": {
-                                                  "value": 20
-                                                }
-                                              },
-                                              "is_mutable": false,
-                                              "line_number": 39
-                                            }
-                                          },
-                                          "c": {
-                                            "Value": {
-                                              "value": {
-                                                "Integer": {
-                                                  "value": 4
-                                                }
-                                              },
-                                              "is_mutable": false,
-                                              "line_number": 39
-                                            }
-                                          },
-                                          "d": {
-                                            "Value": {
-                                              "value": {
-                                                "Integer": {
-                                                  "value": 5
-                                                }
-                                              },
-                                              "is_mutable": false,
-                                              "line_number": 39
-                                            }
-                                          }
-                                        },
-                                        "order": [
-                                          "a",
-                                          "b",
-                                          "c",
-                                          "d"
-                                        ]
+                                      "Integer": {
+                                        "value": 20
                                       }
-                                    }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 39
+                                  }
+                                },
+                                "c": {
+                                  "Value": {
+                                    "value": {
+                                      "Integer": {
+                                        "value": 4
+                                      }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 39
+                                  }
+                                },
+                                "d": {
+                                  "Value": {
+                                    "value": {
+                                      "Integer": {
+                                        "value": 5
+                                      }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 39
                                   }
                                 }
                               },
-                              "is_mutable": false,
-                              "line_number": 39
+                              "order": [
+                                "a",
+                                "b",
+                                "c",
+                                "d"
+                              ]
                             }
                           }
                         }
@@ -249,8 +236,8 @@
                   "line_number": 39
                 },
                 "pattern_with_eval": [
-                  "({0}).value",
-                  true
+                  "{0}",
+                  false
                 ]
               }
             ],
@@ -395,58 +382,45 @@
                           "variant": "ftd#length.px",
                           "full_variant": "ftd#length.px",
                           "value": {
-                            "Value": {
-                              "value": {
-                                "Record": {
-                                  "name": "ftd#length.px",
-                                  "fields": {
+                            "FunctionCall": {
+                              "name": "foo#sum",
+                              "kind": {
+                                "kind": "Integer",
+                                "caption": true,
+                                "body": false
+                              },
+                              "is_mutable": false,
+                              "line_number": 42,
+                              "values": {
+                                "a": {
+                                  "Reference": {
+                                    "name": "foo#number",
+                                    "kind": {
+                                      "kind": "Integer",
+                                      "caption": false,
+                                      "body": false
+                                    },
+                                    "source": "Global",
+                                    "is_mutable": false,
+                                    "line_number": 42
+                                  }
+                                },
+                                "b": {
+                                  "Value": {
                                     "value": {
-                                      "FunctionCall": {
-                                        "name": "foo#sum",
-                                        "kind": {
-                                          "kind": "Integer",
-                                          "caption": true,
-                                          "body": false
-                                        },
-                                        "is_mutable": false,
-                                        "line_number": 42,
-                                        "values": {
-                                          "a": {
-                                            "Reference": {
-                                              "name": "foo#number",
-                                              "kind": {
-                                                "kind": "Integer",
-                                                "caption": false,
-                                                "body": false
-                                              },
-                                              "source": "Global",
-                                              "is_mutable": false,
-                                              "line_number": 42
-                                            }
-                                          },
-                                          "b": {
-                                            "Value": {
-                                              "value": {
-                                                "Integer": {
-                                                  "value": 4
-                                                }
-                                              },
-                                              "is_mutable": false,
-                                              "line_number": 42
-                                            }
-                                          }
-                                        },
-                                        "order": [
-                                          "a",
-                                          "b"
-                                        ]
+                                      "Integer": {
+                                        "value": 4
                                       }
-                                    }
+                                    },
+                                    "is_mutable": false,
+                                    "line_number": 42
                                   }
                                 }
                               },
-                              "is_mutable": false,
-                              "line_number": 42
+                              "order": [
+                                "a",
+                                "b"
+                              ]
                             }
                           }
                         }
@@ -465,8 +439,8 @@
                   "line_number": 42
                 },
                 "pattern_with_eval": [
-                  "({0}).value",
-                  true
+                  "{0}",
+                  false
                 ]
               }
             ],
@@ -613,46 +587,33 @@
                           "variant": "ftd#length.px",
                           "full_variant": "ftd#length.px",
                           "value": {
-                            "Value": {
-                              "value": {
-                                "Record": {
-                                  "name": "ftd#length.px",
-                                  "fields": {
-                                    "value": {
-                                      "FunctionCall": {
-                                        "name": "foo#length",
-                                        "kind": {
-                                          "kind": "Integer",
-                                          "caption": true,
-                                          "body": false
-                                        },
-                                        "is_mutable": false,
-                                        "line_number": 45,
-                                        "values": {
-                                          "a": {
-                                            "Reference": {
-                                              "name": "foo#new-name",
-                                              "kind": {
-                                                "kind": "String",
-                                                "caption": false,
-                                                "body": false
-                                              },
-                                              "source": "Global",
-                                              "is_mutable": false,
-                                              "line_number": 45
-                                            }
-                                          }
-                                        },
-                                        "order": [
-                                          "a"
-                                        ]
-                                      }
-                                    }
+                            "FunctionCall": {
+                              "name": "foo#length",
+                              "kind": {
+                                "kind": "Integer",
+                                "caption": true,
+                                "body": false
+                              },
+                              "is_mutable": false,
+                              "line_number": 45,
+                              "values": {
+                                "a": {
+                                  "Reference": {
+                                    "name": "foo#new-name",
+                                    "kind": {
+                                      "kind": "String",
+                                      "caption": false,
+                                      "body": false
+                                    },
+                                    "source": "Global",
+                                    "is_mutable": false,
+                                    "line_number": 45
                                   }
                                 }
                               },
-                              "is_mutable": false,
-                              "line_number": 45
+                              "order": [
+                                "a"
+                              ]
                             }
                           }
                         }
@@ -671,8 +632,8 @@
                   "line_number": 45
                 },
                 "pattern_with_eval": [
-                  "({0}).value",
-                  true
+                  "{0}",
+                  false
                 ]
               }
             ],

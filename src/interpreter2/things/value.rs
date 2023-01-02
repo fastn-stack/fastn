@@ -1536,6 +1536,45 @@ impl Value {
             line_number,
         }
     }
+
+    pub fn to_string(&self) -> Option<String> {
+        match self {
+            Value::String { text } => Some(text.to_string()),
+            Value::Integer { value } => Some(value.to_string()),
+            Value::Decimal { value } => Some(value.to_string()),
+            Value::Boolean { value } => Some(value.to_string()),
+            Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    data.to_string()
+                } else {
+                    Some("".to_string())
+                }
+            }
+            Value::Object { values } => {
+                let mut new_values: ftd::Map<String> = Default::default();
+                for (k, v) in values {
+                    if let ftd::interpreter2::PropertyValue::Value { value, .. } = v {
+                        if let Some(v) = value.to_string() {
+                            new_values.insert(k.to_owned(), v);
+                        }
+                    }
+                }
+                serde_json::to_string(&new_values).ok()
+            }
+            Value::Record { fields, .. } => {
+                let mut new_values: ftd::Map<String> = Default::default();
+                for (k, v) in fields {
+                    if let ftd::interpreter2::PropertyValue::Value { value, .. } = v {
+                        if let Some(v) = value.to_string() {
+                            new_values.insert(k.to_owned(), v);
+                        }
+                    }
+                }
+                serde_json::to_string(&new_values).ok()
+            }
+            _ => None,
+        }
+    }
 }
 
 fn get_kind(

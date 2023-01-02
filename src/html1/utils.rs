@@ -75,7 +75,7 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     };*/
 
     let value_string = if let Some(value_string) =
-        property_value.to_string(doc, field, id, string_needs_no_quotes)?
+        property_value.to_html_string(doc, field, id, string_needs_no_quotes)?
     {
         value_string
     } else {
@@ -199,7 +199,7 @@ pub(crate) fn dependencies_from_property_value(
 }
 
 impl ftd::interpreter2::PropertyValue {
-    pub(crate) fn to_string(
+    pub(crate) fn to_html_string(
         &self,
         doc: &ftd::interpreter2::TDoc,
         field: Option<String>,
@@ -228,7 +228,7 @@ impl ftd::interpreter2::PropertyValue {
             }
             ftd::interpreter2::PropertyValue::Value {
                 value, line_number, ..
-            } => value.to_string(doc, *line_number, field, id, string_needs_no_quotes)?,
+            } => value.to_html_string(doc, *line_number, field, id, string_needs_no_quotes)?,
             _ => None,
         })
     }
@@ -236,7 +236,7 @@ impl ftd::interpreter2::PropertyValue {
 
 impl ftd::interpreter2::Value {
     // string_needs_no_quotes: for class attribute the value should be red-block not "red-block"
-    pub(crate) fn to_string(
+    pub(crate) fn to_html_string(
         &self,
         doc: &ftd::interpreter2::TDoc,
         line_number: usize,
@@ -257,13 +257,14 @@ impl ftd::interpreter2::Value {
             ftd::interpreter2::Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
-                    let v = if let Some(v) = value.clone().resolve(doc, line_number)?.to_string(
-                        doc,
-                        value.line_number(),
-                        None,
-                        id,
-                        string_needs_no_quotes,
-                    )? {
+                    let v = if let Some(v) =
+                        value.clone().resolve(doc, line_number)?.to_html_string(
+                            doc,
+                            value.line_number(),
+                            None,
+                            id,
+                            string_needs_no_quotes,
+                        )? {
                         v
                     } else {
                         continue;
@@ -281,7 +282,7 @@ impl ftd::interpreter2::Value {
                     .map(|v| fields.contains_key(v))
                     .unwrap_or(false) =>
             {
-                fields.get(&field.unwrap()).unwrap().to_string(
+                fields.get(&field.unwrap()).unwrap().to_html_string(
                     doc,
                     None,
                     id,
@@ -295,7 +296,7 @@ impl ftd::interpreter2::Value {
                 name,
                 ..
             } => {
-                let value = value.to_string(doc, field, id, string_needs_no_quotes)?;
+                let value = value.to_html_string(doc, field, id, string_needs_no_quotes)?;
                 match value {
                     Some(value) if name.eq(ftd::interpreter2::FTD_LENGTH) => {
                         if let Ok(pattern) = ftd::executor::Length::set_pattern_from_variant_str(
@@ -331,7 +332,7 @@ impl ftd::interpreter2::Value {
                 let mut values = vec![];
                 for (k, v) in fields {
                     let value = if let Some(v) =
-                        v.to_string(doc, field.clone(), id, string_needs_no_quotes)?
+                        v.to_html_string(doc, field.clone(), id, string_needs_no_quotes)?
                     {
                         v
                     } else {

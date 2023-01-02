@@ -25,6 +25,26 @@ impl InterpreterState {
         }
     }
 
+    pub fn tdoc<'a>(
+        &'a self,
+        doc_name: &'a str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::TDoc<'a>> {
+        let parsed_document =
+            self.parsed_libs
+                .get(doc_name)
+                .ok_or(ftd::interpreter2::Error::ParseError {
+                    message: format!("Cannot find this document: `{}`", doc_name),
+                    doc_id: doc_name.to_string(),
+                    line_number,
+                })?;
+        Ok(ftd::interpreter2::TDoc::new(
+            &parsed_document.name,
+            &parsed_document.doc_aliases,
+            &self.bag,
+        ))
+    }
+
     pub fn get_current_processing_module(&self) -> Option<String> {
         self.to_process.stack.last().map(|v| v.0.clone())
     }

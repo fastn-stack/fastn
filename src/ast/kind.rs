@@ -135,6 +135,43 @@ impl HeaderValues {
 
         self.0.iter().filter(|v| v.key.eq(key)).collect_vec()
     }
+
+    pub fn get_by_key_optional(
+        &self,
+        key: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::ast::Result<Option<&HeaderValue>> {
+        use itertools::Itertools;
+
+        let values = self.0.iter().filter(|v| v.key.eq(key)).collect_vec();
+        if values.len() > 1 {
+            ftd::ast::parse_error(
+                format!("Multiple header found `{}`", key),
+                doc_id,
+                line_number,
+            )
+        } else {
+            Ok(values.first().copied())
+        }
+    }
+
+    pub fn get_optional_string_by_key(
+        &self,
+        key: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::ast::Result<Option<String>> {
+        if let Some(header) = self.get_by_key_optional(key, doc_id, line_number)? {
+            if header.value.is_null() {
+                Ok(None)
+            } else {
+                Ok(Some(header.value.string(doc_id)?))
+            }
+        } else {
+            Ok(None)
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -175,7 +212,7 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn string(&self, doc_id: &str) -> ftd::ast::Result<String> {
+    pub fn string(&self, doc_id: &str) -> ftd::ast::Result<String> {
         match self {
             VariableValue::String { value, .. } => Ok(value.to_string()),
             t => ftd::ast::parse_error(
@@ -197,7 +234,7 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn line_number(&self) -> usize {
+    pub fn line_number(&self) -> usize {
         match self {
             VariableValue::Optional { line_number, .. }
             | VariableValue::List { line_number, .. }
@@ -237,7 +274,7 @@ impl VariableValue {
     }
 
     #[allow(clippy::type_complexity)]
-    pub(crate) fn get_record(
+    pub fn get_record(
         &self,
         doc_id: &str,
     ) -> ftd::ast::Result<(

@@ -47,21 +47,8 @@
                       "value": {
                         "Value": {
                           "value": {
-                            "Record": {
-                              "name": "ftd#length.px",
-                              "fields": {
-                                "value": {
-                                  "Value": {
-                                    "value": {
-                                      "Integer": {
-                                        "value": 50
-                                      }
-                                    },
-                                    "is_mutable": false,
-                                    "line_number": 8
-                                  }
-                                }
-                              }
+                            "Integer": {
+                              "value": 50
                             }
                           },
                           "is_mutable": false,
@@ -336,21 +323,8 @@
                             "value": {
                               "Value": {
                                 "value": {
-                                  "Record": {
-                                    "name": "ftd#length.px",
-                                    "fields": {
-                                      "value": {
-                                        "Value": {
-                                          "value": {
-                                            "Integer": {
-                                              "value": 50
-                                            }
-                                          },
-                                          "is_mutable": false,
-                                          "line_number": 8
-                                        }
-                                      }
-                                    }
+                                  "Integer": {
+                                    "value": 50
                                   }
                                 },
                                 "is_mutable": false,
