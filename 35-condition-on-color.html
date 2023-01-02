@@ -107,7 +107,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#label:danger:0&quot;}}}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,192,203,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">THE</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#label:danger:0&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,192,203,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">THE</div></div>
 
 
 <script>
@@ -245,8 +245,10 @@ console.log(action.name);
 let argument;
 for (argument in action.values) {
 if (action.values.hasOwnProperty(argument)) {
-if (typeof action.values[argument] === 'object') {
-let function_argument = action.values[argument];
+// @ts-ignore
+let value = action.values[argument][1] !== undefined ? action.values[argument][1] : action.values[argument];
+if (typeof value === 'object') {
+let function_argument = value;
 if (!!function_argument.reference) {
 let value = resolve_reference(function_argument.reference, ftd_data[id]);
 if (!!function_argument.mutable) {
@@ -259,7 +261,7 @@ function_arguments.push(deepCopy(value));
 }
 }
 else {
-function_arguments.push(action.values[argument]);
+function_arguments.push(value);
 }
 }
 }
