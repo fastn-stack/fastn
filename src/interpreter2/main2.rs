@@ -63,9 +63,7 @@ impl InterpreterState {
         }
 
         while let Some((doc_name, number_of_scan, ast)) = self.get_next_ast() {
-            if !number_of_scan.gt(&1) {
-                self.increase_scan_count();
-            }
+            self.increase_scan_count();
             let parsed_document = self.parsed_libs.get(doc_name.as_str()).unwrap();
             let name = parsed_document.name.to_string();
             let aliases = parsed_document.doc_aliases.clone();
@@ -403,6 +401,16 @@ impl InterpreterState {
             self.continue_()
         }
     }*/
+
+    // (doc_name, number_of_scan, last_ast)
+    pub fn peep_stack(&self) -> Option<(String, usize, &ftd::ast::AST)> {
+        if let Some((doc_name, asts)) = self.to_process.stack.last() {
+            if let Some((number_of_scan, ast)) = asts.first() {
+                return Some((doc_name.to_string(), *number_of_scan, ast));
+            }
+        }
+        None
+    }
 
     // (doc_name, number_of_scan, last_ast)
     pub fn get_next_ast(&mut self) -> Option<(String, usize, ftd::ast::AST)> {

@@ -1,0 +1,293 @@
+-- ftd.image-src src:
+light: https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry-dark.svg
+dark: https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry-dark.svg
+
+-- ftd.color text-strong:
+light: #ffffff
+dark: #ffffff
+
+-- ftd.color base:
+light: #18181b
+dark: #18181b
+
+-- ftd.color step-1:
+light: #141414
+dark: #141414
+
+-- ftd.text: Hello World
+color if { ftd.device == "desktop" }: red
+color: green
+padding.px if { ftd.device == "mobile" }: 40
+padding.percent: 10
+
+-- head:
+section-item: $item
+subsection-item: $sub-item
+navtitle: Section-one
+subtitle: Subsection-one
+current: Toc Title 1
+
+-- component head:
+toc-item list section-item:
+toc-item list subsection-item:
+string navtitle:
+string subtitle:
+string current:
+
+-- ftd.column:
+
+-- head-desktop:
+if: { ftd.device == "desktop" }
+section-item: $head.section-item
+subsection-item: $head.subsection-item
+navtitle: $head.navtitle
+subtitle: $head.subtitle
+current: $head.current
+
+-- end: ftd.column
+
+-- end: head
+
+
+-- component head-desktop:
+toc-item list section-item:
+toc-item list subsection-item:
+string navtitle:
+string subtitle:
+string current:
+
+-- ftd.column:
+width.fixed.percent: 100
+
+-- ftd.row:
+width.fixed.percent: 100
+background.solid: $base
+padding.px: 32
+
+-- ftd.row:
+width.fixed.percent: 26
+
+-- ftd.image:
+src: $src
+
+-- end: ftd.row
+
+-- ftd.row:
+width.fixed.percent: 74
+align-content: right
+
+-- print-toc-item:
+item: $head-desktop.section-item
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.row:
+background.solid: $step-1
+width.fixed.percent: 100
+padding-vertical.px: 24
+padding-horizontal.px: 32
+
+-- ftd.column:
+width.fixed.percent: 26
+spacing.px: 12
+
+-- ftd.text: $head-desktop.navtitle
+color: $text-strong
+
+-- ftd.row:
+spacing.px: 8
+
+-- ftd.text: $head-desktop.subtitle
+color: $text-strong
+
+-- ftd.row:
+
+-- ftd.text: \-
+color: $text-strong
+
+-- ftd.text: \>
+color: $text-strong
+padding-top.percent: 10.7
+
+-- end: ftd.row
+
+-- ftd.text: $head-desktop.current
+color: $text-strong
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+align-content: right
+width.fixed.percent: 100
+align-self: center
+
+-- ftd.row:
+width.fixed.percent: 100
+align-content: right
+
+-- ftd.column:
+align-content: center
+
+-- ftd.column:
+align-content: center
+
+-- print-toc-item:
+item: $head-desktop.subsection-item
+
+-- end: ftd.column
+
+-- end: ftd.row
+-- end: ftd.column
+-- end: ftd.row
+-- end: ftd.column
+-- end: head-desktop
+
+-- component print-toc-item:
+toc-item list item:
+
+-- ftd.row:
+padding-left.px: 30
+
+-- print-toc-item-one:
+item: $obj.name
+url: $obj.url
+$loop$: $print-toc-item.item as $obj
+
+-- end: ftd.row
+
+-- end: print-toc-item
+
+-- component print-toc:
+toc-items list item:
+
+-- ftd.column:
+
+-- print-toc-one:
+
+item: $obj.name
+children: $obj.children
+$loop$: $print-toc.item as $obj
+
+-- end: ftd.column
+
+-- end: print-toc
+
+-- component print-toc-one:
+string item:
+toc-items list children:
+
+-- ftd.column:
+
+-- ftd.column:
+
+-- ftd.text:
+text: $print-toc-one.item
+padding-bottom.px: 8
+color: $text-strong
+
+-- end: ftd.column
+
+-- ftd.column:
+padding-left.px: 12
+
+-- print-toc-one:
+item: $obj.name
+children: $obj.children
+$loop$: $print-toc-one.children as $obj
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: print-toc-one
+
+-- component print-toc-item-one:
+caption item:
+string url:
+
+-- ftd.row:
+padding-left.px: 30
+align-content: center
+
+-- ftd.text:
+text:$print-toc-item-one.item
+link:$print-toc-item-one.url
+color: $text-strong
+
+-- end: ftd.row
+
+-- end: print-toc-item-one
+
+-- record toc-item:
+caption name:
+string url:
+
+-- toc-item list item:
+
+-- toc-item: Section-one
+url: /
+
+-- toc-item: Section-two
+url: /
+
+-- toc-item: Section-three
+url: /
+
+-- toc-item: Section-four
+url: /
+
+-- end: item
+
+-- toc-item list sub-item:
+
+-- toc-item: Subsection-one
+url: /
+
+-- toc-item: Subsection-two
+url: /
+
+-- toc-item: Subsection-three
+url: /
+
+-- toc-item: subsection-four
+url: /
+
+-- end: sub-item
+
+-- record toc-items:
+string name:
+toc-items list children:
+
+-- toc-items list toc:
+
+-- toc-items:
+name: TOC title 1
+
+-- toc-items.children:
+
+-- toc-items:
+name: TOC children 1.1
+
+-- toc-items.children:
+
+-- toc-items:
+name: TOC children 1.1.1
+
+-- end: toc-items.children
+
+-- end: toc-items.children
+
+-- toc-items:
+name: TOC title 2
+
+-- toc-items:
+name: TOC title 3
+
+-- toc-items:
+name: TOC title 4
+
+-- end: toc

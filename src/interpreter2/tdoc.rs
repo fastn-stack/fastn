@@ -1253,6 +1253,9 @@ impl<'a> TDoc<'a> {
                     self.name.to_string(),
                     format!("{}#{}", doc_name, thing_name),
                 ));
+            } else if !current_doc_contains_thing.is_empty() && state.peep_stack().unwrap().1.gt(&4)
+            {
+                return self.err("not found", name, "search_thing", line_number);
             }
         }
 
@@ -1297,6 +1300,8 @@ impl<'a> TDoc<'a> {
                     .contains
                     .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
                 state.to_process.stack.push((doc_name, ast_for_thing));
+            } else if state.peep_stack().unwrap().1.gt(&4) {
+                return self.err("not found", name, "search_thing", line_number);
             }
 
             return Ok(ftd::interpreter2::StateWithThing::new_continue());
