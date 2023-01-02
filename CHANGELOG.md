@@ -1,5 +1,10 @@
 # FTD Change Log
 
+## 2nd December 2023
+
+- [Added http and copy_to_clipboard in build.js](https://github.com/ftd-lang/ftd/commit/7eb9e879ff94ced3ed53d7d1584d63975b1a6b2f)
+
+
 ## 30th December 2022
 
 - [FTD.LENGTH VARIANT FROM RECORD TO REGULAR](https://github.com/ftd-lang/ftd/commit/c4e7e591e515c5dfef1647e3f447e77a2f94c538)

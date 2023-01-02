@@ -45,6 +45,7 @@ function copy_to_clipboard(text: string) {
         console.error('Async: Could not copy text: ', err);
     });
 }
+
 function http(url: string, method: string, ...request_data: any) {
     let method_name = method.trim().toUpperCase();
 

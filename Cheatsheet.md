@@ -545,6 +545,62 @@ $on-click$: $set-system()
 enable_system_mode()
 ```
 
+## `http(url: string, method: string)`
+
+This function do http request
+
+```ftd
+-- ftd.text: Click here
+$on-click$: $http-call(url = google.com, method = get, name = John)
+
+-- void http-call(url,method,name):
+string url:
+string method:
+string name:
+
+http(url, method, name)
+```
+
+Response JSON:
+
+- To redirect:
+```json
+{
+  "redirect": "fifthtry.com"
+}
+```
+
+
+- To reload:
+```json
+{
+  "reload": true
+}
+```
+
+- To update ftd data from backend:
+```json
+{
+  "data": {
+    "<module-name>#<variable-name>": <value>
+  }
+}
+```
+
+- [Discussions#511](https://github.com/ftd-lang/ftd/discussions/511)
+
+- To update error data:
+```json
+{
+  "errors": {
+    "<module-name>#<variable-name>": <value>
+  }
+}
+```
+
+- [Discussions#511](https://github.com/ftd-lang/ftd/discussions/511)
+
+
 
 
 
