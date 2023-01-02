@@ -132,8 +132,10 @@ window.ftd = (function () {
         let argument;
         for (argument in action.values) {
             if (action.values.hasOwnProperty(argument)) {
-                if (typeof action.values[argument] === 'object') {
-                    let function_argument = action.values[argument];
+                // @ts-ignore
+                let value = action.values[argument][1] !== undefined ? action.values[argument][1] : action.values[argument];
+                if (typeof value === 'object') {
+                    let function_argument = value;
                     if (!!function_argument.reference) {
                         let value = resolve_reference(function_argument.reference, ftd_data[id]);
                         if (!!function_argument.mutable) {
@@ -146,7 +148,7 @@ window.ftd = (function () {
                     }
                 }
                 else {
-                    function_arguments.push(action.values[argument]);
+                    function_arguments.push(value);
                 }
             }
         }

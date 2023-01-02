@@ -1,11 +1,11 @@
 #[derive(serde::Deserialize, Clone, Debug, serde::Serialize, PartialEq, Default)]
 pub struct Action {
     pub name: String,
-    pub values: ftd::Map<serde_json::Value>,
+    pub values: Vec<(String, serde_json::Value)>,
 }
 
 impl ftd::html1::Action {
-    pub fn new(name: &str, values: ftd::Map<serde_json::Value>) -> ftd::html1::Action {
+    pub fn new(name: &str, values: Vec<(String, serde_json::Value)>) -> ftd::html1::Action {
         ftd::html1::Action {
             name: name.to_string(),
             values,
@@ -29,12 +29,14 @@ impl ftd::html1::Action {
     fn from_values(
         function_call: &ftd::interpreter2::FunctionCall,
         doc: &ftd::interpreter2::TDoc,
-    ) -> ftd::html1::Result<ftd::Map<serde_json::Value>> {
+    ) -> ftd::html1::Result<Vec<(String, serde_json::Value)>> {
         function_call
-            .values
+            .order
             .iter()
-            .map(|(k, v)| {
-                ftd::html1::Action::from_property_value(v, doc).map(|v| (k.to_string(), v))
+            .filter_map(|k| {
+                function_call.values.get(k).map(|v| {
+                    ftd::html1::Action::from_property_value(v, doc).map(|v| (k.to_string(), v))
+                })
             })
             .collect()
     }

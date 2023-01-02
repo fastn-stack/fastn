@@ -238,8 +238,10 @@ console.log(action.name);
 let argument;
 for (argument in action.values) {
 if (action.values.hasOwnProperty(argument)) {
-if (typeof action.values[argument] === 'object') {
-let function_argument = action.values[argument];
+// @ts-ignore
+let value = action.values[argument][1] !== undefined ? action.values[argument][1] : action.values[argument];
+if (typeof value === 'object') {
+let function_argument = value;
 if (!!function_argument.reference) {
 let value = resolve_reference(function_argument.reference, ftd_data[id]);
 if (!!function_argument.mutable) {
@@ -252,7 +254,7 @@ function_arguments.push(deepCopy(value));
 }
 }
 else {
-function_arguments.push(action.values[argument]);
+function_arguments.push(value);
 }
 }
 }
@@ -749,25 +751,25 @@ return (a+b);
 
 window.node_change_main = {};
 window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":"hello","b":"world"}}', this);
+document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":[["a","hello"],["b","world"]]}', this);
 }
 
 window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":20,"c":4,"d":5}}', this)))));
+document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",20],["c",4],["d",5]]}', this)))));
 }
 window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":{"a":{"mutable":false,"reference":"foo#name"},"b":"Jaiswal"}}', this);
+document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":[["a",{"mutable":false,"reference":"foo#name"}],["b","Jaiswal"]]}', this);
 }
 
 window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":{"a":{"mutable":false,"reference":"foo#number"},"b":4}}', this)))));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",4]]}', this)))));
 }
 window.node_change_main["2:main__text"] = function(data) {
 document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data);
 }
 
 window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":{"a":{"mutable":false,"reference":"foo#new-name"}}}', this)))));
+document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":[["a",{"mutable":false,"reference":"foo#new-name"}]]}', this)))));
 }
 window.set_value_main = {};
 window.set_value_main["foo#name"] = function (data, new_value, remaining) {
