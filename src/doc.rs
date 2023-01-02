@@ -151,11 +151,22 @@ pub async fn interpret_helper<'a>(
                     foreign_function,
                 )?;
             }
-            ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast, module } => {
+            ftd::interpreter2::Interpreter::StuckOnProcessor {
+                state,
+                ast,
+                module,
+                processor,
+            } => {
                 let line_number = ast.line_number();
+                dbg!(&ast, &module);
                 let value = lib
-                    .process(ast, &mut state.tdoc(module.as_str(), line_number)?)
+                    .process(
+                        ast,
+                        processor,
+                        &mut state.tdoc(module.as_str(), line_number)?,
+                    )
                     .await?;
+                dbg!(&value);
                 s = state.continue_after_processor(value)?;
             }
             ftd::interpreter2::Interpreter::StuckOnForeignVariable {
@@ -318,6 +329,7 @@ pub async fn resolve_import<'a>(
     Ok(source)
 }
 
+// source, foreign_variable, foreign_function
 pub async fn resolve_import_2022<'a>(
     lib: &'a mut fpm::Library2022,
     state: &mut ftd::interpreter2::InterpreterState,
@@ -334,6 +346,8 @@ pub async fn resolve_import_2022<'a>(
     let current_package = lib.get_current_package(current_processing_module.as_str())?;
     let source = if module.eq("fpm/time") {
         ("".to_string(), vec!["time".to_string()], vec![])
+    } else if module.eq("fpm/processor") {
+        ("".to_string(), vec![], vec!["http".to_string()])
     } else if module.ends_with("assets") {
         let foreign_variable = vec!["files".to_string()];
 

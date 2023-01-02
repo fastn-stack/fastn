@@ -178,10 +178,11 @@ impl Library2022 {
     pub async fn process<'a>(
         &'a self,
         ast: ftd::ast::AST,
+        processor: String,
         doc: &'a mut ftd::interpreter2::TDoc<'a>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
         let line_number = ast.line_number();
-        let (processor, value, kind) = get_processor_data(ast, doc)?;
+        let (_processor, value, kind) = get_processor_data(ast, doc)?;
         match processor.as_str() {
             "http" => fpm::library2022::http::processor(value, kind, doc, &self.config).await,
             t => Err(ftd::interpreter2::Error::ParseError {
@@ -200,8 +201,10 @@ fn get_processor_data(
     let line_number = ast.line_number();
     let ast_name = ast.name();
     if let Ok(variable_definition) = ast.clone().get_variable_definition(doc.name) {
-        let kind = optional_state!(doc.get_kind(
-            variable_definition.name.as_str(),
+        let kind = optional_state!(ftd::interpreter2::KindData::from_ast_kind(
+            variable_definition.kind,
+            &Default::default(),
+            doc,
             variable_definition.line_number,
         )?)
         .ok_or(ftd::interpreter2::Error::ValueNotFound {
@@ -223,18 +226,12 @@ fn get_processor_data(
         Ok((processor, variable_definition.value, kind.kind))
     } else {
         let variable_invocation = ast.get_variable_invocation(doc.name)?;
-        let kind = optional_state!(doc.get_kind(
-            variable_invocation.name.as_str(),
-            variable_invocation.line_number,
-        )?)
-        .ok_or(ftd::interpreter2::Error::ValueNotFound {
-            doc_id: doc.name.to_string(),
-            line_number,
-            message: format!(
-                "Cannot find kind for `{}`",
+        let kind = doc
+            .get_variable(
                 variable_invocation.name.as_str(),
-            ),
-        })?;
+                variable_invocation.line_number,
+            )?
+            .kind;
         let processor =
             variable_invocation
                 .processor
