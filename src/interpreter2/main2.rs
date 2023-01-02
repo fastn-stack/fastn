@@ -145,7 +145,8 @@ impl InterpreterState {
                         ftd::interpreter2::Variable::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter2::Variable::from_ast(ast, &mut doc)? {
+                        match ftd::interpreter2::Variable::from_ast(ast, &mut doc, number_of_scan)?
+                        {
                             ftd::interpreter2::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }

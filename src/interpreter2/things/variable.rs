@@ -62,6 +62,7 @@ impl Variable {
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &mut ftd::interpreter2::TDoc,
+        number_of_scan: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<ftd::interpreter2::Variable>>
     {
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
@@ -111,6 +112,13 @@ impl Variable {
                 .iter()
                 .any(|v| thing_name.eq(v))
             {
+                if number_of_scan.lt(&1) {
+                    ftd::interpreter2::PropertyValue::scan_ast_value(
+                        variable_definition.value,
+                        doc,
+                    )?;
+                    return Ok(ftd::interpreter2::StateWithThing::new_continue());
+                }
                 Ok(ftd::interpreter2::StateWithThing::new_state(
                     ftd::interpreter2::InterpreterWithoutState::StuckOnProcessor {
                         ast,
