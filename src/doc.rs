@@ -157,13 +157,16 @@ pub async fn interpret_helper<'a>(
                 module,
                 processor,
             } => {
+                let doc = state.get_current_processing_module().ok_or(
+                    ftd::interpreter2::Error::ValueNotFound {
+                        doc_id: module,
+                        line_number: ast.line_number(),
+                        message: "Cannot find the module".to_string(),
+                    },
+                )?;
                 let line_number = ast.line_number();
                 let value = lib
-                    .process(
-                        ast,
-                        processor,
-                        &mut state.tdoc(module.as_str(), line_number)?,
-                    )
+                    .process(ast, processor, &mut state.tdoc(doc.as_str(), line_number)?)
                     .await?;
                 s = state.continue_after_processor(value)?;
             }
@@ -344,7 +347,7 @@ pub async fn resolve_import_2022<'a>(
     let current_package = lib.get_current_package(current_processing_module.as_str())?;
     let source = if module.eq("fpm/time") {
         ("".to_string(), vec!["time".to_string()], vec![])
-    } else if module.eq("fpm/processor") {
+    } else if module.eq("fpm/processors") {
         ("".to_string(), vec![], vec!["http".to_string()])
     } else if module.ends_with("assets") {
         let foreign_variable = vec!["files".to_string()];
