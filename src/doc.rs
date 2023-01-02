@@ -152,16 +152,10 @@ pub async fn interpret_helper<'a>(
                 )?;
             }
             ftd::interpreter2::Interpreter::StuckOnProcessor { state, ast, module } => {
-                let variable_definition = ast.get_variable_definition(module.as_str())?;
-                let processor = variable_definition.processor.unwrap();
-                let value = ftd::interpreter2::Value::String {
-                    text: variable_definition
-                        .value
-                        .caption()
-                        .unwrap_or(processor)
-                        .to_uppercase()
-                        .to_string(),
-                };
+                let line_number = ast.line_number();
+                let value = lib
+                    .process(ast, &mut state.tdoc(module.as_str(), line_number)?)
+                    .await?;
                 s = state.continue_after_processor(value)?;
             }
             ftd::interpreter2::Interpreter::StuckOnForeignVariable {

@@ -1,4 +1,6 @@
 extern crate self as fpm;
+#[macro_use]
+extern crate ftd;
 
 #[macro_use]
 pub mod utils;
@@ -34,6 +36,7 @@ mod tracker;
 mod translation;
 mod version;
 // mod wasm;
+mod library2022;
 mod workspace;
 
 pub(crate) use auto_import::AutoImport;

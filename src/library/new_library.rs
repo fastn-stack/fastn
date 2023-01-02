@@ -174,4 +174,75 @@ impl Library2022 {
             .insert(package.name.to_string(), package);
         Ok(())
     }
+
+    pub async fn process<'a>(
+        &'a self,
+        ast: ftd::ast::AST,
+        doc: &'a mut ftd::interpreter2::TDoc<'a>,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        let line_number = ast.line_number();
+        let (processor, value, kind) = get_processor_data(ast, doc)?;
+        match processor.as_str() {
+            "http" => fpm::library2022::http::processor(value, kind, doc, &self.config).await,
+            t => Err(ftd::interpreter2::Error::ParseError {
+                doc_id: self.document_id.to_string(),
+                line_number,
+                message: format!("FPM-Error: No such processor: {}", t),
+            }),
+        }
+    }
+}
+
+fn get_processor_data(
+    ast: ftd::ast::AST,
+    doc: &mut ftd::interpreter2::TDoc,
+) -> ftd::interpreter2::Result<(String, ftd::ast::VariableValue, ftd::interpreter2::Kind)> {
+    let line_number = ast.line_number();
+    let ast_name = ast.name();
+    if let Ok(variable_definition) = ast.clone().get_variable_definition(doc.name) {
+        let kind = optional_state!(doc.get_kind(
+            variable_definition.name.as_str(),
+            variable_definition.line_number,
+        )?)
+        .ok_or(ftd::interpreter2::Error::ValueNotFound {
+            doc_id: doc.name.to_string(),
+            line_number,
+            message: format!(
+                "Cannot find kind for `{}`",
+                variable_definition.name.as_str(),
+            ),
+        })?;
+        let processor =
+            variable_definition
+                .processor
+                .ok_or(ftd::interpreter2::Error::ParseError {
+                    message: format!("No processor found for `{}`", ast_name),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+        Ok((processor, variable_definition.value, kind.kind))
+    } else {
+        let variable_invocation = ast.get_variable_invocation(doc.name)?;
+        let kind = optional_state!(doc.get_kind(
+            variable_invocation.name.as_str(),
+            variable_invocation.line_number,
+        )?)
+        .ok_or(ftd::interpreter2::Error::ValueNotFound {
+            doc_id: doc.name.to_string(),
+            line_number,
+            message: format!(
+                "Cannot find kind for `{}`",
+                variable_invocation.name.as_str(),
+            ),
+        })?;
+        let processor =
+            variable_invocation
+                .processor
+                .ok_or(ftd::interpreter2::Error::ParseError {
+                    message: format!("No processor found for `{}`", ast_name),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+        Ok((processor, variable_invocation.value, kind.kind))
+    }
 }
