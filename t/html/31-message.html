@@ -645,6 +645,13 @@ return f;
 
 
 window.node_change_main = {};
+window.node_change_main["0:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).light;
+}
+else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).dark;}
+}
+
 window.node_change_main["0,0,0,0,0,1:main__display"] = function(data) {
 if(function(){
 return resolve_reference("foo#messageleft:roundavatar:0,0,0", data);
@@ -666,10 +673,7 @@ window.node_change_main["0,0,0,0,0,2:main__border-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,0,0,0,2:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).light;
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,0,0,2:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).dark;
-}
-else { document.querySelector(`[data-id="0,0,0,0,0,2:main"]`).style["border-color"] = null; }
+else {document.querySelector(`[data-id="0,0,0,0,0,2:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).dark;}
 }
 
 window.node_change_main["0,0,0,0,0,2,0:main__text"] = function(data) {
@@ -680,10 +684,7 @@ window.node_change_main["0,0,0,0,0,2,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data).light;
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;
-}
-else { document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["color"] = null; }
+else {document.querySelector(`[data-id="0,0,0,0,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;}
 }
 
 window.node_change_main["0,0,0,0,0,2,0:main__margin-top"] = function(data) {
@@ -693,10 +694,7 @@ window.node_change_main["0,0,1,0,0,0:main__border-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,1,0,0,0:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).light;
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,1,0,0,0:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).dark;
-}
-else { document.querySelector(`[data-id="0,0,1,0,0,0:main"]`).style["border-color"] = null; }
+else {document.querySelector(`[data-id="0,0,1,0,0,0:main"]`).style["border-color"] = resolve_reference("foo#border-color", data).dark;}
 }
 
 window.node_change_main["0,0,1,0,0,0,0:main__text"] = function(data) {
@@ -707,10 +705,7 @@ window.node_change_main["0,0,1,0,0,0,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data).light;
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;
-}
-else { document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["color"] = null; }
+else {document.querySelector(`[data-id="0,0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;}
 }
 
 window.node_change_main["0,0,1,0,0,0,0:main__margin-top"] = function(data) {

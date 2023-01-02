@@ -10,6 +10,8 @@
 "dark": "blue",
 "light": "green"
 },
+"foo#label:danger:0": true,
+"foo#label:value:0": "THE",
 "foo#red": {
 "dark": "red",
 "light": "pink"
@@ -105,7 +107,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,192,203,1); height: fit-content; padding: 10%; text-decoration: none; width: fit-content" class="ft_md">Hello World</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:{&quot;a&quot;:{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#label:danger:0&quot;}}}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(255,192,203,1); height: fit-content; text-decoration: none; width: fit-content" class="ft_md">THE</div></div>
 
 
 <script>
@@ -621,11 +623,21 @@ return f;
 
 
 
+function foo__toggle___main(a){
+a.value = !a.value
+}
+
+
+
 
 window.node_change_main = {};
+window.node_change_main["0:main__text"] = function(data) {
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#label:value:0", data);
+}
+
 window.node_change_main["0:main__color"] = function(data) {
 if(function(){
-return (resolve_reference("ftd#device", data)=="desktop");
+return resolve_reference("foo#label:danger:0", data);
 }()){
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#red", data).light;
@@ -638,15 +650,6 @@ document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference(
 else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#green", data).dark;}
 }
 }
-
-window.node_change_main["0:main__padding"] = function(data) {
-if(function(){
-return (resolve_reference("ftd#device", data)=="mobile");
-}()){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(40))));
-}
-else {document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(10))));}
-}
 window.set_value_main = {};
 window.set_value_main["foo#green"] = function (data, new_value, remaining) {
 if (!!remaining) {
@@ -656,6 +659,28 @@ set_data_value(data, "foo#green", new_value);
 }
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+}
+};
+
+window.set_value_main["foo#label:danger:0"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#label:danger:0" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#label:danger:0", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+}
+};
+
+window.set_value_main["foo#label:value:0"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#label:value:0" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#label:value:0", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 };
 
@@ -678,19 +703,6 @@ set_data_value(data, "ftd#dark-mode", new_value);
 }
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
-}
-};
-
-window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "ftd#device" + "." + remaining, new_value);
-} else {
-set_data_value(data, "ftd#device", new_value);
-}
-
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
 }
 };
 

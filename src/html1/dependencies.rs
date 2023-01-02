@@ -327,6 +327,68 @@ impl<'a> DependencyGenerator<'a> {
                             false,
                         )?
                     {
+                        light_value_string = value_string;
+                    }
+                    let mut dark_value_string = "".to_string();
+                    if let Some(value_string) =
+                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                            self.id,
+                            self.doc,
+                            &property.value,
+                            &property_with_pattern.pattern_with_eval,
+                            Some("dark".to_string()),
+                            false,
+                        )?
+                    {
+                        dark_value_string = value_string;
+                    }
+
+                    if light_value_string.ne(&dark_value_string) {
+                        is_static = false;
+                        let value = ftd::html1::utils::js_expression_from_list(
+                            std::iter::IntoIterator::into_iter([
+                                (
+                                    Some("!data[\"ftd#dark-mode\"]".to_string()),
+                                    format!("{} = {};", key, light_value_string),
+                                ),
+                                (None, format!("{} = {};", key, dark_value_string)),
+                            ])
+                            .collect(),
+                            Some(key.as_str()),
+                        );
+                        expressions.push((condition, value));
+                    } else {
+                        expressions.push((condition, format!("{} = {};", key, light_value_string)));
+                    }
+
+                    if !light_value_string.is_empty() {
+                        dependency_map_from_condition(
+                            var_dependencies,
+                            &property.condition,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        dependency_map_from_property_value(
+                            var_dependencies,
+                            &property.value,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        var_dependencies
+                            .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
+                    }
+
+                    /*let mut light_value_string = "".to_string();
+                    if let Some(value_string) =
+                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                            self.id,
+                            self.doc,
+                            &property.value,
+                            &property_with_pattern.pattern_with_eval,
+                            Some("light".to_string()),
+                            false,
+                        )?
+                    {
                         let value = format!("{} = {};", key, value_string);
                         let condition = Some(match condition {
                             Some(ref c) => format!("{} && !data[\"ftd#dark-mode\"]", c),
@@ -374,7 +436,7 @@ impl<'a> DependencyGenerator<'a> {
                         );
                         var_dependencies
                             .insert("ftd#dark-mode".to_string(), node_change_id.to_string());
-                    }
+                    }*/
                     continue;
                 }
 

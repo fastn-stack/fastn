@@ -1,0 +1,27 @@
+-- label: THE
+$danger: true
+
+
+-- component label:
+caption value:
+boolean $danger: false
+
+-- ftd.text: $label.value
+color: $green
+color if { label.danger }: $red
+$on-click$: $toggle($a = $label.danger)
+
+-- end: label
+
+-- ftd.color red:
+light: pink
+dark: red
+
+-- ftd.color green:
+light: green
+dark: blue
+
+-- void toggle(a):
+boolean $a:
+
+a = !a

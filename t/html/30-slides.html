@@ -643,15 +643,33 @@ return f;
 
 
 window.node_change_main = {};
+window.node_change_main["0:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#text-strong", data).light;
+}
+else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#text-strong", data).dark;}
+}
+
+window.node_change_main["0,0:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).light;
+}
+else {document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).dark;}
+}
+
 window.node_change_main["0,0,0,0,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="0,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).light;
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).dark;
+else {document.querySelector(`[data-id="0,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).dark;}
 }
-else { document.querySelector(`[data-id="0,0,0,0,0:main"]`).style["color"] = null; }
+window.node_change_main["0,0,1,0:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="0,0,1,0:main"]`).style["background-color"] = resolve_reference("foo#text", data).light;
 }
+else {document.querySelector(`[data-id="0,0,1,0:main"]`).style["background-color"] = resolve_reference("foo#text", data).dark;}
+}
+
 window.node_change_main["0,0,1,0,0:main__display"] = function(data) {
 if(function(){
 return (!resolve_reference("foo#presentation:show-full-screen:0", data));
