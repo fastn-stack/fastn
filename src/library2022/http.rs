@@ -43,7 +43,6 @@ pub async fn processor<'a>(
                 line_number,
             }
         })?;
-    dbg!(&headers);
 
     for header in headers.0 {
         if header.key.as_str() == "$processor$"
@@ -90,7 +89,6 @@ pub async fn processor<'a>(
             )
         }
     };
-    dbg!(&response);
 
     let response_string =
         String::from_utf8(response).map_err(|e| ftd::interpreter2::Error::ParseError {
@@ -98,7 +96,6 @@ pub async fn processor<'a>(
             doc_id: doc.name.to_string(),
             line_number,
         })?;
-    dbg!(&response_string);
     let response_json: serde_json::Value = serde_json::from_str(&response_string)
         .map_err(|e| ftd::interpreter2::Error::Serde { source: e })?;
 
