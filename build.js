@@ -31,6 +31,7 @@ function fallbackCopyTextToClipboard(text) {
     }
     document.body.removeChild(textArea);
 }
+// source: https://stackoverflow.com/questions/400212/ (cc-by-sa)
 function copy_to_clipboard(text) {
     if (!navigator.clipboard) {
         fallbackCopyTextToClipboard(text);
