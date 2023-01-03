@@ -49,6 +49,7 @@ pub fn trim_package_name(path: &str, package_name: &str) -> Option<String> {
 // It will return url with end-point, if package or dependency contains endpoint in them
 // url: /-/<package-name>/api/ => (package-name, endpoint/api/, app or package config)
 // url: /-/<package-name>/api/ => (package-name, endpoint/api/, app or package config)
+#[tracing::instrument(skip_all)]
 pub fn get_clean_url(
     config: &fpm::Config,
     url: &str,
@@ -110,8 +111,7 @@ pub fn get_clean_url(
         }
     }
 
-    Err(fpm::Error::GenericError(format!(
-        "http-processor: end-point not found url: {}",
-        url
-    )))
+    let msg = format!("http-processor: end-point not found url: {}", url);
+    tracing::error!(msg = msg);
+    Err(fpm::Error::GenericError(msg))
 }

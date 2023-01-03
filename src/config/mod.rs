@@ -605,7 +605,7 @@ impl Config {
         // dependent package does not contain dependency
 
         // For similar package
-        tracing::info!(path = path);
+        tracing::info!(package = package.name, path = path);
         if path.starts_with(format!("-/{}", package.name.trim_matches('/')).as_str()) {
             let path_without_package_name =
                 path.trim_start_matches(format!("-/{}", package.name.trim_matches('/')).as_str());
