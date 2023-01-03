@@ -1062,7 +1062,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     ftd::interpreter2::Field {
                         name: "mobile".to_string(),
                         kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_TYPE)
-                            .into_optional()
                             .into_kind_data(),
                         mutable: false,
                         value: Some(ftd::interpreter2::PropertyValue::Reference {
@@ -1234,12 +1233,6 @@ pub fn boolean_function() -> ftd::interpreter2::ComponentDefinition {
                         .into_kind_data(),
                 ),
                 ftd::interpreter2::Argument::default(
-                    "role",
-                    ftd::interpreter2::Kind::record("ftd#type")
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-                ftd::interpreter2::Argument::default(
                     "format",
                     ftd::interpreter2::Kind::string()
                         .into_optional()
@@ -1287,12 +1280,6 @@ pub fn integer_function() -> ftd::interpreter2::ComponentDefinition {
                         .into_kind_data(),
                 ),
                 ftd::interpreter2::Argument::default(
-                    "role",
-                    ftd::interpreter2::Kind::record("ftd#type")
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-                ftd::interpreter2::Argument::default(
                     "format",
                     ftd::interpreter2::Kind::string()
                         .into_optional()
@@ -1336,12 +1323,6 @@ pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {
                 ftd::interpreter2::Argument::default(
                     "style",
                     ftd::interpreter2::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-                ftd::interpreter2::Argument::default(
-                    "role",
-                    ftd::interpreter2::Kind::record("ftd#type")
                         .into_optional()
                         .into_kind_data(),
                 ),

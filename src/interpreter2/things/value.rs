@@ -440,7 +440,7 @@ impl PropertyValue {
                     PropertyValue::Value {
                         value: ftd::interpreter2::Value::Optional {
                             data: Box::new(None),
-                            kind: expected_kind.to_owned(),
+                            kind: field.kind.to_owned().inner(),
                         },
                         is_mutable: field.mutable || is_mutable,
                         line_number,
@@ -524,6 +524,17 @@ impl PropertyValue {
                     doc.name,
                     first_header.line_number,
                 );
+            }
+
+            let mut field = field.to_owned();
+            let remaining = first_header
+                .key
+                .trim_start_matches(format!("{}.", field.name).as_str())
+                .trim_start_matches(field.name.as_str())
+                .trim()
+                .to_string();
+            if !remaining.is_empty() {
+                try_ok_state!(field.update_with_or_type_variant(doc, remaining.as_str())?);
             }
 
             let property_value = try_ok_state!(PropertyValue::from_ast_value_with_argument(
@@ -1507,6 +1518,28 @@ impl Value {
         }
     }
 
+    pub fn optional_string(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<Option<String>> {
+        match self {
+            ftd::interpreter2::Value::Optional { data, kind } if kind.is_string() => {
+                if let Some(data) = data.as_ref() {
+                    data.optional_string(doc_id, line_number)
+                } else {
+                    Ok(None)
+                }
+            }
+            ftd::interpreter2::Value::String { text } => Ok(Some(text.to_string())),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected Optional String, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
     pub fn decimal(&self, doc_id: &str, line_number: usize) -> ftd::interpreter2::Result<f64> {
         match self {
             ftd::interpreter2::Value::Decimal { value } => Ok(*value),
@@ -1523,6 +1556,28 @@ impl Value {
             ftd::interpreter2::Value::Integer { value } => Ok(*value),
             t => ftd::interpreter2::utils::e2(
                 format!("Expected Integer, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn optional_integer(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<Option<i64>> {
+        match self {
+            ftd::interpreter2::Value::Optional { data, kind } if kind.is_integer() => {
+                if let Some(data) = data.as_ref() {
+                    data.optional_integer(doc_id, line_number)
+                } else {
+                    Ok(None)
+                }
+            }
+            ftd::interpreter2::Value::Integer { value } => Ok(Some(*value)),
+            t => ftd::interpreter2::utils::e2(
+                format!("Expected Optional Integer, found: `{:?}`", t),
                 doc_id,
                 line_number,
             ),

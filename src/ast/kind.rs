@@ -133,7 +133,10 @@ impl HeaderValues {
     pub fn get_by_key(&self, key: &str) -> Vec<&HeaderValue> {
         use itertools::Itertools;
 
-        self.0.iter().filter(|v| v.key.eq(key)).collect_vec()
+        self.0
+            .iter()
+            .filter(|v| v.key.eq(key) || v.key.starts_with(format!("{}.", key).as_str()))
+            .collect_vec()
     }
 
     pub fn get_by_key_optional(

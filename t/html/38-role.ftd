@@ -1,0 +1,9 @@
+-- ftd.type ftype:
+size.px: 40
+
+-- ftd.responsive-type rtype:
+desktop: $ftype
+mobile: $ftype
+
+-- ftd.text: Hello World
+role: $rtype

@@ -1674,12 +1674,10 @@ impl Type {
 
         let weight = {
             if let Some(value) = values.get("weight") {
-                Some(
-                    value
-                        .clone()
-                        .resolve(&doc.itdoc(), line_number)?
-                        .integer(doc.name, line_number)?,
-                )
+                value
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .optional_integer(doc.name, line_number)?
             } else {
                 None
             }
@@ -1687,12 +1685,10 @@ impl Type {
 
         let font_family = {
             if let Some(value) = values.get("font-family") {
-                Some(
-                    value
-                        .clone()
-                        .resolve(&doc.itdoc(), line_number)?
-                        .string(doc.name, line_number)?,
-                )
+                value
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .optional_string(doc.name, line_number)?
             } else {
                 None
             }
