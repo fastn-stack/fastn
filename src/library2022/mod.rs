@@ -206,12 +206,13 @@ fn get_processor_data(
     let line_number = ast.line_number();
     let ast_name = ast.name();
     if let Ok(variable_definition) = ast.clone().get_variable_definition(doc.name) {
-        let kind = optional_state!(ftd::interpreter2::KindData::from_ast_kind(
+        let kind = ftd::interpreter2::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
             variable_definition.line_number,
-        )?)
+        )?
+        .into_optional()
         .ok_or(ftd::interpreter2::Error::ValueNotFound {
             doc_id: doc.name.to_string(),
             line_number,

@@ -1,6 +1,4 @@
 extern crate self as fpm;
-#[macro_use]
-extern crate ftd;
 
 #[macro_use]
 pub mod utils;

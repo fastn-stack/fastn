@@ -32,7 +32,7 @@ pub async fn processor<'a>(
         }
     };
 
-    let (_, mut url, conf) =
+    let (_, mut url, mut conf) =
         fpm::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
             ftd::p1::Error::ParseError {
                 message: format!("invalid url: {:?}", e),
@@ -40,6 +40,36 @@ pub async fn processor<'a>(
                 line_number: section.line_number,
             }
         })?;
+
+    // Setup the x-fpm-user-id header based on the platform and requested field
+    if let Some(user_id) = conf.get("user-id") {
+        match user_id.split_once('-') {
+            Some((platform, requested_field)) => {
+                if let Some(req) = config.request.as_ref() {
+                    if let Some(user_data) = fpm::auth::get_user_data_from_cookies(
+                        platform,
+                        requested_field,
+                        req.cookies(),
+                    )
+                    .await
+                    .map_err(|e| ftd::p1::Error::ForbiddenUsage {
+                        message: format!("fpm auth error: {}", e),
+                        doc_id: doc.name.to_string(),
+                        line_number: section.line_number,
+                    })? {
+                        conf.insert("X-FPM-USER-ID".to_string(), user_data);
+                    }
+                }
+            }
+            _ => {
+                return ftd::p2::utils::e2(
+                    format!("Invalid user-id provided: {}", user_id),
+                    doc.name,
+                    section.line_number,
+                )
+            }
+        }
+    }
 
     for (line, key, value) in section.header.0.iter() {
         if key == "$processor$" || key == "url" || key == "method" {
