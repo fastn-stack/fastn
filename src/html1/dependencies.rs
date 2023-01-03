@@ -142,7 +142,6 @@ impl<'a> DependencyGenerator<'a> {
             let mut expressions = vec![];
             let mut is_static = true;
             let node_change_id = ftd::html1::utils::node_change_id(node_data_id.as_str(), key);
-            let length = attribute.properties.len();
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -156,19 +155,6 @@ impl<'a> DependencyGenerator<'a> {
 
                 if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
                     // Todo: If the property.value is static then resolve it and use
-                    /*let value = property
-                        .value
-                        .clone()
-                        .resolve(&self.doc, property.value.line_number())?
-                        .record_fields(self.doc.name, property.line_number)?;
-
-                    let light = value.get("light").unwrap();
-                    let dark = value.get("dark").unwrap();
-
-                    if condition.is_none() && dark.eq(light) {
-                        dbg!("condition.is_none()", &dark);
-                        continue;
-                    }*/
                     let mut light_value_string = "".to_string();
                     if let Some(value_string) =
                         ftd::html1::utils::get_formatted_dep_string_from_property_value(
@@ -177,21 +163,11 @@ impl<'a> DependencyGenerator<'a> {
                             &property.value,
                             &property_with_pattern.pattern_with_eval,
                             Some("light".to_string()),
-                            key.eq("class"),
+                            false,
                         )?
                     {
-                        let value = format!(
-                            "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                            node_data_id, key, value_string
-                        );
-                        let condition = Some(match condition {
-                            Some(ref c) => format!("{} && !data[\"ftd#dark-mode\"]", c),
-                            None => "!data[\"ftd#dark-mode\"]".to_string(),
-                        });
-                        expressions.push((condition, value));
                         light_value_string = value_string;
                     }
-
                     let mut dark_value_string = "".to_string();
                     if let Some(value_string) =
                         ftd::html1::utils::get_formatted_dep_string_from_property_value(
@@ -200,25 +176,37 @@ impl<'a> DependencyGenerator<'a> {
                             &property.value,
                             &property_with_pattern.pattern_with_eval,
                             Some("dark".to_string()),
-                            key.eq("class"),
+                            false,
                         )?
                     {
-                        let value = format!(
-                            "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                            node_data_id, key, value_string
-                        );
-                        let condition = Some(match condition {
-                            Some(ref c) => format!("{} && data[\"ftd#dark-mode\"]", c),
-                            None => "data[\"ftd#dark-mode\"]".to_string(),
-                        });
-                        expressions.push((condition, value));
                         dark_value_string = value_string;
                     }
 
-                    if !light_value_string.eq(&dark_value_string)
-                        || condition.is_some()
-                        || length > 0
-                    {
+                    if light_value_string.ne(&dark_value_string) {
+                        is_static = false;
+                        let value = ftd::html1::utils::js_expression_from_list(
+                            std::iter::IntoIterator::into_iter([
+                                (
+                                    Some("!data[\"ftd#dark-mode\"]".to_string()),
+                                    format!(
+                                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                                        node_data_id, key, light_value_string
+                                    )
+                                ),
+                                (None, format!(
+                                    "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                                    node_data_id, key, dark_value_string
+                                )),
+                            ])
+                            .collect(),
+                            Some(key.as_str()),
+                        );
+                        expressions.push((condition, value));
+                    } else {
+                        expressions.push((condition, format!("{} = {};", key, light_value_string)));
+                    }
+
+                    if !light_value_string.is_empty() {
                         dependency_map_from_condition(
                             var_dependencies,
                             &property.condition,

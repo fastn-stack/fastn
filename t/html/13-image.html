@@ -740,9 +740,7 @@ window.node_change_main["1:main__src"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1:main"]`).setAttribute("src", resolve_reference("foo#src", data).light);
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1:main"]`).setAttribute("src", resolve_reference("foo#src", data).dark);
-}
+else {document.querySelector(`[data-id="1:main"]`).setAttribute("src", resolve_reference("foo#src", data).dark);}
 }
 window.set_value_main = {};
 window.set_value_main["foo#src"] = function (data, new_value, remaining) {

@@ -185,6 +185,18 @@ impl Kind {
         matches!(self, Kind::Record { .. })
     }
 
+    pub fn is_ftd_responsive_type(&self) -> bool {
+        matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter2::FTD_RESPONSIVE_TYPE))
+    }
+
+    pub fn is_ftd_type(&self) -> bool {
+        matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter2::FTD_TYPE))
+    }
+
+    pub fn is_ftd_font_size(&self) -> bool {
+        matches!(self, Kind::Record { name, .. } if name.eq(ftd::interpreter2::FTD_FONT_SIZE))
+    }
+
     pub fn is_ftd_length(&self) -> bool {
         matches!(self, Kind::OrType { name, .. } if name.eq(ftd::interpreter2::FTD_LENGTH))
     }

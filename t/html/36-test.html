@@ -814,9 +814,7 @@ window.node_change_main["1,0,0,0,0:main__src"] = function(data) {
 if(!data["ftd#dark-mode"]){
 document.querySelector(`[data-id="1,0,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#src", data).light);
 }
-else if(data["ftd#dark-mode"]){
-document.querySelector(`[data-id="1,0,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#src", data).dark);
-}
+else {document.querySelector(`[data-id="1,0,0,0,0:main"]`).setAttribute("src", resolve_reference("foo#src", data).dark);}
 }
 window.node_change_main["1,0,0,1,0,0,0,0:main__text"] = function(data) {
 document.querySelector(`[data-id="1,0,0,1,0,0,0,0:main"]`).innerHTML = resolve_reference("foo#item.0.name", data);

@@ -193,6 +193,30 @@ pub(crate) fn dependencies_from_property_value(
         } else {
             vec![]
         }
+    } else if property_value.is_value() && property_value.kind().is_ftd_responsive_type() {
+        let value = property_value
+            .value("", 0)
+            .unwrap()
+            .record_fields(doc.name, property_value.line_number())
+            .unwrap();
+        let mut values = vec![];
+        for property_value in value.values() {
+            if property_value.is_value() && property_value.kind().is_ftd_type() {
+                let value = property_value
+                    .value("", 0)
+                    .unwrap()
+                    .record_fields(doc.name, 0)
+                    .unwrap();
+                for property_value in value.values() {
+                    if property_value.is_value() && property_value.kind().is_ftd_font_size() {
+                        let value = property_value.value("", 0).unwrap();
+                        let property_value = value.get_or_type(doc.name, 0).unwrap().2;
+                        values.extend(dependencies_from_property_value(property_value, doc))
+                    }
+                }
+            }
+        }
+        values
     } else {
         vec![]
     }
