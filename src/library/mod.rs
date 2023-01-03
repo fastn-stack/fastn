@@ -1,7 +1,7 @@
 mod cr_meta;
 pub(crate) mod document;
 mod fetch_file;
-mod fpm_dot_ftd;
+pub(crate) mod fpm_dot_ftd;
 pub(crate) mod full_sitemap;
 mod get_data;
 mod get_version_data;
@@ -14,8 +14,8 @@ mod sqlite;
 mod toc;
 
 pub use document::convert_to_document_id;
+pub use fpm::Library2022;
 pub use full_sitemap::KeyValueData;
-pub use new_library::Library2022;
 
 #[derive(Debug)]
 pub struct Library {

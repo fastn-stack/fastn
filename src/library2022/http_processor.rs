@@ -1,4 +1,4 @@
-pub async fn processor<'a>(
+pub async fn process<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,

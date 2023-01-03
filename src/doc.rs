@@ -164,6 +164,7 @@ pub async fn interpret_helper<'a>(
                         message: "Cannot find the module".to_string(),
                     },
                 )?;
+                tracing::info!(doc);
                 let line_number = ast.line_number();
                 let value = lib
                     .process(ast, processor, &mut state.tdoc(doc.as_str(), line_number)?)
