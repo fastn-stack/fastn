@@ -1449,3 +1449,334 @@ impl Cursor {
         }
     }
 }
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum FontSize {
+    Px(i64),
+    Em(f64),
+    Rem(f64),
+}
+
+impl Default for FontSize {
+    fn default() -> FontSize {
+        FontSize::Px(0)
+    }
+}
+
+impl FontSize {
+    fn from_optional_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<FontSize>> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        match value.inner() {
+            Some(ftd::interpreter2::Value::OrType {
+                name,
+                variant,
+                value,
+                ..
+            }) if name.eq(ftd::interpreter2::FTD_FONT_SIZE) => Ok(Some(FontSize::from_values(
+                (variant, value.as_ref().to_owned()),
+                doc,
+                line_number,
+            )?)),
+            None => Ok(None),
+            t => ftd::executor::utils::parse_error(
+                format!(
+                    "Expected value of font-size or-type `{}`, found: {:?}",
+                    ftd::interpreter2::FTD_FONT_SIZE,
+                    t
+                ),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_FONT_SIZE_PX => Ok(FontSize::Px(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .integer(doc.name, line_number)?,
+            )),
+            ftd::interpreter2::FTD_FONT_SIZE_EM => Ok(FontSize::Em(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
+            )),
+            ftd::interpreter2::FTD_FONT_SIZE_REM => Ok(FontSize::Rem(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
+            )),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.font-size`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            FontSize::Px(px) => format!("{}px", px),
+            FontSize::Em(em) => format!("{}em", em),
+            FontSize::Rem(rem) => format!("{}rem", rem),
+        }
+    }
+
+    pub fn get_pattern_from_variant_str(
+        variant: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::executor::Result<&'static str> {
+        match variant {
+            ftd::interpreter2::FTD_FONT_SIZE_PX
+            | ftd::interpreter2::FTD_FONT_SIZE_EM
+            | ftd::interpreter2::FTD_FONT_SIZE_REM => Ok("{0}"),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant found for ftd.font-size: `{}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn set_pattern_from_variant_str(
+        variant: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::executor::Result<&'static str> {
+        match variant {
+            ftd::interpreter2::FTD_FONT_SIZE_PX => Ok("{0}px"),
+            ftd::interpreter2::FTD_FONT_SIZE_EM => Ok("{0}em"),
+            ftd::interpreter2::FTD_FONT_SIZE_REM => Ok("{0}rem"),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant found for ftd.font-size: `{}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    pub fn set_value_from_variant(
+        variant: &str,
+        value: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::executor::Result<String> {
+        match variant {
+            ftd::interpreter2::FTD_FONT_SIZE_PX => Ok(format!("{}px", value)),
+            ftd::interpreter2::FTD_FONT_SIZE_EM => Ok(format!("{}em", value)),
+            ftd::interpreter2::FTD_FONT_SIZE_REM => Ok(format!("{}rem", value)),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant found for ftd.font-size: `{}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct Type {
+    pub size: Option<FontSize>,
+    pub line_height: Option<FontSize>,
+    pub letter_spacing: Option<FontSize>,
+    pub weight: Option<i64>,
+    pub font_family: Option<String>,
+}
+
+impl Type {
+    fn new(
+        size: Option<FontSize>,
+        line_height: Option<FontSize>,
+        letter_spacing: Option<FontSize>,
+        weight: Option<i64>,
+        font_family: Option<String>,
+    ) -> Type {
+        Type {
+            size,
+            line_height,
+            letter_spacing,
+            weight,
+            font_family,
+        }
+    }
+
+    fn from_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Type> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        let fields = match value.inner() {
+            Some(ftd::interpreter2::Value::Record { name, fields })
+                if name.eq(ftd::interpreter2::FTD_TYPE) =>
+            {
+                fields
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter2::FTD_COLOR,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        Type::from_values(fields, doc, line_number)
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Type> {
+        let size = {
+            if let Some(value) = values.get("size") {
+                FontSize::from_optional_value(value.to_owned(), doc, line_number)?
+            } else {
+                None
+            }
+        };
+
+        let line_height = {
+            if let Some(value) = values.get("line-height") {
+                FontSize::from_optional_value(value.to_owned(), doc, line_number)?
+            } else {
+                None
+            }
+        };
+
+        let letter_spacing = {
+            if let Some(value) = values.get("letter-spacing") {
+                FontSize::from_optional_value(value.to_owned(), doc, line_number)?
+            } else {
+                None
+            }
+        };
+
+        let weight = {
+            if let Some(value) = values.get("weight") {
+                Some(
+                    value
+                        .clone()
+                        .resolve(&doc.itdoc(), line_number)?
+                        .integer(doc.name, line_number)?,
+                )
+            } else {
+                None
+            }
+        };
+
+        let font_family = {
+            if let Some(value) = values.get("font-family") {
+                Some(
+                    value
+                        .clone()
+                        .resolve(&doc.itdoc(), line_number)?
+                        .string(doc.name, line_number)?,
+                )
+            } else {
+                None
+            }
+        };
+
+        Ok(Type::new(
+            size,
+            line_height,
+            letter_spacing,
+            weight,
+            font_family,
+        ))
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct ResponsiveType {
+    pub desktop: Type,
+    pub mobile: Type,
+}
+
+impl ResponsiveType {
+    fn from_values(
+        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ResponsiveType> {
+        let desktop = {
+            let value = values
+                .get("desktop")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`desktop` field in ftd.responsive-type not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            Type::from_value(value.to_owned(), doc, line_number)?
+        };
+
+        let mobile = {
+            let value = values
+                .get("mobile")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`mobile` field in ftd.responsive-type not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            Type::from_value(value.to_owned(), doc, line_number)?
+        };
+
+        Ok(ResponsiveType { desktop, mobile })
+    }
+
+    fn from_optional_values(
+        or_type_value: Option<ftd::Map<ftd::interpreter2::PropertyValue>>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(ResponsiveType::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    pub(crate) fn optional_responsive_type(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<ResponsiveType>>> {
+        let record_values = ftd::executor::value::optional_record(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_RESPONSIVE_TYPE,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            ResponsiveType::from_optional_values(record_values.value, doc, line_number)?,
+            record_values.line_number,
+            record_values.properties,
+        ))
+    }
+}
