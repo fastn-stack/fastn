@@ -16,3 +16,10 @@ src: https://ftd-lang.github.io/ftd/25-expander.html
 -- ds.markdown:
 
 Start with the [part 1 now](/expander/hello-world/).
+
+
+-- ds.h3: 1.1.B: Resource section
+
+[Get latest release](https://github.com/ftd-lang/fpm/releases)
+
+[Live Expander Project](https://github.com/ftd-lang/fpm/releases)
