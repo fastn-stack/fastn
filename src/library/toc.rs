@@ -384,7 +384,10 @@ impl TocParser {
                             d,
                         ));
                     }
-                    _ => todo!(),
+                    attr => {
+                        dbg!(&attr);
+                        todo!()
+                    }
                 },
                 _ => panic!("State mismatch"),
             };
