@@ -89,6 +89,7 @@ enum ParsingState {
     WaitingForNextItem,
     WaitingForAttributes,
 }
+
 #[derive(Debug)]
 pub struct TocParser {
     state: ParsingState,

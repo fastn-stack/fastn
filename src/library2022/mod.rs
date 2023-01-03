@@ -1,4 +1,5 @@
 pub(crate) mod http_processor;
+pub(crate) mod toc_processor;
 
 #[derive(Debug)]
 pub struct Library2022 {
@@ -187,10 +188,8 @@ impl Library2022 {
         let line_number = ast.line_number();
         let (_processor, value, kind) = get_processor_data(ast, doc)?;
         match processor.as_str() {
-            "http" => {
-                fpm::library2022::http_processor::process(value, kind, doc, &self.config).await
-            }
-            // "toc" => fpm::library::toc::processor(section, doc, config),
+            "http" => http_processor::process(value, kind, doc, &self.config).await,
+            "toc" => toc_processor::process(value, kind, doc, &self.config),
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,
