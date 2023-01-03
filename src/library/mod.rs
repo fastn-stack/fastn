@@ -10,7 +10,7 @@ mod include;
 mod package_tree;
 mod sitemap;
 mod sqlite;
-mod toc;
+pub(crate) mod toc;
 
 pub use document::convert_to_document_id;
 pub use fpm::Library2022;
