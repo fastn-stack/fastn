@@ -84,6 +84,18 @@ impl<'a> DataGenerator<'a> {
                                 Some(value)
                             }
                         }
+                        Some(value) if name.eq(ftd::interpreter2::FTD_FONT_SIZE) => {
+                            if let Ok(pattern) = ftd::executor::FontSize::set_value_from_variant(
+                                variant.as_str(),
+                                value.to_string().as_str(),
+                                doc.name,
+                                0,
+                            ) {
+                                serde_json::to_value(pattern).ok()
+                            } else {
+                                Some(value)
+                            }
+                        }
                         Some(value)
                             if name.eq(ftd::interpreter2::FTD_RESIZING_FIXED)
                                 && variant.ne(ftd::interpreter2::FTD_RESIZING_FIXED) =>

@@ -1781,7 +1781,7 @@ impl ResponsiveType {
     }
 
     pub fn font_size_pattern() -> (String, bool) {
-        ("{{0}}.font-size".to_string(), true)
+        ("({0})[\"size\"]".to_string(), true)
     }
 
     pub fn to_css_line_height(&self) -> Option<String> {
@@ -1789,7 +1789,7 @@ impl ResponsiveType {
     }
 
     pub fn line_height_pattern() -> (String, bool) {
-        ("{{0}}.line-height".to_string(), true)
+        ("({0})[\"line-height\"]".to_string(), true)
     }
 
     pub fn to_css_letter_spacing(&self) -> Option<String> {
@@ -1800,7 +1800,7 @@ impl ResponsiveType {
     }
 
     pub fn letter_spacing_pattern() -> (String, bool) {
-        ("{{0}}.letter-spacing".to_string(), true)
+        ("({0})[\"letter-spacing\"]".to_string(), true)
     }
 
     pub fn to_css_weight(&self) -> Option<String> {
@@ -1808,7 +1808,7 @@ impl ResponsiveType {
     }
 
     pub fn weight_pattern() -> (String, bool) {
-        ("{{0}}.weight".to_string(), true)
+        ("({0}).weight".to_string(), true)
     }
 
     pub fn to_css_font_family(&self) -> Option<String> {
@@ -1816,6 +1816,6 @@ impl ResponsiveType {
     }
 
     pub fn font_family_pattern() -> (String, bool) {
-        ("{{0}}.font-family".to_string(), true)
+        ("({0})[\"font-family\"]".to_string(), true)
     }
 }

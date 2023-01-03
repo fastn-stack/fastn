@@ -153,6 +153,78 @@ impl<'a> DependencyGenerator<'a> {
                     is_static = false;
                 }
 
+                if ftd::html1::utils::is_device_dependent(&property.value, self.doc)? {
+                    let mut desktop_value_string = "".to_string();
+                    if let Some(value_string) =
+                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                            self.id,
+                            self.doc,
+                            &property.value,
+                            &property_with_pattern.pattern_with_eval,
+                            Some("desktop".to_string()),
+                            false,
+                        )?
+                    {
+                        desktop_value_string = value_string;
+                    }
+
+                    let mut mobile_value_string = "".to_string();
+                    if let Some(value_string) =
+                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                            self.id,
+                            self.doc,
+                            &property.value,
+                            &property_with_pattern.pattern_with_eval,
+                            Some("mobile".to_string()),
+                            false,
+                        )?
+                    {
+                        mobile_value_string = value_string;
+                    }
+                    if desktop_value_string.ne(&mobile_value_string) {
+                        is_static = false;
+                        let value = ftd::html1::utils::js_expression_from_list(
+                            std::iter::IntoIterator::into_iter([
+                                (
+                                    Some("data[\"ftd#device\"] == \"desktop\"".to_string()),
+                                    format!(
+                                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                                        node_data_id, key, desktop_value_string
+                                    )
+                                ),
+                                (None, format!(
+                                    "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                                    node_data_id, key, mobile_value_string
+                                )),
+                            ])
+                                .collect(),
+                            Some(key.as_str()),
+                        );
+                        expressions.push((condition, value));
+                    } else {
+                        expressions
+                            .push((condition, format!("{} = {};", key, desktop_value_string)));
+                    }
+
+                    if !desktop_value_string.is_empty() {
+                        dependency_map_from_condition(
+                            var_dependencies,
+                            &property.condition,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        dependency_map_from_property_value(
+                            var_dependencies,
+                            &property.value,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        var_dependencies
+                            .insert("ftd#device".to_string(), node_change_id.to_string());
+                    }
+                    continue;
+                }
+
                 if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
                     // Todo: If the property.value is static then resolve it and use
                     let mut light_value_string = "".to_string();
@@ -277,7 +349,6 @@ impl<'a> DependencyGenerator<'a> {
                 "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
                 node_data_id, key
             );
-            // dbg!("style", &key, &attribute);
             for property_with_pattern in attribute.properties.iter() {
                 let property = &property_with_pattern.property;
                 let condition = property
@@ -289,21 +360,74 @@ impl<'a> DependencyGenerator<'a> {
                     is_static = false;
                 }
 
+                if ftd::html1::utils::is_device_dependent(&property.value, self.doc)? {
+                    let mut desktop_value_string = "".to_string();
+                    if let Some(value_string) =
+                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                            self.id,
+                            self.doc,
+                            &property.value,
+                            &property_with_pattern.pattern_with_eval,
+                            Some("desktop".to_string()),
+                            false,
+                        )?
+                    {
+                        desktop_value_string = value_string;
+                    }
+
+                    let mut mobile_value_string = "".to_string();
+                    if let Some(value_string) =
+                        ftd::html1::utils::get_formatted_dep_string_from_property_value(
+                            self.id,
+                            self.doc,
+                            &property.value,
+                            &property_with_pattern.pattern_with_eval,
+                            Some("mobile".to_string()),
+                            false,
+                        )?
+                    {
+                        mobile_value_string = value_string;
+                    }
+                    if desktop_value_string.ne(&mobile_value_string) {
+                        is_static = false;
+                        let value = ftd::html1::utils::js_expression_from_list(
+                            std::iter::IntoIterator::into_iter([
+                                (
+                                    Some("data[\"ftd#device\"] == \"desktop\"".to_string()),
+                                    format!("{} = {};", key, desktop_value_string),
+                                ),
+                                (None, format!("{} = {};", key, mobile_value_string)),
+                            ])
+                            .collect(),
+                            Some(key.as_str()),
+                        );
+                        expressions.push((condition, value));
+                    } else {
+                        expressions
+                            .push((condition, format!("{} = {};", key, desktop_value_string)));
+                    }
+
+                    if !desktop_value_string.is_empty() {
+                        dependency_map_from_condition(
+                            var_dependencies,
+                            &property.condition,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        dependency_map_from_property_value(
+                            var_dependencies,
+                            &property.value,
+                            node_change_id.as_str(),
+                            self.doc,
+                        );
+                        var_dependencies
+                            .insert("ftd#device".to_string(), node_change_id.to_string());
+                    }
+                    continue;
+                }
+
                 if ftd::html1::utils::is_dark_mode_dependent(&property.value, self.doc)? {
                     // Todo: If the property.value is static then resolve it and use
-                    /*let value = property
-                        .value
-                        .clone()
-                        .resolve(&self.doc, property.value.line_number())?
-                        .record_fields(self.doc.name, property.line_number)?;
-
-                    let light = value.get("light").unwrap();
-                    let dark = value.get("dark").unwrap();
-
-                    if condition.is_none() && dark.eq(light) {
-                        dbg!("condition.is_none()", &dark);
-                        continue;
-                    }*/
                     let mut light_value_string = "".to_string();
                     if let Some(value_string) =
                         ftd::html1::utils::get_formatted_dep_string_from_property_value(

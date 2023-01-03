@@ -164,6 +164,14 @@ pub(crate) fn is_dark_mode_dependent(
         || value.is_or_type_variant(ftd::interpreter2::FTD_BACKGROUND_SOLID))
 }
 
+pub(crate) fn is_device_dependent(
+    value: &ftd::interpreter2::PropertyValue,
+    doc: &ftd::interpreter2::TDoc,
+) -> ftd::html1::Result<bool> {
+    let value = value.clone().resolve(doc, value.line_number())?;
+    Ok(value.is_record(ftd::interpreter2::FTD_RESPONSIVE_TYPE))
+}
+
 pub(crate) fn dependencies_from_property_value(
     property_value: &ftd::interpreter2::PropertyValue,
     doc: &ftd::interpreter2::TDoc,
