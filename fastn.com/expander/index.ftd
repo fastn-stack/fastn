@@ -1,3 +1,5 @@
+-- import: fpm
+
 -- ds.page: Expander Crash Course
 
 -- ds.youtube:
@@ -23,3 +25,12 @@ Start with the [part 1 now](/expander/hello-world/).
 [Get latest release](https://github.com/ftd-lang/fpm/releases)
 
 [Live Expander Project](https://ftd-lang.github.io/ftd/25-expander.html)
+
+
+-- ds.h3: Get Help
+
+[Raise an issue](https://github.com/ftd-lang/fpm/issues)
+
+[Start a discussion](https://github.com/ftd-lang/fpm/discussions)
+
+Reach out on [Discord](https://discord.com/channels/793929082483769345/793929254911868969)
