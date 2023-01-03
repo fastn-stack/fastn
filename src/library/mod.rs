@@ -7,7 +7,6 @@ mod get_data;
 mod get_version_data;
 pub(crate) mod http;
 mod include;
-mod new_library;
 mod package_tree;
 mod sitemap;
 mod sqlite;
