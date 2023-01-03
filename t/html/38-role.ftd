@@ -1,5 +1,9 @@
 -- ftd.type ftype:
 size.px: 40
+weight: 900
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
 
 -- ftd.responsive-type rtype:
 desktop: $ftype

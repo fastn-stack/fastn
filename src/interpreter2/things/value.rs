@@ -371,7 +371,7 @@ impl PropertyValue {
         value: ftd::ast::VariableValue,
         doc: &mut ftd::interpreter2::TDoc,
         is_mutable: bool,
-        expected_kind: &ftd::interpreter2::KindData,
+        _expected_kind: &ftd::interpreter2::KindData,
         definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     ) -> ftd::interpreter2::Result<
