@@ -97,10 +97,14 @@ pub fn get_clean_url(
         if let Some(ep) = &app.end_point {
             if let Some(remaining_url) = trim_package_name(url.as_str(), app.package.name.as_str())
             {
+                let mut app_conf = app.config.clone();
+                if let Some(user_id) = &app.user_id {
+                    app_conf.insert("user-id".to_string(), user_id.clone());
+                }
                 return Ok((
                     Some(app.package.name.to_string()),
                     url::Url::parse(format!("{}{}", ep, remaining_url).as_str())?,
-                    app.config.clone(),
+                    app_conf,
                 ));
             }
         }

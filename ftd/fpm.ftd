@@ -433,6 +433,7 @@ caption name:
 string package:
 string mount-point:
 optional string end-point:
+optional string user-id:
 string list config:
 string list readers:
 string list writers:

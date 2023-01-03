@@ -5,6 +5,7 @@ pub struct App {
     pub package: fpm::Package,
     pub mount_point: String,
     pub end_point: Option<String>,
+    pub user_id: Option<String>,
     pub config: std::collections::HashMap<String, String>,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
@@ -18,6 +19,8 @@ pub struct AppTemp {
     pub mount_point: String,
     #[serde(rename = "end-point")]
     pub end_point: Option<String>,
+    #[serde(rename = "user-id")]
+    pub user_id: Option<String>,
     pub config: Vec<String>,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
@@ -78,6 +81,7 @@ impl AppTemp {
             package,
             mount_point: self.mount_point,
             end_point: self.end_point,
+            user_id: self.user_id,
             config: Self::parse_config(&self.config)?,
             readers: self.readers,
             writers: self.writers,

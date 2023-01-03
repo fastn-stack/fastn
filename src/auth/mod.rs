@@ -118,6 +118,17 @@ impl AuthProviders {
             AuthProviders::Gmail => "gmail",
         }
     }
+
+    pub(crate) fn from_str(s: &str) -> Self {
+        match s {
+            "github" => AuthProviders::GitHub,
+            "telegram" => AuthProviders::TeleGram,
+            "google" => AuthProviders::Google,
+            "discord" => AuthProviders::Discord,
+            "slack" => AuthProviders::Slack,
+            _ => panic!("Invalid auth provider {}", s),
+        }
+    }
 }
 
 pub fn secret_key() -> String {
@@ -129,6 +140,79 @@ pub fn secret_key() -> String {
             "FPM_TEMP_SECRET".to_string()
         }
     }
+}
+
+/// will fetch out the decrypted user data from cookies
+/// and return it as string
+/// if no cookie wrt to platform found it throws an error
+pub async fn get_user_data_from_cookies(
+    platform: &str,
+    requested_field: &str,
+    cookies: &std::collections::HashMap<String, String>,
+) -> fpm::Result<Option<String>> {
+    let ud_encrypted = cookies.get(platform).ok_or_else(|| {
+        fpm::Error::GenericError(format!(
+            "user detail not found for platform {} in the cookies",
+            platform
+        ))
+    });
+    match ud_encrypted {
+        Ok(encrypt_str) => {
+            if let Ok(ud_decrypted) = utils::decrypt_str(encrypt_str).await {
+                match fpm::auth::AuthProviders::from_str(platform) {
+                    fpm::auth::AuthProviders::GitHub => {
+                        let github_ud: github::UserDetail =
+                            serde_json::from_str(ud_decrypted.as_str())?;
+                        return match requested_field {
+                            "username" | "user_name" | "user-name" => Ok(Some(github_ud.user_name)),
+                            "token" => Ok(Some(github_ud.token)),
+                            _ => Err(fpm::Error::GenericError(format!(
+                                "invalid field {} requested for platform {}",
+                                requested_field, platform
+                            ))),
+                        };
+                    }
+                    fpm::auth::AuthProviders::TeleGram => {
+                        let telegram_ud: telegram::UserDetail =
+                            serde_json::from_str(ud_decrypted.as_str())?;
+                        return match requested_field {
+                            "username" | "user_name" | "user-name" => {
+                                Ok(Some(telegram_ud.user_name))
+                            }
+                            "uid" | "userid" | "user-id" => Ok(Some(telegram_ud.user_id)),
+                            "token" => Ok(Some(telegram_ud.token)),
+                            _ => Err(fpm::Error::GenericError(format!(
+                                "invalid field {} requested for platform {}",
+                                requested_field, platform
+                            ))),
+                        };
+                    }
+                    fpm::auth::AuthProviders::Discord => {
+                        let discord_ud: discord::UserDetail =
+                            serde_json::from_str(ud_decrypted.as_str())?;
+                        return match requested_field {
+                            "username" | "user_name" | "user-name" => {
+                                Ok(Some(discord_ud.user_name))
+                            }
+                            "id" | "userid" | "user-id" => Ok(Some(discord_ud.user_id)),
+                            "token" => Ok(Some(discord_ud.token)),
+                            _ => Err(fpm::Error::GenericError(format!(
+                                "invalid field {} requested for platform {}",
+                                requested_field, platform
+                            ))),
+                        };
+                    }
+                    _ => unimplemented!(),
+                }
+            }
+        }
+        Err(err) => {
+            // Debug out the error and return None
+            let error_msg = format!("User data error: {}", err);
+            dbg!(&error_msg);
+        }
+    };
+    Ok(None)
 }
 
 // TODO: rename the method later
