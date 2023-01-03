@@ -114,7 +114,8 @@ padding-bottom: 20
     if id.is_none() && new_ftd_dir.is_dir() {
         let mut new_ftd_dir_write_doc = write_doc.clone();
         write_doc = format!(
-            "{}\n-- ftd.text: FTD-v2 Examples \npadding-bottom: 20\nrole: $small-heading\nlink: ftd-v2.html\n\n",
+            "{}\n-- ftd.text: FTD-v3 (EDITION: 2022) Examples \npadding-bottom: 20\nrole: \
+            $small-heading\nlink: ftd-v2.html\n\n",
             write_doc,
         );
         for entry in std::fs::read_dir(new_ftd_dir)
