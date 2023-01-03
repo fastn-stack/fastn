@@ -1779,4 +1779,47 @@ impl ResponsiveType {
             record_values.properties,
         ))
     }
+
+    pub fn to_css_font_size(&self) -> Option<String> {
+        self.desktop.size.as_ref().map(|v| v.to_css_string())
+    }
+
+    pub fn font_size_pattern() -> (String, bool) {
+        ("{{0}}.font-size".to_string(), true)
+    }
+
+    pub fn to_css_line_height(&self) -> Option<String> {
+        self.desktop.line_height.as_ref().map(|v| v.to_css_string())
+    }
+
+    pub fn line_height_pattern() -> (String, bool) {
+        ("{{0}}.line-height".to_string(), true)
+    }
+
+    pub fn to_css_letter_spacing(&self) -> Option<String> {
+        self.desktop
+            .letter_spacing
+            .as_ref()
+            .map(|v| v.to_css_string())
+    }
+
+    pub fn letter_spacing_pattern() -> (String, bool) {
+        ("{{0}}.letter-spacing".to_string(), true)
+    }
+
+    pub fn to_css_weight(&self) -> Option<String> {
+        self.desktop.weight.as_ref().map(|v| v.to_string())
+    }
+
+    pub fn weight_pattern() -> (String, bool) {
+        ("{{0}}.weight".to_string(), true)
+    }
+
+    pub fn to_css_font_family(&self) -> Option<String> {
+        self.desktop.font_family.to_owned()
+    }
+
+    pub fn font_family_pattern() -> (String, bool) {
+        ("{{0}}.font-family".to_string(), true)
+    }
 }

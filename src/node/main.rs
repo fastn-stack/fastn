@@ -544,6 +544,71 @@ impl ftd::executor::Common {
         );
 
         d.check_and_insert(
+            "font-size",
+            ftd::node::Value::from_executor_value(
+                self.role
+                    .to_owned()
+                    .map(|v| v.and_then(|v| v.to_css_font_size()))
+                    .value,
+                self.role.to_owned(),
+                Some(ftd::executor::ResponsiveType::font_size_pattern()),
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "line-height",
+            ftd::node::Value::from_executor_value(
+                self.role
+                    .to_owned()
+                    .map(|v| v.and_then(|v| v.to_css_line_height()))
+                    .value,
+                self.role.to_owned(),
+                Some(ftd::executor::ResponsiveType::line_height_pattern()),
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "letter-spacing",
+            ftd::node::Value::from_executor_value(
+                self.role
+                    .to_owned()
+                    .map(|v| v.and_then(|v| v.to_css_letter_spacing()))
+                    .value,
+                self.role.to_owned(),
+                Some(ftd::executor::ResponsiveType::letter_spacing_pattern()),
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "font-weight",
+            ftd::node::Value::from_executor_value(
+                self.role
+                    .to_owned()
+                    .map(|v| v.and_then(|v| v.to_css_weight()))
+                    .value,
+                self.role.to_owned(),
+                Some(ftd::executor::ResponsiveType::weight_pattern()),
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "font-family",
+            ftd::node::Value::from_executor_value(
+                self.role
+                    .to_owned()
+                    .map(|v| v.and_then(|v| v.to_css_font_family()))
+                    .value,
+                self.role.to_owned(),
+                Some(ftd::executor::ResponsiveType::font_family_pattern()),
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "height",
             ftd::node::Value::from_executor_value(
                 Some(self.height.to_owned().map(|v| v.to_css_string()).value),

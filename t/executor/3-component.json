@@ -113,6 +113,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "role": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "cursor": {
                         "value": null,
                         "line_number": null,
@@ -512,6 +517,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "role": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "cursor": {
                                 "value": null,
                                 "line_number": null,
@@ -786,6 +796,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "role": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "cursor": {
                                 "value": null,
                                 "line_number": null,
@@ -1030,6 +1045,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "role": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "cursor": {
                         "value": null,
                         "line_number": null,
@@ -1274,6 +1294,11 @@
               "is_not_visible": false,
               "event": [],
               "is_dummy": false,
+              "role": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "cursor": {
                 "value": null,
                 "line_number": null,
@@ -1518,6 +1543,11 @@
       "is_not_visible": false,
       "event": [],
       "is_dummy": false,
+      "role": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "cursor": {
         "value": null,
         "line_number": null,
