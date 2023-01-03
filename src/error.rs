@@ -81,3 +81,13 @@ pub enum Error {
     #[error("TokioMPSCError2: {}", _0)]
     TokioMPSCError2(#[from] tokio::sync::mpsc::error::SendError<usize>),
 }
+
+impl Error {
+    pub fn generic<T: AsRef<str> + ToString>(error: T) -> Self {
+        Self::GenericError(error.to_string())
+    }
+
+    pub fn generic_err<T: AsRef<str> + ToString>(error: T) -> fpm::Result<()> {
+        Err(Self::generic(error))
+    }
+}

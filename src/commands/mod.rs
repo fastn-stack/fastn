@@ -7,6 +7,7 @@ pub mod create_cr;
 pub mod create_package;
 pub mod diff;
 pub mod edit;
+pub mod init;
 pub mod mark_resolved;
 pub mod mark_upto_date;
 pub mod merge;
