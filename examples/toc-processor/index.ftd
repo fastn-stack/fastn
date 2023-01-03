@@ -1,0 +1,26 @@
+-- import: fpm
+
+;; some error is coming in this
+
+-- ftd.text: Hello world
+
+-- record toc-item:
+caption title:
+string url:
+toc-item list children:
+
+-- ftd.text: You can use it like this:
+
+-- toc-item list toc:
+
+-- toc:
+$processor$: toc
+
+- Document1
+  url: https://google.com
+- Document2
+  url: /some/url/
+  - Document21
+    url: /some/nested/page/
+
+-- end: toc
