@@ -14,7 +14,7 @@ pub use element::{Column, Common, Container, Element, Event, Image, Row, Text};
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
     AlignSelf, Alignment, Background, Color, ColorValue, Cursor, Length, Overflow, Resize,
-    Resizing, SpacingMode, TextAlign,
+    Resizing, ResponsiveType, SpacingMode, TextAlign,
 };
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;
