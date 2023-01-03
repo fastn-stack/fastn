@@ -821,4 +821,12 @@ impl<T> StateWithThing<T> {
         let thing = try_state!(self);
         StateWithThing::new_thing(f(thing))
     }
+
+    pub fn into_optional(self) -> Option<T> {
+        match self {
+            ftd::interpreter2::StateWithThing::State(_)
+            | ftd::interpreter2::StateWithThing::Continue => None,
+            ftd::interpreter2::StateWithThing::Thing(t) => Some(t),
+        }
+    }
 }
