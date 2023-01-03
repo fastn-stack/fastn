@@ -6,7 +6,6 @@ pub const FTD_LENGTH_VH: &str = "ftd#length.vh";
 pub const FTD_LENGTH_VW: &str = "ftd#length.vw";
 pub const FTD_LENGTH_EM: &str = "ftd#length.em";
 pub const FTD_LENGTH_REM: &str = "ftd#length.rem";
-pub const FTD_LENGTH_VALUE: &str = "value";
 
 pub const FTD_ALIGN: &str = "ftd#align";
 pub const FTD_ALIGN_TOP_LEFT: &str = "ftd#align.top-left";
@@ -26,7 +25,6 @@ pub const FTD_RESIZING_FIXED: &str = "ftd#resizing.fixed";
 
 pub const FTD_COLOR: &str = "ftd#color";
 pub const FTD_COLOR_LIGHT: &str = "ftd#color.light";
-pub const FTD_COLOR_DARK: &str = "ftd#color.dark";
 
 pub const FTD_BACKGROUND: &str = "ftd#background";
 pub const FTD_BACKGROUND_SOLID: &str = "ftd#background.solid";
@@ -100,3 +98,13 @@ pub const FTD_CURSOR_ROW_RESIZE: &str = "ftd#cursor.row-resize";
 pub const FTD_CURSOR_ALL_SCROLL: &str = "ftd#cursor.all-scroll";
 pub const FTD_CURSOR_ZOOM_IN: &str = "ftd#cursor.zoom-in";
 pub const FTD_CURSOR_ZOOM_OUT: &str = "ftd#cursor.zoom-out";
+
+pub const FTD_FONT_SIZE: &str = "ftd#font-size";
+pub const FTD_FONT_SIZE_PX: &str = "ftd#font-size.px";
+pub const FTD_FONT_SIZE_EM: &str = "ftd#font-size.em";
+pub const FTD_FONT_SIZE_REM: &str = "ftd#font-size.rem";
+
+pub const FTD_TYPE: &str = "ftd#type";
+
+pub const FTD_RESPONSIVE_TYPE: &str = "ftd#responsive-type";
+pub const FTD_RESPONSIVE_TYPE_DESKTOP: &str = "ftd#responsive-type.desktop";

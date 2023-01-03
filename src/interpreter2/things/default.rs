@@ -956,6 +956,133 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_FONT_SIZE_PX,
+                        ftd::interpreter2::Kind::integer()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_FONT_SIZE_EM,
+                        ftd::interpreter2::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_FONT_SIZE_REM,
+                        ftd::interpreter2::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_TYPE.to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: ftd::interpreter2::FTD_TYPE.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter2::Field {
+                        name: "size".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_FONT_SIZE)
+                            .into_optional()
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "line-height".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_FONT_SIZE)
+                            .into_optional()
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "letter-spacing".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_FONT_SIZE)
+                            .into_optional()
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "weight".to_string(),
+                        kind: ftd::interpreter2::Kind::integer()
+                            .into_optional()
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "font-family".to_string(),
+                        kind: ftd::interpreter2::Kind::string()
+                            .into_optional()
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ])
+                .collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter2::Field {
+                        name: "desktop".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_TYPE)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "mobile".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_TYPE)
+                            .into_optional()
+                            .into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter2::PropertyValue::Reference {
+                            name: ftd::interpreter2::FTD_RESPONSIVE_TYPE_DESKTOP.to_string(),
+                            kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_TYPE)
+                                .into_kind_data(),
+                            source: ftd::interpreter2::PropertyValueSource::Local(
+                                ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                            ),
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                ])
+                .collect(),
+                line_number: 0,
+            }),
+        ),
+        (
             "ftd#dark-mode".to_string(),
             ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                 name: "ftd#dark-mode".to_string(),
@@ -1307,6 +1434,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
+        ftd::interpreter2::Argument::default(
+            "role",
+            ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter2::Argument::default(
             "cursor",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_CURSOR)
