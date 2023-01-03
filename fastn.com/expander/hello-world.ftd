@@ -7,11 +7,15 @@ v: 4tGbwWncZ5c
 
 -- ds.image: 
 src: $assets.files.images.column.png
+width: fill
 
 -- ds.image: 
 src: $assets.files.images.row.png
+width: fill
 
 
 -- ds.markdown:
 
 Continue with the [part 2 now](/expander/basic-ui/).
+
+
