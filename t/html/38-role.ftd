@@ -12,9 +12,22 @@ font-family: fantasy
 line-height.px: 35
 letter-spacing.px: 3
 
+-- boolean $flag: true
+
 -- ftd.responsive-type rtype:
 desktop: $dtype
 mobile: $mtype
 
+-- ftd.responsive-type rrtype:
+desktop: $mtype
+mobile: $dtype
+
 -- ftd.text: Hello World
-role: $rtype
+role if { flag }: $rtype
+role: $rrtype
+$on-click$: $toggle($a = $flag)
+
+-- void toggle(a):
+boolean $a:
+
+a = !a
