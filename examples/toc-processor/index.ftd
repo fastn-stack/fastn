@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fpm/processors
 
 ;; some error is coming in this
 
@@ -12,9 +12,7 @@ toc-item list children:
 -- ftd.text: You can use it like this:
 
 -- toc-item list toc:
-
--- toc:
-$processor$: toc
+$processor$: processors.toc
 
 - Document1
   url: https://google.com
