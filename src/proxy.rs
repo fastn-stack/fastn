@@ -15,6 +15,7 @@ static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
     once_cell::sync::Lazy::new(|| std::sync::Arc::new(client_builder()));
 
 // This method will connect client request to the out of the world
+#[tracing::instrument(skip_all)]
 pub(crate) async fn get_out(
     host: &str,
     req: fpm::http::Request,
@@ -26,7 +27,7 @@ pub(crate) async fn get_out(
     // TODO: It should be part of fpm::Request::uri()
     // let path = &req.uri().to_string()[1..];
 
-    println!("proxy_request: {} {} {}", req.method(), path, host);
+    tracing::info!("proxy_request: {} {} {}", req.method(), path, host);
 
     let mut proxy_request = reqwest::Request::new(
         match req.method() {

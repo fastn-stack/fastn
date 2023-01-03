@@ -284,10 +284,15 @@ pub async fn serve(
         // In that case need to check whether that url is present in sitemap or not and than proxy
         // pass the url if the file is not static
         // So final check would be file is not static and path is not present in the package's sitemap
+        tracing::info!(
+            "executing proxy: file-status: {}, path: {}",
+            file_response.status(),
+            &path
+        );
         if file_response.status() == actix_web::http::StatusCode::NOT_FOUND {
             // TODO: Check if path exists in dynamic urls also, otherwise pass to endpoint
             // Already checked in the above method serve_file
-            println!("executing proxy: {}", &path);
+            tracing::info!("executing proxy: path: {}", &path);
             let (package_name, url, conf) =
                 fpm::config::utils::get_clean_url(&config, path.as_str())?;
             let package_name = package_name.unwrap_or_else(|| config.package.name.to_string());
@@ -300,11 +305,11 @@ pub async fn serve(
             let req = if let Some(r) = config.request {
                 r
             } else {
+                tracing::error!(msg = "request not set");
                 return Ok(fpm::server_error!("request not set"));
             };
 
             // TODO: read app config and send them to service as header
-
             return fpm::proxy::get_out(
                 host.as_str(),
                 req,
