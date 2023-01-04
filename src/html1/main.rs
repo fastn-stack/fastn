@@ -6,6 +6,7 @@ pub struct HtmlUI {
     pub variables: String,
     pub functions: String,
     pub variable_dependencies: String,
+    pub outer_events: String,
 }
 
 impl HtmlUI {
@@ -23,7 +24,8 @@ impl HtmlUI {
         let variable_dependencies = ftd::html1::VariableDependencyGenerator::new(id, &tdoc)
             .get_set_functions(&var_dependencies)?;
         let variables = ftd::html1::data::DataGenerator::new(&tdoc).get_data()?;
-        let html = HtmlGenerator::new(id, &tdoc).to_html(node_data.node)?;
+        let (html, outer_events) =
+            HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;
 
         Ok(HtmlUI {
             html,
@@ -32,6 +34,7 @@ impl HtmlUI {
                 .expect("failed to convert document to json"),
             functions,
             variable_dependencies,
+            outer_events,
         })
     }
 }
@@ -49,9 +52,20 @@ impl<'a> HtmlGenerator<'a> {
         }
     }
 
-    pub fn to_html(&self, node: ftd::node::Node) -> ftd::html1::Result<String> {
+    pub fn to_html_and_outer_events(
+        &self,
+        node: ftd::node::Node,
+    ) -> ftd::html1::Result<(String, String)> {
+        let (html, events) = self.to_html_(node)?;
+        Ok((html, ftd::html1::utils::events_to_string(events)))
+    }
+
+    pub fn to_html_(
+        &self,
+        node: ftd::node::Node,
+    ) -> ftd::html1::Result<(String, Vec<(String, String, String)>)> {
         if node.is_null() {
-            return Ok("".to_string());
+            return Ok(("".to_string(), vec![]));
         }
 
         let style = format!(
@@ -60,17 +74,30 @@ impl<'a> HtmlGenerator<'a> {
         );
         let classes = self.class_to_html(&node);
 
+        let mut outer_events = vec![];
         let attrs = {
             let mut attr = self.attrs_to_html(&node);
             let events = self.group_by_js_event(&node.events)?;
             for (name, actions) in events {
-                let event = format!(
-                    "window.ftd.handle_event(event, '{}', '{}', this)",
-                    self.id,
-                    actions.replace('\"', "&quot;")
-                );
-                attr.push(' ');
-                attr.push_str(&format!("{}={}", name, quote(&event)));
+                if name.eq("onclickoutside") || name.starts_with("onglobalkey") {
+                    let event = format!(
+                        "window.ftd.handle_event(event, '{}', '{}', this)",
+                        self.id, actions
+                    );
+                    outer_events.push((
+                        ftd::html1::utils::full_data_id(self.id.as_str(), node.data_id.as_str()),
+                        name,
+                        event,
+                    ));
+                } else {
+                    let event = format!(
+                        "window.ftd.handle_event(event, '{}', '{}', this)",
+                        self.id,
+                        actions.replace('\"', "&quot;")
+                    );
+                    attr.push(' ');
+                    attr.push_str(&format!("{}={}", name, quote(&event)));
+                }
             }
             attr
         };
@@ -80,18 +107,27 @@ impl<'a> HtmlGenerator<'a> {
             None => node
                 .children
                 .into_iter()
-                .map(|v| self.to_html(v))
+                .map(|v| match self.to_html_(v) {
+                    Ok((html, events)) => {
+                        outer_events.extend(events);
+                        Ok(html)
+                    }
+                    Err(e) => Err(e),
+                })
                 .collect::<ftd::html1::Result<Vec<String>>>()?
                 .join(""),
         };
 
-        Ok(format!(
-            "<{node} {attrs} {style} {classes}>{body}</{node}>",
-            node = node.node.as_str(),
-            attrs = attrs,
-            style = style,
-            classes = classes,
-            body = body,
+        Ok((
+            format!(
+                "<{node} {attrs} {style} {classes}>{body}</{node}>",
+                node = node.node.as_str(),
+                attrs = attrs,
+                style = style,
+                classes = classes,
+                body = body,
+            ),
+            outer_events,
         ))
     }
 

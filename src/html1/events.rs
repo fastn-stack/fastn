@@ -91,7 +91,7 @@ impl<'a> ftd::html1::main::HtmlGenerator<'a> {
         // value: after group by for onclick find all actions, and call to_js_event()
         let mut events: ftd::Map<Vec<ftd::html1::Action>> = Default::default();
         for event in evts {
-            if let Some(actions) = events.get_mut(to_event_name(&event.name)) {
+            if let Some(actions) = events.get_mut(to_event_name(&event.name).as_str()) {
                 actions.push(ftd::html1::Action::from_function_call(
                     &event.action,
                     self.id.as_str(),
@@ -99,7 +99,7 @@ impl<'a> ftd::html1::main::HtmlGenerator<'a> {
                 )?);
             } else {
                 events.insert(
-                    to_event_name(&event.name).to_string(),
+                    to_event_name(&event.name),
                     ftd::html1::Action::from_function_call(
                         &event.action,
                         self.id.as_str(),
@@ -117,10 +117,15 @@ impl<'a> ftd::html1::main::HtmlGenerator<'a> {
     }
 }
 
-fn to_event_name(event_name: &ftd::interpreter2::EventName) -> &'static str {
+fn to_event_name(event_name: &ftd::interpreter2::EventName) -> String {
     match event_name {
-        ftd::interpreter2::EventName::Click => "onclick",
-        ftd::interpreter2::EventName::MouseLeave => "onmouseleave",
-        ftd::interpreter2::EventName::MouseEnter => "onmouseenter",
+        ftd::interpreter2::EventName::Click => "onclick".to_string(),
+        ftd::interpreter2::EventName::MouseLeave => "onmouseleave".to_string(),
+        ftd::interpreter2::EventName::MouseEnter => "onmouseenter".to_string(),
+        ftd::interpreter2::EventName::ClickOutside => "onclickoutside".to_string(),
+        ftd::interpreter2::EventName::GlobalKey(keys) => format!("onglobalkey[{}]", keys.join("-")),
+        ftd::interpreter2::EventName::GlobalKeySeq(keys) => {
+            format!("onglobalkeyseq[{}]", keys.join("-"))
+        }
     }
 }

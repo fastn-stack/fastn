@@ -379,3 +379,140 @@ impl ftd::interpreter2::Value {
         })
     }
 }
+
+pub(crate) fn events_to_string(events: Vec<(String, String, String)>) -> String {
+    use itertools::Itertools;
+
+    if events.is_empty() {
+        return "".to_string();
+    }
+
+    let global_variables =
+        "let global_keys = {};\nlet buffer = [];\nlet lastKeyTime = Date.now();".to_string();
+    let mut keydown_seq_event = "".to_string();
+    let mut keydown_events = indoc::indoc! {"
+        document.addEventListener(\"keydown\", function(event) {
+            global_keys[event.key] = true;
+            const currentTime = Date.now();
+            if (currentTime - lastKeyTime > 1000) {{
+                buffer = [];
+            }}
+            lastKeyTime = currentTime;
+            if (event.target.nodeName === \"INPUT\" || event.target.nodeName === \"TEXTAREA\") {
+                return;
+            }          
+            buffer.push(event.key);
+    "}
+    .to_string();
+
+    for (keys, actions) in events.iter().filter_map(|e| {
+        if let Some(keys) = e.1.strip_prefix("onglobalkeyseq[") {
+            let keys = keys
+                .trim_end_matches(']')
+                .split('-')
+                .map(to_key)
+                .collect_vec();
+            Some((keys, e.2.clone()))
+        } else {
+            None
+        }
+    }) {
+        keydown_seq_event = format!(
+            indoc::indoc! {"
+                {string}
+                if (buffer.join(',').includes(\"{sequence}\")) {{
+                   {actions}
+                    buffer = [];
+                    global_keys[event.key] = false;
+                    return;
+                }}
+            "},
+            string = keydown_seq_event,
+            sequence = keys.join(","),
+            actions = actions,
+        );
+    }
+
+    let keyup_events =
+        "document.addEventListener(\"keyup\", function(event) { global_keys[event.key] = false; })"
+            .to_string();
+
+    for (keys, actions) in events.iter().filter_map(|e| {
+        if let Some(keys) = e.1.strip_prefix("onglobalkey[") {
+            let keys = keys
+                .trim_end_matches(']')
+                .split('-')
+                .map(to_key)
+                .collect_vec();
+            Some((keys, e.2.clone()))
+        } else {
+            None
+        }
+    }) {
+        let all_keys = keys
+            .iter()
+            .map(|v| format!("global_keys[\"{}\"]", v))
+            .join(" && ");
+        keydown_seq_event = format!(
+            indoc::indoc! {"
+                        {string}
+                        if ({all_keys} && buffer.join(',').includes(\"{sequence}\")) {{
+                            {actions}
+                            buffer = [];
+                            global_keys[event.key] = false;
+                            return;
+                        }}
+                    "},
+            string = keydown_seq_event,
+            all_keys = all_keys,
+            sequence = keys.join(","),
+            actions = actions,
+        );
+    }
+
+    if !keydown_seq_event.is_empty() {
+        keydown_events = format!("{}\n\n{}}});", keydown_events, keydown_seq_event);
+    }
+
+    let mut string = "document.addEventListener(\"click\", function(event) {".to_string();
+    for event in events.iter().filter(|e| e.1.eq("onclickoutside")) {
+        string = format!(
+            indoc::indoc! {"
+                {string}
+                if (document.querySelector(`[data-id=\"{data_id}\"]`).style.display !== \"none\" && !document.querySelector(`[data-id=\"{data_id}\"]`).contains(event.target)) {{
+                    {event}
+                }}
+            "},
+            string = string,
+            data_id = event.0,
+            event = event.2,
+        );
+    }
+    string = format!("{}}});", string);
+
+    if !keydown_seq_event.is_empty() {
+        format!(
+            "{}\n\n\n{}\n\n\n{}\n\n\n{}",
+            string, global_variables, keydown_events, keyup_events
+        )
+    } else {
+        string
+    }
+}
+
+fn to_key(key: &str) -> String {
+    match key {
+        "ctrl" => "Control",
+        "alt" => "Alt",
+        "shift" => "Shift",
+        "up" => "ArrowUp",
+        "down" => "ArrowDown",
+        "right" => "ArrowRight",
+        "left" => "ArrowLeft",
+        "esc" => "Escape",
+        "dash" => "-",
+        "space" => " ",
+        t => t,
+    }
+    .to_string()
+}

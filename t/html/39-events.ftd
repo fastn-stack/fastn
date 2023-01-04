@@ -7,3 +7,27 @@ color: red
 color if { flag }: green
 $on-mouse-enter$: $fn.set($a = $flag, v = false)
 $on-mouse-leave$: $fn.set($a = $flag, v = true)
+
+
+-- boolean $flag2: true
+
+-- ftd.text: Click Outside
+color: red
+color if { flag2 }: green
+$on-click-outside$: $fn.toggle($a = $flag2)
+
+
+-- boolean $flag3: true
+
+-- ftd.text: Type ctrl and a simultaneously
+color: red
+color if { flag3 }: green
+$on-global-key[ctrl-a]$: $fn.toggle($a = $flag3)
+
+
+-- boolean $flag4: true
+
+-- ftd.text: Type shift and shift sequentially
+color: red
+color if { flag4 }: green
+$on-global-key-seq[shift-shift]$: $fn.toggle($a = $flag4)

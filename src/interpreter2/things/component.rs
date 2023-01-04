@@ -914,6 +914,9 @@ pub enum EventName {
     Click,
     MouseEnter,
     MouseLeave,
+    ClickOutside,
+    GlobalKey(Vec<String>),
+    GlobalKeySeq(Vec<String>),
 }
 
 impl EventName {
@@ -922,10 +925,31 @@ impl EventName {
         doc_id: &str,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::EventName> {
+        use itertools::Itertools;
+
         match e {
             "click" => Ok(EventName::Click),
             "mouse-enter" => Ok(EventName::MouseEnter),
             "mouse-leave" => Ok(EventName::MouseLeave),
+            "click-outside" => Ok(EventName::ClickOutside),
+            t if t.starts_with("global-key[") && t.ends_with(']') => {
+                let keys = t
+                    .trim_start_matches("global-key[")
+                    .trim_end_matches(']')
+                    .split('-')
+                    .map(|v| v.to_string())
+                    .collect_vec();
+                Ok(EventName::GlobalKey(keys))
+            }
+            t if t.starts_with("global-key-seq[") && t.ends_with(']') => {
+                let keys = t
+                    .trim_start_matches("global-key-seq[")
+                    .trim_end_matches(']')
+                    .split('-')
+                    .map(|v| v.to_string())
+                    .collect_vec();
+                Ok(EventName::GlobalKeySeq(keys))
+            }
             t => ftd::interpreter2::utils::e2(
                 format!("`{}` event not found", t),
                 doc_id,
