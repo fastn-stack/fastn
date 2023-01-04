@@ -27,7 +27,8 @@ async fn async_main() -> fpm::Result<()> {
         let name = project.value_of_("name").unwrap();
         // project-path is optional
         let path = project.value_of_("path");
-        return fpm::create_package(name, path).await;
+        let download_base_url = project.value_of_("download-base-url");
+        return fpm::create_package(name, path, download_base_url).await;
     }
 
     if let Some(mark) = matches.subcommand_matches("serve") {
@@ -208,6 +209,7 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Create a new FPM package")
                 .arg(clap::arg!(name: <NAME> "The name of the package to create"))
                 .arg(clap::arg!(-p --path [PATH] "Where to create the package (relative or absolute path, default value: the name)"))
+                .arg(clap::arg!(--"download-base-url" <DOWNLOAD_BASE_URL> "base url of the package where it can downloaded"))
         )
         .subcommand(
             clap::Command::new("build")

@@ -1,0 +1,5 @@
+
+-- import: fpm
+
+-- fpm.package: dynamic-urls
+download-base-url: https://www.github.com/

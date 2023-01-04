@@ -1,11 +1,22 @@
-async fn template_contents(project_name: &str) -> (String, String) {
-    let ftd = format!("-- import: fpm\n\n-- fpm.package: {}", project_name);
+async fn template_contents(project_name: &str, download_base_url: &str) -> (String, String) {
+    let ftd = format!(
+        r#"-- import: fpm
+
+-- fpm.package: {}
+download-base-url: {}
+"#,
+        project_name, download_base_url
+    );
     let index = "-- ftd.text: Hello world".to_string();
 
     (ftd, index)
 }
 
-pub async fn create_package(name: &str, path: Option<&str>) -> fpm::Result<()> {
+pub async fn create_package(
+    name: &str,
+    path: Option<&str>,
+    download_base_url: Option<&str>,
+) -> fpm::Result<()> {
     use colored::Colorize;
 
     let base_path = {
@@ -36,38 +47,39 @@ pub async fn create_package(name: &str, path: Option<&str>) -> fpm::Result<()> {
     // Create all directories if not present
     tokio::fs::create_dir_all(final_dir.as_str()).await?;
 
-    let tmp_contents = template_contents(name).await;
+    let tmp_contents = template_contents(name, download_base_url.unwrap_or(name)).await;
     let tmp_fpm = tmp_contents.0;
     let tmp_index = tmp_contents.1;
 
     fpm::utils::update(&final_dir.join("FPM.ftd"), tmp_fpm.as_bytes()).await?;
     fpm::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes()).await?;
 
-    let sync_message = "Initial sync".to_string();
-    let file_list: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
-        IntoIterator::into_iter([
-            (
-                "FPM.ftd".to_string(),
-                fpm::history::FileEditTemp {
-                    message: Some(sync_message.to_string()),
-                    author: None,
-                    src_cr: None,
-                    operation: fpm::history::FileOperation::Added,
-                },
-            ),
-            (
-                "index.ftd".to_string(),
-                fpm::history::FileEditTemp {
-                    message: Some(sync_message.to_string()),
-                    author: None,
-                    src_cr: None,
-                    operation: fpm::history::FileOperation::Added,
-                },
-            ),
-        ])
-        .collect();
+    // Note: Not required for now
+    // let sync_message = "Initial sync".to_string();
+    // let file_list: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
+    //     IntoIterator::into_iter([
+    //         (
+    //             "FPM.ftd".to_string(),
+    //             fpm::history::FileEditTemp {
+    //                 message: Some(sync_message.to_string()),
+    //                 author: None,
+    //                 src_cr: None,
+    //                 operation: fpm::history::FileOperation::Added,
+    //             },
+    //         ),
+    //         (
+    //             "index.ftd".to_string(),
+    //             fpm::history::FileEditTemp {
+    //                 message: Some(sync_message.to_string()),
+    //                 author: None,
+    //                 src_cr: None,
+    //                 operation: fpm::history::FileOperation::Added,
+    //             },
+    //         ),
+    //     ])
+    //     .collect();
 
-    fpm::history::insert_into_history(&final_dir, &file_list, &mut Default::default()).await?;
+    // fpm::history::insert_into_history(&final_dir, &file_list, &mut Default::default()).await?;
 
     println!(
         "FPM Package Created: {}\nPath: {}",
