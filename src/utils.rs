@@ -501,6 +501,7 @@ pub fn replace_markers_2022(
     inline_js: &[String],
     external_css: &[String],
     inline_css: &[String],
+    base_url: &str,
 ) -> String {
     ftd::html1::utils::trim_all_lines(
         s.replace("__ftd_doc_title__", "")
@@ -529,6 +530,7 @@ pub fn replace_markers_2022(
             .replace("__ftd_body_events__", "")
             .replace("__ftd_css__", "")
             .replace("__ftd_element_css__", "")
+            .replace("__base_url__", base_url)
             .as_str(),
     )
 }

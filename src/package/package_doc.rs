@@ -410,6 +410,7 @@ pub(crate) async fn read_ftd_2022(
         config.ftd_inline_js.as_slice(),
         config.ftd_external_css.as_slice(),
         config.ftd_inline_css.as_slice(),
+        base_url,
     ));
 
     Ok(file_content.into())
