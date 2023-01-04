@@ -267,6 +267,7 @@ fn ftd_v2_write(id: &str, s: &str) {
             .replace("__ftd__", html_ui.html.as_str())
             .replace("__ftd_js__", ftd_js.as_str())
             .replace("__extra_js__", "")
+            .replace("__base_url__", "/")
             .replace(
                 "__extra_css__",
                 format!("<style>{}</style>", test_css).as_str(),

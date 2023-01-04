@@ -55,6 +55,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(row_function()),
         ),
         (
+            "ftd#input".to_string(),
+            ftd::interpreter2::Thing::Component(row_function()),
+        ),
+        (
             "ftd#column".to_string(),
             ftd::interpreter2::Thing::Component(column_function()),
         ),
@@ -1361,6 +1365,15 @@ pub fn row_function() -> ftd::interpreter2::ComponentDefinition {
             .concat()
             .into_iter()
             .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
+}
+
+pub fn input_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#input".to_string(),
+        arguments: [common_arguments()].concat().into_iter().collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         line_number: 0,
     }
