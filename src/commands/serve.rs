@@ -285,7 +285,7 @@ pub async fn serve(
         // pass the url if the file is not static
         // So final check would be file is not static and path is not present in the package's sitemap
         tracing::info!(
-            "executing proxy: file-status: {}, path: {}",
+            "before executing proxy: file-status: {}, path: {}",
             file_response.status(),
             &path
         );

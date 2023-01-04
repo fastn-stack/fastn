@@ -3,3 +3,17 @@
 
 -- fpm.package: dynamic-urls
 download-base-url: https://www.github.com/
+
+
+-- fpm.dynamic-urls:
+
+# TOC0
+url: /a/<string:username>/person/
+document: index.ftd
+
+- TOC1
+url: /b/<string:username>/person/
+document: index.ftd
+  - TOC2
+  url: /c/<string:username>/person/
+  document: index.ftd
