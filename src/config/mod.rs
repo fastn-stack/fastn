@@ -720,7 +720,7 @@ impl Config {
 
             // Getting `document` with dynamic parameters, if exists
             let (document, path_params) =
-                fpm::sitemap::resolve_sitemap_or_dyn_urls(sanitized_package, &sanitized_path)?;
+                fpm::sitemap::resolve(sanitized_package, &sanitized_path)?;
 
             // document with package-name prefix
             let document = document.map(|doc| {

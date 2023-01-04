@@ -1640,16 +1640,18 @@ fn construct_tree(elements: Vec<(toc::TocItem, usize)>, smallest_level: usize) -
     stack_tree
 }
 
-pub fn resolve_sitemap_or_dyn_urls(
+pub fn resolve(
     package: &fpm::Package,
     path: &str,
 ) -> fpm::Result<(Option<String>, Vec<(String, ftd::Value)>)> {
+    // resolve in sitemap
     if let Some(sitemap) = package.sitemap.as_ref() {
         if let Some(document) = sitemap.resolve_document(path) {
             return Ok((Some(document), vec![]));
         }
     };
 
+    // resolve in dynamic-urls
     if let Some(dynamic_urls) = package.dynamic_urls.as_ref() {
         return dynamic_urls.resolve_document(path);
     };

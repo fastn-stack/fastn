@@ -19,7 +19,9 @@ pub fn parse_named_params(
     // This should go to config request [username: arpita, age: 28]
 
     if request_attrs.len().ne(&sitemap_attrs.len()) {
-        return Err(fpm::Error::GenericError("".to_string()));
+        return Err(fpm::Error::GenericError(
+            "request attributes and sitemap attributes are not same".to_string(),
+        ));
     }
 
     // [(param_name, value)]
@@ -204,6 +206,31 @@ mod tests {
             ],
         );
 
+        assert!(output.is_err())
+    }
+
+    // cargo test --package fpm --lib sitemap::utils::tests::parse_named_params_4
+    #[test]
+    fn parse_named_params_4() {
+        let output = super::parse_named_params(
+            "/b/a/person/",
+            "/b/<string:username>/person/",
+            &[("string".to_string(), "username".to_string())],
+        );
+        assert!(output.is_err())
+    }
+
+    // cargo test --package fpm --lib sitemap::utils::tests::parse_named_params_5
+    #[test]
+    fn parse_named_params_5() {
+        let output = super::parse_named_params(
+            "/a/abrark/person/28/",
+            "/a/<string:username>/person/<integer:age>",
+            &[
+                ("string".to_string(), "username".to_string()),
+                ("integer".to_string(), "age".to_string()),
+            ],
+        );
         assert!(output.is_err())
     }
 }
