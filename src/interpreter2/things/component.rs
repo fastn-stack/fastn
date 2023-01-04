@@ -912,6 +912,8 @@ impl Event {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum EventName {
     Click,
+    MouseEnter,
+    MouseLeave,
 }
 
 impl EventName {
@@ -922,6 +924,8 @@ impl EventName {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::EventName> {
         match e {
             "click" => Ok(EventName::Click),
+            "mouse-enter" => Ok(EventName::MouseEnter),
+            "mouse-leave" => Ok(EventName::MouseLeave),
             t => ftd::interpreter2::utils::e2(
                 format!("`{}` event not found", t),
                 doc_id,

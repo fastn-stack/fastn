@@ -1,0 +1,10 @@
+-- void toggle(a):
+boolean $a:
+
+a = !a
+
+-- void set(a,v):
+boolean $a:
+boolean v:
+
+a = v

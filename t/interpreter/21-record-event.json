@@ -96,11 +96,7 @@
                                   "Optional": {
                                     "data": null,
                                     "kind": {
-                                      "kind": {
-                                        "Record": {
-                                          "name": "foo#full-name"
-                                        }
-                                      },
+                                      "kind": "String",
                                       "caption": false,
                                       "body": false
                                     }
@@ -116,11 +112,7 @@
                                   "Optional": {
                                     "data": null,
                                     "kind": {
-                                      "kind": {
-                                        "Record": {
-                                          "name": "foo#full-name"
-                                        }
-                                      },
+                                      "kind": "String",
                                       "caption": false,
                                       "body": false
                                     }

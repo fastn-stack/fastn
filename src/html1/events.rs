@@ -120,5 +120,7 @@ impl<'a> ftd::html1::main::HtmlGenerator<'a> {
 fn to_event_name(event_name: &ftd::interpreter2::EventName) -> &'static str {
     match event_name {
         ftd::interpreter2::EventName::Click => "onclick",
+        ftd::interpreter2::EventName::MouseLeave => "onmouseleave",
+        ftd::interpreter2::EventName::MouseEnter => "onmouseenter",
     }
 }

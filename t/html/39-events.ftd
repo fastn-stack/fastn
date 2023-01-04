@@ -1,0 +1,9 @@
+-- import: function as fn
+
+-- boolean $flag: true
+
+-- ftd.text: Enter mouse
+color: red
+color if { flag }: green
+$on-mouse-enter$: $fn.set($a = $flag, v = false)
+$on-mouse-leave$: $fn.set($a = $flag, v = true)
