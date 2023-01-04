@@ -341,6 +341,19 @@ fn package_info_markdown(
     let path = config.root.join("FPM").join("markdown.ftd");
     Ok(if path.is_file() {
         std::fs::read_to_string(path)?
+    } else if !config.ftd_edition.eq(&fpm::config::FTDEdition::FTD2021) {
+        if content.trim().is_empty() {
+            content.to_string()
+        } else {
+            format!(
+                indoc::indoc! {"
+                -- ftd.text:
+
+                {content}
+            "},
+                content = content,
+            )
+        }
     } else {
         let package_info_package = match config
             .package

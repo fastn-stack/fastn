@@ -25,6 +25,10 @@ pub async fn build(
 
         match main {
             fpm::File::Ftd(doc) => {
+                if !config.ftd_edition.eq(&fpm::config::FTDEdition::FTD2021) && doc.id.eq("FPM.ftd")
+                {
+                    continue;
+                }
                 let resp =
                     fpm::package::package_doc::process_ftd(config, doc, base_url, no_static).await;
                 match (resp, ignore_failed) {
@@ -54,15 +58,17 @@ pub async fn build(
             }
             fpm::File::Image(main_doc) => {
                 process_static(main_doc, &config.root, &config.package).await?;
-                let resp = process_image(config, main_doc, base_url, no_static).await;
-                match (resp, ignore_failed) {
-                    (Ok(r), _) => r,
-                    (_, true) => {
-                        println!("Failed");
-                        continue;
-                    }
-                    (e, _) => {
-                        return e;
+                if config.ftd_edition.eq(&fpm::config::FTDEdition::FTD2021) {
+                    let resp = process_image(config, main_doc, base_url, no_static).await;
+                    match (resp, ignore_failed) {
+                        (Ok(r), _) => r,
+                        (_, true) => {
+                            println!("Failed");
+                            continue;
+                        }
+                        (e, _) => {
+                            return e;
+                        }
                     }
                 }
             }
@@ -77,15 +83,17 @@ pub async fn build(
                     &config.package,
                 )
                 .await?;
-                let resp = process_code(config, doc, base_url, no_static).await;
-                match (resp, ignore_failed) {
-                    (Ok(r), _) => r,
-                    (_, true) => {
-                        println!("Failed");
-                        continue;
-                    }
-                    (e, _) => {
-                        return e;
+                if config.ftd_edition.eq(&fpm::config::FTDEdition::FTD2021) {
+                    let resp = process_code(config, doc, base_url, no_static).await;
+                    match (resp, ignore_failed) {
+                        (Ok(r), _) => r,
+                        (_, true) => {
+                            println!("Failed");
+                            continue;
+                        }
+                        (e, _) => {
+                            return e;
+                        }
                     }
                 }
             }
