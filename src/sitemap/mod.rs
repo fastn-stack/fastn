@@ -1450,7 +1450,7 @@ impl Sitemap {
     /// path: foo/temp/
     /// path: /
     /// This function can be used for if path exists in sitemap or not
-    #[tracing::instrument(skip_all)]
+    #[tracing::instrument(name = "sitemap-resolve-document", skip_all)]
     pub fn resolve_document(&self, path: &str) -> Option<String> {
         tracing::info!(path = path);
         fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> Option<String> {
@@ -1501,9 +1501,13 @@ impl Sitemap {
         for section in self.sections.iter() {
             let document = resolve_in_section(section, path);
             if document.is_some() {
+                tracing::info!(msg = "return: document found", path = path);
                 return document;
             }
         }
+
+        tracing::info!(msg = "return: document not found", path = path);
+
         None
     }
 
@@ -1634,4 +1638,21 @@ fn construct_tree(elements: Vec<(toc::TocItem, usize)>, smallest_level: usize) -
         stack_tree.push(node);
     }
     stack_tree
+}
+
+pub fn resolve_sitemap_or_dyn_urls(
+    package: &fpm::Package,
+    path: &str,
+) -> fpm::Result<(Option<String>, Vec<(String, ftd::Value)>)> {
+    if let Some(sitemap) = package.sitemap.as_ref() {
+        if let Some(document) = sitemap.resolve_document(path) {
+            return Ok((Some(document), vec![]));
+        }
+    };
+
+    if let Some(dynamic_urls) = package.dynamic_urls.as_ref() {
+        return dynamic_urls.resolve_document(path);
+    };
+
+    Ok((None, vec![]))
 }
