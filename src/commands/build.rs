@@ -49,6 +49,9 @@ pub async fn build(
             }
             fpm::File::Static(sa) => process_static(sa, &config.root, &config.package).await?,
             fpm::File::Markdown(doc) => {
+                if !config.ftd_edition.eq(&fpm::config::FTDEdition::FTD2021) {
+                    continue;
+                }
                 let resp = process_markdown(config, doc, base_url, no_static).await;
                 match (resp, ignore_failed) {
                     (Ok(r), _) => r,
