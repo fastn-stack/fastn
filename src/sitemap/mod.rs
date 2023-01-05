@@ -574,9 +574,8 @@ impl Sitemap {
         // TODO: Need to fix it later
         // sitemap should not contain the dynamic parameters
         if sitemap.has_path_params() {
-            dbg!(&sitemap);
             return Err(ParseError::InvalidSitemap {
-                message: "Sitemap should not contain urls with dynamic params".to_string(),
+                message: "Sitemap must not contain urls with named params".to_string(),
             });
         }
 
