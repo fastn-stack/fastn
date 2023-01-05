@@ -38,7 +38,7 @@ impl DynamicUrls {
             sections: fpm::sitemap::construct_tree_util(parser.finalize()?),
         };
 
-        if dynamic_urls.not_have_path_params() {
+        if dynamic_urls.any_without_named_params() {
             return Err(fpm::sitemap::ParseError::InvalidDynamicUrls {
                 message: "All the dynamic urls must contain dynamic params".to_string(),
             });
@@ -48,9 +48,14 @@ impl DynamicUrls {
     }
 
     // If any one does not have path parameters so return true
-    pub fn not_have_path_params(&self) -> bool {
+    // any_without_named_params
+    pub fn any_without_named_params(&self) -> bool {
+        fn any_named_params(v: &[fpm::sitemap::PathParams]) -> bool {
+            v.iter().any(|x| x.is_named_param())
+        }
+
         fn check_toc(toc: &fpm::sitemap::toc::TocItem) -> bool {
-            if toc.path_parameters.is_empty() {
+            if !any_named_params(&toc.path_parameters) {
                 return true;
             }
 

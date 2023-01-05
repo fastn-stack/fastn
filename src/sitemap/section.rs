@@ -196,9 +196,13 @@ impl Section {
     }
 
     // return true if any item in sitemap does contain path_params
-    pub fn contains_path_params(sections: &[Section]) -> bool {
+    pub fn contains_named_params(sections: &[Section]) -> bool {
+        pub fn any_named_params(v: &[fpm::sitemap::PathParams]) -> bool {
+            v.iter().any(|x| x.is_named_param())
+        }
+
         fn check_toc(toc: &fpm::sitemap::toc::TocItem) -> bool {
-            if !toc.path_parameters.is_empty() {
+            if any_named_params(&toc.path_parameters) {
                 return true;
             }
 
@@ -211,7 +215,7 @@ impl Section {
         }
 
         fn check_sub_section(sub_section: &Subsection) -> bool {
-            if !sub_section.path_parameters.is_empty() {
+            if any_named_params(&sub_section.path_parameters) {
                 return true;
             }
 
@@ -224,7 +228,7 @@ impl Section {
         }
 
         fn check_section(section: &Section) -> bool {
-            if !section.path_parameters.is_empty() {
+            if any_named_params(&section.path_parameters) {
                 return true;
             }
 

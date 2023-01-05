@@ -493,6 +493,7 @@ fn get_extra_css(external_css: &[String], inline_css: &[String]) -> String {
     )
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn replace_markers_2022(
     s: &str,
     html_ui: ftd::html1::HtmlUI,

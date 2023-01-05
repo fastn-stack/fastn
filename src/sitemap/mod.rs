@@ -74,6 +74,10 @@ impl PathParams {
     pub fn value(index: usize, value: String) -> Self {
         PathParams::ValueParam { index, value }
     }
+
+    pub fn is_named_param(&self) -> bool {
+        matches!(self, Self::NamedParm { .. })
+    }
 }
 
 impl SitemapElement {
@@ -569,12 +573,12 @@ impl Sitemap {
 
         // TODO: Need to fix it later
         // sitemap should not contain the dynamic parameters
-        // if sitemap.has_path_params() {
-        //     dbg!(&sitemap);
-        //     return Err(ParseError::InvalidSitemap {
-        //         message: "Sitemap should not contain urls with dynamic params".to_string(),
-        //     });
-        // }
+        if sitemap.has_path_params() {
+            dbg!(&sitemap);
+            return Err(ParseError::InvalidSitemap {
+                message: "Sitemap should not contain urls with dynamic params".to_string(),
+            });
+        }
 
         if resolve_sitemap {
             sitemap
@@ -1465,19 +1469,6 @@ impl Sitemap {
         }
     }
 
-    /// path: /foo/demo/
-    /// path: /
-    /// `path` matches to sitemap.id or not
-    // TODO: possibly not required just call self.resolve_path(&self, path: &str).is_some()
-    pub fn path_exists(&self, path: &str) -> bool {
-        for section in self.sections.iter() {
-            if section.path_exists(path) {
-                return true;
-            }
-        }
-        false
-    }
-
     /// path: foo/temp/
     /// path: /
     /// This function can be used for if path exists in sitemap or not
@@ -1543,7 +1534,7 @@ impl Sitemap {
     }
 
     pub fn has_path_params(&self) -> bool {
-        section::Section::contains_path_params(&self.sections)
+        section::Section::contains_named_params(&self.sections)
     }
 }
 
