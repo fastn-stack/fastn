@@ -1,5 +1,5 @@
 // document and path-parameters
-type ResolveDocOutput = (Option<String>, Vec<(String, ftd::Value)>);
+pub(crate) type ResolveDocOutput = (Option<String>, Vec<(String, ftd::Value)>);
 
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct DynamicUrlsTemp {

@@ -87,7 +87,7 @@ impl Error {
         Self::GenericError(error.to_string())
     }
 
-    pub fn generic_err<T: AsRef<str> + ToString>(error: T) -> fpm::Result<()> {
+    pub fn generic_err<T: AsRef<str> + ToString, O>(error: T) -> fpm::Result<O> {
         Err(Self::generic(error))
     }
 }
