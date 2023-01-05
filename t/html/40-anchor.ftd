@@ -5,6 +5,8 @@ background.solid: pink
 
 -- ftd.text: Hello Parent
 anchor: parent
+left.rem: 8.3
+top.rem: 8
 
 -- end: ftd.column
 

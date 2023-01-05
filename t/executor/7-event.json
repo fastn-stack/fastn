@@ -152,6 +152,26 @@
                 }
               ],
               "is_dummy": false,
+              "left": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "right": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "top": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "bottom": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "anchor": {
                 "value": null,
                 "line_number": null,
@@ -406,6 +426,26 @@
       "is_not_visible": false,
       "event": [],
       "is_dummy": false,
+      "left": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "right": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "top": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "bottom": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "anchor": {
         "value": null,
         "line_number": null,

@@ -126,8 +126,8 @@ if: {!panel.showFullScreen}
 id: full-screen	
 /align: center	
 anchor: parent	
-right: 16
-bottom: 8
+right.px: 16
+bottom.px: 8
 
 -- ftd.image:	
 if: {!panel.active}
@@ -152,8 +152,8 @@ src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/full-screen-d
 if: {panel.showFullScreen}
 /align: center	
 anchor: parent	
-right: 16	
-bottom: 8	
+right.px: 16
+bottom.px: 8
 id: full-screen	
 
 -- ftd.image:	

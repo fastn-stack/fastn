@@ -401,6 +401,46 @@ impl ftd::executor::Common {
         d.check_and_insert("box-sizing", ftd::node::Value::from_string("border-box"));
 
         d.check_and_insert(
+            "top",
+            ftd::node::Value::from_executor_value(
+                self.top.value.as_ref().map(|v| v.to_css_string()),
+                self.top.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "bottom",
+            ftd::node::Value::from_executor_value(
+                self.bottom.value.as_ref().map(|v| v.to_css_string()),
+                self.bottom.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "left",
+            ftd::node::Value::from_executor_value(
+                self.left.value.as_ref().map(|v| v.to_css_string()),
+                self.left.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
+            "right",
+            ftd::node::Value::from_executor_value(
+                self.right.value.as_ref().map(|v| v.to_css_string()),
+                self.right.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "width",
             ftd::node::Value::from_executor_value(
                 Some(self.width.to_owned().map(|v| v.to_css_string()).value),
