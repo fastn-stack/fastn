@@ -271,7 +271,7 @@ package-type: DS
 licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Featured
-last-updated: yesterday
+last-updated: 03 Jan 2023
 
 `DS` means documentation site. `ds` is ready to use template for your `FTD` web sites, blogs etc.
 
