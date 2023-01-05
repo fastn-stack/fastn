@@ -1076,7 +1076,7 @@ dependencies = [
  "edit",
  "fbt-lib",
  "fluent",
- "ftd 0.2.0 (git+https://github.com/FifthTry/ftd?rev=d86de62)",
+ "ftd 0.2.0 (git+https://github.com/FifthTry/ftd?rev=d1cd56a)",
  "futures",
  "hyper",
  "ignore",
@@ -1129,7 +1129,7 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.2.0"
-source = "git+https://github.com/FifthTry/ftd?rev=d86de62#d86de625f8786738862bc6aaf33cc8665c7f73f5"
+source = "git+https://github.com/FifthTry/ftd?rev=d1cd56a#d1cd56a79c800989ff4cff455d3f3ea5a39803a1"
 dependencies = [
  "comrak 0.15.0",
  "css-color-parser",
