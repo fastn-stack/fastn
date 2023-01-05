@@ -4,56 +4,50 @@
 // params_types: [(string, username), (integer, age)]
 // # Output
 // true
-// TODO: This should be match method
-pub fn parse_named_params(
+
+/*
+enum PathParams {
+    NamedParm{index: usize, param_name: String, param_type: String}
+    Param{index: usize, value: String}
+}
+*/
+
+pub fn url_match(
     request_url: &str,
-    sitemap_url: &str,
-    params_type: &[(usize, String, Option<String>)],
-) -> fpm::Result<Vec<(String, ftd::Value)>> {
+    sitemap_params: &[(usize, String, Option<String>)],
+) -> fpm::Result<(bool, Vec<(String, ftd::Value)>)> {
     use itertools::Itertools;
     // request_attrs: [abrark, foo, 28]
-    let request_attrs = request_url.trim_matches('/').split('/').collect_vec();
-    // sitemap_attrs: [<string:username>, foo, <integer:age>]
-    let sitemap_attrs = sitemap_url.trim_matches('/').split('/').collect_vec();
-
+    let request_parts = request_url.trim_matches('/').split('/').collect_vec();
     // This should go to config request [username: abrark, age: 28]
-    if request_attrs.len().ne(&sitemap_attrs.len()) {
-        return Err(fpm::Error::GenericError(
-            "request attributes and sitemap attributes are not same".to_string(),
-        ));
+    if request_parts.len().ne(&sitemap_params.len()) {
+        return Ok((false, vec![]));
     }
 
+    // match logic
+    // req: [a, ak, foo]
+    // d-urls: [(0, a, None), (1, username, Some(string)), (2, foo, None)]
     // [(param_name, value)]
     let mut path_parameters: Vec<(String, ftd::Value)> = vec![];
-
-    // For every element either value should match or request attribute type should match to
-    // sitemap's params_types
-    let mut type_matches_count = 0;
-    for idx in 0..request_attrs.len() {
-        // either value match or type match
-        let value_match = request_attrs[idx].eq(sitemap_attrs[idx]);
-        if value_match {
-            continue;
-        }
-
-        let parsed_value = {
-            // request's attribute value type == type stored in sitemap:params_type
-            let attribute_value = request_attrs[idx];
-            assert!(params_type.len() > type_matches_count);
-            let attribute_type = &params_type[type_matches_count].0;
-            get_value_type(attribute_value, attribute_type)
-        };
-        match parsed_value {
-            Ok(value) => {
-                let attribute_name = params_type[type_matches_count].1.to_string();
-                path_parameters.push((attribute_name, value));
+    let mut index = 0;
+    for req_part in request_parts {
+        let (_idx, value_or_param_name, value_type) = &sitemap_params[index];
+        index += 1; // Note: Use it carefully next
+        if value_type.is_none() {
+            if req_part.eq(value_or_param_name) {
+                continue;
+            } else {
+                return Ok((false, vec![]));
             }
-            Err(e) => return Err(fpm::Error::GenericError(e.to_string())),
-        };
-
-        type_matches_count += 1;
+        } else {
+            if let Ok(value) = get_value_type(req_part, value_type.as_ref().unwrap()) {
+                path_parameters.push((value_or_param_name.to_string(), value));
+            } else {
+                return Ok((false, vec![]));
+            }
+        }
     }
-    return Ok(path_parameters);
+    return Ok((true, path_parameters));
 
     fn get_value_type(value: &str, r#type: &str) -> fpm::Result<ftd::Value> {
         match r#type {
@@ -78,14 +72,9 @@ pub fn parse_named_params(
     }
 }
 
-// Input:  /b/<string:username>/<integer:age>/foo/
-// Output:vec![
-//         (0, "b".to_string(), None),
-//         (1, "username".to_string(), Some("string".to_string())),
-//         (2, "age".to_string(), Some("integer".to_string())),
-//         (3, "foo".to_string(), None),
-//     ]
-pub fn parse_path_params_new(
+/// Please check test case: `parse_path_params_test_0`
+/// This method is for parsing the dynamic params from fpm.dynamic-urls
+pub fn parse_path_params(
     url: &str,
 ) -> Result<Vec<(usize, String, Option<String>)>, fpm::sitemap::ParseError> {
     let mut output = vec![];
@@ -95,8 +84,7 @@ pub fn parse_path_params_new(
     let parts: Vec<&str> = url.split('/').collect();
     // parts: [b, <string:username>, <integer:age>, foo]
     let mut index = 0;
-    for part in parts {
-        let part = part.trim();
+    for part in parts.into_iter().map(|x| x.trim()) {
         if !part.is_empty() {
             if part.contains(':') && part.starts_with('<') && part.ends_with('>') {
                 // <string:username>
@@ -132,7 +120,7 @@ mod tests {
     // cargo test --package fpm --lib sitemap::utils::tests::parse_path_params_test_0
     #[test]
     fn parse_path_params_test_0() {
-        let output = super::parse_path_params_new("/b/<string:username>/<integer:age>/foo/");
+        let output = super::parse_path_params("/b/<string:username>/<integer:age>/foo/");
         let test_output = vec![
             (0, "b".to_string(), None),
             (1, "username".to_string(), Some("string".to_string())),
@@ -146,8 +134,7 @@ mod tests {
     // cargo test --package fpm --lib sitemap::utils::tests::parse_path_params_test_01
     #[test]
     fn parse_path_params_test_01() {
-        let output =
-            super::parse_path_params_new("/b/ <  string  :  username > / <integer:age>/foo/");
+        let output = super::parse_path_params("/b/ <  string  :  username > / <integer:age>/foo/");
         let test_output = vec![
             (0, "b".to_string(), None),
             (1, "username".to_string(), Some("string".to_string())),
@@ -161,7 +148,7 @@ mod tests {
     // cargo test --package fpm --lib sitemap::utils::tests::parse_path_params_test_01
     #[test]
     fn parse_path_params_test_02() {
-        let output = super::parse_path_params_new("/b/ <  :  username > / <integer:age>/foo/");
+        let output = super::parse_path_params("/b/ <  :  username > / <integer:age>/foo/");
         // let test_output = vec![
         //     (0, "b".to_string(), None),
         //     (1, "username".to_string(), Some("string".to_string())),
@@ -171,19 +158,23 @@ mod tests {
         assert!(output.is_err())
     }
 
+    // cargo test --package fpm --lib sitemap::utils::tests::url_match -- --nocapture
     #[test]
-    fn parse_named_params() {
-        let output = super::parse_named_params(
+    fn url_match() {
+        // "/<string:username>/foo/<integer:age>/",
+        let output = super::url_match(
             "/arpita/foo/28/",
-            "/<string:username>/foo/<integer:age>/",
             &[
-                ("string".to_string(), "username".to_string()),
-                ("integer".to_string(), "age".to_string()),
+                (0, "username".to_string(), Some("string".to_string())),
+                (1, "foo".to_string(), None),
+                (2, "age".to_string(), Some("integer".to_string())),
             ],
         );
 
+        let output = output.unwrap();
+        assert!(output.0);
         assert_eq!(
-            output.unwrap(),
+            output.1,
             vec![
                 (
                     "username".to_string(),
@@ -197,101 +188,114 @@ mod tests {
         )
     }
 
+    // cargo test --package fpm --lib sitemap::utils::tests::url_match_2 -- --nocapture
     #[test]
-    fn parse_named_params_1() {
-        // Input:
-        // request_url: /arpita/foo/28/
-        // sitemap_url: /<string:username>/foo/<integer:age>/
-        // params_types: [(string, username), (integer, age)]
-        // Output: true
-        // Reason: Everything is matching
-
-        let output = super::parse_named_params(
-            "/arpita/foo/28/",
-            "/<string:username>/foo/<integer:age>/",
-            &[
-                ("string".to_string(), "username".to_string()),
-                ("integer".to_string(), "age".to_string()),
-            ],
-        );
-
-        assert!(output.is_ok())
-    }
-
-    #[test]
-    fn parse_named_params_2() {
+    fn url_match_2() {
         // Input:
         // request_url: /arpita/foo/28/
         // sitemap_url: /<integer:username>/foo/<integer:age>/
-        // params_types: [(integer, username), (integer, age)]
         // Output: false
         // Reason: `arpita` can not be converted into `integer`
-        let output = super::parse_named_params(
+        let output = super::url_match(
             "/arpita/foo/28/",
-            "/<integer:username>/foo/<integer:age>/",
             &[
-                ("integer".to_string(), "username".to_string()),
-                ("integer".to_string(), "age".to_string()),
+                (0, "username".to_string(), Some("integer".to_string())),
+                (1, "foo".to_string(), None),
+                (2, "age".to_string(), Some("integer".to_string())),
             ],
         );
 
-        assert!(output.is_err())
+        assert!(!output.unwrap().0)
     }
 
+    // cargo test --package fpm --lib sitemap::utils::tests::url_match_3
     #[test]
-    fn parse_named_params_3() {
+    fn url_match_3() {
         // Input:
         // request_url: /arpita/foo/
         // sitemap_url: /<string:username>/foo/<integer:age>/
-        // params_types: [(string, username), (integer, age)]
         // Output: false
         // Reason: There is nothing to match in request_url after `foo`
         //         against with sitemap_url `<integer:age>`
-        let output = super::parse_named_params(
+        let output = super::url_match(
             "/arpita/foo/",
-            "/<string:username>/foo/<integer:age>/",
             &[
-                ("string".to_string(), "username".to_string()),
-                ("integer".to_string(), "age".to_string()),
+                (0, "username".to_string(), Some("integer".to_string())),
+                (1, "foo".to_string(), None),
+                (2, "age".to_string(), Some("integer".to_string())),
             ],
         );
-
-        assert!(output.is_err())
+        assert!(!output.unwrap().0)
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::parse_named_params_4
+    // cargo test --package fpm --lib sitemap::utils::tests::url_match_4 -- --nocapture
     #[test]
-    fn parse_named_params_4() {
-        let output = super::parse_named_params(
+    fn url_match_4() {
+        // sitemap_url: /b/<string:username>/person/,
+        let output = super::url_match(
             "/b/a/person/",
-            "/b/<string:username>/person/",
-            &[("string".to_string(), "username".to_string())],
+            &[
+                (0, "b".to_string(), None),
+                (1, "username".to_string(), Some("string".to_string())),
+                (2, "person".to_string(), None),
+            ],
         );
-        assert!(output.is_ok())
+        let output = output.unwrap();
+        assert!(output.0);
+        assert_eq!(
+            output.1,
+            vec![(
+                "username".to_string(),
+                ftd::Value::String {
+                    text: "a".to_string(),
+                    source: TextSource::Default
+                }
+            )]
+        )
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::parse_named_params_4_1
+    // cargo test --package fpm --lib sitemap::utils::tests::url_match_4_1
     #[test]
-    fn parse_named_params_4_1() {
-        let output = super::parse_named_params(
+    fn url_match_4_1() {
+        // sitemap_url: /a/<string:username>/person/,
+        let output = super::url_match(
             "/b/a/person/",
-            "/a/<string:username>/person/",
-            &[("string".to_string(), "username".to_string())],
+            &[
+                (0, "a".to_string(), None),
+                (1, "username".to_string(), Some("string".to_string())),
+                (2, "person".to_string(), None),
+            ],
         );
-        assert!(output.is_ok())
+        assert!(!output.unwrap().0)
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::parse_named_params_5
+    // cargo test --package fpm --lib sitemap::utils::tests::url_match_5 -- --nocapture
     #[test]
-    fn parse_named_params_5() {
-        let output = super::parse_named_params(
+    fn url_match_5() {
+        // sitemap_url: /a/<string:username>/person/<integer:age>
+        let output = super::url_match(
             "/a/abrark/person/28/",
-            "/a/<string:username>/person/<integer:age>",
             &[
-                ("string".to_string(), "username".to_string()),
-                ("integer".to_string(), "age".to_string()),
+                (0, "a".to_string(), None),
+                (1, "username".to_string(), Some("string".to_string())),
+                (2, "person".to_string(), None),
+                (3, "age".to_string(), Some("integer".to_string())),
             ],
         );
-        assert!(output.is_ok())
+        let output = output.unwrap();
+        assert!(output.0);
+        assert_eq!(
+            output.1,
+            vec![
+                (
+                    "username".to_string(),
+                    ftd::Value::String {
+                        text: "abrark".to_string(),
+                        source: TextSource::Default
+                    }
+                ),
+                ("age".to_string(), ftd::Value::Integer { value: 28 })
+            ]
+        );
     }
 }

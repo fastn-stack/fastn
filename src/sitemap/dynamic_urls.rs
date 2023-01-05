@@ -109,14 +109,10 @@ impl DynamicUrls {
                 // request: arpita foo 28
                 // sitemap: [string,integer]
                 // Mapping: arpita -> string, foo -> foo, 28 -> integer
-                let params = fpm::sitemap::utils::parse_named_params(
-                    path,
-                    toc.id.as_str(),
-                    toc.path_parameters.as_slice(),
-                );
+                let params = fpm::sitemap::utils::url_match(path, toc.path_parameters.as_slice())?;
 
-                if params.is_ok() {
-                    return Ok((toc.document.clone(), params?));
+                if params.0 {
+                    return Ok((toc.document.clone(), params.1));
                 }
             }
 
@@ -139,16 +135,11 @@ impl DynamicUrls {
                 // request: arpita foo 28
                 // sitemap: [string,integer]
                 // Mapping: arpita -> string, foo -> foo, 28 -> integer
-                if let Some(id) = sub_section.id.as_ref() {
-                    let params = fpm::sitemap::utils::parse_named_params(
-                        path,
-                        id.as_str(),
-                        sub_section.path_parameters.as_slice(),
-                    );
+                let params =
+                    fpm::sitemap::utils::url_match(path, sub_section.path_parameters.as_slice())?;
 
-                    if params.is_ok() {
-                        return Ok((sub_section.document.clone(), params?));
-                    }
+                if params.0 {
+                    return Ok((sub_section.document.clone(), params.1));
                 }
             }
             for toc in sub_section.toc.iter() {
@@ -172,14 +163,11 @@ impl DynamicUrls {
                 // request: abrark foo 28
                 // sitemap: [string,integer]
                 // params_matches: abrark -> string, foo -> foo, 28 -> integer
-                let params = fpm::sitemap::utils::parse_named_params(
-                    path,
-                    section.id.as_str(),
-                    section.path_parameters.as_slice(),
-                );
+                let params =
+                    fpm::sitemap::utils::url_match(path, section.path_parameters.as_slice())?;
 
-                if params.is_ok() {
-                    return Ok((section.document.clone(), params?));
+                if params.0 {
+                    return Ok((section.document.clone(), params.1));
                 }
             }
 
@@ -276,7 +264,10 @@ mod tests {
                             readers: vec!["readers/person".to_string()],
                             writers: vec!["writers/person".to_string()],
                             document: Some("person.ftd".to_string()),
-                            path_parameters: vec![("string".to_string(), "name".to_string())],
+                            path_parameters: vec![
+                                (0, "person".to_string(), None),
+                                (1, "name".to_string(), Some("string".to_string())),
+                            ],
                             confidential: true,
                         },
                         fpm::sitemap::toc::TocItem {
@@ -302,7 +293,10 @@ mod tests {
                             readers: vec!["readers/person".to_string()],
                             writers: vec!["writers/person".to_string()],
                             document: Some("person.ftd".to_string()),
-                            path_parameters: vec![("string".to_string(), "name".to_string())],
+                            path_parameters: vec![
+                                (0, "person".to_string(), None),
+                                (1, "name".to_string(), Some("string".to_string())),
+                            ],
                             confidential: true,
                         },
                     ],

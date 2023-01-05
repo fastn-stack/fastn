@@ -719,6 +719,8 @@ impl Config {
                 };
 
             // Getting `document` with dynamic parameters, if exists
+            // It will first resolve in sitemap
+            // Then it will resolve in the dynamic urls
             let (document, path_params) =
                 fpm::sitemap::resolve(sanitized_package, &sanitized_path)?;
 
