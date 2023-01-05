@@ -5,13 +5,13 @@
 
 Owner: Arpita, Sourabh
 
-- [`datetime` type](/ftd/~/27/)
+- `datetime` type
 - match on or-type
 - optional variable is not added to ftd_data in HTML
 - optional integer variable cannot be passed as reference to ftd.integer
-- [allow `$processor$` on component](/ftd/~/128/)
+- allow `$processor$` on component
 - allow `$processor$` on record (CR is almost duplicate of component one)
-- [position simplification](/ftd/~/114/)
+- position simplification
 - recursion check
 - `$MOUSE-IN`
   - semantics: only for the node its applied on
@@ -20,19 +20,19 @@ Owner: Arpita, Sourabh
 
 -- ft.h1: Post First Release
 
-- [ftd-markup](/fifthtry/ftd/~/9/)
-- [json constructor](/ftd/~/122/)
-- [data only functions](/fifthtry/ftd/~/80/)
-- [URL Resolver](/ftd/~/118/)
-- p1: [`>` based caption/header continuation](/ftd/~/104/)
-- remaining [conditional attributes](/ftd/~/7/)
+- ftd-markup
+- json constructor
+- data only functions
+- URL Resolver
+- p1: `>` based caption/header continuation
+- remaining conditional attributes
   - text
 - `if` on external children
-- [`ftd.menu`](/ftd~101/menu/) (mostly not needed after position and anchor thing)
-- [p1::`structured header`](/ftd/~/107/)
+- `ftd.menu` (mostly not needed after position and anchor thing)
+- p1::`structured header`
 - issue: multiple fields with type `caption` allowed (should not be)
-- [better error handling](/ftd/~/10/)
-- [clean external api](/ftd/~/108/)
+- better error handling
+- clean external api
 
 
 -- ft.h1: FTD tutorial roadmap
@@ -49,54 +49,54 @@ that can be created throught ftd.
 
 -- ft.h1: others
 
-- [container header](/ftd/~/116/)
+- container header
 - color, align etc types (to act as type hint or doc)
-- [enum](/ftd/~/33/)
-- [auto variables: `@child-index` and `@sibling-count`](/fifthtry/ftd/~/73/)
-- [auto variables: `first, last, odd, even`](/fifthtry/ftd/~/102/)
-- issue: [padding issue](/fifthtry/ftd/~/68/)
-- [higher order variable: `integer variable`](/fifthtry/ftd/~/75/)
-- [loop variable](/fifthtry/ftd/~/22/)
-- [argument with default value: on record/or-type](/fifthtry/ftd/~/15/)
-- [ref x -> { x }](/fifthtry/ftd/~/37/)? (no longer doing it, `#x` is better)
+- enum
+- auto variables: `@child-index` and `@sibling-count`
+- auto variables: `first, last, odd, even`
+- issue: padding issue
+- higher order variable: `integer variable`
+- loop variable
+- argument with default value: on record/or-type
+- ref x -> { x }? (no longer doing it, `#x` is better)
 - implement markdown, code highlighting, katex etc using `$processor$`?
-- [test improvements](/fifthtry/ftd/~/29/)
-- [`ftd.grid`](/fifthtry/ftd/~/97/)
+- test improvements
+- `ftd.grid`
 
 
 -- ft.h1: implemented but not yet documented
 
-- [`message-host` event handler](/ftd/~/127/)
+- `message-host` event handler
 - support basic types in `from_json_row_`
-- [`ui` as a type](/ftd/~/112/)
-- backward incompatible: [unified component/variable syntax](/ftd/~/115/)
+- `ui` as a type
+- backward incompatible: unified component/variable syntax
 - viewport based length (`width: vh 40` etc)
-- backwards incompatible: [`ftd.text` vs `ftd.text-block`](/ftd/~/113/)
+- backwards incompatible: `ftd.text` vs `ftd.text-block`
 - `$lool$: $foo as $o` instead of `.. $foo as o`
 - `google-font-url`
-- [everything is `$foo` (against `ftd-0.2` branch)](/ftd/~/105/)
+- everything is `$foo` (against `ftd-0.2` branch)
 - remove `ftd.comic`
-- [`@mouse-in`: special variable](/fifthtry/ftd/~/57/)
+- `@mouse-in`: special variable
 - `#foo` global variables (remove `ref`) (and `import: f; #f.foo` not `f.#foo`)
   - `ftd.boolean`'s value is not changing correctly when variable changes
   - `ftd.boolean` should accept value in caption
 - `async` rendering (`import` and `$processor$`)
 - `line-clamp`
-- enhancement: [open container with children should be closed](/fifthtry/ftd/~/69/)
-- action: [set value/ref](/fifthtry/ftd/~/67/)
-- [`inherit` type not working](/fifthtry/ftd/~/71/)
-- [absolute positioning](/fifthtry/ftd/~/100/)
+- enhancement: open container with children should be closed
+- action: set value/ref
+- `inherit` type not working
+- absolute positioning
 - `ftd.scene`
 - `list is empty` | `list is not empty`
 - sub-section level container management
-- [`evt.stopPropagation()`](/fifthtry/ftd/~/91/)
-- action: [increment / decrement integer](/fifthtry/ftd/~/65/)
+- `evt.stopPropagation()`
+- action: increment / decrement integer
 - `ftd.integer`/`.decimal`/`.boolean` should also accept value as `caption`.
-- [`/-` comments](/fifthtry/ftd/~/38/)
+- `/-` comments
 - implement `cursor`
 - if `$on-click$` is set, use `pointer` as default cursor
-- [`if` on var-overwrite/list-append](/fifthtry/ftd/~/35/)
-- [intra page link](/fifthtry/ftd/~/86/)
+- `if` on var-overwrite/list-append
+- intra page link
 - move-{up, down, left, right}
 - example: how to create nested toc with expand collapse behaviour
 - example: how to show a dialog when a button is clicked (click outside)
@@ -109,12 +109,12 @@ that can be created throught ftd.
 
 things on which we do not have a clarity on how things should work.
 
-- [font handling](/fifthtry/ftd/~/6/)
+- font handling
 
 
 -- ft.h1: bugs and minor enhancements
 
-- [line-height does not work when text is in body](/fifthtry/ftd/~/74/)
+- line-height does not work when text is in body
 - row with single line text and block element do not render correctly
 - how to pass more than one multi-line parameters when calling a component
 
@@ -129,17 +129,17 @@ things on which we do not have a clarity on how things should work.
 
 - object header eg `border: { top: 20 }`
 - object merge `{ top: 0, left: 0 }`
-- [`$end$` header](/fifthtry/ftd/~/20/)
-- [`if` -> `$if$`](/fifthtry/ftd/~/26/) (not sure)
-- [`$deprecate$`](/fifthtry/ftd/~/34/)
-- [`-- import: foo as _`](/fifthtry/ftd/~/44/)
+- `$end$` header
+- `if` -> `$if$` (not sure)
+- `$deprecate$`
+- `-- import: foo as _`
 
 
 -- ft.h1: event handling
 
-- [action: cycle](/fifthtry/ftd/~/66/)
+- action: cycle
 - action: input -> variable data binding
-- [in-equality expression](/fifthtry/ftd/~/36/)
+- in-equality expression
 - `$on-escape$`
 
 
@@ -148,7 +148,7 @@ things on which we do not have a clarity on how things should work.
 - oembed
 - off tree container management?
 - canvas or graphics (rectangle, circle, line, arrow etc primitives)
-- [contrast preserving color calculator](/ftd/~/61/)
+- contrast preserving color calculator
 - `line: true` (on `ftd.text` to decide if content is one word or line, eg button
   text, or paragraph)
   - if `line: true` and body contains multi para, show error
@@ -159,15 +159,15 @@ things on which we do not have a clarity on how things should work.
 - `-- <list-name>: ref x` to add `x` to `<list-name>` if type matches (and no
   other header or body passed).
 - `if` on list append
-- [`$loop$` over `list`](/fifthtry/ftd/~/28/)
+- `$loop$` over `list`
 - partial record update (`$overwrite$`)
-- [named-list](/fifthtry/ftd/~/40/)
-- [caption only record field](/fifthtry/ftd/~/51/)
-- [create string from int](/fifthtry/ftd/~/49/)
+- named-list
+- caption only record field
+- create string from int
 - expressions
   - list: more than | less than
-- [generic types](/fifthtry/ftd/~/79/)
-- [if for `or-type`](/fifthtry/ftd/~/81/)
+- generic types
+- if for `or-type`
 - builtin-processors: json/yml
 
 
@@ -179,4 +179,4 @@ things on which we do not have a clarity on how things should work.
 - ftd to pdf generator (ftd 2 [rml](https://www.reportlab.com/docs/rml2pdf-userguide.pdf)?)
 - realm integration
 - editor (click to select item, jump to definition)
-- [ftd-lambda](/fifthtry/ftd/~/25/)
+- ftd-lambda

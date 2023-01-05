@@ -4,8 +4,8 @@
     
 -- ft.markdown: 
 
-A FTD file can be parsed from Rust using the [`ftd` 
-crate](https://crates.io/crates/ftd):
+A FTD file can be parsed from Rust using the `ftd` 
+crate:
 
 -- ft.code:
 lang: rs
@@ -15,8 +15,8 @@ let msg: String = doc.get("some/id#x)?;
 
 -- ft.markdown:
 
-To learn about `lib` parameter, checkout the [library 
-documentation](library/).
+To learn about `lib` parameter, checkout the library 
+documentation.
 
 When calling `.get()` the type of variable in Rust must have compatible 
 [serde::Deserialize](https://docs.serde.rs/serde/de/trait.Deserialize.html) 
