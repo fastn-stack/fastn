@@ -106,7 +106,7 @@ pub fn parse_path_params(
                     output.push(fpm::sitemap::PathParams::named(
                         index,
                         param_name_part.to_string(),
-                        type_part.to_string(),
+                        type_part.to_string(), // TODO: check the type which are supported in the sitemap
                     ));
                     index += 1;
                 }

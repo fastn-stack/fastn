@@ -49,7 +49,7 @@ pub enum SitemapElement {
     TocItem(toc::TocItem),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PathParams {
     NamedParm {
         index: usize,
