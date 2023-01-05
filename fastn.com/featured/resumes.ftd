@@ -30,7 +30,7 @@ github-url: https://github.com/FifthTry/caffeine-resume/
 
 `fifthtry.github.io/caffeine-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`. You can change color-scheme OR site theme using
-it. ex. [Site themes](/featured/doc-site/), [Color Schemes](/featured/color-cs).
+it. ex. [Site themes](featured/doc-sites/), [Color Schemes](featured/cs/).
 
 
 -- resumes: Paper
@@ -41,7 +41,7 @@ github-url: https://github.com/FifthTry/paper-resume/
 
 `fifthtry.github.io/paper-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`. You can change color-scheme OR site theme using
-it. ex. [Site themes](/featured/doc-site/), [Color Schemes](/featured/color-cs).
+it. ex. [Site themes](featured/doc-sites/), [Color Schemes](featured/cs/).
 
 
 -- resumes: Elegant
@@ -53,4 +53,4 @@ is-last: true
 
 `fifthtry.github.io/elegant-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`. You can change color-scheme OR site theme using
-it. ex. [Site themes](/featured/doc-site/), [Color Schemes](/featured/color-cs).
+it. ex. [Site themes](featured/doc-sites/), [Color Schemes](featured/cs/).

@@ -7,7 +7,7 @@
 
 - `fpm -h` or `fpm --help` to print help-text and exit.
 - [`fpm build`](build/)
-- [`fpm sync`](sync/)
+- [`fpm sync`](cli/sync/)
 - [`fpm status`](status/)
 - [`fpm diff`](diff/)
 - [`fpm serve`](serve/)

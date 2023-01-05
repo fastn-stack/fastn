@@ -8,37 +8,37 @@
   - fpm tutorial
   - github pages how to
 - static assets
-- [markdown file handling](/fpm/~/23/)
-- [`README.md` handling](/fpm/~/22/)
-- [Include fonts from dependencies](/fpm/~/18/)
-- [fpm client variables](/fpm/~/25/)
-- [Package dependencies full version](/fpm/~/27/)
+- markdown file handling
+- `README.md` handling
+- Include fonts from dependencies
+- fpm client variables
+- Package dependencies full version
 
 
 -- ft.h1: Rust Book using FPM
 
-- [translation tracking](/fpm/~/3/): UI pending
-- [`$processor$: include-file`](/fpm/~/34/)
+- translation tracking: UI pending
+- `$processor$: include-file`
 
 
 -- ft.h1: Core Features
 
-- [sqlite support](/fpm/~/26/)
-- [package database](/fpm/~/16/)
-- [dynamic/data-driven documents](/fpm/~/20/)
-- [fpm actions](/fpm/~/24/)
+- sqlite support
+- package database
+- dynamic/data-driven documents
+- fpm actions
 - search
-- [package interface](/fpm/~/11/)
+- package interface
 - `fpm serve`, figure out how to do http serving
-- [logical linking](/fpm/~/2/)
-- `fpm-repo`, [auth](/fpm/~/8/) & [`fpm sync` for two way sync](/fpm/~/7/)
-- [version tracking](/fpm/~/5/)
-- [cr tracking](/fpm/~/6/)
-- [access control](/fpm/~/10/)
-- [`$processor$`: with ftd json constructor](/fpm/~/14/)
-- [`fpm fmt`: formatter](/fpm/~/31/)
-- [banner support](/fpm/~/32/)
-- [encryption support](/fpm/~/33/)
+- logical linking
+- `fpm-repo`, auth & `fpm sync` for two way sync
+- version tracking
+- cr tracking
+- access control
+- `$processor$`: with ftd json constructor
+- `fpm fmt`: formatter
+- banner support
+- encryption support
 
 
 -- ft.h1: Importer & Exporters
@@ -70,18 +70,18 @@
 
 -- ft.h1: Developer / Author Productivity
 
-- [live reload for `fpm serve`](/fpm/~/30/)
+- live reload for `fpm serve`
 - syntax highlighting for editors
 - LSP for ftd/fpm
 
 
 -- ft.h1: Backlog
 
-- optimisation: [only include font when needed](/fpm/~/19/)
-- [`fpm diff <path>` filtered diff](/fpm/~/21/)
+- optimisation: only include font when needed
+- `fpm diff <path>` filtered diff
 - ~display programming file etc as code block?~
 
 
 -- ft.h1: Implemented But Not Yet Documented
 
-- [ad-hoc tracking](/fpm/~/12/)
+- ad-hoc tracking

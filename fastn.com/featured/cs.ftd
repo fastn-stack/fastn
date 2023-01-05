@@ -45,13 +45,13 @@ github-url: https://github.com/FifthTry/forest-cs/
 
 
 -- schemes: Night Moon
-template-url: https://fifthtry.github.io/night-moon/
+template-url: https://fifthtry.github.io/night-moon-cs/
 screenshot: $assets.files.static.night-moon.png
-licence-url: https://github.com/FifthTry/night-moon/blob/main/LICENSE
-github-url: https://github.com/FifthTry/night-moon/
+licence-url: https://github.com/FifthTry/night-moon-cs/blob/main/LICENSE
+github-url: https://github.com/FifthTry/night-moon-cs/
 is-last: true
 
-`fifthtry.github.io/night-moon` is a blue(night moon) color scheme. See its 
-documentation to use it. [Night Moon](https://fifthtry.github.io/night-moon/)
+`fifthtry.github.io/night-moon-cs` is a blue(night moon) color scheme. See its 
+documentation to use it. [Night Moon](https://fifthtry.github.io/night-moon-cs/)
 
 

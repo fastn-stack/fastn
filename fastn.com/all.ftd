@@ -250,7 +250,7 @@ status: Featured
 `DS` means documentation site. `ds` is ready to use template for your `FTD` web sites, blogs etc.
 
 -- package-list: `dash-dash-ds`
-package-url: https://fifthtry.github.io/dash-dash-ds/sample
+package-url: https://fifthtry.github.io/dash-dash-ds
 package-name: fifthtry.github.io/dash-dash-ds
 github-url: https://github.com/FifthTry/dash-dash-ds
 package-type: DS
@@ -701,7 +701,7 @@ status: In Progress
 `spartan-resume` is a resume theme. `resume` template is required as default resume data template.
 
 -- package-list: `resume-autumn`
-package-url: https://fifthtry.github.io/resume-autumn
+package-url: https://github.com/FifthTry/resume-autumn
 package-name: fifthtry.github.io/resume-autumn
 github-url: https://github.com/FifthTry/resume-autumn
 package-type: Resume

@@ -12,7 +12,7 @@ width: fill
 The editor is fully integrated with the [fpm version control system](/vcs/), and
 acts as an integrated development environment for ftd projects.
 
-Fun fact: fpm editor is itself [built using
-`ftd`](https://github.com/FifthTry/fpm/blob/main/ftd/editor.ftd).
+Fun fact: fpm editor is itself built using
+`ftd`.
 
 Learn more about the editor in the [editor manual](/editor/manual/).

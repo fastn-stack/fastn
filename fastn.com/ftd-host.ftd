@@ -4,9 +4,9 @@
 
 FPM comes with following built in `ftd` `$processor$`s.
 
-- [`$processor$: http`](/fpm/http/)
-- [`$processor$: toc`](/fpm/toc/)
-- [`$processor$: package-query`](/fpm/package-query/)
+- [`$processor$: http`](http/)
+- [`$processor$: toc`](toc/)
+- [`$processor$: package-query`](package-query/)
 
-FPM also comes with a special document [`fpm`](/fpm/fpm-vars/) that can be
+FPM also comes with a special document [`fpm`](fpm-vars/) that can be
 imported by any document, which contains helpful variables.

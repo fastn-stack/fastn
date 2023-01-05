@@ -39,11 +39,11 @@ let (mut authorize_url, _token) = client
 
 -- ft.markdown:
 
-It will basically call https://github.com/login/oauth/authorize url 
+It will basically call `https://github.com/login/oauth/authorize` url 
 for user login and return `code` and `state` as a query parameter to 
 the callback url.
 
-To get access tokens we need to call https://github.com/login/oauth/access_token . 
+To get access tokens we need to call `https://github.com/login/oauth/access_token` . 
 We need to pass Client Id,Client Secret and Code(returned after authorization).
 In response we will get `access_token` that can be saved in our cookies,
 session or database to be used for accessing other Github Apis.
