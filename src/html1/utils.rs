@@ -41,6 +41,8 @@ pub(crate) fn function_name_to_js_function(s: &str) -> String {
         .replace('-', "_")
         .replace(':', "___")
         .replace(',', "$")
+        .replace("\\\\", "/")
+        .replace("\\", "/")
         .replace(['/', '.'], "_")
 }
 
