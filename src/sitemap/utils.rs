@@ -14,7 +14,7 @@ enum PathParams {
 
 pub fn url_match(
     request_url: &str,
-    sitemap_params: &[(usize, String, Option<String>)],
+    sitemap_params: &[fpm::sitemap::PathParams],
 ) -> fpm::Result<(bool, Vec<(String, ftd::Value)>)> {
     use itertools::Itertools;
     // request_attrs: [abrark, foo, 28]
@@ -29,23 +29,30 @@ pub fn url_match(
     // d-urls: [(0, a, None), (1, username, Some(string)), (2, foo, None)]
     // [(param_name, value)]
     let mut path_parameters: Vec<(String, ftd::Value)> = vec![];
-    let mut index = 0;
+    let mut count = 0;
     for req_part in request_parts {
-        let (_idx, value_or_param_name, value_type) = &sitemap_params[index];
-        index += 1; // Note: Use it carefully next
-        if value_type.is_none() {
-            if req_part.eq(value_or_param_name) {
-                continue;
-            } else {
-                return Ok((false, vec![]));
+        match &sitemap_params[count] {
+            fpm::sitemap::PathParams::ValueParam { index: _, value } => {
+                count += 1;
+                if req_part.eq(value) {
+                    continue;
+                } else {
+                    return Ok((false, vec![]));
+                }
             }
-        } else {
-            if let Ok(value) = get_value_type(req_part, value_type.as_ref().unwrap()) {
-                path_parameters.push((value_or_param_name.to_string(), value));
-            } else {
-                return Ok((false, vec![]));
+            fpm::sitemap::PathParams::NamedParm {
+                index: _,
+                name,
+                param_type,
+            } => {
+                count += 1;
+                if let Ok(value) = get_value_type(req_part, param_type) {
+                    path_parameters.push((name.to_string(), value));
+                } else {
+                    return Ok((false, vec![]));
+                }
             }
-        }
+        };
     }
     return Ok((true, path_parameters));
 
@@ -76,7 +83,7 @@ pub fn url_match(
 /// This method is for parsing the dynamic params from fpm.dynamic-urls
 pub fn parse_path_params(
     url: &str,
-) -> Result<Vec<(usize, String, Option<String>)>, fpm::sitemap::ParseError> {
+) -> Result<Vec<fpm::sitemap::PathParams>, fpm::sitemap::ParseError> {
     let mut output = vec![];
     let url = url.trim().trim_matches('/');
 
@@ -96,16 +103,16 @@ pub fn parse_path_params(
                             message: format!("dynamic-urls format is wrong for: {}", part),
                         });
                     }
-                    output.push((
+                    output.push(fpm::sitemap::PathParams::named(
                         index,
                         param_name_part.to_string(),
-                        Some(type_part.to_string()),
+                        type_part.to_string(),
                     ));
                     index += 1;
                 }
             } else {
                 // b
-                output.push((index, part.to_string(), None));
+                output.push(fpm::sitemap::PathParams::value(index, part.to_string()));
                 index += 1;
             }
         }
@@ -122,10 +129,10 @@ mod tests {
     fn parse_path_params_test_0() {
         let output = super::parse_path_params("/b/<string:username>/<integer:age>/foo/");
         let test_output = vec![
-            (0, "b".to_string(), None),
-            (1, "username".to_string(), Some("string".to_string())),
-            (2, "age".to_string(), Some("integer".to_string())),
-            (3, "foo".to_string(), None),
+            fpm::sitemap::PathParams::value(0, "b".to_string()),
+            fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+            fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
+            fpm::sitemap::PathParams::value(3, "foo".to_string()),
         ];
         assert!(output.is_ok());
         assert_eq!(test_output, output.unwrap())
@@ -136,10 +143,10 @@ mod tests {
     fn parse_path_params_test_01() {
         let output = super::parse_path_params("/b/ <  string  :  username > / <integer:age>/foo/");
         let test_output = vec![
-            (0, "b".to_string(), None),
-            (1, "username".to_string(), Some("string".to_string())),
-            (2, "age".to_string(), Some("integer".to_string())),
-            (3, "foo".to_string(), None),
+            fpm::sitemap::PathParams::value(0, "b".to_string()),
+            fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+            fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
+            fpm::sitemap::PathParams::value(3, "foo".to_string()),
         ];
         assert!(output.is_ok());
         assert_eq!(test_output, output.unwrap())
@@ -149,12 +156,6 @@ mod tests {
     #[test]
     fn parse_path_params_test_02() {
         let output = super::parse_path_params("/b/ <  :  username > / <integer:age>/foo/");
-        // let test_output = vec![
-        //     (0, "b".to_string(), None),
-        //     (1, "username".to_string(), Some("string".to_string())),
-        //     (2, "age".to_string(), Some("integer".to_string())),
-        //     (3, "foo".to_string(), None),
-        // ];
         assert!(output.is_err())
     }
 
@@ -165,9 +166,9 @@ mod tests {
         let output = super::url_match(
             "/arpita/foo/28/",
             &[
-                (0, "username".to_string(), Some("string".to_string())),
-                (1, "foo".to_string(), None),
-                (2, "age".to_string(), Some("integer".to_string())),
+                fpm::sitemap::PathParams::named(0, "username".to_string(), "string".to_string()),
+                fpm::sitemap::PathParams::value(1, "foo".to_string()),
+                fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
             ],
         );
 
@@ -199,9 +200,9 @@ mod tests {
         let output = super::url_match(
             "/arpita/foo/28/",
             &[
-                (0, "username".to_string(), Some("integer".to_string())),
-                (1, "foo".to_string(), None),
-                (2, "age".to_string(), Some("integer".to_string())),
+                fpm::sitemap::PathParams::named(0, "username".to_string(), "integer".to_string()),
+                fpm::sitemap::PathParams::value(1, "foo".to_string()),
+                fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
             ],
         );
 
@@ -220,9 +221,9 @@ mod tests {
         let output = super::url_match(
             "/arpita/foo/",
             &[
-                (0, "username".to_string(), Some("integer".to_string())),
-                (1, "foo".to_string(), None),
-                (2, "age".to_string(), Some("integer".to_string())),
+                fpm::sitemap::PathParams::named(0, "username".to_string(), "integer".to_string()),
+                fpm::sitemap::PathParams::value(1, "foo".to_string()),
+                fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
             ],
         );
         assert!(!output.unwrap().0)
@@ -235,9 +236,9 @@ mod tests {
         let output = super::url_match(
             "/b/a/person/",
             &[
-                (0, "b".to_string(), None),
-                (1, "username".to_string(), Some("string".to_string())),
-                (2, "person".to_string(), None),
+                fpm::sitemap::PathParams::value(0, "b".to_string()),
+                fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+                fpm::sitemap::PathParams::value(2, "person".to_string()),
             ],
         );
         let output = output.unwrap();
@@ -261,9 +262,9 @@ mod tests {
         let output = super::url_match(
             "/b/a/person/",
             &[
-                (0, "a".to_string(), None),
-                (1, "username".to_string(), Some("string".to_string())),
-                (2, "person".to_string(), None),
+                fpm::sitemap::PathParams::value(0, "a".to_string()),
+                fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+                fpm::sitemap::PathParams::value(2, "person".to_string()),
             ],
         );
         assert!(!output.unwrap().0)
@@ -276,10 +277,10 @@ mod tests {
         let output = super::url_match(
             "/a/abrark/person/28/",
             &[
-                (0, "a".to_string(), None),
-                (1, "username".to_string(), Some("string".to_string())),
-                (2, "person".to_string(), None),
-                (3, "age".to_string(), Some("integer".to_string())),
+                fpm::sitemap::PathParams::value(0, "a".to_string()),
+                fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+                fpm::sitemap::PathParams::value(2, "person".to_string()),
+                fpm::sitemap::PathParams::named(3, "age".to_string(), "integer".to_string()),
             ],
         );
         let output = output.unwrap();

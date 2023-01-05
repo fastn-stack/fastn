@@ -20,7 +20,7 @@ pub struct TocItem {
     pub confidential: bool,
     /// /books/<string:book_name>/
     /// here book_name is path parameter
-    pub path_parameters: Vec<(usize, String, Option<String>)>,
+    pub path_parameters: Vec<fpm::sitemap::PathParams>,
 }
 
 impl Default for TocItem {

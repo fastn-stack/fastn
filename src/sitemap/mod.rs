@@ -49,6 +49,33 @@ pub enum SitemapElement {
     TocItem(toc::TocItem),
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum PathParams {
+    NamedParm {
+        index: usize,
+        name: String,
+        param_type: String,
+    },
+    ValueParam {
+        index: usize,
+        value: String,
+    },
+}
+
+impl PathParams {
+    pub fn named(index: usize, name: String, param_type: String) -> Self {
+        PathParams::NamedParm {
+            index,
+            name,
+            param_type,
+        }
+    }
+
+    pub fn value(index: usize, value: String) -> Self {
+        PathParams::ValueParam { index, value }
+    }
+}
+
 impl SitemapElement {
     pub(crate) fn insert_key_value(&mut self, key: &str, value: &str) {
         let element_title = match self {

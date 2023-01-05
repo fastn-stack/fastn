@@ -265,8 +265,12 @@ mod tests {
                             writers: vec!["writers/person".to_string()],
                             document: Some("person.ftd".to_string()),
                             path_parameters: vec![
-                                (0, "person".to_string(), None),
-                                (1, "name".to_string(), Some("string".to_string())),
+                                fpm::sitemap::PathParams::value(0, "person".to_string()),
+                                fpm::sitemap::PathParams::named(
+                                    1,
+                                    "name".to_string(),
+                                    "string".to_string(),
+                                ),
                             ],
                             confidential: true,
                         },
@@ -294,8 +298,12 @@ mod tests {
                             writers: vec!["writers/person".to_string()],
                             document: Some("person.ftd".to_string()),
                             path_parameters: vec![
-                                (0, "person".to_string(), None),
-                                (1, "name".to_string(), Some("string".to_string())),
+                                fpm::sitemap::PathParams::value(0, "person".to_string()),
+                                fpm::sitemap::PathParams::named(
+                                    1,
+                                    "name".to_string(),
+                                    "string".to_string(),
+                                ),
                             ],
                             confidential: true,
                         },

@@ -117,7 +117,7 @@ pub struct Section {
     /// `url: /books/<string:book_name>/<integer:price>/`
     /// here book_name and price are path parameters
     /// [(0, books, None), (1, book_name, string), (2, price, integer)]
-    pub path_parameters: Vec<(usize, String, Option<String>)>,
+    pub path_parameters: Vec<fpm::sitemap::PathParams>,
 }
 
 impl Default for Section {
@@ -168,7 +168,7 @@ pub struct Subsection {
     /// /books/<string:book_name>/
     /// here book_name is path parameter
     /// [(0, books, None), (1, book_name, string)]
-    pub path_parameters: Vec<(usize, String, Option<String>)>,
+    pub path_parameters: Vec<fpm::sitemap::PathParams>,
 }
 
 impl Section {
