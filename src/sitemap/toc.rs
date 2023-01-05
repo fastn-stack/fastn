@@ -20,7 +20,7 @@ pub struct TocItem {
     pub confidential: bool,
     /// /books/<string:book_name>/
     /// here book_name is path parameter
-    pub path_parameters: Vec<(String, String)>,
+    pub path_parameters: Vec<(usize, String, Option<String>)>,
 }
 
 impl Default for TocItem {

@@ -179,8 +179,8 @@ impl SitemapElement {
     // If url contains path parameters so it will set those parameters
     // /person/<string:username>/<integer:age>
     // In that case it will parse and set parameters `username` and `age`
-    pub(crate) fn set_path_params(&mut self, url: &str) {
-        let params = utils::parse_path_params(url);
+    pub(crate) fn set_path_params(&mut self, url: &str) -> Result<(), ParseError> {
+        let params = utils::parse_path_params_new(url)?;
 
         if !params.is_empty() {
             self.set_skip(true);
@@ -197,6 +197,7 @@ impl SitemapElement {
                 t.path_parameters = params;
             }
         }
+        Ok(())
     }
 }
 
@@ -453,7 +454,7 @@ impl SitemapParser {
                             if i.get_title().is_none() {
                                 i.set_title(id);
                             }
-                            i.set_path_params(v);
+                            i.set_path_params(v)?;
                         } else if k.eq("id") {
                             // Fetch link corresponding to the id from global_ids map
                             let link = global_ids.get(v).ok_or_else(|| ParseError::InvalidID {

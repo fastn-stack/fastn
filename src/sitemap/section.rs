@@ -116,8 +116,8 @@ pub struct Section {
     /// If we can define dynamic `url` in section, subsection and toc in `dynamic-urls`.
     /// `url: /books/<string:book_name>/<integer:price>/`
     /// here book_name and price are path parameters
-    /// path_parameters: [(string, book_name), (integer, price)]
-    pub path_parameters: Vec<(String, String)>,
+    /// [(0, books, None), (1, book_name, string), (2, price, integer)]
+    pub path_parameters: Vec<(usize, String, Option<String>)>,
 }
 
 impl Default for Section {
@@ -164,9 +164,11 @@ pub struct Subsection {
     /// `confidential:true` means totally confidential
     /// `confidential:false` can be seen some it's data
     pub confidential: bool,
+
     /// /books/<string:book_name>/
     /// here book_name is path parameter
-    pub path_parameters: Vec<(String, String)>,
+    /// [(0, books, None), (1, book_name, string)]
+    pub path_parameters: Vec<(usize, String, Option<String>)>,
 }
 
 impl Section {

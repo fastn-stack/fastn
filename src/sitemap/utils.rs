@@ -4,11 +4,11 @@
 // params_types: [(string, username), (integer, age)]
 // # Output
 // true
-
+// TODO: This should be match method
 pub fn parse_named_params(
     request_url: &str,
     sitemap_url: &str,
-    params_type: &[(String, String)],
+    params_type: &[(usize, String, Option<String>)],
 ) -> fpm::Result<Vec<(String, ftd::Value)>> {
     use itertools::Itertools;
     // request_attrs: [abrark, foo, 28]
@@ -78,23 +78,6 @@ pub fn parse_named_params(
     }
 }
 
-// url: /<string:username>/<integer:age>/ => [("string", "username"), ("integer", "age")]
-pub fn parse_path_params(url: &str) -> Vec<(String, String)> {
-    fn path_params_regex() -> &'static regex::Regex {
-        static PP: once_cell::sync::OnceCell<regex::Regex> = once_cell::sync::OnceCell::new();
-        PP.get_or_init(|| {
-            regex::Regex::new(r"<\s*([a-z]\w+)\s*:\s*([a-z|A-Z|0-9|_]\w+)\s*>")
-                .expect("PATH_PARAMS: Regex is wrong")
-        })
-    }
-
-    path_params_regex()
-        .captures_iter(url)
-        .into_iter()
-        .map(|params| (params[1].to_string(), params[2].to_string()))
-        .collect::<Vec<_>>()
-}
-
 // Input:  /b/<string:username>/<integer:age>/foo/
 // Output:vec![
 //         (0, "b".to_string(), None),
@@ -102,7 +85,9 @@ pub fn parse_path_params(url: &str) -> Vec<(String, String)> {
 //         (2, "age".to_string(), Some("integer".to_string())),
 //         (3, "foo".to_string(), None),
 //     ]
-pub fn parse_path_params_new(url: &str) -> fpm::Result<Vec<(usize, String, Option<String>)>> {
+pub fn parse_path_params_new(
+    url: &str,
+) -> Result<Vec<(usize, String, Option<String>)>, fpm::sitemap::ParseError> {
     let mut output = vec![];
     let url = url.trim().trim_matches('/');
 
@@ -119,10 +104,9 @@ pub fn parse_path_params_new(url: &str) -> fpm::Result<Vec<(usize, String, Optio
                     let type_part = part[1..colon_index].trim();
                     let param_name_part = part[colon_index + 1..part.len() - 1].trim();
                     if type_part.is_empty() || param_name_part.is_empty() {
-                        return fpm::Error::generic_err(format!(
-                            "dynamic-urls format is wrong for: {}",
-                            part
-                        ));
+                        return Err(fpm::sitemap::ParseError::InvalidDynamicUrls {
+                            message: format!("dynamic-urls format is wrong for: {}", part),
+                        });
                     }
                     output.push((
                         index,
@@ -185,26 +169,6 @@ mod tests {
         //     (3, "foo".to_string(), None),
         // ];
         assert!(output.is_err())
-    }
-
-    #[test]
-    fn parse_path_params_test_1() {
-        let output = super::parse_path_params("/<string:username>/<integer:age>/");
-        let test_output = vec![
-            ("string".to_string(), "username".to_string()),
-            ("integer".to_string(), "age".to_string()),
-        ];
-        assert_eq!(test_output, output)
-    }
-
-    #[test]
-    fn parse_path_params_test_2() {
-        let output = super::parse_path_params("/< string: username >/< integer: age >/");
-        let test_output = vec![
-            ("string".to_string(), "username".to_string()),
-            ("integer".to_string(), "age".to_string()),
-        ];
-        assert_eq!(test_output, output)
     }
 
     #[test]
