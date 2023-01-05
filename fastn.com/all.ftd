@@ -13,6 +13,8 @@ packages: $package-list
 
 
 
+
+
 -- ftd.row all:
 package list packages:
 width: fill
@@ -28,6 +30,7 @@ body: $obj.body
 status: $obj.status
 licence-url: $obj.licence-url
 licence-name: $obj.licence-name
+last-updated: $obj.last-updated
 
 
 
@@ -46,6 +49,7 @@ string github-url:
 string package-type:
 string licence-url:
 string licence-name:
+optional string last-updated:
 string status: 
 body body: 
 width if not $ft.is-mobile: percent 46
@@ -53,13 +57,12 @@ width if $ft.is-mobile: fill
 margin-bottom: 24
 margin-right if not $ft.is-mobile: 24
 margin-bottom if $ft.is-mobile: 24
-padding-vertical: $fpm.space.space-2
+padding-vertical: $fpm.space.space-3
 padding-horizontal: $fpm.space.space-3
-min-height: 140
-max-height: 140
+min-height: 164
+max-height: 164
 background-color: $fpm.color.main.background.step-1
 border-radius: 6
-
 
 --- ftd.column:
 width: fill
@@ -124,7 +127,6 @@ height: 16
 --- ftd.row:
 align: right
 id: title-row
-margin-top: $fpm.space.space-1
 
 --- ftd.row:
 if: $status == Documented
@@ -211,9 +213,31 @@ width: fill
 width: fill
 margin-top: $fpm.space.space-1
 overflow-y: auto
+
 --- ftd.text: 
 text: $body
 role: $fpm.type.copy-tight
+color: $fpm.color.main.text
+height: 62
+
+--- container: ftd.main
+
+--- ftd.column:
+align: right
+
+--- ftd.row:
+if: $last-updated is not null
+width: fill
+spacing: 12
+margin-top: 6
+
+--- ftd.text: Last updated:
+role: $fpm.type.fine-print
+color: $fpm.color.main.success.text
+
+--- ftd.text: $last-updated
+if: $last-updated is not null
+role: $fpm.type.fine-print
 color: $fpm.color.main.text
 
 
@@ -235,6 +259,7 @@ body body:
 string status:
 string licence-url:
 string licence-name:
+optional string last-updated:
 
 -- package list package-list:
 
@@ -246,6 +271,7 @@ package-type: DS
 licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Featured
+last-updated: yesterday
 
 `DS` means documentation site. `ds` is ready to use template for your `FTD` web sites, blogs etc.
 
@@ -257,6 +283,7 @@ package-type: DS
 licence-url: https://github.com/FifthTry/dash-dash-ds/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Featured
+last-updated: 19th Nov 2022
 
 `DS` means documentation site. `ds` is ready to use template for your `FTD` web sites, blogs etc.
 
@@ -268,6 +295,7 @@ package-type: DS
 licence-url: https://github.com/FifthTry/Blue-Sapphire-Template/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Outdated
+last-updated: 27th Jul 2022
 
 `DS` means documentation site. `Blue-Sapphire-Template` was ready to use template for your `FTD` web sites, blogs etc. Its outdated for `FTD` use.
 
@@ -279,6 +307,7 @@ package-type: Font
 licence-url: https://github.com/FifthTry/color-doc/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Featured
+last-updated: 01 Dec 2022
 
 `cs` means color scheme. `color-doc` is ready to use color scheme, it our default `cs`. It is in grey colors.
 
@@ -290,6 +319,7 @@ package-type: CS
 licence-url: https://github.com/FifthTry/forest-cs/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Featured
+last-updated: 01 Sep 2022
 
 `cs` means color scheme. `forest-cs` is ready to use color scheme. It is in forest green colors.
 
@@ -301,6 +331,7 @@ package-type: CS
 licence-url: https://github.com/FifthTry/night-moon-cs/blob/main/LICENSE
 licence-name: BSD-3-Clause
 status: Documented
+last-updated: 03 Nov 2022
 
 `cs` means color scheme. `night-moon-cs` is ready to use color scheme. It is in night blue colors.
 
