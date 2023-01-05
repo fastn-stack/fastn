@@ -16,7 +16,7 @@ impl<'a> DataGenerator<'a> {
             {
                 let value = value.clone().resolve(self.doc, value.line_number())?;
                 if let Some(value) = get_value(self.doc, &value)? {
-                    d.insert(k.to_string(), value);
+                    d.insert(ftd::html1::utils::js_reference_name(k), value);
                 }
             }
         }

@@ -44,6 +44,10 @@ pub(crate) fn function_name_to_js_function(s: &str) -> String {
         .replace(['/', '.'], "_")
 }
 
+pub(crate) fn js_reference_name(s: &str) -> String {
+    s.replace("\\\\", "/").replace("\\", "/")
+}
+
 pub(crate) fn full_data_id(id: &str, data_id: &str) -> String {
     if data_id.trim().is_empty() {
         id.to_string()
@@ -241,7 +245,7 @@ impl ftd::interpreter2::PropertyValue {
         Ok(match self {
             ftd::interpreter2::PropertyValue::Reference { name, .. } => Some(format!(
                 "resolve_reference(\"{}\", data){}",
-                name,
+                js_reference_name(name),
                 field
                     .map(|v| format!(".{}", v))
                     .unwrap_or_else(|| "".to_string())
