@@ -142,8 +142,8 @@ Here `amitu.com/FPM.ftd` has explicitly granted `arpita.com/dms`
 1st Feb 2022
 
 So Arpita is working on [`-- boolean foo:
-$bar`](///github.com/FifthTry/ftd/issues/90) and we are stuck at the
-question [we discussed on 29th Jan](/journal/#pass-by-value-vs-reference).
+$bar`](https://github.com/ftd-lang/ftd/issues/90) and we are stuck at the
+question we discussed on 29th Jan.
 
 -- ft.code:
 lang: ftd
@@ -687,7 +687,7 @@ Here we are not defining a component and can still use `$MOUSE-IN`.
 
 27th Jan 2022
 
-We can already create [comics using FTD](/examples/comic/). But we need is more
+We can already create comics using FTD. But we need is more
 succinct syntax to represent a bunch of position, scale, rotation related
 attributes into a single short-hand notation, and eventually give a drag and
 drop interface that updates the position etc shorthand notation.
@@ -1732,7 +1732,7 @@ $on-input$: $query=$VALUE
 -- ft.markdown:
 
 With the above, whatever is typed in the input field is immediately reflected
-in `$query`. See a [demo here](https://fifthtry.github.io/ftd/input.html).
+in `$query`. See a [demo here](https://ftd-lang.github.io/ftd/01-input.html).
 
 We have two events, `$on-input$`, which happens as soon as a input is edited,
 on key press, and `$on-change$`, which happens when the user presses Enter
@@ -2029,7 +2029,7 @@ adding any new feature to FTD for translation.
 
 23rd Dec 2021
 
-Arpita just implemented [`message-host` event handler](/ftd/~/127/) support. Now
+Arpita just implemented `message-host` event handler support. Now
 the "ftd host" (we will rename `ftd::Library` to `ftd::Host` terminology soon), can
 define a JavaScript function (and in future when we support iOS etc, register Swift
 function etc) and call it as event handler from FTD documents:
@@ -2052,8 +2052,8 @@ $on-click$: message-host foo
 
 -- ft.markdown:
 
-Current we do not pass any arguments to the function. In future, when [json
-constructor](/ftd/~/122/) is ready we would be able to pass FTD variables to host
+Current we do not pass any arguments to the function. In future, when json
+constructor is ready we would be able to pass FTD variables to host
 functions.
 
 
@@ -2061,10 +2061,10 @@ functions.
 
 6th Dec 2021
 
-Was writing a CR about ["fpm actions"](https://www.fifthtry.com/fpm/~/24/), and my
+Was writing a CR about "fpm actions", and my
 initial thought was to expose form errors using special variables, but then I
-realised we do not have a mechanism to register for changes in [special
-variables](/ftd/~/121/).
+realised we do not have a mechanism to register for changes in special
+variables.
 
 Variable change can only happen on client (it can still be triggered by server
 and sent to client, eg on WebSocket). We are going to have `fpm.js` file to handle
@@ -2084,7 +2084,7 @@ document, maybe even one document per variable in extreme case. So we only impor
 the document that we want to use.
 
 We will also have a linter that will complain if a document is imported but not
-used, (and therefore we have [`import: foo as _`](///ftd.dev/~/44/) syntax).
+used, (and therefore we have `import: foo as _` syntax).
 
 
 -- ft.h2: "FTD Host"
@@ -2316,7 +2316,7 @@ accept an image specifically?
 
 FTD is an awesome language, and it deserves a kick-ass package manager. Today you
 can not launch a language without a package manager. So we have started working on
-[`fpm`](/fpm/).
+`fpm`.
 
 
 -- ft.h1: FTD Logo
@@ -2337,7 +2337,7 @@ We movee `play.fifthtry.com` to [`try.ftd.dev`](https://try.ftd.dev),now that
 FifthTry, just the domain would be custom.
 
 
--- ft.h1: [`$var` Everything](/ftd/~/105/) Update
+-- ft.h1: `$var` Everything Update
 
 15th Nov 2021
 
@@ -2366,7 +2366,7 @@ and use `boolean $foo: false` or even `$foo: false` to declare a variable.
 
 15th Nov 2021
 
-Wrote about my thoughts on cleaning up FTD [public crate api](/ftd/~/108/).
+Wrote about my thoughts on cleaning up FTD public crate api.
 
 
 -- ft.h1: `detached` support proposal
@@ -2380,7 +2380,7 @@ src: https://www.loom.com/embed/07681c220abd4eb584c75327c686360b
 
 -- ft.markdown:
 
-Wrote up a [CR for `detached` components](/ftd/~/106/): components that are not
+Wrote up a CR for `detached` components: components that are not
 part of UI when created, and added a new `include` keyword to include any detached
 component in "current container".
 

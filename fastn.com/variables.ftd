@@ -35,7 +35,7 @@ lang: ftd
 
 -- ft.h1: Types
 
-Type of a variable can be one of the [built-in types](builtin-types/),
+Type of a variable can be one of the [built-in types](built-in-types/),
 a [record](record/), or an [or-type](or-type/).
 
 

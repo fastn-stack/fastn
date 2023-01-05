@@ -146,8 +146,8 @@ a very poor editing experience.
   here "hello" is the `section caption`
 - `section header`: this is a series of "key-value" pairs, separated by ":" and
   comes right after the section name line
-  - eg "-- image:<newline>src: http://..", here "src" is the "key", and
-    "http://.." is the "value".
+  - eg "-- image:<newline>src: `http://..`", here "src" is the "key", and
+    `http://..` is the "value".
   - `section header` ends after first empty line
 - `section body`: any text that comes after `section header` till the next
   `section` is the "body" of that section.
