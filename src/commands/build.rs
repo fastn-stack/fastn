@@ -27,6 +27,11 @@ pub async fn build(
             fpm::File::Ftd(doc) => {
                 if !config.ftd_edition.eq(&fpm::config::FTDEdition::FTD2021) && doc.id.eq("FPM.ftd")
                 {
+                    tokio::fs::copy(
+                        config.root.join(doc.id.as_str()),
+                        config.root.join(".build").join(doc.id.as_str()),
+                    )
+                    .await?;
                     continue;
                 }
                 let resp =
