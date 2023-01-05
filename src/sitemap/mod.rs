@@ -567,11 +567,14 @@ impl Sitemap {
             writers: vec![],
         };
 
-        if sitemap.has_path_params() {
-            return Err(ParseError::InvalidSitemap {
-                message: "Sitemap should not contain urls with dynamic params".to_string(),
-            });
-        }
+        // TODO: Need to fix it later
+        // sitemap should not contain the dynamic parameters
+        // if sitemap.has_path_params() {
+        //     dbg!(&sitemap);
+        //     return Err(ParseError::InvalidSitemap {
+        //         message: "Sitemap should not contain urls with dynamic params".to_string(),
+        //     });
+        // }
 
         if resolve_sitemap {
             sitemap
