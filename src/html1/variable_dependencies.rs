@@ -201,7 +201,7 @@ impl<'a> VariableDependencyGenerator<'a> {
                      }};
                 "},
                     id = self.id,
-                    key = key,
+                    key = ftd::html1::utils::js_reference_name(key.as_str()),
                     dependencies = v.join("\n"),
                     node_changes_calls = node_changes_calls.join("\n"),
                 ));
