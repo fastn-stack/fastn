@@ -59,8 +59,8 @@ margin-right if not $ft.is-mobile: 24
 margin-bottom if $ft.is-mobile: 24
 padding-vertical: $fpm.space.space-3
 padding-horizontal: $fpm.space.space-3
-min-height: 158
-max-height: 158
+min-height: 164
+max-height: 164
 background-color: $fpm.color.main.background.step-1
 border-radius: 6
 
@@ -229,6 +229,7 @@ align: right
 if: $last-updated is not null
 width: fill
 spacing: 12
+margin-top: 6
 
 --- ftd.text: Last updated:
 role: $fpm.type.fine-print
