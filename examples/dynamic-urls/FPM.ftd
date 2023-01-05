@@ -22,8 +22,17 @@ url: /a/ <  string  :   username  >  /person/
 document: index1.ftd
 
 - TOC1
-url: /b/<string:username>/person/
+url: /b/<integer:age>/person/
 document: index.ftd
+
+- TOC1
+url: /b/<string:username>/person/
+document: index1.ftd
+
+- TOC1
+url: /b/<string:username>/person/foo/
+document: index.ftd
+
 
 - TOC3
 url: /d/<string:username>/<integer:age>/
