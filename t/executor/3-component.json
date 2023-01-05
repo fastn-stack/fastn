@@ -113,6 +113,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "anchor": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "role": {
                         "value": null,
                         "line_number": null,
@@ -517,6 +522,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "anchor": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "role": {
                                 "value": null,
                                 "line_number": null,
@@ -796,6 +806,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "anchor": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "role": {
                                 "value": null,
                                 "line_number": null,
@@ -1045,6 +1060,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "anchor": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "role": {
                         "value": null,
                         "line_number": null,
@@ -1294,6 +1314,11 @@
               "is_not_visible": false,
               "event": [],
               "is_dummy": false,
+              "anchor": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "role": {
                 "value": null,
                 "line_number": null,
@@ -1543,6 +1568,11 @@
       "is_not_visible": false,
       "event": [],
       "is_dummy": false,
+      "anchor": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "role": {
         "value": null,
         "line_number": null,

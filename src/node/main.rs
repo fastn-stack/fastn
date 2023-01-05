@@ -544,6 +544,19 @@ impl ftd::executor::Common {
         );
 
         d.check_and_insert(
+            "position",
+            ftd::node::Value::from_executor_value(
+                self.anchor
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.anchor.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "font-size",
             ftd::node::Value::from_executor_value(
                 self.role
@@ -1133,6 +1146,11 @@ impl ftd::executor::Container {
         use ftd::node::utils::CheckMap;
 
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
+
+        let count = ftd::node::utils::count_children_with_absolute_parent(self.children.as_slice());
+        if count.gt(&0) {
+            d.check_and_insert("position", ftd::node::Value::from_string("relative"));
+        }
 
         d.check_and_insert(
             "gap",

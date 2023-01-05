@@ -108,3 +108,7 @@ pub const FTD_TYPE: &str = "ftd#type";
 
 pub const FTD_RESPONSIVE_TYPE: &str = "ftd#responsive-type";
 pub const FTD_RESPONSIVE_TYPE_DESKTOP: &str = "ftd#responsive-type.desktop";
+
+pub const FTD_ANCHOR: &str = "ftd#anchor";
+pub const FTD_ANCHOR_WINDOW: &str = "ftd#anchor.window";
+pub const FTD_ANCHOR_PARENT: &str = "ftd#anchor.parent";

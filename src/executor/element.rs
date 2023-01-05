@@ -9,6 +9,20 @@ pub enum Element {
     Null,
 }
 
+impl Element {
+    pub(crate) fn get_common(&self) -> Option<&Common> {
+        match self {
+            Element::Row(r) => Some(&r.common),
+            Element::Column(c) => Some(&c.common),
+            Element::Text(t) => Some(&t.common),
+            Element::Integer(i) => Some(&i.common),
+            Element::Boolean(b) => Some(&b.common),
+            Element::Image(i) => Some(&i.common),
+            Element::Null => None,
+        }
+    }
+}
+
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Row {
     pub container: Container,
@@ -113,6 +127,7 @@ pub struct Common {
     pub is_not_visible: bool,
     pub event: Vec<Event>,
     pub is_dummy: bool,
+    pub anchor: ftd::executor::Value<Option<ftd::executor::Anchor>>,
     pub role: ftd::executor::Value<Option<ftd::executor::ResponsiveType>>,
     pub cursor: ftd::executor::Value<Option<ftd::executor::Cursor>>,
     pub classes: ftd::executor::Value<Vec<String>>,
@@ -402,6 +417,13 @@ pub fn common_from_properties(
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
+        anchor: ftd::executor::Anchor::optional_anchor(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "anchor",
+        )?,
         role: ftd::executor::ResponsiveType::optional_responsive_type(
             properties,
             arguments,
