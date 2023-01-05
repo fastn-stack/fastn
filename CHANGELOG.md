@@ -1,5 +1,17 @@
 # FTD Change Log
 
+## 5th December 2023
+
+- [Added anchor, top, bottom, left and right property](https://github.com/ftd-lang/ftd/commit/d86de625f8786738862bc6aaf33cc8665c7f73f5)
+
+## 4th December 2023
+
+- [Added mouse-enter, mouse-leave, on-click-outside, on-global-key and on-global-key-seq](https://github.com/ftd-lang/ftd/commit/003f3262075abb009ace6cb76dbd9083d8a333a2)
+
+## 3rd December 2023
+
+- [Added role property](https://github.com/ftd-lang/ftd/commit/69bc02ad65358580f2247726aef78e1958b3716f)
+
 ## 2nd December 2023
 
 - [Added cursor property and cursor as pointer in event](https://github.com/ftd-lang/ftd/commit/64aa657a13ab24d932d56a2ddf9bcb77982a7752)

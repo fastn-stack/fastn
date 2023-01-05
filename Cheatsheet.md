@@ -330,17 +330,11 @@ This is a body text.
 -- or-type length:
 
 -- integer px:
-
 -- decimal percent:
-
 -- string calc:
-
 -- integer vh:
-
 -- integer vw:
-
 -- decimal em:
-
 -- decimal rem:
 
 -- end: length
@@ -522,7 +516,7 @@ string dark: $color.light
 - `resize`: `optional ftd.resize`
 
 
-**`ftd.fill`**
+**`ftd.resize`**
 
 ```ftd
 -- or-type resize:
@@ -531,8 +525,53 @@ string dark: $color.light
 -- constant string horizontal: horizontal
 -- constant string vertical: vertical
 
--- end: fill
+-- end: resize
 ```
+
+- `role`: `optional ftd.responsive-type`
+
+
+```ftd
+-- record responsive-type:
+ftd.type desktop:
+ftd.type mobile: $responsive-type.desktop
+
+-- record type:
+optional ftd.font-size size:
+optional ftd.font-size line-height:
+optional ftd.font-size letter-spacing:
+optional integer weight:
+optional string font-family:
+
+-- or-type font-size:
+
+-- integer px:
+-- decimal em:
+-- decimal rem:
+
+-- end: font-size
+```
+
+
+- `anchor`: `optional ftd.anchor`
+
+```ftd
+-- or-type anchor:
+
+-- constant string parent: absolute
+-- constant string window: fixed
+
+-- end: anchor
+```
+
+# Events
+
+- `on-click`
+- `on-mouse-enter`
+- `on-mouse-leave`
+- `on-click-outside`
+- `on-global-key[<keys>]`
+- `on-global-key-seq[<keys>]`
 
 # Default functions
 
