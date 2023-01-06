@@ -98,7 +98,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Click here and move cursor in red area</div><div data-id="1:main" style="align-items: start; background-color: rgba(255,0,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: default; display: flex; flex-direction: column; height: 200px; justify-content: start; text-decoration: none; width: 200px" ></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__http_call___main&quot;,&quot;values&quot;:[[&quot;url&quot;,&quot;http://www.fifthtry.com&quot;],[&quot;method&quot;,&quot;get&quot;],[&quot;name&quot;,&quot;Arpita&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Call http</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Click here and move cursor in red area</div><div data-id="1:main" style="align-items: start; background-color: rgba(255,0,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: default; display: flex; flex-direction: column; height: 200px; justify-content: start; text-decoration: none; width: 200px" ></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__http_call___main&quot;,&quot;values&quot;:[[&quot;url&quot;,&quot;http://www.fifthtry.com&quot;],[&quot;method&quot;,&quot;get&quot;],[&quot;name&quot;,&quot;Arpita&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Call http</div><div data-id="3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__copy_me_call___main&quot;,&quot;values&quot;:[[&quot;text&quot;,&quot;Copy me ⭐\u{fe0f}&quot;]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Copy me ⭐️</div></div>
 
 
 <script>
@@ -717,6 +717,12 @@ return JSON.stringify(f);
 else {
 return f;
 }
+}
+
+
+
+function foo__copy_me_call___main(text){
+return (copy_to_clipboard(text));
 }
 
 
