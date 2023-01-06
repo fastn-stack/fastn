@@ -2,7 +2,16 @@
 padding.responsive: $p
 
 
+-- ftd.text: World
+padding: $res
+
+
 
 -- ftd.responsive-length p:
 desktop.px: 70
 mobile.percent: 40
+
+
+-- ftd.length.responsive res:
+desktop.percent: 40
+mobile.px: 70

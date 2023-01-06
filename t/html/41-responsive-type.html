@@ -10,6 +10,10 @@
 "desktop": "70px",
 "mobile": "40.0%"
 },
+"foo#res": {
+"desktop": "40.0%",
+"mobile": "70px"
+},
 "ftd#dark-mode": false,
 "ftd#desktop-breakpoint": 1440,
 "ftd#device": "desktop",
@@ -101,7 +105,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 70px; text-decoration: none; width: fit-content" class="ft_md">Hello</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 70px; text-decoration: none; width: fit-content" class="ft_md">Hello</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 40%; text-decoration: none; width: fit-content" class="ft_md">World</div></div>
 
 
 <script>
@@ -732,6 +736,12 @@ document.querySelector(`[data-id="0:main"]`).style["padding"] = resolve_referenc
 }
 else {document.querySelector(`[data-id="0:main"]`).style["padding"] = resolve_reference("foo#p", data).mobile;}
 }
+window.node_change_main["1:main__padding"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#res", data).desktop;
+}
+else {document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#res", data).mobile;}
+}
 window.set_value_main = {};
 window.set_value_main["foo#p"] = function (data, new_value, remaining) {
 if (!!remaining) {
@@ -744,6 +754,17 @@ if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"])
 }
 };
 
+window.set_value_main["foo#res"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#res" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#res", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
+}
+};
+
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
 if (!!remaining) {
 set_data_value(data, "ftd#device" + "." + remaining, new_value);
@@ -752,6 +773,8 @@ set_data_value(data, "ftd#device", new_value);
 }
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
 
