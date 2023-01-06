@@ -46,27 +46,6 @@ cursor if { num % 35 == 34 }: zoom-out
 -- end: ftd.column
 
 
--- ftd.text: Call http
-$on-click$: $http-call(url = http://www.fifthtry.com, method = get, name = Arpita)
-
-
--- ftd.text: Copy me ⭐️
-$on-click$: $copy-me-call(text = Copy me ⭐️)
-
-
--- void http-call(url,method,name):
-string url:
-string method:
-string name:
-
-http(url, method, name)
-
-
--- void copy-me-call(text):
-string text:
-
-copy_to_clipboard(text)
-
 
 -- void increment(a):
 integer $a:
