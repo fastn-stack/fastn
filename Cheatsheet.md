@@ -336,8 +336,13 @@ This is a body text.
 -- integer vw:
 -- decimal em:
 -- decimal rem:
+-- ftd.responsive-length responsive:
 
 -- end: length
+
+-- record responsive-length:
+ftd.length desktop:
+ftd.length mobile: $responsive-length.desktop
 ```
 
 - `border-color`: `optional ftd.color`
