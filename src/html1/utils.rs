@@ -42,12 +42,12 @@ pub(crate) fn function_name_to_js_function(s: &str) -> String {
         .replace(':', "___")
         .replace(',', "$")
         .replace("\\\\", "/")
-        .replace("\\", "/")
+        .replace('\\', "/")
         .replace(['/', '.'], "_")
 }
 
 pub(crate) fn js_reference_name(s: &str) -> String {
-    s.replace("\\\\", "/").replace("\\", "/")
+    s.replace("\\\\", "/").replace('\\', "/")
 }
 
 pub(crate) fn full_data_id(id: &str, data_id: &str) -> String {
@@ -175,7 +175,8 @@ pub(crate) fn is_device_dependent(
     doc: &ftd::interpreter2::TDoc,
 ) -> ftd::html1::Result<bool> {
     let value = value.clone().resolve(doc, value.line_number())?;
-    Ok(value.is_record(ftd::interpreter2::FTD_RESPONSIVE_TYPE))
+    Ok(value.is_record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+        || value.is_or_type_variant(ftd::interpreter2::FTD_LENGTH_RESPONSIVE))
 }
 
 pub(crate) fn dependencies_from_property_value(
@@ -191,9 +192,7 @@ pub(crate) fn dependencies_from_property_value(
         }
         result
     } else if property_value.is_value() && property_value.kind().is_ftd_length() {
-        let value = property_value.value("", 0).unwrap();
-        let property_value = value.get_or_type(doc.name, 0).unwrap().2;
-        dependencies_from_property_value(property_value, doc)
+        dependencies_from_length_property_value(property_value, doc)
     } else if property_value.is_value() && property_value.kind().is_ftd_resizing_fixed() {
         let value = property_value.value("", 0).unwrap();
         let property_value = value
@@ -201,9 +200,7 @@ pub(crate) fn dependencies_from_property_value(
             .unwrap()
             .2;
         if property_value.is_value() && property_value.kind().is_ftd_length() {
-            let value = property_value.value("", 0).unwrap();
-            let property_value = value.get_or_type(doc.name, 0).unwrap().2;
-            dependencies_from_property_value(property_value, doc)
+            dependencies_from_length_property_value(property_value, doc)
         } else {
             vec![]
         }
@@ -231,6 +228,32 @@ pub(crate) fn dependencies_from_property_value(
             }
         }
         values
+    } else {
+        vec![]
+    }
+}
+
+fn dependencies_from_length_property_value(
+    property_value: &ftd::interpreter2::PropertyValue,
+    doc: &ftd::interpreter2::TDoc,
+) -> Vec<String> {
+    if property_value.is_value() && property_value.kind().is_ftd_length() {
+        let value = property_value
+            .value(doc.name, property_value.line_number())
+            .unwrap();
+        if let Ok(property_value) = value.get_or_type(doc.name, property_value.line_number()) {
+            dependencies_from_property_value(property_value.2, doc)
+        } else if let Ok(property_value) =
+            value.record_fields(doc.name, property_value.line_number())
+        {
+            let mut values = vec![];
+            for field in property_value.values() {
+                values.extend(dependencies_from_property_value(field, doc));
+            }
+            values
+        } else {
+            vec![]
+        }
     } else {
         vec![]
     }

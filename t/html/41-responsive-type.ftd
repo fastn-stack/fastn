@@ -1,0 +1,8 @@
+-- ftd.text: Hello
+padding.responsive: $p
+
+
+
+-- ftd.responsive-length p:
+desktop.px: 70
+mobile.percent: 40

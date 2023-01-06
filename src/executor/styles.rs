@@ -7,6 +7,7 @@ pub enum Length {
     Vw(f64),
     Em(f64),
     Rem(f64),
+    Responsive(Box<ResponsiveLength>),
 }
 
 impl Default for Length {
@@ -20,7 +21,7 @@ impl Length {
         or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Option<Self>> {
+    ) -> ftd::executor::Result<Option<Length>> {
         if let Some(value) = or_type_value {
             Ok(Some(Length::from_values(value, doc, line_number)?))
         } else {
@@ -28,11 +29,22 @@ impl Length {
         }
     }
 
+    fn from_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Length> {
+        let binding = value.resolve(&doc.itdoc(), line_number)?;
+        let value = binding.get_or_type(doc.name, line_number)?;
+        let value = (value.1.to_owned(), value.2.to_owned());
+        Length::from_values(value, doc, line_number)
+    }
+
     fn from_values(
         or_type_value: (String, ftd::interpreter2::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
-    ) -> ftd::executor::Result<Self> {
+    ) -> ftd::executor::Result<Length> {
         match or_type_value.0.as_str() {
             ftd::interpreter2::FTD_LENGTH_PERCENT => Ok(Length::Percent(
                 or_type_value
@@ -83,6 +95,9 @@ impl Length {
                     .resolve(&doc.itdoc(), line_number)?
                     .decimal(doc.name, line_number)?,
             )),
+            ftd::interpreter2::FTD_LENGTH_RESPONSIVE => Ok(Length::Responsive(Box::new(
+                ResponsiveLength::from_value(or_type_value.1.clone(), doc, line_number)?,
+            ))),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.length`", t),
                 doc.name,
@@ -147,6 +162,7 @@ impl Length {
             Length::Vw(vw) => format!("{}vw", vw),
             Length::Em(em) => format!("{}em", em),
             Length::Rem(rem) => format!("{}rem", rem),
+            Length::Responsive(r) => r.desktop.to_css_string(),
         }
     }
 
@@ -212,6 +228,71 @@ impl Length {
                 line_number,
             ),
         }
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct ResponsiveLength {
+    pub desktop: Length,
+    pub mobile: Length,
+}
+
+impl ResponsiveLength {
+    fn from_value(
+        value: ftd::interpreter2::PropertyValue,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ResponsiveLength> {
+        let value = value.resolve(&doc.itdoc(), line_number)?;
+        let fields = match value.inner() {
+            Some(ftd::interpreter2::Value::Record { name, fields })
+                if name.eq(ftd::interpreter2::FTD_RESPONSIVE_LENGTH) =>
+            {
+                fields
+            }
+            t => {
+                return ftd::executor::utils::parse_error(
+                    format!(
+                        "Expected value of type record `{}`, found: {:?}",
+                        ftd::interpreter2::FTD_RESPONSIVE_LENGTH,
+                        t
+                    ),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+        ResponsiveLength::from_values(fields, doc, line_number)
+    }
+
+    fn from_values(
+        values: ftd::Map<ftd::interpreter2::PropertyValue>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<ResponsiveLength> {
+        let desktop = {
+            let value = values
+                .get("desktop")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`desktop` field in ftd.responsive-type not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            Length::from_value(value.to_owned(), doc, line_number)?
+        };
+
+        let mobile = {
+            let value = values
+                .get("mobile")
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: "`mobile` field in ftd.responsive-type not found".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?;
+            Length::from_value(value.to_owned(), doc, line_number)?
+        };
+
+        Ok(ResponsiveLength { desktop, mobile })
     }
 }
 

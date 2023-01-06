@@ -6,6 +6,10 @@ pub const FTD_LENGTH_VH: &str = "ftd#length.vh";
 pub const FTD_LENGTH_VW: &str = "ftd#length.vw";
 pub const FTD_LENGTH_EM: &str = "ftd#length.em";
 pub const FTD_LENGTH_REM: &str = "ftd#length.rem";
+pub const FTD_LENGTH_RESPONSIVE: &str = "ftd#length.responsive";
+
+pub const FTD_RESPONSIVE_LENGTH: &str = "ftd#responsive-length";
+pub const FTD_RESPONSIVE_LENGTH_DESKTOP: &str = "ftd#responsive-length.desktop";
 
 pub const FTD_ALIGN: &str = "ftd#align";
 pub const FTD_ALIGN_TOP_LEFT: &str = "ftd#align.top-left";

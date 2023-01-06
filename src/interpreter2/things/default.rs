@@ -984,7 +984,51 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         None,
                         0,
                     )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LENGTH_RESPONSIVE,
+                        ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_LENGTH)
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
                 ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_RESPONSIVE_LENGTH.to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: ftd::interpreter2::FTD_RESPONSIVE_LENGTH.to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter2::Field {
+                        name: "desktop".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data()
+                            .caption(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "mobile".to_string(),
+                        kind: ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: Some(ftd::interpreter2::PropertyValue::Reference {
+                            name: ftd::interpreter2::FTD_RESPONSIVE_LENGTH_DESKTOP.to_string(),
+                            kind: ftd::interpreter2::Kind::string().into_kind_data(),
+                            source: ftd::interpreter2::PropertyValueSource::Local(
+                                ftd::interpreter2::FTD_RESPONSIVE_LENGTH.to_string(),
+                            ),
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
+                        line_number: 0,
+                    },
+                ])
+                .collect(),
                 line_number: 0,
             }),
         ),
