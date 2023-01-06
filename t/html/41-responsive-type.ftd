@@ -1,9 +1,15 @@
+-- import: function as fun
+
+-- boolean $flag: true
+
 -- ftd.text: Hello
 padding.responsive: $p
 
 
 -- ftd.text: World
 padding: $res
+padding.responsive if { !flag }: $p
+$on-click$: $fun.toggle($a = $flag)
 
 
 
