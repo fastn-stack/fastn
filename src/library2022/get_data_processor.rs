@@ -14,7 +14,7 @@ pub fn process<'a>(
         Err(e) => return Err(e.into()),
     };
 
-    let key = match headers.get_optional_string_by_key("key", &doc.name, line_number)? {
+    let key = match headers.get_optional_string_by_key("key", doc.name, line_number)? {
         Some(k) => k,
         None => section_name
             .rsplit_once(' ')

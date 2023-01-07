@@ -349,7 +349,15 @@ pub async fn resolve_import_2022<'a>(
     let source = if module.eq("fpm/time") {
         ("".to_string(), vec!["time".to_string()], vec![])
     } else if module.eq("fpm/processors") {
-        ("".to_string(), vec![], vec!["http".to_string()])
+        (
+            "".to_string(),
+            vec![],
+            vec![
+                "http".to_string(),
+                "get-data".to_string(),
+                "toc".to_string(),
+            ],
+        )
     } else if module.ends_with("assets") {
         let foreign_variable = vec!["files".to_string()];
 
