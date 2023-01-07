@@ -1,3 +1,4 @@
+pub(crate) mod get_data_processor;
 pub(crate) mod http_processor;
 pub(crate) mod toc_processor;
 
@@ -190,6 +191,7 @@ impl Library2022 {
         match processor.as_str() {
             "http" => http_processor::process(value, kind, doc, &self.config).await,
             "toc" => toc_processor::process(value, kind, doc, &self.config),
+            "get-data" => get_data_processor::process(value, kind, doc, &self.config),
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,
