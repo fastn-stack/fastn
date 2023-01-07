@@ -81,7 +81,7 @@ pub fn url_match(
 
 /// Please check test case: `parse_path_params_test_0`
 /// This method is for parsing the dynamic params from fpm.dynamic-urls
-pub fn parse_path_params(
+pub fn parse_named_params(
     url: &str,
 ) -> Result<Vec<fpm::sitemap::PathParams>, fpm::sitemap::ParseError> {
     let mut output = vec![];
@@ -127,7 +127,7 @@ mod tests {
     // cargo test --package fpm --lib sitemap::utils::tests::parse_path_params_test_0
     #[test]
     fn parse_path_params_test_0() {
-        let output = super::parse_path_params("/b/<string:username>/<integer:age>/foo/");
+        let output = super::parse_named_params("/b/<string:username>/<integer:age>/foo/");
         let test_output = vec![
             fpm::sitemap::PathParams::value(0, "b".to_string()),
             fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
@@ -141,7 +141,7 @@ mod tests {
     // cargo test --package fpm --lib sitemap::utils::tests::parse_path_params_test_01
     #[test]
     fn parse_path_params_test_01() {
-        let output = super::parse_path_params("/b/ <  string  :  username > / <integer:age>/foo/");
+        let output = super::parse_named_params("/b/ <  string  :  username > / <integer:age>/foo/");
         let test_output = vec![
             fpm::sitemap::PathParams::value(0, "b".to_string()),
             fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
@@ -155,7 +155,7 @@ mod tests {
     // cargo test --package fpm --lib sitemap::utils::tests::parse_path_params_test_01
     #[test]
     fn parse_path_params_test_02() {
-        let output = super::parse_path_params("/b/ <  :  username > / <integer:age>/foo/");
+        let output = super::parse_named_params("/b/ <  :  username > / <integer:age>/foo/");
         assert!(output.is_err())
     }
 
