@@ -86,16 +86,72 @@ pub fn process<'a>(
         }
     }
 
-    // let name = match section.header.string(doc.name, section.line_number, "key") {
-    //     Ok(name) => name,
-    //     _ => {
-    //         if let Some((_, name)) = section.name.rsplit_once(' ') {
-    //             name.to_string()
-    //         } else {
-    //             section.name.to_string()
-    //         }
-    //     }
-    // };
+    if let Ok(Some(path)) =
+        headers.get_optional_string_by_key("file", doc.name, value.line_number())
+    {
+        match camino::Utf8Path::new(path.as_str()).extension() {
+            Some(extension) => {
+                if !extension.eq("json") {
+                    return Err(ftd::interpreter2::Error::ParseError {
+                        message: format!("only json file supported {}", path),
+                        doc_id: doc.name.to_string(),
+                        line_number,
+                    });
+                }
+            }
+            None => {
+                return Err(ftd::interpreter2::Error::ParseError {
+                    message: format!("file does not have any extension {}", path),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                });
+            }
+        }
 
-    doc.from_json(&vec![1], &kind, line_number)
+        let file = std::fs::read_to_string(path.as_str()).map_err(|_e| {
+            ftd::interpreter2::Error::ParseError {
+                message: format!("file path not found {}", path),
+                doc_id: doc.name.to_string(),
+                line_number,
+            }
+        })?;
+        return doc.from_json(
+            &serde_json::from_str::<serde_json::Value>(&file)?,
+            &kind,
+            line_number,
+        );
+    }
+
+    if let Some(b) = body {
+        return doc.from_json(
+            &serde_json::from_str::<serde_json::Value>(b.value.as_str())?,
+            &kind,
+            line_number,
+        );
+    }
+
+    let caption = match value.caption() {
+        Some(ref caption) => caption.to_string(),
+        None => {
+            return Err(ftd::interpreter2::Error::ParseError {
+                message: format!("caption name not passed for section: {}", section_name),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })
+        }
+    };
+
+    if let Ok(val) = caption.parse::<bool>() {
+        return doc.from_json(&serde_json::json!(val), &kind, line_number);
+    }
+
+    if let Ok(val) = caption.parse::<i64>() {
+        return doc.from_json(&serde_json::json!(val), &kind, line_number);
+    }
+
+    if let Ok(val) = caption.parse::<f64>() {
+        return doc.from_json(&serde_json::json!(val), &kind, line_number);
+    }
+
+    doc.from_json(&serde_json::json!(caption), &kind, line_number)
 }
