@@ -1,5 +1,27 @@
 #![allow(dead_code)]
 
+/// The `InterpreterState` struct is a representation of the state of an interpreter. It contains
+/// information about the interpreter's current state and its progress through the code being
+/// interpreted.
+///
+/// The `InterpreterState` struct has the following fields:
+///
+/// - `id`: a String that represents the unique identifier of the interpreter
+///
+/// - `bag`: an `ftd::Map` of `ftd::interpreter2::Thing`s that represents the bag of objects that
+/// the interpreter has access to
+///
+/// - `to_process`: a ToProcess struct that contains information about the elements that still need
+/// to be processed by the interpreter
+///
+/// - `pending_imports`: an `ftd::VecMap` of tuples containing a String and a usize that
+/// represents the pending imports for the interpreter
+///
+/// - `parsed_libs`: an `ftd::Map` of `ParsedDocument`s that represents the parsed libraries for the
+/// interpreter
+///
+/// - `instructions`: a `Vec` of `ftd::interpreter2::Component`s that represents the instructions
+/// that the interpreter has processed
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct InterpreterState {
     pub id: String,
@@ -10,6 +32,19 @@ pub struct InterpreterState {
     pub instructions: Vec<ftd::interpreter2::Component>,
 }
 
+/**
+ * Struct to hold the items that need to be processed by the interpreter.
+ *
+ * # Fields
+ *
+ * `stack`: A vector of tuples containing a `String` representing the name of the document and a `Vec` of
+ * tuples containing a `usize` representing the scan number and an `ftd::ast::AST` representing
+ * the abstract syntax tree of the item to be processed.
+ *
+ * `contains`: A `HashSet` of tuples containing a `String` representing the name of the document and a `String`
+ * representing the name of the item being processed. This field is used to track which items
+ * have already been processed to avoid processing them multiple times.
+ */
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ToProcess {
     pub stack: Vec<(String, Vec<(usize, ftd::ast::AST)>)>,
