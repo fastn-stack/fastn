@@ -1,7 +1,8 @@
 {
   "name": "foo",
   "aliases": {
-    "ftd": "ftd"
+    "ftd": "ftd",
+    "inherited": "inherited"
   },
   "bag": {
     "foo#flag": {

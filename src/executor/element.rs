@@ -85,19 +85,18 @@ impl ImageSrc {
         };
 
         let dark = {
-            let value = values.get("dark").ok_or(ftd::executor::Error::ParseError {
-                message: "`dark` field in ftd.image-src not found".to_string(),
-                doc_id: doc.name.to_string(),
-                line_number,
-            })?;
-            ftd::executor::Value::new(
-                value
-                    .clone()
-                    .resolve(&doc.itdoc(), line_number)?
-                    .string(doc.name, line_number)?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("dark"))],
-            )
+            if let Some(value) = values.get("dark") {
+                ftd::executor::Value::new(
+                    value
+                        .clone()
+                        .resolve(&doc.itdoc(), line_number)?
+                        .string(doc.name, line_number)?,
+                    Some(line_number),
+                    vec![value.into_property(ftd::interpreter2::PropertySource::header("dark"))],
+                )
+            } else {
+                light.clone()
+            }
         };
 
         Ok(ImageSrc { light, dark })

@@ -1,9 +1,35 @@
 use ftd::evalexpr::ContextWithMutableFunctions;
 
+/**
+* The `default_aliases` function is intended to provide default aliases for the `ftd` module,
+* with the only default alias being "ftd" itself. This allows users to reference the `ftd` module
+* using this alias instead of the full module name.
+**/
 pub fn default_aliases() -> ftd::Map<String> {
-    std::iter::IntoIterator::into_iter([("ftd".to_string(), "ftd".to_string())]).collect()
+    std::iter::IntoIterator::into_iter([
+        ("ftd".to_string(), "ftd".to_string()),
+        ("inherited".to_string(), "inherited".to_string()),
+    ])
+    .collect()
 }
 
+/**
+The `default_functions` function returns a map of string keys to Function values. These functions
+are built-in and available for use in the evaluation of an expression.
+
+1. `is_empty` - This function takes an argument and returns a boolean value indicating whether or not
+the argument is empty. It checks for empty values, strings, and tuples.
+
+2. `enable_dark_mode` - This function takes no arguments and returns an empty value. It is used to
+enable dark mode in the application.
+
+3. `enable_light_mode` - This function takes no arguments and returns an empty value. It is used to
+enable light mode in the application.
+
+4. `enable_system_mode` - This function takes no arguments and returns an empty value. It is used to
+enable system mode in the application, which means the application will use the system's default
+color scheme.
+**/
 pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
     use ftd::evalexpr::*;
 
@@ -46,6 +72,13 @@ pub fn default_context() -> ftd::interpreter2::Result<ftd::evalexpr::HashMapCont
     Ok(context)
 }
 
+/**
+The `default_bag` function is a public function that returns a `Map` of `Thing`s.
+
+The `Map` is a data structure that stores key-value pairs in a hash table. In this case, the keys
+are `String`s representing the names of different `Thing`s, and the values are the `Thing`s
+themselves.
+**/
 pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
     let record = |n: &str, r: &str| (n.to_string(), ftd::interpreter2::Kind::record(r));
     let _color = |n: &str| record(n, "ftd#color");
@@ -1235,9 +1268,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            "ftd#background-colors".to_string(),
+            ftd::interpreter2::FTD_BACKGROUND_COLOR.to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
-                name: "ftd#background-colors".to_string(),
+                name: ftd::interpreter2::FTD_BACKGROUND_COLOR.to_string(),
                 fields: vec![
                     ftd::interpreter2::Field {
                         name: "base".to_string(),
@@ -1284,9 +1317,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            "ftd#cta-colors".to_string(),
+            ftd::interpreter2::FTD_CTA_COLOR.to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
-                name: "ftd#cta-colors".to_string(),
+                name: ftd::interpreter2::FTD_CTA_COLOR.to_string(),
                 fields: vec![
                     ftd::interpreter2::Field {
                         name: "base".to_string(),
@@ -1349,9 +1382,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            "ftd#pst".to_string(),
+            ftd::interpreter2::FTD_PST.to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
-                name: "ftd#pst".to_string(),
+                name: ftd::interpreter2::FTD_PST.to_string(),
                 fields: vec![
                     ftd::interpreter2::Field {
                         name: "primary".to_string(),
@@ -1382,9 +1415,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            "ftd#btb".to_string(),
+            ftd::interpreter2::FTD_BTB.to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
-                name: "ftd#btb".to_string(),
+                name: ftd::interpreter2::FTD_BTB.to_string(),
                 fields: vec![
                     ftd::interpreter2::Field {
                         name: "base".to_string(),
@@ -1415,9 +1448,98 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            "ftd#color-scheme".to_string(),
+            ftd::interpreter2::FTD_CUSTOM_COLORS.to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
-                name: "ftd#color-scheme".to_string(),
+                name: ftd::interpreter2::FTD_CUSTOM_COLORS.to_string(),
+                fields: vec![
+                    ftd::interpreter2::Field {
+                        name: "one".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "two".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "three".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "four".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "five".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "six".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "seven".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "eight".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "nine".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "ten".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_COLOR_SCHEME.to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: ftd::interpreter2::FTD_COLOR_SCHEME.to_string(),
                 fields: vec![
                     ftd::interpreter2::Field {
                         name: "background".to_string(),
@@ -1538,8 +1660,1503 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         value: None,
                         line_number: 0,
                     },
+                    ftd::interpreter2::Field {
+                        name: "custom".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#custom-colors").into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
                 ],
                 line_number: 0,
+            }),
+        ),
+        (
+            "inherited#colors".to_string(),
+            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                name: "inherited#colors".to_string(),
+                kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR_SCHEME)
+                    .into_kind_data(),
+                mutable: false,
+                value: ftd::interpreter2::PropertyValue::Value {
+                    value: ftd::interpreter2::Value::Record {
+                        name: ftd::interpreter2::FTD_COLOR_SCHEME.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([
+                            (
+                                "background".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_BACKGROUND_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "base".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value:
+                                                                    ftd::interpreter2::Value::String {
+                                                                        text: "#18181b".to_string(),
+                                                                    },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            }
+                                                        )])
+                                                        .collect(),
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                }
+                                            ),
+                                            (
+                                                "step-1".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value:
+                                                                    ftd::interpreter2::Value::String {
+                                                                        text: "#141414".to_string(),
+                                                                    },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            }
+                                                        )])
+                                                        .collect(),
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                }
+                                            ),
+                                            (
+                                                "step-2".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value:
+                                                                    ftd::interpreter2::Value::String {
+                                                                        text: "#585656".to_string(),
+                                                                    },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            }
+                                                        )])
+                                                        .collect(),
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                }
+                                            ),
+                                            (
+                                                "overlay".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value:
+                                                                    ftd::interpreter2::Value::String {
+                                                                        text: "rgba(0, 0, 0, 0.8)"
+                                                                            .to_string(),
+                                                                    },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            }
+                                                        )])
+                                                        .collect(),
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                }
+                                            ),
+                                            (
+                                                "code".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value:
+                                                                    ftd::interpreter2::Value::String {
+                                                                        text: "#2B303B".to_string(),
+                                                                    },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            }
+                                                        )])
+                                                        .collect(),
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                }
+                                            ),
+                                        ])
+                                        .collect(),
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0,
+                                }
+                            ),
+                            (
+                                "border".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([(
+                                            "light".to_string(),
+                                            ftd::interpreter2::PropertyValue::Value {
+                                                value:
+                                                ftd::interpreter2::Value::String {
+                                                    text: "#434547".to_string(),
+                                                },
+                                                is_mutable: false,
+                                                line_number: 0,
+                                            }
+                                        )])
+                                            .collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "border-strong".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([(
+                                            "light".to_string(),
+                                            ftd::interpreter2::PropertyValue::Value {
+                                                value:
+                                                ftd::interpreter2::Value::String {
+                                                    text: "#919192".to_string(),
+                                                },
+                                                is_mutable: false,
+                                                line_number: 0,
+                                            }
+                                        )])
+                                            .collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "text".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                 value: ftd::interpreter2::Value::Record {
+                                     name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                     fields: std::iter::IntoIterator::into_iter([(
+                                         "light".to_string(),
+                                         ftd::interpreter2::PropertyValue::Value {
+                                             value:
+                                             ftd::interpreter2::Value::String {
+                                                 text: "#a8a29e".to_string(),
+                                             },
+                                             is_mutable: false,
+                                             line_number: 0,
+                                         }
+                                     )])
+                                         .collect()
+                                 },
+                                 is_mutable: false,
+                                 line_number: 0
+                             }
+                            ),
+                            (
+                                "shadow".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([(
+                                            "light".to_string(),
+                                            ftd::interpreter2::PropertyValue::Value {
+                                                value:
+                                                ftd::interpreter2::Value::String {
+                                                    text: "#007f9b".to_string(),
+                                                },
+                                                is_mutable: false,
+                                                line_number: 0,
+                                            },
+                                        )])
+                                            .collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "scrim".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([(
+                                            "light".to_string(),
+                                            ftd::interpreter2::PropertyValue::Value {
+                                                value:
+                                                ftd::interpreter2::Value::String {
+                                                    text: "#007f9b".to_string(),
+                                                },
+                                                is_mutable: false,
+                                                line_number: 0,
+                                            },
+                                        )])
+                                            .collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "cta-primary".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_CTA_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "base".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#2dd4bf".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "hover".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#2c9f90".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "pressed".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#2cc9b5".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "disabled".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "rgba(44, 201, 181, 0.1)".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "focused".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#2cbfac".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "border".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#2b8074".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "text".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#feffff".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "cta-secondary".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_CTA_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "base".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#4fb2df".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "hover".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#40afe1".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "pressed".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#4fb2df".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "disabled".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "rgba(79, 178, 223, 0.1)".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "focused".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#4fb1df".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "border".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#209fdb".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "text".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#ffffff".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "cta-tertiary".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_CTA_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "base".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#556375".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "hover".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#c7cbd1".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "pressed".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#3b4047".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "disabled".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "rgba(85, 99, 117, 0.1)".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "focused".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#e0e2e6".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "border".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#e2e4e7".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "text".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#ffffff".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "cta-danger".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_CTA_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "base".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#1C1B1F".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "hover".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#1C1B1F".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "pressed".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#1C1B1F".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "disabled".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#1C1B1F".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "focused".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#1C1B1F".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "border".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([(
+                                                            "light".to_string(),
+                                                            ftd::interpreter2::PropertyValue::Value {
+                                                                value: ftd::interpreter2::Value::String {
+                                                                    text: "#1C1B1F".to_string()
+                                                                },
+                                                                is_mutable: false,
+                                                                line_number: 0,
+                                                            },
+                                                        )]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            ),
+                                            (
+                                                "text".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#1C1B1F".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0,
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0,
+                                                },
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "accent".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_PST.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "primary".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#2dd4bf".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "secondary".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#4fb2df".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "tertiary".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#c5cbd7".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "error".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_BTB.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "base".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#f5bdbb".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "text".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#c62a21".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "border".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#df2b2b".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "success".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_BTB.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "base".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#e3f0c4".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "text".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#467b28".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "border".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#3d741f".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "info".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_BTB.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "base".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#c4edfd".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "text".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#205694".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "border".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#205694".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "warning".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_BTB.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "base".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#fbefba".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "text".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#966220".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "border".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#966220".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "custom".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_CUSTOM_COLORS.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "one".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#ed753a".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "two".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#f3db5f".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "three".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#8fdcf8".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "four".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#7a65c7".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "five".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#eb57be".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "six".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#ef8dd6".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "seven".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#7564be".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "eight".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#d554b3".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "nine".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#ec8943".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                            (
+                                                "ten".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "light".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::String {
+                                                                        text: "#da7a4a".to_string()
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            )
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ),
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                        ])
+                        .collect(),
+                    },
+                    is_mutable: false,
+                    line_number: 0,
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false,
             }),
         ),
         (

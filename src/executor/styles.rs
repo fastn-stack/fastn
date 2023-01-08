@@ -855,7 +855,7 @@ impl Color {
             let value = values
                 .get("light")
                 .ok_or(ftd::executor::Error::ParseError {
-                    message: "`light` field in ftd.image-src not found".to_string(),
+                    message: "`light` field in ftd.color not found".to_string(),
                     doc_id: doc.name.to_string(),
                     line_number,
                 })?;
@@ -874,23 +874,22 @@ impl Color {
         };
 
         let dark = {
-            let value = values.get("dark").ok_or(ftd::executor::Error::ParseError {
-                message: "`dark` field in ftd.image-src not found".to_string(),
-                doc_id: doc.name.to_string(),
-                line_number,
-            })?;
-            ftd::executor::Value::new(
-                ColorValue::color_from(
-                    value
-                        .clone()
-                        .resolve(&doc.itdoc(), line_number)?
-                        .string(doc.name, line_number)?,
-                    doc.name,
-                    line_number,
-                )?,
-                Some(line_number),
-                vec![value.into_property(ftd::interpreter2::PropertySource::header("dark"))],
-            )
+            if let Some(value) = values.get("dark") {
+                ftd::executor::Value::new(
+                    ColorValue::color_from(
+                        value
+                            .clone()
+                            .resolve(&doc.itdoc(), line_number)?
+                            .string(doc.name, line_number)?,
+                        doc.name,
+                        line_number,
+                    )?,
+                    Some(line_number),
+                    vec![value.into_property(ftd::interpreter2::PropertySource::header("dark"))],
+                )
+            } else {
+                light.clone()
+            }
         };
 
         Ok(Color { light, dark })

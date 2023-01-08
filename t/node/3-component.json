@@ -697,6 +697,7 @@
     }
   },
   "aliases": {
-    "ftd": "ftd"
+    "ftd": "ftd",
+    "inherited": "inherited"
   }
 }
