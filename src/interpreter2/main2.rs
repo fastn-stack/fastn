@@ -86,8 +86,8 @@ impl InterpreterState {
 
     pub fn increase_scan_count(&mut self) {
         if let Some((_, asts)) = self.to_process.stack.last_mut() {
-            if let Some((number_of_scan, _)) = asts.first_mut() {
-                *number_of_scan += 1;
+            if let Some(ast) = asts.first_mut() {
+                ast.0 += 1;
             }
         }
     }
