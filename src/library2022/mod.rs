@@ -32,10 +32,11 @@ impl Library2022 {
     ) -> ftd::p11::Result<fpm::Package> {
         let current_package_name = self
             .module_package_map
-            .get(current_processing_module)
+            .get(current_processing_module.trim_matches('/'))
             .ok_or_else(|| ftd::p11::Error::ParseError {
-                message: "The processing document stack is empty 2".to_string(),
-                doc_id: "".to_string(),
+                message: "The processing document stack is empty: Can't find module in any package"
+                    .to_string(),
+                doc_id: current_processing_module.to_string(),
                 line_number: 0,
             })?;
 
@@ -151,8 +152,10 @@ impl Library2022 {
         module: &str,
         package: &fpm::Package,
     ) -> ftd::p1::Result<()> {
-        self.module_package_map
-            .insert(module.to_string(), package.name.to_string());
+        self.module_package_map.insert(
+            module.trim_matches('/').to_string(),
+            package.name.to_string(),
+        );
         if self
             .config
             .all_packages

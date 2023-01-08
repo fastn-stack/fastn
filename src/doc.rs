@@ -129,8 +129,10 @@ pub async fn interpret_helper<'a>(
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
     tracing::info!(document = name);
     let mut s = ftd::interpreter2::interpret(name, source)?;
-    lib.module_package_map
-        .insert(name.to_string(), lib.config.package.name.to_string());
+    lib.module_package_map.insert(
+        name.trim_matches('/').to_string(),
+        lib.config.package.name.to_string(),
+    );
     let document;
     loop {
         match s {
