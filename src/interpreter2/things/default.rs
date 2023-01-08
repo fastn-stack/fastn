@@ -1235,6 +1235,120 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            "ftd#background-colors".to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: "ftd#background-colors".to_string(),
+                fields: vec![
+                    ftd::interpreter2::Field {
+                        name: "base".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "step-1".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "step-2".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "overlay".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "code".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            "ftd#color-scheme".to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: "ftd#color-scheme".to_string(),
+                fields: vec![
+                    ftd::interpreter2::Field {
+                        name: "background".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#background-colors")
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "border".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "border-strong".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "text".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "text-strong".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "shadow".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "scrim".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             "ftd#mobile-breakpoint".to_string(),
             ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
                 name: "ftd#mobile-breakpoint".to_string(),
