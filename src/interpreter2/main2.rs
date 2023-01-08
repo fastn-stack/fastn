@@ -57,7 +57,7 @@ impl InterpreterState {
         }
     }
 
-    pub fn continue_(mut self) -> ftd::interpreter2::Result<Interpreter> {
+    pub fn continue_processing(mut self) -> ftd::interpreter2::Result<Interpreter> {
         if let Some(interpreter) = self.resolve_pending_imports()? {
             return Ok(interpreter);
         }
@@ -81,7 +81,7 @@ impl InterpreterState {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
                         ftd::interpreter2::Record::scan_ast(ast, &mut doc)?;
-                        return self.continue_();
+                        return self.continue_processing();
                     } else {
                         match ftd::interpreter2::Record::from_ast(ast, &mut doc)? {
                             ftd::interpreter2::StateWithThing::State(s) => {
@@ -230,7 +230,7 @@ impl InterpreterState {
 
             Ok(Interpreter::Done { document })
         } else {
-            self.continue_()
+            self.continue_processing()
         }
     }
 
@@ -402,8 +402,19 @@ impl InterpreterState {
         }
     }*/
 
-    // (doc_name, number_of_scan, last_ast)
-    pub fn peep_stack(&self) -> Option<(String, usize, &ftd::ast::AST)> {
+    /// Returns (doc_name, number_of_scan, last_ast)
+    /// The peek_stack method defined in this code is a method on the InterpreterState struct.
+    /// It returns an Option that contains a tuple of a String, an usize, and a reference to an
+    /// ftd::ast::AST.
+    ///
+    /// The method looks at the last element in the stack field of the to_process field of the
+    /// InterpreterState instance it is called on. If the last element exists, it looks at the
+    /// first element in the asts field of the last element. If the first element exists, the
+    /// method returns a tuple containing the doc_name as a String, the `number_of_scan` as an
+    /// usize, and the ast as a reference to an ftd::ast::AST. If either the last element of the
+    /// stack or the first element of the asts field do not exist, the method returns None.
+
+    pub fn peek_stack(&self) -> Option<(String, usize, &ftd::ast::AST)> {
         if let Some((doc_name, asts)) = self.to_process.stack.last() {
             if let Some((number_of_scan, ast)) = asts.first() {
                 return Some((doc_name.to_string(), *number_of_scan, ast));
@@ -412,28 +423,35 @@ impl InterpreterState {
         None
     }
 
-    // (doc_name, number_of_scan, last_ast)
+    /// Returns (doc_name, number_of_scan, last_ast)
+    ///
+    /// The `get_next_ast` method retrieves the next available AST (abstract syntax tree) from
+    /// the `InterpreterState` struct. It does this by first checking if there are any ASTs
+    /// remaining in the `to_process` field's stack field. If there are, it returns the first one
+    /// in the asts vector. If there are no ASTs remaining in the current stack element, it
+    /// checks if the stack element is empty. If it is, it removes it from the stack and
+    /// continues the loop. If the stack is empty, it returns None.
     pub fn get_next_ast(&mut self) -> Option<(String, usize, ftd::ast::AST)> {
-        if let Some((doc_name, asts)) = self.to_process.stack.last() {
-            if let Some((number_of_scan, ast)) = asts.first() {
-                return Some((doc_name.to_string(), *number_of_scan, ast.clone()));
+        loop {
+            if let Some((doc_name, asts)) = self.to_process.stack.last() {
+                if let Some((number_of_scan, ast)) = asts.first() {
+                    return Some((doc_name.to_string(), *number_of_scan, ast.clone()));
+                }
             }
-        }
 
-        if self
-            .to_process
-            .stack
-            .last()
-            .map(|v| v.1.is_empty())
-            .unwrap_or(false)
-        {
-            self.to_process.stack.pop();
-        }
+            if self
+                .to_process
+                .stack
+                .last()
+                .map(|v| v.1.is_empty())
+                .unwrap_or(false)
+            {
+                self.to_process.stack.pop();
+            }
 
-        if self.to_process.stack.is_empty() {
-            None
-        } else {
-            self.get_next_ast()
+            if self.to_process.stack.is_empty() {
+                return None;
+            }
         }
     }
 
@@ -542,7 +560,7 @@ impl InterpreterState {
             self.pending_imports.value.remove(module);
         }
 
-        self.clone().continue_()
+        self.clone().continue_processing()
     }
 
     pub fn continue_after_import(
@@ -556,7 +574,7 @@ impl InterpreterState {
         document.add_foreign_function(foreign_function);
         document.add_foreign_variable(foreign_variable);
         self.parsed_libs.insert(module.to_string(), document);
-        self.continue_()
+        self.continue_processing()
     }
 
     pub fn continue_after_processor(
@@ -579,7 +597,7 @@ impl InterpreterState {
         )? {
             StateWithThing::Thing(t) => t,
             StateWithThing::State(s) => return Ok(s.into_interpreter(self)),
-            StateWithThing::Continue => return self.continue_(),
+            StateWithThing::Continue => return self.continue_processing(),
         };
 
         let value =
@@ -601,7 +619,7 @@ impl InterpreterState {
             ftd::interpreter2::Thing::Variable(variable),
         );
         self.remove_last();
-        self.continue_()
+        self.continue_processing()
     }
 
     pub fn continue_after_variable(
@@ -630,7 +648,7 @@ impl InterpreterState {
             variable.name.to_string(),
             ftd::interpreter2::Thing::Variable(variable),
         );
-        self.continue_()
+        self.continue_processing()
     }
 }
 
@@ -657,7 +675,7 @@ pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter2::Result<
             .collect_vec(),
     ));
 
-    s.continue_()
+    s.continue_processing()
 }
 
 #[derive(Debug, Clone, Default, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -720,6 +738,24 @@ impl ParsedDocument {
     }
 }
 
+/// Interpreter enum that represents different states that an interpreter can be in during its
+/// execution. The states are:
+///
+/// StuckOnImport: The interpreter is currently waiting onan import to be resolved. The module
+/// field indicates the name of the module that is being imported, and the state field holds the
+/// current state of the interpreter.
+///
+/// Done: The interpreter has completed its execution and the resulting Document is stored in the
+/// document field.
+///
+/// StuckOnProcessor: The interpreter is currently stuck on processing an AST and is waiting on a
+/// processor to finish its execution. The state, ast, module, and processor fields hold the
+/// current state of the interpreter, the AST being processed, the name of the module containing
+/// the processor, and the name of the processor, respectively.
+///
+// StuckOnForeignVariable: The interpreter is currently stuck on processing a foreign variable.
+// The state, module, and variable fields hold the current state of the interpreter, the name of
+// the module containing the variable, and the name of the variable, respectively.
 #[derive(Debug)]
 pub enum Interpreter {
     StuckOnImport {
