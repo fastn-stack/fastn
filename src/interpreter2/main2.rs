@@ -61,6 +61,23 @@ impl InterpreterState {
         }
     }
 
+    /**
+    The `tdoc` method is a function that is defined within the `InterpreterState` struct. It
+    takes in two parameters:
+
+    - `doc_name`: a reference to a string slice representing the name of the document
+    - `line_number`: a usize representing the line number
+
+    The `tdoc` method first retrieves the `parsed_document` from the `parsed_libs` field of the
+    `InterpreterState` struct using the `doc_name` parameter. If the document is not found, the
+    `Error` variant is returned with a `ParseError`. If the document is found, a new `TDoc`
+    struct is constructed. The `TDoc` struct contains a name field, an `aliases` field that
+    is a reference to a map of strings representing the aliases of the document, and a `bag`
+    field that is either a reference to the `bag` of the `InterpreterState` struct or a mutable
+    reference to the `InterpreterState` struct itself. The new `TDoc` struct is then returned as
+    the `Ok` variant of the
+    `Result`.
+    **/
     pub fn tdoc<'a>(
         &'a self,
         doc_name: &'a str,
@@ -460,7 +477,6 @@ impl InterpreterState {
     /// method returns a tuple containing the doc_name as a String, the `number_of_scan` as an
     /// usize, and the ast as a reference to an ftd::ast::AST. If either the last element of the
     /// stack or the first element of the asts field do not exist, the method returns None.
-
     pub fn peek_stack(&self) -> Option<(String, usize, &ftd::ast::AST)> {
         if let Some((doc_name, asts)) = self.to_process.stack.last() {
             if let Some((number_of_scan, ast)) = asts.first() {
@@ -800,9 +816,9 @@ impl ParsedDocument {
 /// current state of the interpreter, the AST being processed, the name of the module containing
 /// the processor, and the name of the processor, respectively.
 ///
-// StuckOnForeignVariable: The interpreter is currently stuck on processing a foreign variable.
-// The state, module, and variable fields hold the current state of the interpreter, the name of
-// the module containing the variable, and the name of the variable, respectively.
+/// StuckOnForeignVariable: The interpreter is currently stuck on processing a foreign variable.
+/// The state, module, and variable fields hold the current state of the interpreter, the name of
+/// the module containing the variable, and the name of the variable, respectively.
 #[derive(Debug)]
 pub enum Interpreter {
     StuckOnImport {
