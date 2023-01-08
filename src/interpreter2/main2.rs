@@ -84,6 +84,17 @@ impl InterpreterState {
         self.to_process.stack.last().map(|v| v.0.clone())
     }
 
+    /// Increments the scan count of the first element in the
+    /// AST stack of the `to_process` field of `InterpreterState` instance.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let mut state = ftd::InterpreterState::default();
+    /// state.to_process.stack = vec![("foo", vec![(1, ast1), (0, ast2)])];
+    /// state.increase_scan_count();
+    /// assert_eq!(state.to_process.stack, vec![("foo", vec![(2, ast1), (0, ast2)])]);
+    /// ```
     pub fn increase_scan_count(&mut self) {
         if let Some((_, asts)) = self.to_process.stack.last_mut() {
             if let Some(ast) = asts.first_mut() {
