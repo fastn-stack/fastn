@@ -1284,6 +1284,137 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            "ftd#cta-colors".to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: "ftd#cta-colors".to_string(),
+                fields: vec![
+                    ftd::interpreter2::Field {
+                        name: "base".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "hover".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "pressed".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "disabled".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "focused".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "border".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "text".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            "ftd#pst".to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: "ftd#pst".to_string(),
+                fields: vec![
+                    ftd::interpreter2::Field {
+                        name: "primary".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "secondary".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "tertiary".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            "ftd#btb".to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: "ftd#btb".to_string(),
+                fields: vec![
+                    ftd::interpreter2::Field {
+                        name: "base".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "text".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "border".to_string(),
+                        kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
+                            .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             "ftd#color-scheme".to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
                 name: "ftd#color-scheme".to_string(),
@@ -1340,6 +1471,69 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         name: "scrim".to_string(),
                         kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_COLOR)
                             .into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "cta-primary".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#cta-colors").into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "cta-secondary".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#cta-colors").into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "cta-tertiary".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#cta-colors").into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "cta-danger".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#cta-colors").into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "accent".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#pst").into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "error".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#btb").into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "success".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#btb").into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "info".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#btb").into_kind_data(),
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Field {
+                        name: "warning".to_string(),
+                        kind: ftd::interpreter2::Kind::record("ftd#btb").into_kind_data(),
                         mutable: false,
                         value: None,
                         line_number: 0,
