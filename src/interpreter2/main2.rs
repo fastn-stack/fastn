@@ -52,6 +52,7 @@ pub struct ToProcess {
 }
 
 impl InterpreterState {
+    /// The `new` function returns the new `InterpreterState` instance that it has created.
     fn new(id: String) -> InterpreterState {
         InterpreterState {
             id,
