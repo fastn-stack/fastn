@@ -2,7 +2,6 @@ use ftd::evalexpr::{
     error::{EvalexprError, EvalexprResult},
     value::{FloatType, IntType},
 };
-use std::collections::HashMap;
 
 mod display;
 
@@ -269,10 +268,8 @@ fn str_to_partial_tokens(string: &str) -> EvalexprResult<Vec<PartialToken>> {
 
     while let Some(c) = iter.next() {
         if c == '"' {
-            // println!("TOP block, c: {}", c);
             result.push(parse_string_literal(&mut iter)?);
         } else {
-            // println!("BOTTOM block, c: {}", c);
             let mut partial_token = char_to_partial_token(c);
             if let Some(PartialToken::Literal(..)) = result.last() {
                 if partial_token == PartialToken::Minus {
@@ -295,15 +292,11 @@ fn str_to_partial_tokens(string: &str) -> EvalexprResult<Vec<PartialToken>> {
             }
         }
     }
-    println!("Result after partial string");
-    dbg!(&result);
     Ok(result)
 }
 
 /// Resolves all partial tokens by converting them to complex tokens.
 fn partial_tokens_to_tokens(mut tokens: &[PartialToken]) -> EvalexprResult<Vec<Token>> {
-    println!("Inside partial to tokens");
-    dbg!(&tokens);
     let mut result = Vec::new();
     while !tokens.is_empty() {
         let first = tokens[0].clone();
