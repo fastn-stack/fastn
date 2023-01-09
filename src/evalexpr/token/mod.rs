@@ -262,7 +262,6 @@ fn parse_string_literal<Iter: Iterator<Item = char>>(
 
 /// Converts a string to a vector of partial tokens.
 fn str_to_partial_tokens(string: &str) -> EvalexprResult<Vec<PartialToken>> {
-    println!("Partial string = {}", string);
     let mut result = Vec::new();
     let mut iter = string.chars().peekable();
 
