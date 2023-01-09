@@ -119,9 +119,9 @@ pub const FTD_ANCHOR_PARENT: &str = "ftd#anchor.parent";
 
 pub const FTD_COLOR_SCHEME: &str = "ftd#color-scheme";
 pub const FTD_BACKGROUND_COLOR: &str = "ftd#background-colors";
-
 pub const FTD_CTA_COLOR: &str = "ftd#cta-colors";
 pub const FTD_PST: &str = "ftd#pst";
 pub const FTD_BTB: &str = "ftd#btb";
-
 pub const FTD_CUSTOM_COLORS: &str = "ftd#custom-colors";
+
+pub const FTD_TYPE_DATA: &str = "ftd#type-data";

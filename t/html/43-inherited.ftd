@@ -1,2 +1,3 @@
 -- ftd.text: Hello
 color: $inherited.colors.custom.one
+role: $inherited.types.heading-large

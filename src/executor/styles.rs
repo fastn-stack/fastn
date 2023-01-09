@@ -282,14 +282,11 @@ impl ResponsiveLength {
         };
 
         let mobile = {
-            let value = values
-                .get("mobile")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`mobile` field in ftd.responsive-type not found".to_string(),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?;
-            Length::from_value(value.to_owned(), doc, line_number)?
+            if let Some(value) = values.get("mobile") {
+                Length::from_value(value.to_owned(), doc, line_number)?
+            } else {
+                desktop.clone()
+            }
         };
 
         Ok(ResponsiveLength { desktop, mobile })
@@ -1808,14 +1805,11 @@ impl ResponsiveType {
         };
 
         let mobile = {
-            let value = values
-                .get("mobile")
-                .ok_or(ftd::executor::Error::ParseError {
-                    message: "`mobile` field in ftd.responsive-type not found".to_string(),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?;
-            Type::from_value(value.to_owned(), doc, line_number)?
+            if let Some(value) = values.get("mobile") {
+                Type::from_value(value.to_owned(), doc, line_number)?
+            } else {
+                desktop.clone()
+            }
         };
 
         Ok(ResponsiveType { desktop, mobile })

@@ -224,6 +224,85 @@
 "light": "#966220"
 }
 }
+},
+"inherited#types": {
+"blockquote": {
+"desktop": {
+"line-height": "16px",
+"size": "14px",
+"weight": 400
+}
+},
+"copy-large": {
+"desktop": {
+"line-height": "28px",
+"size": "20px",
+"weight": 400
+}
+},
+"copy-relaxed": {
+"desktop": {
+"line-height": "24px",
+"size": "16px",
+"weight": 400
+}
+},
+"copy-tight": {
+"desktop": {
+"line-height": "20px",
+"size": "16px",
+"weight": 400
+}
+},
+"fine-print": {
+"desktop": {
+"line-height": "16px",
+"size": "14px",
+"weight": 400
+}
+},
+"heading-hero": {
+"desktop": {
+"line-height": "60px",
+"size": "48px",
+"weight": 400
+}
+},
+"heading-large": {
+"desktop": {
+"line-height": "48px",
+"size": "40px",
+"weight": 400
+}
+},
+"heading-medium": {
+"desktop": {
+"line-height": "44px",
+"size": "32px",
+"weight": 400
+}
+},
+"heading-small": {
+"desktop": {
+"line-height": "36px",
+"size": "24px",
+"weight": 400
+}
+},
+"label-big": {
+"desktop": {
+"line-height": "22px",
+"size": "16px",
+"weight": 400
+}
+},
+"label-small": {
+"desktop": {
+"line-height": "16px",
+"size": "14px",
+"weight": 400
+}
+}
 }
 }
 </script>
@@ -310,7 +389,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(237,117,58,1); height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Hello</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(237,117,58,1); font-size: 40px; font-weight: 400; height: fit-content; line-height: 48px; text-decoration: none; width: fit-content" class="ft_md">Hello</div></div>
 
 
 <script>
@@ -941,6 +1020,41 @@ document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference(
 }
 else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("inherited#colors.custom.one", data).dark;}
 }
+
+window.node_change_main["0:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+}
+
+window.node_change_main["0:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+}
+
+window.node_change_main["0:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+}
+
+window.node_change_main["0:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+}
+
+window.node_change_main["0:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+}
 window.set_value_main = {};
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
 if (!!remaining) {
@@ -953,6 +1067,25 @@ if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){w
 }
 };
 
+window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#device" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#device", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+}
+};
+
 window.set_value_main["inherited#colors"] = function (data, new_value, remaining) {
 if (!!remaining) {
 set_data_value(data, "inherited#colors" + "." + remaining, new_value);
@@ -961,6 +1094,25 @@ set_data_value(data, "inherited#colors", new_value);
 }
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+}
+};
+
+window.set_value_main["inherited#types"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "inherited#types" + "." + remaining, new_value);
+} else {
+set_data_value(data, "inherited#types", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
 }
 };
 
