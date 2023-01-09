@@ -1,3 +1,29 @@
--- ftd.text: Hello
+-- ftd.text: Heading 1
 region: h1
-padding.px: 40
+padding-horizontal.px: 20
+padding-vertical.px: 20
+
+-- ftd.text: Heading 2
+region: h2
+padding-horizontal.px: 30
+padding-vertical.px: 20
+
+-- ftd.text: Heading 3
+region: h3
+padding-horizontal.px: 40
+padding-vertical.px: 20
+
+-- ftd.text: Heading 4
+region: h4
+padding-horizontal.px: 50
+padding-vertical.px: 20
+
+-- ftd.text: Heading 5
+region: h5
+padding-horizontal.px: 60
+padding-vertical.px: 20
+
+-- ftd.text: Heading 6
+region: h6
+padding-horizontal.px: 70
+padding-vertical.px: 20
