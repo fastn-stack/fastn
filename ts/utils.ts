@@ -9,6 +9,9 @@ function isObject(obj: object) {
 }
 
 function resolve_reference(reference: string, data: any) {
+    if (!!data[reference]) {
+        return deepCopy(data[reference]);
+    }
     let [var_name, remaining] = get_name_and_remaining(reference);
     let initial_value = data[var_name];
     while (!!remaining) {
@@ -58,7 +61,7 @@ function change_value(function_arguments: (FunctionArgument | any)[], data: {
         if (isFunctionArgument(function_arguments[a])) {
             if (!!function_arguments[a]["reference"]) {
                 let reference: string = <string>function_arguments[a]["reference"];
-                let [var_name, remaining] = get_name_and_remaining(reference);
+                let [var_name, remaining] = (!!data[reference]) ? get_name_and_remaining(reference): [reference, null];
                 if (var_name === "ftd#dark-mode") {
                     if (!!function_arguments[a]["value"]) {
                         window.enable_dark_mode();
@@ -90,6 +93,10 @@ String.prototype.format = function() {
 
 
 function set_data_value(data: any, name: string, value: any) {
+    if (!!data[name]) {
+        data[name] = deepCopy(set(data[name], null, value));
+        return;
+    }
     let [var_name, remaining] = get_name_and_remaining(name);
     let initial_value = data[var_name];
     data[var_name] = deepCopy(set(initial_value, remaining, value));
@@ -106,6 +113,9 @@ function set_data_value(data: any, name: string, value: any) {
 }
 
 function get_data_value(data: any, name: string) {
+    if (!!data[name]) {
+        return deepCopy(data[name]);
+    }
     let [var_name, remaining] = get_name_and_remaining(name);
     let initial_value = data[var_name];
     while (!!remaining) {

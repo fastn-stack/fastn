@@ -67,7 +67,7 @@ window.ftd = (function() {
 
         let [var_name, _] = get_name_and_remaining(variable);
 
-        if (data[var_name] === undefined) {
+        if (data[var_name] === undefined && data[variable] === undefined) {
             console_log(variable, "is not in data, ignoring");
             return;
         }
@@ -110,7 +110,7 @@ window.ftd = (function() {
 
         let [var_name, remaining] = get_name_and_remaining(variable);
 
-        if (data[var_name] === undefined) {
+        if (data[var_name] === undefined && data[variable] === undefined) {
             console_log(variable, "is not in data, ignoring");
             return;
         }

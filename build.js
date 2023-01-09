@@ -175,7 +175,7 @@ window.ftd = (function () {
     exports.get_value = function (id, variable) {
         let data = ftd_data[id];
         let [var_name, _] = get_name_and_remaining(variable);
-        if (data[var_name] === undefined) {
+        if (data[var_name] === undefined && data[variable] === undefined) {
             console_log(variable, "is not in data, ignoring");
             return;
         }
@@ -208,7 +208,7 @@ window.ftd = (function () {
     exports.set_value_by_id = function (id, variable, value) {
         let data = ftd_data[id];
         let [var_name, remaining] = get_name_and_remaining(variable);
-        if (data[var_name] === undefined) {
+        if (data[var_name] === undefined && data[variable] === undefined) {
             console_log(variable, "is not in data, ignoring");
             return;
         }
@@ -511,6 +511,9 @@ function isObject(obj) {
     return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 function resolve_reference(reference, data) {
+    if (!!data[reference]) {
+        return deepCopy(data[reference]);
+    }
     let [var_name, remaining] = get_name_and_remaining(reference);
     let initial_value = data[var_name];
     while (!!remaining) {
@@ -552,7 +555,7 @@ function change_value(function_arguments, data, id) {
         if (isFunctionArgument(function_arguments[a])) {
             if (!!function_arguments[a]["reference"]) {
                 let reference = function_arguments[a]["reference"];
-                let [var_name, remaining] = get_name_and_remaining(reference);
+                let [var_name, remaining] = (!!data[reference]) ? get_name_and_remaining(reference) : [reference, null];
                 if (var_name === "ftd#dark-mode") {
                     if (!!function_arguments[a]["value"]) {
                         window.enable_dark_mode();
@@ -583,6 +586,10 @@ String.prototype.format = function () {
     return formatted;
 };
 function set_data_value(data, name, value) {
+    if (!!data[name]) {
+        data[name] = deepCopy(set(data[name], null, value));
+        return;
+    }
     let [var_name, remaining] = get_name_and_remaining(name);
     let initial_value = data[var_name];
     data[var_name] = deepCopy(set(initial_value, remaining, value));
@@ -597,6 +604,9 @@ function set_data_value(data, name, value) {
     }
 }
 function get_data_value(data, name) {
+    if (!!data[name]) {
+        return deepCopy(data[name]);
+    }
     let [var_name, remaining] = get_name_and_remaining(name);
     let initial_value = data[var_name];
     while (!!remaining) {

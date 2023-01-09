@@ -442,7 +442,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__set___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}],[&quot;v&quot;,false]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__set___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}],[&quot;v&quot;,true]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Enter mouse</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Click Outside</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Type ctrl and a simultaneously</div><div data-id="3:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Type shift and shift sequentially</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__set___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}],[&quot;v&quot;,true]]}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__set___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}],[&quot;v&quot;,false]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Enter mouse</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Click Outside</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Type ctrl and a simultaneously</div><div data-id="3:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Type shift and shift sequentially</div></div>
 
 
 <script>
@@ -623,7 +623,7 @@ return handle_function(evt, id, actions, obj, function_arguments);
 exports.get_value = function (id, variable) {
 let data = ftd_data[id];
 let [var_name, _] = get_name_and_remaining(variable);
-if (data[var_name] === undefined) {
+if (data[var_name] === undefined && data[variable] === undefined) {
 console_log(variable, "is not in data, ignoring");
 return;
 }
@@ -656,7 +656,7 @@ window.ftd.set_value_by_id("main", variable, value);
 exports.set_value_by_id = function (id, variable, value) {
 let data = ftd_data[id];
 let [var_name, remaining] = get_name_and_remaining(variable);
-if (data[var_name] === undefined) {
+if (data[var_name] === undefined && data[variable] === undefined) {
 console_log(variable, "is not in data, ignoring");
 return;
 }
@@ -959,6 +959,9 @@ function isObject(obj) {
 return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 function resolve_reference(reference, data) {
+if (!!data[reference]) {
+return deepCopy(data[reference]);
+}
 let [var_name, remaining] = get_name_and_remaining(reference);
 let initial_value = data[var_name];
 while (!!remaining) {
@@ -1000,7 +1003,7 @@ for (const a in function_arguments) {
 if (isFunctionArgument(function_arguments[a])) {
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
-let [var_name, remaining] = get_name_and_remaining(reference);
+let [var_name, remaining] = (!!data[reference]) ? get_name_and_remaining(reference) : [reference, null];
 if (var_name === "ftd#dark-mode") {
 if (!!function_arguments[a]["value"]) {
 window.enable_dark_mode();
@@ -1031,6 +1034,10 @@ formatted = formatted.replace(regexp, arguments[i]);
 return formatted;
 };
 function set_data_value(data, name, value) {
+if (!!data[name]) {
+data[name] = deepCopy(set(data[name], null, value));
+return;
+}
 let [var_name, remaining] = get_name_and_remaining(name);
 let initial_value = data[var_name];
 data[var_name] = deepCopy(set(initial_value, remaining, value));
@@ -1045,6 +1052,9 @@ return initial_value;
 }
 }
 function get_data_value(data, name) {
+if (!!data[name]) {
+return deepCopy(data[name]);
+}
 let [var_name, remaining] = get_name_and_remaining(name);
 let initial_value = data[var_name];
 while (!!remaining) {
