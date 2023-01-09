@@ -1,5 +1,10 @@
 # FTD Change Log
 
+## 9th December 2023
+
+- [Added inherited type](https://github.com/ftd-lang/ftd/commit/b1fe8af46cd35c51c3b37312d9c1a6466a54d1e5)
+- [Added inherited color](https://github.com/ftd-lang/ftd/commit/8c22529da64f449620f937ed18d466c6256dfb74)
+
 ## 6th December 2023
 
 - [Added `ftd.responsive-length` and `responsive` variant of type `ftd.

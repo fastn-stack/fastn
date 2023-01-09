@@ -249,22 +249,6 @@ integer by_how_much:
 what += by_how_much
 ```
 
-# In Built Functions
-
-## `isempty()`
-
-It works with lists, optionals and strings.
-
-```ftd
--- string list foo:
--- end: foo
-
--- boolean $empty: true
-
--- $empty: false
-if: {!isempty(foo)}
-```
-
 # Kernel Components
 
 FTD comes with following kernel components:
@@ -706,3 +690,87 @@ Response JSON:
 - Run `cargo run`
 - Run `cd docs`
 - Run `python3 -m http.server 8000`
+
+
+# Default Variable
+
+# `inherited.types`
+
+```ftd
+-- record type-data:
+ftd.responsive-type heading-large:
+ftd.responsive-type heading-medium:
+ftd.responsive-type heading-small:
+ftd.responsive-type heading-hero:
+ftd.responsive-type copy-tight:
+ftd.responsive-type copy-relaxed:
+ftd.responsive-type copy-large:
+ftd.responsive-type fine-print:
+ftd.responsive-type blockquote:
+ftd.responsive-type label-big:
+ftd.responsive-type label-small:
+```
+
+The fields in record `type-data` are of type `ftd.responsive-type` which is 
+another record with `desktop` and `mobile` fields of type `ftd.type`
+
+In `inherited.types` variable, value of all the fields is same for both 
+`desktop` and `mobile`. So just mentioning the value for one only.
+
+- `heading-large`:
+  size: 40
+  line-height: 48
+  weight: 400
+
+- `heading-medium`:
+  size: 32
+  line-height: 44
+  weight: 400
+
+- `heading-small`:
+  size: 24
+  line-height: 36
+  weight: 400
+
+- `heading-hero`:
+  size: 48
+  line-height: 60
+  weight: 400
+
+- `copy-tight`:
+  size: 16
+  line-height: 20
+  weight: 400
+
+- `copy-relaxed`:
+  size: 16
+  line-height: 24
+  weight: 400
+
+- `copy-large`:
+  size: 20
+  line-height: 28
+  weight: 400
+
+- `fine-print`:
+  size: 14
+  line-height: 16
+  weight: 400
+
+
+- `blockquote`:
+  size: 14
+  line-height: 16
+  weight: 400
+
+
+- `label-big`:
+  size: 16
+  line-height: 22
+  weight: 400
+
+
+- `label-small`:
+  size: 14
+  line-height: 16
+  weight: 400
