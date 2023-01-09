@@ -1,3 +1,9 @@
+-- import: function as fn
+
+-- integer $num: 0
+
 -- ftd.text: Hello
 color: $inherited.colors.custom.one
+color if { num % 2 == 0 }: $inherited.colors.custom.two
 role: $inherited.types.heading-large
+$on-click$: $fn.increment($a = $num)
