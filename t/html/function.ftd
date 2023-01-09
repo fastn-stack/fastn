@@ -8,3 +8,8 @@ boolean $a:
 boolean v:
 
 a = v
+
+-- void increment(a):
+integer $a:
+
+a += 1

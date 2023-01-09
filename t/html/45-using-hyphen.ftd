@@ -1,0 +1,12 @@
+-- import: function as fn
+
+-- string rithik-name: Rithik
+
+-- integer $x: 0
+
+-- ftd.text: $rithik-name
+if: { rithik-name == "Rithik" }
+
+-- ftd.text: Hello world
+if: { 5 -2 > x }
+$on-click$: $fn.increment($a = $x)
