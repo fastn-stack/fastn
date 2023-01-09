@@ -6,9 +6,8 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#name": "Arpita",
-"foo#new-name": "Arpita FifthTry",
-"foo#number": 10,
+"foo#rithik-name": "Rithik",
+"foo#x": 0,
 "ftd#dark-mode": false,
 "ftd#desktop-breakpoint": 1440,
 "ftd#device": "desktop",
@@ -399,7 +398,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 5px; text-decoration: none; width: fit-content" class="ft_md">hello world</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 14px; text-decoration: none; width: fit-content" class="ft_md">Arpita Jaiswal</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; padding: 15px; text-decoration: none; width: fit-content" class="ft_md">Arpita FifthTry</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Rithik</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#x&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: fit-content; text-decoration: none; width: fit-content" class="ft_md">Hello world</div></div>
 
 
 <script>
@@ -1032,97 +1031,56 @@ return f;
 
 
 
-function foo__append___main(a,b){
-return (a+" "+b);
+
+
+function function__increment___main(a){
+return (a.value += 1);
 }
-
-
-
-function foo__compare___main(a,b,c,d){
-let e = a+c;
-return (if((e>b),c,d));
-}
-
-
-
-function foo__length___main(a){
-return (len(a));
-}
-
-
-
-function foo__sum___main(a,b){
-return (a+b);
-}
-
-
 
 
 window.node_change_main = {};
+window.node_change_main["0:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("foo#rithik-name", data)=="Rithik");
+}()){
+document.querySelector(`[data-id="0:main"]`).style["display"] = "block";
+}
+else {document.querySelector(`[data-id="0:main"]`).style["display"] = "none";}
+}
+
 window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":[["a","hello"],["b","world"]]}', this);
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#rithik-name", data);
 }
-
-window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__compare___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",20],["c",4],["d",5]]}', this)))));
+window.node_change_main["1:main__display"] = function(data) {
+if(function(){
+return (5-2>resolve_reference("foo#x", data));
+}()){
+document.querySelector(`[data-id="1:main"]`).style["display"] = "block";
 }
-window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__append___main","values":[["a",{"mutable":false,"reference":"foo#name"}],["b","Jaiswal"]]}', this);
-}
-
-window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",4]]}', this)))));
-}
-window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data);
-}
-
-window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__length___main","values":[["a",{"mutable":false,"reference":"foo#new-name"}]]}', this)))));
+else {document.querySelector(`[data-id="1:main"]`).style["display"] = "none";}
 }
 window.set_value_main = {};
-window.set_value_main["foo#name"] = function (data, new_value, remaining) {
+window.set_value_main["foo#rithik-name"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#name" + "." + remaining, new_value);
+set_data_value(data, "foo#rithik-name" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#name", new_value);
+set_data_value(data, "foo#rithik-name", new_value);
 }
-if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#new-name"]){window["resolve_value_main"]["foo#new-name"](data);
-} else {
-let value = resolve_reference("foo#name", data);
-set_data_value(data, "foo#new-name", value);
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
 };
 
-window.set_value_main["foo#new-name"] = function (data, new_value, remaining) {
+window.set_value_main["foo#x"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#new-name" + "." + remaining, new_value);
+set_data_value(data, "foo#x" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#new-name", new_value);
+set_data_value(data, "foo#x", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
-}
-};
-
-window.set_value_main["foo#number"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#number" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#number", new_value);
-}
-
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
 }
 };
 
