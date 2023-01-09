@@ -113,6 +113,9 @@ pub struct TocItemCompat {
     pub readers: Vec<String>,
     pub writers: Vec<String>,
     pub document: Option<String>,
+    pub extra_data: std::collections::BTreeMap<String, String>,
+    #[serde(rename = "nav-title")]
+    pub nav_title: Option<String>,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -143,6 +146,8 @@ impl TocItemCompat {
             readers,
             writers,
             document: None,
+            extra_data: Default::default(),
+            nav_title: None,
         }
     }
 

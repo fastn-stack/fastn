@@ -14,7 +14,6 @@ pub(crate) mod toc;
 
 pub use document::convert_to_document_id;
 pub use fpm::Library2022;
-pub use full_sitemap::KeyValueData;
 
 #[derive(Debug)]
 pub struct Library {

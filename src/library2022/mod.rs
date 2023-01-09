@@ -1,6 +1,19 @@
 pub(crate) mod get_data_processor;
 pub(crate) mod http_processor;
+pub(crate) mod processor;
 pub(crate) mod toc_processor;
+
+#[derive(Default, Debug, serde::Serialize)]
+pub struct KeyValueData {
+    pub key: String,
+    pub value: String,
+}
+
+impl KeyValueData {
+    pub fn from(key: String, value: String) -> Self {
+        Self { key, value }
+    }
+}
 
 #[derive(Debug)]
 pub struct Library2022 {
@@ -195,6 +208,10 @@ impl Library2022 {
             "http" => http_processor::process(value, kind, doc, &self.config).await,
             "toc" => toc_processor::process(value, kind, doc, &self.config),
             "get-data" => get_data_processor::process(value, kind, doc, &self.config),
+            "sitemap" => processor::sitemap::process(value, kind, doc, &self.config),
+            "full-sitemap" => {
+                processor::sitemap::full_sitemap_process(value, kind, doc, &self.config)
+            }
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

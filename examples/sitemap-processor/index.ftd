@@ -1,0 +1,87 @@
+-- import: fpm/processors
+
+-- record toc-item:
+optional string title:
+optional string url:
+optional string path:
+optional string number:
+optional ftd.image-src font-icon:
+optional string img-src:
+boolean bury: false
+optional string document:
+
+-- record sitemap-data:
+toc-item list sections:
+toc-item list subsections:
+toc-item list toc:
+optional toc-item current-section:
+optional toc-item current-subsection:
+optional toc-item current-page:
+
+-- component print-toc:
+toc-item item:
+
+-- ftd.column:
+
+-- ftd.text: $print-toc.item.title
+
+-- ftd.text: $print-toc.item.url
+
+-- end: ftd.column
+
+-- end: print-toc
+
+
+
+
+;; sitemap example
+
+-- ftd.text: Processor `sitemap`
+
+-- sitemap-data sitemap:
+$processor$: processors.sitemap
+
+-- print-toc:
+$loop$: $sitemap.toc as $toc
+item: $toc
+
+-- end: print-toc
+
+-- print-toc:
+$loop$: $sitemap.sections as $section
+item: $section
+
+-- end: print-toc
+
+-- print-toc:
+$loop$: $sitemap.subsections as $subsection
+item: $subsection
+
+-- end: print-toc
+
+
+
+;; full-sitemap example
+
+-- ftd.text: Processor `full-sitemap`
+
+-- sitemap-data full-sitemap:
+$processor$: processors.full-sitemap
+
+-- print-toc:
+$loop$: $full-sitemap.toc as $toc
+item: $toc
+
+-- end: print-toc
+
+-- print-toc:
+$loop$: $full-sitemap.sections as $section
+item: $section
+
+-- end: print-toc
+
+-- print-toc:
+$loop$: $full-sitemap.subsections as $subsection
+item: $subsection
+
+-- end: print-toc

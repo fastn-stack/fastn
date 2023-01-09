@@ -1,0 +1,14 @@
+-- import: fpm
+
+-- fpm.package: sitemap-processor
+download-base-url: https://www.github.com/
+
+
+-- fpm.sitemap:
+
+# Section: /doc1/
+
+## Sub Section: /doc2/
+
+- TOC 1: /doc3/
+- TOC 2: /doc4/

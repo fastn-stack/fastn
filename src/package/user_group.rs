@@ -163,7 +163,7 @@ pub struct UserGroupCompat {
     description: Option<String>,
     // It will contain all group members, like group, email and -email, etc...
     #[serde(rename = "group-members")]
-    group_members: Vec<fpm::library::full_sitemap::KeyValueData>,
+    group_members: Vec<fpm::library2022::KeyValueData>,
     groups: Vec<String>,
 }
 
@@ -176,14 +176,12 @@ impl UserGroup {
             self.identities
                 .clone()
                 .into_iter()
-                .map(|i| fpm::library::KeyValueData::from(i.key, i.value)),
+                .map(|i| fpm::library2022::KeyValueData::from(i.key, i.value)),
         );
 
-        group_members.extend(
-            self.excluded_identities.iter().map(|i| {
-                fpm::library::KeyValueData::from(format!("-{}", i.key), i.value.to_string())
-            }),
-        );
+        group_members.extend(self.excluded_identities.iter().map(|i| {
+            fpm::library2022::KeyValueData::from(format!("-{}", i.key), i.value.to_string())
+        }));
 
         UserGroupCompat {
             id: self.id.clone(),
