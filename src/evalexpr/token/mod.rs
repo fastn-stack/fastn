@@ -269,7 +269,12 @@ fn str_to_partial_tokens(string: &str) -> EvalexprResult<Vec<PartialToken>> {
         if c == '"' {
             result.push(parse_string_literal(&mut iter)?);
         } else {
-            let partial_token = char_to_partial_token(c);
+            let mut partial_token = char_to_partial_token(c);
+            if let Some(PartialToken::Literal(..)) = result.last() {
+                if partial_token == PartialToken::Minus {
+                    partial_token = PartialToken::Literal('-'.to_string())
+                }
+            }
 
             let if_let_successful =
                 if let (Some(PartialToken::Literal(last)), PartialToken::Literal(literal)) =
