@@ -60,6 +60,7 @@ impl<'a> HtmlGenerator<'a> {
         Ok((html, ftd::html1::utils::events_to_string(events)))
     }
 
+    #[allow(clippy::type_complexity)]
     pub fn to_html_(
         &self,
         node: ftd::node::Node,

@@ -435,8 +435,17 @@ impl KindData {
     pub fn is_or_type(&self) -> bool {
         self.kind.is_or_type()
     }
+
     pub fn is_optional(&self) -> bool {
         self.kind.is_optional()
+    }
+
+    pub fn into_optional(self) -> Self {
+        KindData {
+            caption: self.caption,
+            body: self.body,
+            kind: self.kind.into_optional(),
+        }
     }
 
     pub fn is_string(&self) -> bool {

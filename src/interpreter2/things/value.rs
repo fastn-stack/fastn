@@ -1490,18 +1490,36 @@ impl Value {
         }
     }
 
-    pub(crate) fn into_evalexpr_value(self) -> ftd::evalexpr::Value {
+    pub(crate) fn into_evalexpr_value(
+        self,
+        doc: &ftd::interpreter2::TDoc,
+    ) -> ftd::interpreter2::Result<ftd::evalexpr::Value> {
         match self {
-            ftd::interpreter2::Value::String { text } => ftd::evalexpr::Value::String(text),
-            ftd::interpreter2::Value::Integer { value } => ftd::evalexpr::Value::Int(value),
-            ftd::interpreter2::Value::Decimal { value } => ftd::evalexpr::Value::Float(value),
-            ftd::interpreter2::Value::Boolean { value } => ftd::evalexpr::Value::Boolean(value),
+            ftd::interpreter2::Value::String { text } => Ok(ftd::evalexpr::Value::String(text)),
+            ftd::interpreter2::Value::Integer { value } => Ok(ftd::evalexpr::Value::Int(value)),
+            ftd::interpreter2::Value::Decimal { value } => Ok(ftd::evalexpr::Value::Float(value)),
+            ftd::interpreter2::Value::Boolean { value } => Ok(ftd::evalexpr::Value::Boolean(value)),
             ftd::interpreter2::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
-                    data.clone().into_evalexpr_value()
+                    data.clone().into_evalexpr_value(doc)
                 } else {
-                    ftd::evalexpr::Value::Empty
+                    Ok(ftd::evalexpr::Value::Empty)
                 }
+            }
+            ftd::interpreter2::Value::Record { .. } => {
+                if let Ok(Some(value)) = ftd::interpreter2::utils::get_value(doc, &self) {
+                    Ok(ftd::evalexpr::Value::String(value.to_string()))
+                } else {
+                    unimplemented!("{:?}", self)
+                }
+            }
+            ftd::interpreter2::Value::List { data, .. } => {
+                let mut values = vec![];
+                for item in data {
+                    let line_number = item.line_number();
+                    values.push(item.resolve(doc, line_number)?.into_evalexpr_value(doc)?);
+                }
+                Ok(ftd::evalexpr::Value::Tuple(values))
             }
             t => unimplemented!("{:?}", t),
         }

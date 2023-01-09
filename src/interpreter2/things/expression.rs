@@ -134,7 +134,7 @@ impl Expression {
                 property_value
                     .clone()
                     .resolve(doc, self.line_number)?
-                    .into_evalexpr_value(),
+                    .into_evalexpr_value(doc)?,
             );
         }
         let node = self.expression.update_node_with_value(&values);

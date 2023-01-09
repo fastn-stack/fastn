@@ -1,0 +1,33 @@
+-- record person:
+string name:
+string bio:
+
+
+-- person arpita:
+name: Arpita
+bio: Works in FifthTry
+
+
+-- show-person:
+person-instance: $arpita
+
+-- show-person:
+
+
+-- component show-person:
+optional person person-instance:
+
+-- ftd.row:
+padding.px: 40
+spacing.px: 20
+
+
+-- ftd.text: $show-person.person-instance.name
+if: { show-person.person-instance != NULL }
+
+-- ftd.text: Anonymous
+if: { show-person.person-instance == NULL }
+
+-- end: ftd.row
+
+-- end: show-person

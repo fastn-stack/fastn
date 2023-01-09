@@ -458,6 +458,7 @@ impl InterpreterState {
     }*/
 
     /// Returns (doc_name, number_of_scan, last_ast)
+    ///
     /// The peek_stack method defined in this code is a method on the InterpreterState struct.
     /// It returns an Option that contains a tuple of a String, an usize, and a reference to an
     /// ftd::ast::AST.

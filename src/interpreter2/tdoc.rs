@@ -589,6 +589,16 @@ impl<'a> TDoc<'a> {
                         ))
                     }
                 }
+                ftd::interpreter2::Kind::Optional { kind } => {
+                    let state_with_thing = get_kind_(*kind, name, doc, line_number)?;
+                    if let ftd::interpreter2::StateWithThing::Thing(ref t) = state_with_thing {
+                        Ok(ftd::interpreter2::StateWithThing::new_thing(
+                            t.to_owned().into_optional(),
+                        ))
+                    } else {
+                        Ok(state_with_thing)
+                    }
+                }
                 t => ftd::interpreter2::utils::e2(
                     format!("Expected Record field `{}`, found: `{:?}`", name, t),
                     doc.name,
