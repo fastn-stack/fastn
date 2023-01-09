@@ -129,3 +129,7 @@ pub const FTD_TYPE_DATA: &str = "ftd#type-data";
 pub const FTD_REGION: &str = "ftd#region";
 pub const FTD_REGION_H1: &str = "ftd#region.h1";
 pub const FTD_REGION_H2: &str = "ftd#region.h2";
+pub const FTD_REGION_H3: &str = "ftd#region.h3";
+pub const FTD_REGION_H4: &str = "ftd#region.h4";
+pub const FTD_REGION_H5: &str = "ftd#region.h5";
+pub const FTD_REGION_H6: &str = "ftd#region.h6";

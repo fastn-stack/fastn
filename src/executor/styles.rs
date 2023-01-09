@@ -1964,6 +1964,10 @@ impl Anchor {
 pub enum Region {
     H1,
     H2,
+    H3,
+    H4,
+    H5,
+    H6
 }
 
 impl Region {
@@ -1987,6 +1991,10 @@ impl Region {
         match or_type_value.0.as_str() {
             ftd::interpreter2::FTD_REGION_H1 => Ok(Region::H1),
             ftd::interpreter2::FTD_REGION_H2 => Ok(Region::H2),
+            ftd::interpreter2::FTD_REGION_H3 => Ok(Region::H3),
+            ftd::interpreter2::FTD_REGION_H4 => Ok(Region::H4),
+            ftd::interpreter2::FTD_REGION_H5 => Ok(Region::H5),
+            ftd::interpreter2::FTD_REGION_H6 => Ok(Region::H6),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.region`", t),
                 doc.name,
@@ -2022,6 +2030,10 @@ impl Region {
         match self {
             Region::H1 => "h1".to_string(),
             Region::H2 => "h2".to_string(),
+            Region::H3 => "h3".to_string(),
+            Region::H4 => "h4".to_string(),
+            Region::H5 => "h5".to_string(),
+            Region::H6 => "h6".to_string(),
         }
     }
 }
