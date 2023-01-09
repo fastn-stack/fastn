@@ -338,6 +338,7 @@ This is a body text.
 - `border-top-right-radius`: `optional ftd.length`
 - `border-bottom-left-radius`: `optional ftd.length`
 - `border-bottom-right-radius`: `optional ftd.length`
+- `region`: `optional ftd.region`
 
 
 **`ftd.length`**
@@ -489,6 +490,25 @@ string dark: $color.light
 -- constant string zoom-out: zoom-out
 
 -- end: cursor
+```
+
+**`ftd.region`**
+
+```ftd
+;; NOTE
+;; 1. Using conditionals with region is not supported yet.
+;; 2. Only one region can be specified as region value.
+
+-- or-type region:
+
+-- constant string h1: h1
+-- constant string h2: h2
+-- constant string h3: h3
+-- constant string h4: h4
+-- constant string h5: h5
+-- constant string h6: h6
+
+-- end: region
 ```
 
 - `classes`: string list (classes are created in css)
