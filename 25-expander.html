@@ -222,6 +222,9 @@
 "text": {
 "light": "#a8a29e"
 },
+"text-strong": {
+"light": "#ffffff"
+},
 "warning": {
 "base": {
 "light": "#fbefba"
@@ -1193,11 +1196,11 @@ set_data_value(data, "foo#box:open:0,2" + "." + remaining, new_value);
 set_data_value(data, "foo#box:open:0,2", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,2,1:main__display"]){window.node_change_main["0,2,1:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,2,0,2:main__display"]){window.node_change_main["0,2,0,2:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,2,0,1:main__display"]){window.node_change_main["0,2,0,1:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,2,0,2:main__display"]){window.node_change_main["0,2,0,2:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,2,1:main__display"]){window.node_change_main["0,2,1:main__display"](data);
 }
 };
 
