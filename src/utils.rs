@@ -528,7 +528,7 @@ pub fn replace_markers_2022(
                 )
                 .as_str(),
             )
-            .replace("__ftd_body_events__", "")
+            .replace("__ftd_body_events__", html_ui.outer_events.as_str())
             .replace("__ftd_css__", "")
             .replace("__ftd_element_css__", "")
             .replace("__base_url__", base_url)
