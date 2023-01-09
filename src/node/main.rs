@@ -1165,6 +1165,8 @@ impl ftd::executor::Common {
     fn node(&self) -> String {
         if self.link.value.is_some() {
             s("a")
+        } else if let Some(ref region) = self.region.value {
+            region.to_css_string()
         } else {
             s("div")
         }

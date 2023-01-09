@@ -1102,6 +1102,35 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            ftd::interpreter2::FTD_REGION.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_REGION.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_REGION_H1,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("h1")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_REGION_H2,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("h2")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter2::FTD_TYPE.to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
                 name: ftd::interpreter2::FTD_TYPE.to_string(),
@@ -4378,6 +4407,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
+        ftd::interpreter2::Argument::default(
+            "region",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_REGION)
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter2::Argument::default(
             "left",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)

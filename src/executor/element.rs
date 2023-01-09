@@ -132,6 +132,7 @@ pub struct Common {
     pub bottom: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub anchor: ftd::executor::Value<Option<ftd::executor::Anchor>>,
     pub role: ftd::executor::Value<Option<ftd::executor::ResponsiveType>>,
+    pub region: ftd::executor::Value<Option<ftd::executor::Region>>,
     pub cursor: ftd::executor::Value<Option<ftd::executor::Cursor>>,
     pub classes: ftd::executor::Value<Vec<String>>,
     pub padding: ftd::executor::Value<Option<ftd::executor::Length>>,
@@ -461,6 +462,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "role",
+        )?,
+        region: ftd::executor::Region::optional_region(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "region",
         )?,
         cursor: ftd::executor::Cursor::optional_cursor(
             properties,

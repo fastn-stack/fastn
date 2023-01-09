@@ -125,3 +125,7 @@ pub const FTD_BTB: &str = "ftd#btb";
 pub const FTD_CUSTOM_COLORS: &str = "ftd#custom-colors";
 
 pub const FTD_TYPE_DATA: &str = "ftd#type-data";
+
+pub const FTD_REGION: &str = "ftd#region";
+pub const FTD_REGION_H1: &str = "ftd#region.h1";
+pub const FTD_REGION_H2: &str = "ftd#region.h2";

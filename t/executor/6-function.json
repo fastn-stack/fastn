@@ -165,6 +165,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "region": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "cursor": {
                 "value": null,
                 "line_number": null,
@@ -435,6 +440,11 @@
         "properties": []
       },
       "role": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "region": {
         "value": null,
         "line_number": null,
         "properties": []

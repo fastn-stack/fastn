@@ -176,6 +176,38 @@ blue: 0
 
 Now `$color.red` is a named constant.
 
+
+The `or-type` can have three types of variant:
+
+- `regular`: This accepts value and it has defined type/kind
+- `constant`: This doesn't accept. The value is provided during declaration and is non-changeable.
+- `anonymous-record`: The new record type/kind is created during declaration.
+  It also accepts value.
+
+```ftd
+-- or-type color:
+
+;; regular
+-- string hex:
+
+;; constant
+-- const string foo-red: red
+
+;; anonymous-record
+-- record dl:
+caption string dark:
+string light: $dl.dark
+
+
+;; Using regular type variant
+-- ftd.text: Hello
+color.hex: #ffffff
+
+;; Using anonymous-record type variant
+-- ftd.text: Hello
+color.dl: blue
+```
+
 ## Lists
 
 ```ftd
