@@ -1873,6 +1873,28 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                              }
                             ),
                             (
+                                "text-strong".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_COLOR.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([(
+                                            "light".to_string(),
+                                            ftd::interpreter2::PropertyValue::Value {
+                                                value:
+                                                ftd::interpreter2::Value::String {
+                                                    text: "#ffffff".to_string(),
+                                                },
+                                                is_mutable: false,
+                                                line_number: 0,
+                                            }
+                                        )])
+                                            .collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
                                 "shadow".to_string(),
                                 ftd::interpreter2::PropertyValue::Value {
                                     value: ftd::interpreter2::Value::Record {

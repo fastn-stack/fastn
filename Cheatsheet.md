@@ -694,7 +694,9 @@ Response JSON:
 
 # Default Variable
 
-# `inherited.types`
+## `inherited.types`
+
+The `inherited.types` variable is of type `ftd.type-data` which is a record.
 
 ```ftd
 -- record type-data:
@@ -757,20 +759,160 @@ In `inherited.types` variable, value of all the fields is same for both
   line-height: 16
   weight: 400
 
-
 - `blockquote`:
   size: 14
   line-height: 16
   weight: 400
-
 
 - `label-big`:
   size: 16
   line-height: 22
   weight: 400
 
-
 - `label-small`:
   size: 14
   line-height: 16
   weight: 400
+
+
+## `inherited.colors`
+
+The `inherited.colors` variable is of type `ftd.color-scheme` which is a record.
+
+```ftd
+-- record color-scheme:
+ftd.background-colors background:
+ftd.color border:
+ftd.color border-strong:
+ftd.color text:
+ftd.color text-strong:
+ftd.color shadow:
+ftd.color scrim:
+ftd.cta-colors cta-primary:
+ftd.cta-colors cta-secondary:
+ftd.cta-colors cta-tertiary:
+ftd.cta-colors cta-danger:
+ftd.pst accent:
+ftd.btb error:
+ftd.btb success:
+ftd.btb info:
+ftd.btb warning:
+ftd.custom-colors custom:
+
+-- record background-colors:
+ftd.color base:
+ftd.color step-1:
+ftd.color step-2:
+ftd.color overlay:
+ftd.color code:
+
+-- record cta-colors:
+ftd.color base:
+ftd.color hover:
+ftd.color pressed:
+ftd.color disabled:
+ftd.color focused:
+ftd.color border:
+ftd.color text:
+
+-- record pst:
+ftd.color primary:
+ftd.color secondary:
+ftd.color tertiary:
+
+-- record btb:
+ftd.color base:
+ftd.color text:
+ftd.color border:
+
+-- record custom-colors:
+ftd.color one:
+ftd.color two:
+ftd.color three:
+ftd.color four:
+ftd.color five:
+ftd.color six:
+ftd.color seven:
+ftd.color eight:
+ftd.color nine:
+ftd.color ten:
+```
+
+The `inherited.colors` has following value:
+
+- `background`:
+  1. `base`: `#18181b`
+  2. `step-1`: `#141414`
+  3. `step-2`: `#585656`
+  4. `overlay`: `rgba(0, 0, 0, 0.8)`
+  3. `code`: `#2B303B`
+  
+- `border`: `#434547`
+- `border-strong`: `#919192`
+- `text`: `#a8a29e`
+- `text-strong`: `#ffffff`
+- `shadow`: `#007f9b`
+- `scrim`: `#007f9b`
+- `cta-primary`:
+  1. `base`: `#2dd4bf`
+  2. `hover`: `#2c9f90`
+  3. `pressed`: `#2cc9b5`
+  4. `disabled`: `rgba(44, 201, 181, 0.1)`
+  5. `focused`: `#2cbfac`
+  6. `border`: `#2b8074`
+  7. `text`: `#feffff`
+- `cta-secondary`:
+  1. `base`: `#4fb2df`
+  2. `hover`: `#40afe1`
+  3. `pressed`: `#4fb2df`
+  4. `disabled`: `rgba(79, 178, 223, 0.1)`
+  5. `focused`: `#4fb1df`
+  6. `border`: `#209fdb`
+  7. `text`: `#ffffff`
+- `cta-tertiary`:
+  1. `base`: `#556375`
+  2. `hover`: `#c7cbd1`
+  3. `pressed`: `#3b4047`
+  4. `disabled`: `rgba(85, 99, 117, 0.1)`
+  5. `focused`: `#e0e2e6`
+  6. `border`: `#e2e4e7`
+  7. `text`: `#ffffff`
+- `cta-danger`:
+  1. `base`: `#1C1B1F`
+  2. `hover`: `#1C1B1F`
+  3. `pressed`: `#1C1B1F`
+  4. `disabled`: `#1C1B1F`
+  5. `focused`: `#1C1B1F`
+  6. `border`: `#1C1B1F`
+  7. `text`: `#1C1B1F`
+- `accent`:
+  1. `primary`: `#2dd4bf`
+  2. `secondary`: `#4fb2df`
+  3. `tertiary`: `#c5cbd7`
+- `error`:
+  1. `base`: `#f5bdbb`
+  2. `text`: `#c62a21`
+  3. `border`: `#df2b2b`
+- `success`:
+  1. `base`: `#e3f0c4`
+  2. `text`: `#467b28`
+  3. `border`: `#3d741f`
+- `info`:
+  1. `base`: `#c4edfd`
+  2. `text`: `#205694`
+  3. `border`: `#205694`
+- `warning`:
+  1. `base`: `#fbefba`
+  2. `text`: `#966220`
+  3. `border`: `#966220`
+- `custom`:
+  1. `one`: `#ed753a`
+  1. `two`: `#f3db5f`
+  1. `three`: `#8fdcf8`
+  1. `four`: `#7a65c7`
+  1. `five`: `#eb57be`
+  1. `six`: `#ef8dd6`
+  1. `seven`: `#7564be`
+  1. `eight`: `#d554b3`
+  1. `nine`: `#ec8943`
+  1. `ten`: `#da7a4a`
