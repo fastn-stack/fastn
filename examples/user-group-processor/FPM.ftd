@@ -13,3 +13,10 @@ discord-channel: discord-server-id
 title: Foo People
 github-team: FifthTry/foo
 
+
+-- fpm.sitemap:
+
+# Home: /
+readers: fifthtry-people
+readers: foo-people
+confidential: false

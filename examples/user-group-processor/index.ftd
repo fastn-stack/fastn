@@ -33,9 +33,12 @@ $loop$: $print-user-group.group.group-members as $member
 
 -- end: print-user-group
 
+
+
+
+
 ;; User Groups
 -- ftd.text: User Groups
-
 
 -- fpm.user-group-compat list groups:
 $processor$: processors.user-groups
@@ -45,7 +48,10 @@ $processor$: processors.user-groups
 $loop$: $groups as $group
 group: $group
 
+
 -- end: print-user-group
+
+
 
 
 
@@ -59,5 +65,36 @@ id: fifthtry-people
 -- print-user-group:
 group: $user-group
 
-
 -- end: print-user-group
+
+
+
+
+
+;; Get Identities
+-- ftd.text: All The Identities Of The Current document
+
+-- string list identities:
+$processor$: processors.get-identities
+
+
+-- print-identity:
+$loop$: $identities as $name
+name: $name
+
+
+-- component print-identity:
+string name:
+
+-- ftd.column:
+margin.px: 10
+border-width.px: 1
+padding.px: 5
+background.solid: yellow
+
+-- ftd.text: $print-identity.name
+
+-- end: ftd.column
+
+-- end: print-identity
+
