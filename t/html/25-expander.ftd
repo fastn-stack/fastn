@@ -47,7 +47,7 @@ padding.px: 10
 border-width.px: 1
 width: fill-container
 spacing-mode: space-between
-$on-click$: toggle($a=$box.open)
+$on-click$: $toggle($value = $box.open)
 
 -- ftd.text: $box.title
 -- ftd.text: O

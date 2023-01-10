@@ -1163,38 +1163,8 @@ return (if((e>b),c,d));
 
 
 
-function foo__increment___main(a){
-return (a.value += 1);
-}
-
-
-
-function foo__increment_by___main(a,v){
-return (a.value += v);
-}
-
-
-
 function foo__length___main(a){
 return (len(a));
-}
-
-
-
-function foo__set_bool___main(a,v){
-a.value = v
-}
-
-
-
-function foo__set_integer___main(a,v){
-a.value = v
-}
-
-
-
-function foo__set_string___main(a,v){
-a.value = v
 }
 
 
@@ -1205,11 +1175,39 @@ return (a+b);
 
 
 
-function foo__toggle___main(a){
-a.value = !a.value
+function ftd__increment___main(a){
+return (a.value += 1);
 }
 
 
+
+function ftd__increment_by___main(a,v){
+return (a.value += v);
+}
+
+
+
+function ftd__set_bool___main(a,v){
+a.value = v
+}
+
+
+
+function ftd__set_integer___main(a,v){
+a.value = v
+}
+
+
+
+function ftd__set_string___main(a,v){
+a.value = v
+}
+
+
+
+function ftd__toggle___main(a){
+a.value = !a.value
+}
 
 
 window.node_change_main = {};
