@@ -1157,7 +1157,7 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "white-space",
             ftd::node::Value::from_executor_value(
-                self.white_space.value.as_ref().map(|v| v.to_string()),
+                self.white_space.value.as_ref().map(|v| v.to_css_string()),
                 self.white_space.to_owned(),
                 None,
                 doc_id,

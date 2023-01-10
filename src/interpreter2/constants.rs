@@ -133,3 +133,11 @@ pub const FTD_REGION_H3: &str = "ftd#region.h3";
 pub const FTD_REGION_H4: &str = "ftd#region.h4";
 pub const FTD_REGION_H5: &str = "ftd#region.h5";
 pub const FTD_REGION_H6: &str = "ftd#region.h6";
+
+pub const FTD_WHITESPACE: &str = "ftd#white-space";
+pub const FTD_WHITESPACE_NORMAL: &str = "ftd#white-space.normal";
+pub const FTD_WHITESPACE_NOWRAP: &str = "ftd#white-space.nowrap";
+pub const FTD_WHITESPACE_PRE: &str = "ftd#white-space.pre";
+pub const FTD_WHITESPACE_PREWRAP: &str = "ftd#white-space.pre-wrap";
+pub const FTD_WHITESPACE_PRELINE: &str = "ftd#white-space.pre-line";
+pub const FTD_WHITESPACE_BREAKSPACES: &str = "ftd#white-space.break-spaces";
