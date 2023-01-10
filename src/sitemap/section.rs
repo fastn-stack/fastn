@@ -18,7 +18,7 @@ pub struct Section {
     /// `title` contains the title of the document. This can be specified inside
     /// document itself.
     ///
-    /// Example: In the foo.ftd document
+    /// Example: In the inheritance.ftd document
     ///
     /// ```ftd
     /// -- fpm.info DOCUMENT_INFO:
@@ -30,7 +30,7 @@ pub struct Section {
     /// In the case where the title is not defined as above, the title would be
     /// according to heading priority
     ///
-    /// Example: In the foo.ftd document
+    /// Example: In the inheritance.ftd document
     ///
     /// ```ftd
     ///
@@ -72,7 +72,7 @@ pub struct Section {
     /// message: Hello World
     /// ```
     ///
-    /// In `foo.ftd`
+    /// In `inheritance.ftd`
     ///
     /// ```ftd
     ///
@@ -84,7 +84,7 @@ pub struct Section {
     /// ```
     ///
     /// The above example injects the value `true` and `Hello World`
-    /// to the variables `show` and `message` respectively in foo.ftd
+    /// to the variables `show` and `message` respectively in inheritance.ftd
     /// and then renders it.
     //    pub extra_data: Vec<(String, String)>,
     pub extra_data: std::collections::BTreeMap<String, String>,

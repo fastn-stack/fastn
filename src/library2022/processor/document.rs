@@ -15,13 +15,18 @@ pub fn process_readers<'a>(
 
     // sitemap document otherwise use current document
     // TODO: Possibly bug if we define different document as key in the sitemap
+
+    dbg!(&document_id);
+
     let document = headers
         .get_optional_string_by_key("document", doc.name, value.line_number())?
         .unwrap_or_else(|| document_id.to_string());
 
+    let document_name = config.document_name_with_default(document.as_str());
+
     let readers = match config.package.sitemap.as_ref() {
         Some(s) => s
-            .readers(document.as_str(), &config.package.groups)
+            .readers(document_name.as_str(), &config.package.groups)
             .0
             .into_iter()
             .map(|g| g.to_group_compat())
@@ -29,7 +34,7 @@ pub fn process_readers<'a>(
         None => vec![],
     };
 
-    doc.from_json(&readers, &kind, value.line_number())
+    doc.from_json(dbg!(&readers), &kind, value.line_number())
 }
 
 pub fn process_writers<'a>(
@@ -52,9 +57,10 @@ pub fn process_writers<'a>(
         .get_optional_string_by_key("document", doc.name, value.line_number())?
         .unwrap_or_else(|| document_id.to_string());
 
+    let document_name = config.document_name_with_default(document.as_str());
     let writers = match config.package.sitemap.as_ref() {
         Some(s) => s
-            .writers(document.as_str(), &config.package.groups)
+            .writers(document_name.as_str(), &config.package.groups)
             .into_iter()
             .map(|g| g.to_group_compat())
             .collect_vec(),

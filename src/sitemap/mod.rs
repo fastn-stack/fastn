@@ -1277,6 +1277,10 @@ impl Sitemap {
     ) -> (Vec<&'a fpm::user_group::UserGroup>, bool) {
         use itertools::Itertools;
 
+        dbg!(doc_path);
+        dbg!(groups);
+        dbg!(&self.sections);
+
         for section in self.sections.iter() {
             let (readers, confidential) = find_section(section, doc_path);
             if readers.is_empty() {

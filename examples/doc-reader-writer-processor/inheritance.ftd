@@ -1,0 +1,46 @@
+-- import: fpm
+-- import: fpm/processors
+
+
+-- ftd.text: Hello world
+
+
+
+-- fpm.user-group-compat list readers:
+$processor$: processors.document-readers
+
+
+;; key-value-data list group-members:
+
+-- component print-user-group:
+fpm.user-group-compat group:
+
+-- ftd.column:
+margin.px: 10
+
+-- ftd.text: Group Title
+
+-- ftd.text: $print-user-group.group.title
+
+
+-- ftd.text: Group ID
+margin-top.px: 10
+
+-- ftd.text: $print-user-group.group.id
+
+-- ftd.text: Identities
+margin-top.px: 10
+
+-- ftd.text: $member.key
+$loop$: $print-user-group.group.group-members as $member
+
+-- end: ftd.column
+
+-- end: print-user-group
+
+
+-- print-user-group:
+$loop$: $readers as $reader
+group: $reader
+
+-- end: print-user-group
