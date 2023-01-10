@@ -1,0 +1,13 @@
+-- import: fpm
+
+-- fpm.package: request-data-processor
+download-base-url: https://www.github.com/
+
+
+-- fpm.dynamic-urls:
+
+# Home
+
+- TOC:
+url: /<string:name>/<string:age>/
+document: named-params.ftd

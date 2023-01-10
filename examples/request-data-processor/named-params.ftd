@@ -1,0 +1,17 @@
+-- import: fpm/processors
+
+
+-- ftd.text: Hello world
+
+-- record query:
+string name:
+string age:
+
+-- query query-data:
+$processor$: processors.request-data
+
+
+-- ftd.text: $query-data.name
+
+-- ftd.text: $query-data.age
+
