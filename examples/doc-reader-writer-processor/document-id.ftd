@@ -1,0 +1,69 @@
+-- import: fpm
+-- import: fpm/processors
+
+
+-- ftd.text: Document ID Related Processors
+margin.px: 10
+padding.px: 10
+
+
+-- ftd.text: Document ID
+margin.px: 10
+padding.px: 10
+
+
+-- string document-id:
+$processor$: processors.document-id
+
+-- ftd.text: $document-id
+margin.px: 10
+padding.px: 10
+
+
+
+
+
+
+
+-- ftd.text: Document Name
+margin.px: 10
+padding.px: 10
+
+
+-- string document-name:
+$processor$: processors.document-name
+
+-- ftd.text: $document-name
+margin.px: 10
+padding.px: 10
+
+
+
+
+
+-- ftd.text: Document Full ID
+margin.px: 10
+padding.px: 10
+
+
+-- string document-full-id:
+$processor$: processors.document-full-id
+
+-- ftd.text: $document-full-id
+margin.px: 10
+padding.px: 10
+
+
+
+-- ftd.text: Document Suffix
+margin.px: 10
+padding.px: 10
+
+
+-- optional string document-suffix: some
+$processor$: processors.document-suffix
+
+-- ftd.text: $document-suffix
+if: { document-suffix != NULL }
+margin.px: 10
+padding.px: 10
