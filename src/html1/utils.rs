@@ -26,14 +26,7 @@ pub fn trim_brackets(s: &str) -> String {
 }
 
 pub(crate) fn name_with_id(s: &str, id: &str) -> String {
-    if is_ftd_function(s) {
-        return s.to_string();
-    }
     format!("{}:{}", s, id)
-}
-
-pub(crate) fn is_ftd_function(s: &str) -> bool {
-    s.starts_with("ftd#")
 }
 
 pub(crate) fn function_name_to_js_function(s: &str) -> String {

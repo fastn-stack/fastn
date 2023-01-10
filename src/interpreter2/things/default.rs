@@ -112,9 +112,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(image_function()),
         ),
         (
-            "foo#toggle".to_string(),
+            "ftd#toggle".to_string(),
             ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
-                name: "foo#toggle".to_string(),
+                name: "ftd#toggle".to_string(),
                 return_kind: ftd::interpreter2::KindData {
                     kind: ftd::interpreter2::things::kind::Kind::Void,
                     caption: false,
@@ -143,9 +143,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             })
         ),
         (
-            "foo#increment".to_string(),
+            "ftd#increment".to_string(),
             ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
-                name: "foo#increment".to_string(),
+                name: "ftd#increment".to_string(),
                 return_kind: ftd::interpreter2::KindData {
                     kind: ftd::interpreter2::things::kind::Kind::Void,
                     caption: false,
@@ -174,9 +174,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             })
         ),
         (
-            "foo#increment-by".to_string(),
+            "ftd#increment-by".to_string(),
             ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
-                name: "foo#increment-by".to_string(),
+                name: "ftd#increment-by".to_string(),
                 return_kind: ftd::interpreter2::KindData {
                     kind: ftd::interpreter2::things::kind::Kind::Void,
                     caption: false,
@@ -216,9 +216,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             })
         ),
         (
-            "foo#set-bool".to_string(),
+            "ftd#set-bool".to_string(),
             ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
-                name: "foo#set-bool".to_string(),
+                name: "ftd#set-bool".to_string(),
                 return_kind: ftd::interpreter2::KindData {
                     kind: ftd::interpreter2::things::kind::Kind::Void,
                     caption: false,
@@ -258,9 +258,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             })
         ),
         (
-            "foo#set-string".to_string(),
+            "ftd#set-string".to_string(),
             ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
-                name: "foo#set-string".to_string(),
+                name: "ftd#set-string".to_string(),
                 return_kind: ftd::interpreter2::KindData {
                     kind: ftd::interpreter2::things::kind::Kind::Void,
                     caption: false,
@@ -300,9 +300,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             })
         ),
         (
-            "foo#set-integer".to_string(),
+            "ftd#set-integer".to_string(),
             ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
-                name: "foo#set-integer".to_string(),
+                name: "ftd#set-integer".to_string(),
                 return_kind: ftd::interpreter2::KindData {
                     kind: ftd::interpreter2::things::kind::Kind::Void,
                     caption: false,
@@ -1605,16 +1605,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 conditional_value: vec![],
                 line_number: 0,
                 is_static: false,
-            }),
-        ),
-        (
-            "ftd#enable-dark-mode".to_string(),
-            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
-                name: "ftd#enable-dark-mode".to_string(),
-                return_kind: ftd::interpreter2::Kind::void().into_kind_data(),
-                arguments: vec![],
-                expression: vec![],
-                line_number: 0,
             }),
         ),
         (
