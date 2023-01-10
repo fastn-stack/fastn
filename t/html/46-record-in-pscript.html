@@ -11,11 +11,12 @@
 "name": "Arpita"
 },
 "foo#show-person:person-instance:1": null,
+"ftd#breakpoint-width": {
+"mobile": 768
+},
 "ftd#dark-mode": false,
-"ftd#desktop-breakpoint": 1440,
 "ftd#device": "desktop",
 "ftd#follow-system-dark-mode": true,
-"ftd#mobile-breakpoint": 768,
 "ftd#system-dark-mode": false,
 "inherited#colors": {
 "accent": {
@@ -760,8 +761,7 @@ const DARK_MODE_CLASS = "fpm-dark";
 const MOBILE_CLASS = "ftd-mobile";
 const XL_CLASS = "ftd-xl";
 const FTD_DEVICE = "ftd#device";
-const FTD_MOBILE_BREAKPOINT = "ftd#mobile-breakpoint";
-const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
+const FTD_BREAKPOINT_WIDTH = "ftd#breakpoint-width";
 const FTD_THEME_COLOR = "ftd#theme-color";
 const THEME_COLOR_META = "theme-color";
 const MARKDOWN_COLOR = "ftd#markdown-color";
@@ -859,8 +859,7 @@ let width = window.innerWidth;
 // another function detect_orientation(), "landscape" and "portrait" etc,
 // and instead of setting `fpm#mobile: boolean` we set `fpm-ui#device`
 // and `fpm#view-port-orientation` etc.
-let mobile_breakpoint = window.ftd.get_value("main", FTD_MOBILE_BREAKPOINT);
-let desktop_breakpoint = window.ftd.get_value("main", FTD_DESKTOP_BREAKPOINT);
+let mobile_breakpoint = window.ftd.get_value("main", FTD_BREAKPOINT_WIDTH + ".mobile");
 if (width <= mobile_breakpoint) {
 document.body.classList.add(MOBILE_CLASS);
 if (document.body.classList.contains(XL_CLASS)) {
@@ -868,19 +867,19 @@ document.body.classList.remove(XL_CLASS);
 }
 return "mobile";
 }
-if (width > desktop_breakpoint) {
+/*if (width > desktop_breakpoint) {
 document.body.classList.add(XL_CLASS);
 if (document.body.classList.contains(MOBILE_CLASS)) {
 document.body.classList.remove(MOBILE_CLASS);
 }
 return "xl";
-}
+}*/
 if (document.body.classList.contains(MOBILE_CLASS)) {
 document.body.classList.remove(MOBILE_CLASS);
 }
-if (document.body.classList.contains(XL_CLASS)) {
+/*if (document.body.classList.contains(XL_CLASS)) {
 document.body.classList.remove(XL_CLASS);
-}
+}*/
 return "desktop";
 }
 /*

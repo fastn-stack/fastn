@@ -5520,36 +5520,49 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             })
         ),
         (
-            "ftd#mobile-breakpoint".to_string(),
-            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
-                name: "ftd#mobile-breakpoint".to_string(),
-                kind: ftd::interpreter2::Kind::integer().into_kind_data(),
-                mutable: true,
-                value: ftd::interpreter2::PropertyValue::Value {
-                    value: ftd::interpreter2::Value::Integer { value: 768 },
-                    is_mutable: true,
-                    line_number: 0,
-                },
-                conditional_value: vec![],
-                line_number: 0,
-                is_static: false,
-            }),
+            ftd::interpreter2::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
+            ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
+                name: ftd::interpreter2::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
+                fields: vec![ftd::interpreter2::Field {
+                    name: "mobile".to_string(),
+                    kind: ftd::interpreter2::Kind::integer().into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                }],
+                line_number: 0
+            })
         ),
         (
-            "ftd#desktop-breakpoint".to_string(),
+            ftd::interpreter2::FTD_BREAKPOINT_WIDTH.to_string(),
             ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
-                name: "ftd#desktop-breakpoint".to_string(),
-                kind: ftd::interpreter2::Kind::integer().into_kind_data(),
+                name: ftd::interpreter2::FTD_BREAKPOINT_WIDTH.to_string(),
+                kind: ftd::interpreter2::Kind::record
+                    (ftd::interpreter2::FTD_BREAKPOINT_WIDTH_DATA).into_kind_data(),
                 mutable: true,
                 value: ftd::interpreter2::PropertyValue::Value {
-                    value: ftd::interpreter2::Value::Integer { value: 1440 },
+                    value: ftd::interpreter2::Value::Record {
+                        name: ftd::interpreter2::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
+                        fields: std::iter::IntoIterator::into_iter([
+                            (
+                                "mobile".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Integer {
+                                        value: 768
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            )
+                        ]).collect()
+                    },
                     is_mutable: true,
-                    line_number: 0,
+                    line_number: 0
                 },
                 conditional_value: vec![],
                 line_number: 0,
-                is_static: false,
-            }),
+                is_static: false
+            })
         ),
     ])
     .collect()

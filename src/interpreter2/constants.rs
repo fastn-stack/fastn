@@ -1,3 +1,6 @@
+pub const FTD_BREAKPOINT_WIDTH: &str = "ftd#breakpoint-width";
+pub const FTD_BREAKPOINT_WIDTH_DATA: &str = "ftd#breakpoint-width-data";
+
 pub const FTD_LENGTH: &str = "ftd#length";
 pub const FTD_LENGTH_PX: &str = "ftd#length.px";
 pub const FTD_LENGTH_PERCENT: &str = "ftd#length.percent";
