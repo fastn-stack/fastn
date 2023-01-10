@@ -149,8 +149,10 @@ language: en
   url: /expander/components/
 - Part 4: Event Handling
   url: /expander/events/
-- Bonus Video: Layout
-  url: /expander/layout/
+- Part 5: Publish a package
+  url: /expander/publish/
+- Part 6: Reuse the package
+  url: /expander/reuse/
 
 
 # News: /news/
