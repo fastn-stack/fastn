@@ -1,0 +1,15 @@
+-- import: fpm
+
+-- fpm.package: user-group-processor
+download-base-url: https://www.github.com/
+
+
+-- fpm.user-group: fifthtry-people
+title: FifthTry People
+github-team: FifthTry/everyone
+discord-channel: discord-server-id
+
+-- fpm.user-group: foo-people
+title: Foo People
+github-team: FifthTry/foo
+

@@ -4,6 +4,7 @@ pub(crate) mod http;
 pub(crate) mod request_data;
 pub(crate) mod sitemap;
 pub(crate) mod toc;
+pub(crate) mod user_group;
 
 // pub enum Processor {
 //     Toc,

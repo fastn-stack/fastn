@@ -224,7 +224,7 @@ impl Library2022 {
                 &self.config,
                 self.document_id.as_str(),
             ),
-
+            "user-groups" => processor::user_group::process(value, kind, doc, &self.config),
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

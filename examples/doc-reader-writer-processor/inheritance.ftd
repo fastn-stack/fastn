@@ -40,6 +40,9 @@ fpm.user-group-compat group:
 
 -- ftd.column:
 margin.px: 10
+border-width.px: 1
+padding.px: 5
+background.solid: yellow
 
 -- ftd.text: Group Title
 

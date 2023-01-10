@@ -363,6 +363,7 @@ pub async fn resolve_import_2022<'a>(
                 "request-data".to_string(),
                 "document-readers".to_string(),
                 "document-writers".to_string(),
+                "user-groups".to_string(),
             ],
         )
     } else if module.ends_with("assets") {
