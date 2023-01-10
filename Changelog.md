@@ -2,7 +2,7 @@
 
 ## 10th January 2023
 
-- [Added white-space css](https://github.com/ftd-lang/ftd/commit/e0ddd86abd0a31cc5039260ce49b589a6a69ddcb)
+- [Added white-space css](https://github.com/ftd-lang/ftd/pull/523/commits/af5b339f1b6ff04a0738dbbfda4186d57d27fd27)
 
 ## 9th January 2023
 

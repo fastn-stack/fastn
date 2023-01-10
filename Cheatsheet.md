@@ -339,7 +339,24 @@ This is a body text.
 - `border-bottom-left-radius`: `optional ftd.length`
 - `border-bottom-right-radius`: `optional ftd.length`
 - `region`: `optional ftd.region`
-- `white-space`: `optional string`
+- `white-space`: `optional ftd.white-space`
+
+**`ftd.white-space`**
+
+```ftd 
+
+-- or-type white-space:
+
+-- constant string normal: normal
+-- constant string nowrap: nowrap
+-- constant string pre: pre 
+-- constant string pre-wrap: pre-wrap
+-- constant string pre-line: pre-line
+-- constant string break-spaces: break-spaces
+
+-- end: length
+
+```
 
 **`ftd.length`**
 
