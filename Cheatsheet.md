@@ -848,6 +848,22 @@ Response JSON:
 
 # Default Variable
 
+## `ftd.device`
+
+The `ftd.device` variable is a mutable variable of type `ftd.
+device-data` which is an or-type.
+
+```ftd
+-- or-type device-data:
+
+-- constant string mobile: mobile
+-- constant string desktop: desktop
+
+-- end: device-data
+
+-- ftd.device-data $device: desktop
+```
+
 ## `ftd.breakpoint-width`
 
 The `ftd.breakpoint-width` variable is a mutable variable of type `ftd.
@@ -857,7 +873,7 @@ breakpoint-width-data` which is a record.
 -- record breakpoint-width-data:
 integer mobile:
 
--- ftd.breakpoint-width-data breakpoint-width:
+-- ftd.breakpoint-width-data $breakpoint-width:
 mobile: 768
 ```
 
