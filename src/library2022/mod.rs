@@ -1,7 +1,4 @@
-pub(crate) mod get_data_processor;
-pub(crate) mod http_processor;
 pub(crate) mod processor;
-pub(crate) mod toc_processor;
 
 #[derive(Default, Debug, serde::Serialize)]
 pub struct KeyValueData {
@@ -195,7 +192,7 @@ impl Library2022 {
         Ok(())
     }
 
-    /// process the processor and return the processor's output
+    /// process the $processor$ and return the processor's output
     pub async fn process<'a>(
         &'a self,
         ast: ftd::ast::AST,
@@ -205,9 +202,9 @@ impl Library2022 {
         let line_number = ast.line_number();
         let (_processor, value, kind) = get_processor_data(ast, doc)?;
         match processor.as_str() {
-            "http" => http_processor::process(value, kind, doc, &self.config).await,
-            "toc" => toc_processor::process(value, kind, doc, &self.config),
-            "get-data" => get_data_processor::process(value, kind, doc, &self.config),
+            "http" => processor::http::process(value, kind, doc, &self.config).await,
+            "toc" => processor::toc::process(value, kind, doc, &self.config),
+            "get-data" => processor::get_data::process(value, kind, doc, &self.config),
             "sitemap" => processor::sitemap::process(value, kind, doc, &self.config),
             "full-sitemap" => {
                 processor::sitemap::full_sitemap_process(value, kind, doc, &self.config)

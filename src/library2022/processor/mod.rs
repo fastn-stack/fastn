@@ -1,6 +1,9 @@
 pub(crate) mod document;
+pub(crate) mod get_data;
+pub(crate) mod http;
 pub(crate) mod request_data;
 pub(crate) mod sitemap;
+pub(crate) mod toc;
 
 // pub enum Processor {
 //     Toc,
