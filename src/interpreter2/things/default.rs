@@ -1608,24 +1608,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            "ftd#device".to_string(),
-            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
-                name: "ftd#device".to_string(),
-                kind: ftd::interpreter2::Kind::string().into_kind_data(),
-                mutable: true,
-                value: ftd::interpreter2::PropertyValue::Value {
-                    value: ftd::interpreter2::Value::String {
-                        text: "desktop".to_string(),
-                    },
-                    is_mutable: true,
-                    line_number: 0,
-                },
-                conditional_value: vec![],
-                line_number: 0,
-                is_static: false,
-            }),
-        ),
-        (
             ftd::interpreter2::FTD_BACKGROUND_COLOR.to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
                 name: ftd::interpreter2::FTD_BACKGROUND_COLOR.to_string(),
@@ -5784,6 +5766,57 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 is_static: false
             })
         ),
+        (
+            ftd::interpreter2::FTD_DEVICE_DATA.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_DEVICE_DATA.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_DEVICE_DATA_MOBILE,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("mobile")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_DEVICE_DATA_DESKTOP,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("desktop")
+                                 .into_property_value(false, 0),),
+                        0,
+                    )),
+                ],
+                line_number: 0
+            })
+        ),
+        (
+            ftd::interpreter2::FTD_DEVICE.to_string(),
+            ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                name: ftd::interpreter2::FTD_DEVICE.to_string(),
+                kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_DEVICE_DATA).into_kind_data(),
+                mutable: true,
+                value: ftd::interpreter2::PropertyValue::Value {
+                    value: ftd::interpreter2::Value::OrType {
+                        name: ftd::interpreter2::FTD_DEVICE_DATA.to_string(),
+                        variant: ftd::interpreter2::FTD_DEVICE_DATA_DESKTOP.to_string(),
+                        full_variant: ftd::interpreter2::FTD_DEVICE_DATA_DESKTOP.to_string(),
+                        value: Box::new(ftd::interpreter2::Value::new_string("desktop")
+                            .into_property_value(false, 0))
+                    },
+                    is_mutable: true,
+                    line_number: 0
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false
+            })
+        )
     ])
     .collect()
 }

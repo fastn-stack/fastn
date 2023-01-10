@@ -1,6 +1,11 @@
 pub const FTD_BREAKPOINT_WIDTH: &str = "ftd#breakpoint-width";
 pub const FTD_BREAKPOINT_WIDTH_DATA: &str = "ftd#breakpoint-width-data";
 
+pub const FTD_DEVICE: &str = "ftd#device";
+pub const FTD_DEVICE_DATA: &str = "ftd#device-data";
+pub const FTD_DEVICE_DATA_MOBILE: &str = "ftd#device-data.mobile";
+pub const FTD_DEVICE_DATA_DESKTOP: &str = "ftd#device-data.desktop";
+
 pub const FTD_LENGTH: &str = "ftd#length";
 pub const FTD_LENGTH_PX: &str = "ftd#length.px";
 pub const FTD_LENGTH_PERCENT: &str = "ftd#length.percent";

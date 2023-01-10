@@ -6,6 +6,7 @@
 
 -- ftd.text: Hello World
 padding.px if { flag }: 50
+cursor: pointer
 if: { flag }
 
 -- end: foo

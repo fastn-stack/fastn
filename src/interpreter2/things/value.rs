@@ -1510,6 +1510,10 @@ impl Value {
                     Ok(ftd::evalexpr::Value::Empty)
                 }
             }
+            ftd::interpreter2::Value::OrType { value, .. } => {
+                let line_number = value.line_number();
+                value.resolve(doc, line_number)?.into_evalexpr_value(doc)
+            }
             ftd::interpreter2::Value::Record { .. } => {
                 if let Ok(Some(value)) = ftd::interpreter2::utils::get_value(doc, &self) {
                     Ok(ftd::evalexpr::Value::String(value.to_string()))

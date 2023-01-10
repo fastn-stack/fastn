@@ -105,6 +105,40 @@
               "value": {
                 "Value": {
                   "value": {
+                    "OrType": {
+                      "name": "ftd#cursor",
+                      "variant": "ftd#cursor.pointer",
+                      "full_variant": "ftd#cursor.pointer",
+                      "value": {
+                        "Value": {
+                          "value": {
+                            "String": {
+                              "text": "pointer"
+                            }
+                          },
+                          "is_mutable": false,
+                          "line_number": 0
+                        }
+                      }
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 9
+                }
+              },
+              "source": {
+                "Header": {
+                  "name": "cursor",
+                  "mutable": false
+                }
+              },
+              "condition": null,
+              "line_number": 9
+            },
+            {
+              "value": {
+                "Value": {
+                  "value": {
                     "String": {
                       "text": "Hello World"
                     }
@@ -144,11 +178,11 @@
                   },
                   "source": "Global",
                   "is_mutable": false,
-                  "line_number": 9
+                  "line_number": 10
                 }
               }
             },
-            "line_number": 9
+            "line_number": 10
           },
           "events": [],
           "children": [],
@@ -175,16 +209,16 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 16
+            "line_number": 17
           }
         ],
         "expression": [
           {
             "expression": "a += 1",
-            "line_number": 20
+            "line_number": 21
           }
         ],
-        "line_number": 15
+        "line_number": 16
       }
     },
     "foo#num": {
@@ -230,16 +264,16 @@
             },
             "mutable": true,
             "value": null,
-            "line_number": 22
+            "line_number": 23
           }
         ],
         "expression": [
           {
             "expression": "a = !a;",
-            "line_number": 28
+            "line_number": 29
           }
         ],
-        "line_number": 21
+        "line_number": 22
       }
     }
   },
@@ -338,9 +372,44 @@
                 "properties": []
               },
               "cursor": {
-                "value": null,
-                "line_number": null,
-                "properties": []
+                "value": "Pointer",
+                "line_number": 9,
+                "properties": [
+                  {
+                    "value": {
+                      "Value": {
+                        "value": {
+                          "OrType": {
+                            "name": "ftd#cursor",
+                            "variant": "ftd#cursor.pointer",
+                            "full_variant": "ftd#cursor.pointer",
+                            "value": {
+                              "Value": {
+                                "value": {
+                                  "String": {
+                                    "text": "pointer"
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 0
+                              }
+                            }
+                          }
+                        },
+                        "is_mutable": false,
+                        "line_number": 9
+                      }
+                    },
+                    "source": {
+                      "Header": {
+                        "name": "cursor",
+                        "mutable": false
+                      }
+                    },
+                    "condition": null,
+                    "line_number": 9
+                  }
+                ]
               },
               "classes": {
                 "value": [],
@@ -681,7 +750,7 @@
                       },
                       "source": "Global",
                       "is_mutable": false,
-                      "line_number": 9
+                      "line_number": 10
                     }
                   },
                   "num": {
@@ -694,7 +763,7 @@
                       },
                       "source": "Global",
                       "is_mutable": false,
-                      "line_number": 30
+                      "line_number": 31
                     }
                   }
                 },
