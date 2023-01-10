@@ -339,7 +339,7 @@ This is a body text.
 - `border-bottom-left-radius`: `optional ftd.length`
 - `border-bottom-right-radius`: `optional ftd.length`
 - `region`: `optional ftd.region`
-
+- `white-space`: `optional string`
 
 **`ftd.length`**
 
