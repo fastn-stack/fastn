@@ -78,6 +78,10 @@ fn fpm_ftd() -> &'static str {
     include_str!("../ftd/fpm.ftd")
 }
 
+fn processor_ftd() -> &'static str {
+    include_str!("../ftd/processors.ftd")
+}
+
 fn design_ftd() -> &'static str {
     include_str!("../ftd/design.ftd")
 }

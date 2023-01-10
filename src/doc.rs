@@ -352,7 +352,7 @@ pub async fn resolve_import_2022<'a>(
         ("".to_string(), vec!["time".to_string()], vec![])
     } else if module.eq("fpm/processors") {
         (
-            "".to_string(),
+            fpm::processor_ftd().to_string(),
             vec![],
             vec![
                 "http".to_string(),
