@@ -10,7 +10,7 @@
 
 -- ftd.text: $s
 
--- ftd.text: Increment x by 1
+/-- ftd.text: Increment x by 1
 $on-click$: increment($a = $x)
 
 -- ftd.text: Increment x by 5
@@ -26,4 +26,4 @@ $on-click$: set-bool($a = $b, v = false)
 $on-click$: set-integer($a = $x, v = 100)
 
 -- ftd.boolean: $b
-$on-click$: toggle($a = $b)
+$on-click$: $ftd.toggle($a = $b)
