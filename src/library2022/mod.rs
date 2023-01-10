@@ -1,4 +1,5 @@
 pub(crate) mod processor;
+pub(crate) mod utils;
 
 #[derive(Default, Debug, serde::Serialize)]
 pub struct KeyValueData {
@@ -228,6 +229,10 @@ impl Library2022 {
             "user-group-by-id" => {
                 processor::user_group::process_by_id(value, kind, doc, &self.config)
             }
+            "get-identities" => {
+                processor::user_group::get_identities(value, kind, doc, &self.config)
+            }
+
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,
