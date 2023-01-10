@@ -213,6 +213,20 @@ impl Library2022 {
                 processor::sitemap::full_sitemap_process(value, kind, doc, &self.config)
             }
             "request-data" => processor::request_data::process(value, kind, doc, &self.config),
+            "document-readers" => processor::document::process_readers(
+                value,
+                kind,
+                doc,
+                &self.config,
+                self.document_id.as_str(),
+            ),
+            "document-writers" => processor::document::process_writers(
+                value,
+                kind,
+                doc,
+                &self.config,
+                self.document_id.as_str(),
+            ),
 
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),

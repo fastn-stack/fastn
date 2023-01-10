@@ -361,6 +361,8 @@ pub async fn resolve_import_2022<'a>(
                 "sitemap".to_string(),
                 "full-sitemap".to_string(),
                 "request-data".to_string(),
+                "document-readers".to_string(),
+                "document-writers".to_string(),
             ],
         )
     } else if module.ends_with("assets") {
