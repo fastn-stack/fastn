@@ -266,6 +266,7 @@ impl Field {
         &mut self,
         doc: &mut ftd::interpreter2::TDoc,
         variant: &str,
+        line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<()>> {
         match self.kind.kind.mut_inner() {
             ftd::interpreter2::Kind::OrType {
@@ -290,7 +291,7 @@ impl Field {
                             variant, name
                         ),
                         doc_id: doc.name.to_string(),
-                        line_number: self.line_number,
+                        line_number,
                     })?;
 
                 check_variant_if_constant(or_variant, remaining, doc)?;
@@ -306,7 +307,7 @@ impl Field {
                     variant, t
                 ),
                 doc.name,
-                self.line_number,
+                line_number,
             ),
         }
     }

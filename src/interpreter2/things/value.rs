@@ -534,7 +534,11 @@ impl PropertyValue {
                 .trim()
                 .to_string();
             if !remaining.is_empty() {
-                try_ok_state!(field.update_with_or_type_variant(doc, remaining.as_str())?);
+                try_ok_state!(field.update_with_or_type_variant(
+                    doc,
+                    remaining.as_str(),
+                    value.line_number()
+                )?);
             }
 
             let property_value = try_ok_state!(PropertyValue::from_ast_value_with_argument(

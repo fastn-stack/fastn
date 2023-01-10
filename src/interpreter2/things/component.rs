@@ -708,7 +708,11 @@ impl Property {
                 }
 
                 if let Some(variant) = remaining {
-                    try_ok_state!(argument.update_with_or_type_variant(doc, variant.as_str())?);
+                    try_ok_state!(argument.update_with_or_type_variant(
+                        doc,
+                        variant.as_str(),
+                        ast_property.line_number
+                    )?);
                 }
 
                 Ok(ftd::interpreter2::StateWithThing::new_thing(argument))

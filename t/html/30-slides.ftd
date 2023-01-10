@@ -55,7 +55,6 @@ height.fixed.percent: 100
 background.solid: $step-1
 /background-image if {presentation.bgimage != NULL}: $presentation.bgimage
 /background-color if {presentation.bgimage = NULL}: $presentation.bgcolor
-id: hidden-screen-container	
 
 -- ftd.column:
 align-self: center
@@ -79,7 +78,6 @@ width.fixed.percent: 100
 height.fixed.percent: 350
 max-width.fixed.px: 1200
 align-self: center
-id: content
 
 -- panel:
 bgcolor: $presentation.panelBgColor
@@ -123,7 +121,6 @@ align-content: center
 
 -- ftd.column:	
 if: {!panel.showFullScreen}
-id: full-screen	
 /align: center	
 anchor: parent	
 right.px: 16
@@ -154,7 +151,6 @@ if: {panel.showFullScreen}
 anchor: parent	
 right.px: 16
 bottom.px: 8
-id: full-screen	
 
 -- ftd.image:	
 if:{!panel.active}
@@ -176,10 +172,8 @@ src: https://fifthtry.github.io/slides/-/fifthtry.github.io/slides/full-screen-m
 
 -- ftd.row:	
 align-content: center
-id: slots	
 
--- ftd.row:	
-id: left-arrow	
+-- ftd.row:
 align-content: center
 
 -- ftd.image:	
@@ -212,8 +206,7 @@ total: $panel.children-count
 current: $panel.currentNew
 /align: center	
 
--- ftd.row:	
-id: right-arrow	
+-- ftd.row:
 align-content: center
 
 -- ftd.image:	

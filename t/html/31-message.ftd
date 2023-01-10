@@ -49,14 +49,12 @@ integer pulltop: 0
 -- ftd.column:
 margin-bottom.px: 16 
 /append-at: msg-container
-id: message
 
 -- ftd.column:
 width.fixed.percent: 100
 
 -- ftd.row:
 width.fixed.percent: 100
-id: chat-right
 
 -- ftd.image:
 if: {!messageleft.roundavatar}
@@ -74,11 +72,10 @@ border-radius.px: 32
 -- ftd.column:
 border-width.px: 1
 border-color: $border-color
-background-color: $step-1
+background.solid: $step-1
 padding.px: 12
 border-radius.px: 4
 width.fixed.percent: 100
-id: msg-container
 
 -- ftd.text:
 text: $messageleft.title
@@ -118,7 +115,6 @@ integer pulltop: 0
 -- ftd.column:
 margin-bottom.px: 16 
 /append-at: msg-container
-id: message
 align-self: end
 
 -- ftd.column:
@@ -126,16 +122,14 @@ width.fixed.percent: 100
 
 -- ftd.row:
 width.fixed.percent: 100
-id: chat-right
 
 -- ftd.column:
 border-width.px: 1
 border-color: $border-color
-background-color: $step-1
+background.solid: $step-1
 padding.px: 12
 border-radius.px: 4
 width.fixed.percent: 100
-id: msg-container
 
 -- ftd.text:
 text: $messageright.title
