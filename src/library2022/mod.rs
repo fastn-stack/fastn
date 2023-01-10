@@ -232,6 +232,16 @@ impl Library2022 {
             "get-identities" => {
                 processor::user_group::get_identities(value, kind, doc, &self.config)
             }
+            "document-id" => processor::document::document_id(value, kind, doc, &self.config),
+            "document-full-id" => {
+                processor::document::document_full_id(value, kind, doc, &self.config)
+            }
+            "document-suffix" => {
+                processor::document::document_suffix(value, kind, doc, &self.config)
+            }
+            "document-name" => {
+                processor::document::document_name(value, kind, doc, &self.config).await
+            }
 
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),

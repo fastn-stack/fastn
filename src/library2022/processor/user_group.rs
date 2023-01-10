@@ -54,7 +54,7 @@ pub fn process_by_id<'a>(
 /// This is used to get all the identities of the current document
 pub fn get_identities<'a>(
     value: ftd::ast::VariableValue,
-    _kind: ftd::interpreter2::Kind,
+    kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
     config: &fpm::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
@@ -83,7 +83,7 @@ pub fn get_identities<'a>(
             })
             .collect_vec(),
         kind: ftd::interpreter2::KindData {
-            kind: ftd::interpreter2::Kind::String,
+            kind,
             caption: false,
             body: false,
         },

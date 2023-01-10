@@ -366,6 +366,10 @@ pub async fn resolve_import_2022<'a>(
                 "user-groups".to_string(),
                 "user-group-by-id".to_string(),
                 "get-identities".to_string(),
+                "document-id".to_string(),
+                "document-full-id".to_string(),
+                "document-suffix".to_string(),
+                "document-name".to_string(),
             ],
         )
     } else if module.ends_with("assets") {
