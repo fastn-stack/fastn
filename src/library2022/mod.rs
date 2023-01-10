@@ -212,6 +212,8 @@ impl Library2022 {
             "full-sitemap" => {
                 processor::sitemap::full_sitemap_process(value, kind, doc, &self.config)
             }
+            "request-data" => processor::request_data::process(value, kind, doc, &self.config),
+
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

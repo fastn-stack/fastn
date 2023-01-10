@@ -34,7 +34,7 @@ pub struct Config {
     pub global_ids: std::collections::HashMap<String, String>,
     // Related to current request, or per request
     pub extra_data: serde_json::Map<String, serde_json::Value>,
-    pub path_parameters: Vec<(String, ftd::Value)>,
+    pub named_parameters: Vec<(String, ftd::Value)>,
     pub current_document: Option<String>,
     pub request: Option<fpm::http::Request>, // TODO: It should only contain reference
     pub ftd_edition: FTDEdition,
@@ -749,7 +749,7 @@ impl Config {
             )
             .await?;
             self.current_document = Some(path.to_string());
-            self.path_parameters = path_params;
+            self.named_parameters = path_params;
             Ok(file)
         } else {
             // -/fifthtry.github.io/todos/add-todo/
@@ -1285,7 +1285,7 @@ impl Config {
             downloaded_assets: Default::default(),
             global_ids: Default::default(),
             request: req.map(ToOwned::to_owned),
-            path_parameters: vec![],
+            named_parameters: vec![],
             ftd_edition: FTDEdition::FTD2021,
             ftd_external_js: Default::default(),
             ftd_inline_js: Default::default(),

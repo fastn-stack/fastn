@@ -138,7 +138,7 @@ pub fn request_data_processor<'a>(
     let mut data = req.query().clone();
 
     let mut path_parameters = std::collections::HashMap::new();
-    for (name, value) in config.path_parameters.iter() {
+    for (name, value) in config.named_parameters.iter() {
         let json_value = value.to_serde_value().ok_or(ftd::p1::Error::ParseError {
             message: format!("ftd value cannot be parsed to json: name: {}", name),
             doc_id: doc.name.to_string(),

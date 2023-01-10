@@ -360,6 +360,7 @@ pub async fn resolve_import_2022<'a>(
                 "toc".to_string(),
                 "sitemap".to_string(),
                 "full-sitemap".to_string(),
+                "request-data".to_string(),
             ],
         )
     } else if module.ends_with("assets") {
