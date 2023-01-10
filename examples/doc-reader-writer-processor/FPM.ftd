@@ -1,0 +1,24 @@
+-- import: fpm
+
+-- fpm.package: doc-reader-writer-processor
+download-base-url: https://www.github.com/
+
+-- fpm.user-group: fifthtry-people
+title: FifthTry People
+github-team: FifthTry/everyone
+discord-channel: discord-server-id
+
+-- fpm.user-group: foo-people
+title: Foo People
+github-team: FifthTry/foo
+
+
+-- fpm.sitemap:
+
+# Home: /
+writers: foo-people
+readers: fifthtry-people
+confidential: false
+
+## Subsection: /inheritance/
+confidential: false

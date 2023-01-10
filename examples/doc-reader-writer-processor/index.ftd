@@ -5,6 +5,35 @@
 -- ftd.text: Hello world
 
 
+-- component print-user-group:
+fpm.user-group-compat group:
+
+-- ftd.column:
+margin.px: 10
+
+-- ftd.text: Group Title
+
+-- ftd.text: $print-user-group.group.title
+
+
+-- ftd.text: Group ID
+margin-top.px: 10
+
+-- ftd.text: $print-user-group.group.id
+
+-- ftd.text: Identities
+margin-top.px: 10
+
+-- ftd.text: $member.key
+$loop$: $print-user-group.group.group-members as $member
+
+-- end: ftd.column
+
+-- end: print-user-group
+
+
+
+
 ;; Document Readers Processor
 
 -- fpm.user-group-compat list readers:
@@ -32,32 +61,3 @@ $loop$: $writers as $writer
 group: $writer
 
 -- end: print-user-group
-
-
-
--- component print-user-group:
-fpm.user-group-compat group:
-
--- ftd.column:
-margin.px: 10
-
--- ftd.text: Group Title
-
--- ftd.text: $print-user-group.group.title
-
-
--- ftd.text: Group ID
-margin-top.px: 10
-
--- ftd.text: $print-user-group.group.id
-
--- ftd.text: Identities
-margin-top.px: 10
-
--- ftd.text: $member.key
-$loop$: $print-user-group.group.group-members as $member
-
--- end: ftd.column
-
--- end: print-user-group
-
