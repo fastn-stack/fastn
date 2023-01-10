@@ -1,0 +1,29 @@
+-- integer $x: 1
+
+-- boolean $b: true
+
+-- string $s: Hello there
+
+-- ftd.integer: $x
+
+-- ftd.boolean: $b
+
+-- ftd.text: $s
+
+-- ftd.text: Increment x by 1
+$on-click$: increment($a = $x)
+
+-- ftd.text: Increment x by 5
+$on-click$: increment-by($a = $x, v = 5)
+
+-- ftd.text: Set string to hello world
+$on-click$: set-string($a = $s, v = hello world)
+
+-- ftd.text: Set bool to false
+$on-click$: set-bool($a = $b, v = false)
+
+-- ftd.text: Set integer to 100
+$on-click$: set-integer($a = $x, v = 100)
+
+-- ftd.boolean: $b
+$on-click$: toggle($a = $b)
