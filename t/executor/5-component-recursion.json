@@ -117,7 +117,7 @@
                                             "body": false
                                           },
                                           "source": {
-                                            "Loop": "obj"
+                                            "Loop": "foo#obj"
                                           },
                                           "is_mutable": false,
                                           "line_number": 39
@@ -157,7 +157,7 @@
                                         "line_number": 40
                                       }
                                     },
-                                    "alias": "obj",
+                                    "alias": "foo#obj",
                                     "line_number": 40
                                   },
                                   "condition": null,

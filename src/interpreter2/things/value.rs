@@ -281,7 +281,7 @@ impl PropertyValue {
                 let initial_kind_with_remaining_and_source =
                     ftd::interpreter2::utils::is_argument_in_component_or_loop(
                         reference.as_str(),
-                        doc.name,
+                        doc,
                         definition_name_with_arguments,
                         loop_object_name_and_kind,
                     );
@@ -1080,7 +1080,7 @@ impl PropertyValue {
                     } else {
                         ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
                             reference.as_str(),
-                            doc.name,
+                            doc,
                             definition_name_with_arguments,
                             loop_object_name_and_kind,
                             value.line_number(),

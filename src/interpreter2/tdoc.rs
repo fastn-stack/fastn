@@ -495,7 +495,7 @@ impl<'a> TDoc<'a> {
         let initial_kind_with_remaining_and_source =
             ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
                 name,
-                self.name,
+                self,
                 component_definition_name_with_arguments,
                 loop_object_name_and_kind,
                 line_number,

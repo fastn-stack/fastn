@@ -189,14 +189,14 @@ pub(crate) fn get_special_variable() -> Vec<&'static str> {
 
 pub fn is_argument_in_component_or_loop<'a>(
     name: &'a str,
-    doc_id: &'a str,
+    doc: &'a ftd::interpreter2::TDoc,
     component_definition_name_with_arguments: Option<(&'a str, &'a [String])>,
     loop_object_name_and_kind: &'a Option<String>,
 ) -> bool {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
-            .or_else(|| name.strip_prefix(format!("{}#{}.", doc_id, component_name).as_str()))
+            .or_else(|| name.strip_prefix(format!("{}#{}.", doc.name, component_name).as_str()))
         {
             let (p1, _p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
             if arguments.iter().contains(&p1) {
@@ -205,10 +205,11 @@ pub fn is_argument_in_component_or_loop<'a>(
         }
     }
     if let Some(loop_name) = loop_object_name_and_kind {
+        let name = doc.resolve_name(name);
         if name.starts_with(format!("{}.", loop_name).as_str())
-            || name.starts_with(format!("{}#{}.", doc_id, loop_name).as_str())
+            || name.starts_with(format!("{}#{}.", doc.name, loop_name).as_str())
             || name.eq(loop_name)
-            || name.eq(format!("{}#{}", doc_id, loop_name).as_str())
+            || name.eq(format!("{}#{}", doc.name, loop_name).as_str())
         {
             return true;
         }
@@ -219,7 +220,7 @@ pub fn is_argument_in_component_or_loop<'a>(
 
 pub fn get_argument_for_reference_and_remaining<'a>(
     name: &'a str,
-    doc_id: &'a str,
+    doc: &'a ftd::interpreter2::TDoc,
     component_definition_name_with_arguments: Option<(&'a str, &'a [ftd::interpreter2::Argument])>,
     loop_object_name_and_kind: &'a Option<(String, ftd::interpreter2::Argument)>,
     line_number: usize,
@@ -233,7 +234,7 @@ pub fn get_argument_for_reference_and_remaining<'a>(
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
-            .or_else(|| name.strip_prefix(format!("{}#{}.", doc_id, component_name).as_str()))
+            .or_else(|| name.strip_prefix(format!("{}#{}.", doc.name, component_name).as_str()))
         {
             let (p1, p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
             return if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
@@ -245,19 +246,20 @@ pub fn get_argument_for_reference_and_remaining<'a>(
             } else {
                 ftd::interpreter2::utils::e2(
                     format!("{} is not the argument in {}", p1, component_name),
-                    doc_id,
+                    doc.name,
                     line_number,
                 )
             };
         }
     }
     if let Some((loop_name, loop_argument)) = loop_object_name_and_kind {
+        let name = doc.resolve_name(name);
         if name.starts_with(format!("{}.", loop_name).as_str())
-            || name.starts_with(format!("{}#{}.", doc_id, loop_name).as_str())
+            || name.starts_with(format!("{}#{}.", doc.name, loop_name).as_str())
             || name.eq(loop_name)
-            || name.eq(format!("{}#{}", doc_id, loop_name).as_str())
+            || name.eq(format!("{}#{}", doc.name, loop_name).as_str())
         {
-            let p2 = ftd::interpreter2::utils::split_at(name, ".").1;
+            let p2 = ftd::interpreter2::utils::split_at(name.as_str(), ".").1;
             return Ok(Some((
                 loop_argument,
                 p2,

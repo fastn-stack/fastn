@@ -171,7 +171,7 @@ impl Component {
 
         let mut loop_object_name_and_kind = None;
         if let Some(v) = ast_component.iteration {
-            loop_object_name_and_kind = Some(v.alias.to_string());
+            loop_object_name_and_kind = Some(doc.resolve_name(v.alias.as_str()).to_string());
             Loop::scan_ast_loop(v, definition_name_with_arguments, doc)?;
         };
 
@@ -795,7 +795,7 @@ impl Loop {
 
         Ok(ftd::interpreter2::StateWithThing::new_thing(Loop::new(
             on,
-            ast_loop.alias.as_str(),
+            doc.resolve_name(ast_loop.alias.as_str()).as_str(),
             ast_loop.line_number,
         )))
     }

@@ -1,0 +1,6 @@
+-- import: 49-import as im
+
+
+
+-- im.foo:
+products: $im.example-product
