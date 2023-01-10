@@ -240,6 +240,62 @@ fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
     )
 }
 
+pub(crate) async fn get2022_(lib: &fpm::Library) -> String {
+    #[allow(clippy::format_in_format_args)]
+    let mut fpm_base = format!(
+        indoc::indoc! {"
+            {fpm_base}
+            {capital_fpm}        
+
+            {build_info}
+
+            -- string document-id: {document_id}
+            -- string package-title: {title}
+            -- string package-name: {package_name}
+            -- string home-url: {home_url}
+        "},
+        fpm_base = fpm::fpm_ftd(),
+        capital_fpm = capital_fpm(lib),
+        build_info = construct_fpm_cli_variables(lib),
+        document_id = lib.document_id,
+        title = lib.config.package.name,
+        package_name = lib.config.package.name,
+        home_url = format!("https://{}", lib.config.package.name),
+    );
+
+    if let Ok(number_of_documents) =
+        futures::executor::block_on(fpm::utils::get_number_of_documents(&lib.config))
+    {
+        fpm_base = format!(
+            indoc::indoc! {"
+                {fpm_base}
+                
+                -- number-of-documents: {number_of_documents}    
+            "},
+            fpm_base = fpm_base,
+            number_of_documents = number_of_documents,
+        );
+    }
+
+    if let Some((ref filename, ref content)) = lib.markdown {
+        fpm_base = format!(
+            indoc::indoc! {"
+                {fpm_base}
+                
+                -- string markdown-filename: {filename}                        
+                -- string markdown-content:
+    
+                {content}
+            "},
+            fpm_base = fpm_base,
+            filename = filename,
+            content = content,
+        );
+    }
+
+    fpm_base
+}
+
 pub(crate) async fn get(lib: &fpm::Library) -> String {
     #[allow(clippy::format_in_format_args)]
     let mut fpm_base = format!(
@@ -768,7 +824,7 @@ pub(crate) async fn get2022(lib: &fpm::Library2022) -> String {
         asset_documents: Default::default(),
         base_url: lib.base_url.clone(),
     };
-    get(&lib).await
+    get2022_(&lib).await
 }
 
 fn capital_fpm(lib: &fpm::Library) -> String {

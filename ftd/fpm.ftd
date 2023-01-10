@@ -232,7 +232,7 @@ string ftd-version:
 -- toc-item list upto-date-files:
 
 
-\ Translation status for the original language package
+;; Translation status for the original language package
 
 -- record all-language-status-data:
 string language:
