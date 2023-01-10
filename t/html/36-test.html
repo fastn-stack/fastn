@@ -1202,6 +1202,42 @@ return f;
 
 
 
+function foo__increment___main(a){
+return (a.value += 1);
+}
+
+
+
+function foo__increment_by___main(a,v){
+return (a.value += v);
+}
+
+
+
+function foo__set_bool___main(a,v){
+a.value = v
+}
+
+
+
+function foo__set_integer___main(a,v){
+a.value = v
+}
+
+
+
+function foo__set_string___main(a,v){
+a.value = v
+}
+
+
+
+function foo__toggle___main(a){
+a.value = !a.value
+}
+
+
+
 
 window.node_change_main = {};
 window.node_change_main["0:main__color"] = function(data) {
