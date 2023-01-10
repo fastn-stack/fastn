@@ -112,6 +112,236 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(image_function()),
         ),
         (
+            "foo#toggle".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "foo#toggle".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::things::kind::Kind::Void,
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter2::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::Boolean,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "a = !a".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                line_number: 0,
+            })
+        ),
+        (
+            "foo#increment".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "foo#increment".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::things::kind::Kind::Void,
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter2::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::Integer,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "a += 1".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                line_number: 0,
+            })
+        ),
+        (
+            "foo#increment-by".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "foo#increment-by".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::things::kind::Kind::Void,
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter2::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::Integer,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Argument {
+                        name: "v".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::Integer,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "a += v".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                line_number: 0,
+            })
+        ),
+        (
+            "foo#set-bool".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "foo#set-bool".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::things::kind::Kind::Void,
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter2::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::Boolean,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Argument {
+                        name: "v".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::Boolean,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "a = v".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                line_number: 0,
+            })
+        ),
+        (
+            "foo#set-string".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "foo#set-string".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::things::kind::Kind::Void,
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter2::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::String,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Argument {
+                        name: "v".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::String,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "a = v".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                line_number: 0,
+            })
+        ),
+        (
+            "foo#set-integer".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "foo#set-integer".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::things::kind::Kind::Void,
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter2::Argument {
+                        name: "a".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::Integer,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        line_number: 0,
+                    },
+                    ftd::interpreter2::Argument {
+                        name: "v".to_string(),
+                        kind: ftd::interpreter2::KindData {
+                            kind: ftd::interpreter2::things::kind::Kind::Integer,
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "a = v".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                line_number: 0,
+            })
+        ),
+        (
             ftd::interpreter2::FTD_IMAGE_SRC.to_string(),
             ftd::interpreter2::Thing::Record(ftd::interpreter2::Record {
                 name: ftd::interpreter2::FTD_IMAGE_SRC.to_string(),
