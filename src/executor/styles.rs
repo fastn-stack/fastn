@@ -2045,7 +2045,7 @@ pub enum WhiteSpace {
     PRE,
     PREWRAP,
     PRELINE,
-    BREAKSPACES
+    BREAKSPACES,
 }
 
 impl WhiteSpace {
