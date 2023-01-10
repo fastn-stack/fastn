@@ -21,4 +21,6 @@ readers: fifthtry-people
 confidential: false
 
 ## Subsection: /inheritance/
+writers: foo-people
+readers: fifthtry-people
 confidential: false
