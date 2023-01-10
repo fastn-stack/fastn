@@ -1,5 +1,9 @@
 # FTD Change Log
 
+## 10th January 2023
+
+- [Added white-space css](https://github.com/ftd-lang/ftd/pull/523/commits/af5b339f1b6ff04a0738dbbfda4186d57d27fd27)
+
 ## 9th January 2023
 
 - [Added inherited type](https://github.com/ftd-lang/ftd/commit/b1fe8af46cd35c51c3b37312d9c1a6466a54d1e5)

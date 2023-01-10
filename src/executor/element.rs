@@ -182,6 +182,7 @@ pub struct Common {
     pub overflow_x: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub resize: ftd::executor::Value<Option<ftd::executor::Resize>>,
+    pub white_space: ftd::executor::Value<Option<ftd::executor::WhiteSpace>>,
 }
 
 pub fn default_column() -> Column {
@@ -797,6 +798,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "resize",
+        )?,
+        white_space: ftd::executor::WhiteSpace::optional_whitespace(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "white-space",
         )?,
     })
 }

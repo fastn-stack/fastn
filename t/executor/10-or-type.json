@@ -465,6 +465,11 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
+              },
+              "white_space": {
+                "value": null,
+                "line_number": null,
+                "properties": []
               }
             }
           }
@@ -813,6 +818,11 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
+              },
+              "white_space": {
+                "value": null,
+                "line_number": null,
+                "properties": []
               }
             }
           }
@@ -1151,6 +1161,11 @@
                 "properties": []
               },
               "resize": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
+              "white_space": {
                 "value": null,
                 "line_number": null,
                 "properties": []
@@ -1564,6 +1579,11 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
+              },
+              "white_space": {
+                "value": null,
+                "line_number": null,
+                "properties": []
               }
             }
           }
@@ -1840,6 +1860,11 @@
         "properties": []
       },
       "resize": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "white_space": {
         "value": null,
         "line_number": null,
         "properties": []
