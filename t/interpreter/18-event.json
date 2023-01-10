@@ -24,6 +24,36 @@
         "line_number": 7,
         "is_static": false
       }
+    },
+    "foo#toggle": {
+      "Function": {
+        "name": "foo#toggle",
+        "return_kind": {
+          "kind": "Void",
+          "caption": false,
+          "body": false
+        },
+        "arguments": [
+          {
+            "name": "a",
+            "kind": {
+              "kind": "Boolean",
+              "caption": false,
+              "body": false
+            },
+            "mutable": true,
+            "value": null,
+            "line_number": 2
+          }
+        ],
+        "expression": [
+          {
+            "expression": "a = !a;",
+            "line_number": 6
+          }
+        ],
+        "line_number": 1
+      }
     }
   },
   "name": "foo",
