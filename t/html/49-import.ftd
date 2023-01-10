@@ -1,0 +1,72 @@
+-- foo:
+
+
+-- record product-data:
+caption title:
+body body:
+integer index:
+string url:
+optional string sub-title:
+optional string button-text:
+
+-- product-data list example-product:
+
+-- product-data: cDoc
+index: 1
+url: https://fifthtry.github.io/cdoc-doc/
+sub-title: Continuous Documentation
+
+`cdoc` is an open source web application that integrates with Github and works like continuous integration.
+
+- Initial Setup Flow
+- Self Hosted Flow
+
+
+-- product-data: FTD
+index: 2
+url: https://ftd.dev/
+sub-title: FifthTry Document
+
+FTD gives you a lot of power over your presentation, and yet it is quite easy to learn.
+
+- FTD Is Easy To Learn
+- FTD Is Quite Powerful
+
+
+-- product-data: FPM
+index: 3
+url: https://fpm.dev/
+sub-title: `ftd` package manager
+
+`fpm` is `ftd package manager`, defines a package format for packaging `ftd` files.
+
+- Distributed Package Manager
+- Translation Tracking
+
+
+-- product-data: ftd-py
+index: 4
+url: https://fifthtry.github.io/python.ftd.dev/
+sub-title: `ftd-py` Documentation
+
+`ftd-py`: Python Package for Working With FTD/FPM
+
+- Python Package for Working With `FTD/FPM`
+- `ftd_django` is a Python package
+
+-- end: example-product
+
+
+
+-- component foo:
+product-data list products: $example-product
+
+-- ftd.column:
+
+-- ftd.text: $obj.title
+$loop$: $foo.products as $obj
+
+
+-- end: ftd.column
+
+-- end: foo

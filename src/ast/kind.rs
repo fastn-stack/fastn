@@ -349,6 +349,16 @@ impl VariableValue {
                 } else if self.is_list() || self.is_record() {
                     // todo: check if `end` exists
                     Ok(self)
+                } else if let VariableValue::String { ref value, .. } = self {
+                    if value.starts_with('$') {
+                        Ok(self)
+                    } else {
+                        ftd::ast::parse_error(
+                            format!("Expected List found: `{:?}`", self),
+                            doc_id,
+                            line_number,
+                        )
+                    }
                 } else {
                     ftd::ast::parse_error(
                         format!("Expected List found: `{:?}`", self),
