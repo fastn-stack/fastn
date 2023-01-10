@@ -4,6 +4,7 @@
 
 - [Added white-space css](https://github.com/ftd-lang/ftd/pull/523/commits/af5b339f1b6ff04a0738dbbfda4186d57d27fd27)
 - [Added basic ftd functions](https://github.com/ftd-lang/ftd/pull/524/commits/f268014568ef75e86e989ef80de0089ad614e07f)
+- [Added `ftd.breakpoint-width`](https://github.com/ftd-lang/ftd/pull/524/commits/537b8cfd356f91e0059edbd04987c0a3f0dbf8a6)
 
 ## 9th January 2023
 

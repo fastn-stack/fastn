@@ -848,6 +848,19 @@ Response JSON:
 
 # Default Variable
 
+## `ftd.breakpoint-width`
+
+The `ftd.breakpoint-width` variable is a mutable variable of type `ftd.
+breakpoint-width-data` which is a record.
+
+```ftd
+-- record breakpoint-width-data:
+integer mobile:
+
+-- ftd.breakpoint-width-data breakpoint-width:
+mobile: 768
+```
+
 ## `inherited.types`
 
 The `inherited.types` variable is of type `ftd.type-data` which is a record.
