@@ -253,13 +253,13 @@ pub fn get_argument_for_reference_and_remaining<'a>(
         }
     }
     if let Some((loop_name, loop_argument)) = loop_object_name_and_kind {
+        let p2 = ftd::interpreter2::utils::split_at(name, ".").1;
         let name = doc.resolve_name(name);
         if name.starts_with(format!("{}.", loop_name).as_str())
             || name.starts_with(format!("{}#{}.", doc.name, loop_name).as_str())
             || name.eq(loop_name)
             || name.eq(format!("{}#{}", doc.name, loop_name).as_str())
         {
-            let p2 = ftd::interpreter2::utils::split_at(name.as_str(), ".").1;
             return Ok(Some((
                 loop_argument,
                 p2,
