@@ -633,6 +633,91 @@ optional string font-family:
 
 # Default functions
 
+## `toggle($a: bool)`
+
+This is FScript function. It will toggle the boolean variable which is passed 
+as argument `a` to this function.
+
+```ftd
+-- boolean $b: false
+
+-- ftd.boolean: $b
+
+-- ftd.text: Click to toggle
+$on-click$: toggle($a = $b)
+```
+
+## `increment($a: integer)`
+
+This is FScript function. It will increment the integer variable by 1 which is passed
+as argument `a` to this function.
+
+```ftd
+-- integer $x: 1
+
+-- ftd.integer: $x
+
+-- ftd.text: Click to increment by 1 
+$on-click$: increment($a = $x)
+```
+
+## `increment-by($a: integer, v: integer)`
+
+This is FScript function. It will increment the integer variable by value `v` which is passed
+as argument `a` to this function.
+
+```ftd
+-- integer $x: 1
+
+-- ftd.integer: $x
+
+-- ftd.text: Click to increment by 5 
+$on-click$: increment-by($a = $x, v = 5)
+```
+
+## `set-bool($a: bool, v: bool)`
+
+This is FScript function. It will set the boolean variable by value `v` which is passed
+as argument `a` to this function.
+
+```ftd
+-- boolean $b: false
+
+-- ftd.boolean: $b
+
+-- ftd.text: Click to set the boolean as true 
+$on-click$: set-bool($a = $b, v = true)
+```
+
+## `set-string($a: string, v: string)`
+
+This is FScript function. It will set the string variable by value `v` which is passed
+as argument `a` to this function.
+
+```ftd
+-- string $s: Hello
+
+-- ftd.text: $s
+
+-- ftd.text: Click to set the string as World 
+$on-click$: set-string($a = $s, v = World)
+```
+
+## `set-integer($a: integer, v: integer)`
+
+This is FScript function. It will set the integer variable by value `v` which is passed
+as argument `a` to this function.
+
+```ftd
+-- integer $x: 1
+
+-- ftd.integer: $x
+
+-- ftd.text: Click to set the integer as 100 
+$on-click$: set-integer($a = $x, v = 100)
+```
+
+
 ## `is_empty(a: any)`
 
 This is FScript function. It gives if the value passed to argument `a` is null or empty.
