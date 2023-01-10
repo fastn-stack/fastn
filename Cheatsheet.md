@@ -644,7 +644,7 @@ as argument `a` to this function.
 -- ftd.boolean: $b
 
 -- ftd.text: Click to toggle
-$on-click$: toggle($a = $b)
+$on-click$: $ftd.toggle($a = $b)
 ```
 
 ## `increment($a: integer)`
@@ -658,7 +658,7 @@ as argument `a` to this function.
 -- ftd.integer: $x
 
 -- ftd.text: Click to increment by 1 
-$on-click$: increment($a = $x)
+$on-click$: $ftd.increment($a = $x)
 ```
 
 ## `increment-by($a: integer, v: integer)`
@@ -672,7 +672,7 @@ as argument `a` to this function.
 -- ftd.integer: $x
 
 -- ftd.text: Click to increment by 5 
-$on-click$: increment-by($a = $x, v = 5)
+$on-click$: $ftd.increment-by($a = $x, v = 5)
 ```
 
 ## `set-bool($a: bool, v: bool)`
@@ -686,7 +686,7 @@ as argument `a` to this function.
 -- ftd.boolean: $b
 
 -- ftd.text: Click to set the boolean as true 
-$on-click$: set-bool($a = $b, v = true)
+$on-click$: $ftd.set-bool($a = $b, v = true)
 ```
 
 ## `set-string($a: string, v: string)`
@@ -700,7 +700,7 @@ as argument `a` to this function.
 -- ftd.text: $s
 
 -- ftd.text: Click to set the string as World 
-$on-click$: set-string($a = $s, v = World)
+$on-click$: $ftd.set-string($a = $s, v = World)
 ```
 
 ## `set-integer($a: integer, v: integer)`
@@ -714,7 +714,7 @@ as argument `a` to this function.
 -- ftd.integer: $x
 
 -- ftd.text: Click to set the integer as 100 
-$on-click$: set-integer($a = $x, v = 100)
+$on-click$: $ftd.set-integer($a = $x, v = 100)
 ```
 
 
