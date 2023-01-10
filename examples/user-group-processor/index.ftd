@@ -33,8 +33,9 @@ $loop$: $print-user-group.group.group-members as $member
 
 -- end: print-user-group
 
-
 ;; User Groups
+-- ftd.text: User Groups
+
 
 -- fpm.user-group-compat list groups:
 $processor$: processors.user-groups
@@ -43,5 +44,20 @@ $processor$: processors.user-groups
 -- print-user-group:
 $loop$: $groups as $group
 group: $group
+
+-- end: print-user-group
+
+
+
+;; User Group By Id
+-- ftd.text: User Group By Id
+
+-- fpm.user-group-compat user-group:
+$processor$: processors.user-group-by-id
+id: fifthtry-people
+
+-- print-user-group:
+group: $user-group
+
 
 -- end: print-user-group
