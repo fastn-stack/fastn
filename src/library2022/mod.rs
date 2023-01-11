@@ -243,8 +243,8 @@ impl Library2022 {
                 processor::document::document_name(value, kind, doc, &self.config).await
             }
             "user-details" => processor::user_details::process(value, kind, doc, &self.config),
-            // "fpm-apps" => fpm::package::app::processor(section, doc, &self.config),
-            // "is-reader" => fpm::user_group::processor::is_reader(section, doc, &self.config).await,
+            "fpm-apps" => processor::apps::process(value, kind, doc, &self.config),
+            "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

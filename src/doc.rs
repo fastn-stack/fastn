@@ -370,6 +370,9 @@ pub async fn resolve_import_2022<'a>(
                 "document-full-id".to_string(),
                 "document-suffix".to_string(),
                 "document-name".to_string(),
+                "user-details".to_string(),
+                "fpm-apps".to_string(),
+                "is-reader".to_string(),
             ],
         )
     } else if module.ends_with("assets") {
