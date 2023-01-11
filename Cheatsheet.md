@@ -340,11 +340,11 @@ This is a body text.
 - `border-bottom-right-radius`: `optional ftd.length`
 - `region`: `optional ftd.region`
 - `white-space`: `optional ftd.white-space`
+- `text-transform`: `optional ftd.text-transform`
 
 **`ftd.white-space`**
 
 ```ftd 
-
 -- or-type white-space:
 
 -- constant string normal: normal
@@ -355,7 +355,21 @@ This is a body text.
 -- constant string break-spaces: break-spaces
 
 -- end: length
+```
 
+**`ftd.text-transform`**
+
+```ftd 
+-- or-type text-transform:
+
+-- constant string none: none
+-- constant string capitalize: capitalize
+-- constant string uppercase: uppercase
+-- constant string lowercase: lowercase
+-- constant string initial: initial 
+-- constant string inherit: inherit
+
+-- end: text-transform
 ```
 
 **`ftd.length`**
