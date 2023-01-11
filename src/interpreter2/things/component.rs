@@ -67,6 +67,14 @@ impl ComponentDefinition {
             Some(definition_name_with_arguments),
             doc,
         )?);
+        if let Some(iteration) = definition.iteration.as_ref() {
+            return Err(ftd::interpreter2::Error::ParseError {
+                message: "The component definition cannot have loop. Help: use container component as it's parent"
+                    .to_string(),
+                doc_id: doc.name.to_string(),
+                line_number: iteration.line_number,
+            });
+        }
         Ok(ftd::interpreter2::StateWithThing::new_thing(
             ComponentDefinition::new(
                 name.as_str(),
