@@ -313,8 +313,6 @@ This is a body text.
 ## Common Attributes
 
 - `padding`: `optional ftd.length`
-- `padding`: `optional ftd.length`
-- `padding`: `optional ftd.length`
 - `padding-left`: `optional ftd.length`
 - `padding-right`: `optional ftd.length`
 - `padding-top`: `optional ftd.length`
@@ -338,25 +336,6 @@ This is a body text.
 - `border-top-right-radius`: `optional ftd.length`
 - `border-bottom-left-radius`: `optional ftd.length`
 - `border-bottom-right-radius`: `optional ftd.length`
-- `region`: `optional ftd.region`
-- `white-space`: `optional ftd.white-space`
-
-**`ftd.white-space`**
-
-```ftd 
-
--- or-type white-space:
-
--- constant string normal: normal
--- constant string nowrap: nowrap
--- constant string pre: pre 
--- constant string pre-wrap: pre-wrap
--- constant string pre-line: pre-line
--- constant string break-spaces: break-spaces
-
--- end: length
-
-```
 
 **`ftd.length`**
 
@@ -509,6 +488,8 @@ string dark: $color.light
 -- end: cursor
 ```
 
+- `region`: `optional ftd.region`
+
 **`ftd.region`**
 
 ```ftd
@@ -526,6 +507,25 @@ string dark: $color.light
 -- constant string h6: h6
 
 -- end: region
+```
+
+- `white-space`: `optional ftd.white-space`
+
+**`ftd.white-space`**
+
+```ftd 
+
+-- or-type white-space:
+
+-- constant string normal: normal
+-- constant string nowrap: nowrap
+-- constant string pre: pre 
+-- constant string pre-wrap: pre-wrap
+-- constant string pre-line: pre-line
+-- constant string break-spaces: break-spaces
+
+-- end: white-space
+
 ```
 
 - `classes`: string list (classes are created in css)
