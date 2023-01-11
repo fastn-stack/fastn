@@ -325,9 +325,9 @@ def func() {
 
 ## `ftd.code` attributes
 
-### `optional lang`: To specify code language.
+### `lang`: `optional string` -> To specify code language.
 `Default lang = txt` 
-### `optional theme`: To specify the theme
+### `theme`: `optional string` -> To specify the theme
 `Default theme = base16.ocean-dark`
 
 Currently includes these themes
@@ -337,8 +337,8 @@ Currently includes these themes
 
 Also see InspiredGitHub from [here](https://github.com/sethlopezme/InspiredGitHub.tmtheme)
 
-### `body`: specify the code to display
-### `text-align`: specify text alignment
+### `body`: `string` -> specify the code to display
+### `text-align`: `ftd.text-align` -> specify text alignment
 (Refer or-type `ftd.text-align` to know all possible values)
 
 ## Common Attributes
