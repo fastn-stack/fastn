@@ -88,6 +88,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(row_function()),
         ),
         (
+            "ftd#code".to_string(),
+            ftd::interpreter2::Thing::Component(code_function()),
+        ),
+        (
             "ftd#input".to_string(),
             ftd::interpreter2::Thing::Component(row_function()),
         ),
@@ -6022,38 +6026,12 @@ pub fn markup_function() -> ftd::interpreter2::ComponentDefinition {
         arguments: [
             text_arguments(),
             common_arguments(),
-            vec![
-                ftd::interpreter2::Argument::default(
-                    "text",
-                    ftd::interpreter2::Kind::string()
-                        .into_kind_data()
-                        .caption_or_body(),
-                ),
-                ftd::interpreter2::Argument::default(
-                    "style",
-                    ftd::interpreter2::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-                ftd::interpreter2::Argument::default(
-                    "line-clamp",
-                    ftd::interpreter2::Kind::integer()
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-                ftd::interpreter2::Argument::default(
-                    "text-indent",
-                    ftd::interpreter2::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-                ftd::interpreter2::Argument::default(
-                    "text-align",
-                    ftd::interpreter2::Kind::string()
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-            ],
+            vec![ftd::interpreter2::Argument::default(
+                "text",
+                ftd::interpreter2::Kind::string()
+                    .into_kind_data()
+                    .caption_or_body(),
+            )],
         ]
         .concat()
         .into_iter()
@@ -6070,6 +6048,41 @@ pub fn row_function() -> ftd::interpreter2::ComponentDefinition {
             .concat()
             .into_iter()
             .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
+}
+
+pub fn code_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#code".to_string(),
+        arguments: [
+            text_arguments(),
+            common_arguments(),
+            vec![
+                ftd::interpreter2::Argument::default(
+                    "text",
+                    ftd::interpreter2::Kind::string()
+                        .into_kind_data()
+                        .caption_or_body(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "lang",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "theme",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+            ],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         line_number: 0,
     }

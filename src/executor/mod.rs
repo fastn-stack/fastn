@@ -2,6 +2,7 @@
 #[macro_use]
 mod test;
 
+mod code;
 mod element;
 mod main;
 mod markup;
@@ -10,7 +11,7 @@ mod tdoc;
 mod utils;
 mod value;
 
-pub use element::{Column, Common, Container, Element, Event, Image, Row, Text};
+pub use element::{Code, Column, Common, Container, Element, Event, Image, Row, Text};
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, Color, ColorValue, Cursor, FontSize, Length,
@@ -30,6 +31,12 @@ pub enum Error {
         message: String,
         doc_id: String,
         line_number: usize,
+    },
+
+    #[error("syntect error: {source}")]
+    Syntect {
+        #[from]
+        source: syntect::Error,
     },
 }
 

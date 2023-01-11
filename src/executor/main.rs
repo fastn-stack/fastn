@@ -281,6 +281,17 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                 )?)
             }
+            "ftd#code" => {
+                ftd::executor::Element::Code(ftd::executor::element::code_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                )?)
+            }
             _ => unimplemented!(),
         })
     }

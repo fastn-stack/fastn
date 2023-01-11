@@ -6,6 +6,7 @@ pub enum Element {
     Integer(Text),
     Boolean(Text),
     Image(Image),
+    Code(Code),
     Null,
 }
 
@@ -18,6 +19,7 @@ impl Element {
             Element::Integer(i) => Some(&i.common),
             Element::Boolean(b) => Some(&b.common),
             Element::Image(i) => Some(&i.common),
+            Element::Code(c) => Some(&c.common),
             Element::Null => None,
         }
     }
@@ -103,11 +105,109 @@ impl ImageSrc {
     }
 }
 
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct Code {
+    pub text: ftd::executor::Value<Rendered>,
+    pub text_align: ftd::executor::Value<Option<ftd::executor::TextAlign>>,
+    pub common: Common,
+}
+
+pub fn code_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
+    arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Expression>,
+    doc: &ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+) -> ftd::executor::Result<Code> {
+    // TODO: `text`, `lang` and `theme` cannot have condition
+
+    let text =
+        ftd::executor::value::optional_string("text", properties, arguments, doc, line_number)?;
+    if text.value.is_none() && condition.is_none() {
+        // TODO: Check condition if `value is not null` is there
+        return ftd::executor::utils::parse_error(
+            "Expected string for text property",
+            doc.name,
+            line_number,
+        );
+    }
+
+    let lang = ftd::executor::value::string_with_default(
+        "lang",
+        properties,
+        arguments,
+        "txt",
+        doc,
+        line_number,
+    )?;
+
+    let theme = ftd::executor::value::string_with_default(
+        "theme",
+        properties,
+        arguments,
+        ftd::executor::code::DEFAULT_THEME,
+        doc,
+        line_number,
+    )?;
+
+    let text = ftd::executor::Value::new(
+        ftd::executor::element::code_with_theme(
+            text.value.unwrap_or_default().as_str(),
+            lang.value.as_str(),
+            theme.value.as_str(),
+            doc.name,
+        )?,
+        text.line_number,
+        text.properties,
+    );
+
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+    )?;
+
+    Ok(Code {
+        text,
+        text_align: ftd::executor::TextAlign::optional_text_align(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-align",
+        )?,
+        common,
+    })
+}
+
 pub fn markup_inline(s: &str) -> Rendered {
     Rendered {
         original: s.to_string(),
         rendered: ftd::executor::markup::markup_inline(s),
     }
+}
+
+pub fn code_with_theme(
+    code: &str,
+    ext: &str,
+    theme: &str,
+    doc_id: &str,
+) -> ftd::executor::Result<Rendered> {
+    Ok(Rendered {
+        original: code.to_string(),
+        rendered: ftd::executor::code::code(
+            code.replace("\n\\-- ", "\n-- ").as_str(),
+            ext,
+            theme,
+            doc_id,
+        )?,
+    })
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]

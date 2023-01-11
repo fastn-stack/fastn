@@ -320,6 +320,41 @@ pub fn optional_i64(
     }
 }
 
+pub fn string_with_default(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    default: &str,
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<String>> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::String { text }) => Ok(ftd::executor::Value::new(
+            text,
+            value.line_number,
+            value.properties,
+        )),
+        None => Ok(ftd::executor::Value::new(
+            default.to_string(),
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type optional string, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
 pub fn optional_string(
     key: &str,
     properties: &[ftd::interpreter2::Property],

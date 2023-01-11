@@ -90,6 +90,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Integer(t) => t.to_node(doc_id),
             ftd::executor::Element::Boolean(t) => t.to_node(doc_id),
             ftd::executor::Element::Image(i) => i.to_node(doc_id),
+            ftd::executor::Element::Code(c) => c.to_node(doc_id),
             ftd::executor::Element::Null => Node {
                 classes: vec![],
                 events: vec![],
@@ -270,6 +271,37 @@ impl ftd::executor::Column {
 }
 
 impl ftd::executor::Text {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        use ftd::node::utils::CheckMap;
+
+        let node = self.common.node();
+        let mut n = Node::from_common(node.as_str(), "block", &self.common, doc_id);
+
+        n.style.check_and_insert(
+            "text-align",
+            ftd::node::Value::from_executor_value(
+                self.text_align
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.text_align.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+        n.classes.extend(self.common.add_class());
+        n.classes.push("ft_md".to_string());
+        n.text = ftd::node::Value::from_executor_value(
+            Some(self.text.value.rendered.to_string()),
+            self.text.clone(),
+            None,
+            doc_id,
+        );
+        n
+    }
+}
+
+impl ftd::executor::Code {
     pub fn to_node(&self, doc_id: &str) -> Node {
         use ftd::node::utils::CheckMap;
 
