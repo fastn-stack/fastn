@@ -126,9 +126,10 @@ pub async fn interpret_helper<'a>(
     lib: &'a mut fpm::Library2022,
     base_url: &str,
     download_assets: bool,
+    line_number: usize,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
     tracing::info!(document = name);
-    let mut s = ftd::interpreter2::interpret(name, source)?;
+    let mut s = ftd::interpreter2::interpret_with_line_number(name, source, line_number)?;
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),
         lib.config.package.name.to_string(),

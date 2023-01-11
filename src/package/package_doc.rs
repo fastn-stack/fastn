@@ -373,12 +373,14 @@ pub(crate) async fn read_ftd_2022(
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
 
+    let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
     let main_ftd_doc = match fpm::time("interpret_helper").it(fpm::doc::interpret_helper(
         main.id_with_package().as_str(),
         doc_content.as_str(),
         &mut lib,
         base_url,
         download_assets,
+        line_number,
     )
     .await)
     {
