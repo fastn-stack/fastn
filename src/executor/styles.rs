@@ -562,12 +562,13 @@ impl Alignment {
 pub enum Resizing {
     HugContent,
     FillContainer,
+    Auto,
     Fixed(ftd::executor::Length),
 }
 
 impl Default for Resizing {
     fn default() -> Resizing {
-        Resizing::HugContent
+        Resizing::Auto
     }
 }
 
@@ -600,6 +601,7 @@ impl Resizing {
                 )?))
             }
             ftd::interpreter2::FTD_RESIZING_HUG_CONTENT => Ok(Resizing::HugContent),
+            ftd::interpreter2::FTD_RESIZING_AUTO => Ok(Resizing::Auto),
             ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok(Resizing::FillContainer),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.resizing`", t),
@@ -662,6 +664,7 @@ impl Resizing {
             Resizing::HugContent => "fit-content".to_string(),
             Resizing::FillContainer => "100%".to_string(),
             Resizing::Fixed(l) => l.to_css_string(),
+            Resizing::Auto => "auto".to_string(),
         }
     }
 
@@ -684,6 +687,7 @@ impl Resizing {
             }
             ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok(("100%", false)),
             ftd::interpreter2::FTD_RESIZING_HUG_CONTENT => Ok(("fit-content", false)),
+            ftd::interpreter2::FTD_RESIZING_AUTO => Ok(("auto", false)),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.resizing: `{}`", t),
                 doc_id,
@@ -708,6 +712,7 @@ impl Resizing {
             }
             ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok("100%"),
             ftd::interpreter2::FTD_RESIZING_HUG_CONTENT => Ok("fit-content"),
+            ftd::interpreter2::FTD_RESIZING_AUTO => Ok("auto"),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.resizing: `{}`", t),
                 doc_id,
@@ -733,6 +738,7 @@ impl Resizing {
             }
             ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER => Ok("100%".to_string()),
             ftd::interpreter2::FTD_RESIZING_HUG_CONTENT => Ok("fit-content".to_string()),
+            ftd::interpreter2::FTD_RESIZING_AUTO => Ok("auto".to_string()),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant found for ftd.resizing: `{}`", t),
                 doc_id,

@@ -1158,6 +1158,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_RESIZING_AUTO,
+                        ftd::interpreter2::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            ftd::interpreter2::Value::new_string(
+                                ftd::interpreter2::FTD_RESIZING_AUTO,
+                            )
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
                         ftd::interpreter2::FTD_RESIZING_FILL_CONTAINER,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
