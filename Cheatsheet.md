@@ -526,7 +526,23 @@ string dark: $color.light
 -- constant string break-spaces: break-spaces
 
 -- end: white-space
+```
 
+- `text-transform`: `optional ftd.text-transform`
+
+**`ftd.text-transform`**
+
+```ftd 
+-- or-type text-transform:
+
+-- constant string none: none
+-- constant string capitalize: capitalize
+-- constant string uppercase: uppercase
+-- constant string lowercase: lowercase
+-- constant string initial: initial 
+-- constant string inherit: inherit
+
+-- end: text-transform
 ```
 
 - `classes`: string list (classes are created in css)

@@ -2,6 +2,7 @@
 
 ## 11th January 2023
 
+- [Added text-transform css](https://github.com/ftd-lang/ftd/pull/529/commits/0cae01d1a5b9b7a3775bd60d1c36a8230e5d74cc)
 - [Added `auto` variant in `ftd.resizing`](https://github.com/ftd-lang/ftd/pull/523/commits/939fce3398b6f5612eceffab8931c71d7341af55)
 
 ## 10th January 2023

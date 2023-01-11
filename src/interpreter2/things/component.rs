@@ -171,7 +171,7 @@ impl Component {
 
         let mut loop_object_name_and_kind = None;
         if let Some(v) = ast_component.iteration {
-            loop_object_name_and_kind = Some(doc.resolve_name(v.alias.as_str()).to_string());
+            loop_object_name_and_kind = Some(doc.resolve_name(v.alias.as_str()));
             Loop::scan_ast_loop(v, definition_name_with_arguments, doc)?;
         };
 

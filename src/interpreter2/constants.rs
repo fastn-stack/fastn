@@ -150,3 +150,11 @@ pub const FTD_WHITESPACE_PRE: &str = "ftd#white-space.pre";
 pub const FTD_WHITESPACE_PREWRAP: &str = "ftd#white-space.pre-wrap";
 pub const FTD_WHITESPACE_PRELINE: &str = "ftd#white-space.pre-line";
 pub const FTD_WHITESPACE_BREAKSPACES: &str = "ftd#white-space.break-spaces";
+
+pub const FTD_TEXT_TRANSFORM: &str = "ftd#text-transform";
+pub const FTD_TEXT_TRANSFORM_NONE: &str = "ftd#text-transform.none";
+pub const FTD_TEXT_TRANSFORM_CAPITALIZE: &str = "ftd#text-transform.capitalize";
+pub const FTD_TEXT_TRANSFORM_UPPERCASE: &str = "ftd#text-transform.uppercase";
+pub const FTD_TEXT_TRANSFORM_LOWERCASE: &str = "ftd#text-transform.lowercase";
+pub const FTD_TEXT_TRANSFORM_INITIAL: &str = "ftd#text-transform.initial";
+pub const FTD_TEXT_TRANSFORM_INHERIT: &str = "ftd#text-transform.inherit";

@@ -183,6 +183,7 @@ pub struct Common {
     pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub resize: ftd::executor::Value<Option<ftd::executor::Resize>>,
     pub white_space: ftd::executor::Value<Option<ftd::executor::WhiteSpace>>,
+    pub text_transform: ftd::executor::Value<Option<ftd::executor::TextTransform>>,
 }
 
 pub fn default_column() -> Column {
@@ -477,6 +478,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "cursor",
+        )?,
+        text_transform: ftd::executor::TextTransform::optional_text_transform(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-transform",
         )?,
         classes: ftd::executor::value::string_list(
             "classes",
