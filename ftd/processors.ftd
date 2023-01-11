@@ -5,6 +5,16 @@ string url:
 optional ftd.image-src icon:
 
 
+-- record app-indexy-item:
+integer index:
+app-ui-item item:
+
+
+-- record app-ui:
+integer len:
+app-indexy-item list items:
+
+
 
 -- record toc-item:
 optional string title:
