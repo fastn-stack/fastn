@@ -502,13 +502,17 @@ pub fn replace_markers_2022(
     inline_js: &[String],
     external_css: &[String],
     inline_css: &[String],
+    font_style: &str,
     base_url: &str,
 ) -> String {
     ftd::html1::utils::trim_all_lines(
         s.replace("__ftd_doc_title__", "")
             .replace("__ftd_data__", html_ui.variables.as_str())
             .replace("__ftd_external_children__", "{}")
-            .replace("__ftd__", html_ui.html.as_str())
+            .replace(
+                "__ftd__",
+                format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
+            )
             .replace("__ftd_js__", ftd_js)
             .replace(
                 "__extra_js__",

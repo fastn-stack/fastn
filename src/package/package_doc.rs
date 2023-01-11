@@ -404,6 +404,7 @@ pub(crate) async fn read_ftd_2022(
         .downloaded_assets
         .extend(lib.config.downloaded_assets);
 
+    let font_style = config.get_font_style();
     let file_content = fpm::time("replace_markers").it(fpm::utils::replace_markers_2022(
         ftd::build(),
         html_ui,
@@ -412,6 +413,7 @@ pub(crate) async fn read_ftd_2022(
         config.ftd_inline_js.as_slice(),
         config.ftd_external_css.as_slice(),
         config.ftd_inline_css.as_slice(),
+        font_style.as_str(),
         base_url,
     ));
 
