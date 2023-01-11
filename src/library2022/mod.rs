@@ -30,7 +30,7 @@ impl Library2022 {
         &mut self,
         name: &str,
         current_processing_module: &str,
-    ) -> ftd::p11::Result<String> {
+    ) -> ftd::p11::Result<(String, usize)> {
         match self.get(name, current_processing_module).await {
             Some(v) => Ok(v),
             None => ftd::p11::utils::parse_error(format!("library not found: {}", name), "", 0),
@@ -63,13 +63,17 @@ impl Library2022 {
             })
     }
 
-    pub async fn get(&mut self, name: &str, current_processing_module: &str) -> Option<String> {
+    pub async fn get(
+        &mut self,
+        name: &str,
+        current_processing_module: &str,
+    ) -> Option<(String, usize)> {
         if name == "fpm" {
-            return Some(fpm::library::fpm_dot_ftd::get2022(self).await);
+            return Some((fpm::library::fpm_dot_ftd::get2022(self).await, 0));
         }
 
         if name == "fpm-lib" {
-            return Some(fpm::fpm_lib_ftd().to_string());
+            return Some((fpm::fpm_lib_ftd().to_string(), 0));
         }
 
         return get_for_package(
@@ -83,7 +87,7 @@ impl Library2022 {
             name: &str,
             lib: &mut fpm::Library2022,
             current_processing_module: &str,
-        ) -> Option<String> {
+        ) -> Option<(String, usize)> {
             let package = lib.get_current_package(current_processing_module).ok()?;
             if name.starts_with(package.name.as_str()) {
                 if let Some(r) = get_data_from_package(name, &package, lib).await {
@@ -139,7 +143,7 @@ impl Library2022 {
             name: &str,
             package: &fpm::Package,
             lib: &mut fpm::Library2022,
-        ) -> Option<String> {
+        ) -> Option<(String, usize)> {
             lib.push_package_under_process(name, package).await.ok()?;
             let packages = lib.config.all_packages.borrow();
             let package = packages.get(package.name.as_str()).unwrap_or(package);
@@ -152,9 +156,11 @@ impl Library2022 {
             if !file_path.ends_with(".ftd") {
                 return None;
             }
-            String::from_utf8(data)
-                .ok()
-                .map(|body| package.get_prefixed_body(body.as_str(), name, true))
+            String::from_utf8(data).ok().map(|body| {
+                let body_with_prefix = package.get_prefixed_body(body.as_str(), name, true);
+                let line_number = body_with_prefix.split('\n').count() - body.split('\n').count();
+                (body_with_prefix, line_number)
+            })
         }
     }
 

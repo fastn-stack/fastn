@@ -145,13 +145,14 @@ pub async fn interpret_helper<'a>(
                 module,
                 state: mut st,
             } => {
-                let (source, foreign_variable, foreign_function) =
+                let (source, foreign_variable, foreign_function, ignore_line_numbers) =
                     resolve_import_2022(lib, &mut st, module.as_str()).await?;
                 s = st.continue_after_import(
                     module.as_str(),
                     source.as_str(),
                     foreign_variable,
                     foreign_function,
+                    ignore_line_numbers,
                 )?;
             }
             ftd::interpreter2::Interpreter::StuckOnProcessor {
@@ -339,7 +340,7 @@ pub async fn resolve_import_2022<'a>(
     lib: &'a mut fpm::Library2022,
     state: &mut ftd::interpreter2::InterpreterState,
     module: &str,
-) -> ftd::interpreter2::Result<(String, Vec<String>, Vec<String>)> {
+) -> ftd::interpreter2::Result<(String, Vec<String>, Vec<String>, usize)> {
     let current_processing_module = state.get_current_processing_module().ok_or_else(|| {
         ftd::interpreter2::Error::ParseError {
             message: "The processing document stack is empty".to_string(),
@@ -350,7 +351,7 @@ pub async fn resolve_import_2022<'a>(
 
     let current_package = lib.get_current_package(current_processing_module.as_str())?;
     let source = if module.eq("fpm/time") {
-        ("".to_string(), vec!["time".to_string()], vec![])
+        ("".to_string(), vec!["time".to_string()], vec![], 0)
     } else if module.eq("fpm/processors") {
         (
             fpm::processor_ftd().to_string(),
@@ -375,6 +376,7 @@ pub async fn resolve_import_2022<'a>(
                 "fpm-apps".to_string(),
                 "is-reader".to_string(),
             ],
+            0,
         )
     } else if module.ends_with("assets") {
         let foreign_variable = vec!["files".to_string()];
@@ -384,6 +386,7 @@ pub async fn resolve_import_2022<'a>(
                 current_package.get_font_ftd().unwrap_or_default(),
                 foreign_variable,
                 vec![],
+                0,
             )
         } else {
             let mut font_ftd = "".to_string();
@@ -401,12 +404,15 @@ pub async fn resolve_import_2022<'a>(
                     break;
                 }
             }
-            (font_ftd, foreign_variable, vec![])
+            (font_ftd, foreign_variable, vec![], 0)
         }
     } else {
+        let (content, ignore_line_numbers) = lib
+            .get_with_result(module, current_processing_module.as_str())
+            .await?;
+
         (
-            lib.get_with_result(module, current_processing_module.as_str())
-                .await?,
+            content,
             vec![],
             vec![
                 "http".to_string(),
@@ -435,6 +441,7 @@ pub async fn resolve_import_2022<'a>(
                 "fpm-apps".to_string(),
                 "is-reader".to_string(),
             ],
+            ignore_line_numbers,
         )
     };
     Ok(source)
