@@ -335,9 +335,11 @@ Currently includes these themes
 `base16-ocean.dark`, `base16-eighties.dark`, `base16-mocha.dark`, `base16-ocean.light`
 `Solarized (dark)`, `Solarized (light)`
 
-InspiredGitHub from [here](https://github.com/sethlopezme/InspiredGitHub.tmtheme)
+Also see InspiredGitHub from [here](https://github.com/sethlopezme/InspiredGitHub.tmtheme)
 
 ### `body`: specify the code to display
+### `text-align`: specify text alignment
+(Refer or-type `ftd.text-align` to know all possible values)
 
 ## Common Attributes
 
