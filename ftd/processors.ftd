@@ -1,3 +1,11 @@
+-- record app-ui-item:
+caption name:
+string package:
+string url:
+optional ftd.image-src icon:
+
+
+
 -- record toc-item:
 optional string title:
 optional string url:
