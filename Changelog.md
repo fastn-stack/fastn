@@ -11,6 +11,7 @@
 - [Added basic ftd functions](https://github.com/ftd-lang/ftd/pull/524/commits/f268014568ef75e86e989ef80de0089ad614e07f)
 - [Added `ftd.breakpoint-width`](https://github.com/ftd-lang/ftd/pull/524/commits/537b8cfd356f91e0059edbd04987c0a3f0dbf8a6)
 - [`ftd.device` type string to or-type](https://github.com/ftd-lang/ftd/pull/524/commits/85da36d3eecddcefad8b3acc9800458d4c740f34)
+- [Added `ftd.code`](https://github.com/ftd-lang/ftd/commit/5c5a8214d69276fe587949a364199ab8a2407e71)
 
 ## 9th January 2023
 
