@@ -60,7 +60,7 @@ pub(crate) enum AuthProviders {
 }
 
 impl AuthProviders {
-    const AUTH_ITER: [AuthProviders; 26] = [
+    pub(crate) const AUTH_ITER: [AuthProviders; 26] = [
         AuthProviders::GitHub,
         AuthProviders::TeleGram,
         AuthProviders::Google,
