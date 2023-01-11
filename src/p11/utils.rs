@@ -25,3 +25,11 @@ where
         line_number,
     })
 }
+
+pub(crate) fn i32_to_usize(i: i32) -> usize {
+    if i < 0 {
+        0
+    } else {
+        i as usize
+    }
+}

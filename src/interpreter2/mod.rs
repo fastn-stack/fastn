@@ -75,8 +75,8 @@ pub use constants::{
     FTD_WHITESPACE_PRELINE, FTD_WHITESPACE_PREWRAP,
 };
 pub use main2::{
-    interpret, Document, Interpreter, InterpreterState, InterpreterWithoutState, StateWithThing,
-    ToProcess,
+    interpret, interpret_with_line_number, Document, Interpreter, InterpreterState,
+    InterpreterWithoutState, StateWithThing, ToProcess,
 };
 pub use tdoc::TDoc;
 pub use things::{

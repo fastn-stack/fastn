@@ -8,7 +8,7 @@ mod section;
 pub mod utils;
 
 pub use header::{Header, Headers, Section as HSection, KV};
-pub use parser::parse;
+pub use parser::{parse, parse_with_line_number};
 pub use section::Body;
 pub use section::Section;
 

@@ -708,11 +708,21 @@ impl InterpreterState {
 }
 
 pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter2::Result<Interpreter> {
+    interpret_with_line_number(id, source, 0)
+}
+
+pub fn interpret_with_line_number<'a>(
+    id: &'a str,
+    source: &'a str,
+    line_number: usize,
+) -> ftd::interpreter2::Result<Interpreter> {
     use itertools::Itertools;
 
     let mut s = InterpreterState::new(id.to_string());
-    s.parsed_libs
-        .insert(id.to_string(), ParsedDocument::parse(id, source)?);
+    s.parsed_libs.insert(
+        id.to_string(),
+        ParsedDocument::parse_with_line_number(id, source, line_number)?,
+    );
     s.to_process.stack.push((
         id.to_string(),
         s.parsed_libs
@@ -746,7 +756,18 @@ pub struct ParsedDocument {
 
 impl ParsedDocument {
     fn parse(id: &str, source: &str) -> ftd::interpreter2::Result<ParsedDocument> {
-        let ast = ftd::ast::AST::from_sections(ftd::p11::parse(source, id)?.as_slice(), id)?;
+        ParsedDocument::parse_with_line_number(id, source, 0)
+    }
+
+    fn parse_with_line_number(
+        id: &str,
+        source: &str,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ParsedDocument> {
+        let ast = ftd::ast::AST::from_sections(
+            ftd::p11::parse_with_line_number(source, id, line_number)?.as_slice(),
+            id,
+        )?;
         let doc_aliases = {
             let mut doc_aliases = ftd::interpreter2::default::default_aliases();
             for ast in ast.iter().filter(|v| v.is_import()) {
