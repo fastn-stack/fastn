@@ -183,7 +183,7 @@ pub struct Common {
     pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub resize: ftd::executor::Value<Option<ftd::executor::Resize>>,
     pub white_space: ftd::executor::Value<Option<ftd::executor::WhiteSpace>>,
-    pub text_transform: ftd::executor::Value<Option<ftd::executor::TextTransform>>
+    pub text_transform: ftd::executor::Value<Option<ftd::executor::TextTransform>>,
 }
 
 pub fn default_column() -> Column {
