@@ -33,6 +33,7 @@ pub const FTD_ALIGN_BOTTOM_RIGHT: &str = "ftd#align.bottom-right";
 pub const FTD_RESIZING: &str = "ftd#resizing";
 pub const FTD_RESIZING_HUG_CONTENT: &str = "ftd#resizing.hug-content";
 pub const FTD_RESIZING_FILL_CONTAINER: &str = "ftd#resizing.fill-container";
+pub const FTD_RESIZING_AUTO: &str = "ftd#resizing.auto";
 pub const FTD_RESIZING_FIXED: &str = "ftd#resizing.fixed";
 
 pub const FTD_COLOR: &str = "ftd#color";
