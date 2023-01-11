@@ -1164,6 +1164,16 @@ impl ftd::executor::Common {
             ),
         );
 
+        d.check_and_insert(
+            "text-transform",
+            ftd::node::Value::from_executor_value(
+                self.text_transform.value.as_ref().map(|v| v.to_css_string()),
+                self.text_transform.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
         d
     }
 
