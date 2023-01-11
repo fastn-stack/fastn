@@ -138,7 +138,7 @@
             "line_number": null
           },
           "height": {
-            "value": "fit-content",
+            "value": "auto",
             "properties": [],
             "line_number": null
           },
@@ -249,7 +249,7 @@
             "line_number": null
           },
           "width": {
-            "value": "fit-content",
+            "value": "auto",
             "properties": [],
             "line_number": null
           }
@@ -365,7 +365,7 @@
             "line_number": null
           },
           "height": {
-            "value": "fit-content",
+            "value": "auto",
             "properties": [],
             "line_number": null
           },
@@ -452,7 +452,7 @@
             "line_number": null
           },
           "width": {
-            "value": "fit-content",
+            "value": "auto",
             "properties": [],
             "line_number": null
           }
@@ -570,7 +570,7 @@
             "line_number": null
           },
           "height": {
-            "value": "fit-content",
+            "value": "auto",
             "properties": [],
             "line_number": null
           },
@@ -645,7 +645,7 @@
             "line_number": null
           },
           "width": {
-            "value": "fit-content",
+            "value": "auto",
             "properties": [],
             "line_number": null
           }

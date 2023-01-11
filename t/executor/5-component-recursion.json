@@ -736,12 +736,12 @@
                         "properties": []
                       },
                       "width": {
-                        "value": "HugContent",
+                        "value": "Auto",
                         "line_number": null,
                         "properties": []
                       },
                       "height": {
-                        "value": "HugContent",
+                        "value": "Auto",
                         "line_number": null,
                         "properties": []
                       },
@@ -1083,12 +1083,12 @@
                                 "properties": []
                               },
                               "width": {
-                                "value": "HugContent",
+                                "value": "Auto",
                                 "line_number": null,
                                 "properties": []
                               },
                               "height": {
-                                "value": "HugContent",
+                                "value": "Auto",
                                 "line_number": null,
                                 "properties": []
                               },
@@ -1372,12 +1372,12 @@
                         "properties": []
                       },
                       "width": {
-                        "value": "HugContent",
+                        "value": "Auto",
                         "line_number": null,
                         "properties": []
                       },
                       "height": {
-                        "value": "HugContent",
+                        "value": "Auto",
                         "line_number": null,
                         "properties": []
                       },
@@ -1719,12 +1719,12 @@
                                 "properties": []
                               },
                               "width": {
-                                "value": "HugContent",
+                                "value": "Auto",
                                 "line_number": null,
                                 "properties": []
                               },
                               "height": {
-                                "value": "HugContent",
+                                "value": "Auto",
                                 "line_number": null,
                                 "properties": []
                               },
@@ -2066,12 +2066,12 @@
                                         "properties": []
                                       },
                                       "width": {
-                                        "value": "HugContent",
+                                        "value": "Auto",
                                         "line_number": null,
                                         "properties": []
                                       },
                                       "height": {
-                                        "value": "HugContent",
+                                        "value": "Auto",
                                         "line_number": null,
                                         "properties": []
                                       },
@@ -2355,12 +2355,12 @@
                                 "properties": []
                               },
                               "width": {
-                                "value": "HugContent",
+                                "value": "Auto",
                                 "line_number": null,
                                 "properties": []
                               },
                               "height": {
-                                "value": "HugContent",
+                                "value": "Auto",
                                 "line_number": null,
                                 "properties": []
                               },
@@ -2644,12 +2644,12 @@
                         "properties": []
                       },
                       "width": {
-                        "value": "HugContent",
+                        "value": "Auto",
                         "line_number": null,
                         "properties": []
                       },
                       "height": {
-                        "value": "HugContent",
+                        "value": "Auto",
                         "line_number": null,
                         "properties": []
                       },
@@ -2933,12 +2933,12 @@
                 "properties": []
               },
               "width": {
-                "value": "HugContent",
+                "value": "Auto",
                 "line_number": null,
                 "properties": []
               },
               "height": {
-                "value": "HugContent",
+                "value": "Auto",
                 "line_number": null,
                 "properties": []
               },
