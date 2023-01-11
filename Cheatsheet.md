@@ -336,39 +336,6 @@ This is a body text.
 - `border-top-right-radius`: `optional ftd.length`
 - `border-bottom-left-radius`: `optional ftd.length`
 - `border-bottom-right-radius`: `optional ftd.length`
-- `region`: `optional ftd.region`
-- `white-space`: `optional ftd.white-space`
-- `text-transform`: `optional ftd.text-transform`
-
-**`ftd.white-space`**
-
-```ftd 
--- or-type white-space:
-
--- constant string normal: normal
--- constant string nowrap: nowrap
--- constant string pre: pre 
--- constant string pre-wrap: pre-wrap
--- constant string pre-line: pre-line
--- constant string break-spaces: break-spaces
-
--- end: length
-```
-
-**`ftd.text-transform`**
-
-```ftd 
--- or-type text-transform:
-
--- constant string none: none
--- constant string capitalize: capitalize
--- constant string uppercase: uppercase
--- constant string lowercase: lowercase
--- constant string initial: initial 
--- constant string inherit: inherit
-
--- end: text-transform
-```
 
 **`ftd.length`**
 
@@ -559,7 +526,23 @@ string dark: $color.light
 -- constant string break-spaces: break-spaces
 
 -- end: white-space
+```
 
+- `text-transform`: `optional ftd.text-transform`
+
+**`ftd.text-transform`**
+
+```ftd 
+-- or-type text-transform:
+
+-- constant string none: none
+-- constant string capitalize: capitalize
+-- constant string uppercase: uppercase
+-- constant string lowercase: lowercase
+-- constant string initial: initial 
+-- constant string inherit: inherit
+
+-- end: text-transform
 ```
 
 - `classes`: string list (classes are created in css)
