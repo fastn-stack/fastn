@@ -2116,16 +2116,6 @@ impl WhiteSpace {
     }
 }
 
-/*
-Value	Description	Demo
-none	No capitalization. The text renders as it is. This is default
-capitalize	Transforms the first character of each word to uppercase
-uppercase	Transforms all characters to uppercase
-lowercase	Transforms all characters to lowercase
-initial	Sets this property to its default value. Read about initial
-inherit	Inherits this property from its parent element. Read about inherit
-
- */
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum TextTransform {
     NONE,
