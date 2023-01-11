@@ -1,5 +1,9 @@
 # FTD Change Log
 
+## 11th January 2023
+
+- [Added `auto` variant in `ftd.resizing`](https://github.com/ftd-lang/ftd/pull/523/commits/939fce3398b6f5612eceffab8931c71d7341af55)
+
 ## 10th January 2023
 
 - [Added white-space css](https://github.com/ftd-lang/ftd/pull/523/commits/af5b339f1b6ff04a0738dbbfda4186d57d27fd27)
