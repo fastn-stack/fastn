@@ -1,0 +1,4 @@
+-- import: fpm
+
+-- fpm.package: user-details-processor
+download-base-url: https://www.github.com/

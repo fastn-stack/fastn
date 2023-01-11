@@ -1,0 +1,66 @@
+-- import: fpm
+-- import: fpm/processors
+
+
+;; Data Structure to hold the app data
+-- record app:
+string name:
+string package:
+string url:
+/optional ftd.img-src icon:
+
+;; Processor to get the data
+-- fpm.app-ui apps:
+$processor$: processors.fpm-apps
+
+;; printing the individual app data
+-- print-app:
+$loop$: $apps.items as $app
+app-data: $app.item
+
+-- end: print-app
+
+
+;; component for printing the app data
+-- component print-app:
+fpm.app-ui-item app-data:
+
+-- ftd.column:
+margin.px: 10
+border-width.px: 1
+padding.px: 5
+background.solid: yellow
+
+-- ftd.row:
+padding.px: 5
+
+-- ftd.text: App Name:
+
+-- ftd.text: $print-app.app-data.name
+
+-- end: ftd.row
+
+-- ftd.row:
+padding.px: 5
+
+-- ftd.text: App Dependency Package:
+
+-- ftd.text: $print-app.app-data.package
+
+-- end: ftd.row
+
+-- ftd.row:
+padding.px: 5
+
+-- ftd.text: App Mount Point:
+
+-- ftd.text: $print-app.app-data.url
+
+-- end: ftd.row
+
+/-- ftd.text: $print-app.app-data.icon
+if: {print-app.app-data.icon != NULL}
+
+-- end: ftd.column
+
+-- end: print-app

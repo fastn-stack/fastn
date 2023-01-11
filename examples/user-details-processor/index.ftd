@@ -1,0 +1,22 @@
+-- import: fpm
+-- import: fpm/processors
+
+
+-- ftd.text: Hello world
+
+-- record user-details:
+boolean is-login:
+
+-- user-details details:
+$processor$: processors.user-details
+
+
+-- ftd.boolean: $details.is-login
+
+
+
+-- boolean is-reader:
+$processor$: processors.is-reader
+
+
+-- ftd.boolean: $is-reader
