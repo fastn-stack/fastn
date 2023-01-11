@@ -25,6 +25,7 @@ pub fn interpret_helper(
                     source,
                     foreign_variable,
                     foreign_function,
+                    0,
                 )?;
             }
             ftd::interpreter2::Interpreter::StuckOnProcessor {

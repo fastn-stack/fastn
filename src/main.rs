@@ -206,6 +206,7 @@ pub fn ftd_v2_interpret_helper(
                     source.as_str(),
                     foreign_variable,
                     foreign_function,
+                    0,
                 )?;
             }
             ftd::interpreter2::Interpreter::StuckOnProcessor {

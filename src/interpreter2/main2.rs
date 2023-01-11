@@ -113,11 +113,11 @@ impl InterpreterState {
     }
 
     pub fn continue_processing(mut self) -> ftd::interpreter2::Result<Interpreter> {
-        if let Some(interpreter) = self.resolve_pending_imports()? {
-            return Ok(interpreter);
-        }
-
         while let Some((doc_name, number_of_scan, ast)) = self.get_next_ast() {
+            if let Some(interpreter) = self.resolve_pending_imports()? {
+                return Ok(interpreter);
+            }
+
             self.increase_scan_count();
             let parsed_document = self.parsed_libs.get(doc_name.as_str()).unwrap();
             let name = parsed_document.name.to_string();
@@ -136,7 +136,7 @@ impl InterpreterState {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
                         ftd::interpreter2::Record::scan_ast(ast, &mut doc)?;
-                        return self.continue_processing();
+                        continue;
                     } else {
                         match ftd::interpreter2::Record::from_ast(ast, &mut doc)? {
                             ftd::interpreter2::StateWithThing::State(s) => {
@@ -582,6 +582,9 @@ impl InterpreterState {
                     .collect_vec();
 
                 if !ast_for_thing.is_empty() {
+                    self.to_process
+                        .contains
+                        .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
                     self.to_process.stack.push((doc_name, ast_for_thing));
                 } else {
                     let found_foreign_variable =
