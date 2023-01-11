@@ -11,7 +11,7 @@ mod tdoc;
 mod utils;
 mod value;
 
-pub use element::{Code, Column, Common, Container, Element, Event, Image, Row, Text};
+pub use element::{Code, Column, Common, Container, Element, Event, Image, ImageSrc, Row, Text};
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, Color, ColorValue, Cursor, FontSize, Length,

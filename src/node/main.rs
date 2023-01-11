@@ -1,3 +1,5 @@
+use ftd::executor::Background;
+
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub classes: Vec<String>,
@@ -563,18 +565,32 @@ impl ftd::executor::Common {
             ),
         );
 
-        d.check_and_insert(
-            "background-color",
-            ftd::node::Value::from_executor_value(
-                self.background
-                    .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
-                    .value,
-                self.background.to_owned(),
-                None,
-                doc_id,
+        match self.background.value.as_ref() {
+            Background::Solid(_) => d.check_and_insert(
+                "background-color",
+                ftd::node::Value::from_executor_value(
+                    self.background
+                        .to_owned()
+                        .map(|v| v.map(|v| v.to_css_string()))
+                        .value,
+                    self.background.to_owned(),
+                    None,
+                    doc_id,
+                ),
             ),
-        );
+            Background::Image(_) => d.check_and_insert(
+                "background-image",
+                ftd::node::Value::from_executor_value(
+                    self.background
+                        .to_owned()
+                        .map(|v| v.map(|v| format!("url({})", v.to_css_string())))
+                        .value,
+                    self.background.to_owned(),
+                    None,
+                    doc_id,
+                ),
+            )
+        }
 
         d.check_and_insert(
             "color",

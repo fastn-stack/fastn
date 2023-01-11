@@ -1,3 +1,6 @@
+use ftd::executor::Image as Image;
+use ftd::executor::ImageSrc as ImageSrc;
+
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Length {
     Px(i64),
@@ -751,6 +754,7 @@ impl Resizing {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Background {
     Solid(Color),
+    Image(ImageSrc)
 }
 
 impl Background {
@@ -773,6 +777,11 @@ impl Background {
     ) -> ftd::executor::Result<Self> {
         match or_type_value.0.as_str() {
             ftd::interpreter2::FTD_BACKGROUND_SOLID => Ok(Background::Solid(Color::from_value(
+                or_type_value.1,
+                doc,
+                line_number,
+            )?)),
+            ftd::interpreter2::FTD_BACKGROUND_IMAGE => Ok(Background::Image(ImageSrc::from_value(
                 or_type_value.1,
                 doc,
                 line_number,
@@ -811,6 +820,7 @@ impl Background {
     pub fn to_css_string(&self) -> String {
         match self {
             Background::Solid(c) => c.light.value.to_css_string(),
+            Background::Image(img) => img.light.value.to_string(),
         }
     }
 }
