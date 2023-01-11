@@ -285,6 +285,8 @@ what += by_how_much
 
 FTD comes with following kernel components:
 
+## `ftd.text` - To display text or strings 
+
 ```ftd
 -- ftd.text: hello world
 ```
@@ -309,6 +311,35 @@ This is a body text.
 -- constant string justify: justify
 -- end: text-align
 ```
+
+## `ftd.code` - To render a code block
+
+```ftd 
+-- ftd.code: 
+lang: rs
+
+def func() {
+  println!("Hello World");
+}
+```
+
+## `ftd.code` attributes
+
+### `lang`: `optional string` -> To specify code language.
+`Default lang = txt` 
+### `theme`: `optional string` -> To specify the theme
+`Default theme = base16.ocean-dark`
+
+Currently includes these themes
+
+`base16-ocean.dark`, `base16-eighties.dark`, `base16-mocha.dark`, `base16-ocean.light`
+`Solarized (dark)`, `Solarized (light)`
+
+Also see InspiredGitHub from [here](https://github.com/sethlopezme/InspiredGitHub.tmtheme)
+
+### `body`: `string` -> specify the code to display
+### `text-align`: `ftd.text-align` -> specify text alignment
+(Refer or-type `ftd.text-align` to know all possible values)
 
 ## Common Attributes
 
