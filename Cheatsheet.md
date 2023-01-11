@@ -411,8 +411,8 @@ string dark: $color.light
 - `max-width`: `optional ftd.resizing`
 - `min-height`: `optional ftd.resizing`
 - `max-height`: `optional ftd.resizing`
-- `width`: `optional ftd.resizing`
-- `height`: `optional ftd.resizing`
+- `width`: `optional ftd.resizing` (default: `auto`)
+- `height`: `optional ftd.resizing` (default: `auto`)
 
 
 **`ftd.resizing`**
@@ -422,6 +422,7 @@ string dark: $color.light
 
 -- constant string fill-container: fill-container
 -- constant string hug-content: hug-content
+-- constant string auto: auto
 -- ftd.length fixed:
 
 -- end: resizing
