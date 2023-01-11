@@ -1,0 +1,22 @@
+-- ftd.color c:
+light: red
+dark: green
+
+-- ftd.image-src img:
+light: https://picsum.photos/200/300
+dark: https://picsum.photos/id/237/200/300
+
+/-- ftd.text: Hello world
+background.solid: $c
+
+-- ftd.image:
+src: $img
+
+-- ftd.column:
+background.image: $img
+width.fixed.px: 300
+height.fixed.px: 300
+
+-- ftd.text: hello world
+
+-- end: ftd.column
