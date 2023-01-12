@@ -1249,20 +1249,21 @@ impl<'a> TDoc<'a> {
                 })
                 .map(|v| (0, v.to_owned()))
                 .collect_vec();
-            if !current_doc_contains_thing.is_empty()
-                && !state.to_process.contains.contains(&(
-                    self.name.to_string(),
-                    format!("{}#{}", doc_name, thing_name),
-                ))
-            {
+            if !current_doc_contains_thing.is_empty() {
                 state
                     .to_process
                     .stack
                     .push((self.name.to_string(), current_doc_contains_thing));
-                state.to_process.contains.insert((
+
+                if !state.to_process.contains.contains(&(
                     self.name.to_string(),
                     format!("{}#{}", doc_name, thing_name),
-                ));
+                )) {
+                    state.to_process.contains.insert((
+                        self.name.to_string(),
+                        format!("{}#{}", doc_name, thing_name),
+                    ));
+                }
             } else if !current_doc_contains_thing.is_empty() && state.peek_stack().unwrap().1.gt(&4)
             {
                 return self.err("not found", name, "search_thing", line_number);
@@ -1300,6 +1301,10 @@ impl<'a> TDoc<'a> {
                 return self.err("not found", name, "search_thing", line_number);
             }
 
+            state
+                .to_process
+                .stack
+                .push((doc_name.to_string(), ast_for_thing));
             if !state
                 .to_process
                 .contains
@@ -1309,9 +1314,6 @@ impl<'a> TDoc<'a> {
                     .to_process
                     .contains
                     .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
-                state.to_process.stack.push((doc_name, ast_for_thing));
-            } else if state.peek_stack().unwrap().1.gt(&4) {
-                return self.err("not found", name, "search_thing", line_number);
             }
 
             return Ok(ftd::interpreter2::StateWithThing::new_continue());
