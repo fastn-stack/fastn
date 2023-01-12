@@ -7,6 +7,7 @@ pub enum Element {
     Boolean(Text),
     Image(Image),
     Code(Code),
+    Iframe(Iframe),
     Null,
 }
 
@@ -20,6 +21,7 @@ impl Element {
             Element::Boolean(b) => Some(&b.common),
             Element::Image(i) => Some(&i.common),
             Element::Code(c) => Some(&c.common),
+            Element::Iframe(i) => Some(&i.common),
             Element::Null => None,
         }
     }
@@ -182,6 +184,86 @@ pub fn code_from_properties(
             line_number,
             "text-align",
         )?,
+        common,
+    })
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct Iframe {
+    pub src: ftd::executor::Value<String>,
+    /// iframe can load lazily.
+    pub loading: ftd::executor::Value<ftd::executor::Loading>,
+    pub common: Common,
+}
+
+pub fn iframe_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
+    arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Expression>,
+    doc: &ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+) -> ftd::executor::Result<Iframe> {
+    let src = {
+        let src =
+            ftd::executor::value::optional_string("src", properties, arguments, doc, line_number)?;
+
+        let youtube = ftd::executor::value::optional_string(
+            "youtube",
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?
+        .map(|v| v.and_then(|v| ftd::executor::youtube_id::from_raw(v.as_str())));
+
+        if src.value.is_some() && youtube.value.is_some() {
+            return ftd::executor::utils::parse_error(
+                "both src and youtube id provided",
+                doc.name,
+                src.line_number
+                    .unwrap_or(youtube.line_number.unwrap_or(line_number)),
+            );
+        }
+        if src.value.is_none() && youtube.value.is_none() {
+            return ftd::executor::utils::parse_error(
+                "src or youtube id is required",
+                doc.name,
+                line_number,
+            );
+        }
+        match src.value {
+            Some(val) => ftd::executor::Value::new(val, src.line_number.to_owned(), src.properties),
+            None => ftd::executor::Value::new(
+                youtube.value.unwrap_or_default(),
+                youtube.line_number.to_owned(),
+                youtube.properties,
+            ),
+        }
+    };
+
+    let loading = ftd::executor::Loading::loading_with_default(
+        properties,
+        arguments,
+        doc,
+        line_number,
+        "loading",
+    )?;
+
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+    )?;
+
+    Ok(Iframe {
+        src,
+        loading,
         common,
     })
 }

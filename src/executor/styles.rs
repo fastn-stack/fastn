@@ -2199,3 +2199,81 @@ impl TextTransform {
         }
     }
 }
+
+/// https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[serde(tag = "type")]
+pub enum Loading {
+    Lazy,
+    Eager,
+}
+
+impl Default for Loading {
+    fn default() -> Self {
+        Loading::Lazy
+    }
+}
+
+impl Loading {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(Loading::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_LOADING_LAZY => Ok(Loading::Lazy),
+            ftd::interpreter2::FTD_LOADING_EAGER => Ok(Loading::Eager),
+            t => ftd::executor::utils::parse_error(
+                format!(
+                    "Unknown variant `{}` for or-type `ftd.loading`. Help: use `lazy` or `eager`",
+                    t
+                ),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn loading_with_default(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Loading>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_LOADING,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            Loading::from_optional_values(or_type_value.value, doc, line_number)?
+                .unwrap_or_default(),
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            Loading::Lazy => "lazy".to_string(),
+            Loading::Eager => "eager".to_string(),
+        }
+    }
+}

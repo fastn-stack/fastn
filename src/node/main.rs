@@ -91,6 +91,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Boolean(t) => t.to_node(doc_id),
             ftd::executor::Element::Image(i) => i.to_node(doc_id),
             ftd::executor::Element::Code(c) => c.to_node(doc_id),
+            ftd::executor::Element::Iframe(i) => i.to_node(doc_id),
             ftd::executor::Element::Null => Node {
                 classes: vec![],
                 events: vec![],
@@ -310,6 +311,46 @@ impl ftd::executor::Code {
             None,
             doc_id,
         );
+        n
+    }
+}
+
+impl ftd::executor::Iframe {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        use ftd::node::utils::CheckMap;
+
+        let mut n = Node::from_common("iframe", "block", &self.common, doc_id);
+
+        n.attrs.check_and_insert(
+            "src",
+            ftd::node::Value::from_executor_value(
+                Some(self.src.to_owned().value),
+                self.src.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.attrs
+            .check_and_insert("allow", ftd::node::Value::from_string("fullscreen"));
+
+        n.attrs.check_and_insert(
+            "allowfullscreen",
+            ftd::node::Value::from_string("allowfullscreen"),
+        );
+
+        n.attrs.check_and_insert(
+            "loading",
+            ftd::node::Value::from_executor_value(
+                Some(self.loading.to_owned().map(|v| v.to_css_string()).value),
+                self.loading.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.classes.extend(self.common.add_class());
+        n.classes.push("ft_md".to_string());
         n
     }
 }

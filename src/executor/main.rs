@@ -292,6 +292,17 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                 )?)
             }
+            "ftd#iframe" => {
+                ftd::executor::Element::Iframe(ftd::executor::element::iframe_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                )?)
+            }
             _ => unimplemented!(),
         })
     }
