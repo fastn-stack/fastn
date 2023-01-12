@@ -1,5 +1,9 @@
 # FTD Change Log
 
+## 12 January 2023
+
+- Major Change: [Converted executor from recursion to loop](https://github.com/ftd-lang/ftd/pull/529/commits/f305bc187f006bb49e2cbdaf1f35bbd62e151d67)
+
 ## 11th January 2023
 
 - [Added text-transform css](https://github.com/ftd-lang/ftd/pull/529/commits/0cae01d1a5b9b7a3775bd60d1c36a8230e5d74cc)
