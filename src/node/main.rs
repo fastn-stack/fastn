@@ -177,15 +177,6 @@ impl ftd::executor::Row {
                 doc_id,
             ),
         );
-
-        n.children = {
-            let mut children = vec![];
-            for child in self.container.children.iter() {
-                let child_node = child.to_node(doc_id);
-                children.push(child_node);
-            }
-            children
-        };
         n
     }
 }
@@ -257,15 +248,6 @@ impl ftd::executor::Column {
                 doc_id,
             ),
         );
-
-        n.children = {
-            let mut children = vec![];
-            for child in self.container.children.iter() {
-                let child_node = child.to_node(doc_id);
-                children.push(child_node);
-            }
-            children
-        };
         n
     }
 }
