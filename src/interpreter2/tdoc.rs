@@ -1365,6 +1365,121 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn from_json_rows(
+        &self,
+        kind: &ftd::interpreter2::Kind,
+        rows: &[Vec<serde_json::Value>],
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        Ok(match kind {
+            ftd::interpreter2::Kind::List { kind, .. } => {
+                let kind = kind.as_ref();
+                let mut data = vec![];
+                for row in rows {
+                    data.push(
+                        self.from_json_row(&kind, row, line_number)?
+                            .into_property_value(false, line_number),
+                    );
+                }
+
+                ftd::interpreter2::Value::List {
+                    data,
+                    kind: kind.to_owned().into_kind_data(),
+                }
+            }
+            t => unimplemented!(
+                "{:?} not yet implemented, line number: {}, doc: {}",
+                t,
+                line_number,
+                self.name.to_string()
+            ),
+        })
+    }
+
+    pub fn from_json_row(
+        &self,
+        kind: &ftd::interpreter2::Kind,
+        row: &[serde_json::Value],
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        Ok(match kind {
+            ftd::interpreter2::Kind::Record { name, .. } => {
+                let rec = self.get_record(&name, line_number)?;
+                let rec_fields = rec.fields;
+                let mut fields: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
+                for (idx, key) in rec_fields.iter().enumerate() {
+                    let val = match row.get(idx) {
+                        Some(v) => v,
+                        None => {
+                            return ftd::interpreter2::utils::e2(
+                                format!("key not found: {}", key.name.as_str()),
+                                self.name,
+                                line_number,
+                            )
+                        }
+                    };
+                    fields.insert(
+                        key.name.to_string(),
+                        self.from_json(val, &key.kind.kind, line_number)?
+                            .into_property_value(false, line_number),
+                    );
+                }
+                ftd::interpreter2::Value::Record {
+                    name: name.to_string(),
+                    fields,
+                }
+            }
+            ftd::interpreter2::Kind::String { .. } if row.first().is_some() => {
+                ftd::interpreter2::Value::String {
+                    text: serde_json::from_value::<String>(row.first().unwrap().to_owned())
+                        .map_err(|_| ftd::interpreter2::Error::ParseError {
+                            message: format!("Can't parse to string, found: {:?}", row),
+                            doc_id: self.name.to_string(),
+                            line_number,
+                        })?,
+                }
+            }
+            ftd::interpreter2::Kind::Integer { .. } if row.first().is_some() => {
+                ftd::interpreter2::Value::Integer {
+                    value: serde_json::from_value::<i64>(row.first().unwrap().to_owned()).map_err(
+                        |_| ftd::interpreter2::Error::ParseError {
+                            message: format!("Can't parse to integer, found: {:?}", row),
+                            doc_id: self.name.to_string(),
+                            line_number,
+                        },
+                    )?,
+                }
+            }
+            ftd::interpreter2::Kind::Decimal { .. } if row.first().is_some() => {
+                ftd::interpreter2::Value::Decimal {
+                    value: serde_json::from_value::<f64>(row.first().unwrap().to_owned()).map_err(
+                        |_| ftd::interpreter2::Error::ParseError {
+                            message: format!("Can't parse to decimal, found: {:?}", row),
+                            doc_id: self.name.to_string(),
+                            line_number,
+                        },
+                    )?,
+                }
+            }
+            ftd::interpreter2::Kind::Boolean { .. } if row.first().is_some() => {
+                ftd::interpreter2::Value::Boolean {
+                    value: serde_json::from_value::<bool>(row.first().unwrap().to_owned())
+                        .map_err(|_| ftd::interpreter2::Error::ParseError {
+                            message: format!("Can't parse to boolean,found: {:?}", row),
+                            doc_id: self.name.to_string(),
+                            line_number,
+                        })?,
+                }
+            }
+            t => unimplemented!(
+                "{:?} not yet implemented, line number: {}, doc: {}",
+                t,
+                line_number,
+                self.name.to_string()
+            ),
+        })
+    }
+
     pub fn from_json<T>(
         &self,
         json: &T,
