@@ -464,6 +464,7 @@ impl Library2 {
                 fpm::library::package_tree::processor(section, doc, &self.config).await
             }
             "fetch-file" => fpm::library::fetch_file::processor(section, doc, &self.config).await,
+            // Note: Not needed right now
             "get-version-data" => {
                 fpm::library::get_version_data::processor(
                     section,
@@ -474,6 +475,7 @@ impl Library2 {
                 )
                 .await
             }
+            // Note: Not needed right now
             "cr-meta" => fpm::library::cr_meta::processor(section, doc, &self.config).await,
             "request-data" => {
                 fpm::library::http::request_data_processor(section, doc, &self.config)
