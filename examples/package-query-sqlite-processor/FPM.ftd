@@ -1,0 +1,4 @@
+-- import: fpm
+
+-- fpm.package: package-query-sqlite-processor
+download-base-url: https://www.github.com/

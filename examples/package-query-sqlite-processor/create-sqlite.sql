@@ -1,0 +1,12 @@
+CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL);
+INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic1', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic2', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic3', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic4', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic5', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic6', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic7', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic8', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic9', 'alice@example.com');
+INSERT INTO users (name, email) VALUES ('Alic0', 'alice@example.com');

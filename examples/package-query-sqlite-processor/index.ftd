@@ -1,0 +1,45 @@
+-- import: fpm
+-- import: fpm/processors
+
+
+
+-- ftd.text: Hello world
+
+
+-- record employee:
+integer id:
+string name:
+string email:
+
+-- employee list employees:
+$processor$: processors.package-query
+db: users.db
+
+SELECT * from users;
+
+
+-- print-employee:
+$loop$: $employees as $employee
+e: $employee
+
+-- end: print-employee
+
+
+-- component print-employee:
+employee e:
+
+-- ftd.column:
+margin.px: 10
+border-width.px: 1
+padding.px: 5
+background.solid: yellow
+
+-- ftd.integer: $print-employee.e.id
+
+-- ftd.text: $print-employee.e.name
+
+-- ftd.integer: $print-employee.e.email
+
+-- end: ftd.column
+
+-- end: print-employee
