@@ -375,6 +375,7 @@ pub async fn resolve_import_2022<'a>(
                 "user-details".to_string(),
                 "fpm-apps".to_string(),
                 "is-reader".to_string(),
+                "package-query".to_string(),
             ],
             0,
         )
