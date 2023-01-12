@@ -706,6 +706,8 @@ optional string font-family:
 -- end: anchor
 ```
 
+- `z-index`: `optional integer`
+
 # Events
 
 - `on-click`
