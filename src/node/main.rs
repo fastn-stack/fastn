@@ -466,6 +466,16 @@ impl ftd::executor::Common {
         d.check_and_insert("box-sizing", ftd::node::Value::from_string("border-box"));
 
         d.check_and_insert(
+            "z-index",
+            ftd::node::Value::from_executor_value(
+                self.z_index.value.as_ref().map(|v| v.to_string()),
+                self.z_index.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        d.check_and_insert(
             "top",
             ftd::node::Value::from_executor_value(
                 self.top.value.as_ref().map(|v| v.to_css_string()),

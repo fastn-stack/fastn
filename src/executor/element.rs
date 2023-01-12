@@ -322,6 +322,7 @@ pub struct Common {
     pub is_not_visible: bool,
     pub event: Vec<Event>,
     pub is_dummy: bool,
+    pub z_index: ftd::executor::Value<Option<i64>>,
     pub left: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub right: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub top: ftd::executor::Value<Option<ftd::executor::Length>>,
@@ -619,6 +620,13 @@ pub fn common_from_properties(
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
+        z_index: ftd::executor::value::optional_i64(
+            "z-index",
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
         left: ftd::executor::Length::optional_length(
             properties,
             arguments,

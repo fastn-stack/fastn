@@ -6222,6 +6222,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
         ftd::interpreter2::Argument::default(
+            "z-index",
+            ftd::interpreter2::Kind::integer()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "white-space",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_WHITESPACE)
                 .into_optional()
