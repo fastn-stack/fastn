@@ -324,8 +324,18 @@ impl ftd::executor::Iframe {
         n.attrs.check_and_insert(
             "src",
             ftd::node::Value::from_executor_value(
-                Some(self.src.to_owned().value),
+                self.src.to_owned().value,
                 self.src.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.attrs.check_and_insert(
+            "srcdoc",
+            ftd::node::Value::from_executor_value(
+                self.srcdoc.to_owned().value,
+                self.srcdoc.to_owned(),
                 None,
                 doc_id,
             ),

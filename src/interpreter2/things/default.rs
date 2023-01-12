@@ -6132,13 +6132,20 @@ pub fn iframe_function() -> ftd::interpreter2::ComponentDefinition {
                     ftd::interpreter2::Kind::string()
                         .into_optional()
                         .into_kind_data()
-                        .caption_or_body(),
+                        .caption(),
                 ),
                 ftd::interpreter2::Argument::default(
                     "youtube",
                     ftd::interpreter2::Kind::string()
                         .into_optional()
                         .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "srcdoc",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data()
+                        .body(),
                 ),
                 ftd::interpreter2::Argument::default(
                     "loading",

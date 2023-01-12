@@ -190,7 +190,8 @@ pub fn code_from_properties(
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Iframe {
-    pub src: ftd::executor::Value<String>,
+    pub src: ftd::executor::Value<Option<String>>,
+    pub srcdoc: ftd::executor::Value<Option<String>>,
     /// iframe can load lazily.
     pub loading: ftd::executor::Value<ftd::executor::Loading>,
     pub common: Common,
@@ -205,6 +206,9 @@ pub fn iframe_from_properties(
     local_container: &[usize],
     line_number: usize,
 ) -> ftd::executor::Result<Iframe> {
+    let srcdoc =
+        ftd::executor::value::optional_string("srcdoc", properties, arguments, doc, line_number)?;
+
     let src = {
         let src =
             ftd::executor::value::optional_string("src", properties, arguments, doc, line_number)?;
@@ -218,28 +222,37 @@ pub fn iframe_from_properties(
         )?
         .map(|v| v.and_then(|v| ftd::executor::youtube_id::from_raw(v.as_str())));
 
-        if src.value.is_some() && youtube.value.is_some() {
+        if [
+            src.value.is_some(),
+            youtube.value.is_some(),
+            srcdoc.value.is_some(),
+        ]
+        .into_iter()
+        .filter(|b| *b)
+        .count()
+            > 1
+        {
             return ftd::executor::utils::parse_error(
-                "both src and youtube id provided",
+                "Two or more than two values are provided among src, youtube and srcdoc.",
                 doc.name,
-                src.line_number
-                    .unwrap_or(youtube.line_number.unwrap_or(line_number)),
+                src.line_number.unwrap_or(
+                    youtube
+                        .line_number
+                        .unwrap_or(srcdoc.line_number.unwrap_or(line_number)),
+                ),
             );
         }
-        if src.value.is_none() && youtube.value.is_none() {
+        if src.value.is_none() && youtube.value.is_none() && srcdoc.value.is_none() {
             return ftd::executor::utils::parse_error(
-                "src or youtube id is required",
+                "Either srcdoc or src or youtube id is required",
                 doc.name,
                 line_number,
             );
         }
-        match src.value {
-            Some(val) => ftd::executor::Value::new(val, src.line_number.to_owned(), src.properties),
-            None => ftd::executor::Value::new(
-                youtube.value.unwrap_or_default(),
-                youtube.line_number.to_owned(),
-                youtube.properties,
-            ),
+        if src.value.is_some() {
+            src
+        } else {
+            youtube
         }
     };
 
@@ -263,6 +276,7 @@ pub fn iframe_from_properties(
 
     Ok(Iframe {
         src,
+        srcdoc,
         loading,
         common,
     })

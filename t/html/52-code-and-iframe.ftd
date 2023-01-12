@@ -9,3 +9,10 @@ fn hello_world() {
 
 -- ftd.iframe:
 youtube: 10MHfy3b3c8
+
+
+-- ftd.iframe:
+border-width.px: 4
+padding.px: 20
+
+<p>Hello world!</p>
