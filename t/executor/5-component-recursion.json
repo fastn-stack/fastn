@@ -1147,7 +1147,7 @@
                                 "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,0,0",
+                              "data_id": "0,1,0",
                               "line_number": 36,
                               "condition": null,
                               "overflow": {
@@ -1441,7 +1441,7 @@
                         "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,1,0",
+                      "data_id": "0,1",
                       "line_number": 34,
                       "condition": null,
                       "overflow": {
@@ -1793,7 +1793,7 @@
                                 "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,1,0",
+                              "data_id": "0,2,0",
                               "line_number": 36,
                               "condition": null,
                               "overflow": {
@@ -2145,7 +2145,7 @@
                                         "line_number": null,
                                         "properties": []
                                       },
-                                      "data_id": "0,1,1,1,0,0",
+                                      "data_id": "0,2,1,0",
                                       "line_number": 36,
                                       "condition": null,
                                       "overflow": {
@@ -2439,7 +2439,7 @@
                                 "line_number": null,
                                 "properties": []
                               },
-                              "data_id": "0,1,1,1,0",
+                              "data_id": "0,2,1",
                               "line_number": 34,
                               "condition": null,
                               "overflow": {
@@ -2733,7 +2733,7 @@
                         "line_number": null,
                         "properties": []
                       },
-                      "data_id": "0,1,1",
+                      "data_id": "0,2",
                       "line_number": 34,
                       "condition": null,
                       "overflow": {
