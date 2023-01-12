@@ -346,6 +346,7 @@ pub(crate) async fn read_ftd(
 }
 
 #[allow(clippy::await_holding_refcell_ref)]
+#[tracing::instrument(name = "read_ftd_2022", skip_all)]
 pub(crate) async fn read_ftd_2022(
     config: &mut fpm::Config,
     main: &fpm::Document,
@@ -374,7 +375,7 @@ pub(crate) async fn read_ftd_2022(
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
 
     let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
-    let main_ftd_doc = match fpm::time("interpret_helper").it(fpm::doc::interpret_helper(
+    let main_ftd_doc = match fpm::doc::interpret_helper(
         main.id_with_package().as_str(),
         doc_content.as_str(),
         &mut lib,
@@ -382,7 +383,7 @@ pub(crate) async fn read_ftd_2022(
         download_assets,
         line_number,
     )
-    .await)
+    .await
     {
         Ok(v) => v,
         Err(e) => {
@@ -392,10 +393,26 @@ pub(crate) async fn read_ftd_2022(
         }
     };
 
-    let executor =
-        fpm::time("Executor").it(ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?);
-    let node = fpm::time("NodeData").it(ftd::node::NodeData::from_rt(executor));
-    let html_ui = fpm::time("HtmlUI").it(ftd::html1::HtmlUI::from_node_data(node, "main")?);
+    #[tracing::instrument(name = "from_interpreter", skip_all)]
+    fn from_interpreter_wrapper(
+        document: ftd::interpreter2::Document,
+    ) -> ftd::executor::Result<ftd::executor::RT> {
+        ftd::executor::ExecuteDoc::from_interpreter(document)
+    }
+
+    #[tracing::instrument(name = "from_rt", skip_all)]
+    fn from_rt_wrapper(rt: ftd::executor::RT) -> ftd::node::NodeData {
+        ftd::node::NodeData::from_rt(rt)
+    }
+
+    #[tracing::instrument(name = "from_node_data", skip_all)]
+    fn from_node_data_wrapper(node: ftd::node::NodeData) -> ftd::html1::Result<ftd::html1::HtmlUI> {
+        ftd::html1::HtmlUI::from_node_data(node, "main")
+    }
+
+    let executor = from_interpreter_wrapper(main_ftd_doc)?;
+    let node = from_rt_wrapper(executor);
+    let html_ui = from_node_data_wrapper(node)?;
 
     all_packages.extend(lib.config.all_packages.into_inner());
     drop(all_packages);
