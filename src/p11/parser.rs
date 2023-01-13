@@ -1,3 +1,5 @@
+use std::borrow::BorrowMut;
+
 #[derive(Debug, Clone)]
 enum ParsingStateReading {
     Section,
@@ -26,8 +28,8 @@ impl State {
 
         self.reading_section()?;
 
-        while let Some((_, state)) = self.get_latest_state() {
-            self.end()?;
+        while let Some((_, mut state)) = self.get_latest_state() {
+            self.end(&mut Some(&mut state))?;
 
             if self.content.trim().is_empty() {
                 let sections = self.state.iter().map(|(v, _)| v.clone()).collect_vec();
@@ -63,7 +65,10 @@ impl State {
         Ok(())
     }
 
-    fn end(&mut self) -> ftd::p11::Result<()> {
+    fn end(
+        &mut self,
+        current_state: &mut Option<&mut ParsingStateReading>,
+    ) -> ftd::p11::Result<()> {
         let (scan_line_number, content) = self.clean_content();
         let (start_line, rest_lines) = new_line_split(content.as_str());
         if !start_line.starts_with("-- ") {
@@ -116,6 +121,9 @@ impl State {
                             sections,
                             condition,
                         ));
+                        if let Some(state) = current_state.as_mut() {
+                            **state = ParsingStateReading::Section
+                        }
                         break;
                     }
                     _ => {}
@@ -123,7 +131,7 @@ impl State {
             }
             self.line_number += (scan_line_number as i32) + 1;
             self.content = rest_lines;
-            return self.end();
+            return self.end(current_state);
         }
 
         Ok(())
@@ -218,7 +226,7 @@ impl State {
     }
 
     fn reading_block_headers(&mut self) -> ftd::p11::Result<()> {
-        self.end()?;
+        self.end(&mut None)?;
         let (scan_line_number, content) = self.clean_content();
         let (section, parsing_states) =
             self.state

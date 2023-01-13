@@ -1,0 +1,52 @@
+[
+  {
+    "name": "ds.page",
+    "kind": null,
+    "caption": null,
+    "headers": [
+      {
+        "type": "Section",
+        "line_number": 0,
+        "key": "extra-headers",
+        "kind": null,
+        "section": [
+          {
+            "name": "ds.h2",
+            "kind": null,
+            "caption": {
+              "type": "KV",
+              "line_number": 0,
+              "key": "$caption$",
+              "kind": null,
+              "value": "Heading 2 title",
+              "condition": null
+            },
+            "headers": [],
+            "body": {
+              "line_number": 0,
+              "value": "Heading body"
+            },
+            "sub_sections": [],
+            "is_commented": false,
+            "line_number": 0,
+            "block_body": false
+          }
+        ],
+        "condition": null
+      },
+      {
+        "type": "KV",
+        "line_number": 0,
+        "key": "description",
+        "kind": null,
+        "value": "We have made provision of adding `right-sidebar` for additional components to",
+        "condition": null
+      }
+    ],
+    "body": null,
+    "sub_sections": [],
+    "is_commented": false,
+    "line_number": 0,
+    "block_body": false
+  }
+]
