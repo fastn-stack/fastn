@@ -14,8 +14,10 @@ string email:
 -- employee list employees:
 $processor$: processors.package-query
 db: users.db
+param: 3
+param: %Alic%
 
-SELECT * from users;
+SELECT * from users where id > ? and name like ?
 
 
 -- print-employee:
