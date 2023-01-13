@@ -1,6 +1,9 @@
--- ft.page: FTD News
+-- ds.page: FTD News
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 Checkout the [developer journal](/journal/) for internal news.
+
+
+-- end: ds.page

@@ -1,60 +1,52 @@
--- ft.page: Code
+-- ds.page: Code
 
--- ftd.column:
-width: fill
-id: outer-4
-
--- ft.markdown:
+-- ds.markdown:
 
 It renders the code component.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
 
 print("hello world")
 
--- ft.output:
+-- ds.output:
 
 -- ftd.code:
 
 print("hello world")
 
--- container: outer-4
-
--- ft.markdown:
+-- ds.markdown:
 
 The `ftd.code` component accepts the below attributes along with the
 [common attributes](common/).
 
 
--- ft.h1: `text: String`
+-- ds.h1: `text: String`
 
 This is the text or code to show. It accepts the value both in caption
 or body besides in header.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
 text: print("hello world")
 
--- ft.output:
+-- ds.output:
 
 -- ftd.code:
 text: print("hello world")
 
--- container: outer-4
 
-
--- ft.h1: `lang: String`
+-- ds.h1: `lang: String`
 
 The `lang` property defines the language of the code. It is an
 optional field. In case if the value is not provided, this
 will take `txt` as default value.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
@@ -63,7 +55,7 @@ lang: py
 value = "hello world"
 print(value)
 
--- ft.output:
+-- ds.output:
 
 -- ftd.code:
 lang: py
@@ -71,10 +63,8 @@ lang: py
 value = "hello world"
 print(value)
 
--- container: outer-4
 
-
--- ft.h1: `theme: String`
+-- ds.h1: `theme: String`
 
 The `theme` property defines the theme for the code block.
 It is an optional field with default value `base16-ocean.dark`.
@@ -92,7 +82,7 @@ The available themes are:
 Refer [this](https://docs.rs/syntect/latest/syntect/highlighting/struct.ThemeSet.html#method.load_defaults)
 for the list of themes available
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
@@ -102,7 +92,7 @@ theme: Solarized (dark)
 value = "hello world"
 print(value)
 
--- ft.output:
+-- ds.output:
 
 -- ftd.code:
 lang: py
@@ -111,15 +101,13 @@ theme: Solarized (dark)
 value = "hello world"
 print(value)
 
--- container: outer-4
 
-
--- ft.h1: `role: ftd.type`
+-- ds.h1: `role: ftd.type`
 
 It defines the font typography.
 Refer [built-in types](built-in-types/#ftd-type) for more detail
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
@@ -129,25 +117,27 @@ role: $font-type
 value = "hello world"
 print(value)
 
--- ft.output:
+-- ds.output:
 
+-- ds.code:
+lang: ftd
 
--- ftd.font-size desktop-fs:
+\-- ftd.font-size desktop-fs:
 line-height: 30
 size: 24
 letter-spacing: 0
 
--- ftd.font-size mobile-fs:
+\-- ftd.font-size mobile-fs:
 line-height: 20
 size: 16
 letter-spacing: 0
 
--- ftd.font-size xl-fs:
+\-- ftd.font-size xl-fs:
 line-height: 50
 size: 46
 letter-spacing: 0
 
--- ftd.type font-type:
+\-- ftd.type font-type:
 font: serif
 desktop: $desktop-fs
 mobile: $mobile-fs
@@ -155,45 +145,37 @@ xl: $xl-fs
 weight: 400
 style: italic
 
--- ftd.code:
+-- ds.code:
 lang: py
-role: $font-type
 
 value = "hello world"
 print(value)
 
--- container: outer-4
 
-
-
--- ft.h1: `line-clamp: Integer`
+-- ds.h1: `line-clamp: Integer`
 
 The `line-clamp` property allows limiting of the contents to the specified number of lines.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
 lang: py
-line-clamp: 1
 
 value = "hello world"
 print(value)
 
--- ft.output:
+-- ds.output:
 
 
--- ftd.code:
+-- ds.code:
 lang: py
-line-clamp: 1
 
 value = "hello world"
 print(value)
 
--- container: outer-4
 
-
--- ft.h1: `text-align: String`
+-- ds.h1: `text-align: String`
 
 The `text-align` property sets the horizontal alignment of the content.
 It accepts the following values:
@@ -203,11 +185,11 @@ It accepts the following values:
 - right
 - justify
 
--- ft.h2: `center`
+-- ds.h2: `center`
 
 The inline contents are centered within the line box.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
@@ -218,24 +200,20 @@ text-align: center
 value = "hello world"
 print(value)
 
--- ft.output:
+-- ds.output:
 
 
--- ftd.code:
+-- ds.code:
 lang: py
-width: 400
-text-align: center
 
 value = "hello world"
 print(value)
 
--- container: outer-4
-
--- ft.h2: `left`
+-- ds.h2: `left`
 
 The inline contents are aligned to the left edge of the line box.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
@@ -246,25 +224,21 @@ text-align: left
 value = "hello world"
 print(value)
 
--- ft.output:
+-- ds.output:
 
 
--- ftd.code:
+-- ds.code:
 lang: py
-width: 400
-text-align: left
 
 value = "hello world"
 print(value)
 
--- container: outer-4
 
-
--- ft.h2: `right`
+-- ds.h2: `right`
 
 The inline contents are aligned to the right edge of the line box.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
@@ -275,26 +249,22 @@ text-align: right
 value = "hello world"
 print(value)
 
--- ft.output:
+-- ds.output:
 
 
--- ftd.code:
+-- ds.code:
 lang: py
-width: 400
-text-align: right
 
 value = "hello world"
 print(value)
 
--- container: outer-4
-
--- ft.h2: `justify`
+-- ds.h2: `justify`
 
 The inline contents are justified. Text should be spaced to line up
 its left and right edges to the left and right edges of the line box,
 except for the last line.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.code:
@@ -305,15 +275,14 @@ text-align: justify
 value = "hello world"
 print(value)
 
--- ft.output:
+-- ds.output:
 
 
--- ftd.code:
+-- ds.code:
 lang: py
-width: 400
-text-align: justify
 
 value = "hello world"
 print(value)
 
--- container: outer-4
+
+-- end: ds.page

@@ -1,35 +1,35 @@
--- ft.page: Integer
+-- ds.page: Integer
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 Renders an integer value.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.integer:
 value: 10
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Integer accepts the below attributes along with the
 [common attributes](common/).
 
 
--- ft.h1: `value`
+-- ds.h1: `value`
 
 This is the value to show. It is a required field.
 
 
--- ft.h1: `format`
+-- ds.h1: `format`
 
 This is a format string.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.integer:
@@ -37,7 +37,7 @@ value: 48879
 format: #X
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Is shown as (hex):
 
@@ -47,13 +47,13 @@ value: 48879
 format: #X
 
 
--- ft.markdown:
+-- ds.markdown:
 
 You can find documentation of formatting strings 
 [here](https://docs.rs/format_num/0.1.0/format_num/).
 
 
--- ft.h3: Attributes
+-- ds.h3: Attributes
 
 - `align`
 - `style`
@@ -61,3 +61,5 @@ You can find documentation of formatting strings
 - `external_font`
 - `font`
 - `line_height`
+
+-- end: ds.page

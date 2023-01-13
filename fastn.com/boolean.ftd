@@ -1,17 +1,17 @@
--- ft.page: Boolean
+-- ds.page: Boolean
 
--- ft.markdown: 
+-- ds.markdown: 
 
 Renders a boolean value.
 
--- ft.h3: Usage
+-- ds.h3: Usage
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.boolean:
 
--- ft.h3: Attributes
+-- ds.h3: Attributes
 
 Boolean accepts the below attributes as well all the [common attributes ](common/).
 
@@ -24,3 +24,5 @@ Boolean accepts the below attributes as well all the [common attributes ](common
 - `external_font`
 - `font`
 - `line_height`
+
+-- end: ds.page
