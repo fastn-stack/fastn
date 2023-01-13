@@ -1,5 +1,3 @@
-use std::borrow::BorrowMut;
-
 #[derive(Debug, Clone)]
 enum ParsingStateReading {
     Section,
@@ -29,7 +27,8 @@ impl State {
         self.reading_section()?;
 
         while let Some((_, mut state)) = self.get_latest_state() {
-            self.end(&mut Some(&mut state))?;
+            let mut change_state = None;
+            self.end(&mut change_state)?;
 
             if self.content.trim().is_empty() {
                 let sections = self.state.iter().map(|(v, _)| v.clone()).collect_vec();
@@ -37,6 +36,10 @@ impl State {
                 self.sections.extend(sections);
 
                 continue;
+            }
+
+            if let Some(change_state) = change_state {
+                state = change_state;
             }
 
             match state {
@@ -65,10 +68,7 @@ impl State {
         Ok(())
     }
 
-    fn end(
-        &mut self,
-        current_state: &mut Option<&mut ParsingStateReading>,
-    ) -> ftd::p11::Result<()> {
+    fn end(&mut self, change_state: &mut Option<ParsingStateReading>) -> ftd::p11::Result<()> {
         let (scan_line_number, content) = self.clean_content();
         let (start_line, rest_lines) = new_line_split(content.as_str());
         if !start_line.starts_with("-- ") {
@@ -106,6 +106,7 @@ impl State {
                     ParsingStateReading::Section if caption.eq(section.name.as_str()) => {
                         sections.reverse();
                         section.sub_sections.extend(sections);
+                        *change_state = None;
                         break;
                     }
                     ParsingStateReading::Header {
@@ -121,9 +122,7 @@ impl State {
                             sections,
                             condition,
                         ));
-                        if let Some(state) = current_state.as_mut() {
-                            **state = ParsingStateReading::Section
-                        }
+                        *change_state = Some(ParsingStateReading::Section);
                         break;
                     }
                     _ => {}
@@ -131,7 +130,7 @@ impl State {
             }
             self.line_number += (scan_line_number as i32) + 1;
             self.content = rest_lines;
-            return self.end(current_state);
+            return self.end(change_state);
         }
 
         Ok(())

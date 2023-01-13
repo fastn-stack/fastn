@@ -195,6 +195,15 @@ impl Component {
             ftd::ast::VariableValue::Optional { value, .. } if value.is_some() => {
                 Component::from_variable_value(key, value.unwrap(), doc_id)
             }
+            ftd::ast::VariableValue::Optional { line_number, .. } => Ok(ftd::ast::Component {
+                name: key.to_string(),
+                properties: vec![],
+                iteration: None,
+                condition: None,
+                events: vec![],
+                children: vec![],
+                line_number,
+            }),
             ftd::ast::VariableValue::List { value, line_number } => {
                 let mut children = vec![];
                 for (key, val) in value {
@@ -288,7 +297,6 @@ impl Component {
                 children: vec![],
                 line_number,
             }),
-            t => unimplemented!("Component::from_variable_value {:?}", t),
         }
     }
 
