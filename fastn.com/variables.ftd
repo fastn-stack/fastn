@@ -1,50 +1,50 @@
 \-- ft-core.concept:
 
 
--- ft.page: Variables
+-- ds.page: Variables
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 `ftd` has support for [rich data modelling](data-modelling/), and it
 supports declaring variables.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer x: 20
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Variables have `type`s.
 
 
--- ft.h1: Auto Guessing Basic Types
+-- ds.h1: Auto Guessing Basic Types
 
 For [built-in types](built-in-types/), integer, boolean,  etc,
 `ftd` can guess the type based on the value:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer x: 20
 
 
--- ft.h1: Types
+-- ds.h1: Types
 
 Type of a variable can be one of the [built-in types](built-in-types/),
 a [record](record/), or an [or-type](or-type/).
 
 
--- ft.h1: Referring To Another Variable
+-- ds.h1: Referring To Another Variable
 
 A variable can be defined as referring to another variable.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer x: 10
@@ -52,12 +52,12 @@ lang: ftd
 \-- integer y: $x
 
 
--- ft.h1: Accessing the value of a Variable
+-- ds.h1: Accessing the value of a Variable
 
 A value of the variable can be accessed by de-referencing the variable reference.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer x: 10
@@ -65,14 +65,14 @@ lang: ftd
 \-- integer y: *$x
 
 
--- ft.h1: Updating a Variable
+-- ds.h1: Updating a Variable
 
 Once a `mutable` variable has been defined it can be updated too.
 Any variable can be made `mutable` by prefixing it with `$`.
 
 Note: By default, `ftd variables` are `immutable` (can't be changed once initialized).
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer $x: 10
@@ -80,12 +80,12 @@ lang: ftd
 \-- $x: 20
 
 
--- ft.markdown:
+-- ds.markdown:
 
 The type of the variable can not be updated.
 
 
--- ft.h1: `$processor$`: dynamic variables
+-- ds.h1: `$processor$`: dynamic variables
 
 `ftd` documents are processed in the context of a "platform", and platform can
 provide access to dynamic variables.
@@ -94,14 +94,14 @@ Say platform has provided a dynamic variable `os`, which is the operating system
 on which this document is getting rendered, you can use that like this:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string name-of-os:
 $processor$: os
 
 
--- ft.markdown:
+-- ds.markdown:
 
 `type` is mandatory when using `$processor$`. Available processors would be
 documented as part of platform documentation.
@@ -109,15 +109,18 @@ documented as part of platform documentation.
 Processors can also look at data passed, so its possible to create a processor:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string greeting: hello, world
 $processor$: uppercase
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Say the platform has provided a processor `uppercase`, which takes the current
 value, `hello, world` and returns its upper case value. In this case the variable
 greeting will hold the value: `HELLO, WORLD`.
+
+
+-- end: ds.page

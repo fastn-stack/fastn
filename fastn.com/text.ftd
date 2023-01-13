@@ -1,26 +1,25 @@
--- ft.page: `ftd.text`: Text Block Kernel Element
+-- boolean $show-theme-demos: false
 
 
--- ftd.column:
-id: main-3
+-- ds.page: `ftd.text`: Text Block Kernel Element
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 `ftd.text` can be used to renders text.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: hello world
 
 
--- ft.tip: Common Attributes
+-- ds.tip: Common Attributes
 
 Text accepts the below attributes as well all the [common attributes](common/).
 
--- ft.h1: `text: String`
+-- ds.h1: `text: String`
 
 You can pass any string value.
 
@@ -28,46 +27,46 @@ You have two ways to pass text value to the `ftd.text` component.
 
 As `caption` which is a single line text.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: FTD example
 
 
--- ft.markdown:
+-- ds.markdown:
 
 This will be render like this:
 
 
 -- ftd.text: FTD example
-color if $ftd.dark-mode: $fpm.color.main.text
-color: $fpm.color.main.text-strong
+;;color if $ftd.dark-mode: $inherited.colors.text
+color: $inherited.colors.text-strong
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text:
 text: This is an example of how to use ftd.text.
 
 
--- ft.markdown:
+-- ds.markdown:
 
 This will be render like this:
 
 
 -- ftd.text:
 text: This is an example of how to use ftd.text.
-color if $ftd.dark-mode: $fpm.color.main.text
-color: $fpm.color.main.text-strong
+;;color if $ftd.dark-mode: $inherited.colors.text
+color: $inherited.colors.text-strong
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Multi-line text can be added to the body the `ftd.text`:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text:
@@ -77,77 +76,76 @@ This is a bigger text.
 This can span multiple lines.
 
 
--- ft.h1: `text-align `
+-- ds.h1: `text-align `
 
 This property is used to aligns text blocks:
 
+-- ftd.column:
 
 -- ftd.row:
-spacing: 10
+spacing.px: 10
 
 
 -- ftd.text:
 text-align: center
-border-width: 1
-border-radius: 3
-padding: 5
-color: $fpm.color.main.text-strong
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
 
 this is **text-align: center** text. a bit longer text so you can see what's going on.
 
 
 -- ftd.text:
-align: left
-border-width: 1
-border-radius: 3
-padding: 5
-color: $fpm.color.main.text-strong
+align-self: start
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
 
 this is **text-align: left** text. typing dummy text for examples is so boring.
 
 
 -- ftd.text:
-text-align: right
-border-width: 1
-border-radius: 3
-padding: 5
-color: $fpm.color.main.text-strong
+;;text-align: right
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
 
 this is **text-align: right** aligned text. but then you got to do what you go to do.
 
 
 -- ftd.text:
 text-align: justify
-border-width: 1
-border-radius: 3
-padding: 5
-color: $fpm.color.main.text-strong
+border-width.px: 1
+border-radius.px: 3
+padding.px: 5
+color: $inherited.colors.text-strong
 
 this is **text-align: justify** text. or not. whatever works. I mean maybe it matters.
 
 
--- container: main-3
 
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: this is some center aligned text
 align: center
 
 
--- ft.h1: `format`
+-- ds.h1: `format`
 
 `ftd.text` uses `format` attribute to decide how to format the text. It can be
 `markdown`, `latex` or `code`.
 
 
--- ft.h2: `format: markdown`
+-- ds.h2: `format: markdown`
 
 `markdown` is the default `format`. It is used to format text as markdown.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text:
@@ -156,39 +154,39 @@ format: markdown
 This is **markdown** formatted text.
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Which renders like this:
 
 
 -- ftd.text:
-color: $fpm.color.main.text-strong
+color: $inherited.colors.text-strong
 
 This is **markdown** formatted text.
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Note: we do not support `![]()` (image) in markdown, nor we support html tags.
 
 
--- ft.h2: `format: code`
+-- ds.h2: `format: code`
 
 `ftd.text` supports source code syntax highlighting.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text:
 format: code
 lang: py
-width: fill
+width: fill-container
 
 import os
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Which renders as:
 
@@ -196,21 +194,21 @@ Which renders as:
 \-- ftd.text:
 format: code
 lang: py
-width: fill
+width: fill-container
 
 import os
 
 print("hello world")
 
 
--- ft.markdown:
+-- ds.markdown:
 
 When using `format: code`, `lang` attribute should be also specified. This
 attribute decides what "language" the source code is in. Further `theme` can also
 be specified to control the theme used for syntax highlighting.
 
 
--- ft.h1: `lang`
+-- ds.h1: `lang`
 
 When the value of `format` is `code`, `lang` can be specified to chose the
 "language" used for syntax highlighting.
@@ -221,7 +219,7 @@ python it must be `py` and so on.
 The default value of `lang` is `txt`.
 
 
--- ft.h1: `theme`
+-- ds.h1: `theme`
 
 When the value of `format` is `code`, `theme` can be specified to chose the
 "theme" used for syntax highlighting.
@@ -237,36 +235,33 @@ The supported values of themes are:
 - base16-ocean.light
 
 
--- ft.h2: Theme Demos
-
-
--- boolean show-theme-demos: false
+-- ds.h2: Theme Demos
 
 
 -- ftd.text: View Themes
-if: not $show-theme-demos
-color if $ftd.dark-mode: $fpm.color.main.text
-color: $fpm.color.main.text-strong
-$on-click$: toggle $show-theme-demos
+if: { !show-theme-demos }
+;; color if $ftd.dark-mode: $inherited.colors.text -- TODO FTD 0.3
+color: $inherited.colors.text-strong
+$on-click$: $ftd.set-bool($a = $show-theme-demos, v = false) 
 
 
 -- ftd.text: Hide Themes
-if: $show-theme-demos
-color if $ftd.dark-mode: $fpm.color.main.text
-color: $fpm.color.main.text-strong
-$on-click$: toggle $show-theme-demos
+if: { show-theme-demos }
+;; color if $ftd.dark-mode: $inherited.colors.text -- TODO FTD 0.3
+color: $inherited.colors.text-strong
+$on-click$: $ftd.set-bool($a = $show-theme-demos, v = true) 
 
 
 -- ftd.column:
-if: $show-theme-demos
+if: { show-theme-demos }
 
 
--- ft.h3: `theme: InspiredGitHub`
+-- ds.h3: `theme: InspiredGitHub`
 
 
 -- ftd.code:
 lang: py
-width: fill
+width: fill-container
 theme: InspiredGitHub
 
 import os
@@ -274,12 +269,12 @@ import os
 print("hello world")
 
 
--- ft.h3: `theme: Solarized (dark)`
+-- ds.h3: `theme: Solarized (dark)`
 
 
 -- ftd.code:
 lang: py
-width: fill
+width: fill-container
 theme: Solarized (dark)
 
 import os
@@ -288,24 +283,24 @@ print("hello world")
 
 
 -- ftd.text: Hide Themes
-if: $show-theme-demos
-color if $ftd.dark-mode: $fpm.color.main.text
-color: $fpm.color.main.text-strong
-$on-click$: toggle $show-theme-demos
+if: { show-theme-demos }
+;; color if $ftd.dark-mode: $inherited.colors.text -- TODO FTD 0.3
+color: $inherited.colors.text-strong
+$on-click$: $ftd.set-bool($a = $show-theme-demos, v = true) 
 
 
--- ft.h3: `theme: Solarized (light)`
+-- ds.h3: `theme: Solarized (light)`
 
 
 -- ftd.code:
 lang: py
-width: fill
+width: fill-container
 theme: Solarized (light)
 
 \-- ftd.text:
 format: code
 lang: py
-width: fill
+width: fill-container
 theme: Solarized (light)
 
 import os
@@ -313,18 +308,18 @@ import os
 print("hello world")
 
 
--- ft.h3: `theme: base16-eighties.dark`
+-- ds.h3: `theme: base16-eighties.dark`
 
 
 -- ftd.code:
 lang: py
-width: fill
+width: fill-container
 theme: base16-eighties.dark
 
 \-- ftd.text:
 format: code
 lang: py
-width: fill
+width: fill-container
 theme: base16-eighties.dark
 
 import os
@@ -333,23 +328,23 @@ print("hello world")
 
 
 -- ftd.text: Hide Themes
-if: $show-theme-demos
-color if $ftd.dark-mode: $fpm.color.main.text
-color: $fpm.color.main.text-strong
-$on-click$: toggle $show-theme-demos
+if: { $show-theme-demos }
+;; color if $ftd.dark-mode: $inherited.colors.text -- TODO FTD 0.2
+color: $inherited.colors.text-strong
+$on-click$: $ftd.set-bool($a = $show-theme-demos, v = true) 
 
 
--- ft.h3: `theme: base16-mocha.dark`
+-- ds.h3: `theme: base16-mocha.dark`
 
 -- ftd.code:
 lang: py
-width: fill
+width: fill-container
 theme: base16-mocha.dark
 
 \-- ftd.text:
 format: code
 lang: py
-width: fill
+width: fill-container
 theme: base16-mocha.dark
 
 import os
@@ -357,17 +352,17 @@ import os
 print("hello world")
 
 
--- ft.h3: `theme: base16-ocean.dark`
+-- ds.h3: `theme: base16-ocean.dark`
 
 -- ftd.code:
 lang: py
-width: fill
+width: fill-container
 theme: base16-ocean.dark
 
 \-- ftd.text:
 format: code
 lang: py
-width: fill
+width: fill-container
 theme: base16-ocean.dark
 
 import os
@@ -375,17 +370,17 @@ import os
 print("hello world")
 
 
--- ft.h3: `theme: base16-ocean.light`
+-- ds.h3: `theme: base16-ocean.light`
 
 -- ftd.code:
 lang: py
-width: fill
+width: fill-container
 theme: base16-ocean.light
 
 \-- ftd.text:
 format: code
 lang: py
-width: fill
+width: fill-container
 theme: base16-ocean.light
 
 import os
@@ -394,10 +389,9 @@ print("hello world")
 
 
 -- ftd.text: Hide Themes
-if: $show-theme-demos
-color if $ftd.dark-mode: $fpm.color.main.text
-color: $fpm.color.main.text-strong
-$on-click$: toggle $show-theme-demos
+if: { $show-theme-demos }
+;; color if $ftd.dark-mode: $inherited.colors.text
+color: $inherited.colors.text-strong
+$on-click$: $ftd.set-bool($a = $show-theme-demos, v = true) 
 
-
--- container: main-3
+-- end: ds.page

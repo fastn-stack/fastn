@@ -1,19 +1,19 @@
 /-- ft-core.concept:
 
--- ft.page: `list`
+-- ds.page: `list`
 
--- ft.markdown: 
+-- ds.markdown: 
 
 `list` keyword can be used to create a list or an array in `ftd`.
 
--- ft.h1: Declaring a `list`
+-- ds.h1: Declaring a `list`
 
--- ft.code: a list of integer
+-- ds.code: a list of integer
 lang: ftd
 
 \-- integer list primes:
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have declared a new variable called `primes`, which is a `list` of
 `integer`s. When the list is created it is empty.
@@ -21,7 +21,7 @@ Here we have declared a new variable called `primes`, which is a `list` of
 `Note`: By default, lists are `immutable`. The user can make the list `mutable`
 by prefixing it with `$` like this `-- integer list $primes:`
 
--- ft.h1: Initializing values to a list
+-- ds.h1: Initializing values to a list
 
 We can add elements to the list during initialization
 by mentioning the `list-type` like this:
@@ -31,7 +31,7 @@ by mentioning the `list-type` like this:
 `Note`: Also make sure to use the end syntax `-- end: <list-name>` to mark
 the end of the list during initialization.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer list primes:
@@ -44,11 +44,11 @@ lang: ftd
 
 \-- end: primes
 
--- ft.markdown:
+-- ds.markdown:
 
 We have inserted 5 `integers` to our `list` named `primes`.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record person:
@@ -67,28 +67,28 @@ Shobhit is a developer at FifthTry.
 
 \-- end: people
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have created a `list` of `person` objects, called it `people`, and
 created two `person` objects and inserted them the `people` list.
 
--- ft.h1: `$processor$`
+-- ds.h1: `$processor$`
 
 A list can be created using platform provided processors:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string list foo:
 $processor$: some-list
 
--- ft.markdown:
+-- ds.markdown:
 
 Here the value of the list will be provided by the `some-list` processor.
 
 If we already have a list we can insert values to it using `$processor$` as well:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string list foo:
@@ -96,11 +96,11 @@ lang: ftd
 \-- foo:
 $processor$: some-list
 
--- ft.h1: Reading A `list` from Rust
+-- ds.h1: Reading A `list` from Rust
 
 You can use the `.get()` method to read a `list`:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 #[derive(serde::Deserialize)]
@@ -112,7 +112,10 @@ struct Person {
 let doc = ftd::p2::Document::from("some/id", source, lib)?;
 let people: Vec<Person> = doc.get("people")?;
 
--- ft.markdown:
+-- ds.markdown:
 
 You can read more details of reading `ftd` files ["Reading FTD Files"](/reading-data/)
 guide.
+
+
+-- end: ds.page
