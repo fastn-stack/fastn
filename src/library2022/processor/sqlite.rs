@@ -41,6 +41,14 @@ pub async fn processor_<'a>(
         sqlite_database_path = config.root.join(sqlite_database_path.as_path());
     }
 
+    // need the query params
+    // question is they can be multiple
+    // so lets say start with passing attributes from ftd file
+    // db-<param-name1>: value
+    // db-<param-name2>: value
+    // for now they wil be ordered
+    // select * from users where
+
     dbg!(&sqlite_database_path);
 
     let query = match &body {
@@ -55,7 +63,14 @@ pub async fn processor_<'a>(
         }
     };
 
-    dbg!(&query);
+    let query_params: Vec<String> = headers
+        .0
+        .iter()
+        .filter(|hv| hv.key.eq("param"))
+        .map(|x| x.value.string(doc.name))
+        .collect::<ftd::ast::Result<Vec<String>>>()?;
+
+    dbg!(&query_params);
 
     if kind.is_list() {
         let result = execute_query(
@@ -64,6 +79,7 @@ pub async fn processor_<'a>(
             doc.name,
             value.line_number(),
             kind.is_list(),
+            query_params,
         )
         .await?;
         doc.from_json_rows(result.0.as_slice(), &kind, value.line_number())
@@ -74,18 +90,20 @@ pub async fn processor_<'a>(
             doc.name,
             value.line_number(),
             kind.is_list(),
+            vec![],
         )
         .await?;
         doc.from_json_row(&result.1, &kind, value.line_number())
     }
 }
 
-async fn execute_query(
+async fn execute_query<'a>(
     database_path: &camino::Utf8Path,
     query: &str,
     doc_name: &str,
     line_number: usize,
     is_list: bool,
+    query_params: Vec<String>,
 ) -> ftd::interpreter2::Result<(Vec<Vec<serde_json::Value>>, Vec<serde_json::Value>)> {
     let conn = match rusqlite::Connection::open_with_flags(
         database_path,
@@ -114,7 +132,13 @@ async fn execute_query(
 
     let count = stmt.column_count();
 
-    let mut rows = match stmt.query([]) {
+    // let mut stmt = conn.prepare("SELECT * FROM test where name = :name")?;
+    // let mut rows = stmt.query(rusqlite::named_params! { ":name": "one" })?
+
+    // let mut stmt = conn.prepare("SELECT * FROM test where name = ?")?;
+    // let mut rows = stmt.query([name])?;
+
+    let mut rows = match stmt.query(rusqlite::params_from_iter(query_params)) {
         Ok(v) => v,
         Err(e) => {
             return ftd::interpreter2::utils::e2(
