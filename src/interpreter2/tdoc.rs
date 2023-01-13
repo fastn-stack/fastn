@@ -1373,11 +1373,10 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
         Ok(match kind {
             ftd::interpreter2::Kind::List { kind, .. } => {
-                let kind = kind.as_ref();
                 let mut data = vec![];
                 for row in rows {
                     data.push(
-                        self.from_json_row(&kind, row, line_number)?
+                        self.from_json_row(kind.as_ref(), row, line_number)?
                             .into_property_value(false, line_number),
                     );
                 }
@@ -1404,7 +1403,7 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
         Ok(match kind {
             ftd::interpreter2::Kind::Record { name, .. } => {
-                let rec = self.get_record(&name, line_number)?;
+                let rec = self.get_record(name, line_number)?;
                 let rec_fields = rec.fields;
                 let mut fields: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
                 for (idx, key) in rec_fields.iter().enumerate() {

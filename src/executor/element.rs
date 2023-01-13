@@ -235,11 +235,11 @@ pub fn iframe_from_properties(
             return ftd::executor::utils::parse_error(
                 "Two or more than two values are provided among src, youtube and srcdoc.",
                 doc.name,
-                src.line_number.unwrap_or(
+                src.line_number.unwrap_or_else(|| {
                     youtube
                         .line_number
-                        .unwrap_or(srcdoc.line_number.unwrap_or(line_number)),
-                ),
+                        .unwrap_or_else(|| srcdoc.line_number.unwrap_or(line_number))
+                }),
             );
         }
         if src.value.is_none() && youtube.value.is_none() && srcdoc.value.is_none() {

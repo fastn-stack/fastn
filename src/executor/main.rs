@@ -167,7 +167,7 @@ impl<'a> ExecuteDoc<'a> {
         let mut elements = vec![];
         let mut instructions =
             ExecuteDoc::get_instructions_from_instructions(instructions, doc, &[])?;
-        while instructions.len() > 0 {
+        while !instructions.is_empty() {
             let (container, mut instruction) = instructions.remove(0);
             loop {
                 if let Some(condition) = instruction.condition.as_ref() {
@@ -240,7 +240,7 @@ impl<'a> ExecuteDoc<'a> {
         }
     }
 
-    fn execute_from_instructions(
+    /*    fn execute_from_instructions(
         instructions: &[ftd::interpreter2::Component],
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
@@ -384,7 +384,7 @@ impl<'a> ExecuteDoc<'a> {
         }
 
         ExecuteDoc::execute_from_instruction(&component_definition.definition, doc, local_container)
-    }
+    }*/
 
     fn execute_kernel_components(
         instruction: &ftd::interpreter2::Component,

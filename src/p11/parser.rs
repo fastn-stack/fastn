@@ -557,7 +557,7 @@ pub fn parse_with_line_number(
         content: content.to_string(),
         doc_id: doc_id.to_string(),
         line_number: if line_number > 0 {
-            -1 * (line_number as i32)
+            -(line_number as i32)
         } else {
             0
         },
