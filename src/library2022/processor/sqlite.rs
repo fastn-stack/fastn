@@ -66,7 +66,7 @@ pub async fn processor_<'a>(
             kind.is_list(),
         )
         .await?;
-        doc.from_json_row(&kind, result.0.as_slice(), value.line_number())
+        doc.from_json_rows(result.0.as_slice(), &kind, value.line_number())
     } else {
         let result = execute_query(
             &sqlite_database_path,
@@ -76,11 +76,11 @@ pub async fn processor_<'a>(
             kind.is_list(),
         )
         .await?;
-        doc.from_json(&result.1, &kind, value.line_number())
+        doc.from_json_row(&result.1, &kind, value.line_number())
     }
 }
 
-async fn execute_query<T>(
+async fn execute_query(
     database_path: &camino::Utf8Path,
     query: &str,
     doc_name: &str,

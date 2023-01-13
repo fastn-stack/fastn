@@ -66,6 +66,11 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
             match fpm::package::package_doc::read_ftd(config, &main_document, "/", false).await {
                 Ok(r) => fpm::http::ok_with_content_type(r, mime_guess::mime::TEXT_HTML_UTF_8),
                 Err(e) => {
+                    tracing::error!(
+                        msg = "FPM-Error",
+                        path = path.as_str(),
+                        error = e.to_string()
+                    );
                     fpm::server_error!("FPM-Error: path: {}, {:?}", path, e)
                 }
             }
@@ -75,6 +80,7 @@ async fn serve_file(config: &mut fpm::Config, path: &camino::Utf8Path) -> fpm::h
         }
         fpm::File::Static(s) => fpm::http::ok(s.content),
         _ => {
+            tracing::error!(msg = "unknown handler", path = path.as_str());
             fpm::server_error!("unknown handler")
         }
     }
