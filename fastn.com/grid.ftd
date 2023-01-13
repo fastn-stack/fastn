@@ -1,19 +1,15 @@
--- ft.page: Grid
+-- ds.page: Grid
 
--- ftd.column:
-width: fill
-id: outer-13
-
--- ft.markdown:
+-- ds.markdown:
 
 The `ftd.grid` component offers a grid-based layout system, with rows and columns.
 
 Grid accepts the below attributes along with the [common attributes](common/)
 and [container attributes](container/)
 
--- ft.h1: `slots: String`
+-- ds.h1: `slots: String`
 
--- ft.markdown:
+-- ds.markdown:
 
 It is a required field. The `slots` property specifies named grid areas,
 establishing the cells in the grid and assigning them names.
@@ -30,14 +26,14 @@ So here there are two columns and two rows
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.grid:
 slots: header header | sidebar main
 background-color: $purple
 
--- ft.markdown:
+-- ds.markdown:
 
 These areas are not associated with any particular grid item, but can be
 referenced from the grid-placement property `slot`
@@ -47,7 +43,7 @@ should be assign to the child component.
 
 Consider the code below:
 
--- ft.code: Grid Layout
+-- ds.code: Grid Layout
 lang: ftd
 
 
@@ -90,41 +86,44 @@ text-align: center
 height: fill
 padding: 20
 
--- ft.output:
+-- ds.output:
 
--- ftd.color transparency: rgba(255, 255, 255, 0.8)
+-- ds.code:
+lang: ftd
+
+\-- ftd.color transparency: rgba(255, 255, 255, 0.8)
 dark: rgba(255, 255, 255, 0.8)
 
--- ftd.color purple: purple
+\-- ftd.color purple: purple
 dark: purple
 
--- ftd.color red: red
+\-- ftd.color red: red
 dark: red
 
--- ftd.color green: green
+\-- ftd.color green: green
 dark: green
 
--- ftd.color yellow: yellow
+\-- ftd.color yellow: yellow
 dark: yellow
 
--- ftd.grid:
+\-- ftd.grid:
 slots: header header | sidebar main
 background-color: $purple
 padding: 20
 
---- text: Header
+\-- text: Header
 slot: header
 bg-color: $red
 
---- text: Sidebar
+\-- text: Sidebar
 slot: sidebar
 bg-color: $green
 
---- text: Main
+\-- text: Main
 slot: main
 bg-color: $yellow
 
--- ftd.text text: $value
+\-- ftd.text text: $value
 caption value:
 ftd.color bg-color:
 slot: $slot
@@ -133,10 +132,8 @@ text-align: center
 height: fill
 padding: 20
 
--- container: outer-13
 
-
--- ft.h1: `slot-widths: String`
+-- ds.h1: `slot-widths: String`
 
 The `slot-widths` property defines the track sizing of grid columns.
 In other words, it defines the width of each slot.
@@ -144,7 +141,7 @@ In other words, it defines the width of each slot.
 A grid column is a vertical track in grid, and is the space between
 two vertical grid lines.
 
--- ft.code: Grid Layout With slot-widths
+-- ds.code: Grid Layout With slot-widths
 lang: ftd
 
 \-- ftd.grid:
@@ -165,30 +162,30 @@ bg-color: $green
 slot: main
 bg-color: $yellow
 
--- ft.output:
+-- ds.output:
 
--- ftd.grid:
+-- ds.code:
+lang: ftd
+
+\-- ftd.grid:
 slots: header header | sidebar main
 slot-widths: 100px 200px
 background-color: $purple
 padding: 20
 
---- text: Header
+\-- text: Header
 slot: header
 bg-color: $red
 
---- text: Sidebar
+\-- text: Sidebar
 slot: sidebar
 bg-color: $green
 
---- text: Main
+\-- text: Main
 slot: main
 bg-color: $yellow
 
--- container: outer-13
-
-
--- ft.h1: `slot-heights: String`
+-- ds.h1: `slot-heights: String`
 
 The `slot-heights` property defines the track sizing of grid rows.
 In other words, it defines the height of each slot.
@@ -196,7 +193,7 @@ In other words, it defines the height of each slot.
 A grid column is a horizontal track in grid, and is the space between
 two horizontal grid lines.
 
--- ft.code: Grid Layout With slot-heights
+-- ds.code: Grid Layout With slot-heights
 lang: ftd
 
 \-- ftd.grid:
@@ -218,34 +215,35 @@ bg-color: $green
 slot: main
 bg-color: $yellow
 
--- ft.output:
+-- ds.output:
 
--- ftd.grid:
+-- ds.code:
+lang: ftd
+
+\-- ftd.grid:
 slots: header header | sidebar main
 slot-widths: 100px 200px
 slot-heights: 60px 300px
 background-color: $purple
 padding: 20
 
---- text: Header
+\-- text: Header
 slot: header
 bg-color: $red
 
---- text: Sidebar
+\-- text: Sidebar
 slot: sidebar
 bg-color: $green
 
---- text: Main
+\-- text: Main
 slot: main
 bg-color: $yellow
 
--- container: outer-13
-
--- ft.h1: `spacing: Integer`
+-- ds.h1: `spacing: Integer`
 
 The `spacing` property sets the space (gutters) between slots (rows and columns).
 
--- ft.code: Grid Layout With slot-heights
+-- ds.code: Grid Layout With slot-heights
 lang: ftd
 
 \-- ftd.grid:
@@ -268,9 +266,12 @@ bg-color: $green
 slot: main
 bg-color: $yellow
 
--- ft.output:
+-- ds.output:
 
--- ftd.grid:
+-- ds.code:
+lang: ftd
+
+\-- ftd.grid:
 slots: header header | sidebar main
 slot-widths: 100px 200px
 slot-heights: 60px 300px
@@ -278,18 +279,16 @@ background-color: $purple
 spacing: 20
 padding: 20
 
---- text: Header
+\-- text: Header
 slot: header
 bg-color: $red
 
---- text: Sidebar
+\-- text: Sidebar
 slot: sidebar
 bg-color: $green
 
---- text: Main
+\-- text: Main
 slot: main
 bg-color: $yellow
 
--- container: outer-13
-
-
+-- end: ds.page

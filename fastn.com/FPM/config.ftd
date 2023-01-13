@@ -35,7 +35,7 @@ dark: $assets.files.images.logo-fifthtry-dark.svg.dark
 light: $assets.files.images.ftd.png.light
 dark:  $assets.files.images.ftd.png.dark
 
--- ps.current-product: 2
+-- $ps.current-product: 2
 
 
 

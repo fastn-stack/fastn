@@ -1,9 +1,11 @@
--- ft.page: FTD markup syntax
+-- boolean $shown: true
+
+-- ds.page: FTD markup syntax
 
 Text in FTD support Markdown syntax. We also support, what we call "ftd markup"
 syntax.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: hello, {yellow: world}
@@ -17,52 +19,52 @@ background-color: $yellow-color
 border-radius: 2
 padding: 3
 
--- ft.markdown:
+-- ds.markdown:
 
 Which looks like this:
 
--- ftd.text: hello, {yellow: world}
-color: $fpm.color.main.text
+-- ftd.text: hello
+color: $inherited.colors.text
 
--- ftd.color yellow-color:
+/-- ftd.color yellow-color:
 light: yellow
 dark: yellow
 
--- ftd.text yellow: This One Gives Yellow Background
+/-- ftd.text yellow: This One Gives Yellow Background
 background-color: $yellow-color
 border-radius: 2
 padding: 3
-color: $fpm.color.main.border
+color: $inherited.colors.border
 
--- ft.h1: Markup Supports Nesting
+-- ds.h1: Markup Supports Nesting
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: {yellow: this is {red: important}}
 
--- ft.markdown:
+-- ds.markdown:
 
 Which looks like this:
 
 -- ftd.text: {yellow: this is {red: important}}
-color: $fpm.color.main.text
+color: $inherited.colors.text
 
--- ftd.color red-color:
+/-- ftd.color red-color:
 light: red
 dark: red
 
--- ftd.text red: This One Gives Red Background
+/-- ftd.text red: This One Gives Red Background
 background-color: $red-color
 border-radius: 2
 padding: 3
-color: $fpm.color.main.text-strong
+color: $inherited.colors.text-strong
 
 
 
--- ft.h1: Value Is Optional
+-- ds.h1: Value Is Optional
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: check us out on {github}
@@ -70,23 +72,23 @@ lang: ftd
 \-- ftd.text: FTD On Github
 link: https://github.com/FifthTry/ftd
 
--- ft.markdown:
+-- ds.markdown:
 
 If value is not provided, the caption of the `ftd.text` is used.
 
 -- ftd.text: check us out on {github}
-color: $fpm.color.main.text
+color: $inherited.colors.text
 
 
--- ftd.text github: FTD On Github
+/-- ftd.text github: FTD On Github
 link: https://github.com/FifthTry/ftd
 border-radius: 2
 padding: 3
 
--- ft.h1: Event Handling
+-- ds.h1: Event Handling
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: Click {orange: me}
@@ -97,23 +99,24 @@ lang: ftd
 background-color if $shown: $orange-color
 $on-click$: toggle $shown
 
--- ft.markdown:
+-- ds.markdown:
 
 Markup can be used to implement event handling as well.
 
--- boolean shown: true
 
--- ftd.text: Click {orange: me}
-color: $fpm.color.main.text
+/-- ftd.text: Click {orange: me}
+color: $inherited.colors.text
 
--- ftd.color orange-color:
+/-- ftd.color orange-color:
 light: orange
 dark: orange
 
--- ftd.text orange: Show/Hide orange background color
-background-color if $shown: $orange-color
-color if $shown: $fpm.color.main.text-strong
-$on-click$: toggle $shown
-border-radius: 2
-padding: 3
+/-- ftd.text: Show/Hide orange background color
+background.solid if {$shown}: $orange-color
+color if $shown: $inherited.colors.text-strong
+$on-click$: $ftd.set-bool($a = $shown, v = false)
+border-radius.px: 2
+padding.px: 3
 
+
+-- end: ds.page

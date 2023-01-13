@@ -1,19 +1,19 @@
--- ft.page: FTD: Programming Language For Prose
+-- import: fifthtry.github.io/doc-site as ds
 
-
+-- ds.page: FTD: Programming Language For Prose
 
 [Learn FTD in Y Minutes](/y/).
 
 FTD is an open source programming language for writing prose.
 
--- ft.code: `ftd` Hello World!
+-- ds.code: `ftd` Hello World!
 lang: ftd
 
 \-- import: lib
 
 \-- lib.h1: Hello World
 
--- ft.markdown:
+-- ds.markdown:
 
 Here is a FTD document that is importing a library, `lib`, and has a heading of
 level 1, "Hello World". FTD language is designed for human beings, not just
@@ -28,42 +28,35 @@ example:
 
 
 
--- ftd.grid:
-boolean current: false
-width: fill
-slots: left right
-slot-widths: 70% auto
-spacing: 15
+-- ftd.column:
+width: fill-container
 
---- ft.code: `ftd.text` kernel component
+-- ftd.row: 
+align-self: start
+spacing.px: 50
+
+-- ds.code: `ftd.text` kernel component
 lang: ftd
-slot: left
 
 \-- boolean $current: true
 
 \-- ftd.text: Hello World!
 align: center
-slot: right
 $on-click$: toggle $current
 padding: 20
 text-align: center
-color if { current } : $fpm.color.main.cta-primary.base
-color: $fpm.color.main.cta-primary.text
-background-color: $fpm.color.main.text
+color if { current } : $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+background-color: $inherited.colors.text
 
---- ftd.text: Hello World!
-align: center
-slot: right
-$on-click$: toggle $current
-padding: 20
-text-align: center
-color if $current: $fpm.color.main.cta-primary.base
-color: $fpm.color.main.cta-primary.text
-background-color: $fpm.color.main.text
+-- toggle-text: Hello World!
+
+-- end: ftd.row
+
+-- end: ftd.column
 
 
-
--- ft.markdown:
+-- ds.markdown:
 
 We can define variables in FTD. FTD is strongly typed. We can do event handling.
 Since we are targeting "human beings" we have created a lot of "actions" that
@@ -72,44 +65,37 @@ be used to create simple event handling.
 
 You can also abstract out the logic in a custom ftd component, eg:
 
--- ftd.grid:
-width: fill
-slots: left right
-slot-widths: 70% auto
-spacing: 15
+-- ftd.column:
+width: fill-container
 
---- ft.code: Creating a custom component
+-- ftd.row: 
+align-self: start
+spacing.px: 50
+
+-- ds.code: Creating a custom component
 lang: ftd
-slot: left
 
 \-- ftd.text toggle-text: $title
 boolean $current: false
 caption title:
 $on-click$: toggle $current
 text-align: center
-color if { current }: $fpm.color.main.cta-primary.base
-color: $fpm.color.main.cta-primary.text
-background-color: $fpm.color.main.text
+color if { current }: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+background-color: $inherited.colors.text
 padding: 20
 
 \-- toggle-text: FTD is cool!
 
---- toggle-text: FTD is cool!
-slot: right
+-- toggle-text: FTD is cool!
 
--- ftd.text toggle-text: $title
-boolean current: false
-caption title:
-align: center
-text-align: center
-$on-click$: toggle $current
-color if $current: $fpm.color.main.cta-primary.base
-color: $fpm.color.main.cta-primary.text
-background-color: $fpm.color.main.text
-padding: 20
+-- end: ftd.row
+
+-- end: ftd.column
 
 
--- ft.markdown:
+
+-- ds.markdown:
 
 Here we have created a new component called `toggle-text`, and then instantiated
 it instead. This way we can create custom component library and use them in our
@@ -117,7 +103,7 @@ writing without "polluting" the prose with noise.
 
 FTD is also a good first class data language. You can define and use records:
 
--- ft.code: Data Modelling in `ftd`
+-- ds.code: Data Modelling in `ftd`
 lang: ftd
 
 \-- record person:
@@ -125,14 +111,14 @@ caption name:
 string location:
 optional body bio:
 
--- ft.markdown:
+-- ds.markdown:
 
 Each field has a type. `caption` is an alias for `string`, and tells ftd that
 the value can come in the "caption" position, after the `:` of the "section line",
 eg lines that start with `--` or `---`. If a field is optional, it must be marked
 as such.
 
--- ft.code: Creating a variable
+-- ds.code: Creating a variable
 lang: ftd
 
 \-- person amitu: Amit Upadhyay
@@ -143,12 +129,12 @@ Amit is the founder and CEO of FifthTry.
 He loves to code, and is pursuing his childhood goal of
 becoming a professional starer of the trees.
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have defined a variable `amitu`. You can also define a list:
 
 
--- ft.code: Creating a list
+-- ds.code: Creating a list
 lang: ftd
 
 \-- person list employees:
@@ -163,24 +149,24 @@ Arpita is the primary author of FTD language.
 
 \-- end: employees
 
--- ft.markdown:
+-- ds.markdown:
 
 We can then create a component that can render such record and loop over a list
 to show all members of the list:
 
--- ft.code: Looping over a list
+-- ds.code: Looping over a list
 lang: ftd
 
 \-- render-person:
 person: $p
 $loop$: $employees as $p
 
--- ft.markdown:
+-- ds.markdown:
 
 This way we can have clean separation of data from presentation. The data
 defined in FTD documents can be easily read from say Rust:
 
--- ft.code: Reading Data from `ftd` files
+-- ds.code: Reading Data from `ftd` files
 lang: rs
 
 #[derive(serde::Deserialize)]
@@ -195,7 +181,7 @@ let amitu: Employee = doc.get("amitu")?;
 let employees: Vec<Employee> = doc.get("employees")?;
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Data defined in FTD are first class data. Instead of sharing CSV/JSON files you
 can chose to share FTD files. Unlike CSV/JSON data in FTD are type checked. And
@@ -205,11 +191,11 @@ in your browser.
 
 FTD can also be used as a configuration language.
 
--- ft.h1: FPM: FTD Package Manager
+-- ds.h1: FPM: FTD Package Manager
 
 FTD has a sister project, [fpm](https://fpm.dev), a package manager for FTD.
 
--- ft.h1: Getting Involved
+-- ds.h1: Getting Involved
 
 We are trying to create the language for human beings and we do not believe it
 would be possible without your support. We would love to hear from you.
@@ -223,25 +209,53 @@ License: BSD
 Checkout the [Journal](journal/) and [Roadmap](roadmap/).
 
 
--- ft.h1: Videos
+-- ds.h1: Videos
 
 We have recorded some videos explaining FTD in detail for our internal team.
 You may benefit from them as well.
 
 
--- ft.youtube:
+-- ds.youtube:
 v: ZoCGwt_nLbk
 
 
--- ft.youtube:
+-- ds.youtube:
 v: h0uLW9hucLw
 
 
--- ft.youtube:
+-- ds.youtube:
 v: n341w3GwdrQ
 
 
--- ft.youtube:
+-- ds.youtube:
 v: qyP8bBBAu98
 
 
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+-- component toggle-text:
+boolean $current: false
+caption title:
+
+-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center 
+$on-click$: $ftd.set-bool($a = $toggle-text.current, v = true)
+color if { toggle-text.current }: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.text
+padding.px: 20
+width: fill-container
+white-space: nowrap
+
+-- end: toggle-text

@@ -1,17 +1,17 @@
--- ft.page: Why FTD
+-- ds.page: Why FTD
 
 
--- ft.h1: FTD Is Easy To Learn
+-- ds.h1: FTD Is Easy To Learn
 
 FTD gives you a lot of power over your presentation, and yet it is quite easy to
 learn compared to building websites the traditional way HTML, CSS and JavaScript.
 
--- ft.h1: FTD Is Quite Powerful
+-- ds.h1: FTD Is Quite Powerful
 
 While FTD is not as powerful as JavaScript, it is still quite powerful for day
 to day website development.
 
--- ft.h1: Your Content Must Live Forever
+-- ds.h1: Your Content Must Live Forever
 
 Today we have a huge abundance of things being written, and yet these few
 decades may also become black hole of human knowledge. So much is being written
@@ -30,7 +30,7 @@ FTD aims to live for long. FTD is open source. It compiles your content into a
 very small set of HTML/CSS/JS that will be supported for a long time. FTD will
 hopefully soon have other rendering engines, open source.
 
-
+-- end: ds.page
 
 
 

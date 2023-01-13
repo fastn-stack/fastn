@@ -1,11 +1,8 @@
 -- import: fpm
 
--- ft.page: Reference linking in FTD
+-- ds.page: Reference linking in FTD
 
--- ftd.column:
-id: outer-column
-
--- ft.markdown:
+-- ds.markdown:
 
 As people build and create new things using FTD,
 the package contents will grow in size and eventually they might want to refer to the contents
@@ -17,54 +14,54 @@ Any [component] whether it's a heading, markdown, code-block etc. can have this 
 associated with it since id is a [universal attribute](id: universal-attributes).
 
 
--- ft.h1: Linking syntax
+-- ds.h1: Linking syntax
 
--- ft.h3: **Generalized Syntax**
+-- ds.h3: **Generalized Syntax**
 
 When the user wants to specify the linked text along with id of the component
 which needs to be linked, then use this syntax
 
 `[<linked-text>](id: <id-to-link>)`
 
--- ft.h3: **Condensed Syntax**
+-- ds.h3: **Condensed Syntax**
 
 When the user wants the linked text to be same as the id itself,
 then use this simplified syntax
 
 `[<id-to-link>]`
 
--- ft.h3: **Escaping linking syntax**
+-- ds.h3: **Escaping linking syntax**
 
 Sometimes, there might be cases where the user wants to treat this linking syntax as a raw text instead of a link,
 he/she can use the escape character `\` preceding this syntax to make it behave as a raw text.
 For eg. `\[foo]`, `\[this is escaped](id: hello)`
 
--- ft.h1: How to use linking syntax
+-- ds.h1: How to use linking syntax
 
 To link any component, we just have to give a unique id to the component we want to refer,
 and use the linking syntax in the component from where we want to refer.
 
--- ft.code: Example code to show how linking is done
+-- ds.code: Example code to show how linking is done
 lang: ftd
 
-\;; This ft.h1 component could be within the same file
+\;; This ds.h1 component could be within the same file
 \;; or maybe in a different file within the same package
-\-- ft.h1: Linking example
+\-- ds.h1: Linking example
 id: A
 
-\-- ft.markdown:
+\-- ds.markdown:
 
-I want to link to component ft.h1 having id: A.
+I want to link to component ds.h1 having id: A.
 This is how we link.
 
 Link with different linked text - [different-text](id: A)
 The linked text above will be "different-text" which will link
-to ft.h1 component defined above.
+to ds.h1 component defined above.
 
 Link with linked text same as id - [A]
 Isn't this even more simpler ?.
 
--- ft.h2: Constraints
+-- ds.h2: Constraints
 
 - These user defined `id's` on components have to be `unique` within the same package.
 
@@ -75,3 +72,6 @@ Cross Linking of components between two different packages is not supported yet.
 `[x](id: x)` or `[X](id: X)` to get the same effect.
 
 - This linking logic will only work in `ftd.text` and the components derived using this `ftd.text` component.
+
+
+-- end: ds.page

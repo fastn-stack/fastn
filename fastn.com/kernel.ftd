@@ -1,6 +1,6 @@
--- ft.page: Kernel Components
+-- ds.page: Kernel Components
     
--- ft.markdown: 
+-- ds.markdown: 
 
 `ftd` comes with a few "kernel" components, these components are the building 
 blocks for building all other components.
@@ -11,14 +11,14 @@ documents act as a namespace.
 All ftd components are defined in a "virtual document", named `ftd`, and every
 `ftd` file implicitly imports ftd:
 
--- ft.code: ftd hello world using `ftd.text`
+-- ds.code: ftd hello world using `ftd.text`
 lang: ftd
 
 \-- import: ftd
 
 \-- ftd.text: hello world
 
--- ft.markdown:
+-- ds.markdown:
 
 The `import` line is not needed as it's automatically imported. This line defines 
 namespace `ftd`, so all `ftd` kernels components are referred as `ftd.text` and 
@@ -27,7 +27,7 @@ so on.
 We are then using a component named [`ftd.text`](text/) to render 
 the text "hello world" in the UI.
 
--- ft.h1: List of `ftd` kernel components
+-- ds.h1: List of `ftd` kernel components
 
 - [`ftd.column`](column/)
 - [`ftd.row`](row/)
@@ -40,3 +40,6 @@ the text "hello world" in the UI.
 - [`ftd.code`](code/)
 - [`ftd.scene`](scene/)
 - [`ftd.grid`](grid/)
+
+
+-- end: ds.page

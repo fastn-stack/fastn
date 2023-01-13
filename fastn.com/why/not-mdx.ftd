@@ -1,11 +1,11 @@
--- ft.page: Why Not MDX?
+-- ds.page: Why Not MDX?
 
--- ft.markdown: 
+-- ds.markdown: 
 
 FTD is often compared with [MDX](https://mdxjs.com/playground/),
 [mdsvex](https://mdsvex.com/playground).
 
--- ft.h1: What is MDX?
+-- ds.h1: What is MDX?
 
 [React](///reactjs.org) is a pretty popular Javascript library, and it exposes a
 syntax called JSX. JSX almost looks like HTML, but unlike HTML where the
@@ -20,7 +20,7 @@ JavaScript.
 So what is MDX? MD of MDX refers to Markdown, and X is from JSX. MDX lets you
 write Markdown and JSX in the same file.
 
--- ft.code: example.mdx
+-- ds.code: example.mdx
 lang: html
 
 **Hello**, world!
@@ -31,18 +31,18 @@ Below is an example of markdown in JSX.
   Try and change the background color to `tomato`.
 </div>
 
--- ft.markdown:
+-- ds.markdown:
 
 In the above snippet we see Markdown, `**` around "Hello" will make it appear as
 bold text, this is Markdown. And `<div>` is a JSX syntax for creating a "div".
 
--- ft.h1: What is SVX?
+-- ds.h1: What is SVX?
 
 Like React, [svelte](///svelte.dev/) is another popular JavaScript
 framework for creating components. svelte components can be mixed with Markdown
 prose using [mdsvex](https://mdsvex.com), also known as `.svx`.
 
--- ft.code: example.svx
+-- ds.code: example.svx
 lang: html
 
 # mdsvex
@@ -51,12 +51,12 @@ svelte in markdown
 <Penguin walk={true} />
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Checkout their [example](https://mdsvex.com/playground) to see what is possible
 with mdsvex.
 
--- ft.h1: Component Vs Prose Language
+-- ds.h1: Component Vs Prose Language
 
 First difference between FTD with MDX or SVX is that the language in which you write
 your `.mdx` or `.svx` is not the same as the language in which you write the
@@ -64,7 +64,7 @@ actual component implementation.
 
 To write a new React component you have to switch to JavaScript:
 
--- ft.code: shopping-list.jsx
+-- ds.code: shopping-list.jsx
 lang: jsx
 
 class ShoppingList extends React.Component {
@@ -84,7 +84,7 @@ class ShoppingList extends React.Component {
 
 // Example usage: <ShoppingList name="Mark" />
 
--- ft.markdown:
+-- ds.markdown:
 
 This is how you create a new component in React. You will have to add a lot
 of dependencies, configure webpack or some such JavaScript build system.
@@ -92,16 +92,16 @@ of dependencies, configure webpack or some such JavaScript build system.
 Similarly to create a new svelte component you have to write something like
 this:
 
--- ft.code: HelloWorld.svelte
-lang: svelte
+-- ds.code: HelloWorld.svelte
+lang: html
 
-<script>
+<`script`>
     let name = 'world';
-</script>
+</`script`>
 
 <h1>Hello {name}!</h1>
 
--- ft.markdown:
+-- ds.markdown:
 
 This looks like HTML but is svelte syntax.
 
@@ -124,7 +124,7 @@ power available to authors is constrained by what is provided as existing
 components, if someone arrives at even slight variation to some component they
 have to either know JavaScript or they have to create a support ticket.
 
--- ft.h1: MDX/SVX: Basic Event Handling Is Difficult
+-- ds.h1: MDX/SVX: Basic Event Handling Is Difficult
 
 When creating architecture diagrams, or visualisations of different kinds, say
 you want to tweak the documentation based on author's preferred language, or
@@ -136,22 +136,22 @@ We have been creating largely static documentation. But if some powers are
 given authors and creative people a lot can be created, but is not possible
 today because of upwards battle of learning JavaScript.
 
--- ft.h1: Layout Control
+-- ds.h1: Layout Control
 
 MDX/SVX typically require you to provide some sort of "layout", in svx you do:
 
--- ft.code:
+-- ds.code:
 lang: yml
 
 \---
 layout: blog
 \---
 
--- ft.markdown:
+-- ds.markdown:
 
 And in mdx you do something like:
 
--- ft.code:
+-- ds.code:
 lang: mdx
 
 import MyLayout from './MyLayout'
@@ -167,14 +167,14 @@ This section has custom styles
 This part of the document uses default styles
 
 
--- ft.markdown:
+-- ds.markdown:
 
 In both these examples the layout is not in the control of the author. If author
 wants to place to element side by side with some control over padding/spacing,
 author has to hope such a component or "layout" has been provided. Authors can
 not create their own layouts.
 
--- ft.h1: Data Modelling
+-- ds.h1: Data Modelling
 
 The data modelling aspects of MDX and SVX are quite weak. Say you want to show
 your team on some page. You have to hope someone has created a `<TeamMember>`
@@ -184,21 +184,21 @@ Now even if someone has anticipated your need and created the `<TeamMember>`
 component, there are going to be difficulties. If you want to specify more than
 one attribute for team member with prose in it.
 
--- ft.code:
+-- ds.code:
 lang: html
 
 <TeamMember name="Some Name">
     Bio of the member.
 </TeamMember>
 
--- ft.markdown:
+-- ds.markdown:
 
 Here if you wanted to have Markdown styling in the Bio, it is easy, these
 frameworks support it and it's easy to author. But if you wanted to style name
 attribute, or have another attribute like `role` where you want to use
 multiline text, it would become ugly.
 
--- ft.code:
+-- ds.code:
 lang: html
 
 <TeamMember
@@ -208,14 +208,14 @@ lang: html
     Bio of the member.
 </TeamMember>
 
--- ft.markdown:
+-- ds.markdown:
 
 If an attribute becomes long it is not easy to put line breaks, you have to
 escape every double quote, and so on. It's tricky and ugly.
 
 You can always do something like this:
 
--- ft.code:
+-- ds.code:
 lang: html
 
 <TeamMember>
@@ -229,7 +229,7 @@ lang: html
     </Bio>
 </TeamMember>
 
--- ft.markdown:
+-- ds.markdown:
 
 This is definitely less torture to write compared to the previous example, but it
 completely defeats the point of using Markdown, this is too much syntax, markdwon
@@ -247,11 +247,11 @@ collection of React libraries, but none are used like this.
 We want to pass clean data to the end component and let components figure out how
 to render them.
 
--- ft.h1: Consider FTD Samples
+-- ds.h1: Consider FTD Samples
 
 For `team-member` we could have a syntax like this:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- team-member: Jane Doe, "JD"
@@ -261,7 +261,7 @@ role:
 
 Bio of Jane.
 
--- ft.markdown:
+-- ds.markdown:
 
 As you can see its quite clean, you can nest things easily if you wanted to, and
 there is no double-quote in sight unless you want it in the text.
@@ -269,7 +269,7 @@ there is no double-quote in sight unless you want it in the text.
 If you are going to show Jane Doe in more than places or pages you can easily
 create a component:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- team-member jd: Jane Doe, "JD"
@@ -280,21 +280,22 @@ role:
 Bio of Jane.
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Look at how little difference there is between using a component and creating
 a new component, now you can use the newly created `jd` component anywhere:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- jd:
 
--- ft.markdown:
+-- ds.markdown:
 
 It's great to avoid duplication.
 
 
+-- end: ds.page
 
 
 

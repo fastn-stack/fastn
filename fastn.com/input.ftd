@@ -1,11 +1,10 @@
 -- import: fpm
 
 
--- ft.page: Input
-id: main
+-- ds.page: Input
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
@@ -18,9 +17,9 @@ border-width: 1
 border-color: $fpm.color.main.border
 border-radius: 4
 
--- ft.output:
+-- ds.output:
 
--- ftd.input:
+/-- ftd.input: -- TODO FTD 0.3
 placeholder: search
 padding-horizontal: 16
 padding-vertical: 8
@@ -30,14 +29,12 @@ border-color: $fpm.color.main.border
 border-radius: 4
 
 
--- container: main
-
--- ft.markdown:
+-- ds.markdown:
 
 Integer accepts the below attributes along with the
 [common attributes](common/).
 
--- ft.h3: Attributes
+-- ds.h3: Attributes
 
 - `explain`
 - `id`
@@ -46,7 +43,9 @@ Integer accepts the below attributes along with the
 - `value`: sets the current value
 - `default-value`: sets the defaultValue Property with the specified value
 
--- ft.h3: Note:
+-- ds.h3: Note:
 
 Either use value or default-value, using both is not allowed.
 
+
+-- end: ds.page

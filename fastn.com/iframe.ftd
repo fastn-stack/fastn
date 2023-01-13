@@ -1,28 +1,30 @@
--- ft.page: `ftd.iframe`
+-- ds.page: `ftd.iframe`
     
 `ftd.iframe` can be used to create an [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe).
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.iframe:
 src: https://www.google.com
 
--- ft.markdown:
+-- ds.markdown:
 
 Iframe accepts the below attributes as well all the [common attributes ](common/).
 
--- ft.h1: `src: Option String`
+-- ds.h1: `src: Option String`
 
 The `src` of the iframe.
 
--- ft.h1: `youtube: Option String`
+-- ds.h1: `youtube: Option String`
 
 For YouTube videos we have special support, you can specify just the video id,
 and we generate the full video embed.
 
--- ft.h1: `loading: Optional String`
+-- ds.h1: `loading: Optional String`
 
 The value of `loading` can be either `lazy` (default) or `eager`. This field
 [controls lazy
 loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading).
+
+-- end: ds.page

@@ -1,65 +1,65 @@
 \-- ft-core.concept:
 
--- ft.page: Built-in Types
+-- ds.page: Built-in Types
 
--- ft.markdown: 
+-- ds.markdown: 
 
 `ftd` comes with some built-in types. These types can be used to construct more
 complex types like [`record`](/record/) and
 [`or-type`](/or-type/).
 
--- ft.h1: `boolean`
+-- ds.h1: `boolean`
 
 This type is used to represent boolean values `true` and `false`.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- boolean is-monday: true
 
--- ft.markdown:
+-- ds.markdown:
 
 This type can be "auto-detected" so it's not necessary to specify the type when
 declaring a boolean variable.
 
--- ft.h1: `integer`
+-- ds.h1: `integer`
 
 This is integer type, can be positive or negative.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer number-of-days-in-a-week: 7
 
--- ft.markdown:
+-- ds.markdown:
 
 This type can be "auto-detected" so it's not necessary to specify the type when
 declaring an integer variable.
 
--- ft.h1: `decimal`
+-- ds.h1: `decimal`
 
 This type is used to represent decimal numbers.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- decimal pi: 3.14159
 
--- ft.markdown:
+-- ds.markdown:
 
 This type can be "auto-detected" so it's not necessary to specify the type when
 declaring a decimal variable.
 
--- ft.h1: `string`
+-- ds.h1: `string`
 
 This is unicode string.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string message: hello world!
 
--- ft.code: a multi-line string
+-- ds.code: a multi-line string
 lang: ftd
 
 \-- string message:
@@ -71,7 +71,7 @@ can have any number of lines.
 or long paragraph, if you have a long paragraph to write. it can
 contain unicode characters in any भाषा, or emojis, 💁👌🎍😍.
 
--- ft.h1: `caption`
+-- ds.h1: `caption`
 
 `caption` is a special type, it is an alias for `string`, but can not be used when
 declaring a variable.
@@ -81,7 +81,7 @@ This type is used for `record`, `or-type` and `component` arguments.
 If a `record` or `or-type` field, or `component` argument is defined as `caption`,
 it can be passed in the "caption" location in `ftd::p1` "section".
 
--- ft.code: record with caption
+-- ds.code: record with caption
 lang: ftd
 
 \-- record person:
@@ -92,13 +92,13 @@ caption name:
 \-- person shobhit:
 name: Shobhit Sharma
 
--- ft.markdown:
+-- ds.markdown:
 
 If something is specified as `caption`, it can come in the "caption" location, eg
 in case of `amitu` var, or it can come as an explicit key, as in the declaration
 of `shobhit` variable.
 
--- ft.h1: `body`
+-- ds.h1: `body`
 
 `body` is a special type, it is an alias for `string`, but can not be used when
 declaring a variable.
@@ -108,7 +108,7 @@ This type is used for `record`, `or-type` and `component` arguments.
 If a `record` or `or-type` field, or `component` argument is defined as `body`,
 it can be passed in the "body" location in `ftd::p1` "section".
 
--- ft.code: record with body
+-- ds.code: record with body
 lang: ftd
 
 \-- record person:
@@ -125,13 +125,13 @@ or multi-line bio of Amit.
 name: Shobhit Sharma
 bio: or we can put things in "header"
 
--- ft.markdown:
+-- ds.markdown:
 
 If something is specified as `body`, it can come in the "body" location, eg in
 case of `amitu` var, or it can come as an explicit key, as in the declaration of
 `shobhit` variable.
 
--- ft.h1: `caption or body`
+-- ds.h1: `caption or body`
 
 `caption or body` is a special type, it is an alias for `string`, but can not be
 used when declaring a variable.
@@ -142,7 +142,7 @@ If a `record` or `or-type` field, or `component` argument is defined as `caption
 or body`, it can be passed in either the "caption" or "body" location in
 `ftd::p1` "section".
 
--- ft.code: record with caption or body
+-- ds.code: record with caption or body
 lang: ftd
 
 \-- record person:
@@ -157,41 +157,41 @@ name: Shobhit Sharma
 
 Abrar Khan
 
--- ft.markdown:
+-- ds.markdown:
 
 If something is specified as `caption or body`, it can come in the "caption"
 location, eg in case of `amitu` var, or it can come as an explicit key, as in
 the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
 
 
--- ft.h1: `ftd.color`
+-- ds.h1: `ftd.color`
 
 It is record type with the following fields.
 
--- ft.code: `ftd.color` record (ftd.ftd)
+-- ds.code: `ftd.color` record (ftd.ftd)
 lang: ftd
 
 \-- record color:
 caption light:
 string dark:
 
--- ft.markdown:
+-- ds.markdown:
 
 It shows color in light field in light mode and color in dark field in dark mode.
 Consider the following example:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.color red-orange:
 light: red
 dark: orange
 
--- ft.markdown:
+-- ds.markdown:
 
 This would return `red` color in light mode and `orange` color in dark mode.
 
--- ft.h2: Supported Color Formats
+-- ds.h2: Supported Color Formats
 
 The value of `light` and `dark` can be any string supported by [CSS3 Color
 spec](https://www.w3.org/TR/css-color-3/).
@@ -200,11 +200,11 @@ Along with CSS3 colors we also support 8 digit RGBA format (eg `#RRGGBBAA`) from
 [CSS Color Module Level 4](https://www.w3.org/TR/css-color-4/).
 
 
--- ft.h1: `ftd.font-size`
+-- ds.h1: `ftd.font-size`
 
 It is record font-size with the following fields.
 
--- ft.code: `ftd.font-size` record (ftd.ftd)
+-- ds.code: `ftd.font-size` record (ftd.ftd)
 lang: ftd
 
 \-- record font-size:
@@ -212,20 +212,20 @@ integer line-height:
 integer size:
 integer letter-spacing:
 
--- ft.markdown:
+-- ds.markdown:
 
 It defines the line-height, size and letter-spacing.
 
--- ft.h2: `line-height`
+-- ds.h2: `line-height`
 
 The `line-height` field sets the height of a line box. It's commonly
 used to set the distance between lines of text.
 
--- ft.h2: `size`
+-- ds.h2: `size`
 
 The `size` field sets the size of the font.
 
--- ft.h2: `letter-spacing`
+-- ds.h2: `letter-spacing`
 
 The `letter-spacing` sets the horizontal spacing behavior between text
 characters. This value is added to the natural spacing between characters
@@ -233,7 +233,7 @@ while rendering the text. Positive values of letter-spacing causes
 characters to spread farther apart, while negative values of letter-spacing
 bring characters closer together.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.font-size fs:
@@ -242,13 +242,13 @@ size: 24
 letter-spacing: 0
 
 
--- ft.h1: `ftd.type`
+-- ds.h1: `ftd.type`
 
 It defines the typography of the font.
 
 It is record type with the following fields.
 
--- ft.code: `ftd.type` record (ftd.ftd)
+-- ds.code: `ftd.type` record (ftd.ftd)
 lang: ftd
 
 \-- record type:
@@ -260,7 +260,7 @@ integer weight:
 optional string style:
 
 
--- ft.markdown:
+-- ds.markdown:
 
 It defines the:
 
@@ -275,7 +275,7 @@ It defines the:
   Example: `style: italic underline`
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.font-size desktop-fs:
@@ -301,12 +301,12 @@ xl: $xl-fs
 weight: 400
 style: italic
 
--- ft.markdown:
+-- ds.markdown:
 
 This would return `red` color in light mode and `orange` color in dark mode.
 
 
--- ft.h1: `length`
+-- ds.h1: `length`
 
 `length` is a type that is used for passing UI dimensions. It has one of the
 
@@ -324,3 +324,5 @@ This would return `red` color in light mode and `orange` color in dark mode.
 - `vh <integer>`: Relative to 1% of the height of the viewport
 - `vw <integer>`: Relative to 1% of the width of the viewport
 - `<integer>`: Gives <integer>px unit space.
+
+-- end: ds.page

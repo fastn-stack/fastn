@@ -1,11 +1,11 @@
--- ft.page: `ftd` Documentation
+-- ds.page: `ftd` Documentation
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 Everything you need to know about `ftd`.
 
--- ft.h1: First Steps
+-- ds.h1: First Steps
 
 Are you new to `ftd` or to programming? This is the place to start!
 
@@ -13,7 +13,7 @@ Are you new to `ftd` or to programming? This is the place to start!
 - **Tutorial:** Creating Your First FPM Package
 
 
--- ft.h1: Getting Help
+-- ds.h1: Getting Help
 
 Having trouble? We'd like to help!
 
@@ -24,6 +24,5 @@ Having trouble? We'd like to help!
   tracker](https://github.com/FifthTry/ftd/issues).
 
 
-
-
+-- end: ds.page
 

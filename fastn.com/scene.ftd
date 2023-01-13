@@ -1,10 +1,6 @@
--- ft.page: Scene
+-- ds.page: Scene
 
--- ftd.column:
-width: fill
-id: outer-5
-
--- ft.markdown:
+-- ds.markdown:
 
 Renders an scene. The child components can be placed at arbitrary positions.
 The child components inside the scene should be given a vertical position
@@ -12,7 +8,7 @@ The child components inside the scene should be given a vertical position
 positions are relative to the element (`scene`)
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.color cadetblue: cadetblue
@@ -49,45 +45,50 @@ padding: 40
 border-width: 2
 
 
--- ft.output:
+-- ds.output:
 
--- ftd.color cadetblue: cadetblue
+-- ds.code:
+lang: ftd
+
+\-- ftd.color cadetblue: cadetblue
 dark: cadetblue
 
--- ftd.scene:
+\-- ftd.scene:
 width: 400
 height: 400
 background-color: $cadetblue
 
---- data: Scene 1
+\-- data: Scene 1
 top: 10
 left: 20
 
---- data: Scene 2
+\-- data: Scene 2
 top: 10
 right: 20
 
---- data: Scene 3
+\-- data: Scene 3
 bottom: 10
 left: 20
 
---- data: Scene 4
+\-- data: Scene 4
 bottom: 10
 right: 20
 
---- data: Scene 5
+\-- data: Scene 5
 bottom: 148
 right: 133
 
--- ftd.text data: $title
+\-- ftd.text data: $title
 caption title:
-padding: 40
-border-width: 2
+padding.px: 40
+border-width.px: 2
 
--- container: outer-5
 
--- ft.markdown:
+-- ds.markdown:
 
 The `ftd.scene` can be used to create any kind of arbitrary ui. For
 instance, [architectural diagram](examples/diagram/) or
 [comic](examples/comic/)
+
+
+-- end: ds.page

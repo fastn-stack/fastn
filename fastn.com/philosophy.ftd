@@ -1,10 +1,10 @@
 \-- ft-core.concept:
 
 
--- ft.page: Philosophy Behind `ftd`
+-- ds.page: Philosophy Behind `ftd`
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 FTD is being designed as language for human beings. We believe all humans should
 be able to own the digital work they produce. Today that work is lost in
@@ -53,7 +53,7 @@ you want to share? A text written in one software is today lost, can barely be
 used from another without export step.
 
 
--- ft.h1: Markdown
+-- ds.h1: Markdown
 
 Markdown is brilliant, very soon probably every text input where humans write free
 form text will be supporting markdown or a subset of it. 
@@ -76,7 +76,7 @@ hopefully superior to many programming languages (we have
 [ADT](or-type/)!).
 
 
--- ft.h1: Simple Syntax
+-- ds.h1: Simple Syntax
 
 If our goal is for all humans to learn some syntax, it must be very simple.
 
@@ -84,7 +84,7 @@ With these in mind, we have a syntax that only has `-`, `:` (and `\`) as special
 characters. There is no `(`, or `[`, or `{`, or even `"` etc etc.
 
 
--- ft.h1: Indentation And Closing Tags
+-- ds.h1: Indentation And Closing Tags
 
 If our goal is to the universal data format, which can be inputted in any text
 field humans come across, we can not rely on advanced editor features.
@@ -101,7 +101,7 @@ most successful programming languages used "getting rid of closing tags/brackets
 as one of the selling points, at least in the beginning).
 
 
--- ft.h2: Hierarchical data and flat structure
+-- ds.h2: Hierarchical data and flat structure
 
 This forces us to represent data and UI, both of them are inherently hierarchal 
 in nature, in a flat format. This is possible to some extent, as we explore with
@@ -110,3 +110,5 @@ the design of `ftd`.
 Read how we do ["container management"](container/) to attempt this.
 
 What we are trying is very hard. We will have to make compromises somewhere.
+
+-- end: ds.page

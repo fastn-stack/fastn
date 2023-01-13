@@ -1,21 +1,23 @@
--- ft.page: Changelog
+-- ds.page: Changelog
 
--- ft.markdown: 
+-- ds.markdown: 
 
 Since things are too much in flux right now we are not updating the Changelog.
 
 
--- ft.h1: 24th May 2021: Released 0.1.4
+-- ds.h1: 24th May 2021: Released 0.1.4
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Fixes
 
 
--- ft.h1: 27th Apr 2021: Released 0.1.2
+-- ds.h1: 27th Apr 2021: Released 0.1.2
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - `ftd::p1` is almost usable now.
+
+-- end: ds.page

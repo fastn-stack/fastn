@@ -1,32 +1,34 @@
--- ft.page: `ftd.image`: Image Kernel Element
+-- ds.page: `ftd.image`: Image Kernel Element
     
--- ft.markdown: 
+-- ds.markdown: 
 
 `ftd.image` is the kernel elment used to render images in ftd.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.image:
 
 
--- ft.tip: Common Attributes
+-- ds.tip: Common Attributes
 
 Image accepts the below attributes as well all the [common attributes ](common/).
 
--- ft.h1: `src: String`
+-- ds.h1: `src: String`
 
 `src` is the image to show. This is the only required element.
 
--- ft.h1: `description: Optional String`
+-- ds.h1: `description: Optional String`
 
 Content of `description` is added as `alt` text in HTML.
 
--- ft.h1: `loading: Optional String`
+-- ds.h1: `loading: Optional String`
 
 The value of `loading` can be either `lazy` (default) or `eager`. This field
 [controls lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading).
 
--- ft.h1: `crop: Boolean, default: False`
+-- ds.h1: `crop: Boolean, default: False`
 
 If this is specified the image is cropped to fit the container.
+
+-- end: ds.page

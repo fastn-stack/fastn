@@ -1,17 +1,17 @@
--- ft.page: Decimal
+-- ds.page: Decimal
 
--- ft.markdown: 
+-- ds.markdown: 
 
 Renders a decimal value.
 
--- ft.h3: Usage
+-- ds.h3: Usage
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.decimal:
 
--- ft.h3: Attributes
+-- ds.h3: Attributes
 
 Decimal accepts the below attributes as well all the [common attributes ](common/).
 
@@ -24,3 +24,5 @@ Decimal accepts the below attributes as well all the [common attributes ](common
 - `external_font`
 - `font`
 - `line_height`
+
+-- end: ds.page

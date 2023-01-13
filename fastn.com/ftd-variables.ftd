@@ -1,9 +1,9 @@
--- ft.page: FTD Variables
+-- ds.page: FTD Variables
 
 
--- ft.h1: `color`
+-- ds.h1: `color`
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record color:
@@ -12,11 +12,11 @@ string dark:
 
 
 
--- ft.h1: `markdown-color`
+-- ds.h1: `markdown-color`
 
 `markdown-color` is a variable of type `markdown-color-data`.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record markdown-color-data:
@@ -28,11 +28,11 @@ color link-visited-code:
 color ul-ol-li-before:
 
 
--- ft.h1: `markdown-background-color`
+-- ds.h1: `markdown-background-color`
 
 `markdown-background-color` is a variable of type `markdown-background-color-data`.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record markdown-background-color-data:
@@ -44,9 +44,9 @@ color link-visited-code:
 color ul-ol-li-before:
 color blockquote:
 
--- ft.h1: How to Use in FTD Files
+-- ds.h1: How to Use in FTD Files
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: Link
@@ -86,3 +86,5 @@ color: $ftd.markdown-background-color.link-visited-code
 \-- ftd.text: ul ol li: before
 color: $ftd.markdown-background-color.ul-ol-li-before
 
+
+-- end: ds.page
