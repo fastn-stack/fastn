@@ -86,7 +86,7 @@ impl<'a> ftd::html1::main::HtmlGenerator<'a> {
     pub(crate) fn group_by_js_event(
         &self,
         evts: &[ftd::node::Event],
-    ) -> ftd::html1::Result<std::collections::HashMap<String, String>> {
+    ) -> ftd::html1::Result<ftd::Map<String>> {
         // key: onclick
         // value: after group by for onclick find all actions, and call to_js_event()
         let mut events: ftd::Map<Vec<ftd::html1::Action>> = Default::default();
@@ -109,7 +109,7 @@ impl<'a> ftd::html1::main::HtmlGenerator<'a> {
                 );
             }
         }
-        let mut string_events: std::collections::HashMap<String, String> = Default::default();
+        let mut string_events: ftd::Map<String> = Default::default();
         for (k, v) in events {
             string_events.insert(k, serde_json::to_string(&v).expect(""));
         }
