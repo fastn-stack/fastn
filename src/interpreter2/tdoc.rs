@@ -1367,8 +1367,8 @@ impl<'a> TDoc<'a> {
 
     pub fn from_json_rows(
         &self,
-        kind: &ftd::interpreter2::Kind,
         rows: &[Vec<serde_json::Value>],
+        kind: &ftd::interpreter2::Kind,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
         Ok(match kind {
@@ -1376,7 +1376,7 @@ impl<'a> TDoc<'a> {
                 let mut data = vec![];
                 for row in rows {
                     data.push(
-                        self.from_json_row(kind.as_ref(), row, line_number)?
+                        self.from_json_row(row, kind.as_ref(), line_number)?
                             .into_property_value(false, line_number),
                     );
                 }
@@ -1397,8 +1397,8 @@ impl<'a> TDoc<'a> {
 
     pub fn from_json_row(
         &self,
-        kind: &ftd::interpreter2::Kind,
         row: &[serde_json::Value],
+        kind: &ftd::interpreter2::Kind,
         line_number: usize,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
         Ok(match kind {
