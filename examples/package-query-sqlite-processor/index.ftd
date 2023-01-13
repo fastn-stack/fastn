@@ -38,7 +38,7 @@ background.solid: yellow
 
 -- ftd.text: $print-employee.e.name
 
--- ftd.integer: $print-employee.e.email
+-- ftd.text: $print-employee.e.email
 
 -- end: ftd.column
 
