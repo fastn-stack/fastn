@@ -9,6 +9,12 @@ pub enum FTDEdition {
     FTD2022,
 }
 
+impl Default for FTDEdition {
+    fn default() -> Self {
+        FTDEdition::FTD2022
+    }
+}
+
 impl FTDEdition {
     pub(crate) fn from_string(s: &str) -> fpm::Result<FTDEdition> {
         match s {
@@ -1286,7 +1292,7 @@ impl Config {
             global_ids: Default::default(),
             request: req.map(ToOwned::to_owned),
             named_parameters: vec![],
-            ftd_edition: FTDEdition::FTD2021,
+            ftd_edition: FTDEdition::default(),
             ftd_external_js: Default::default(),
             ftd_inline_js: Default::default(),
             ftd_external_css: Default::default(),
