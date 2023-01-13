@@ -1,37 +1,37 @@
 -- import: fpm
 
--- ft.page: `import`
+-- ds.page: `import`
 
 -- ftd.column:
-id: outer-14
 
--- ft.markdown:
+-- ds.markdown:
 
 `ftd` code in one page/component gains access to the code in another page by 
 the process of importing it. It takes input like this :
 
--- ft.h1: `import: string`
+-- ds.h1: `import: string`
 
--- ft.markdown:
+-- ds.markdown:
 
 Suppose you are gonna use some properties like `color: $fpm.color.main.border` 
 or `padding: $fpm.space.space-4` then you have to write the following piece of 
 code at the top on that particular `ftd page` as well as `FPM.ftd` page :
 
--- ft.code: use of import
+-- ds.code: use of import
 lang: ftd
 
 \-- import: fpm 
 
--- ft.markdown:
+-- ds.markdown:
 
 If you want to call a page/component to another page or you want to use some 
 properties like images etc then you have to use the following piece of code 
 on that particular `ftd page` : 
 
--- ft.code: use of import
+-- ds.code: use of import
 lang: ftd
 
 \-- import: fifthtry.github.io/footer/assets
 
 
+-- end: ds.page

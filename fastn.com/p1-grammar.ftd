@@ -1,16 +1,16 @@
 /-- ft-core.concept:
 
--- ft.page: `ftd::p1` grammar
+-- ds.page: `ftd::p1` grammar
 
--- ft.markdown: 
+-- ds.markdown: 
 
 `ftd` is based on a low-level grammar called `ftd::p1` grammar.
 
--- ft.h1: `section`
+-- ds.h1: `section`
 
 A `ftd::p1` file is composed of "sections". A section looks like this:
 
--- ft.code: an `ftd::p1` file with two sections
+-- ds.code: an `ftd::p1` file with two sections
 lang: ftd
 
 \-- some section: the caption of the section
@@ -22,13 +22,13 @@ the body of the first section
 \-- something:
 yo: 42
 
--- ft.markdown:
+-- ds.markdown:
 
 Each section starts with `-- `. 
 
 The section has these properties:
 
--- ft.h2: `section name`
+-- ds.h2: `section name`
 
 The section name is the only **mandatory parameter** for a section. Name starts 
 after `-- `, and ends with the first `:`. Trailing `:` is mandatory.
@@ -41,7 +41,7 @@ hash(`#`), and hyphens(`-`). Colon terminates the section name.
 
 Leading and trailing whitespaces are not considered part of the section name.
 
--- ft.h2: `section caption`
+-- ds.h2: `section caption`
 
 What comes after `:` in the section line, till the end of the first line is called
 the `caption` of the section.
@@ -53,7 +53,7 @@ the second section does not have a caption.
 
 Leading and trailing whitespaces are not considered part of the caption.
 
--- ft.h2: `section headers`
+-- ds.h2: `section headers`
 
 After the "section line" (the first line that starts with `-- `, zero or more
 section headers can be passed. In our example, the first section has two headers,
@@ -64,7 +64,7 @@ marks the end of the headers.
 
 Leading and trailing whitespaces of both header name and header value are ignored.
 
--- ft.h2: `section body`
+-- ds.h2: `section body`
 
 After the first empty line that comes after the section header, till the start
 of next section is considered the body of the section.
@@ -73,11 +73,11 @@ The body is optional.
 
 Leading and trailing newlines are not considered part of the body.
 
-/-- ft.h1: `sub-section`
+/-- ds.h1: `sub-section`
 
 A section can contain zero or more `sub-sections`:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- some-section:
@@ -86,7 +86,7 @@ optional body of "some-section"
 
 this one has a body
 
-/-- ft.markdown:
+/-- ds.markdown:
 
 `sub-section` starts with `--- `. If `section` has `body`, body comes before any
 of the `sub-section`s.
@@ -99,20 +99,22 @@ In our example, `some-section` `section` has two `sub-section`s, with names
 and the second doesn't. First `sub-section-1` has one header, and no body, `lalala`
 has no header but has a body: `this one has a body`.
 
-/-- ft.h1: Philosophy, and why there is no `sub-sub-section`
+/-- ds.h1: Philosophy, and why there is no `sub-sub-section`
 
 Check out our [philosophy guide](philosophy/) to understand why we 
 have taken some of these decisions.
 
--- ft.h1: Programmatic Access
+-- ds.h1: Programmatic Access
 
 `ftd::p1` module in `ftd` crate can be used to read `ftd.p1` files. Wrappers of
 this crate in Python and other programming languages would hopefully come soon.
 
--- ft.h2: File Extension
+-- ds.h2: File Extension
 
 Each user of `ftd::p1` should come up with their own extension, but `.p1` is an
 extension which can be used by convention in some cases.
 
 Also consider using `ftd` itself, instead of this low-level library, this library 
 should only be used as a fallback.
+
+-- end: ds.page

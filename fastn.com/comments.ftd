@@ -1,47 +1,47 @@
--- ft.page: Comments In `ftd` Files
+-- ds.page: Comments In `ftd` Files
 
--- ft.h1: Block comment
+-- ds.h1: Block comment
 
 Writing `/` before any section will "comment out" that entire section.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
-\/-- ft.code:
+\/-- ds.code:
 lang: ftd
 
 fooo
 
 
--- ft.h1: Header comment
+-- ds.h1: Header comment
 
 Similarly any attribute can be commented out by prefixing it with `/`:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
-\-- ft.code:
+\-- ds.code:
 lang: ftd
 /color: red
 
 fooo
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have commented out the `color: red` header.
 
-/-- ft.markdown:
+/-- ds.markdown:
 
 Also we can comment out the entire body of a section or a subsection:
 
 
-/-- ft.code:
+/-- ds.code:
 lang: ftd
 
-\-- ft.code:
+\-- ds.code:
 lang: ftd
 
 /import os
@@ -49,7 +49,7 @@ lang: ftd
 print "hello world"
 
 
-/-- ft.markdown:
+/-- ds.markdown:
 
 Here the entire body would be considered commented out.
 
@@ -57,10 +57,10 @@ If we want the body to start with `/`, we can write `\/`, and `\` will be stripp
 out by the `p1` parser and body will start with `/`.
 
 
-/-- ft.code:
+/-- ds.code:
 lang: ftd
 
-\-- ft.code:
+\-- ds.code:
 lang: ftd
 
 \/import os
@@ -68,25 +68,25 @@ lang: ftd
 print "hello world"
 
 
-/-- ft.markdown:
+/-- ds.markdown:
 
 In this case the body would be: `/import os\n\nprint "hello world"`.
 
 
--- ft.h1: Comment using `;`
+-- ds.h1: Comment using `;`
 
 Similarly any attribute can be commented out by following with `;`:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
-\-- ft.code:
+\-- ds.code:
 lang: ftd
 \;color: red
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have commented out the `color: red` header.
 
@@ -96,3 +96,4 @@ and it will comment out that line.
 
 
 
+-- end: ds.page
