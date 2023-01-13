@@ -2,25 +2,25 @@
 
 -- fpm.package: ftd.dev
 download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
-language: en
 
--- fpm.dependency: fifthtry.github.io/doc-site as ft
+-- fpm.dependency: fifthtry.github.io/doc-site as ds
 -- fpm.dependency: fifthtry.github.io/product-switcher as ps
--- fpm.dependency: fifthtry.github.io/bling as bling
+;; -- fpm.dependency: fifthtry.github.io/bling as bling
 -- fpm.dependency: fifthtry.github.io/admonitions as cbox
--- fpm.dependency: fifthtry.github.io/workshop-page as ws
+;; -- fpm.dependency: fifthtry.github.io/workshop-page as ws
 -- fpm.dependency: fifthtry.github.io/fifthtry-brand-switcher as fbs
 
--- fpm.dependency: fifthtry.github.io/dark-mode-switcher as dms
--- fpm.dependency: arjaupashak.com
--- fpm.dependency: fpm.dev
--- fpm.dependency: fifthtry.github.io/roboto-mono as mono
+;; -- fpm.dependency: fifthtry.github.io/dark-mode-switcher as dms
+;; -- fpm.dependency: arjaupashak.com
+;; -- fpm.dependency: fpm.dev
+-- fpm.dependency: fifthtry.github.io/roboto as mono
 
--- fpm.auto-import: ft as ds
+-- fpm.auto-import: ds
 -- fpm.auto-import: ws
 -- fpm.auto-import: fpm
 -- fpm.auto-import: ftd.dev/FPM/config
 -- fpm.auto-import: dms
+-- fpm.auto-import: cbox
 
 
 -- fpm.sitemap:
