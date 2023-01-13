@@ -1,4 +1,4 @@
--- import: ft
+-- import: ds
 -- import: ps
 -- import: fbs
 -- import: ftd.dev/assets
@@ -8,12 +8,12 @@
 
 
 
--- ft.github: https://github.com/fifthtry/ftd/
--- ft.site-url: /
--- ft.site-name: 
+-- ds.github: https://github.com/fifthtry/ftd/
+-- ds.site-url: /
+-- ds.site-name: FTD
 
 
--- ft.site-logo:
+-- ds.site-logo:
 light: $assets.files.images.logo-fifthtry-dark.svg.light
 dark: $assets.files.images.logo-fifthtry-dark.svg.dark
 
@@ -24,14 +24,14 @@ dark: $assets.files.images.logo-fifthtry-dark.svg.dark
 
 
 
--- ft.parent-brand: false
+-- ds.parent-brand: false
 
--- ft.brand-caption: Created by
+-- ds.brand-caption: Created by
 
--- ft.brand-site-name: FTD
+-- ds.brand-site-name: FTD
 
 
--- ft.brand-site-logo:
+-- ds.brand-site-logo:
 light: $assets.files.images.ftd.png.light
 dark:  $assets.files.images.ftd.png.dark
 
