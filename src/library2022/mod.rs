@@ -251,6 +251,7 @@ impl Library2022 {
             "user-details" => processor::user_details::process(value, kind, doc, &self.config),
             "fpm-apps" => processor::apps::process(value, kind, doc, &self.config),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,
+            "package-query" => processor::sqlite::process(value, kind, doc, &self.config).await,
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

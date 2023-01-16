@@ -1,0 +1,18 @@
+-- import: fpm
+-- import: fpm/processors
+
+
+-- ftd.text: Hello World
+
+
+-- record query:
+optional string q:
+
+
+-- query query-data:
+$processor$: processors.request-data
+
+-- ftd.text: $query-data.q
+if: { query-data.q != NULL}
+
+

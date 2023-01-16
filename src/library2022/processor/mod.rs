@@ -4,6 +4,7 @@ pub(crate) mod get_data;
 pub(crate) mod http;
 pub(crate) mod request_data;
 pub(crate) mod sitemap;
+pub(crate) mod sqlite;
 pub(crate) mod toc;
 pub(crate) mod user_details;
 pub(crate) mod user_group;
