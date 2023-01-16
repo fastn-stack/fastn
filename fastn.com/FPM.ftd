@@ -142,18 +142,12 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 ## Crash Course: /expander/
 
 - Overview: /expander/
-- Part 1: Hello World
-  url: /expander/hello-world/
-- Part 2: Basic UI
-  url: /expander/basic-ui/
-- Part 3: Components
-  url: /expander/components/
-- Part 4: Event Handling
-  url: /expander/events/
-- Part 5: Publish a package
-  url: /expander/publish/
-- Part 6: Reuse the package
-  url: /expander/reuse/
+- Part 1. Hello World: /expander/hello-world/
+- Part 2. Basic UI: /expander/basic-ui/
+- Part 3. Components: /expander/components/
+- Part 4. Event Handling: /expander/events/
+- Part 5. Publish a package: /expander/publish/
+- Part 6. Reuse the package: /expander/reuse/
 
 
 # News: /news/
@@ -180,4 +174,3 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 
 
 # GitHub: https://github.com/fifthtry/ftd/
-

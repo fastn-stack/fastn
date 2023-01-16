@@ -10,7 +10,7 @@
 
 -- ds.github: https://github.com/fifthtry/ftd/
 -- ds.site-url: /
--- ds.site-name: FTD
+-- $ds.site-name: FTD
 
 
 -- ds.site-logo:
@@ -175,6 +175,3 @@ $processor$: toc
 - Grid: /examples/grid/
 - Dark Mode: /examples/dark-mode/
 - Conditional Variable: /examples/conditional-variable/
-  
-
-

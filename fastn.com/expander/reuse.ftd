@@ -7,5 +7,7 @@
 v: gHOoxmOdGsE
 
 -- ds.image: 
-src: $assets.files.images.thankyou.png
-width: fill
+src: $assets.files.images.thankyou.jpg
+width: fill-container
+
+-- end: ds.page

@@ -1,21 +1,23 @@
 -- import: ftd.dev/assets
 
+-- $ds.site-name: FTD
+
 -- ds.page: Part 1: Hello World
 
 -- ds.youtube:
 v: 4tGbwWncZ5c
 
--- ds.image: 
+-- ds.image:
 src: $assets.files.images.column.png
-width: fill
+width: fill-container
 
--- ds.image: 
+-- ds.image:
 src: $assets.files.images.row.png
-width: fill
+width: fill-container
 
 
 -- ds.markdown:
 
 Continue with the [part 2 now](/expander/basic-ui/).
 
-
+-- end: ds.page
