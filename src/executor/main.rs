@@ -17,6 +17,7 @@ pub struct RT {
 }
 
 impl<'a> ExecuteDoc<'a> {
+    #[tracing::instrument(skip_all)]
     pub fn from_interpreter(document: ftd::interpreter2::Document) -> ftd::executor::Result<RT> {
         let mut document = document;
         let execute_doc = ExecuteDoc {
@@ -36,7 +37,7 @@ impl<'a> ExecuteDoc<'a> {
             main,
         })
     }
-
+    #[tracing::instrument(skip_all)]
     fn execute(&mut self) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
         let mut doc = ftd::executor::TDoc {
             name: self.name,
@@ -112,6 +113,7 @@ impl<'a> ExecuteDoc<'a> {
         Ok(component_definition.definition)
     }
 
+    #[tracing::instrument(skip_all)]
     fn get_loop_instructions(
         instruction: &ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
@@ -160,6 +162,7 @@ impl<'a> ExecuteDoc<'a> {
         Ok(elements)
     }
 
+    #[tracing::instrument(skip_all)]
     fn execute_from_instructions_loop(
         instructions: &[ftd::interpreter2::Component],
         doc: &mut ftd::executor::TDoc,

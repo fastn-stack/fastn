@@ -35,6 +35,7 @@ impl Record {
         Field::scan_ast_fields(record.fields, doc, &known_kinds)
     }
 
+    #[tracing::instrument(name = "record:from_ast", skip_all)]
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &mut ftd::interpreter2::TDoc,

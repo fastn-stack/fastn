@@ -30,6 +30,7 @@ impl OrType {
         Ok(())
     }
 
+    #[tracing::instrument(name = "or_type:from_ast", skip_all)]
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &mut ftd::interpreter2::TDoc,
