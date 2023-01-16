@@ -59,7 +59,6 @@ impl Variable {
         Ok(())
     }
 
-    #[tracing::instrument(name = "variable:from_ast", skip_all)]
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &mut ftd::interpreter2::TDoc,
