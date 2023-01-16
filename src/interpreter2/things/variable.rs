@@ -40,7 +40,7 @@ impl Variable {
                     variable_definition.line_number,
                 );
             };
-            let (doc_name, _thing_name, _remaining) =
+            let (doc_name, thing_name, _remaining) =
                 ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
                     name.as_str(),
                     doc.name,
@@ -48,9 +48,16 @@ impl Variable {
                 );
 
             if !state.parsed_libs.contains_key(doc_name.as_str()) {
+                state.pending_imports.stack.push((
+                    doc_name.to_string(),
+                    name,
+                    ast.line_number(),
+                    doc.name.to_string(),
+                ));
                 state
                     .pending_imports
-                    .unique_insert(doc_name, (name, ast.line_number()));
+                    .contains
+                    .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
             }
 
             return Ok(());
@@ -102,6 +109,7 @@ impl Variable {
                     return Ok(ftd::interpreter2::StateWithThing::new_state(
                         ftd::interpreter2::InterpreterWithoutState::StuckOnImport {
                             module: doc_name,
+                            caller_module: doc.name.to_string(),
                         },
                     ))
                 }
@@ -128,6 +136,7 @@ impl Variable {
                         } else {
                             thing_name
                         },
+                        caller_module: doc.name.to_string(),
                     },
                 ))
             } else {

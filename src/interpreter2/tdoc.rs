@@ -936,9 +936,9 @@ impl<'a> TDoc<'a> {
                 line_number,
             );
 
-        let current_parsed_document = state.parsed_libs.get(self.name).unwrap();
+        // let current_parsed_document = state.parsed_libs.get(self.name).unwrap();
 
-        if doc_name.ne(self.name) {
+        /*if doc_name.ne(self.name) {
             let current_doc_contains_thing = current_parsed_document
                 .ast
                 .iter()
@@ -965,7 +965,7 @@ impl<'a> TDoc<'a> {
                     format!("{}#{}", doc_name, thing_name),
                 ));
             }
-        }
+        }*/
 
         if let Some(parsed_document) = state.parsed_libs.get(doc_name.as_str()) {
             let ast_for_thing = parsed_document
@@ -985,29 +985,53 @@ impl<'a> TDoc<'a> {
                     .iter()
                     .any(|v| thing_name.eq(v))
                 {
+                    state.pending_imports.stack.push((
+                        doc_name.to_string(),
+                        name,
+                        line_number,
+                        self.name.to_string(),
+                    ));
                     state
                         .pending_imports
-                        .unique_insert(doc_name.to_string(), (name, line_number));
+                        .contains
+                        .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
                 }
 
                 return Ok(());
             }
 
             if !state
-                .to_process
+                .pending_imports
                 .contains
                 .contains(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)))
-            {
-                state
+                && !state
                     .to_process
                     .contains
+                    .contains(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)))
+            {
+                state
+                    .pending_imports
+                    .contains
                     .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
-                state.to_process.stack.push((doc_name, ast_for_thing));
+
+                state.pending_imports.stack.push((
+                    doc_name.to_string(),
+                    name,
+                    line_number,
+                    self.name.to_string(),
+                ));
             }
         } else {
+            state.pending_imports.stack.push((
+                doc_name.to_string(),
+                name,
+                line_number,
+                self.name.to_string(),
+            ));
             state
                 .pending_imports
-                .unique_insert(doc_name.to_string(), (name, line_number));
+                .contains
+                .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
         }
 
         Ok(())
@@ -1294,6 +1318,7 @@ impl<'a> TDoc<'a> {
                             variable: remaining
                                 .map(|v| format!("{}.{}", thing_name, v))
                                 .unwrap_or(thing_name),
+                            caller_module: self.name.to_string(),
                         },
                     ));
                 }
@@ -1323,12 +1348,18 @@ impl<'a> TDoc<'a> {
             return self.err("not found", name, "search_thing", line_number);
         }
 
-        state
-            .pending_imports
-            .unique_insert(doc_name.to_string(), (name, line_number));
+        state.pending_imports.stack.push((
+            doc_name.to_string(),
+            name,
+            line_number,
+            self.name.to_string(),
+        ));
 
         Ok(ftd::interpreter2::StateWithThing::new_state(
-            ftd::interpreter2::InterpreterWithoutState::StuckOnImport { module: doc_name },
+            ftd::interpreter2::InterpreterWithoutState::StuckOnImport {
+                module: doc_name,
+                caller_module: self.name.to_string(),
+            },
         ))
     }
 

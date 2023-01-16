@@ -22,6 +22,16 @@ pub enum Thing {
 }
 
 impl Thing {
+    pub(crate) fn name(&self) -> String {
+        match self {
+            ftd::interpreter2::Thing::Record(r) => r.name.clone(),
+            ftd::interpreter2::Thing::OrType(o) => o.name.clone(),
+            ftd::interpreter2::Thing::OrTypeWithVariant { or_type, .. } => or_type.clone(),
+            ftd::interpreter2::Thing::Variable(v) => v.name.to_string(),
+            ftd::interpreter2::Thing::Component(c) => c.name.to_string(),
+            ftd::interpreter2::Thing::Function(f) => f.name.to_string(),
+        }
+    }
     pub fn line_number(&self) -> usize {
         match self {
             Thing::Record(r) => r.line_number,
