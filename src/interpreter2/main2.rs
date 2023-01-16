@@ -621,6 +621,7 @@ impl InterpreterState {
         self.clone().continue_processing()
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn continue_after_import(
         mut self,
         module: &str,
@@ -637,6 +638,7 @@ impl InterpreterState {
         self.continue_processing()
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn continue_after_processor(
         mut self,
         value: ftd::interpreter2::Value,
@@ -682,6 +684,7 @@ impl InterpreterState {
         self.continue_processing()
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn continue_after_variable(
         mut self,
         module: &str,
@@ -716,12 +719,15 @@ pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter2::Result<
     interpret_with_line_number(id, source, 0)
 }
 
+#[tracing::instrument(skip_all)]
 pub fn interpret_with_line_number<'a>(
     id: &'a str,
     source: &'a str,
     line_number: usize,
 ) -> ftd::interpreter2::Result<Interpreter> {
     use itertools::Itertools;
+
+    tracing::info!(msg = "ftd: interpreting", doc = id);
 
     let mut s = InterpreterState::new(id.to_string());
     s.parsed_libs.insert(

@@ -39,6 +39,12 @@ indoc = "1"
 itertools = "0.10"
 
 
+# Logs Tracing Purpose
+tracing = "0.1"
+tracing-subscriber = "0.3"
+
+
+
 [dependencies.syntect]
 # We use syntect for syntax highlighting feature in ftd.code.
 version = "5"
