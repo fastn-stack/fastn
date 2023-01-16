@@ -10,6 +10,7 @@ pub struct HtmlUI {
 }
 
 impl HtmlUI {
+    #[tracing::instrument(skip_all)]
     pub fn from_node_data(node_data: ftd::node::NodeData, id: &str) -> ftd::html1::Result<HtmlUI> {
         let tdoc = ftd::interpreter2::TDoc::new(
             node_data.name.as_str(),
