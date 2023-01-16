@@ -144,9 +144,11 @@ pub async fn interpret_helper<'a>(
             ftd::interpreter2::Interpreter::StuckOnImport {
                 module,
                 state: mut st,
+                caller_module,
             } => {
                 let (source, foreign_variable, foreign_function, ignore_line_numbers) =
-                    resolve_import_2022(lib, &mut st, module.as_str()).await?;
+                    resolve_import_2022(lib, &mut st, module.as_str(), caller_module.as_str())
+                        .await?;
                 s = st.continue_after_import(
                     module.as_str(),
                     source.as_str(),
@@ -160,6 +162,7 @@ pub async fn interpret_helper<'a>(
                 ast,
                 module,
                 processor,
+                ..
             } => {
                 let doc = state.get_current_processing_module().ok_or(
                     ftd::interpreter2::Error::ValueNotFound {
@@ -179,6 +182,7 @@ pub async fn interpret_helper<'a>(
                 state,
                 module,
                 variable,
+                caller_module,
             } => {
                 if module.eq("test") {
                     let value = ftd::interpreter2::Value::String {
@@ -193,6 +197,7 @@ pub async fn interpret_helper<'a>(
                         lib,
                         base_url,
                         download_assets,
+                        caller_module.as_str(),
                     )
                     .await?;
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
@@ -338,18 +343,11 @@ pub async fn resolve_import<'a>(
 // source, foreign_variable, foreign_function
 pub async fn resolve_import_2022<'a>(
     lib: &'a mut fpm::Library2022,
-    state: &mut ftd::interpreter2::InterpreterState,
+    _state: &mut ftd::interpreter2::InterpreterState,
     module: &str,
+    caller_module: &str,
 ) -> ftd::interpreter2::Result<(String, Vec<String>, Vec<String>, usize)> {
-    let current_processing_module = state.get_current_processing_module().ok_or_else(|| {
-        ftd::interpreter2::Error::ParseError {
-            message: "The processing document stack is empty".to_string(),
-            doc_id: "".to_string(),
-            line_number: 0,
-        }
-    })?;
-
-    let current_package = lib.get_current_package(current_processing_module.as_str())?;
+    let current_package = lib.get_current_package(caller_module)?;
     let source = if module.eq("fpm/time") {
         ("".to_string(), vec!["time".to_string()], vec![], 0)
     } else if module.eq("fpm/processors") {
@@ -379,6 +377,15 @@ pub async fn resolve_import_2022<'a>(
             0,
         )
     } else if module.ends_with("assets") {
+        let package = lib
+            .config
+            .all_packages
+            .borrow()
+            .get(module.trim_end_matches("/assets"))
+            .unwrap()
+            .clone();
+
+        lib.push_package_under_process(module, &package).await?;
         let foreign_variable = vec!["files".to_string()];
 
         if module.starts_with(current_package.name.as_str()) {
@@ -407,9 +414,7 @@ pub async fn resolve_import_2022<'a>(
             (font_ftd, foreign_variable, vec![], 0)
         }
     } else {
-        let (content, ignore_line_numbers) = lib
-            .get_with_result(module, current_processing_module.as_str())
-            .await?;
+        let (content, ignore_line_numbers) = lib.get_with_result(module, caller_module).await?;
 
         (
             content,
@@ -450,19 +455,13 @@ pub async fn resolve_import_2022<'a>(
 pub async fn resolve_foreign_variable2022(
     variable: &str,
     doc_name: &str,
-    state: &ftd::interpreter2::InterpreterState,
+    _state: &ftd::interpreter2::InterpreterState,
     lib: &mut fpm::Library2022,
     base_url: &str,
     download_assets: bool,
+    caller_module: &str,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
-    let current_processing_module = state.get_current_processing_module().ok_or_else(|| {
-        ftd::interpreter2::Error::ParseError {
-            message: "The processing document stack is empty".to_string(),
-            doc_id: "".to_string(),
-            line_number: 0,
-        }
-    })?;
-    let package = lib.get_current_package(current_processing_module.as_str())?;
+    let package = lib.get_current_package(caller_module)?;
     if let Ok(value) = resolve_ftd_foreign_variable_2022(variable, doc_name) {
         return Ok(value);
     }
@@ -470,6 +469,7 @@ pub async fn resolve_foreign_variable2022(
     if variable.starts_with("files.") {
         let files = variable.trim_start_matches("files.").to_string();
         let package_name = doc_name.trim_end_matches("/assets").to_string();
+
         if package.name.eq(&package_name) {
             if let Ok(value) = get_assets_value(
                 doc_name,
