@@ -209,7 +209,6 @@ impl Component {
         Ok(())
     }
 
-    #[tracing::instrument(name = "component:from_ast", skip_all)]
     pub(crate) fn from_ast(
         ast: ftd::ast::AST,
         doc: &mut ftd::interpreter2::TDoc,
