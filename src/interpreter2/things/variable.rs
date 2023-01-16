@@ -172,7 +172,6 @@ impl Variable {
         ftd::interpreter2::PropertyValue::scan_ast_value(variable_definition.value, doc)
     }
 
-    #[tracing::instrument(name = "variable:update_ast", skip_all)]
     pub(crate) fn update_from_ast(
         ast: ftd::ast::AST,
         doc: &mut ftd::interpreter2::TDoc,
