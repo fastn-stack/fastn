@@ -1265,7 +1265,7 @@ impl<'a> TDoc<'a> {
                     let name = ftd::interpreter2::utils::resolve_name(
                         v.name().as_str(),
                         state.id.as_str(),
-                        self.aliases,
+                        &current_parsed_document.doc_aliases,
                     );
                     !v.is_component()
                         && (name.eq(&format!("{}#{}", doc_name, thing_name))
