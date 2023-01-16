@@ -146,7 +146,7 @@ impl InterpreterState {
             let state = &mut self;
 
             let mut doc = ftd::interpreter2::TDoc::new_state(&name, &aliases, state);
-            if dbg!(ast.is_record()) {
+            if ast.is_record() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
                         ftd::interpreter2::Record::scan_ast(ast, &mut doc)?;
@@ -601,32 +601,35 @@ impl InterpreterState {
                 line_number,
             );
 
-        if doc_name.ne(current_module) {
-            let current_document = self.parsed_libs.get(module).unwrap();
+        if doc_name.ne(self.id.as_str()) {
+            let current_document = self.parsed_libs.get(self.id.as_str()).unwrap();
             let current_doc_contains_thing = current_document
                 .ast
                 .iter()
                 .filter(|v| {
+                    let name = ftd::interpreter2::utils::resolve_name(
+                        v.name().as_str(),
+                        self.id.as_str(),
+                        &current_document.doc_aliases,
+                    );
                     !v.is_component()
-                        && (v.name().eq(&format!("{}.{}", doc_name, thing_name))
-                            || v.name()
-                                .starts_with(format!("{}.{}.", doc_name, thing_name).as_str()))
+                        && (name.eq(&format!("{}#{}", doc_name, thing_name))
+                            || name.starts_with(format!("{}#{}.", doc_name, thing_name).as_str()))
                 })
                 .map(|v| (0, v.to_owned()))
                 .collect_vec();
             if !current_doc_contains_thing.is_empty()
-                && !self.to_process.contains.contains(&(
-                    current_module.to_string(),
-                    format!("{}#{}", doc_name, thing_name),
-                ))
+                && !self
+                    .to_process
+                    .contains
+                    .contains(&(self.id.to_string(), format!("{}#{}", doc_name, thing_name)))
             {
                 self.to_process
                     .stack
-                    .push((current_module.to_string(), current_doc_contains_thing));
-                self.to_process.contains.insert((
-                    current_module.to_string(),
-                    format!("{}#{}", doc_name, thing_name),
-                ));
+                    .push((self.id.to_string(), current_doc_contains_thing));
+                self.to_process
+                    .contains
+                    .insert((self.id.to_string(), format!("{}#{}", doc_name, thing_name)));
             }
         }
 

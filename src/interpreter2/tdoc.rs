@@ -1004,10 +1004,6 @@ impl<'a> TDoc<'a> {
                 .pending_imports
                 .contains
                 .contains(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)))
-                && !state
-                    .to_process
-                    .contains
-                    .contains(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)))
             {
                 state
                     .pending_imports
@@ -1259,17 +1255,21 @@ impl<'a> TDoc<'a> {
                 line_number,
             );
 
-        let current_parsed_document = state.parsed_libs.get(self.name).unwrap();
+        let current_parsed_document = state.parsed_libs.get(state.id.as_str()).unwrap();
 
-        if doc_name.ne(self.name) {
+        if doc_name.ne(state.id.as_str()) {
             let current_doc_contains_thing = current_parsed_document
                 .ast
                 .iter()
                 .filter(|v| {
+                    let name = ftd::interpreter2::utils::resolve_name(
+                        v.name().as_str(),
+                        state.id.as_str(),
+                        self.aliases,
+                    );
                     !v.is_component()
-                        && (v.name().eq(&format!("{}.{}", doc_name, thing_name))
-                            || v.name()
-                                .starts_with(format!("{}.{}.", doc_name, thing_name).as_str()))
+                        && (name.eq(&format!("{}#{}", doc_name, thing_name))
+                            || name.starts_with(format!("{}#{}.", doc_name, thing_name).as_str()))
                 })
                 .map(|v| (0, v.to_owned()))
                 .collect_vec();
@@ -1277,16 +1277,17 @@ impl<'a> TDoc<'a> {
                 state
                     .to_process
                     .stack
-                    .push((self.name.to_string(), current_doc_contains_thing));
+                    .push((state.id.to_string(), current_doc_contains_thing));
 
-                if !state.to_process.contains.contains(&(
-                    self.name.to_string(),
-                    format!("{}#{}", doc_name, thing_name),
-                )) {
-                    state.to_process.contains.insert((
-                        self.name.to_string(),
-                        format!("{}#{}", doc_name, thing_name),
-                    ));
+                if !state
+                    .to_process
+                    .contains
+                    .contains(&(state.id.to_string(), format!("{}#{}", doc_name, thing_name)))
+                {
+                    state
+                        .to_process
+                        .contains
+                        .insert((state.id.to_string(), format!("{}#{}", doc_name, thing_name)));
                 }
             } else if !current_doc_contains_thing.is_empty() && state.peek_stack().unwrap().1.gt(&4)
             {
