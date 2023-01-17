@@ -85,8 +85,8 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 - `if` Conditional Components:
 url: /if/
 - Conditional Attributes: /if-attr/
-;; - `$loop$`: Looping Over Lists
-;; url: /loop/
+- `$loop$`: Looping Over Lists:
+url: /loop/
 ;; - ID: /id/
 ;; - `$on-<event-name>$`: Event Handling
 ;; url: /event-handling/
