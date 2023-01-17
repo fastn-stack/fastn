@@ -1,21 +1,23 @@
--- ft.page: Global Key Event Handling
+-- string $name: Foo
+
+-- ds.page: Global Key Event Handling
 
 There are two different global events in `ftd`
 `$on-global-key[<keys sequence>]$` and `$on-global-key-seq[<keys sequence>]$`.
 
--- ft.h1: `$on-global-key[<keys sequence>]$: <event action>`
+-- ds.h1: `$on-global-key[<keys sequence>]$: <event action>`
 
 In this case user has to press keys simultaneously with same sequence, and
 `event action` will get triggered.
 
 
--- ft.h1: `$on-global-key-seq[<keys sequence>]$: <event action>`
+-- ds.h1: `$on-global-key-seq[<keys sequence>]$: <event action>`
 
 In this case user has to press keys in same sequence, and `event action` will
 get triggered.
 
 
--- ft.h1: Special Keys Map
+-- ds.h1: Special Keys Map
 
 `ftd` to Keyboard Mapping
 
@@ -40,26 +42,42 @@ get triggered.
 "space" => " ",
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
-\-- string name: Foo
+\-- string $name: Foo
 
 \-- ftd.text: $name
-$on-global-key[ctrl-,]$: $name = Arpita
-$on-global-key[ctrl-3]$: $name = Ayushi
-$on-global-key-seq[shift-shift]$: $name = Rajshri
-$on-global-key-seq[space-dash]$: $name = Jatinderjit
+color: $inherited.colors.text-strong
+$on-global-key[ctrl-j]$: $set($a = $name, v = Arpita)
+$on-global-key[ctrl-3]$: $set($a = $name, v = Ayushi)
+$on-global-key-seq[shift-shift]$: $set($a = $name, v = Rajshri)
+$on-global-key-seq[space-dash]$:  $set($a = $name, v = Jatinderjit)
 
 
--- ft.output:
+\-- void set(a,v):
+string $a:
+string v:
 
+a = v
 
--- string name: Foo
+-- ds.output:
 
 -- ftd.text: $name
-color: $fpm.color.main.text-strong
-$on-global-key[ctrl-,]$: $name = Arpita
-$on-global-key[ctrl-3]$: $name = Ayushi
-$on-global-key-seq[shift-shift]$: $name = Rajshri
-$on-global-key-seq[space-dash]$: $name = Jatinderjit
+color: $inherited.colors.text-strong
+$on-global-key[ctrl-j]$: $set($a = $name, v = Arpita)
+$on-global-key[ctrl-3]$: $set($a = $name, v = Ayushi)
+$on-global-key-seq[shift-shift]$: $set($a = $name, v = Rajshri)
+$on-global-key-seq[space-dash]$:  $set($a = $name, v = Jatinderjit)
+
+-- end: ds.output
+
+-- end: ds.page
+
+
+
+-- void set(a,v):
+string $a:
+string v:
+
+a = v

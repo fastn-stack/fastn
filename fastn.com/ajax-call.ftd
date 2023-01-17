@@ -1,6 +1,6 @@
--- ft.page: AJAX calls in `ftd`
+-- ds.page: AJAX calls in `ftd`
 
--- ft.h1: AJAX Calls
+-- ds.h1: AJAX Calls
 
 Let's say there is a GET API `api/get-name` which is giving `name` in response.
 `ftd` will automatically call this API and set's the value in `foo.ftd#name`.
@@ -11,9 +11,9 @@ While we are creating `ftd` object `get-name-api`, `function`, `method` and
 `url` all are mandatory headers. `method` values can be `get/put/delete/post`.
 
 
--- ft.h2: GET Call
+-- ds.h2: GET Call
 
--- ft.code: foo.ftd
+-- ds.code: foo.ftd
 lang: ftd
 
 \-- ftd.column show-name:
@@ -35,9 +35,9 @@ $always-include$: true
 
 \-- show-name:
 
--- ft.h2: `api/get-name` Response
+-- ds.h2: `api/get-name` Response
 
--- ft.code:
+-- ds.code:
 lang: json
 
 {
@@ -46,12 +46,12 @@ lang: json
     }
 }
 
--- ft.h2: POST Call
+-- ds.h2: POST Call
 
 While we are creating `ftd` object `post-api`, `method` value will be `post`
 and all headers will get submitted to post api as request body.
 
--- ft.code: post-api
+-- ds.code: post-api
 lang: ftd
 
 \-- object post-api:
@@ -62,9 +62,9 @@ name: Abrar Khan
 age: 28
 
 
--- ft.h2: POST Request Body
+-- ds.h2: POST Request Body
 
--- ft.code:
+-- ds.code:
 lang: json
 
 {
@@ -74,3 +74,5 @@ lang: json
     "name": "Abrar Khan",
     "age": 28
 }
+
+-- end: ds.page
