@@ -6,6 +6,8 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#foo:name:3": "SDFSD",
+"foo#name": "ftd",
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -520,7 +522,7 @@ animation-direction: alternate;
 </span><span style="color:#4f5b66;">    println!(&quot;</span><span style="color:#a3be8c;">Hello World</span><span style="color:#4f5b66;">&quot;);
 </span><span style="color:#4f5b66;">}
 </span></pre>
-</div><iframe allow="fullscreen" allowfullscreen="allowfullscreen" data-id="1:main" loading="lazy" src="https://youtube.com/embed/10MHfy3b3c8" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"></iframe><iframe allow="fullscreen" allowfullscreen="allowfullscreen" data-id="2:main" loading="lazy" srcdoc="<p>Hello world!</p>" style="border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-style: solid; border-top-width: 4px; box-sizing: border-box; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md"></iframe></div>
+</div><iframe allow="fullscreen" allowfullscreen="allowfullscreen" data-id="1:main" loading="lazy" src="https://youtube.com/embed/10MHfy3b3c8" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md"></iframe><iframe allow="fullscreen" allowfullscreen="allowfullscreen" data-id="2:main" loading="lazy" srcdoc="<p>Hello world!</p>" style="border-bottom-width: 4px; border-left-width: 4px; border-right-width: 4px; border-style: solid; border-top-width: 4px; box-sizing: border-box; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md"></iframe><div data-id="3:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; text-decoration: none; width: auto" ><div data-id="3,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">SDFSD</div><div data-id="3,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Arpita</div></div></div>
 
 
 <script>
@@ -1186,7 +1188,32 @@ a.value = !a.value
 }
 
 
+window.node_change_main = {};
+window.node_change_main["3,0:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("foo#foo:name:3", data)!=null);
+}()){
+document.querySelector(`[data-id="3,0:main"]`).style["display"] = "block";
+}
+else {document.querySelector(`[data-id="3,0:main"]`).style["display"] = "none";}
+}
 
+window.node_change_main["3,0:main__text"] = function(data) {
+document.querySelector(`[data-id="3,0:main"]`).innerHTML = resolve_reference("foo#foo:name:3", data);
+}
+window.set_value_main = {};
+window.set_value_main["foo#foo:name:3"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#foo:name:3" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#foo:name:3", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["3,0:main__display"]){window.node_change_main["3,0:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3,0:main__text"]){window.node_change_main["3,0:main__text"](data);
+}
+};
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>
