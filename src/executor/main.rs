@@ -113,7 +113,6 @@ impl<'a> ExecuteDoc<'a> {
         Ok(component_definition.definition)
     }
 
-    #[tracing::instrument(skip_all)]
     fn get_loop_instructions(
         instruction: &ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
