@@ -203,20 +203,20 @@ impl fpm::Config {
             .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap())
             .filter(|x| x.is_file() && x.extension().map(|v| v.eq("track")).unwrap_or(false))
             .collect::<Vec<camino::Utf8PathBuf>>();
-        let mut tracking_infos = vec![];
+        let mut tracking_info_list = vec![];
 
         for cr_track_path in cr_track_paths {
             let tracked_file = cr_track_path.strip_prefix(self.track_dir())?;
             let tracked_file_str = fpm::cr::cr_path_to_file_name(cr_number, tracked_file.as_str())?;
-            let cr_tracking_infos = fpm::track::get_tracking_info_(&cr_track_path).await?;
-            if let Some(tracking_info) = cr_tracking_infos
+            if let Some(info) = fpm::track::get_tracking_info_(&cr_track_path)
+                .await?
                 .into_iter()
                 .find(|v| tracked_file_str.eq(&v.filename))
             {
-                tracking_infos.push(tracking_info);
+                tracking_info_list.push(info);
             }
         }
-        Ok(tracking_infos)
+        Ok(tracking_info_list)
     }
 }
 

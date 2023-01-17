@@ -1,9 +1,29 @@
-fn main() -> fpm::Result<()> {
+fn main() {
     tokio::runtime::Builder::new_multi_thread()
         .enable_all()
         .build()
         .unwrap()
-        .block_on(async_main())
+        .block_on(traced_main())
+}
+
+async fn traced_main() {
+    use tracing_subscriber::layer::SubscriberExt;
+
+    tracing_forest::worker_task()
+        .set_global(true)
+        .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
+            tracing_subscriber::Registry::default()
+                .with(tracing_forest::ForestLayer::default())
+                .with(tracing_forest::util::LevelFilter::INFO)
+        })
+        .on(outer_main())
+        .await
+}
+
+async fn outer_main() {
+    if let Err(e) = async_main().await {
+        eprintln!("{:?}", e)
+    }
 }
 
 async fn async_main() -> fpm::Result<()> {

@@ -601,7 +601,6 @@ You can try without providing port, it will automatically pick unused port."#,
         tcp_listener.local_addr()?.port()
     );
 
-    tracing().await;
     println!("### Configured tracing ###");
 
     actix_web::HttpServer::new(app)
@@ -609,20 +608,6 @@ You can try without providing port, it will automatically pick unused port."#,
         .run()
         .await?;
     Ok(())
-}
-
-async fn tracing() {
-    use tracing_subscriber::layer::SubscriberExt;
-    tracing_forest::worker_task()
-        .set_global(true)
-        .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
-            tracing_subscriber::Registry::default()
-                .with(tracing_forest::ForestLayer::default())
-                .with(tracing_forest::util::LevelFilter::INFO)
-        })
-        // .build_on(|subscriber| subscriber.with(tracing_forest::util::LevelFilter::INFO))
-        .on(async {}) // this statement is needed, without this logs are getting printed
-        .await;
 }
 
 // cargo install --features controller --path=.

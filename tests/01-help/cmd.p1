@@ -16,5 +16,5 @@ Commands:
 
 Options:
   -v             Sets the level of verbosity
-  -h, --help     Print help information
-  -V, --version  Print version information
+  -h, --help     Print help
+  -V, --version  Print version

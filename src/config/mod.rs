@@ -115,6 +115,19 @@ impl Config {
         self.cr_path(cr_number).join("-/meta.ftd")
     }
 
+    pub(crate) fn package_info_package(&self) -> &str {
+        match self
+            .package
+            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
+            .or_else(|| {
+                self.package
+                    .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+            }) {
+            Some(dep) => dep.package.name.as_str(),
+            None => fpm::FPM_UI_INTERFACE,
+        }
+    }
+
     pub fn remote_dir(&self) -> camino::Utf8PathBuf {
         self.root.join(".remote-state")
     }

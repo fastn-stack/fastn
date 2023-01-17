@@ -513,20 +513,9 @@ pub(crate) async fn process_ftd(
             main.content = if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {
-                let package_info_package = match config
-                    .package
-                    .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
-                    .or_else(|| {
-                        config
-                            .package
-                            .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
-                    }) {
-                    Some(dep) => dep.package.name.as_str(),
-                    None => fpm::FPM_UI_INTERFACE,
-                };
                 format!(
                     "-- import: {}/package-info as pi\n\n-- pi.package-info-page:",
-                    package_info_package
+                    config.package_info_package()
                 )
             }
         }
