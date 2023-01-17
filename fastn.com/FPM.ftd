@@ -87,10 +87,10 @@ url: /if/
 - Conditional Attributes: /if-attr/
 - `$loop$`: Looping Over Lists:
 url: /loop/
-;; - ID: /id/
+;; - ID: /id/ -- ID is deprecated from FTD 0.3
 - `$on-<event-name>$`: Event Handling
 url: /event-handling/
-;; - Auto Nesting: /auto-nesting/
+- Auto Nesting: /auto-nesting/
 ;; - Ajax Call: /ajax-call/
 ;; - `$on-global-key[<keys>]$` Global Key Events
 ;;  url: /global-key-events/
