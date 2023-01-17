@@ -45,3 +45,7 @@ document: index1.ftd
 - TOC3
 url: /<string:username>/<string:class>/
 document: index.ftd
+
+- TOC 4
+url: /<string:username>/<string:class>/<integer:age>/<boolean:flag>/
+document: index.ftd
