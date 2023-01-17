@@ -6,7 +6,6 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#flag": true,
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -519,7 +518,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; height: auto; justify-content: start; padding: 40px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 20px; text-decoration: none; width: auto" class="ft_md">Hello World</div><div data-id="0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 2px; text-decoration: none; width: auto" class="ft_md">again</div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 40px; font-weight: 400; height: auto; line-height: 48px; text-decoration: none; width: auto" class="ft_md">hello world</div></div>
 
 
 <script>
@@ -1186,33 +1185,76 @@ a.value = !a.value
 
 
 window.node_change_main = {};
-window.node_change_main["0,0:main__padding"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="0,0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(20))));
+window.node_change_main["0:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));}
-}
-window.node_change_main["0,1:main__padding"] = function(data) {
-if(function(){
-return (!resolve_reference("foo#flag", data));
-}()){
-document.querySelector(`[data-id="0,1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(20))));
-}
-else {document.querySelector(`[data-id="0,1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(2))));}
-}
-window.set_value_main = {};
-window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#flag" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#flag", new_value);
+else {document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__padding"]){window.node_change_main["0,0:main__padding"](data);
+window.node_change_main["0:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__padding"]){window.node_change_main["0,1:main__padding"](data);
+else {document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+}
+
+window.node_change_main["0:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+}
+
+window.node_change_main["0:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+}
+
+window.node_change_main["0:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+}
+else {document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+}
+window.set_value_main = {};
+window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#device" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#device", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+}
+};
+
+window.set_value_main["inherited#types"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "inherited#types" + "." + remaining, new_value);
+} else {
+set_data_value(data, "inherited#types", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
 }
 };
 

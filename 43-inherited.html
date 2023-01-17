@@ -13,6 +13,7 @@
 "ftd#dark-mode": false,
 "ftd#device": "desktop",
 "ftd#follow-system-dark-mode": true,
+"ftd#font-display": "sans-serif",
 "ftd#system-dark-mode": false,
 "inherited#colors": {
 "accent": {
@@ -369,6 +370,7 @@
 },
 "heading-large": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "48px",
 "size": "40px",
 "weight": 400
@@ -1293,17 +1295,17 @@ set_data_value(data, "foo#num" + "." + remaining, new_value);
 set_data_value(data, "foo#num", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
 }
 };
 
@@ -1325,13 +1327,13 @@ set_data_value(data, "ftd#device" + "." + remaining, new_value);
 set_data_value(data, "ftd#device", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
 }
@@ -1355,15 +1357,15 @@ set_data_value(data, "inherited#types" + "." + remaining, new_value);
 set_data_value(data, "inherited#types", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
 }
 };
 

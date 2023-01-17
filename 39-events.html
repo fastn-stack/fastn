@@ -16,6 +16,7 @@
 "ftd#dark-mode": false,
 "ftd#device": "desktop",
 "ftd#follow-system-dark-mode": true,
+"ftd#font-display": "sans-serif",
 "ftd#system-dark-mode": false,
 "inherited#colors": {
 "accent": {
@@ -372,6 +373,7 @@
 },
 "heading-large": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "48px",
 "size": "40px",
 "weight": 400
@@ -1325,13 +1327,13 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__color"]){window.node_change_main["1:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__color"]){window.node_change_main["3:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__color"]){window.node_change_main["2:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__color"]){window.node_change_main["3:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__color"]){window.node_change_main["1:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
 
