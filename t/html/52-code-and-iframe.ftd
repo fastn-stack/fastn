@@ -16,3 +16,24 @@ border-width.px: 4
 padding.px: 20
 
 <p>Hello world!</p>
+
+
+-- optional string $name:
+
+-- $name: ftd
+
+-- foo:
+name: SDFSD
+
+-- component foo:
+optional string name: $name
+
+-- ftd.column:
+-- ftd.text: $foo.name
+if: {foo.name != NULL}
+
+-- ftd.text: Arpita
+
+-- end: ftd.column
+
+-- end: foo

@@ -468,8 +468,20 @@ impl<'a> TDoc<'a> {
                     }
                 }
             } else {
-                assert_eq!(value.kind(), set.kind());
-                *value = set;
+                if value.kind().inner().eq(&set.kind()) || value.kind().eq(&set.kind()) {
+                    *value = set;
+                } else {
+                    return ftd::interpreter2::utils::e2(
+                        format!(
+                            "Expected kind `{:?}`, found: \
+                    `{:?}`",
+                            value.kind(),
+                            set.kind()
+                        ),
+                        doc.name,
+                        line_number,
+                    );
+                }
             }
             Ok(())
         }
