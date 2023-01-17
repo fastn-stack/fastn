@@ -96,7 +96,7 @@ url: /event-handling/
 url: /global-key-events/
 
 
-;; ## API: reading-data/
+## API: reading-data/
 
 - Reading FTD Files: /reading-data/
 - `ftd::p1`: A JSON/YML Replacement

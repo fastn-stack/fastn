@@ -1,22 +1,22 @@
--- ft.page: `ftd::p1`: A JSON/YML Replacement
+-- ds.page: `ftd::p1`: A JSON/YML Replacement
 
 
--- ft.markdown:
+-- ds.markdown:
 
 `ftd::p1` represents a file format that can be used as configuration file, and many
 text based documents, eg instead of markdown file used by a bunch of static site
 generators, with yml "front matter", they can switch to `p1` file.
 
--- ft.h1: Motivation
+-- ds.h1: Motivation
 
--- ft.markdown:
+-- ds.markdown:
 
 JSON is particularly hard to write for humans, and while YML is slightly better,
 but its still quite hard for humans.
 
 Also for writing multiline text, YML is not greatest option.
 
--- ft.code:
+-- ds.code:
 lang: md
 
 ---
@@ -26,11 +26,11 @@ title: Blogging Like a Hacker
 
 Some **markdown** text.
 
--- ft.markdown:
+-- ds.markdown:
 
 Consider the above "markdown with front matter" file. We can instead write:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- meta:
@@ -42,11 +42,11 @@ layout: post
 
 Some **markdown** text.
 
--- ft.markdown:
+-- ds.markdown:
 
 There are advantages like you can mix markdown content with other content, eg:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- markdown:
@@ -59,7 +59,7 @@ alt: some alt text for the image
 width: 400
 align: center
 
--- ft.markdown:
+-- ds.markdown:
 
 As you can see we have created a custom "section" for image, and not using the
 relatively ugly and limiting `![]()` syntax.
@@ -67,9 +67,9 @@ relatively ugly and limiting `![]()` syntax.
 We can extend our `image` considerably, adding a lot of headers, without worrying
 about crating cryptic `![Alt text](/path/to/img.jpg "image title")`.
 
--- ft.h2: `ftd::p1` as configuration file
+-- ds.h2: `ftd::p1` as configuration file
 
--- ft.markdown:
+-- ds.markdown:
 
 Compared to `ini`/`toml`/`json`/`yml`, the `p1`'s `-- section:` syntax is bit
 easier, less text to write, and there is no distinction between the format people
@@ -80,9 +80,9 @@ We intentionally do not support nesting as it forces you to think about what is
 going on. p1 file should be designed for humans to read and write, and as little
 "syntactical" stuff should be there.
 
--- ft.h2: File Format For Humans
+-- ds.h2: File Format For Humans
 
--- ft.markdown:
+-- ds.markdown:
 
 One of the goals of `ftd::p1` is to become the file format that all humans know,
 not just programmers. Humans must be able to own their data, and for non binary
@@ -98,9 +98,9 @@ All XML files look "alike", have common sigils, similar syntax, if you ever get
 used to editing one, you feel quite comfortable in others. You just have to learn
 about the xml schema. We are trying to do the same with `ftd::p1`.
 
--- ft.h2: Nesting Is Bad
+-- ds.h2: Nesting Is Bad
 
--- ft.markdown:
+-- ds.markdown:
 
 One aspect we diverge from JSON/XML etc is lack of nesting. JSON etc support
 arbitrary nesting, we only support two level nesting (section and sub-section,
@@ -114,9 +114,9 @@ Keeping things flat means humans don't have to learn about nesting or indentatio
 rules. This means we don't refer to anonymous deeply nested DOM nodes or JSON
 objects, but refer by IDs and CLASSes.
 
--- ft.h2: Text Vs Data
+-- ds.h2: Text Vs Data
 
--- ft.markdown:
+-- ds.markdown:
 
 If you look at file formats, we have asciidoc, markdown, restructured text etc on
 one hand, and json/yml/ini files on another.
@@ -133,9 +133,9 @@ a very poor editing experience.
 
 `ftd:p1` aims to allow people to write prose and store data in one place.
 
--- ft.h1: Grammar Of A `p1` File
+-- ds.h1: Grammar Of A `p1` File
 
--- ft.markdown:
+-- ds.markdown:
 
 `ftd` is a list of `sections`, each `section`:
 
@@ -152,7 +152,7 @@ a very poor editing experience.
 - `section body`: any text that comes after `section header` till the next
   `section` is the "body" of that section.
 
-/-- ft.markdown:
+/-- ds.markdown:
 
 Deprecated subsection:
 - `sub-section`: `sub-sections` look like `section`, but they start with `--- `
@@ -164,7 +164,7 @@ Deprecated subsection:
 
 
 
--- ft.code: A sample p1 file
+-- ds.code: A sample p1 file
 lang: ftd
 
 \-- some-section: the caption of the section (optional)
@@ -176,13 +176,13 @@ of "header"
 
 \-- some-other-section: same file can have any number of sections
 
--- ft.h2: `ftd::p1::Section` "AST"
+-- ds.h2: `ftd::p1::Section` "AST"
 
--- ft.markdown:
+-- ds.markdown:
 
 A p1 document is serialised into a `Vec<ftd::p1::Section>`:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 #[derive(Debug, PartialEq, Default)]
@@ -196,7 +196,7 @@ pub struct Section {
 #[derive(Debug, PartialEq, Default)]
 pub struct Header(pub(crate) Vec<(String, String)>);
 
--- ft.markdown:
+-- ds.markdown:
 
 This is a low level AST. You should have your own types defined, and convert
 `ftd::p1::Section` etc to your type and use that type in your program, instead of
@@ -205,13 +205,13 @@ directly using these types.
 In future we may get `serde` like auto derives that will convert things directly to
 your types.
 
--- ft.h2: Sample Code To Convert `ftd::p1::Section` to Custom Type
+-- ds.h2: Sample Code To Convert `ftd::p1::Section` to Custom Type
 
--- ft.markdown:
+-- ds.markdown:
 
 Say we have a type like this:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 #[derive(PartialEq, Debug, Clone, Serialize)]
@@ -226,11 +226,11 @@ pub struct Markdown {
     pub collapsed: bool,
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 This is how you will create `Markdown` given `ftd::p1::Section`:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 impl Markdown {
@@ -278,19 +278,19 @@ impl Markdown {
     }
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 We are using a bunch of helpers defined on `ftd::p1::Header` eg
 `.bool_with_default()` and `.str_with_default()`, which gets a `bool` or `str`
 from header, or return if not found or invalid (in case of `bool`).
 
--- ft.h2: Convert Custom Type To `ftd::p1::Section`
+-- ds.h2: Convert Custom Type To `ftd::p1::Section`
 
--- ft.markdown:
+-- ds.markdown:
 
 We can convert back out type, say `Markdown` to `ftd::p1::Section`:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 impl Markdown {
@@ -322,27 +322,27 @@ impl Markdown {
     }
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 We have used some more helpers, `.add_header()` and `. and_optional_caption()` etc
 to construct and populate `ftd::p1::Section` types.
 
--- ft.h1: The "parser"
+-- ds.h1: The "parser"
 
--- ft.markdown:
+-- ds.markdown:
 
 The parsing is implemented by `ftd::p1::parse()`:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 pub fn parse(s: &str) -> Result<Vec<Section>> {}
 
--- ft.markdown:
+-- ds.markdown:
 
 Where the `Result` and `Error` is:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 use thiserror::Error as Error_;
@@ -372,18 +372,21 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
--- ft.h1: Pretty Printer / Serialiser
+-- ds.h1: Pretty Printer / Serialiser
 
--- ft.markdown:
+-- ds.markdown:
 
 If we have `Vec<ftd::p1::Section>` we can convert them back to `String` using
 `ftd::p1::to_string()`:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 pub fn to_string(p1: &[crate::p1::Section]) -> String {}
 
--- ft.markdown:
+-- ds.markdown:
 
 The returned string is "pretty printed".
+
+
+-- end: ds.page
