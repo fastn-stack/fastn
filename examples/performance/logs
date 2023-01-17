@@ -1,0 +1,53 @@
+### Server Started ###
+Go to: http://127.0.0.1:8000
+### Configured tracing ###
+INFO     ｉ [info]: Starting 8 workers
+INFO     ｉ [info]: Tokio runtime found; starting in existing Tokio runtime
+INFO     route [ 20.2s | 0.00% / 100.00% ]
+INFO     ┝━ ｉ [info]:  | method: "GET" | uri: "/performance/loop/"
+INFO     ┕━ serve [ 20.2s | 0.00% / 100.00% ]
+INFO        ┝━ Config::read [ 8.17ms | 0.04% ]
+INFO        ┝━ serve_file [ 20.2s | 0.00% / 99.96% ]
+INFO        │  ┝━ get_file_and_package_by_id [ 492µs | 0.00% / 0.00% ]
+INFO        │  │  ┝━ ｉ [info]:  | path: "performance/loop/"
+INFO        │  │  ┕━ resolve_by_id [ 45.0µs | 0.00% / 0.00% ]
+INFO        │  │     ┝━ ｉ [info]:  | id: "/loop/"
+INFO        │  │     ┕━ fs_fetch_by_id [ 39.5µs | 0.00% / 0.00% ]
+INFO        │  │        ┕━ fs_fetch_by_file_name [ 26.7µs | 0.00% ]
+INFO        │  │           ┕━ ｉ [info]:  | document: "loop.ftd"
+INFO        │  ┕━ read_ftd [ 20.2s | 0.00% / 99.95% ]
+INFO        │     ┝━ ｉ [info]:  | document: "loop.ftd"
+INFO        │     ┕━ read_ftd_2022 [ 20.2s | 0.70% / 99.95% ]
+INFO        │        ┝━ interpret_helper [ 200ms | 0.00% / 0.99% ]
+INFO        │        │  ┝━ ｉ [info]:  | document: "performance/loop/"
+INFO        │        │  ┝━ interpret_with_line_number [ 110ms | 0.00% / 0.55% ]
+INFO        │        │  │  ┝━ ｉ [info]:  | msg: "ftd: interpreting" | doc: "performance/loop/"
+INFO        │        │  │  ┝━ parse_with_line_number [ 105ms | 0.52% ]
+INFO        │        │  │  ┕━ continue_processing [ 4.79ms | 0.02% ]
+INFO        │        │  ┝━ fpm::stuck-on-import [ 7.08µs | 0.00% ]
+INFO        │        │  ┝━ continue_after_import [ 75.0ms | 0.00% / 0.37% ]
+INFO        │        │  │  ┝━ parse_with_line_number [ 199µs | 0.00% ]
+INFO        │        │  │  ┕━ continue_processing [ 74.8ms | 0.37% ]
+INFO        │        │  ┝━ fpm::stuck-on-processor [ 10.7ms | 0.05% ]
+INFO        │        │  │  ┕━ ｉ [info]:  | msg: "stuck-on-processor" | doc: "performance/loop/" | processor: "get-data"
+INFO        │        │  ┕━ continue_after_processor [ 3.43ms | 0.00% / 0.02% ]
+INFO        │        │     ┕━ continue_processing [ 2.47ms | 0.01% ]
+INFO        │        ┝━ from_interpreter [ 19.6s | 0.00% / 97.09% ]
+INFO        │        │  ┕━ execute [ 19.6s | 0.00% / 97.09% ]
+INFO        │        │     ┕━ execute_from_instructions_loop [ 19.6s | 97.04% / 97.09% ]
+INFO        │        │        ┕━ get_loop_instructions [ 11.0ms | 0.05% ]
+INFO        │        ┝━ from_rt [ 44.9ms | 0.22% ]
+INFO        │        ┕━ from_node_data [ 194ms | 0.96% ]
+INFO        ┕━ ｉ [info]: before executing proxy: file-status: 200 OK, path: performance/loop/
+
+
+
+`total`: 20s
+`ftd`: 20s
+`interpret_with_line_number`: 110ms
+`continue_processing`: 3ms
+`from_interpreter`: 19.6s, taking most of the time
+`from_rt`: 45ms
+`from_node_data`: 194ms
+`html size`: 25MB
+`browser latency`: 23s

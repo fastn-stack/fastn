@@ -171,7 +171,6 @@ pub async fn interpret_helper<'a>(
                         message: "Cannot find the module".to_string(),
                     },
                 )?;
-                tracing::info!(doc);
                 let line_number = ast.line_number();
                 let value = lib
                     .process(ast, processor, &mut state.tdoc(doc.as_str(), line_number)?)
@@ -453,6 +452,7 @@ pub async fn resolve_import_2022<'a>(
     Ok(source)
 }
 
+#[tracing::instrument(name = "fpm::stuck-on-foreign-variable", err)]
 pub async fn resolve_foreign_variable2022(
     variable: &str,
     doc_name: &str,
@@ -462,6 +462,7 @@ pub async fn resolve_foreign_variable2022(
     download_assets: bool,
     caller_module: &str,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+    tracing::info!(doc = doc_name, var = variable);
     let package = lib.get_current_package(caller_module)?;
     if let Ok(value) = resolve_ftd_foreign_variable_2022(variable, doc_name) {
         return Ok(value);

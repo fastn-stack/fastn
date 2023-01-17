@@ -1,0 +1,43 @@
+### Server Started ###
+Go to: http://127.0.0.1:8000
+### Configured tracing ###
+[1;32mINFO    [0m ｉ [info]: Starting 8 workers
+[1;32mINFO    [0m ｉ [info]: Tokio runtime found; starting in existing Tokio runtime
+replace_markers in 36.218208ms
+[1;32mINFO    [0m route [ 330s | 0.00% / 100.00% ]
+[1;32mINFO    [0m ┝━ ｉ [info]:  | method: "GET" | uri: "/50k-text/"
+[1;32mINFO    [0m ┕━ serve [ 330s | 0.00% / 100.00% ]
+[1;32mINFO    [0m    ┝━ Config::read [ 10.0ms | 0.00% ]
+[1;32mINFO    [0m    ┝━ serve_file [ 330s | 0.00% / 100.00% ]
+[1;32mINFO    [0m    │  ┝━ get_file_and_package_by_id [ 104µs | 0.00% / 0.00% ]
+[1;32mINFO    [0m    │  │  ┝━ ｉ [info]:  | path: "50k-text/"
+[1;32mINFO    [0m    │  │  ┕━ resolve_by_id [ 20.8µs | 0.00% / 0.00% ]
+[1;32mINFO    [0m    │  │     ┝━ ｉ [info]:  | id: "50k-text/"
+[1;32mINFO    [0m    │  │     ┕━ fs_fetch_by_id [ 18.5µs | 0.00% / 0.00% ]
+[1;32mINFO    [0m    │  │        ┕━ fs_fetch_by_file_name [ 15.1µs | 0.00% ]
+[1;32mINFO    [0m    │  │           ┕━ ｉ [info]:  | document: "50k-text.ftd"
+[1;32mINFO    [0m    │  ┕━ read_ftd [ 330s | 0.00% / 100.00% ]
+[1;32mINFO    [0m    │     ┝━ ｉ [info]:  | document: "50k-text.ftd"
+[1;32mINFO    [0m    │     ┕━ read_ftd_2022 [ 330s | 0.02% / 100.00% ]
+[1;32mINFO    [0m    │        ┝━ interpret_helper [ 324s | 0.00% / 98.35% ]
+[1;32mINFO    [0m    │        │  ┝━ ｉ [info]:  | document: "performance/50k-text/"
+[1;32mINFO    [0m    │        │  ┕━ interpret_with_line_number [ 324s | 0.01% / 98.35% ]
+[1;32mINFO    [0m    │        │     ┝━ ｉ [info]:  | msg: "ftd: interpreting" | doc: "performance/50k-text/"
+[1;32mINFO    [0m    │        │     ┝━ parse_with_line_number [ 317s | 96.05% ]
+[1;32mINFO    [0m    │        │     ┕━ continue_processing [ 7.55s | 2.29% ]
+[1;32mINFO    [0m    │        ┝━ from_interpreter [ 4.83s | 0.04% / 1.46% ]
+[1;32mINFO    [0m    │        │  ┕━ execute [ 4.70s | 0.00% / 1.43% ]
+[1;32mINFO    [0m    │        │     ┕━ execute_from_instructions_loop [ 4.70s | 1.43% ]
+[1;32mINFO    [0m    │        ┝━ from_rt [ 184ms | 0.06% ]
+[1;32mINFO    [0m    │        ┕━ from_node_data [ 375ms | 0.11% ]
+[1;32mINFO    [0m    ┕━ ｉ [info]: before executing proxy: file-status: 200 OK, path: 50k-text/
+[1;32mINFO    [0m ｉ [info]: SIGINT received; starting forced shutdown
+[1;32mINFO    [0m ｉ [info]: Accept thread stopped
+[1;32mINFO    [0m ｉ [info]: Shutting down idle worker
+[1;32mINFO    [0m ｉ [info]: Shutting down idle worker
+[1;32mINFO    [0m ｉ [info]: Shutting down idle worker
+[1;32mINFO    [0m ｉ [info]: Shutting down idle worker
+[1;32mINFO    [0m ｉ [info]: Shutting down idle worker
+[1;32mINFO    [0m ｉ [info]: Shutting down idle worker
+[1;32mINFO    [0m ｉ [info]: Shutting down idle worker
+[1;32mINFO    [0m ｉ [info]: Shutting down idle worker

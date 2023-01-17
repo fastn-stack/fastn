@@ -201,12 +201,18 @@ impl Library2022 {
     }
 
     /// process the $processor$ and return the processor's output
+    #[tracing::instrument(name = "fpm::stuck-on-processor", err)]
     pub async fn process<'a>(
         &'a self,
         ast: ftd::ast::AST,
         processor: String,
         doc: &'a mut ftd::interpreter2::TDoc<'a>,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        tracing::info!(
+            msg = "stuck-on-processor",
+            doc = doc.name,
+            processor = processor
+        );
         let line_number = ast.line_number();
         let (_processor, value, kind) = get_processor_data(ast, doc)?;
         match processor.as_str() {

@@ -1,0 +1,30 @@
+
+
+-- component check-performance:
+integer break:
+
+-- ftd.column:
+
+-- ftd.text: Hello World
+
+-- ftd.integer: $check-performance.break
+
+-- check-performance:
+break: $decrement(a=$check-performance.break)
+if: {check-performance.break != 0}
+
+-- end: ftd.column
+
+-- end: check-performance
+
+
+-- integer decrement(a):
+integer a:
+
+a - 1
+
+
+
+-- check-performance:
+break: 250
+
