@@ -111,7 +111,7 @@ url: /global-key-events/
 - Internals: /internals/
 - How to add `foreign-variables`: /foreign-variable/
 - Supported Browsers: /supported-browsers/
-- How To:
+- How To: 
 - Create FTD Variables: /how-to/ftd-variable/
 - Use FTD Variables in JS: /how-to/use-ftd-variable/
 
