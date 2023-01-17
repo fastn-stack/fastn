@@ -1,79 +1,80 @@
-/-- ft-core.concept:
 
--- ft.page: `if`: Conditional Components
+-- ds.page: `if`: Conditional Components
     
--- ft.markdown: 
+-- ds.markdown: 
 
 `ftd` supports an `if` expression to decide if the component should be visible or 
 not, based on the arguments, or global variables.
 
--- ft.code: Conditionals When Using Components
+-- ds.code: Conditionals When Using Components
 lang: ftd
 
 \-- boolean dark-mode: true
 
 \-- ftd.text: we are in dark mode
-if: $ftd.dark-mode
+if: { ftd.dark-mode }
 
 \-- ftd.text: light mode rules
-if: not $ftd.dark-mode
+if: { !$ftd.dark-mode }
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have used the `if` header to describe the condition in which the component
 is visible. Since our variable `dark-mode` is set to true, the first `ftd.text`, 
 will be visible, and the second will not be.
 
--- ft.h1: Conditionals In Components
+-- ds.h1: Conditionals In Components
 
 When defining a component we can also use conditionals:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.column image:
 string src:
 optional caption caption:
 
-\-- ft.image:
+\-- ds.image:
 src: $src
 
-\-- ft.text:
-if: $caption is not null
+\-- ds.text:
+if: { $caption != NULL }
 text: $caption
 
 \-- end: image
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have created an image component, with an optional caption. If caption is
-passed, that is `$caption is not null`, the `ftd.text` is rendered.
+passed, that is `$caption !- NULL`, the `ftd.text` is rendered.
 
--- ft.h1: Supported Conditions
+-- ds.h1: Supported Conditions
 
 Currently, we support the following conditions:
 
--- ft.h2: `if: $foo is null`
+-- ds.h2: `if: { $foo == NULL }`
 
 Only show the component when the optional value is missing.
 
--- ft.h2: `if: $foo is not null`
+-- ds.h2: `if: {$foo != NULL }`
 
 Only show the component when the optional value is passed.
 
--- ft.h2: `if: $foo`
+-- ds.h2: `if: $foo`
 
 Only show the component if `$foo` is `true`. Can only be used if `$foo` is a 
 boolean.
 
-It can also use a global variable: `if: foo` (assuming `foo` is declared earlier 
+It can also use a global variable: `if: { foo }` (assuming `foo` is declared earlier 
 as a boolean variable).
 
--- ft.h2: `if: not $foo`
+-- ds.h2: `if: { !$foo }`
 
-Only show the component if `$foo` is `false`, otherwise same as `if: $foo`.
+Only show the component if `$foo` is `false`, otherwise same as `if: { $foo }`.
 
--- ft.h2: `if: true` | `if: false`
+-- ds.h2: `if: { true }` | `if: { false }`
 
-`if: false` can be used to disable a component without deleting it. `if: true` is
+`if: { false }` can be used to disable a component without deleting it. `if: { true } ` is
 no-op, can be safely deleted.
+
+-- end: ds.page
