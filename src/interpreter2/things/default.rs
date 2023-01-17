@@ -4312,6 +4312,21 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 line_number: 0
             })
         ),
+        ("ftd#font-display".to_string(),
+         ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+             name: "ftd#font-display".to_string(),
+             kind: ftd::interpreter2::Kind::string().into_kind_data(),
+             mutable: true,
+             value: ftd::interpreter2::PropertyValue::Value {
+                 value: ftd::interpreter2::Value::new_string("sans-serif"),
+                 is_mutable: true,
+                 line_number: 0
+             },
+             conditional_value: vec![],
+             line_number: 0,
+             is_static: false
+         })
+        ),
         (
             "inherited#types".to_string(),
             ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
@@ -4334,6 +4349,18 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
                                                             (
                                                                 "size".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
