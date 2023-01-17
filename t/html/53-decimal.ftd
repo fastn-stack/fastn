@@ -1,0 +1,7 @@
+-- integer x: 10
+
+-- ftd.integer: 32
+
+-- ftd.integer: $x
+
+-- ftd.decimal: 10.0f

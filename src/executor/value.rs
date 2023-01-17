@@ -256,6 +256,35 @@ pub fn i64(
     }
 }
 
+pub fn f64(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<f64>> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
+            v,
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type decimal, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
 pub fn bool(
     key: &str,
     properties: &[ftd::interpreter2::Property],

@@ -5,6 +5,7 @@ pub enum Element {
     Text(Text),
     Integer(Text),
     Boolean(Text),
+    Decimal(Text),
     Image(Image),
     Code(Code),
     Iframe(Iframe),
@@ -20,6 +21,7 @@ impl Element {
             Element::Text(t) => Some(&t.common),
             Element::Integer(i) => Some(&i.common),
             Element::Boolean(b) => Some(&b.common),
+            Element::Decimal(d) => Some(&d.common),
             Element::Image(i) => Some(&i.common),
             Element::Code(c) => Some(&c.common),
             Element::Iframe(i) => Some(&i.common),
@@ -460,6 +462,55 @@ pub fn integer_from_properties(
     .value
     {
         Some(f) => value.map(|v| {
+            ftd::executor::element::markup_inline(num.format(f.as_str(), v as f64).as_str())
+        }),
+        None => value.map(|v| ftd::executor::element::markup_inline(v.to_string().as_str())),
+    };
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+    )?;
+    Ok(Text {
+        text,
+        common,
+        text_align: ftd::executor::TextAlign::optional_text_align(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "text-align",
+        )?,
+    })
+}
+
+pub fn decimal_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
+    arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Expression>,
+    doc: &ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+) -> ftd::executor::Result<Text>{
+    let value = ftd::executor::value::f64("value", properties, arguments, doc, line_number)?;
+    let num = format_num::NumberFormat::new();
+    let text = match ftd::executor::value::optional_string(
+        "format",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?
+        .value
+    {
+        Some(f) => value.map(|v| {
+            dbg!(f.as_str());
+            dbg!(&v);
             ftd::executor::element::markup_inline(num.format(f.as_str(), v as f64).as_str())
         }),
         None => value.map(|v| ftd::executor::element::markup_inline(v.to_string().as_str())),

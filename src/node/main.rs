@@ -88,6 +88,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Column(c) => c.to_node(doc_id),
             ftd::executor::Element::Text(t) => t.to_node(doc_id),
             ftd::executor::Element::Integer(t) => t.to_node(doc_id),
+            ftd::executor::Element::Decimal(t) => t.to_node(doc_id),
             ftd::executor::Element::Boolean(t) => t.to_node(doc_id),
             ftd::executor::Element::Image(i) => i.to_node(doc_id),
             ftd::executor::Element::Code(c) => c.to_node(doc_id),

@@ -428,6 +428,17 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                 )?)
             }
+            "ftd#decimal" => {
+                ftd::executor::Element::Decimal(ftd::executor::element::decimal_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                )?)
+            }
             "ftd#row" => ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
                 instruction.properties.as_slice(),
                 instruction.events.as_slice(),
