@@ -2,10 +2,10 @@
 
 
 
--- ft.page: FPM Color
+-- ds.page: FPM Color
 
--- cd.color-display:
-color: $fpm.color
+/-- cd.color-display:
+color: $inherited.colors
 minimize: true
 
-
+-- end: ds.page

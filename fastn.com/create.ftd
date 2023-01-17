@@ -1,22 +1,22 @@
 -- import: fpm.dev/lib
 -- import: fpm.dev/assets
 
--- ft.page:
+-- ds.page:
 toc: $config.empty-toc
 
 -- lib.hero: Build optimized websites quickly, focus on your content
 image: $assets.files.static.images.github-light.svg
 
---- lib.action-button: Get Started
+-- lib.action-button: Get Started
 slot: cta-1
 url: /install/
 background-color: $fpm.color.main.background.base
 color: $fpm.color.main.text
 
 
--- ft.content:
+-- ds.content:
 
---- ft.h1: fpm: FTD Package Manager
+-- ds.h1: fpm: FTD Package Manager
 
 [What is FPM?](/about/)
 
@@ -27,5 +27,7 @@ Github: [github.com/FifthTry/fpm](https://github.com/FifthTry/fpm)
 Discord: [#fpm on FifthTry](https://discord.gg/a7eBUeutWD)
 
 
---- ft.youtube:
+-- ds.youtube:
 v: rny1EGkqw_M
+
+-- end: ds.page

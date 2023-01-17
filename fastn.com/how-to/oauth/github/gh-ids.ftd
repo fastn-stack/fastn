@@ -1,22 +1,22 @@
--- ft.page: How To Use GitHub Identities
+-- ds.page: How To Use GitHub Identities
 
--- ft.markdown:
+-- ds.markdown:
 
 A fpm package can limit who has read or write access. We do it by organising a
 set of [user identities](/dev/user-identity/) using `user group` and then using
 the `user group` in the [sitemap](/sitemap/).
 
--- ft.h1: `github-starred`: `<repo-name>`
+-- ds.h1: `github-starred`: `<repo-name>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if he/she starred 
 the input repo. 
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: starred-repos
@@ -28,9 +28,9 @@ github-starred: ftd-lang/fpm
 # Github Starred: /
 readers: starred-repos
 
--- ft.h2: GitHub Resource API
+-- ds.h2: GitHub Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.github.com/user/starred
@@ -39,21 +39,21 @@ Header Parameters
 Authorization: Bearer {access_token}
 
 
--- ft.h1: `github-watches`: `<repo-name>`
+-- ds.h1: `github-watches`: `<repo-name>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if he/she subscribed 
 the input repo. 
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
 [User Group](/dev/user-group/)
 
 [User Identity](/dev/user-identity/)
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: watched-repos
@@ -65,9 +65,9 @@ github-watches: ftd-lang/ftd
 # Github Watched: /
 readers: watched-repos
 
--- ft.h2: GitHub Resource API
+-- ds.h2: GitHub Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.github.com/orgs/{org_title}/teams/{team_name}
@@ -75,21 +75,21 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- ft.h1: `github-follows`: `<repo-name>`
+-- ds.h1: `github-follows`: `<repo-name>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if he/she has followed 
 the input repo.
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
 [User Group](/dev/user-group/)
 
 [User Identity](/dev/user-identity/)
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: followed-repos
@@ -101,9 +101,9 @@ github-follows: ftd-lang
 # Github Followed: /
 readers: followed-repos
 
--- ft.h2: GitHub Resource API
+-- ds.h2: GitHub Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.github.com/user/following
@@ -111,21 +111,21 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- ft.h1: `github-contributor`: `<repo-name>`
+-- ds.h1: `github-contributor`: `<repo-name>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if he/she is contributor 
 of input repo.
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
 [User Group](/dev/user-group/)
 
 [User Identity](/dev/user-identity/)
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: contributed-repos
@@ -137,9 +137,9 @@ github-contributor: ftd-lang/fpm
 # Github Contributor: /
 readers: contributed-repos
 
--- ft.h2: GitHub Resource API
+-- ds.h2: GitHub Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.github.com/repos/{repo_name}/contributors
@@ -147,21 +147,21 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- ft.h1: `github-collaborator`: `<repo-name>`
+-- ds.h1: `github-collaborator`: `<repo-name>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if he/she is collaborator
 of input repo.
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
 [User Group](/dev/user-group/)
 
 [User Identity](/dev/user-identity/)
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: collaborated-repos
@@ -172,9 +172,9 @@ github-collaborator: ftd-lang/fpm
 # Github Collaborated: /
 readers: collaborated-repos
 
--- ft.h2: GitHub Resource API
+-- ds.h2: GitHub Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.github.com/repos/{repo_name}/collaborators
@@ -182,21 +182,21 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- ft.h1: `github-team`: `<team-name>`
+-- ds.h1: `github-team`: `<team-name>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if he/she 
 is part of the team.
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
 [User Group](/dev/user-group/)
 
 [User Identity](/dev/user-identity/)
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: fifthtry-teams
@@ -208,9 +208,9 @@ github-team: fifthtry/fifthtry-team
 # Github Teams: /
 readers: fifthtry-teams
 
--- ft.h2: GitHub Resource API
+-- ds.h2: GitHub Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.github.com/orgs/{org_title}/teams/{team_name}
@@ -218,21 +218,21 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- ft.h1: `github-sponsor`: `<user-name>`
+-- ds.h1: `github-sponsor`: `<user-name>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if he/she 
 has sponsored the user.
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
 [User Group](/dev/user-group/)
 
 [User Identity](/dev/user-identity/)
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: sponsored-account
@@ -244,9 +244,9 @@ github-sponsor: weiznich
 # Github Sponsor: /
 readers: sponsored-account
 
--- ft.h2: GitHub Resource API
+-- ds.h2: GitHub Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.github.com/graphql
@@ -255,6 +255,4 @@ Header Parameters
 Authorization: Bearer {access_token}
 Query: query { user(login:{user_name}){isSponsoredBy(accountLogin:{sponsored_by})}}
  
-
-
-
+-- end: ds.page

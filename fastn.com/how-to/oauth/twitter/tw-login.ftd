@@ -1,8 +1,8 @@
 -- import: fpm.dev/assets
 
--- ft.page: FPM Login Flow with Twitter
+-- ds.page: FPM Login Flow with Twitter
 
--- ft.markdown:
+-- ds.markdown:
 
 User Authorization link for authorization on twitter.
 
@@ -11,7 +11,7 @@ https://twitter.com/i/oauth2/authorize
 state=state&code_challenge=challenge&code_challenge_method=plain
 &scope={scope_1} {scope_2}
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://twitter.com/i/oauth2/authorize
@@ -20,20 +20,20 @@ state=state&code_challenge=challenge&code_challenge_method=plain
 &scope={scope_1} {scope_2}
 Method: Get
 
--- ft.markdown:
+-- ds.markdown:
 
 Remember there must be space between multiple scopes.
 
 On successful login it redirects to give a redirect url with `code` 
 as query parameter.
 
--- ft.h1: `How to get Access Token?`
+-- ds.h1: `How to get Access Token?`
 
--- ft.markdown:
+-- ds.markdown:
 
 Use token url to get access token on discord.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.twitter.com/2/oauth2/token
@@ -41,14 +41,14 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- ft.markdown:
+-- ds.markdown:
 
 On success it gives `access_token` as a response that we can save in 
 cookies/session or in a database that will be used for other Http Apis.
 
--- ft.h1: `Get Logged-in user details`
+-- ds.h1: `Get Logged-in user details`
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.twitter.com/2/users/me
@@ -56,12 +56,14 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- ft.h1: `Find user detail by username`
+-- ds.h1: `Find user detail by username`
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://api.twitter.com/2/users/by/username/{user_name}
 Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
+
+-- end: ds.page

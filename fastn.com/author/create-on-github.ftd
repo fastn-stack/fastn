@@ -1,6 +1,6 @@
 -- import: fpm.dev/assets
 
--- ft.page: How to create new fpm project using `fpm-template` on GitHub?
+-- ds.page: How to create new fpm project using `fpm-template` on GitHub?
 
 Let's understand `fpm` project creation in just 5 minutes by playing! 
 
@@ -20,9 +20,9 @@ website project on GitHub.
 
 To start with it, create a repository using `fpm-template` - [Click here](https://github.com/ftd-lang/fpm-template/generate)
 
---- ft.image: How to create new repository using `fpm-template`
+--- ds.image: How to create new repository using `fpm-template`
 src: $assets.files.static.docs.create-new-repository.png
-width: fill
+width: fill-container
 
 Click on Public to make your `FTD` website visible to public. You can click on 
 Private in-case you want to keep it private. We recomment to keep Public selected.
@@ -32,83 +32,83 @@ You can also add description of your `FTD` website(optional).
 Once you click on `Create repository from template` your first ever `FTD` web 
 repository is ready.
 
---- ft.image: Creating GitHub repository using `fpm-template`
+--- ds.image: Creating GitHub repository using `fpm-template`
 src: $assets.files.static.docs.example-ftd-website-repository.png
-width: fill
+width: fill-container-container
 
 Follow below steps to make your first `FTD` web-site live.
 
 - Click on `Actions` tab and check for green tick, if `initial-commit` workflow 
 ran successfully.
 
---- ft.image: `initial-commit` workflow should run successfully
+--- ds.image: `initial-commit` workflow should run successfully
 src: $assets.files.static.docs.action-tab-initial-commit-ticked.png
-width: fill
+width: fill-container
 
 - Click on `Settings` tab and follow `Step-1` to `Step-5` shown in below image:
 
---- ft.image: On `Settings` tab follow `Step-1` to `Step-5` ⚙️
+--- ds.image: On `Settings` tab follow `Step-1` to `Step-5` ⚙️
 src: $assets.files.static.docs.settings-pages-branch-gh-pages.png
-width: fill
+width: fill-container
 
 - Click on `Actions` tab and check for green tick, if `pages build and deployment` 
 workflow ran successfully.
 
---- ft.image: `pages build and deployment` workflow should run successfully
+--- ds.image: `pages build and deployment` workflow should run successfully
 src: $assets.files.static.docs.action-tab-pages-build-and-deployment.png
-width: fill
+width: fill-container
 
 
 Once `pages build and deployment` ran successfully. Your first `FTD` website is live.
 
 To see your live website click on `Settings` tab and follow below steps:
 
---- ft.image: `Settings`, `Pages` - click on `Visit site` button
+--- ds.image: `Settings`, `Pages` - click on `Visit site` button
 src: $assets.files.static.docs.settings-pages-website-live.png
-width: fill
+width: fill-container
 
 
 In above example `FTD` website name is `https://gsalunke.github.io/my-ftd-blog/`.
 Copy your website url `https://gsalunke.github.io/my-ftd-blog/` and follow below 
 steps from `Part-1` and `Part-2`
 
---- ft.image: Going with public live - Part - 1 
+--- ds.image: Going with public live - Part - 1 
 src: $assets.files.static.docs.about-settings-website-url.png
-width: fill
+width: fill-container
 
 
---- ft.image: Going with public live - Part - 2
+--- ds.image: Going with public live - Part - 2
 src: $assets.files.static.docs.going-public-live-about-settings.png
-width: fill
+width: fill-container
 
 
 Done! now you can share your `FTD` website url which is now live publicly.
 
---- ft.image: Click on website URL to see it in action
+--- ds.image: Click on website URL to see it in action
 src: $assets.files.static.docs.about-gone-live-with-url.png
-width: fill
+width: fill-container
 
 
---- ft.h3: Updating default theme
+--- ds.h3: Updating default theme
 
 Your repository is now ready to use. You are now FTD website user. `FPM.ftd` 
 file contains all dependencies you are using. 
 
 Let's change default theme, by following below step.
 
---- ft.code: 
+--- ds.code: 
 lang: ftd
 
 \-- fpm.dependency: fifthtry.github.io/doc-site as ds
 
 
---- ft.code: Just replace above line with
+--- ds.code: Just replace above line with
 lang: ftd
 
 \-- fpm.dependency: fifthtry.github.io/dash-dash-ds as ds
 
 
---- ft.markdown:
+--- ds.markdown:
 
 Commit and Push above changes to your GitHub repository. Our deployment process of 
 these changes will start.
@@ -116,5 +116,4 @@ these changes will start.
 Once deployment is done goto your website, you will see your website theme
 is changed.
 
-
-
+-- end: ds.page

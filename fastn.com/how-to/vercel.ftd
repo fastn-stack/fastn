@@ -1,26 +1,34 @@
 -- import: fpm.dev/assets
--- import: fpm.dev/static
+-- import: fifthtry.github.io/admonitions as cbox
+;;-- import: fpm.dev/static
 
--- ft.page: Publishing Static Site On Vercel
+-- ds.page: Publishing Static Site On Vercel
 
 Vercel is an incredibly easy to use tool which helps you build and ship your
 websites with an easy to use interface. You can get started with a fresh
 repository (step 1) or you can deploy your existing repository (step 2).
 
--- static.warning:
+-- cbox.warning: You Lose Many Dynamic Features In Static Modes
 
--- ft.h1: Step 1. Choosing the source of your deployment
+FPM comes with a lot of dynamic features, which are only available when you are
+using [fpm server](/server/) for hosting.
 
--- ft.h2: Step 1.1. Start from scratch: New Repository
+The main feature you will miss when using fpm as static site generator is
+authentication, you can not create private fpm sites, or fpm sites with mixed
+mode, some pages public and some accessible to only few people.
+
+-- ds.h1: Step 1. Choosing the source of your deployment
+
+-- ds.h2: Step 1.1. Start from scratch: New Repository
 
 Use this [template](https://vercel.com/new/clone?repository-url=https://github.com/fifthtry/fpm-blog&template=other)
 to initialize. Check out step 2 for the configuration setup.
 
---- ft.image: Just choose your repository name and click on the Create button
+--- ds.image: Just choose your repository name and click on the Create button
 src: $assets.files.how-to.vercel-new-template.png
-width: fill
+width: fill-container
 
--- ft.h2: Step 1.2. Deploy an existing repository
+-- ds.h2: Step 1.2. Deploy an existing repository
 
 Deploying an existing FPM repository on vercel is quite easy. On your vercel
 dashboard, click on [New Project](https://vercel.com/new) and select your git
@@ -30,34 +38,36 @@ Once done, you'll be taken to the Configuration Dashboard of the application.
 Select the `FRAMEWORK PRESET` as Other and enter the configuration mentioned in
 Step 2.
 
--- ft.image:
+-- ds.image:
 src: $assets.files.how-to.vercel-new-from-repo.png
-width: fill
+width: fill-container
 
--- ft.h1: Step 2. Vercel FPM configuration
+-- ds.h1: Step 2. Vercel FPM configuration
 
 Once the application is up and ready, head over to Settings > General and enter
 the following configuration in the __Build & Development Settings__
 
--- ft.code: Build Command
+-- ds.code: Build Command
 lang: sh
 
 fpm build --base=/
 
--- ft.code: Output Directory
+-- ds.code: Output Directory
 lang: sh
 
 .build
 
--- ft.code: Install Command
+-- ds.code: Install Command
 lang: sh
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-fpm.sh)"
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.how-to.vercel-deploy-settings.png
-width: fill
+width: fill-container
 
 Congratulations, your FPM package is now successfully hosted. You can head over to
 the application dashboard to see your deployment domain(s).
+
+-- end: ds.page

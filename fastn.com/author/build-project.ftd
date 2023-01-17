@@ -1,33 +1,34 @@
--- ft.page: Build fpm project locally
+-- ds.page: Build fpm project locally
 
 
 To build the fpm project, Change the current working directory to the
 fpm project and run the following command in terminal
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 fpm build
 
--- ft.markdown:
+-- ds.markdown:
 
 `fpm build` command builds the whole project. It converts the ftd files
 into the corresponding html file and stores them in `.build` folder.
 
 
--- ft.h1: Build an individual file
+-- ds.h1: Build an individual file
 
 We can only build certain ftd file. This can be done using the following
 command
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 fpm build <file-name>
 
--- ft.markdown:
+-- ds.markdown:
 
 `fpm build <file-name>` command builds only the <file-name> file.
 Eg: if we want to build `foo.ftd` only, then run `fpm build foo.ftd` in the
 terminal.
 
+-- end: ds.page

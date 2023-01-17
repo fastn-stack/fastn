@@ -1,30 +1,30 @@
 -- import: fpm.dev/assets
 
--- ft.page: Auth Testing
+-- ds.page: Auth Testing
 
 In this article, I am using [abrark.com](https://github.com/abrarnitk/abrark/)
 package for `remote` and `local` testing.
 
--- ft.h1: Local Testing with CLI Parameter `--identities`
+-- ds.h1: Local Testing with CLI Parameter `--identities`
 
 For authorization purpose we have to define [user groups](/dev/user-group/)
 in `FPM.ftd`.
 
--- ft.h2: Define User Group in `FPM.ftd`
+-- ds.h2: Define User Group in `FPM.ftd`
 
 In the below group using `email` as identity.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: abrark-readers
 email: abrark.asahi@gmail.com
 
--- ft.h2: Use User Group in Sitemap
+-- ds.h2: Use User Group in Sitemap
 
 Use `abrark-readers` in Sitemap with `readers` key.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.sitemap:
@@ -32,17 +32,17 @@ lang: ftd
 # Home: /
 readers: abrark-readers
 
--- ft.h2: Build `fpm` Binary
+-- ds.h2: Build `fpm` Binary
 
 Clone [`FifthTry/fpm`](https://github.com/fifthtry/fpm) and build it.
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 cargo install --path=.
 
 
--- ft.h2: Run `fpm` with CLI Parameter `--identities`
+-- ds.h2: Run `fpm` with CLI Parameter `--identities`
 
 By setting `--identities` as `email: abrark.asahi@gmail.com` we are saying that
 at every http request this `email` is the user identity and check the permission
@@ -50,36 +50,36 @@ against this user identity.
 
 Run `fpm` with cli parameter `--identities` in your package.
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 fpm serve --port 8000 --identities 'email: abrark.asahi@gmail.com'
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Open `/` in the browser, It will let access to `/` page. If you will change
 `email` identity in `FPM.ftd` to other email and reload page again, so it will
 show unauthorized access.
 
 
--- ft.h1: Local Testing with Cookie `identities`
+-- ds.h1: Local Testing with Cookie `identities`
 
--- ft.h2: Define User Group in `FPM.ftd`
+-- ds.h2: Define User Group in `FPM.ftd`
 
 In the below group using `email` as identity.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: abrark-readers
 email: abrark.asahi@gmail.com
 
--- ft.h2: Use User Group in Sitemap
+-- ds.h2: Use User Group in Sitemap
 
 Use `abrark-readers` in Sitemap with `readers` key.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.sitemap:
@@ -88,27 +88,27 @@ lang: ftd
 readers: abrark-readers
 
 
--- ft.h2: Build `fpm` Binary
+-- ds.h2: Build `fpm` Binary
 
 Clone [`FifthTry/fpm`](https://github.com/fifthtry/fpm) and build it.
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 cargo install --path=.
 
 
--- ft.h2: Run `fpm`
+-- ds.h2: Run `fpm`
 
 Run `fpm` binary in your package.
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 fpm serve --port 8000
 
 
--- ft.h2: Set Cookie `identities`
+-- ds.h2: Set Cookie `identities`
 
 Open browser window with `/` and right click to open `inspect` elements. Go to
 `Application` and set cookies for `http://127.0.0.1:8000` to `identities` as
@@ -117,34 +117,34 @@ separated values E.g. `email: abrark.asahi@gmail.com, github: abrarnitk`.
 
 Reload the window after setting the cookie, it will let access the document.
 
--- ft.image:
-src: $assets.files.static.images.auth.identities-cookie.png
-scale: 1
-width: fill
+-- ds.image:
+src: $assets.files.static.images.auth.github.identities-cookie.png
+;;scale: 1
+width: fill-container
 
 
--- ft.h1: Local Testing with GitHub `sid` Cookie
+-- ds.h1: Local Testing with GitHub `sid` Cookie
 
 For testing purpose, I am using [abrark.com](https://github.com/abrarnitk/abrark/)
 package. So if you starred [AbrarNitk/abrark](https://github.com/abrarnitk/abrark/)
 repository so it should let you access the document otherwise give unauthorized
 access.
 
--- ft.h2: Define User Group in `FPM.ftd`
+-- ds.h2: Define User Group in `FPM.ftd`
 
 In the below group using `github-like` as identity.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: abrark-readers
 github-like: AbrarNitk/abrark
 
--- ft.h2: Use User Group in Sitemap
+-- ds.h2: Use User Group in Sitemap
 
 Use `abrark-readers` in Sitemap with `readers` key.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.sitemap:
@@ -152,26 +152,26 @@ lang: ftd
 # Home: /
 readers: abrark-readers
 
--- ft.h2: OAuth Login with GitHub
+-- ds.h2: OAuth Login with GitHub
 
 Open link `https://abrark.com/-/dj/login/github/` in browser and complete the
 OAuth login flow and provide permissions to FifthTry to access your GitHub APIs.
 
 It will redirect to GitHub login page.
 
--- ft.image: GitHub Login
-src: $assets.files.static.images.auth.github-login.png
-scale: 1
-width: fill
+-- ds.image: GitHub Login
+src: $assets.files.static.images.auth.github.github-login.png
+;;scale: 1
+width: fill-container
 
 Click on `Sign in`, and complete Two-factor if any.
 
 It will redirect to authorize page.
 
--- ft.image: GitHub Authorize 5thtry
-src: $assets.files.static.images.auth.github-authorized-5thtry.png
-scale: 1
-width: fill
+-- ds.image: GitHub Authorize 5thtry
+src: $assets.files.static.images.auth.github.github-authorized-5thtry.png
+;;scale: 1
+width: fill-container
 
 
 Click on `Authorize FifthTry`, after that you will be redirected to `abrark.com`.
@@ -179,7 +179,7 @@ Click on `Authorize FifthTry`, after that you will be redirected to `abrark.com`
 Check GET API `https://abrark.com/-/dj/get-identities/`, It will give below
 response.
 
--- ft.code:
+-- ds.code:
 lang: json
 
 {
@@ -189,7 +189,7 @@ lang: json
 
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Now copy `sid` cookie from `https://abrark.com/` and paste it in
 `http://127.0.0.1:8000` cookie with `sid` key.
@@ -198,26 +198,28 @@ Note: Go to `fpm::controller::get_remote_identities` and change `remote_host` in
 `fpm`, to `abrark.com`.
 
 
--- ft.h2: Build `fpm` with Remote Feature
+-- ds.h2: Build `fpm` with Remote Feature
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 cargo install --path=. --features remote
 
--- ft.h2: Run `fpm`
+-- ds.h2: Run `fpm`
 
 Run `fpm` binary in your package.
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 fpm serve --port 8000
 
--- ft.markdown:
+-- ds.markdown:
 
 Now go to [AbrarNitk/abrark](https://github.com/abrarnitk/abrark/) repository
 and give a star, you should be able access `/` document. If you undo star and
 access it again it will give unauthorized access.
 
 Yay!!! Such a magic it is. 💫
+
+-- end: ds.page

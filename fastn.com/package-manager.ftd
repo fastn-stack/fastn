@@ -1,13 +1,13 @@
--- ft.page: FPM: Package Manager
+-- ds.page: FPM: Package Manager
 
 `ftd` is a ["programming language for prose"](https://ftd.dev), and `fpm` is the
 package manager for `ftd`.
 
--- ft.h1: FPM.ftd
+-- ds.h1: FPM.ftd
 
 To create a "fpm package", create a `FPM.ftd` file in any folder:
 
--- ft.code: `FPM.ftd` marks a folder as `fpm` package
+-- ds.code: `FPM.ftd` marks a folder as `fpm` package
 lang: ftd
 
 \-- import: fpm
@@ -16,20 +16,20 @@ lang: ftd
 zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
 base: https://raw.githubusercontent.com/fifthtry/fpm.dev/main
 
--- ft.markdown:
+-- ds.markdown:
 
 We have created a package named `fpm.dev`. Packages in FPM are named after the
-domain where they would be published. {ft.highlight: Every FPM package is a
+domain where they would be published. {ds.highlight: Every FPM package is a
 website.}
 
 
 
 
--- ft.h1: Dependencies
+-- ds.h1: Dependencies
 
 FPM support package dependencies. To add a dependency add it in `FPM.ftd` file:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
@@ -39,7 +39,7 @@ zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
 
 \-- fpm.dependency: fifthtry.github.io/doc-site as ds
 
--- ft.markdown:
+-- ds.markdown:
 
 Here `fpm.dev` has a dependency on [`fifthtry.github.io/doc-site`](https://fifthtry.github.io/doc-site).
 
@@ -49,7 +49,7 @@ e.g. `-- import: fifthtry.github.io/doc-site`.
 
 
 
--- ft.h1: Distributed Package Manager
+-- ds.h1: Distributed Package Manager
 
 Unlike other package managers like pypi, npm and crates, there is no central
 package repository in FPM. Since every FPM package is a website, that website
@@ -65,4 +65,4 @@ distribute our .zip file. If you are not using `Github`, you can store the zip
 file containing entire package in some other location, like S3, or a server you
 control, and `fpm` will work with that.
 
-
+-- end: ds.page

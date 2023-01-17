@@ -1,9 +1,11 @@
--- ft.page: `fpm update`
+-- ds.page: `fpm update`
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 `fpm update` updates all the dependencies of the package.
 
 Note: Currently we simply delete `.packages` folder and re-download everything, so
 do not do any modifications in `.packages` or do not run this command.
+
+-- end: ds.page

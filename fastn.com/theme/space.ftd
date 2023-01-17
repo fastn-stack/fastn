@@ -1,367 +1,363 @@
--- ft.page: FPM Space
+-- ds.page: FPM Space
 
 -- ftd.column:
-id: outer
+;;id: outer
 
--- ft.markdown: 
+-- ds.markdown: 
 
 FPM Space
 
--- ft.h1: `fpm.space.space-0`
+-- ds.h1: `fpm.space.space-0`
 
 space-0: 0
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-0
+padding-top.px: $fpm.space.space-0
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-0
-color: $fpm.color.main.text-strong
-
--- container: outer
+padding-top.px: 0
+color: $inherited.colors.text-strong
 
 
--- ft.h1: `fpm.space.space-1`
+-- ds.h1: `fpm.space.space-1`
 
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-1
+padding-top.px: $fpm.space.space-1
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-1
-color: $fpm.color.main.text-strong
+padding-top.px: 2
+color: $inherited.colors.text-strong
 
--- container: outer
+;;-- container: outer
 
--- ft.h1: `fpm.space.space-2`
+-- ds.h1: `fpm.space.space-2`
 
 space-2: 8
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-2
+padding-top.px: $fpm.space.space-2
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-2
-color: $fpm.color.main.text-strong
+padding-top.px: 8
+color: $inherited.colors.text-strong
 
--- container: outer
+;;-- container: outer
 
--- ft.h1: `fpm.space.space-3`
+-- ds.h1: `fpm.space.space-3`
 
 space-3: 12
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-3
+padding-top.px: $fpm.space.space-3
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-3
-color: $fpm.color.main.text-strong
+padding-top.px: 12
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-4`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-4`
 
 space-4: 16
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-4
+padding-top.px: $fpm.space.space-4
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-4
-color: $fpm.color.main.text-strong
+padding-top.px: 16
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-5`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-5`
 
 space-5: 20
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-5
+padding-top.px: $fpm.space.space-5
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-5
-color: $fpm.color.main.text-strong
+padding-top.px: 20
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-6`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-6`
 
 space-6: 24
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-6
+padding-top.px: $fpm.space.space-6
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-6
-color: $fpm.color.main.text-strong
+padding-top.px: 24
+color: $inherited.colors.text-strong
 
--- container: outer
+;;-- container: outer
 
--- ft.h1: `fpm.space.space-7`
+-- ds.h1: `fpm.space.space-7`
 
 space-7: 32
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-7
+padding-top.px: $fpm.space.space-7
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-7
-color: $fpm.color.main.text-strong
+padding-top.px: 32
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-8`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-8`
 
 space-1: 40
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-8
+padding-top.px: $fpm.space.space-8
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-8
-color: $fpm.color.main.text-strong
+padding-top.px: 40
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-9`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-9`
 
 space-9: 48
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-9
+padding-top.px: $fpm.space.space-9
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-9
-color: $fpm.color.main.text-strong
+padding-top.px: 48
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-10`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-10`
 
 space-10: 56
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-10
+padding-top.px: $fpm.space.space-10
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-10
-color: $fpm.color.main.text-strong
+padding-top.px: 56
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-11`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-11`
 
 space-11: 64
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-11
+padding-top.px: $fpm.space.space-11
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-11
-color: $fpm.color.main.text-strong
+padding-top.px: 64
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-12`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-12`
 
 space-1: 72
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-12
+padding-top.px: $fpm.space.space-12
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-12
-color: $fpm.color.main.text-strong
+padding-top.px: 72
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-13`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-13`
 
 space-13: 80
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-13
+padding-top.px: $fpm.space.space-13
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-13
-color: $fpm.color.main.text-strong
+padding-top.px: 80
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-14`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-14`
 
 space-14: 96
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-14
+padding-top.px: $fpm.space.space-14
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-14
-color: $fpm.color.main.text-strong
+padding-top.px: 96
+color: $inherited.colors.text-strong
 
--- container: outer
--- ft.h1: `fpm.space.space-15`
+;;-- container: outer
+-- ds.h1: `fpm.space.space-15`
 
 space-15: 120
 
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-padding-top: $fpm.space.space-15
+padding-top.px: $fpm.space.space-15
 
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: $fpm.space.space-15
-color: $fpm.color.main.text-strong
+padding-top.px: 120
+color: $inherited.colors.text-strong
 
-
-
-
+-- end: ds.page

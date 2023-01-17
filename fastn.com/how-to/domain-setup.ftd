@@ -1,13 +1,13 @@
 -- import: fpm.dev/assets
 
 
--- ft.page: FPM & FTD Domain Setup
+-- ds.page: FPM & FTD Domain Setup
 
 Follow this documentation to setup your FPM & FTD domain.
 
 
--- ft.h2: 1: Registering your domain on [Godaddy.com](https://www.godaddy.com/)
-id: step-1
+-- ds.h2: 1: Registering your domain on [Godaddy.com](https://www.godaddy.com/)
+;;id: step-1
 
 To register your domain on [Godaddy.com](https://www.godaddy.com/) you need to 
 register with Godaddy.com, if you are not registered. If you are already 
@@ -19,12 +19,12 @@ registered then login to your account and shop for your domain.
 Once you are Signed-In then search for your desired domain name:
 
 
--- ft.image: Figure 1:  Search for your desired domain
+-- ds.image: Figure 1:  Search for your desired domain
 src: $assets.files.images.domains.figure-1.png
-width: fill
+width: fill-container
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 For e.g. you want to register your domain name as jonhywalker.com type 
 `jonhywalker.com` into the above input field and click on Search Domain button.
@@ -32,12 +32,12 @@ For e.g. you want to register your domain name as jonhywalker.com type
 If `jonhywalker.com` is available for registration then it will show below screen:
 
 
--- ft.image: Figure 2: Search for your desired domain
+-- ds.image: Figure 2: Search for your desired domain
 src: $assets.files.images.domains.figure-2.png
-width: fill
+width: fill-container
 
--- ft.h2: 2: GitHub repository 
-id: step-2
+-- ds.h2: 2: GitHub repository 
+;;id: step-2
 
 Let’s understand fpm project creation in just 5 minutes by playing!
 
@@ -59,12 +59,12 @@ website project on GitHub.
 To start with it, create a repository using fpm-template - [Click here](https://github.com/ftd-lang/fpm-template/generate)
 
 
--- ft.image: Figure 3: How to create new repository using fpm-template
+-- ds.image: Figure 3: How to create new repository using fpm-template
 src: $assets.files.images.domains.figure-3.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Click on Public to make your FTD website visible to public. You can click on 
 Private in-case you want to keep it private. We recommend keeping the Public 
@@ -77,12 +77,12 @@ Once you click on Create repository from template your first ever FTD web
 repository is ready.
 
 
--- ft.image: Figure 4: Creating GitHub repository using fpm-template
+-- ds.image: Figure 4: Creating GitHub repository using fpm-template
 src: $assets.files.images.domains.figure-4.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Edit your repository README.md file and remove default content from it. 
 
@@ -92,46 +92,46 @@ Follow below steps to make your first `FTD` web-site live.
 {$ds.greenmarker: Update README.md} workflow ran successfully.
 
 
--- ft.image: Figure 5: Creating GitHub repository using fpm-template
+-- ds.image: Figure 5: Creating GitHub repository using fpm-template
 src: $assets.files.images.domains.figure-5.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Click on `Settings` tab and follow `Step-1` to `Step-5` shown in below image:
 
 
--- ft.image: Figure 6: On ⚙️ `Settings` tab follow Step-1 to Step-5 
+-- ds.image: Figure 6: On ⚙️ `Settings` tab follow Step-1 to Step-5 
 src: $assets.files.images.domains.figure-6.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Click on `Actions` tab and check for green tick, if `pages build and 
 deployment` workflow ran successfully.
 
 
 
--- ft.image: Figure 7: {$ds.greenmarker: pages build and deployment} workflow should run successfully
+-- ds.image: Figure 7: {$ds.greenmarker: pages build and deployment} workflow should run successfully
 src: $assets.files.images.domains.figure-7.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Once {$ds.greenmarker: pages build and deployment} ran successfully. Your first 
 `FTD` website is live.
 
 To see your live website click on `Settings` tab and follow below steps:
 
--- ft.image: Figure 8: On  ⚙️ {$ds.greenmarker:Settings} → {$ds.greenmarker:Pages} → click on {$ds.greenmarker: Visit site} button
+-- ds.image: Figure 8: On  ⚙️ {$ds.greenmarker:Settings} → {$ds.greenmarker:Pages} → click on {$ds.greenmarker: Visit site} button
 src: $assets.files.images.domains.figure-8.png
-width: fill
+width: fill-container
 
 
--- ft.h2: 3: GitHub repository link to Godaddy website 
+-- ds.h2: 3: GitHub repository link to Godaddy website 
 
 We have already registered your domain using Godaddy.com. Let’s link your GitHub
  repository with your website by adding DNS(Domain Name System) configurations 
@@ -147,12 +147,12 @@ Follow below steps to add DNS configurations:
 
 - Click on your user name and select {$ds.greenmarker: My Products} link from the dropdown menu.
 
--- ft.image: Figure 9: Click on DNS button
+-- ds.image: Figure 9: Click on DNS button
 src: $assets.files.images.domains.figure-9.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Or
 
@@ -161,23 +161,23 @@ Or
 And open it in browser tab you should see below screen:
 
 
--- ft.image: Figure 10: Click on Add button
+-- ds.image: Figure 10: Click on Add button
 src: $assets.files.images.domains.figure-10.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Click on Add button below box will appear on screen. Click on Type and select A 
 from the dropdown menu. As shown in Step 1 and Step 2
 
 
--- ft.image: Figure 11: Follow Step 1 and Step 2
+-- ds.image: Figure 11: Follow Step 1 and Step 2
 src: $assets.files.images.domains.figure-11.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - In Name field type @ 
 
@@ -185,12 +185,12 @@ width: fill
 
 - In TTL click on dropdown and select custom option and enter value {$ds.greenmarker: 600}
 
--- ft.image: Figure 12: Follow Step 1 to Step 6
+-- ds.image: Figure 12: Follow Step 1 to Step 6
 src: $assets.files.images.domains.figure-12.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Add all 4 IPs A records mentioned in GitHub documentation ([refer Step No.2 from this document](https://docs.google.com/document/d/1aD_nol3-4QSQW4d5Tn9BgpwbDj58eQAMtbiBtZCB5I8/edit#bookmark=id.ohc2t8qa8z6x))
 
@@ -214,22 +214,22 @@ A record.
 - Editing CNAME record: on same screen you will find CNAME record click on edit icon
 
 
--- ft.image: Figure 13: Click on edit icon
+-- ds.image: Figure 13: Click on edit icon
 src: $assets.files.images.domains.figure-13.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - You will see below CNAME record box opened for editing
 
 
--- ft.image: Figure 14: Click on Save button
+-- ds.image: Figure 14: Click on Save button
 src: $assets.files.images.domains.figure-14.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Update Value as shown in above image and click on save. CNAME value is always 
 your GitHub username and github.io
@@ -241,22 +241,22 @@ your GitHub username and github.io
 - Goto your GitHub repository and click on Add file dropdown and select Create new file,
 
 
--- ft.image: Figure 15: Follow Step 1 and Step 2
+-- ds.image: Figure 15: Follow Step 1 and Step 2
 src: $assets.files.images.domains.figure-15.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Enter filename as CNAME (without any extension)
 
--- ft.image: Figure 16: Creating CNAME file
+-- ds.image: Figure 16: Creating CNAME file
 src: $assets.files.images.domains.figure-16.png
-width: fill
+width: fill-container
 
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Click on Commit new file button. CNAME file will be created on your repository 
 root directory.
@@ -264,12 +264,12 @@ root directory.
 - Click on {$ds.greenmarker: ⚙️ Settings} and select Pages link from left sidebar. Scroll down to Custom domain section and add your domain name into custom domain input box,
 
 
--- ft.image: Figure 17: Follow Step 1 and Step 2
+-- ds.image: Figure 17: Follow Step 1 and Step 2
 src: $assets.files.images.domains.figure-17.png
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Click on Save button and Once DNS check is done you can click to enforce HTTPS 
 for your domain.
@@ -277,8 +277,4 @@ for your domain.
 
 Congratulations! your `www.johnywalker.com` domain is now public live.
 
-
-
-
-
-
+-- end: ds.page

@@ -1,30 +1,30 @@
 -- import: fpm.dev/assets
 
--- ft.page: Sitemap
+-- ds.page: Sitemap
 
 "FPM Sitemap" is the structure we recommend for sites. This recommendation is
 optional, you can  create any [sitemap](glossary/#sitemap) you want for your
 site.
 
--- ft.h1: The Structure
+-- ds.h1: The Structure
 
 A site should have "sections" on top level. Each section should ideally be
 listed in the header of the site.
 
--- ft.image:
+-- ds.image:
 src: $assets.files.static.images.sitemap.png
-width: fill
+width: fill-container
 
 Each section may have one or more sub-sections. Sub-section should be listed
 as second level navigation in the header of the site. Each sub-section has one
 or more documents organised in a "table of content", and TOC should be shown
-on the left.
+on the leds.
 
--- ft.h1: How To Configure Sitemap For Your Site
+-- ds.h1: How To Configure Sitemap For Your Site
 
 `FPM.ftd` contains the sitemap of your site.
 
--- ft.code: Sitemap Example (in `FPM.ftd`)
+-- ds.code: Sitemap Example (in `FPM.ftd`)
 lang: ftd
 
 \-- fpm.sitemap:
@@ -44,7 +44,7 @@ url: whatever
 - ToC Item: toc/
   nav-title: Shorter title
 
--- ft.markdown:
+-- ds.markdown:
 
 Note: The URLs in sitemap start with slash, but we remove the first slash. We do
 this because some projects may deploy FPM package on a base URL eg, `foo.com/bar/`,
@@ -52,22 +52,22 @@ so all reference to /x/ is actually a reference to `foo.com/bar/x/`. We also
 convert `/` to `index.html` for the same reason.
 
 
--- ft.h1: Sitemap `$processor$`
+-- ds.h1: Sitemap `$processor$`
 
 We have `$processor$` called [`sitemap`](processors/sitemap/), which
 can be used to get sitemap data:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap-data sitemap:
 $processor$: sitemap
 
--- ft.markdown:
+-- ds.markdown:
 
 Consider a package contains the following sitemap
 
--- ft.code: In FPM.ftd
+-- ds.code: In FPM.ftd
 lang: ftd
 
 \-- fpm.sitemap:
@@ -95,13 +95,13 @@ lang: ftd
 - Second Toc Title: second-toc/
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Now, for the `sitemap` processor in the document with id `bar/`
 would return the value
 
 
--- ft.code:
+-- ds.code:
 lang: json
 
 {
@@ -153,14 +153,14 @@ lang: json
 }
 
 
--- ft.h1: Missing Sub Section
+-- ds.h1: Missing Sub Section
 
 If a TOC comes directly in a section the section would have a single anonymous
 sub-section, and this sub-section would not be shown in UI. In UI people will
 just see the section header and toc on left, no sub-section line.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
@@ -170,7 +170,7 @@ lang: ftd
   - Toc 2: toc2/
 
 
--- ft.h1: FPM Build Behaviour
+-- ds.h1: FPM Build Behaviour
 
 If a document is not part of sitemap, it will be built as is built right
 now. All documents that are part of sitemap are built in a special way.
@@ -184,7 +184,7 @@ builds one HTML file for each time a ftd document appears in sitemap.
 Note: A document can appear only once in a single TOC?
 
 
--- ft.h1: Canonical URL
+-- ds.h1: Canonical URL
 
 If a ftd document appears multiple times in sitemap, one of them would
 be the canonical, the "main" URL.
@@ -202,7 +202,7 @@ will include the canonical url pointing to `foo/`.
 
 
 
--- ft.h1: `document-metadata`: Key Value Data in Sitemap
+-- ds.h1: `document-metadata`: Key Value Data in Sitemap
 
 Document can use `get-data` processor to get value of any key specified in
 the sitemap. Since a document would get rendered once for each occurrence
@@ -214,7 +214,7 @@ This means that the document-metadata presents in section get passed to it's
 subsection and TOCs. Similarly, subsection document-metadata get passed to TOCs.
 And also the parent TOC-item's document-metadata get passed to its children TOC.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 # name: section/url/
@@ -229,7 +229,7 @@ key3: value3
   - childtoc/url/
     key5: value5
 
--- ft.markdown:
+-- ds.markdown:
 
 In the above example, the `section/url/` section have two document-metadata
 `key1: value1` and `key2: value2`
@@ -246,11 +246,11 @@ from section, subsection and it's parent TOC. i.e. `key1: value1`, `key2: value2
 
 
 
--- ft.h1: Variable can be changed based on document-metadata
+-- ds.h1: Variable can be changed based on document-metadata
 
 Using the `get-data`, the title can be different:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- boolean show-dev-info:
@@ -261,9 +261,9 @@ $processor$: get-data
 \-- page-title: The Dev Title
 if: $show-dev-info
 
-\-- ft.h0: $page-title
+\-- ds.h0: $page-title
 
--- ft.code: sitemap
+-- ds.code: sitemap
 lang: ftd
 
 \-- fpm.sitemap:
@@ -279,19 +279,19 @@ lang: ftd
 
 
 
--- ft.h1: Including Documents From Other FPM Packages In Sitemap
+-- ds.h1: Including Documents From Other FPM Packages In Sitemap
 
 A package `foo.com` can chose to include a document in `bar.com` by including
 it in sitemap.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
 
 - Intro: -/bar.com/intro/
 
--- ft.markdown:
+-- ds.markdown:
 
 In this case the file would get copied over, and the url of intro would be
 `https://foo.com/-/bar.com/intro/`. For dependent packages, the url should
@@ -306,31 +306,31 @@ than once, which is mentioned earlier.
 
 Consider the example below:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
 
 - Intro: -/bar.com/intro/-/main/
 
--- ft.markdown:
+-- ds.markdown:
 
 So the document `intro.ftd` in the package `bar.com` is included in the sitemap
 with the variant `main`.
 The generated HTML includes the canonical url with value as `bar.com/intro`
 
--- ft.h1: Linking using `id`
+-- ds.h1: Linking using `id`
 
 There are several different ways by which the user can link sitemap titles to different components
 (present within the same package) using `id`.
 
--- ft.h2: By directly using `<id>` as title
+-- ds.h2: By directly using `<id>` as title
 
 In this case, the displayed title will be same as the `<id>` itself which will link to the component
 having `id: <id>` within the same package. If the user wants the title to be different from `<id>`,
 then he/she should use any of the other two methods mentioned below.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -341,19 +341,19 @@ lang: ftd
 
 - foo3
 
--- ft.markdown:
+-- ds.markdown:
 
 In the above example, `foo`, `foo2` and `foo3` are different component id's (within the same package).
 Here the section title `foo` will be linked to component having `id: foo` (if present within
 the same package). Similarly, the subsection title `foo2` and ToC title `foo3` will be linked
 to their corresponding components having `id: foo2` and `id: foo3` respectively.
 
--- ft.h2: By using `<id>` as url
+-- ds.h2: By using `<id>` as url
 
 The user can pass the `<id>` as url which would link the title to the component
 having `id: <id>` (if present within the same package).
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -364,18 +364,18 @@ lang: ftd
 
 - ToC: foo3
 
--- ft.markdown:
+-- ds.markdown:
 
 In the above example, `foo`, `foo2` and `foo3` are different component id's (within the same package).
 The `Section` title will be linked to the component having `id: foo`. Similarly, the `Subsection`
 and `ToC` titles will be linked to the components having `id: foo2` and `id: foo3` respectively.
 
--- ft.h2: By using `id` header
+-- ds.h2: By using `id` header
 
 In this case, the user can make use of the `id` header when linking `<id>`
 with any sitemap element (Section, Subsection or ToC).
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -389,18 +389,18 @@ lang: ftd
 - ToC
   id: foo3
 
--- ft.markdown:
+-- ds.markdown:
 
 In the above example, `foo`, `foo2` and `foo3` are different component id's (within the same package).
 The `Section` title will be linked to the component having `id: foo`.
 Similarly, the `Subsection` and `ToC` title will be linked to the components having `id: foo2`
 and `id: foo3` respectively.
 
--- ft.h1: Skip Header
+-- ds.h1: Skip Header
 
 `skip: true`
 
--- ft.h2: Motivation Behind `skip` Header
+-- ds.h2: Motivation Behind `skip` Header
 
 If people want to draft something and don't want to publish any section, sub
 section or toc, they can use `skip` in section, sub-section and toc header.
@@ -410,12 +410,12 @@ sitemap](processors/sitemap/) till it is not the active opened page.
 
 Value of `skip` will be `true` if `url` contains [dynamic parameters](/sitemap/#dynamic-parameters-in-url).
 
--- ft.h2: `skip` in Section
+-- ds.h2: `skip` in Section
 
 We have header called `skip`(by default `false`), using this header we can skip
 the whole section.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -434,24 +434,24 @@ skip: true
 ## Section 2 Subsection 2: /subsection2
 
 
--- ft.markdown:
-move-down: 15
+-- ds.markdown:
+;;move-down: 15
 
 In this case, Whole Section 2 will be skipped and will not displayed.
 
 
--- ft.image: Page without `skip` header
-move-down: 15
+-- ds.image: Page without `skip` header
+;;move-down: 15
 src: $assets.files.static.images.sitemap.without_skip_header.png
-width: 725
+width.fixed.px: 725
 
--- ft.image: Page with `skip` header
-move-down: 15
+-- ds.image: Page with `skip` header
+;;move-down: 15
 src: $assets.files.static.images.sitemap.with_skip_header.png
-width: 725
+width.fixed.px: 725
 
 
--- ft.h2: `skip` in Subsection
+-- ds.h2: `skip` in Subsection
 
 We have header called `skip`(by default `false`), using this header we can skip
 the whole subsection.
@@ -459,7 +459,7 @@ the whole subsection.
 In the below example `Subsection 1` of `Section 1` and `Subsection 2` of
 `Section 2` will be skipped
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -479,14 +479,14 @@ skip: true
 ## Subsection 2: /subsection2
 
 
--- ft.h2: `skip` in ToC
+-- ds.h2: `skip` in ToC
 
 We have header called `skip`(by default `false`), using this header we can skip
 the whole toc.
 
 In the below example, ToC 3 and ToC 5 will be skipped.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -505,13 +505,13 @@ skip: true
 - ToC 6: /page6
 
 
--- ft.image: `skip` ToC Header
-move-down: 15
+-- ds.image: `skip` ToC Header
+;;move-down: 15
 src: $assets.files.static.images.sitemap.toc_with_skip_header.png
-width: 725
+width.fixed.px: 725
 
 
--- ft.h1: Access Control Using Sitemap
+-- ds.h1: Access Control Using Sitemap
 
 Different parts of a package may have access control limitation, like who can
 read or edit a package. Read and write are only enforced when `fpm serve` is
@@ -523,7 +523,7 @@ by the world, and not writable by any.
 
 Access control is specified in terms of [`user groups`](/dev/user-group/).
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -538,19 +538,19 @@ writers: write-group-id
   - child toc: /url/
     key5: value5
 
--- ft.markdown:
+-- ds.markdown:
 
 If a `readers` is specified it is assumed that sub section of the site is no
 longer readable by the world. There exists a special group call "everyone",
 which can be used to set a subtree readable by the world.
 
 
--- ft.h2: Access Control Inheritance
+-- ds.h2: Access Control Inheritance
 
 Both `readers` and `writers` are inherited from parent's section, subsection and
 toc. And they get merged.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -574,7 +574,7 @@ as well.
 extra reader `bar`, so both `foo` and `bar` have access to `/toc/url/` and it's
 children, which is `/child/toc/url/`.
 
--- ft.h2:  Resetting Access Control Inheritance
+-- ds.h2:  Resetting Access Control Inheritance
 
 If you want to overwrite, you can say "readers: not-inherited" or
 "writers: not-inherited", this is a special group which removes inheritance till
@@ -582,7 +582,7 @@ now, and only other writers or readers defined at this level are used.
 
 Eg
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -598,18 +598,18 @@ readers: foo
   - U2: /child/toc/url/
     key5: value5
 
--- ft.markdown:
+-- ds.markdown:
 
 Now since `/toc/url/` has specified both `not-inherited` and `bar`, `foo` will
 not have access to `/toc/url/` and only `bar` will have access to it.
 
 
--- ft.h2: Global ACL
+-- ds.h2: Global ACL
 
 If you do not want to specify groups for each section, you can specify it at
 sitemap level as well:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -624,7 +624,7 @@ readers: foo
     key5: value5
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have added `readers` key directly on `fpm.sitemap` itself, so entire
 site is only readable by `foo`.
@@ -632,7 +632,7 @@ site is only readable by `foo`.
 You can still specify access control at any node, and regular inheritance rules
 specified above will apply.
 
--- ft.h1: How Is ACL Implemented
+-- ds.h1: How Is ACL Implemented
 
 For HTTP request get `doc-id` and `read`. Based on this find the groups using
 `get-readers` or `get-writers`. Given `these groups`, `total identities`
@@ -641,8 +641,8 @@ and create a set of all identities). Pass `total identities` to
 `get-identities API`, it returns `actual identities` for the current user.
 
 
--- ft.h1: Custom URL Support in Sitemap
-id: sitemap-custom-url
+-- ds.h1: Custom URL Support in Sitemap
+;;id: sitemap-custom-url
 
 You can define `document` key in Sitemap's section, subsection and toc.
 
@@ -652,7 +652,7 @@ document `sub-section.ftd` will be served. If request come for `/toc1/` so
 document `toc-temp.ftd` will be served.
 
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.sitemap:
@@ -667,7 +667,7 @@ lang: ftd
   document: toc-temp.ftd
 
 
--- ft.h1: Dynamic Urls
+-- ds.h1: Dynamic Urls
 
 You can define `url` like `url: /<string:username>/foo/<integer:age>/` in
 `dynamic-urls`. With this configuration you have to also define
@@ -684,7 +684,7 @@ accordingly
 - `/abrark/task2/30/` -> `task-type-2.ftd`
 
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.dynamic-urls:
@@ -706,7 +706,7 @@ document: person-employee.ftd
     url: /<string:username>/task2/<integer:age>/
     document: task-type-2.ftd
 
--- ft.h2: Syntax
+-- ds.h2: Syntax
 
 Syntactically, You can customize your urls same as sitemap. One section `#`,
 `Title`, `url` and `document` is mandatory.
@@ -716,11 +716,11 @@ Note: `-- fpm.sitemap:` will not contain any urls with dynamic parameters, and
 `-- fpm.dynamic-urls:` will not contain any urls without dynamic parameters.
 
 
--- ft.h3: Examples
+-- ds.h3: Examples
 
 One url entry only with single `section`.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.dynamic-urls:
@@ -730,11 +730,11 @@ url: /<string:username>/manager/<integer:age>/
 document: person-manager.ftd
 
 
--- ft.markdown:
+-- ds.markdown:
 
 One url entry only with one `section` and one `toc` item.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.dynamic-urls:
@@ -749,3 +749,5 @@ writers: writers
   document: task-type-1.ftd
   readers: readers
   writers: writers
+
+-- end: ds.page

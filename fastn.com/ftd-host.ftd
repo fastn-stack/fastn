@@ -1,6 +1,6 @@
--- ft.page: Available `$processor$`s
+-- ds.page: Available `$processor$`s
 
--- ft.markdown: 
+-- ds.markdown: 
 
 FPM comes with following built in `ftd` `$processor$`s.
 
@@ -10,3 +10,5 @@ FPM comes with following built in `ftd` `$processor$`s.
 
 FPM also comes with a special document [`fpm`](fpm-vars/) that can be
 imported by any document, which contains helpful variables.
+
+-- end: ds.page

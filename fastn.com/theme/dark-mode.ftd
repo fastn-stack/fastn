@@ -1,8 +1,8 @@
 -- import: fpm.dev/assets
 
--- ft.page: Dark Mode Support
+-- ds.page: Dark Mode Support
 
--- ft.markdown: 
+-- ds.markdown: 
 
 Modern operating systems come with Dark Mode support. Readers have started to get
 used to support for dark mode on more and more web sites. Dark mode is not just
@@ -14,7 +14,7 @@ especially in night.
 
 So all themes should consider supporting dark mode.
 
--- ft.h1: User Toggle Vs OS Toggle
+-- ds.h1: User Toggle Vs OS Toggle
 
 In earlier days of dark mode, when very few sites supported it, when operating
 system did not support dark mode, every site had to rely on a toggle on the site
@@ -51,22 +51,22 @@ This two state switcher should be considered an anti pattern.
 
 This kind of UI is preferred today:
 
--- ft.image: Dark Mode Switcher
+-- ds.image: Dark Mode Switcher
 src: $assets.files.static.images.theme.dark-mode-switcher.png
-align: center
-width: 400
+;;align: center
+width.fixed.px: 400
 
 In the collapsed state it should show the icon showing the mode that is currently
 being used based on combination of user and system preference. Unlike the image
 shown above, the icon for system mode should show the value system is
 recommending right now.
 
--- ft.h1: `fpm.dark-mode`
+-- ds.h1: `fpm.dark-mode`
 
 To support dark mode in your themes, you should use `fpm.dark-mode` variable,
 which is set by FPM based on past user preference, and current OS settings.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
@@ -74,14 +74,14 @@ lang: ftd
 \-- ftd.text highlight: $title
 caption title:
 color if { ftd.dark-mode }: yellow
-background-color if { !ftd.dark-mode }: yellow
+background.solid if { !ftd.dark-mode }: yellow
 
--- ft.markdown:
+-- ds.markdown:
 
 We have used `ftd.dark-mode` to change color and background colors here.
 
 
--- ft.h1: `fpm.follow-system-dark-mode` and `fpm.system-dark-mode`
+-- ds.h1: `fpm.follow-system-dark-mode` and `fpm.system-dark-mode`
 
 `fpm.follow-system-dark-mode` tells you if user has asked to follow system dark
 mode or user has explicitly selected dark or light mode, over-riding the system
@@ -94,7 +94,7 @@ you should use `fpm.dark-mode` for that. These two variables are only to help
 you create the dark mode switcher.
 
 
--- ft.h1: Preferences Are Stored In A Cookie
+-- ds.h1: Preferences Are Stored In A Cookie
 
 On first page load a cookie is created from JavaScript, indicating the dark-mode
 setting. The name of the cookie is `fpm-dark-mode`, and it contains value in this
@@ -109,7 +109,7 @@ the cookie would be used to set the way initial page is rendered. Currently when
 the page loads, the site is assumed to be light mode, so there is a slight flash
 when the mode switches back to dark.
 
--- ft.h1: Updating The Preference
+-- ds.h1: Updating The Preference
 
 When user interacts with the dark mode switcher UI in your theme and they can
 chose to overwrite system preference and go for dark, overwrite and go for light,
@@ -123,4 +123,4 @@ The host functions, "enable-dark-mode" etc, are provided by fpm, and they will
 update the cookie, and change `fpm.dark-mode`, `fpm.follow-system-dark-mode` and
 `fpm.system-dark-mode` FTD variables.
 
-
+-- end: ds.page

@@ -1,21 +1,21 @@
 -- import: fpm.dev/assets
 
--- ft.page: FPM Login Flow with Telegram
+-- ds.page: FPM Login Flow with Telegram
 
--- ft.markdown:
+-- ds.markdown:
 
 You need to use a Telegram Login Widget. For this please go to 
 the following link Telegram Login Widget.https://core.telegram.org/widgets/login
 
--- ft.image:
+-- ds.image:
 src: $assets.files.static.images.auth.telegram.telegram-login-1.png
-align: center
+;;align: center
 
--- ft.markdown:
+-- ds.markdown:
 
 You can use the Callback function or you can give a redirect url.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Script
@@ -23,7 +23,7 @@ Script
 data-telegram-login="fpmuserbot" data-size="medium" data-auth-url="" 
 data-request-access="write"></script>
 
--- ft.markdown:
+-- ds.markdown:
 
 One thing to note is that if you want to use it on a local computer 
 then it will only be tested on port 80. Use http://127.0.0.1:80 
@@ -32,3 +32,4 @@ for redirect base url.
 On successful login it will return the following parameters: `id`, 
 `first_name`, `last_name`, `username`, `photo_url`, `auth_date` and `hash`. 
 
+-- end: ds.page

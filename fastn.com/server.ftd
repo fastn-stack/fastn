@@ -1,4 +1,4 @@
--- ft.page: FPM Server
+-- ds.page: FPM Server
 
 FPM can act as an HTTP server as well. Using FPM server is an alterantive to
 using [fpm static site generator](/static/).
@@ -11,4 +11,4 @@ features.
 - [`get-data`](/processors/get-data/) has access to request parameters
   ([planned](https://github.com/FifthTry/fpm/discussions/386))
 
-
+-- end: ds.page

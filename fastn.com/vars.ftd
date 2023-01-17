@@ -1,4 +1,4 @@
--- ft.page: `fpm` Variables
+-- ds.page: `fpm` Variables
 
 
 
@@ -47,7 +47,7 @@ readonly: true
 
 It gives the home url of the package which basically is `//<package.name>`.
 
---- ft.tip:
+-- ds.tip:
 
 We do not include the protocol so this URL works for both HTTP and HTTPS depoyed
 sites.
@@ -75,14 +75,14 @@ readonly: true
 
 It is a list of record `language-toc-item`. This record has following structure
 
--- ft.code: language-toc-item
+-- ds.code: language-toc-item
 lang: ftd
 
 \-- record language-toc-item:
 caption title:
 string url:
 
--- ft.markdown:
+-- ds.markdown:
 
 It contains the list of all the available languages.
 
@@ -199,67 +199,79 @@ readonly: true
 This sets the [theme-color
 meta](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color).
 
+-- end: ds.page
 
 
 
--- ftd.column var:
+
+
+
+
+
+-- component var:
 caption name:
 string type:
 optional string default:
 boolean dynamic: false
 boolean readonly: false
 body body:
-spacing: 20
-width: fill
 
---- ft.h1: $name
+-- ftd.column:
+spacing.px: 20
+width: fill-container
 
---- ftd.row:
-border-width: 1
-border-color: $fpm.color.main.text
-padding: 20
-spacing: 5
-width: fill
+-- ds.h1: $var.name
 
---- ftd.text: Type:
-color: $fpm.color.main.text
-role: $fpm.type.copy-relaxed
+-- ftd.row:
+border-width.px: 1
+border-color: $inherited.colors.text
+padding.px: 20
+spacing.px: 5
+width: fill-container
 
---- ftd.text: $type
-color: $fpm.color.main.text
-role: $fpm.type.copy-relaxed
+-- ftd.text: Type:
+color: $inherited.colors.text
+role: $inherited.types.copy-relaxed
 
---- container: ftd.main
+-- ftd.text: $var.type
+color: $inherited.colors.text
+role: $inherited.types.copy-relaxed
 
---- ftd.row:
-width: fill
-border-width: 1
-border-color: $fpm.color.main.text
-padding: 20
-spacing: 5
-if: $default is not null
+-- end: ftd.row
 
---- ftd.text: Default Value:
-color: $fpm.color.main.text
-role: $fpm.type.copy-relaxed
+-- ftd.row:
+width: fill-container
+border-width.px: 1
+border-color: $inherited.colors.text
+padding.px: 20
+spacing.px: 5
+if: {$var.default != NULL}
 
---- ftd.text: $default
-if: $default is not null
-color: $fpm.color.main.text
-role: $fpm.type.copy-relaxed
+-- ftd.text: Default Value:
+color: $inherited.colors.text
+role: $inherited.types.copy-relaxed
 
---- container: ftd.main
+-- ftd.text: $var.default
+if: {$var.default != NULL}
+color: $inherited.colors.text
+role: $inherited.types.copy-relaxed
 
---- ft.tip:
-if: $dynamic
+-- end: ftd.row
+
+-- ds.tip:
+if: {$var.dynamic}
 
 This variable is dynamic, it can change after page load.
 
---- ft.tip:
-if: $readonly
+-- ds.tip:
+if: {$var.readonly}
 
 This variable is readonly, do not try to modify it.
 
---- ft.markdown:
+-- ds.markdown:
 
-$body
+$var.body
+
+-- end: ftd.column
+
+-- end: var

@@ -1,14 +1,16 @@
--- ft.page: `fpm serve`
+-- ds.page: `fpm serve`
 
 
 `fpm serve [<port>]` creates an `http` server, which dynamically builds ftd files when serving.
 
--- ft.h1: Usage
+-- ds.h1: Usage
 
 - `fpm serve`, It will create and run server at default port `8000`
 - `fpm serve 8080`, It will create and run server at port `8080`
 
--- ft.h2: TODO
+-- ds.h2: TODO
 
 - static directory should be configurable
 - default error page or list the directory in case of file not found
+
+-- end: ds.page

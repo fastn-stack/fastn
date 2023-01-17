@@ -1,6 +1,6 @@
--- ft.page: Upgrade `fpm`
+-- ds.page: Upgrade `fpm`
 
--- ft.markdown: 
+-- ds.markdown: 
 
 
 As of Rust 1.41.0, `cargo install fpm` does an auto upgrade of eg `fpm` if it
@@ -9,7 +9,9 @@ is already installed.
 If you are using older Rust, then run the following to upgrade.
 
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 cargo install --force fpm
+
+-- end: ds.page

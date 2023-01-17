@@ -1,39 +1,41 @@
--- ft.page: `fpm`: Offline Sync
+-- ds.page: `fpm`: Offline Sync
 
 `fpm` comes with ability to "clone" any `fpm` package, and view and modify it
 offline. We support *two way sync*, with first class conflict handling, so you
 do not inadvertently overwrite changes done by others when syncing your changes
 back online.
 
--- ft.h1: View Offline
+-- ds.h1: View Offline
 
 With this feature, you can clone a package, and build/serve it on your local
 machine. This is great keeping a copy of the site on your local machine for
 access when you do not have internet connection.
 
--- ft.h1: Access Control
+-- ds.h1: Access Control
 
 `offline` feature works only if you have proper access to the `fpm` package in
 question. You can download a package only if the package owner have allowed you
 read access to it.
 
--- ft.h1: Archive FPM Sites
+-- ds.h1: Archive FPM Sites
 
 With offline feature it is possible to download the content of `fpm` powered
 website for creating an offline archive. When you clone a site you get access
 to it's entire history.
 
 
--- ft.h1: Use Your Own Editor
+-- ds.h1: Use Your Own Editor
 
 `fpm` comes with built in editor, but you may want to use your own editor
 instead of `fpm`'s web based editor. There are a lot of very powerful and
 feature rich editors available today, and with this feature fpm users can use
 any of those editors, and are not limited to the built in editor.
 
--- ft.h1: Batch Modifications
+-- ds.h1: Batch Modifications
 
 Sometimes you want to make large modifications, maybe using some script. Being
 able to bring the site content to your machine, make edits and upload it back to
 the `fpm server` opens gates for many use cases, not possible with a purely
 web based editor.
+
+-- end: ds.page
