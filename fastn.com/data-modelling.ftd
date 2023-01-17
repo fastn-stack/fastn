@@ -68,3 +68,5 @@ Read more about it in ["reading data" guide](/reading-data/).
 
 `ftd` also supports referring to other `ftd` files, so one can describe the schema
 or data in one file and refer it from other files.
+
+-- end: ds.page
