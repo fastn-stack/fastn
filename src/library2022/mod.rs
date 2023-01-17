@@ -96,7 +96,7 @@ impl Library2022 {
             }
 
             for (alias, package) in package.aliases() {
-                lib.push_package_under_process(name, &package).await.ok()?;
+                lib.push_package_under_process(name, package).await.ok()?;
                 if name.starts_with(alias) {
                     if let Some(r) = get_data_from_package(
                         name.replacen(alias, &package.name, 1).as_str(),
