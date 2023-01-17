@@ -80,11 +80,11 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 - Common Text Attributes: /text-common/
 - FTD "markup": /markup/
 - Container Attributes: /container/
-;; - Container Management: /container-management/
-;; - Inner Container: /inner-container/
-;; - `if` Conditional Components
-;;  url: /if/
-;; - Conditional Attributes: /if-attr/
+- Container Management: /container-management/
+- Inner Container: /inner-container/
+- `if` Conditional Components:
+url: /if/
+- Conditional Attributes: /if-attr/
 ;; - `$loop$`: Looping Over Lists
 ;; url: /loop/
 ;; - ID: /id/

@@ -1,12 +1,11 @@
-\-- ft-core.concept:
 
--- ft.page: Container Management
+-- ds.page: Container Management
 
--- ft.markdown: 
+-- ds.markdown: 
 
 Every `ftd` document is rendered in the context of a "main container".
 
--- ft.h1: `ftd.main`: the main container
+-- ds.h1: `ftd.main`: the main container
 
 `ftd` has several container components. This includes [`ftd.column`](column/),
 [`ftd.row`](row/), [`ftd.grid`](grid/) and [`ftd.scene`](scene/). These
@@ -15,39 +14,39 @@ components can store zero or more components as children.
 The main container for the document is an `ftd.column`. It is created when we start
 rendering and is set as the "current container".
 
--- ft.h1: "current container"
+-- ds.h1: "current container"
 
 Current container is the container where every newly initialized component is 
 placed.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: hello
 
--- ft.markdown:
+-- ds.markdown:
 
 So when you see a code like above, the `ftd.text` component is initialized, and
 placed into the current container.
 
--- ft.h1: An Open Container
+-- ds.h1: An Open Container
 
 If a container, say `ftd.row`, is created, and it has zero children, it is
 considered an "open container"
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row:
 
--- ft.markdown:
+-- ds.markdown:
 
 As you can see we have created an `ftd.row`, but it has zero children, so the 
 row is considered "open", and when `ftd` finds an open container, it first places
 it in the current container, and changes the current container to this new open 
 container.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row:
@@ -56,14 +55,14 @@ lang: ftd
 
 \--- ftd.text: world
 
--- ft.markdown:
+-- ds.markdown:
 
 In this example we created a row with two children. In this case since the
 container is not empty, it is not made the current container. 
 
 We can force a container to be open or closed by using the `open` attribute:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row:
@@ -77,7 +76,7 @@ open: true
 \-- ftd.row:
 open: false
 
--- ft.markdown:
+-- ds.markdown:
 
 In this example, the first row is not open, even though it has no children, 
 because we set the `open` attribute to `false`. This means the next row is not 
@@ -88,7 +87,7 @@ The second row, on the other hand, has a child, "hello" text, and it would have
 normally been considered closed, but we kept it open using the `open` attribute,
 which means the third row is placed inside the second row.
 
--- ft.h2: `append-at` takes an `id`
+-- ds.h2: `append-at` takes an `id`
 
 A container can set the value of `append-at` to the `id` of one of its children,
 when that is done, the `id`ed child is made the container in which all subsequent 
@@ -96,7 +95,7 @@ components will be placed, if it is open (when `open` is set) or all direct
 child components (or components in subsection) will be placed, if it's not open
 (when `open` is not set)
 
--- ft.code: `append-at` with `open` not set
+-- ds.code: `append-at` with `open` not set
 lang: ftd
 
 \-- ftd.column foo:
@@ -112,7 +111,7 @@ id: some-child
 \--- ftd.text: hello
 
 
--- ft.code: `append-at` with `open` set
+-- ds.code: `append-at` with `open` set
 lang: ftd
 
 \-- ftd.column foo:
@@ -128,25 +127,25 @@ id: some-child
 
 \-- ftd.text: hello
 
--- ft.markdown:
+-- ds.markdown:
 
 In both cases, `foo` has designated the first `row` inside it as the container which
 will receive children.
 
 `hello` text will go inside the row with id: `some-child`.
 
--- ft.h1: `container` keywords and container id
+-- ds.h1: `container` keywords and container id
 
 In the last example we left a row inside another row as the current container.
 Anything new will be placed inside the row-inside-the-row container. If we want to
 get back to the "main container", we use the container keyword:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- container: ftd.main
 
--- ft.markdown:
+-- ds.markdown:
 
 Note that the main container created for the document is called `ftd.main`. This
 sentence also means the main container has an id: `ftd.main`. Actually the `id`
@@ -156,7 +155,7 @@ is `main`, but since that container is part of `ftd` namespace, its full id is
 Any container can specify an id, and then we can use that id to insert more 
 children in it:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row:
@@ -177,7 +176,7 @@ id: second-row
 
 \-- ftd.text: this is the second child of the second row
 
--- ft.h1: "sub-component container management"
+-- ds.h1: "sub-component container management"
 
 When defining a component based on a container component, we can do the container
 management inside the definition as well. 
@@ -185,7 +184,7 @@ management inside the definition as well.
 In that case the id `ftd.main` points to the container belonging to the component
 being defined.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
@@ -201,19 +200,19 @@ id: first-in-foo
 
 \--- ftd.text: first child of `first-in-foo` row
 
--- ft.markdown:
+-- ds.markdown:
 
 The IDs inside the component, eg `first-in-foo` here, are not accessible outside 
 the container.
 
--- ft.h1: Inner Containers
+-- ds.h1: Inner Containers
 
 An inner container facilitates us to set the current container as any 
 inner container of a component, so that a new element can be placed inside it as it's child.
 
 Consider this component:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.column foo:
@@ -230,21 +229,24 @@ id: foo-1
 \-- foo:
 id: foo-2
 
--- ft.markdown:
+-- ds.markdown:
 
 We have created two instances of `foo` with id as `foo-1` and `foo-2`,
 and each `foo` contains two columns (or inner containers), `c1` and `c2`. 
 If we wanted to place a child inside `c1` of first `foo` (i.e. one with id `foo-1`)
 , we must use `foo-1.c1`:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- container: foo-1.c1
 
 \-- ftd.text: hello
 
--- ft.markdown:
+-- ds.markdown:
 
 This would place the element `-- ftd.text: hello` as a child inside `c1` of `foo`
 with id `foo-1`. For more example, visit this [link](inner-container/)
+
+
+-- end: ds.page
