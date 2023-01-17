@@ -78,8 +78,8 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 - Universal Attributes: /universal-attributes/
 - Common Attributes: /common/
 - Common Text Attributes: /text-common/
-;; - FTD "markup": /markup/
-;; - Container Attributes: /container/
+- FTD "markup": /markup/
+- Container Attributes: /container/
 ;; - Container Management: /container-management/
 ;; - Inner Container: /inner-container/
 ;; - `if` Conditional Components
