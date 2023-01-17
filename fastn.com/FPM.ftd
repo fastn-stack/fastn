@@ -77,7 +77,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 - Reference Linking: /reference-linking/
 - Universal Attributes: /universal-attributes/
 - Common Attributes: /common/
-;; - Common Text Attributes: /text-common/
+- Common Text Attributes: /text-common/
 ;; - FTD "markup": /markup/
 ;; - Container Attributes: /container/
 ;; - Container Management: /container-management/

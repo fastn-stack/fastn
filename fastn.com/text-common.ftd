@@ -1,62 +1,58 @@
 -- import: fpm
 
 
--- ft.page: Common Text Kernel Attributes
+-- ds.page: Common Text Kernel Attributes
 
--- ftd.column:
-id: outer-2
-
--- ft.markdown:
+-- ds.markdown:
 
 These attributes are available to all `ftd` "kernel" components.
 
--- ft.h1: `text-align: string`
+-- ds.h1: `text-align: string`
 
--- ft.markdown:
+-- ds.markdown:
 
 This `text-align` property sets the alignment of text. It takes input like this:
 
--- ft.code: specifying alignment of text
+-- ds.code: specifying alignment of text
 lang: ftd
 
 \-- ftd.text: FifthTry
 text-align: center
 
--- ft.markdown:
+-- ds.markdown:
 
 This will render like this:
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-width: 400
+width.fixed.px: 400
 text-align: center
-color: $fpm.color.main.text-strong
+color: $inherited.colors.text-strong
 
--- container: outer-2
+-- end: ds.output
 
--- ft.code: specifying alignment of text
+-- ds.code: specifying alignment of text
 lang: ftd
 
 \-- ftd.text: FifthTry
 text-align: left
 
--- ft.markdown:
+-- ds.markdown:
 
 This will render like this:
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-width: 400
-text-align: left
-color: $fpm.color.main.text-strong
+width.fixed.px: 400
+color: $inherited.colors.text-strong
 
--- container: outer-2
+-- end: ds.output
 
--- ft.h1: `style: string`
+-- ds.h1: `style: string`
 
--- ft.markdown:
+-- ds.markdown:
 
 The `style` property specifies the font style for a text component. It accepts
 multiple style separated using space ` `. It takes following values:
@@ -76,85 +72,93 @@ multiple style separated using space ` `. It takes following values:
 
  This property takes input like this:
 
--- ft.code: specifying style (underline)
+-- ds.code: specifying style (underline)
 lang: ftd
 
 \-- ftd.text: FifthTry
 style: underline
 
--- ft.markdown:
+-- ds.markdown:
 
 This will render like this:
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-style: underline
-color: $fpm.color.main.text-strong
+;; style: underline -- TODO FTD 0.3
+color: $inherited.colors.text-strong
 
--- container: outer-2
+-- end: ds.output
 
--- ft.code: specifying style (strike)
+-- ds.code: specifying style (strike)
 lang: ftd
 
 \-- ftd.text: FifthTry
 style: strike
 
--- ft.markdown:
+-- ds.markdown:
 
 This will render like this:
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-style: strike
-color: $fpm.color.main.text-strong
+;; style: strike -- TODO FTD 0.3
+color: $inherited.colors.text-strong
 
--- container: outer-2
+-- end: ds.output
 
--- ft.code: specifying multiple styles
+-- ds.code: specifying multiple styles
 lang: ftd
 
 \-- ftd.text: FifthTry
 style: italic heavy underline
 
--- ft.markdown:
+-- ds.markdown:
 
 This will render like this:
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-style: italic heavy underline
-color: $fpm.color.main.text-strong
+;; style: italic heavy underline -- TODO FTD 0.3
+color: $inherited.colors.text-strong
 
--- container: outer-2
+-- end: ds.output
 
--- ft.h1: `line-clamp:`
+-- ds.h1: Custom `card` `read more`
 
-This `line-clamp` property takes input like this:
+`card` can be used as read more component like this:
 
--- ft.code: specifying line-clamp
+-- ds.code: specifying line-clamp
 lang: ftd
 
-\-- ftd.column card:
+\-- component card:
 body text:
-width: 300
-min-height: 300
-boolean read_more: true
+boolean $read_more: true
 integer max_lines:
-spacing: 20
 
-\-- ftd.text: $text
-line-clamp if $read_more: $max_lines
+\-- ftd.column:
+width: fill-container
+color: $inherited.colors.text-strong
+spacing.px: 20
+
+\-- ftd.text: 
+text: $card.text
+;; line-clamp if { card.read_more }: $card.max_lines -- TODO FTD 0.3
+height.fixed.px if { card.read_more }: 20
+overflow-y: auto
+height.fixed.px if { !card.read_more }: 60
 
 \-- ftd.text: Read More
-$on-click$: toggle $read_more
-if: $read_more
+if: { card.read_more }
+$on-click$: $ftd.toggle($a = $card.read_more) 
 
 \-- ftd.text: Read Less
-$on-click$: toggle $read_more
-if: not $read_more
+if: { !card.read_more }
+$on-click$: $ftd.toggle($a = $card.read_more)
+
+\-- end: ftd.column
 
 \-- end: card
 
@@ -166,32 +170,11 @@ tempor incididunt ut labore et dolore magna aliqua. elit, sed do eiusmod.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua.
 
--- ft.markdown:
+-- ds.markdown:
 
 This will render like this:
 
--- ft.output:
-
--- ftd.column card:
-body text:
-width: fill
-boolean read_more: true
-integer max_lines:
-color: $fpm.color.main.text-strong
-spacing: 20
-
---- ftd.text: $text
-line-clamp if $read_more: $max_lines
-
-
---- ftd.text: Read More
-$on-click$: toggle $read_more
-if: $read_more
-
---- ftd.text: Read Less
-$on-click$: toggle $read_more
-if: not $read_more
-
+-- ds.output:
 
 -- card:
 max_lines: 1
@@ -200,3 +183,45 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. elit, sed do eiusmod.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua.
+
+-- end: ds.output
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- component card:
+body text:
+boolean $read_more: true
+integer max_lines:
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text-strong
+spacing.px: 20
+
+-- ftd.text: 
+text: $card.text
+;; line-clamp if { card.read_more }: $card.max_lines -- TODO FTD 0.3
+height.fixed.px if { card.read_more }: 20
+overflow-y: auto
+height.fixed.px if { !card.read_more }: 60
+
+-- ftd.text: Read More
+if: { card.read_more }
+$on-click$: $ftd.toggle($a = $card.read_more) 
+
+-- ftd.text: Read Less
+if: { !card.read_more }
+$on-click$: $ftd.toggle($a = $card.read_more)
+
+-- end: ftd.column
+
+-- end: card
