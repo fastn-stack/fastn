@@ -88,8 +88,8 @@ url: /if/
 - `$loop$`: Looping Over Lists:
 url: /loop/
 ;; - ID: /id/
-;; - `$on-<event-name>$`: Event Handling
-;; url: /event-handling/
+- `$on-<event-name>$`: Event Handling
+url: /event-handling/
 ;; - Auto Nesting: /auto-nesting/
 ;; - Ajax Call: /ajax-call/
 ;; - `$on-global-key[<keys>]$` Global Key Events

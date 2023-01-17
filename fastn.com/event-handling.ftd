@@ -1,37 +1,39 @@
--- ft.page: Event Handling
+-- boolean $open: true
 
 
--- ft.markdown: 
+-- ds.page: Event Handling
+
+
+-- ds.markdown: 
 
 FTD supports event handling using `$on-<event-name>$` header.
 
 
--- boolean open: true
-
-
 -- ftd.column:
-padding: 20
-border-width: 2
-border-radius: 5
-width: fill
-margin-bottom: 20
-background-color: $fpm.color.main.background.step-2
+padding.px: 20
+border-width.px: 2
+border-radius.px: 5
+width: fill-container
+margin-bottom.px: 20
+background.solid: $inherited.colors.background.step-2
 
---- ftd.text: The heading (click to toggle)
-$on-click$: toggle $open
-color: $fpm.color.main.text
-role: $fpm.type.copy-tight
+-- ftd.text: The heading (click to toggle)
+$on-click$: $ftd.toggle($a = $open)
+color: $inherited.colors.text
+role: $inherited.types.copy-tight
 
---- ftd.text:
-if: $open
-color: $fpm.color.main.text
-role: $fpm.type.copy-tight
-margin-top: $fpm.space.space-2
+-- ftd.text:
+if: { open }
+color: $inherited.colors.text
+role: $inherited.types.copy-tight
+margin-top.px: 8
 
 This is some **markdown text**.
 
---- ft.code:
-if: $open
+-- end: ftd.column
+
+-- ds.code:
+if: { open }
 lang: py
 
 import os
@@ -39,32 +41,35 @@ import os
 print(os)
 
 
--- ft.code: source of the example shown above
+-- ds.code: source of the example shown above
 lang: ftd
 
 \-- boolean $open: true
 
 \-- ftd.column:
-padding: 20
-border-width: 2
-border-radius: 5
-width: fill
-margin-bottom: 20
+padding.px: 20
+border-width.px: 2
+border-radius.px: 5
+width: fill-container
+margin-bottom.px: 20
+background.solid: $inherited.colors.background.step-2
 
-\-- ftd.text: the heading (click to toggle)
-$on-click$: toggle $open
-color: $fpm.color.main.text
-role: $fpm.type.copy-tight
+\-- ftd.text: The heading (click to toggle)
+$on-click$: $ftd.toggle($a = $open)
+color: $inherited.colors.text
+role: $inherited.types.copy-tight
 
 \-- ftd.text:
-if: $open
-color: $fpm.color.main.text
-role: $fpm.type.copy-tight
-margin-top: $fpm.space.space-2
+if: { open }
+color: $inherited.colors.text
+role: $inherited.types.copy-tight
+margin-top.px: 8
 
 This is some **markdown text**.
 
-\-- ft.code:
+\-- end: ftd.column
+
+\-- ds.code:
 if: $open
 lang: py
 
@@ -72,10 +77,8 @@ import os
 
 print(os)
 
-\-- end: ftd.column
 
-
--- ft.h1: `$on-<event-name>$: <action> <action-arguments>`
+-- ds.h1: `$on-<event-name>$: <action> <action-arguments>`
 
 FTD supports a few events, like `click`, which is mapped to an "action", eg 
 there is an action `toggle`, which toggles a Boolean variable. Actions take data
@@ -88,11 +91,13 @@ More than one event handler can be assigned to same event, and more than one eve
 can be added to a component.
 
 
--- ft.h1: Event `click`
+-- ds.h1: Event `click`
 
 This event is used to track mouse clicks.
 
 
--- ft.h1: Action `toggle`
+-- ds.h1: Action `toggle`
 
 This action is used to toggle a Boolean variable.
+
+-- end: ds.page
