@@ -76,7 +76,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
   - `ftd.grid`: /grid/
 - Reference Linking: /reference-linking/
 - Universal Attributes: /universal-attributes/
-;; - Common Attributes: /common/
+- Common Attributes: /common/
 ;; - Common Text Attributes: /text-common/
 ;; - FTD "markup": /markup/
 ;; - Container Attributes: /container/

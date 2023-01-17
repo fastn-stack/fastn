@@ -1,14 +1,16 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
+-- ftd.color red:
+light: red
+dark: red
+
+
 -- ds.page: Common Kernel Attributes
 
 -- ds.markdown: 
 
 These attributes are available to all `ftd` "kernel" components.
-
-
-
 
 
 -- ds.h1: `color:` [`ftd.color`](/built-in-types/#ftd-color)
@@ -34,28 +36,25 @@ color: $red
 
 This will render like this:
 
--- ds.output:
 
--- ftd.color red:
-light: red
-dark: red
+-- ds.output:
 
 -- ftd.text: FifthTry
 color: $red
 
+-- end: ds.output
 
+-- ds.h1: `background.solid:` [`ftd.color`](/built-in-types/#ftd-color)
 
--- ds.h1: `background-color:` [`ftd.color`](/built-in-types/#ftd-color)
-
-The background-color property sets the background color of an element. It takes
+The background.solid property sets the background color of an element. It takes
 input of [`ftd.color`](/built-in-types/#ftd-color) type.
 
 
--- ds.code: specifying background-color
+-- ds.code: specifying background.solid
 lang: ftd
 
 \-- ftd.text: FifthTry
-background-color: $red
+background.solid: $red
 
 
 -- ds.markdown:
@@ -66,8 +65,10 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-background-color: $red
+color: $inherited.colors.text-strong
+background.solid: $red
+
+-- end: ds.output
 
 -- ds.h1: `title: Optional String`
 
@@ -75,7 +76,7 @@ This is used to create
 [title attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title)
 on generated DOM.
 
--- ds.h1: `border-width: Integer`
+-- ds.h1: `border-width.px: Integer`
 
 Use this property to specify the width of the border. By default the `border-width`
 is zero, and is not visible.
@@ -85,7 +86,7 @@ is zero, and is not visible.
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-width: 2
+border-width.px: 2
 
 
 -- ds.markdown:
@@ -96,12 +97,13 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-width: 2
-color: $fpm.color.main.text
+border-width.px: 2
+color: $inherited.colors.text
+
+-- end: ds.output
 
 
-
--- ds.h1: `border-top: Integer`
+-- ds.h1: `border-top-width.px: Integer`
 
 The border-top property sets the width of an element's top border.
 
@@ -110,7 +112,7 @@ The border-top property sets the width of an element's top border.
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-top: 2
+border-top-width.px: 2
 
 
 -- ds.markdown:
@@ -120,11 +122,13 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-top: 2
-color: $fpm.color.main.text
+border-top-width.px: 2
+color: $inherited.colors.text
+
+-- end: ds.output
 
 
--- ds.h1: `border-bottom: Integer`
+-- ds.h1: `border-bottom-width.px: Integer`
 
 The border-bottom property sets the width of an element's bottom border.
 
@@ -133,7 +137,7 @@ The border-bottom property sets the width of an element's bottom border.
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-bottom: 2
+border-bottom-width.px: 2
 
 
 -- ds.markdown:
@@ -143,10 +147,13 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-bottom: 2
-color: $fpm.color.main.text
+border-bottom-width.px: 2
+color: $inherited.colors.text
 
--- ds.h1: `border-left: Integer`
+-- end: ds.output
+
+
+-- ds.h1: `border-left-width.px: Integer`
 
 The border-left property sets the width of an element's left border.
 
@@ -155,7 +162,7 @@ The border-left property sets the width of an element's left border.
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-left: 2
+border-left-width.px: 2
 
 
 -- ds.markdown:
@@ -165,10 +172,13 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-left: 2
-color: $fpm.color.main.text
+border-left-width.px: 2
+color: $inherited.colors.text
 
--- ds.h1: `border-right: Integer`
+-- end: ds.output
+
+
+-- ds.h1: `border-right-width.px: Integer`
 
 The border-right property sets the width of an element's right border.
 
@@ -177,7 +187,7 @@ The border-right property sets the width of an element's right border.
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-right: 2
+border-right-width.px: 2
 
 
 -- ds.markdown:
@@ -187,10 +197,13 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-right: 2
-color: $fpm.color.main.text
+border-right-width.px: 2
+color: $inherited.colors.text
 
--- ds.h1: `border-style: String`
+-- end: ds.output
+
+
+-- ds.h1: `;; border-style: String`
 
 The border-style property sets the style of an element's borders.
 
@@ -199,8 +212,8 @@ The border-style property sets the style of an element's borders.
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-style: dashed
-border-width: 2
+;; border-style: dashed
+border-width.px: 2
 
 
 -- ds.markdown:
@@ -210,9 +223,12 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-style: dashed
-border-width: 2
-color: $fpm.color.main.text
+;; border-style: dashed
+border-width.px: 2
+color: $inherited.colors.text
+
+-- end: ds.output
+
 
 -- ds.h1: `border-color:` [`ftd.color`](/built-in-types/#ftd-color)
 
@@ -228,7 +244,7 @@ light: red
 dark: red
 
 \-- ftd.text: FifthTry
-border-width: 2
+border-width.px: 2
 border-color: $red
 
 
@@ -239,12 +255,14 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-width: 2
-color: $fpm.color.main.text
+border-width.px: 2
+color: $inherited.colors.text
 border-color: $red
 
+-- end: ds.output
 
--- ds.h1: `border-radius: Integer`
+
+-- ds.h1: `border-radius.px: Integer`
 
 The border-radius property defines the radius of the element's corners.
 
@@ -253,8 +271,8 @@ The border-radius property defines the radius of the element's corners.
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-width: 2
-border-radius: 50
+border-width.px: 2
+border-radius.px: 50
 
 
 -- ds.markdown:
@@ -264,22 +282,25 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-width: 2
-color: $fpm.color.main.text
-border-radius: 50
+border-width.px: 2
+color: $inherited.colors.text
+border-radius.px: 50
+
+-- end: ds.output
 
 
--- ds.h1: `border-top-radius: Integer`
 
-The border-top-radius property defines the radius of the top corner.
+-- ds.h1: `border-top-left-radius.px: Integer`
+
+The border-top-left-radius property defines the radius of the top left corner.
 
 
 -- ds.code:
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-width: 2
-border-top-radius: 50
+border-width.px: 2
+border-top-left-radius.px: 50
 
 
 -- ds.markdown:
@@ -289,22 +310,24 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-width: 2
-color: $fpm.color.main.text
-border-top-radius: 50
+border-width.px: 2
+color: $inherited.colors.text
+border-top-left-radius.px: 50
+
+-- end: ds.output
 
 
--- ds.h1: `border-bottom-radius: Integer`
+-- ds.h1: `border-top-right-radius.px: Integer`
 
-The border-bottom-radius property defines the radius of the bottom corner.
+The border-top-right-radius property defines the radius of the top right corner.
 
 
 -- ds.code:
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-width: 2
-border-bottom-radius: 50
+border-width.px: 2
+border-top-right-radius.px: 50
 
 
 -- ds.markdown:
@@ -314,22 +337,24 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-width: 2
-color: $fpm.color.main.text
-border-bottom-radius: 50
+border-width.px: 2
+color: $inherited.colors.text
+border-top-right-radius.px: 50
+
+-- end: ds.output
 
 
--- ds.h1: `border-left-radius: Integer`
+-- ds.h1: `border-bottom-left-radius.px: Integer`
 
-The border-left-radius property defines the radius of the left corner.
+The border-bottom-radius property defines the radius of the bottom left corner.
 
 
 -- ds.code:
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-width: 2
-border-left-radius: 50
+border-width.px: 2
+border-bottom-left-radius.px: 50
 
 
 -- ds.markdown:
@@ -339,22 +364,26 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-width: 2
-color: $fpm.color.main.text
-border-left-radius: 50
+border-width.px: 2
+color: $inherited.colors.text
+border-bottom-left-radius.px: 50
+
+-- end: ds.output
 
 
--- ds.h1: `border-right-radius: Integer`
 
-The border-right-radius property defines the radius of the right corner.
+-- ds.h1: `border-bottom-right-radius.px: Integer`
+
+The border-bottom-right-radius property defines the radius of the bottom right 
+corner.
 
 
 -- ds.code:
 lang: ftd
 
 \-- ftd.text: FifthTry
-border-width: 2
-border-right-radius: 50
+border-width.px: 2
+border-bottom-right-radius.px: 50
 
 
 -- ds.markdown:
@@ -364,12 +393,14 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-border-width: 2
-color: $fpm.color.main.text
-border-right-radius: 50
+border-width.px: 2
+color: $inherited.colors.text
+border-bottom-right-radius.px: 50
+
+-- end: ds.output
 
 
--- ds.h1: `padding: Integer`
+-- ds.h1: `padding.px: Integer`
 
 Padding is used to create space around an element's content, inside of any defined borders.
 
@@ -378,8 +409,8 @@ Padding is used to create space around an element's content, inside of any defin
 lang: ftd
 
 \-- ftd.text: FifthTry
-padding: 60
-border-width: 2
+padding.px: 60
+border-width.px: 2
 
 
 -- ds.markdown:
@@ -389,12 +420,14 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-padding: 60
-color: $fpm.color.main.text
-border-width: 2
+padding.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
 
 
--- ds.h1: `padding-vertical: Integer`
+-- ds.h1: `padding-vertical.px: Integer`
 
 This gives top and bottom padding.
 
@@ -403,7 +436,7 @@ This gives top and bottom padding.
 lang: ftd
 
 \-- ftd.text: FifthTry
-padding-vertical: 60
+padding-vertical.px: 60
 
 
 -- ds.markdown:
@@ -413,12 +446,15 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-padding-vertical: 60
-color: $fpm.color.main.text
-border-width: 2
+padding-vertical.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
 
 
--- ds.h1: `padding-horizontal: Integer`
+
+-- ds.h1: `padding-horizontal.px: Integer`
 
 This gives left and right padding.
 
@@ -427,7 +463,7 @@ This gives left and right padding.
 lang: ftd
 
 \-- ftd.text: FifthTry
-padding-horizontal: 60
+padding-horizontal.px: 60
 
 
 -- ds.markdown:
@@ -437,11 +473,14 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-padding-horizontal: 60
-color: $fpm.color.main.text
-border-width: 2
+padding-horizontal.px: 60
+color: $inherited.colors.text
+border-width.px: 2
 
--- ds.h1: `padding-left: Integer`
+-- end: ds.output
+
+
+-- ds.h1: `padding-left.px: Integer`
 
 This gives left padding.
 
@@ -450,7 +489,7 @@ This gives left padding.
 lang: ftd
 
 \-- ftd.text: FifthTry
-padding-left: 60
+padding-left.px: 60
 
 
 -- ds.markdown:
@@ -460,12 +499,14 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-padding-left: 60
-color: $fpm.color.main.text
-border-width: 2
+padding-left.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
 
 
--- ds.h1: `padding-right: Integer`
+-- ds.h1: `padding-right.px: Integer`
 
 This gives right padding.
 
@@ -474,7 +515,7 @@ This gives right padding.
 lang: ftd
 
 \-- ftd.text: FifthTry
-padding-right: 60
+padding-right.px: 60
 
 
 -- ds.markdown:
@@ -484,12 +525,15 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-padding-right: 60
-color: $fpm.color.main.text
-border-width: 2
+padding-right.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
 
 
--- ds.h1: `padding-top: Integer`
+
+-- ds.h1: `padding-top.px: Integer`
 
 This gives top padding.
 
@@ -498,7 +542,7 @@ This gives top padding.
 lang: ftd
 
 \-- ftd.text: FifthTry
-padding-top: 60
+padding-top.px: 60
 
 
 -- ds.markdown:
@@ -508,12 +552,15 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-padding-top: 60
-color: $fpm.color.main.text
-border-width: 2
+padding-top.px: 60
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
 
 
--- ds.h1: `padding-bottom: Integer`
+
+-- ds.h1: `padding-bottom.px: Integer`
 
 This gives bottom padding.
 
@@ -522,7 +569,7 @@ This gives bottom padding.
 lang: ftd
 
 \-- ftd.text: FifthTry
-padding-bottom: 60
+padding-bottom.px: 60
 
 
 -- ds.markdown:
@@ -532,13 +579,16 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-padding-bottom: 60
-color: $fpm.color.main.text
-border-width: 2
+padding-bottom.px: 60
+color: $inherited.colors.text
+border-width.px: 2
 
--- ds.h1: `width: String`
+-- end: ds.output
 
-The width property sets the width of an element.
+
+-- ds.h1: `width.fixed.px: Integer`
+
+The width property sets the fixed width of an element.
 
 The width of an element does not include padding, borders, or margins.
 It takes the [length values](/built-in-types/#length-string)
@@ -548,7 +598,7 @@ It takes the [length values](/built-in-types/#length-string)
 lang: ftd
 
 \-- ftd.text: FifthTry
-width: 200
+width.fixed.px: 200
 
 
 -- ds.markdown:
@@ -558,9 +608,12 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-width: 200
-color: $fpm.color.main.text
-border-width: 2
+width.fixed.px: 200
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
 
 -- ds.h1: `min-width: String`
 
@@ -576,7 +629,7 @@ If the content is larger than the minimum width, the min-width property has no e
 lang: ftd
 
 \-- ftd.text: FifthTry
-min-width: 200
+min-width: fill-container
 
 
 -- ds.markdown:
@@ -586,9 +639,12 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-min-width: 200
-color: $fpm.color.main.text
-border-width: 2
+min-width: fill-container
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
 
 -- ds.h1: `max-width: String`
 
@@ -604,7 +660,7 @@ If the content is smaller than the maximum width, the max-width property has no 
 lang: ftd
 
 \-- ftd.text: FifthTry
-max-width: 40
+max-width: fill-container
 
 
 -- ds.markdown:
@@ -614,9 +670,12 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-max-width: 40
-color: $fpm.color.main.text
-border-width: 2
+max-width: fill-container
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
 
 -- ds.h1: `height: String`
 
@@ -630,7 +689,7 @@ It takes the [length values](/built-in-types/#length-string)
 lang: ftd
 
 \-- ftd.text: FifthTry
-height: 60
+height: fill-container
 
 
 -- ds.markdown:
@@ -640,9 +699,12 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-height: 60
-color: $fpm.color.main.text
-border-width: 2
+height: fill-container
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
 
 -- ds.h1: `min-height: String`
 
@@ -658,7 +720,7 @@ If the content is larger than the minimum height, the min-width property has no 
 lang: ftd
 
 \-- ftd.text: FifthTry
-min-height: 70
+min-height: fill-container
 
 
 -- ds.markdown:
@@ -668,9 +730,12 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-min-height: 70
-color: $fpm.color.main.text
-border-width: 2
+min-height: fill-container
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
+
 
 -- ds.h1: `max-height: String`
 
@@ -686,7 +751,7 @@ If the content is smaller than the maximum height, the max-height property has n
 lang: ftd
 
 \-- ftd.text: FifthTry
-max-height: 10
+max-height: fill-container
 
 
 -- ds.markdown:
@@ -696,9 +761,11 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text: FifthTry
-max-height: 10
-color: $fpm.color.main.text
-border-width: 2
+max-height: fill-container
+color: $inherited.colors.text
+border-width.px: 2
+
+-- end: ds.output
 
 -- ds.h1: `overflow-x: String`
 
@@ -716,9 +783,9 @@ left and right edges. It takes the following values:
 lang: ftd
 
 \-- ftd.text:
-background-color: $red
-width: 150
-height: 100
+background.solid: $red
+width.fixed.px: 150
+height.fixed.px: 100
 overflow-x: scroll
 
 Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
@@ -733,15 +800,18 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text:
-color: $fpm.color.main.text-strong
-background-color: $red
-width: 150
-height: 100
+color: $inherited.colors.text-strong
+background.solid: $red
+width.fixed.px: 150
+height.fixed.px: 100
 overflow-x: scroll
 
 Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
 word consectetuer adipiscing elit, sed diam nonummy nibh euismod
 tincidunt ut laoreet dolore magna aliquam erat
+
+
+-- end: ds.output
 
 
 -- ds.h1: `overflow-y: String`
@@ -760,9 +830,9 @@ when it overflows at the top and bottom edges. It takes the following values:
 lang: ftd
 
 \-- ftd.text:
-background-color: $red
-width: 150
-height: 100
+background.solid: $red
+width.fixed.px: 150
+height.fixed.px: 100
 overflow-y: scroll
 
 Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
@@ -777,15 +847,17 @@ This will render like this:
 -- ds.output:
 
 -- ftd.text:
-color: $fpm.color.main.text-strong
-background-color: $red
-width: 150
-height: 100
+color: $inherited.colors.text-strong
+background.solid: $red
+width.fixed.px: 150
+height.fixed.px: 100
 overflow-y: scroll
 
 Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
 word consectetuer adipiscing elit, sed diam nonummy nibh euismod
 tincidunt ut laoreet dolore magna aliquam erat
+
+-- end: ds.output
 
 -- ds.h1: `cursor: String`
 
@@ -797,9 +869,9 @@ lang: ftd
 
 \-- ftd.row:
 width: fill
-border-width: 5
-border-color: $fpm.color.main.text
-padding: 10
+border-width.px: 5
+border-color: $inherited.colors.text
+padding.px: 10
 cursor: pointer
 
 \-- ftd.text: this row has pointer as cursor
@@ -821,18 +893,19 @@ This will render like this:
 -- ds.output:
 
 -- ftd.row:
-width: fill
-border-width: 5
-border-color: $fpm.color.main.text
-padding: 10
+width: fill-container
+border-width.px: 5
+border-color: $inherited.colors.text
+padding.px: 10
 cursor: pointer
 
 
 -- ftd.text: this row has pointer as cursor
-align: center
-width: fill
-color: $fpm.color.main.text
+align-self: center
+width: fill-container
+color: $inherited.colors.text
 
+-- end: ds.output
 
 
 -- ds.h1: `link: String`
@@ -862,6 +935,8 @@ link: https://www.google.com
 If `link` is provided, this attribute can also be set to open the link in new
 tab instead of current tab.
 
+-- end: ds.output
+
 
 -- ds.code:
 lang: ftd
@@ -881,31 +956,32 @@ Which will render like this:
 link: https://www.google.com
 open-in-new-tab: true
 
--- ds.h1: `submit: Option<String>`
+-- end: ds.output
+
+
+/-- ds.h1: `submit: Option<String>`
 
 If `submit` is passed, clicking on it issues a POST request on the provided URL.
 
 
--- ds.code:
+/-- ds.code:
 lang: ftd
 
 \-- ftd.text: test post
 submit: https://httpbin.org/post?x=10
 
 
--- ds.markdown:
+/-- ds.markdown:
 
 Renders as:
 
--- ds.output:
+/-- ds.output:
 
--- ftd.text: test post
+/-- ftd.text: test post
 submit: https://httpbin.org/post?x=10
-color: $fpm.color.main.text
+color: $inherited.colors.text
 
--- container: outer
-
--- ds.markdown:
+/-- ds.markdown:
 
 Note: Be careful about CSRF when using this feature. If the URL is dynamically 
 generated, include some CSRF token for example.
@@ -929,17 +1005,17 @@ lang: ftd
 region: h1
 
 
--- ds.markdown:
+/-- ds.markdown:
 
 This tells this is a heading with the given level.
 
 
--- ds.h1: `background-gradient`
+/-- ds.h1: `background-gradient`
 
 To add gradient please use the below gradient properties.
 
 
--- ds.h2: `gradient-direction:  Direction`
+/-- ds.h2: `gradient-direction:  Direction`
 
 Below are the supported Direction type
 
@@ -955,13 +1031,13 @@ Below are the supported Direction type
 - angle Integer
 
 
--- ds.h2: `gradient-colors: List Color`
+/-- ds.h2: `gradient-colors: List Color`
 
 
--- ds.h3: Code sample.
+/-- ds.h3: Code sample.
 
 
--- ds.code: Left to right gradient
+/-- ds.code: Left to right gradient
 lang: ftd
 
 \-- ftd.row:
@@ -973,27 +1049,24 @@ gradient-colors: red , blue
 \-- end: ftd.row
 
 
--- ds.output:
+/-- ds.output:
 
 
--- ftd.row:
-width: 400
-height: 200
+/-- ftd.row:
+width.fixed.px: 400
+height.fixed.px: 200
 gradient-direction: left to right
 gradient-colors: red , blue
 
 
--- container: outer
-
-
--- ds.markdown:
+/-- ds.markdown:
 
 You can also make a gradient diagonally. 
 Following example shows a gradient that starts at bottom left and goes to 
 top right.
 
 
--- ds.code: Diagonal Gradient
+/-- ds.code: Diagonal Gradient
 lang: ftd
 
 \-- ftd.row:
@@ -1005,25 +1078,23 @@ gradient-colors: yellow, orange
 \-- end: ftd.row
 
 
--- ds.output:
+/-- ds.output:
 
 
--- ftd.row:
-width: 400
-height: 200
+/-- ftd.row:
+width.fixed.px: 400
+height.fixed.px: 200
 gradient-direction: bottom-left to top-right
 gradient-colors: yellow, orange
 
 
--- container: outer
 
-
--- ds.markdown:
+/-- ds.markdown:
 
 Gradient with multiple colors
 
 
--- ds.code: Multiple colors.
+/-- ds.code: Multiple colors.
 lang: ftd
 
 \-- ftd.row:
@@ -1035,25 +1106,22 @@ gradient-colors: red, green, blue, yellow, black
 \-- end: ftd.row
 
 
--- ds.output:
+/-- ds.output:
 
 
--- ftd.row:
-width: 400
-height: 200
+/-- ftd.row:
+width.fixed.px: 400
+height.fixed.px: 200
 gradient-direction: left to right
 gradient-colors: red, green, blue, yellow, black
 
 
--- container: outer
-
-
--- ds.markdown:
+/-- ds.markdown:
 
 Radial gradient that starts from the centre.
 
 
--- ds.code: Radial gradient
+/-- ds.code: Radial gradient
 lang: ftd
 
 \-- ftd.row:
@@ -1065,27 +1133,24 @@ gradient-colors: red, green
 \-- end: ftd.row
 
 
--- ds.output:
+/-- ds.output:
 
 
--- ftd.row:
+/-- ftd.row:
 width: 400
 height: 200
 gradient-direction: center
 gradient-colors: red, green
 
 
--- container: outer
-
-
--- ds.markdown:
+/-- ds.markdown:
 
 For more control you can use angle instead of the pre-defined directions.
 A value of 0deg is equivalent to "bottom to top". A value of 90deg is equivalent 
 to "left to right". A value of 180deg is equivalent to "top to bottom".
 
 
--- ds.code: With Angle
+/-- ds.code: With Angle
 lang: ftd
 
 \-- ftd.row:
@@ -1097,25 +1162,22 @@ gradient-colors: red, green
 \-- end: ftd.row
 
 
--- ds.output:
+/-- ds.output:
 
 
--- ftd.row:
+/-- ftd.row:
 width: 400
 height: 200
 gradient-direction: angle 90
 gradient-colors: red, green
 
 
--- container: outer
-
-
--- ds.markdown:
+/-- ds.markdown:
 
 More examples with angle
 
 
--- ds.code: With 45deg Angle
+/-- ds.code: With 45deg Angle
 lang: ftd
 
 \-- ftd.row:
@@ -1127,26 +1189,23 @@ gradient-colors: red, green
 \-- end: ftd.row
 
 
--- ds.output:
+/-- ds.output:
 
 
--- ftd.row:
+/-- ftd.row:
 width: 400
 height: 200
 gradient-direction: angle 45
 gradient-colors: red, green
 
 
--- container: outer
-
-
--- ds.h1: `background-image: String`
+/-- ds.h1: `background-image: String`
 
 `background-image` accepts a url as the value. Use this property to make an image 
 as background of a container.
 
 
--- ds.code: Container with background image
+/-- ds.code: Container with background image
 lang: ftd
 
 \-- ftd.row:
@@ -1157,32 +1216,29 @@ background-image: https://imgur.com/oCHWQQF.jpg
 \-- ftd.text: Sample Text
 role: $fpm.type.heading-large
 align: center
-color: $fpm.color.main.text
+color: $inherited.colors.text
 
 \-- end: ftd.row
 
 
--- ds.output:
+/-- ds.output:
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 height: 300
 background-image: $assets.files.images.oCHWQQF.jpg
 
 
--- ftd.text: Sample Text
+/-- ftd.text: Sample Text
 role: $fpm.type.heading-large
 align: center
-color: $fpm.color.main.text
+color: $inherited.colors.text
 width: fill
 height: fill
 
 
--- container: outer
-
-
--- ds.h1: `background-repeat: boolean`
+/-- ds.h1: `background-repeat: boolean`
 
 If you are using background-image property, you can also background-repeat
 property to true to repeat the image until the container is filled.
@@ -1191,7 +1247,7 @@ This property is usually helpful when you have a small image of a pattern you
 want to fill the container with that pattern.
 
 
--- ds.code: background image with background-repeat
+/-- ds.code: background image with background-repeat
 lang: ftd
 
 \-- ftd.row:
@@ -1203,41 +1259,37 @@ background-repeat: true
 \-- ftd.text: Sample Text
 role: $fpm.type.heading-large
 align: center
-color: $fpm.color.main.text
+color: $inherited.colors.text
 width: fill
 height: fill
 
 \-- end: ftd.row
 
 
--- ds.output:
+/-- ds.output:
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 height: 300
 background-image: $assets.files.images.LnJ4ziC.png
 background-repeat: true
 
 
--- ftd.text: Sample Text
+/-- ftd.text: Sample Text
 role: $fpm.type.heading-large
 align: center
-color: $fpm.color.main.text
+color: $inherited.colors.text
 width: fill
 height: fill
 
-
--- container: outer
-
-
--- ds.h1: `background-parallax: boolean`
+/-- ds.h1: `background-parallax: boolean`
 
 To achieve parallax effect on your container. Make `background-parallax` property
 to true.
 
 
--- ds.code: Container with parallax effect
+/-- ds.code: Container with parallax effect
 lang: ftd
 
 \-- ftd.row:
@@ -1249,37 +1301,34 @@ background-parallax: true
 \-- ftd.text: Sample Text
 role: $fpm.type.heading-large
 align: center
-color: $fpm.color.main.text
+color: $inherited.colors.text
 
 \-- end: ftd.row
 
--- ds.output:
+/-- ds.output:
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 height: 300
 background-image: $assets.files.images.oCHWQQF.jpg
 background-parallax: true
 
 
--- ftd.text: Sample Text
+/-- ftd.text: Sample Text
 role: $fpm.type.heading-large
 align: center
-color: $fpm.color.main.text
+color: $inherited.colors.text
 width: fill
 height: fill
 
 
--- container: outer
-
-
--- ds.h1: `sticky: boolean`
+/-- ds.h1: `sticky: boolean`
 
 An element with sticky; is positioned based on the user's scroll position.
 
 
--- ds.code:
+/-- ds.code:
 lang: ftd
 
 \-- ftd.text: FifthTry
@@ -1308,61 +1357,61 @@ lang: ftd
 \-- ftd.text: FifthTry
 top: 1
 
--- ds.h1: `shadow-offset-x: Integer`
+/-- ds.h1: `shadow-offset-x: Integer`
 
 It is one of the shadow property. It is length value to set the shadow offset.
 `shadow-offset-x` specifies the horizontal distance. Negative values place the
 shadow to the left of the element.
 
 
--- ds.code:
+/-- ds.code:
 lang: ftd
 
 \-- ftd.text: FifthTry
 shadow-offset-x: 1
 
 
--- ds.h1: `shadow-offset-y: Integer`
+/-- ds.h1: `shadow-offset-y: Integer`
 
 It is one of the shadow property. It is length value to set the shadow offset.
 `shadow-offset-y` specifies the vertical distance. Negative values place the
 shadow above the element.
 
 
--- ds.code:
+/-- ds.code:
 lang: ftd
 
 \-- ftd.text: FifthTry
 shadow-offset-y: 1
 
 
--- ds.h1: `shadow-blur: Integer`
+/-- ds.h1: `shadow-blur: Integer`
 
 It adds blur in shadow. The larger the value of `shadow-blur`, the bigger
 the blur, so the shadow becomes bigger and lighter. Negative values are
 not allowed.
 
 
--- ds.code:
+/-- ds.code:
 lang: ftd
 
 \-- ftd.text: FifthTry
 shadow-blur: 4
 
 
--- ds.h1: `shadow-size: Integer`
+/-- ds.h1: `shadow-size: Integer`
 
 It specifies the size of shadow. Positive values will cause the shadow to
 expand and grow bigger, negative values will cause the shadow to shrink.
 
 
--- ds.h1: `shadow-color:` [`ftd.color`](/built-in-types/#ftd-color)
+/-- ds.h1: `shadow-color:` [`ftd.color`](/built-in-types/#ftd-color)
 
 The shadow-color property sets the shadow color of an element. It takes
 input of [`ftd.color`](/built-in-types/#ftd-color) type.
 
 
--- ds.code: specifying color
+/-- ds.code: specifying color
 lang: ftd
 
 \-- ftd.color yellow:
@@ -1373,12 +1422,12 @@ dark: yellow
 shadow-color: $red
 
 
--- ds.markdown:
+/-- ds.markdown:
 
 Let's combine all shadow properties and see the output.
 
 
--- ds.code:
+/-- ds.code:
 lang: ftd
 
 \-- ftd.text: FifthTry
@@ -1387,29 +1436,26 @@ shadow-offset-y: 10
 shadow-blur: 5
 shadow-size: 4
 shadow-color: $yellow
-padding: 20
-background-color: $red
+padding.px: 20
+background.solid: $red
 
 
 
--- ds.output:
+/-- ds.output:
 
--- ftd.color yellow:
+/-- ftd.color yellow:
 light: yellow
 dark: yellow
 
--- ftd.text: FifthTry
+/-- ftd.text: FifthTry
 shadow-offset-x: 14
 shadow-offset-y: 10
 shadow-blur: 5
 shadow-size: 4
 shadow-color: $yellow
-padding: 20
-background-color: $red
-color: $fpm.color.main.text-strong
-
-
--- container: outer
+padding.px: 20
+background.solid: $red
+color: $inherited.colors.text-strong
 
 -- ds.h1: `z-index: Integer`
 
@@ -1425,22 +1471,22 @@ element with a lower stack order.
 lang: ftd
 
 \-- ftd.column:
-padding: 80
+padding.px: 80
 
 \-- ftd.text: FifthTry Red
 z-index: 1
-background-color: $red
-left: 20
-top: 20
-padding: 40
+background.solid: $red
+left.px: 20
+top.px: 20
+padding.px: 40
 anchor: parent
 
 \-- ftd.text: FifthTry Yellow
 z-index: 2
-background-color: $yellow
-left: 40
-top: 40
-padding: 40
+background.solid: $yellow
+left.px: 40
+top.px: 40
+padding.px: 40
 anchor: parent
 
 \-- end: ftd.column
@@ -1449,25 +1495,26 @@ anchor: parent
 -- ds.output:
 
 -- ftd.column:
-padding: 80
+padding.px: 80
 
 -- ftd.text: FifthTry Red
 z-index: 1
-background-color: $red
-left: 20
-top: 20
-padding: 40
+background.solid: $red
+left.px: 20
+top.px: 20
+padding.px: 40
 anchor: parent
 
 -- ftd.text: FifthTry Yellow
 z-index: 2
-background-color: $yellow
-left: 40
-top: 40
-padding: 40
+background.solid: $inherited.colors.custom.one
+left.px: 40
+top.px: 40
+padding.px: 40
 anchor: parent
 
--- container: outer
+
+-- end: ds.output
 
 
 -- ds.h1: `white-space: String`
@@ -1493,13 +1540,14 @@ and smiled, and passed it off Ere from the door she stept—
 
 -- ftd.text:
 white-space: pre-wrap
-color: $fpm.color.main.text
+color: $inherited.colors.text
 
 But ere she from the church-door stepped She smiled and told us why:
 'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
 and smiled, and passed it off Ere from the door she stept—
 
--- container: outer
+
+-- end: ds.output
 
 
 -- ds.h1: `text-transform: String`
@@ -1521,13 +1569,18 @@ But ere she from the church-door stepped She smiled and told us why:
 'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
 and smiled, and passed it off Ere from the door she stept—
 
+-- end: ds.output
 
 -- ds.output:
 
 -- ftd.text:
 text-transform: capitalize
-color: $fpm.color.main.text
+color: $inherited.colors.text
 
 But ere she from the church-door stepped She smiled and told us why:
 'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
 and smiled, and passed it off Ere from the door she stept—
+
+-- end: ds.output
+
+-- end: ds.page
