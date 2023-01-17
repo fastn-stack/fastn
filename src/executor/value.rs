@@ -285,6 +285,41 @@ pub fn bool(
     }
 }
 
+pub fn bool_with_default(
+    key: &str,
+    properties: &[ftd::interpreter2::Property],
+    arguments: &[ftd::interpreter2::Argument],
+    default: bool,
+    doc: &ftd::executor::TDoc,
+    line_number: usize,
+) -> ftd::executor::Result<ftd::executor::Value<bool>> {
+    let value = get_value_from_properties_using_key_and_arguments(
+        key,
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    match value.value.and_then(|v| v.inner()) {
+        Some(ftd::interpreter2::Value::Boolean { value: b }) => Ok(ftd::executor::Value::new(
+            b,
+            value.line_number,
+            value.properties,
+        )),
+        None => Ok(ftd::executor::Value::new(
+            default,
+            value.line_number,
+            value.properties,
+        )),
+        t => ftd::executor::utils::parse_error(
+            format!("Expected value of type optional bool, found: {:?}", t),
+            doc.name,
+            line_number,
+        ),
+    }
+}
+
 #[allow(dead_code)]
 pub fn optional_i64(
     key: &str,

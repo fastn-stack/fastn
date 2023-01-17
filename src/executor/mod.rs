@@ -12,7 +12,9 @@ mod utils;
 mod value;
 mod youtube_id;
 
-pub use element::{Code, Column, Common, Container, Element, Event, Iframe, Image, Row, Text};
+pub use element::{
+    Code, Column, Common, Container, Element, Event, Iframe, Image, Input, Row, Text,
+};
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, Color, ColorValue, Cursor, FontSize, Length, Loading,

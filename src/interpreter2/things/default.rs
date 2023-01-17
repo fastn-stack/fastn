@@ -116,6 +116,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(boolean_function()),
         ),
         (
+            "ftd#input".to_string(),
+            ftd::interpreter2::Thing::Component(input_function()),
+        ),
+        (
             "ftd#image".to_string(),
             ftd::interpreter2::Thing::Component(image_function()),
         ),
@@ -4312,20 +4316,21 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                 line_number: 0
             })
         ),
-        ("ftd#font-display".to_string(),
-         ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
-             name: "ftd#font-display".to_string(),
-             kind: ftd::interpreter2::Kind::string().into_kind_data(),
-             mutable: true,
-             value: ftd::interpreter2::PropertyValue::Value {
-                 value: ftd::interpreter2::Value::new_string("sans-serif"),
-                 is_mutable: true,
-                 line_number: 0
-             },
-             conditional_value: vec![],
-             line_number: 0,
-             is_static: false
-         })
+        (
+            "ftd#font-display".to_string(),
+             ftd::interpreter2::Thing::Variable(ftd::interpreter2::Variable {
+                 name: "ftd#font-display".to_string(),
+                 kind: ftd::interpreter2::Kind::string().into_kind_data(),
+                 mutable: true,
+                 value: ftd::interpreter2::PropertyValue::Value {
+                     value: ftd::interpreter2::Value::new_string("sans-serif"),
+                     is_mutable: true,
+                     line_number: 0
+                 },
+                 conditional_value: vec![],
+                 line_number: 0,
+                 is_static: false
+             })
         ),
         (
             "inherited#types".to_string(),
@@ -6033,6 +6038,53 @@ pub fn boolean_function() -> ftd::interpreter2::ComponentDefinition {
     }
 }
 
+pub fn input_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#input".to_string(),
+        arguments: [
+            text_arguments(),
+            common_arguments(),
+            vec![
+                ftd::interpreter2::Argument::default(
+                    "placeholder",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "value",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "default-value",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "multiline",
+                    ftd::interpreter2::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "type",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+            ],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
+}
+
 pub fn integer_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#integer".to_string(),
@@ -6185,15 +6237,6 @@ pub fn iframe_function() -> ftd::interpreter2::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
-        line_number: 0,
-    }
-}
-
-pub fn input_function() -> ftd::interpreter2::ComponentDefinition {
-    ftd::interpreter2::ComponentDefinition {
-        name: "ftd#input".to_string(),
-        arguments: [common_arguments()].concat().into_iter().collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         line_number: 0,
     }

@@ -1,0 +1,11 @@
+-- ftd.input:
+placeholder: Type Something Here...
+type: password
+width.fixed.px: 400
+border-width.px: 2
+
+-- ftd.input:
+placeholder: Type Something Here...
+width.fixed.px: 400
+border-width.px: 2
+multiline: true

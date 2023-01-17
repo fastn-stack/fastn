@@ -8,6 +8,7 @@ pub enum Element {
     Image(Image),
     Code(Code),
     Iframe(Iframe),
+    Input(Input),
     Null,
 }
 
@@ -22,6 +23,7 @@ impl Element {
             Element::Image(i) => Some(&i.common),
             Element::Code(c) => Some(&c.common),
             Element::Iframe(i) => Some(&i.common),
+            Element::Input(i) => Some(&i.common),
             Element::Null => None,
         }
     }
@@ -1054,5 +1056,76 @@ pub fn container_from_properties(
             "spacing-mode",
         )?,
         children,
+    })
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct Input {
+    pub placeholder: ftd::executor::Value<Option<String>>,
+    pub value: ftd::executor::Value<Option<String>>,
+    pub multiline: ftd::executor::Value<bool>,
+    pub default_value: ftd::executor::Value<Option<String>>,
+    pub type_: ftd::executor::Value<Option<String>>,
+    pub common: Common,
+}
+
+pub fn input_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
+    arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Expression>,
+    doc: &ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+) -> ftd::executor::Result<Input> {
+    // TODO: `youtube` should not be conditional
+    let placeholder = ftd::executor::value::optional_string(
+        "placeholder",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    let value =
+        ftd::executor::value::optional_string("value", properties, arguments, doc, line_number)?;
+
+    let multiline = ftd::executor::value::bool_with_default(
+        "multiline",
+        properties,
+        arguments,
+        false,
+        doc,
+        line_number,
+    )?;
+
+    let default_value = ftd::executor::value::optional_string(
+        "default-value",
+        properties,
+        arguments,
+        doc,
+        line_number,
+    )?;
+
+    let type_ =
+        ftd::executor::value::optional_string("type", properties, arguments, doc, line_number)?;
+
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+    )?;
+
+    Ok(Input {
+        placeholder,
+        value,
+        multiline,
+        default_value,
+        common,
+        type_,
     })
 }
