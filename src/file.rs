@@ -156,7 +156,6 @@ pub fn ignore_path(
     overrides.build()
 }
 
-#[tracing::instrument(skip_all)]
 pub(crate) async fn get_file(
     package_name: String,
     doc_path: &camino::Utf8Path,
