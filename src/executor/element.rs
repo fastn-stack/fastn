@@ -7,6 +7,7 @@ pub enum Element {
     Boolean(Text),
     Image(Image),
     Code(Code),
+    Iframe(Iframe),
     Null,
 }
 
@@ -20,6 +21,7 @@ impl Element {
             Element::Boolean(b) => Some(&b.common),
             Element::Image(i) => Some(&i.common),
             Element::Code(c) => Some(&c.common),
+            Element::Iframe(i) => Some(&i.common),
             Element::Null => None,
         }
     }
@@ -213,6 +215,101 @@ pub fn code_from_properties(
     })
 }
 
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct Iframe {
+    pub src: ftd::executor::Value<Option<String>>,
+    pub srcdoc: ftd::executor::Value<Option<String>>,
+    /// iframe can load lazily.
+    pub loading: ftd::executor::Value<ftd::executor::Loading>,
+    pub common: Common,
+}
+
+pub fn iframe_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
+    arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Expression>,
+    doc: &ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+) -> ftd::executor::Result<Iframe> {
+    // TODO: `youtube` should not be conditional
+    let srcdoc =
+        ftd::executor::value::optional_string("srcdoc", properties, arguments, doc, line_number)?;
+
+    let src = {
+        let src =
+            ftd::executor::value::optional_string("src", properties, arguments, doc, line_number)?;
+
+        let youtube = ftd::executor::value::optional_string(
+            "youtube",
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?
+        .map(|v| v.and_then(|v| ftd::executor::youtube_id::from_raw(v.as_str())));
+
+        if [
+            src.value.is_some(),
+            youtube.value.is_some(),
+            srcdoc.value.is_some(),
+        ]
+        .into_iter()
+        .filter(|b| *b)
+        .count()
+            > 1
+        {
+            return ftd::executor::utils::parse_error(
+                "Two or more than two values are provided among src, youtube and srcdoc.",
+                doc.name,
+                src.line_number.unwrap_or_else(|| {
+                    youtube
+                        .line_number
+                        .unwrap_or_else(|| srcdoc.line_number.unwrap_or(line_number))
+                }),
+            );
+        }
+        if src.value.is_none() && youtube.value.is_none() && srcdoc.value.is_none() {
+            return ftd::executor::utils::parse_error(
+                "Either srcdoc or src or youtube id is required",
+                doc.name,
+                line_number,
+            );
+        }
+        if src.value.is_some() {
+            src
+        } else {
+            youtube
+        }
+    };
+
+    let loading = ftd::executor::Loading::loading_with_default(
+        properties,
+        arguments,
+        doc,
+        line_number,
+        "loading",
+    )?;
+
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+    )?;
+
+    Ok(Iframe {
+        src,
+        srcdoc,
+        loading,
+        common,
+    })
+}
+
 pub fn markup_inline(s: &str) -> Rendered {
     Rendered {
         original: s.to_string(),
@@ -253,6 +350,7 @@ pub struct Common {
     pub is_not_visible: bool,
     pub event: Vec<Event>,
     pub is_dummy: bool,
+    pub z_index: ftd::executor::Value<Option<i64>>,
     pub left: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub right: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub top: ftd::executor::Value<Option<ftd::executor::Length>>,
@@ -550,6 +648,13 @@ pub fn common_from_properties(
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
+        z_index: ftd::executor::value::optional_i64(
+            "z-index",
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
         left: ftd::executor::Length::optional_length(
             properties,
             arguments,

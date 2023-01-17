@@ -25,7 +25,7 @@ impl<'a> ExecuteDoc<'a> {
             bag: &mut document.data,
             instructions: &document.tree,
         }
-        .execute(&[])?;
+        .execute()?;
         let mut main = ftd::executor::element::default_column();
         main.container.children.extend(execute_doc);
 
@@ -37,20 +37,210 @@ impl<'a> ExecuteDoc<'a> {
         })
     }
 
-    fn execute(
-        &mut self,
-        parent_container: &[usize],
-    ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
+    fn execute(&mut self) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
         let mut doc = ftd::executor::TDoc {
             name: self.name,
             aliases: self.aliases,
             bag: self.bag,
         };
 
-        ExecuteDoc::execute_from_instructions(self.instructions, &mut doc, parent_container)
+        ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
     }
 
-    fn execute_from_instructions(
+    fn get_instructions_from_instructions(
+        instructions: &[ftd::interpreter2::Component],
+        doc: &mut ftd::executor::TDoc,
+        parent_container: &[usize],
+    ) -> ftd::executor::Result<Vec<(Vec<usize>, ftd::interpreter2::Component)>> {
+        let mut elements = vec![];
+        let mut count = 0;
+        for instruction in instructions.iter() {
+            let instructions = ExecuteDoc::get_instructions_from_instruction(
+                instruction,
+                doc,
+                parent_container,
+                count,
+            )?;
+            count += instructions.len();
+            elements.extend(instructions)
+        }
+        Ok(elements)
+    }
+
+    fn get_instructions_from_instruction(
+        instruction: &ftd::interpreter2::Component,
+        doc: &mut ftd::executor::TDoc,
+        parent_container: &[usize],
+        start_index: usize,
+    ) -> ftd::executor::Result<Vec<(Vec<usize>, ftd::interpreter2::Component)>> {
+        if instruction.is_loop() {
+            ExecuteDoc::get_loop_instructions(instruction, doc, parent_container, start_index)
+        } else {
+            let mut local_container = parent_container.to_vec();
+            local_container.push(start_index);
+            Ok(vec![(local_container, instruction.to_owned())])
+        }
+    }
+
+    fn get_simple_instruction(
+        instruction: &ftd::interpreter2::Component,
+        doc: &mut ftd::executor::TDoc,
+        local_container: &[usize],
+        component_definition: ftd::interpreter2::ComponentDefinition,
+    ) -> ftd::executor::Result<ftd::interpreter2::Component> {
+        let mut component_definition = component_definition;
+        let local_variable_map = doc.insert_local_variables(
+            component_definition.name.as_str(),
+            instruction.properties.as_slice(),
+            component_definition.arguments.as_slice(),
+            local_container,
+            instruction.line_number,
+        )?;
+
+        update_local_variable_references_in_component(
+            &mut component_definition.definition,
+            &local_variable_map,
+        );
+
+        if let Some(condition) = instruction.condition.as_ref() {
+            update_condition_in_component(
+                &mut component_definition.definition,
+                condition.to_owned(),
+            );
+        }
+
+        Ok(component_definition.definition)
+    }
+
+    fn get_loop_instructions(
+        instruction: &ftd::interpreter2::Component,
+        doc: &mut ftd::executor::TDoc,
+        parent_container: &[usize],
+        start_index: usize,
+    ) -> ftd::executor::Result<Vec<(Vec<usize>, ftd::interpreter2::Component)>> {
+        let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
+            iteration
+        } else {
+            return ftd::executor::utils::parse_error(
+                format!("Expected recursive, found: `{:?}`", instruction),
+                doc.name,
+                instruction.line_number,
+            );
+        };
+
+        let children_length = iteration.children(&doc.itdoc())?.0.len();
+        let reference_name =
+            iteration
+                .on
+                .get_reference_or_clone()
+                .ok_or(ftd::executor::Error::ParseError {
+                    message: format!(
+                        "Expected reference for loop object, found: `{:?}`",
+                        iteration.on
+                    ),
+                    doc_id: doc.name.to_string(),
+                    line_number: iteration.line_number,
+                })?;
+        let mut elements = vec![];
+        for index in 0..children_length {
+            let new_instruction = update_instruction_for_loop_element(
+                instruction,
+                doc,
+                index,
+                iteration.alias.as_str(),
+                reference_name,
+            )?;
+            let local_container = {
+                let mut local_container = parent_container.to_vec();
+                local_container.push(index + start_index);
+                local_container
+            };
+            elements.push((local_container, new_instruction));
+        }
+        Ok(elements)
+    }
+
+    fn execute_from_instructions_loop(
+        instructions: &[ftd::interpreter2::Component],
+        doc: &mut ftd::executor::TDoc,
+    ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
+        let mut elements = vec![];
+        let mut instructions =
+            ExecuteDoc::get_instructions_from_instructions(instructions, doc, &[])?;
+        while !instructions.is_empty() {
+            let (container, mut instruction) = instructions.remove(0);
+            loop {
+                if let Some(condition) = instruction.condition.as_ref() {
+                    if condition.is_static(&doc.itdoc()) && !condition.eval(&doc.itdoc())? {
+                        ExecuteDoc::insert_element(
+                            &mut elements,
+                            container.as_slice(),
+                            ftd::executor::Element::Null,
+                        );
+                        break;
+                    }
+                }
+                let component_definition = {
+                    // NOTE: doing unwrap to force bug report if we following fails, this function
+                    // must have validated everything, and must not fail at run time
+                    doc.itdoc()
+                        .get_component(instruction.name.as_str(), instruction.line_number)
+                        .unwrap()
+                };
+
+                if component_definition.definition.name.eq("ftd.kernel") {
+                    ExecuteDoc::insert_element(
+                        &mut elements,
+                        container.as_slice(),
+                        ExecuteDoc::execute_kernel_components(
+                            &instruction,
+                            doc,
+                            container.as_slice(),
+                            &component_definition,
+                        )?,
+                    );
+                    let children_instructions = ExecuteDoc::get_instructions_from_instructions(
+                        instruction.get_children(&doc.itdoc())?.as_slice(),
+                        doc,
+                        container.as_slice(),
+                    )?;
+                    instructions.extend(children_instructions);
+
+                    break;
+                } else {
+                    instruction = ExecuteDoc::get_simple_instruction(
+                        &instruction,
+                        doc,
+                        container.as_slice(),
+                        component_definition,
+                    )?;
+                }
+            }
+        }
+        Ok(elements)
+    }
+
+    fn insert_element(
+        elements: &mut Vec<ftd::executor::Element>,
+        container: &[usize],
+        element: ftd::executor::Element,
+    ) {
+        let mut current = elements;
+        for (idx, i) in container.iter().enumerate() {
+            if idx == container.len() - 1 {
+                current.insert(*i, element);
+                break;
+            } else {
+                current = match &mut current[*i] {
+                    ftd::executor::Element::Row(r) => &mut r.container.children,
+                    ftd::executor::Element::Column(r) => &mut r.container.children,
+                    t => unreachable!("{:?}", t),
+                };
+            }
+        }
+    }
+
+    /*    fn execute_from_instructions(
         instructions: &[ftd::interpreter2::Component],
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
@@ -194,7 +384,7 @@ impl<'a> ExecuteDoc<'a> {
         }
 
         ExecuteDoc::execute_from_instruction(&component_definition.definition, doc, local_container)
-    }
+    }*/
 
     fn execute_kernel_components(
         instruction: &ftd::interpreter2::Component,
@@ -236,29 +426,17 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                 )?)
             }
-            "ftd#row" => {
-                let children = ExecuteDoc::execute_from_instructions(
-                    instruction.get_children(&doc.itdoc())?.as_slice(),
-                    doc,
-                    local_container,
-                )?;
-                ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
-                    instruction.properties.as_slice(),
-                    instruction.events.as_slice(),
-                    component_definition.arguments.as_slice(),
-                    instruction.condition.as_ref(),
-                    doc,
-                    local_container,
-                    instruction.line_number,
-                    children,
-                )?)
-            }
+            "ftd#row" => ftd::executor::Element::Row(ftd::executor::element::row_from_properties(
+                instruction.properties.as_slice(),
+                instruction.events.as_slice(),
+                component_definition.arguments.as_slice(),
+                instruction.condition.as_ref(),
+                doc,
+                local_container,
+                instruction.line_number,
+                vec![],
+            )?),
             "ftd#column" => {
-                let children = ExecuteDoc::execute_from_instructions(
-                    instruction.get_children(&doc.itdoc())?.as_slice(),
-                    doc,
-                    local_container,
-                )?;
                 ftd::executor::Element::Column(ftd::executor::element::column_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
@@ -267,7 +445,7 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
-                    children,
+                    vec![],
                 )?)
             }
             "ftd#image" => {
@@ -283,6 +461,17 @@ impl<'a> ExecuteDoc<'a> {
             }
             "ftd#code" => {
                 ftd::executor::Element::Code(ftd::executor::element::code_from_properties(
+                    instruction.properties.as_slice(),
+                    instruction.events.as_slice(),
+                    component_definition.arguments.as_slice(),
+                    instruction.condition.as_ref(),
+                    doc,
+                    local_container,
+                    instruction.line_number,
+                )?)
+            }
+            "ftd#iframe" => {
+                ftd::executor::Element::Iframe(ftd::executor::element::iframe_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),

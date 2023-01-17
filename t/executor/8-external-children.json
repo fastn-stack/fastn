@@ -358,6 +358,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "z_index": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "left": {
                         "value": null,
                         "line_number": null,
@@ -701,6 +706,11 @@
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
+                              "z_index": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "left": {
                                 "value": null,
                                 "line_number": null,
@@ -990,6 +1000,11 @@
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
+                      "z_index": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "left": {
                         "value": null,
                         "line_number": null,
@@ -1279,6 +1294,11 @@
               "is_not_visible": false,
               "event": [],
               "is_dummy": false,
+              "z_index": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "left": {
                 "value": null,
                 "line_number": null,
@@ -1568,6 +1588,11 @@
       "is_not_visible": false,
       "event": [],
       "is_dummy": false,
+      "z_index": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "left": {
         "value": null,
         "line_number": null,

@@ -159,7 +159,7 @@ impl Kind {
         }
     }
 
-    pub(crate) fn is_list(&self) -> bool {
+    pub fn is_list(&self) -> bool {
         matches!(self, Kind::List { .. })
     }
 

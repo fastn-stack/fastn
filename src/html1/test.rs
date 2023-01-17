@@ -12,7 +12,9 @@ pub fn interpret_helper(
                 document = doc;
                 break;
             }
-            ftd::interpreter2::Interpreter::StuckOnImport { module, state: st } => {
+            ftd::interpreter2::Interpreter::StuckOnImport {
+                module, state: st, ..
+            } => {
                 let mut source = "".to_string();
                 let mut foreign_variable = vec![];
                 let mut foreign_function = vec![];
@@ -28,6 +30,7 @@ pub fn interpret_helper(
                     source.as_str(),
                     foreign_variable,
                     foreign_function,
+                    0,
                 )?;
             }
             ftd::interpreter2::Interpreter::StuckOnProcessor {
@@ -49,6 +52,7 @@ pub fn interpret_helper(
                 state,
                 module,
                 variable,
+                ..
             } => {
                 if module.eq("test") {
                     let value = ftd::interpreter2::Value::String {

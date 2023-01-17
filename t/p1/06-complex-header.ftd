@@ -1,0 +1,21 @@
+-- ds.page:
+
+
+
+-- ds.page.extra-headers:
+
+-- ds.h2: Heading 2 title
+
+Heading body
+
+-- end: ds.page.extra-headers
+
+
+
+-- ds.page.description:
+
+We have made provision of adding `right-sidebar` for additional components to
+
+
+
+-- end: ds.page

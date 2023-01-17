@@ -92,6 +92,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(code_function()),
         ),
         (
+            "ftd#iframe".to_string(),
+            ftd::interpreter2::Thing::Component(iframe_function()),
+        ),
+        (
             "ftd#input".to_string(),
             ftd::interpreter2::Thing::Component(row_function()),
         ),
@@ -1486,6 +1490,35 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                             .caption(),
                         false,
                         Some(ftd::interpreter2::Value::new_string("h6")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_LOADING.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_LOADING.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LOADING_EAGER,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("eager")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_LOADING_LAZY,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("lazy")
                             .into_property_value(false, 0)),
                         0,
                     )),
@@ -6096,6 +6129,48 @@ pub fn code_function() -> ftd::interpreter2::ComponentDefinition {
     }
 }
 
+pub fn iframe_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#iframe".to_string(),
+        arguments: [
+            common_arguments(),
+            vec![
+                ftd::interpreter2::Argument::default(
+                    "src",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data()
+                        .caption(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "youtube",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "srcdoc",
+                    ftd::interpreter2::Kind::string()
+                        .into_optional()
+                        .into_kind_data()
+                        .body(),
+                ),
+                ftd::interpreter2::Argument::default(
+                    "loading",
+                    ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LOADING)
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+            ],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
+}
+
 pub fn input_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
         name: "ftd#input".to_string(),
@@ -6154,6 +6229,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
+        ftd::interpreter2::Argument::default(
+            "z-index",
+            ftd::interpreter2::Kind::integer()
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter2::Argument::default(
             "white-space",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_WHITESPACE)

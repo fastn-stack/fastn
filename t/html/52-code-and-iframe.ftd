@@ -1,0 +1,18 @@
+-- ftd.code:
+lang: rs
+theme: base16-ocean.light
+
+fn hello_world() {
+    println!("Hello World");
+}
+
+
+-- ftd.iframe:
+youtube: 10MHfy3b3c8
+
+
+-- ftd.iframe:
+border-width.px: 4
+padding.px: 20
+
+<p>Hello world!</p>

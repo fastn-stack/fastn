@@ -341,6 +341,42 @@ Also see InspiredGitHub from [here](https://github.com/sethlopezme/InspiredGitHu
 ### `text-align`: `ftd.text-align` -> specify text alignment
 (Refer or-type `ftd.text-align` to know all possible values)
 
+
+## `ftd.iframe` - To render an iframe
+
+```ftd 
+-- ftd.iframe: 
+src: https://www.fifthtry.com/
+
+-- ftd.iframe: 
+youtube: 10MHfy3b3c8
+
+-- ftd.iframe:
+
+<p>Hello world!</p>
+```
+
+## `ftd.iframe` attributes
+
+### `src`: `optional caption string`
+### `youtube`: `optional string` -> It accepts the youtube `vid` or `video id`.
+### `srcdoc`: `optional body string`
+
+Either src or youtube or srcdoc value is required. If any two or more than 
+two of these are given or none is given would result to an error.
+
+### 'loading': `optional ftd.loading`
+Default: `lazy`
+
+```ftd
+-- or-type loading:
+
+-- constant string lazy: lazy
+-- constant string eager: eager
+
+-- end: loading
+```
+
 ## Common Attributes
 
 - `padding`: `optional ftd.length`
@@ -669,6 +705,8 @@ optional string font-family:
 
 -- end: anchor
 ```
+
+- `z-index`: `optional integer`
 
 # Events
 

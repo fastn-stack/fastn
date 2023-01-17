@@ -936,9 +936,9 @@ impl<'a> TDoc<'a> {
                 line_number,
             );
 
-        let current_parsed_document = state.parsed_libs.get(self.name).unwrap();
+        // let current_parsed_document = state.parsed_libs.get(self.name).unwrap();
 
-        if doc_name.ne(self.name) {
+        /*if doc_name.ne(self.name) {
             let current_doc_contains_thing = current_parsed_document
                 .ast
                 .iter()
@@ -965,7 +965,7 @@ impl<'a> TDoc<'a> {
                     format!("{}#{}", doc_name, thing_name),
                 ));
             }
-        }
+        }*/
 
         if let Some(parsed_document) = state.parsed_libs.get(doc_name.as_str()) {
             let ast_for_thing = parsed_document
@@ -985,29 +985,49 @@ impl<'a> TDoc<'a> {
                     .iter()
                     .any(|v| thing_name.eq(v))
                 {
+                    state.pending_imports.stack.push((
+                        doc_name.to_string(),
+                        name,
+                        line_number,
+                        self.name.to_string(),
+                    ));
                     state
                         .pending_imports
-                        .unique_insert(doc_name.to_string(), (name, line_number));
+                        .contains
+                        .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
                 }
 
                 return Ok(());
             }
 
             if !state
-                .to_process
+                .pending_imports
                 .contains
                 .contains(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)))
             {
                 state
-                    .to_process
+                    .pending_imports
                     .contains
                     .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
-                state.to_process.stack.push((doc_name, ast_for_thing));
+
+                state.pending_imports.stack.push((
+                    doc_name.to_string(),
+                    name,
+                    line_number,
+                    self.name.to_string(),
+                ));
             }
         } else {
+            state.pending_imports.stack.push((
+                doc_name.to_string(),
+                name,
+                line_number,
+                self.name.to_string(),
+            ));
             state
                 .pending_imports
-                .unique_insert(doc_name.to_string(), (name, line_number));
+                .contains
+                .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
         }
 
         Ok(())
@@ -1235,34 +1255,40 @@ impl<'a> TDoc<'a> {
                 line_number,
             );
 
-        let current_parsed_document = state.parsed_libs.get(self.name).unwrap();
+        let current_parsed_document = state.parsed_libs.get(state.id.as_str()).unwrap();
 
-        if doc_name.ne(self.name) {
+        if doc_name.ne(state.id.as_str()) {
             let current_doc_contains_thing = current_parsed_document
                 .ast
                 .iter()
                 .filter(|v| {
+                    let name = ftd::interpreter2::utils::resolve_name(
+                        v.name().as_str(),
+                        state.id.as_str(),
+                        self.aliases,
+                    );
                     !v.is_component()
-                        && (v.name().eq(&format!("{}.{}", doc_name, thing_name))
-                            || v.name()
-                                .starts_with(format!("{}.{}.", doc_name, thing_name).as_str()))
+                        && (name.eq(&format!("{}#{}", doc_name, thing_name))
+                            || name.starts_with(format!("{}#{}.", doc_name, thing_name).as_str()))
                 })
                 .map(|v| (0, v.to_owned()))
                 .collect_vec();
-            if !current_doc_contains_thing.is_empty()
-                && !state.to_process.contains.contains(&(
-                    self.name.to_string(),
-                    format!("{}#{}", doc_name, thing_name),
-                ))
-            {
+            if !current_doc_contains_thing.is_empty() {
                 state
                     .to_process
                     .stack
-                    .push((self.name.to_string(), current_doc_contains_thing));
-                state.to_process.contains.insert((
-                    self.name.to_string(),
-                    format!("{}#{}", doc_name, thing_name),
-                ));
+                    .push((state.id.to_string(), current_doc_contains_thing));
+
+                if !state
+                    .to_process
+                    .contains
+                    .contains(&(state.id.to_string(), format!("{}#{}", doc_name, thing_name)))
+                {
+                    state
+                        .to_process
+                        .contains
+                        .insert((state.id.to_string(), format!("{}#{}", doc_name, thing_name)));
+                }
             } else if !current_doc_contains_thing.is_empty() && state.peek_stack().unwrap().1.gt(&4)
             {
                 return self.err("not found", name, "search_thing", line_number);
@@ -1293,6 +1319,7 @@ impl<'a> TDoc<'a> {
                             variable: remaining
                                 .map(|v| format!("{}.{}", thing_name, v))
                                 .unwrap_or(thing_name),
+                            caller_module: self.name.to_string(),
                         },
                     ));
                 }
@@ -1300,6 +1327,10 @@ impl<'a> TDoc<'a> {
                 return self.err("not found", name, "search_thing", line_number);
             }
 
+            state
+                .to_process
+                .stack
+                .push((doc_name.to_string(), ast_for_thing));
             if !state
                 .to_process
                 .contains
@@ -1309,9 +1340,6 @@ impl<'a> TDoc<'a> {
                     .to_process
                     .contains
                     .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
-                state.to_process.stack.push((doc_name, ast_for_thing));
-            } else if state.peek_stack().unwrap().1.gt(&4) {
-                return self.err("not found", name, "search_thing", line_number);
             }
 
             return Ok(ftd::interpreter2::StateWithThing::new_continue());
@@ -1321,12 +1349,18 @@ impl<'a> TDoc<'a> {
             return self.err("not found", name, "search_thing", line_number);
         }
 
-        state
-            .pending_imports
-            .unique_insert(doc_name.to_string(), (name, line_number));
+        state.pending_imports.stack.push((
+            doc_name.to_string(),
+            name,
+            line_number,
+            self.name.to_string(),
+        ));
 
         Ok(ftd::interpreter2::StateWithThing::new_state(
-            ftd::interpreter2::InterpreterWithoutState::StuckOnImport { module: doc_name },
+            ftd::interpreter2::InterpreterWithoutState::StuckOnImport {
+                module: doc_name,
+                caller_module: self.name.to_string(),
+            },
         ))
     }
 
@@ -1361,6 +1395,120 @@ impl<'a> TDoc<'a> {
                 None => self.err("not found", splited_name, "get_initial_thing", line_number),
             },
         }
+    }
+
+    pub fn from_json_rows(
+        &self,
+        rows: &[Vec<serde_json::Value>],
+        kind: &ftd::interpreter2::Kind,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        Ok(match kind {
+            ftd::interpreter2::Kind::List { kind, .. } => {
+                let mut data = vec![];
+                for row in rows {
+                    data.push(
+                        self.from_json_row(row, kind.as_ref(), line_number)?
+                            .into_property_value(false, line_number),
+                    );
+                }
+
+                ftd::interpreter2::Value::List {
+                    data,
+                    kind: kind.to_owned().into_kind_data(),
+                }
+            }
+            t => unimplemented!(
+                "{:?} not yet implemented, line number: {}, doc: {}",
+                t,
+                line_number,
+                self.name.to_string()
+            ),
+        })
+    }
+
+    pub fn from_json_row(
+        &self,
+        row: &[serde_json::Value],
+        kind: &ftd::interpreter2::Kind,
+        line_number: usize,
+    ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
+        Ok(match kind {
+            ftd::interpreter2::Kind::Record { name, .. } => {
+                let rec = self.get_record(name, line_number)?;
+                let rec_fields = rec.fields;
+                let mut fields: ftd::Map<ftd::interpreter2::PropertyValue> = Default::default();
+                for (idx, key) in rec_fields.iter().enumerate() {
+                    let val = match row.get(idx) {
+                        Some(v) => v,
+                        None => {
+                            return ftd::interpreter2::utils::e2(
+                                format!("key not found: {}", key.name.as_str()),
+                                self.name,
+                                line_number,
+                            )
+                        }
+                    };
+                    fields.insert(
+                        key.name.to_string(),
+                        self.from_json(val, &key.kind.kind, line_number)?
+                            .into_property_value(false, line_number),
+                    );
+                }
+                ftd::interpreter2::Value::Record {
+                    name: name.to_string(),
+                    fields,
+                }
+            }
+            ftd::interpreter2::Kind::String { .. } if row.first().is_some() => {
+                ftd::interpreter2::Value::String {
+                    text: serde_json::from_value::<String>(row.first().unwrap().to_owned())
+                        .map_err(|_| ftd::interpreter2::Error::ParseError {
+                            message: format!("Can't parse to string, found: {:?}", row),
+                            doc_id: self.name.to_string(),
+                            line_number,
+                        })?,
+                }
+            }
+            ftd::interpreter2::Kind::Integer { .. } if row.first().is_some() => {
+                ftd::interpreter2::Value::Integer {
+                    value: serde_json::from_value::<i64>(row.first().unwrap().to_owned()).map_err(
+                        |_| ftd::interpreter2::Error::ParseError {
+                            message: format!("Can't parse to integer, found: {:?}", row),
+                            doc_id: self.name.to_string(),
+                            line_number,
+                        },
+                    )?,
+                }
+            }
+            ftd::interpreter2::Kind::Decimal { .. } if row.first().is_some() => {
+                ftd::interpreter2::Value::Decimal {
+                    value: serde_json::from_value::<f64>(row.first().unwrap().to_owned()).map_err(
+                        |_| ftd::interpreter2::Error::ParseError {
+                            message: format!("Can't parse to decimal, found: {:?}", row),
+                            doc_id: self.name.to_string(),
+                            line_number,
+                        },
+                    )?,
+                }
+            }
+            ftd::interpreter2::Kind::Boolean { .. } if row.first().is_some() => {
+                ftd::interpreter2::Value::Boolean {
+                    value: serde_json::from_value::<bool>(row.first().unwrap().to_owned())
+                        .map_err(|_| ftd::interpreter2::Error::ParseError {
+                            message: format!("Can't parse to boolean,found: {:?}", row),
+                            doc_id: self.name.to_string(),
+                            line_number,
+                        })?,
+                }
+            }
+            t => unimplemented!(
+                "{:?} not yet implemented, line number: {}, doc: {}",
+                t,
+                line_number,
+                self.name.to_string()
+            ),
+        })
     }
 
     pub fn from_json<T>(

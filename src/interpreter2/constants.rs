@@ -159,3 +159,7 @@ pub const FTD_TEXT_TRANSFORM_UPPERCASE: &str = "ftd#text-transform.uppercase";
 pub const FTD_TEXT_TRANSFORM_LOWERCASE: &str = "ftd#text-transform.lowercase";
 pub const FTD_TEXT_TRANSFORM_INITIAL: &str = "ftd#text-transform.initial";
 pub const FTD_TEXT_TRANSFORM_INHERIT: &str = "ftd#text-transform.inherit";
+
+pub const FTD_LOADING: &str = "ftd#loading";
+pub const FTD_LOADING_EAGER: &str = "ftd#loading.eager";
+pub const FTD_LOADING_LAZY: &str = "ftd#loading.lazy";

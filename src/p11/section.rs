@@ -1,5 +1,21 @@
 use itertools::Itertools;
 
+/**
+ * Structure representing a section in a document.
+ *
+ * # Fields
+ *
+ * - `name`: A String representing the name of the section
+ * - `kind`: An optional String representing the kind of the section
+ * - `caption`: An optional `ftd::p11::Header` representing the caption of the section
+ * - `headers`: `ftd::p11::Headers` representing the headers of the section
+ * - `body`: An optional `Body` representing the body of the section
+ * - `sub_sections`: A Vec of `Section` representing the sub sections of the section
+ * - `is_commented`: A boolean representing whether the section is commented or not
+ * - `line_number`: A usize representing the line number where the section starts in the document
+ * - `block_body`: A boolean representing whether the section body is present as a block
+ *
+ */
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
 #[serde(default)]
 pub struct Section {

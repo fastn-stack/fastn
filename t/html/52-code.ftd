@@ -1,7 +1,0 @@
--- ftd.code:
-lang: rs
-theme: base16-ocean.light
-
-fn hello_world() {
-    println!("Hello World");
-}

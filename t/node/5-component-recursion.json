@@ -332,7 +332,7 @@
                 "line_number": null
               },
               "data-id": {
-                "value": "0,1,0",
+                "value": "0,1",
                 "properties": [],
                 "line_number": null
               }
@@ -466,7 +466,7 @@
                     "line_number": null
                   },
                   "data-id": {
-                    "value": "0,1,0,0",
+                    "value": "0,1,0",
                     "properties": [],
                     "line_number": null
                   }
@@ -549,7 +549,7 @@
                   "line_number": 34
                 },
                 "null": false,
-                "data_id": "0,1,0,0",
+                "data_id": "0,1,0",
                 "line_number": 34
               }
             ],
@@ -559,7 +559,7 @@
               "line_number": null
             },
             "null": false,
-            "data_id": "0,1,0",
+            "data_id": "0,1",
             "line_number": 31
           },
           {
@@ -575,7 +575,7 @@
                 "line_number": null
               },
               "data-id": {
-                "value": "0,1,1",
+                "value": "0,2",
                 "properties": [],
                 "line_number": null
               }
@@ -709,7 +709,7 @@
                     "line_number": null
                   },
                   "data-id": {
-                    "value": "0,1,1,0",
+                    "value": "0,2,0",
                     "properties": [],
                     "line_number": null
                   }
@@ -792,7 +792,7 @@
                   "line_number": 34
                 },
                 "null": false,
-                "data_id": "0,1,1,0",
+                "data_id": "0,2,0",
                 "line_number": 34
               },
               {
@@ -808,7 +808,7 @@
                     "line_number": null
                   },
                   "data-id": {
-                    "value": "0,1,1,1,0",
+                    "value": "0,2,1",
                     "properties": [],
                     "line_number": null
                   }
@@ -942,7 +942,7 @@
                         "line_number": null
                       },
                       "data-id": {
-                        "value": "0,1,1,1,0,0",
+                        "value": "0,2,1,0",
                         "properties": [],
                         "line_number": null
                       }
@@ -1025,7 +1025,7 @@
                       "line_number": 34
                     },
                     "null": false,
-                    "data_id": "0,1,1,1,0,0",
+                    "data_id": "0,2,1,0",
                     "line_number": 34
                   }
                 ],
@@ -1035,7 +1035,7 @@
                   "line_number": null
                 },
                 "null": false,
-                "data_id": "0,1,1,1,0",
+                "data_id": "0,2,1",
                 "line_number": 31
               }
             ],
@@ -1045,7 +1045,7 @@
               "line_number": null
             },
             "null": false,
-            "data_id": "0,1,1",
+            "data_id": "0,2",
             "line_number": 31
           }
         ],
