@@ -1,16 +1,24 @@
 -- import: ftd.dev/assets
 
--- ft.page: FTD Journal
+-- string list strings:
+
+-- optional string query:
+
+-- boolean $show: true
+
+
+
+-- ds.page: FTD Journal
 id: page
 
 
 
--- ft.h1: Conditional Variable
+-- ds.h1: Conditional Variable
 
 
--- ft.h1: Sublime Text Gets Syntax Support
+-- ds.h1: Sublime Text Gets Syntax Support
 
--- ft.h1: Index Symbols
+-- ds.h1: Index Symbols
 
 10th Feb 2022
 
@@ -42,23 +50,23 @@ the ideal name for the file would be the name of the component itself. Also
 since ftd only supports importing a module and not individual symbols from the
 module we would have to end up writing:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: some-lib.com/foo/header
 \-- header.header: something
 
--- ft.markdown:
+-- ds.markdown:
 
 I am not liking the `header.header` etc. What if we allow people to write:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: some-lib.com/foo/header
 \-- header: something
 
--- ft.markdown:
+-- ds.markdown:
 
 And ftd will see if we are trying to use the module itself, and if so it will
 translate it to `module.<whatever is named after module>`. It can be either a
@@ -76,7 +84,7 @@ understand each component used, is to not use auto import or dependency alias
 feature, and put explicit import on top of each file.
 
 
--- ft.h1: Final Decision On References
+-- ds.h1: Final Decision On References
 
 2nd Feb 2022
 
@@ -84,26 +92,26 @@ Let's hope it is really final, Arpita is now going to implement it.
 
 Every binding is now by reference. So if you define:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string foo: hello
 \-- string bar: $foo
 
--- ft.markdown:
+-- ds.markdown:
 
 Both `foo` and `bar` have the same storage in memory and both are names refering
 to same thing.
 
 One can opt out of this by cloning:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string foo: hello
 \-- string bar: ftd.clone: $foo
 
--- ft.markdown:
+-- ds.markdown:
 
 We will build `ftd.clone` in due time.
 
@@ -112,32 +120,32 @@ exact syntax of mutable-by is not fixed but concept is.
 
 We will further allow mutable-by to following package interfect. So e.g.
 
--- ft.code: `fpm.ftd`
+-- ds.code: `fpm.ftd`
 lang: ftd
 
 \-- boolean dark-mode: false
 mutable-by: fpm.dev/dark-mode-switcher
 
--- ft.markdown:
+-- ds.markdown:
 
 Now any package that implements `fpm.dev/dark-mode-switcher` will be able to
 modify the `fpm.dark-mode` variable.
 
 Further anyone that uses such a package will have to still opt in:
 
--- ft.code: amitu.com/FPM.ftd
+-- ds.code: amitu.com/FPM.ftd
 lang: ftd
 
 \-- fpm.dependency: arpita.com/dms
 implements: fpm.dev/dark-mode-switcher
 
--- ft.markdown:
+-- ds.markdown:
 
 Here `amitu.com/FPM.ftd` has explicitly granted `arpita.com/dms`
 `fpm.dev/dark-mode-switcher` "rights".
 
 
--- ft.h1: Reference Vs Value Recap
+-- ds.h1: Reference Vs Value Recap
 
 1st Feb 2022
 
@@ -145,7 +153,7 @@ So Arpita is working on [`-- boolean foo:
 $bar`](https://github.com/ftd-lang/ftd/issues/90) and we are stuck at the
 question we discussed on 29th Jan.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- boolean y: true
@@ -155,7 +163,7 @@ lang: ftd
 boolean $x: $y
 boolean z: $y
 
--- ft.markdown:
+-- ds.markdown:
 
 In `foo` we are going with the proposal Arpita likes for declaring variable
 references: `boolean $x` meaning `$x` is now tied to the `rvalue`. If `rvalue`
@@ -185,13 +193,13 @@ of component to change that if they want to.
 
 Would readable vs writable semantics help? If we are doing:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
 boolean x: $some-global
 
--- ft.markdown:
+-- ds.markdown:
 
 We want to default `x` to `some-global`, but want callers of `foo` to be able to
 overwrite it. We are not creating a variable to change it in the component after
@@ -209,23 +217,23 @@ analysing the body of the component.
 Say we use a explicit mutable syntax, and only allow event handlers to modify a
 mutable variable:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
 mutable boolean x: $some-global
 
--- ft.markdown:
+-- ds.markdown:
 
 Or we do:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
 boolean $x: $some-global
 
--- ft.markdown:
+-- ds.markdown:
 
 But sometimes we want components to modify top level variables as well.
 
@@ -242,7 +250,7 @@ variable.
 
 How about global reference:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- boolean y: true
@@ -251,14 +259,14 @@ lang: ftd
 \-- foo:
 $on-click$: toggle $x
 
--- ft.markdown:
+-- ds.markdown:
 
 Does it modify only global `x` or `y` as well? We can say we follow the same
 behaviour for global variables as well, x will continue to track `y` till `x`
 was modified. Unless `x` was defined as `boolean variable x`, in which `x` and
 `y` are always the same variables.
 
--- ft.h2: Final Proposal?
+-- ds.h2: Final Proposal?
 
 All variables, where-ever they are defined, if they are defined with rvalue of
 an expression involving one or more variables will continue to reflect the value
@@ -279,7 +287,7 @@ put a warning on console everytime it happens, when a variable changes "nature",
 we can even give warning on build time that there are now variables that change
 their nature.
 
--- ft.h2: Microsoft PowerFX Model
+-- ds.h2: Microsoft PowerFX Model
 
 One language/system to compare FTD with is Micosoft Power FX. They have an
 [interesting aspect](https://github.com/microsoft/Power-Fx/blob/main/docs/variables.md#benefits),
@@ -314,7 +322,7 @@ But then we are still facing all data is in UI problem. We have to identify UI
 elements using IDs, or name of component if they are singlton. Current clean
 data modelling will go.
 
--- ft.h1: Limited / Controllable Mutability
+-- ds.h1: Limited / Controllable Mutability
 
 It's not easy to put all data only in component, data being defined at top of
 file, etc is handy, we have seen it work quite well, everything looks clean etc,
@@ -333,7 +341,7 @@ can modify things. Or we change defaults, `mut` means `mut(package)`, and
 
 So we go with the "Final Proposal" with `mut` added to limit debugging scope?
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- boolean foo: true
@@ -342,7 +350,7 @@ mutable-by: module
 mutable-by: all
 mutable-by: some-other-package
 
--- ft.markdown:
+-- ds.markdown:
 
 Maybe we can even allow name of other packages explicitly that can mutate it.
 `mutable-by` can be specified multiple times. `package` and `module` refer to
@@ -350,14 +358,14 @@ current package and module respectively, or you can specify any package or
 specific module. Or you can specify `all` to say everyone can mutate this.
 By default it would be `mutable-by: module`.
 
--- ft.h1: Boolean Expressions
+-- ds.h1: Boolean Expressions
 
 29th Jan 2022
 
 We are going to add boolean expressions in FTD now. Till now we support `if` at
 component level, attribute level, and variable level.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- foo:
@@ -369,7 +377,7 @@ color if $something-else: red
 \-- bar: hello
 if: $something
 
--- ft.markdown:
+-- ds.markdown:
 
 In the first example we use `if` both at component level, and attribute level.
 In the next example we use `if` to control `bar` variable.
@@ -386,7 +394,7 @@ grouping using `(`/`)`. We will follow Python syntax for that.
 What about multiline expressions? We can use multiline expressions for `section
 level if` easily:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- foo:
@@ -401,11 +409,11 @@ if: $a or $b or (
     $something and $something-else
 )
 
--- ft.markdown:
+-- ds.markdown:
 
 Should we also allow:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- foo:
@@ -415,7 +423,7 @@ color if (
     )
 ): red
 
--- ft.markdown:
+-- ds.markdown:
 
 Technically we should. We will have to fix our `p1` grammar/parser for this.
 We can always implement the inline versions first, and do the more general
@@ -423,7 +431,7 @@ syntax later on.
 
 Other thought was we created intermediary "formulas" and use them.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- boolean some-formula: (
@@ -435,11 +443,11 @@ lang: ftd
 \-- foo:
 color if $some-formula: red
 
--- ft.markdown:
+-- ds.markdown:
 
 We should also allow component level formulas when defining a component:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
@@ -452,12 +460,12 @@ boolean some-formula: (
 \--- ftd.text:
 color if $some-formula: red
 
--- ft.markdown:
+-- ds.markdown:
 
 Basically we can chose to only support expression at header or caption level,
 and not a p1 key level. In fact maybe not even at cation level:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- boolean some-formula:
@@ -466,13 +474,13 @@ $a or $b or (
     $something and $something-else
 )
 
--- ft.markdown:
+-- ds.markdown:
 
 Above is arguably cleaner than the caption one. Which leaves us with header
 being the only thing that needs multi value support. Unless we allow this
 syntax:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
@@ -483,7 +491,7 @@ $a or $b or (
     $something and $something-else
 )
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have created a "component level variable" by using `---`. With component
 level variable we never need multi line header key or value to support multiline
@@ -493,7 +501,7 @@ grammar remains simpler.
 Arpita thinks even if we use multiline value or caption, we must use our
 continuation syntax:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
@@ -502,17 +510,17 @@ boolean some-formula:
 >     $something and $something-else
 > )
 
--- ft.markdown:
+-- ds.markdown:
 
 With continuation in the mix we do not need "component level variable". Or we
 support both continuation and component level variable.
 
 
--- ft.h1: Pass By Value Vs Reference
+-- ds.h1: Pass By Value Vs Reference
 
 If we do this:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- boolean foo: true
@@ -524,13 +532,13 @@ val: $foo
 boolean val:
 color if $val: red
 
--- ft.markdown:
+-- ds.markdown:
 
 If we modify `$foo`, should `$val` change? This is currently implemented as
 pass by value. We are planning a syntax in future:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- t:
@@ -540,7 +548,7 @@ val: $foo
 boolean variable val:
 color if $val: red
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we defined `val` as `boolean variable` instead of `boolean` as in last
 example. With `x variable`, the we will implement pass by reference semantics.
@@ -548,7 +556,7 @@ We call this feature higher order variable.
 
 Arpita proposes this syntax:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- t:
@@ -558,13 +566,13 @@ val: $foo
 boolean $val:
 color if $val: red
 
--- ft.markdown:
+-- ds.markdown:
 
 It's better because it's way shorter.
 
 One open question for higher order variable is should this be allowed:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- t:
@@ -575,7 +583,7 @@ boolean variable val:
 boolean $val:
 color if $val: red
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have passed `true` but `$val` need to bind to some existing variable,
 and we only have a value. We can say we would allow it, and any modifications
@@ -590,7 +598,7 @@ reflected in other side, when using normal variable (pass by value). The default
 of pass by value seems bad, as if a parent variable is modified it's value is
 updated everywhere it is directly referenced but not in children:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
@@ -601,14 +609,14 @@ o: $o
 color if $o: red
 $on-click$: toggle $o
 
--- ft.markdown:
+-- ds.markdown:
 
 Here color keeps changing when `$o` is changing, but `o` is not. This feels
 wrong.
 
 Shouldn't people just write:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
@@ -619,7 +627,7 @@ o if $o: true
 o if not $o: false
 
 
--- ft.markdown:
+-- ds.markdown:
 
 It clearly looks equivalent to above but is actually different.
 
@@ -642,7 +650,7 @@ variable.
 What to do?
 
 
--- ft.h1: `MOUSE-IN` Behavior Change
+-- ds.h1: `MOUSE-IN` Behavior Change
 
 Currently we have a special variable `$MOUSE-IN` which can be used anywhere
 inside a component definition without declaring, and it is true if the mouse is
@@ -654,7 +662,7 @@ want to do something if the mouse is within a specific child in the component?
 
 If you want to emulate the old behaviour you will have to do this:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
@@ -663,13 +671,13 @@ boolean mouse-in: false
 \--- ftd.text: yo
 $on-mouse$: $mouse-in=$MOUSE-IN
 
--- ft.markdown:
+-- ds.markdown:
 
 We have `$on-mouse$` that will be triggered when mouse enters or leaves a
 component. Then we can do the following as well:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row:
@@ -679,11 +687,11 @@ border-width if $mouse-in: 1
 \--- ftd.text: yo
 $on-mouse$: $mouse-in=$MOUSE-IN
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we are not defining a component and can still use `$MOUSE-IN`.
 
--- ft.h1: Comics Using FTD
+-- ds.h1: Comics Using FTD
 
 27th Jan 2022
 
@@ -692,7 +700,7 @@ succinct syntax to represent a bunch of position, scale, rotation related
 attributes into a single short-hand notation, and eventually give a drag and
 drop interface that updates the position etc shorthand notation.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- panel:
@@ -715,7 +723,7 @@ a: 2-
 pose: flying
 a: right-left, 1s
 
--- ft.markdown:
+-- ds.markdown:
 
 `d:` could be dimensions, position, orientation, scale etc. `a:` could be
 animation. We can even have double representation, eg a separate place where all
@@ -742,7 +750,7 @@ too much fragmentation, entire companies on individual tools, but your workflow
 needs all of them. Git can solve that if there was a text file representation
 for each need.
 
--- ft.h1: Pure Functions?
+-- ds.h1: Pure Functions?
 
 26th Jan 2022
 
@@ -784,7 +792,7 @@ must forever remain host language domain, and what must be handled by ftd is
 tricky to resolve for me yet.
 
 
--- ft.h1: Dynamic Components: Path Ahead
+-- ds.h1: Dynamic Components: Path Ahead
 
 21st Jan 2022
 
@@ -804,7 +812,7 @@ Some command operations:
 1. Removing element at given position: `remove from $list at $pos`
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: hello
@@ -816,7 +824,7 @@ $on-click$: increment: what=$count, by=2
 \-- ftd.text: hello
 $on-click$: increment: what=$count, by=2, clamp=10
 
--- ft.markdown:
+-- ds.markdown:
 
 Moving to a function call syntax looks good. We have to prefix functions by their
 module names, so most of functions provided by `ftd` will be `ftd.<foo>`.
@@ -825,11 +833,11 @@ arguments that come on same line, and `:` for arguments that come in subsequent
 lines. Functions can define `caption` type, in such cases, other arguments can
 not come in caption line.
 
--- ft.h2: Function Syntax Basics
+-- ds.h2: Function Syntax Basics
 
 One possible way to implement functions could be:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- void increment:
@@ -845,7 +853,7 @@ if $clamp && $new > $clamp {
 
 $what = $new
 
--- ft.markdown:
+-- ds.markdown:
 
 The type of a function is in the declaration line. We have created a special type
 `void` for functions that are only for side effects, e.g. to be directly called
@@ -855,13 +863,13 @@ integer variable definition, but since it takes arguments, it's a function.
 The last expression can be considered the return type of a function, but we will
 also support `return <value>`. Arguments are specified in usual manner.
 
--- ft.h2: Higher Order Variables
+-- ds.h2: Higher Order Variables
 
 In the example we have used `integer variable what`, which is to indicate that
 here we are not accepting a value, but the reference to some variable, which
 would be modified by this function.
 
--- ft.h2: Functions Vs Formula
+-- ds.h2: Functions Vs Formula
 
 Functions would be called from event handlers. Functions job is to mutate some
 variables.
@@ -871,20 +879,20 @@ and can only be called from variables defined at global levels. Formulas can
 depend on other variables, and when the underlying variable changes, the value
 of the formula changes automatically.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer length: 20
 
 \-- integer foo: area: length=$length, width=20
 
--- ft.markdown:
+-- ds.markdown:
 
 Here since the declaration of a variable uses a function, `foo` is considered a
 formula. In such cases further updates to `foo` is not allowed. If `$length`
 changes, `foo` would be auto-updated.
 
--- ft.h2: Error Handling
+-- ds.h2: Error Handling
 
 We are basically stuck here right now. What is you try to remove the 10th item
 from a list, but the list only contains 2 items? Should it silently be dropped?
@@ -909,7 +917,7 @@ error message and let author figure it out. This is equivalent to "compile time"
 and we want people to not store invalid documents. But runtime errors we can not
 avoid.
 
--- ft.h3: Rust Like `Result` And `Option`
+-- ds.h3: Rust Like `Result` And `Option`
 
 Rust has first class for failures, `Result` and `Option` types are there. It kind
 of means we need some level of generic support. We can have special handling for
@@ -917,23 +925,23 @@ Result and Option types without generic.
 
 So we can write something like:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer result to-integer:
 string value:
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have a function `to-return` that returns `integer result`, (for list it
 would be `integer list result foo:`).
 
--- ft.h3: Handling Errors
+-- ds.h3: Handling Errors
 
 `if <var-name> = <result expression> { success clause, can use <var-name> }
 else <error-name> { error clause }`
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- void foo:
@@ -944,7 +952,7 @@ let i = if num = to-string: value=hello {
     console.log(error)
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 Can also work with optional values. Function can return `-- optional integer foo:`
 optional values as well. In such cases, the `else` block won't take `error`
@@ -952,7 +960,7 @@ variable name, it will always be null.
 
 Error type will only be string. In future when we have enums, we can also do:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string enum Errors:
@@ -973,11 +981,11 @@ let i = if num = to-string: value=hello {
     console.log(error)
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have multiple else clauses for `enum`.
 
--- ft.h2: `<type> result` is not an `or-type`
+-- ds.h2: `<type> result` is not an `or-type`
 
 `or-type` is our name for `enum` in Rust.
 
@@ -985,26 +993,26 @@ In future we will have `match` statement for handling `or-type`, but we are not
 going to treat `result` and `optional` as `or-type`, so `match` can never work
 with them.
 
--- ft.h2: Returning Errors
+-- ds.h2: Returning Errors
 
 We will use `return 1` to indicate success, and `fail "whatever the message`
 to return failure message. We will also support `let num = to-string?
 value=hello`, here `?` acts like Rust.
 
--- ft.h2: Event Handler Errors
+-- ds.h2: Event Handler Errors
 
 What happens if one of the event handlers raises an error? One option is we do
 not allow functions that can fail as event handlers.
 
 
--- ft.h2: Old Notes
+-- ds.h2: Old Notes
 
 insert syntax, clear, delete at index, is list empty, how many items in the
 list, similarly how to filter
 
 default record
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
@@ -1030,7 +1038,7 @@ error error:
 
 
 
--- ft.h1: Dynamic Components Landed!
+-- ds.h1: Dynamic Components Landed!
 
 19th Jan 2022
 
@@ -1045,77 +1053,60 @@ list, and add elements to the list from any of our event handling code.
 Yesterday Arpita implemented support for dynamically constructing DOM when say
 we add elements to a list.
 
-Consider this:
+/--Consider this:
 
--- string list strings:
 
--- optional string query:
-
--- ftd.column:
+/-- ftd.column:
 spacing: 10
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 spacing: 10
 
---- ftd.input:
+/-- ftd.input:
 placeholder: Type Something Here...
 width: 250
 border-width: 2
-padding: 8
+padding.px: 8
 $on-input$: $query=$VALUE
 
---- ftd.text: Add
+/-- ftd.text: Add
 if: $query is not null
-color: $fpm.color.main.text
-background-color: $fpm.color.main.background.base
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
 move-down: 4
-padding: 5
+padding.px: 5
 $on-click$: insert into $strings value $query at end
 $on-click$: clear $query
 
---- ftd.text: Clear
-color: $fpm.color.main.text
-background-color: $fpm.color.main.background.base
+/--- ftd.text: Clear
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
 move-down: 4
-padding: 5
+padding.px: 5
 $on-click$: clear $strings
 
 
--- ftd.text:
-if: $query is not null
-color if $ftd.dark-mode: $fpm.color.main.text
+/-- ftd.text:
+if: { $query != NULL }
+color if { $ftd.dark-mode }: $inherited.colors.text
 
 You have typed: {value}
 
---- ftd.text value: $query
-color: $fpm.color.main.success.text
-color if $ftd.dark-mode: $fpm.color.main.text
-background-color if $ftd.dark-mode: $fpm.color.main.background.base
+/-- ftd.text value: $query
+color: $inherited.colors.success.text
+color if $ftd.dark-mode: $inherited.colors.text
+background-color if $ftd.dark-mode: $inherited.colors.background.base
 padding if $query is not null: 5
 role: $fpm.type.copy-large
 
 
--- show-data: $obj
+/-- show-data: $obj
 $loop$: $strings as $obj
 
 
--- ftd.column show-data:
-caption text:
-padding: 10
-/background-color if $ftd.dark-mode: $fpm.color.main.background.base
-background-color: $fpm.color.main.background.base
-color: $fpm.color.main.text
 
---- ftd.column:
-padding: 20
-border-width: 2
-
---- ftd.text: $text
-
--- container: page
-
--- ft.markdown:
+-- ds.markdown:
 
 We are very proud of this feature! What is even cooler is how little work it
 took to implement it. Initially I thought we will have to somehow send our
@@ -1136,7 +1127,7 @@ Now that we have support for creating nodes dynamically, we are almost complete
 UI solution, and FTD should be considered an alternative anywhere you would
 consider using say React for creating UI.
 
--- ft.h1: "$main$" Variables
+-- ds.h1: "$main$" Variables
 
 18th Jan 2022
 
@@ -1149,7 +1140,7 @@ cycles, so these variables can get clobbered. Say if there is `a.ftd` and `b.ftd
 and former wants document title to `A` and later to `B`, they can do both:
 `-- fpm.document-title: A` and so on. But what if `a.ftd` looks like this:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
@@ -1158,7 +1149,7 @@ lang: ftd
 
 \-- import: b
 
--- ft.markdown:
+-- ds.markdown:
 
 `b.ftd` would be imported after `a.ftd` has updated `fpm.document-title`, and
 it will overwrite `fpm.document-title`. We can argue this is fine at some level
@@ -1173,13 +1164,13 @@ order etc.
 
 Proposal:
 
--- ft.code: `fpm.ftd` file
+-- ds.code: `fpm.ftd` file
 lang: ftd
 
 \-- optional string document-title:
 $main$: true
 
--- ft.markdown:
+-- ds.markdown:
 
 If any variable or list is defined as `$main$`, then only the changes done by
 the "main document" would be kept. FTD interpreter knows whats the main document
@@ -1190,33 +1181,33 @@ We can further allow `$main$` during variable change also to allow non main
 documents to update variable still, eg a `config.ftd` or some file which is
 only for setting project variables.
 
--- ft.code: `config.ftd`
+-- ds.code: `config.ftd`
 lang: ftd
 
 \-- import: fpm
 \-- fpm.site-title: AmitU's Blog
 $main$: true
 
--- ft.markdown:
+-- ds.markdown:
 
 Further when any "main" document is importing some document, it can declare that
 that document be also considered main:
 
--- ft.code: `a.ftd`
+-- ds.code: `a.ftd`
 lang: ftd
 
 \-- import: ftd-dev.vercel.app/config
 $main$: true
 \-- import: b
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have imported `config` as "main", but not `b`.
 
 This would be applicable for both variable overwrite, and for adding a an element
 to a list, either can use "$main$".
 
--- ft.h2: In Other Words
+-- ds.h2: In Other Words
 
 1. some variables can be declared as $main$.
 1. a `$main$` variable can only be modified by
@@ -1227,11 +1218,11 @@ to a list, either can use "$main$".
 1. when a `$main$` document is importing some document it can declare those
    document as `$main$` as well
 
--- ft.h2: Edge Case
+-- ds.h2: Edge Case
 
 Consider if `b.ftd`:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
@@ -1240,11 +1231,11 @@ lang: ftd
 \-- ftd.text show-title: $fpm.title
 
 
--- ft.markdown:
+-- ds.markdown:
 
 And say `a.ftd` was:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
@@ -1252,7 +1243,7 @@ lang: ftd
 \-- import: b
 \-- b.show-title:
 
--- ft.markdown:
+-- ds.markdown:
 
 The `show-title` will show `A` and not `B` even though if you look at source
 of `show-title` in `b.ftd` it appears it is modifying a variable and using it
@@ -1261,7 +1252,7 @@ right away.
 This is not particularly confusing because a variable could have been updated
 multiple times, even within the same file:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
@@ -1271,35 +1262,35 @@ lang: ftd
 
 \-- fpm.document-title: New B
 
--- ft.markdown:
+-- ds.markdown:
 
 In this case, the immediate value of `fpm.document-title` is not used by
 `show-title`, but the "eventual value".
 
--- ft.h1: Object Gets `$ref` syntax
+-- ds.h1: Object Gets `$ref` syntax
 
 Arpita implemented variable referencing in object constructor syntax, so now
 you can do:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: bar
 \-- object foo:
 key: $bar.baz
 
--- ft.markdown:
+-- ds.markdown:
 
 And say if `bar.baz` is `20` (`integer`), it will generate this:
 
--- ft.code:
+-- ds.code:
 lang: json
 
 {
     "key": 20
 }
 
--- ft.h1: Proposal: `message-host` to only accepts objects
+-- ds.h1: Proposal: `message-host` to only accepts objects
 
 This brings use to `message-host`. It currently accepts either a string, which
 is the name of function exposed by the FTD host, or it can be an object, that
@@ -1314,7 +1305,7 @@ schema and type definition?
 In the meanwhile, accepting both string and object, I now consider an
 anti-pattern, we should only support well known object constructors:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
@@ -1322,13 +1313,13 @@ lang: ftd
 \-- ftd.text: Switch To Dark Mode
 $on-click$: message-host $fpm.switch-to-dark-mode
 
--- ft.markdown:
+-- ds.markdown:
 
 Is superior to `message-host switch-to-dark-mode`, where `switch-to-dark-mode`
 was a string, but `$fpm.switch-to-dark-mode` is a reference to something FTD
 interpreter can verify.
 
--- ft.h1: `$processor$`, `async`, `Library::get()` and `Document::set_*()`
+-- ds.h1: `$processor$`, `async`, `Library::get()` and `Document::set_*()`
 
 16th Jan 2022
 
@@ -1346,7 +1337,7 @@ currently we only support changes to basic types like boolean and string, if we
 support complete access to FTD internals from host, and reliably update the FTD
 "view" based on FTD data it would be cool.
 
--- ft.h2: `Library::get()` Simplification
+-- ds.h2: `Library::get()` Simplification
 
 Currently we have a technique where we create "virtual" FTD documents, e.g. there
 is a module `fpm` for our FPM static site generator. This module is dynamically
@@ -1354,7 +1345,7 @@ constructed with actual values set for all these variables. This is done so we
 can pass a bunch of data that we have in Rust to FTD files. So we do something
 like [this](https://github.com/FifthTry/fpm/blob/8a0ce82571921e275292532b211a2dcaad618131/src/library/mod.rs#L136-L336):
 
--- ft.code: dynamically generating `last_modified_on`
+-- ds.code: dynamically generating `last_modified_on`
 lang: rs
 
 format!(
@@ -1374,7 +1365,7 @@ format!(
     ),
 )
 
--- ft.markdown:
+-- ds.markdown:
 
 We are setting `last_modified_on` based on string substitution in Rust using
 `format!()` statement.
@@ -1410,7 +1401,7 @@ solvable somehow and in general we should allow fetching from internet etc.
 So while we can not fully make `ftd::Library::get()` `sync`, at least we can
 limit it's complexity, and not have two ways to set dynamic data.
 
--- ft.h2: Reviewing `$processor$`
+-- ds.h2: Reviewing `$processor$`
 
 So if we have first class support for update FTD data from host languages, then
 do we still need `$processor$`?
@@ -1437,13 +1428,13 @@ arbitrary FTD file. Interpreter can give each of `$processor$` variables a
 default value, go through the document once, and afterwards let Rust update it
 How would Rust know what all variables to update?
 
--- ft.code: `$processor$` to update variable
+-- ds.code: `$processor$` to update variable
 lang: ftd
 
 \-- string foo:
 $processor$: get-some-data-from-internet
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have a processor `get-some-data-from-internet`, which returns a `string`,
 and the string is bound to the name `foo` in FTD.
@@ -1457,13 +1448,13 @@ have processor applied.
 
 We have another use case of processor planned:
 
--- ft.code: `$processor$` to component
+-- ds.code: `$processor$` to component
 lang: ftd
 
 \-- ftd.text:
 $processor$: get-some-data-from-internet
 
--- ft.markdown:
+-- ds.markdown:
 
 In this case we are not keeping the output of `get-some-data-from-internet` in
 any FTD variable, but instead directly passing the value to the component.
@@ -1480,24 +1471,24 @@ design is to allow for first class `async` support and continue on current path.
 
 
 
--- ft.h1: Object Implementation Details
+-- ds.h1: Object Implementation Details
 
 15th Jan 2022
 
 So Arpita has just implemented object constructors:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- object obj:
 function: console-print
 value: Hello World
 
--- ft.markdown:
+-- ds.markdown:
 
 With this now you can construct JSON objects, eg above will create:
 
--- ft.code:
+-- ds.code:
 lang: json
 
 {
@@ -1505,28 +1496,28 @@ lang: json
     "value": "Hello World"
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 And then you can pass the object to JavaScript using `message-host`, eg:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: click me
 $on-click$: message-host $obj
 
--- ft.markdown:
+-- ds.markdown:
 
 And in JavaScript you can write the consumer:
 
--- ft.code:
+-- ds.code:
 lang: js
 
 window["console-print"] = function(v) {
     console.log(v.value);
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 This JS code has to be provided by the "FTD Host", eg FPM is one such FTD Host.
 To create arbitrary functionality, FTD Host interface has to be implemented.
@@ -1535,29 +1526,29 @@ To create arbitrary functionality, FTD Host interface has to be implemented.
 This is the basic. Soon the object constructor will be able to refer to other
 variables in FTD, eg:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- object obj:
 function: console-print
 value: $foo
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we will use the value, and type of `$foo`, and that will be inserted in the
 object.
 
--- ft.h2: Objects Are Opaque
+-- ds.h2: Objects Are Opaque
 
 One important point to note is that objects, once constructed, can not be
 introspected from FTD. So you can not do:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer f: $obj.value
 
--- ft.markdown:
+-- ds.markdown:
 
 Assuming `$object.value` is an `integer`, this may seem "reasonable", but we do
 not allow it. At least for now. We are doing it for performance reason one can
@@ -1567,12 +1558,12 @@ of it.
 We are building this feature to pass data to JavaScript for now, so we are
 committing to only the part of design that is minimally needed.
 
--- ft.h2: JS Evaluation
+-- ds.h2: JS Evaluation
 
 When we have variable references in the object, we will generate the following
 object:
 
--- ft.code:
+-- ds.code:
 lang: json
 
 {
@@ -1583,14 +1574,14 @@ lang: json
 }
 
 
--- ft.markdown:
+-- ds.markdown:
 
 We have one option that we go through the object and find all values with `$foo`
 pattern, and resolve them. We can also have `\$foo` to escape this behaviour.
 
 Other option is to keep track of references:
 
--- ft.code:
+-- ds.code:
 lang: json
 
 {
@@ -1604,20 +1595,20 @@ lang: json
     }
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 In `references` we have "JSON-paths" to every key that is a reference. Its easy
 to update the object by iterating it.
 
 We will see which ends up being easier to implement.
 
--- ft.h2: Objects Are Only Constructed in JS
+-- ds.h2: Objects Are Only Constructed in JS
 
 The optimization I was talking about, why we want things opaque in FTD is so that
 we only write code to create "object" in JS, and we do not have to evaluate the
 value of object in Rust at all.
 
--- ft.h2: JavaScript Is Not The Only Host Language
+-- ds.h2: JavaScript Is Not The Only Host Language
 
 Currently we are writing our FTD Host implementations in JS, but tomorrow we
 want to support Swift, Java, etc when FTD targets other platforms.
@@ -1626,11 +1617,11 @@ This is why FTD is trying to be a common language that will work everywhere, it
 will be responsible for UI and all the core part of functionality, like search,
 API access etc, has to be provided by host.
 
--- ft.h2: Objects Can Take Parameters
+-- ds.h2: Objects Can Take Parameters
 
 You may want to pass parameters to objects. Soon you will be able to do:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- object console-print:
@@ -1647,11 +1638,11 @@ $on-input$: message-host console-print:
 > message: $VALUE
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Other usage of object constructor that takes parameter would be:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- object get-user-info:
@@ -1665,26 +1656,26 @@ api-key: $api-key
 $processor$: get-user-info
 username: amitu
 
--- ft.h2: `message-host` can now pass parameters to FTD Host
+-- ds.h2: `message-host` can now pass parameters to FTD Host
 
 `message-host` till now used to accept a function name, and `ftd.js` used to call
 that function.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: click me
 $on-click$: message-host foo
 
--- ft.markdown:
+-- ds.markdown:
 
 This will call a function named `window.foo()`.
 
 But there was no way till now to pass arguments to that function. With the
 latest changes done by Arpita now we can pass arguments as well:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- object arg:
@@ -1695,11 +1686,11 @@ field: value
 \-- ftd.text: click me
 $on-click$: message-host $arg
 
--- ft.markdown:
+-- ds.markdown:
 
 With this we will call `window.what-ever-function` and pass it following object:
 
--- ft.code:
+-- ds.code:
 lang: json
 
 {
@@ -1708,17 +1699,17 @@ lang: json
     "field": "value"
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 We will soon allow including FTD variable references in the object, e.g.
 `name: $name`. We will also make `function` optional, if it's not passed we will
 assume the name of object, in the above example it was `arg`.
 
--- ft.h1: `$VALUE` on `ftd.input`, `$on-input$` and `$on-change`
+-- ds.h1: `$VALUE` on `ftd.input`, `$on-input$` and `$on-change`
 
 Arpita added support for `$VALUE` special variable so now you can do:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- optional string query:
@@ -1729,7 +1720,7 @@ $on-input$: $query=$VALUE
 
 \-- ftd.text: $query
 
--- ft.markdown:
+-- ds.markdown:
 
 With the above, whatever is typed in the input field is immediately reflected
 in `$query`. See a [demo here](https://ftd-lang.github.io/ftd/01-input.html).
@@ -1741,46 +1732,46 @@ after inputting, or if the input field loses focus.
 The `$VALUE` special variable is only visible to the event handler of the above
 two events.
 
--- ft.h2: Future Plans
+-- ds.h2: Future Plans
 
 In future we will add a few features:
 
--- ft.h3: `value`
+-- ds.h3: `value`
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.input:
 value: $query
 $on-input$: $query=$VALUE
 
--- ft.markdown:
+-- ds.markdown:
 
 Note the `value` bound to a variable, every time the variable changes the value
 of the input field would be updated. So you can control the value of one input
 field with another for example.
 
--- ft.h3: `default`
+-- ds.h3: `default`
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.input:
 default: $query
 
--- ft.markdown:
+-- ds.markdown:
 
 `default` will be used to bind the value of an input field when the input field
 is initialized, and any further changes done to `$query` would have no effect on
 the input field.
 
--- ft.h3: `type`
+-- ds.h3: `type`
 
 We will also support `type` parameter so input field can be used to get `username`,
 which hints the browser to use Password Manager etc, `email`, `password` etc,
 similar to how HTML input works.
 
--- ft.h1: Missing Feature: Intra-Page Table Of Content
+-- ds.h1: Missing Feature: Intra-Page Table Of Content
 
 When a FTD generated page is created, it is currently not possible to create a
 table of content based on headings in the page.
@@ -1820,18 +1811,18 @@ What all to include? We can pass a list of regions that we are interested in.
 It has to be a `$processor$`. We can call it `page-query`, `package-query` for
 entire package, page query for just the page.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.toc-item list headers:
 $processor$: page-query
 regions: h1, h2, h3, h4, image, table
 
--- ft.markdown:
+-- ds.markdown:
 
 Where `ftd.toc-item` itself is a record:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record toc-item:
@@ -1839,13 +1830,13 @@ string title:
 string url:
 toc-item list children:
 
--- ft.markdown:
+-- ds.markdown:
 
 Implementing it requires two pass rendering. In first pass the data would be
 wrong, an empty list, we will first construct the whole DOM tree. And then in
 second pass we will do the query, and update the list with the result.
 
--- ft.h1: TODO, RELEASE Only Posts And So On
+-- ds.h1: TODO, RELEASE Only Posts And So On
 
 In org-mode it is possible to add some tags to headings, like a TODO, RELEASE
 etc, and then do query on the tags, eg only show headings matching given tag.
@@ -1857,7 +1848,7 @@ with TODO tags are visible.
 
 How would we do that? One easy way to do it is to create components like this:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- optional string current-tag:
@@ -1867,23 +1858,23 @@ caption title:
 string tags:
 if: $current-tag is null | $tags contains $current-tag
 
--- ft.markdown:
+-- ds.markdown:
 
 This should be doable already with no feature requirements, other than the `|`,
 the `or` expression support.
 
--- ft.h1: Tags In TOC
+-- ds.h1: Tags In TOC
 
 It would also be cool if we could show the tags in the TOC. But our type
 `toc-item` does not have `tags`. `region` is a common property, available on
 all ftd elements. Maybe we can add `tags` on all of them as well, and include
 `tags` in `toc-item`? We should also add `region` to `toc-item`.
 
--- ft.h1: Min/Max And Other Constraints
+-- ds.h1: Min/Max And Other Constraints
 
 I was reading up on asn1, and they have interesting feature:
 
--- ft.code:
+-- ds.code:
 lang: asn
 
 Address ::= SEQUENCE {
@@ -1904,7 +1895,7 @@ Address ::= SEQUENCE {
   ))
 
 
--- ft.markdown:
+-- ds.markdown:
 
 SEQUENCE is just a `record`, and it has three fields, and for `postal-code` they
 have two different constraints applied, depending on the value of `country`
@@ -1926,7 +1917,7 @@ to design. Lets see.
 
 Say:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string foo: hello
@@ -1936,14 +1927,14 @@ lang: ftd
 \--- title:
 regex: <some regex>
 
--- ft.markdown:
+-- ds.markdown:
 
 So I am proposing a `check` keyword. We could have called it `constraint foo`
 as well, but that's longer to type and I keep forgetting the spelling.
 
 We can do it on record as well:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record foo:
@@ -1952,11 +1943,11 @@ string title:
 \--- check title:
 regex: <whatever>
 
--- ft.markdown:
+-- ds.markdown:
 
 And for components:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text foo:
@@ -1968,7 +1959,7 @@ regex: <whatever>
 \--- check p:
 check: foo
 
--- ft.markdown:
+-- ds.markdown:
 
 Types of checks will vary based on type of thing being checked. For string we
 have `regex`. But we can have `max-length`, `min-length`, `starts-with`,
@@ -1999,14 +1990,14 @@ features in `fpm`? Problem for tomorrow me!
 there are more than one errors? Make it `.errors`, like Django forms? Auto
 message, e.g. failure of `min`, we can create an error message in right language.
 
--- ft.h1: Thoughts On Internationalization in FTD
+-- ds.h1: Thoughts On Internationalization in FTD
 
 BTW this takes us to need for ftl, Fluent, like way to translate stuff, when
 we are creating component libraries, we are going to have to hard code strings,
 and given we have first class `markup` support, we can create string templates
 in every language for some string, and use variable substitution etc.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text welcome-message:
@@ -2020,12 +2011,12 @@ if $fpm.lang == hi:
 
 आपसे मिल कर बहुत ख़ुशी हुई.
 
--- ft.markdown:
+-- ds.markdown:
 
 Some polish is needed in the syntax, but I think it can be made to work without
 adding any new feature to FTD for translation.
 
--- ft.h1: `$on-click$: message-host <>`
+-- ds.h1: `$on-click$: message-host <>`
 
 23rd Dec 2021
 
@@ -2035,7 +2026,7 @@ define a JavaScript function (and in future when we support iOS etc, register Sw
 function etc) and call it as event handler from FTD documents:
 
 
--- ft.code: defining the `foo()` host method
+-- ds.code: defining the `foo()` host method
 lang: js
 
 window.foo = function() {
@@ -2043,21 +2034,21 @@ window.foo = function() {
 }
 
 
--- ft.code: calling the `foo()` host method
+-- ds.code: calling the `foo()` host method
 lang: ftd
 
 \-- ftd.text: call foo
 $on-click$: message-host foo
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Current we do not pass any arguments to the function. In future, when json
 constructor is ready we would be able to pass FTD variables to host
 functions.
 
 
--- ft.h1: Giving up on Special Variables
+-- ds.h1: Giving up on Special Variables
 
 6th Dec 2021
 
@@ -2073,7 +2064,7 @@ already have variable dependency tracker that updates the rendered DOM tree in a
 efficient way.
 
 
--- ft.h2: What about "heavy variables"?
+-- ds.h2: What about "heavy variables"?
 
 If we are creating regular variables, do we create a single virtual document that
 exposes all the variables? Wouldn't computing that document be expensive? What if
@@ -2087,7 +2078,7 @@ We will also have a linter that will complain if a document is imported but not
 used, (and therefore we have `import: foo as _` syntax).
 
 
--- ft.h2: "FTD Host"
+-- ds.h2: "FTD Host"
 
 FPM is proving to be a very good playground to explore what is the meaning of a FTD
 Host. We have the `.get()` method, and FPM is putting a lot of interesting logic
@@ -2107,46 +2098,46 @@ you are going to need your own variables with your own way of fetching documents
 and your own
 
 
--- ft.h1: Unified Component Syntax
+-- ds.h1: Unified Component Syntax
 
 3rd Dec 2021
 
 Arpita has implemented a unified syntax for component creation.
 
 
--- ft.code: old syntax
+-- ds.code: old syntax
 lang: ftd
 
 \-- ftd.row foo:
 spacing: 20
 
 
--- ft.code: new syntax
+-- ds.code: new syntax
 lang: ftd
 
 \-- ftd.row foo:
 spacing: 20
 
 
--- ft.markdown:
+-- ds.markdown:
 
 This was done to make it uniform with declaring variables:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer bar: 20
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Declaring something new is now always `<type> <name>:`, both for variables, records
 and components, as well as for fields and argument definition in records and
 components.
 
 
--- ft.h1: Backward Compatibility Guarantee
+-- ds.h1: Backward Compatibility Guarantee
 
 We hope this was the last backward incompatible change. We are now going to become
 very careful about backward compatibility. We are not yet 1.0, and we expect at
@@ -2154,13 +2145,13 @@ least one major backward incompatible change before we really are ready for
 production, but we are now going to avoid it as much as we can.
 
 
--- ft.h1: UI As A Type
+-- ds.h1: UI As A Type
 
 Arpita has implemented UI as a type. Now a component can take another ui element
 as an argument. Till now they could only accept data types.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.column foo:
@@ -2170,7 +2161,7 @@ integer size: 10
 \--- a:
 
 
--- ft.markdown:
+-- ds.markdown:
 
 We have introduced a new type, `ftd.ui`, the argument `a` for component `foo` here
 has type `ftd.ui`.
@@ -2178,20 +2169,20 @@ has type `ftd.ui`.
 Any ftd kernel component can be passed to someone expecting a `ftd.ui`.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- foo:
 a: ftd.text: hello
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we are passing `ftd.text: hello` to `foo` as `a`. We have also implemented
 what we call "continuation" to pass parameters:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- foo:
@@ -2200,7 +2191,7 @@ a: ftd.text: hello
 size: 12
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have passed `size` to both `foo`, `size: 12` goes to `foo`, and to
 `ftd.text`, `> size: 20` means we are continuing from the previous line, and hence
@@ -2209,7 +2200,7 @@ Here we have passed `size` to both `foo`, `size: 12` goes to `foo`, and to
 We can do arbitrary nesting this way.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- foo:
@@ -2222,7 +2213,7 @@ a: foo:
 size: 12
 
 
--- ft.markdown:
+-- ds.markdown:
 
 And so on. Of course this makes things harder to understand, so use this with
 that in mind, don't over do it, break down things into smaller components, code is
@@ -2230,56 +2221,56 @@ read way more often than it is written, a little bit of extra effort goes a long
 way keeping things easy.
 
 
--- ft.h1: `$var` Everything Is Done
+-- ds.h1: `$var` Everything Is Done
 
 25th Nov 2021
 
 We finished implementation of $ for all variable.
 
 
--- ft.h1: New Component Syntax
+-- ds.h1: New Component Syntax
 
 We are now working on unified component / variable declaration syntax. Currently
 our components are defined like this:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text foo:
 text: some text
 
 
--- ft.markdown:
+-- ds.markdown:
 
 We are now going to use the following syntax for the same:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text foo:
 text: some text
 
 
--- ft.markdown:
+-- ds.markdown:
 
 As you can see its simpler. It aligns with how we declare a variable:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- integer bar: 20
 
 
--- ft.h1: Components as type
+-- ds.h1: Components as type
 
 Currently a component can only accept basic data types, like integer and string,
 but not other components. We are now going to use component as type:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row foo:
@@ -2289,12 +2280,12 @@ ftd.text child:
 child: ftd.text: hello
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have `child` of type `ftd.text`.
 
 
--- ft.h2: Thoughts On UI Types
+-- ds.h2: Thoughts On UI Types
 
 Can only kernel types be used for UI type or any component? Ideally we should be
 able to specify a component, and any direct invocation of that component, or any
@@ -2312,32 +2303,32 @@ accepted by a component that is expecting image? Why would any component want to
 accept an image specifically?
 
 
--- ft.h1: Started FPM: FTD Package Manager
+-- ds.h1: Started FPM: FTD Package Manager
 
 FTD is an awesome language, and it deserves a kick-ass package manager. Today you
 can not launch a language without a package manager. So we have started working on
 `fpm`.
 
 
--- ft.h1: FTD Logo
+-- ds.h1: FTD Logo
 
 Jay has created a logo for FTD that we like:
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.ftd-language.jpg
 width: 300
 align: center
 
 
--- ft.h1: `try.ftd.dev`
+-- ds.h1: `try.ftd.dev`
 
 We movee `play.fifthtry.com` to [`try.ftd.dev`](https://try.ftd.dev),now that
 `ftd` docs are moving to [`ftd.dev`](https://ftd.dev). They will still use
 FifthTry, just the domain would be custom.
 
 
--- ft.h1: `$var` Everything Update
+-- ds.h1: `$var` Everything Update
 
 15th Nov 2021
 
@@ -2349,52 +2340,52 @@ What she is working now is external variables, you can define a variable on top 
 a component:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.row:
 $foo: boolean with default false
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Once external variable is done she has to fix the `boolean with default false` syntax
 and use `boolean $foo: false` or even `$foo: false` to declare a variable.
 
 
--- ft.h1: clean api CR
+-- ds.h1: clean api CR
 
 15th Nov 2021
 
 Wrote about my thoughts on cleaning up FTD public crate api.
 
 
--- ft.h1: `detached` support proposal
+-- ds.h1: `detached` support proposal
 
 13th Nov 2021
 
 
--- ft.iframe:
+-- ds.iframe:
 src: https://www.loom.com/embed/07681c220abd4eb584c75327c686360b
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Wrote up a CR for `detached` components: components that are not
 part of UI when created, and added a new `include` keyword to include any detached
 component in "current container".
 
 
--- ft.h1: Started Journal
+-- ds.h1: Started Journal
 
 13th Nov 2021
 
 
--- ft.iframe:
+-- ds.iframe:
 src: https://www.loom.com/embed/dd33e35449f64963ac694155b3ed88e0
 
 
--- ft.markdown:
+-- ds.markdown:
 
 We have decided to start a journal for FTD. FTD has been under a lot of development
 and its good for us to record our daily development.
@@ -2412,21 +2403,21 @@ We also want to create a loom recording after the fact, just to capture a few mo
 things we might have missed when writing it down.
 
 
--- ft.h1: Fix: spacing issue
+-- ds.h1: Fix: spacing issue
 
 12th Nov 2021
 
 
--- ft.iframe:
+-- ds.iframe:
 src: https://www.loom.com/embed/23000f3b4fc442f988181c5ff65c7949
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Consider the following code:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- var show: true
@@ -2453,12 +2444,12 @@ spacing: 20
 id: some-id
 
 
--- ft.markdown:
+-- ds.markdown:
 
 This is how the DOM structure should look like:
 
 
--- ftd.scene:
+/-- ftd.scene:
 height: 400
 
 
@@ -2518,74 +2509,38 @@ top: 250
 left: 45
 
 
--- ftd.text text:
-caption text:
-text: $text
 
 
--- ftd.column box:
-string width:
-width: $width
-string height:
-height: $height
-border-width: 1
-border-radius: 5
-open: false
-
-
--- ftd.text text-box:
-caption text:
-text: $text
-padding: 10
-border-width: 1
-border-radius: 5
-
-
--- container: page
-
-
--- boolean show: true
-
-
--- ft.markdown:
+-- ds.markdown:
 
 This is how it should look like:
 
 
 -- foo:
 
---- ftd.text: Hello 👋
-if: $show
+-- ftd.text: Hello 👋
+if: { $show }
 
---- ftd.text: World 🌎
+-- ftd.text: World 🌎
 
 
 -- ftd.text: Click here!
-$on-click$: toggle $show
+$on-click$: $ftd.set-bool($a = $show, v = false)
 
 
--- ftd.column foo:
-open: true
-append-at: some-id
-
---- ftd.text: Title
-
---- ftd.row:
-spacing: 20
-id: some-id
 
 
--- ft.markdown:
+-- ds.markdown:
 
 And this is how it used to look like:
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.7vypfBR.jpg
 width: 130
 
 
--- ft.markdown:
+-- ds.markdown:
 
 There were two issues for proper rendering of the above code:
 
@@ -2601,7 +2556,7 @@ contain spacing from each other, except the first visible one, but here it has o
 one wrapper child, so no spacing.
 
 
--- ft.h2: How have we solved this?
+-- ds.h2: How have we solved this?
 
 Just remove the wrapper and put all external children directly inside the desired
 node. But how would we do reparenting of them (like in the case of event handling)?
@@ -2609,7 +2564,7 @@ Put a new attribute (`data-ext-id`) that has the same value in all the external
 children and during reparenting, access children using this attribute.
 
 
--- ft.h2: Is everything solved?
+-- ds.h2: Is everything solved?
 
 Not yet. In the case of event-handling, what if the first child becomes invisible
 or removed and so what about spacing then?
@@ -2624,19 +2579,19 @@ parent node that contains the spacing value. Every time this kind of event occur
 we reevaluate spacing for its children.
 
 
--- ft.h2: Are we done now?
+-- ds.h2: Are we done now?
 
 Yes, all problems are resolved. 🎉 🎊
 
 
--- ft.h1: Image link Fix
+-- ds.h1: Image link Fix
 
 Fri, 12th Nov 2012
 
 Consider the following code:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.image:
@@ -2644,17 +2599,130 @@ src: https://www.w3schools.com/cssref/img_tree.gif
 link: https://www.amitu.com/fifthtry/amitu/
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Earlier, the link was not working. We just fixed this issue.
 
 
--- ft.h2: What was the issue?
+-- ds.h2: What was the issue?
 
 For link we use `<a>` tag and for image we use `<img>` tag. `<img>` tag was
 overriding `<a>`. Basically we were attaching `href` on top of `img` tag.
 
 
--- ft.h2: How have we resolved?
+-- ds.h2: How have we resolved?
 
 Now we create `<img>` tag and make it child of `<a>`.
+
+-- end: ds.page
+
+
+
+
+
+
+-- component show-data:
+caption text:
+
+-- ftd.column:
+padding.px: 10
+background.solid: $inherited.colors.background.base
+color: $inherited.colors.text
+
+-- ftd.column:
+padding.px: 20
+border-width.px: 2
+
+-- ftd.text: $show-data.text
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: show-data
+
+
+
+
+
+
+
+
+
+
+-- component text:
+caption text:
+
+-- ftd.text:
+text: $text
+
+-- end: text
+
+
+
+
+
+
+
+
+
+
+-- component box:
+integer width:
+integer height:
+
+-- ftd.column:
+width.fixed.px: $box.width
+height.fixed.px: $box.height
+border-width.px: 1
+border-radius.px: 5
+
+-- end: ftd.column
+
+-- end: box
+
+
+
+
+
+
+
+
+
+
+-- component text-box:
+caption text:
+
+-- ftd.text:
+text: $text-box.text
+padding.px: 10
+border-width.px: 1
+border-radius.px: 5
+
+-- end: text-box
+
+
+
+
+
+
+
+
+
+
+-- component foo:
+children wrapper:
+
+-- ftd.column:
+
+-- ftd.text: Title
+
+-- ftd.row:
+spacing.px: 20
+children: $foo.wrapper
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: foo

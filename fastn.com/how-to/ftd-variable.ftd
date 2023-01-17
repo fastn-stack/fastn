@@ -1,4 +1,4 @@
--- ft.page: How to Create FTD Variable
+-- ds.page: How to Create FTD Variable
 
 To create FTD variables, we have to use it's [primitive types](/variables/).
 
@@ -15,7 +15,7 @@ In FTD currently we are adding these predefined variables like `markdown-color`
 in a default variables bag, check `ftd::interpreter::default_bag`.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record markdown-color-data:
@@ -26,3 +26,5 @@ color code:
 
 \-- ftd.text: Link Code
 color: $ftd.markdown-color.link
+
+-- end: ds.page

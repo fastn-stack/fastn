@@ -1,7 +1,7 @@
--- ft.page: `ftd` Development
+-- ds.page: `ftd` Development
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 `ftd` is an open source project and is being developed on
 [`github.com/FifthTry/ftd`](https://github.com/FifthTry/ftd). To report issues
@@ -16,3 +16,5 @@ This is a longish list of where the project is headed.
 
 [Changelog](/changelog/) is for keeping track of releases, migration guide etc.
 We haven't had a "proper" release yet, so this page is not yet being maintained.
+
+-- end: ds.page

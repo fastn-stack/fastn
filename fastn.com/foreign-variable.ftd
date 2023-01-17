@@ -1,11 +1,11 @@
--- ft.page: `foreign-variables`
+-- ds.page: `foreign-variables`
 
 Foreign Variables are the variables that are not defined in any module but whose
 value can be defined by application (like FPM). It's value is populated by
 application during interpreter's runtime.
 
 
--- ft.h1: Motivation Behind Foreign Variables
+-- ds.h1: Motivation Behind Foreign Variables
 
 If application wants to provide value to any data variable at runtime, so they
 can use foreign variables.
@@ -13,9 +13,9 @@ can use foreign variables.
 It can be used to fetch data provided by application.
 
 
--- ft.h1: Resolving Foreign Variable In Application
+-- ds.h1: Resolving Foreign Variable In Application
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 let mut s = ftd::interpret(name, source)?;
@@ -58,23 +58,25 @@ fn resolve_foreign_variable(variable: &str, doc_name: &str) -> ftd::p1::Result<f
 }
 
 
--- ft.h1: `fpm/time.now-str`
+-- ds.h1: `fpm/time.now-str`
 
--- ft.code: foo.ftd
+-- ds.code: foo.ftd
 lang: ftd
 
 \-- import: fpm/time
 
 \-- ftd.text: $time.now-str
 
--- ft.markdown:
+-- ds.markdown:
 
 The `-- import: fpm/time` statement exposes foreign variable `fpm/time.now-str`
 which returns the current date and time as a string.
 
 The output looks something like this
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 Mon Jun 13 15:08:18 IST 2022
+
+-- end: ds.page
