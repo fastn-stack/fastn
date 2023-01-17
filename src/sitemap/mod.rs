@@ -213,7 +213,7 @@ impl SitemapElement {
     pub(crate) fn set_path_params(&mut self, url: &str) -> Result<(), ParseError> {
         let params = utils::parse_named_params(url)?;
 
-        if !params.is_empty() {
+        if params.is_empty() {
             self.set_skip(true);
         }
 
