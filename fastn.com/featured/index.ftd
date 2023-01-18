@@ -10,15 +10,6 @@
 
 
 
-
--- ftd.column:
-width: fill-container
-height: hug-content
-background.solid: $inherited.colors.background.base
-padding-vertical.px: 24
-padding-horizontal.px: 24
-;;margin-top.px: -44
-
 -- ds.page: Featured components
 
 -- ds.markdown:
@@ -56,8 +47,6 @@ more-link-text: How to use fonts
 more-link: /featured/fonts/
 
 -- end: ds.page
-
--- end: ftd.column
 
 
 
