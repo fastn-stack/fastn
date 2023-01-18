@@ -64,7 +64,7 @@ pub async fn processor_<'a>(
     Ok(doc.from_json(&tree, section)?)
 }
 
-async fn construct_tree(
+pub(crate) async fn construct_tree(
     config: &fpm::Config,
     files: &[String],
     snapshots: &std::collections::BTreeMap<String, u128>,

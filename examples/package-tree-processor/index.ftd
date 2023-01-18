@@ -1,0 +1,30 @@
+-- import: fpm
+-- import: fpm/processors
+
+
+-- ftd.text: Hello world
+
+
+-- fpm.toc-item list package-tree:
+$processor$: processors.package-tree
+
+
+-- print-toc:
+$loop$: $package-tree as $item
+item: $item
+
+
+-- component print-toc:
+fpm.toc-item item:
+
+-- ftd.column:
+
+-- ftd.text: $print-toc.item.title
+
+-- ftd.text: $print-toc.item.url
+if: {print-toc.item.url != NULL}
+
+-- end: ftd.column
+
+-- end: print-toc
+

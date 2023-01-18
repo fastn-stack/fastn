@@ -2,6 +2,7 @@ pub(crate) mod apps;
 pub(crate) mod document;
 pub(crate) mod get_data;
 pub(crate) mod http;
+pub(crate) mod package_tree;
 pub(crate) mod request_data;
 pub(crate) mod sitemap;
 pub(crate) mod sqlite;
