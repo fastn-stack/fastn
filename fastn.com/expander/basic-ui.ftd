@@ -3,7 +3,13 @@
 -- ds.youtube:
 v: -VzrI1o6IzU
 
+-- ds.image:
+src: $assets.files.images.column.png
+width: fill-container
 
+-- ds.image:
+src: $assets.files.images.row.png
+width: fill-container
 
 -- ds.markdown:
 

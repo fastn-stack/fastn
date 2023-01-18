@@ -7,13 +7,26 @@
 -- ds.youtube:
 v: v1u-TmNE0bA
 
--- ds.image:
-src: $assets.files.images.column.png
-width: fill-container
 
--- ds.image:
-src: $assets.files.images.row.png
-width: fill-container
+-- ds.h2: First step
+
+First step is to write ftd.text and give the value Hello World
+
+-- ds.code: Code
+lang: ftd
+
+\-- ftd.text: Hello World
+
+-- ds.markdown:
+
+You can always change the text
+
+-- ds.code: Code
+lang: ftd
+
+\-- ftd.text: Hello Multiverse
+
+
 
 
 -- ds.markdown:
