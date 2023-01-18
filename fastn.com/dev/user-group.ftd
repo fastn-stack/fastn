@@ -1,4 +1,4 @@
--- ft.page: User Group
+-- ds.page: User Group
 
 A fpm package can limit who has read or write access. We do it by organising a
 set of [user identities](/dev/user-identity/) using `user group` and then using
@@ -6,7 +6,7 @@ the `user group` in the [sitemap](/sitemap/).
 
 User groups are defined in any package by using `fpm.user-group`:
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- import: fpm
@@ -19,35 +19,35 @@ github-team: FifthTry/everyone
 
 Description-Body: This group is for FifthTry People
 
--- ft.markdown:
+-- ds.markdown:
 
 This creates a new user-group, whose unique id is `fifthtry-people`.
 
 The `id` of every `user-group` must be unique in a given package.
 
 
--- ft.h1: Group Properties
+-- ds.h1: Group Properties
 
 A group have different properties like `id`, `title`, `description` and
 identities.
 
--- ft.h2: `id`
+-- ds.h2: `id`
 
 `id` which should be unique for a package
 
--- ft.h2: `title`
+-- ds.h2: `title`
 
 `title` is a optional key in user-group.
 
--- ft.h2: `description`
+-- ds.h2: `description`
 
 `description` is a optional `body` in user-group.
 
--- ft.h2: Identities
+-- ds.h2: Identities
 
 Identities in a user-group contains `email`, `-email`, `group`, `-group`, etc...
 
--- ft.h3: All Supported Identities
+-- ds.h3: All Supported Identities
 
 These are all supported identities for [fpm.user-group](/theme/fpm/#user-group).
 
@@ -67,12 +67,12 @@ These are all supported identities for [fpm.user-group](/theme/fpm/#user-group).
 - `-group`
 
 
--- ft.h1: How To Create Group with Multiple Identities
+-- ds.h1: How To Create Group with Multiple Identities
 
 In the below group, `email` key can be used multiple times, `-email` means that
 `do-not-include-email` and for other identities as well.
 
--- ft.code: User Group
+-- ds.code: User Group
 lang: ftd
 
 \fpm.user-group:
@@ -87,12 +87,12 @@ github-team: abrarnitk/team-a
 
 
 
--- ft.h1: Re-using groups
+-- ds.h1: Re-using groups
 
 User groups can be imported from other packages as well.
 
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- import: fpm
@@ -103,7 +103,7 @@ lang: ftd
 group: amitu.com/fifthtry-people
 email: gvr@gmail.com
 
--- ft.markdown:
+-- ds.markdown:
 
 Here we have created a group "fifthtry-people", by importing the definition from
 `amitu.com/fifthtry-people` and we have added another email address to this
@@ -113,12 +113,12 @@ We can use `group` as many times as we want, it must refer to a group defined
 in another package. To import we have to add the other package as a dependency
 first as shown above.
 
--- ft.h2: Removing Some People When Importing
+-- ds.h2: Removing Some People When Importing
 
 We can also remove some of the users defined in the group that is being
 imported.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- import: fpm
@@ -131,11 +131,13 @@ group: amitu.com/fifthtry-people
 email: gvr@gmail.com
 github: abrarnitk
 
--- ft.markdown:
+-- ds.markdown:
 
 This will combine all `group` and other group identities, but `except` ones
 will be explicitly removed from the combined set.
 
--- ft.h1: How to Use User Groups In Sitemap
+-- ds.h1: How to Use User Groups In Sitemap
 
 Please check [this](/sitemap/#readers-and-writers-in-sitemap)
+
+-- end: ds.page

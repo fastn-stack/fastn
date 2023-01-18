@@ -1,26 +1,26 @@
--- ft.page: How To Run Tests
+-- ds.page: How To Run Tests
 
 
 Steps:
 
 In the terminal, run the following commands
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 cargo install fbt
 
 
--- ft.markdown:
+-- ds.markdown:
 
 This will install the latest [fbt](https://crates.io/crates/fbt)
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 fbt
 
--- ft.markdown:
+-- ds.markdown:
 
 This will run all the tests present in [tests folder](https://github.com/FifthTry/fpm/tree/main/tests).
 
@@ -50,5 +50,4 @@ The output will look somewhat like this
 
 Next: Read this [How To Update Failing Snapshot Tests](day-to-day/how-to-fix-tests/)
 
-
-
+-- end: ds.page

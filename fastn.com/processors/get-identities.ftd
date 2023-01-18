@@ -1,16 +1,16 @@
--- ft.page: `get-identities` processor
+-- ds.page: `get-identities` processor
 
 `get-identities` processor can be used to find all the
 [identities](/dev/user-identity/) for a document of the user making request.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string list identities:
 $processor$: get-identities
 
 
--- ft.markdown:
+-- ds.markdown:
 
 This will initialise the list `identities` with the user's identities.
 
@@ -20,7 +20,7 @@ processor for URL `/page/` will return `readers` group `identities` including
 `email: abrark1@gmail.com`, `email: arpita1@gmail.com`].
 
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: readers
@@ -40,3 +40,5 @@ email: arpita1@gmail.com
 
 - Toc: /page/
 readers: readers
+
+-- end: ds.page

@@ -1,10 +1,10 @@
--- ft.page: User Identity
+-- ds.page: User Identity
 
 A fpm package can limit who has read or write access. We do it by storing
 [user groups](/dev/user-group/) in [sitemap](/sitemap/). An `identity
 group` contains one or more `user identity`.
 
--- ft.h1: What is User Identity?
+-- ds.h1: What is User Identity?
 
 In many systems that implement authentication and ACL, users are identified by
 username on that system, or user-id.
@@ -28,6 +28,8 @@ All these are called user identities. Example identities:
 
 All these strings are now known as `user identity`.
 
--- ft.h1: All Identities
+-- ds.h1: All Identities
 
 Find all identities [here](/dev/user-group/#all-supported-identities)
+
+-- end: ds.page

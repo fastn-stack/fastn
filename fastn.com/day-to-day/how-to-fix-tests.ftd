@@ -1,17 +1,16 @@
--- ft.page: How To Update Failing Snapshot Tests
+-- ds.page: How To Update Failing Snapshot Tests
 
 We can fix the failing tests which is due to snapshot mismatch in output folder.
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 fbt --fix
 
--- ft.markdown:
+-- ds.markdown:
 
 This will update the snapshots of all the tests
 
 Prerequisite: Read this [How To Run Tests](day-to-day/how-to-run-tests/)
 
-
-
+-- end: ds.page

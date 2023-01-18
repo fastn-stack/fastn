@@ -1,4 +1,4 @@
--- ft.page: `fpm::Config`
+-- ds.page: `fpm::Config`
 
 `fpm::Config` struct keeps track of configuration for a FPM package that is
 shared with the entire program. It is constructed from the content of `FPM.ftd`
@@ -11,7 +11,7 @@ only once in the `main()` and passed everywhere.
 [Source Code](https://github.com/FifthTry/fpm/blob/main/src/config.rs)
 
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 
@@ -28,9 +28,9 @@ pub struct Config {
 }
 
 
--- ft.h1: Config Properties
+-- ds.h1: Config Properties
 
--- ft.h2: `root`
+-- ds.h2: `root`
 
 `root` is the package root folder, this is the folder where `FPM.ftd` file is
 stored.
@@ -47,14 +47,14 @@ If `root` is passed as `Some(path)`, it is assumed to be the root of the fpm
 package, and `FPM.ftd` file must be present in this folder.
 
 
--- ft.h2: `packages_root`
+-- ds.h2: `packages_root`
 
 Keeps a track of the package root for a particular config. For a dep2 of a dep1,
 this could point to the <original_root>/.packages/ whereas the project root
 could be at <original_root>/.packages/<dep1_root>
 
 
--- ft.h2: `original_directory`
+-- ds.h2: `original_directory`
 
 `original_directory` is the directory from which the `fpm` command was invoked
 
@@ -67,13 +67,13 @@ relative to the `original_directory`, so we keep track of the original
 directory.
 
 
--- ft.h2: `extra_data`
+-- ds.h2: `extra_data`
 
 The extra_data stores the data passed for variables in ftd files as context.
 This data is processed by `get-data` processor.
 
 
--- ft.h2: `current_document`
+-- ds.h2: `current_document`
 
 `current_document` stores the document id (Eg: `foo.ftd` or `bar/foo.ftd`) which
 is currently in building process.
@@ -81,7 +81,7 @@ It's value is injected by `fpm::build()` function according to the currently
 processing document. It is consumed by the `sitemap` processor.
 
 
--- ft.h2: `all_packages`
+-- ds.h2: `all_packages`
 
 `all_packages` stores the package data for all the packages that are
 dependencies of current package directly or indirectly. It also includes current
@@ -90,13 +90,13 @@ translation) The key store the name of the package and value stores
 corresponding package data.
 
 
--- ft.h1: Config Functions
+-- ds.h1: Config Functions
 
--- ft.h2: `fpm::Config::read()`
+-- ds.h2: `fpm::Config::read()`
 
 `fpm::Config::read()` finds the `FPM.ftd` and creates `fpm::Config` struct.
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 impl fpm::Config {
@@ -104,57 +104,57 @@ impl fpm::Config {
         -> fpm::Result<fpm::Config>
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 `fpm::Config::read()` returns a [`fpm::Result`](crate/result/) of `fpm::Config`.
 
 
 
--- ft.h2: `fpm::Config.attach_data_string()`
+-- ds.h2: `fpm::Config.attach_data_string()`
 
 This function can be used to attach json data to Config. This JSON data is
 available to every ftd file that uses [`get-data`
 processor](processors/get-data/).
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 impl fpm::Config {
     pub fn attach_data_string(&mut self, json: &str) -> fpm::Result<()>
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 This should be called before [`fpm::render()`](crate/render/).
 
 Implementation note: This function internally calls `fpm::Config::attach_data()`.
 
 
--- ft.h2: `fpm::Config.attach_data()`
+-- ds.h2: `fpm::Config.attach_data()`
 
 This function can be used to attach json data to Config. This JSON data is
 available to every ftd file that uses [`get-data`
 processor](processors/get-data/).
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 impl fpm::Config {
     pub fn attach_data(&mut self, data: &serde_json::Value) -> fpm::Result<()>
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 This should be called before [`fpm::render()`](crate/render/).
 
 
--- ft.h2: `fpm::Config.get_file_by_id(&fpm::Package)`
+-- ds.h2: `fpm::Config.get_file_by_id(&fpm::Package)`
 
 Given the `id` of a document, this function returns the FTD source of the
 document.
 
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 impl fpm::Config {
@@ -162,17 +162,17 @@ impl fpm::Config {
 }
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Note this implements fallback feature in case this is a translated package.
 
 
 
--- ft.h2: `fpm::Config.get_files()`
+-- ds.h2: `fpm::Config.get_files()`
 
 `fpm::Config.get_files()` returns all the ["files"](crate/file/) in a package.
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 pub(crate) async fn get_files(&self, package: &fpm::Package)
@@ -180,12 +180,12 @@ pub(crate) async fn get_files(&self, package: &fpm::Package)
 
 
 
--- ft.h2: `fpm::Config.get_assets()`
+-- ds.h2: `fpm::Config.get_assets()`
 
 `fpm::Config.get_assets()` returns the "assets" automagic module for each
 package.
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 pub(crate) async fn get_assets(
@@ -193,8 +193,8 @@ pub(crate) async fn get_assets(
     base_url: &str,
 ) -> fpm::Result<std::collections::HashMap<String, String>>
 
--- ft.markdown:
+-- ds.markdown:
 
 Key is the package name, and value is FTD source of generated assets module.
 
-
+-- end: ds.page

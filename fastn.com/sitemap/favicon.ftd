@@ -1,5 +1,5 @@
--- ft.page: favicon.ico handler
+-- ds.page: favicon.ico handler
 
 Requests to `/favicon.ico` is served by serving `favicon.ico` file if present.
 
-
+-- end: ds.page

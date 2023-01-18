@@ -1,11 +1,11 @@
--- ft.page: `fpm::render`
+-- ds.page: `fpm::render`
 
 
 `fpm::render()` renders a single ftd file that is part of current FPM package.
 
 Implementation Note: This function is implemented in `src/render.rs`.
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 pub async fn fpm::render(
@@ -14,9 +14,11 @@ pub async fn fpm::render(
     base_url: &str,
 ) -> fpm::Result<String>
 
--- ft.markdown:
+-- ds.markdown:
 
 `fpm::render()` returns `fpm::Result` of rendered HTML as `String`.
 
 `fpm::render()` gets ["data" for `get-data`](processors/get-data/) via
 [`fpm::Config`](crate/config/#fpm-config-attach-data).
+
+-- end: ds.page

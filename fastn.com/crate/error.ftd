@@ -1,8 +1,8 @@
--- ft.page: `fpm::Error`
+-- ds.page: `fpm::Error`
 
 `fpm::Error` is the main Error enum that is returned by most of our functions.
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 pub enum Error {
@@ -17,3 +17,4 @@ pub enum Error {
     SerdeJsonError(serde_json::Error),
 }
 
+-- end: ds.page

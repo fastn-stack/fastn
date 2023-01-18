@@ -1,26 +1,26 @@
--- ft.page: `$processor$: get-data`
+-- ds.page: `$processor$: get-data`
 
 `get-data` processor is used to get data from
 ["data"](crate/config/#fpm-config-attach-data-string).
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string foo:
 $processor$: get-data
 
--- ft.markdown:
+-- ds.markdown:
 
 Assuming `foo: "hello"` is part of "data", the variable `foo` will be get
 "hello" as the value.
 
 
--- ft.h1: Key
+-- ds.h1: Key
 
 By default, the name of the variable or list where the data is being store is
 used as the key. You can overwrite the key using `key` attribute:
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string foo:
@@ -31,11 +31,11 @@ key: some-other-key-instead-of-foo
 
 
 
--- ft.h1: Default Value
+-- ds.h1: Default Value
 
 If the data is not found, we use the body as default value if body is available.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string foo:
@@ -43,7 +43,7 @@ $processor$: get-data
 
 "hello world"
 
--- ft.markdown:
+-- ds.markdown:
 
 The body must be valid json, compatible with the data type on which we are
 using the `get-data` processor.
@@ -52,23 +52,23 @@ using the `get-data` processor.
 
 
 
--- ft.h1: Default Value in Caption For Basic Types
+-- ds.h1: Default Value in Caption For Basic Types
 
 For basic types like `integer`, `boolean` etc, the default value can also be
 provided in the caption. E.g.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string foo: hello world
 $processor$: get-data
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Providing both `body` and `caption` when using `get-data` is an error.
 
--- ft.h1: Reading data from JSON File
+-- ds.h1: Reading data from JSON File
 
 We will be reading the data from JSON file and injecting the value to the caller of the processor (caller could be variable or component).
 
@@ -76,7 +76,7 @@ Step - 1 : We need to make two files i.e. one file should be .ftd and another fi
 
 Step - 2 : Creating .ftd (for example, record.ftd)
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record person:
@@ -93,11 +93,11 @@ file: foo.json
 \-- ftd.text: $foo.gender
 
 
--- ft.markdown:
+-- ds.markdown:
 
 
 Step - 3 : Creating .json (for example, foo.json)
--- ft.code:
+-- ds.code:
 lang: ftd
 
 {
@@ -106,19 +106,21 @@ lang: ftd
   "gender": "female"
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 
 Step - 4 : Output
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 arpita
 15
 female
 
--- ft.markdown:
+-- ds.markdown:
 
 
 NOTE : It will throw an error if other than .json file is used.
+
+-- end: ds.page

@@ -1,9 +1,9 @@
--- ft.page: `$processor$: full-sitemap`
+-- ds.page: `$processor$: full-sitemap`
 
 `full-sitemap` processor returns content of `FPM.ftd`s `fpm.sitemap`.
 
 
--- ft.code: Sitemap in `FPM.ftd`
+-- ds.code: Sitemap in `FPM.ftd`
 lang: ftd
 
 \-- fpm.sitemap:
@@ -27,12 +27,12 @@ url: whatever
 readers: <group name>
 writers: <group name>
 
--- ft.markdown:
+-- ds.markdown:
 
 In `full-sitemap` processor sitemap get parse into a record `sitemap-compat-data`.
 This record is present in `fpm` The record looks like this
 
--- ft.code: record `sitemap-compat-data` (fpm.ftd)
+-- ds.code: record `sitemap-compat-data` (fpm.ftd)
 lang: ftd
 
 \-- record sitemap-compat-data:
@@ -81,8 +81,10 @@ string list writers:
 string key:
 string value:
 
--- ft.markdown:
+-- ds.markdown:
 
 The record `sitemap-compat-data` contains sections, section contains
 subsections, subsections contains list of toc, and toc again contains list of
 toc.
+
+-- end: ds.page

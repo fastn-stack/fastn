@@ -1,7 +1,7 @@
--- ft.page: Roadmap
+-- ds.page: Roadmap
 
 
--- ft.h1: FPM as kick-ass SSG tool
+-- ds.h1: FPM as kick-ass SSG tool
 
 - package cargo binary for different os/arch
 - docs:
@@ -15,13 +15,13 @@
 - Package dependencies full version
 
 
--- ft.h1: Rust Book using FPM
+-- ds.h1: Rust Book using FPM
 
 - translation tracking: UI pending
 - `$processor$: include-file`
 
 
--- ft.h1: Core Features
+-- ds.h1: Core Features
 
 - sqlite support
 - package database
@@ -41,7 +41,7 @@
 - encryption support
 
 
--- ft.h1: Importer & Exporters
+-- ds.h1: Importer & Exporters
 
 - mdbook
 - jekyll
@@ -50,7 +50,7 @@
 - medium
 
 
--- ft.h1: Packaging & Tooling
+-- ds.h1: Packaging & Tooling
 
 - brew
 - apt
@@ -58,7 +58,7 @@
 - auto create packages using github action
 
 
--- ft.h1: Tutorials & Documentation
+-- ds.h1: Tutorials & Documentation
 
 - hello world
 - how to create a new fpm component library
@@ -68,20 +68,22 @@
 - how to setup your own `fpm-repo` on heroku
 
 
--- ft.h1: Developer / Author Productivity
+-- ds.h1: Developer / Author Productivity
 
 - live reload for `fpm serve`
 - syntax highlighting for editors
 - LSP for ftd/fpm
 
 
--- ft.h1: Backlog
+-- ds.h1: Backlog
 
 - optimisation: only include font when needed
 - `fpm diff <path>` filtered diff
 - ~display programming file etc as code block?~
 
 
--- ft.h1: Implemented But Not Yet Documented
+-- ds.h1: Implemented But Not Yet Documented
 
 - ad-hoc tracking
+
+-- end: ds.page

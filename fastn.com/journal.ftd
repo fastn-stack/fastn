@@ -1,12 +1,27 @@
 -- import: fpm.dev/assets
 
+-- boolean $show-t-py: false
+
+
+
+
+
 -- ds.page: FPM Journal
+
+
+
 
 
 -- ds.h2: Thoughts: Browsing History
 
 
+
+
+
 -- ds.h2: Readership Tracking
+
+
+
 
 
 -- ds.h2: Linking Using Package Dependency
@@ -14,16 +29,29 @@
 So links never break (and original author can keep updating document URL at whim).
 
 
+
+
+
 -- ds.h2: Git Tracking
 
 
+
+
+
 -- ds.h2: More than one fpm package per git repo
+
+
+
 
 
 -- ds.h1: Article Out
 
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
+
+
+
+
 
 -- ds.h1: `fpm::Config::read()`'s `root` should be `String`
 
@@ -37,6 +65,10 @@ calling `read()` must take a dependency on `camino`. So we changed the type of
 `String` to begin with.
 
 Doc PR. [Code PR](https://github.com/ftd-lang/fpm/pull/158).
+
+
+
+
 
 -- ds.h1: `fpm::Config::read()` now accepts optional root
 
@@ -76,6 +108,10 @@ To solve this we made `fpm::Config::read()` accept an optional root folder.
 [Documentation PR](https://github.com/FifthTry/fpm.dev/pull/4) and
 [Code PR](https://github.com/FifthTry/fpm/pull/157).
 
+
+
+
+
 -- ds.h1: Implementing `continuous documentation` for `fpm`
 
 13th Apr 2022
@@ -92,11 +128,13 @@ Let's see how it goes.
 
 
 
+
 -- ds.h1: `get-data` `$processor$`
 
 We just implemented a new processor called `get-data`. This is mainly so we can
 start using `fpm` from django templates. Checkout out [get-data processor's
 documentaiton](processors/get-data/).
+
 
 
 
@@ -130,6 +168,10 @@ such a case it would make sense for you to create FPM package as FPM package
 can become the website for you, tomorrow when we have FPM repo in place you can
 easily monetise and otherwise control the distribution of your font.
 
+
+
+
+
 -- ds.h2: Package Interfaces
 
 Each kind of special package, will have a package interface, eg for fonts we
@@ -145,8 +187,6 @@ data to be used to create CSS `@font-face` statement etc.
 Based on the interface fpm will do something custom, font will be used in the
 generated HTML, syntax definition and syntax theme would be passed to syntact
 during syntax highlighting and so on.
-
-
 
 
 
@@ -169,6 +209,10 @@ stuff (not sure in which order, static -> dynamic -> CR seems logical because
 dynamic does not have frontend UI, is purely backend work, and also maybe we
 will build CR/editor etc using dynamic FPM).
 
+
+
+
+
 -- ds.h2: Read Permissions
 
 If we have static hosting, we can give access to read permissions. When using
@@ -189,6 +233,10 @@ Hugo and Vercel are independent products, and any integration between the two
 requires effort. FPM and FPM-Repo are being developed in parallel and can have
 complimentary features.
 
+
+
+
+
 -- ds.h2: Publishers Advantage
 
 Imagine if one can say this fpm package is only readable to people in my org,
@@ -200,12 +248,14 @@ The first version of fpm-repo is being designed to realise this publisher
 advantage. We can start with something simple like Google Signin for company
 email verifiction, and then add other plugins for Slack, Telegram etc later.
 
+
+
+
+
 -- ds.h2: Paid Packages
 
 As a logical next step to this would be package monetisation. If you want to
 charge for your package, fpm-repo can help you with that as well.
-
-
 
 
 
@@ -225,6 +275,10 @@ people are going to have arbitrary needs, and we can not hope to anticipate all
 of them and ship all such methods. We have to make it such that people can write
 their own.
 
+
+
+
+
 -- ds.h2: WASM: Processor And Host Method Packages
 
 Ideally we should be able to distribute them as FPM packages themselves, so no
@@ -233,12 +287,20 @@ and ship wasm files as part of FPM packages.
 
 We have two alternatives, [wasmer](https://wasmer.io) and wasmtime.
 
+
+
+
+
 -- ds.h2: Processor Use Cases
 
 Currently processors are written for parsing toc, which is pure computation.
 Then we have a processor to read file (include processor). This one needs disc
 access. We have a processor to do HTTP request and another to do SQLite queries
 against sqlite databases stored in FPM package.
+
+
+
+
 
 -- ds.h2: Processors And Reproducibility
 
@@ -252,6 +314,10 @@ package is included as a dependency, it may not work, or it would require
 extra setup before it can work.
 
 Not much we can do about it. We do not want to curtail power of processors.
+
+
+
+
 
 -- ds.h2: Processor Sandboxing
 
@@ -270,6 +336,10 @@ work, so we should try to start from there.
 
 We can start with a very limited sandbox, only giving readonly access to files
 in current package.
+
+
+
+
 
 -- ds.h2: Cloud Consideration: CPU and RAM Limits
 
@@ -297,6 +367,9 @@ packages, we do not want crypto miners and other such nasties running on our
 end users laptops.
 
 
+
+
+
 -- ds.h2: WASM Limitations
 
 WASM can do pure computation, but doing arbitary thing from WASM is not
@@ -307,6 +380,10 @@ libraries etc, it't not going to be possible in WASM model.
 WASM we are chosing for making it safe to run arbitrary programs so putting
 limitations on what is can do is required. We can not have both, arbitrary
 access and safe.
+
+
+
+
 
 -- ds.h2: Processor WASM API
 
@@ -346,6 +423,10 @@ offered by FTD.
 
 In future we will slowly allow access to TCP, HTTP, more file operations and so
 on.
+
+
+
+
 
 -- ds.h2: Host Methods and WASM
 
@@ -390,11 +471,19 @@ Say want to parse the date entered by the user in an input field, and we have a
 package `amitu.com/parse-date`, which provides a host method "parse" that can do
 this.
 
+
+
+
+
 -- ds.h2: Where Would WASM Files Be Stored?
 
 We can store wasm files in FPM folder. Maybe we can have each wasm file export
 a single function, so we only include the minimum amount of code. For processors
 we can club all of them together in one file.
+
+
+
+
 
 -- ds.h2: Should Processors Be Callable From Frontend?
 
@@ -414,12 +503,15 @@ frontend and backend. But it can not be generalised.
 
 
 
-
 -- ds.h1: Static Assets From Dependencies
 
 9th Feb 20222
 
 For static assets we have to solve three problems.
+
+
+
+
 
 -- ds.h2: Where are the assets stored?
 
@@ -431,6 +523,10 @@ For a dependency `d.com/a`, the asset `images/foo.png` will be stored in
 
 There is not much to this part.
 
+
+
+
+
 -- ds.h2: When to copy?
 
 Should we copy all assets in `.packages` folder in `.build/_assets`? Or should
@@ -438,6 +534,10 @@ we do it on demand?
 
 Easy answer for now is lets copy all static (non ftd and md files a package are
 considered static). In future we can optimize this.
+
+
+
+
 
 -- ds.h2: How to ensure paths work?
 
@@ -523,7 +623,6 @@ lang: ftd
 ftd.image-src src: $assets.files.static.images.foo.png
 src: $src
 
-
 -- ds.code: main package:
 lang: ftd
 
@@ -581,6 +680,10 @@ leave it as is.
 
 Theme designers would be encouraged to use their package name in the assets.
 
+
+
+
+
 -- ds.h2: Base And Versioning
 
 Instead of resolving `https://d.com/a/images/two.png ->
@@ -596,8 +699,6 @@ have versioning, we may want `tutorial/` to resolve either into `/v1/tutorial/`
 or `/v2/tutorial/`, and this will depenend on current version. So when we have
 haversion support we will want to keep base free to handle versioning, but we
 are assuming assets would be shared across all versions.
-
-
 
 
 
@@ -623,6 +724,10 @@ implements: fpm.dev/blog
 `fpm.dev/blog` declairs `main: book, author` which tells you that because of
 the `implements` every module in current package has access to `author`.
 
+
+
+
+
 -- ds.h2: Revised proposal
 
 The idea of `main:` was to ensure we do not have all the code in index file, so
@@ -643,9 +748,6 @@ Further we will not have `:` (reason: when using / we get a full URL that we can
 paste in browser and see doc of individual module) and we will always refer to
 current package either as `package` keyword, or we can even allow `as` alias
 syntax in the `-- fpm.package:` line.
-
-
-
 
 
 
@@ -683,6 +785,10 @@ import default ones. We can also include individual patterns explicitly.
 
 Note: exports are not considered part of package interface.
 
+
+
+
+
 -- ds.h2: Can we import any file?
 
 Not seeing any reason why not. There is a question of backward compatibility, I
@@ -692,6 +798,10 @@ exported are private to me.
 This feature is largely so components exposed by a theme can reliably refer to
 assets made available by theme. Ideally only theme components should know about
 existence of such.
+
+
+
+
 
 -- ds.h2: Auto Include In A Name-spaced Folder
 
@@ -716,11 +826,6 @@ referred to the URL using protocol, then it would be absolute and we do not want
 to analyze.
 
 Ideally we should copy on access.
-
-
-
-
-
 
 
 
@@ -807,10 +912,6 @@ string comparison operator, `>`.
 
 
 
-
-
-
-
 -- ds.h1: FPM Package Registry
 
 Currently FPM is fully distributed, each FPM package is published on a URL
@@ -838,6 +939,10 @@ Framework](/journal/#explanation-of-dynamic-documents-and-actions)? Time will
 tell. We will not block on it. FPM package repository can tomorrow become an
 open source real world showcase of fpm web framework when it is in place tho.
 
+
+
+
+
 -- ds.h2: `fpm ping`
 
 The way the registry would work is by a package pinging the central repository
@@ -846,11 +951,19 @@ not have API keys, signup etc. `fpm ping` will simply call an end point and pass
 the package name as the only information. FPM registry will then schedule a
 crawl of the fpm package and get the information from the published package.
 
+
+
+
+
 -- ds.h2: Registry and News
 
 We just discussed adding news support in FPM packages. FPM registry can show the
 news, and may give quick notify me when this package has news button next to
 each package listed.
+
+
+
+
 
 -- ds.h2: Registry And Web Hook
 
@@ -863,14 +976,16 @@ can tomorrow also notify arbitrary webhook end points when a news is published
 about any package. You can listen for that and review and republish or
 auto-republish.
 
+
+
+
+
 -- ds.h2: Decentralized Registry?
 
 The first idea was a centralised registry, but we can have say 10s of registries
 each gossiping with each other telling about updates, so there is no central
 point. And any registry you publish to, you can expect the eventually the entire
 registry network will know about updates to your package.
-
-
 
 
 
@@ -937,6 +1052,10 @@ be the starting point. Since if we have disabled
 contain both `en` and `hi` folders, and without the manifest file we do not know
 where the `FPM.ftd` file is so we need the manifest file.
 
+
+
+
+
 -- ds.h2: Confusion On Ignore
 
 Currently we use "ignored files" terminology to refer to both files that never
@@ -983,6 +1102,10 @@ or in `en` (as part of our fallback logic) are considered part of the package.
 So you can import `hi:a`, even though there is no such file because we have
 fallback logic.
 
+
+
+
+
 -- ds.h2: Bind Proposal
 
 One option is we do not let people go out of `en` folder, and if any file has to
@@ -1001,6 +1124,10 @@ lang: ftd
 
 This is like we are implementing our own file linking feature.
 
+
+
+
+
 -- ds.h2: Solution 1
 
 With `bind` the generated package will simply copy the bound folder. So we will
@@ -1009,12 +1136,14 @@ not care of repo structure at all when generating `package.zip`. When bulding
 content of en folder, and then all `bind` files/dirs. So we will do
 `cp ../code.rs foo.rs` and `cp -r ../images .`
 
+
+
+
+
 -- ds.h2: Solution: Final?
 
 We have explict bind in FPM.ftd. When generating zip we keep the repo structure,
 we only copy files that are bound. We will also generate manifest file.
-
-
 
 
 
@@ -1063,9 +1192,6 @@ Overall I think we should go ahead with this proposal.
 
 
 
-
-
-
 -- ds.h1: Scroll To View Host Function
 
 Was wondering how would we implement [this site](https://www.businessonbot.com).
@@ -1088,12 +1214,10 @@ id: foo
 \-- ftd.text: About Us
 $on-click$: message-host $scroll-to-foo
 
-
 -- ds.markdown:
 
 This will use the ["smooth"
 behaviour](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView).
-
 
 We should eventually be able to do:
 
@@ -1117,9 +1241,6 @@ lang: ftd
 
 \-- ftd.text: About Us
 $on-click$: $fpm.scroll-to: id=foo
-
-
-
 
 
 
@@ -1162,9 +1283,6 @@ all the component constructors, and completely control the rendering.
 
 
 
-
-
-
 -- ds.h1: Syntax And Theme Packages
 
 26th Jan 2022
@@ -1189,8 +1307,6 @@ dependency of current package and make them available to ftd.
 
 
 
-
-
 -- ds.h1: `-- import: package`?
 
 Currently when you see `-- import: foo`, `foo` can either be package name or
@@ -1204,8 +1320,6 @@ needed), and always use `<current-package–name:module-name>` when importing.
 So both? I tend to prefer one. Rust does `crate`. But they also have to rename
 `crate` to any name, and I tend to use that in all my Rust code instead of
 `crate`.
-
-
 
 
 
@@ -1232,7 +1346,6 @@ argument it installs the latest release.
 
 FPM.dev, ftd.dev and a bunch of FifthTry sites use fpm in `--pre-release` mode
 so as to catch bugs and regressions early.
-
 
 
 
@@ -1297,6 +1410,9 @@ Nesting is still there, by two spaces. You can use free spaces before and after
 links, but not between the properties.
 
 
+
+
+
 -- ds.h1: Package Interfaces: Strict Vs Compatible
 
 17th Jan 2022
@@ -1318,7 +1434,6 @@ hello, this me.
 
 \-- ds.markdown:
 
-
 -- ds.code: resume-1.ftd
 lang: ftd
 
@@ -1336,7 +1451,6 @@ ftd.ui bio:
 
 \-- person me:
 
-
 \-- ftd.column:
 spacing: 20
 
@@ -1353,6 +1467,9 @@ start-date: 2020-August
 
 \--- resume.role: CEO
 start-date: 2020-August
+
+
+
 
 
 -- ds.h1: Another Thought On Prelude
@@ -1428,7 +1545,6 @@ lang: ftd
 \-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
 implements: fpm.dev/blog
 
-
 -- ds.markdown:
 
 Is equivalent to:
@@ -1499,7 +1615,6 @@ implements: fpm.dev/blog
 implements: fpm.dev/book
 book-author: k.author
 
-
 -- ds.markdown:
 
 Here we are saying `author` will refer to `j.author`, the default, and
@@ -1532,6 +1647,10 @@ any `ftd` document you come across in wild can be easily copy-paste-able in your
 project is easily achieved by this. You will always know what `book` is if you
 come across it anywhere, and can quickly pick from a huge number of themes that
 are implementing `book`.
+
+
+
+
 
 -- ds.h1: More Thoughts On Search: And Host Architecture
 
@@ -1589,6 +1708,10 @@ with FTD. Your JS will have no idea about DOM, your JS will simply set FTD
 variables, and FTD will take care of rendering them, and will call your JS from
 time to time, based on user events etc via `message-host`.
 
+
+
+
+
 -- ds.h1: Thought: Theme-able Internet
 
 When we are consuming a site, say HackerNews, we get their UI. But it would be
@@ -1598,6 +1721,10 @@ interface" for every site, and a "converter" which will crawl the site and
 create data of site in the package interface format ftd files. Then people can
 create their own theme implementing the package interface, and we have
 theme-able internet.
+
+
+
+
 
 -- ds.h1: Lint Vs Warning Vs Error
 
@@ -1618,6 +1745,10 @@ something is published.
 We can also have `fpm check` which will test for all warnings, and can be used
 as part of `pre-commit` hooks.
 
+
+
+
+
 -- ds.h1: Added And Removed `git2`
 
 We used to depend on `git` when doing validation of `fpm.package.zip` URL. This
@@ -1632,6 +1763,10 @@ contained.
 While I was doing that I realised the reason we use `git` is currently not strong
 enough, so Arpita removed `git2`.
 
+
+
+
+
 -- ds.h1: `FPM Editor` Plans
 
 In future we may be bringing `git2` dependency back though, when `fpm` becomes
@@ -1641,6 +1776,10 @@ need, it will be the editor, so you do not say SublimeText etc, it will have
 make `fpm` run as a web server, and maybe a side by side preview with auto reload.
 
 Integrated Authoring Environment it would be, IAE.
+
+
+
+
 
 -- ds.h1: `fpm-ui` -> `fpm`
 
@@ -1662,6 +1801,9 @@ all the variables to `fpm`.
 We have not yet properly documented those variables which we will be doing soon.
 
 
+
+
+
 -- ds.h1: The Struggle With Prelude
 
 13th Jan 2022
@@ -1669,6 +1811,10 @@ We have not yet properly documented those variables which we will be doing soon.
 We had a feature called prelude. You can define a file `FPM/prelude.ftd`, and
 this file is prepended to the top of every `.ftd` file in the package when its
 being evaluated by FTD.
+
+
+
+
 
 -- ds.h2: Motivation
 
@@ -1694,6 +1840,10 @@ global variables that should be available to all FTD files in that package. We
 can but them in say `config.ftd`, and then in `FPM/prelude.ftd` we can import
 the `config`, and it becomes available everywhere.
 
+
+
+
+
 -- ds.h2: This Approach Did Not Workout
 
 The problem with this approach was that it fails if you import any local FTD file
@@ -1715,10 +1865,14 @@ hold on to question of recursive module imports and not link it with prelude.
 
 We decide and removed this prelude feature {recently}.
 
-/-- ftd.text recently: recently
+-- ftd.text: recently
 link: https://github.com/FifthTry/fpm/pull/57
 color: $inherited.colors.text
 role: $inherited.types.copy-relaxed
+
+
+
+
 
 -- ds.h2: The Second Try
 
@@ -1754,6 +1908,10 @@ folder itself, so we know what documents are special, and prelude can only impor
 from FPM and not elsewhere, but it too was too much magic. And there was also a
 risk that it may bring every document in `FPM` folder due to transitive
 dependencies.
+
+
+
+
 
 -- ds.h2: The Next Attempt
 
@@ -1791,6 +1949,10 @@ We felt quite good about the design and Arpita wrote up a quick
 [PR](https://github.com/FifthTry/ftd/pull/72).
 
 Unfortunately I am not at all happy with it, and here is the thought process.
+
+
+
+
 
 -- ds.h2: Import Star Is An Anti Pattern
 
@@ -1860,6 +2022,10 @@ a bunch of things and create a useful common place.
 So as it stands the current PR is both an anti pattern and useless for the task
 at hand.
 
+
+
+
+
 -- ds.h2: Yet Another Proposal
 
 Is this the fifth proposal? Not sure. I swear Arpita this was not on purpose, to
@@ -1873,6 +2039,9 @@ lang: ftd
 \-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
 book: j.book
 ft: j.ft
+
+
+
 
 
 -- ds.h2: A Detour: Index Only Or Package Interface Specific Documents?
@@ -1989,6 +2158,10 @@ okay. But how do we "force" authors to do this? If they do not do that they will
 have harder time switching themes. So if `FifthTry/slide` had defined `slide.ftd`
 with `slide` component it would be forced by all authors to do the former.
 
+
+
+
+
 -- ds.h2: Coming Back To The Proposal
 
 So lets review this:
@@ -2032,6 +2205,10 @@ a: j.article
 \-- fpm.dependency: fifthtry.github.io/Some-Other-theme as k
 a: k.article
 
+
+
+
+
 -- ds.h2: But What Happened To `config.ftd`?
 
 We still will have to import `config.ftd` from all files. What can we do about it?
@@ -2056,6 +2233,10 @@ even if the key `config` is not found we can auto import it.
 
 Will it work? I guess we will only find out after Arpita has implemented it and
 it comes time for me to merge it.
+
+
+
+
 
 -- ds.h1: Thought: What About Search?
 
@@ -2086,6 +2267,10 @@ So lets say we are using one of these, and for purpose of this write-up lets say
 there is a function `search(query)` available in JavaScript that can initiate
 the search, and lets say it calls `found_results(results)` every time the result
 is ready. Let's assume these two functions do absolutely nothing with DOM.
+
+
+
+
 
 -- ds.h2: `message-host` to Rescue
 
@@ -2135,6 +2320,10 @@ This way changes will flow from FTD to JavaScript. In JavaScript, specifically,
 `fpm.js` we will call `search()` method, with `params` as input parameter.
 `search()` will perform a fetch from say Algolia.
 
+
+
+
+
 -- ds.h2: Passing Results Back From JavaScript
 
 JavaScript can modify any of the variables defined in FTD files. We are already
@@ -2149,6 +2338,9 @@ Once these variables are passed, the ftd "re-renders" the document. This way
 search result can be shown to users.
 
 Should not be very hard to implement.
+
+
+
 
 
 -- ds.h1: Thought: Package Identity
@@ -2260,13 +2452,14 @@ identities, so say if dependencies say you are publishing on
 
 
 
+
+
 -- ds.h1: Basic Translation UI Done!
 
 1st Jan 2022
 
 Arpita has been working relentlessly on transition UI and I am quite proud of what
 she has done so far.
-
 
 -- ds.image: You can see the translation banner and available languages
 src: $assets.files.static.images.translation.english-with-dropdown.jpg
@@ -2281,7 +2474,6 @@ page in that language.
 Now say you go to the the corresponding [Hindi
 translation](https://arpita-jaiswal.github.io/vivekanand-hi/), you see the
 following:
-
 
 -- ds.image:
 src: $assets.files.static.images.2zHKX8m.jpg
@@ -2301,7 +2493,6 @@ this document out of date, as in how much out of date it is, slight typo in
 original, or major re-write. Based on this knowledge reader can decide to stick
 with translation or read the original.
 
-
 -- ds.image:
 src: $assets.files.static.images.QzstrXh.jpg
 width: fill-container
@@ -2314,7 +2505,6 @@ technique for version tracking (what logical changes has happened in the new
 version/edition of a book/documentation), change request, two way sync etc.
 
 We also take you to translation status page if you are so interested:
-
 
 -- ds.image:
 src: $assets.files.static.images.BunGHmW.jpg
@@ -2330,6 +2520,9 @@ UI shown above as fallback, we first look for corresponding files in package's
 `FPM` folder.
 
 
+
+
+
 -- ds.h1: FPM Package Info Page
 
 We are accumulating a lot of package meta-data in generated `FPM.ftd` file during
@@ -2337,7 +2530,6 @@ build time, now Arpita has started displaying that data as well on
 `/FPM/` URL for any fpm built
 package. Currently the URL is almost empty, but after we merge [this
 PR](https://github.com/FifthTry/fpm/pull/43) it will start looking a bit like this:
-
 
 -- ds.image:
 src: $assets.files.static.images.90xCFV3.jpg
@@ -2351,6 +2543,9 @@ this page.
 This page is fully customisable. You can modify
 [`FPM/info.ftd`](https://github.com/FifthTry/fpm/blob/7655e4e10bebc602bdf92251f40176bece494827/ftd/info.ftd)
 file and tweak it based on your need.
+
+
+
 
 
 -- ds.h1: "FPM Theme"
@@ -2382,6 +2577,9 @@ You have full power over entire UI, the interaction, style, and you only need to
 learn FTD to design those pages, FTD something that is lot easier to learn than
 HTML/CSS/JS for doing this kind of job. FTD that is designed for non programmers
 even.
+
+
+
 
 
 -- ds.h1: Thought: How Should `fpm update` Work?
@@ -2458,6 +2656,10 @@ push mechanism.
 Update: Turns out [nostr](https://github.com/fiatjaf/nostr) describes the protocol
 very close to what I had in my mind.
 
+
+
+
+
 -- ds.h1: Thought: GlueSQL Based Package Query
 
 31st Dec 2021
@@ -2496,12 +2698,18 @@ there is good starting point, we will not have to start from scratch means this
 solution is now at least conceptually feasible.
 
 
+
+
+
 -- ds.h1: Translation Status Coming Along Nicely
 
 30th Dec 2021
 
 Arpita has been relentless about translation support. After finishing the basic
 features she is now focussing on data presentation. Some of the UIs that are ready.
+
+
+
 
 
 -- ds.h2: Translation Status Page
@@ -2511,7 +2719,6 @@ create a translation status page now. The URL is
 `<domain>/FPM/translation-status/`,
 which looks like this (screenshot added to capture current state, it so we can see
 the progress):
-
 
 -- ds.image:
 src: $assets.files.static.images.eL3C99a.jpg
@@ -2538,6 +2745,9 @@ the information at a glance. We will have to do usability testing, engage with
 proper UX people etc. But its a good start, quite happy with it.
 
 
+
+
+
 -- ds.h2: Language Detail Page
 
 So you saw overall status of translations across all languages, but you would want
@@ -2552,7 +2762,6 @@ would be monstrosity, "Language Detail Page" seems obvious.
 Anyways, so this is how say Hindi version of
 [arpita-jaiswal.github.io/vivekanand-hi/FPM/translation-status/](https://arpita-jaiswal.github.io/vivekanand-hi/FPM/translation-status/)
 looks like:
-
 
 -- ds.image:
 src: $assets.files.static.images.7gWQZvy.jpg
@@ -2569,6 +2778,9 @@ We then list all the document, currently their `document-id`, but soon we will s
 the `document-title` and `document-title-original` also (with decent non cluttered
 UI, maybe tooltips etc. We have to show timestamp of when the original was last
 modified and when the translation was last modified also in this table.
+
+
+
 
 
 -- ds.h2: A Note On Upto-Date-ness Of These Pages
@@ -2597,6 +2809,9 @@ fetch what we want when we want won't work, and such federated, change when need
 show stale but refresh etc approaches would be needed.
 
 
+
+
+
 -- ds.h2: UI Customization
 
 The screenshots you see are the UI that's shipped as default with `fpm`, but you
@@ -2609,6 +2824,9 @@ upcoming: package info page, package and document history pages, change request
 pages and so on.
 
 Further we have to figure out how do we internationalise the UI messages.
+
+
+
 
 
 -- ds.h1: UI Message Internationalisation
@@ -2629,11 +2847,13 @@ interface in that language doesn't have to keep deciding how to translate things
 We need to think more about this.
 
 
+
+
+
 -- ds.h1: Thought: Language IDs
 
 Currently we are using 2 letter ISO 639-1 code to represent language names, eg in
 `FPM.ftd` file:
-
 
 -- ds.code:
 lang: ftd
@@ -2641,7 +2861,6 @@ lang: ftd
 \-- package: foo.com
 language: en
 translation: foo.com/hi
-
 
 -- ds.markdown:
 
@@ -2671,6 +2890,9 @@ Then the other problem is how to show the name of language in language detail
 page in a form native speakers of that language can understand, so "ગુજરાતી" we
 should show. But the translation status page we should show probably both ગુજરાતી and
 Gujarati.
+
+
+
 
 
 -- ds.h1: Special Languages
@@ -2713,6 +2935,9 @@ entire value of `language:` key. So you can not have two translations with
 (simplified)`.
 
 
+
+
+
 -- ds.h1: Thought: Font/Asset Packages
 
 What if there were fonts that can be distributed as FPM package? They can chose to
@@ -2741,7 +2966,6 @@ package alias).
 
 How would we refer to such asset?
 
-
 -- ds.code:
 lang: ftd
 
@@ -2749,7 +2973,6 @@ lang: ftd
 
 \-- ds.image:
 src: foo:path/of/image.png
-
 
 -- ds.markdown:
 
@@ -2763,6 +2986,9 @@ needs asset `f1:foo.png`. Should we create `assets/a/foo.png` or
 dependencies with different names, so we end up having lots of copies of the same.
 
 To solve this folder name must match full package name, not just the alias.
+
+
+
 
 
 -- ds.h1: Thought: Testing Improvement (dynamic documents)
@@ -2780,6 +3006,9 @@ in the `.ftd` file, maybe it is bare-bones, and when someone uses realistic `.ft
 files, maybe things would not go as expected.
 
 
+
+
+
 -- ds.h2: `fpm.ftd` snapshotting
 
 We are currently creating one main dynamic file, `fpm.ftd`, its a virtual file,
@@ -2788,6 +3017,9 @@ rendered, and it contains data related to that document.
 
 We should snapshot the generated `fpm.ftd` file as well on file system, and ensure
 it doesn't change without review, so all the variables are asserted upon.
+
+
+
 
 
 -- ds.h2: Special Files
@@ -2805,11 +3037,17 @@ smaller diffs. I guess I just trying to reduce the amount of code review I have 
 do 😅.
 
 
+
+
+
 -- ds.h1: `fpm update` Implemented
 
 A few days back, as part of some other larger PR, Arpita implemented `fpm update`.
 It's currently pretty "hacky", deletes the `.packages` folder, and re-downloads all
 the dependencies.
+
+
+
 
 
 -- ds.h1: `FPM/prelude.fpm` Added
@@ -2822,6 +3060,9 @@ Usually you would have a `config.ftd` file that can store a bunch of things that
 you want available everywhere. Also you would want to include one or more component
 libraries in your `ftd` files. Putting them all in `FPM/prelude.ftd` saves you from
 repeating the same lines in every document, making documents that bit cleaner.
+
+
+
 
 
 -- ds.h1: Thought: Publishing `FPM.ftd` With Extra Data, and Better /FPM/ Page
@@ -2845,6 +3086,9 @@ that becomes even more interesting.
 We will create `FPM/info.ftd` file, which will have all the `FPM.ftd` data
 available, and would be rendered in `FPM/index.html`, so we can have a proper
 package meta data page as well.
+
+
+
 
 
 -- ds.h1: Source Of Truth: Repo Or Deployed?
@@ -2871,6 +3115,9 @@ So it seems that the `<package-name>/FPM.ftd` should be considered source of tru
 when its materially different from `<package-repo>/FPM.ftd`.
 
 
+
+
+
 -- ds.h1: Domain In Package Support Done
 
 28th Dec 2021
@@ -2882,7 +3129,6 @@ identifiers](https://github.com/FifthTry/fpm/pull/34/files).
 Consider this [FPM.ftd](https://github.com/Arpita-Jaiswal/vivekanand/blob/main/FPM.ftd)
 file for instance:
 
-
 -- ds.code:
 lang: ftd
 
@@ -2893,7 +3139,6 @@ language: en
 zip: github.com/arpita-jaiswal/vivekanand/archive/refs/heads/main.zip
 translation: arpita-jaiswal.github.io/vivekanand-hi
 translation: arpita-jaiswal.github.io/vivekanand-gu
-
 
 -- ds.markdown:
 
@@ -2911,6 +3156,9 @@ meta-data of that package, and she used to have to download the entire FPM packa
 zip file just to get the language (so she can show it in the translation dropdown).
 
 
+
+
+
 -- ds.h1: Idea: Canonical URL Support
 
 So we are going to approach few open source projects to checkout FPM and our
@@ -2924,29 +3172,28 @@ original URL for improving their search ranking.
 
 So we will support `canonical-url` key in `fpm.package`:
 
-
 -- ds.code:
 lang: ftd
 
 \-- package: www.amitu.com/rust-book/
 canonical-url: https://doc.rust-lang.org/book/
 
-
 -- ds.markdown:
 
 Currently we are supporting it only at package level. This means every URL that we
 generate, eg /foo/, which is generated from `foo.ftd`, will be have a:
-
 
 -- ds.code: Note the /foo/ appended to canonical-url
 lang: html
 
 <link rel="canonical" href="https://doc.rust-lang.org/book/foo/" />
 
-
 -- ds.markdown:
 
 In the generate file, with `href` pointing to corresponding URL.
+
+
+
 
 
 -- ds.h2: `fpm.canonical-url`
@@ -2954,6 +3201,9 @@ In the generate file, with `href` pointing to corresponding URL.
 In future we will also allow `canonical-url` on a special module `fpm`, so any
 document can `-- import: fpm` and overwrite `fpm.canonical-url: <some url>` to
 specify arbitrary canonical URL on a per document basis if they wanted to.
+
+
+
 
 
 -- ds.h1: Document Title Support Implemented
@@ -2976,6 +3226,9 @@ file path of the file being process with respect to package root, without the
 `.ftd` extension) is the title.
 
 
+
+
+
 -- ds.h1: Dependency Alias Support Implemented
 
 [Shobhit's PR for dependency aliasing][pr] was merged today. This brings us one
@@ -2992,7 +3245,6 @@ cross portability across all of them "as long as it makes sense": follows the sa
 
 This is how you create an alias:
 
-
 -- ds.code:
 lang: ftd
 
@@ -3003,7 +3255,6 @@ zip: github.com/fifthtry/amitu/archive/refs/heads/main.zip
 
 \-- fpm.dependency: fifthtry.github.io/blog-theme as theme
 
-
 -- ds.markdown:
 
 We have used `as theme` to create an alias `theme` for the package
@@ -3011,14 +3262,12 @@ We have used `as theme` to create an alias `theme` for the package
 
 In order to use it you can do this:
 
-
 -- ds.code:
 lang: ftd
 
 \-- import: theme
 
 \-- theme.h4 : Hello world!
-
 
 -- ds.markdown:
 
@@ -3041,6 +3290,9 @@ Note: We can also import the full package name if we wanted.
      you not?
 
 
+
+
+
 -- ds.h1: Translation UI Working!
 
 27th Dec 2021
@@ -3058,11 +3310,17 @@ languages.
 Super awesome job 🙌, Arpita!
 
 
+
+
+
 -- ds.h1: Package Name With Domain?
 
 Currently when we add a dependency on another package, we need two bits of
 information, the name of the package and the repository where you can get the
 package from.
+
+
+
 
 
 -- ds.h2: Decentralisation
@@ -3096,18 +3354,19 @@ that means there is a lot of play in features offered, pricing and business mode
 and so on.
 
 
+
+
+
 -- ds.h2: Golang Like Package Naming
 
 Golang recommends package names to contain domain names, including special
 [emphasis on vanity URLs](https://rakyll.org/style-packages/) (not just URLs
 pointing to code hosting locations). Their entire tooling works with domain names:
 
-
 -- ds.code:
 lang: sh
 
 godoc cloud.google.com/go/datastore
-
 
 -- ds.markdown:
 
@@ -3118,23 +3377,23 @@ the documentation of that module.
 
 So can we have:
 
-
 -- ds.code:
 lang: ftd
 
 \-- fpm.dependency: amitu.com/realm
 
-
 -- ds.markdown:
 
 Instead of
-
 
 -- ds.code:
 lang: ftd
 
 \-- fpm.dependency: amitu/realm
 repo: github
+
+
+
 
 
 -- ds.h2: `fpm build` to copy `FPM.ftd`
@@ -3150,6 +3409,9 @@ more optimal downloads (eg `git pull` instead of full download). Git or upcoming
 etc, so uploading `.zip` is not optimal.
 
 We must copy just the `FPM.ftd` file instead.
+
+
+
 
 
 -- ds.h2: The New Package Download Scheme
@@ -3169,6 +3431,9 @@ that `git clone` understands), and we can support `hg`/`svn`/`fossil` etc as wel
 
 The package name can not contain `https://`, for cleanliness. We will do what
 modern browsers do, first check if `https://` is opening, else try `http://`.
+
+
+
 
 
 -- ds.h1: `fpm build --base=/foo/` for Github Pages
@@ -3197,6 +3462,9 @@ pro. Later somehow feels cleaner to me. Not yet sure.
 If you are using GitHub Pages, build your files with `fpm build --base=/` locally
 and `fpm build --base=/repo-name/` in your GitHub Actions, and use remove use `x/`
 instead of `/x/` when creating links in your ftd files.
+
+
+
 
 
 -- ds.h1: `fpm` CLI now Supports Windows
@@ -3234,6 +3502,9 @@ framework for CLI applications, we have developed at FifthTry, but it too doesn'
 support Windows yet.
 
 
+
+
+
 -- ds.h1: Thought: Unicode in FPM/FTD
 
 Was looking at this thread on Reddit: [Filename with dots or Unicode chars not
@@ -3261,6 +3532,9 @@ all our "id"s should accept allow them (minis keywords reserved by FTD itself, e
 `record`).
 
 
+
+
+
 -- ds.h1: Thoughts: Package Naming Restrictions & `$FPM_HOME`
 
 Other than Unicode stuff in package names, we actually have some restricts on
@@ -3281,6 +3555,9 @@ fetch the source version of package, so in dependency it would be enough to give
 the package name, (with domain name as part of package name).
 
 I was going in another direction, but I think I like this decision even more.
+
+
+
 
 
 -- ds.h1: Font Support Added (and thoughts on future renderers)
@@ -3310,14 +3587,12 @@ So coming back to problem: we only had place to store one font file, which clear
 won't cut it. The easy way to fix was suggested by Sourabh to allow people to pass
 URL of CSS file, eg Google Font recommends something like this:
 
-
 -- ds.code:
 lang: html
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 </style>
-
 
 -- ds.markdown:
 
@@ -3345,7 +3620,6 @@ to use such custom rendering even for current HTML based browsers.
 So we can not include CSS. What we did instead of looked at `@font-face` from CSS,
 and created an equivalent for the same:
 
-
 -- ds.code:
 lang: ftd
 
@@ -3357,11 +3631,9 @@ style: normal
 woff2: https://fonts.gstatic.com/s/roboto/v29-italic.woff2
 style: italic
 
-
 -- ds.markdown:
 
 This is quite equivalent to what those CSS files for font include:
-
 
 -- ds.code:
 lang: css
@@ -3383,7 +3655,6 @@ lang: css
   unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 
-
 -- ds.markdown:
 
 We support all the attributes on `fpm.font`, with simplified names, eg `name`
@@ -3399,12 +3670,18 @@ Google Font etc, and auto convert it to `ftd.font` specs that can be added to
 `FPM.ftd` file.
 
 
+
+
+
 -- ds.h1: Doc/TOC Subtree Re-levelling Problem
 
 23rd Dec 2021
 
 So I said including content from other package is proving to be challenging. Lets
 see the problem. We have to modes of including contents from other packages.
+
+
+
 
 
 -- ds.h2: Doc Sub-Tree Includes
@@ -3422,13 +3699,11 @@ So we want to include that entire `h2` in current document, including that `h2`'
 descendents like `h3` etc, all code and images and tables of that `h2`. We can
 write something like this:
 
-
 -- ds.code:
 lang: ftd
 
 \-- include: the-id-of/the-document
 id: the-id-of-the-h2
-
 
 -- ds.markdown:
 
@@ -3437,13 +3712,15 @@ that much complexity, and it wants to include that `h2` at `h1` level.
 
 This is the "re-levelling" problem. We may want to write something like this:
 
-
 -- ds.code:
 lang: ftd
 
 \-- include: the-id-of/the-document
 id: the-id-of-the-h2
 level: h1
+
+
+
 
 
 -- ds.h3: Cross Package Component Visual Harmonisation
@@ -3459,6 +3736,9 @@ the package interface of the package being substituted), we achieve component
 visual harmonisation.
 
 
+
+
+
 -- ds.h3: Re-Levelling Challenge
 
 In visual harmonisation we had to map `foo.code` to `bar.code`, the name of
@@ -3472,7 +3752,6 @@ package.
 
 We can try to solve it by creating promotion rule entry in `FPM.ftd`:
 
-
 -- ds.code:
 lang: ftd
 
@@ -3483,12 +3762,14 @@ heading-2: heading-1
 heading-3: heading-2
 heading-4: heading-3
 
-
 -- ds.markdown:
 
 With these rules in place we are saying 1. only the components listed in
 `promotion-rules` are to be promoted or demoted, and 2. `heading-2` can be
 promoted to `heading-1` and demoted to `heading-3` and so on.
+
+
+
 
 
 -- ds.h2: TOC Sub-Tree Includes
@@ -3508,6 +3789,8 @@ and asking documents to use these variables instead of making assumptions about
 their roles etc.
 
 
+
+
 -- ds.h1: Challenges In "Remixing" Text Content
 
 22nd Dec 2021
@@ -3521,6 +3804,9 @@ that list or use the variable, and create your custom visualisations etc. This
 part of FTD/FPM is working well already.
 
 But when it comes to text content, it proving to be surprisingly hard.
+
+
+
 
 
 -- ds.h1: Remixing Books: Documents from Dependency Packages
@@ -3582,6 +3868,9 @@ other packages as dependencies. This can allow "knowledge curators" to create
 learning paths for specific audiences.
 
 
+
+
+
 -- ds.h1: Translation UI Design & Multi FTD Technique
 
 20th Dec 2021
@@ -3607,6 +3896,9 @@ message-host show-main` etc.
 We are quite happy with this design for now. I wrote couple of feature requests
 that can be implemented using this: ["banner support"](/fpm/~/32/) and [encryption
 support](/fpm/~/33/).
+
+
+
 
 
 -- ds.h1: Can Translation Package Use Tracking?
@@ -3679,6 +3971,9 @@ latest version.
 Where does it leave us? Disallow tracking in translation packages?
 
 
+
+
+
 -- ds.h1: Translation Way Forward
 
 17th Dec 2021
@@ -3734,10 +4029,12 @@ with variables like `original-language`, `translation-language`,
 `original-latest-date`, `original-diff` etc.
 
 
+
+
+
 -- ds.h1: Document-Name and Package Ambiguities
 
 15th Dec 2021
-
 
 When referring to a document, we use a document id. The document id for a document
 in current package is the relative path from package root. If we are referring to
@@ -3780,6 +4077,9 @@ content of `logo.png.ftd` and if you request image you get the `.png`. But then 
 would you link to the file? Say you want to open an image in a new tab?
 
 
+
+
+
 -- ds.h1: TranslationStatus Output
 
 14th Dec 2021
@@ -3811,6 +4111,9 @@ Also, `main()` should do the print to stdout or convert to json etc and not
 individual command handler functions.
 
 
+
+
+
 -- ds.h1: Arpita Next Steps
 
 13th Dec 2021
@@ -3830,6 +4133,9 @@ individual command handler functions.
 - [ ] `fpm mark-upto-date a --target b --on <timestamp>`
 - [ ] `fpm diff <optional-folder>` to only show regular diff (only changes from
       `.history` file)
+
+
+
 
 
 -- ds.h1: `fpm::document` refactor
@@ -4737,25 +5043,25 @@ wc -l tags
      312 tags
 
 
-/-- boolean show-t-py: false
 
 
-/-- ftd.text: Hide `t.py`
+
+-- ftd.text: Hide `t.py`
 if: {$show-t-py}
-$on-click$: toggle $show-t-py
+$on-click$: $ftd.toggle($a = $show-t-py)
 color: $inherited.colors.text
 role: $inherited.types.copy-relaxed
 
 
-/-- ftd.text: Show `t.py`
-if: not $show-t-py
-$on-click$: toggle $show-t-py
+-- ftd.text: Show `t.py`
+if: {!$show-t-py}
+$on-click$: $ftd.toggle($a = $show-t-py)
 color: $inherited.colors.text
 role: $inherited.types.copy-relaxed
 
 
-/-- ds.code:
-if: $show-t-py
+-- ds.code:
+if: {$show-t-py}
 lang: py
 
 import sys

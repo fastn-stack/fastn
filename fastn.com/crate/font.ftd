@@ -1,9 +1,9 @@
--- ft.page: `fpm::Font`
+-- ds.page: `fpm::Font`
 
 `fpm::Font` struct keeps track of a font. Fonts are defined in `FPM.ftd` file
 and are stored in [`fpm::Package`](crate/package/) struct after parsing.
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 #[derive(serde::Deserialize, Debug, Clone)]
@@ -23,3 +23,5 @@ pub struct Font {
     weight: Option<String>,
     stretch: Option<String>,
 }
+
+-- end: ds.page

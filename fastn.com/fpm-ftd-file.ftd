@@ -1,13 +1,16 @@
 -- import: fifthtry.github.io/admonitions as cbox
--- ft.page: `FPM.ftd`
 
 
--- ft.markdown: 
+
+
+
+-- ds.page: `FPM.ftd`
+
+-- ds.markdown: 
 
 In every [FPM package](/fs/) there must be a file named `FPM.ftd`.
 
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
@@ -16,17 +19,26 @@ lang: ftd
 repo: github
 
 
--- ft.h1: `fpm.package`
+
+
+
+-- ds.h1: `fpm.package`
 
 This is the only mandatory `ftd section` in `FPM.ftd` file.
 
 
--- ft.h2: `name: caption`
+
+
+
+-- ds.h2: `name: caption`
 
 This is the name of the package. This is the only required value.
 
 
--- ft.h2: `repo: optional string`
+
+
+
+-- ds.h2: `repo: optional string`
 
 An FPM package can be hosted on [`fpm-repo`](/fpm/about/) or on Github etc.
 
@@ -44,17 +56,22 @@ specific version from Git repo, you can locate its corresponding `.zip` file and
 store it here.
 
 
--- ft.h2: `download-base-url`
+
+
+
+-- ds.h2: `download-base-url`
 
 `download-base-url` is the base url of package where it is actually stored.
 
 
--- ft.h1: `fpm.dependency`
+
+
+
+-- ds.h1: `fpm.dependency`
 
 A package can depend on another package.
 
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
@@ -65,7 +82,10 @@ lang: ftd
 repo: github
 
 
--- ft.markdown:
+
+
+
+-- ds.markdown:
 
 Here the package `amitu` has a dependency on `fifthtry/fpm-blog`. When any
 dependency is specified, `fpm build` downloads and stored it in `.packages` folder.
@@ -73,25 +93,29 @@ dependency is specified, `fpm build` downloads and stored it in `.packages` fold
 Any number of dependencies can be mentioned.
 
 
--- ft.h2: `repo`
+
+
+
+-- ds.h2: `repo`
 
 This is the repo where the dependency is hosted. If the `repo` is omitted it is
 assumed to the same as `repo` of the current package.
 
 
--- ft.h2: `mount-point`
+
+
+
+-- ds.h2: `mount-point`
 
 `fpm.dependency` now contains a header `mount-point`. It is used for clean urls
 for a dependency.
 
-
--- ft.code: abrark/FPM.ftd
+-- ds.code: abrark/FPM.ftd
 lang: ftd
 
 \-- import: fpm
 
 \-- fpm.package: abrark.com
-
 
 \-- fpm.dependency: fifthtry.github.io/todos as todos
 mount-point: /todos/
@@ -101,13 +125,16 @@ mount-point: /todos/
 # Todos
 - TODOs: /todos/
 
--- ft.markdown:
+
+
+
+
+-- ds.markdown:
 
 All the requests coming to `abrark.com` which has prefix `/todos/`(`mount-point`)
 in the urls, will be served by package `fifthtry.github.io/todos`.
 
-
--- ft.code: fifthtry.github.io/todos/FPM.ftd
+-- ds.code: fifthtry.github.io/todos/FPM.ftd
 lang: ftd
 
 \-- import: fpm
@@ -124,11 +151,14 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/kameri-app/main
 - List: /
 
 
--- ft.h2: `icon`
+
+
+
+-- ds.h2: `icon`
 
 Package can have a optional icon as well, which is type of ftd.image-src.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.image-src icon:
@@ -140,32 +170,40 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/kameri-app/main
 icon: $icon
 
 
--- ft.h1: `fpm.font`
+
+
+
+-- ds.h1: `fpm.font`
 
 Any custom fonts can be included in FTD generated HTML files by using `font`
 blocks:
 
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.font: myFirstFont
 woff: sansation_light.woff
 woff2: sansation_light.woff
 
--- ft.h2: `name: caption`
+
+
+
+
+-- ds.h2: `name: caption`
 
 `name` is required, it must be used to refer to the font in the ftd files, eg:
 
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: hello
 font: myFirstFont
 
 
--- ft.h2: `woff`, `woff2`
+
+
+
+-- ds.h2: `woff`, `woff2`
 
 The URL of the font files. Both `woff` and `woff2` are supported. We will use
 `woff2` if it is provided, else `woff`.
@@ -173,7 +211,10 @@ The URL of the font files. Both `woff` and `woff2` are supported. We will use
 At least one of the two must be provided.
 
 
--- ft.h1: `fpm.ignore`
+
+
+
+-- ds.h1: `fpm.ignore`
 
 You can add files to ignore when creating a build. Ignored files are not processed
 during build process, and are not made part of `.build` folder.
@@ -181,27 +222,30 @@ during build process, and are not made part of `.build` folder.
 By default `fpm` already ignores all files that `git` ignores, if the package is
 part of a git repository. You can also ignore files by using `fpm.ignore`:
 
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.ignore: *.txt
 \-- fpm.ignore: /db.sqlite
 
 
--- ft.markdown:
+
+
+
+-- ds.markdown:
 
 Any number of patterns can be specified.
 
 
--- ft.h1: User Group `fpm.user-group`
+
+
+
+-- ds.h1: User Group `fpm.user-group`
 
 You can add user groups to FPM.ftd file. Details in [user-group
 docs](/dev/user-group)
 
-
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.user-group: readers
@@ -224,7 +268,9 @@ group: fifthtry.github.io/doc-site/group_id
 
 
 
--- ft.h1: `fpm.sitemap`
+
+
+-- ds.h1: `fpm.sitemap`
 
 You can add a sitemap in FPM.ftd file. Details in [sitemap docs](sitemap/).
 In sitemap you can also put `readers` and `writers` user groups at section,
@@ -232,7 +278,7 @@ subsection and toc level.
 
 Note: `sitemap` will only contain urls without dynamic parameters.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -253,7 +299,11 @@ readers: random
 - ToC 2: /page2
 readers: random
 
--- ft.h1: `fpm.dynamic-urls`
+
+
+
+
+-- ds.h1: `fpm.dynamic-urls`
 
 You can add a `dynamic-urls`, syntactically same as sitemap. In`dynamic-urls`
 you can also put `readers` and `writers` user groups at section, subsection
@@ -261,7 +311,7 @@ and toc level.
 
 Note: `dynamic-urls` will only contain urls with dynamic parameters.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.dynamic-urls:
@@ -278,11 +328,12 @@ writers: writers
   writers: writers
 
 
--- ft.h1: `fpm.app`
 
 
 
--- ft.code: App Type
+-- ds.h1: `fpm.app`
+
+-- ds.code: App Type
 lang: ftd
 
 ;; FPM Apps Installation
@@ -296,7 +347,7 @@ string list config:
 string list readers:
 string list writers:
 
--- ft.code: App Processor
+-- ds.code: App Processor
 lang: ftd
 
 \-- record app-ui-item:
@@ -315,3 +366,5 @@ app-indexy-item list items:
 
 \-- fpm.app-ui apps:
 $processor$: fpm-apps
+
+-- end: ds.page

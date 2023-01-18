@@ -1,22 +1,24 @@
--- ft.page: `belongs-to` Processor
+-- ds.page: `belongs-to` Processor
 
 TODO:
 
 A document may show different content based on who is visiting the document. To
 do that the document can request if the current user belongs to any [`group`
-defined in FPM.ftd](/dev/user-group/).
+defined in FPM.dsd](/dev/user-group/).
 
--- ft.code:
-lang: ftd
+-- ds.code:
+lang: dsd
 
 \-- boolean is-admin:
 $processor$: belongs-to
 group: admin
 
-\-- ft.h1: Regular Heading, visible to everyone
+\-- ds.h1: Regular Heading, visible to everyone
 
-\-- ft.h1: Only Admins Can See This
+\-- ds.h1: Only Admins Can See This
 if: $is-admin
 
 This heading and para is only visible to admins because we have used `if:
 $is-admin` in the heading.
+
+-- end: ds.page

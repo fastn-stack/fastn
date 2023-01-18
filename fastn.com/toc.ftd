@@ -1,13 +1,13 @@
--- ft.page: `$processor$: toc`
+-- ds.page: `$processor$: toc`
 
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 This is "table of content processor". It has the following data type:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record toc-item:
@@ -16,12 +16,12 @@ string url:
 toc-item list children:
 
 
--- ft.markdown:
+-- ds.markdown:
 
 You can use it like this:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- toc-item list toc:
@@ -37,7 +37,7 @@ $processor$: toc
     Supports Nesting as Well
 
 
--- ft.markdown:
+-- ds.markdown:
 
 `toc` is used for creating optionally nested table of content data. Usually it is
 used to succinctly describe links in nav bars or creating table of content.
@@ -49,3 +49,5 @@ For nesting we can indent both lines by two spaces. Any amount of nesting is
 possible.
 
 Currently the parser is strict, rules must be followed exactly.
+
+-- end: ds.page

@@ -1,4 +1,4 @@
--- ft.page: Local Identity for Testing
+-- ds.page: Local Identity for Testing
 
 Since identity requires people to sign in, and that may happen via oauth etc,
 local development can become a pain, so we use a local identity feature, only
@@ -6,31 +6,33 @@ for testing.
 
 [How to Test Auth](/how-to/auth-testing/)
 
--- ft.h1: When Would This Feature Work
+-- ds.h1: When Would This Feature Work
 
 For safety this will only happen if fpm serve is listening on 127.0.0.1. Also
 it will not happen if [HOST key feature](https://github.com/FifthTry/fpm/issues/204)
 is being used.
 
 
--- ft.h1: How to Use Local Identities
+-- ds.h1: How to Use Local Identities
 
 This feature can be used on a per request basis using `identities` cookie, or
 globally via `--identities` cli argument to `fpm serve`.
 
--- ft.h2: `identities` request cookie
+-- ds.h2: `identities` request cookie
 
 If a cookie named `identity` is present as part of HTTP request, and contains
 comma separated list of `email: amitu, github: amitu` identities, we will use
 the cookie content as identities of current user.
 
--- ft.h2: `--identities` cli parameter
+-- ds.h2: `--identities` cli parameter
 
 When launching fpm server we can also specify
 `fpm serve --identities="email: amitu, github: amitu"`, if so every request will
 be assumed to have this identity.
 
--- ft.h2: What to do if both are passed?
+-- ds.h2: What to do if both are passed?
 
 If the server started `--identities` and `identities` cookie is found, so we will
 prefer cli `--identities` and ignore the cookie.
+
+-- end: ds.page

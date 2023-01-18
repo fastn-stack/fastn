@@ -1,6 +1,10 @@
 -- import: fifthtry.github.io/admonitions as cbox
 
--- ft.page: `$processor$: http`
+
+
+
+
+-- ds.page: `$processor$: http`
 
 This processor is used to initialise some FTD variable with content of JSON fetched
 from HTTP.
@@ -11,12 +15,11 @@ The http request is made on build time if you are using fpm in [static site
 mode](/static/), and instead if you are using [server mode](/server/) then this
 processor makes http request on every page load.
 
--- ft.markdown:
+-- ds.markdown:
 
 Consider this data type:
 
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record repo:
@@ -32,16 +35,14 @@ repo list items:
 
 \-- result r:
 
-
--- ft.markdown:
+-- ds.markdown:
 
 We have two records: `repo`, and `result`. We also have a variable of type `result`.
 
 Lets initialise this variable with result of fetching the top repositories from
 Github:
 
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- r:
@@ -51,15 +52,15 @@ sort: stars
 order: desc
 q: language:python
 
-
--- ft.h2: `url: string`
+-- ds.h2: `url: string`
 
 This is the URL where we would be fetching the JSON from. It is mandatory.
 
-
--- ft.h2: Key: Value pairs
+-- ds.h2: Key: Value pairs
 
 Each key value pair is passed added to the URL as query params.
 
 The response of the JSON must match with type of the variable where we are storing
 the result, here it is `r` of type `record` defined above.
+
+-- end: ds.page
