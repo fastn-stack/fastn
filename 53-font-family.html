@@ -12,6 +12,8 @@
 "ftd#dark-mode": false,
 "ftd#device": "desktop",
 "ftd#follow-system-dark-mode": true,
+"ftd#font-code": "sans-serif",
+"ftd#font-copy": "sans-serif",
 "ftd#font-display": "sans-serif",
 "ftd#system-dark-mode": false,
 "inherited#colors": {
@@ -297,6 +299,7 @@
 "inherited#types": {
 "blockquote": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "14px",
 "weight": 400
@@ -309,6 +312,7 @@
 },
 "copy-large": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "28px",
 "size": "20px",
 "weight": 400
@@ -321,6 +325,7 @@
 },
 "copy-relaxed": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "24px",
 "size": "16px",
 "weight": 400
@@ -333,6 +338,7 @@
 },
 "copy-tight": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "20px",
 "size": "16px",
 "weight": 400
@@ -345,6 +351,7 @@
 },
 "fine-print": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "14px",
 "weight": 400
@@ -357,6 +364,7 @@
 },
 "heading-hero": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "60px",
 "size": "48px",
 "weight": 400
@@ -382,6 +390,7 @@
 },
 "heading-medium": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "44px",
 "size": "32px",
 "weight": 400
@@ -394,6 +403,7 @@
 },
 "heading-small": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "36px",
 "size": "24px",
 "weight": 400
@@ -406,6 +416,7 @@
 },
 "label-big": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "22px",
 "size": "16px",
 "weight": 400
@@ -418,6 +429,7 @@
 },
 "label-small": {
 "desktop": {
+"font-family": "sans-serif",
 "line-height": "16px",
 "size": "14px",
 "weight": 400
@@ -518,7 +530,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 40px; font-weight: 400; height: auto; line-height: 48px; text-decoration: none; width: auto" class="ft_md">hello world</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 40px; font-weight: 400; height: auto; line-height: 48px; text-decoration: none; width: auto" class="ft_md">hello world 1</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 16px; font-weight: 400; height: auto; line-height: 20px; text-decoration: none; width: auto" class="ft_md">hello world 2</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; font-family: sans-serif; font-size: 14px; font-weight: 400; height: auto; line-height: 16px; text-decoration: none; width: auto" class="ft_md">hello world 3</div></div>
 
 
 <script>
@@ -1219,6 +1231,74 @@ document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})[
 }
 else {document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
 }
+window.node_change_main["1:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).desktop)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).mobile)));}
+}
+
+window.node_change_main["1:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).desktop)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).mobile)));}
+}
+
+window.node_change_main["1:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).desktop)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).mobile)));}
+}
+
+window.node_change_main["1:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).desktop)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).mobile)));}
+}
+
+window.node_change_main["1:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).desktop)));
+}
+else {document.querySelector(`[data-id="1:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.copy-tight", data).mobile)));}
+}
+window.node_change_main["2:main__font-family"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).desktop)));
+}
+else {document.querySelector(`[data-id="2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).mobile)));}
+}
+
+window.node_change_main["2:main__font-size"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).desktop)));
+}
+else {document.querySelector(`[data-id="2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).mobile)));}
+}
+
+window.node_change_main["2:main__font-weight"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).desktop)));
+}
+else {document.querySelector(`[data-id="2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).mobile)));}
+}
+
+window.node_change_main["2:main__letter-spacing"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).desktop)));
+}
+else {document.querySelector(`[data-id="2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).mobile)));}
+}
+
+window.node_change_main["2:main__line-height"] = function(data) {
+if(data["ftd#device"] == "desktop"){
+document.querySelector(`[data-id="2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).desktop)));
+}
+else {document.querySelector(`[data-id="2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.fine-print", data).mobile)));}
+}
 window.set_value_main = {};
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
 if (!!remaining) {
@@ -1229,13 +1309,33 @@ set_data_value(data, "ftd#device", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__letter-spacing"]){window.node_change_main["1:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__letter-spacing"]){window.node_change_main["2:main__letter-spacing"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-weight"]){window.node_change_main["1:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
 }
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-family"]){window.node_change_main["1:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__font-size"]){window.node_change_main["2:main__font-size"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__font-family"]){window.node_change_main["2:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-size"]){window.node_change_main["1:main__font-size"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__line-height"]){window.node_change_main["1:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__line-height"]){window.node_change_main["2:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__font-weight"]){window.node_change_main["2:main__font-weight"](data);
 }
 };
 
@@ -1246,15 +1346,15 @@ set_data_value(data, "inherited#types" + "." + remaining, new_value);
 set_data_value(data, "inherited#types", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-size"]){window.node_change_main["1:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-family"]){window.node_change_main["1:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__font-weight"]){window.node_change_main["1:main__font-weight"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__letter-spacing"]){window.node_change_main["1:main__letter-spacing"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__line-height"]){window.node_change_main["1:main__line-height"](data);
 }
 };
 
