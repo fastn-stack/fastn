@@ -458,6 +458,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1222,7 +1223,7 @@ else {document.querySelector(`[data-id="0,0:main"]`).style["display"] = "none";}
 }
 
 window.node_change_main["0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#arpita.name", data);
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#arpita.name", data, null);
 }
 window.node_change_main["1,1:main__display"] = function(data) {
 if(function(){

@@ -471,6 +471,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1226,16 +1227,16 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#toc.name", data);
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#toc.name", data, null);
 }
 window.node_change_main["0,1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,1,0:main"]`).innerHTML = resolve_reference("foo#toc.children.0.name", data);
+document.querySelector(`[data-id="0,1,0:main"]`).innerHTML = resolve_reference("foo#toc.children.0.name", data, null);
 }
 window.node_change_main["0,2,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,2,0:main"]`).innerHTML = resolve_reference("foo#toc.children.1.name", data);
+document.querySelector(`[data-id="0,2,0:main"]`).innerHTML = resolve_reference("foo#toc.children.1.name", data, null);
 }
 window.node_change_main["0,2,1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,2,1,0:main"]`).innerHTML = resolve_reference("foo#toc.children.1.children.0.name", data);
+document.querySelector(`[data-id="0,2,1,0:main"]`).innerHTML = resolve_reference("foo#toc.children.1.children.0.name", data, null);
 }
 window.set_value_main = {};
 window.set_value_main["foo#toc"] = function (data, new_value, remaining) {

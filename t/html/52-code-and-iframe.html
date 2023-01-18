@@ -455,6 +455,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1223,7 +1224,7 @@ else {document.querySelector(`[data-id="3,0:main"]`).style["display"] = "none";}
 }
 
 window.node_change_main["3,0:main__text"] = function(data) {
-document.querySelector(`[data-id="3,0:main"]`).innerHTML = resolve_reference("foo#foo:name:3", data);
+document.querySelector(`[data-id="3,0:main"]`).innerHTML = resolve_reference("foo#foo:name:3", data, null);
 }
 window.set_value_main = {};
 window.set_value_main["foo#foo:name:3"] = function (data, new_value, remaining) {

@@ -493,6 +493,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1249,98 +1250,98 @@ a.value = !a.value
 window.node_change_main = {};
 window.node_change_main["0:main__background-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#step-2", data).light;
+document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#step-2", data, null).light;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#step-2", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#step-2", data, null).dark;}
 }
 
 window.node_change_main["0,0,0,0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,0,0,0:main"]`).innerHTML = resolve_reference("foo#header:site-name:0,0,0", data);
+document.querySelector(`[data-id="0,0,0,0,0:main"]`).innerHTML = resolve_reference("foo#header:site-name:0,0,0", data, null);
 }
 
 window.node_change_main["0,0,0,0,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).light;
+document.querySelector(`[data-id="0,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).light;
 }
-else {document.querySelector(`[data-id="0,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).dark;}
+else {document.querySelector(`[data-id="0,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).dark;}
 }
 window.node_change_main["0,0,0,1,0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).innerHTML = resolve_reference("foo#toc.name", data);
+document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).innerHTML = resolve_reference("foo#toc.name", data, null);
 }
 
 window.node_change_main["0,0,0,1,0,0:main__href"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).setAttribute("href", resolve_reference("foo#toc.link", data));
+document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).setAttribute("href", resolve_reference("foo#toc.link", data, null));
 }
 
 window.node_change_main["0,0,0,1,0,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).light;
+document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).light;
 }
-else {document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).dark;}
+else {document.querySelector(`[data-id="0,0,0,1,0,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).dark;}
 }
 window.node_change_main["0,0,0,1,0,1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).innerHTML = resolve_reference("foo#toc.children.0.name", data);
+document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).innerHTML = resolve_reference("foo#toc.children.0.name", data, null);
 }
 
 window.node_change_main["0,0,0,1,0,1,0:main__href"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).setAttribute("href", resolve_reference("foo#toc.children.0.link", data));
+document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).setAttribute("href", resolve_reference("foo#toc.children.0.link", data, null));
 }
 
 window.node_change_main["0,0,0,1,0,1,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).light;
+document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).light;
 }
-else {document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).dark;}
+else {document.querySelector(`[data-id="0,0,0,1,0,1,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).dark;}
 }
 window.node_change_main["0,0,0,1,0,2,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).innerHTML = resolve_reference("foo#toc.children.1.name", data);
+document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).innerHTML = resolve_reference("foo#toc.children.1.name", data, null);
 }
 
 window.node_change_main["0,0,0,1,0,2,0:main__href"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).setAttribute("href", resolve_reference("foo#toc.children.1.link", data));
+document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).setAttribute("href", resolve_reference("foo#toc.children.1.link", data, null));
 }
 
 window.node_change_main["0,0,0,1,0,2,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).light;
+document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).light;
 }
-else {document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).dark;}
+else {document.querySelector(`[data-id="0,0,0,1,0,2,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).dark;}
 }
 window.node_change_main["0,0,0,1,0,2,1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).innerHTML = resolve_reference("foo#toc.children.1.children.0.name", data);
+document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).innerHTML = resolve_reference("foo#toc.children.1.children.0.name", data, null);
 }
 
 window.node_change_main["0,0,0,1,0,2,1,0:main__href"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).setAttribute("href", resolve_reference("foo#toc.children.1.children.0.link", data));
+document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).setAttribute("href", resolve_reference("foo#toc.children.1.children.0.link", data, null));
 }
 
 window.node_change_main["0,0,0,1,0,2,1,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).light;
+document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).light;
 }
-else {document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data).dark;}
+else {document.querySelector(`[data-id="0,0,0,1,0,2,1,0:main"]`).style["color"] = resolve_reference("foo#text-strong", data, null).dark;}
 }
 window.node_change_main["0,1,0,0,0:main__background-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).light;
+document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data, null).light;
 }
-else {document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).dark;}
+else {document.querySelector(`[data-id="0,1,0,0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data, null).dark;}
 }
 
 window.node_change_main["0,1,0,0,0,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data).light;
+document.querySelector(`[data-id="0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data, null).light;
 }
-else {document.querySelector(`[data-id="0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;}
+else {document.querySelector(`[data-id="0,1,0,0,0,0:main"]`).style["color"] = resolve_reference("foo#text", data, null).dark;}
 }
 window.node_change_main["0,1,0,1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,1,0,1,0:main"]`).innerHTML = resolve_reference("foo#page:mytext:0", data);
+document.querySelector(`[data-id="0,1,0,1,0:main"]`).innerHTML = resolve_reference("foo#page:mytext:0", data, null);
 }
 window.node_change_main["0,1,0,2,0:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,1,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data).light;
+document.querySelector(`[data-id="0,1,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data, null).light;
 }
-else {document.querySelector(`[data-id="0,1,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data).dark;}
+else {document.querySelector(`[data-id="0,1,0,2,0:main"]`).style["color"] = resolve_reference("foo#text", data, null).dark;}
 }
 window.set_value_main = {};
 window.set_value_main["foo#header:site-name:0,0,0"] = function (data, new_value, remaining) {

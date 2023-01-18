@@ -456,6 +456,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1224,19 +1225,19 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#value", data);
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#value", data, null);
 }
 window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#value", data);
+document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#value", data, null);
 }
 window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#foo:foo-value:2", data);
+document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#foo:foo-value:2", data, null);
 }
 window.node_change_main["3:main__text"] = function(data) {
-document.querySelector(`[data-id="3:main"]`).innerHTML = resolve_reference("foo#name", data);
+document.querySelector(`[data-id="3:main"]`).innerHTML = resolve_reference("foo#name", data, null);
 }
 window.node_change_main["4:main__padding"] = function(data) {
-document.querySelector(`[data-id="4:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#value", data)))));
+document.querySelector(`[data-id="4:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#value", data, null)))));
 }
 window.set_value_main = {};
 window.set_value_main["foo#foo:foo-value:2"] = function (data, new_value, remaining) {

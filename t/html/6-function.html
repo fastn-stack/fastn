@@ -456,6 +456,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1250,7 +1251,7 @@ window.node_change_main["1:main__padding"] = function(data) {
 document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(window.ftd.handle_function(event, 'main', '{"name":"foo__sum___main","values":[["a",{"mutable":false,"reference":"foo#number"}],["b",4]]}', this)))));
 }
 window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data);
+document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#new-name", data, null);
 }
 
 window.node_change_main["2:main__padding"] = function(data) {
@@ -1265,7 +1266,7 @@ set_data_value(data, "foo#name", new_value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#new-name"]){window["resolve_value_main"]["foo#new-name"](data);
 } else {
-let value = resolve_reference("foo#name", data);
+let value = resolve_reference("foo#name", data, null);
 set_data_value(data, "foo#new-name", value);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__text"]){window.node_change_main["1:main__text"](data);

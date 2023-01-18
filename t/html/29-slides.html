@@ -463,6 +463,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1225,9 +1226,9 @@ a.value = !a.value
 window.node_change_main = {};
 window.node_change_main["0:main__background-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).light;
+document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data, null).light;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#base", data, null).dark;}
 }
 
 window.node_change_main["0,0:main__display"] = function(data) {
@@ -1241,9 +1242,9 @@ else {document.querySelector(`[data-id="0,0:main"]`).style["display"] = "none";}
 
 window.node_change_main["0,0:main__background-color"] = function(data) {
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).light;
+document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data, null).light;
 }
-else {document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data).dark;}
+else {document.querySelector(`[data-id="0,0:main"]`).style["background-color"] = resolve_reference("foo#step-1", data, null).dark;}
 }
 window.set_value_main = {};
 window.set_value_main["foo#presentation:show:0"] = function (data, new_value, remaining) {

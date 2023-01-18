@@ -454,6 +454,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1209,16 +1210,16 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#sample-text", data);
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#sample-text", data, null);
 }
 window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#sample-text", data);
+document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#sample-text", data, null);
 }
 window.node_change_main["2:main__text"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#sample-text", data);
+document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#sample-text", data, null);
 }
 window.node_change_main["3:main__text"] = function(data) {
-document.querySelector(`[data-id="3:main"]`).innerHTML = resolve_reference("foo#sample-text", data);
+document.querySelector(`[data-id="3:main"]`).innerHTML = resolve_reference("foo#sample-text", data, null);
 }
 window.set_value_main = {};
 window.set_value_main["foo#sample-text"] = function (data, new_value, remaining) {

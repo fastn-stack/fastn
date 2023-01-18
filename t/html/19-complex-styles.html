@@ -457,6 +457,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1227,7 +1228,7 @@ document.querySelector(`[data-id="1:main"]`).style["align-items"] = eval(`if ("{
 } else {
 null
 }
-`.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
+`.format(JSONstringify(resolve_reference("foo#foo:align:1", data, null))));
 }
 
 window.node_change_main["1:main__justify-content"] = function(data) {
@@ -1240,25 +1241,25 @@ document.querySelector(`[data-id="1:main"]`).style["justify-content"] = eval(`if
 } else {
 null
 }
-`.format(JSONstringify(resolve_reference("foo#foo:align:1", data))));
+`.format(JSONstringify(resolve_reference("foo#foo:align:1", data, null))));
 }
 
 window.node_change_main["1:main__width"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["width"] = resolve_reference("foo#foo:resize:1", data);
+document.querySelector(`[data-id="1:main"]`).style["width"] = resolve_reference("foo#foo:resize:1", data, null);
 }
-else {document.querySelector(`[data-id="1:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))));}
+else {document.querySelector(`[data-id="1:main"]`).style["width"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data, null)))));}
 }
 
 window.node_change_main["1,0:main__height"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1,0:main"]`).style["height"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data)))));
+document.querySelector(`[data-id="1,0:main"]`).style["height"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#foo:px:1", data, null)))));
 }
-else {document.querySelector(`[data-id="1,0:main"]`).style["height"] = resolve_reference("foo#foo:resize:1", data);}
+else {document.querySelector(`[data-id="1,0:main"]`).style["height"] = resolve_reference("foo#foo:resize:1", data, null);}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
@@ -1269,17 +1270,17 @@ set_data_value(data, "foo#flag", new_value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:align:1"]){window["resolve_value_main"]["foo#foo:align:1"](data);
 } else {
-let value = resolve_reference("foo#flag", data);
+let value = resolve_reference("foo#flag", data, null);
 set_data_value(data, "foo#foo:align:1", value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:px:1"]){window["resolve_value_main"]["foo#foo:px:1"](data);
 } else {
-let value = resolve_reference("foo#flag", data);
+let value = resolve_reference("foo#flag", data, null);
 set_data_value(data, "foo#foo:px:1", value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#foo:resize:1"]){window["resolve_value_main"]["foo#foo:resize:1"](data);
 } else {
-let value = resolve_reference("foo#flag", data);
+let value = resolve_reference("foo#flag", data, null);
 set_data_value(data, "foo#foo:resize:1", value);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1,0:main__height"]){window.node_change_main["1,0:main__height"](data);

@@ -454,6 +454,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1244,7 +1245,7 @@ document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSO
 }
 
 window.node_change_main["0,3:main__text"] = function(data) {
-document.querySelector(`[data-id="0,3:main"]`).innerHTML = resolve_reference("foo#value", data);
+document.querySelector(`[data-id="0,3:main"]`).innerHTML = resolve_reference("foo#value", data, null);
 }
 window.node_change_main["0,4:main__text"] = function(data) {
 document.querySelector(`[data-id="0,4:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__rmultiple___main","values":[["a",{"mutable":false,"reference":"foo#value"}],["b",2]]}', this);

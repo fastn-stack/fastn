@@ -454,6 +454,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1215,7 +1216,7 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0,1:main__text"] = function(data) {
-document.querySelector(`[data-id="0,1:main"]`).innerHTML = resolve_reference("foo#num", data);
+document.querySelector(`[data-id="0,1:main"]`).innerHTML = resolve_reference("foo#num", data, null);
 }
 window.node_change_main["0,2,0:main__align-items"] = function(data) {
 if(function(){

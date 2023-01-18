@@ -462,6 +462,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1223,7 +1224,7 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0,0,0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,0,0:main"]`).innerHTML = resolve_reference("foo#box:title:0,0", data);
+document.querySelector(`[data-id="0,0,0,0:main"]`).innerHTML = resolve_reference("foo#box:title:0,0", data, null);
 }
 window.node_change_main["0,0,0,1:main__display"] = function(data) {
 if(function(){
@@ -1251,10 +1252,10 @@ else {document.querySelector(`[data-id="0,0,1:main"]`).style["display"] = "none"
 }
 
 window.node_change_main["0,0,1:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,1:main"]`).innerHTML = resolve_reference("foo#box:body:0,0", data);
+document.querySelector(`[data-id="0,0,1:main"]`).innerHTML = resolve_reference("foo#box:body:0,0", data, null);
 }
 window.node_change_main["0,1,0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,1,0,0:main"]`).innerHTML = resolve_reference("foo#box:title:0,1", data);
+document.querySelector(`[data-id="0,1,0,0:main"]`).innerHTML = resolve_reference("foo#box:title:0,1", data, null);
 }
 window.node_change_main["0,1,0,1:main__display"] = function(data) {
 if(function(){
@@ -1282,10 +1283,10 @@ else {document.querySelector(`[data-id="0,1,1:main"]`).style["display"] = "none"
 }
 
 window.node_change_main["0,1,1:main__text"] = function(data) {
-document.querySelector(`[data-id="0,1,1:main"]`).innerHTML = resolve_reference("foo#box:body:0,1", data);
+document.querySelector(`[data-id="0,1,1:main"]`).innerHTML = resolve_reference("foo#box:body:0,1", data, null);
 }
 window.node_change_main["0,2,0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,2,0,0:main"]`).innerHTML = resolve_reference("foo#box:title:0,2", data);
+document.querySelector(`[data-id="0,2,0,0:main"]`).innerHTML = resolve_reference("foo#box:title:0,2", data, null);
 }
 window.node_change_main["0,2,0,1:main__display"] = function(data) {
 if(function(){
@@ -1313,7 +1314,7 @@ else {document.querySelector(`[data-id="0,2,1:main"]`).style["display"] = "none"
 }
 
 window.node_change_main["0,2,1:main__text"] = function(data) {
-document.querySelector(`[data-id="0,2,1:main"]`).innerHTML = resolve_reference("foo#box:body:0,2", data);
+document.querySelector(`[data-id="0,2,1:main"]`).innerHTML = resolve_reference("foo#box:body:0,2", data, null);
 }
 window.set_value_main = {};
 window.set_value_main["foo#box:body:0,0"] = function (data, new_value, remaining) {

@@ -456,6 +456,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1217,16 +1218,16 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0,0,0,1:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1:main"]`).innerHTML = resolve_reference("foo#boo:bv:0,0,0", data);
+document.querySelector(`[data-id="0,0,0,1:main"]`).innerHTML = resolve_reference("foo#boo:bv:0,0,0", data, null);
 }
 window.node_change_main["0,0,2:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,2:main"]`).innerHTML = resolve_reference("foo#foo:fv:0", data);
+document.querySelector(`[data-id="0,0,2:main"]`).innerHTML = resolve_reference("foo#foo:fv:0", data, null);
 }
 window.node_change_main["0,0,3:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,3:main"]`).innerHTML = resolve_reference("foo#moo:mv:0,0", data);
+document.querySelector(`[data-id="0,0,3:main"]`).innerHTML = resolve_reference("foo#moo:mv:0,0", data, null);
 }
 window.node_change_main["0,2:main__text"] = function(data) {
-document.querySelector(`[data-id="0,2:main"]`).innerHTML = resolve_reference("foo#foo:fv:0", data);
+document.querySelector(`[data-id="0,2:main"]`).innerHTML = resolve_reference("foo#foo:fv:0", data, null);
 }
 window.set_value_main = {};
 window.set_value_main["foo#boo:bv:0,0,0"] = function (data, new_value, remaining) {
@@ -1248,12 +1249,12 @@ set_data_value(data, "foo#foo:fv:0", new_value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#moo:mv:0,0"]){window["resolve_value_main"]["foo#moo:mv:0,0"](data);
 } else {
-let value = resolve_reference("foo#foo:fv:0", data);
+let value = resolve_reference("foo#foo:fv:0", data, null);
 set_data_value(data, "foo#moo:mv:0,0", value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:0,0,0"]){window["resolve_value_main"]["foo#boo:bv:0,0,0"](data);
 } else {
-let value = resolve_reference("foo#foo:fv:0", data);
+let value = resolve_reference("foo#foo:fv:0", data, null);
 set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
@@ -1274,7 +1275,7 @@ set_data_value(data, "foo#moo:mv:0,0", new_value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:0,0,0"]){window["resolve_value_main"]["foo#boo:bv:0,0,0"](data);
 } else {
-let value = resolve_reference("foo#moo:mv:0,0", data);
+let value = resolve_reference("foo#moo:mv:0,0", data, null);
 set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);

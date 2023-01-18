@@ -462,6 +462,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1224,23 +1225,23 @@ a.value = !a.value
 window.node_change_main = {};
 window.node_change_main["0:main__padding"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["padding"] = resolve_reference("foo#p", data).desktop;
+document.querySelector(`[data-id="0:main"]`).style["padding"] = resolve_reference("foo#p", data, null).desktop;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["padding"] = resolve_reference("foo#p", data).mobile;}
+else {document.querySelector(`[data-id="0:main"]`).style["padding"] = resolve_reference("foo#p", data, null).mobile;}
 }
 window.node_change_main["1:main__padding"] = function(data) {
 if(function(){
 return (!resolve_reference("foo#flag", data));
 }()){
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#p", data).desktop;
+document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#p", data, null).desktop;
 }
-else {document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#p", data).mobile;}
+else {document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#p", data, null).mobile;}
 }
 else {if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#res", data).desktop;
+document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#res", data, null).desktop;
 }
-else {document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#res", data).mobile;}
+else {document.querySelector(`[data-id="1:main"]`).style["padding"] = resolve_reference("foo#res", data, null).mobile;}
 }
 }
 window.set_value_main = {};

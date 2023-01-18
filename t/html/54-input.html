@@ -455,6 +455,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1210,10 +1211,10 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#x", data);
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#x", data, null);
 }
 window.node_change_main["1:main__text"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#y", data);
+document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#y", data, null);
 }
 window.set_value_main = {};
 window.set_value_main["foo#x"] = function (data, new_value, remaining) {

@@ -455,6 +455,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1210,10 +1211,10 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#print:name:0", data);
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#print:name:0", data, null);
 }
 window.node_change_main["1,0:main__text"] = function(data) {
-document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#print:name:1", data);
+document.querySelector(`[data-id="1,0:main"]`).innerHTML = resolve_reference("foo#print:name:1", data, null);
 }
 window.set_value_main = {};
 window.set_value_main["foo#print:name:0"] = function (data, new_value, remaining) {

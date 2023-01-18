@@ -487,6 +487,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1242,16 +1243,16 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0,0:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#example-product.0.title", data);
+document.querySelector(`[data-id="0,0:main"]`).innerHTML = resolve_reference("foo#example-product.0.title", data, null);
 }
 window.node_change_main["0,1:main__text"] = function(data) {
-document.querySelector(`[data-id="0,1:main"]`).innerHTML = resolve_reference("foo#example-product.1.title", data);
+document.querySelector(`[data-id="0,1:main"]`).innerHTML = resolve_reference("foo#example-product.1.title", data, null);
 }
 window.node_change_main["0,2:main__text"] = function(data) {
-document.querySelector(`[data-id="0,2:main"]`).innerHTML = resolve_reference("foo#example-product.2.title", data);
+document.querySelector(`[data-id="0,2:main"]`).innerHTML = resolve_reference("foo#example-product.2.title", data, null);
 }
 window.node_change_main["0,3:main__text"] = function(data) {
-document.querySelector(`[data-id="0,3:main"]`).innerHTML = resolve_reference("foo#example-product.3.title", data);
+document.querySelector(`[data-id="0,3:main"]`).innerHTML = resolve_reference("foo#example-product.3.title", data, null);
 }
 window.set_value_main = {};
 window.set_value_main["foo#example-product"] = function (data, new_value, remaining) {

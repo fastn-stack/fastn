@@ -461,6 +461,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -1220,14 +1221,14 @@ if(function(){
 return (resolve_reference("ftd#device", data)=="desktop");
 }()){
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#red", data).light;
+document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#red", data, null).light;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#red", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#red", data, null).dark;}
 }
 else {if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#green", data).light;
+document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#green", data, null).light;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#green", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#green", data, null).dark;}
 }
 }
 
