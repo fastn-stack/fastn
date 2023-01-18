@@ -689,9 +689,21 @@ impl InterpreterState {
         foreign_variable: Vec<String>,
         foreign_function: Vec<String>,
         ignore_line_numbers: usize,
+        cache: Option<&dyn ftd::interpreter2::Cache>,
     ) -> ftd::interpreter2::Result<Interpreter> {
-        let mut document =
-            ParsedDocument::parse_with_line_number(module, source, ignore_line_numbers)?;
+        let mut document = if let Some(cache) = cache {
+            if let Some(cached_doc) = cache.get(module)? {
+                cached_doc
+            } else {
+                let d =
+                    ParsedDocument::parse_with_line_number(module, source, ignore_line_numbers)?;
+                cache.set(module, &d)?;
+                d
+            }
+        } else {
+            ParsedDocument::parse_with_line_number(module, source, ignore_line_numbers)?
+        };
+
         document.add_foreign_function(foreign_function);
         document.add_foreign_variable(foreign_variable);
         self.parsed_libs.insert(module.to_string(), document);
