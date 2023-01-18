@@ -127,5 +127,7 @@ fn to_event_name(event_name: &ftd::interpreter2::EventName) -> String {
         ftd::interpreter2::EventName::GlobalKeySeq(keys) => {
             format!("onglobalkeyseq[{}]", keys.join("-"))
         }
+        ftd::interpreter2::EventName::Input => "oninput".to_string(),
+        ftd::interpreter2::EventName::Change => "onchange".to_string(),
     }
 }

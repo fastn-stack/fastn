@@ -1,8 +1,17 @@
+-- integer $x: 0
+-- integer $y: 0
+
+
+-- ftd.integer: $x
+-- ftd.integer: $y
+
 -- ftd.input:
 placeholder: Type Something Here...
 type: password
 width.fixed.px: 400
 border-width.px: 2
+$on-input$: $ftd.increment($a = $x)
+$on-change$: $ftd.increment($a = $y)
 
 -- ftd.input:
 placeholder: Type Something Here...

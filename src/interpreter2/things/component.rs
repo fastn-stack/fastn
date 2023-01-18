@@ -929,6 +929,8 @@ pub enum EventName {
     ClickOutside,
     GlobalKey(Vec<String>),
     GlobalKeySeq(Vec<String>),
+    Input,
+    Change,
 }
 
 impl EventName {
@@ -944,6 +946,8 @@ impl EventName {
             "mouse-enter" => Ok(EventName::MouseEnter),
             "mouse-leave" => Ok(EventName::MouseLeave),
             "click-outside" => Ok(EventName::ClickOutside),
+            "input" => Ok(EventName::Input),
+            "change" => Ok(EventName::Change),
             t if t.starts_with("global-key[") && t.ends_with(']') => {
                 let keys = t
                     .trim_start_matches("global-key[")
