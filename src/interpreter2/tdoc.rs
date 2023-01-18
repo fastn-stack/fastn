@@ -467,22 +467,21 @@ impl<'a> TDoc<'a> {
                         change_value(value, set, Some(remaining), doc, line_number)?;
                     }
                 }
+            } else if value.kind().inner().eq(&set.kind()) || value.kind().eq(&set.kind()) {
+                *value = set;
             } else {
-                if value.kind().inner().eq(&set.kind()) || value.kind().eq(&set.kind()) {
-                    *value = set;
-                } else {
-                    return ftd::interpreter2::utils::e2(
-                        format!(
-                            "Expected kind `{:?}`, found: \
+                return ftd::interpreter2::utils::e2(
+                    format!(
+                        "Expected kind `{:?}`, found: \
                     `{:?}`",
-                            value.kind(),
-                            set.kind()
-                        ),
-                        doc.name,
-                        line_number,
-                    );
-                }
+                        value.kind(),
+                        set.kind()
+                    ),
+                    doc.name,
+                    line_number,
+                );
             }
+
             Ok(())
         }
     }
