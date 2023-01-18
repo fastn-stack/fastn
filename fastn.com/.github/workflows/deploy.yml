@@ -5,7 +5,9 @@ on:
     branches: [ main ]
     paths:
     - '**.ftd'
+    - '**.md'
   workflow_dispatch:
+  workflow_call:
 env:
   CARGO_TERM_COLOR: always
 
@@ -13,41 +15,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: FranzDiebold/github-env-vars-action@v2
       - name: Install fpm
         id: install_fpm
         continue-on-error: false
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: --git 'https://github.com/fifthtry/fpm.git'
+        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-fpm.sh)"
       - name: Build the pages with fpm
         id: build
         continue-on-error: false
-        run: fpm build --base=/fpm-dev-en/
-      - uses: actions/upload-artifact@master
+        run: |
+          echo "Using '$CI_REPOSITORY_NAME_SLUG/' as the base while building"
+          fpm build --base=/$CI_REPOSITORY_NAME/ --edition=2022
+      - name: copy CNAME
+        run: '(test -f CNAME && cp CNAME .build) || echo "CNAME does not exist, skipping step"'
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
-          name: SSR_BUILD
-          path: .build/
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout build branch
-        uses: actions/checkout@v2
-        with:
-          ref: build
-      - run: /bin/rm -rf *
-      - uses: actions/download-artifact@master
-        with:
-          name: SSR_BUILD
-          path: .
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        name: Commit changes to build branch
-        with:
-          commit_message: SSR build
-          branch: build
-          commit_options: '--no-verify --signoff'
-          repository: .
-          
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./.build
