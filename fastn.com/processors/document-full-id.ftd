@@ -1,11 +1,11 @@
--- ft.page: `document-full-id` processor
+-- ds.page: `document-full-id` processor
 
 `document-full-id` processor is used to get `document-full-id`
 
 Let's say, If request path is `/foo/ftd/` or `/foo/ftd/-/x/y/` so document full
 id will be `/foo/ftd/` and `/foo/ftd/-/x/y/` respectively.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: Document Full Id
@@ -17,3 +17,5 @@ $processor$: document-full-id
 
 \-- ftd.text: $document-full-id
 color: $white
+
+-- end: ds.page

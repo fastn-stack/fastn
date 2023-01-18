@@ -1,4 +1,4 @@
--- ft.page: `static`: Serve Static Files
+-- ds.page: `static`: Serve Static Files
 
 `static` serves all the non `ftd` files. We guess the file type based on content
 of the file using the [`infer` crate](/crate/deps/infer/).
@@ -9,8 +9,8 @@ dependencies of the current package.
 The static files from dependencies are downloaded only on demand, and cached in
 `.packages` folder.
 
--- ft.h1: URL
+-- ds.h1: URL
 
 The URL of the static files follow the pattern: `/-/<package-name>/file/name.jpg`.
 
-
+-- end: ds.page

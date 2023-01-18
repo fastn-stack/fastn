@@ -1,21 +1,21 @@
--- ft.page: How To Use Discord Identities
+-- ds.page: How To Use Discord Identities
 
--- ft.markdown:
+-- ds.markdown:
 
 A fpm package can limit who has read or write access. We do it by organising a
 set of [user identities](/dev/user-identity/) using `user group` and then using
 the `user group` in the [sitemap](/sitemap/).
 
--- ft.h1: `discord-server`: `<server-name>`
+-- ds.h1: `discord-server`: `<server-name>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user has joined the server or not.
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: server-members
@@ -27,9 +27,9 @@ discord-server: FifthTry.com
 # Discord Server: /
 readers: server-members
 
--- ft.h2: Discord Resource API
+-- ds.h2: Discord Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://discord.com/api/users/@me/guilds
@@ -37,17 +37,17 @@ Method: Get
 Header Parameters
 Authorization: Bearer {access_token}
 
--- ft.h1: `discord-thread`: `<thread-id>`
+-- ds.h1: `discord-thread`: `<thread-id>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if 
 he/she is member of the thread. 
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: thread-members
@@ -59,9 +59,9 @@ discord-thread: 1050487724727091291
 # Discord Thread: /
 readers: thread-members
 
--- ft.h2: Discord Resource API
+-- ds.h2: Discord Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://discord.com/api/channels/{thread-id}/thread-members
@@ -69,16 +69,16 @@ Method: Get
 Header Parameters
 Authorization: Bot {bot_id}
 
--- ft.h1: `discord-event`: `<event-id>`
+-- ds.h1: `discord-event`: `<event-id>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if he/she joined the event.
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: event-members
@@ -90,9 +90,9 @@ discord-event: 1050685780747620362
 # Discord Event: /
 readers: event-members
 
--- ft.h2: Discord Resource API
+-- ds.h2: Discord Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://discord.com/api/guilds/{guild-id}/scheduled-events/{event-id}/users
@@ -100,17 +100,17 @@ Method: Get
 Header Parameters
 Authorization: Bot {bot_id}
 
--- ft.h1: `discord-permission`: `<permission-id>`
+-- ds.h1: `discord-permission`: `<permission-id>`
 
--- ft.markdown:
+-- ds.markdown:
 
 This user identity will be used to implement the restrictions that the 
 logged-in user will only be allowed to access a page if he/she 
 has been given specific permission.
 
--- ft.h2: How To Use It
+-- ds.h2: How To Use It
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- fpm.user-group: permitted-members
@@ -122,12 +122,14 @@ discord-permission: 1051824761375834193
 # Discord Permission: /
 readers: permitted-members
 
--- ft.h2: Discord Resource API
+-- ds.h2: Discord Resource API
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 Url: https://discord.com/api/guilds/{guild-id}/members/{user-id}
 Method: Get
 Header Parameters
 Authorization: Bot {bot_id}
+
+-- end: ds.page

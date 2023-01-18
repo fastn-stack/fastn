@@ -1,18 +1,18 @@
--- ft.page: `sync` API
+-- ds.page: `sync` API
 
 `sync` API is called by the `fpm cli` to sync the local content of fpm package
 with the remote server. It is available only in FPM `remote` feature.
 
 
--- ft.h1: URL And Parameters
+-- ds.h1: URL And Parameters
 
 The URL is `/-/sync/`
 
--- ft.h2: Input
+-- ds.h2: Input
 
 The input to this API is:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -31,11 +31,11 @@ pub struct SyncRequest {
 }
 
 
--- ft.h2: Response
+-- ds.h2: Response
 
 The output of this API is:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 #[derive(serde::Serialize, serde::Deserialize, PartialEq)]
@@ -71,3 +71,5 @@ pub struct File {
     pub path: String,
     pub content: Vec<u8>,
 }
+
+-- end: ds.page

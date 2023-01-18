@@ -1,6 +1,6 @@
--- ft.page: `fpm add <file-name>`
-
+-- ds.page: `fpm add <file-name>`
 
 This would create entry in workspace.ftd and only the files added would be
 consider for sync.
 
+-- end: ds.page

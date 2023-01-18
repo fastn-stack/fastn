@@ -1,4 +1,4 @@
--- ft.page: `document-name` processor
+-- ds.page: `document-name` processor
 
 `document-name` processor is used to get filename in system of accessed
 document.
@@ -8,7 +8,7 @@ Let's say, If request path is `/foo/ftd/` or `/foo/ftd/-/x/y/` for file
 respect to your project `FPM.ftd` file.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: Document Filename
@@ -17,3 +17,5 @@ lang: ftd
 $processor$: document-name
 
 \-- ftd.text: $document-name
+
+-- end: ds.page

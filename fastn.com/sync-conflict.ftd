@@ -1,8 +1,8 @@
--- ft.page: Understanding FPM Sync Conflict
+-- ds.page: Understanding FPM Sync Conflict
 
 Prerequisite: [How Sync Works](dev/sync/)
 
--- ft.h1: What is an FPM Sync Conflict?
+-- ds.h1: What is an FPM Sync Conflict?
 
 FPM can handle most [sync](glossary/#sync) operations on its own with
 automatic merging features. A sync conflict is when FPM is unable to
@@ -26,11 +26,11 @@ clone's responsibility to resolve the conflict.
 Now that we have gone through the basics of the fpm sync conflict, let’s look
 at the various types of conflicts next.
 
--- ft.h1: Types of FPM Sync Conflicts
+-- ds.h1: Types of FPM Sync Conflicts
 
 A conflict can be of various types depending on how it occurs.
 
--- ft.h2: `edit-edit-conflict`
+-- ds.h2: `edit-edit-conflict`
 
 The `edit-edit-conflict` occurs when two clones try to sync the file in which
 they have done the independent changes and three-way merge of the file has
@@ -47,7 +47,7 @@ its end, it fails to do so, as the remote and B are out of sync with respect to
 that file, i.e. the remote has new version v2 of that file and B has done its
 changes against the version v1. Now remote doesn't know what is correct.
 
--- ft.h2: `edit-delete-conflict`
+-- ds.h2: `edit-delete-conflict`
 
 The `edit-delete-conflict` occurs when the remote contains a new version of the
 file and the clone tries to delete the same file against some older version.
@@ -64,7 +64,7 @@ version v2 of that file and B has deleted it against the version v1.
 Now remote doesn't know what to do.
 
 
--- ft.h2: `delete-edit-conflict`
+-- ds.h2: `delete-edit-conflict`
 
 The `edit-delete-conflict` occurs when on the remote, the file is deleted and
 the clone tries to edit the same file against some older version.
@@ -79,7 +79,7 @@ is deleted on the remote and B has done its changes against the version v1.
 Now remote doesn't know what to do.
 
 
--- ft.h2: `add-add-conflict`
+-- ds.h2: `add-add-conflict`
 
 The `add-add-conflict` occurs when two clones create a new file with same
 filename and independent content and try to sync the file.
@@ -95,7 +95,7 @@ with respect to that file, i.e. the remote already has version v1 of that file
 and B has created its own new file. Now remote doesn't know what is correct.
 
 
--- ft.h1: How to identify sync conflicts
+-- ds.h1: How to identify sync conflicts
 
 On sync, FPM produces some descriptive output letting us know that a CONFLICT
 has occurred. We can gain further insight by running the
@@ -106,11 +106,11 @@ conflicts have been resolved.
 
 
 
--- ft.h1: How to resolve sync conflicts
+-- ds.h1: How to resolve sync conflicts
 
 Once knowing the files that have conflicts, you can resolve their conflicts
 using the [`fpm resolve-conflict <file-name>`](cli/resolve-conflict/) command.
 This command gives you various endpoints to address conflict according to its
 type.
 
-
+-- end: ds.page

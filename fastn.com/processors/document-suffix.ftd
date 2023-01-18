@@ -1,4 +1,4 @@
--- ft.page: `document-suffix` processor
+-- ds.page: `document-suffix` processor
 
 `document-suffix` processor is used to find suffix of a requested document.
 
@@ -6,7 +6,7 @@ If request path is `/foo/ftd/-/x/y/` so It will return portion after `-` which
 is `/x/y/`. If request is `/foo/ftd/` so It will return None.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.text: Document Suffix
@@ -15,3 +15,5 @@ lang: ftd
 $processor$: document-suffix
 
 \-- ftd.text: $document-suffix
+
+-- end: ds.page

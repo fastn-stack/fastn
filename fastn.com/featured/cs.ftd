@@ -5,15 +5,15 @@
 
 
 
-
--- ft.page: Color schemes
+-- ds.page: Color schemes
 
 We have designed and developed below color schemes. You can use them
 to change your `FTD` web site color scheme. 
 
-
 -- ft-ui.grid-view:
 templates: $schemes
+
+-- end: ds.page
 
 
 
@@ -26,7 +26,7 @@ templates: $schemes
 
 -- ft-ui.template list schemes:
 
--- schemes: Color Doc
+-- ft-ui.template: Color Doc
 template-url: https://fifthtry.github.io/color-doc/
 screenshot: $assets.files.static.color-doc.png
 licence-url: https://github.com/FifthTry/color-doc/blob/main/LICENSE
@@ -35,7 +35,7 @@ github-url: https://github.com/FifthTry/color-doc/
 `fifthtry.github.io/color-doc` is a grey color scheme. All our web sites are using
 this color scheme. For ex. [`fpm.dev`](https://fpm.dev/), [`ftd.dev`](https://ftd.dev/) etc.
 
--- schemes: Forest CS
+-- ft-ui.template: Forest CS
 template-url: https://fifthtry.github.io/forest-cs/
 screenshot: $assets.files.static.forest-cs.png
 licence-url: https://github.com/FifthTry/forest-cs/blob/main/LICENSE
@@ -43,8 +43,7 @@ github-url: https://github.com/FifthTry/forest-cs/
 
 `fifthtry.github.io/forest-cs` is a forest green color scheme. See forest-cs color scheme we using on our [`df.fifthtry.com`](https://df.fifthtry.com/)
 
-
--- schemes: Night Moon
+-- ft-ui.template: Night Moon
 template-url: https://fifthtry.github.io/night-moon-cs/
 screenshot: $assets.files.static.night-moon.png
 licence-url: https://github.com/FifthTry/night-moon-cs/blob/main/LICENSE
@@ -54,4 +53,4 @@ is-last: true
 `fifthtry.github.io/night-moon-cs` is a blue(night moon) color scheme. See its 
 documentation to use it. [Night Moon](https://fifthtry.github.io/night-moon-cs/)
 
-
+-- end: schemes

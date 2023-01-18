@@ -1,6 +1,6 @@
--- ft.page: About `fpm`
+-- ds.page: About `fpm`
 
--- ft.markdown: 
+-- ds.markdown: 
 
 [`ftd`](https://ftd.dev) is a language to create web pages or documents for
 publishing on the web. `fpm` takes markdown, and adds features to create full
@@ -8,7 +8,7 @@ page layouts, lets you create reusable "ftd components", and has first class
 support for data modelling, so the `ftd` document can be used as an data exchange
 format as well (as a replacement of JSON/CSV etc).
 
--- ft.h1: FPM: Package Manager
+-- ds.h1: FPM: Package Manager
 
 `fpm` is "`ftd` package manager", defines a package format for packaging `ftd`
 files. `fpm` packages can depend on other `fpm` packages, and `fpm` can install
@@ -16,7 +16,7 @@ all the dependencies of a package.
 
 [Learn more](/package-manager/).
 
--- ft.h1: FPM: Static Site Generator
+-- ds.h1: FPM: Static Site Generator
 
 `fpm` can also convert `ftd` files to static HTML files, so you can use it as
 a static site generator, and publish FTD files on github pages, S3 etc static
@@ -24,7 +24,7 @@ site hosting sites.
 
 [Learn more about FPM as static site generator](/static/).
 
--- ft.h1: FPM for Remixing/Curating Documentation
+-- ds.h1: FPM for Remixing/Curating Documentation
 
 FPM has a feature that let's you reuse content, you can include the same
 document in multiple places in your site, and you can also include content
@@ -33,13 +33,13 @@ present in other packages.
 Learn mode about [remixing packages here](/remixing/).
 
 
--- ft.h1: FPM for Distributing Static Assets
+-- ds.h1: FPM for Distributing Static Assets
 
 FPM can be used for distributing images, and fonts as packages.
 
 
 
--- ft.h1: Features
+-- ds.h1: Features
 
 - Web Server(fpm serve)
 - FPM CLI
@@ -68,3 +68,5 @@ FPM can be used for distributing images, and fonts as packages.
 - Editor
 - Database and Cache
 - Logs(Observer)
+
+-- end: ds.page

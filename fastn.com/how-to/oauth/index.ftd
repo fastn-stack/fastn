@@ -1,9 +1,11 @@
--- ft.page: FPM OAuth Integrations
+-- ds.page: FPM OAuth Integrations
 
--- ft.h1: FPM with GitHub Authentication
+-- ds.h1: FPM with GitHub Authentication
 
--- ft.h1: FPM with Twitter Authentication
+-- ds.h1: FPM with Twitter Authentication
 
--- ft.h1: FPM with Telegram Authentication
+-- ds.h1: FPM with Telegram Authentication
 
--- ft.h1: FPM with Discord Authentication
+-- ds.h1: FPM with Discord Authentication
+
+-- end: ds.page

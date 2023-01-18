@@ -1,8 +1,8 @@
--- ft.page: `fpm status`
+-- ds.page: `fpm status`
 
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 Status: Planned
 
@@ -11,10 +11,12 @@ package dir and compare it with the latest version of that file in `.history`
 folder.
 
 
--- ft.code:
+-- ds.code:
 lang: sh
 
 fpm status
 modified    a/b.ftd
 added       f.ftd
 removed     g/f.ftd
+
+-- end: ds.page

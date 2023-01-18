@@ -1,24 +1,24 @@
--- ft.page: `edit` API
+-- ds.page: `edit` API
 
 `edit` API is called by the `fpm editor` to update  the local content of fpm
 package where `fpm serve` is running.
 
--- ft.h1: API
+-- ds.h1: API
 
--- ft.h2: URL and Parameters
+-- ds.h2: URL and Parameters
 
 The URL is `/-/edit/`
 
--- ft.h2: Request Method
+-- ds.h2: Request Method
 
 Request Method of this API is `POST`
 
 
--- ft.h2: Input
+-- ds.h2: Input
 
 The input of this API is:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 pub struct EditRequest {
@@ -30,11 +30,11 @@ pub struct EditRequest {
 }
 
 
--- ft.h2: Response
+-- ds.h2: Response
 
 The output of this API is:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 pub struct EditResponse {
@@ -42,3 +42,5 @@ pub struct EditResponse {
     pub url: Option<String>,
     pub reload: bool,
 }
+
+-- end: ds.page

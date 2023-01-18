@@ -1,13 +1,10 @@
--- ft.page: FPM Typography
+-- ds.page: FPM Typography
 
--- ftd.column:
-id: outer-2
-
--- ft.markdown: 
+-- ds.markdown: 
 
 FPM Typography
 
--- ft.h1: `fpm.type.heading-large`
+-- ds.h1: `inherited.types.heading-large`
 
 line-height: 48
 
@@ -15,24 +12,24 @@ size: 40
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- import: fpm
 
 \-- ftd.text: FifthTry
-role: $fpm.type.heading-large
+role: $inherited.types.heading-large
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.heading-large
-color: $fpm.color.main.text
+role: $inherited.types.heading-large
+color: $inherited.colors.text
 
--- container: outer-2
+-- end: ds.output
 
--- ft.h1: `fpm.type.heading-medium`
+-- ds.h1: `inherited.types.heading-medium`
 
 line-height: 44
 
@@ -40,26 +37,24 @@ size: 32
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.heading-medium
+role: $inherited.types.heading-medium
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.heading-medium
-color: $fpm.color.main.text
+role: $inherited.types.heading-medium
+color: $inherited.colors.text
+
+-- end: ds.output
 
 
-
-
--- container: outer-2
-
--- ft.h1: `fpm.type.heading-small`
+-- ds.h1: `inherited.types.heading-small`
 
 line-height: 36
 
@@ -67,26 +62,23 @@ size: 24
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.heading-small
+role: $inherited.types.heading-small
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.heading-small
-color: $fpm.color.main.text
+role: $inherited.types.heading-small
+color: $inherited.colors.text
 
+-- end: ds.output
 
-
-
--- container: outer-2
-
--- ft.h1: `fpm.type.heading-hero`
+-- ds.h1: `inherited.types.heading-hero`
 
 line-height: 52
 
@@ -94,27 +86,23 @@ size: 48
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.heading-hero
+role: $inherited.types.heading-hero
 
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.heading-hero
-color: $fpm.color.main.text
+role: $inherited.types.heading-hero
+color: $inherited.colors.text
 
+-- end: ds.output
 
-
-
-
--- container: outer-2
-
--- ft.h1: `fpm.type.copy-tight`
+-- ds.h1: `inherited.types.copy-tight`
 
 line-height: 20
 
@@ -122,26 +110,25 @@ size: 16
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.copy-tight
+role: $inherited.types.copy-tight
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.copy-tight
-color: $fpm.color.main.text
+role: $inherited.types.copy-tight
+color: $inherited.colors.text
+
+-- end: ds.output
 
 
 
 
-
--- container: outer-2
-
--- ft.h1: `fpm.type.copy-relaxed`
+-- ds.h1: `inherited.types.copy-relaxed`
 
 line-height: 24
 
@@ -149,25 +136,24 @@ size: 16
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.copy-relaxed
+role: $inherited.types.copy-relaxed
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.copy-relaxed
-color: $fpm.color.main.text
+role: $inherited.types.copy-relaxed
+color: $inherited.colors.text
+
+-- end: ds.output
 
 
 
-
--- container: outer-2
-
--- ft.h1: `fpm.type.copy-large`
+-- ds.h1: `inherited.types.copy-large`
 
 line-height: 28
 
@@ -175,24 +161,23 @@ size: 20
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.copy-large
+role: $inherited.types.copy-large
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.copy-large
-color: $fpm.color.main.text
+role: $inherited.types.copy-large
+color: $inherited.colors.text
 
 
+-- end: ds.output
 
--- container: outer-2
-
--- ft.h1: `fpm.type.label-big`
+-- ds.h1: `inherited.types.label-big`
 
 line-height: 22
 
@@ -200,25 +185,23 @@ size: 16
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.label-big
+role: $inherited.types.label-big
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.label-big
-color: $fpm.color.main.text
+role: $inherited.types.label-big
+color: $inherited.colors.text
 
 
+-- end: ds.output
 
-
--- container: outer-2
-
--- ft.h1: `fpm.type.label-small`
+-- ds.h1: `inherited.types.label-small`
 
 line-height: 16
 
@@ -226,24 +209,23 @@ size: 14
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.label-small
+role: $inherited.types.label-small
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.label-small
-color: $fpm.color.main.text
+role: $inherited.types.label-small
+color: $inherited.colors.text
+
+-- end: ds.output
 
 
-
--- container: outer-2
-
--- ft.h1: `fpm.type.fine-print`
+-- ds.h1: `inherited.types.fine-print`
 
 line-height: 16
 
@@ -251,24 +233,23 @@ size: 14
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.fine-print
+role: $inherited.types.fine-print
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.fine-print
-color: $fpm.color.main.text
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- end: ds.output
 
 
-
--- container: outer-2
-
--- ft.h1: `fpm.type.blockquote`
+-- ds.h1: `inherited.types.blockquote`
 
 line-height: 16
 
@@ -276,15 +257,19 @@ size: 14
 
 weight: 400
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 
 \-- ftd.text: FifthTry
-role: $fpm.type.blockquote
+role: $inherited.types.blockquote
 
--- ft.output:
+-- ds.output:
 
 -- ftd.text: FifthTry
-role: $fpm.type.blockquote
-color: $fpm.color.main.text
+role: $inherited.types.blockquote
+color: $inherited.colors.text
+
+-- end: ds.output
+
+-- end: ds.page

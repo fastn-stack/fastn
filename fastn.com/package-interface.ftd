@@ -1,4 +1,4 @@
--- ft.page: Fungible Packages - Package Interface
+-- ds.page: Fungible Packages - Package Interface
 
 An FPM package contains one or more "ftd modules", and the modules export one or
 more "symbols", eg [records](https://ftd.dev/record/),
@@ -10,3 +10,5 @@ interface" of that package. FPM lets one package declare that it is
 "implementing" another package. All packages that implement a common package
 are interchangeable without changing any code, and only updating the dependency
 in `FPM.ftd` file.
+
+-- end: ds.page

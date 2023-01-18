@@ -1,6 +1,6 @@
 -- import: fpm.dev/assets
 
--- ft.page: Best practices for `FTD`
+-- ds.page: Best practices for `FTD`
 
 We at FifthTry suggest below practices to be followed while writing your `.ftd`
 files.
@@ -9,7 +9,7 @@ Following below practices will help you reduce, build errors and aviod code mess
 `.ftd` files.
 
 
--- ft.h1: Judiciously Use `caption`
+-- ds.h1: Judiciously Use `caption`
 
 When creating a new component, see if you can use `caption` as the type of one
 of the arguments.
@@ -23,7 +23,7 @@ of the arguments.
   to write one line of text.
 
 
--- ft.h1: Judiciously Use `body`
+-- ds.h1: Judiciously Use `body`
 
 When creating a component see if one of the parameters can be of type `body`.
 
@@ -32,14 +32,14 @@ paragraphs.
 
 
 
--- ft.h1: Space after `colon :`
+-- ds.h1: Space after `colon :`
 
 Always keep space after `:` in each declaration. e.g. `-- ftd.text: `
 
 
 
 
--- ft.h1: 10 lines space between 2 components 
+-- ds.h1: 10 lines space between 2 components 
 
 Always keep 10 lines space between two `ftd` components.
 
@@ -49,11 +49,11 @@ Always keep 10 lines space between two `ftd` components.
 
 
 
--- ft.h1: `ftd` variables first
+-- ds.h1: `ftd` variables first
 
 Always declare `ftd` variables first while creating new component. e.g. below
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.column my-ftd-component:
@@ -66,5 +66,4 @@ background-color: $fpm.color.main.background.base
 
 \-- end: my-ftd-component
 
-
-
+-- end: ds.page

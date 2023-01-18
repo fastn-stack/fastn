@@ -1,6 +1,6 @@
 -- import: fpm.dev/assets
 
--- ft.page: Remixing Static Site Generator
+-- ds.page: Remixing Static Site Generator
 
 FPM is a static site generator. What it means it generates a set of static files
 that we can host on any static site host, eg nginx on your custom server, or on
@@ -11,10 +11,10 @@ etc.
 If you checkout fpm.dev, this site is built using fpm. The document that you are
 [reading right now is here](https://github.com/FifthTry/fpm.dev/blob/main/remixing.ftd).
 
--- ft.code: remixing.ftd gets published on /remixing/ that you are reading right now
+-- ds.code: remixing.ftd gets published on /remixing/ that you are reading right now
 lang: ftd
 
-\-- ft.page: Remixing Static Site Generator
+\-- ds.page: Remixing Static Site Generator
 
 FPM is a static site generator. What it means it generates a set of
 static files that we can host on any static site host, eg nginx on
@@ -24,7 +24,7 @@ etc.
 
 ... omitted the rest ...
 
--- ft.markdown:
+-- ds.markdown:
 
 So someone has written the above code, and when we "build it", using `fpm build`,
 it generates and HTML page that looks like this.
@@ -34,9 +34,9 @@ This is what static site generators do. `ssg` or static site generator is a
 example if you visit this [list of generators](https://jamstack.org/generators/),
 you see a lot of them:
 
--- ft.image: There are three hundred plus static site generators!
+-- ds.image: There are three hundred plus static site generators!
 src: $assets.files.static.images.generators.png
-width: fill
+width: fill-container
 
 One of them that we compare ourselves to is [Docusaurus](https://docusaurus.io).
 [Jekyll](https://jekyllrb.com) was the original static site generator, one can
@@ -51,23 +51,23 @@ them.
 So FPM is a static site generator like all these ones, but compared to them, we
 have a special feature: remixing sites.
 
--- ft.h1: What Does Remixing Site Mean?
+-- ds.h1: What Does Remixing Site Mean?
 
 Lets consider this: A lot of books and blogs are hosted on Github etc, that have
 permissive licenses. For example if you [search on Github, repositories that have
 "Creative Commons" license](https://github.com/search?q=license%3Acc&type=Repositories&ref=advsearch&l=&l=),
 
--- ft.image: 170 Thousand creative common licensed repos!
+-- ds.image: 170 Thousand creative common licensed repos!
 src: $assets.files.static.images.cc-repos.png
-width: fill
+width: fill-container
 
 A huge majority of them are books, or learning material of some sort. There is
 learning material on interview practices, or for learning Java, and so on.
-{ft.highlight: There is a huge amount of content that is freely available},
+{ds.highlight: There is a huge amount of content that is freely available},
 free as in free speech, creative commons! We are allowed to do whatever we want
 with them. We can republish them if we wanted for example.
 
-But, {ft.highlight: unfortunately, it is not easy to remix this content} or
+But, {ds.highlight: unfortunately, it is not easy to remix this content} or
 curate a **custom book or learning resource** for the specific audiance you are
 catering to. It can be just for your team, or your students in your class, or
 maybe even if you want to assign a task to someone, what if you can create a
@@ -88,9 +88,9 @@ portions selectively from these projects. Even if the whole thing is not PDF,
 and is organised in small markdown files, currently there is no good way to
 "remix" these contents.
 
--- ft.h1: Precision Learning: Why Is Remixing Really Important?
+-- ds.h1: Precision Learning: Why Is Remixing Really Important?
 
--- ft.h1: We Are Not Talking Piracy Here
+-- ds.h1: We Are Not Talking Piracy Here
 
 We will honour copy rights. You can chose to give your content for free or you
 can ask that whoever includes your content pay you a reasonable share.
@@ -109,3 +109,5 @@ Compare this with the way we add depndencies in Node or Python etc to other
 code, you do not have to download the packages, the package manager downloads
 your dependencies. Your package manage can also check if the packages have been
 updated.
+
+-- end: ds.page

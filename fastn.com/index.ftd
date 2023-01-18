@@ -1,5 +1,5 @@
 -- import: fifthtry.github.io/admonitions as cbox
--- ft.page: fpm: FTD Package Manager & Static Site Generator
+-- ds.page: fpm: FTD Package Manager & Static Site Generator
 
 
 FPM is a command line tool written in Rust that acts as both package manager for
@@ -27,7 +27,7 @@ generated HTML is about `>1MB` in size. We are working on these.
 
 Learn about other [known issues here](/known-issues/).
 
--- ft.h1: Learning Resource
+-- ds.h1: Learning Resource
 
 We are writing three manuals to help you learn FPM:
 
@@ -37,7 +37,7 @@ We are writing three manuals to help you learn FPM:
   people can use.
 
 
--- ft.h1: Development
+-- ds.h1: Development
 
 Checkout what is planned in [Roadmap](/roadmap/), and day to day updates in the
 [Journal](/journal/).
@@ -45,3 +45,4 @@ Checkout what is planned in [Roadmap](/roadmap/), and day to day updates in the
 Github: [github.com/FifthTry/fpm](https://github.com/FifthTry/fpm)
 Discord: [#fpm on FifthTry](https://discord.gg/a7eBUeutWD)
 
+-- end: ds.page

@@ -1,7 +1,7 @@
--- ft.page: `$processor$: sitemap`
+-- ds.page: `$processor$: sitemap`
 
 
--- ft.code: Sitemap in `FPM.ftd`
+-- ds.code: Sitemap in `FPM.ftd`
 lang: ftd
 
 \-- fpm.sitemap:
@@ -28,12 +28,12 @@ url: whatever
 readers: <group name>
 writers: <group name>
 
--- ft.markdown:
+-- ds.markdown:
 
 The sitemap get parse into a record `sitemap-data`. This record is present in `fpm`
 The record looks like this
 
--- ft.code: record `sitemap-data` (fpm.ftd)
+-- ds.code: record `sitemap-data` (fpm.ftd)
 lang: ftd
 
 \-- record sitemap-data:
@@ -60,7 +60,7 @@ string list readers:
 string list writers:
 
 
--- ft.markdown:
+-- ds.markdown:
 
 The record `sitemap-data` contains sections, subsections and toc. For different
 document these values would be different. We can get this values by calling the
@@ -73,3 +73,5 @@ specified, the `current-*` will use the overridden titles.
 In sitemap, we can now use `readers` and `writers` for access control. `readers`
 and `writers` are [user groups](/dev/user-group). We can use access controls at `sitemap`,
 `section`, `subsection` and `toc` levels.
+
+-- end: ds.page

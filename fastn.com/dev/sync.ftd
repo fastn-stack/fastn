@@ -1,13 +1,13 @@
--- ft.page: How Sync Works
+-- ds.page: How Sync Works
 
 We have two states, "remote state" and "clone state".
 
--- ft.h1: Remote state
+-- ds.h1: Remote state
 
 The remote state is stored inside the `.remote-state` folder. It comprises all
 files' history.
 
--- ft.code: `.remote-state/history.ftd`
+-- ds.code: `.remote-state/history.ftd`
 lang: ftd
 
 \-- record remote-state:
@@ -15,7 +15,7 @@ file-history list history:
 
 
 
--- ft.h2: History
+-- ds.h2: History
 
 File history captures every modification to a file. It also included information
 about changes that happened due to merges, if an action happened to the "main
@@ -23,7 +23,7 @@ branch" via merge from a CR, we store the CR where the change came from in the
 `src-cr` field.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record file-history:
@@ -39,7 +39,7 @@ option integer src-cr:
 string operation:
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Actual content is stored in the file system based on
 `.remote-state/<file-name-without-last-extension>.<version>.<extension>`.
@@ -50,12 +50,12 @@ one for every change in that file. Delete also increments the version number.
 
 
 
--- ft.h1: Clone state
+-- ds.h1: Clone state
 
 On the clone, the state contains the workspace information.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record clone-state:
@@ -66,19 +66,19 @@ caption filename:
 optional boolean deleted:
 integer version:
 
--- ft.markdown:
+-- ds.markdown:
 
 Clone state is stored in `.clone-state` folder. Workspace information is
 stored in `.clone-state/workspace.ftd`.
 
 
 
--- ft.h1: Sync Scenarios
+-- ds.h1: Sync Scenarios
 
 Given the current remote and clone state, a bunch of operations are there,
 which either print some output or update either the clone or remote state.
 
--- ft.h2: A file was updated locally, no changes on remote
+-- ds.h2: A file was updated locally, no changes on remote
 
 We detect a file is updated locally by finding the version for every file in
 `workspace.ftd`, and then comparing the local file with the
@@ -95,7 +95,7 @@ Remote returns latest `file.v2.ftd` content, and clone stores it in
 in workspace.
 
 
--- ft.h2: A file was updated locally, with non conflicting changes on remote
+-- ds.h2: A file was updated locally, with non conflicting changes on remote
 
 If `file.ftd` was modified by someone else in the meanwhile, and the remote
 state has already moved to v2, remote does a three way merge between v1 version
@@ -106,7 +106,7 @@ a v3, and returns the merged content to clone, clone adds it to .remote-state
 folder, and updates the workspace.ftd and file.ftd's content in the workspace.
 
 
--- ft.h2: A file was updated locally with conflicting changes on remote
+-- ds.h2: A file was updated locally with conflicting changes on remote
 
 If on remote, v2 and our changes do not merge cleanly with v1 version as based,
 remote notifies the clone that the sync for that file failed. Remote sends the
@@ -115,7 +115,7 @@ and `file.ftd` in workspace are not modified. This conflict, then, can be
 resolved by clone using [`fpm resolve-conflict <file>`](cli/resolve-conflict).
 
 
--- ft.h2: Only a file with no known conflicts are sent to remote
+-- ds.h2: Only a file with no known conflicts are sent to remote
 
 Before sending a file we check if the file has known conflict. To do this we
 use the version in `workspace.ftd` and the content of `file.ftd` for that
@@ -124,7 +124,7 @@ version as "base", and the latest version of `file.ftd` in `.remote-state` as
 three way merge, and if the merge fails, we know there is conflict.
 
 
--- ft.h2: Deleting a file, no edits on remote case
+-- ds.h2: Deleting a file, no edits on remote case
 
 If a file is deleted from workspace and if [`fpm rm <file>`](/cli/rm/) command
 has been run, this sets deleted in `workspace.ftd` entry, we send this
@@ -134,7 +134,7 @@ deletion of the file, and update the `.remote-state/history.ftd`. And the clone
 will delete the entry from `.clone-state/workspace.ftd`.
 
 
--- ft.h2: Deleted by us, edited on remote
+-- ds.h2: Deleted by us, edited on remote
 
 If the file we deleted has been updated on remote, remote will see different
 version number, and return a conflict message along with the latest content of
@@ -145,10 +145,12 @@ fpm sync.
 
 
 
--- ft.h2: Edited by us, deleted on remote
+-- ds.h2: Edited by us, deleted on remote
 
 Remote again see two different version numbers, on delete we increase the
 version number, and reject the changes, as delete and edit are not cleanly
 merge-abe using three way merge operation.
 
 Clone will show the conflict message.
+
+-- end: ds.page

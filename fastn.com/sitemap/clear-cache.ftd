@@ -1,4 +1,4 @@
--- ft.page: `/-/clear-cache/` API
+-- ds.page: `/-/clear-cache/` API
 
 This API `/-/clear-cache/` clear files from where the `fpm` instance is running.
 
@@ -10,14 +10,14 @@ will not download from the internet, It will serve from local cache.
 So to serve an updated version of files we have to remove those files or
 packages from `fpm` local cache, which can be done using this API.
 
--- ft.h1: API: `/-/clear-cache/`
+-- ds.h1: API: `/-/clear-cache/`
 
 Method: `POST`
 
 Query Parameters: `file`, `package`, `all-dependencies`
 
 
--- ft.h2: Query Parameter `file`
+-- ds.h2: Query Parameter `file`
 
 `file` provides path of the file with respect to `main` or foreign package.
 
@@ -25,13 +25,13 @@ E.g.: `?file=a.ftd`, `?file=foo/abc.ftd`, `?<package-name>/foo.ftd`
 
 This argument can be provided more than once.
 
--- ft.h3: Expected Behaviour
+-- ds.h3: Expected Behaviour
 
 `file` argument value can be passed with the `package-name` prefix or without
 it, so to remove that file first check it in the `main` package, and if it is
 not present then remove it from `.packages`.
 
--- ft.h2: Query Parameter `package`
+-- ds.h2: Query Parameter `package`
 
 `package` provides the name of the package which `fpm` `main` package in
 dependent on.
@@ -41,25 +41,25 @@ E.g.: `main`, `<package-name>`
 This parameter can be specified more than once to delete multiple packages in
 one go.
 
--- ft.h3: Expected Behaviour
+-- ds.h3: Expected Behaviour
 
 if `main` is given as a value, so remove the files of `main` package only.
 If `<package-name>` is given as value, so remove the entry from `.packages`
 directory.
 
--- ft.h2: Query Parameter `all-dependencies`
+-- ds.h2: Query Parameter `all-dependencies`
 
 `all-dependencies` provides boolean value, whether to remove dependencies or not
 default value of it is `false`.
 
 E.g.: `?all-dependencies=true`
 
--- ft.h3: Expected Behaviour
+-- ds.h3: Expected Behaviour
 
 If `all-dependencies` is given as `true` in query, so it should remove all the
 entries from `.packages` directory.
 
--- ft.h1: API Testing
+-- ds.h1: API Testing
 
 Tested it with [`abrark`](https://github.com/abrarNitk/abrark). Clone, and
 follow the below steps for testing.
@@ -90,3 +90,5 @@ Run `fpm` with `fpm serve --download-base-url https://raw.githubusercontent.com/
     - Status: Working, removed only `main` package content
   - `http://127.0.0.1:8001/-/clear-cache/?package=fifthtry.github.io/doc-site&package=fifthtry.github.io/typography&package=fifthtry.github.io/toc`
     - Status: Working
+
+-- end: ds.page

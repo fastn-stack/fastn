@@ -2,19 +2,27 @@
 -- import: fpm.dev/featured as ft-ui
 
 
+
+
+
 -- boolean show-grid: true
 -- boolean show-list: false
 
--- ft.page: Documentation site themes
+
+
+
+
+-- ds.page: Documentation site themes
 
 We have designed and developed below documentation site themes. You can use them
 for writing books, blog, technical documentation etc. These themes can be used 
 as personal web sites or organizational static web sites.
 
-
 -- ft-ui.grid-view:
-if: $show-grid
+if: {$show-grid}
 templates: $doc-sites
+
+-- end: ds.page
 
 
 
@@ -27,7 +35,7 @@ templates: $doc-sites
 
 -- ft-ui.template list doc-sites:
 
--- doc-sites: Doc-site
+-- ft-ui.template: Doc-site
 template-url: http://fifthtry.github.io/doc-site/
 screenshot: $assets.files.static.doc-site.png
 licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
@@ -37,8 +45,7 @@ github-url: https://github.com/FifthTry/doc-site/
 using `doc-site` as base theme. Click on image OR package name to view it's working 
 demo. 
 
-
--- doc-sites: Blue Sapphire
+-- ft-ui.template: Blue Sapphire
 template-url: https://fifthtry.github.io/Blue-Sapphire-Template/
 screenshot: $assets.files.static.blue-sapphire.png
 licence-url: https://github.com/FifthTry/Blue-Sapphire-Template/blob/main/LICENSE
@@ -48,7 +55,7 @@ github-url: https://fifthtry.github.io/Blue-Sapphire-Template/
 ready to use template for your web packages. Click on image OR package name to see
 it's working demo and usage.
 
--- doc-sites: Forest 
+-- ft-ui.template: Forest 
 template-url: https://fifthtry.github.io/Forest-Template/
 screenshot: $assets.files.static.forest.png
 licence-url: https://github.com/FifthTry/Forest-Template/blob/master/LICENSE
@@ -58,3 +65,5 @@ is-last: true
 `fifthtry.github.io/Forest-Template` is based on Forest Theme. This is 
 ready to use template for your web packages. Click on image OR package name to see
 it's working demo and usage.
+
+-- end: doc-sites

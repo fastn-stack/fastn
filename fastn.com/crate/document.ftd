@@ -1,10 +1,10 @@
--- ft.page: `fpm::Document`
+-- ds.page: `fpm::Document`
 
 `fpm::Document` struct keeps track of a "document". Document is a [`file` in fpm
 package](crate/file/), which is either a ftd file, a markdown file, or a code
 file.
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 #[derive(Debug, Clone)]
@@ -14,3 +14,5 @@ pub struct Document {
     pub content: String,
     pub parent_path: String,
 }
+
+-- end: ds.page

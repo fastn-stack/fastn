@@ -1,5 +1,6 @@
--- ft.page: Create new fpm project
-
+-- ds.page: Create new fpm project
 
 There are several ways to create a new fpm project. This can be done using
 fpm command line or using fpm template available on github.
+
+-- end: ds.page

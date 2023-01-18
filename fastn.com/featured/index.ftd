@@ -1,5 +1,9 @@
 -- import: fpm.dev/assets
 
+
+
+
+
 -- boolean show-grid: true
 -- boolean show-list: false
 
@@ -7,13 +11,17 @@
 
 
 
--- ft.page: Featured components
-
 -- ftd.column:
-margin-top: -44
-width: fill
+width: fill-container
+height: hug-content
+background.solid: $inherited.colors.background.base
+padding-vertical.px: 24
+padding-horizontal.px: 24
+;;margin-top.px: -44
 
--- ft.markdown:
+-- ds.page: Featured components
+
+-- ds.markdown:
 
 We have designed and developed below components using `FTD` and `FPM` package. 
 Use them for writing e-books, blogs, web technical documentation etc. 
@@ -22,32 +30,34 @@ These components can be used inside your personal web sites or organizational st
 web sites developed using `FPM` package.
 
 -- grid-view: Documentation Sites:
-if: $show-grid
+if: {$show-grid}
 templates: $doc-sites
 more-link: /featured/doc-sites/
 
 -- grid-view: Resumes:
-if: $show-grid
+if: {$show-grid}
 templates: $resumes
 more-link: /featured/resumes/
 
--- grid-view: Component Libraries
-if: $show-grid
+-- grid-view: Component Libraries:
+if: {$show-grid}
 templates: $bling
 more-link: /featured/components-library/
 
--- grid-view: Color Schemes
-if: $show-grid
+-- grid-view: Color Schemes:
+if: {$show-grid}
 templates: $schemes
 more-link: /featured/cs/
 
-
--- grid-view: Fonts
-if: $show-grid
+-- grid-view: Fonts:
+if: {$show-grid}
 templates: $font
 more-link-text: How to use fonts
 more-link: /featured/fonts/
 
+-- end: ds.page
+
+-- end: ftd.column
 
 
 
@@ -56,64 +66,70 @@ more-link: /featured/fonts/
 
 
 
--- ftd.column grid-view:
+
+
+-- component grid-view:
 optional caption title:
 template list templates:
 optional string more-link: 
 optional string more-link-text: View all 
-boolean hover: false
-width: fill
-border-top: 1
-border-color: $fpm.color.main.border
-padding-top: $fpm.space.space-2
-margin-top: $fpm.space.space-4
+boolean $hover: false
 
---- ftd.row:
-width: fill
+-- ftd.column:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border
+padding-top.px: 8
+margin-top.px: 16
 
---- ftd.text: $title
-if: not $ft.is-mobile
-role: $fpm.type.heading-small
-color: $fpm.color.main.text
-width: fill
-margin-top: $fpm.space.space-3
+-- ftd.row:
+width: fill-container
 
---- ftd.text: $title
-if: $ft.is-mobile
-role: $fpm.type.copy-large
-color: $fpm.color.main.text
-width: fill
-margin-top: $fpm.space.space-3
+-- ftd.text: $grid-view.title
+if: { ftd.device != "mobile" }
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+width: fill-container
+margin-top.px: 12
 
---- ftd.row:
-align: right
-margin-top: $fpm.space.space-5
-padding-right: $fpm.space.space-5
-padding-right if $ft.is-mobile: $fpm.space.space-0
+-- ftd.text: $grid-view.title
+if: { ftd.device == "mobile" }
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+width: fill-container
+margin-top.px: 12
 
---- ftd.text: $more-link-text
-if: $more-link is not null
-link: $more-link
-role: $fpm.type.fine-print
-color: $fpm.color.main.text
-$on-mouse-enter$: $hover = true
-$on-mouse-leave$: $hover = false
+-- ftd.row:
+align-self: end
+margin-top.px: 20
+padding-right.px: 20
+padding-right.px if { ftd.device != "mobile" }: 0
+
+-- ftd.text: $grid-view.more-link-text
+if: { $grid-view.more-link != NULL}
+link: $grid-view.more-link
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+$on-mouse-enter$: $ftd.set-bool($a=$grid-view.hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-view.hover, v = false)
 white-space: nowrap
-border-bottom: 1
-border-color: $fpm.color.main.background.step-1
-border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+border-bottom-width.px: 1
+border-color: $inherited.colors.background.step-1
+border-color if { $grid-view.hover }: $inherited.colors.cta-primary.base
+color if { $grid-view.hover }: $inherited.colors.cta-primary.base
 
---- container: ftd.main
+-- end: ftd.row
 
---- ftd.row:
-if: not $ft.is-mobile
-width: fill
+-- end: ftd.row
+
+-- ftd.row:
+if: { ftd.device != "mobile" }
+width: fill-container
 wrap: true
-spacing: 46
+spacing.px: 46
 
---- grid-of-items: $obj.title
-$loop$: $templates as $obj
+-- grid-of-items: $obj.title
+$loop$: $grid-view.templates as $obj
 template-url: $obj.template-url
 licence-url: $obj.licence-url
 github-url: $obj.github-url
@@ -121,14 +137,14 @@ screenshot: $obj.screenshot
 body: $obj.body
 is-last: $obj.is-last
 
---- container: ftd.main
+-- end: ftd.row
 
---- ftd.column:
-if: $ft.is-mobile
-width: fill
+-- ftd.column:
+if: { ftd.device == "mobile" }
+width.fixed.percent: 100
 
---- grid-of-items: $obj.title
-$loop$: $templates as $obj
+-- grid-of-items: $obj.title
+$loop$: $grid-view.templates as $obj
 template-url: $obj.template-url
 licence-url: $obj.licence-url
 github-url: $obj.github-url
@@ -136,7 +152,11 @@ screenshot: $obj.screenshot
 body: $obj.body
 is-last: $obj.is-last
 
---- container: ftd.main
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: grid-view
 
 
 
@@ -147,134 +167,145 @@ is-last: $obj.is-last
 
 
 
--- ftd.column grid-of-items:
+-- component grid-of-items:
 caption title: 
 string template-url:
 string licence-url:
 string github-url:
 boolean is-last:
-boolean github-hover: false
-boolean mit-hover: false
+boolean $github-hover: false
+boolean $mit-hover: false
 body body:
 optional ftd.image-src screenshot:
-width if not $ft.is-mobile: percent 46
-margin-top: $fpm.space.space-6
-margin-bottom: $fpm.space.space-6
-width if $ft.is-mobile: fill
 
---- ftd.column:
-width: fill
-margin-left if $is-last: -44
-margin-left if $ft.is-mobile: 0
-id: parent
-spacing: 16
+-- ftd.column:
+width.fixed.percent if { ftd.device != "mobile" }: 46
+width if { ftd.device == "mobile" }: fill-container
+margin-top.px: 24
+margin-bottom.px: 24
 
---- ftd.row:
-id: main-wrapper
-width: fill
+-- ftd.column:
+width: fill-container
+;;margin-left.px if { $grid-of-items.is-last }: -44
+margin-left.px if { ftd.device == "mobile" }: 0
+;;id: parent
+spacing.px: 16
 
---- ftd.row:
-width: fill
-align: center
+-- ftd.row:
+;;id: main-wrapper
+width: fill-container
+;;align-self: start
 
---- ftd.text: $title
-role: $fpm.type.copy-large
-color: $fpm.color.main.text-strong
-link: $template-url
+-- ftd.text: $grid-of-items.title
+role: $inherited.types.copy-large
+color: $inherited.colors.text-strong
+link: $grid-of-items.template-url
 open-in-new-tab: true
-border-bottom: 1
-border-color: $fpm.color.main.background.step-1
-border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+border-bottom-width.px: 1
+width: fill-container
+border-color: $inherited.colors.background.step-1
+;;border-color if { grid-of-items.title }: $inherited.colors.cta-primary.base
+;;color if { $grid-of-items.mouse-in }: $inherited.colors.cta-primary.base
 
---- container: main-wrapper
+-- ftd.row:
+align-content: right
+spacing.px: 12
+padding-top.px: 8
+;;width.fixed.percent: 50
+;;id: icon-pane
 
---- ftd.row:
-align: right
-spacing: 12
-padding-top: $fpm.space.space-2
-id: icon-pane
-
---- ftd.row:
-link: $github-url
+-- ftd.row:
+link: $grid-of-items.github-url
 open-in-new-tab: true
-id: github-pane
+;;id: github-pane
 
---- ftd.image:
-if: not $github-hover
+-- ftd.image:
+if: { !$grid-of-items.github-hover }
 src: $assets.files.static.icon-github.svg
-width: 16
-height: 16
-align: center
-margin-right: $fpm.space.space-2
-$on-mouse-enter$: $github-hover = true
-$on-mouse-leave$: $github-hover = false
+width.fixed.px: 16
+height.fixed.px: 16
+align-self: center
+margin-right.px: 8
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 
---- ftd.image:
-if: $github-hover
+-- ftd.image:
+if: { $grid-of-items.github-hover }
 src: $assets.files.static.icon-github-grey.svg
-width: 16
-height: 16
-align: center
-margin-right: $fpm.space.space-2
-$on-mouse-enter$: $github-hover = true
-$on-mouse-leave$: $github-hover = false
+width.fixed.px: 16
+height.fixed.px: 16
+align-self: center
+margin-right.px: 8
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
 
---- container: icon-pane
+-- end: ftd.row
 
---- ftd.row:
-link: $licence-url
+-- ftd.row:
+link: $grid-of-items.licence-url
 open-in-new-tab: true
-id: github-pane
+;;id: github-pane
 
---- ftd.image:
-if: not $mit-hover
+-- ftd.image:
+if: {!$grid-of-items.mit-hover}
 src: $assets.files.static.mit-icon.svg
-width: 16
-height: 16
-align: center
-$on-mouse-enter$: $mit-hover = true
-$on-mouse-leave$: $mit-hover = false
+width.fixed.px: 16
+height.fixed.px: 16
+align-self: center
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.mit-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.mit-hover, v = false)
 
---- ftd.image:
-if: $mit-hover
+-- ftd.image:
+if: {$grid-of-items.mit-hover}
 src: $assets.files.static.mit-icon-grey.svg
-width: 16
-height: 16
-align: center
-$on-mouse-enter$: $mit-hover = true
-$on-mouse-leave$: $mit-hover = false
+width.fixed.px: 16
+height.fixed.px: 16
+align-self: center
+$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.mit-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.mit-hover, v = false)
 
---- container: parent
+-- end: ftd.row
 
---- ftd.column:
-if: $screenshot is not null
-width: fill
-border-width: 1
-border-color: $fpm.color.main.text
-border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
-border-radius: 12
-link: $template-url
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.column:
+if: {$grid-of-items.screenshot != NULL}
+width: fill-container
+border-width.px: 1
+border-color: $inherited.colors.text
+;;border-color if {grid-of-items.github-hover}: $inherited.colors.cta-primary.base
+border-radius.px: 12
+link: $grid-of-items.template-url
 open-in-new-tab: true
 
---- ftd.image:
-if: $screenshot is not null
-src: $screenshot
-width: fill
+-- ftd.image:
+if: {$grid-of-items.screenshot != NULL}
+src: $grid-of-items.screenshot
+width: fill-container
 height: auto
-border-radius: 12
+border-radius.px: 12
 
---- container: parent
+-- end: ftd.column
 
---- ftd.column:
-width: fill
-margin-top: $fpm.space.space-4
-spacing: 24
+-- end: ftd.column
 
---- ftd.text:
-text: $body
-role: $copy-print-medium
-color: $fpm.color.main.text
+-- ftd.column:
+width: fill-container
+margin-top.px:16
+spacing.px: 24
+
+-- ftd.text:
+text: $grid-of-items.body
+role: $inherited.types.copy-tight
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: grid-of-items
 
 
 
@@ -296,7 +327,7 @@ boolean is-last: false
 
 -- template list doc-sites:
 
--- doc-sites: Doc-site
+-- template: Doc-site
 template-url: http://fifthtry.github.io/doc-site/
 screenshot: $assets.files.static.doc-site.png
 licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
@@ -306,7 +337,7 @@ github-url: https://github.com/FifthTry/doc-site/
 using `doc-site` as base theme. Click on image OR package name to view it's working 
 demo. 
 
--- doc-sites: Blue Sapphire
+-- template: Blue Sapphire
 template-url: https://fifthtry.github.io/Blue-Sapphire-Template/
 screenshot: $assets.files.static.blue-sapphire.png
 licence-url: https://github.com/FifthTry/Blue-Sapphire-Template/blob/main/LICENSE
@@ -315,6 +346,8 @@ github-url: https://fifthtry.github.io/Blue-Sapphire-Template/
 `fifthtry.github.io/Blue-Sapphire-Template` is based on Blue Saffire Theme. This is 
 ready to use template for your web packages. Click on image OR package name to see
 it's working demo and usage.
+
+-- end: doc-sites
 
 
 
@@ -327,7 +360,7 @@ it's working demo and usage.
 
 -- template list resumes:
 
--- resumes: Caffeine
+-- template: Caffeine
 template-url: http://fifthtry.github.io/caffeine-resume/
 screenshot: $assets.files.static.caffiene.png
 licence-url: https://github.com/FifthTry/caffeine-resume/blob/main/LICENSE
@@ -336,7 +369,7 @@ github-url: https://github.com/FifthTry/caffeine-resume/
 `fifthtry.github.io/caffeine-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`
 
--- resumes: Paper
+-- template: Paper
 template-url: http://fifthtry.github.io/paper-resume/
 screenshot: $assets.files.static.paper.png
 licence-url: https://github.com/FifthTry/paper-resume/blob/main/LICENSE
@@ -345,6 +378,7 @@ github-url: https://github.com/FifthTry/paper-resume/
 `fifthtry.github.io/paper-resume` is resume theme based on our grey color scheme
 of `fifthtry.github.io/doc-site/`
 
+-- end: resumes
 
 
 
@@ -357,7 +391,7 @@ of `fifthtry.github.io/doc-site/`
 
 -- template list schemes:
 
--- schemes: Color Doc
+-- template: Color Doc
 template-url: https://fifthtry.github.io/color-doc/
 screenshot: $assets.files.static.color-doc.png
 licence-url: https://github.com/FifthTry/color-doc/blob/main/LICENSE
@@ -366,7 +400,7 @@ github-url: https://github.com/FifthTry/color-doc/
 `fifthtry.github.io/color-doc` is a grey color scheme. Our web sites are using
 this color scheme. For ex. [`fpm.dev`](https://fpm.dev/), [`ftd.dev`](https://ftd.dev/) etc.
 
--- schemes: Forest CS
+-- template: Forest CS
 template-url: https://fifthtry.github.io/forest-cs/
 screenshot: $assets.files.static.forest-cs.png
 licence-url: https://github.com/FifthTry/forest-cs/blob/main/LICENSE
@@ -374,6 +408,7 @@ github-url: https://github.com/FifthTry/forest-cs/
 
 `fifthtry.github.io/forest-cs` is a forest green color scheme. See forest-cs color scheme we using on our [`df.fifthtry.com`](https://df.fifthtry.com/)
 
+-- end: schemes
 
 
 
@@ -386,7 +421,7 @@ github-url: https://github.com/FifthTry/forest-cs/
 
 -- template list bling:
 
--- bling: Bling
+-- template: Bling
 template-url: https://fifthtry.github.io/bling/
 screenshot: $assets.files.static.bling-components.png
 licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
@@ -395,7 +430,7 @@ github-url: https://github.com/FifthTry/bling/
 `fifthtry.github.io/bling` is develoed and designed with various components which 
 can be used inside `FTD` web packages.
 
--- bling: Image Gallery
+-- template: Image Gallery
 template-url: https://fifthtry.github.io/imago-gallery-ig/
 screenshot: $assets.files.static.slideshow-demo.png
 licence-url: https://github.com/FifthTry/imago-gallery-ig/blob/main/LICENSE
@@ -403,6 +438,8 @@ github-url: https://github.com/FifthTry/imago-gallery-ig/
 
 `fifthtry.github.io/imago-gallery-ig` is a image gallery component which can be used 
 inside `FTD` web packages.
+
+-- end: bling
 
 
 
@@ -415,7 +452,7 @@ inside `FTD` web packages.
 
 -- template list font:
 
--- font: Inter
+-- template: Inter
 template-url: https://fifthtry.github.io/inter/
 licence-url: https://github.com/FifthTry/inter/blob/main/LICENSE
 github-url: https://github.com/FifthTry/inter
@@ -423,7 +460,7 @@ github-url: https://github.com/FifthTry/inter
 `fifthtry.github.io/inter` font is available and can be used inside `FTD` web 
 packages.
 
--- font: Roboto
+-- template: Roboto
 template-url: https://fifthtry.github.io/roboto/
 licence-url: https://github.com/FifthTry/roboto/blob/main/LICENSE
 github-url: https://github.com/FifthTry/roboto/
@@ -431,24 +468,7 @@ github-url: https://github.com/FifthTry/roboto/
 `fifthtry.github.io/roboto` font is available and can be used inside `FTD` web 
 packages.
 
-
-
-
-
-
-
-
-
--- ftd.font-size copy-print-medium-desktop:
-line-height: 20
-size: 13
-letter-spacing: 0
-
--- ftd.type copy-print-medium: $fpm.font-display
-desktop: $copy-print-medium-desktop
-mobile: $copy-print-medium-desktop
-xl: $copy-print-medium-desktop
-weight: 400
+-- end: font
 
 
 
@@ -459,62 +479,96 @@ weight: 400
 
 
 
--- ftd.column font-package:
+-- component font-package:
 caption name:
 string github:
 string google:
 string site:
-padding: 20
-border-width: 2
-border-radius: 5
-border-color: $fpm.color.main.border
-margin-bottom: 20
-spacing: 10
 
---- ftd.text: $name
-role: $fpm.type.copy-large
-color: $fpm.color.main.text-strong
+-- ftd.column:
+padding.px: 20
+border-width.px: 2
+border-radius.px: 5
+border-color: $inherited.colors.border
+margin-bottom.px: 20
+spacing.px: 10
 
---- kv: Google:
-value: $google
+-- ftd.text: $font-package.name
+role: $inherited.types.copy-large
+color: $inherited.colors.text-strong
 
---- kv: Github:
-value: $github
+-- kv: Google:
+value: $font-package.google
 
---- kv: Site:
-value: $site
+-- kv: Github:
+value: $font-package.github
 
--- ftd.row kv:
+-- kv: Site:
+value: $font-package.site
+
+-- end: ftd.column
+
+-- end: font-package
+
+
+
+
+
+
+
+
+
+
+-- component kv:
 caption key:
 body value:
-width: fill
-spacing: 5
 
---- ftd.text: $key
-role: $fpm.type.copy-tight
-color: $fpm.color.main.text
+-- ftd.row:
+width: fill-container
+spacing.px: 5
 
---- ftd.text: $value
-role: $fpm.type.copy-tight
-color: $fpm.color.main.text-strong
+-- ftd.text: $kv.key
+role: $inherited.types.copy-tight
+color: $inherited.colors.text
+
+-- ftd.text: $kv.value
+role: $inherited.types.copy-tight
+color: $inherited.colors.text-strong
+
+-- end: ftd.row
+
+-- end: kv
 
 
 
 
 
--- ftd.column fonts:
-width: fill
 
---- ftd.row:
-width: fill
-spacing: 34
 
---- font-package: Inter
+
+
+
+-- component fonts:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+spacing.px: 34
+
+-- font-package: Inter
 google: https://fonts.google.com/specimen/Inter
 site: https://fifthtry.github.io/inter/
 github: https://github.com/FifthTry/inter
 
---- font-package: Roboto
+-- font-package: Roboto
 google: https://fonts.google.com/specimen/Roboto
 site: https://fifthtry.github.io/roboto/
 github: https://github.com/FifthTry/roboto
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: fonts

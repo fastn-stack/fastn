@@ -1,12 +1,14 @@
--- ft.page: `editor-sync` API
+-- ds.page: `editor-sync` API
 
 `editor-sync` API is called from `fpm editor` to sync the local content with
 remote server. It worked same as [`fpm sync`](/sitemap/sync/) worked.
 
--- ft.h1: URL and Parameters
+-- ds.h1: URL and Parameters
 
 The URL of the API is: `/-/editor-sync/`
 
--- ft.h2: Request Method
+-- ds.h2: Request Method
 
 Request Method of this API is `GET`
+
+-- end: ds.page

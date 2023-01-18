@@ -1,10 +1,10 @@
--- ft.page: `fpm::Package`
+-- ds.page: `fpm::Package`
 
 `fpm::Package` struct keeps track of a single fpm package.
 
 [Source Code](https://github.com/FifthTry/fpm/blob/main/src/config.rs)
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 #[derive(Debug, Clone)]
@@ -31,60 +31,60 @@ pub struct Package {
     pub favicon: Option<String>,
 }
 
--- ft.markdown:
+-- ds.markdown:
 
 [`fpm::Font`](crate/font/).
 
--- ft.h1: Package Properties
+-- ds.h1: Package Properties
 
--- ft.h2: `name`
+-- ds.h2: `name`
 
 `name` stores name of the package. E.g.  `fifthtry/doc-site` and `abrark`.
 
--- ft.h2: `versioned`
+-- ds.h2: `versioned`
 
 The `versioned` stores the boolean value storing of the fpm package is versioned
 or not.
 
--- ft.h2: `dependencies`
+-- ds.h2: `dependencies`
 
 `dependencies` keeps track of direct dependencies of a given package. This too
 should be moved to `fpm::Package` to support recursive dependencies etc.
 
 
--- ft.h2: `auto_import`
+-- ds.h2: `auto_import`
 
 `auto_import` keeps track of the global auto imports in the package.
 
--- ft.h2: `fpm_path`
+-- ds.h2: `fpm_path`
 
 `fpm_path` contains the fpm package root. This value is found in `FPM.ftd` or
 `FPM.manifest.ftd` file.
 
--- ft.h2: `ignored_path`
+-- ds.h2: `ignored_path`
 
 `ignored_path` keeps track of files that are to be ignored by `fpm build`,
 `fpm sync` etc.
 
--- ft.h2: `fonts`
+-- ds.h2: `fonts`
 
 `fonts` keeps track of the fonts used by the package.
 Note that this too is kind of bad design, we will move fonts to `fpm::Package`
 struct soon.
 
--- ft.h2: `groups`
+-- ds.h2: `groups`
 
 `groups` contains all the [user-groups](/dev/user-group/) defined in the package.
 
 
--- ft.h2: `sitemap`
+-- ds.h2: `sitemap`
 
 `sitemap` stores the structure of the package. The structure includes `sections`,
 `subsections` and table of content (`toc`). This automatically converts the
 documents in package into the corresponding to structure.
 
 
--- ft.h2: `favicon`
+-- ds.h2: `favicon`
 
 Optional path for favicon icon to be used.
 
@@ -94,27 +94,29 @@ specified in FPM.ftd, that file will be used.
 If more than one favicon.* file is present, we will use them
 in following priority: .ico > .svg > .png > .jpg
 
--- ft.h2: `download_base_url`
+-- ds.h2: `download_base_url`
 
 `download_base_url` is base url from where package data has to download. We have
 to pass it also as command line parameter `--download-base-url` for main package,
 if `FPM.ftd` does not exists.
 
 
--- ft.h1: Package Functions
+-- ds.h1: Package Functions
 
--- ft.h2: `fpm::Package::generate_canonical_url()`
+-- ds.h2: `fpm::Package::generate_canonical_url()`
 
 `FPM.ftd` file can contain `canonical-url` key in `fpm.package` declaration. If
 this key is present this function returns the canonical-url, else it returns
 empty string.
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 pub fn fpm::Package::generate_canonical_url(&self, id: &str) -> String
 
--- ft.markdown:
+-- ds.markdown:
 
 `id` is the identifier of the document for which we want the canonical-url. `id`
 is appended to `canonical-url` found in `FPM.ftd` file.
+
+-- end: ds.page

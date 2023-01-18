@@ -1,5 +1,6 @@
--- ft.page: Dependency: `camino`
-
+-- ds.page: Dependency: `camino`
 
 We use [`camino`](https://docs.rs/camino/) crate which provides us "UTF-8
 encoded paths".
+
+-- end: ds.page

@@ -1,4 +1,4 @@
--- ft.page: Remote Identity
+-- ds.page: Remote Identity
 
 When `fpm serve` is running with on remote, it needs to get all the identities
 of the user who is currently making the HTTP request to decide if the user has
@@ -17,7 +17,7 @@ identity.
 
 [Local Testing with GitHub](/how-to/auth-testing/#local-testing-with-github-`sid`-cookie)
 
--- ft.h1: Identity Service
+-- ds.h1: Identity Service
 
 [Identity service](https://github.com/FifthTry/identity-service) is responsible
 for logging user in, and managing all the identities of the user. FPM and
@@ -30,7 +30,7 @@ variable.
 FPM will call `/get-identities/` API on `identity service`, which will return
 the list of [identities](/dev/user-identity/).
 
--- ft.code: `/get-identities/?sid=<sid>&github=abrarnitk`
+-- ds.code: `/get-identities/?sid=<sid>&github=abrarnitk`
 lang: json
 
 {
@@ -40,13 +40,13 @@ lang: json
     ]
 }
 
--- ft.h1: Access Control
+-- ds.h1: Access Control
 
 Once `fpm` gets the identities of user corresponding to current HTTP request, it
 will then look at [`user group` definitions in FPM.ftd](/dev/user-group/) and
 find all the groups the the current user belongs to.
 
--- ft.code: FPM.ftd
+-- ds.code: FPM.ftd
 lang: ftd
 
 \-- import: fpm
@@ -57,7 +57,7 @@ id: fifthtry-people
 email: yo@y.com
 github-team: FifthTry/everyone
 
--- ft.markdown:
+-- ds.markdown:
 
 Then based on `email: yo@y.com`, we know the user belongs to `fifthtry-people`
 group. The other identity, `github: foo` did not match any groups. The maker of
@@ -67,9 +67,11 @@ Now we will look at the sitemap, find the `readers` of the current URL that is
 requested. If the user belongs to a group that has read access to current URL
 the user can read it, else fpm will return 401.
 
--- ft.h1: Optimization: If URL Is World Readable Then We Won't Read `sid`
+-- ds.h1: Optimization: If URL Is World Readable Then We Won't Read `sid`
 
 TODO:
 `sid` cookie and the identity stuff is only needed to see if a private URL is
 readable by the specific user making request. If the URL is public, readable by
 the world, then there is no need to do any checks.
+
+-- end: ds.page

@@ -1,24 +1,24 @@
--- ft.page: `clone` API
+-- ds.page: `clone` API
 
 `clone` API is called from `fpm cli` with command `fpm clone`. This API clones
 FPM package to local. This API is only available in FPM `remote` feature.
 
--- ft.h1: API
+-- ds.h1: API
 
--- ft.h2: URL and Parameters
+-- ds.h2: URL and Parameters
 
 The URL of the API is: `/-/clone/`
 
--- ft.h2: Request Method
+-- ds.h2: Request Method
 
 Request Method of this API is `GET`
 
 
--- ft.h2: Response
+-- ds.h2: Response
 
 The output of the API is:
 
--- ft.code:
+-- ds.code:
 lang: rs
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug)]
@@ -28,6 +28,8 @@ pub struct CloneResponse {
 }
 
 
--- ft.h2: TODO
+-- ds.h2: TODO
 
 This API ideally should take URL of FPM package to clone.
+
+-- end: ds.page

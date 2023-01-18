@@ -1,10 +1,10 @@
 
--- ft.page: How to create `font` package
+-- ds.page: How to create `font` package
 
 Follow below instructions:
 
 
--- ft.h2: How to use google-font-to-fpm package
+-- ds.h2: How to use google-font-to-fpm package
 
 While creating new `fpm` font package you need to download
 [google-font-to-fpm](https://github.com/FifthTry/google-font-to-fpm).
@@ -20,13 +20,13 @@ Follow below steps to download
   below command on command prompt
 
 
--- ft.code:
+-- ds.code:
 lang: python
 
 python3 -m pip install requests
 
 
--- ft.h2: How to copy Google Font CSS
+-- ds.h2: How to copy Google Font CSS
 
 Follow Below steps on [https://fonts.google.com/specimen/Lato?query=lato](https://fonts.google.com/specimen/Lato?query=lato)
 to download font CSS. Here we are going to use `Lato` font.
@@ -45,7 +45,7 @@ to download font CSS. Here we are going to use `Lato` font.
 
 
 
--- ft.h2: Create new `fpm` font package on `GitHub.com`
+-- ds.h2: Create new `fpm` font package on `GitHub.com`
 
 Create new repository on your GitHub account, here we are creating package for
 `Lato` font so package name should be e.g. `https://github.com/FifthTry/lato-font`
@@ -58,14 +58,14 @@ Create new repository on your GitHub account, here we are creating package for
 - change the package name with your `lato` repository package name
 
 
--- ft.code: 
+-- ds.code: 
 lang: python
 
 package_name = "fifthtry.github.io/inter-font"
 name = "inter"
 
 
--- ft.code: Change above lines with:
+-- ds.code: Change above lines with:
 lang: python
 
 package_name = "fifthtry.github.io/lato-font"
@@ -73,16 +73,18 @@ name = "lato"
 
 
 
--- ft.code: Run `read_google_font.py` file on command prompt
+-- ds.code: Run `read_google_font.py` file on command prompt
 lang: terminal-command
 
 python3 read_google_font.py 
 
 
--- ft.markdown:
+-- ds.markdown:
 
 - Open `google-font-to-fpm` repository into `SubLimeText` editor
 - Copy `FPM.ftd` file and paste it to your repository 
 - Copy `static` folder and paste it to your repository
 - Run `fpm build` on your repository
 - Push repository code to `GitHub`
+
+-- end: ds.page

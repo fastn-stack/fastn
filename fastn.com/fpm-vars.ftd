@@ -1,16 +1,18 @@
--- ft.page: `import: fpm`
+-- ds.page: `import: fpm`
 
 
--- ft.h1: `document-id: String`
+
+
+
+-- ds.h1: `document-id: String`
 
 The current document being processed.
 
--- ft.h1: `language-toc: list fpm.language-toc-item`
+-- ds.h1: `language-toc: list fpm.language-toc-item`
 
 This contains the list of language-toc-item.
 
-
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record language-toc-item:
@@ -18,8 +20,9 @@ caption title:
 string url:
 language-toc-item list children:
 
-
--- ft.markdown:
+-- ds.markdown:
 
 Title contains the language of the translation package and url contains the
 link to the page in the translated version.
+
+-- end: ds.page

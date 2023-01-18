@@ -1,4 +1,4 @@
--- ft.page: `document-id` processor
+-- ds.page: `document-id` processor
 
 `document-id` processor is used to get id of the document
 
@@ -6,7 +6,7 @@ Let's say, If request path is `/foo/ftd/` or `/foo/ftd/-/x/y/` so document id
 will be `/foo/ftd/` and `/foo/ftd/` respectively.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- string document-id:
@@ -16,3 +16,5 @@ $processor$: document-id
 \-- ftd.text: Document Id
 
 \-- ftd.text: $document-id
+
+-- end: ds.page

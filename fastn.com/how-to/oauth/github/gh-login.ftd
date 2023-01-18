@@ -1,8 +1,8 @@
 -- import: fpm.dev/assets
 
--- ft.page: FPM Login Flow with GitHub
+-- ds.page: FPM Login Flow with GitHub
 
--- ft.markdown:
+-- ds.markdown:
 
 Once Application has been created then follow below given instructions 
 
@@ -10,7 +10,7 @@ First of All you need to install the `oauth2` crate in `Cargo.toml` file.
 Create Oauth2 Basic Client using Github app Client Id and Secret Key . 
 Also specify Github Authorization Url and Github Access Token Url as well.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 oauth2::basic::BasicClient::new(
@@ -23,11 +23,11 @@ oauth2::basic::BasicClient::new(
            ),
        )
 
--- ft.markdown:
+-- ds.markdown:
 
 After this, call the oauth2 client url method by specifying different scopes.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 let (mut authorize_url, _token) = client
@@ -37,7 +37,7 @@ let (mut authorize_url, _token) = client
        .add_scope(oauth2::Scope::new("read:org".to_string()))
        .url();
 
--- ft.markdown:
+-- ds.markdown:
 
 It will basically call `https://github.com/login/oauth/authorize` url 
 for user login and return `code` and `state` as a query parameter to 
@@ -48,3 +48,4 @@ We need to pass Client Id,Client Secret and Code(returned after authorization).
 In response we will get `access_token` that can be saved in our cookies,
 session or database to be used for accessing other Github Apis.
 
+-- end: ds.page

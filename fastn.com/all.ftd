@@ -1,11 +1,15 @@
 -- import: fpm.dev/assets
 
 
--- ft.page: All `FTD` components
+
+
+
+-- ds.page: All `FTD` components
 
 -- all:
 packages: $package-list
 
+-- end: ds.page
 
 
 
@@ -15,12 +19,15 @@ packages: $package-list
 
 
 
--- ftd.row all:
+
+-- component all:
 package list packages:
-width: fill
+
+-- ftd.row:
+width: fill-container
 wrap: true
 
---- packages: $obj.title
+-- packages: $obj.title
 $loop$: $package-list as $obj
 package-url: $obj.package-url
 package-name: $obj.package-name
@@ -32,6 +39,9 @@ licence-url: $obj.licence-url
 licence-name: $obj.licence-name
 last-updated: $obj.last-updated
 
+-- end: ftd.row
+
+-- end: all
 
 
 
@@ -41,7 +51,8 @@ last-updated: $obj.last-updated
 
 
 
--- ftd.column packages:
+
+-- component packages:
 caption title:
 string package-url:
 string package-name:
@@ -51,194 +62,220 @@ string licence-url:
 string licence-name:
 optional string last-updated:
 string status: 
-body body: 
-width if not $ft.is-mobile: percent 46
-width if $ft.is-mobile: fill
-margin-bottom: 24
-margin-right if not $ft.is-mobile: 24
-margin-bottom if $ft.is-mobile: 24
-padding-vertical: $fpm.space.space-3
-padding-horizontal: $fpm.space.space-3
-min-height: 164
-max-height: 164
-background-color: $fpm.color.main.background.step-1
-border-radius: 6
+body body:
 
---- ftd.column:
-width: fill
+-- ftd.column:
+width.fixed.percent if { ftd.device != "mobile" }: 46
+width if { ftd.device == "mobile" }: fill-container
+margin-bottom.px: 24
+margin-right.px if { ftd.device != "mobile" }: 24
+margin-bottom.px if { ftd.device == "mobile" }: 24
+padding-vertical.px: 12
+padding-horizontal.px: 12
+min-height.fixed.px: 164
+max-height.fixed.px: 164
+background.solid: $inherited.colors.background.step-1
+border-radius.px: 6
 
---- ftd.row:
-width: fill
-id: title-column
+-- ftd.column:
+width: fill-container
 
---- ftd.column:
-width: fill
+-- ftd.row:
+width: fill-container
+;;id: title-column
 
---- ftd.text: $title
-role: $fpm.type.copy-tight
-color: $fpm.color.main.text
-color if $MOUSE-IN: $fpm.color.main.text-strong
-style: bold
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $packages.title
+role: $inherited.types.copy-tight
+color: $inherited.colors.text
+;;color if $MOUSE-IN: $inherited.colors.text-strong
+;;style: bold
 open-in-new-tab: true
-link: $package-url
-width: fill
+link: $packages.package-url
+width: fill-container
 
---- ftd.row:
-align: left
-id: icon-row
-width: fill
+-- ftd.row:
+align-self: start
+;;id: icon-row
+width: fill-container
 
---- ftd.text: $package-type
-padding: $fpm.space.space-2
-padding-left: 0
-role: $fpm.type.fine-print
-color: $fpm.color.main.text
-;color if $status == In Progress: $fpm.color.main.error.text
-;color if $status == Documented: $fpm.color.main.success.text
-;color if $status == Featured: $fpm.color.main.warning.text
-;color if $status == Coded: $fpm.color.main.text-strong
-;color if $status == Outdated: $fpm.color.main.text-strong
+-- ftd.text: 
+text: $packages.package-type
+padding.px: 8
+padding-left.px: 0
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+;;color if $packages.status == In Progress: $inherited.colors.error.text
+;;color if $packages.status == Documented: $inherited.colors.success.text
+;;color if $packages.status == Featured: $inherited.colors.warning.text
+;;color if $packages.status == Coded: $inherited.colors.text-strong
+;;color if $packages.status == Outdated: $inherited.colors.text-strong
 text-align: center
-align: center
-min-width: 16
+align-self: center
+min-width.fixed.px: 16
 
---- ftd.text: $licence-name
-padding: $fpm.space.space-2
-role: $fpm.type.fine-print
-color: $fpm.color.main.text
-color if $MOUSE-IN: $fpm.color.main.text-strong
+-- ftd.text: 
+text: $packages.licence-name
+padding.px: 8
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+;;color if $MOUSE-IN: $inherited.colors.text-strong
 text-align: center
-align: center
-min-width: 16
+align-self: center
+min-width.fixed.px: 16
 white-space: nowrap
 open-in-new-tab: true
-link: $licence-url
+link: $packages.licence-url
 
---- ftd.image:
+-- ftd.image:
 src: $assets.files.static.icon-github.svg
 open-in-new-tab: true
-link: $github-url
-align: center
-width: 16
-height: 16
+link: $packages.github-url
+align-self: center
+width.fixed.px: 16
+height.fixed.px: 16
 
---- container: title-column
+-- end: ftd.row
 
---- ftd.row:
-align: right
-id: title-row
+-- end: ftd.column
 
---- ftd.row:
-if: $status == Documented
-background-color: $fpm.color.main.success.base
-padding-vertical: $fpm.space.space-1
-padding-horizontal: $fpm.space.space-2
-border-radius: 20
+-- ftd.row:
+align-self: start
+;;id: title-row
 
---- ftd.text: $status
-role: $fpm.type.fine-print
-color: $fpm.color.main.success.text
+-- ftd.row:
+if: {packages.status == "Documented"}
+background.solid: $inherited.colors.success.base
+padding-vertical.px: 4
+padding-horizontal.px: 8
+border-radius.px: 20
+
+-- ftd.text: 
+text: $packages.status
+role: $inherited.types.fine-print
+color: $inherited.colors.success.text
 open-in-new-tab: true
-link: $package-url
-width: fill
+link: $packages.package-url
+width: fill-container
 
---- container: title-row
+-- end: ftd.row
 
---- ftd.row:
-if: $status == In Progress
-background-color: $fpm.color.main.error.base
-padding-vertical: $fpm.space.space-1
-padding-horizontal: $fpm.space.space-2
-border-radius: 20
+-- ftd.row:
+if: {$packages.status == "In Progress"}
+background.solid: $inherited.colors.error.base
+padding-vertical.px: 4
+padding-horizontal.px: 8
+border-radius.px: 20
 
---- ftd.text: $status
-role: $fpm.type.fine-print
-color: $fpm.color.main.error.text
+-- ftd.text: 
+text: $packages.status
+role: $inherited.types.fine-print
+color: $inherited.colors.error.text
 open-in-new-tab: true
-link: $package-url
-width: fill
+link: $packages.package-url
+width: fill-container
 white-space: nowrap
 
---- container: title-row
+-- end: ftd.row
 
---- ftd.row:
-if: $status == Featured
-background-color: $fpm.color.main.warning.base
-padding-vertical: $fpm.space.space-1
-padding-horizontal: $fpm.space.space-2
-border-radius: 20
+-- ftd.row:
+if: {$packages.status == "Featured"}
+background.solid: $inherited.colors.warning.base
+padding-vertical.px: 4
+padding-horizontal.px: 8
+border-radius.px: 20
 
---- ftd.text: $status
-role: $fpm.type.fine-print
-color: $fpm.color.main.warning.text
+-- ftd.text: 
+text: $packages.status
+role: $inherited.types.fine-print
+color: $inherited.colors.warning.text
 open-in-new-tab: true
-link: $package-url
-width: fill
+link: $packages.package-url
+width: fill-container
 
---- container: title-row
+-- end: ftd.row
 
---- ftd.row:
-if: $status == Outdated
-background-color: $fpm.color.main.background.base
-padding-vertical: $fpm.space.space-1
-padding-horizontal: $fpm.space.space-2
-border-radius: 20
+-- ftd.row:
+if: {$packages.status == "Outdated"}
+background.solid: $inherited.colors.background.base
+padding-vertical.px: 4
+padding-horizontal.px: 8
+border-radius.px: 20
 
---- ftd.text: $status
-role: $fpm.type.fine-print
-color: $fpm.color.main.text
+-- ftd.text: 
+text: $packages.status
+role: $inherited.types.fine-print
+color: $inherited.colors.text
 open-in-new-tab: true
-link: $package-url
-width: fill
+link: $packages.package-url
+width: fill-container
 
---- container: title-row
+-- end: ftd.row
 
---- ftd.row:
-if: $status == Coded
-background-color: $fpm.color.main.cta-tertiary.base
-padding-vertical: $fpm.space.space-1
-padding-horizontal: $fpm.space.space-2
-border-radius: 20
+-- ftd.row:
+if: {$packages.status == "Coded"}
+background.solid: $inherited.colors.cta-tertiary.base
+padding-vertical.px: 4
+padding-horizontal.px: 8
+border-radius.px: 20
 
---- ftd.text: $status
-role: $fpm.type.fine-print
-color: $fpm.color.main.custom.two
+-- ftd.text: 
+text: $packages.status
+role: $inherited.types.fine-print
+color: $inherited.colors.custom.two
 open-in-new-tab: true
-link: $package-url
-width: fill
+link: $packages.package-url
+width: fill-container
 
---- container: ftd.main
+-- end: ftd.row
 
---- ftd.column:
-width: fill
-margin-top: $fpm.space.space-1
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 4
 overflow-y: auto
 
---- ftd.text: 
-text: $body
-role: $fpm.type.copy-tight
-color: $fpm.color.main.text
-height: 62
+-- ftd.text: 
+text: $packages.body
+role: $inherited.types.copy-tight
+color: $inherited.colors.text
+height.fixed.px: 62
 
---- container: ftd.main
+-- end: ftd.column
 
---- ftd.column:
-align: right
+-- end: ftd.column
 
---- ftd.row:
-if: $last-updated is not null
-width: fill
-spacing: 12
-margin-top: 6
+-- ftd.column:
+align-self: end
 
---- ftd.text: Last updated:
-role: $fpm.type.fine-print
-color: $fpm.color.main.success.text
+-- ftd.row:
+if: {$packages.last-updated != NULL}
+width: fill-container
+spacing.px: 12
+margin-top.px: 6
 
---- ftd.text: $last-updated
-if: $last-updated is not null
-role: $fpm.type.fine-print
-color: $fpm.color.main.text
+-- ftd.text: Last updated:
+role: $inherited.types.fine-print
+color: $inherited.colors.success.text
+
+-- ftd.text: 
+text: $packages.last-updated
+if: {$packages.last-updated != NULL}
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: packages
 
 
 
@@ -263,7 +300,7 @@ optional string last-updated:
 
 -- package list package-list:
 
--- package-list: `doc-site`
+-- package: `doc-site`
 package-url: https://fifthtry.github.io/doc-site
 package-name: fifthtry.github.io/doc-site
 github-url: https://github.com/FifthTry/doc-site
@@ -275,7 +312,7 @@ last-updated: 03 Jan 2023
 
 `DS` means documentation site. `ds` is ready to use template for your `FTD` web sites, blogs etc.
 
--- package-list: `dash-dash-ds`
+-- package: `dash-dash-ds`
 package-url: https://fifthtry.github.io/dash-dash-ds
 package-name: fifthtry.github.io/dash-dash-ds
 github-url: https://github.com/FifthTry/dash-dash-ds
@@ -287,7 +324,7 @@ last-updated: 19th Nov 2022
 
 `DS` means documentation site. `ds` is ready to use template for your `FTD` web sites, blogs etc.
 
--- package-list: `Blue-Sapphire-Template`
+-- package: `Blue-Sapphire-Template`
 package-url: https://fifthtry.github.io/Blue-Sapphire-Template
 package-name: fifthtry.github.io/Blue-Sapphire-Template
 github-url: https://github.com/FifthTry/Blue-Sapphire-Template
@@ -299,7 +336,7 @@ last-updated: 27th Jul 2022
 
 `DS` means documentation site. `Blue-Sapphire-Template` was ready to use template for your `FTD` web sites, blogs etc. Its outdated for `FTD` use.
 
--- package-list: `color-doc`
+-- package: `color-doc`
 package-url: https://fifthtry.github.io/color-doc
 package-name: fifthtry.github.io/color-doc
 github-url: https://github.com/FifthTry/color-doc
@@ -311,7 +348,7 @@ last-updated: 01 Dec 2022
 
 `cs` means color scheme. `color-doc` is ready to use color scheme, it our default `cs`. It is in grey colors.
 
--- package-list: `forest-cs`
+-- package: `forest-cs`
 package-url: https://fifthtry.github.io/forest-cs
 package-name: fifthtry.github.io/forest-cs
 github-url: https://github.com/FifthTry/forest-cs
@@ -323,7 +360,7 @@ last-updated: 01 Sep 2022
 
 `cs` means color scheme. `forest-cs` is ready to use color scheme. It is in forest green colors.
 
--- package-list: `night-moon-cs`
+-- package: `night-moon-cs`
 package-url: https://fifthtry.github.io/night-moon-cs
 package-name: fifthtry.github.io/night-moon-cs
 github-url: https://github.com/FifthTry/night-moon-cs
@@ -335,7 +372,7 @@ last-updated: 03 Nov 2022
 
 `cs` means color scheme. `night-moon-cs` is ready to use color scheme. It is in night blue colors.
 
--- package-list: `blue-sapphire-cs`
+-- package: `blue-sapphire-cs`
 package-url: https://fifthtry.github.io/blue-sapphire-cs
 package-name: fifthtry.github.io/blue-sapphire-cs
 github-url: https://github.com/FifthTry/blue-sapphire-cs
@@ -346,7 +383,7 @@ status: Documented
 
 `cs` means color scheme. `blue-sapphire-cs` is ready to use color scheme. It is in blue sapphire colors.
 
--- package-list: `slides`
+-- package: `slides`
 package-url: https://fifthtry.github.io/slides
 package-name: fifthtry.github.io/slides
 github-url: https://github.com/FifthTry/slides
@@ -357,7 +394,7 @@ status: Documented
 
 `slides` is a presentation template.
 
--- package-list: `simple-dark-slides`
+-- package: `simple-dark-slides`
 package-url: https://fifthtry.github.io/simple-dark-slides
 package-name: fifthtry.github.io/simple-dark-slides
 github-url: https://github.com/FifthTry/simple-dark-slides
@@ -368,7 +405,7 @@ status: In Progress
 
 `simple-dark-slides` is a `slides` presentation theme.
 
--- package-list: `streamline-slides`
+-- package: `streamline-slides`
 package-url: https://fifthtry.github.io/streamline-slides
 package-name: fifthtry.github.io/streamline-slides
 github-url: https://github.com/FifthTry/streamline-slides
@@ -379,7 +416,7 @@ status: In Progress
 
 `streamline-slides` is a `slides` presentation theme.
 
--- package-list: `momentum-slides`
+-- package: `momentum-slides`
 package-url: https://fifthtry.github.io/momentum-slides
 package-name: fifthtry.github.io/momentum-slides
 github-url: https://github.com/FifthTry/momentum-slides
@@ -390,7 +427,7 @@ status: In Progress
 
 `momentum-slides` is a `slides` presentation theme.
 
--- package-list: `Crispy-Presentation-Theme`
+-- package: `Crispy-Presentation-Theme`
 package-url: https://fifthtry.github.io/Crispy-Presentation-Theme
 package-name: fifthtry.github.io/Crispy-Presentation-Theme
 github-url: https://github.com/FifthTry/Crispy-Presentation-Theme
@@ -401,7 +438,7 @@ status: Outdated
 
 `Crispy-Presentation-Theme` was a `slides` presentation theme. Its now outdated and should not be used into `FTD` packages.
 
--- package-list: `Crispy-Presentation-Template`
+-- package: `Crispy-Presentation-Template`
 package-url: https://fifthtry.github.io/Crispy-Presentation-Template
 package-name: fifthtry.github.io/Crispy-Presentation-Template
 github-url: https://github.com/FifthTry/Crispy-Presentation-Template
@@ -412,7 +449,7 @@ status: Outdated
 
 `Crispy-Presentation-Template` was a `slides` presentation template. Its now outdated and should not be used into `FTD` packages.
 
--- package-list: `Rotary-Presentation-Theme`
+-- package: `Rotary-Presentation-Theme`
 package-url: https://fifthtry.github.io/Rotary-Presentation-Theme
 package-name: fifthtry.github.io/Rotary-Presentation-Theme
 github-url: https://github.com/FifthTry/Rotary-Presentation-Theme
@@ -423,7 +460,7 @@ status: Outdated
 
 `Rotary-Presentation-Theme` was a `slides` presentation theme. Its now outdated and should not be used into `FTD` packages.
 
--- package-list: `Rotary-Presentation-Template`
+-- package: `Rotary-Presentation-Template`
 package-url: https://fifthtry.github.io/Rotary-Presentation-Template
 package-name: fifthtry.github.io/Rotary-Presentation-Template
 github-url: https://github.com/FifthTry/Rotary-Presentation-Template
@@ -434,7 +471,7 @@ status: Outdated
 
 `Rotary-Presentation-Template` was a `slides` presentation template. Its now outdated and should not be used into `FTD` packages.
 
--- package-list: `Giggle-Presentation-Theme`
+-- package: `Giggle-Presentation-Theme`
 package-url: https://fifthtry.github.io/Giggle-Presentation-Theme
 package-name: fifthtry.github.io/Giggle-Presentation-Theme
 github-url: https://github.com/FifthTry/Giggle-Presentation-Theme
@@ -445,7 +482,7 @@ status: Outdated
 
 `Giggle-Presentation-Theme` was a `slides` presentation theme. Its now outdated and should not be used into `FTD` packages.
 
--- package-list: `Giggle-Presentation-Template`
+-- package: `Giggle-Presentation-Template`
 package-url: https://fifthtry.github.io/Giggle-Presentation-Template
 package-name: fifthtry.github.io/Giggle-Presentation-Template
 github-url: https://github.com/FifthTry/Giggle-Presentation-Template
@@ -456,7 +493,7 @@ status: Outdated
 
 `Giggle-Presentation-Template` was a `slides` presentation template. Its now outdated and should not be used into `FTD` packages.
 
--- package-list: `bling`
+-- package: `bling`
 package-url: https://fifthtry.github.io/bling
 package-name: fifthtry.github.io/bling
 github-url: https://github.com/FifthTry/bling/blob
@@ -467,7 +504,7 @@ status: Featured
 
 `BL` means bling library. `bling` is a library of `FTD` components. `BL` has more than `10+` components, which are ready to use for your web packages.
 
--- package-list: `slika-ig`
+-- package: `slika-ig`
 package-url: https://fifthtry.github.io/slika-ig
 package-name: fifthtry.github.io/slika-ig
 github-url: https://github.com/FifthTry/slika-ig
@@ -478,7 +515,7 @@ status: In Progress
 
 `IG` means image gallery. `slika-ig` image gallery is ready to use for your `FTD` web packages.
 
--- package-list: `imagen-ig`
+-- package: `imagen-ig`
 package-url: https://fifthtry.github.io/imagen-ig
 package-name: fifthtry.github.io/imagen-ig
 github-url: https://github.com/FifthTry/imagen-ig
@@ -489,7 +526,7 @@ status: In Progress
 
 `IG` means image gallery. `imagen-ig` image gallery is ready to use for your `FTD` web packages.
 
--- package-list: `imago-gallery-ig`
+-- package: `imago-gallery-ig`
 package-url: https://fifthtry.github.io/imago-gallery-ig
 package-name: fifthtry.github.io/imago-gallery-ig
 github-url: https://github.com/FifthTry/imago-gallery-ig
@@ -500,7 +537,7 @@ status: Featured
 
 `IG` means image gallery. `imago-gallery-ig` image gallery is ready to use for your `FTD` web packages.
 
--- package-list: `typography`
+-- package: `typography`
 package-url: https://fifthtry.github.io/typography
 package-name: fifthtry.github.io/typography
 github-url: https://github.com/FifthTry/typography
@@ -511,7 +548,7 @@ status: Documented
 
 `TF` means typography. `typography` contains `h0`,`h1`, `h2`, `h3` and `markdown` which can be used on `FTD` web sites as `typography` component.
 
--- package-list: `header`
+-- package: `header`
 package-url: https://fifthtry.github.io/header
 package-name: fifthtry.github.io/header
 github-url: https://github.com/FifthTry/header
@@ -522,7 +559,7 @@ status: Documented
 
 `H` means header. `header` can be used on `FTD` web sites as `header` component.
 
--- package-list: `admonitions`
+-- package: `admonitions`
 package-url: https://fifthtry.github.io/admonitions
 package-name: fifthtry.github.io/admonitions
 github-url: https://github.com/FifthTry/admonitions
@@ -533,7 +570,7 @@ status: Documented
 
 `cbox` means admonitions. `admonitions` can be used on `FTD` web sites as `admonitions` component.
 
--- package-list: `code-block`
+-- package: `code-block`
 package-url: https://fifthtry.github.io/code-block
 package-name: fifthtry.github.io/code-block
 github-url: https://github.com/FifthTry/code-block
@@ -544,7 +581,7 @@ status: Documented
 
 `cb` means code-block. `code-block` can be used on `FTD` web sites as `code-block` component.
 
--- package-list: `language-switcher`
+-- package: `language-switcher`
 package-url: https://fifthtry.github.io/language-switcher
 package-name: fifthtry.github.io/language-switcher
 github-url: https://github.com/FifthTry/language-switcher
@@ -555,7 +592,7 @@ status: Documented
 
 `ls` means language switcher. `language-switcher` component can be used to translates web page content in available languages.
 
--- package-list: `inter-font`
+-- package: `inter-font`
 package-url: https://fifthtry.github.io/inter
 package-name: fifthtry.github.io/inter-font
 github-url: https://github.com/FifthTry/inter
@@ -566,7 +603,7 @@ status: Documented
 
 `inter-font` is included in `FTD`. `inter-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
 
--- package-list: `lato-font`
+-- package: `lato-font`
 package-url: https://fifthtry.github.io/lato-font
 package-name: fifthtry.github.io/lato-font
 github-url: https://github.com/FifthTry/lato-font
@@ -577,7 +614,7 @@ status: Documented
 
 `lato-font` is included in `FTD`. `lato-font` can be used on `FTD` web sites to change font of your web pages.
 
--- package-list: `roboto-font`
+-- package: `roboto-font`
 package-url: https://fifthtry.github.io/roboto
 package-name: fifthtry.github.io/roboto-font
 github-url: https://github.com/FifthTry/roboto
@@ -588,7 +625,7 @@ status: Documented
 
 `roboto-font` is included in `FTD`. `roboto-font` can be used on `FTD` web sites to change font of your web pages.
 
--- package-list: `roboto-mono-font`
+-- package: `roboto-mono-font`
 package-url: https://fifthtry.github.io/roboto-mono
 package-name: fifthtry.github.io/roboto-mono-font
 github-url: https://github.com/FifthTry/roboto-mono
@@ -599,7 +636,7 @@ status: Documented
 
 `roboto-mono-font` is included in `FTD`. `roboto-mono-font` can be used on `FTD` web sites to change font of your web pages.
 
--- package-list: `virgil-font`
+-- package: `virgil-font`
 package-url: https://fifthtry.github.io/virgil-font
 package-name: fifthtry.github.io/virgil-font
 github-url: https://github.com/FifthTry/virgil-font
@@ -610,7 +647,7 @@ status: Documented
 
 `virgil-font` is included in `FTD`. `virgil-font` can be used on `FTD` web sites to change font of your web pages. Inspired by `github.com/excalidraw/virgil`.
 
--- package-list: `product-switcher`
+-- package: `product-switcher`
 package-url: https://fifthtry.github.io/product-switcher
 package-name: fifthtry.github.io/product-switcher
 github-url: https://github.com/FifthTry/product-switcher
@@ -621,7 +658,7 @@ status: Documented
 
 `PS` means product switcher. `switcher` can be used on your web pages as a brand website switcher.
 
--- package-list: `dark-mode-switcher`
+-- package: `dark-mode-switcher`
 package-url: https://fifthtry.github.io/dark-mode-switcher
 package-name: fifthtry.github.io/dark-mode-switcher
 github-url: https://github.com/FifthTry/dark-mode-switcher
@@ -632,7 +669,7 @@ status: Documented
 
 `DMS` means dark mode switcher. `dark-mode-switcher` can be used on your web pages as a dark and light theme switcher.
 
--- package-list: `button`
+-- package: `button`
 package-url: https://fifthtry.github.io/button
 package-name: fifthtry.github.io/button
 github-url: https://github.com/FifthTry/button
@@ -643,7 +680,7 @@ status: Documented
 
 `BT` means button. `button` can be used on your web pages as a button component.
 
--- package-list: `octicon`
+-- package: `octicon`
 package-url: https://fifthtry.github.io/octicon
 package-name: fifthtry.github.io/octicon
 github-url: https://github.com/FifthTry/octicon
@@ -654,7 +691,7 @@ status: Documented
 
 `IC` means icon. `octicon` can be used on your web pages as a octicons icon component.
 
--- package-list: `resume`
+-- package: `resume`
 package-url: https://fifthtry.github.io/resume
 package-name: fifthtry.github.io/resume
 github-url: https://github.com/FifthTry/resume
@@ -665,7 +702,7 @@ status: In Progress
 
  `resume` is default resume data package. Its used in all resume themes as resume data template.
 
--- package-list: `paper-resume`
+-- package: `paper-resume`
 package-url: https://fifthtry.github.io/paper-resume
 package-name: fifthtry.github.io/resume-paper
 github-url: https://github.com/FifthTry/paper-resume
@@ -676,7 +713,7 @@ status: In Progress
 
 `paper-resume` is a resume theme. `resume` template is required as default resume data template.
 
--- package-list: `caffeine-resume`
+-- package: `caffeine-resume`
 package-url: https://fifthtry.github.io/caffeine-resume
 package-name: fifthtry.github.io/caffeine-resume
 github-url: https://github.com/FifthTry/caffeine-resume
@@ -687,7 +724,7 @@ status: In Progress
 
 `caffeine-resume` is a resume theme. `resume` template is required as default resume data template.
 
--- package-list: `elegant-resume`
+-- package: `elegant-resume`
 package-url: https://fifthtry.github.io/elegant-resume
 package-name: fifthtry.github.io/elegant-resume
 github-url: https://github.com/FifthTry/elegant-resume
@@ -698,7 +735,7 @@ status: In Progress
 
 `elegant-resume` is a resume theme. `resume` template is required as default resume data template.
 
--- package-list: `onepage-resume`
+-- package: `onepage-resume`
 package-url: https://fifthtry.github.io/onepage-resume
 package-name: fifthtry.github.io/onepage-resume
 github-url: https://github.com/FifthTry/onepage-resume
@@ -709,7 +746,7 @@ status: In Progress
 
 `onepage-resume` is a resume theme. `resume` template is required as default resume data template.
 
--- package-list: `actual-resume`
+-- package: `actual-resume`
 package-url: https://fifthtry.github.io/actual-resume
 package-name: fifthtry.github.io/actual-resume
 github-url: https://github.com/FifthTry/actual-resume
@@ -720,7 +757,7 @@ status: In Progress
 
 `actual-resume` is a resume theme. `resume` template is required as default resume data template.
 
--- package-list: `spartan-resume`
+-- package: `spartan-resume`
 package-url: https://fifthtry.github.io/spartan-resume
 package-name: fifthtry.github.io/spartan-resume
 github-url: https://github.com/FifthTry/spartan-resume
@@ -731,7 +768,7 @@ status: In Progress
 
 `spartan-resume` is a resume theme. `resume` template is required as default resume data template.
 
--- package-list: `resume-autumn`
+-- package: `resume-autumn`
 package-url: https://github.com/FifthTry/resume-autumn
 package-name: fifthtry.github.io/resume-autumn
 github-url: https://github.com/FifthTry/resume-autumn
@@ -742,7 +779,7 @@ status: In Progress
 
 `resume-autumn` is a resume theme. `resume` template is required as default resume data template.
 
--- package-list: `kendall-resume`
+-- package: `kendall-resume`
 package-url: https://fifthtry.github.io/kendall-resume
 package-name: fifthtry.github.io/kendall-resume
 github-url: https://github.com/FifthTry/kendall-resume
@@ -753,7 +790,7 @@ status: In Progress
 
 `kendall-resume` is a resume theme. `resume` template is required as default resume data template.
 
--- package-list: `simple-blog`
+-- package: `simple-blog`
 package-url: https://fifthtry.github.io/simple-blog
 package-name: fifthtry.github.io/simple-blog
 github-url: https://github.com/FifthTry/simple-blog
@@ -764,7 +801,7 @@ status: Outdated
 
 `simple-blog` was a blog theme. `simple-blog` theme can be used as `FTD` blog template for bloggers.
 
--- package-list: `blog-components`
+-- package: `blog-components`
 package-url: https://fifthtry.github.io/blog-components
 package-name: fifthtry.github.io/blog-components
 github-url: https://github.com/FifthTry/blog-components
@@ -775,7 +812,7 @@ status: Outdated
 
 `blog-components` are used in a `ds` package. Its outdated and should not be used into `FTD` packages.
 
--- package-list: `Rocky-Blog-Theme`
+-- package: `Rocky-Blog-Theme`
 package-url: https://fifthtry.github.io/Rocky-Blog-Theme
 package-name: fifthtry.github.io/Rocky-Blog-Theme
 github-url: https://github.com/FifthTry/Rocky-Blog-Theme
@@ -786,7 +823,7 @@ status: Outdated
 
 `Rocky-Blog-Theme` is `FTD` blog theme for bloggers. Its outdated and should not be used into `FTD` packages.
 
--- package-list: `Rocky-Blog-Template`
+-- package: `Rocky-Blog-Template`
 package-url: https://fifthtry.github.io/Rocky-Blog-Template
 package-name: fifthtry.github.io/Rocky-Blog-Template
 github-url: https://github.com/FifthTry/Rocky-Blog-Template
@@ -797,7 +834,7 @@ status: Outdated
 
 `Rocky-Blog-Template` is `FTD` blog theme for bloggers. Its outdated and should not be used into `FTD` packages.
 
-- package-list: `fpm-book`
+- package: `fpm-book`
 package-url: https://fifthtry.github.io/fpm-book
 package-name: fifthtry.github.io/fpm-book
 github-url: https://github.com/FifthTry/fpm-book
@@ -808,7 +845,7 @@ status: Outdated
 
 `fpm-book` is `FTD` book theme for authors. Its outdated and should not be used into `FTD` packages.
 
-- package-list: `Forest-FOSS-Template`
+- package: `Forest-FOSS-Template`
 package-url: https://fifthtry.github.io/Forest-FOSS-Template
 package-name: fifthtry.github.io/Forest-FOSS-Template
 github-url: https://github.com/FifthTry/Forest-FOSS-Template
@@ -819,7 +856,7 @@ status: Outdated
 
 `Forest-FOSS-Template` is `FTD` book theme for authors. Its outdated and should not be used into `FTD` packages.
 
-- package-list: `jupiter-foss-template`
+- package: `jupiter-foss-template`
 package-url: https://fifthtry.github.io/jupiter-foss-template
 package-name: fifthtry.github.io/jupiter-foss-template
 github-url: https://github.com/FifthTry/jupiter-foss-template
@@ -830,7 +867,7 @@ status: Outdated
 
 `jupiter-foss-template` is `FTD` static web site theme. Its outdated and should not be used into `FTD` packages.
 
--- package-list: `footer`
+-- package: `footer`
 package-url: https://fifthtry.github.io/footer
 package-name: fifthtry.github.io/footer
 github-url: https://github.com/FifthTry/footer
@@ -841,7 +878,7 @@ status: In Progress
 
 `footer` will be used in a `ds` package. 
 
--- package-list: `ForestTheme`
+-- package: `ForestTheme`
 package-url: https://fifthtry.github.io/ForestTheme
 package-name: fifthtry.github.io/ForestTheme
 github-url: https://github.com/FifthTry/ForestTheme
@@ -852,7 +889,7 @@ status: Documented
 
 `ForestTheme` is ready to use color scheme.
 
--- package-list: `Docusaurus-theme`
+-- package: `Docusaurus-theme`
 package-url: https://fifthtry.github.io/Docusaurus-theme
 package-name: fifthtry.github.io/Docusaurus-theme
 github-url: https://github.com/FifthTry/Docusaurus-theme
@@ -863,7 +900,7 @@ status: Outdated
 
 `Docusaurus-theme` allows you to get started with a FPM powered blog.
 
--- package-list: `blog-theme`
+-- package: `blog-theme`
 package-url: https://fifthtry.github.io/blog-theme
 package-name: fifthtry.github.io/blog-theme
 github-url: https://github.com/FifthTry/blog-theme
@@ -874,7 +911,7 @@ status: Outdated
 
 `blog-theme` is a simple blog theme for fpm packages.
 
--- package-list: `Green-theme`
+-- package: `Green-theme`
 package-url: https://fifthtry.github.io/Green-theme
 package-name: fifthtry.github.io/Green-theme
 github-url: https://github.com/FifthTry/Green-theme
@@ -885,7 +922,7 @@ status: Outdated
 
 `Green-theme` is a theme for creating FPM powered open source project page.
 
--- package-list: `Jupiter-theme`
+-- package: `Jupiter-theme`
 package-url: https://fifthtry.github.io/Jupiter-theme
 package-name: fifthtry.github.io/Jupiter-theme
 github-url: https://github.com/FifthTry/Jupiter-theme
@@ -896,7 +933,7 @@ status: Outdated
 
 `Jupiter-theme` is a part of `Flash-theme`. Template for book written as FPM Package.
 
--- package-list: `Flash-theme`
+-- package: `Flash-theme`
 package-url: https://fifthtry.github.io/Flash-theme
 package-name: fifthtry.github.io/Flash-theme
 github-url: https://github.com/FifthTry/Flash-theme
@@ -907,7 +944,7 @@ status: Outdated
 
 `Flash-theme` is a template for book written as FPM Package.
 
--- package-list: `spider-book-ds`
+-- package: `spider-book-ds`
 package-url: https://fifthtry.github.io/spider-book-ds
 package-name: fifthtry.github.io/spider-book-ds
 github-url: https://github.com/FifthTry/spider-book-ds
@@ -918,7 +955,7 @@ status: Documented
 
 `spider-book-ds` is a chrome book documentation site.
 
--- package-list: `dash-dash-cs`
+-- package: `dash-dash-cs`
 package-url: https://fifthtry.github.io/dash-dash-cs
 package-name: fifthtry.github.io/dash-dash-cs
 github-url: https://github.com/FifthTry/dash-dash-cs
@@ -929,7 +966,7 @@ status: Documented
 
 Color scheme for `dash-dash-cs`.
 
--- package-list: `spider-book-cs`
+-- package: `spider-book-cs`
 package-url: https://fifthtry.github.io/spider-book-cs
 package-name: fifthtry.github.io/spider-book-cs
 github-url: https://github.com/FifthTry/spider-book-cs
@@ -940,7 +977,7 @@ status: Documented
 
 `spider-book-cs` Chrome book Color Scheme is a light color scheme used for chrome-book-ds.
 
--- package-list: `simple-light-slides`
+-- package: `simple-light-slides`
 package-url: https://fifthtry.github.io/simple-light-slides
 package-name: fifthtry.github.io/simple-light-slides
 github-url: https://github.com/FifthTry/simple-light-slides
@@ -951,7 +988,7 @@ status: Documented
 
 `simple-light-slides` is a `slides` presentation theme.
 
--- package-list: `Forest-Template`
+-- package: `Forest-Template`
 package-url: https://fifthtry.github.io/Forest-Template
 package-name: fifthtry.github.io/Forest-Template
 github-url: https://github.com/FifthTry/Forest-Template
@@ -962,7 +999,7 @@ status: Documented
 
 `DS` means documentation site. `Forest-Template` is ready to use template for your `FTD` web sites, blogs etc.
 
--- package-list: `texty-ps`
+-- package: `texty-ps`
 package-url: https://fifthtry.github.io/texty-ps
 package-name: fifthtry.github.io/texty-ps
 github-url: https://github.com/FifthTry/texty-ps
@@ -973,7 +1010,7 @@ status: Coded
 
 `texty-ps` is a personal site help you to create your personal websites.
 
--- package-list: `jony-ps`
+-- package: `jony-ps`
 package-url: https://fifthtry.github.io/jony-ps
 package-name: fifthtry.github.io/jony-ps
 github-url: https://github.com/FifthTry/jony-ps
@@ -984,7 +1021,7 @@ status: Coded
 
 `jony-ps` is a personal site help you to create your personal websites.
 
--- package-list: `images`
+-- package: `images`
 package-url: https://fifthtry.github.io/images
 package-name: fifthtry.github.io/images
 github-url: https://github.com/FifthTry/images
@@ -995,7 +1032,7 @@ status: Documented
 
 A collection `images` components for FTD web package.
 
--- package-list: `tiro-devnagari-marathi-font`
+-- package: `tiro-devnagari-marathi-font`
 package-url: https://github.com/FifthTry/tiro-devnagari-marathi-font
 package-name: https://github.com/FifthTry/tiro-devnagari-marathi-font
 github-url: https://github.com/FifthTry/tiro-devnagari-marathi-font
@@ -1006,7 +1043,7 @@ status: Documented
 
 `tiro-devnagari-marathi-font` is included in `FTD`. `tiro-devnagari-marathi-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
 
--- package-list: `karma-font`
+-- package: `karma-font`
 package-url: https://github.com/FifthTry/karma-font
 package-name: https://github.com/FifthTry/karma-font
 github-url: https://github.com/FifthTry/karma-font
@@ -1017,7 +1054,7 @@ status: Documented
 
 `karma-font` is included in `FTD`. `karma-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
 
--- package-list: `pragati-narrow-font`
+-- package: `pragati-narrow-font`
 package-url: https://github.com/FifthTry/pragati-narrow-font
 package-name: https://github.com/FifthTry/pragati-narrow-font
 github-url: https://github.com/FifthTry/pragati-narrow-font
@@ -1028,7 +1065,7 @@ status: Documented
 
 `pragati-narrow-font` is included in `FTD`. `pragati-narrow-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
 
--- package-list: `khand-font`
+-- package: `khand-font`
 package-url: https://github.com/FifthTry/khand-font
 package-name: https://github.com/FifthTry/khand-font
 github-url: https://github.com/FifthTry/khand-font
@@ -1039,7 +1076,7 @@ status: Documented
 
 `khand-font` is included in `FTD`. `khand-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
 
--- package-list: `arya-font`
+-- package: `arya-font`
 package-url: https://github.com/FifthTry/arya-font
 package-name: https://github.com/FifthTry/arya-font
 github-url: https://github.com/FifthTry/arya-font
@@ -1050,7 +1087,7 @@ status: Documented
 
 `arya-font` is included in `FTD`. `arya-font` can be used on `FTD` web sites to change font of your web pages. Original trademark of `github.com/rsms/inter`.
 
--- package-list: `form`
+-- package: `form`
 package-url: https://fifthtry.github.io/form
 package-name: fifthtry.github.io/form
 github-url: https://github.com/FifthTry/form
@@ -1061,7 +1098,7 @@ status: Documented
 
 `form` can be used on your web-page as a form component.
 
--- package-list: `cards`
+-- package: `cards`
 package-url: https://fifthtry.github.io/cards
 package-name: fifthtry.github.io/cards
 github-url: https://github.com/FifthTry/cards
@@ -1072,7 +1109,7 @@ status: Documented
 
 `cards` can be used on your web-page as a cards component.
 
--- package-list: `package-doc`
+-- package: `package-doc`
 package-url: https://fifthtry.github.io/package-doc
 package-name: fifthtry.github.io/package-doc
 github-url: https://github.com/FifthTry/package-doc
@@ -1083,7 +1120,7 @@ status: Documented
 
 `package-doc` is a FPM Package Documentation Helpers.
 
--- package-list: `demo-day`
+-- package: `demo-day`
 package-url: https://github.com/FifthTry/demo-day
 package-name: https://github.com/FifthTry/demo-day
 github-url: https://github.com/FifthTry/demo-day
@@ -1094,7 +1131,7 @@ status: Documented
 
 `DD` stands for `demo-day`. Template for Demo Day.
 
--- package-list: `subscription-app`
+-- package: `subscription-app`
 package-url: https://fifthtry.github.io/subscription-app
 package-name: fifthtry.github.io/subscription-app
 github-url: https://github.com/FifthTry/subscription-app
@@ -1106,7 +1143,7 @@ status: Documented
 `SA` stands for `subscription-app`. This FTD subscription app template 
 helps your FTD website users to subscribe.
 
--- package-list: `app-switcher`
+-- package: `app-switcher`
 package-url: https://fifthtry.github.io/app-switcher
 package-name: fifthtry.github.io/app-switcher
 github-url: https://github.com/FifthTry/app-switcher
@@ -1118,7 +1155,7 @@ status: Documented
 `AS` stands for `app-switcher`. App Switcher FTD component is used to 
 switch between apps of FTD web-site.
 
--- package-list: `workshop-page`
+-- package: `workshop-page`
 package-url: https://fifthtry.github.io/workshop-page
 package-name: fifthtry.github.io/workshop-page
 github-url: https://github.com/FifthTry/workshop-page
@@ -1130,7 +1167,7 @@ status: Documented
 `WS` stands for `workshop-page`. Workshop page is -- ws component for 
 workshop workbook.
 
--- package-list: `event`
+-- package: `event`
 package-url: https://fifthtry.github.io/event
 package-name: fifthtry.github.io/event
 github-url: https://github.com/FifthTry/event
@@ -1141,7 +1178,7 @@ status: Documented
 
 `E` stands for `event`. This will help you to create different events.
 
--- package-list: `key-value-table`
+-- package: `key-value-table`
 package-url: https://fifthtry.github.io/key-value-table
 package-name: fifthtry.github.io/key-value-table
 github-url: https://github.com/FifthTry/key-value-table
@@ -1152,7 +1189,7 @@ status: Documented
 
 `key-value-table` to be called as `kvt` is a data table with tooltip feature.
 
--- package-list: `toc`
+-- package: `toc`
 package-url: https://fifthtry.github.io/toc
 package-name: fifthtry.github.io/toc
 github-url: https://github.com/FifthTry/toc
@@ -1163,7 +1200,7 @@ status: Documented
 
 `TOC` is a toc component help you to create table of content in you website.
 
--- package-list: `flat-resume`
+-- package: `flat-resume`
 package-url: https://fifthtry.github.io/resume
 package-name: fifthtry.github.io/resume
 github-url: https://github.com/FifthTry/flat-resume
@@ -1173,3 +1210,5 @@ licence-name: BSD 3-Clause
 status: In Progress
 
 `flat-resume` is a resume theme. `resume` template is required as default resume data template.
+
+-- end: package-list

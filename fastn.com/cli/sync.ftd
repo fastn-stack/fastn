@@ -1,4 +1,4 @@
--- ft.page: `fpm sync`
+-- ds.page: `fpm sync`
 
 This commands executes the [sync](glossary/#sync) operation on all the files
 that are part of [workspace](glossary/#workspace) and are different
@@ -11,3 +11,5 @@ us know what [type of sync conflict](sync-conflict/#types-of-fpm-sync-conflicts)
 has occurred. It displays the conflict same as [`fpm sync-status`](cli/sync-status/).
 
 The conflicts can be resolved using [`fpm resolve-conflict <file-name>`](cli/resolve-conflict/).
+
+-- end: ds.page

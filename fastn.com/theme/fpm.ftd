@@ -1,11 +1,11 @@
--- ft.page: `import: fpm`
+-- ds.page: `import: fpm`
 
 This file contain information about what all things are present in `fpm`
 
 
--- ft.h1: User Group
+-- ds.h1: User Group
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \; Need to think of a type like object, make keys dynamic
@@ -44,9 +44,9 @@ lang: ftd
 \-- user-group-data list user-group:
 
 
--- ft.h1: Key Value Data
+-- ds.h1: Key Value Data
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record key-value-data:
@@ -54,9 +54,9 @@ string key:
 string value:
 
 
--- ft.h1: User Group Compat
+-- ds.h1: User Group Compat
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record user-group-compat:
@@ -68,11 +68,11 @@ key-value-data list group-members:
 
 
 
--- ft.h1: Sitemap
+-- ds.h1: Sitemap
 
 Sitemap structure in FPM, It contains reader, writer groups and sitemap body.
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- optional sitemap-rec sitemap:
@@ -84,11 +84,11 @@ body sitemap-body:
 
 
 
--- ft.h1: Sitemap Compat
+-- ds.h1: Sitemap Compat
 
 Sitemap Compat is the output for UI of `fpm.sitemap`
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- record sitemap-compat-data:
@@ -128,3 +128,5 @@ toc-compat-data list children:
 boolean skip:
 string list readers:
 string list writers:
+
+-- end: ds.page
