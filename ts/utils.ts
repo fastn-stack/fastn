@@ -8,7 +8,10 @@ function isObject(obj: object) {
     return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
 
-function resolve_reference(reference: string, data: any) {
+function resolve_reference(reference: string, data: any, value: any) {
+    if (reference === "VALUE") {
+        return value;
+    }
     if (!!data[reference]) {
         return deepCopy(data[reference]);
     }

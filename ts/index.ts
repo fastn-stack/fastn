@@ -23,7 +23,13 @@ window.ftd = (function() {
                 if (typeof value === 'object') {
                     let function_argument = <FunctionArgument>value;
                     if (!!function_argument.reference) {
-                        let value = resolve_reference(function_argument.reference, ftd_data[id]);
+                        let obj_value = null;
+                        try {
+                            obj_value= (<HTMLInputElement>obj).value;
+                        } catch {
+                            obj_value = null;
+                        }
+                        let value = resolve_reference(function_argument.reference, ftd_data[id], obj_value);
                         if (!!function_argument.mutable) {
                             function_argument.value = value;
                             function_arguments.push(function_argument);
@@ -72,7 +78,7 @@ window.ftd = (function() {
             return;
         }
         return get_data_value(data, variable);
-    }
+    };
 
     exports.set_string_for_all = function (variable, value) {
         for (let id in ftd_data) {
@@ -83,7 +89,7 @@ window.ftd = (function() {
             // @ts-ignore
             exports.set_value_by_id(id, variable, value);
         }
-    }
+    };
 
 
     exports.set_bool_for_all = function (variable, value) {
@@ -95,15 +101,15 @@ window.ftd = (function() {
             // @ts-ignore
             exports.set_bool(id, variable, value);
         }
-    }
+    };
 
     exports.set_bool = function (id, variable, value) {
         window.ftd.set_value_by_id(id, variable, value);
-    }
+    };
 
     exports.set_value = function (variable, value) {
-        window.ftd.set_value_by_id("main", variable, value)
-    }
+        window.ftd.set_value_by_id("main", variable, value);
+    };
 
     exports.set_value_by_id = function (id, variable, value) {
         let data = ftd_data[id];
@@ -120,7 +126,7 @@ window.ftd = (function() {
         else {
             set_data_value(data, variable, value);
         }
-    }
+    };
 
     return exports;
 })();

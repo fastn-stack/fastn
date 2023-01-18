@@ -930,6 +930,19 @@ impl PropertyValue {
         ftd::interpreter2::StateWithThing<Option<ftd::interpreter2::PropertyValue>>,
     > {
         match value.string(doc.name) {
+            Ok(expression) if expression.eq(ftd::interpreter2::FTD_SPECIAL_VALUE) => {
+                Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
+                    ftd::interpreter2::PropertyValue::Reference {
+                        name: "VALUE".to_string(),
+                        kind: ftd::interpreter2::Kind::string()
+                            .into_optional()
+                            .into_kind_data(),
+                        source: PropertyValueSource::Global,
+                        is_mutable: false,
+                        line_number: 0,
+                    },
+                )))
+            }
             Ok(expression)
                 if expression.starts_with(ftd::interpreter2::utils::REFERENCE)
                     && ftd::interpreter2::utils::get_function_name(

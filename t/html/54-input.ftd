@@ -1,17 +1,17 @@
--- integer $x: 0
--- integer $y: 0
+-- string $x: Fifthtry
+-- string $y: Fifthtry
 
 
--- ftd.integer: $x
--- ftd.integer: $y
+-- ftd.text: $x
+-- ftd.text: $y
 
 -- ftd.input:
 placeholder: Type Something Here...
 type: password
 width.fixed.px: 400
 border-width.px: 2
-$on-input$: $ftd.increment($a = $x)
-$on-change$: $ftd.increment($a = $y)
+$on-input$: $ftd.set-string($a = $x, v = $VALUE)
+$on-change$: $ftd.set-string($a = $y, v = $VALUE)
 
 -- ftd.input:
 placeholder: Type Something Here...

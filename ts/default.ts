@@ -121,7 +121,7 @@ function http(url: string, method: string, ...request_data: any) {
 
             for (let ftd_variable of Object.keys(data)) {
                 // @ts-ignore
-                window.ftd.set_value(ftd_variable, data[ftd_variable])
+                window.ftd.set_value(ftd_variable, data[ftd_variable]);
             }
         }
     };
