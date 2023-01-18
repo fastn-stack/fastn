@@ -776,7 +776,7 @@ impl InterpreterState {
 }
 
 pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter2::Result<Interpreter> {
-    interpret_with_line_number(id, source, 0)
+    interpret_with_line_number(id, source, 0, None)
 }
 
 #[tracing::instrument(skip_all)]
@@ -784,16 +784,28 @@ pub fn interpret_with_line_number<'a>(
     id: &'a str,
     source: &'a str,
     line_number: usize,
+    cache: Option<&dyn ftd::interpreter2::Cache>,
 ) -> ftd::interpreter2::Result<Interpreter> {
     use itertools::Itertools;
 
     tracing::info!(msg = "ftd: interpreting", doc = id);
 
     let mut s = InterpreterState::new(id.to_string());
-    s.parsed_libs.insert(
-        id.to_string(),
-        ParsedDocument::parse_with_line_number(id, source, line_number)?,
-    );
+
+    let parsed_doc = if let Some(cache) = cache {
+        if let Some(cached_doc) = cache.get(id)? {
+            cached_doc
+        } else {
+            let parsed_document = ParsedDocument::parse_with_line_number(id, source, line_number)?;
+            cache.set(id, &parsed_document)?;
+            parsed_document
+        }
+    } else {
+        ParsedDocument::parse_with_line_number(id, source, line_number)?
+    };
+
+    s.parsed_libs.insert(id.to_string(), parsed_doc);
+
     s.to_process.stack.push((
         id.to_string(),
         s.parsed_libs
