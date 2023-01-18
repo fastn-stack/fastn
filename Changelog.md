@@ -1,5 +1,8 @@
 # FTD Change Log
 
+## 18 January 2023
+- [Added ftd.decimal](https://github.com/ftd-lang/ftd/pull/536/commits/114c1af8a9e159b11f9f2eb62dfd3839b1dd9e4b)
+
 ## 13 January 2023
 
 - Major Change: [Converted executor from recursion to loop](https://github.com/ftd-lang/ftd/pull/529/commits/f305bc187f006bb49e2cbdaf1f35bbd62e151d67)
