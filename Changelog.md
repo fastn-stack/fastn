@@ -4,6 +4,10 @@
 
 - [Added ftd fonts](https://github.com/ftd-lang/ftd/pull/535/commits/aeeb33f97645f97fc7360b46fe8ec9afc6d52416)
 
+## 17 January 2023
+
+- [Added `ftd.input`](https://github.com/ftd-lang/ftd/pull/535/commits/99702d33ce6b3485ed9a7481709cb85f3ee7fddf)
+
 ## 13 January 2023
 
 - Major Change: [Converted executor from recursion to loop](https://github.com/ftd-lang/ftd/pull/529/commits/f305bc187f006bb49e2cbdaf1f35bbd62e151d67)
