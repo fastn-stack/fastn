@@ -963,6 +963,51 @@ integer mobile:
 mobile: 768
 ```
 
+## `ftd.font-display`
+This variable is a mutable string variable which can be 
+used to change the font family of `headings` and `labels` 
+under inherited types which includes `heading-large`, 
+`heading-medium`, `heading-small`,`heading-hero`, 
+`label-big`, `label-small`
+
+By default `ftd.font-display` is set to `sans-serif`
+
+```ftd
+-- $ftd.font-display: cursive
+
+-- ftd.text: Hello world
+role: $inherited.types.heading-large
+```
+
+## `ftd.font-copy`
+This variable is a mutable string variable which can be
+used to change the font family of `copy` type fonts
+under inherited types which includes `copy-tight`,
+`copy-relaxed` and `copy-large`
+
+By default `ftd.font-copy` is set to `sans-serif`
+
+```ftd
+-- $ftd.font-copy: cursive
+
+-- ftd.text: Hello world
+role: $inherited.types.copy-large
+```
+
+## `ftd.font-code`
+This variable is a mutable string variable which can be
+used to change the font family of `fine-print` and `blockquote` fonts
+under inherited types.
+
+By default `ftd.font-code` is set to `sans-serif`
+
+```ftd
+-- $ftd.font-code: cursive
+
+-- ftd.text: Hello world
+role: $inherited.types.fine-print
+```
+
 ## `inherited.types`
 
 The `inherited.types` variable is of type `ftd.type-data` which is a record.
