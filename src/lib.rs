@@ -136,7 +136,7 @@ pub struct Document {
 }
 
 // Condensed form of page-heading item stored by parsed document
-#[derive(Debug, Clone, serde::Serialize)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct PageHeadingItem {
     pub url: Option<String>,
     pub title: Option<String>,

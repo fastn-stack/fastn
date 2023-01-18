@@ -11,6 +11,7 @@ pub enum AST {
 }
 
 impl AST {
+    #[tracing::instrument(name = "AST::from_sections", skip_all)]
     pub fn from_sections(
         sections: &[ftd::p11::Section],
         doc_id: &str,

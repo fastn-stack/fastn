@@ -1676,7 +1676,7 @@ impl InterpreterState {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct ParsedDocument {
     name: String,
     sections: Vec<ftd::p1::Section>,

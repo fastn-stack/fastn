@@ -555,6 +555,7 @@ pub fn parse(content: &str, doc_id: &str) -> ftd::p11::Result<Vec<ftd::p11::Sect
     parse_with_line_number(content, doc_id, 0)
 }
 
+#[tracing::instrument(name = "p11::parse_with_line_number", skip_all)]
 pub fn parse_with_line_number(
     content: &str,
     doc_id: &str,

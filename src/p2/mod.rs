@@ -17,3 +17,9 @@ pub use kind::Kind;
 pub use library::TestLibrary;
 pub use record::Record;
 pub use tdoc::TDoc;
+
+/// ftd is providing this trait to hosts to implement cache for the ParsedDocument.
+pub trait Cache {
+    fn get(id: &str) -> ftd::interpreter2::Result<Option<ftd::ParsedDocument>>;
+    fn set(id: &str, document: &ftd::ParsedDocument) -> ftd::interpreter2::Result<()>;
+}
