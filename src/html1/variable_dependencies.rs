@@ -155,7 +155,7 @@ impl<'a> VariableDependencyGenerator<'a> {
                         if(!!window[\"resolve_value_{id}\"] && !!window[\"resolve_value_{id}\"][\"{variable_name}\"]){{\
                             window[\"resolve_value_{id}\"][\"{variable_name}\"](data);
                         }} else {{
-                            let value = resolve_reference(\"{set_variable_name}\", data);
+                            let value = resolve_reference(\"{set_variable_name}\", data, null);
                             set_data_value(data, \"{variable_name}\", value);
                         }}"
                     },
