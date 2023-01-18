@@ -6169,9 +6169,9 @@ pub fn decimal_function() -> ftd::interpreter2::ComponentDefinition {
                 ),
             ],
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         line_number: 0,
     }

@@ -496,7 +496,7 @@ pub fn decimal_from_properties(
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
-) -> ftd::executor::Result<Text>{
+) -> ftd::executor::Result<Text> {
     let value = ftd::executor::value::f64("value", properties, arguments, doc, line_number)?;
     let num = format_num::NumberFormat::new();
     let text = match ftd::executor::value::optional_string(
@@ -506,7 +506,7 @@ pub fn decimal_from_properties(
         doc,
         line_number,
     )?
-        .value
+    .value
     {
         Some(f) => value.map(|v| {
             dbg!(f.as_str());
