@@ -6145,7 +6145,7 @@ pub fn decimal_function() -> ftd::interpreter2::ComponentDefinition {
             vec![
                 ftd::interpreter2::Argument::default(
                     "value",
-                    ftd::interpreter2::Kind::integer()
+                    ftd::interpreter2::Kind::decimal()
                         .into_kind_data()
                         .caption_or_body(),
                 ),
