@@ -377,6 +377,29 @@ Default: `lazy`
 -- end: loading
 ```
 
+
+## `ftd.input` - To render an iframe
+
+```ftd 
+-- ftd.input: 
+placeholder: Type Something Here...
+type: password
+
+-- ftd.input:
+placeholder: Type Something Here...
+multiline: true
+```
+
+## `ftd.input` attributes
+
+### `placeholder`: `optional string`
+### `value`: `optional string`
+### `default-value`: `optional string`
+### `multiline`: `optional boolean`
+### `type`: `optional string`
+
+
+
 ## Common Attributes
 
 - `padding`: `optional ftd.length`
