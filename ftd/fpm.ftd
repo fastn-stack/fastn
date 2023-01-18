@@ -194,7 +194,7 @@ $always-include$: true
 
 
 
--- record toc-item:
+/-- record toc-item:
 optional string title:
 optional string url:
 optional string path:
@@ -211,11 +211,11 @@ toc-item list children:
 
 
 
--- toc-item list versions:
+/-- toc-item list versions:
 
 
 
--- toc-item list language-toc:
+/-- toc-item list language-toc:
 
 
 -- record build-info:
@@ -226,10 +226,10 @@ string build-created-on:
 string ftd-version:
 
 
--- toc-item list missing-files:
--- toc-item list never-marked-files:
--- toc-item list outdated-files:
--- toc-item list upto-date-files:
+/-- toc-item list missing-files:
+/-- toc-item list never-marked-files:
+/-- toc-item list outdated-files:
+/-- toc-item list upto-date-files:
 
 
 ;; Translation status for the original language package
@@ -251,7 +251,7 @@ optional string last-modified-on:
 -- optional string toc-title:
 
 
--- record sitemap-data:
+/-- record sitemap-data:
 toc-item list sections:
 toc-item list subsections:
 toc-item list toc:
