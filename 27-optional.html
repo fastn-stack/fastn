@@ -674,7 +674,14 @@ let value = action.values[argument][1] !== undefined ? action.values[argument][1
 if (typeof value === 'object') {
 let function_argument = value;
 if (!!function_argument.reference) {
-let value = resolve_reference(function_argument.reference, ftd_data[id]);
+let obj_value = null;
+try {
+obj_value = obj.value;
+}
+catch (_a) {
+obj_value = null;
+}
+let value = resolve_reference(function_argument.reference, ftd_data[id], obj_value);
 if (!!function_argument.mutable) {
 function_argument.value = value;
 function_arguments.push(function_argument);
@@ -1045,7 +1052,10 @@ console.log(...message);
 function isObject(obj) {
 return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
-function resolve_reference(reference, data) {
+function resolve_reference(reference, data, value) {
+if (reference === "VALUE") {
+return value;
+}
 if (!!data[reference]) {
 return deepCopy(data[reference]);
 }
@@ -1252,17 +1262,17 @@ set_data_value(data, "foo#name" + "." + remaining, new_value);
 set_data_value(data, "foo#name", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__display"]){window.node_change_main["3:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
 }
 };
 
