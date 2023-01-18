@@ -1,8 +1,5 @@
 -- ds.page: FPM Typography
 
--- ftd.column:
-;;id: outer-2
-
 -- ds.markdown: 
 
 FPM Typography
@@ -30,7 +27,7 @@ role: $inherited.types.heading-large
 role: $inherited.types.heading-large
 color: $inherited.colors.text
 
-;;-- container: outer-2
+-- end: ds.output
 
 -- ds.h1: `inherited.types.heading-medium`
 
@@ -54,10 +51,8 @@ role: $inherited.types.heading-medium
 role: $inherited.types.heading-medium
 color: $inherited.colors.text
 
+-- end: ds.output
 
-
-
-;;-- container: outer-2
 
 -- ds.h1: `inherited.types.heading-small`
 
@@ -81,10 +76,7 @@ role: $inherited.types.heading-small
 role: $inherited.types.heading-small
 color: $inherited.colors.text
 
-
-
-
-;;-- container: outer-2
+-- end: ds.output
 
 -- ds.h1: `inherited.types.heading-hero`
 
@@ -108,11 +100,7 @@ role: $inherited.types.heading-hero
 role: $inherited.types.heading-hero
 color: $inherited.colors.text
 
-
-
-
-
-;;-- container: outer-2
+-- end: ds.output
 
 -- ds.h1: `inherited.types.copy-tight`
 
@@ -135,11 +123,10 @@ role: $inherited.types.copy-tight
 role: $inherited.types.copy-tight
 color: $inherited.colors.text
 
+-- end: ds.output
 
 
 
-
-;;-- container: outer-2
 
 -- ds.h1: `inherited.types.copy-relaxed`
 
@@ -162,10 +149,9 @@ role: $inherited.types.copy-relaxed
 role: $inherited.types.copy-relaxed
 color: $inherited.colors.text
 
+-- end: ds.output
 
 
-
-;;-- container: outer-2
 
 -- ds.h1: `inherited.types.copy-large`
 
@@ -189,8 +175,7 @@ role: $inherited.types.copy-large
 color: $inherited.colors.text
 
 
-
-;;-- container: outer-2
+-- end: ds.output
 
 -- ds.h1: `inherited.types.label-big`
 
@@ -214,9 +199,7 @@ role: $inherited.types.label-big
 color: $inherited.colors.text
 
 
-
-
-;;-- container: outer-2
+-- end: ds.output
 
 -- ds.h1: `inherited.types.label-small`
 
@@ -239,9 +222,8 @@ role: $inherited.types.label-small
 role: $inherited.types.label-small
 color: $inherited.colors.text
 
+-- end: ds.output
 
-
-;;-- container: outer-2
 
 -- ds.h1: `inherited.types.fine-print`
 
@@ -264,9 +246,8 @@ role: $inherited.types.fine-print
 role: $inherited.types.fine-print
 color: $inherited.colors.text
 
+-- end: ds.output
 
-
-;;-- container: outer-2
 
 -- ds.h1: `inherited.types.blockquote`
 
@@ -289,6 +270,6 @@ role: $inherited.types.blockquote
 role: $inherited.types.blockquote
 color: $inherited.colors.text
 
--- end: ftd.column
+-- end: ds.output
 
 -- end: ds.page

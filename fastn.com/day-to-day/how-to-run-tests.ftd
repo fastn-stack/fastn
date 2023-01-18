@@ -26,7 +26,9 @@ This will run all the tests present in [tests folder](https://github.com/FifthTr
 
 The output will look somewhat like this
 
-```
+-- ds.code:
+lang: py
+
 01-help: PASSED in 1.94192775s
 02-hello: PASSED in 2.064883375s
 03-nested-document: PASSED in 986.959958ms
@@ -46,7 +48,9 @@ The output will look somewhat like this
 17-fpm-dependency-alias: PASSED in 947.086041ms
 18-include-processor: PASSED in 3.253793333s
 19-dependency-alias-prelude: PASSED in 1.598941708s
-```
+
+
+-- ds.markdown:
 
 Next: Read this [How To Update Failing Snapshot Tests](day-to-day/how-to-fix-tests/)
 
