@@ -481,6 +481,7 @@ impl<'a> TDoc<'a> {
                     line_number,
                 );
             }
+
             Ok(())
         }
     }
