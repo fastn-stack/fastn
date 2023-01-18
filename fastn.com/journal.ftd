@@ -8,9 +8,7 @@
 
 
 
-/-- ds.page: FTD Journal
-
-
+-- ds.page: FTD Journal
 
 -- ds.h1: Conditional Variable
 
@@ -82,7 +80,6 @@ to see the symbol's full name. The only way to avoid jumping to `FPM.ftd` to
 understand each component used, is to not use auto import or dependency alias
 feature, and put explicit import on top of each file.
 
-
 -- ds.h1: Final Decision On References
 
 2nd Feb 2022
@@ -142,7 +139,6 @@ implements: fpm.dev/dark-mode-switcher
 
 Here `amitu.com/FPM.ftd` has explicitly granted `arpita.com/dms`
 `fpm.dev/dark-mode-switcher` "rights".
-
 
 -- ds.h1: Reference Vs Value Recap
 
@@ -514,7 +510,6 @@ boolean some-formula:
 With continuation in the mix we do not need "component level variable". Or we
 support both continuation and component level variable.
 
-
 -- ds.h1: Pass By Value Vs Reference
 
 If we do this:
@@ -624,7 +619,6 @@ boolean o: true
 \--- bar:
 o if $o: true
 o if not $o: false
-
 
 -- ds.markdown:
 
@@ -1025,17 +1019,11 @@ failure error->void:
 
 ftd.http-get("https://foo.com", success, failure)
 
-
-
 \-- void after-get:
 person list people:
 
 \-- void on-error:
 error error:
-
-
-
-
 
 -- ds.h1: Dynamic Components Landed!
 
@@ -1052,24 +1040,26 @@ list, and add elements to the list from any of our event handling code.
 Yesterday Arpita implemented support for dynamically constructing DOM when say
 we add elements to a list.
 
-/--Consider this:
+--Consider this:
 
+-- ds.code:
+lang: ftd
 
-/-- ftd.column:
+\-- ftd.column:
 spacing: 10
 
-/-- ftd.row:
+\-- ftd.row:
 width: fill
 spacing: 10
 
-/-- ftd.input:
+\-- ftd.input:
 placeholder: Type Something Here...
 width: 250
 border-width: 2
 padding.px: 8
 $on-input$: $query=$VALUE
 
-/-- ftd.text: Add
+\-- ftd.text: Add
 if: $query is not null
 color: $inherited.colors.text
 background.solid: $inherited.colors.background.base
@@ -1078,7 +1068,7 @@ padding.px: 5
 $on-click$: insert into $strings value $query at end
 $on-click$: clear $query
 
-/--- ftd.text: Clear
+\-- ftd.text: Clear
 color: $inherited.colors.text
 background.solid: $inherited.colors.background.base
 move-down: 4
@@ -1086,13 +1076,13 @@ padding.px: 5
 $on-click$: clear $strings
 
 
-/-- ftd.text:
+\-- ftd.text:
 if: { $query != NULL }
 color if { $ftd.dark-mode }: $inherited.colors.text
 
 You have typed: {value}
 
-/-- ftd.text value: $query
+\-- ftd.text value: $query
 color: $inherited.colors.success.text
 color if $ftd.dark-mode: $inherited.colors.text
 background-color if $ftd.dark-mode: $inherited.colors.background.base
@@ -1100,10 +1090,8 @@ padding if $query is not null: 5
 role: $fpm.type.copy-large
 
 
-/-- show-data: $obj
+\-- show-data: $obj
 $loop$: $strings as $obj
-
-
 
 -- ds.markdown:
 
@@ -1572,7 +1560,6 @@ lang: json
     }
 }
 
-
 -- ds.markdown:
 
 We have one option that we go through the object and find all values with `$foo`
@@ -1635,7 +1622,6 @@ $on-click$: message-host console-print:
 \-- ftd.input:
 $on-input$: message-host console-print:
 > message: $VALUE
-
 
 -- ds.markdown:
 
@@ -1893,7 +1879,6 @@ Address ::= SEQUENCE {
     }
   ))
 
-
 -- ds.markdown:
 
 SEQUENCE is just a `record`, and it has three fields, and for `postal-code` they
@@ -2062,7 +2047,6 @@ those variables. We already have methods in `ftd.js` to update any variable, and
 already have variable dependency tracker that updates the rendered DOM tree in an
 efficient way.
 
-
 -- ds.h2: What about "heavy variables"?
 
 If we are creating regular variables, do we create a single virtual document that
@@ -2158,7 +2142,6 @@ ftd.ui a:
 integer size: 10
 
 \--- a:
-
 
 -- ds.markdown:
 
@@ -2262,7 +2245,6 @@ lang: ftd
 
 \-- integer bar: 20
 
-
 -- ds.h1: Components as type
 
 Currently a component can only accept basic data types, like integer and string,
@@ -2316,8 +2298,8 @@ Jay has created a logo for FTD that we like:
 
 -- ds.image:
 src: $assets.files.images.ftd-language.jpg
-width: 300
-align: center
+width.fixed.px: 300
+;;align: center
 
 
 -- ds.h1: `try.ftd.dev`
@@ -2373,7 +2355,6 @@ src: https://www.loom.com/embed/07681c220abd4eb584c75327c686360b
 Wrote up a CR for `detached` components: components that are not
 part of UI when created, and added a new `include` keyword to include any detached
 component in "current container".
-
 
 -- ds.h1: Started Journal
 
@@ -2447,68 +2428,63 @@ id: some-id
 
 This is how the DOM structure should look like:
 
+-- ds.code:
+lang: ftd
 
-/-- ftd.scene:
+\-- ftd.scene:
 height: 400
 
-
--- box:
+\-- box:
 left: 20
 top: 20
 width: 500
 height: 300
 
-
--- text: `ftd.main` (`ftd.column`)
+\-- text: `ftd.main` (`ftd.column`)
 left: 290
 top: 323
 
 
--- box:
+\-- box:
 left: 40
 top: 40
 width: 460
 height: 200
 
 
--- text-box: Title
+\-- text-box: Title
 left: 55
 top: 55
 
 
--- text: `ftd.row: some-id`
+\-- text: `ftd.row: some-id`
 left: 300
 top: 88
 
 
--- box:
+\-- box:
 width: 430
 height: 80
 top: 110
 left: 55
 
 
--- text: `foo`
+\-- text: `foo`
 top: 215
 left: 457
 
 
--- text-box: Hello 👋
+\-- text-box: Hello 👋
 top: 130
 left: 70
 
-
--- text-box: World 🌎
+\-- text-box: World 🌎
 top: 130
 left: 200
 
-
--- ftd.text: Click Here!
+\-- ftd.text: Click Here!
 top: 250
 left: 45
-
-
-
 
 -- ds.markdown:
 
@@ -2526,18 +2502,13 @@ if: { $show }
 -- ftd.text: Click here!
 $on-click$: $ftd.set-bool($a = $show, v = false)
 
-
-
-
 -- ds.markdown:
 
 And this is how it used to look like:
 
-
 -- ds.image:
 src: $assets.files.images.7vypfBR.jpg
-width: 130
-
+width.fixed.px: 130
 
 -- ds.markdown:
 
@@ -2554,14 +2525,12 @@ it appears column-wise.
 contain spacing from each other, except the first visible one, but here it has only
 one wrapper child, so no spacing.
 
-
 -- ds.h2: How have we solved this?
 
 Just remove the wrapper and put all external children directly inside the desired
 node. But how would we do reparenting of them (like in the case of event handling)?
 Put a new attribute (`data-ext-id`) that has the same value in all the external
 children and during reparenting, access children using this attribute.
-
 
 -- ds.h2: Is everything solved?
 
@@ -2590,6 +2559,7 @@ Fri, 12th Nov 2012
 Consider the following code:
 
 
+
 -- ds.code:
 lang: ftd
 
@@ -2613,7 +2583,9 @@ overriding `<a>`. Basically we were attaching `href` on top of `img` tag.
 
 Now we create `<img>` tag and make it child of `<a>`.
 
+
 -- end: ds.page
+
 
 
 

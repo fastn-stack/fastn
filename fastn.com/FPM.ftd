@@ -106,7 +106,7 @@ url: /global-key-events/
 ## Development: /development/
 
 - Roadmap & RFCs: /roadmap/
-;; - Journal: /journal/ -- This page kills running server something is looped in this file.
+- Journal: /journal/
 - Changelog: /changelog/
 - Internals: /internals/
 - How to add `foreign-variables`: /foreign-variable/
