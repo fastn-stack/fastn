@@ -750,6 +750,10 @@ optional string font-family:
 # Events
 
 - `on-click`
+- `on-change`
+- `on-input`
+- `on-blur`
+- `on-focus`
 - `on-mouse-enter`
 - `on-mouse-leave`
 - `on-click-outside`
