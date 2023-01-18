@@ -341,6 +341,22 @@ Also see InspiredGitHub from [here](https://github.com/sethlopezme/InspiredGitHu
 ### `text-align`: `ftd.text-align` -> specify text alignment
 (Refer or-type `ftd.text-align` to know all possible values)
 
+## `ftd.decimal` - To display decimal values
+
+```ftd 
+-- decimal pi: 3.142
+
+-- ftd.decimal: 1.5
+
+;; To display decimal variables
+-- ftd.decimal: $pi
+```
+
+## `ftd.decimal` attributes
+
+### `value`: `caption or body` -> decimal value to be rendered
+
+### `text-align`: `ftd.text-align -> specify text alignment
 
 ## `ftd.iframe` - To render an iframe
 
@@ -734,6 +750,10 @@ optional string font-family:
 # Events
 
 - `on-click`
+- `on-change`
+- `on-input`
+- `on-blur`
+- `on-focus`
 - `on-mouse-enter`
 - `on-mouse-leave`
 - `on-click-outside`
