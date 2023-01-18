@@ -1,0 +1,5 @@
+-- decimal x: 10.2
+
+-- ftd.decimal: $x
+
+-- ftd.decimal: 1.5

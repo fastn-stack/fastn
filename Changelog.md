@@ -1,7 +1,7 @@
 # FTD Change Log
 
 ## 18 January 2023
-
+- [Added ftd.decimal](https://github.com/ftd-lang/ftd/pull/536/commits/114c1af8a9e159b11f9f2eb62dfd3839b1dd9e4b)
 - [Added ftd fonts](https://github.com/ftd-lang/ftd/pull/535/commits/aeeb33f97645f97fc7360b46fe8ec9afc6d52416)
 
 ## 17 January 2023
