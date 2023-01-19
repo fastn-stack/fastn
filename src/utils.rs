@@ -1,3 +1,5 @@
+use crate::fpm_2022_js;
+
 pub trait ValueOf {
     fn value_of_(&self, name: &str) -> Option<&str>;
     fn values_of_(&self, name: &str) -> Vec<String>;
@@ -513,7 +515,10 @@ pub fn replace_markers_2022(
                 "__ftd__",
                 format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
             )
-            .replace("__ftd_js__", ftd_js)
+            .replace(
+                "__ftd_js__",
+                format!("{}{}", ftd_js, fpm_2022_js()).as_str(),
+            )
             .replace(
                 "__extra_js__",
                 get_extra_js(external_js, inline_js).as_str(),
