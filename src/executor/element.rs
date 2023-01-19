@@ -1156,8 +1156,13 @@ pub fn text_input_from_properties(
         line_number,
     )?;
 
-    let type_ =
-        ftd::executor::TextInputType::optional_text_input_type(properties, arguments, doc, line_number, "type")?;
+    let type_ = ftd::executor::TextInputType::optional_text_input_type(
+        properties,
+        arguments,
+        doc,
+        line_number,
+        "type",
+    )?;
 
     let common = common_from_properties(
         properties,
