@@ -3,6 +3,31 @@ type ParsedDocC =
 static PARSED_DOC_CACHE: once_cell::sync::Lazy<ParsedDocC> =
     once_cell::sync::Lazy::new(|| std::sync::RwLock::new(std::collections::HashMap::new()));
 
+fn cached_doc(id: &str) -> Option<ftd::interpreter2::ParsedDocument> {
+    if let Ok(l) = PARSED_DOC_CACHE.read() {
+        return l.get(id).cloned();
+    }
+    None
+}
+
+fn cache_get_or_set(
+    id: &str,
+    source: &str,
+    line_number: usize,
+) -> ftd::interpreter2::Result<ftd::interpreter2::ParsedDocument> {
+    if let Some(doc) = cached_doc(id) {
+        println!("returning from cache: {}", id);
+        return Ok(doc);
+    }
+
+    println!("setting and returning from cache: {}", id);
+    let doc = ftd::interpreter2::ParsedDocument::parse_with_line_number(id, source, line_number)?;
+    if let Ok(mut l) = PARSED_DOC_CACHE.write() {
+        l.insert(id.to_string(), doc.clone());
+    }
+    Ok(doc)
+}
+
 pub async fn parse<'a>(
     name: &str,
     source: &str,
@@ -134,7 +159,7 @@ pub async fn interpret_helper<'a>(
     line_number: usize,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
     tracing::info!(document = name);
-    let doc = ftd::interpreter2::ParsedDocument::parse_with_line_number(name, source, line_number)?;
+    let doc = cache_get_or_set(name, source, line_number)?;
     let mut s = ftd::interpreter2::interpret_with_line_number(name, doc, line_number)?;
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),
@@ -155,9 +180,10 @@ pub async fn interpret_helper<'a>(
                 let (source, foreign_variable, foreign_function, ignore_line_numbers) =
                     resolve_import_2022(lib, &mut st, module.as_str(), caller_module.as_str())
                         .await?;
+                let doc = cache_get_or_set(module.as_str(), source.as_str(), ignore_line_numbers)?;
                 s = st.continue_after_import(
                     module.as_str(),
-                    source.as_str(),
+                    doc,
                     foreign_variable,
                     foreign_function,
                     ignore_line_numbers,
