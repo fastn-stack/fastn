@@ -394,25 +394,39 @@ Default: `lazy`
 ```
 
 
-## `ftd.input` - To render an iframe
+## `ftd.text-input` - To take text input from user 
 
 ```ftd 
--- ftd.input: 
+-- ftd.text-input: 
 placeholder: Type Something Here...
 type: password
 
--- ftd.input:
+-- ftd.text-input:
 placeholder: Type Something Here...
 multiline: true
 ```
 
-## `ftd.input` attributes
+## `ftd.text-input` attributes
 
-### `placeholder`: `optional string`
+### `placeholder`: `optional string` -> Adjusts a visible text inside the input field
 ### `value`: `optional string`
 ### `default-value`: `optional string`
-### `multiline`: `optional boolean`
-### `type`: `optional string`
+### `multiline`: `optional boolean` -> To allow multiline input
+### `type`: `optional ftd.text-input-type` -> Sets the type of text input
+
+```ftd
+-- or-type text-input-type:
+-- constant string text: text
+-- constant string email: email
+-- constant string password: password
+-- constant string url: url
+-- end: text-input-type
+```
+
+By default, `type` is set to `ftd.text-input-type.text`
+
+
+
 
 
 

@@ -1,5 +1,8 @@
 # FTD Change Log
 
+## 19 January 2023
+- [Added ftd.text-input](https://github.com/ftd-lang/ftd/pull/543/commits/b86f74b45322e53f8a9acf43155b4bb0aa1a19b3)
+
 ## 18 January 2023
 - [Added on-blur, on-focus events](https://github.com/ftd-lang/ftd/pull/540/commits/d0416a7eb2d5b4fa6172b4f32cf442161427e4db)
 - [Added on-change, on-input events](https://github.com/ftd-lang/ftd/commit/06d6d91fb10c63e01dbfbe02d4913b8b8e8f1594)
