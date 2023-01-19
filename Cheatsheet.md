@@ -938,7 +938,7 @@ This function is used to make http request
 -- ftd.text: Click to send POST request
 $on-click$: $http-call(url = https://www.fifthtry.com, method = post, name = John, age = 23)
 
--- void http-call(url,method,name):
+-- void http-call(url,method,name,age):
 string url:
 string method:
 string name:
@@ -959,7 +959,7 @@ http(url, method, ("name": name),("age": age))
 -- ftd.text: Click to send POST request
 $on-click$: $http-call(url = https://www.fifthtry.com, method = post, name = John, age = 23)
 
--- void http-call(url,method,name):
+-- void http-call(url,method,name,age):
 string url:
 string method:
 string name:
@@ -987,7 +987,7 @@ age: 22
 -- ftd.text: Click to send POST request
 $on-click$: $http-call(url = https://www.fifthtry.com, method = post, person = $alice)
 
--- void http-call(url,method,name):
+-- void http-call(url,method,person):
 string url:
 string method:
 Person person:
