@@ -919,9 +919,13 @@ enable_system_mode()
 
 ## `http(url: string, method: string, ...request-data)`
 
-This function do http request
+This function is used to make http request
 
-- We can either pass `named` data or `unnamed` data as 
+- For `GET` requests, the request-data will sent as `query parameters`
+
+- For `POST` requests, the request-data will be sent as request `body`
+
+- We can either pass `named` data or `unnamed` data as
   `request-data` values.
 
 - For `named` data, the values need to be passed as `(key,value)` tuples.
@@ -991,9 +995,6 @@ Person person:
 ;; Unnamed record as request-data
 http(url, method, person)
 ```
-
-- For `GET` requests, the request-data will sent as `query parameters`
-- For `POST` requests, the request-data will be sent as request `body`
 
 Response JSON:
 
