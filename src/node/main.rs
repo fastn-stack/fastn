@@ -93,7 +93,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Image(i) => i.to_node(doc_id),
             ftd::executor::Element::Code(c) => c.to_node(doc_id),
             ftd::executor::Element::Iframe(i) => i.to_node(doc_id),
-            ftd::executor::Element::Input(i) => i.to_node(doc_id),
+            ftd::executor::Element::TextInput(i) => i.to_node(doc_id),
             ftd::executor::Element::Null => Node {
                 classes: vec![],
                 events: vec![],
@@ -367,7 +367,7 @@ impl ftd::executor::Iframe {
     }
 }
 
-impl ftd::executor::Input {
+impl ftd::executor::TextInput {
     pub fn to_node(&self, doc_id: &str) -> Node {
         use ftd::node::utils::CheckMap;
 
@@ -389,15 +389,17 @@ impl ftd::executor::Input {
             ),
         );
 
-        n.attrs.check_and_insert(
-            "type",
-            ftd::node::Value::from_executor_value(
-                self.type_.to_owned().value,
-                self.type_.to_owned(),
-                None,
-                doc_id,
-            ),
-        );
+        if let Some(type_) = &self.type_.value {
+            n.attrs.check_and_insert(
+                "type",
+                ftd::node::Value::from_executor_value(
+                    Some(type_.to_css_string()),
+                    self.type_.to_owned(),
+                    None,
+                    doc_id,
+                ),
+            );
+        }
 
         if self.multiline.value {
             n.text = ftd::node::Value::from_executor_value(

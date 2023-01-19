@@ -494,8 +494,8 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                 )?)
             }
-            "ftd#input" => {
-                ftd::executor::Element::Input(ftd::executor::element::input_from_properties(
+            "ftd#text-input" => {
+                ftd::executor::Element::TextInput(ftd::executor::element::text_input_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),

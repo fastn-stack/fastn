@@ -96,10 +96,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(iframe_function()),
         ),
         (
-            "ftd#input".to_string(),
-            ftd::interpreter2::Thing::Component(row_function()),
-        ),
-        (
             "ftd#column".to_string(),
             ftd::interpreter2::Thing::Component(column_function()),
         ),
@@ -120,8 +116,8 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(boolean_function()),
         ),
         (
-            "ftd#input".to_string(),
-            ftd::interpreter2::Thing::Component(input_function()),
+            "ftd#text-input".to_string(),
+            ftd::interpreter2::Thing::Component(text_input_function()),
         ),
         (
             "ftd#image".to_string(),
@@ -1490,6 +1486,55 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                             .caption(),
                         false,
                         Some(ftd::interpreter2::Value::new_string("h6")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
+            ftd::interpreter2::FTD_TEXT_INPUT_TYPE.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_TEXT_INPUT_TYPE.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TEXT_INPUT_TYPE_TEXT,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("text")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TEXT_INPUT_TYPE_EMAIL,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("email")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TEXT_INPUT_TYPE_PASSWORD,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("password")
+                            .into_property_value(false, 0)),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TEXT_INPUT_TYPE_URL,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(ftd::interpreter2::Value::new_string("url")
                             .into_property_value(false, 0)),
                         0,
                     )),
@@ -6194,9 +6239,9 @@ pub fn boolean_function() -> ftd::interpreter2::ComponentDefinition {
     }
 }
 
-pub fn input_function() -> ftd::interpreter2::ComponentDefinition {
+pub fn text_input_function() -> ftd::interpreter2::ComponentDefinition {
     ftd::interpreter2::ComponentDefinition {
-        name: "ftd#input".to_string(),
+        name: "ftd#text-input".to_string(),
         arguments: [
             text_arguments(),
             common_arguments(),
@@ -6227,7 +6272,7 @@ pub fn input_function() -> ftd::interpreter2::ComponentDefinition {
                 ),
                 ftd::interpreter2::Argument::default(
                     "type",
-                    ftd::interpreter2::Kind::string()
+                    ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TEXT_INPUT_TYPE)
                         .into_optional()
                         .into_kind_data(),
                 ),
