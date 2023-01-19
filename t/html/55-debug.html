@@ -532,7 +532,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">false</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; padding: 10px; text-decoration: none; width: 100px" class="ft_md">Hello world This is some random sample text</div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="-webkit-box-orient: vertical; -webkit-line-clamp: 1; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: -webkit-box; height: auto; overflow: hidden; text-decoration: none; width: 100px" class="ft_md">Hello world This is some random sample text</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="-webkit-box-orient: vertical; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: -webkit-box; height: auto; overflow: hidden; text-decoration: none; width: auto" class="ft_md">false</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="-webkit-box-orient: vertical; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: -webkit-box; height: auto; overflow: hidden; text-decoration: none; width: 100px" class="ft_md">Hello world This is some random sample text</div></div>
 
 
 <script>
@@ -1223,6 +1223,56 @@ window.node_change_main = {};
 window.node_change_main["0:main__text"] = function(data) {
 document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#flag", data, null);
 }
+window.node_change_main["1:main__-webkit-box-orient"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["-webkit-box-orient"] = eval(`if (!!{0}) {
+"vertical"
+} else {
+null
+}
+`.format(JSONstringify(2)));
+}
+else { document.querySelector(`[data-id="1:main"]`).style["-webkit-box-orient"] = null; }
+}
+
+window.node_change_main["1:main__-webkit-line-clamp"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["-webkit-line-clamp"] = 2;
+}
+else { document.querySelector(`[data-id="1:main"]`).style["-webkit-line-clamp"] = null; }
+}
+
+window.node_change_main["1:main__display"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["display"] = eval(`if (!!{0}) {
+"-webkit-box"
+} else {
+"block"
+}
+`.format(JSONstringify(2)));
+}
+else { document.querySelector(`[data-id="1:main"]`).style["display"] = "block"; }
+}
+
+window.node_change_main["1:main__overflow"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["overflow"] = eval(`if (!!{0}) {
+"hidden"
+} else {
+null
+}
+`.format(JSONstringify(2)));
+}
+else { document.querySelector(`[data-id="1:main"]`).style["overflow"] = null; }
+}
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
 if (!!remaining) {
@@ -1232,6 +1282,14 @@ set_data_value(data, "foo#flag", new_value);
 }
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__-webkit-box-orient"]){window.node_change_main["1:main__-webkit-box-orient"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__-webkit-line-clamp"]){window.node_change_main["1:main__-webkit-line-clamp"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__overflow"]){window.node_change_main["1:main__overflow"](data);
 }
 };
 
