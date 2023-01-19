@@ -685,13 +685,11 @@ impl InterpreterState {
     pub fn continue_after_import(
         mut self,
         module: &str,
-        source: &str,
+        mut document: ParsedDocument,
         foreign_variable: Vec<String>,
         foreign_function: Vec<String>,
-        ignore_line_numbers: usize,
+        _ignore_line_numbers: usize,
     ) -> ftd::interpreter2::Result<Interpreter> {
-        let mut document =
-            ParsedDocument::parse_with_line_number(module, source, ignore_line_numbers)?;
         document.add_foreign_function(foreign_function);
         document.add_foreign_variable(foreign_variable);
         self.parsed_libs.insert(module.to_string(), document);
@@ -776,24 +774,22 @@ impl InterpreterState {
 }
 
 pub fn interpret<'a>(id: &'a str, source: &'a str) -> ftd::interpreter2::Result<Interpreter> {
-    interpret_with_line_number(id, source, 0)
+    let doc = ParsedDocument::parse_with_line_number(id, source, 0)?;
+    interpret_with_line_number(id, doc, 0)
 }
 
 #[tracing::instrument(skip_all)]
 pub fn interpret_with_line_number<'a>(
     id: &'a str,
-    source: &'a str,
-    line_number: usize,
+    document: ParsedDocument,
+    _line_number: usize,
 ) -> ftd::interpreter2::Result<Interpreter> {
     use itertools::Itertools;
 
     tracing::info!(msg = "ftd: interpreting", doc = id);
 
     let mut s = InterpreterState::new(id.to_string());
-    s.parsed_libs.insert(
-        id.to_string(),
-        ParsedDocument::parse_with_line_number(id, source, line_number)?,
-    );
+    s.parsed_libs.insert(id.to_string(), document);
     s.to_process.stack.push((
         id.to_string(),
         s.parsed_libs
@@ -831,7 +827,7 @@ impl ParsedDocument {
     }
 
     #[tracing::instrument(name = "parse_with_line_number", skip_all)]
-    fn parse_with_line_number(
+    pub fn parse_with_line_number(
         id: &str,
         source: &str,
         line_number: usize,
