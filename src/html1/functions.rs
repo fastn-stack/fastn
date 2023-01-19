@@ -130,7 +130,7 @@ impl ExpressionGenerator {
             for children in node.children() {
                 result.push(self.to_string(children, false, arguments));
             }
-            return format!("({})", result.join(","));
+            return format!("[{}]", result.join(","));
         }
 
         if let Some(function_name) = self.function_name(node.operator()) {

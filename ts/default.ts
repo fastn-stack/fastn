@@ -57,7 +57,8 @@ function http(url: string, method: string, ...request_data: any) {
         for (let [header, value] of Object.entries(request_data)) {
             if (header != "url" && header != "function" && header != "method")
             {
-                query_parameters.set(header, value);
+                let [key, val] = value.length == 2 ? value: [header, value];
+                query_parameters.set(key, val);
             }
         }
         let query_string = query_parameters.toString();
@@ -69,6 +70,19 @@ function http(url: string, method: string, ...request_data: any) {
             window.location.href = url;
         }
         return;
+    }
+
+    let json = request_data[0];
+
+    if(request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
+        let new_json: any = {};
+
+        // @ts-ignore
+        for (let [header, value] of Object.entries(request_data)) {
+            let [key, val] = value.length == 2 ? value: [header, value];
+            new_json[key] = val;
+        }
+        json = new_json;
     }
 
     let xhr = new XMLHttpRequest();
@@ -125,5 +139,5 @@ function http(url: string, method: string, ...request_data: any) {
             }
         }
     };
-    xhr.send(JSON.stringify(request_data));
+    xhr.send(JSON.stringify(json));
 }
