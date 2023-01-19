@@ -22,7 +22,7 @@ window.ftd = (function() {
                 let value = action.values[argument][1] !== undefined ? action.values[argument][1]: action.values[argument];
                 if (typeof value === 'object') {
                     let function_argument = <FunctionArgument>value;
-                    if (!!function_argument.reference) {
+                    if (!!function_argument && !!function_argument.reference) {
                         let obj_value = null;
                         try {
                             obj_value= (<HTMLInputElement>obj).value;
