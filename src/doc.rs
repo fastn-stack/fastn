@@ -20,6 +20,7 @@ fn cache_get_or_set(
     }
 
     let doc = ftd::interpreter2::ParsedDocument::parse_with_line_number(id, source, line_number)?;
+    // TODO: do not cache editor
     if let Ok(mut l) = PARSED_DOC_CACHE.write() {
         l.insert(id.to_string(), doc.clone());
     }
