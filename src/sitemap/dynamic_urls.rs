@@ -224,10 +224,9 @@ mod tests {
         let right = Ok(fpm::sitemap::DynamicUrls {
             sections: vec![fpm::sitemap::section::Section {
                 id: "Dynamic Urls Section".to_string(),
-                title: Some("Dynamic Urls Section".to_string()),
                 icon: None,
                 bury: false,
-                confidential: true,
+                title: Some("Dynamic Urls Section".to_string()),
                 file_location: None,
                 translation_file_location: None,
                 extra_data: Default::default(),
@@ -235,22 +234,21 @@ mod tests {
                 nav_title: None,
                 subsections: vec![fpm::sitemap::section::Subsection {
                     id: None,
-                    title: None,
                     icon: None,
                     bury: false,
+                    title: None,
                     file_location: None,
                     translation_file_location: None,
                     visible: false,
                     extra_data: Default::default(),
                     is_active: false,
                     nav_title: None,
-                    confidential: true,
                     toc: vec![
                         fpm::sitemap::toc::TocItem {
                             id: "/person/<string:name>/".to_string(),
-                            title: Some("Url 1".to_string()),
                             icon: None,
                             bury: false,
+                            title: Some("Url 1".to_string()),
                             file_location: None,
                             translation_file_location: None,
                             extra_data: vec![
@@ -265,10 +263,11 @@ mod tests {
                             is_active: false,
                             nav_title: None,
                             children: vec![],
-                            skip: true,
+                            skip: false,
                             readers: vec!["readers/person".to_string()],
                             writers: vec!["writers/person".to_string()],
                             document: Some("person.ftd".to_string()),
+                            confidential: true,
                             path_parameters: vec![
                                 fpm::sitemap::PathParams::value(0, "person".to_string()),
                                 fpm::sitemap::PathParams::named(
@@ -277,13 +276,12 @@ mod tests {
                                     "string".to_string(),
                                 ),
                             ],
-                            confidential: true,
                         },
                         fpm::sitemap::toc::TocItem {
                             id: "/person/<string:name>/".to_string(),
-                            title: Some("Url 2".to_string()),
                             icon: None,
                             bury: false,
+                            title: Some("Url 2".to_string()),
                             file_location: None,
                             translation_file_location: None,
                             extra_data: vec![
@@ -298,10 +296,11 @@ mod tests {
                             is_active: false,
                             nav_title: None,
                             children: vec![],
-                            skip: true,
+                            skip: false,
                             readers: vec!["readers/person".to_string()],
                             writers: vec!["writers/person".to_string()],
                             document: Some("person.ftd".to_string()),
+                            confidential: true,
                             path_parameters: vec![
                                 fpm::sitemap::PathParams::value(0, "person".to_string()),
                                 fpm::sitemap::PathParams::named(
@@ -310,23 +309,23 @@ mod tests {
                                     "string".to_string(),
                                 ),
                             ],
-                            confidential: true,
                         },
                     ],
                     skip: false,
                     readers: vec![],
                     writers: vec![],
                     document: None,
+                    confidential: true,
                     path_parameters: vec![],
                 }],
                 skip: false,
+                confidential: true,
                 readers: vec![],
                 writers: vec![],
                 document: None,
                 path_parameters: vec![],
             }],
         });
-
         assert_eq!(left, right)
     }
 }
