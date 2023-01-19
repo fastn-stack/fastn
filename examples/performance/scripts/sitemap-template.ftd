@@ -1,0 +1,56 @@
+-- fpm.dynamic-urls:
+
+# Sec 1: /
+
+## Subsection: /
+
+- TOC:
+url: /<string:username>/<string:class>/<integer:age>/<boolean:flag>/
+document: /
+  - TOC:
+  url: /<string:username>/<string:class>/<integer:age>/<boolean:flag>/
+  document: /
+    - TOC:
+    url: /<string:username>/<string:class>/<integer:age>/<boolean:flag>/
+    document: /
+      - TOC:
+      url: /<string:username>/<string:class>/<integer:age>/<boolean:flag>/
+      document: /
+        - TOC:
+        url: /<string:username>/<string:class>/<integer:age>/<boolean:flag>/
+        document: /
+          - TOC:
+          url: /<string:username>/<string:class>/<integer:age>/<boolean:flag>/
+          document: /
+
+
+-- fpm.sitemap:
+
+# Sec 1: /
+
+## Subsection: /
+
+- TOC: /
+  - TOC: /
+    - TOC: /
+      - TOC: /
+        - TOC: /
+          - TOC: /
+- TOC: /
+  - TOC: /
+    - TOC: /
+      - TOC: /
+        - TOC: /
+          - TOC: /
+- TOC: /
+  - TOC: /
+    - TOC: /
+      - TOC: /
+        - TOC: /
+          - TOC: /
+- TOC: /
+  - TOC: /
+    - TOC: /
+      - TOC: /
+        - TOC: /
+          - TOC: /

@@ -1,3 +1,7 @@
+type ParsedDocC = std::sync::RwLock<std::collections::HashMap<String, ftd::ParsedDocument>>;
+static PARSED_DOC_CACHE: once_cell::sync::Lazy<ParsedDocC> =
+    once_cell::sync::Lazy::new(|| std::sync::RwLock::new(std::collections::HashMap::new()));
+
 pub async fn parse<'a>(
     name: &str,
     source: &str,
