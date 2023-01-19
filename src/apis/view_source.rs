@@ -32,7 +32,7 @@ async fn handle_view_source(req: &fpm::http::Request, path: &str) -> fpm::Result
             let editor_ftd = fpm::package_info_editor(&config, file_name.as_str(), diff)?;
             let main_document = fpm::Document {
                 id: "editor.ftd".to_string(),
-                content: editor_ftd,
+                content: dbg!(editor_ftd),
                 parent_path: config.root.as_str().to_string(),
                 package_name: config.package.name.clone(),
             };

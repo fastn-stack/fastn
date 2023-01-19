@@ -199,14 +199,16 @@ fn package_info_editor(
             {body_prefix}
     
             -- import: {package_info_package}/editor as pi
+            -- import: fpm/processors as pr
 
+            
             -- pi.editor:
-
-            -- pi.source:
-            $processor$: fetch-file
+            source: $source
             path: {file_name}
 
-            -- pi.path: {file_name}
+            -- string source:
+            $processor$: pr.fetch-file
+            path: {file_name}
         ",
         body_prefix = body_prefix,
         package_info_package = config.package_info_package(),

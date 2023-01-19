@@ -1,5 +1,6 @@
 pub(crate) mod apps;
 pub(crate) mod document;
+pub(crate) mod fetch_file;
 pub(crate) mod get_data;
 pub(crate) mod http;
 pub(crate) mod package_tree;

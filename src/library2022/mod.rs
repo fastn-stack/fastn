@@ -255,6 +255,9 @@ impl Library2022 {
             "document-name" => {
                 processor::document::document_name(value, kind, doc, &self.config).await
             }
+            "fetch-file" => {
+                processor::fetch_file::fetch_files(value, kind, doc, &self.config).await
+            }
             "user-details" => processor::user_details::process(value, kind, doc, &self.config),
             "fpm-apps" => processor::apps::process(value, kind, doc, &self.config),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,

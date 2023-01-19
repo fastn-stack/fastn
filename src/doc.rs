@@ -404,6 +404,7 @@ pub async fn resolve_import_2022<'a>(
                 "is-reader".to_string(),
                 "package-query".to_string(),
                 "package-tree".to_string(),
+                "fetch-file".to_string(),
             ],
             0,
         )
