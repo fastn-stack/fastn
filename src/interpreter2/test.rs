@@ -22,7 +22,7 @@ pub fn interpret_helper(
                     foreign_variable.push("var".to_string());
                     foreign_function.push("fn".to_string());
                 }
-                let document = ParsedDocument::parse_with_line_number(module.as_str(), source, 0)?;
+                let document = ftd::interpreter2::ParsedDocument::parse(module.as_str(), source)?;
                 s = st.continue_after_import(
                     module.as_str(),
                     document,

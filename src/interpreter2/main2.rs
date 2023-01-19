@@ -822,7 +822,7 @@ pub struct ParsedDocument {
 }
 
 impl ParsedDocument {
-    fn parse(id: &str, source: &str) -> ftd::interpreter2::Result<ParsedDocument> {
+    pub fn parse(id: &str, source: &str) -> ftd::interpreter2::Result<ParsedDocument> {
         ParsedDocument::parse_with_line_number(id, source, 0)
     }
 
