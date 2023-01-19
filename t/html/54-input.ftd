@@ -1,20 +1,42 @@
--- string $x: Fifthtry
--- string $y: Fifthtry
+-- string $txt: Fifthtry
+-- string $email: Fifthtry
+-- string $pass: Fifthtry
+-- string $url: Fifthtry
 
+-- ftd.text: $txt
 
--- ftd.text: $x
--- ftd.text: $y
-
--- ftd.input:
-placeholder: Type Something Here...
-type: password
+-- ftd.text-input:
+placeholder: Type any text ...
+type: text
 width.fixed.px: 400
 border-width.px: 2
-$on-input$: $ftd.set-string($a = $x, v = $VALUE)
-$on-change$: $ftd.set-string($a = $y, v = $VALUE)
+$on-input$: $ftd.set-string($a = $txt, v = $VALUE)
 
--- ftd.input:
-placeholder: Type Something Here...
+-- ftd.text: $email
+
+-- ftd.text-input:
+type: email
+placeholder: Type your email here...
 width.fixed.px: 400
 border-width.px: 2
 multiline: true
+$on-input$: $ftd.set-string($a = $email, v = $VALUE)
+
+-- ftd.text: $pass
+
+-- ftd.text-input:
+placeholder: Type your password...
+type: password
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $pass, v = $VALUE)
+
+-- ftd.text: $url
+
+-- ftd.text-input:
+placeholder: Type any url...
+type: url
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $url, v = $VALUE)
+
