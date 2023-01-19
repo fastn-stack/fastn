@@ -1,29 +1,30 @@
-type ParsedDocC =
-    std::sync::RwLock<std::collections::HashMap<String, ftd::interpreter2::ParsedDocument>>;
-static PARSED_DOC_CACHE: once_cell::sync::Lazy<ParsedDocC> =
-    once_cell::sync::Lazy::new(|| std::sync::RwLock::new(std::collections::HashMap::new()));
+// type ParsedDocC =
+//     std::sync::RwLock<std::collections::HashMap<String, ftd::interpreter2::ParsedDocument>>;
+// static PARSED_DOC_CACHE: once_cell::sync::Lazy<ParsedDocC> =
+//     once_cell::sync::Lazy::new(|| std::sync::RwLock::new(std::collections::HashMap::new()));
 
-fn cached_doc(id: &str) -> Option<ftd::interpreter2::ParsedDocument> {
-    if let Ok(l) = PARSED_DOC_CACHE.read() {
-        return l.get(id).cloned();
-    }
-    None
-}
+// fn cached_doc(id: &str) -> Option<ftd::interpreter2::ParsedDocument> {
+//     if let Ok(l) = PARSED_DOC_CACHE.read() {
+//         return l.get(id).cloned();
+//     }
+//     None
+// }
 
 fn cache_get_or_set(
     id: &str,
     source: &str,
     line_number: usize,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::ParsedDocument> {
-    if let Some(doc) = cached_doc(id) {
-        return Ok(doc);
-    }
+    // TODO: Disabled cache for now
+    // if let Some(doc) = cached_doc(id) {
+    //     return Ok(doc);
+    // }
 
     let doc = ftd::interpreter2::ParsedDocument::parse_with_line_number(id, source, line_number)?;
     // TODO: do not cache editor
-    if let Ok(mut l) = PARSED_DOC_CACHE.write() {
-        l.insert(id.to_string(), doc.clone());
-    }
+    // if let Ok(mut l) = PARSED_DOC_CACHE.write() {
+    //     l.insert(id.to_string(), doc.clone());
+    // }
     Ok(doc)
 }
 
