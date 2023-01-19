@@ -1,7 +1,13 @@
+-- import: ftd.dev/assets
+
 -- ds.page: Part 2: Basic UI
 
 -- ds.youtube:
 v: -VzrI1o6IzU
+
+
+-- ds.h3: UI design of container components, Column and Row, with properties:
+
 
 -- ds.image:
 src: $assets.files.images.column.png
