@@ -8,13 +8,21 @@ fn main() {
 
 async fn traced_main() {
     use tracing_subscriber::layer::SubscriberExt;
+    let level = match std::env::var("TRACING") {
+        Ok(l) if l.to_lowercase().eq("trace") => tracing_forest::util::LevelFilter::TRACE,
+        Ok(l) if l.to_lowercase().eq("debug") => tracing_forest::util::LevelFilter::DEBUG,
+        Ok(l) if l.to_lowercase().eq("warn") => tracing_forest::util::LevelFilter::WARN,
+        Ok(l) if l.to_lowercase().eq("info") => tracing_forest::util::LevelFilter::INFO,
+        Ok(l) if l.to_lowercase().eq("error") => tracing_forest::util::LevelFilter::ERROR,
+        _ => tracing_forest::util::LevelFilter::OFF,
+    };
 
     tracing_forest::worker_task()
         .set_global(true)
         .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
             tracing_subscriber::Registry::default()
                 .with(tracing_forest::ForestLayer::default())
-                .with(tracing_forest::util::LevelFilter::INFO)
+                .with(level)
         })
         .on(outer_main())
         .await

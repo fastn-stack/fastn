@@ -582,6 +582,7 @@ You can try without providing port, it will automatically pick unused port."#,
         }
     };
 
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
     let app = move || {
         actix_web::App::new()
             .app_data(actix_web::web::Data::new(AppData {
@@ -591,6 +592,12 @@ You can try without providing port, it will automatically pick unused port."#,
                 external_css: external_css.clone(),
                 inline_css: inline_css.clone(),
             }))
+            .wrap(
+                actix_web::middleware::Logger::new(
+                    r#""%r" %Ts %s %b %a "%{Referer}i" "%{User-Agent}i""#,
+                )
+                .log_target(""),
+            )
             .route("/{path:.*}", actix_web::web::route().to(route))
     };
 
@@ -600,9 +607,6 @@ You can try without providing port, it will automatically pick unused port."#,
         bind_address,
         tcp_listener.local_addr()?.port()
     );
-
-    println!("### Configured tracing ###");
-
     actix_web::HttpServer::new(app)
         .listen(tcp_listener)?
         .run()
@@ -612,3 +616,4 @@ You can try without providing port, it will automatically pick unused port."#,
 
 // cargo install --features controller --path=.
 // FPM_CONTROLLER=http://127.0.0.1:8000 FPM_INSTANCE_ID=12345 fpm serve 8001
+// TRACING=INFO fpm serve
