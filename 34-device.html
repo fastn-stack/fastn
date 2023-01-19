@@ -461,6 +461,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -594,7 +595,8 @@ let query_parameters = new URLSearchParams();
 // @ts-ignore
 for (let [header, value] of Object.entries(request_data)) {
 if (header != "url" && header != "function" && header != "method") {
-query_parameters.set(header, value);
+let [key, val] = value.length == 2 ? value : [header, value];
+query_parameters.set(key, val);
 }
 }
 let query_string = query_parameters.toString();
@@ -606,6 +608,16 @@ else {
 window.location.href = url;
 }
 return;
+}
+let json = request_data[0];
+if (request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
+let new_json = {};
+// @ts-ignore
+for (let [header, value] of Object.entries(request_data)) {
+let [key, val] = value.length == 2 ? value : [header, value];
+new_json[key] = val;
+}
+json = new_json;
 }
 let xhr = new XMLHttpRequest();
 xhr.open(method_name, url);
@@ -658,7 +670,7 @@ window.ftd.set_value(ftd_variable, data[ftd_variable]);
 }
 }
 };
-xhr.send(JSON.stringify(request_data));
+xhr.send(JSON.stringify(json));
 }
 window.ftd = (function () {
 let ftd_data = {};
@@ -1220,14 +1232,14 @@ if(function(){
 return (resolve_reference("ftd#device", data)=="desktop");
 }()){
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#red", data).light;
+document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#red", data, null).light;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#red", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#red", data, null).dark;}
 }
 else {if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#green", data).light;
+document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#green", data, null).light;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#green", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("foo#green", data, null).dark;}
 }
 }
 

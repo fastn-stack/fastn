@@ -454,6 +454,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -587,7 +588,8 @@ let query_parameters = new URLSearchParams();
 // @ts-ignore
 for (let [header, value] of Object.entries(request_data)) {
 if (header != "url" && header != "function" && header != "method") {
-query_parameters.set(header, value);
+let [key, val] = value.length == 2 ? value : [header, value];
+query_parameters.set(key, val);
 }
 }
 let query_string = query_parameters.toString();
@@ -599,6 +601,16 @@ else {
 window.location.href = url;
 }
 return;
+}
+let json = request_data[0];
+if (request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
+let new_json = {};
+// @ts-ignore
+for (let [header, value] of Object.entries(request_data)) {
+let [key, val] = value.length == 2 ? value : [header, value];
+new_json[key] = val;
+}
+json = new_json;
 }
 let xhr = new XMLHttpRequest();
 xhr.open(method_name, url);
@@ -651,7 +663,7 @@ window.ftd.set_value(ftd_variable, data[ftd_variable]);
 }
 }
 };
-xhr.send(JSON.stringify(request_data));
+xhr.send(JSON.stringify(json));
 }
 window.ftd = (function () {
 let ftd_data = {};
@@ -1219,14 +1231,14 @@ if(function(){
 return (resolve_reference("foo#num", data)%2==0);
 }()){
 if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("inherited#colors.custom.two", data).light;
+document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("inherited#colors.custom.two", data, null).light;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("inherited#colors.custom.two", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("inherited#colors.custom.two", data, null).dark;}
 }
 else {if(!data["ftd#dark-mode"]){
-document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("inherited#colors.custom.one", data).light;
+document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("inherited#colors.custom.one", data, null).light;
 }
-else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("inherited#colors.custom.one", data).dark;}
+else {document.querySelector(`[data-id="0:main"]`).style["color"] = resolve_reference("inherited#colors.custom.one", data, null).dark;}
 }
 }
 
@@ -1235,14 +1247,14 @@ if(function(){
 return (resolve_reference("foo#num", data)%2==0);
 }()){
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).mobile)));}
 }
 else {if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).mobile)));}
 }
 }
 
@@ -1251,14 +1263,14 @@ if(function(){
 return (resolve_reference("foo#num", data)%2==0);
 }()){
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).mobile)));}
 }
 else {if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).mobile)));}
 }
 }
 
@@ -1267,14 +1279,14 @@ if(function(){
 return (resolve_reference("foo#num", data)%2==0);
 }()){
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).mobile)));}
 }
 else {if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).mobile)));}
 }
 }
 
@@ -1283,14 +1295,14 @@ if(function(){
 return (resolve_reference("foo#num", data)%2==0);
 }()){
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).mobile)));}
 }
 else {if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).mobile)));}
 }
 }
 
@@ -1299,14 +1311,14 @@ if(function(){
 return (resolve_reference("foo#num", data)%2==0);
 }()){
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-medium", data, null).mobile)));}
 }
 else {if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).desktop)));
+document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).desktop)));
 }
-else {document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data).mobile)));}
+else {document.querySelector(`[data-id="0:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSONstringify(resolve_reference("inherited#types.heading-large", data, null).mobile)));}
 }
 }
 window.set_value_main = {};
@@ -1317,17 +1329,17 @@ set_data_value(data, "foo#num" + "." + remaining, new_value);
 set_data_value(data, "foo#num", new_value);
 }
 
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
 };
 
@@ -1351,13 +1363,13 @@ set_data_value(data, "ftd#device", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
 }
 };
 
@@ -1379,15 +1391,15 @@ set_data_value(data, "inherited#types" + "." + remaining, new_value);
 set_data_value(data, "inherited#types", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-family"]){window.node_change_main["0:main__font-family"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__line-height"]){window.node_change_main["0:main__line-height"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-size"]){window.node_change_main["0:main__font-size"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__font-weight"]){window.node_change_main["0:main__font-weight"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__letter-spacing"]){window.node_change_main["0:main__letter-spacing"](data);
 }
 };
 

@@ -456,6 +456,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -589,7 +590,8 @@ let query_parameters = new URLSearchParams();
 // @ts-ignore
 for (let [header, value] of Object.entries(request_data)) {
 if (header != "url" && header != "function" && header != "method") {
-query_parameters.set(header, value);
+let [key, val] = value.length == 2 ? value : [header, value];
+query_parameters.set(key, val);
 }
 }
 let query_string = query_parameters.toString();
@@ -601,6 +603,16 @@ else {
 window.location.href = url;
 }
 return;
+}
+let json = request_data[0];
+if (request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
+let new_json = {};
+// @ts-ignore
+for (let [header, value] of Object.entries(request_data)) {
+let [key, val] = value.length == 2 ? value : [header, value];
+new_json[key] = val;
+}
+json = new_json;
 }
 let xhr = new XMLHttpRequest();
 xhr.open(method_name, url);
@@ -653,7 +665,7 @@ window.ftd.set_value(ftd_variable, data[ftd_variable]);
 }
 }
 };
-xhr.send(JSON.stringify(request_data));
+xhr.send(JSON.stringify(json));
 }
 window.ftd = (function () {
 let ftd_data = {};
@@ -1217,16 +1229,16 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["0,0,0,1:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,0,1:main"]`).innerHTML = resolve_reference("foo#boo:bv:0,0,0", data);
+document.querySelector(`[data-id="0,0,0,1:main"]`).innerHTML = resolve_reference("foo#boo:bv:0,0,0", data, null);
 }
 window.node_change_main["0,0,2:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,2:main"]`).innerHTML = resolve_reference("foo#foo:fv:0", data);
+document.querySelector(`[data-id="0,0,2:main"]`).innerHTML = resolve_reference("foo#foo:fv:0", data, null);
 }
 window.node_change_main["0,0,3:main__text"] = function(data) {
-document.querySelector(`[data-id="0,0,3:main"]`).innerHTML = resolve_reference("foo#moo:mv:0,0", data);
+document.querySelector(`[data-id="0,0,3:main"]`).innerHTML = resolve_reference("foo#moo:mv:0,0", data, null);
 }
 window.node_change_main["0,2:main__text"] = function(data) {
-document.querySelector(`[data-id="0,2:main"]`).innerHTML = resolve_reference("foo#foo:fv:0", data);
+document.querySelector(`[data-id="0,2:main"]`).innerHTML = resolve_reference("foo#foo:fv:0", data, null);
 }
 window.set_value_main = {};
 window.set_value_main["foo#boo:bv:0,0,0"] = function (data, new_value, remaining) {
@@ -1248,21 +1260,21 @@ set_data_value(data, "foo#foo:fv:0", new_value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#moo:mv:0,0"]){window["resolve_value_main"]["foo#moo:mv:0,0"](data);
 } else {
-let value = resolve_reference("foo#foo:fv:0", data);
+let value = resolve_reference("foo#foo:fv:0", data, null);
 set_data_value(data, "foo#moo:mv:0,0", value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:0,0,0"]){window["resolve_value_main"]["foo#boo:bv:0,0,0"](data);
 } else {
-let value = resolve_reference("foo#foo:fv:0", data);
+let value = resolve_reference("foo#foo:fv:0", data, null);
 set_data_value(data, "foo#boo:bv:0,0,0", value);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,2:main__text"]){window.node_change_main["0,0,2:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,2:main__text"]){window.node_change_main["0,2:main__text"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text"]){window.node_change_main["0,0,0,1:main__text"](data);
 }
 };
 
@@ -1274,7 +1286,7 @@ set_data_value(data, "foo#moo:mv:0,0", new_value);
 }
 if(!!window["resolve_value_main"] && !!window["resolve_value_main"]["foo#boo:bv:0,0,0"]){window["resolve_value_main"]["foo#boo:bv:0,0,0"](data);
 } else {
-let value = resolve_reference("foo#moo:mv:0,0", data);
+let value = resolve_reference("foo#moo:mv:0,0", data, null);
 set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,3:main__text"]){window.node_change_main["0,0,3:main__text"](data);
@@ -1284,6 +1296,15 @@ if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,1:main__text
 };
 
 window.resolve_value_main = {};
+window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
+if(function(){
+return (resolve_reference("foo#foo:fv:0", data)>2);
+}()){
+set_data_value(data, "foo#moo:mv:0,0", 6);
+}
+else {set_data_value(data, "foo#moo:mv:0,0", 7);}
+
+}
 window.resolve_value_main["foo#boo:bv:0,0,0"] = function(data) {
 if(function(){
 return (resolve_reference("foo#foo:fv:0", data)>10);
@@ -1296,15 +1317,6 @@ return (resolve_reference("foo#moo:mv:0,0", data)>6);
 set_data_value(data, "foo#boo:bv:0,0,0", 5);
 }
 else {set_data_value(data, "foo#boo:bv:0,0,0", 4);}
-
-}
-window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
-if(function(){
-return (resolve_reference("foo#foo:fv:0", data)>2);
-}()){
-set_data_value(data, "foo#moo:mv:0,0", 6);
-}
-else {set_data_value(data, "foo#moo:mv:0,0", 7);}
 
 }
 window.ftd.init("main", "ftd-data", "ftd-external-children");

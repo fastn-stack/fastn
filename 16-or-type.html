@@ -456,6 +456,7 @@
 * {
 padding: 0;
 margin: 0;
+gap: 0px;
 }
 
 
@@ -589,7 +590,8 @@ let query_parameters = new URLSearchParams();
 // @ts-ignore
 for (let [header, value] of Object.entries(request_data)) {
 if (header != "url" && header != "function" && header != "method") {
-query_parameters.set(header, value);
+let [key, val] = value.length == 2 ? value : [header, value];
+query_parameters.set(key, val);
 }
 }
 let query_string = query_parameters.toString();
@@ -601,6 +603,16 @@ else {
 window.location.href = url;
 }
 return;
+}
+let json = request_data[0];
+if (request_data.length !== 1 || (request_data[0].length === 2 && Array.isArray(request_data[0]))) {
+let new_json = {};
+// @ts-ignore
+for (let [header, value] of Object.entries(request_data)) {
+let [key, val] = value.length == 2 ? value : [header, value];
+new_json[key] = val;
+}
+json = new_json;
 }
 let xhr = new XMLHttpRequest();
 xhr.open(method_name, url);
@@ -653,7 +665,7 @@ window.ftd.set_value(ftd_variable, data[ftd_variable]);
 }
 }
 };
-xhr.send(JSON.stringify(request_data));
+xhr.send(JSON.stringify(json));
 }
 window.ftd = (function () {
 let ftd_data = {};
@@ -1223,10 +1235,10 @@ a.value = !a.value
 
 window.node_change_main = {};
 window.node_change_main["1:main__padding"] = function(data) {
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#value", data)))));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#value", data, null)))));
 }
 window.node_change_main["2:main__padding"] = function(data) {
-document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}`.format(JSONstringify(resolve_reference("foo#len", data)));
+document.querySelector(`[data-id="2:main"]`).style["padding"] = `{0}`.format(JSONstringify(resolve_reference("foo#len", data, null)));
 }
 window.node_change_main["3:main__padding"] = function(data) {
 if(function(){
@@ -1234,7 +1246,7 @@ return resolve_reference("foo#flag", data);
 }()){
 document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}%`.format(JSONstringify(20))));
 }
-else {document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}`.format(JSONstringify(resolve_reference("foo#len", data)));}
+else {document.querySelector(`[data-id="3:main"]`).style["padding"] = `{0}`.format(JSONstringify(resolve_reference("foo#len", data, null)));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
@@ -1255,9 +1267,9 @@ set_data_value(data, "foo#len" + "." + remaining, new_value);
 set_data_value(data, "foo#len", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__padding"]){window.node_change_main["3:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__padding"]){window.node_change_main["2:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__padding"]){window.node_change_main["3:main__padding"](data);
 }
 };
 
