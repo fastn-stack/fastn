@@ -96,7 +96,7 @@ fn fpm_2022_js() -> &'static str {
     if fpm::utils::is_test() {
         return "FPM_JS";
     }
-    include_str!("../fpm.js")
+    include_str!("../fpm2022.js")
 }
 
 fn ftd_js() -> String {
