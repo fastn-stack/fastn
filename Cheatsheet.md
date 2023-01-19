@@ -917,21 +917,83 @@ $on-click$: $set-system()
 enable_system_mode()
 ```
 
-## `http(url: string, method: string)`
+## `http(url: string, method: string, ...request-data)`
 
 This function do http request
 
+- We can either pass `named` data or `unnamed` data as 
+  `request-data` values.
+
+- For `named` data, the values need to be passed as `(key,value)` tuples.
+
+  For example `http("www.fifthtry.com", "post", ("name": "John"), ("age": 25))`
+
+  request-data = `{ "name": "John", "age": 25 }`
+
 ```ftd
--- ftd.text: Click here
-$on-click$: $http-call(url = google.com, method = get, name = John)
+-- ftd.text: Click to send POST request
+$on-click$: $http-call(url = https://www.fifthtry.com, method = post, name = John, age = 23)
 
 -- void http-call(url,method,name):
 string url:
 string method:
 string name:
+integer age: 
 
-http(url, method, name)
+;; Named request-data
+http(url, method, ("name": name),("age": age))
 ```
+
+- For `unnamed` data, i.e when keys are not passed with data values, then the keys will be indexed 
+  based on the order in which these values are passed. 
+ 
+  For example `http("www.fifthtry.com", "post", "John", 25)`
+
+  request-data = `{ "0": "John", "1": 25 }`
+
+```ftd
+-- ftd.text: Click to send POST request
+$on-click$: $http-call(url = https://www.fifthtry.com, method = post, name = John, age = 23)
+
+-- void http-call(url,method,name):
+string url:
+string method:
+string name:
+integer age: 
+
+;; Unnamed request-data
+http(url, method, name, age)
+```
+
+- In case if a unnamed `record` variable is passed as request-data,
+  in that case, the record's `field` names will be used as key values.
+
+  For example: Let's say we have a `Person` record, and we have created a `alice` 
+  record of `Person` type. And if we pass this `alice` variable as request-data
+  then request-data will be `{ "name" : "Alice", "age": 22 }`
+
+```ftd
+-- record Person: 
+caption name: 
+integer age: 
+
+-- Person alice: Alice
+age: 22
+
+-- ftd.text: Click to send POST request
+$on-click$: $http-call(url = https://www.fifthtry.com, method = post, person = $alice)
+
+-- void http-call(url,method,name):
+string url:
+string method:
+Person person:
+
+;; Unnamed record as request-data
+http(url, method, person)
+```
+
+- For `GET` requests, the request-data will sent as `query parameters`
+- For `POST` requests, the request-data will be sent as request `body`
 
 Response JSON:
 
