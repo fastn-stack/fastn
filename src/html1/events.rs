@@ -71,6 +71,13 @@ impl ftd::html1::Action {
             ftd::interpreter2::Value::Integer { value } => serde_json::json!(value),
             ftd::interpreter2::Value::Decimal { value } => serde_json::json!(value),
             ftd::interpreter2::Value::Boolean { value } => serde_json::json!(value),
+            ftd::interpreter2::Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    ftd::html1::Action::from_value(data)
+                } else {
+                    serde_json::Value::Null
+                }
+            }
             t => {
                 unimplemented!("{:?}", t)
             }
