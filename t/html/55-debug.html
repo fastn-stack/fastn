@@ -1227,12 +1227,7 @@ window.node_change_main["1:main__-webkit-box-orient"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["-webkit-box-orient"] = eval(`if (!!{0}) {
-"vertical"
-} else {
-null
-}
-`.format(JSONstringify(2)));
+document.querySelector(`[data-id="1:main"]`).style["-webkit-box-orient"] = `vertical`.format(JSONstringify(2));
 }
 else { document.querySelector(`[data-id="1:main"]`).style["-webkit-box-orient"] = null; }
 }
@@ -1250,12 +1245,7 @@ window.node_change_main["1:main__display"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["display"] = eval(`if (!!{0}) {
-"-webkit-box"
-} else {
-"block"
-}
-`.format(JSONstringify(2)));
+document.querySelector(`[data-id="1:main"]`).style["display"] = `-webkit-box`.format(JSONstringify(2));
 }
 else { document.querySelector(`[data-id="1:main"]`).style["display"] = "block"; }
 }
@@ -1264,12 +1254,7 @@ window.node_change_main["1:main__overflow"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["overflow"] = eval(`if (!!{0}) {
-"hidden"
-} else {
-null
-}
-`.format(JSONstringify(2)));
+document.querySelector(`[data-id="1:main"]`).style["overflow"] = `hidden`.format(JSONstringify(2));
 }
 else { document.querySelector(`[data-id="1:main"]`).style["overflow"] = null; }
 }

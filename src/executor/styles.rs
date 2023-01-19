@@ -2353,47 +2353,15 @@ impl Loading {
 pub struct LineClamp;
 
 impl LineClamp {
-    pub(crate) fn display_pattern(display: &str) -> (String, bool) {
-        (
-            format!(
-                indoc::indoc! {"
-                   if (!!{{0}}) {{
-                        \"-webkit-box\"
-                    }} else {{
-                        \"{display}\"
-                    }}
-                "},
-                display = display
-            ),
-            true,
-        )
+    pub(crate) fn display_pattern() -> (String, bool) {
+        ("-webkit-box".to_string(), false)
     }
 
     pub(crate) fn overflow_pattern() -> (String, bool) {
-        (
-            indoc::indoc! {"
-               if (!!{0}) {
-                    \"hidden\"
-                } else {
-                    null
-                }
-            "}
-            .to_string(),
-            true,
-        )
+        ("hidden".to_string(), false)
     }
 
     pub(crate) fn webkit_box_orient_pattern() -> (String, bool) {
-        (
-            indoc::indoc! {"
-               if (!!{0}) {
-                    \"vertical\"
-                } else {
-                    null
-                }
-            "}
-            .to_string(),
-            true,
-        )
+        ("vertical".to_string(), false)
     }
 }

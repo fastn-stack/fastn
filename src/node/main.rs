@@ -283,9 +283,7 @@ impl ftd::executor::Text {
                     .map(|v| v.map(|_| "-webkit-box".to_string()))
                     .value,
                 self.line_clamp.to_owned(),
-                Some(ftd::executor::LineClamp::display_pattern(
-                    n.display.as_str(),
-                )),
+                Some(ftd::executor::LineClamp::display_pattern()),
                 doc_id,
                 Some(format!("\"{}\"", n.display)),
             ),
