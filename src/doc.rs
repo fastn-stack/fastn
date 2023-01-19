@@ -1,4 +1,5 @@
-type ParsedDocC = std::sync::RwLock<std::collections::HashMap<String, ftd::ParsedDocument>>;
+type ParsedDocC =
+    std::sync::RwLock<std::collections::HashMap<String, ftd::interpreter2::ParsedDocument>>;
 static PARSED_DOC_CACHE: once_cell::sync::Lazy<ParsedDocC> =
     once_cell::sync::Lazy::new(|| std::sync::RwLock::new(std::collections::HashMap::new()));
 
@@ -133,7 +134,8 @@ pub async fn interpret_helper<'a>(
     line_number: usize,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Document> {
     tracing::info!(document = name);
-    let mut s = ftd::interpreter2::interpret_with_line_number(name, source, line_number)?;
+    let doc = ftd::interpreter2::ParsedDocument::parse_with_line_number(name, source, line_number)?;
+    let mut s = ftd::interpreter2::interpret_with_line_number(name, doc, line_number)?;
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),
         lib.config.package.name.to_string(),
