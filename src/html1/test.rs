@@ -25,9 +25,11 @@ pub fn interpret_helper(
                 if let Ok(value) = std::fs::read_to_string(format!("./t/html/{}.ftd", module)) {
                     source = value;
                 }
+                let document = ParsedDocument::parse_with_line_number(module, source, 0)?;
+
                 s = st.continue_after_import(
                     module.as_str(),
-                    source.as_str(),
+                    document,
                     foreign_variable,
                     foreign_function,
                     0,

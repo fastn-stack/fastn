@@ -76,7 +76,7 @@ pub use constants::{
 };
 pub use main2::{
     interpret, interpret_with_line_number, Document, Interpreter, InterpreterState,
-    InterpreterWithoutState, StateWithThing, ToProcess,
+    InterpreterWithoutState, ParsedDocument, StateWithThing, ToProcess,
 };
 pub use tdoc::TDoc;
 pub use things::{
