@@ -280,7 +280,7 @@ impl ftd::executor::Text {
             ftd::node::Value::from_executor_value_with_default(
                 self.line_clamp
                     .to_owned()
-                    .map(|_| Some("-webkit-box".to_string()))
+                    .map(|v| v.map(|_| "-webkit-box".to_string()))
                     .value,
                 self.line_clamp.to_owned(),
                 Some(ftd::executor::LineClamp::display_pattern(
@@ -296,7 +296,7 @@ impl ftd::executor::Text {
             ftd::node::Value::from_executor_value(
                 self.line_clamp
                     .to_owned()
-                    .map(|_| Some("hidden".to_string()))
+                    .map(|v| v.map(|_| "hidden".to_string()))
                     .value,
                 self.line_clamp.to_owned(),
                 Some(ftd::executor::LineClamp::overflow_pattern()),
@@ -322,7 +322,7 @@ impl ftd::executor::Text {
             ftd::node::Value::from_executor_value(
                 self.line_clamp
                     .to_owned()
-                    .map(|_| Some("vertical".to_string()))
+                    .map(|v| v.map(|_| "vertical".to_string()))
                     .value,
                 self.line_clamp.to_owned(),
                 Some(ftd::executor::LineClamp::webkit_box_orient_pattern()),
