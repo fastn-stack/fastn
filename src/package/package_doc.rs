@@ -406,7 +406,7 @@ pub(crate) async fn read_ftd_2022(
         .extend(lib.config.downloaded_assets);
 
     let font_style = config.get_font_style();
-    let file_content = fpm::time("replace_markers").it(fpm::utils::replace_markers_2022(
+    let file_content = fpm::utils::replace_markers_2022(
         ftd::build(),
         html_ui,
         ftd::build_js(),
@@ -416,7 +416,7 @@ pub(crate) async fn read_ftd_2022(
         config.ftd_inline_css.as_slice(),
         font_style.as_str(),
         base_url,
-    ));
+    );
 
     Ok(file_content.into())
 }
@@ -479,14 +479,14 @@ pub(crate) async fn read_ftd_2021(
     };
     let ftd_doc = fpm::time("to_rt()").it(main_ftd_doc.to_rt("main", &main.id));
 
-    let file_content = fpm::time("replace_markers").it(fpm::utils::replace_markers_2021(
+    let file_content = fpm::utils::replace_markers_2021(
         fpm::ftd_html(),
         config,
         main.id_to_path().as_str(),
         doc_title.as_str(),
         base_url,
         &ftd_doc,
-    ));
+    );
 
     Ok(file_content.into())
 }
