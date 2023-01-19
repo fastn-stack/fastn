@@ -16,11 +16,9 @@ fn cache_get_or_set(
     line_number: usize,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::ParsedDocument> {
     if let Some(doc) = cached_doc(id) {
-        println!("returning from cache: {}", id);
         return Ok(doc);
     }
 
-    println!("setting and returning from cache: {}", id);
     let doc = ftd::interpreter2::ParsedDocument::parse_with_line_number(id, source, line_number)?;
     if let Ok(mut l) = PARSED_DOC_CACHE.write() {
         l.insert(id.to_string(), doc.clone());
