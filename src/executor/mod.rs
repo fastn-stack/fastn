@@ -13,13 +13,13 @@ mod value;
 mod youtube_id;
 
 pub use element::{
-    Code, Column, Common, Container, Element, Event, Iframe, Image, Input, Row, Text,
+    Code, Column, Common, Container, Element, Event, Iframe, Image, TextInput, Row, Text,
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, Color, ColorValue, Cursor, FontSize, Length, Loading,
     Overflow, Region, Resize, Resizing, ResponsiveType, SpacingMode, TextAlign, TextTransform,
-    WhiteSpace,
+    TextInputType, WhiteSpace,
 };
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;
