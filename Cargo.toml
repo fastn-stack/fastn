@@ -123,7 +123,7 @@ features=["macos_kqueue"]
 #
 # Once we are closer to release we will stop using this and adopot semver.
 git = "https://github.com/FifthTry/ftd"
-rev = "7daacd1"
+rev = "24237de1fc17e093b86e739a3063fe2510edd457"
 #
 # If you are testing fpm against local ftd, you can keep ftd and fpm checked out in
 # same folder and uncomment the next `path` line to use local ftd.
