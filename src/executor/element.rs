@@ -47,6 +47,7 @@ pub struct Column {
 pub struct Text {
     pub text: ftd::executor::Value<Rendered>,
     pub text_align: ftd::executor::Value<Option<ftd::executor::TextAlign>>,
+    pub line_clamp: ftd::executor::Value<Option<i64>>,
     pub common: Common,
 }
 
@@ -437,6 +438,7 @@ pub fn text_from_properties(
             line_number,
             "text-align",
         )?,
+        line_clamp: ftd::executor::value::optional_i64("line-clamp", properties, arguments, doc, line_number)?,
         common,
     })
 }
@@ -485,6 +487,7 @@ pub fn integer_from_properties(
             line_number,
             "text-align",
         )?,
+        line_clamp: ftd::executor::value::optional_i64("line-clamp", properties, arguments, doc, line_number)?,
     })
 }
 
@@ -532,6 +535,7 @@ pub fn decimal_from_properties(
             line_number,
             "text-align",
         )?,
+        line_clamp: ftd::executor::value::optional_i64("line-clamp", properties, arguments, doc, line_number)?,
     })
 }
 
@@ -565,6 +569,7 @@ pub fn boolean_from_properties(
             line_number,
             "text-align",
         )?,
+        line_clamp: ftd::executor::value::optional_i64("line-clamp", properties, arguments, doc, line_number)?,
     })
 }
 

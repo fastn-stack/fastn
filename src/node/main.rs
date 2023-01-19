@@ -274,6 +274,16 @@ impl ftd::executor::Text {
                 doc_id,
             ),
         );
+
+        if let Some(clamp) = &self.line_clamp.value {
+            n.style.insert(s("display"),
+                           ftd::node::Value::from_string("-webkit-box"));
+            n.style.insert(s("overflow"), ftd::node::Value::from_string("hidden"));
+            n.style.insert(s("-webkit-line-clamp"), ftd::node::Value::from_string(format!("{}", clamp).as_str()));
+            n.style
+                .insert(s("-webkit-box-orient"), ftd::node::Value::from_string("vertical"));
+        }
+
         n.classes.extend(self.common.add_class());
         n.classes.push("ft_md".to_string());
         n.text = ftd::node::Value::from_executor_value(
