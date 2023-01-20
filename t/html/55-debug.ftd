@@ -1,9 +1,0 @@
--- boolean $flag: false
-
--- ftd.boolean: $flag
-
-
--- ftd.text: Hello world This is some random sample text
-width.fixed.px: 100
-line-clamp if { flag }: 2
-$on-click$: $ftd.toggle($a = $flag)

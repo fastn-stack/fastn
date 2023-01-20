@@ -1,0 +1,19 @@
+;; Line clamp -> ftd.text, ftd.boolean, ftd.integer, ftd.decimal
+;; Also adding in ftd.code
+
+-- boolean $flag: false
+
+-- ftd.boolean: $flag
+
+-- ftd.text: Hello world This is some random sample text
+width.fixed.px: 100
+line-clamp if { flag }: 1
+line-clamp: 3
+$on-click$: $ftd.toggle($a = $flag)
+
+-- ftd.code:
+lang: rs
+
+pub fn foo() {
+    println!("Hello world!");
+}

@@ -116,6 +116,7 @@ impl ImageSrc {
 pub struct Code {
     pub text: ftd::executor::Value<Rendered>,
     pub text_align: ftd::executor::Value<Option<ftd::executor::TextAlign>>,
+    pub line_clamp: ftd::executor::Value<Option<i64>>,
     pub common: Common,
 }
 
@@ -190,6 +191,7 @@ pub fn code_from_properties(
             "text-align",
         )?,
         common,
+        line_clamp: ftd::executor::value::optional_i64("line-clamp", properties, arguments, doc, line_number)?
     })
 }
 
