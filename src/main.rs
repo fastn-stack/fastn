@@ -3,19 +3,21 @@ fn main() {
         .enable_all()
         .build()
         .unwrap()
-        .block_on(traced_main())
+        .block_on(async {
+            if fpm::utils::is_traced() {
+                traced_main().await
+            } else {
+                outer_main().await
+            }
+        })
 }
 
 async fn traced_main() {
     use tracing_subscriber::layer::SubscriberExt;
-    let level = match std::env::var("TRACING") {
-        Ok(l) if l.to_lowercase().eq("trace") => tracing_forest::util::LevelFilter::TRACE,
-        Ok(l) if l.to_lowercase().eq("debug") => tracing_forest::util::LevelFilter::DEBUG,
-        Ok(l) if l.to_lowercase().eq("warn") => tracing_forest::util::LevelFilter::WARN,
-        Ok(l) if l.to_lowercase().eq("info") => tracing_forest::util::LevelFilter::INFO,
-        Ok(l) if l.to_lowercase().eq("error") => tracing_forest::util::LevelFilter::ERROR,
-        _ => tracing_forest::util::LevelFilter::OFF,
-    };
+    let level = std::env::var("TRACING")
+        .unwrap_or_else(|_| "info".to_string())
+        .parse::<tracing_forest::util::LevelFilter>()
+        .unwrap_or(tracing_forest::util::LevelFilter::INFO);
 
     tracing_forest::worker_task()
         .set_global(true)
@@ -228,6 +230,7 @@ fn app(version: &'static str) -> clap::Command {
         .arg_required_else_help(true)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
+        .arg(clap::arg!(--trace "Activate tracing").hide(true))
         .subcommand(
             // Initial subcommand format
             // fpm create-package <project-name> [project-path]

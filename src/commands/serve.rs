@@ -543,7 +543,7 @@ pub async fn listen(
     inline_css: Vec<String>,
 ) -> fpm::Result<()> {
     use colored::Colorize;
-    dotenv::dotenv().ok();
+
     if package_download_base_url.is_some() {
         download_init_package(package_download_base_url).await?;
     }
@@ -582,7 +582,6 @@ You can try without providing port, it will automatically pick unused port."#,
         }
     };
 
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
     let app = move || {
         actix_web::App::new()
             .app_data(actix_web::web::Data::new(AppData {

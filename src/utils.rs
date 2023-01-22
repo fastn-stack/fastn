@@ -22,7 +22,11 @@ macro_rules! warning {
     ($($t:tt)*) => {{
         use colored::Colorize;
         let msg = format!($($t)*);
-        eprintln!("WARN: {}", msg.yellow());
+        if fpm::utils::is_traced() {
+            tracing::warn!(msg);
+        } else {
+            eprintln!("WARN: {}", msg.yellow());
+        }
         msg
     }};
 }
@@ -547,6 +551,10 @@ pub fn replace_markers_2022(
 
 pub fn is_test() -> bool {
     cfg!(test) || std::env::args().any(|e| e == "--test")
+}
+
+pub fn is_traced() -> bool {
+    std::env::var("TRACING").is_ok() || std::env::args().any(|e| e == "--trace")
 }
 
 pub(crate) async fn write(
