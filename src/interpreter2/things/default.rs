@@ -6592,7 +6592,7 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ),
         ftd::interpreter2::Argument::default(
             "rotate",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::decimal()
                 .into_optional()
                 .into_kind_data(),
         ),

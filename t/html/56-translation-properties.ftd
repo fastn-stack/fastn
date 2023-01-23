@@ -3,7 +3,7 @@ rotate: -40
 padding-vertical.px: 20
 
 -- ftd.text: ROTATE CLOCKWISE
-rotate: 40
+rotate: 49.5
 padding-vertical.px: 20
 
 -- ftd.text: MOVED DOWN

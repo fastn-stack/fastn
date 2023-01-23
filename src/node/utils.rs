@@ -38,7 +38,7 @@ pub(crate) fn get_translate(
     scale: &Option<f64>,
     scale_x: &Option<f64>,
     scale_y: &Option<f64>,
-    rotate: &Option<i64>,
+    rotate: &Option<f64>,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<Option<String>> {

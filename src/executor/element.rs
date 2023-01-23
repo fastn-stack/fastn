@@ -390,7 +390,7 @@ pub struct Common {
     pub move_down: ftd::executor::Value<Option<ftd::executor::TranslateLength>>,
     pub move_left: ftd::executor::Value<Option<ftd::executor::TranslateLength>>,
     pub move_right: ftd::executor::Value<Option<ftd::executor::TranslateLength>>,
-    pub rotate: ftd::executor::Value<Option<i64>>,
+    pub rotate: ftd::executor::Value<Option<f64>>,
     pub scale: ftd::executor::Value<Option<f64>>,
     pub scale_x: ftd::executor::Value<Option<f64>>,
     pub scale_y: ftd::executor::Value<Option<f64>>,
@@ -715,7 +715,7 @@ pub fn common_from_properties(
             line_number,
             "move-right",
         )?,
-        rotate: ftd::executor::value::optional_i64(
+        rotate: ftd::executor::value::optional_f64(
             "rotate",
             properties,
             arguments,
