@@ -29,6 +29,84 @@ impl CheckMap for ftd::Map<ftd::node::Value> {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn get_translate(
+    left: &Option<i64>,
+    right: &Option<i64>,
+    up: &Option<i64>,
+    down: &Option<i64>,
+    scale: &Option<f64>,
+    scale_x: &Option<f64>,
+    scale_y: &Option<f64>,
+    rotate: &Option<i64>,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::p1::Result<Option<String>> {
+    let mut translate = match (left, right, up, down) {
+        (Some(_), Some(_), Some(_), Some(_)) => {
+            return ftd::p2::utils::e2(
+                "move-up, move-down, move-left and move-right all 4 can't be used at once!",
+                doc_id,
+                line_number,
+            );
+        }
+        (Some(_), Some(_), _, _) => {
+            return ftd::p2::utils::e2(
+                "move-left, move-right both can't be used at once!",
+                doc_id,
+                line_number,
+            );
+        }
+        (_, _, Some(_), Some(_)) => {
+            // TODO
+            return ftd::p2::utils::e2(
+                "move-up, move-down both can't be used at once!",
+                doc_id,
+                line_number,
+            );
+        }
+        (Some(l), None, None, None) => Some(format!("translateX(-{}px) ", l)),
+        (Some(l), None, Some(u), None) => Some(format!("translate(-{}px, -{}px) ", l, u)),
+        (Some(l), None, None, Some(d)) => Some(format!("translate(-{}px, {}px) ", l, d)),
+        (None, Some(r), None, None) => Some(format!("translateX({}px) ", r)),
+        (None, Some(r), Some(u), None) => Some(format!("translate({}px, -{}px) ", r, u)),
+        (None, Some(r), None, Some(d)) => Some(format!("translate({}px, {}px) ", r, d)),
+        (None, None, Some(u), None) => Some(format!("translateY(-{}px) ", u)),
+        (None, None, None, Some(d)) => Some(format!("translateY({}px) ", d)),
+        _ => None,
+    };
+
+    if let Some(ref scale) = scale {
+        if let Some(d) = translate {
+            translate = Some(format!("{} scale({})", d, scale));
+        } else {
+            translate = Some(format!("scale({})", scale));
+        };
+    }
+    if let Some(ref scale) = scale_x {
+        if let Some(d) = translate {
+            translate = Some(format!("{} scaleX({})", d, scale));
+        } else {
+            translate = Some(format!("scaleX({})", scale));
+        };
+    }
+    if let Some(ref scale) = scale_y {
+        if let Some(d) = translate {
+            translate = Some(format!("{} scaleY({})", d, scale));
+        } else {
+            translate = Some(format!("scaleY({})", scale));
+        };
+    }
+    if let Some(ref rotate) = rotate {
+        if let Some(d) = translate {
+            translate = Some(format!("{} rotate({}deg)", d, rotate));
+        } else {
+            translate = Some(format!("rotate({}deg)", rotate));
+        };
+    }
+    Ok(translate)
+}
+
 pub(crate) fn wrap_to_css(wrap: bool) -> String {
     if wrap {
         "wrap".to_string()

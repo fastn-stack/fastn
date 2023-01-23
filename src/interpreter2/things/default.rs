@@ -6540,6 +6540,54 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
+            "move-up",
+            ftd::interpreter2::Kind::integer()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "move-down",
+            ftd::interpreter2::Kind::integer()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "move-left",
+            ftd::interpreter2::Kind::integer()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "move-right",
+            ftd::interpreter2::Kind::integer()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "rotate",
+            ftd::interpreter2::Kind::integer()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "scale",
+            ftd::interpreter2::Kind::decimal()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "scale-x",
+            ftd::interpreter2::Kind::decimal()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "scale-y",
+            ftd::interpreter2::Kind::decimal()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
             "white-space",
             ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_WHITESPACE)
                 .into_optional()

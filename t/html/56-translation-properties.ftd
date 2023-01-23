@@ -1,0 +1,31 @@
+-- ftd.text: ROTATED
+rotate: 40
+padding-vertical.px: 20
+
+-- ftd.text: MOVED DOWN
+move-down: 20
+padding-vertical.px: 20
+
+-- ftd.text: MOVED UP
+move-up: 20
+padding-vertical.px: 20
+
+-- ftd.text: MOVED LEFT
+move-left: 20
+padding-vertical.px: 20
+
+-- ftd.text: MOVED RIGHT
+move-right: 20
+padding-vertical.px: 20
+
+-- ftd.text: SCALED 2x
+scale: 2.0
+padding-vertical.px: 20
+
+-- ftd.text: SCALED-X 0.5x
+scale-x: 0.5
+padding-vertical.px: 20
+
+-- ftd.text: SCALED-Y 0.5x
+scale-y: 0.5
+padding-vertical.px: 20

@@ -524,6 +524,28 @@ impl ftd::executor::Common {
 
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
+        let translate = ftd::node::utils::get_translate(
+            &self.move_left.value,
+            &self.move_right.value,
+            &self.move_up.value,
+            &self.move_down.value,
+            &self.scale.value,
+            &self.scale_x.value,
+            &self.scale_y.value,
+            &self.rotate.value,
+            doc_id,
+            self.line_number,
+        ).unwrap();
+
+        if let Some(t) = translate {
+            let data = if let Some(existing) = d.get_mut("transform").and_then(|v| v.value.as_ref()) {
+                format!("{} {}", existing, t)
+            } else {
+                t
+            };
+            d.insert(s("transform"), ftd::node::Value::from_string(data.as_str()));
+        }
+
         if !self.event.is_empty() {
             d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
         }
