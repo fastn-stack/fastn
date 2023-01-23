@@ -302,15 +302,7 @@ This is a body text.
 ```
 
 ### `text-align`: `ftd.text-align`
-
-```ftd
--- or-type text-align:
--- constant string start: start
--- constant string center: center
--- constant string end: end
--- constant string justify: justify
--- end: text-align
-```
+### `line-clamp`: `optional integer`
 
 ## `ftd.code` - To render a code block
 
@@ -338,6 +330,7 @@ Currently includes these themes
 Also see InspiredGitHub from [here](https://github.com/sethlopezme/InspiredGitHub.tmtheme)
 
 ### `body`: `string` -> specify the code to display
+### `line-clamp`: `optional integer` -> clamps the specified number of lines
 ### `text-align`: `ftd.text-align` -> specify text alignment
 (Refer or-type `ftd.text-align` to know all possible values)
 
@@ -357,6 +350,8 @@ Also see InspiredGitHub from [here](https://github.com/sethlopezme/InspiredGitHu
 ### `value`: `caption or body` -> decimal value to be rendered
 
 ### `text-align`: `ftd.text-align -> specify text alignment
+
+### `line-clamp`: `optional integer`
 
 ## `ftd.iframe` - To render an iframe
 
@@ -760,6 +755,23 @@ optional string font-family:
 ```
 
 - `z-index`: `optional integer`
+
+# Text Attributes
+
+- `text-align`: `ftd.text-align`
+
+### `ftd.text-align`
+
+```ftd
+-- or-type text-align:
+-- constant string start: start
+-- constant string center: center
+-- constant string end: end
+-- constant string justify: justify
+-- end: text-align
+```
+
+- `line-clamp`: `optional integer`
 
 # Events
 
