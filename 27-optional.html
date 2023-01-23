@@ -685,7 +685,7 @@ if (action.values.hasOwnProperty(argument)) {
 let value = action.values[argument][1] !== undefined ? action.values[argument][1] : action.values[argument];
 if (typeof value === 'object') {
 let function_argument = value;
-if (!!function_argument.reference) {
+if (!!function_argument && !!function_argument.reference) {
 let obj_value = null;
 try {
 obj_value = obj.value;
@@ -1276,15 +1276,15 @@ set_data_value(data, "foo#name", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__text"]){window.node_change_main["2:main__text"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__display"]){window.node_change_main["3:main__display"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__text"]){window.node_change_main["3:main__text"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__display"]){window.node_change_main["2:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__display"]){window.node_change_main["3:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
 }
 };
 
