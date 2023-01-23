@@ -3,13 +3,7 @@ fn main() {
         .enable_all()
         .build()
         .unwrap()
-        .block_on(async {
-            if fpm::utils::is_traced() {
-                traced_main().await
-            } else {
-                outer_main().await
-            }
-        })
+        .block_on(traced_main())
 }
 
 async fn traced_main() {
@@ -19,15 +13,26 @@ async fn traced_main() {
         .parse::<tracing_forest::util::LevelFilter>()
         .unwrap_or(tracing_forest::util::LevelFilter::INFO);
 
-    tracing_forest::worker_task()
-        .set_global(true)
-        .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
-            tracing_subscriber::Registry::default()
-                .with(tracing_forest::ForestLayer::default())
-                .with(level)
-        })
-        .on(outer_main())
-        .await
+    // only difference between the two branches of this if condition is the extra forest layer.
+    if fpm::utils::is_traced() {
+        tracing_forest::worker_task()
+            .set_global(true)
+            .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
+                tracing_subscriber::Registry::default()
+                    .with(tracing_forest::ForestLayer::default())
+                    .with(level)
+            })
+            .on(outer_main())
+            .await
+    } else {
+        tracing_forest::worker_task()
+            .set_global(true)
+            .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
+                tracing_subscriber::Registry::default().with(level)
+            })
+            .on(outer_main())
+            .await
+    }
 }
 
 async fn outer_main() {
@@ -61,8 +66,8 @@ async fn async_main() -> fpm::Result<()> {
         return fpm::create_package(name, path, download_base_url).await;
     }
 
-    if let Some(mark) = matches.subcommand_matches("serve") {
-        let port = mark.value_of_("port").map(|p| match p.parse::<u16>() {
+    if let Some(serve) = matches.subcommand_matches("serve") {
+        let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
             Ok(v) => v,
             Err(_) => {
                 eprintln!("Provided port {} is not a valid port.", p.to_string().red());
@@ -70,13 +75,18 @@ async fn async_main() -> fpm::Result<()> {
             }
         });
 
-        let bind = mark.value_of_("bind").unwrap_or("127.0.0.1").to_string();
-        let download_base_url = mark.value_of_("download-base-url");
-        let edition = mark.value_of_("edition");
-        let external_js = mark.values_of_("external-js");
-        let inline_js = mark.values_of_("js");
-        let external_css = mark.values_of_("external-css");
-        let inline_css = mark.values_of_("css");
+        let bind = serve.value_of_("bind").unwrap_or("127.0.0.1").to_string();
+        let download_base_url = serve.value_of_("download-base-url");
+        let edition = serve.value_of_("edition");
+        let external_js = serve.values_of_("external-js");
+        let inline_js = serve.values_of_("js");
+        let external_css = serve.values_of_("external-css");
+        let inline_css = serve.values_of_("css");
+
+        if serve.get_flag("cached-parse") {
+            fpm::warning!("using cached parser, files modifications may be ignored");
+            fpm::utils::enable_parse_caching(true);
+        }
 
         return fpm::listen(
             bind.as_str(),
@@ -395,6 +405,7 @@ mod sub_command {
             Read more about it on https://fpm.dev/serve/")
             .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
             .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
+            .arg(clap::arg!(--"cached-parse" "Use cached parser"))
             .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
             .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
                 .action(clap::ArgAction::Append))

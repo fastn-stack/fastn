@@ -201,7 +201,7 @@ impl Library2022 {
     }
 
     /// process the $processor$ and return the processor's output
-    #[tracing::instrument(name = "fpm::stuck-on-processor", err)]
+    #[tracing::instrument(name = "fpm::stuck-on-processor", skip_all, err)]
     pub async fn process<'a>(
         &'a self,
         ast: ftd::ast::AST,
