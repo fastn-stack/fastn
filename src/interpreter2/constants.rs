@@ -19,6 +19,10 @@ pub const FTD_LENGTH_RESPONSIVE: &str = "ftd#length.responsive";
 pub const FTD_RESPONSIVE_LENGTH: &str = "ftd#responsive-length";
 pub const FTD_RESPONSIVE_LENGTH_DESKTOP: &str = "ftd#responsive-length.desktop";
 
+pub const FTD_TRANSLATE_LENGTH: &str = "ftd#translate-length";
+pub const FTD_TRANSLATE_LENGTH_PX: &str = "ftd#translate-length.px";
+pub const FTD_TRANSLATE_LENGTH_PERCENT: &str = "ftd#translate-length.percent";
+
 pub const FTD_ALIGN: &str = "ftd#align";
 pub const FTD_ALIGN_TOP_LEFT: &str = "ftd#align.top-left";
 pub const FTD_ALIGN_TOP_CENTER: &str = "ftd#align.top-center";

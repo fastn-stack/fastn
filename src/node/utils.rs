@@ -31,10 +31,10 @@ impl CheckMap for ftd::Map<ftd::node::Value> {
 
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn get_translate(
-    left: &Option<i64>,
-    right: &Option<i64>,
-    up: &Option<i64>,
-    down: &Option<i64>,
+    left: &Option<ftd::executor::TranslateLength>,
+    right: &Option<ftd::executor::TranslateLength>,
+    up: &Option<ftd::executor::TranslateLength>,
+    down: &Option<ftd::executor::TranslateLength>,
     scale: &Option<f64>,
     scale_x: &Option<f64>,
     scale_y: &Option<f64>,
@@ -58,21 +58,20 @@ pub(crate) fn get_translate(
             );
         }
         (_, _, Some(_), Some(_)) => {
-            // TODO
             return ftd::p2::utils::e2(
                 "move-up, move-down both can't be used at once!",
                 doc_id,
                 line_number,
             );
         }
-        (Some(l), None, None, None) => Some(format!("translateX(-{}px) ", l)),
-        (Some(l), None, Some(u), None) => Some(format!("translate(-{}px, -{}px) ", l, u)),
-        (Some(l), None, None, Some(d)) => Some(format!("translate(-{}px, {}px) ", l, d)),
-        (None, Some(r), None, None) => Some(format!("translateX({}px) ", r)),
-        (None, Some(r), Some(u), None) => Some(format!("translate({}px, -{}px) ", r, u)),
-        (None, Some(r), None, Some(d)) => Some(format!("translate({}px, {}px) ", r, d)),
-        (None, None, Some(u), None) => Some(format!("translateY(-{}px) ", u)),
-        (None, None, None, Some(d)) => Some(format!("translateY({}px) ", d)),
+        (Some(l), None, None, None) => Some(format!("translateX(-{}) ", l.to_css_string())),
+        (Some(l), None, Some(u), None) => Some(format!("translate(-{}, -{}) ", l.to_css_string(), u.to_css_string())),
+        (Some(l), None, None, Some(d)) => Some(format!("translate(-{}, {}) ", l.to_css_string(), d.to_css_string())),
+        (None, Some(r), None, None) => Some(format!("translateX({}) ", r.to_css_string())),
+        (None, Some(r), Some(u), None) => Some(format!("translate({}, -{}) ", r.to_css_string(), u.to_css_string())),
+        (None, Some(r), None, Some(d)) => Some(format!("translate({}, {}) ", r.to_css_string(), d.to_css_string())),
+        (None, None, Some(u), None) => Some(format!("translateY(-{}) ", u.to_css_string())),
+        (None, None, None, Some(d)) => Some(format!("translateY({}) ", d.to_css_string())),
         _ => None,
     };
 

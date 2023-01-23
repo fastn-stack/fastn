@@ -231,6 +231,84 @@ impl Length {
     }
 }
 
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum TranslateLength {
+    Px(i64),
+    Percent(f64),
+}
+
+impl TranslateLength {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(TranslateLength::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_TRANSLATE_LENGTH_PX => Ok(TranslateLength::Px(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .integer(doc.name, line_number)?,
+            )),
+            ftd::interpreter2::FTD_TRANSLATE_LENGTH_PERCENT => Ok(TranslateLength::Percent(
+                or_type_value
+                    .1
+                    .clone()
+                    .resolve(&doc.itdoc(), line_number)?
+                    .decimal(doc.name, line_number)?,
+            )),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.translate-length`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_translate_length(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<TranslateLength>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_TRANSLATE_LENGTH,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            TranslateLength::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            TranslateLength::Px(px) => format!("{}px", px),
+            TranslateLength::Percent(p) => format!("{}%", p),
+        }
+    }
+}
+
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct ResponsiveLength {
     pub desktop: Length,

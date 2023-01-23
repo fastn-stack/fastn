@@ -1389,6 +1389,33 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            ftd::interpreter2::FTD_TRANSLATE_LENGTH.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_TRANSLATE_LENGTH.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TRANSLATE_LENGTH_PX,
+                        ftd::interpreter2::Kind::integer()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_TRANSLATE_LENGTH_PERCENT,
+                        ftd::interpreter2::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter2::FTD_FONT_SIZE.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
@@ -6541,25 +6568,25 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ),
         ftd::interpreter2::Argument::default(
             "move-up",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TRANSLATE_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "move-down",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TRANSLATE_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "move-left",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TRANSLATE_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
             "move-right",
-            ftd::interpreter2::Kind::integer()
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TRANSLATE_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),

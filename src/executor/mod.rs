@@ -19,7 +19,7 @@ pub use main::{ExecuteDoc, RT};
 pub use styles::{
     AlignSelf, Alignment, Anchor, Background, Color, ColorValue, Cursor, FontSize, Length, Loading,
     Overflow, Region, Resize, Resizing, ResponsiveType, SpacingMode, TextAlign, TextInputType,
-    TextTransform, WhiteSpace,
+    TextTransform, TranslateLength, WhiteSpace,
 };
 pub(crate) use tdoc::TDoc;
 pub(crate) use value::Value;

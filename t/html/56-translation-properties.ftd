@@ -1,31 +1,35 @@
--- ftd.text: ROTATED
+-- ftd.text: ROTATE ANTI-CLOCKWISE
+rotate: -40
+padding-vertical.px: 20
+
+-- ftd.text: ROTATE CLOCKWISE
 rotate: 40
 padding-vertical.px: 20
 
 -- ftd.text: MOVED DOWN
-move-down: 20
+move-down.px: 20
 padding-vertical.px: 20
 
 -- ftd.text: MOVED UP
-move-up: 20
+move-up.px: 20
 padding-vertical.px: 20
 
 -- ftd.text: MOVED LEFT
-move-left: 20
+move-left.px: 20
 padding-vertical.px: 20
 
 -- ftd.text: MOVED RIGHT
-move-right: 20
+move-right.px: 200
 padding-vertical.px: 20
 
--- ftd.text: SCALED 2x
+-- ftd.text: SCALE 2x
 scale: 2.0
 padding-vertical.px: 20
 
--- ftd.text: SCALED-X 0.5x
+-- ftd.text: SCALE-X 0.5x
 scale-x: 0.5
 padding-vertical.px: 20
 
--- ftd.text: SCALED-Y 0.5x
+-- ftd.text: SCALE-Y 0.5x
 scale-y: 0.5
 padding-vertical.px: 20
