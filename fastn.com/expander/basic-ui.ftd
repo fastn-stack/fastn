@@ -5,17 +5,49 @@
 -- ds.youtube:
 v: -VzrI1o6IzU
 
+-- ds.code: Properties Used
+lang: ftd
 
--- ds.h3: UI design of container components, Column and Row, with properties:
+padding.px: 50
+border-width.px: 1
+background.solid: yellow
+width: fill-container
+height: fill-container
+align-content: top-center
+spacing.px: 10
+spacing-mode: space-between
+border-bottom-width.px: 1
 
+-- ds.h3: Container Components:
 
+UI design: 
 -- ds.image:
 src: $assets.files.images.column.png
 width: fill-container
 
+
+-- ds.code: Column Syntax
+lang: ftd
+
+\-- ftd.column:
+
+\-- end: ftd.column
+
+-- ds.markdown:
+
+UI design: 
 -- ds.image:
 src: $assets.files.images.row.png
 width: fill-container
+
+-- ds.code: Row Syntax
+lang: ftd
+
+\-- ftd.row:
+
+\-- end: ftd.row
+
+
 
 -- ds.markdown:
 

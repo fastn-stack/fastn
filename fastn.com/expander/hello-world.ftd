@@ -6,23 +6,54 @@
 v: v1u-TmNE0bA
 
 
--- ds.h2: First step
+-- ds.h3: Install FPM
 
-First step is to write ftd.text and give the value Hello World
+- **First Step:** To install fpm, go to Resource Section of this *Crash Course* in te Overview part.
+
+- **Second Step:** Set a Path for FPM in your machine's Environment Variable.
+
+-- ds.code: New Path
+lang: ftd
+
+C:\FPM
+
+-- ds.h3: FPM.ftd
+
+We import FPM
+
+-- ds.code: Code
+lang: ftd
+
+\-- import: fpm
+
+-- ds.markdown:
+
+Then, we create a new fpm package
+
+-- ds.code: Code
+lang: ftd
+
+\-- fpm.pacakge: <project-name>
+
+-- ds.h3: index.ftd
+
+To print Hello World, we are using ftd.text section
 
 -- ds.code: Code
 lang: ftd
 
 \-- ftd.text: Hello World
 
+
 -- ds.markdown:
+
 
 You can always change the text
 
 -- ds.code: Code
 lang: ftd
 
-\-- ftd.text: Hello Multiverse
+\-- ftd.text: "I am IronMan"
 
 
 
