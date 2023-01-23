@@ -539,6 +539,11 @@
                       "line_number": null,
                       "properties": []
                     },
+                    "line_clamp": {
+                      "value": null,
+                      "line_number": null,
+                      "properties": []
+                    },
                     "common": {
                       "is_not_visible": false,
                       "event": [],
@@ -887,6 +892,11 @@
                               ]
                             },
                             "text_align": {
+                              "value": null,
+                              "line_number": null,
+                              "properties": []
+                            },
+                            "line_clamp": {
                               "value": null,
                               "line_number": null,
                               "properties": []
@@ -1537,6 +1547,11 @@
                               "line_number": null,
                               "properties": []
                             },
+                            "line_clamp": {
+                              "value": null,
+                              "line_number": null,
+                              "properties": []
+                            },
                             "common": {
                               "is_not_visible": false,
                               "event": [],
@@ -1885,6 +1900,11 @@
                                       ]
                                     },
                                     "text_align": {
+                                      "value": null,
+                                      "line_number": null,
+                                      "properties": []
+                                    },
+                                    "line_clamp": {
                                       "value": null,
                                       "line_number": null,
                                       "properties": []
