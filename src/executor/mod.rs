@@ -17,7 +17,7 @@ pub use element::{
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
-    AlignSelf, Alignment, Anchor, Background, Color, ColorValue, Cursor, FontSize, Length, Loading,
+    AlignSelf, Alignment, Anchor, Background, Color, ColorValue, Cursor, FontSize, Length, LineClamp, Loading,
     Overflow, Region, Resize, Resizing, ResponsiveType, SpacingMode, TextAlign, TextInputType,
     TextTransform, TranslateLength, WhiteSpace,
 };

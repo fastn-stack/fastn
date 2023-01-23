@@ -274,6 +274,60 @@ impl ftd::executor::Text {
                 doc_id,
             ),
         );
+
+        n.style.check_and_insert(
+            "display",
+            ftd::node::Value::from_executor_value_with_default(
+                self.line_clamp
+                    .to_owned()
+                    .map(|v| v.map(|_| "-webkit-box".to_string()))
+                    .value,
+                self.line_clamp.to_owned(),
+                Some(ftd::executor::LineClamp::display_pattern()),
+                doc_id,
+                Some(format!("\"{}\"", n.display)),
+            ),
+        );
+
+        n.style.check_and_insert(
+            "overflow",
+            ftd::node::Value::from_executor_value(
+                self.line_clamp
+                    .to_owned()
+                    .map(|v| v.map(|_| "hidden".to_string()))
+                    .value,
+                self.line_clamp.to_owned(),
+                Some(ftd::executor::LineClamp::overflow_pattern()),
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "-webkit-line-clamp",
+            ftd::node::Value::from_executor_value(
+                self.line_clamp
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_string()))
+                    .value,
+                self.line_clamp.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "-webkit-box-orient",
+            ftd::node::Value::from_executor_value(
+                self.line_clamp
+                    .to_owned()
+                    .map(|v| v.map(|_| "vertical".to_string()))
+                    .value,
+                self.line_clamp.to_owned(),
+                Some(ftd::executor::LineClamp::webkit_box_orient_pattern()),
+                doc_id,
+            ),
+        );
+
         n.classes.extend(self.common.add_class());
         n.classes.push("ft_md".to_string());
         n.text = ftd::node::Value::from_executor_value(
@@ -305,6 +359,60 @@ impl ftd::executor::Code {
                 doc_id,
             ),
         );
+
+        n.style.check_and_insert(
+            "display",
+            ftd::node::Value::from_executor_value_with_default(
+                self.line_clamp
+                    .to_owned()
+                    .map(|v| v.map(|_| "-webkit-box".to_string()))
+                    .value,
+                self.line_clamp.to_owned(),
+                Some(ftd::executor::LineClamp::display_pattern()),
+                doc_id,
+                Some(format!("\"{}\"", n.display)),
+            ),
+        );
+
+        n.style.check_and_insert(
+            "overflow",
+            ftd::node::Value::from_executor_value(
+                self.line_clamp
+                    .to_owned()
+                    .map(|v| v.map(|_| "hidden".to_string()))
+                    .value,
+                self.line_clamp.to_owned(),
+                Some(ftd::executor::LineClamp::overflow_pattern()),
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "-webkit-line-clamp",
+            ftd::node::Value::from_executor_value(
+                self.line_clamp
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_string()))
+                    .value,
+                self.line_clamp.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.style.check_and_insert(
+            "-webkit-box-orient",
+            ftd::node::Value::from_executor_value(
+                self.line_clamp
+                    .to_owned()
+                    .map(|v| v.map(|_| "vertical".to_string()))
+                    .value,
+                self.line_clamp.to_owned(),
+                Some(ftd::executor::LineClamp::webkit_box_orient_pattern()),
+                doc_id,
+            ),
+        );
+
         n.classes.extend(self.common.add_class());
         n.classes.push("ft_md".to_string());
         n.text = ftd::node::Value::from_executor_value(
@@ -389,17 +497,18 @@ impl ftd::executor::TextInput {
             ),
         );
 
-        if let Some(type_) = &self.type_.value {
-            n.attrs.check_and_insert(
-                "type",
-                ftd::node::Value::from_executor_value(
-                    Some(type_.to_css_string()),
-                    self.type_.to_owned(),
-                    None,
-                    doc_id,
-                ),
-            );
-        }
+        n.attrs.check_and_insert(
+            "type",
+            ftd::node::Value::from_executor_value(
+                self.type_
+                    .to_owned()
+                    .map(|v| v.map(|v| v.to_css_string()))
+                    .value,
+                self.type_.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
 
         if self.multiline.value {
             n.text = ftd::node::Value::from_executor_value(

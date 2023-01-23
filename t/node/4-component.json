@@ -10,79 +10,94 @@
       "class": {
         "value": "",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "data-id": {
         "value": "",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       }
     },
     "style": {
       "align-items": {
         "value": "start",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "border-bottom-width": {
         "value": "0px",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "border-left-width": {
         "value": "0px",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "border-right-width": {
         "value": "0px",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "border-style": {
         "value": "solid",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "border-top-width": {
         "value": "0px",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "box-sizing": {
         "value": "border-box",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "display": {
         "value": "flex",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "flex-direction": {
         "value": "column",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "height": {
         "value": "100%",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "justify-content": {
         "value": "start",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "text-decoration": {
         "value": "none",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       },
       "width": {
         "value": "100%",
         "properties": [],
-        "line_number": null
+        "line_number": null,
+        "default": null
       }
     },
     "children": [
@@ -96,79 +111,94 @@
           "class": {
             "value": "",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "data-id": {
             "value": "0",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           }
         },
         "style": {
           "align-items": {
             "value": "start",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-bottom-width": {
             "value": "0px",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-left-width": {
             "value": "0px",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-right-width": {
             "value": "0px",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-style": {
             "value": "solid",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-top-width": {
             "value": "0px",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "box-sizing": {
             "value": "border-box",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "display": {
             "value": "flex",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "flex-direction": {
             "value": "column",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "height": {
             "value": "auto",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "justify-content": {
             "value": "start",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "width": {
             "value": "auto",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           }
         },
         "children": [
@@ -184,59 +214,70 @@
               "class": {
                 "value": "",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "data-id": {
                 "value": "0,0",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               }
             },
             "style": {
               "border-bottom-width": {
                 "value": "0px",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "border-left-width": {
                 "value": "0px",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "border-right-width": {
                 "value": "0px",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "border-style": {
                 "value": "solid",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "border-top-width": {
                 "value": "0px",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "box-sizing": {
                 "value": "border-box",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "height": {
                 "value": "auto",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "width": {
                 "value": "auto",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               }
             },
             "children": [],
@@ -267,7 +308,8 @@
                   "pattern_with_eval": null
                 }
               ],
-              "line_number": 6
+              "line_number": 6,
+              "default": null
             },
             "null": false,
             "data_id": "0,0",
@@ -277,7 +319,8 @@
         "text": {
           "value": null,
           "properties": [],
-          "line_number": null
+          "line_number": null,
+          "default": null
         },
         "null": false,
         "data_id": "0",
@@ -293,79 +336,94 @@
           "class": {
             "value": "",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "data-id": {
             "value": "1",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           }
         },
         "style": {
           "align-items": {
             "value": "start",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-bottom-width": {
             "value": "0px",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-left-width": {
             "value": "0px",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-right-width": {
             "value": "0px",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-style": {
             "value": "solid",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "border-top-width": {
             "value": "0px",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "box-sizing": {
             "value": "border-box",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "display": {
             "value": "flex",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "flex-direction": {
             "value": "column",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "height": {
             "value": "auto",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "justify-content": {
             "value": "start",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "text-decoration": {
             "value": "none",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           },
           "width": {
             "value": "auto",
             "properties": [],
-            "line_number": null
+            "line_number": null,
+            "default": null
           }
         },
         "children": [
@@ -381,59 +439,70 @@
               "class": {
                 "value": "",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "data-id": {
                 "value": "1,0",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               }
             },
             "style": {
               "border-bottom-width": {
                 "value": "0px",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "border-left-width": {
                 "value": "0px",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "border-right-width": {
                 "value": "0px",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "border-style": {
                 "value": "solid",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "border-top-width": {
                 "value": "0px",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "box-sizing": {
                 "value": "border-box",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "height": {
                 "value": "auto",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "text-decoration": {
                 "value": "none",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               },
               "width": {
                 "value": "auto",
                 "properties": [],
-                "line_number": null
+                "line_number": null,
+                "default": null
               }
             },
             "children": [],
@@ -464,7 +533,8 @@
                   "pattern_with_eval": null
                 }
               ],
-              "line_number": 6
+              "line_number": 6,
+              "default": null
             },
             "null": false,
             "data_id": "1,0",
@@ -474,7 +544,8 @@
         "text": {
           "value": null,
           "properties": [],
-          "line_number": null
+          "line_number": null,
+          "default": null
         },
         "null": false,
         "data_id": "1",
@@ -484,7 +555,8 @@
     "text": {
       "value": null,
       "properties": [],
-      "line_number": null
+      "line_number": null,
+      "default": null
     },
     "null": false,
     "data_id": "",

@@ -3,6 +3,7 @@ pub struct Value {
     pub value: Option<String>,
     pub properties: Vec<PropertyWithPattern>,
     pub line_number: Option<usize>,
+    pub default: Option<String>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
@@ -29,6 +30,7 @@ impl Value {
             value: Some(value.to_string()),
             properties: vec![],
             line_number: None,
+            default: None,
         }
     }
 
@@ -37,6 +39,16 @@ impl Value {
         exec_value: ftd::executor::Value<T>,
         pattern_with_eval: Option<(String, bool)>,
         doc_id: &str,
+    ) -> Value {
+        Value::from_executor_value_with_default(value, exec_value, pattern_with_eval, doc_id, None)
+    }
+
+    pub fn from_executor_value_with_default<T>(
+        value: Option<String>,
+        exec_value: ftd::executor::Value<T>,
+        pattern_with_eval: Option<(String, bool)>,
+        doc_id: &str,
+        default: Option<String>,
     ) -> Value {
         use itertools::Itertools;
 
@@ -69,6 +81,7 @@ impl Value {
             value,
             properties,
             line_number: exec_value.line_number,
+            default,
         }
     }
 }

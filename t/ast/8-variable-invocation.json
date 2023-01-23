@@ -30,6 +30,7 @@
         }
       },
       "condition": null,
+      "processor": null,
       "line_number": 3
     }
   },
@@ -69,6 +70,7 @@
         "expression": "not $flag",
         "line_number": 6
       },
+      "processor": null,
       "line_number": 5
     }
   }

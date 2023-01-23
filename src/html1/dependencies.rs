@@ -62,7 +62,8 @@ impl<'a> DependencyGenerator<'a> {
                 expressions.push((None, neg_value));
             }
 
-            let value = ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()));
+            let value =
+                ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()), &None);
             if !value.trim().is_empty() {
                 result.push(format!(
                     indoc::indoc! {"
@@ -123,7 +124,11 @@ impl<'a> DependencyGenerator<'a> {
                     expressions.push((condition, value));
                 }
             }
-            let value = ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()));
+            let value = ftd::html1::utils::js_expression_from_list(
+                expressions,
+                Some(key.as_str()),
+                &self.node.text.default,
+            );
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"
@@ -198,7 +203,7 @@ impl<'a> DependencyGenerator<'a> {
                                 )),
                             ])
                                 .collect(),
-                            Some(key.as_str()),
+                            Some(key.as_str()),&attribute.default
                         );
                         expressions.push((condition, value));
                     } else {
@@ -271,7 +276,7 @@ impl<'a> DependencyGenerator<'a> {
                                 )),
                             ])
                             .collect(),
-                            Some(key.as_str()),
+                            Some(key.as_str()),&attribute.default
                         );
                         expressions.push((condition, value));
                     } else {
@@ -326,7 +331,8 @@ impl<'a> DependencyGenerator<'a> {
                     expressions.push((condition, value));
                 }
             }
-            let value = ftd::html1::utils::js_expression_from_list(expressions, None);
+            let value =
+                ftd::html1::utils::js_expression_from_list(expressions, None, &attribute.default);
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"
@@ -400,6 +406,7 @@ impl<'a> DependencyGenerator<'a> {
                             ])
                             .collect(),
                             Some(key.as_str()),
+                            &attribute.default,
                         );
                         expressions.push((condition, value));
                     } else {
@@ -467,6 +474,7 @@ impl<'a> DependencyGenerator<'a> {
                             ])
                             .collect(),
                             Some(key.as_str()),
+                            &attribute.default,
                         );
                         expressions.push((condition, value));
                     } else {
@@ -579,7 +587,11 @@ impl<'a> DependencyGenerator<'a> {
                 }
             }
 
-            let value = ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()));
+            let value = ftd::html1::utils::js_expression_from_list(
+                expressions,
+                Some(key.as_str()),
+                &attribute.default,
+            );
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"

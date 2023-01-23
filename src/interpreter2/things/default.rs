@@ -6996,12 +6996,20 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
 }
 
 fn text_arguments() -> Vec<ftd::interpreter2::Argument> {
-    vec![ftd::interpreter2::Argument::default(
-        "text-align",
-        ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TEXT_ALIGN)
-            .into_optional()
-            .into_kind_data(),
-    )]
+    vec![
+        ftd::interpreter2::Argument::default(
+            "text-align",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_TEXT_ALIGN)
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "line-clamp",
+            ftd::interpreter2::Kind::integer()
+                .into_kind_data()
+                .into_optional(),
+        ),
+    ]
 }
 
 /*fn kernel_component() -> ftd::interpreter2::ComponentDefinition {

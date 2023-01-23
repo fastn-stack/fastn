@@ -1,5 +1,8 @@
 # FTD Change Log
 
+## 23 January 2023
+- [Added line-clamp](https://github.com/ftd-lang/ftd/pull/544/commits/b50d8ef371ead95679838e862d0ea956e7655b39)
+
 ## 19 January 2023
 - [Added ftd.text-input](https://github.com/ftd-lang/ftd/pull/543/commits/b86f74b45322e53f8a9acf43155b4bb0aa1a19b3)
 
