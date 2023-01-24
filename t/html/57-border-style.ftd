@@ -1,0 +1,49 @@
+
+-- component check-border-style:
+ftd.border-style style:
+
+-- ftd.column:
+border-style: $check-border-style.style
+border-width.px: 2
+padding.px: 10
+margin.px: 10
+
+-- ftd.text: Hello World
+
+-- end: ftd.column
+
+-- end: check-border-style
+
+
+-- check-border-style:
+style: dotted
+
+
+-- check-border-style:
+style: dashed
+
+
+-- check-border-style:
+style: solid
+
+
+-- check-border-style:
+style: double
+
+
+-- check-border-style:
+style: groove
+
+
+-- check-border-style:
+style: ridge
+
+
+-- check-border-style:
+style: inset
+
+
+-- check-border-style:
+style: outset
+
+
