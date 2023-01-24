@@ -113,6 +113,7 @@ impl<'a> ExecuteDoc<'a> {
             &local_variable_map,
             inherited_variables,
             local_container,
+            doc,
         );
 
         if let Some(condition) = instruction.condition.as_ref() {
@@ -227,6 +228,7 @@ impl<'a> ExecuteDoc<'a> {
                         &mut instruction,
                         &mut inherited_variables,
                         container.as_slice(),
+                        doc,
                     );
                     ExecuteDoc::insert_element(
                         &mut elements,
@@ -569,6 +571,7 @@ fn update_instruction_for_loop_element(
         &map,
         inherited_variables,
         local_container,
+        doc,
     );
     Ok(instruction)
 }
@@ -638,12 +641,14 @@ fn update_inherited_reference_in_instruction(
     component_definition: &mut ftd::interpreter2::Component,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
+    doc: &mut ftd::executor::TDoc,
 ) {
     update_local_variable_references_in_component(
         component_definition,
         &Default::default(),
         inherited_variables,
         local_container,
+        doc,
     );
 }
 
@@ -652,6 +657,7 @@ fn update_local_variable_references_in_component(
     local_variable_map: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
+    doc: &mut ftd::executor::TDoc,
 ) {
     for property in component.properties.iter_mut() {
         update_local_variable_reference_in_property(
@@ -659,6 +665,7 @@ fn update_local_variable_references_in_component(
             local_variable_map,
             inherited_variables,
             local_container,
+            doc,
         );
     }
 
@@ -669,6 +676,7 @@ fn update_local_variable_references_in_component(
                 local_variable_map,
                 inherited_variables,
                 local_container,
+                doc,
             );
         }
     }
@@ -679,6 +687,7 @@ fn update_local_variable_references_in_component(
             local_variable_map,
             inherited_variables,
             local_container,
+            doc,
         );
     }
 
@@ -688,6 +697,7 @@ fn update_local_variable_references_in_component(
             local_variable_map,
             inherited_variables,
             local_container,
+            doc,
         );
     }
 
@@ -697,6 +707,7 @@ fn update_local_variable_references_in_component(
             local_variable_map,
             inherited_variables,
             local_container,
+            doc,
         );
     }
 }
@@ -706,12 +717,14 @@ fn update_local_variable_reference_in_property(
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
+    doc: &mut ftd::executor::TDoc,
 ) {
     update_local_variable_reference_in_property_value(
         &mut property.value,
         local_variable,
         inherited_variables,
         local_container,
+        doc,
     );
     if let Some(ref mut condition) = property.condition {
         update_local_variable_reference_in_condition(
@@ -719,6 +732,7 @@ fn update_local_variable_reference_in_property(
             local_variable,
             inherited_variables,
             local_container,
+            doc,
         );
     }
 }
@@ -728,6 +742,7 @@ fn update_local_variable_reference_in_condition(
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
+    doc: &mut ftd::executor::TDoc,
 ) {
     for reference in condition.references.values_mut() {
         update_local_variable_reference_in_property_value(
@@ -735,6 +750,7 @@ fn update_local_variable_reference_in_condition(
             local_variable,
             inherited_variables,
             local_container,
+            doc,
         );
     }
 }
@@ -744,6 +760,7 @@ fn update_local_variable_reference_in_property_value(
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
+    doc: &mut ftd::executor::TDoc,
 ) {
     let reference_or_clone = match property_value {
         ftd::interpreter2::PropertyValue::Reference { name, .. }
@@ -755,6 +772,7 @@ fn update_local_variable_reference_in_property_value(
                     local_variable,
                     inherited_variables,
                     local_container,
+                    doc,
                 );
             }
             return;
@@ -768,6 +786,7 @@ fn update_local_variable_reference_in_property_value(
                             local_variable,
                             inherited_variables,
                             local_container,
+                            doc,
                         );
                     }
                 }
@@ -779,6 +798,7 @@ fn update_local_variable_reference_in_property_value(
                             local_variable,
                             inherited_variables,
                             local_container,
+                            doc,
                         );
                     }
                 }
@@ -788,6 +808,7 @@ fn update_local_variable_reference_in_property_value(
                         local_variable,
                         inherited_variables,
                         local_container,
+                        doc,
                     )
                 }
                 ftd::interpreter2::Value::OrType { value, .. } => {
@@ -796,6 +817,7 @@ fn update_local_variable_reference_in_property_value(
                         local_variable,
                         inherited_variables,
                         local_container,
+                        doc,
                     );
                 }
                 _ => {}
@@ -819,6 +841,7 @@ fn update_local_variable_reference_in_property_value(
         reference_or_clone.as_str(),
         inherited_variables,
         local_container,
+        doc,
     )
 }
 
@@ -827,6 +850,7 @@ fn update_inherited_reference_in_property_value(
     reference_or_clone: &str,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
+    doc: &mut ftd::executor::TDoc,
 ) {
     let values = if reference_or_clone.starts_with(ftd::interpreter2::FTD_INHERITED) {
         let reference_or_clone = reference_or_clone
@@ -858,13 +882,33 @@ fn update_inherited_reference_in_property_value(
         || reference_or_clone
             .starts_with(format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str())
     {
-        property_value.set_reference_or_clone(
-            format!(
-                "inherited#{}",
-                reference_or_clone
-                    .trim_start_matches(format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str())
+        if let Ok(ftd::interpreter2::StateWithThing::Thing(property)) =
+            ftd::interpreter2::PropertyValue::from_ast_value(
+                ftd::ast::VariableValue::String {
+                    value: format!(
+                        "$inherited#{}",
+                        reference_or_clone.trim_start_matches(
+                            format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str()
+                        )
+                    ),
+                    line_number: 0,
+                },
+                &mut doc.itdoc(),
+                property_value.is_mutable(),
+                Some(&property_value.kind().into_kind_data()),
             )
-            .as_str(),
-        );
+        {
+            *property_value = property;
+        } else {
+            property_value.set_reference_or_clone(
+                format!(
+                    "inherited#{}",
+                    reference_or_clone.trim_start_matches(
+                        format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str()
+                    )
+                )
+                .as_str(),
+            );
+        }
     }
 }

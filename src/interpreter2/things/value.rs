@@ -932,9 +932,20 @@ impl PropertyValue {
         match value.string(doc.name) {
             Ok(expression)
                 if expression
-                    .starts_with(format!("${}", ftd::interpreter2::FTD_INHERITED).as_str()) =>
+                    .starts_with(format!("${}.", ftd::interpreter2::FTD_INHERITED).as_str()) =>
             {
                 if let Some(kind) = expected_kind {
+                    /*if kind.kind.ref_inner().is_or_type() {
+                        return Ok(PropertyValue::value_from_ast_value(
+                            value,
+                            doc,
+                            mutable,
+                            expected_kind,
+                            definition_name_with_arguments,
+                            loop_object_name_and_kind,
+                        )?
+                        .map(Some));
+                    }*/
                     Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                         ftd::interpreter2::PropertyValue::Reference {
                             name: expression.trim_start_matches('$').to_string(),
