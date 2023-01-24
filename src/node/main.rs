@@ -1176,8 +1176,8 @@ impl ftd::executor::Common {
         d.check_and_insert(
             "border-style",
             ftd::node::Value::from_executor_value(
-                Some(s("solid")),
-                ftd::executor::Value::new(None::<String>, None, vec![]),
+                self.border_style.value.as_ref().map(|v| v.to_css_string()),
+                self.border_style.to_owned(),
                 None,
                 doc_id,
             ),
