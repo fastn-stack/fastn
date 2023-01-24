@@ -1189,6 +1189,24 @@ return f;
 
 
 
+function ftd__enable_dark_mode___main(){
+return (enable_dark_mode());
+}
+
+
+
+function ftd__enable_light_mode___main(){
+return (enable_light_mode());
+}
+
+
+
+function ftd__enable_system_mode___main(){
+return (enable_system_mode());
+}
+
+
+
 function ftd__increment___main(a){
 return (a.value += 1);
 }
@@ -1303,13 +1321,13 @@ set_data_value(data, "foo#flag" + "." + remaining, new_value);
 set_data_value(data, "foo#flag", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__overflow"]){window.node_change_main["0:main__overflow"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__-webkit-line-clamp"]){window.node_change_main["0:main__-webkit-line-clamp"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__-webkit-line-clamp"]){window.node_change_main["0:main__-webkit-line-clamp"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__-webkit-box-orient"]){window.node_change_main["0:main__-webkit-box-orient"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__overflow"]){window.node_change_main["0:main__overflow"](data);
 }
 };
 
@@ -1322,11 +1340,11 @@ set_data_value(data, "foo#flag_2", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__overflow"]){window.node_change_main["1:main__overflow"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__-webkit-box-orient"]){window.node_change_main["1:main__-webkit-box-orient"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__-webkit-line-clamp"]){window.node_change_main["1:main__-webkit-line-clamp"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__-webkit-box-orient"]){window.node_change_main["1:main__-webkit-box-orient"](data);
 }
 };
 

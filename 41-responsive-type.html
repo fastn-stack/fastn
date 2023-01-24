@@ -1192,6 +1192,24 @@ return f;
 
 
 
+function ftd__enable_dark_mode___main(){
+return (enable_dark_mode());
+}
+
+
+
+function ftd__enable_light_mode___main(){
+return (enable_light_mode());
+}
+
+
+
+function ftd__enable_system_mode___main(){
+return (enable_system_mode());
+}
+
+
+
 function ftd__increment___main(a){
 return (a.value += 1);
 }
@@ -1274,9 +1292,9 @@ set_data_value(data, "foo#p" + "." + remaining, new_value);
 set_data_value(data, "foo#p", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
 }
 };
 
@@ -1298,9 +1316,9 @@ set_data_value(data, "ftd#device" + "." + remaining, new_value);
 set_data_value(data, "ftd#device", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__padding"]){window.node_change_main["0:main__padding"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__padding"]){window.node_change_main["1:main__padding"](data);
 }
 };
 
