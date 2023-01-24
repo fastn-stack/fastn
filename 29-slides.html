@@ -1121,7 +1121,7 @@ for (const a in function_arguments) {
 if (isFunctionArgument(function_arguments[a])) {
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
-let [var_name, remaining] = (!!data[reference]) ? get_name_and_remaining(reference) : [reference, null];
+let [var_name, remaining] = (!!data[reference]) ? [reference, null] : get_name_and_remaining(reference);
 if (var_name === "ftd#dark-mode") {
 if (!!function_arguments[a]["value"]) {
 window.enable_dark_mode();

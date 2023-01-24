@@ -1139,7 +1139,7 @@ for (const a in function_arguments) {
 if (isFunctionArgument(function_arguments[a])) {
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
-let [var_name, remaining] = (!!data[reference]) ? get_name_and_remaining(reference) : [reference, null];
+let [var_name, remaining] = (!!data[reference]) ? [reference, null] : get_name_and_remaining(reference);
 if (var_name === "ftd#dark-mode") {
 if (!!function_arguments[a]["value"]) {
 window.enable_dark_mode();
@@ -1418,15 +1418,15 @@ set_data_value(data, "ftd#dark-mode", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,0,0,0:main__color"]){window.node_change_main["0,0,0,0,0:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-color"]){window.node_change_main["0,0:main__background-color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,0,0:main__src"]){window.node_change_main["0,0,1,0,0,0:main__src"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0:main__background-color"]){window.node_change_main["0,0,1,0:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,2,0,0:main__src"]){window.node_change_main["0,0,1,0,2,0,0:main__src"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,0,0:main__src"]){window.node_change_main["0,0,1,0,0,0:main__src"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,0,1,0,2,0,2,1,0:main__src"]){window.node_change_main["0,0,1,0,2,0,2,1,0:main__src"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["0,0:main__background-color"]){window.node_change_main["0,0:main__background-color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__background-color"]){window.node_change_main["0:main__background-color"](data);
 }

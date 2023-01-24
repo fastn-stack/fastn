@@ -532,7 +532,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">10.2</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">1.5</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">10.2</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">1.5</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">-50</div></div>
 
 
 <script>
@@ -1112,7 +1112,7 @@ for (const a in function_arguments) {
 if (isFunctionArgument(function_arguments[a])) {
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
-let [var_name, remaining] = (!!data[reference]) ? get_name_and_remaining(reference) : [reference, null];
+let [var_name, remaining] = (!!data[reference]) ? [reference, null] : get_name_and_remaining(reference);
 if (var_name === "ftd#dark-mode") {
 if (!!function_arguments[a]["value"]) {
 window.enable_dark_mode();
@@ -1184,6 +1184,12 @@ return f;
 
 
 
+function foo__diff___main(a){
+return (-1*(a/2));
+}
+
+
+
 function ftd__enable_dark_mode___main(){
 return (enable_dark_mode());
 }
@@ -1240,6 +1246,9 @@ a.value = !a.value
 window.node_change_main = {};
 window.node_change_main["0:main__text"] = function(data) {
 document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#x", data, null);
+}
+window.node_change_main["2:main__text"] = function(data) {
+document.querySelector(`[data-id="2:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__diff___main","values":[["a",100]]}', this);
 }
 window.set_value_main = {};
 window.set_value_main["foo#x"] = function (data, new_value, remaining) {
