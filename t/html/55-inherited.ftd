@@ -12,6 +12,13 @@ name: FOO2
 
 -- end: foo
 
+-- ftd.column:
+
+-- ftd.text: $inherited.name
+-- bar:
+
+-- end: ftd.column
+
 -- end: foo
 
 

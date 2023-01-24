@@ -1,0 +1,101 @@
+-- ftd.column:
+width.fixed.px: 650
+padding.px: 40
+spacing.px: 20
+align-self: center
+margin-vertical.px: 40
+border-color: $b-color
+border-width.px: 20
+background.solid: $bg-color
+
+-- dark-mode-switcher:
+
+-- ftd.column:
+border-width.px: 10
+border-color: $b-color
+width: fill-container
+
+-- ftd.image:
+src: $tom-and-jerry
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+
+-- void set-system():
+
+enable_system_mode()
+
+
+-- void set-light():
+
+enable_light_mode()
+
+
+
+-- void set-dark():
+
+enable_dark_mode()
+
+
+
+-- component button:
+ftd.color color:
+caption cta:
+
+-- ftd.text: $button.cta
+padding-horizontal.px: 16
+padding-vertical.px: 12
+background.solid: $button.color
+border-radius.px: 2
+color: white
+width.fixed.px: 132
+text-align: center
+
+
+-- end: button
+
+
+
+
+-- ftd.image-src tom-and-jerry:
+light: https://wallpaperaccess.com/full/215445.jpg
+dark: https://wallpapers.com/images/file/tom-and-jerry-in-the-dog-house-myfg3ooaklw9fk9q.jpg
+
+-- ftd.color b-color:
+light: red
+dark: pink
+
+-- ftd.color bg-color:
+light: pink
+dark: #e62f2f
+
+
+
+
+-- component dark-mode-switcher:
+
+-- ftd.row:
+width: fill-container
+spacing-mode: space-between
+
+-- button: Dark Mode
+color: #2dd4bf
+$on-click$: $set-dark()
+
+
+-- button: Light Mode
+color: #4fb2df
+$on-click$: $set-light()
+
+
+-- button: System Mode
+color: #df894f
+$on-click$: $set-system()
+
+
+-- end: ftd.row
+
+-- end: dark-mode-switcher
