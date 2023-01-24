@@ -24,22 +24,6 @@ width: fill-container
 -- end: ftd.column
 
 
--- void set-system():
-
-enable_system_mode()
-
-
--- void set-light():
-
-enable_light_mode()
-
-
-
--- void set-dark():
-
-enable_dark_mode()
-
-
 
 -- component button:
 ftd.color color:
@@ -83,17 +67,17 @@ spacing-mode: space-between
 
 -- button: Dark Mode
 color: #2dd4bf
-$on-click$: $set-dark()
+$on-click$: $ftd.enable-dark-mode()
 
 
 -- button: Light Mode
 color: #4fb2df
-$on-click$: $set-light()
+$on-click$: $ftd.enable-light-mode()
 
 
 -- button: System Mode
 color: #df894f
-$on-click$: $set-system()
+$on-click$: $ftd.enable-system-mode()
 
 
 -- end: ftd.row

@@ -228,6 +228,66 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             })
         ),
         (
+            "ftd#enable-light-mode".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "ftd#enable-light-mode".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::things::kind::Kind::Void,
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "enable_light_mode()".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#enable-dark-mode".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "ftd#enable-dark-mode".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::things::kind::Kind::Void,
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "enable_dark_mode()".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                line_number: 0,
+            })
+        ),
+        (
+            "ftd#enable-system-mode".to_string(),
+            ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
+                name: "ftd#enable-system-mode".to_string(),
+                return_kind: ftd::interpreter2::KindData {
+                    kind: ftd::interpreter2::things::kind::Kind::Void,
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                ],
+                expression: vec![
+                    ftd::interpreter2::things::function::Expression {
+                        expression: "enable_system_mode()".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                line_number: 0,
+            })
+        ),
+        (
             "ftd#set-bool".to_string(),
             ftd::interpreter2::Thing::Function(ftd::interpreter2::Function {
                 name: "ftd#set-bool".to_string(),
