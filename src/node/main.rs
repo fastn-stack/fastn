@@ -1173,15 +1173,27 @@ impl ftd::executor::Common {
             ),
         );
 
-        d.check_and_insert(
-            "border-style",
-            ftd::node::Value::from_executor_value(
-                self.border_style.value.as_ref().map(|v| v.to_css_string()),
-                self.border_style.to_owned(),
-                None,
-                doc_id,
-            ),
-        );
+        if let Some(ref br_style) = self.border_style.value {
+            d.check_and_insert(
+                "border-style",
+                ftd::node::Value::from_executor_value(
+                    Some(br_style.to_css_string()),
+                    self.border_style.to_owned(),
+                    None,
+                    doc_id,
+                ),
+            );
+        } else {
+            d.check_and_insert(
+                "border-style",
+                ftd::node::Value::from_executor_value(
+                    Some(s("solid")),
+                    ftd::executor::Value::new(None::<String>, None, vec![]),
+                    None,
+                    doc_id,
+                ),
+            );
+        }
 
         d.check_and_insert(
             "border-bottom-width",
