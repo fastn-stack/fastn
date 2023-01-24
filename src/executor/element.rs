@@ -395,6 +395,7 @@ pub struct Common {
     pub resize: ftd::executor::Value<Option<ftd::executor::Resize>>,
     pub white_space: ftd::executor::Value<Option<ftd::executor::WhiteSpace>>,
     pub text_transform: ftd::executor::Value<Option<ftd::executor::TextTransform>>,
+    pub border_style: ftd::executor::Value<Option<ftd::executor::BorderStyle>>,
 }
 
 pub fn default_column() -> Column {
@@ -778,6 +779,13 @@ pub fn common_from_properties(
             doc,
             line_number,
             "text-transform",
+        )?,
+        border_style: ftd::executor::BorderStyle::optional_border_style(
+            properties,
+            arguments,
+            doc,
+            line_number,
+            "border-style",
         )?,
         classes: ftd::executor::value::string_list(
             "classes",
