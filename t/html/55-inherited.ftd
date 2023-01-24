@@ -22,6 +22,26 @@ name: FOO2
 -- end: foo
 
 
+-- pink-block:
+
+-- render-title:
+
+-- end: pink-block
+
+
+-- orange-block:
+
+-- render-title:
+
+-- end: orange-block
+
+
+-- green-block:
+
+-- render-title:
+
+-- end: green-block
+
 
 -- component foo:
 string name:
@@ -48,3 +68,61 @@ children: $foo.wrapper
 -- ftd.text: $inherited.name
 
 -- end: bar
+
+
+
+-- component pink-block:
+ftd.color title-color: red
+children wrapper:
+
+-- ftd.column:
+children: $pink-block.wrapper
+width.fixed.px: 100
+height.fixed.px: 100
+background.solid: pink
+align-content: center
+
+-- end: ftd.column
+
+-- end: pink-block
+
+
+-- component orange-block:
+ftd.color title-color: orange
+children wrapper:
+
+-- ftd.column:
+children: $orange-block.wrapper
+width.fixed.px: 100
+height.fixed.px: 100
+background.solid: yellow
+align-content: center
+
+-- end: ftd.column
+
+-- end: orange-block
+
+
+-- component green-block:
+ftd.color title-color: darkgreen
+children wrapper:
+
+-- ftd.column:
+children: $green-block.wrapper
+width.fixed.px: 100
+height.fixed.px: 100
+background.solid: #6ecf6e
+align-content: center
+
+-- end: ftd.column
+
+-- end: green-block
+
+
+
+-- component render-title:
+
+-- ftd.text: Title
+color: $inherited.title-color
+
+-- end: render-title

@@ -1233,7 +1233,7 @@ for (const a in function_arguments) {
 if (isFunctionArgument(function_arguments[a])) {
 if (!!function_arguments[a]["reference"]) {
 let reference = function_arguments[a]["reference"];
-let [var_name, remaining] = (!!data[reference]) ? get_name_and_remaining(reference) : [reference, null];
+let [var_name, remaining] = (!!data[reference]) ? [reference, null] : get_name_and_remaining(reference);
 if (var_name === "ftd#dark-mode") {
 if (!!function_arguments[a]["value"]) {
 window.enable_dark_mode();
@@ -1301,6 +1301,24 @@ return JSON.stringify(f);
 else {
 return f;
 }
+}
+
+
+
+function ftd__enable_dark_mode___main(){
+return (enable_dark_mode());
+}
+
+
+
+function ftd__enable_light_mode___main(){
+return (enable_light_mode());
+}
+
+
+
+function ftd__enable_system_mode___main(){
+return (enable_system_mode());
 }
 
 
