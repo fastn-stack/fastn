@@ -1,13 +1,13 @@
 
 
--- ws.chapter: Creating Custom Components
+/-- ws.chapter: Creating Custom Components
 id: ws-components
 sidebar: true
 
--- container: ws-components.content-wrap.right-sidebar
+/-- container: ws-components.content-wrap.right-sidebar
 
--- ws.sidebar:
+/-- ws.sidebar:
 
--- container: ws-components.content-wrap.right-sidebar-mobile
+/-- container: ws-components.content-wrap.right-sidebar-mobile
 
--- ws.sidebar:
+/-- ws.sidebar:

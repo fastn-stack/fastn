@@ -8,35 +8,35 @@
 -- integer count: 0
 -- integer total: 4
 
--- ftd.grid:
+/-- ftd.grid:
 slots: left right-1 right-2 | main main main
 slot-widths: auto 80px 80px
 slot-heights: 56px auto
 width: fill
 height: fill
 
--- ftd.text: FTD Slideshow
+/-- ftd.text: FTD Slideshow
 slot: left
 background-color: $fpm.color.main.background.base
 padding: 20
 color: $fpm.color.main.text
 width: fill
 
--- ftd.text: Previous
+/-- ftd.text: Previous
 slot: right-1
 color: $fpm.color.main.text
 padding: 20
 background-color: $fpm.color.main.background.base
 $on-click$: decrement $count clamp 0 $total
 
--- ftd.text: Next
+/-- ftd.text: Next
 slot: right-2
 padding: 20
 background-color: $fpm.color.main.background.base
 color: $fpm.color.main.text
 $on-click$: increment $count clamp 0 $total
 
--- ftd.column:
+/-- ftd.column:
 slot: main
 align: center
 width: fill
@@ -64,18 +64,18 @@ src: https://akns-images.eonline.com/eol_images/Entire_Site/20121016/634.mm.cm.1
 if: $count == 1
 width: 300
 
--- slide:
+/-- slide:
 src: $assets.files.images.17.jpg
 if: $count == 3
 width: 400
 
--- slide:
+/-- slide:
 src: $assets.files.images.18-18.jpg
 if: $count == 4
 width: 300
 
 
--- ftd.image slide:
+/-- ftd.image slide:
 ftd.image-src src:
 optional string width:
 src: $src

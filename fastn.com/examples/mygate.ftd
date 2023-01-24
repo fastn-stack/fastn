@@ -1,31 +1,31 @@
 -- import: fpm
 
--- ft.page:
+-- ds.page:
 
 
 /-- ftd.color color-bg: $fpm.color.main.background.base
 
 
--- ftd.column:
+/-- ftd.column:
 align: center
 padding: 100
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 spacing: 30
 align: center
 
 
--- boolean open: true
+/-- boolean open: true
 
 
--- ftd.text: toggle
+/-- ftd.text: toggle
 $on-click$: toggle $open
 color if $ftd.dark-mode: $fpm.color.main.text
 
 
--- ftd.column gate-pass:
+/-- ftd.column gate-pass:
 width: 400
 align: center
 border-color: $fpm.color.main.text
@@ -35,16 +35,16 @@ body body:
 integer code:
 boolean open: true
 
---- ftd.column:
+/-- ftd.column:
 background-color: $fpm.color.main.background.base
 width: fill
 padding-top: 40
 
---- ftd.row:
+/-- ftd.row:
 align: center
 width: 100
 
---- ftd.text: $title
+/-- ftd.text: $title
 color: $fpm.color.main.text
 width: 100
 background-color: $fpm.color.main.background.base
@@ -57,9 +57,9 @@ padding: 5
 color if $ftd.dark-mode: $fpm.color.main.text
 $on-click$: toggle $open
 
---- container: ftd.main
+/-- container: ftd.main
 
---- ftd.row:
+/-- ftd.row:
 align: center
 width: 100
 border-color: $fpm.color.main.text
@@ -69,7 +69,7 @@ border-right: 4
 padding-top: 2
 open: false
 
---- ftd.text:
+/-- ftd.text:
 align: center
 padding-top: 20
 padding-bottom: 20
@@ -77,64 +77,67 @@ color if $ftd.dark-mode: $fpm.color.main.text
 
 $body
 
---- ftd.text: frequent entry code
+/-- ftd.text: frequent entry code
 align: center
 width: fill
 padding: 20
 color if $ftd.dark-mode: $fpm.color.main.text
 
---- ftd.row:
+/-- ftd.row:
 align: center
 background-color: $fpm.color.main.text
 padding: 20
 if: $open
 
---- ftd.integer:
+/-- ftd.integer:
 value: $code
 align: center
 color: $fpm.color.main.text
 role: $fpm.type.heading-large
 
---- container: ftd.main
+/-- container: ftd.main
 
---- ftd.row:
+/-- ftd.row:
 padding: 10
 width: fill
 
---- ftd.text: Use this code at the gate
+/-- ftd.text: Use this code at the gate
 align: center
 width: fill
 padding: 10
 role: $fpm.type.heading-medium
 color if $ftd.dark-mode: $fpm.color.main.text
 
---- container: ftd.main
+/-- container: ftd.main
 
---- ftd.row:
+/-- ftd.row:
 height: 20
 
---- container: ftd.main
+/-- container: ftd.main
 
---- ftd.row:
+/-- ftd.row:
 width: fill
 background-color: $fpm.color.main.background.base
 padding: 20
 
---- ftd.text: www-mygate-com
+/-- ftd.text: www-mygate-com
 align: center
 width: fill
 color: $fpm.color.main.text
 
 
--- gate-pass: Invitation
+/-- gate-pass: Invitation
 if: $open
 code: 123123
 
 **Amit Upadhyay** has added you as a frequent...
 
 
--- gate-pass: Yo Yo Honey Singh
+/-- gate-pass: Yo Yo Honey Singh
 if: $open
 code: 998822
 
 The Gateway Protection Programme was operated by the British government.
+
+
+-- end: ds.page

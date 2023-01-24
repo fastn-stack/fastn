@@ -1,13 +1,13 @@
 
 
--- ws.chapter: Import: Splitting FTD Into Modules
+/-- ws.chapter: Import: Splitting FTD Into Modules
 id: ws-imports
 sidebar: true
 
--- container: ws-imports.content-wrap.right-sidebar
+/-- container: ws-imports.content-wrap.right-sidebar
 
--- ws.sidebar:
+/-- ws.sidebar:
 
--- container: ws-imports.content-wrap.right-sidebar-mobile
+/-- container: ws-imports.content-wrap.right-sidebar-mobile
 
--- ws.sidebar:
+/-- ws.sidebar:

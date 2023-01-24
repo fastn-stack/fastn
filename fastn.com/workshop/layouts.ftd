@@ -1,14 +1,14 @@
 
 
--- ws.chapter: Row And Columns: Layouting In FTD
+/--  ws.chapter: Row And Columns: Layouting In FTD
 id: ws-layouts
 sidebar: true
 
--- container: ws-layouts.content-wrap.right-sidebar
+/--  container: ws-layouts.content-wrap.right-sidebar
 
--- ws.sidebar:
+/--  ws.sidebar:
 
--- container: ws-layouts.content-wrap.right-sidebar-mobile
+/--  container: ws-layouts.content-wrap.right-sidebar-mobile
 
--- ws.sidebar:
+/--  ws.sidebar:
 

@@ -4,184 +4,189 @@
 
 
 -- ftd.column:
-width: fill
-id: outer-11
+width: fill-container
+;; id: outer-11
 
 
 -- ftd.row:
-width: fill
-padding-left: 100
-padding-right: 100
-padding-top: 20
-padding-bottom: 20
-background-color: $fpm.color.main.background.base
-id: nav-bar
+width: fill-container
+padding-left.px: 100
+padding-right.px: 100
+padding-top.px: 20
+padding-bottom.px: 20
+background.solid: $$inherited.colors.background.base
+;; id: nav-bar
 
 
 -- ftd.image:
 src: $assets.files.images.fpm-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
-width: 130
+width: fill-container
 
 
--- container: nav-bar
+/-- container:  nav-bar
 
 
 -- ftd.row:
-spacing: 50
-align: right
+spacing.px: 50
+align-self: end
 
 
 -- ftd.text: HOME
 link: https://www.fifthtry.com/ftd/new/
-color: $fpm.color.main.text
-padding-top: 10
-role: $fpm.type.copy-large
+color: $$inherited.colors.text
+padding-top.px: 10
+role: $inherited.types.copy-large
 
 
 -- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
-color: $fpm.color.main.text
-padding-top: 10
-role: $fpm.type.copy-large
+color: $$inherited.colors.text
+padding-top.px: 10
+role: $inherited.types.copy-large
 
 
 -- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
-color: $fpm.color.main.text
-padding-top: 10
-role: $fpm.type.copy-large
+color: $$inherited.colors.text
+padding-top.px: 10
+role: $inherited.types.copy-large
 
 
 -- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
-color: $fpm.color.main.text
-padding-top: 10
-role: $fpm.type.copy-large
+color: $$inherited.colors.text
+padding-top.px: 10
+role: $inherited.types.copy-large
 
 
 -- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
-color: $fpm.color.main.text
-padding-top: 10
-role: $fpm.type.copy-large
+color: $$inherited.colors.text
+padding-top.px: 10
+role: $inherited.types.copy-large
 
 
--- container: outer-11
+/-- container:  outer-11
 
 
 -- ftd.row:
-width: fill
-padding-top: 20
-padding-left: 250
-padding-right: 150
-id: subject
+width: fill-container
+padding-top.px: 20
+padding-left.px: 250
+padding-right.px: 150
+;; id: subject
 
 
 -- ftd.column:
-width: 850
-padding: 100
-background-color: $fpm.color.main.background.base
-align: center
-border-radius: 15
+width.fixed.px: 850
+padding.px: 100
+background.solid: $$inherited.colors.background.base
+align-self: center
+border-radius.px: 15
 
 
 -- ftd.text: Quickstart
-role: $fpm.type.heading-large
+role: $inherited.types.heading-large
 
 
 -- ftd.text:
-role: $fpm.type.copy-large
+role: $inherited.types.copy-large
 
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it
 
 
 -- ftd.text: Instructions
-padding-top: 50
-role: $fpm.type.heading-large
+padding-top.px: 50
+role: $inherited.types.heading-large
 
 
 -- ftd.text:
-role: $fpm.type.copy-large
+role: $inherited.types.copy-large
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 
 
--- container: subject
+/-- container:  subject
 
 
 -- ftd.column:
-width: 300
-padding-top: 80
+width.fixed.px: 300
+padding-top.px: 80
 
 
 -- ftd.text: GETTING STARTED
-padding-left: 50
-padding-bottom: 15
+padding-left.px: 50
+padding-bottom.px: 15
 
 
 
 -- ftd.column:
-width: 250
-border-top: 1
-border-color: $fpm.color.main.text
+width.fixed.px: 250
+border-top-width.px: 1
+border-color: $$inherited.colors.text
 
 
 -- ftd.text: Quickstart
-padding-left: 50
-padding-top: 40
+padding-left.px: 50
+padding-top.px: 40
 
 
 -- ftd.text: Installation
-padding-left: 50
-padding-top: 10
+padding-left.px: 50
+padding-top.px: 10
 
 
 -- ftd.text: FTD Language
-padding-left: 50
-padding-bottom: 15
-padding-top: 40
+padding-left.px: 50
+padding-bottom.px: 15
+padding-top.px: 40
 
 
 -- ftd.column:
-width: 250
-border-top: 1
-border-color: $fpm.color.main.text
+width.fixed.px: 250
+border-top-width.px: 1
+border-color: $$inherited.colors.text
 
 
 -- ftd.text: Grammar
-padding-left: 50
-padding-top: 40
+padding-left.px: 50
+padding-top.px: 40
 
 
 -- ftd.text: Philosophy
-padding-left: 50
-padding-top: 10
+padding-left.px: 50
+padding-top.px: 10
 
 
 -- ftd.text: Data Modelling
-padding-left: 50
-padding-top: 10
+padding-left.px: 50
+padding-top.px: 10
 
 
 -- ftd.text: UI
-padding-left: 50
-padding-bottom: 15
-padding-top: 40
+padding-left.px: 50
+padding-bottom.px: 15
+padding-top.px: 40
 
 
 -- ftd.column:
-width: 250
-border-top: 1
-border-color: $fpm.color.main.text
+width.fixed.px: 250
+border-top-width.px: 1
+border-color: $$inherited.colors.text
 
 
 -- ftd.text: Component
-padding-left: 50
-padding-top: 40
+padding-left.px: 50
+padding-top.px: 40
 
 
 -- ftd.text: Kernel components
-padding-left: 50
-padding-top: 10
+padding-left.px: 50
+padding-top.px: 10
+
+
+-- end: ftd.column
+
+-- end: ftd.column

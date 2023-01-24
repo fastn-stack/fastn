@@ -1,7 +1,7 @@
--- ft.page: Doomsday
-toc: $ft.toc
+-- ds.page: Doomsday
+toc: $ds.toc
 
--- ft.markdown: 
+-- ds.markdown: 
 
 FTD comes with a create, `doomsday`, which can serve a FTD file over http.
 
@@ -13,5 +13,8 @@ Github: [github.com/FifthTry/doomsday](https://github.com/FifthTry/doomsday).
 - [ ] http `$processor$`
 
 
--- ft.youtube:
+-- ds.youtube:
 v: GWhxP1TFFvA
+
+
+-- end: ds.page

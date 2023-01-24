@@ -1,81 +1,81 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
--- ft.page: ID in `ftd`
+-- ds.page: ID in `ftd`
 
 
--- ft.h1: What is `id`?
-id: id-page
+-- ds.h1: What is `id`?
+;; id: id-page
 
 `id` is the attribute to an element to apply styling or interactivity to that 
 specific element.
 
 
--- ft.h1: Understanding `id` in `ftd`
+-- ds.h1: Understanding `id` in `ftd`
 
 We can define `id` to any element using the `id` property. Consider the following
 code.
 
 
--- ft.code: Giving id to the element
+-- ds.code: Giving id to the element
 lang: ftd
 
 \-- ftd.text: Hello
-id: hello-id
+;; id: hello-id
 
 \-- ftd.row:
-id: row-id
+;; id: row-id
 
 \-- ftd.text: Hello again
 
 \-- end: ftd.row
 
 
--- ft.markdown:
+-- ds.markdown:
 
 In the above code, we have given `id` to `ftd.text` and `ftd.row` elements.
 We can also define `id` inside a component. Consider the following code:
 
 
--- ft.code: Defining id inside component
+-- ds.code: Defining id inside component
 lang: ftd
 
 \--  component foo:
 component: ftd.column
 
 \-- ftd.text: hello
-id: hello
+;; id: hello
 
 \-- end: foo
 
--- ft.markdown:
+-- ds.markdown:
 
 As we can see above, the element `--- ftd.text: hello` has given `id` as `hello`.
 
-In short, we can define `id` to an element using `id: some-id`.
+In short, we can define `id` to an element using `;; id: some-id`.
 
 
--- ft.h1: `id`s present in DOM node
+-- ds.h1: `id`s present in DOM node
 
 So far so good! But what are the `id`s present in DOM node? Can we use this `id` 
 directly? Let's go through these questions one by one.
 
 
--- ft.h2: Can we use this `id` directly?
+-- ds.h2: Can we use this `id` directly?
 
 The answer is NO! These `id` modifies a bit. (But why??). Let's understand this.
 
 Consider the following code:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- component foo:
 component: ftd.column
 
 \-- ftd.text: Hello
-id: hello
+;; id: hello
 
 \-- end: foo
 
@@ -84,7 +84,7 @@ id: hello
 \-- foo:
 
 
--- ft.markdown:
+-- ds.markdown:
 
 In the above code, there are two instances of `foo`. So there are two similar
 DOM nodes where the corresponding DOM node of `--- ftd.text: hello` gets `id` as `hello`.
@@ -93,12 +93,12 @@ problematic aspect is if we want to apply styling or interactivity to only one o
 these.
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.ask-id-to-ftd.png
-width: fill
+width: fill-container
 
 
--- ft.h2: What are the `id`s present in DOM node?
+-- ds.h2: What are the `id`s present in DOM node?
 
 Here's what `ftd` does. In first instance of `foo`, we haven't defined any id for it.
 So, the corresponding DOM node of it won't get any `id`, and even the `--- ftd.text: hello`
@@ -111,7 +111,7 @@ Lets see how HTML code looks like for both cases. (By the way, these are pseudo
 codes)
 
 
--- ft.code: Case 1: The first instance of foo
+-- ds.code: Case 1: The first instance of foo
 lang: html
 
 <div style="flex-direction: column; .."> 
@@ -119,7 +119,7 @@ lang: html
 </div>
 
 
--- ft.code: Case 2: The second instance of foo
+-- ds.code: Case 2: The second instance of foo
 lang: html
 
 <div id="foo-id" style="flex-direction: column; .."> 
@@ -127,7 +127,7 @@ lang: html
 </div>
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Here's the conclusion, If you want to give `id` to DOM node of element, then 
 provide `id` during invocation of component (as we have done for second case, where 
@@ -136,27 +136,27 @@ inner element becomes `<parent-id>:<inner-element-id>`. (Similar to `foo-id:hell
 which becomes `id` for DOM node of `ftd.text`element. 😊 )
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.ftd-give-me-id-yes-got-it.png
-width: fill
+width: fill-container
 
 
--- ft.h2: More Complex example
+-- ds.h2: More Complex example
 
 Let's see more complex id. Consider the code below:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- page:
-id: page-id
+;; id: page-id
 
 \-- component page:
 component: ftd.column
 
 \-- inside-page:
-id: inside-page-id
+;; id: inside-page-id
 
 \-- end: page
 
@@ -164,7 +164,7 @@ id: inside-page-id
 component: ftd.column
 
 \-- display-text:
-id: display-text-id
+;; id: display-text-id
 
 \-- end: inside-page
 
@@ -172,11 +172,11 @@ id: display-text-id
 component: ftd.column
 
 \-- ftd.text: Hello
-id: hello-id
+;; id: hello-id
 
 \-- end: display-text
 
--- ft.markdown:
+-- ds.markdown:
 
 Can you guess what is the `id` which DOM node of `--- ftd.text: hello` gets?
 It is `page-id:inside-page-id:display-text-id:hello-id`. I think you know how, but
@@ -194,7 +194,7 @@ this element becomes `page-id:inside-page-id:display-text-id:hello-id`.
 Let's check the pseudo HTML code for the above `ftd` code.
 
 
--- ft.code:
+-- ds.code:
 lang: html
 
 <div id="page-id" style="flex-direction: column; ..">
@@ -208,12 +208,14 @@ lang: html
 </div>
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Note: You have to provide `id` to all sequential invocations, in order to have 
 id available for element which you want to refer to.
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.ftd-give-me-an-element-with-id.png
-width: fill
+width: fill-container
+
+-- end: ds.page

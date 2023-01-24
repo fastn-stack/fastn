@@ -1,26 +1,28 @@
 -- import: fpm
 
--- intro:
+-- ds.page: intro
 
--- ftd.grid intro:
+/-- intro:
+
+/-- ftd.grid intro:
 slots: left right | bottom right
 slot-widths: 50% auto
 slot-heights: 50% auto
 width: fill
 height: fill
 
---- ftd.text: Future Of Writing
+/--- ftd.text: Future Of Writing
 slot: left
 align: center
 role: $fpm.type.heading-large
 
---- ftd.text: FTD & FPM
+/--- ftd.text: FTD & FPM
 slot: right
 align: center
 role: $fpm.type.heading-large
 
 
---- ftd.text:
+/--- ftd.text:
 slot: bottom
 align: center
 role: $fpm.type.heading-large
@@ -29,9 +31,12 @@ By Amit Upadhyay
 
 CEO, Founder: FifthTry.com
 
--- ftd.text ftd-text: FTD
+/-- ftd.text ftd-text: FTD
 color: $fpm.color.main.text
 link: https://ftd.dev
 
--- ftd.text fpm: FPM
+/-- ftd.text fpm: FPM
 link: https://fpm.dev
+
+
+-- end: ds.page

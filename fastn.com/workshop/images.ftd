@@ -1,12 +1,12 @@
 
--- ws.chapter: Images In FTD
+/-- ws.chapter: Images In FTD
 id: ws-images
 sidebar: true
 
--- container: ws-images.content-wrap.right-sidebar
+/-- container: ws-images.content-wrap.right-sidebar
 
--- ws.sidebar:
+/-- ws.sidebar:
 
--- container: ws-images.content-wrap.right-sidebar-mobile
+/-- container: ws-images.content-wrap.right-sidebar-mobile
 
--- ws.sidebar:
+/-- ws.sidebar:

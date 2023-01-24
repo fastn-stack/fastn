@@ -1,19 +1,19 @@
 
 
--- boolean $what-are-task-1-completed: false
+/--  boolean $what-are-task-1-completed: false
 $always-include$: true
 
--- object what-are-task-1-object:
+/--  object what-are-task-1-object:
 function: ls.set-boolean
 variable: $what-are-task-1-completed
 
--- ws.understood what-are-task-1-button: Done
+/--  ws.understood what-are-task-1-button: Done
 $on-click$: $what-are-task-1-completed = true
 $on-click$: message-host $what-are-task-1-object
 $task-status: $what-are-task-1-completed
 
 
--- ws.chapter: Numbers And Strings
+/--  ws.chapter: Numbers And Strings
 id: ws-numbers-and-strings
 sidebar: true
 
@@ -22,15 +22,15 @@ in FTD.
 
 We have two types, {ds.highlight: `integer` and `decimal` for dealing with
 numbers} in FTD. _Integers are signed_. `integer`s and `decimal`s are quite
-similar to `boolean`s, we have the `-- integer foo: 10` syntax to define them.
+similar to `boolean`s, we have the `/--  integer foo: 10` syntax to define them.
 
 {ds.highlight: Strings in FTD do not use quotes}, so a string is defined like
-`-- string name: amitu`. Also you can define multi-line string like this:
+`/--  string name: amitu`. Also you can define multi-line string like this:
 
--- ds.code: multi-line string in ftd
+/--  ds.code: multi-line string in ftd
 lang: ftd
 
-\-- string about-this-workshop:
+\/--  string about-this-workshop:
 
 FTD language is a possible replacement for JavaScript/React to build
 web front-ends. In this workshop you will learn the basics of FTD and
@@ -48,11 +48,11 @@ stages and write code to get the application working. Participants are
 required to have a decent computer, but there is no need to install any
 software before hand (other than your favorite editor).
 
--- ds.markdown:
+/--  ds.markdown:
 
 {ds.highlight: This makes FTD quite suitable for authoring content.}
 
--- ws.task: Task: Fix FTD files
+/--  ws.task: Task: Fix FTD files
 $status: $what-are-task-1-completed
 button: what-are-task-1-button:
 
@@ -61,20 +61,20 @@ Go through [numbers.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-d
 and [strings.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/03-numbers-and-strings/strings.ftd) as per
 instructions given in the file.
 
--- container:ws-numbers-and-strings
+/--  container:ws-numbers-and-strings
 
--- ds.h1: You Are Done
+/--  ds.h1: You Are Done
 
--- ds.markdown:
+/--  ds.markdown:
 
 You have learnt basics of numbers and strings. {ds.highlight: Lets move on to
 [records now](id: ws-records)} or go back to [the workshop page](id: workshop).
 
 
--- container: ws-numbers-and-strings.content-wrap.right-sidebar
+/--  container: ws-numbers-and-strings.content-wrap.right-sidebar
 
--- ws.sidebar:
+/--  ws.sidebar:
 
--- container: ws-numbers-and-strings.content-wrap.right-sidebar-mobile
+/--  container: ws-numbers-and-strings.content-wrap.right-sidebar-mobile
 
--- ws.sidebar:
+/--  ws.sidebar:

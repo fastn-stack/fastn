@@ -1,56 +1,56 @@
 -- import: fpm
 
--- ftd.color efefef: #efefef
+/-- ftd.color efefef: #efefef
 dark: #efefef
 
--- ftd.color white: white
+/-- ftd.color white: white
 dark: white
 
--- ftd.color ebe2ce: #ebe2ce
+/-- ftd.color ebe2ce: #ebe2ce
 dark: #ebe2ce
 
--- ftd.color d9e7f8: #d9e7f8
+/-- ftd.color d9e7f8: #d9e7f8
 dark: #d9e7f8
 
--- ftd.color dc9eb3: #dc9eb3
+/-- ftd.color dc9eb3: #dc9eb3
 dark: #dc9eb3
 
--- ftd.color 76c2c4: #76c2c4
+/-- ftd.color 76c2c4: #76c2c4
 dark: #76c2c4
 
--- ftd.color fce251: #fce251
+/-- ftd.color fce251: #fce251
 dark: #fce251
 
--- ftd.color d2d2ce: #d2d2ce
+/-- ftd.color d2d2ce: #d2d2ce
 dark: #d2d2ce
 
--- ftd.color f09483: #f09483
+/-- ftd.color f09483: #f09483
 dark: #f09483
 
--- ftd.color yellow: yellow
+/-- ftd.color yellow: yellow
 dark: yellow
 
--- ft.page: An Architecture Diagram
+-- ds.page: An Architecture Diagram
 
--- ft.markdown: 
+-- ds.markdown: 
 
 In this example you can see an architecture diagram created using FTD.
 
 It is interactive, you can click on individual blocks. It is not yet responsive,
 we will be updating the example to make it mobile optimized/responsive soon.
 
--- diagram:
+/-- diagram:
 
--- string info: start-info
+/-- string info: start-info
 
 
--- ftd.column diagram:
+/-- ftd.column diagram:
 background-color: $efefef
 width: fill
 height: fill
 padding: 40
 
---- ftd.scene:
+-/-- ftd.scene:
 background-color: $white
 width: 1350
 height: 540
@@ -95,20 +95,20 @@ right: 506
 
 --- container: ftd.main
 
---- ftd.column:
+-/-- ftd.column:
 background-color: $ebe2ce
 width: fill
 padding: 10
 margin-top: -60
 
---- ftd.column:
+-/-- ftd.column:
 width: fill
 padding: 10
 border-width: 2
 border-radius: 4
 spacing: 5
 
---- ftd.text: Notes:
+-/-- ftd.text: Notes:
 role: $fpm.type.copy-large
 
 --- start-info:
@@ -168,7 +168,7 @@ if: $info == container-runtime-info
 
 
 
--- ftd.scene control-panel:
+/-- ftd.scene control-panel:
 background-color: $d9e7f8
 border-color if $MOUSE-IN: $fpm.color.main.text
 border-width: 2
@@ -177,7 +177,7 @@ height: 460
 align: center
 border-radius: 4
 
---- ftd.text: Control Panel
+-/-- ftd.text: Control Panel
 top: 5
 left: 5
 role: $fpm.type.copy-large
@@ -225,7 +225,7 @@ top: 251
 left: 304
 
 
--- ftd.text etcd: etcd
+/-- ftd.text etcd: etcd
 padding: 20
 border-width: 2
 border-radius: 10
@@ -237,7 +237,7 @@ $on-click$: prevent-default
 
 
 
--- ftd.column kube-controller-manager:
+/-- ftd.column kube-controller-manager:
 
 --- box:
 background-color: $dc9eb3
@@ -265,7 +265,7 @@ $on-click$: prevent-default
 
 
 
--- ftd.column cloud-controller-manager:
+/-- ftd.column cloud-controller-manager:
 
 --- box:
 background-color: $76c2c4
@@ -290,7 +290,7 @@ $on-click$: prevent-default
 
 
 
--- ftd.row kube-api-server:
+/-- ftd.row kube-api-server:
 width: 100
 height: 270
 background-color: $fce251
@@ -299,7 +299,7 @@ padding: 20
 border-color if $MOUSE-IN: $fpm.color.main.text
 /border-color if $info == $kube-api-server-info: $fpm.color.main.text
 
---- ftd.text: Kube Api Server
+-/-- ftd.text: Kube Api Server
 align: center
 
 
@@ -307,7 +307,7 @@ align: center
 
 
 
--- ftd.scene nodes:
+/-- ftd.scene nodes:
 background-color: $d2d2ce
 border-width: 2
 border-radius: 4
@@ -316,12 +316,12 @@ height: 460
 align: center
 border-color if $MOUSE-IN: $fpm.color.main.text
 
---- ftd.text: Nodes
+-/-- ftd.text: Nodes
 top: 5
 left: 5
 role: $fpm.type.copy-large
 
---- ftd.column:
+-/-- ftd.column:
 top: 50
 left: 90
 background-color: $f09483
@@ -339,14 +339,14 @@ left: 115
 
 
 
--- ftd.scene worker-node:
+/-- ftd.scene worker-node:
 background-color: $f09483
 width: 400
 height: 300
 border-width: 2
 border-radius: 4
 
---- ftd.text: Worker Node
+-/-- ftd.text: Worker Node
 top: 5
 left: 5
 
@@ -373,7 +373,7 @@ $on-click$: prevent-default
 
 
 
--- ftd.column box:
+/-- ftd.column box:
 optional ftd.color background-color:
 string title:
 background-color: $background-color
@@ -387,12 +387,12 @@ padding: 15
 border-color if $MOUSE-IN: $fpm.color.main.text
 border-radius: 4
 
---- ftd.text: $title
+-/-- ftd.text: $title
 top: 5
 left: 5
 role: $fpm.type.copy-large
 
---- ftd.row:
+-/-- ftd.row:
 spacing: space-around
 width: fill
 top: 40
@@ -401,7 +401,7 @@ id: box-id
 
 
 
--- ftd.text text-block: $text
+/-- ftd.text text-block: $text
 caption text:
 background-color: $white
 width: 80
@@ -411,14 +411,14 @@ border-width: 2
 border-color if $MOUSE-IN: $fpm.color.main.text
 border-radius: 4
 
--- ftd.row vertical-line:
+/-- ftd.row vertical-line:
 string length:
 width: $length
 height: 1
 border-width: 1
 open: false
 
--- ftd.row horizontal-line:
+/-- ftd.row horizontal-line:
 string length:
 height: $length
 width: 1
@@ -426,8 +426,8 @@ border-width: 1
 open: false
 
 
--- ftd.text start-info: Click on various components to see the related-information.
--- ftd.text kubernetes-info:
+/-- ftd.text start-info: Click on various components to see the related-information.
+/-- ftd.text kubernetes-info:
 
 **Kubernetes**: A Kubernetes cluster consists of a set of worker machines, called
 nodes, that run containerized applications. Every cluster has at least one
@@ -440,7 +440,7 @@ computers and a cluster usually runs multiple nodes, providing fault-tolerance
 and high availability.
 
 
--- ftd.text control-panel-info:
+/-- ftd.text control-panel-info:
 
 **Control Panel**: The control planes components make global decisions about the
 cluster (for example, scheduling), as well as detecting and responding to
@@ -454,7 +454,7 @@ Highly Available clusters with kubeadm for an example control plane setup that
 runs across multiple VMs.
 
 
--- ftd.text kube-api-server-info:
+/-- ftd.text kube-api-server-info:
 
 **Kube Api Server**: The API server is a component of the Kubernetes control plane
 that exposes the Kubernetes API. The API server is the front end for the
@@ -466,7 +466,7 @@ more instances. You can run several instances of kube-apiserver and balance
 traffic between those instances.
 
 
--- ftd.text etcd-info:
+/-- ftd.text etcd-info:
 
 **etcd**: Consistent and highly-available key value store used as Kubernetes backing
 store for all cluster data.
@@ -475,7 +475,7 @@ If your Kubernetes cluster uses etcd as its backing store, make sure you have a
 back up plan for those data.
 
 
--- ftd.text kube-controller-manager-info:
+/-- ftd.text kube-controller-manager-info:
 
 **Kube Controller Manager**: Control plane component that runs controller processes.
 
@@ -483,26 +483,26 @@ Logically, each controller is a separate process, but to reduce complexity, they
 are all compiled into a single binary and run in a single process.
 
 
--- ftd.text node-controller-info:
+/-- ftd.text node-controller-info:
 
 **Node controller**: Responsible for noticing and responding when nodes go down.
 
--- ftd.text replication-controller-info:
+/-- ftd.text replication-controller-info:
 
 **Replication Controller**: Watches for Job objects that represent one-off tasks,
 then creates Pods to run those tasks to completion.
 
--- ftd.text endpoints-controller-info:
+/-- ftd.text endpoints-controller-info:
 
 **Endpoints controller**: Populates the Endpoints object (that is, joins
 Services & Pods).
 
--- ftd.text service-account-token-controller-info:
+/-- ftd.text service-account-token-controller-info:
 
 **Service Account & Token controllers**: Create default accounts and API access
 tokens for new namespaces.
 
--- ftd.text cloud-controller-manager-info:
+/-- ftd.text cloud-controller-manager-info:
 
 **Cloud controller manager**: A Kubernetes control plane component that embeds
 cloud-specific control logic. The cloud controller manager lets you link your
@@ -520,26 +520,26 @@ several logically independent control loops into a single binary that you run
 as a single process. You can scale horizontally (run more than one copy) to
 improve performance or to help tolerate failures.
 
--- ftd.text cloud-node-controller-info:
+/-- ftd.text cloud-node-controller-info:
 
 **Node controller**: For checking the cloud provider to determine if a node has been
 deleted in the cloud after it stops responding.
 
--- ftd.text cloud-route-controller-info:
+/-- ftd.text cloud-route-controller-info:
 
 **Route controller**: For setting up routes in the underlying cloud infrastructure.
 
--- ftd.text cloud-service-controller-info:
+/-- ftd.text cloud-service-controller-info:
 
 **Service controller**: For creating, updating and deleting cloud provider
 load balancers.
 
--- ftd.text nodes-info:
+/-- ftd.text nodes-info:
 
 **Node Components**: Node components run on every node, maintaining running pods
 and providing the Kubernetes runtime environment.
 
--- ftd.text kubelet-info:
+/-- ftd.text kubelet-info:
 
 **Kubelet**: An agent that runs on each node in the cluster. It makes sure that
 containers are running in a Pod.
@@ -549,7 +549,7 @@ and ensures that the containers described in those PodSpecs are running and
 healthy. The kubelet doesnt manage containers which were not created by
 Kubernetes.
 
--- ftd.text kube-proxy-info:
+/-- ftd.text kube-proxy-info:
 
 **Kube-proxy**: kube-proxy is a network proxy that runs on each node in your
 cluster, implementing part of the Kubernetes Service concept.
@@ -561,10 +561,13 @@ cluster.
 kube-proxy uses the operating system packet filtering layer if there is one and
 its available. Otherwise, kube-proxy forwards the traffic itself.
 
--- ftd.text container-runtime-info:
+/-- ftd.text container-runtime-info:
 
 **Container runtime**: The container runtime is the software that is responsible for
 running containers.
 
 Kubernetes supports several container runtimes: Docker, containerd, CRI-O, and
 any implementation of the Kubernetes CRI (Container Runtime Interface).
+
+
+-- end: ds.page

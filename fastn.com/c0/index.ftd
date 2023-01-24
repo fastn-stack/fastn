@@ -1,4 +1,4 @@
--- ft.page: FTD Crash Course
+-- ds.page: FTD Crash Course
 
 20 mins Video Course
 
@@ -7,3 +7,6 @@ image: some-image
 
 section body
 FTD is a programming lang created for non programmers
+
+
+-- end: ds.page

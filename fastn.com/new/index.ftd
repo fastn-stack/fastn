@@ -4,18 +4,18 @@
 /-- import: new/lib as lib
 
 
--- ft.page:
-toc: $config.empty-toc
+-- ds.page:
+;; toc: $config.empty-toc
 
 
--- ftd.column:
+/-- ftd.column:
 id: outer-9
 
 
--- ftd.text: hello
+/-- ftd.text: hello
 
 
--- ftd.column page:
+/-- ftd.column page:
 open: true
 append-at: m
 
@@ -25,15 +25,15 @@ append-at: m
 width: fill
 padding: 100
 
---- container: ftd.main
+/--- container: ftd.main
 
 /--- lib.ftd-footer:
 
 
--- container: outer-9
+/-- container: outer-9
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 padding-bottom: 150
 padding-left: 100
@@ -41,12 +41,12 @@ padding-top: 100
 id: hero-text
 
 
--- ftd.column:
+/-- ftd.column:
 width: 600
 id: middle-left-2
 
 
--- ftd.text:
+/-- ftd.text:
 color: $fpm.color.main.text
 width: 580
 padding-top: 40
@@ -56,10 +56,10 @@ role: $fpm.type.heading-large
 Create amazing sites quickly & store data as well
 
 
--- container: middle-left-2
+/-- container: middle-left-2
 
 
--- ftd.row:
+/-- ftd.row:
 width: 270
 background-color: $fpm.color.main.background.base
 border-radius: 50
@@ -67,7 +67,7 @@ padding-top: 6
 padding-bottom: 9
 
 
--- ftd.text:
+/-- ftd.text:
 width: fill
 color: $fpm.color.main.text
 text-align: center
@@ -75,23 +75,23 @@ text-align: center
 Create your website
 
 
--- container: hero-text
+/-- container: hero-text
 
 
--- ftd.row:
+/-- ftd.row:
 padding-right: 100
 align: right
 
 
--- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.IwSE554.png
 width: 660
 
 
--- container: outer-9
+/-- container: outer-9
 
 
--- ftd.column:
+//-- ftd.column:
 width: fill
 background-color: $fpm.color.main.background.base
 padding-left: 100
@@ -101,43 +101,43 @@ padding-bottom: 50
 id: footer
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 
 
--- ftd.text:
+/-- ftd.text:
 width: 350
 color: $fpm.color.main.background.base
 
 FTD is lovingly maintained by the core team of volunteers
 
 
--- ftd.row:
+/-- ftd.row:
 width: 400
 align: right
 
 
--- ftd.text:
+/-- ftd.text:
 color: $fpm.color.main.text
 
 Proudly hosted by
 
 
--- ftd.text: FifthTry
+/-- ftd.text: FifthTry
 link: https://www.fifthtry.com/
 role: $fpm.type.heading-medium
 color: $fpm.color.main.text
 padding-left: 20
 
 
--- container: footer
+/-- container: footer
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 
 
--- ftd.text:
+/-- ftd.text:
 width: 500
 color: $fpm.color.main.text
 
@@ -145,12 +145,15 @@ The contents of this website are
 © 2021 under the terms of the BSE License.
 
 
--- ftd.row:
+/-- ftd.row:
 width: 400
 align: right
 
 
--- ftd.text:
+/-- ftd.text:
 color: $fpm.color.main.text
 
 FTD is funded, thanks to its sponsors!
+
+
+-- end: ds.page

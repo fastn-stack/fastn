@@ -1,21 +1,16 @@
 -- import: fpm
 
--- ft.page: Grid Layout
-
-
 -- boolean mobile: false
 
 
--- ftd.column:
-padding: 30
-width: fill
+-- ds.page: Grid Layout
 
 
--- ft.h1: Grid Using Area
+-- ds.h1: Grid Using Area
 
 This grid layout contains six columns and three rows:
 
--- ftd.grid:
+/-- ftd.grid:
 slots: header header header header header header | menu main main main right right | menu footer footer footer footer footer
 spacing: 10
 background-color: $fpm.color.main.background.base
@@ -23,14 +18,14 @@ padding: 10
 width: fill
 margin-bottom: 40
 
---- ftd.text: Header
+/-- ftd.text: Header
 slot: header
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: Menu
+/-- ftd.text: Menu
 slot: menu
 background-color: $fpm.color.main.background.base
 text-align: center
@@ -38,21 +33,21 @@ padding-vertical: 20
 height: fill
 role: $fpm.type.heading-large
 
---- ftd.text: Main
+/-- ftd.text: Main
 slot: main
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: Right
+/-- ftd.text: Right
 slot: right
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: Footer
+/-- ftd.text: Footer
 slot: footer
 background-color: $fpm.color.main.background.base
 text-align: center
@@ -61,7 +56,7 @@ role: $fpm.type.heading-large
 
 
 
-/-- ft.h1: Grid Using Rows and Column
+-- ds.h1: Grid Using Rows and Column
 
 This grid layout contains three columns and two rows:
 
@@ -74,7 +69,7 @@ background-color: $fpm.color.main.background.base
 padding: 10
 margin-bottom: 40
 
---- ftd.text: 11
+/-- ftd.text: 11
 grid-column: 1 / 2
 grid-row: 1 / 2
 background-color: $fpm.color.main.background.base
@@ -82,7 +77,7 @@ text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: 12
+/-- ftd.text: 12
 grid-column: 2 / 3
 grid-row: 1 / 2
 background-color: $fpm.color.main.background.base
@@ -91,7 +86,7 @@ padding-vertical: 20
 height: fill
 role: $fpm.type.heading-large
 
---- ftd.text: 13
+/-- ftd.text: 13
 grid-column: 3 / 4
 grid-row: 1 / 2
 background-color: $fpm.color.main.background.base
@@ -99,7 +94,7 @@ text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: 21
+/-- ftd.text: 21
 grid-column: 1 / 2
 grid-row: 2 / 3
 background-color: $fpm.color.main.background.base
@@ -107,7 +102,7 @@ text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: 22
+/-- ftd.text: 22
 grid-column: 2 / 3
 grid-row: 2 / 3
 background-color: $fpm.color.main.background.base
@@ -115,7 +110,7 @@ text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: 23
+/-- ftd.text: 23
 grid-column: 3 / 4
 grid-row: 2 / 3
 background-color: $fpm.color.main.background.base
@@ -123,11 +118,11 @@ text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
--- ft.h1: Grid Using Area With An Empty Grid Cell
+-- ds.h1: Grid Using Area With An Empty Grid Cell
 
 This grid layout contains four columns and three rows:
 
--- ftd.grid:
+/-- ftd.grid:
 slots: header header header header | main main . sidebar | footer footer footer footer
 spacing: 10
 background-color: $fpm.color.main.background.base
@@ -135,28 +130,28 @@ padding: 10
 width: fill
 margin-bottom: 40
 
---- ftd.text: Header
+/-- ftd.text: Header
 slot: header
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: Main
+/-- ftd.text: Main
 slot: main
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: Sidebar
+/-- ftd.text: Sidebar
 slot: sidebar
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
 role: $fpm.type.heading-large
 
---- ftd.text: Footer
+/-- ftd.text: Footer
 slot: footer
 background-color: $fpm.color.main.background.base
 text-align: center
@@ -165,7 +160,7 @@ role: $fpm.type.heading-large
 
 
 
-/-- ft.h1: Grid Row Auto Flow
+-- ds.h1: Grid Row Auto Flow
 
 This grid layout contains five columns and two rows:
 
@@ -179,7 +174,7 @@ padding: 10
 margin-bottom: 40
 auto-flow: row
 
---- ftd.text: 11
+/-- ftd.text: 11
 grid-column: 1
 grid-row: 1 / 3
 background-color: $fpm.color.main.background.base
@@ -188,28 +183,28 @@ height: fill
 overflow-y: auto
 role: $fpm.type.heading-large
 
---- ftd.text: 12
+/-- ftd.text: 12
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
 role: $fpm.type.heading-large
 
---- ftd.text: 13
+/-- ftd.text: 13
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
 role: $fpm.type.heading-large
 
---- ftd.text: 14
+/-- ftd.text: 14
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
 role: $fpm.type.heading-large
 
---- ftd.text: 15
+/-- ftd.text: 15
 grid-column: 5
 grid-row: 1 / 3
 background-color: $fpm.color.main.background.base
@@ -219,7 +214,7 @@ overflow-y: auto
 role: $fpm.type.heading-large
 
 
-/-- ft.h1: Grid Column Auto Flow
+-- ds.h1: Grid Column Auto Flow
 
 This grid layout contains five columns and two rows:
 
@@ -233,7 +228,7 @@ padding: 10
 margin-bottom: 40
 auto-flow: column
 
---- ftd.text: 11
+/-- ftd.text: 11
 grid-column: 1
 grid-row: 1 / 3
 background-color: $fpm.color.main.background.base
@@ -242,28 +237,28 @@ height: fill
 overflow-y: auto
 role: $fpm.type.heading-large
 
---- ftd.text: 12
+/-- ftd.text: 12
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
 role: $fpm.type.heading-large
 
---- ftd.text: 13
+/-- ftd.text: 13
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
 role: $fpm.type.heading-large
 
---- ftd.text: 14
+/-- ftd.text: 14
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
 role: $fpm.type.heading-large
 
---- ftd.text: 15
+/-- ftd.text: 15
 grid-column: 5
 grid-row: 1 / 3
 background-color: $fpm.color.main.background.base
@@ -272,11 +267,11 @@ height: fill
 overflow-y: auto
 role: $fpm.type.heading-large
 
--- ft.h1: Grid Areas with slot-widths and slot-heights
+-- ds.h1: Grid Areas with slot-widths and slot-heights
 
 This grid layout contains two columns and two rows:
 
--- ftd.grid:
+/-- ftd.grid:
 slots: header header | sidebar main
 slot-widths: 60px 100px
 slot-heights: 20px 200px
@@ -284,21 +279,21 @@ background-color: $fpm.color.main.background.base
 spacing: 10
 padding: 10
 
---- text: Header
+/-- text: Header
 slot: header
 
---- text: Sidebar
+/-- text: Sidebar
 slot: sidebar
 
---- text: Main
+/-- text: Main
 slot: main
 
 
--- ft.h1: Grid with Event
+-- ds.h1: Grid with Event
 
 This grid layout contains two columns and two rows which changes to one column and two rows:
 
--- ftd.grid:
+/-- ftd.grid:
 slots: header header | sidebar main
 slots if $mobile: header | main
 slot-widths: 60px 100px
@@ -310,27 +305,30 @@ spacing: 10
 spacing if $mobile: 5
 padding: 10
 
---- text: Header
+/-- text: Header
 slot: header
 slot if $mobile: main
 
---- text: Sidebar
+/-- text: Sidebar
 if: not $mobile
 slot: sidebar
 
---- text: Main
+/-- text: Main
 slot: main
 slot if $mobile: header
 
 
--- ftd.text: CLICK HERE!
+/-- ftd.text: CLICK HERE!
 color if $ftd.dark-mode: $fpm.color.main.text
 $on-click$: toggle $mobile
 
--- ftd.text text: $value
+/-- ftd.text text: $value
 caption value:
 string slot:
 slot: $slot
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
+
+
+-- end: ds.page

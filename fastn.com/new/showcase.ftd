@@ -3,12 +3,12 @@
 
 
 
--- ftd.column:
+/-- ftd.column:
 width: fill
 id: outer-6
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 padding-top: 20
 padding-bottom: 20
@@ -18,66 +18,66 @@ background-color: $fpm.color.main.background.base
 id: nav-bar-3
 
 
--- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.fpm-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
 width: 110
 
 
--- container: nav-bar-3
+/-- container: nav-bar-3
 
 
--- ftd.row:
+/-- ftd.row:
 spacing: 40
 align: right
 
 
--- ftd.text: HOME
+/-- ftd.text: HOME
 link: https://www.fifthtry.com/ftd/new/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
 
--- ftd.text: DOCS
+/-- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
 
--- ftd.text: RESOURCES
+/-- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
 
--- ftd.text: SHOWCASE
+/-- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
 
--- ftd.text: NEWS
+/-- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
 
--- container: outer-6
+/-- container: outer-6
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 padding-top: 20
 padding-left: 350
 id: subject-2
 
 
--- ftd.column:
+/-- ftd.column:
 width: 850
 padding: 100
 align: center
@@ -85,11 +85,11 @@ background-color: $fpm.color.main.background.base
 border-radius: 15
 
 
--- ftd.text: Showcase
+/-- ftd.text: Showcase
 role: $fpm.type.heading-medium
 
 
--- ftd.text:
+/-- ftd.text:
 role: $fpm.type.copy-large
 
 Fifthtry powers some company websites, here are some examples:

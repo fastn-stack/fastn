@@ -1,13 +1,31 @@
--- ft.page: Examples
+-- import: fpm/processors as pr
 
 
--- ft.markdown: 
+-- pr.toc-item list examples-toc:
+$processor$: pr.toc
+
+- Input: /examples/input/
+- Architecture Diagram: /examples/diagram/
+- Comic: /examples/comic/
+- Creating a tree: /creating-a-tree/
+- Gate Pass: /examples/mygate/
+- Grid: /examples/grid/
+- Dark Mode: /examples/dark-mode/
+- Conditional Variable: /examples/conditional-variable/
+
+-- ds.page: Examples
+
+
+-- ds.markdown: 
 
 Checkout few of FTD examples here:
 
 -- ftd.text: $o.title
-$loop$: $config.examples-toc as $o
+$loop$: $examples-toc as $o
 link: $o.url
-role: $fpm.type.copy-large
-padding: 5
+role: $inherited.types.copy-large
+padding.px: 5
 
+
+
+-- end: ds.page

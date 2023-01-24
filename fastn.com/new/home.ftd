@@ -4,118 +4,122 @@
 
 
 -- ftd.column:
-width: fill
-id: outer-10
+width: fill-container
+;; id: outer-10
 
 
 -- ftd.row:
-width: fill
-padding-left: 100
-padding-right: 100
-padding-top: 20
-padding-bottom: 20
-background-color: $fpm.color.main.background.base
-id: nav-bar-4
+width: fill-container
+padding-left.px: 100
+padding-right.px: 100
+padding-top.px: 20
+padding-bottom.px: 20
+background.solid: $inherited.colors.background.base
+;; id: nav-bar-4
 
 
 -- ftd.image:
 src: $assets.files.images.fpm-logo-1.png
-width: 130
+width: fill-container
 
 
--- container: nav-bar-4
+/-- container: nav-bar-4
 
 
 -- ftd.row:
-spacing: 50
-align: right
+spacing.px: 50
+align-self: end
 
 
 -- ftd.text: HOME
-color: $fpm.color.main.text
-padding-top: 10
-role: $fpm.type.copy-large
+color: $inherited.colors.text
+padding-top.px: 10
+role: $inherited.types.copy-large
 
 
 -- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
-padding-top: 10
+color: $inherited.colors.text
+role: $inherited.types.copy-large
+padding-top.px: 10
 
 
 -- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
-padding-top: 10
+color: $inherited.colors.text
+role: $inherited.types.copy-large
+padding-top.px: 10
 
 
 -- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
-padding-top: 10
+color: $inherited.colors.text
+role: $inherited.types.copy-large
+padding-top.px: 10
 
 
 -- ftd.text: NEWS
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
-padding-top: 10
+color: $inherited.colors.text
+role: $inherited.types.copy-large
+padding-top.px: 10
 
 
--- container: outer-10
+/-- container: outer-10
 
 
 -- ftd.row:
-width: fill
-padding-bottom: 20
-padding-left: 100
-padding-top: 100
-id: hero-text-2
+width: fill-container
+padding-bottom.px: 20
+padding-left.px: 100
+padding-top.px: 100
+;; id: hero-text-2
 
 
 -- ftd.column:
-width: 600
-id: middle-left
+width.fixed.px: 600
+;; id: middle-left
 
 
 -- ftd.text:
-width: 580
-role: $fpm.type.heading-large
-padding-top: 40
-padding-bottom: 50
+width.fixed.px: 580
+role: $inherited.types.heading-large
+padding-top.px: 40
+padding-bottom.px: 50
 
 Create amazing sites quickly & store data as well
 
 
--- container: middle-left
+/-- container: middle-left
 
 
 -- ftd.row:
-width: 300
-background-color: $fpm.color.main.background.base
-border-radius: 50
-padding-top: 12
-padding-bottom: 15
+width.fixed.px: 300
+background.solid: $inherited.colors.background.base
+border-radius.px: 50
+padding-top.px: 12
+padding-bottom.px: 15
 
 
 -- ftd.text:
-width: fill
-color: $fpm.color.main.text
+width: fill-container
+color: $inherited.colors.text
 text-align: center
 
 Create your website
 
 
--- container: hero-text-2
+/-- container: hero-text-2
 
 
 -- ftd.row:
-padding-right: 100
-align: right
+padding-right.px: 100
+align-self: end
 
 
 -- ftd.image:
 src: $assets.files.images.IwSE554.png
-width: 660
+width: fill-container
+
+-- end: ftd.row
+
+-- end: ftd.column

@@ -7,13 +7,15 @@ dark: cadetblue
 -- ftd.color white: white
 dark: white
 
--- ft.page: Once upon a time...
+-- ds.page: Once upon a time...
 
 
--- comic:
+/-- comic:
 
 
--- ftd.scene comic:
+-- end: ds.page
+
+/-- ftd.scene comic:
 background-color: $cadetblue
 width: 1070
 height: 1137
@@ -22,19 +24,19 @@ move-left: 100
 move-up: 80
 left: 0
 
---- power-puff-girls-say:
+/-- power-puff-girls-say:
 
---- mm_says:
+/-- mm_says:
 
---- sophie-and-ethan-say:
+/-- sophie-and-ethan-say:
 
-/--- import-ethan-scene:
+/-- import-ethan-scene:
 
---- priya-dances:
+/-- priya-dances:
 
---- priya-dances-again:
+/-- priya-dances-again:
 
---- ftd.text: The End!!
+/-- ftd.text: The End!!
 top: 800
 left: 320
 cursor: default
@@ -45,17 +47,17 @@ role: $fpm.type.heading-large
 
 
 
--- ftd.scene power-puff-girls-say:
+/-- ftd.scene power-puff-girls-say:
 left: 20
 top: 20
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.ppg2016_keyart_horizontal_nologos_final.jpg
 top: 0
 left: 0
 width: 500
 
---- ftd.text: Hello Everyone! We are PowerPuff Girls
+/-- ftd.text: Hello Everyone! We are PowerPuff Girls
 border-radius: 150
 background-color: $white
 padding: 10
@@ -64,17 +66,17 @@ top: 10
 
 
 
--- ftd.scene mm_says:
+/-- ftd.scene mm_says:
 left: 540
 top: 20
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.disney-mickey-mouse-104-pcs-puzzle-104-3d-model_GT4iLTt.jpg
 top: 0
 left: 0
 width: 500
 
---- ftd.text: Hello Everyone! I am Mickey Mouse
+/-- ftd.text: Hello Everyone! I am Mickey Mouse
 border-radius: 150
 background-color: $white
 padding: 10
@@ -82,48 +84,48 @@ left: 10
 top: 10
 
 
--- ftd.scene sophie-and-ethan-say:
+/-- ftd.scene sophie-and-ethan-say:
 background-image: $assets.files.images.49429469-cartoon-forest-background.jpg
 width: 500
 left: 20
 top: 386
 scale-y: 1.4
 
---- ethan-says:
+/-- ethan-says:
 
---- sophie-says:
-
-
+/-- sophie-says:
 
 
--- ftd.scene ethan-says:
+
+
+/-- ftd.scene ethan-says:
 left: 0
 top: 0
 
---- ftd.text: Hi! I am Ethan
+/-- ftd.text: Hi! I am Ethan
 border-radius: 150
 background-color: $white
 padding: 10
 left: 0
 top: 5
 
---- ethan-happy-facing-side:
+/-- ethan-happy-facing-side:
 
 
--- ftd.scene ethan-happy-facing-side:
+/-- ftd.scene ethan-happy-facing-side:
 left: 0
 top: 0
 width: 200
 scale: 2.3
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.handsfolded.svg
 top: 0
 left: 0
 height: 123
 crop: true
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.smile.svg
 top: 0
 left: 0
@@ -134,18 +136,18 @@ left: 0
 
 
 
--- ftd.scene sophie-says:
+/-- ftd.scene sophie-says:
 left: 240
 top: 0
 
---- ftd.text: Nice to meet you Ethan. I am Sophie
+/-- ftd.text: Nice to meet you Ethan. I am Sophie
 border-radius: 150
 background-color: $white
 padding: 10
 left: 0
 top: 5
 
---- sophie-excited:
+/-- sophie-excited:
 
 
 -- ftd.scene sophie-excited:
@@ -154,14 +156,14 @@ top: 73
 width: 200
 scale: 1.5
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.holdingumbrella.svg
 top: 0
 left: 0
 height: 140
 crop: true
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.excited.svg
 top: 0
 left: 0
@@ -174,7 +176,7 @@ top: 590
 background-image: $assets.files.images.vector-illustration-of-a-beautiful-summer-landscape-143054302
 scale: 0.5
 
-/--- comic1.ethan_says:
+/-- comic1.ethan_says:
 
 
 -- ftd.scene priya-dances:
@@ -183,30 +185,30 @@ top: 700
 width: 200
 scale: 1.8
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.yuhoo.svg
 top: 0
 left: 0
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.laugh.svg
 top: 0
 left: 0
 
 
--- ftd.scene priya-dances-again:
+/-- ftd.scene priya-dances-again:
 left: 800
 top: 700
 width: 200
 scale: 1.8
 scale-x: -1
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.yuhoo.svg
 top: 0
 left: 0
 
---- ftd.image:
+/-- ftd.image:
 src: $assets.files.images.laugh.svg
 top: 0
 left: 0

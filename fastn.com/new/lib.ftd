@@ -5,36 +5,36 @@
 component: ftd.column
 open: m
 
---- ftd-header:
+/--- ftd-header:
 
---- ftd.column:
+/--- ftd.column:
 width: fill
 padding: 100
 
---- container: ftd.main
+/--- container: ftd.main
 
---- ftd-footer:
-
-
--- ft.h1: `ftd-header`
+/--- ftd-footer:
 
 
--- ft.code:
+-- ds.h1: `ftd-header`
+
+
+-- ds.code:
 lang: ftd
 
 \-- ftd-header:
 
 
--- ft.output:
+-- ds.output:
 
-/--- ftd-header:
+//--- ftd-header:
 
 
 /-- component ftd-header:
 component: ftd.column
 width: fill
 
---- ftd.row:
+/--- ftd.row:
 width: fill
 padding-left: 100
 padding-right: 100
@@ -43,60 +43,60 @@ padding-bottom: 20
 background-color: $fpm.color.main.background.base
 id: nav-bar-2
 
---- ftd.image:
+/--- ftd.image:
 src: $assets.files.images.fpm-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
 width: 130
 
-/--- container: nav-bar-2
+//--- container: nav-bar-2
 
---- ftd.row:
+/--- ftd.row:
 spacing: 50
 align: right
 
---- ftd.text: HOME
+/--- ftd.text: HOME
 link: https://www.fifthtry.com/ftd/new/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
---- ftd.text: DOCS
+/--- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
---- ftd.text: RESOURCES
+/--- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
---- ftd.text: SHOWCASE
+/--- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
---- ftd.text: NEWS
+/--- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
 color: $fpm.color.main.text
 role: $fpm.type.copy-large
 padding-top: 10
 
 
--- ft.h1: `ftd-footer`
+-- ds.h1: `ftd-footer`
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd-footer:
 
 
--- ft.output:
+-- ds.output:
 
-/--- ftd-footer:
+//--- ftd-footer:
 
 
 /-- component ftd-footer:
@@ -108,47 +108,47 @@ padding-right: 100
 padding-top: 50
 padding-bottom: 50
 
---- ftd.row:
+/--- ftd.row:
 width: fill
 
---- ftd.text:
+/--- ftd.text:
 width: 350
 color: $fpm.color.main.text
 
 FTD is lovingly maintained by the core team of volunteers
 
---- ftd.row:
+/--- ftd.row:
 width: 400
 align: right
 
---- ftd.text:
+/--- ftd.text:
 color: $fpm.color.main.text
 
 Proudly hosted by
 
---- ftd.text: FifthTry
+/--- ftd.text: FifthTry
 link: https://www.fifthtry.com/
 role: $fpm.type.heading-large
 color: $fpm.color.main.text
 padding-left: 20
 
-/--- container: ftd.main
+//--- container: ftd.main
 
---- ftd.row:
+/--- ftd.row:
 width: fill
 
---- ftd.text:
+/--- ftd.text:
 width: 500
 color: $fpm.color.main.text
 
 The contents of this website are
 © 2021 under the terms of the BSE License.
 
---- ftd.row:
+/--- ftd.row:
 width: 400
 align: right
 
---- ftd.text:
+/--- ftd.text:
 color: $fpm.color.main.text
 
 FTD is funded, thanks to its sponsors!

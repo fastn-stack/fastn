@@ -1,48 +1,49 @@
 -- import: fpm
 
--- ft.page: Conditional Variable
+-- boolean $ayushi: false
 
--- boolean ayushi: false
-
--- boolean arpita: false
+-- boolean $arpita: false
 
 -- string foo: empty
 
--- foo: Ayushi
-if: $ayushi
+-- ds.page: Conditional Variable
 
--- foo: Arpita
-if: $arpita
+/-- foo: Ayushi
+if: { $ayushi }
+
+/-- foo: Arpita
+if: { $arpita }
 
 -- ftd.column:
-padding: 40
+padding.px: 40
 
 -- ftd.text: $foo
-role: $fpm.type.heading-large
-color: $fpm.color.main.text
-
+role: $inherited.types.heading-large
+color: $inherited.colors.text
 
 -- ftd.text: Click arpita true 💡
-if: $arpita
-$on-click$: toggle $arpita
-color if $ftd.dark-mode: $fpm.color.main.text
+if: { $arpita }
+$on-click$: ftd.toggle($a = $arpita) 
+;; color if $ftd.dark-mode: $inherited.colors.text
 
 -- ftd.text: Click arpita false 💡
-if: not $arpita
-$on-click$: toggle $arpita
-color if $ftd.dark-mode: $fpm.color.main.text
+if: { !$arpita }
+$on-click$: ftd.toggle($a = $arpita) 
+;; color if $ftd.dark-mode: $inherited.colors.text
 
 -- ftd.text: Click ayushi true 💡
-if: $ayushi
-$on-click$: toggle $ayushi
-color if $ftd.dark-mode: $fpm.color.main.text
+if: { $ayushi }
+$on-click$: ftd.toggle($a = $ayushi) 
+;; color if $ftd.dark-mode: $inherited.colors.text
 
 -- ftd.text: Click ayushi false 💡
-if: not $ayushi
-$on-click$: toggle $ayushi
-color if $ftd.dark-mode: $fpm.color.main.text
+if: { !$ayushi }
+$on-click$: ftd.toggle($a = $ayushi) 
+;; color if $ftd.dark-mode: $inherited.colors.text
 
--- ft.code:
+-- end: ftd.column
+
+-- ds.code:
 lang: ftd
 
 \-- boolean ayushi: false
@@ -56,3 +57,6 @@ if: $ayushi
 
 \-- foo: Arpita
 if: $arpita
+
+
+-- end: ds.page

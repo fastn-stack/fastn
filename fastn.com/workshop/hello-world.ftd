@@ -1,37 +1,37 @@
 
 
--- boolean $what-are-task-1-completed: false
+/-- boolean $what-are-task-1-completed: false
 $always-include$: true
 
--- object what-are-task-1-object:
+/-- object what-are-task-1-object:
 function: ls.set-boolean
 variable: $what-are-task-1-completed
 
--- ws.understood what-are-task-1-button: Done
+/-- ws.understood what-are-task-1-button: Done
 $on-click$: $what-are-task-1-completed = true
 $on-click$: message-host $what-are-task-1-object
 $task-status: $what-are-task-1-completed
 
--- boolean $what-are-task-2-completed: false
+/-- boolean $what-are-task-2-completed: false
 $always-include$: true
 
--- object what-are-task-2-object:
+/-- object what-are-task-2-object:
 function: ls.set-boolean
 variable: $what-are-task-2-completed
 
--- ws.understood what-are-task-2-button: Done
+/-- ws.understood what-are-task-2-button: Done
 $on-click$: $what-are-task-2-completed = true
 $on-click$: message-host $what-are-task-2-object
 $task-status: $what-are-task-2-completed
 
--- boolean $what-are-task-3-completed: false
+/-- boolean $what-are-task-3-completed: false
 $always-include$: true
 
--- object what-are-task-3-object:
+/-- object what-are-task-3-object:
 function: ls.set-boolean
 variable: $what-are-task-3-completed
 
--- ws.understood what-are-task-3-button: Done
+/-- ws.understood what-are-task-3-button: Done
 $on-click$: $what-are-task-3-completed = true
 $on-click$: message-host $what-are-task-3-object
 $task-status: $what-are-task-3-completed
@@ -41,7 +41,7 @@ $task-status: $what-are-task-3-completed
 
 
 
--- ws.chapter: Hello World
+/-- ws.chapter: Hello World
 id: ws-hello-world
 sidebar: true
 
@@ -51,18 +51,18 @@ the package manager and server for FTD.
 In this exercise **we will install FPM, and run a hello world program**.
 
 
--- ws.task: Task 1: Install FPM
+/-- ws.task: Task 1: Install FPM
 $status: $what-are-task-1-completed
 button: what-are-task-1-button:
 
 To install {ds.highlight: fpm we will use the installation script}:
 
--- ds.code: install fpm
+/-- ds.code: install fpm
 lang: sh
 
 sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fpm/main/install-fpm.sh)"
 
--- ds.markdown:
+/-- ds.markdown:
 
 This installs `fpm` in `/usr/local/bin/fpm`. If you are curious this is the
 [source code of fpm-install.sh](https://github.com/ftd-lang/fpm/blob/main/install-fpm.sh).
@@ -74,25 +74,25 @@ We support recent versions of Linux, Mac and Windows.
 
 {ds.highlight: To test if the installation worked, run:}
 
--- ds.code: run `fpm` to see if its working
+/-- ds.code: run `fpm` to see if its working
 lang: sh
 
 fpm
 
--- ds.markdown:
+/-- ds.markdown:
 
 And it will show you the fpm help text. Shout out to let everyone know when
 you are done with this step.
 
 If you get an error message in chat or speak up.
 
--- container: ws-hello-world
+/-- container: ws-hello-world
 
--- ws.task: Task 2: FPM.ftd
+/-- ws.task: Task 2: FPM.ftd
 $status: $what-are-task-2-completed
 button: what-are-task-2-button:
 
--- ds.markdown:
+/-- ds.markdown:
 
 Note: If you have not yet cloned `ftd-lang/ftd-workshop` repo as mentioned in
 [workshop basics](id: ws-basics), please do it now:
@@ -108,15 +108,15 @@ with message in terminal saying FPM.ftd file is missing.
 
 {ds.highlight: Lets fix this by creating a `FPM.ftd` file with the following content:}
 
--- ds.code: sample `FPM.ftd` file
+/-- ds.code: sample `FPM.ftd` file
 lang: ftd
 
-\-- import: fpm
+\/-- import: fpm
 
-\-- fpm.package: hello
+\/-- fpm.package: hello
 
 
--- ft.markdown:
+/-- ft.markdown:
 
 We have "imported" fpm, a special `ftd module` (each ftd file is called a `fpm
 module`, the way we call `.py` files `python modules`).
@@ -129,9 +129,9 @@ server address (http://127.0.0.1:8000 by default), you will see an empty page.
 
 Congrats, you have created your first FPM package!
 
--- container: ws-hello-world
+/-- container: ws-hello-world
 
--- ws.task: Task 3: Hello World
+/-- ws.task: Task 3: Hello World
 $status: $what-are-task-3-completed
 button: what-are-task-3-button:
 
@@ -152,11 +152,11 @@ on top level is `/`. `x/index.ftd` would have been `/x/` and so on.
 This repo comes with an [index.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/01-hello-world/index.ftd)
 file, {ds.highlight: go ahead and view it and modify it as it instructs}.
 
--- container: ws-hello-world
+/-- container: ws-hello-world
 
--- ds.h1: You are Done
+/-- ds.h1: You are Done
 
--- ds.markdown:
+/-- ds.markdown:
 
 You have installed fpm and created your first fpm package. Good job!
 
@@ -164,10 +164,10 @@ You have installed fpm and created your first fpm package. Good job!
 [the workshop page](id: workshop).
 
 
--- container: ws-hello-world.content-wrap.right-sidebar
+/-- container: ws-hello-world.content-wrap.right-sidebar
 
--- ws.sidebar:
+/-- ws.sidebar:
 
--- container: ws-hello-world.content-wrap.right-sidebar-mobile
+/-- container: ws-hello-world.content-wrap.right-sidebar-mobile
 
--- ws.sidebar:
+/-- ws.sidebar:

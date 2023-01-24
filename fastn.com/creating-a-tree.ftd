@@ -1,42 +1,41 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
--- ft.page: How to create a tree using `ftd`?
-id: main-2
+-- ds.page: How to create a tree using `ftd`?
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 A tree view represents a hierarchical form of items where each item can have 
 subitems and so on. In this tutorial, we will learn how to create a tree using 
 `ftd` step by step.
 
 
--- ft.h1: Create a component for tree
+-- ds.h1: Create a component for tree
 
 Let us create a component that would contain all the items and subitems.
 The component needs to be of [`column`](/ftd/column/) type which would stack the 
 items vertically.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.column:
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.first.jpeg
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 The above code uses `ftd.column` which is a [kernel component](/ftd/kernel/).
 Now let's insert an item.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.column:
@@ -45,12 +44,12 @@ lang: ftd
 name: Beverage
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.second.jpeg
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Bravo! we have successfully inserted an item with the property `name: Beverage`. 
 You must have noticed that we have called another component with the name `item` to display this item.
@@ -58,10 +57,10 @@ This component becomes subsection/child of the `ftd.column` component.
 Before we insert another item, let's understand how to create the `item` component first.
 
 
--- ft.h1: Create an `item` component
+-- ds.h1: Create an `item` component
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- component item:
@@ -71,12 +70,12 @@ padding-left: 10
 open: true
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.third.jpeg
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Let's understand the above code in detail. As we need to insert subitem inside 
 `Beverage` item and it's proper to show subitems vertically. So we have created 
@@ -92,7 +91,7 @@ calling this component, we have to pass an argument `name` of type `string`. Now
 We have to consume this argument to show it in frontend.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- component item:
@@ -104,12 +103,12 @@ open: true
 \--- ftd.text: $name
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.fourth.jpeg
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Here, we have inserted [`--- ftd.text: ref $name`](/ftd/text/) as the 
 child/subsection of `item` component. This has reference to the argument `$name`. 
@@ -117,51 +116,35 @@ Hence consuming it 😊. Before we proceed further let's call this component and
 see the result.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- item: 
 name: Beverage
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.fifth.jpeg
-width: fill
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Output:
 
+-- item:
+$name: Beverage
 
--- ftd.column item1:
-string name:
-padding-left: 10
-open: true
+-- end: item
 
---- ftd.text: $name
-color if $ftd.dark-mode: $fpm.color.main.text
-
--- ftd.column:
-spacing: 20
-border-width: 1
-border-radius: 5
-border-color if $ftd.dark-mode: $fpm.color.main.text
-padding: 10
-width: fill
-
---- item1:
-name: Beverage
-
-
--- ft.h1: Add items to the tree
+-- ds.h1: Add items to the tree
 
 Let's get back to adding items. 
 In this example, we are going to add Water and Juice as children of Bevarage 
 and Mango Juice as child of Juice.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- ftd.column:
@@ -182,7 +165,7 @@ name: Juice
 name: Mango Juice
 
 
--- ft.markdown:
+-- ds.markdown:
 
 We are almost done now. Let's understand this in detail. First, we have inserted
 our old pal `Beverage` and now item `Beverage` becomes open. (Wait, it's different than the first time when we have inserted.
@@ -196,32 +179,32 @@ which changes the open container to the one with id `beverage-id` which is item 
 and now this becomes an open container. At last, we have inserted item `Mango Juice`.
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.sixth.jpeg
-width: fill
+width: fill-container
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.seventh.jpeg
-width: fill
+width: fill-container
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.eighth.jpeg
-width: fill
+width: fill-container
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.ninth.jpeg
-width: fill
+width: fill-container
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.images.tree.tenth.jpeg
-width: fill
+width: fill-container
 
 
--- ft.h1: Presenting Tree
+-- ds.h1: Presenting Tree
 
 Let's combine everything now and see the magic 🪄. 
 
@@ -230,7 +213,7 @@ Let's combine everything now and see the magic 🪄.
 and added a `row` having two elements of type `text`. One with ✌️ emoji and the other with reference to the `$name` argument.)
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- component item:
@@ -264,46 +247,26 @@ name: Juice
 name: Mango Juice
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Output
 
 
 -- ftd.column:
-spacing: 20
-border-width: 1
-border-radius: 5
-border-color if $ftd.dark-mode: $fpm.color.main.text
-padding: 10
-width: fill
-
-
--- ftd.column display-item:
-string name:
-padding-left: 10
-open: true
-color if $ftd.dark-mode: $fpm.color.main.text
-
---- ftd.row:
-
---- ftd.text: ✌️
-
---- ftd.text: $name
-color if $ftd.dark-mode: $fpm.color.main.text
-
--- ftd.column:
+spacing.px: 20
+border-width.px: 1
+border-radius.px: 5
+;; border-color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+padding.px: 10
+width: fill-container
 
 
 -- display-item:
 name: Beverage
-id: beverage
 
 
 -- display-item:
 name: Water
-
-
--- container: beverage
 
 
 -- display-item:
@@ -314,17 +277,17 @@ name: Juice
 name: Mango Juice
 
 
--- container: main-2
+-- end: ftd.column
 
 
--- ft.h1: Adding Events
+-- ds.h1: Adding Events
 
 We have learnt how to create a tree. Now, we'll learn how to make it more interactive.
 As you have guessed, we need to do changes in `-- component item:`.
 Let us take a quick look at updated version, then we'll discuss about it line by line.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- component item:
@@ -349,12 +312,12 @@ if: $visible
 id: some-child
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Thankfully, not many changes. phew 😮‍💨!! Let's take a closer look at changes in component `item`.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- component item:
@@ -366,7 +329,7 @@ append-at: some-child
 $visible: true
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Here, we have changed the `open` property value from `true` to `some-child`.
 This would make the component `item` open as earlier, but now elements that come after its call 
@@ -384,7 +347,7 @@ We have declared a local variable `@visible` of boolean type with default value 
 Now, let us focus on changes in subsections. We have added the below two subsections.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \--- container: ftd.main
@@ -394,7 +357,7 @@ if: $visible
 id: some-child
 
 
--- ft.markdown:
+-- ds.markdown:
 
 As `--- ftd.row:` was an open container, we need to change the container to component `item` 
 having type `column`. This line `--- container: ftd.main` helps in achieving it.
@@ -413,21 +376,21 @@ FTD has an action `toggle` which toggles a boolean variable.
 We can attach it with an event `click`. Check these changes in subsection `--- ftd.row:` of `item`
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \--- ftd.row:
 $on-click$: toggle $visible
 
 
--- ft.h1: Presenting an interactive Tree
+-- ds.h1: Presenting an interactive Tree
 
 Let's combine everything now and see more magic 🪄. 
 Click on `✌️Beverage` to see everything else disappears, then click it again, and everything is back.
 Similarly, click on `✌️Juice` and see `✌️Mango Juice` disappear. You know how to make it appear again.
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
 \-- component item:
@@ -472,58 +435,180 @@ name: Juice
 name: Mango Juice
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Output
 
 
 -- ftd.column:
-spacing: 20
-border-width: 1
-border-radius: 5
-border-color if $ftd.dark-mode: $fpm.color.main.text
-padding: 10
-width: fill
-
-
--- ftd.column display-item1:
-string name:
-color if $ftd.dark-mode: $fpm.color.main.text
-padding-left: 10
-open: true
-append-at: some-child
-boolean visible: true
-
---- ftd.row:
-$on-click$: toggle $visible
-
---- ftd.text: ✌️
-
---- ftd.text: $name
-color if $ftd.dark-mode: $fpm.color.main.text
-
---- container: ftd.main
-
---- ftd.column:
-if: $visible
-id: some-child
-
+spacing.px: 20
+border-width.px: 1
+border-radius.px: 5
+;; border-color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+padding.px: 10
+width: fill-container
 
 -- display-item1:
 name: Beverage
-id: beverage-2
+
+-- end: display-item1
 
 
 -- display-item1:
 name: Water
 
-
--- container: beverage-2
-
+-- end: display-item1
 
 -- display-item1:
 name: Juice
 
+-- end: display-item1
+
 
 -- display-item1:
 name: Mango Juice
+
+-- end: display-item1
+
+-- end: ftd.column
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+-- component item1:
+string name:
+children item-wtap:
+
+-- ftd.column:
+padding-left.px: 10
+
+-- ftd.text: $name
+;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+
+-- ftd.column:
+spacing.px: 20
+border-width.px: 1
+border-radius.px: 5
+;; border-color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+padding.px: 10
+width: fill-container
+children: $item1.item-wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: item1
+
+
+
+
+
+
+
+
+-- component display-item:
+string name:
+
+-- ftd.column:
+;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+
+-- ftd.row:
+padding-left.px: 10
+
+-- ftd.text: ✌️
+color: $inherited.colors.text
+
+-- ftd.text: $display-item.name
+;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: display-item
+
+
+
+
+
+
+
+-- component display-item1:
+string name:
+boolean $visible: true
+children item1-wrap: 
+
+-- ftd.column:
+;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+padding-left.px: 10
+
+-- ftd.row:
+$on-click$: $ftd.toggle($a = $display-item1.visible)
+
+-- ftd.text: ✌️
+color: $inherited.colors.text
+
+-- ftd.text: $display-item1.name
+color: $inherited.colors.text
+;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+
+-- end: ftd.row
+
+-- ftd.column:
+if: { display-item1.visible }
+children: $display-item1.item1-wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: display-item1
+
+
+
+
+
+
+
+
+
+-- component item:
+string $name:
+boolean $visible: true
+children item-wrap:
+
+-- ftd.column:
+padding-left.px: 10
+
+-- ftd.row:
+$on-click$: $ftd.toggle($a = $item.visible)
+
+-- ftd.text: ✌️
+color: $inherited.colors.text
+
+-- ftd.text: $item.name
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- ftd.column:
+if: { item.visible }
+children: $item.item-wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: item

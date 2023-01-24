@@ -1,17 +1,17 @@
--- ft.page: FTD Language
-toc: $ft.toc
+-- ds.page: FTD Language
+toc: $ds.toc
 
 
--- ftd.column:
-id: foo-3
+/-- ftd.column:
+;; id: foo-3
 
 
--- ft.markdown: 
+-- ds.markdown: 
 
 FTD is a domain-specific language to represent typed data and user interfaces.
 
 
--- ft.h1: Typed Data Language
+-- ds.h1: Typed Data Language
 
 `ftd` is an alternative to XML/JSON for storing data.
 
@@ -19,7 +19,7 @@ Note: `ftd` is built on a lower level grammar, called [`ftd::p1` grammar](/p1-gr
 it defines things like sections, sub-sections, caption, headers, and body.
 
 
--- ft.code: ftd file containing data
+-- ds.code: ftd file containing data
 lang: ftd
 
 \-- record person:
@@ -46,12 +46,12 @@ Sourabh loves to UI.
 location: Lucknow, India
 
 
--- ft.markdown:
+-- ds.markdown:
 
 This data can be read from Rust:
 
 
--- ft.code: getting data out of ftd
+-- ds.code: getting data out of ftd
 lang: rs
 
 #[derive(serde::Deserialize)]
@@ -66,24 +66,24 @@ let amitu: Employee = doc.get("amitu")?;
 let employees: Vec<Employee> = doc.get("employees")?;
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Read about [ftd's data modelling capability](/data-modelling/) in
 detail.
 
 
--- ft.h1: UI Language
+-- ds.h1: UI Language
 
 
--- ft.code: hello world ftd
+-- ds.code: hello world ftd
 lang: ftd
 
 \-- string msg: hello world
 
-\-- ftd.text: $msg
+\-- ftd.ftd.text: $msg
 
 
--- ft.markdown:
+-- ds.markdown:
 
 This is a ftd file that defines a variable `msg` and uses it to shows
 "hello world" in the UI using `ftd.text` "component".
@@ -91,13 +91,13 @@ This is a ftd file that defines a variable `msg` and uses it to shows
 ----
 
 
--- string msg: hello world
+/-- string msg: hello world
 
 
--- ftd.text: $msg
+/-- ftd.text: $msg
 
 
--- ft.markdown:
+-- ds.markdown:
 
 ----
 
@@ -107,83 +107,83 @@ document, and what you see above between the two lines is rendered by ftd.
 Let's see a slightly more complex layout:
 
 
--- ft.code:
+-- ds.code:
 lang: ftd
 
-\-- ftd.column:
+\-- ftd.ftd.column:
 border-width: 1
 width: fill
-id: outer
+;; id: outer
 
-\-- ftd.row:
+\-- ftd.ftd.row:
 width: fill
-background-color: $ft.neutral-200
+background-color: $ds.neutral-200
 padding: 10
 
-\-- ftd.text: $msg
+\-- ftd.ftd.text: $msg
 width: fill
 
-\-- ftd.row:
+\-- ftd.ftd.row:
 
-\-- ftd.text: $msg
+\-- ftd.ftd.text: $msg
 width: fill
 
-\-- container: outer
+\/-- container outer
 
-\-- ftd.row:
+\-- ftd.ftd.row:
 padding: 10
 border-top: 1
 width: fill
 align: center
 
-\-- ftd.text:
+\-- ftd.ftd.text:
 width: fill
 
 We support **markdown** as well.
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Which gets rendered into:
 
 
--- ftd.column:
+/-- ftd.column:
 border-width: 1
 width: fill
-id: outer-15
+;; id: outer-15
 margin-bottom: 20
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 background-color: $fpm.color.main.background.base
 padding: 10
 
 
--- ftd.text: $msg
+/-- ftd.text: $msg
 width: fill
 color: $fpm.color.main.text
 
 
--- ftd.row:
+/-- ftd.row:
 width: fill
 
 
--- ftd.text: $msg
+/-- ftd.text: $msg
 width: fill
 align: right
 color: $fpm.color.main.text
 
 
--- container: outer-15
+/-- container: outer-15
 
 
--- ftd.row:
+/-- ftd.row:
 padding: 10
 border-top: 1
 width: fill
 
 
--- ftd.text:
+/-- ftd.text:
 width: fill
 color: $fpm.color.main.text
 color if $ftd.dark-mode: $fpm.color.main.text
@@ -191,10 +191,10 @@ color if $ftd.dark-mode: $fpm.color.main.text
 
 We support **markdown** as well.
 
--- container: foo-3
+/-- container: foo-3
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Most websites you come across can be created using this (or will be in the future).
 We have a DSL that picks elements from CSS, after simplifying things a little bit.
@@ -202,3 +202,5 @@ We have a DSL that picks elements from CSS, after simplifying things a little bi
 As a goal we want `ftd` files to be renderable in the browser, as well as in other
 modes, like in Terminal using curses UI, natively on Mobile devices, Emacs,
 rendering from scratch using just C/assembly for low-powered devices and so on.
+
+-- end: ds.page

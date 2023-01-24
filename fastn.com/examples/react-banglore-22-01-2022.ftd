@@ -5,7 +5,7 @@
 -- integer count: 0
 -- integer total: 20
 
--- ftd.grid:
+/-- ftd.grid:
 slots: left right-1 right-2 | main main main
 slot-widths: auto 90px 90px
 slot-heights: 56px auto
@@ -13,7 +13,7 @@ width: fill
 height: fill
 
 
--- ftd.text: ftd: Programming Language For Human Beings _by_ @amitu
+/-- ftd.text: ftd: Programming Language For Human Beings _by_ @amitu
 $on-click$: $count = 0
 slot: left
 background-color: $fpm.color.main.background.base
@@ -22,7 +22,7 @@ role: $fpm.type.copy-large
 color: $fpm.color.main.text
 width: fill
 
--- ftd.text: Previous
+/-- ftd.text: Previous
 slot: right-1
 role: $fpm.type.copy-large
 color: $fpm.color.main.text
@@ -30,7 +30,7 @@ padding: 20
 background-color: $fpm.color.main.background.base
 $on-click$: decrement $count clamp 0 $total
 
--- ftd.text: Next
+/-- ftd.text: Next
 slot: right-2
 role: $fpm.type.copy-large
 padding: 20
@@ -38,77 +38,77 @@ background-color: $fpm.color.main.text
 color: $fpm.color.main.background.base
 $on-click$: increment $count clamp 0 $total
 
--- ftd.column:
+/-- ftd.column:
 slot: main
 align: center
 width: fill
 height: fill
 
 
--- intro:
+/-- intro:
 if: $count == 0
 
--- markdown-is-great:
+/-- markdown-is-great:
 if: $count == 1
 
--- mdx:
+/-- mdx:
 if: $count == 2
 
--- mdx-1:
+/-- mdx-1:
 if: $count == 3
 
--- mdx-2:
+/-- mdx-2:
 if: $count == 4
 
--- ftd-1:
+/-- ftd-1:
 if: $count == 5
 
--- ftd-2:
+/-- ftd-2:
 if: $count == 6
 
--- ftd-3:
+/-- ftd-3:
 if: $count == 7
 
--- data-1:
+/-- data-1:
 if: $count == 8
 
--- data-2:
+/-- data-2:
 if: $count == 9
 
--- data-3:
+/-- data-3:
 if: $count == 10
 
--- data-4:
+/-- data-4:
 if: $count == 11
 
--- data-5:
+/-- data-5:
 if: $count == 12
 
--- event-1:
+/-- event-1:
 if: $count == 13
 
--- event-2:
+/-- event-2:
 if: $count == 14
 
 /-- event-3:
 if: $count == 15
 
--- theme-1:
+/-- theme-1:
 if: $count == 15
 
--- theme-2:
+/-- theme-2:
 if: $count == 16
 
--- diagram.diagram:
+/-- diagram.diagram:
 if: $count == 17
 
--- comic.comic:
+/-- comic.comic:
 if: $count == 18
 
--- mini-todo:
+/-- mini-todo:
 if: $count == 19
 
--- outro:
+/-- outro:
 if: $count == 20
 
 /-- slide:
@@ -132,7 +132,7 @@ if: $count == 4
 width: 300
 
 
--- ftd.image slide:
+/-- ftd.image slide:
 ftd.image-src src:
 optional string width:
 src: $src
@@ -148,10 +148,10 @@ $on-click$: increment $count clamp 0 $total
 
 
 
--- ftd.scene mdx:
+/-- ftd.scene mdx:
 width: 800
 
---- ftd.text: Let's Look At MDX
+-/-- ftd.text: Let's Look At MDX
 top: 80
 left: 300
 role: $fpm.type.heading-large
@@ -179,10 +179,10 @@ flood conditions in many of the nearby rivers.
 
 
 
--- ftd.scene mdx-1:
+/-- ftd.scene mdx-1:
 width: 800
 
---- ftd.text: Let's Look At MDX
+-/-- ftd.text: Let's Look At MDX
 top: 80
 left: 300
 role: $fpm.type.heading-large
@@ -203,7 +203,7 @@ flood conditions in many of the nearby rivers.
 
 <Chart year={year} color="#fcb32c" />
 
---- ftd.text: How to show `year` in {yellow}?
+-/-- ftd.text: How to show `year` in {yellow}?
 role: $fpm.type.heading-medium
 left: 300
 top: 500
@@ -219,10 +219,10 @@ top: 500
 
 
 
--- ftd.scene mdx-2:
+/-- ftd.scene mdx-2:
 width: 800
 
---- ftd.text: Let's Look At MDX
+-/-- ftd.text: Let's Look At MDX
 top: 80
 left: 300
 role: $fpm.type.heading-large
@@ -247,7 +247,7 @@ flood conditions in many of the nearby rivers.
 />
 
 
---- ftd.text: What If `Chart` Needed A `title` And `description`?
+-/-- ftd.text: What If `Chart` Needed A `title` And `description`?
 left: 300
 top: 600
 role: $fpm.type.heading-medium
@@ -260,7 +260,7 @@ role: $fpm.type.heading-medium
 
 
 
--- ftd.scene ftd-1:
+/-- ftd.scene ftd-1:
 width: 800
 height: fill
 
@@ -290,7 +290,7 @@ top: 400
 
 
 
--- ftd.scene ftd-2:
+/-- ftd.scene ftd-2:
 width: 800
 height: fill
 
@@ -307,17 +307,17 @@ lang: ftd
 left: 300
 top: 300
 
-\-- ftd.row hello:
+\/-- ftd.row hello:
 string who: Everyone!
 spacing: 10
 
-\--- ftd.text: Hello,
+\-/-- ftd.text: Hello,
 
-\--- ftd.text: $who
+\-/-- ftd.text: $who
 background-color: $fpm.color.main.background.base
 
 
---- ftd.text: Hello, {yellow: World!}
+-/-- ftd.text: Hello, {yellow: World!}
 top: 620
 left: 300
 
@@ -331,7 +331,7 @@ left: 300
 
 
 
--- ftd.scene ftd-3:
+/-- ftd.scene ftd-3:
 width: 800
 height: fill
 
@@ -347,17 +347,17 @@ lang: ftd
 left: 300
 top: 300
 
-\-- ftd.row hello:
+\/-- ftd.row hello:
 caption who: Everyone!
 spacing: 10
 
-\--- ftd.text: Hello,
+\-/-- ftd.text: Hello,
 
-\--- ftd.text: $who
+\-/-- ftd.text: $who
 background-color: $fpm.color.main.background.base
 
 
---- ftd.text: Hello, {yellow: World!}
+-/-- ftd.text: Hello, {yellow: World!}
 top: 620
 left: 300
 
@@ -372,7 +372,7 @@ left: 300
 
 
 
--- ftd.scene data-1:
+/-- ftd.scene data-1:
 width: 800
 height: fill
 
@@ -390,11 +390,11 @@ lang: ftd
 left: 300
 top: 300
 
-\-- ftd.text: $message
+\/-- ftd.text: $message
 size: $size
 
 
---- ftd.text: Hello React Bangalore!
+-/-- ftd.text: Hello React Bangalore!
 left: 300
 top: 500
 role: $fpm.type.heading-large
@@ -405,7 +405,7 @@ role: $fpm.type.heading-large
 
 
 
--- ftd.scene data-2:
+/-- ftd.scene data-2:
 width: 800
 height: fill
 
@@ -437,16 +437,16 @@ lang: ftd
 left: 300
 top: 440
 
-\-- ftd.text: $amitu.name
+\/-- ftd.text: $amitu.name
 
-\-- ftd.text: Company
+\/-- ftd.text: Company
 
-\-- ftd.text: $amitu.company
-
-
+\/-- ftd.text: $amitu.company
 
 
--- ftd.scene data-3:
+
+
+/-- ftd.scene data-3:
 width: 800
 height: fill
 
@@ -478,7 +478,7 @@ of FTD and FPM.
 
 
 
--- ftd.scene data-4:
+/-- ftd.scene data-4:
 width: 800
 height: fill
 
@@ -492,7 +492,7 @@ $loop$: people as o
 company: $o.company
 bio: $o.bio
 
-\-- ftd.column show-person:
+\/-- ftd.column show-person:
 caption name:
 string company:
 optional body bio:
@@ -505,7 +505,7 @@ optional body bio:
 
 
 
--- ftd.scene data-5:
+/-- ftd.scene data-5:
 width: 800
 height: fill
 
@@ -529,7 +529,7 @@ bio: $o.bio
 
 
 
--- ftd.scene event-1:
+/-- ftd.scene event-1:
 width: 800
 height: fill
 
@@ -540,20 +540,20 @@ top: 100
 
 \-- boolean open: true
 
-\-- ftd.text: You can see me!
+\/-- ftd.text: You can see me!
 if: $open
 
-\-- ftd.text: Toggle
+\/-- ftd.text: Toggle
 $on-click$: toggle $open
 
 -- boolean on-1-open: false
 
---- ftd.text: You can see me!
+-/-- ftd.text: You can see me!
 left: 300
 top: 430
 if: $on-1-open
 
---- ftd.text: Toggle
+-/-- ftd.text: Toggle
 left: 300
 top: 460
 $on-click$: toggle $on-1-open
@@ -564,7 +564,7 @@ $on-click$: toggle $on-1-open
 
 -- boolean event-2-funky: false
 
--- ftd.scene event-2:
+/-- ftd.scene event-2:
 width: 800
 height: fill
 
@@ -575,23 +575,23 @@ top: 100
 
 \-- boolean funky: false
 
-\-- ftd.text: Some Text
+\/-- ftd.text: Some Text
 color if $funky: $fpm.color.main.text
 background-color if $funky: $fpm.color.main.background.base
 
-\-- ftd.text: Toggle
+\/-- ftd.text: Toggle
 $on-click$: toggle $funky
 
 -- boolean on-2-funky: false
 
---- ftd.text: Some Text
+-/-- ftd.text: Some Text
 color if $on-2-funky: $fpm.color.main.text
 background-color if $on-2-funky: $fpm.color.main.background.base
 left: 300
 top: 440
 role: $fpm.type.heading-medium
 
---- ftd.text: Toggle
+-/-- ftd.text: Toggle
 left: 300
 top: 489
 $on-click$: toggle $on-2-funky
@@ -606,7 +606,7 @@ $on-click$: toggle $on-2-funky
 
 -- boolean event-3-funky: false
 
-/-- ftd.scene event-3:
+//-- ftd.scene event-3:
 width: 800
 height: fill
 
@@ -615,12 +615,12 @@ lang: ftd
 left: 300
 top: 100
 
-\-- ftd.text: Some Text
+\/-- ftd.text: Some Text
 color if $MOUSE-IN: red
 background-color if $MOUSE-IN: yellow
 
 
---- ftd.text: Some Text
+-/-- ftd.text: Some Text
 color if $MOUSE-IN: $fpm.color.main.text
 background-color if $MOUSE-IN: $fpm.color.main.background.base
 left: 300
@@ -628,16 +628,16 @@ top: 440
 role: $fpm.type.heading-medium
 
 
--- ftd.scene theme-1:
+/-- ftd.scene theme-1:
 
---- ftd.iframe:
+-/-- ftd.iframe:
 left: 140
 top: 20
 src: https://fpm.dev/new/open-source/
 width: 1200
 height: 700
 
--- ftd.scene theme-2:
+/-- ftd.scene theme-2:
 
 
 --- ft.code:
@@ -683,25 +683,25 @@ live_preview: https://fifthtry.github.io/Forest-Template/
 
 
 
--- ftd.text yellow: yellow
+/-- ftd.text yellow: yellow
 background-color: $fpm.color.main.background.base
 
 
--- ftd.scene markdown-is-great:
+/-- ftd.scene markdown-is-great:
 width: fill
 height: fill
 
---- ftd.text: Markdown Is Great!
+-/-- ftd.text: Markdown Is Great!
 role: $fpm.type.heading-large
 left: 400
 top: 200
 
---- ftd.text: Soon every text input will support markdown.
+-/-- ftd.text: Soon every text input will support markdown.
 role: $fpm.type.heading-medium
 left: 400
 top: 300
 
---- ftd.text: ... but!
+-/-- ftd.text: ... but!
 role: $fpm.type.heading-medium
 left: 800
 top: 350
@@ -712,26 +712,26 @@ top: 350
 -- string list strings:
 -- optional string query:
 
--- ftd.scene mini-todo:
+/-- ftd.scene mini-todo:
 
---- ftd.column:
+-/-- ftd.column:
 top: 100
 left: 300
 spacing: 10
 id: column-one
 
---- ftd.row:
+-/-- ftd.row:
 width: fill
 spacing: 10
 
---- ftd.input:
+-/-- ftd.input:
 placeholder: Type Something Here...
 width: 250
 border-width: 2
 padding: 8
 $on-input$: $query=$VALUE
 
---- ftd.text: Add
+-/-- ftd.text: Add
 if: $query is not null
 color: $fpm.color.main.text
 background-color: $fpm.color.main.background.base
@@ -740,7 +740,7 @@ padding: 5
 $on-click$: insert into $strings value $query at end
 $on-click$: clear $query
 
---- ftd.text: Clear
+-/-- ftd.text: Clear
 color: $fpm.color.main.text
 background-color: $fpm.color.main.background.base
 move-down: 4
@@ -749,12 +749,12 @@ $on-click$: clear $strings
 
 --- container: column-one
 
---- ftd.text:
+-/-- ftd.text:
 if: $query is not null
 
 You have typed: {value}
 
---- ftd.column:
+-/-- ftd.column:
 top: 300
 left: 300
 spacing: 20
@@ -764,7 +764,7 @@ $loop$: $strings as $obj
 
 
 
--- ftd.text value: $query
+/-- ftd.text value: $query
 color: $fpm.color.main.text
 color if $ftd.dark-mode: $fpm.color.main.text
 background-color if $ftd.dark-mode: $fpm.color.main.text
@@ -774,18 +774,18 @@ role: $fpm.type.label-big
 
 
 
--- ftd.column show-data:
+/-- ftd.column show-data:
 caption text:
 padding: 10
 /background-color if $ftd.dark-mode: $fpm.color.main.background.base
 background-color: $fpm.color.main.background.base
 color: $fpm.color.main.text
 
---- ftd.column:
+-/-- ftd.column:
 padding: 20
 border-width: 2
 
---- ftd.text: $text
+-/-- ftd.text: $text
 
 
 
@@ -798,21 +798,21 @@ border-width: 2
 
 
 
--- ftd.scene intro:
+/-- ftd.scene intro:
 width: 1000
 height: fill
 
---- ftd.column:
+-/-- ftd.column:
 top: 200
 left: 350
 spacing: 60
 
---- ftd.text: FTD: Programming Language For Human Beings
+-/-- ftd.text: FTD: Programming Language For Human Beings
 text-align: center
 role: $fpm.type.heading-large
 
 
---- ftd.text:
+-/-- ftd.text:
 role: $fpm.type.copy-large
 width: fill
 text-align: center
@@ -821,18 +821,18 @@ Amit Upadhyay, Founder: [FifthTry.com](https://www.fifthtry.com) -
 [@amitu](https://twitter.com/amitu)
 
 
--- ftd.scene outro:
+/-- ftd.scene outro:
 width: 1000
 height: fill
 
 
 
---- ftd.text: Thank You!
+-/-- ftd.text: Thank You!
 top: 150
 left: 500
 role: $fpm.type.heading-medium
 
---- ftd.text:
+-/-- ftd.text:
 top: 250
 left: 500
 width: fill

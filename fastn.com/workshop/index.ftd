@@ -2,10 +2,10 @@
 -- import: cbox
 
 
--- ftd.column sidebar:
+/-- ftd.column sidebar:
 width: fill
 
---- cbox.text-4: Need Help?
+/--  cbox.text-4: Need Help?
 
 Please join our [Discord to ask any questions](https://discord.gg/d2MgKBybEQ)
 related to this workshop!
@@ -13,25 +13,25 @@ related to this workshop!
 Or just meet the others who are learning FTD like you :-)
 
 
---- cbox.info: Github Repo
+/--  cbox.info: Github Repo
 
 The code for this workshop can be found on Github:
 [ftd-lang/ftd-workshop](https://github.com/ftd-lang/ftd-workshop).
 
 
---- cbox.text-4: Join The Next Session
+/--  cbox.text-4: Join The Next Session
 
 The next remote workshop would be happening on **4th Nov 2022**. [Learn more
 here](https://fifthtry.com/events/).
 
 
--- ds.page: FTD Workshop
+/-- ds.page: FTD Workshop
 id: workshop
 
 Welcome to the FTD Language's official workshop.
 
 
--- cbox.info: About This Workshop
+/-- cbox.info: About This Workshop
 
 {ds.highlight: FTD language is a possible replacement for JavaScript/React to
 build web front-ends}. In this workshop you will learn the basics of FTD and
@@ -50,7 +50,7 @@ required to have a decent computer, but there is no need to install any software
 before hand (other than your favorite editor).
 
 
--- ft.markdown:
+/-- ft.markdown:
 
 This workshop is a 3 part workshop, where in each part we will learn a different
 aspect of programming with FTD. In first two parts we will interact with HTTP API
@@ -59,7 +59,7 @@ create client side event handling and interact with HTTP APIs (ajax and form
 submissions).
 
 
--- cbox.note: Basic Instruction
+/-- cbox.note: Basic Instruction
 id: ws-basics
 
 Clone [this repository](https://github.com/ftd-lang/ftd-workshop):
@@ -82,7 +82,7 @@ by speaking out during the workshop.
 {ds.highlight: Have fun, you are among friends.}
 
 
--- ft.h1: Part 1: Working With Data In FTD
+/-- ft.h1: Part 1: Working With Data In FTD
 
 In this part we will install [fpm](https://fpm.dev) and learn about data
 modelling capabilities of FTD.
@@ -97,7 +97,7 @@ modelling capabilities of FTD.
 
 
 
--- ft.h1: Part 2: Building UI
+/-- ft.h1: Part 2: Building UI
 
 In this part we will learn how to create re-usable, server-rendered, UI
 components.
@@ -113,13 +113,13 @@ components.
 - [UI-9: Auto Imports](/workshop/auto-imports/)
 
 
--- ft.h1: Part 3: Front-end Event Handling And HTTP APIs
+/-- ft.h1: Part 3: Front-end Event Handling And HTTP APIs
 
 In this we will learn how to do event handling and to work with HTTP APIs.
 
 
 
--- ftd.column lesson:
+/-- ftd.column lesson:
 caption title:
 optional body content:
 boolean $understood:
@@ -132,51 +132,51 @@ append-at: inner
 open: true
 
 
---- ftd.row:
+/--  ftd.row:
 background-color: $fpm.color.main.background.step-2
 width: fill
 padding-horizontal: 20
 padding-vertical: 10
 spacing: 15
 
---- ftd.text: DONE
+/--  ftd.text: DONE
 role: $fpm.type.heading-medium
 color: $fpm.color.main.text
 if: $understood
 
---- ftd.text: LESSON
+/--  ftd.text: LESSON
 role: $fpm.type.heading-medium
 color: $fpm.color.main.text
 if: not $understood
 
---- ftd.text: $title
+/--  ftd.text: $title
 role: $fpm.type.heading-medium
 color: $fpm.color.main.text-strong
 width: fill
 
---- container: ftd.main
+/--  container: ftd.main
 
---- ftd.column:
+/--  ftd.column:
 width: fill
 padding-horizontal: 20
 padding-bottom: 10
 id: inner
 
---- ds.markdown:
+/--  ds.markdown:
 
 $content
 
 
---- container: ftd.main
+/--  container: ftd.main
 
---- ftd.row:
+/--  ftd.row:
 width: fill
 padding: 20
 
---- button:
+/--  button:
 
 
--- ftd.text understood: Understood
+/-- ftd.text understood: Understood
 padding: 10
 border-radius: 5
 background-color: $fpm.color.main.cta-primary.hover
@@ -184,9 +184,9 @@ background-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
 role: $fpm.type.label-big
 color: $fpm.color.main.text-strong
 
--- container: workshop.wrapper.right-sidebar
+/-- container: workshop.wrapper.right-sidebar
 
--- sidebar:
+/-- sidebar:
 
 
 

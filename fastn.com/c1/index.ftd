@@ -1,7 +1,7 @@
--- ft.page: FTD Courses
+-- ds.page: FTD Courses
 
 
--- ft.page: Part 1
+-- ds.h1: Part 1
 
 - How to use crate
 - Data Modeling
@@ -43,7 +43,7 @@ C8. Publishing FTD (10 mins)
 - Hosted FifthTry
 
 
--- ft.h1: Part 2
+-- ds.h1: Part 2
 
 C1. Using FTD as config language (10 mins)
 C2. Creating a slide show using ftd (10 mins)
@@ -51,4 +51,5 @@ C3. Creating a dropdown using ftd (10 mins)
 C4. Creating todo app (10 mins)
 
 
+-- end: ds.page
 

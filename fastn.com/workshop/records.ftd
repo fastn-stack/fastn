@@ -1,8 +1,8 @@
--- ws.chapter: Records
+/--  ws.chapter: Records
 id: ws-records
 sidebar: true
 
--- ds.markdown:
+/--  ds.markdown:
 
 Till now we dealt with basic types like [booleans](id: ws-booleans), [numbers
 and strings](id: ws-numbers-and-strings). Now we are moving to more interesting
@@ -15,20 +15,20 @@ stuff: `record`.
 
 
 
--- boolean $what-are-lesson-completed: false
+/--  boolean $what-are-lesson-completed: false
 $always-include$: true
 
--- object what-are-lesson-object:
+/--  object what-are-lesson-object:
 function: ls.set-boolean
 variable: $what-are-lesson-completed
 
--- ws.understood what-are-lesson-button: Understood
+/--  ws.understood what-are-lesson-button: Understood
 $on-click$: $what-are-lesson-completed = true
 $on-click$: message-host $what-are-lesson-object
 $lesson-status: $what-are-lesson-completed
 
 
--- ws.lesson: What is FPM CLI?
+/--  ws.lesson: What is FPM CLI?
 $status: $what-are-lesson-completed
 button: what-are-lesson-button:
 
@@ -38,26 +38,26 @@ more fields.
 
 An example record looks like this:
 
--- ds.code: defining a record called `person`
+/--  ds.code: defining a record called `person`
 lang: ftd
 
-\-- record person:
+\/--  record person:
 string name:
 integer age:
 
--- ds.markdown:
+/--  ds.markdown:
 
 And to create an instance of the record we use:
 
--- ds.code: creating a variable `john` of type `person`
+/--  ds.code: creating a variable `john` of type `person`
 lang: ftd
 
-\-- person john:
+\/--  person john:
 name: John
 age: 20
 
 
--- container: ws-records
+/--  container: ws-records
 
 
 
@@ -69,19 +69,19 @@ age: 20
 
 
 
--- boolean $what-are-task-1-completed: false
+/--  boolean $what-are-task-1-completed: false
 $always-include$: true
 
--- object what-are-task-1-object:
+/--  object what-are-task-1-object:
 function: ls.set-boolean
 variable: $what-are-task-1-completed
 
--- ws.understood what-are-task-1-button: Done
+/--  ws.understood what-are-task-1-button: Done
 $on-click$: $what-are-task-1-completed = true
 $on-click$: message-host $what-are-task-1-object
 $task-status: $what-are-task-1-completed
 
--- ws.task: Task 1: Define and Use A Record
+/--  ws.task: Task 1: Define and Use A Record
 $status: $what-are-task-1-completed
 button: what-are-task-1-button:
 
@@ -89,7 +89,7 @@ button: what-are-task-1-button:
 Open [records.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/records.ftd)
 and define your first record and then an instance of it.
 
--- container: ws-records
+/--  container: ws-records
 
 
 
@@ -98,19 +98,19 @@ and define your first record and then an instance of it.
 
 
 
--- boolean $special-types-completed: false
+/--  boolean $special-types-completed: false
 $always-include$: true
 
--- object special-types-object:
+/--  object special-types-object:
 function: ls.set-boolean
 variable: $special-types-completed
 
--- ws.understood special-types-button: Understood
+/--  ws.understood special-types-button: Understood
 $on-click$: $special-types-completed = true
 $on-click$: message-host $special-types-object
 $lesson-status: $special-types-completed
 
--- ws.lesson: Special Types: `caption` and `body`
+/--  ws.lesson: Special Types: `caption` and `body`
 $status: $special-types-completed
 button: special-types-button:
 
@@ -119,15 +119,15 @@ created the types `caption` and `body`, both of which are aliases for `string`
 type, but they also govern where the value should written. Best demonstrated
 using and example:
 
--- ds.code: record with `caption` and `body`
+/--  ds.code: record with `caption` and `body`
 lang: ftd
 
-\-- record person:
+\/--  record person:
 caption name:
 integer age:
 body bio:
 
-\-- person john: John Doe
+\/--  person john: John Doe
 age: 20
 
 John Doe is the best of Johns, but the worst of Does.
@@ -135,7 +135,7 @@ John Doe is the best of Johns, but the worst of Does.
 Hindi people think he has something to do with the "desh ke liye".
 Punjabi people consider him the patron saint of forging mistakes.
 
--- ds.markdown:
+/--  ds.markdown:
 
 Notice we have not used the `name` and `bio` fields as "headers", like we have
 done for `age`. The `name`'s type is `caption` so it appears in the "caption"
@@ -146,7 +146,7 @@ Note: {ds.highlight: you can only have single caption and single body types in
 a record}. If you want to have more than one multi-line field for a record, you
 can either use a local string variable, or wait for 0.3 syntax to be ready.
 
--- container: ws-records
+/--  container: ws-records
 
 
 
@@ -158,26 +158,26 @@ can either use a local string variable, or wait for 0.3 syntax to be ready.
 
 
 
--- boolean $what-are-task-2-completed: false
+/--  boolean $what-are-task-2-completed: false
 $always-include$: true
 
--- object what-are-task-2-object:
+/--  object what-are-task-2-object:
 function: ls.set-boolean
 variable: $what-are-task-2-completed
 
--- ws.understood what-are-task-2-button: Done
+/--  ws.understood what-are-task-2-button: Done
 $on-click$: $what-are-task-2-completed = true
 $on-click$: message-host $what-are-task-2-object
 $task-status: $what-are-task-2-completed
 
--- ws.task: Task 2: Caption And Body Types
+/--  ws.task: Task 2: Caption And Body Types
 $status: $what-are-task-2-completed
 button: what-are-task-2-button:
 
 
 Fix the mistakes in [caption-and-body.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/caption-and-body.ftd).
 
--- container: ws-records
+/--  container: ws-records
 
 
 
@@ -189,46 +189,46 @@ Fix the mistakes in [caption-and-body.ftd](https://github.com/ftd-lang/ftd-works
 
 
 
--- boolean $default-values-completed: false
+/--  boolean $default-values-completed: false
 $always-include$: true
 
--- object default-values-object:
+/--  object default-values-object:
 function: ls.set-boolean
 variable: $default-values-completed
 
--- ws.understood default-values-button: Understood
+/--  ws.understood default-values-button: Understood
 $on-click$: $default-values-completed = true
 $on-click$: message-host $default-values-object
 $lesson-status: $default-values-completed
 
--- ws.lesson: Default Values For Fields
+/--  ws.lesson: Default Values For Fields
 $status: $default-values-completed
 button: default-values-button:
 
 Record fields can have default values, eg:
 
--- ds.code:
+/--  ds.code:
 lang: ftd
 
-\-- record person:
+\/--  record person:
 caption name:
 integer age: 18
 body bio:
 
 
--- ds.markdown:
+/--  ds.markdown:
 
 Here we have specified `18` as `age`. When creating a variable of type person
 we can leave off age now:
 
--- ds.code:
+/--  ds.code:
 lang: ftd
 
-\-- person john: John Lee
+\/--  person john: John Lee
 
 Elder brother of the notorious Bache Qui.
 
--- container: ws-records
+/--  container: ws-records
 
 
 
@@ -236,26 +236,26 @@ Elder brother of the notorious Bache Qui.
 
 
 
--- boolean $what-are-task-3-completed: false
+/--  boolean $what-are-task-3-completed: false
 $always-include$: true
 
--- object what-are-task-3-object:
+/--  object what-are-task-3-object:
 function: ls.set-boolean
 variable: $what-are-task-3-completed
 
--- ws.understood what-are-task-3-button: Done
+/--  ws.understood what-are-task-3-button: Done
 $on-click$: $what-are-task-3-completed = true
 $on-click$: message-host $what-are-task-3-object
 $task-status: $what-are-task-3-completed
 
--- ws.task: Task 3: Task: Use Default Values
+/--  ws.task: Task 3: Task: Use Default Values
 $status: $what-are-task-3-completed
 button: what-are-task-3-button:
 
 
 Fix the mistakes in [default.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/default.ftd).
 
--- container: ws-records
+/--  container: ws-records
 
 
 
@@ -264,39 +264,39 @@ Fix the mistakes in [default.ftd](https://github.com/ftd-lang/ftd-workshop/blob/
 
 
 
--- boolean $default-another-completed: false
+/--  boolean $default-another-completed: false
 $always-include$: true
 
--- object default-another-object:
+/--  object default-another-object:
 function: ls.set-boolean
 variable: $default-another-completed
 
--- ws.understood default-another-button: Understood
+/--  ws.understood default-another-button: Understood
 $on-click$: $default-another-completed = true
 $on-click$: message-host $default-another-object
 $lesson-status: $default-another-completed
 
--- ws.lesson: Default of a field can be another field
+/--  ws.lesson: Default of a field can be another field
 $status: $default-another-completed
 button: default-another-button:
 
 The default value of a field can be set to another field as well:
 
--- ds.code:
+/--  ds.code:
 lang: ftd
 
-\-- record person:
+\/--  record person:
 caption name:
 string nick-name: $name
 integer age: 18
 body bio:
 
--- ds.markdown:
+/--  ds.markdown:
 
 Here we have specified an optional (because it has a default value) `nick-name`.
 If you leave out the `nick-name`, the `name` would be used as the `nick-name`.
 
--- container: ws-records
+/--  container: ws-records
 
 
 
@@ -306,26 +306,26 @@ If you leave out the `nick-name`, the `name` would be used as the `nick-name`.
 
 
 
--- boolean $what-are-task-4-completed: false
+/--  boolean $what-are-task-4-completed: false
 $always-include$: true
 
--- object what-are-task-4-object:
+/--  object what-are-task-4-object:
 function: ls.set-boolean
 variable: $what-are-task-4-completed
 
--- ws.understood what-are-task-4-button: Done
+/--  ws.understood what-are-task-4-button: Done
 $on-click$: $what-are-task-4-completed = true
 $on-click$: message-host $what-are-task-4-object
 $task-status: $what-are-task-4-completed
 
 
--- ws.task: Task 4: Fix `default.ftd`
+/--  ws.task: Task 4: Fix `default.ftd`
 $status: $what-are-task-4-completed
 button: what-are-task-4-button:
 
 Fix the mistakes in [default.ftd](https://github.com/ftd-lang/ftd-workshop/blob/main/01-data/04-records/default.ftd).
 
--- container: ws-records
+/--  container: ws-records
 
 
 
@@ -335,9 +335,9 @@ Fix the mistakes in [default.ftd](https://github.com/ftd-lang/ftd-workshop/blob/
 
 
 
--- ds.h1: Move To Next Chapter
+/--  ds.h1: Move To Next Chapter
 
--- ds.markdown:
+/--  ds.markdown:
 
 You have learnt about how to create record and make authoring records more
 author friendly using caption and body types.
@@ -352,11 +352,11 @@ steps](id: workshop).
 
 
 
--- container: ws-records.content-wrap.right-sidebar
+/--  container: ws-records.content-wrap.right-sidebar
 
--- ws.sidebar:
+/--  ws.sidebar:
 
--- container: ws-records.content-wrap.right-sidebar-mobile
+/--  container: ws-records.content-wrap.right-sidebar-mobile
 
--- ws.sidebar:
+/--  ws.sidebar:
 
