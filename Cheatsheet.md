@@ -663,6 +663,27 @@ string dark: $color.light
 - `classes`: string list (classes are created in css)
 
 
+- `border-style`: `optional ftd.border-style`
+
+**`ftd.border-style`**
+
+```ftd
+-- or-type border-style:
+
+-- constant string dotted: dotted
+-- constant string dashed: dashed
+-- constant string solid: solid
+-- constant string double: double
+-- constant string groove: groove 
+-- constant string ridge: ridge
+-- constant string inset: inset
+-- constant string outset: outset
+
+-- end: border-style
+
+```
+
+
 ## Container Attributes
 
 - `spacing`: `optional ftd.length`
