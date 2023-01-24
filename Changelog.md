@@ -1,5 +1,9 @@
 # FTD Change Log
 
+## 24 January 2023
+- [Added border-style](https://github.com/ftd-lang/ftd/pull/544/commits/b50d8ef371ead95679838e862d0ea956e7655b39)
+
+
 ## 23 January 2023
 - [Added line-clamp](https://github.com/ftd-lang/ftd/pull/544/commits/b50d8ef371ead95679838e862d0ea956e7655b39)
 
