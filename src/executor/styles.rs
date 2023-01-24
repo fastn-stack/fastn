@@ -2272,6 +2272,90 @@ impl TextTransform {
     }
 }
 
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum BorderStyle {
+    DOTTED,
+    DASHED,
+    SOLID,
+    DOUBLE,
+    GROOVE,
+    RIDGE,
+    INSET,
+    OUTSET,
+}
+
+impl BorderStyle {
+    fn from_optional_values(
+        or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Option<Self>> {
+        if let Some(value) = or_type_value {
+            Ok(Some(BorderStyle::from_values(value, doc, line_number)?))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn from_values(
+        or_type_value: (String, ftd::interpreter2::PropertyValue),
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+    ) -> ftd::executor::Result<Self> {
+        match or_type_value.0.as_str() {
+            ftd::interpreter2::FTD_BORDER_STYLE_DOTTED => Ok(BorderStyle::DOTTED),
+            ftd::interpreter2::FTD_BORDER_STYLE_DASHED => Ok(BorderStyle::DASHED),
+            ftd::interpreter2::FTD_BORDER_STYLE_SOLID => Ok(BorderStyle::SOLID),
+            ftd::interpreter2::FTD_BORDER_STYLE_GROOVE => Ok(BorderStyle::GROOVE),
+            ftd::interpreter2::FTD_BORDER_STYLE_RIDGE => Ok(BorderStyle::RIDGE),
+            ftd::interpreter2::FTD_BORDER_STYLE_OUTSET => Ok(BorderStyle::OUTSET),
+            ftd::interpreter2::FTD_BORDER_STYLE_INSET => Ok(BorderStyle::INSET),
+            ftd::interpreter2::FTD_BORDER_STYLE_DOUBLE => Ok(BorderStyle::DOUBLE),
+            t => ftd::executor::utils::parse_error(
+                format!("Unknown variant `{}` for or-type `ftd.border-style`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    pub(crate) fn optional_border_style(
+        properties: &[ftd::interpreter2::Property],
+        arguments: &[ftd::interpreter2::Argument],
+        doc: &ftd::executor::TDoc,
+        line_number: usize,
+        key: &str,
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<BorderStyle>>> {
+        let or_type_value = ftd::executor::value::optional_or_type(
+            key,
+            properties,
+            arguments,
+            doc,
+            line_number,
+            ftd::interpreter2::FTD_BORDER_STYLE,
+        )?;
+
+        Ok(ftd::executor::Value::new(
+            BorderStyle::from_optional_values(or_type_value.value, doc, line_number)?,
+            or_type_value.line_number,
+            or_type_value.properties,
+        ))
+    }
+
+    pub fn to_css_string(&self) -> String {
+        match self {
+            BorderStyle::DOTTED => "dotted".to_string(),
+            BorderStyle::DASHED => "dashed".to_string(),
+            BorderStyle::SOLID => "solid".to_string(),
+            BorderStyle::DOUBLE => "double".to_string(),
+            BorderStyle::GROOVE => "groove".to_string(),
+            BorderStyle::RIDGE => "ridge".to_string(),
+            BorderStyle::INSET => "inset".to_string(),
+            BorderStyle::OUTSET => "outset".to_string(),
+        }
+    }
+}
+
 /// https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
