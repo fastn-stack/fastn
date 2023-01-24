@@ -170,3 +170,4 @@ pub const FTD_LOADING_EAGER: &str = "ftd#loading.eager";
 pub const FTD_LOADING_LAZY: &str = "ftd#loading.lazy";
 
 pub const FTD_SPECIAL_VALUE: &str = "$VALUE";
+pub const FTD_INHERITED: &str = "inherited";

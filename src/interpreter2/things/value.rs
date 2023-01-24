@@ -930,6 +930,24 @@ impl PropertyValue {
         ftd::interpreter2::StateWithThing<Option<ftd::interpreter2::PropertyValue>>,
     > {
         match value.string(doc.name) {
+            Ok(expression)
+                if expression
+                    .starts_with(format!("${}", ftd::interpreter2::FTD_INHERITED).as_str()) =>
+            {
+                if let Some(kind) = expected_kind {
+                    Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
+                        ftd::interpreter2::PropertyValue::Reference {
+                            name: expression.trim_start_matches('$').to_string(),
+                            kind: kind.to_owned(),
+                            source: PropertyValueSource::Global,
+                            is_mutable: false,
+                            line_number: 0,
+                        },
+                    )))
+                } else {
+                    ftd::interpreter2::utils::e2("Kind not found", doc.name, value.line_number())
+                }
+            }
             Ok(expression) if expression.eq(ftd::interpreter2::FTD_SPECIAL_VALUE) => {
                 Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                     ftd::interpreter2::PropertyValue::Reference {

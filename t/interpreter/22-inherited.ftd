@@ -1,0 +1,35 @@
+-- foo:
+name: Foo
+
+-- ftd.text: $inherited.name
+-- bar:
+
+-- end: foo
+
+
+
+-- component foo:
+string name:
+children wrapper:
+
+-- ftd.column:
+
+-- ftd.text: $foo.name
+
+-- ftd.column:
+children: $foo.wrapper
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: foo
+
+
+
+
+-- component bar:
+
+-- ftd.text: $inherited.name
+
+-- end: bar

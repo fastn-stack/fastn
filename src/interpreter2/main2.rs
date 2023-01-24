@@ -594,7 +594,9 @@ impl InterpreterState {
         current_module: &str,
     ) -> ftd::interpreter2::Result<StateWithThing<T>> {
         use itertools::Itertools;
+
         let document = self.parsed_libs.get(module).unwrap();
+
         let (doc_name, thing_name, remaining) = // Todo: use remaining
             ftd::interpreter2::utils::get_doc_name_and_thing_name_and_remaining(
                 name,

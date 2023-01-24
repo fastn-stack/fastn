@@ -947,6 +947,10 @@ impl<'a> TDoc<'a> {
                 line_number,
             );
 
+        if doc_name.eq(ftd::interpreter2::FTD_INHERITED) {
+            return Ok(());
+        }
+
         // let current_parsed_document = state.parsed_libs.get(self.name).unwrap();
 
         /*if doc_name.ne(self.name) {

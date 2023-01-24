@@ -339,7 +339,72 @@
             },
             "common": {
               "is_not_visible": true,
-              "event": [],
+              "event": [
+                {
+                  "name": "Click",
+                  "action": {
+                    "name": "foo#increment",
+                    "kind": {
+                      "kind": "Void",
+                      "caption": false,
+                      "body": false
+                    },
+                    "is_mutable": false,
+                    "line_number": 32,
+                    "values": {
+                      "a": {
+                        "Reference": {
+                          "name": "foo#num",
+                          "kind": {
+                            "kind": "Integer",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": "Global",
+                          "is_mutable": true,
+                          "line_number": 32
+                        }
+                      }
+                    },
+                    "order": [
+                      "a"
+                    ]
+                  },
+                  "line_number": 32
+                },
+                {
+                  "name": "Click",
+                  "action": {
+                    "name": "foo#toggle",
+                    "kind": {
+                      "kind": "Void",
+                      "caption": false,
+                      "body": false
+                    },
+                    "is_mutable": false,
+                    "line_number": 33,
+                    "values": {
+                      "a": {
+                        "Reference": {
+                          "name": "foo#flag",
+                          "kind": {
+                            "kind": "Boolean",
+                            "caption": false,
+                            "body": false
+                          },
+                          "source": "Global",
+                          "is_mutable": true,
+                          "line_number": 33
+                        }
+                      }
+                    },
+                    "order": [
+                      "a"
+                    ]
+                  },
+                  "line_number": 33
+                }
+              ],
               "is_dummy": false,
               "z_index": {
                 "value": null,
