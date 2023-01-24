@@ -1,12 +1,22 @@
 
 -- component check-border-style:
 ftd.border-style style:
+integer $which:
 
 -- ftd.column:
-border-style: $check-border-style.style
+border-style if { $check-border-style.which % 8 == 0 } : dotted
+border-style if { $check-border-style.which % 8 == 1 } : dashed
+border-style if { $check-border-style.which % 8 == 2 } : solid
+border-style if { $check-border-style.which % 8 == 3 } : inset
+border-style if { $check-border-style.which % 8 == 4 } : groove
+border-style if { $check-border-style.which % 8 == 5 } : ridge
+border-style if { $check-border-style.which % 8 == 6 } : outset
+border-style if { $check-border-style.which % 8 == 7 } : double
 border-width.px: 2
 padding.px: 10
 margin.px: 10
+$on-click$: $ftd.increment($a=$check-border-style.which)
+
 
 -- ftd.text: Hello World
 
@@ -17,33 +27,34 @@ margin.px: 10
 
 -- check-border-style:
 style: dotted
+$which: 0
 
 
--- check-border-style:
+/-- check-border-style:
 style: dashed
 
 
--- check-border-style:
+/-- check-border-style:
 style: solid
 
 
--- check-border-style:
+/-- check-border-style:
 style: double
 
 
--- check-border-style:
+/-- check-border-style:
 style: groove
 
 
--- check-border-style:
+/-- check-border-style:
 style: ridge
 
 
--- check-border-style:
+/-- check-border-style:
 style: inset
 
 
--- check-border-style:
+/-- check-border-style:
 style: outset
 
 
