@@ -545,6 +545,11 @@
                       "properties": []
                     },
                     "common": {
+                      "id": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
@@ -907,6 +912,11 @@
                               "properties": []
                             },
                             "common": {
+                              "id": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
@@ -1206,6 +1216,11 @@
                       ]
                     },
                     "common": {
+                      "id": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
@@ -1568,6 +1583,11 @@
                               "properties": []
                             },
                             "common": {
+                              "id": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
@@ -1930,6 +1950,11 @@
                                       "properties": []
                                     },
                                     "common": {
+                                      "id": {
+                                        "value": null,
+                                        "line_number": null,
+                                        "properties": []
+                                      },
                                       "is_not_visible": false,
                                       "event": [],
                                       "is_dummy": false,
@@ -2229,6 +2254,11 @@
                               ]
                             },
                             "common": {
+                              "id": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "is_not_visible": false,
                               "event": [],
                               "is_dummy": false,
@@ -2528,6 +2558,11 @@
                       ]
                     },
                     "common": {
+                      "id": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "is_not_visible": false,
                       "event": [],
                       "is_dummy": false,
@@ -2827,6 +2862,11 @@
               ]
             },
             "common": {
+              "id": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "is_not_visible": false,
               "event": [],
               "is_dummy": false,
@@ -3126,6 +3166,11 @@
       ]
     },
     "common": {
+      "id": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
       "is_not_visible": false,
       "event": [],
       "is_dummy": false,
