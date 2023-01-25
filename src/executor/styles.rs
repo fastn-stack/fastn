@@ -1047,7 +1047,11 @@ impl Spacing {
             ftd::interpreter2::FTD_SPACING_SPACE_BETWEEN => Ok(Spacing::SpaceBetween),
             ftd::interpreter2::FTD_SPACING_SPACE_EVENLY => Ok(Spacing::SpaceEvenly),
             ftd::interpreter2::FTD_SPACING_SPACE_AROUND => Ok(Spacing::SpaceAround),
-            ftd::interpreter2::FTD_SPACING_FIXED => Ok(Spacing::Fixed(Length::from_value(or_type_value.1.to_owned(), doc, line_number)?)),
+            ftd::interpreter2::FTD_SPACING_FIXED => Ok(Spacing::Fixed(Length::from_value(
+                or_type_value.1.to_owned(),
+                doc,
+                line_number,
+            )?)),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.spacing`", t),
                 doc.name,
