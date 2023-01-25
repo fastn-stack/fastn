@@ -155,11 +155,11 @@ impl ftd::executor::Row {
             "justify-content",
             ftd::node::Value::from_executor_value(
                 self.container
-                    .spacing_mode
+                    .spacing
                     .to_owned()
                     .map(|v| v.map(|v| v.to_css_string()))
                     .value,
-                self.container.spacing_mode.to_owned(),
+                self.container.spacing.to_owned(),
                 None,
                 doc_id,
             ),
@@ -226,11 +226,11 @@ impl ftd::executor::Column {
             "justify-content",
             ftd::node::Value::from_executor_value(
                 self.container
-                    .spacing_mode
+                    .spacing
                     .to_owned()
                     .map(|v| v.map(|v| v.to_css_string()))
                     .value,
-                self.container.spacing_mode.to_owned(),
+                self.container.spacing.to_owned(),
                 None,
                 doc_id,
             ),
@@ -1501,12 +1501,12 @@ impl ftd::executor::Container {
             d.check_and_insert("position", ftd::node::Value::from_string("relative"));
         }
 
-        if let Some(ftd::executor::SpacingMode::Fixed(_)) = self.spacing_mode.value.as_ref() {
+        if let Some(ftd::executor::Spacing::Fixed(_)) = self.spacing.value.as_ref() {
             d.check_and_insert(
                 "gap",
                 ftd::node::Value::from_executor_value(
-                    self.spacing_mode.value.as_ref().map(|v| v.to_css_string()),
-                    self.spacing_mode.to_owned(),
+                    self.spacing.value.as_ref().map(|v| v.to_css_string()),
+                    self.spacing.to_owned(),
                     None,
                     doc_id,
                 ),

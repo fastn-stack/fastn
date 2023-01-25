@@ -1018,21 +1018,21 @@ fn round_1p(n: f32) -> f32 {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
-pub enum SpacingMode {
+pub enum Spacing {
     Fixed(Length),
     SpaceBetween,
     SpaceEvenly,
     SpaceAround,
 }
 
-impl SpacingMode {
+impl Spacing {
     fn from_optional_values(
         or_type_value: Option<(String, ftd::interpreter2::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
         if let Some(value) = or_type_value {
-            Ok(Some(SpacingMode::from_values(value, doc, line_number)?))
+            Ok(Some(Spacing::from_values(value, doc, line_number)?))
         } else {
             Ok(None)
         }
@@ -1044,12 +1044,12 @@ impl SpacingMode {
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
         match or_type_value.0.as_str() {
-            ftd::interpreter2::FTD_SPACING_MODE_SPACE_BETWEEN => Ok(SpacingMode::SpaceBetween),
-            ftd::interpreter2::FTD_SPACING_MODE_SPACE_EVENLY => Ok(SpacingMode::SpaceEvenly),
-            ftd::interpreter2::FTD_SPACING_MODE_SPACE_AROUND => Ok(SpacingMode::SpaceAround),
-            ftd::interpreter2::FTD_SPACING_MODE_FIXED => Ok(SpacingMode::Fixed(Length::from_value(or_type_value.1.to_owned(), doc, line_number)?)),
+            ftd::interpreter2::FTD_SPACING_SPACE_BETWEEN => Ok(Spacing::SpaceBetween),
+            ftd::interpreter2::FTD_SPACING_SPACE_EVENLY => Ok(Spacing::SpaceEvenly),
+            ftd::interpreter2::FTD_SPACING_SPACE_AROUND => Ok(Spacing::SpaceAround),
+            ftd::interpreter2::FTD_SPACING_FIXED => Ok(Spacing::Fixed(Length::from_value(or_type_value.1.to_owned(), doc, line_number)?)),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.spacing-mode`", t),
+                format!("Unknown variant `{}` for or-type `ftd.spacing`", t),
                 doc.name,
                 line_number,
             ),
@@ -1062,18 +1062,18 @@ impl SpacingMode {
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
-    ) -> ftd::executor::Result<ftd::executor::Value<Option<SpacingMode>>> {
+    ) -> ftd::executor::Result<ftd::executor::Value<Option<Spacing>>> {
         let or_type_value = ftd::executor::value::optional_or_type(
             key,
             properties,
             arguments,
             doc,
             line_number,
-            ftd::interpreter2::FTD_SPACING_MODE,
+            ftd::interpreter2::FTD_SPACING,
         )?;
 
         Ok(ftd::executor::Value::new(
-            SpacingMode::from_optional_values(or_type_value.value, doc, line_number)?,
+            Spacing::from_optional_values(or_type_value.value, doc, line_number)?,
             or_type_value.line_number,
             or_type_value.properties,
         ))
@@ -1081,10 +1081,10 @@ impl SpacingMode {
 
     pub fn to_css_string(&self) -> String {
         match self {
-            SpacingMode::SpaceBetween => "space-between".to_string(),
-            SpacingMode::SpaceEvenly => "space-evenly".to_string(),
-            SpacingMode::SpaceAround => "space-around".to_string(),
-            SpacingMode::Fixed(f) => f.to_css_string(),
+            Spacing::SpaceBetween => "space-between".to_string(),
+            Spacing::SpaceEvenly => "space-evenly".to_string(),
+            Spacing::SpaceAround => "space-around".to_string(),
+            Spacing::Fixed(f) => f.to_css_string(),
         }
     }
 }

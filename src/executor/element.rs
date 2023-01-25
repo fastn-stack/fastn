@@ -326,7 +326,7 @@ pub fn code_with_theme(
 pub struct Container {
     pub wrap: ftd::executor::Value<Option<bool>>,
     pub align_content: ftd::executor::Value<ftd::executor::Alignment>,
-    pub spacing_mode: ftd::executor::Value<Option<ftd::executor::SpacingMode>>,
+    pub spacing: ftd::executor::Value<Option<ftd::executor::Spacing>>,
     pub children: Vec<Element>,
 }
 
@@ -1138,12 +1138,12 @@ pub fn container_from_properties(
             "align-content",
             ftd::executor::Alignment::TopLeft,
         )?,
-        spacing_mode: ftd::executor::SpacingMode::optional_spacing_mode(
+        spacing: ftd::executor::Spacing::optional_spacing_mode(
             properties,
             arguments,
             doc,
             line_number,
-            "spacing-mode",
+            "spacing",
         )?,
         children,
     })
