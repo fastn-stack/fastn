@@ -312,7 +312,9 @@ pub fn code_with_theme(
     Ok(Rendered {
         original: code.to_string(),
         rendered: ftd::executor::code::code(
-            code.replace("\n\\-- ", "\n-- ").as_str(),
+            code.replace("\n\\-- ", "\n-- ")
+                .replace("\\$", "$")
+                .as_str(),
             ext,
             theme,
             doc_id,
