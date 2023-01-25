@@ -655,27 +655,42 @@ impl ftd::executor::Common {
             ),
         );
 
-        if let Some(sticky) = self.sticky.value.as_ref() {
-            if *sticky {
-                d.check_and_insert(
-                    "position",
-                    ftd::node::Value::from_executor_value(
-                        Some(s("sticky")),
-                        self.sticky.to_owned(),
-                        None,
-                        doc_id,
-                    ),
-                );
-                d.check_and_insert(
-                    "top",
-                    ftd::node::Value::from_executor_value(
-                        Some(s("0px")),
-                        self.top.to_owned(),
-                        None,
-                        doc_id,
-                    ),
-                );
-            }
+        if self.sticky.value.is_some()
+        {
+            // When sticky is used, setting top = 0px  and left = 0px
+            d.check_and_insert(
+                "position",
+                ftd::node::Value::from_executor_value(
+                    Some(s("sticky")),
+                    self.sticky.to_owned(),
+                    Some((s("if ({0}) {\"sticky\"} else {null}"), true)),
+                    doc_id,
+                ),
+            );
+            d.check_and_insert(
+                "top",
+                ftd::node::Value::from_executor_value(
+                    self.sticky
+                        .to_owned()
+                        .map(|v| v.map(|val| "0px".to_string()))
+                        .value,
+                    self.sticky.to_owned(),
+                    Some((s("if ({0}) {\"0px\"}"), true)),
+                    doc_id,
+                ),
+            );
+            d.check_and_insert(
+                "left",
+                ftd::node::Value::from_executor_value(
+                    self.sticky
+                        .to_owned()
+                        .map(|v| v.map(|val| "0px".to_string()))
+                        .value,
+                    self.sticky.to_owned(),
+                    Some((s("if ({0}) {\"0px\"}"), true)),
+                    doc_id,
+                ),
+            );
         }
 
         d.check_and_insert(

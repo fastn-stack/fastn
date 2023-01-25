@@ -2,6 +2,8 @@
 light: yellow
 dark: yellow
 
+-- boolean $flag: true
+
 -- component print-text:
 
 -- ftd.column:
@@ -14,9 +16,10 @@ padding.px: 80
 
 -- ftd.text: Sticky Hello world
 padding.px: 20
-sticky: true
+sticky if { flag }: true
 top.px: 50
 left.px: 100
+$on-click$: $ftd.toggle($a = $flag)
 
 -- ftd.text: dummy
 padding.px: 80
