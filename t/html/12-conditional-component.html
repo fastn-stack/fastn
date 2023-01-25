@@ -1266,7 +1266,7 @@ return resolve_reference("foo#flag", data);
 }()){
 document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(50))));
 }
-else { document.querySelector(`[data-id="0:main"]`).style["padding"] = null; }
+else { document.querySelector(`[data-id="0:main"]`).style["padding"] = null }
 }
 window.node_change_main["1:main__text"] = function(data) {
 document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#num", data, null);

@@ -1280,7 +1280,7 @@ return (resolve_reference("foo#check-border-style:which:0", data)%8==7);
 }()){
 document.querySelector(`[data-id="0:main"]`).style["border-style"] = "double";
 }
-else { document.querySelector(`[data-id="0:main"]`).style["border-style"] = null; }
+else { document.querySelector(`[data-id="0:main"]`).style["border-style"] = null }
 }
 window.set_value_main = {};
 window.set_value_main["foo#check-border-style:which:0"] = function (data, new_value, remaining) {

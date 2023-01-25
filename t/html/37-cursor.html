@@ -1420,7 +1420,7 @@ return (resolve_reference("foo#num", data)%35==34);
 }()){
 document.querySelector(`[data-id="1:main"]`).style["cursor"] = "zoom-out";
 }
-else { document.querySelector(`[data-id="1:main"]`).style["cursor"] = null; }
+else { document.querySelector(`[data-id="1:main"]`).style["cursor"] = null }
 }
 window.set_value_main = {};
 window.set_value_main["foo#num"] = function (data, new_value, remaining) {
