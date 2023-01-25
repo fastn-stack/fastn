@@ -614,6 +614,14 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_SPACING_MODE.to_string(),
                 variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_SPACING_MODE_FIXED,
+                        ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
                         ftd::interpreter2::FTD_SPACING_MODE_SPACE_BETWEEN,
                         ftd::interpreter2::Kind::string().into_kind_data(),
