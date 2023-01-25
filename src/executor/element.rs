@@ -324,7 +324,6 @@ pub fn code_with_theme(
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Container {
-    pub spacing: ftd::executor::Value<Option<ftd::executor::Length>>,
     pub wrap: ftd::executor::Value<Option<bool>>,
     pub align_content: ftd::executor::Value<ftd::executor::Alignment>,
     pub spacing_mode: ftd::executor::Value<Option<ftd::executor::SpacingMode>>,
@@ -1130,13 +1129,6 @@ pub fn container_from_properties(
     children: Vec<Element>,
 ) -> ftd::executor::Result<Container> {
     Ok(Container {
-        spacing: ftd::executor::Length::optional_length(
-            properties,
-            arguments,
-            doc,
-            line_number,
-            "spacing",
-        )?,
         wrap: ftd::executor::value::optional_bool("wrap", properties, arguments, doc, line_number)?,
         align_content: ftd::executor::Alignment::alignment_with_default(
             properties,
