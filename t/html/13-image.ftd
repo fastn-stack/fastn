@@ -1,7 +1,10 @@
+-- boolean $flag: true
+
 -- ftd.boolean: $ftd.dark-mode
 
 -- ftd.image:
 $on-click$: $toggle-dark-mode($a = $ftd.dark-mode)
+width.fixed.px: 100
 src: $src
 
 -- ftd.image:
@@ -10,7 +13,17 @@ width.fixed.px: 100
 
 -- ftd.image:
 src: $new-src
+width.fixed.px: 100
 height: auto
+
+
+-- ftd.image:
+src: $src
+src if { flag }: $tom-and-jerry
+width.fixed.px: 100
+$on-click$: $ftd.toggle($a = $flag)
+
+
 
 -- void toggle-dark-mode(a):
 boolean $a:
@@ -24,3 +37,8 @@ dark: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
 
 
 -- string new-src: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+
+
+-- ftd.image-src tom-and-jerry:
+light: https://wallpaperaccess.com/full/215445.jpg
+dark: https://wallpapers.com/images/file/tom-and-jerry-in-the-dog-house-myfg3ooaklw9fk9q.jpg

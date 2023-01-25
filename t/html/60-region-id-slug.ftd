@@ -1,0 +1,37 @@
+-- component region-slug:
+
+-- ftd.column:
+
+-- ftd.text: Hello World h1
+region: h1
+
+-- ftd.text: Hello World h1
+id: hello-world-new
+region: h1
+
+-- ftd.text: Hello World h1
+region: h1
+id: hello-world-new
+
+-- ftd.text: Hello World h2
+region: h2
+
+-- ftd.text: Hello World h3
+region: h3
+
+-- ftd.text: Hello World h4
+region: h4
+
+-- ftd.text: Hello World h5
+region: h5
+
+-- ftd.text: Hello World h6
+region: h6
+
+
+-- end: ftd.column
+
+-- end: region-slug
+
+
+-- region-slug:

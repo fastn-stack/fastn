@@ -62,8 +62,11 @@ impl<'a> DependencyGenerator<'a> {
                 expressions.push((None, neg_value));
             }
 
-            let value =
-                ftd::html1::utils::js_expression_from_list(expressions, Some(key.as_str()), &None);
+            let value = ftd::html1::utils::js_expression_from_list(
+                expressions,
+                Some(key.as_str()),
+                format!("{} = null;", key).as_str(),
+            );
             if !value.trim().is_empty() {
                 result.push(format!(
                     indoc::indoc! {"
@@ -127,7 +130,16 @@ impl<'a> DependencyGenerator<'a> {
             let value = ftd::html1::utils::js_expression_from_list(
                 expressions,
                 Some(key.as_str()),
-                &self.node.text.default,
+                format!(
+                    "{} = {}",
+                    key,
+                    self.node
+                        .text
+                        .default
+                        .clone()
+                        .unwrap_or_else(|| "null".to_string())
+                )
+                .as_str(),
             );
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
@@ -203,7 +215,22 @@ impl<'a> DependencyGenerator<'a> {
                                 )),
                             ])
                                 .collect(),
-                            Some(key.as_str()),&attribute.default
+                            Some(key.as_str()),attribute
+                                .default
+                                .as_ref()
+                                .map(|v| {
+                                    format!(
+                                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                                        node_data_id, key, v
+                                    )
+                                })
+                                .unwrap_or_else(|| {
+                                    format!(
+                                        "document.querySelector(`[data-id=\"{}\"]`).removeAttribute(\"{}\");",
+                                        node_data_id, key,
+                                    )
+                                })
+                                .as_str(),
                         );
                         expressions.push((condition, value));
                     } else {
@@ -276,7 +303,22 @@ impl<'a> DependencyGenerator<'a> {
                                 )),
                             ])
                             .collect(),
-                            Some(key.as_str()),&attribute.default
+                            Some(key.as_str()),attribute
+                                .default
+                                .as_ref()
+                                .map(|v| {
+                                    format!(
+                                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                                        node_data_id, key, v
+                                    )
+                                })
+                                .unwrap_or_else(|| {
+                                    format!(
+                                        "document.querySelector(`[data-id=\"{}\"]`).removeAttribute(\"{}\");",
+                                        node_data_id, key,
+                                    )
+                                })
+                                .as_str(),
                         );
                         expressions.push((condition, value));
                     } else {
@@ -331,8 +373,26 @@ impl<'a> DependencyGenerator<'a> {
                     expressions.push((condition, value));
                 }
             }
-            let value =
-                ftd::html1::utils::js_expression_from_list(expressions, None, &attribute.default);
+            let value = ftd::html1::utils::js_expression_from_list(
+                expressions,
+                Some(key),
+                attribute
+                    .default
+                    .as_ref()
+                    .map(|v| {
+                        format!(
+                            "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
+                            node_data_id, key, v
+                        )
+                    })
+                    .unwrap_or_else(|| {
+                        format!(
+                            "document.querySelector(`[data-id=\"{}\"]`).removeAttribute(\"{}\");",
+                            node_data_id, key,
+                        )
+                    })
+                    .as_str(),
+            );
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
                     indoc::indoc! {"
@@ -406,7 +466,15 @@ impl<'a> DependencyGenerator<'a> {
                             ])
                             .collect(),
                             Some(key.as_str()),
-                            &attribute.default,
+                            format!(
+                                "{} = {}",
+                                key,
+                                attribute
+                                    .default
+                                    .clone()
+                                    .unwrap_or_else(|| "null".to_string())
+                            )
+                            .as_str(),
                         );
                         expressions.push((condition, value));
                     } else {
@@ -474,7 +542,15 @@ impl<'a> DependencyGenerator<'a> {
                             ])
                             .collect(),
                             Some(key.as_str()),
-                            &attribute.default,
+                            format!(
+                                "{} = {}",
+                                key,
+                                attribute
+                                    .default
+                                    .clone()
+                                    .unwrap_or_else(|| "null".to_string())
+                            )
+                            .as_str(),
                         );
                         expressions.push((condition, value));
                     } else {
@@ -590,7 +666,15 @@ impl<'a> DependencyGenerator<'a> {
             let value = ftd::html1::utils::js_expression_from_list(
                 expressions,
                 Some(key.as_str()),
-                &attribute.default,
+                format!(
+                    "{} = {}",
+                    key,
+                    attribute
+                        .default
+                        .clone()
+                        .unwrap_or_else(|| "null".to_string())
+                )
+                .as_str(),
             );
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
