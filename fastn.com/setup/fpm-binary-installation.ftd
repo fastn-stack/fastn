@@ -1,40 +1,40 @@
 -- import: fpm.dev/assets
--- ft.page:
 
--- ft.h1: FPM binary Installation Using Windows
 
--- ft.markdown:
+-- ds.page:
 
-download the latest version [fpm binary installation](https://github.com/FifthTry/fpm/releases)
+-- ds.h1: FPM binary Installation Using Windows
 
--- ft.image:
+-- ds.markdown:
+
+download the latest version [fpm binary installation](https://github.com/ftd-lang/fpm/releases)
+
+-- ds.image:
 src: $assets.files.static.images.setup.fpm.png
-scale: 1
-width: fill
+;; scale: 1
+width: fill-container
 
-
-
-
--- ft.markdown:
+-- ds.markdown:
 
 Make a folder and added fpm release on it.
 
--- ft.image:
+-- ds.image:
 src: $assets.files.static.images.setup.fpm-folder.png
-scale: 1
-width: fill
+;; scale: 1
+width: fill-container
 
 
--- ft.markdown:
+-- ds.markdown:
 
 Go to Menu Bar
 - advanced settings -> environment-variables -> edit path variable -> set path
 
 
--- ft.image:
+-- ds.image:
 src: $assets.files.static.images.setup.setup-fpm.png
-scale: 1
-width: fill
+;; scale: 1
+width: fill-container
 
 
 
+-- end: ds.page

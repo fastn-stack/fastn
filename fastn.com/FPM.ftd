@@ -75,6 +75,7 @@ email: arpita@fifthtry.com
 ## How Tos: /how-to/install/
 
 - Install `fpm`: /how-to/install/
+  - `fpm` binary installation: /setup/fpm-binary-installation/
 - Update `fpm`: /how-to/update/
 - Create new fpm project: /author/create-project/
 - Create new fpm project on github: /author/create-on-github/
