@@ -43,4 +43,4 @@ $on-click$: $ftd.increment($a = $foo.value)
 string list $a:
 string v:
 
-a = append(a, v);
+a = ftd.append(a, v);

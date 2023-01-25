@@ -35,7 +35,7 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
 
     std::iter::IntoIterator::into_iter([
         (
-            "is_empty".to_string(),
+            "ftd.is_empty".to_string(),
             Function::new(|argument| {
                 if argument.as_empty().is_ok() {
                     Ok(Value::Boolean(true))
@@ -49,7 +49,7 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
             }),
         ),
         (
-            "append".to_string(),
+            "ftd.append".to_string(),
             Function::new(|argument| {
                 if let Ok(s) = argument.as_tuple() {
                     if s.len() != 2 {

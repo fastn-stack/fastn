@@ -16,7 +16,7 @@ a = a + " " + b
 -- boolean is-empty(a):
 optional string a:
 
-is_empty(a)
+ftd.is_empty(a)
 
 
 -- component foo:

@@ -7,13 +7,7 @@ function enable_light_mode() {
 function enable_system_mode() {
     window.enable_system_mode();
 }
-function is_empty(str: any) {
-    return (!str || str.length === 0 );
-}
-function append(array: any[], value: any) {
-    array.push(value);
-    return array;
-}
+
 
 function fallbackCopyTextToClipboard(text: string) {
     var textArea = document.createElement("textarea");

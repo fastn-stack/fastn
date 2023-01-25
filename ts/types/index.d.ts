@@ -19,6 +19,8 @@ declare global {
         set_value(variable: string, value: any): any;
         set_value_by_id(id: string, variable: string, value: any): any;
         get_value(id: string, variable: string): any;
+        is_empty(str: any): boolean;
+        append(array: any[], value: any): any[]
     }
 
     interface String {

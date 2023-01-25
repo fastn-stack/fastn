@@ -3,7 +3,7 @@
 
 
 -- ftd.text: Hello
-if: { is_empty(name) }
+if: { ftd.is_empty(name) }
 $on-click$: $append($a = $name, b = FifthTry)
 
 -- ftd.text: Hello Again
@@ -11,7 +11,7 @@ if: { name == NULL }
 
 
 -- ftd.text: $name
-if: { !is_empty(name) }
+if: { !ftd.is_empty(name) }
 $on-click$: $append($a = $name, b = FifthTry)
 
 -- ftd.text: $name

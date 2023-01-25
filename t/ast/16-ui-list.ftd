@@ -215,7 +215,7 @@ site-url: $chapter-desktop.site-url
 site-name: $chapter-desktop.site-name
 
 -- render-toc:
-if: {!is_empty(chapter-desktop.toc) }
+if: {!ftd.is_empty(chapter-desktop.toc) }
 toc-obj: $chapter-desktop.toc
 $status: $chapter-desktop.status
 
@@ -546,7 +546,7 @@ color if {toc-instance.toc.is-active}: $inherited.colors.cta-primary.base
 margin-left.px: 12
 
 -- childrens:
-if: {!is_empty(toc-instance.toc.children)}
+if: {!ftd.is_empty(toc-instance.toc.children)}
 $loop$: $toc-instance.toc.children as $obj
 toc: $obj
 
@@ -614,7 +614,7 @@ color if {childrens.toc.is-active}: $inherited.colors.cta-primary.base
 -- end: ftd.row
 
 -- childrens:
-if: {!is_empty(childrens.toc.children)}
+if: {!ftd.is_empty(childrens.toc.children)}
 $loop$: $childrens.toc.children as $obj
 toc: $obj
 
