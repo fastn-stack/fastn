@@ -1,0 +1,39 @@
+-- ftd.color green:
+light: green
+dark: green
+
+-- ftd.color red:
+light: red
+dark: red
+
+-- print-text:
+
+-- component print-text:
+
+-- ftd.column:
+background.solid: $red
+width: fill-container
+height.fixed.px: 1800
+
+-- ftd.text: dummy
+padding.px: 20
+
+-- ftd.text: Sticky Hello world
+padding.px: 20
+sticky: true
+
+-- ftd.text: dummy
+padding.px: 80
+
+-- ftd.text: dummy
+padding.px: 80
+
+-- ftd.text: dummy
+padding.px: 80
+
+-- ftd.text: dummy
+padding.px: 80
+
+-- end: ftd.column
+
+-- end: print-text
