@@ -112,6 +112,7 @@ impl<'a> ExecuteDoc<'a> {
             &mut component_definition.definition,
             &local_variable_map,
             inherited_variables,
+            &Default::default(),
             local_container,
             doc,
         );
@@ -566,10 +567,21 @@ fn update_instruction_for_loop_element(
     let replace_with = format!("{}.{}", reference_name, index_in_loop);
     let map =
         std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();
+    let replace_property_value = std::iter::IntoIterator::into_iter([(
+        doc.itdoc()
+            .resolve_name(ftd::interpreter2::FTD_LOOP_COUNTER),
+        ftd::interpreter2::Value::Integer {
+            value: index_in_loop as i64,
+        }
+        .into_property_value(false, instruction.line_number),
+    )])
+    .collect();
+
     update_local_variable_references_in_component(
         &mut instruction,
         &map,
         inherited_variables,
+        &replace_property_value,
         local_container,
         doc,
     );
@@ -647,6 +659,7 @@ fn update_inherited_reference_in_instruction(
         component_definition,
         &Default::default(),
         inherited_variables,
+        &Default::default(),
         local_container,
         doc,
     );
@@ -656,6 +669,7 @@ fn update_local_variable_references_in_component(
     component: &mut ftd::interpreter2::Component,
     local_variable_map: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+    replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
 ) {
@@ -664,6 +678,7 @@ fn update_local_variable_references_in_component(
             property,
             local_variable_map,
             inherited_variables,
+            replace_property_value,
             local_container,
             doc,
         );
@@ -675,6 +690,7 @@ fn update_local_variable_references_in_component(
                 action,
                 local_variable_map,
                 inherited_variables,
+                replace_property_value,
                 local_container,
                 doc,
             );
@@ -686,6 +702,7 @@ fn update_local_variable_references_in_component(
             condition,
             local_variable_map,
             inherited_variables,
+            replace_property_value,
             local_container,
             doc,
         );
@@ -696,6 +713,7 @@ fn update_local_variable_references_in_component(
             on,
             local_variable_map,
             inherited_variables,
+            replace_property_value,
             local_container,
             doc,
         );
@@ -706,6 +724,7 @@ fn update_local_variable_references_in_component(
             child,
             local_variable_map,
             inherited_variables,
+            &Default::default(),
             local_container,
             doc,
         );
@@ -716,6 +735,7 @@ fn update_local_variable_reference_in_property(
     property: &mut ftd::interpreter2::Property,
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+    replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
 ) {
@@ -723,6 +743,7 @@ fn update_local_variable_reference_in_property(
         &mut property.value,
         local_variable,
         inherited_variables,
+        replace_property_value,
         local_container,
         doc,
     );
@@ -731,6 +752,7 @@ fn update_local_variable_reference_in_property(
             condition,
             local_variable,
             inherited_variables,
+            replace_property_value,
             local_container,
             doc,
         );
@@ -741,6 +763,7 @@ fn update_local_variable_reference_in_condition(
     condition: &mut ftd::interpreter2::Expression,
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+    replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
 ) {
@@ -749,6 +772,7 @@ fn update_local_variable_reference_in_condition(
             reference,
             local_variable,
             inherited_variables,
+            replace_property_value,
             local_container,
             doc,
         );
@@ -759,6 +783,7 @@ fn update_local_variable_reference_in_property_value(
     property_value: &mut ftd::interpreter2::PropertyValue,
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+    replace_property_value: &ftd::Map<ftd::interpreter2::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
 ) {
@@ -771,6 +796,7 @@ fn update_local_variable_reference_in_property_value(
                     property_value,
                     local_variable,
                     inherited_variables,
+                    replace_property_value,
                     local_container,
                     doc,
                 );
@@ -785,6 +811,7 @@ fn update_local_variable_reference_in_property_value(
                             d,
                             local_variable,
                             inherited_variables,
+                            replace_property_value,
                             local_container,
                             doc,
                         );
@@ -797,6 +824,7 @@ fn update_local_variable_reference_in_property_value(
                             d,
                             local_variable,
                             inherited_variables,
+                            replace_property_value,
                             local_container,
                             doc,
                         );
@@ -807,6 +835,7 @@ fn update_local_variable_reference_in_property_value(
                         component,
                         local_variable,
                         inherited_variables,
+                        &Default::default(),
                         local_container,
                         doc,
                     )
@@ -816,6 +845,7 @@ fn update_local_variable_reference_in_property_value(
                         value,
                         local_variable,
                         inherited_variables,
+                        replace_property_value,
                         local_container,
                         doc,
                     );
@@ -833,6 +863,11 @@ fn update_local_variable_reference_in_property_value(
         }
     }) {
         property_value.set_reference_or_clone(local_variable.as_str());
+        return;
+    }
+
+    if let Some(replace_with) = replace_property_value.get(reference_or_clone.as_str()) {
+        *property_value = replace_with.to_owned();
         return;
     }
 

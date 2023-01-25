@@ -1,0 +1,33 @@
+-- string list names:
+
+-- string: AmitU
+-- string: Abrar
+-- string: Arpita
+-- string: Ganesh
+-- string: Rithik
+
+-- end: names
+
+
+
+
+-- foo: $obj
+idx: $LOOP.COUNTER
+$loop$: $names as $obj
+
+
+
+
+-- component foo:
+caption name:
+integer idx:
+
+-- ftd.row:
+spacing.px: 30
+
+-- ftd.text: $foo.name
+-- ftd.integer: $foo.idx
+
+-- end: ftd.row
+
+-- end: foo
