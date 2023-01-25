@@ -1632,6 +1632,95 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
+            ftd::interpreter2::FTD_BORDER_STYLE.to_string(),
+            ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
+                name: ftd::interpreter2::FTD_BORDER_STYLE.to_string(),
+                variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BORDER_STYLE_DASHED,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("dashed")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BORDER_STYLE_DOTTED,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("dotted")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BORDER_STYLE_DOUBLE,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("double")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BORDER_STYLE_GROOVE,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("groove")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BORDER_STYLE_INSET,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("inset")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BORDER_STYLE_OUTSET,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("outset")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BORDER_STYLE_RIDGE,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("ridge")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                    ftd::interpreter2::OrTypeVariant::Constant(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_BORDER_STYLE_SOLID,
+                        ftd::interpreter2::Kind::string()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        Some(   ftd::interpreter2::Value::new_string("solid")
+                                    .into_property_value(false, 0),),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
+        ),
+        (
             ftd::interpreter2::FTD_TEXT_TRANSFORM.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
                 name: ftd::interpreter2::FTD_TEXT_TRANSFORM.to_string(),
@@ -6596,6 +6685,12 @@ fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
         ftd::interpreter2::Argument::default(
             "sticky",
             ftd::interpreter2::Kind::boolean()
+                .into_optional()
+                .into_kind_data(),
+        ),
+        ftd::interpreter2::Argument::default(
+            "border-style",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_BORDER_STYLE)
                 .into_optional()
                 .into_kind_data(),
         ),

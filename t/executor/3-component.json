@@ -504,6 +504,11 @@
                         "value": null,
                         "line_number": null,
                         "properties": []
+                      },
+                      "border_style": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
                       }
                     }
                   }
@@ -857,6 +862,11 @@
                                 "value": null,
                                 "line_number": null,
                                 "properties": []
+                              },
+                              "border_style": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
                               }
                             }
                           }
@@ -1186,6 +1196,11 @@
                                 "value": null,
                                 "line_number": null,
                                 "properties": []
+                              },
+                              "border_style": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
                               }
                             }
                           }
@@ -1477,6 +1492,11 @@
                         "properties": []
                       },
                       "text_transform": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "border_style": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -1774,6 +1794,11 @@
                 "value": null,
                 "line_number": null,
                 "properties": []
+              },
+              "border_style": {
+                "value": null,
+                "line_number": null,
+                "properties": []
               }
             }
           }
@@ -2065,6 +2090,11 @@
         "properties": []
       },
       "text_transform": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "border_style": {
         "value": null,
         "line_number": null,
         "properties": []

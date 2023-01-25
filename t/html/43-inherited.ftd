@@ -8,3 +8,7 @@ color if { num % 2 == 0 }: $inherited.colors.custom.two
 role: $inherited.types.heading-large
 role if { num % 2 == 0 }: $inherited.types.heading-medium
 $on-click$: $fn.increment($a = $num)
+
+
+-- ftd.text: Hello
+background.solid: $inherited.colors.background.base

@@ -171,3 +171,13 @@ pub const FTD_LOADING_LAZY: &str = "ftd#loading.lazy";
 
 pub const FTD_SPECIAL_VALUE: &str = "$VALUE";
 pub const FTD_INHERITED: &str = "inherited";
+
+pub const FTD_BORDER_STYLE: &str = "ftd#border-style";
+pub const FTD_BORDER_STYLE_DOTTED: &str = "ftd#border-style.dotted";
+pub const FTD_BORDER_STYLE_DASHED: &str = "ftd#border-style.dashed";
+pub const FTD_BORDER_STYLE_SOLID: &str = "ftd#border-style.solid";
+pub const FTD_BORDER_STYLE_DOUBLE: &str = "ftd#border-style.double";
+pub const FTD_BORDER_STYLE_GROOVE: &str = "ftd#border-style.groove";
+pub const FTD_BORDER_STYLE_RIDGE: &str = "ftd#border-style.ridge";
+pub const FTD_BORDER_STYLE_INSET: &str = "ftd#border-style.inset";
+pub const FTD_BORDER_STYLE_OUTSET: &str = "ftd#border-style.outset";

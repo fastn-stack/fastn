@@ -6,8 +6,8 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
-"foo#rithik-name": "Rithik",
-"foo#x": 0,
+"foo#check-border-style:style:0": "dotted",
+"foo#check-border-style:which:0": 0,
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -533,7 +533,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Rithik</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#x&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; height: auto; text-decoration: none; width: auto" class="ft_md">Hello world</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#check-border-style:which:0&quot;}]]}]', this)" style="align-items: start; border-bottom-width: 2px; border-left-width: 2px; border-right-width: 2px; border-style: dotted; border-top-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; height: auto; justify-content: start; margin: 10px; padding: 10px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Hello World</div></div></div>
 
 
 <script>
@@ -1238,55 +1238,59 @@ a.value = !a.value
 }
 
 
-
-function function__increment___main(a){
-return (a.value += 1);
-}
-
-
 window.node_change_main = {};
-window.node_change_main["0:main__display"] = function(data) {
+window.node_change_main["0:main__border-style"] = function(data) {
 if(function(){
-return (resolve_reference("foo#rithik-name", data)=="Rithik");
+return (resolve_reference("foo#check-border-style:which:0", data)%8==0);
 }()){
-document.querySelector(`[data-id="0:main"]`).style["display"] = "block";
+document.querySelector(`[data-id="0:main"]`).style["border-style"] = "dotted";
 }
-else {document.querySelector(`[data-id="0:main"]`).style["display"] = "none";}
-}
-
-window.node_change_main["0:main__text"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#rithik-name", data, null);
-}
-window.node_change_main["1:main__display"] = function(data) {
-if(function(){
-return (5-2>resolve_reference("foo#x", data));
+else if(function(){
+return (resolve_reference("foo#check-border-style:which:0", data)%8==1);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["display"] = "block";
+document.querySelector(`[data-id="0:main"]`).style["border-style"] = "dashed";
 }
-else {document.querySelector(`[data-id="1:main"]`).style["display"] = "none";}
+else if(function(){
+return (resolve_reference("foo#check-border-style:which:0", data)%8==2);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-style"] = "solid";
+}
+else if(function(){
+return (resolve_reference("foo#check-border-style:which:0", data)%8==3);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-style"] = "inset";
+}
+else if(function(){
+return (resolve_reference("foo#check-border-style:which:0", data)%8==4);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-style"] = "groove";
+}
+else if(function(){
+return (resolve_reference("foo#check-border-style:which:0", data)%8==5);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-style"] = "ridge";
+}
+else if(function(){
+return (resolve_reference("foo#check-border-style:which:0", data)%8==6);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-style"] = "outset";
+}
+else if(function(){
+return (resolve_reference("foo#check-border-style:which:0", data)%8==7);
+}()){
+document.querySelector(`[data-id="0:main"]`).style["border-style"] = "double";
+}
+else { document.querySelector(`[data-id="0:main"]`).style["border-style"] = null; }
 }
 window.set_value_main = {};
-window.set_value_main["foo#rithik-name"] = function (data, new_value, remaining) {
+window.set_value_main["foo#check-border-style:which:0"] = function (data, new_value, remaining) {
 if (!!remaining) {
-set_data_value(data, "foo#rithik-name" + "." + remaining, new_value);
+set_data_value(data, "foo#check-border-style:which:0" + "." + remaining, new_value);
 } else {
-set_data_value(data, "foo#rithik-name", new_value);
+set_data_value(data, "foo#check-border-style:which:0", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__display"]){window.node_change_main["0:main__display"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
-}
-};
-
-window.set_value_main["foo#x"] = function (data, new_value, remaining) {
-if (!!remaining) {
-set_data_value(data, "foo#x" + "." + remaining, new_value);
-} else {
-set_data_value(data, "foo#x", new_value);
-}
-
-if(!!window["node_change_main"] && !!window.node_change_main["1:main__display"]){window.node_change_main["1:main__display"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__border-style"]){window.node_change_main["0:main__border-style"](data);
 }
 };
 
