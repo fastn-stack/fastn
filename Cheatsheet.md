@@ -1418,3 +1418,68 @@ The `inherited.colors` has following value:
   1. `eight`: `#d554b3`
   1. `nine`: `#ec8943`
   1. `ten`: `#da7a4a`
+
+
+## Understanding Loop
+
+`$loop$` loops over each item in an array, making the item available in a 
+context argument in component
+
+
+```ftd
+-- string list names:
+
+-- string: Ayushi
+-- string: Arpita
+
+-- end: names
+
+-- ftd.text: $obj
+$loop$: $names as $obj
+```
+
+The output would be:
+
+```
+Ayushi
+Arpita
+```
+
+### `LOOP.COUNTER`
+
+The current iteration of the loop (0-indexed)
+
+```ftd
+-- string list names:
+
+-- string: Ayushi
+-- string: Arpita
+
+-- end: names
+
+-- foo: $obj
+idx: $LOOP.COUNTER
+$loop$: $names as $obj
+
+
+-- component foo:
+caption name:
+integer idx:
+
+-- ftd.row:
+spacing.px: 30
+
+-- ftd.text: $foo.name
+-- ftd.integer: $foo.idx
+
+-- end: ftd.row
+
+-- end: foo
+```
+
+The output would be:
+
+```
+Ayushi     0
+Arpita     1
+```
