@@ -637,6 +637,10 @@ impl ftd::executor::Common {
             d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
         }
 
+        if let Some(ref id) = self.id.value {
+            d.check_and_insert("id", ftd::node::Value::from_string(id));
+        }
+
         d.check_and_insert("text-decoration", ftd::node::Value::from_string("none"));
 
         if self.is_not_visible {
