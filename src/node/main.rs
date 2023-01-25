@@ -655,6 +655,29 @@ impl ftd::executor::Common {
             ),
         );
 
+        if let Some(sticky) = self.sticky.value.as_ref() {
+            if *sticky {
+                d.check_and_insert(
+                    "position",
+                    ftd::node::Value::from_executor_value(
+                        Some(s("sticky")),
+                        self.sticky.to_owned(),
+                        None,
+                        doc_id,
+                    ),
+                );
+                d.check_and_insert(
+                    "top",
+                    ftd::node::Value::from_executor_value(
+                        Some(s("0px")),
+                        self.top.to_owned(),
+                        None,
+                        doc_id,
+                    ),
+                );
+            }
+        }
+
         d.check_and_insert(
             "top",
             ftd::node::Value::from_executor_value(

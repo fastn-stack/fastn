@@ -395,6 +395,7 @@ pub struct Common {
     pub resize: ftd::executor::Value<Option<ftd::executor::Resize>>,
     pub white_space: ftd::executor::Value<Option<ftd::executor::WhiteSpace>>,
     pub text_transform: ftd::executor::Value<Option<ftd::executor::TextTransform>>,
+    pub sticky: ftd::executor::Value<Option<bool>>,
 }
 
 pub fn default_column() -> Column {
@@ -709,6 +710,13 @@ pub fn common_from_properties(
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
+        sticky: ftd::executor::value::optional_bool(
+            "sticky",
+            properties,
+            arguments,
+            doc,
+            line_number,
+        )?,
         z_index: ftd::executor::value::optional_i64(
             "z-index",
             properties,
