@@ -1,6 +1,6 @@
 -- ftd.column:
 height: fill-container
-spacing-mode.fixed.px: 20
+spacing: space-evenly
 
 -- ftd.text: hello 1
 
