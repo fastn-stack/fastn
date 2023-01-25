@@ -181,5 +181,3 @@ pub const FTD_BORDER_STYLE_GROOVE: &str = "ftd#border-style.groove";
 pub const FTD_BORDER_STYLE_RIDGE: &str = "ftd#border-style.ridge";
 pub const FTD_BORDER_STYLE_INSET: &str = "ftd#border-style.inset";
 pub const FTD_BORDER_STYLE_OUTSET: &str = "ftd#border-style.outset";
-
-pub const FTD_ID: &str = "ftd#id";
