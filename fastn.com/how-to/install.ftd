@@ -11,18 +11,18 @@ binary and install it in your local system.
 -- ds.h2: Linux Installation
 
 You can get our pre-compiled binaries in the 
-[Releases](https://github.com/FifthTry/fpm/releases) section. 
+[Releases](https://github.com/ftd-lang/fpm/releases) section. 
 
 -- ds.h3: One line snippet
 
---- ds.code:
+-- ds.code:
 lang: sh
 
-\$ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-fpm.sh)"
+\$ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fpm/main/install-fpm.sh)"
 
 -- ds.h3: Download and map the binaries
 
-- Download the binaries from the [Releases](https://github.com/FifthTry/fpm/releases) 
+- Download the binaries from the [Releases](https://github.com/ftd-lang/fpm/releases) 
   page.
 - Move the `fpm` binary and the `ftd.d` file to the `/usr/local/bin/`.
 
@@ -31,14 +31,14 @@ lang: sh
 
 -- ds.h3: One line snippet
 
---- ds.code:
+-- ds.code:
 lang: sh
 
-\$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-fpm.sh)"
+\$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fpm/main/install-fpm.sh)"
 
 -- ds.h3: Download and map the binaries
 
-- Download the binaries from the [Releases](https://github.com/FifthTry/fpm/releases) 
+- Download the binaries from the [Releases](https://github.com/ftd-lang/fpm/releases) 
   page.
 - Move the `fpm` binary to the `/usr/local/bin/`.
 
@@ -47,7 +47,7 @@ lang: sh
 
 -- ds.h3: Download and map the binaries
 
-- Download the executable from the [Releases](https://github.com/FifthTry/fpm/releases) 
+- Download the executable from the [Releases](https://github.com/ftd-lang/fpm/releases) 
   page.
 - Use the reference to `fpm.exe` in your terminal to invoke ftd.
 
@@ -70,7 +70,7 @@ cargo install fpm
 -- ds.code:
 lang: sh
 
-git clone git@github.com:FifthTry/fpm.git
+git clone git@github.com:ftd-lang/fpm.git
 
 
 -- ds.markdown:
