@@ -7,7 +7,7 @@
 
 ## 24 January 2023
 - [Added border-style](https://github.com/ftd-lang/ftd/pull/549/commits/6f08e0ce2b9eeb5aa8da5bb418b60fcc0b221d05)
-
+- [Added ftd.enable-dark-mode, ftd.enable-light-mode, ftd.enable-system-mode](https://github.com/ftd-lang/ftd/commit/723b1f50e3e1564c112c926ec024198fa843e42f)
 
 ## 23 January 2023
 - [Added line-clamp](https://github.com/ftd-lang/ftd/pull/544/commits/b50d8ef371ead95679838e862d0ea956e7655b39)
