@@ -427,6 +427,7 @@ By default, `type` is set to `ftd.text-input-type.text`
 
 ## Common Attributes
 
+- `id`: `optional string`
 - `padding`: `optional ftd.length`
 - `padding-left`: `optional ftd.length`
 - `padding-right`: `optional ftd.length`
@@ -680,7 +681,6 @@ string dark: $color.light
 -- constant string outset: outset
 
 -- end: border-style
-
 ```
 
 
