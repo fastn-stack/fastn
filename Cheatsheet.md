@@ -686,7 +686,6 @@ string dark: $color.light
 
 ## Container Attributes
 
-- `spacing`: `optional ftd.length`
 - `wrap`: `optional boolean`
 
 - `align-content`: `optional ftd.align`
@@ -710,18 +709,19 @@ string dark: $color.light
 ```
 
 
-- `spacing-mode`: `optional ftd.spacing-mode`
+- `spacing`: `optional ftd.spacing`
 
-**`ftd.spacing-mode`**
+**`ftd.spacing`**
 
 ```ftd
--- or-type spacing-mode:
+-- or-type spacing:
 
+-- ftd.length fixed:
 -- constant string space-between: space-between
 -- constant string space-around: space-around
 -- constant string space-evenly: space-evenly
 
--- end: spacing-mode
+-- end: spacing
 ```
 
 - `resize`: `optional ftd.resize`
