@@ -1,7 +1,8 @@
 # FTD Change Log
 
 ## 25 January 2023
-- [Added id](https://github.com/ftd-lang/ftd/pull/554/commits/7321ba5253d565683e35e078606567f302633eaf)
+- [Added `id` attr](https://github.com/ftd-lang/ftd/pull/554/commits/7321ba5253d565683e35e078606567f302633eaf)
+- [Added slugify `id` for `region`s](https://github.com/ftd-lang/ftd/pull/556/commits/a419d0155bd4299c4efab91ad55557f92bc21f0f)
 
 
 ## 24 January 2023
