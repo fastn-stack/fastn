@@ -16,7 +16,7 @@ align-content: center
 -- ftd.row:
 margin-bottom.px: 100
 padding.px: 40
-spacing.px: 40
+spacing.fixed.px: 40
 width: fill-container
 
 
@@ -88,7 +88,7 @@ align-content: center
 -- ftd.row:
 margin-top.px: 40
 padding.px: 40
-spacing.px: 40
+spacing.fixed.px: 40
 width: fill-container
 
 
@@ -154,7 +154,7 @@ align-content: center
 -- ftd.row:
 margin-top.px: 40
 padding.px: 40
-spacing.px: 40
+spacing.fixed.px: 40
 width: fill-container
 
 

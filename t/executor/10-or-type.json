@@ -102,11 +102,6 @@
   },
   "main": {
     "container": {
-      "spacing": {
-        "value": null,
-        "line_number": null,
-        "properties": []
-      },
       "wrap": {
         "value": null,
         "line_number": null,
@@ -117,7 +112,7 @@
         "line_number": null,
         "properties": []
       },
-      "spacing_mode": {
+      "spacing": {
         "value": null,
         "line_number": null,
         "properties": []

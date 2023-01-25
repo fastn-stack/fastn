@@ -67,7 +67,7 @@ current-title: $page.current-title
 
 -- ftd.row:
 padding.px: 48
-spacing.px: 48
+spacing.fixed.px: 48
 width.fixed.percent: 100
 
 -- ftd.column:
@@ -82,7 +82,7 @@ item: $page.toc
 -- end: ftd.column
 
 -- ftd.column:
-spacing.px: 32
+spacing.fixed.px: 32
 width.fixed.percent: 80
 
 -- ftd.text: $page.title
@@ -93,7 +93,7 @@ color: $text-strong
 
 -- ftd.column:
 children: $page.container
-spacing.px: 32
+spacing.fixed.px: 32
 width.fixed.percent: 100
 
 -- end: ftd.column
@@ -235,7 +235,7 @@ ftd.align aaa: center
 -- ftd.column: 
 width.fixed.percent: 100
 align-content: $image.aaa
-spacing.px: 12
+spacing.fixed.px: 12
 
 -- ftd.column:
 width.fixed.percent: 100
@@ -308,13 +308,13 @@ padding-horizontal.px: 32
 
 -- ftd.column:
 width.fixed.percent: 26
-spacing.px: 12
+spacing.fixed.px: 12
 
 -- ftd.text: $header.navtitle
 color: $text-strong
 
 -- ftd.row:
-spacing.px: 8
+spacing.fixed.px: 8
 
 -- ftd.text: $header.nav-subtitle
 color: $text-strong

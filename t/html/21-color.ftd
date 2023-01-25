@@ -1,8 +1,8 @@
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 
 -- ftd.row:
-spacing.px: 5
+spacing.fixed.px: 5
 
 -- ftd.text: ftd.dark-mode:
 
@@ -14,7 +14,7 @@ color: $bgcolor
 
 
 -- ftd.row:
-spacing.px: 5
+spacing.fixed.px: 5
 
 -- ftd.text: ftd.system-dark-mode:
 
@@ -25,7 +25,7 @@ color: $bgcolor
 
 
 -- ftd.row:
-spacing.px: 5
+spacing.fixed.px: 5
 
 -- ftd.text: ftd.follow-system-dark-mode:
 
@@ -39,10 +39,10 @@ color: $bgcolor
 -- end: ftd.row
 
 -- ftd.column:
-spacing.px: 40
+spacing.fixed.px: 40
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 
 -- ftd.text: Dark Mode
 $on-click$: $set-dark()

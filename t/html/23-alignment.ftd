@@ -1,7 +1,7 @@
 -- integer $num: 0
 
 -- ftd.column:
-spacing.px: 20
+spacing.fixed.px: 20
 
 -- ftd.text: Click Here!!
 color: red
@@ -12,13 +12,13 @@ $on-click$: $increment($a=$num)
 
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 wrap: true
 
 
 
 -- ftd.column:
-spacing.px: 20
+spacing.fixed.px: 20
 align-content if { num % 9 == 0 }: top-left
 align-content if { num % 9 == 1 }: top-center
 align-content if { num % 9 == 2 }: top-right
@@ -60,7 +60,7 @@ border-width.px: 1
 
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 align-content if { num % 9 == 0 }: top-left
 align-content if { num % 9 == 1 }: top-center
 align-content if { num % 9 == 2 }: top-right
@@ -103,7 +103,7 @@ border-width.px: 1
 
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 align-content if { num % 9 == 0 }: top-left
 align-content if { num % 9 == 1 }: top-center
 align-content if { num % 9 == 2 }: top-right
@@ -113,7 +113,7 @@ align-content if { num % 9 == 5 }: right
 align-content if { num % 9 == 6 }: bottom-left
 align-content if { num % 9 == 7 }: bottom-center
 align-content if { num % 9 == 8 }: bottom-right
-spacing-mode: space-between
+/spacing: space-between
 background.solid: green
 width.fixed.px: 200
 height.fixed.px: 200
@@ -144,7 +144,7 @@ border-width.px: 1
 
 
 -- ftd.column:
-spacing.px: 20
+spacing.fixed.px: 20
 align-content if { num % 9 == 0 }: top-left
 align-content if { num % 9 == 1 }: top-center
 align-content if { num % 9 == 2 }: top-right
@@ -154,7 +154,7 @@ align-content if { num % 9 == 5 }: right
 align-content if { num % 9 == 6 }: bottom-left
 align-content if { num % 9 == 7 }: bottom-center
 align-content if { num % 9 == 8 }: bottom-right
-spacing-mode: space-evenly
+/spacing: space-evenly
 background.solid: green
 width.fixed.px: 200
 height.fixed.px: 200
@@ -185,7 +185,7 @@ border-width.px: 1
 
 
 -- ftd.column:
-spacing.px: 20
+spacing.fixed.px: 20
 background.solid: blue
 width.fixed.px: 200
 height.fixed.px: 200
@@ -217,7 +217,7 @@ border-width.px: 1
 
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 background.solid: blue
 width.fixed.px: 200
 height.fixed.px: 200
@@ -249,7 +249,7 @@ border-width.px: 1
 
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 background.solid: pink
 width.fixed.px: 200
 height.fixed.px: 200
