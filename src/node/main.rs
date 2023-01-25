@@ -265,7 +265,7 @@ impl ftd::executor::Text {
         if self.common.region.value.is_some() {
             n.attrs.insert_if_not_contains(
                 "id",
-                ftd::node::Value::from_string(slug::slugify(&self.text.value.rendered)),
+                ftd::node::Value::from_string(slug::slugify(&self.text.value.original)),
             );
         }
 
