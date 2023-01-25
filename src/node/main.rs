@@ -588,6 +588,18 @@ impl ftd::executor::Common {
 
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
+        if let Some(ref id) = self.id.value {
+            d.check_and_insert(
+                "id",
+                ftd::node::Value::from_executor_value(
+                    Some(id.to_string()),
+                    self.id.to_owned(),
+                    Some((format!("{{0}}"), false)),
+                    doc_id,
+                ),
+            );
+        }
+
         d.check_and_insert(
             "data-id",
             ftd::node::Value::from_string(self.data_id.as_str()),
@@ -635,10 +647,6 @@ impl ftd::executor::Common {
 
         if !self.event.is_empty() {
             d.check_and_insert("cursor", ftd::node::Value::from_string("pointer"));
-        }
-
-        if let Some(ref id) = self.id.value {
-            d.check_and_insert("id", ftd::node::Value::from_string(id));
         }
 
         d.check_and_insert("text-decoration", ftd::node::Value::from_string("none"));
