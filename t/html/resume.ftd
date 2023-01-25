@@ -1,0 +1,34 @@
+-- record work:
+optional caption name:
+optional string position:
+optional string url:
+
+
+-- record resume:
+caption name:
+work list works:
+
+
+-- resume john-doe: John Doe
+works: $data
+
+;; -- john-doe.works:
+
+;; -- work: SD
+
+;; -- end: john-doe.works
+
+
+-- work list data:
+
+-- work: SD
+-- work: Designer
+
+-- end: data
+
+
+-- ftd.text: $john-doe.name
+
+-- ftd.text: $obj.name
+if: { obj.name != NULL }
+$loop$: $john-doe.works as $obj
