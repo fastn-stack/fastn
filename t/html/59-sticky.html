@@ -1255,7 +1255,7 @@ return resolve_reference("foo#flag", data);
 }()){
 document.querySelector(`[data-id="0,1:main"]`).style["position"] = eval(`if ({0}) {"sticky"} else {"static"}`.format(JSONstringify(true)));
 }
-else { document.querySelector(`[data-id="0,1:main"]`).style["position"] = null; }
+else { document.querySelector(`[data-id="0,1:main"]`).style["position"] = null }
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
