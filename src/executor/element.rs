@@ -312,7 +312,9 @@ pub fn code_with_theme(
     Ok(Rendered {
         original: code.to_string(),
         rendered: ftd::executor::code::code(
-            code.replace("\n\\-- ", "\n-- ").as_str(),
+            code.replace("\n\\-- ", "\n-- ")
+                .replace("\\$", "$")
+                .as_str(),
             ext,
             theme,
             doc_id,
@@ -333,6 +335,7 @@ pub type Event = ftd::interpreter2::Event;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Common {
+    pub id: ftd::executor::Value<Option<String>>,
     pub is_not_visible: bool,
     pub event: Vec<Event>,
     pub is_dummy: bool,
@@ -707,6 +710,7 @@ pub fn common_from_properties(
     };
 
     Ok(Common {
+        id: ftd::executor::value::optional_string("id", properties, arguments, doc, line_number)?,
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
