@@ -1,0 +1,14 @@
+-- component region-slug:
+
+-- ftd.column:
+
+-- ftd.text: Hello World
+id: hello-world-new
+region: h1
+
+-- end: ftd.column
+
+-- end: region-slug
+
+
+-- region-slug:
