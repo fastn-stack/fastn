@@ -1,0 +1,11 @@
+-- ftd.column:
+height: fill-container
+spacing-mode.fixed.px: 20
+
+-- ftd.text: hello 1
+
+-- ftd.text: hello 2
+
+-- ftd.text: hello 3
+
+-- end: ftd.column
