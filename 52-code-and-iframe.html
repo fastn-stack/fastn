@@ -556,6 +556,10 @@ window.enable_system_mode();
 function is_empty(str) {
 return (!str || str.length === 0);
 }
+function append(array, value) {
+array.push(value);
+return array;
+}
 function fallbackCopyTextToClipboard(text) {
 var textArea = document.createElement("textarea");
 textArea.value = text;
@@ -1265,9 +1269,9 @@ set_data_value(data, "foo#foo:name:4" + "." + remaining, new_value);
 set_data_value(data, "foo#foo:name:4", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__text"]){window.node_change_main["4,0:main__text"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__display"]){window.node_change_main["4,0:main__display"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["4,0:main__text"]){window.node_change_main["4,0:main__text"](data);
 }
 };
 
