@@ -1,0 +1,16 @@
+-- component hello:
+integer check:
+
+-- ftd.column:
+id if { hello.check == 1}: hello-world-text1
+id if { hello.check == 2}: hello-world-text2
+
+-- ftd.text: Hello World
+
+-- end: ftd.column
+
+-- end: hello
+
+
+-- hello:
+check: 3
