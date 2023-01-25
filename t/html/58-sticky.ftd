@@ -1,22 +1,16 @@
--- ftd.color green:
-light: green
-dark: green
-
--- ftd.color red:
-light: red
-dark: red
-
--- print-text:
+-- ftd.color yellow:
+light: yellow
+dark: yellow
 
 -- component print-text:
 
 -- ftd.column:
-background.solid: $red
-width: fill-container
+background.solid: $yellow
+width.fixed.px: 300
 height.fixed.px: 1800
 
 -- ftd.text: dummy
-padding.px: 20
+padding.px: 80
 
 -- ftd.text: Sticky Hello world
 padding.px: 20
@@ -37,3 +31,5 @@ padding.px: 80
 -- end: ftd.column
 
 -- end: print-text
+
+-- print-text:

@@ -793,6 +793,7 @@ optional string font-family:
 ```
 
 - `line-clamp`: `optional integer`
+- `sticky`: `optional boolean`
 
 # Events
 

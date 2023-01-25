@@ -1,5 +1,8 @@
 # FTD Change Log
 
+## 25 January 2023
+- [Added sticky css](https://github.com/ftd-lang/ftd/pull/553/commits/a3b43d09b7b968d8242559e96dbff7c356104880)
+
 ## 24 January 2023
 - [Added border-style](https://github.com/ftd-lang/ftd/pull/549/commits/6f08e0ce2b9eeb5aa8da5bb418b60fcc0b221d05)
 
