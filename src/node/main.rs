@@ -1484,15 +1484,17 @@ impl ftd::executor::Container {
             d.check_and_insert("position", ftd::node::Value::from_string("relative"));
         }
 
-        d.check_and_insert(
-            "gap",
-            ftd::node::Value::from_executor_value(
-                self.spacing.value.as_ref().map(|v| v.to_css_string()),
-                self.spacing.to_owned(),
-                None,
-                doc_id,
-            ),
-        );
+        if let Some(ftd::executor::SpacingMode::Fixed(_)) = self.spacing_mode.value.as_ref() {
+            d.check_and_insert(
+                "gap",
+                ftd::node::Value::from_executor_value(
+                    self.spacing_mode.value.as_ref().map(|v| v.to_css_string()),
+                    self.spacing_mode.to_owned(),
+                    None,
+                    doc_id,
+                ),
+            );
+        }
 
         d.check_and_insert(
             "flex-wrap",

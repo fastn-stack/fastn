@@ -1019,6 +1019,7 @@ fn round_1p(n: f32) -> f32 {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum SpacingMode {
+    Fixed(Length),
     SpaceBetween,
     SpaceEvenly,
     SpaceAround,
@@ -1046,6 +1047,7 @@ impl SpacingMode {
             ftd::interpreter2::FTD_SPACING_MODE_SPACE_BETWEEN => Ok(SpacingMode::SpaceBetween),
             ftd::interpreter2::FTD_SPACING_MODE_SPACE_EVENLY => Ok(SpacingMode::SpaceEvenly),
             ftd::interpreter2::FTD_SPACING_MODE_SPACE_AROUND => Ok(SpacingMode::SpaceAround),
+            ftd::interpreter2::FTD_SPACING_MODE_FIXED => Ok(SpacingMode::Fixed(Length::from_value(or_type_value.1.to_owned(), doc, line_number)?)),
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.spacing-mode`", t),
                 doc.name,
@@ -1082,6 +1084,7 @@ impl SpacingMode {
             SpacingMode::SpaceBetween => "space-between".to_string(),
             SpacingMode::SpaceEvenly => "space-evenly".to_string(),
             SpacingMode::SpaceAround => "space-around".to_string(),
+            SpacingMode::Fixed(f) => f.to_css_string(),
         }
     }
 }
