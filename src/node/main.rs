@@ -262,6 +262,13 @@ impl ftd::executor::Text {
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), "block", &self.common, doc_id);
 
+        if self.common.region.value.is_some() {
+            n.attrs.insert_if_not_contains(
+                "id",
+                ftd::node::Value::from_string(slug::slugify(&self.text.value.rendered)),
+            );
+        }
+
         n.style.check_and_insert(
             "text-align",
             ftd::node::Value::from_executor_value(
@@ -587,6 +594,16 @@ impl ftd::executor::Common {
         use ftd::node::utils::CheckMap;
 
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
+
+        d.check_and_insert(
+            "id",
+            ftd::node::Value::from_executor_value(
+                self.id.value.to_owned(),
+                self.id.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
 
         d.check_and_insert(
             "data-id",

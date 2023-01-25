@@ -1,6 +1,10 @@
+use crate::node::Value;
+
 pub trait CheckMap {
     fn check_and_insert(&mut self, key: &str, value: ftd::node::Value);
     fn upsert(&mut self, key: &str, value: ftd::node::Value);
+    // only `insert if value is null or not present, and update properties always`
+    fn insert_if_not_contains(&mut self, key: &str, value: ftd::node::Value);
 }
 
 impl CheckMap for ftd::Map<ftd::node::Value> {
@@ -26,6 +30,17 @@ impl CheckMap for ftd::Map<ftd::node::Value> {
         if value.value.is_some() || !value.properties.is_empty() {
             self.insert(key.to_string(), value);
         }
+    }
+
+    fn insert_if_not_contains(&mut self, key: &str, value: Value) {
+        if let Some(old_value) = self.get_mut(key) {
+            // if old value present so extend the props only
+            if old_value.value.is_some() {
+                old_value.properties.extend(value.properties);
+                return;
+            }
+        }
+        self.insert(key.to_string(), value);
     }
 }
 

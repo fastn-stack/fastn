@@ -1250,7 +1250,7 @@ return resolve_reference("foo#flag", data);
 }()){
 document.querySelector(`[data-id="1,0:main"]`).style["overflow"] = "scroll";
 }
-else { document.querySelector(`[data-id="1,0:main"]`).style["overflow"] = null; }
+else { document.querySelector(`[data-id="1,0:main"]`).style["overflow"] = null }
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {

@@ -421,12 +421,29 @@ multiline: true
 By default, `type` is set to `ftd.text-input-type.text`
 
 
+## `ftd.image` - To render an image
+
+```ftd 
+-- ftd.image: 
+src: $assets.files.static.fifthtry-logo.svg
+```
+
+## `ftd.image` attributes
+
+### `src`: `ftd.image-src`
+
+```ftd
+-- record image-src:
+string light:
+string dark: $light
+```
 
 
 
 
 ## Common Attributes
 
+- `id`: `optional string`
 - `padding`: `optional ftd.length`
 - `padding-left`: `optional ftd.length`
 - `padding-right`: `optional ftd.length`
@@ -680,7 +697,6 @@ string dark: $color.light
 -- constant string outset: outset
 
 -- end: border-style
-
 ```
 
 
@@ -914,7 +930,7 @@ if: { !is_empty(names) }
 
 ## `enable_dark_mode()`
 
-This is FScript function. This function enables the dark mode.
+This is FScript as well as a standard ftd function. This function enables the dark mode.
 
 ```ftd
 -- ftd.text: Dark Mode
@@ -925,9 +941,15 @@ $on-click$: $set-dark()
 enable_dark_mode()
 ```
 
+Alternatively you can do
+```ftd
+-- ftd.text: Click to set Dark Mode
+$on-click$: $ftd.enable-dark-mode()
+```
+
 ## `enable_light_mode()`
 
-This is FScript function. This function enables the light mode.
+This is FScript as well as a standard ftd function. This function enables the light mode.
 
 ```ftd
 -- ftd.text: Light Mode
@@ -938,9 +960,15 @@ $on-click$: $set-light()
 enable_light_mode()
 ```
 
+Alternatively you can do
+```ftd
+-- ftd.text: Click to set Light Mode
+$on-click$: $ftd.enable-light-mode()
+```
+
 ## `enable_system_mode()`
 
-This is FScript function. This function enables the system mode.
+This is FScript as well as a standard ftd function. This function enables the system mode.
 
 ```ftd
 -- ftd.text: System Mode
@@ -949,6 +977,12 @@ $on-click$: $set-system()
 -- void set-system():
 
 enable_system_mode()
+```
+
+Alternatively you can do
+```ftd
+-- ftd.text: Click to set System Mode
+$on-click$: $ftd.enable-system-mode()
 ```
 
 ## `http(url: string, method: string, ...request-data)`
