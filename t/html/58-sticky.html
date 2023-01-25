@@ -1249,31 +1249,13 @@ document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve
 else {document.querySelector(`[data-id="0:main"]`).style["background-color"] = resolve_reference("foo#yellow", data, null).dark;}
 }
 
-window.node_change_main["0,1:main__left"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="0,1:main"]`).style["left"] = eval(`if ({0}) {"0px"}`.format(JSONstringify(true)));
-}
-else {document.querySelector(`[data-id="0,1:main"]`).style["left"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(100))));}
-}
-
 window.node_change_main["0,1:main__position"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
 }()){
-document.querySelector(`[data-id="0,1:main"]`).style["position"] = eval(`if ({0}) {"sticky"} else {null}`.format(JSONstringify(true)));
+document.querySelector(`[data-id="0,1:main"]`).style["position"] = eval(`if ({0}) {"sticky"} else {"static"}`.format(JSONstringify(true)));
 }
 else { document.querySelector(`[data-id="0,1:main"]`).style["position"] = null; }
-}
-
-window.node_change_main["0,1:main__top"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-document.querySelector(`[data-id="0,1:main"]`).style["top"] = eval(`if ({0}) {"0px"}`.format(JSONstringify(true)));
-}
-else {document.querySelector(`[data-id="0,1:main"]`).style["top"] = `{0}`.format(JSONstringify(`{0}px`.format(JSONstringify(50))));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
@@ -1283,11 +1265,7 @@ set_data_value(data, "foo#flag" + "." + remaining, new_value);
 set_data_value(data, "foo#flag", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__left"]){window.node_change_main["0,1:main__left"](data);
-}
 if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__position"]){window.node_change_main["0,1:main__position"](data);
-}
-if(!!window["node_change_main"] && !!window.node_change_main["0,1:main__top"]){window.node_change_main["0,1:main__top"](data);
 }
 };
 
