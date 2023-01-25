@@ -262,6 +262,13 @@ impl ftd::executor::Text {
         let node = self.common.node();
         let mut n = Node::from_common(node.as_str(), "block", &self.common, doc_id);
 
+        if self.common.region.value.is_some() {
+            n.attrs.insert_if_not_contains(
+                "id",
+                ftd::node::Value::from_string(slug::slugify(&self.text.value.rendered)),
+            );
+        }
+
         n.style.check_and_insert(
             "text-align",
             ftd::node::Value::from_executor_value(
