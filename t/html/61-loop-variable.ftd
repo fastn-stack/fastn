@@ -1,4 +1,4 @@
--- string list names:
+-- string list $names:
 
 -- string: AmitU
 -- string: Abrar
@@ -6,9 +6,11 @@
 -- string: Ganesh
 -- string: Rithik
 
--- end: names
+-- end: $names
 
 
+-- ftd.text: Click me!
+$on-click$: $append($a = $names, v = FifthTry)
 
 
 -- foo: $obj
@@ -21,13 +23,24 @@ $loop$: $names as $obj
 -- component foo:
 caption name:
 integer idx:
+integer $value: 0
 
 -- ftd.row:
 spacing.px: 30
+$on-click$: $ftd.increment($a = $foo.value)
 
 -- ftd.text: $foo.name
 -- ftd.integer: $foo.idx
+-- ftd.integer: $foo.value
 
 -- end: ftd.row
 
 -- end: foo
+
+
+
+-- void append(a,v):
+string list $a:
+string v:
+
+a = append(a, v);

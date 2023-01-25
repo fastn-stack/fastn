@@ -11,6 +11,10 @@ function enable_system_mode() {
 function is_empty(str) {
     return (!str || str.length === 0);
 }
+function append(array, value) {
+    array.push(value);
+    return array;
+}
 function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
     textArea.value = text;

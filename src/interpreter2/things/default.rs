@@ -49,6 +49,28 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
             }),
         ),
         (
+            "append".to_string(),
+            Function::new(|argument| {
+                if let Ok(s) = argument.as_tuple() {
+                    if s.len() != 2 {
+                        Err(
+                            ftd::evalexpr::error::EvalexprError::WrongOperatorArgumentAmount {
+                                expected: 2,
+                                actual: s.len(),
+                            },
+                        )
+                    } else {
+                        let mut argument = s.first().unwrap().as_tuple()?;
+                        let value = s.last().unwrap();
+                        argument.push(value.to_owned());
+                        Ok(Value::Tuple(argument))
+                    }
+                } else {
+                    Ok(Value::Boolean(false)) //todo: throw error
+                }
+            }),
+        ),
+        (
             "enable_dark_mode".to_string(),
             Function::new(|_| Ok(Value::Empty)),
         ),
