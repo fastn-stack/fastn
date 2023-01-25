@@ -710,13 +710,7 @@ pub fn common_from_properties(
     };
 
     Ok(Common {
-        id: ftd::executor::value::optional_string(
-            "z-index",
-            properties,
-            arguments,
-            doc,
-            line_number,
-        )?,
+        id: ftd::executor::value::optional_string("id", properties, arguments, doc, line_number)?,
         is_not_visible: !is_visible,
         event: events.to_owned(),
         is_dummy: false,
