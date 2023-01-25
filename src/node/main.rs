@@ -588,17 +588,15 @@ impl ftd::executor::Common {
 
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
-        if let Some(ref id) = self.id.value {
-            d.check_and_insert(
-                "id",
-                ftd::node::Value::from_executor_value(
-                    Some(id.to_string()),
-                    self.id.to_owned(),
-                    Some((format!("{{0}}"), false)),
-                    doc_id,
-                ),
-            );
-        }
+        d.check_and_insert(
+            "id",
+            ftd::node::Value::from_executor_value(
+                self.id.value.to_owned(),
+                self.id.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
 
         d.check_and_insert(
             "data-id",

@@ -1,11 +1,12 @@
 -- component hello:
-integer check:
+integer $check:
 
 -- ftd.column:
-id if { hello.check == 1}: hello-world-text1
-id if { hello.check == 2}: hello-world-text2
+id if { hello.check % 3 == 1 }: hello-world-text1
+id if { hello.check % 3 == 2 }: hello-world-text2
 
 -- ftd.text: Hello World
+$on-click$: $ftd.increment($a = $hello.check)
 
 -- end: ftd.column
 
@@ -13,4 +14,4 @@ id if { hello.check == 2}: hello-world-text2
 
 
 -- hello:
-check: 3
+$check: 3
