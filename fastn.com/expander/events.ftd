@@ -33,6 +33,7 @@ lang: ftd
 
 \$on-click$: $toggle($<function-argument> = $box.<boolean-variable>)
 
+
 -- ds.markdown:
 
 4. Define the **toggle function** after component
