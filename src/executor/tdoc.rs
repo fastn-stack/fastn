@@ -3,6 +3,15 @@ pub struct TDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
     pub bag: &'a mut ftd::Map<ftd::interpreter2::Thing>,
+    pub dummy_instructions: &'a mut ftd::Map<DummyInstruction>,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct DummyInstruction {
+    pub parent_container: Vec<usize>,
+    pub start_index: usize,
+    pub main_instruction: ftd::executor::Element,
+    pub helper_instructions: ftd::Map<ftd::executor::Element>,
 }
 
 impl<'a> TDoc<'a> {
