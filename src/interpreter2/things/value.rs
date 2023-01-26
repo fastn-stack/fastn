@@ -34,6 +34,17 @@ impl PropertyValue {
         }
     }
 
+    pub(crate) fn set_mutable(&mut self, mutable: bool) {
+        match self {
+            PropertyValue::Value { is_mutable, .. }
+            | PropertyValue::Reference { is_mutable, .. }
+            | PropertyValue::Clone { is_mutable, .. }
+            | PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall { is_mutable, .. }) => {
+                *is_mutable = mutable
+            }
+        }
+    }
+
     pub(crate) fn is_static(&self, doc: &ftd::interpreter2::TDoc) -> bool {
         match self {
             PropertyValue::Clone { .. } => true,

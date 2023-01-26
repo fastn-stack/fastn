@@ -3,6 +3,7 @@
 mod test;
 
 mod code;
+mod dummy;
 mod element;
 mod main;
 mod markup;

@@ -1,9 +1,10 @@
 -- string list $names:
 
--- string: John
--- string: Alice
--- string: Tom
--- string: Jerry
+-- string: AmitU
+-- string: Abrar
+-- string: Arpita
+-- string: Ganesh
+-- string: Rithik
 
 -- end: $names
 
@@ -25,7 +26,7 @@ integer idx:
 integer $value: 0
 
 -- ftd.row:
-spacing.fixed.px: 30
+spacing.px: 30
 $on-click$: $ftd.increment($a = $foo.value)
 
 -- ftd.text: $foo.name

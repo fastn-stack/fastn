@@ -43,6 +43,7 @@ impl<'a> ExecuteDoc<'a> {
             name: self.name,
             aliases: self.aliases,
             bag: self.bag,
+            dummy_instructions: &mut Default::default(),
         };
 
         ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
@@ -53,7 +54,7 @@ impl<'a> ExecuteDoc<'a> {
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Vec<usize>, ftd::interpreter2::Component)>> {
+    ) -> ftd::executor::Result<Vec<(bool, Vec<usize>, ftd::interpreter2::Component)>> {
         let mut elements = vec![];
         let mut count = 0;
         for instruction in instructions.iter() {
@@ -76,7 +77,7 @@ impl<'a> ExecuteDoc<'a> {
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Vec<usize>, ftd::interpreter2::Component)>> {
+    ) -> ftd::executor::Result<Vec<(bool, Vec<usize>, ftd::interpreter2::Component)>> {
         if instruction.is_loop() {
             ExecuteDoc::get_loop_instructions(
                 instruction,
@@ -88,7 +89,7 @@ impl<'a> ExecuteDoc<'a> {
         } else {
             let mut local_container = parent_container.to_vec();
             local_container.push(start_index);
-            Ok(vec![(local_container, instruction.to_owned())])
+            Ok(vec![(false, local_container, instruction.to_owned())])
         }
     }
 
@@ -145,7 +146,7 @@ impl<'a> ExecuteDoc<'a> {
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Vec<usize>, ftd::interpreter2::Component)>> {
+    ) -> ftd::executor::Result<Vec<(bool, Vec<usize>, ftd::interpreter2::Component)>> {
         let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
             iteration
         } else {
@@ -185,7 +186,25 @@ impl<'a> ExecuteDoc<'a> {
                 inherited_variables,
                 local_container.as_slice(),
             )?;
-            elements.push((local_container, new_instruction));
+            elements.push((false, local_container, new_instruction));
+        }
+        if iteration.on.is_mutable() {
+            let local_container = {
+                let mut local_container = parent_container.to_vec();
+                local_container.push(start_index);
+                local_container
+            };
+            let component = create_dummy_instruction_for_loop_element(
+                instruction,
+                doc,
+                iteration.alias.as_str(),
+                reference_name,
+                inherited_variables,
+                local_container.as_slice(),
+            )?;
+
+            dbg!(&component);
+            elements.push((true, local_container, component))
         }
         Ok(elements)
     }
@@ -204,7 +223,7 @@ impl<'a> ExecuteDoc<'a> {
             &mut inherited_variables,
         )?;
         while !instructions.is_empty() {
-            let (container, mut instruction) = instructions.remove(0);
+            let (is_dummy, container, mut instruction) = instructions.remove(0);
             loop {
                 if let Some(condition) = instruction.condition.as_ref() {
                     if condition.is_static(&doc.itdoc()) && !condition.eval(&doc.itdoc())? {
@@ -215,6 +234,10 @@ impl<'a> ExecuteDoc<'a> {
                         );
                         break;
                     }
+                }
+
+                if is_dummy {
+                    dbg!(&instruction);
                 }
                 let component_definition = {
                     // NOTE: doing unwrap to force bug report if we following fails, this function
@@ -550,6 +573,32 @@ impl<'a> ExecuteDoc<'a> {
             _ => unimplemented!(),
         })
     }
+}
+
+fn create_dummy_instruction_for_loop_element(
+    instruction: &ftd::interpreter2::Component,
+    doc: &mut ftd::executor::TDoc,
+    alias: &str,
+    reference_name: &str,
+    inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+    local_container: &[usize],
+) -> ftd::executor::Result<ftd::interpreter2::Component> {
+    let mut instruction = instruction.clone();
+    let reference_replace_pattern = ftd::interpreter2::PropertyValueSource::Loop(alias.to_string())
+        .get_reference_name(alias, &doc.itdoc());
+    let replace_with = format!("{}.INDEX", reference_name);
+    let map =
+        std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();
+
+    update_local_variable_references_in_component(
+        &mut instruction,
+        &map,
+        inherited_variables,
+        &Default::default(),
+        local_container,
+        doc,
+    );
+    Ok(instruction)
 }
 
 fn update_instruction_for_loop_element(
