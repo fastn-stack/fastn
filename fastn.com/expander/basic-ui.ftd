@@ -14,8 +14,8 @@ background.solid: yellow
 width: fill-container
 height: fill-container
 align-content: top-center
-spacing.px: 10
-spacing-mode: space-between
+spacing.fixed.px: 10
+spacing: space-between
 border-bottom-width.px: 1
 
 -- ds.h3: Container Components:

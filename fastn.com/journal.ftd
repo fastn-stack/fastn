@@ -2689,7 +2689,7 @@ children wrapper:
 -- ftd.text: Title
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 children: $foo.wrapper
 
 -- end: ftd.row

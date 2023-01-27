@@ -141,7 +141,7 @@ integer max_lines:
 \-- ftd.column:
 width: fill-container
 color: $inherited.colors.text-strong
-spacing.px: 20
+spacing.fixed.px: 20
 
 \-- ftd.text: 
 text: $card.text
@@ -205,7 +205,7 @@ integer max_lines:
 -- ftd.column:
 width: fill-container
 color: $inherited.colors.text-strong
-spacing.px: 20
+spacing.fixed.px: 20
 
 -- ftd.text: 
 text: $card.text

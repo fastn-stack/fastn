@@ -33,7 +33,7 @@ width: fill-container
 
 -- ftd.row: 
 align-self: start
-spacing.px: 50
+spacing.fixed.px: 50
 
 -- ds.code: `ftd.text` kernel component
 lang: ftd
@@ -70,7 +70,7 @@ width: fill-container
 
 -- ftd.row: 
 align-self: start
-spacing.px: 50
+spacing.fixed.px: 50
 
 -- ds.code: Creating a custom component
 lang: ftd

@@ -253,7 +253,7 @@ Output
 
 
 -- ftd.column:
-spacing.px: 20
+spacing.fixed.px: 20
 border-width.px: 1
 border-radius.px: 5
 ;; border-color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
@@ -441,7 +441,7 @@ Output
 
 
 -- ftd.column:
-spacing.px: 20
+spacing.fixed.px: 20
 border-width.px: 1
 border-radius.px: 5
 ;; border-color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
@@ -496,7 +496,7 @@ padding-left.px: 10
 ;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
 
 -- ftd.column:
-spacing.px: 20
+spacing.fixed.px: 20
 border-width.px: 1
 border-radius.px: 5
 ;; border-color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
