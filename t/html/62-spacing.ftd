@@ -5,40 +5,24 @@
 -- boolean $flag: false
 -- integer $num: 0
 
--- ftd.boolean: $flag
+-- ftd.integer: $num
 
 -- ftd.row:
 width: fill-container
 height.fixed.px: 40
-margin.px: 20
-padding.px: 10
-background.solid: $yellow
+spacing if { num % 4 == 1 }: space-between
+spacing if { num % 4 == 2 }: space-around
+spacing if { num % 4 == 3 }: space-evenly
+spacing.fixed.px: 50
+margin-vertical.px: 20
+padding-vertical.px: 20
+background.solid: $green
+$on-click$: $ftd.increment($a = $num)
 
 -- ftd.text: hello 1
 
 -- ftd.text: hello 2
 
 -- ftd.text: hello 3
-
--- end: ftd.row
-
--- ftd.row:
-width: fill-container
-height.fixed.px: 40
-spacing if { num % 4 == 0 }: space-between
-spacing if { num % 4 == 1 }: space-around
-spacing.fixed.px if { num % 4 == 2 }: $num
-spacing: space-evenly
-margin.px: 20
-padding.px: 10
-background.solid: $green
-;; $on-click$: $ftd.toggle($a = $flag)
-$on-click$: $ftd.increment($a = $num)
-
--- ftd.text: hello 1b
-
--- ftd.text: hello 2b
-
--- ftd.text: hello 3b
 
 -- end: ftd.row

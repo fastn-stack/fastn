@@ -1322,7 +1322,7 @@
                 ],
                 "iteration": null,
                 "condition": {
-                  "expression": "{!is_empty(chapter-desktop.toc) }",
+                  "expression": "{!ftd.is_empty(chapter-desktop.toc) }",
                   "line_number": 218
                 },
                 "events": [],
@@ -4196,7 +4196,7 @@
                   "line_number": 550
                 },
                 "condition": {
-                  "expression": "{!is_empty(toc-instance.toc.children)}",
+                  "expression": "{!ftd.is_empty(toc-instance.toc.children)}",
                   "line_number": 549
                 },
                 "events": [],
@@ -4686,7 +4686,7 @@
               "line_number": 618
             },
             "condition": {
-              "expression": "{!is_empty(childrens.toc.children)}",
+              "expression": "{!ftd.is_empty(childrens.toc.children)}",
               "line_number": 617
             },
             "events": [],

@@ -1108,10 +1108,6 @@ impl Spacing {
         }
     }
 
-    pub fn is_fixed_type(&self) -> bool {
-        matches!(self, Spacing::Fixed(_))
-    }
-
     pub fn justify_content_pattern() -> (String, bool) {
         (
             indoc::indoc! {"
