@@ -27,6 +27,7 @@ impl Element {
             Element::Code(c) => Some(&c.common),
             Element::Iframe(i) => Some(&i.common),
             Element::TextInput(i) => Some(&i.common),
+            Element::CheckBox(c) => Some(&c.common),
             Element::Null => None,
         }
     }

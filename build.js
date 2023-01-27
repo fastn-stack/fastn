@@ -149,13 +149,16 @@ window.ftd = (function () {
                     let function_argument = value;
                     if (!!function_argument && !!function_argument.reference) {
                         let obj_value = null;
+                        let obj_checked = null;
                         try {
                             obj_value = obj.value;
+                            obj_checked = obj.checked
                         }
                         catch (_a) {
                             obj_value = null;
+                            obj_checked = null;
                         }
-                        let value = resolve_reference(function_argument.reference, ftd_data[id], obj_value);
+                        let value = resolve_reference(function_argument.reference, ftd_data[id], obj_value, obj_checked);
                         if (!!function_argument.mutable) {
                             function_argument.value = value;
                             function_arguments.push(function_argument);
@@ -533,9 +536,12 @@ function console_log(...message) {
 function isObject(obj) {
     return obj != null && typeof obj === 'object' && obj === Object(obj);
 }
-function resolve_reference(reference, data, value) {
+function resolve_reference(reference, data, value, checked) {
     if (reference === "VALUE") {
         return value;
+    }
+    if (reference === "CHECKED") {
+        return checked;
     }
     if (!!data[reference]) {
         return deepCopy(data[reference]);
