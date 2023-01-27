@@ -48,13 +48,6 @@ lang: ftd
 -- ds.markdown:
 
 
-You can always change the text
-
--- ds.code: Code
-lang: ftd
-
-\-- ftd.text: "I am IronMan"
-
 
 
 -- ds.markdown:

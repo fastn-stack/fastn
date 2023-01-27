@@ -1,4 +1,5 @@
 -- import: fpm
+-- import: gargajit.github.io/expander
 
 -- ds.page: Expander Crash Course
 
@@ -11,9 +12,13 @@ In this video course Ajit Garg will teach you about FTD from scratch, how to
 making the following:
 
 
+-- expander.box: Test Box
 
--- ds.iframe:
-src: https://ftd-lang.github.io/ftd/25-expander.html
+Package is running component box.
+Body expands and collapse when clicked on the Header triggering on-click event handling.
+
+You can use this package for your project.
+
 
 
 -- ds.markdown:

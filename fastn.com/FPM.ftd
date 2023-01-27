@@ -14,6 +14,7 @@ download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 ;; -- fpm.dependency: arjaupashak.com
 ;; -- fpm.dependency: fpm.dev
 -- fpm.dependency: fifthtry.github.io/roboto as mono
+-- fpm.dependency: gargajit.github.io/expander
 
 -- fpm.auto-import: ds
 -- fpm.auto-import: ws
