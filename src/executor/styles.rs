@@ -1091,6 +1091,41 @@ impl Spacing {
             Spacing::Fixed(f) => f.to_css_string(),
         }
     }
+
+    pub fn is_fixed_type(&self) -> bool {
+        matches!(self, Spacing::Fixed(_))
+    }
+
+    pub fn justify_content_pattern() -> (String, bool){
+        (
+            indoc::indoc! {"
+                if (\"{{0}}\" == \"space-between\") {{
+                    \"space-between\"
+                }} else if (\"{{0}}\" == \"space_around\") {{
+                    \"space-around\"
+                }} else if (\"{{0}}\" == \"space-evenly\") {{
+                    \"space-evenly\"
+                }} else {{
+                    flex-start
+                }}
+            "}.to_string(),
+            true,
+        )
+    }
+
+    pub fn fixed_content_pattern() -> (String, bool){
+        (
+            indoc::indoc! {"
+                if (\"{{0}}\" != \"space-between\" && \"{{0}}\" != \"space_around\" && \"{{0}}\" != \"space-evenly\") {{
+                    \"{{0}}\"
+                }} else {{
+                    null
+                }}
+            "}.to_string(),
+            true,
+        )
+    }
+
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]

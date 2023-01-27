@@ -151,7 +151,7 @@ impl ftd::executor::Row {
             ),
         );
 
-        n.style.upsert(
+        n.style.check_and_insert(
             "justify-content",
             ftd::node::Value::from_executor_value(
                 self.container
@@ -160,10 +160,11 @@ impl ftd::executor::Row {
                     .map(|v| v.map(|v| v.to_css_string()))
                     .value,
                 self.container.spacing.to_owned(),
-                None,
+                Some(ftd::executor::Spacing::justify_content_pattern()),
                 doc_id,
             ),
         );
+
 
         n.style.check_and_insert(
             "align-items",
@@ -222,7 +223,7 @@ impl ftd::executor::Column {
             ),
         );
 
-        n.style.upsert(
+        n.style.check_and_insert(
             "justify-content",
             ftd::node::Value::from_executor_value(
                 self.container
@@ -231,7 +232,7 @@ impl ftd::executor::Column {
                     .map(|v| v.map(|v| v.to_css_string()))
                     .value,
                 self.container.spacing.to_owned(),
-                None,
+                Some(ftd::executor::Spacing::justify_content_pattern()),
                 doc_id,
             ),
         );
@@ -1501,17 +1502,15 @@ impl ftd::executor::Container {
             d.check_and_insert("position", ftd::node::Value::from_string("relative"));
         }
 
-        if let Some(ftd::executor::Spacing::Fixed(_)) = self.spacing.value.as_ref() {
-            d.check_and_insert(
-                "gap",
-                ftd::node::Value::from_executor_value(
-                    self.spacing.value.as_ref().map(|v| v.to_css_string()),
-                    self.spacing.to_owned(),
-                    None,
-                    doc_id,
-                ),
-            );
-        }
+        d.check_and_insert(
+            "gap",
+            ftd::node::Value::from_executor_value(
+                self.spacing.value.as_ref().map(|v| v.to_css_string()),
+                self.spacing.to_owned(),
+                Some(ftd::executor::Spacing::fixed_content_pattern()),
+                doc_id,
+            ),
+        );
 
         d.check_and_insert(
             "flex-wrap",
