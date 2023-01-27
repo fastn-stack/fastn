@@ -14,7 +14,8 @@ mod value;
 mod youtube_id;
 
 pub use element::{
-    Code, Column, Common, Container, Element, Event, Iframe, Image, Row, Text, TextInput,
+    Code, Column, Common, Container, Element, Event, Iframe, Image, IterativeElement, RawElement,
+    Row, Text, TextInput,
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{

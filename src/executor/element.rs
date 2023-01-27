@@ -10,6 +10,8 @@ pub enum Element {
     Code(Code),
     Iframe(Iframe),
     TextInput(TextInput),
+    RawElement(RawElement),
+    IterativeElement(IterativeElement),
     Null,
 }
 
@@ -27,8 +29,25 @@ impl Element {
             Element::Iframe(i) => Some(&i.common),
             Element::TextInput(i) => Some(&i.common),
             Element::Null => None,
+            Element::RawElement(_) => None,
+            Element::IterativeElement(i) => i.element.get_common(),
         }
     }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct RawElement {
+    pub name: String,
+    pub properties: Vec<ftd::interpreter2::Property>,
+    pub condition: Option<ftd::interpreter2::Expression>,
+    pub children: Vec<Element>,
+    pub line_number: usize,
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct IterativeElement {
+    pub element: ftd::executor::Element,
+    pub iteration: Option<ftd::interpreter2::Loop>,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
