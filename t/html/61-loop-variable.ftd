@@ -1,10 +1,9 @@
 -- string list $names:
 
--- string: AmitU
--- string: Abrar
--- string: Arpita
--- string: Ganesh
--- string: Rithik
+-- string: John
+-- string: Alice
+-- string: Tom
+-- string: Jerry
 
 -- end: $names
 
