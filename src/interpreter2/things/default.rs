@@ -35,7 +35,7 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
 
     std::iter::IntoIterator::into_iter([
         (
-            "is_empty".to_string(),
+            "ftd.is_empty".to_string(),
             Function::new(|argument| {
                 if argument.as_empty().is_ok() {
                     Ok(Value::Boolean(true))
@@ -43,6 +43,28 @@ pub fn default_functions() -> ftd::Map<ftd::evalexpr::Function> {
                     Ok(Value::Boolean(s.is_empty()))
                 } else if let Ok(s) = argument.as_tuple() {
                     Ok(Value::Boolean(s.is_empty()))
+                } else {
+                    Ok(Value::Boolean(false)) //todo: throw error
+                }
+            }),
+        ),
+        (
+            "ftd.append".to_string(),
+            Function::new(|argument| {
+                if let Ok(s) = argument.as_tuple() {
+                    if s.len() != 2 {
+                        Err(
+                            ftd::evalexpr::error::EvalexprError::WrongOperatorArgumentAmount {
+                                expected: 2,
+                                actual: s.len(),
+                            },
+                        )
+                    } else {
+                        let mut argument = s.first().unwrap().as_tuple()?;
+                        let value = s.last().unwrap();
+                        argument.push(value.to_owned());
+                        Ok(Value::Tuple(argument))
+                    }
                 } else {
                     Ok(Value::Boolean(false)) //todo: throw error
                 }
@@ -6684,6 +6706,12 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
 
 fn common_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
+        ftd::interpreter2::Argument::default(
+            "sticky",
+            ftd::interpreter2::Kind::boolean()
+                .into_optional()
+                .into_kind_data(),
+        ),
         ftd::interpreter2::Argument::default(
             "id",
             ftd::interpreter2::Kind::string()

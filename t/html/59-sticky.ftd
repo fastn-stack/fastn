@@ -1,0 +1,40 @@
+-- ftd.color yellow:
+light: yellow
+dark: yellow
+
+-- boolean $flag: true
+
+-- component print-text:
+
+-- ftd.column:
+background.solid: $yellow
+width.fixed.px: 300
+height.fixed.px: 1800
+
+-- ftd.text: dummy
+padding.px: 80
+
+-- ftd.text: Sticky Hello world
+padding.px: 20
+sticky if { flag }: true
+top.px: 50
+left.px: 100
+$on-click$: $ftd.toggle($a = $flag)
+
+-- ftd.text: dummy
+padding.px: 80
+
+-- ftd.text: dummy
+padding.px: 80
+
+-- ftd.text: dummy
+padding.px: 80
+
+-- ftd.text: dummy
+padding.px: 80
+
+-- end: ftd.column
+
+-- end: print-text
+
+-- print-text:

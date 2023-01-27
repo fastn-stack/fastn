@@ -6,6 +6,15 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#flag": false,
+"foo#green": {
+"dark": "green",
+"light": "green"
+},
+"foo#yellow": {
+"dark": "yellow",
+"light": "yellow"
+},
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -531,7 +540,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: space-evenly; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 1</div><div data-id="0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 2</div><div data-id="0,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 3</div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">false</div><div data-id="1:main" style="align-items: start; background-color: rgba(255,255,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; height: 40px; justify-content: space-evenly; margin: 20px; padding: 10px; text-decoration: none; width: 100%" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 1</div><div data-id="1,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 2</div><div data-id="1,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 3</div></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="align-items: start; background-color: rgba(0,128,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 50px; height: 40px; justify-content: 50px; margin: 20px; padding: 10px; text-decoration: none; width: 100%" ><div data-id="2,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 1b</div><div data-id="2,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 2b</div><div data-id="2,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 3b</div></div></div>
 
 
 <script>
@@ -1236,7 +1245,68 @@ a.value = !a.value
 }
 
 
+window.node_change_main = {};
+window.node_change_main["0:main__text"] = function(data) {
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#flag", data, null);
+}
+window.node_change_main["1:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("foo#yellow", data, null).light;
+}
+else {document.querySelector(`[data-id="1:main"]`).style["background-color"] = resolve_reference("foo#yellow", data, null).dark;}
+}
+window.node_change_main["2:main__background-color"] = function(data) {
+if(!data["ftd#dark-mode"]){
+document.querySelector(`[data-id="2:main"]`).style["background-color"] = resolve_reference("foo#green", data, null).light;
+}
+else {document.querySelector(`[data-id="2:main"]`).style["background-color"] = resolve_reference("foo#green", data, null).dark;}
+}
 
+window.node_change_main["2:main__gap"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["gap"] = "space-evenly";
+}
+else {document.querySelector(`[data-id="2:main"]`).style["gap"] = `{0}px`.format(JSONstringify(50));}
+}
+
+window.node_change_main["2:main__justify-content"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["justify-content"] = "space-evenly";
+}
+else {document.querySelector(`[data-id="2:main"]`).style["justify-content"] = `{0}px`.format(JSONstringify(50));}
+}
+window.set_value_main = {};
+window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#flag" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#flag", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__gap"]){window.node_change_main["2:main__gap"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__justify-content"]){window.node_change_main["2:main__justify-content"](data);
+}
+};
+
+window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
+} else {
+set_data_value(data, "ftd#dark-mode", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["1:main__background-color"]){window.node_change_main["1:main__background-color"](data);
+}
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__background-color"]){window.node_change_main["2:main__background-color"](data);
+}
+};
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>

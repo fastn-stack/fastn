@@ -218,15 +218,15 @@ pub fn is_argument_in_component_or_loop<'a>(
     false
 }
 
-pub fn get_argument_for_reference_and_remaining<'a>(
-    name: &'a str,
-    doc: &'a ftd::interpreter2::TDoc,
-    component_definition_name_with_arguments: Option<(&'a str, &'a [ftd::interpreter2::Argument])>,
-    loop_object_name_and_kind: &'a Option<(String, ftd::interpreter2::Argument)>,
+pub fn get_argument_for_reference_and_remaining(
+    name: &str,
+    doc: &ftd::interpreter2::TDoc,
+    component_definition_name_with_arguments: Option<(&str, &[ftd::interpreter2::Argument])>,
+    loop_object_name_and_kind: &Option<(String, ftd::interpreter2::Argument)>,
     line_number: usize,
 ) -> ftd::interpreter2::Result<
     Option<(
-        &'a ftd::interpreter2::Argument,
+        ftd::interpreter2::Argument,
         Option<String>,
         ftd::interpreter2::PropertyValueSource,
     )>,
@@ -239,7 +239,7 @@ pub fn get_argument_for_reference_and_remaining<'a>(
             let (p1, p2) = ftd::interpreter2::utils::split_at(referenced_argument, ".");
             return if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
                 Ok(Some((
-                    argument,
+                    argument.to_owned(),
                     p2,
                     ftd::interpreter2::PropertyValueSource::Local(component_name.to_string()),
                 )))
@@ -261,8 +261,22 @@ pub fn get_argument_for_reference_and_remaining<'a>(
             || name.eq(format!("{}#{}", doc.name, loop_name).as_str())
         {
             return Ok(Some((
-                loop_argument,
+                loop_argument.to_owned(),
                 p2,
+                ftd::interpreter2::PropertyValueSource::Loop(loop_name.to_string()),
+            )));
+        }
+        if name
+            .starts_with(format!("{}#{}", doc.name, ftd::interpreter2::FTD_LOOP_COUNTER).as_str())
+        {
+            return Ok(Some((
+                ftd::interpreter2::Field::default(
+                    ftd::interpreter2::FTD_LOOP_COUNTER,
+                    ftd::interpreter2::Kind::integer()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                None,
                 ftd::interpreter2::PropertyValueSource::Loop(loop_name.to_string()),
             )));
         }

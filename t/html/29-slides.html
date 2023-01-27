@@ -784,6 +784,13 @@ else {
 set_data_value(data, variable, value);
 }
 };
+exports.is_empty = function (str) {
+return (!str || str.length === 0);
+};
+exports.append = function (array, value) {
+array.push(value);
+return array;
+};
 return exports;
 })();
 window.ftd.post_init = function () {

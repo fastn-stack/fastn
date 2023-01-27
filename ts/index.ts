@@ -128,5 +128,14 @@ window.ftd = (function() {
         }
     };
 
+    exports.is_empty = function(str: any) {
+        return (!str || str.length === 0 );
+    }
+
+    exports.append = function(array: any[], value: any) {
+        array.push(value);
+        return array;
+    }
+
     return exports;
 })();

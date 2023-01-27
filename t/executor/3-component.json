@@ -500,6 +500,11 @@
                         "line_number": null,
                         "properties": []
                       },
+                      "sticky": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
                       "border_style": {
                         "value": null,
                         "line_number": null,
@@ -858,6 +863,11 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "sticky": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "border_style": {
                                 "value": null,
                                 "line_number": null,
@@ -1197,6 +1207,11 @@
                                 "line_number": null,
                                 "properties": []
                               },
+                              "sticky": {
+                                "value": null,
+                                "line_number": null,
+                                "properties": []
+                              },
                               "border_style": {
                                 "value": null,
                                 "line_number": null,
@@ -1497,6 +1512,11 @@
                         "properties": []
                       },
                       "text_transform": {
+                        "value": null,
+                        "line_number": null,
+                        "properties": []
+                      },
+                      "sticky": {
                         "value": null,
                         "line_number": null,
                         "properties": []
@@ -1805,6 +1825,11 @@
                 "line_number": null,
                 "properties": []
               },
+              "sticky": {
+                "value": null,
+                "line_number": null,
+                "properties": []
+              },
               "border_style": {
                 "value": null,
                 "line_number": null,
@@ -2105,6 +2130,11 @@
         "properties": []
       },
       "text_transform": {
+        "value": null,
+        "line_number": null,
+        "properties": []
+      },
+      "sticky": {
         "value": null,
         "line_number": null,
         "properties": []

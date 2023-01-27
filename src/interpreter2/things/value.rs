@@ -433,8 +433,10 @@ impl PropertyValue {
                 result_field.insert(field.name.to_string(), property_value);
                 continue;
             }
-            let headers = headers.get_by_key(field.name.as_str());
-            if headers.is_empty() && field.kind.is_optional() {
+            let headers =
+                headers.get_by_key_optional(field.name.as_str(), doc.name, line_number)?;
+
+            if headers.is_none() && field.kind.is_optional() {
                 result_field.insert(
                     field.name.to_string(),
                     PropertyValue::Value {
@@ -449,18 +451,16 @@ impl PropertyValue {
                 continue;
             }
             if field.kind.is_list() {
-                let mut header_list = vec![];
-                for header in headers {
-                    header_list.extend(match &header.value {
-                        ftd::ast::VariableValue::List { value, .. } => value.to_owned(),
-                        t => vec![(header.key.to_string(), t.to_owned())],
-                    });
+                let mut variable = ftd::ast::VariableValue::List {
+                    value: vec![],
+                    line_number: value.line_number(),
+                };
+                if let Some(header) = headers {
+                    variable = header.value.clone();
+                    variable.set_line_number(value.line_number())
                 }
                 let property_value = try_ok_state!(PropertyValue::from_ast_value_with_argument(
-                    ftd::ast::VariableValue::List {
-                        value: header_list,
-                        line_number: value.line_number(),
-                    },
+                    variable,
                     doc,
                     field.mutable || is_mutable,
                     Some(&field.kind),
@@ -471,7 +471,7 @@ impl PropertyValue {
                 continue;
             }
 
-            if headers.is_empty() && field.value.is_some() {
+            if headers.is_none() && field.value.is_some() {
                 let value = field.value.as_ref().unwrap();
                 match value {
                     ftd::interpreter2::PropertyValue::Reference {
@@ -503,7 +503,7 @@ impl PropertyValue {
                 }
                 continue;
             }
-            if headers.len() != 1 {
+            if headers.is_none() {
                 return ftd::interpreter2::utils::e2(
                     format!(
                         "Expected `{}` of type `{:?}`, found: `{:?}`",
@@ -513,7 +513,7 @@ impl PropertyValue {
                     value.line_number(),
                 );
             }
-            let first_header = headers.first().unwrap();
+            let first_header = headers.unwrap();
 
             if field.mutable.ne(&first_header.mutable) {
                 return ftd::interpreter2::utils::e2(
@@ -935,17 +935,6 @@ impl PropertyValue {
                     .starts_with(format!("${}.", ftd::interpreter2::FTD_INHERITED).as_str()) =>
             {
                 if let Some(kind) = expected_kind {
-                    /*if kind.kind.ref_inner().is_or_type() {
-                        return Ok(PropertyValue::value_from_ast_value(
-                            value,
-                            doc,
-                            mutable,
-                            expected_kind,
-                            definition_name_with_arguments,
-                            loop_object_name_and_kind,
-                        )?
-                        .map(Some));
-                    }*/
                     Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
                         ftd::interpreter2::PropertyValue::Reference {
                             name: expression.trim_start_matches('$').to_string(),

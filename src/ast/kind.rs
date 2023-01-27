@@ -145,9 +145,7 @@ impl HeaderValues {
         doc_id: &str,
         line_number: usize,
     ) -> ftd::ast::Result<Option<&HeaderValue>> {
-        use itertools::Itertools;
-
-        let values = self.0.iter().filter(|v| v.key.eq(key)).collect_vec();
+        let values = self.get_by_key(key);
         if values.len() > 1 {
             ftd::ast::parse_error(
                 format!("Multiple header found `{}`", key),
@@ -243,6 +241,15 @@ impl VariableValue {
             | VariableValue::List { line_number, .. }
             | VariableValue::Record { line_number, .. }
             | VariableValue::String { line_number, .. } => *line_number,
+        }
+    }
+
+    pub fn set_line_number(&mut self, new_line_number: usize) {
+        match self {
+            VariableValue::Optional { line_number, .. }
+            | VariableValue::List { line_number, .. }
+            | VariableValue::Record { line_number, .. }
+            | VariableValue::String { line_number, .. } => *line_number = new_line_number,
         }
     }
 

@@ -6,6 +6,33 @@
 <title></title>
 <script type="ftd" id="ftd-data">
 {
+"foo#data": [
+{
+"name": "SD",
+"position": null,
+"url": null
+},
+{
+"name": "Designer",
+"position": null,
+"url": null
+}
+],
+"foo#john-doe": {
+"name": "John Doe",
+"works": [
+{
+"name": "SD",
+"position": null,
+"url": null
+},
+{
+"name": "Designer",
+"position": null,
+"url": null
+}
+]
+},
 "ftd#breakpoint-width": {
 "mobile": 768
 },
@@ -531,7 +558,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: auto; justify-content: start; padding: 40px; text-decoration: none; width: auto" ><div data-id="0,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Hello World</div><div data-id="0,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">again</div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">John Doe</div><div data-id="1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">SD</div><div data-id="2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Designer</div></div>
 
 
 <script>
@@ -1243,7 +1270,45 @@ a.value = !a.value
 }
 
 
+window.node_change_main = {};
+window.node_change_main["0:main__text"] = function(data) {
+document.querySelector(`[data-id="0:main"]`).innerHTML = resolve_reference("foo#john-doe.name", data, null);
+}
+window.node_change_main["1:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("foo#john-doe.works.0.name", data)!=null);
+}()){
+document.querySelector(`[data-id="1:main"]`).style["display"] = "block";
+}
+else {document.querySelector(`[data-id="1:main"]`).style["display"] = "none";}
+}
 
+window.node_change_main["1:main__text"] = function(data) {
+document.querySelector(`[data-id="1:main"]`).innerHTML = resolve_reference("foo#john-doe.works.0.name", data, null);
+}
+window.node_change_main["2:main__display"] = function(data) {
+if(function(){
+return (resolve_reference("foo#john-doe.works.1.name", data)!=null);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["display"] = "block";
+}
+else {document.querySelector(`[data-id="2:main"]`).style["display"] = "none";}
+}
+
+window.node_change_main["2:main__text"] = function(data) {
+document.querySelector(`[data-id="2:main"]`).innerHTML = resolve_reference("foo#john-doe.works.1.name", data, null);
+}
+window.set_value_main = {};
+window.set_value_main["foo#john-doe"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#john-doe" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#john-doe", new_value);
+}
+
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
+}
+};
 
 window.ftd.init("main", "ftd-data", "ftd-external-children");
 </script>

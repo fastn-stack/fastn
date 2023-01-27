@@ -1,6 +1,17 @@
--- ftd.column:
-height: fill-container
-spacing: space-evenly
+-- ftd.color yellow: yellow
+
+-- ftd.color green: green
+
+-- boolean $flag: false
+
+-- ftd.boolean: $flag
+
+-- ftd.row:
+width: fill-container
+height.fixed.px: 40
+margin.px: 20
+padding.px: 10
+background.solid: $yellow
 
 -- ftd.text: hello 1
 
@@ -8,4 +19,22 @@ spacing: space-evenly
 
 -- ftd.text: hello 3
 
--- end: ftd.column
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+height.fixed.px: 40
+spacing if { flag }: space-between
+spacing: space-evenly
+margin.px: 20
+padding.px: 10
+background.solid: $green
+$on-click$: $ftd.toggle($a = $flag)
+
+-- ftd.text: hello 1b
+
+-- ftd.text: hello 2b
+
+-- ftd.text: hello 3b
+
+-- end: ftd.row

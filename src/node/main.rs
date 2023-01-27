@@ -266,7 +266,7 @@ impl ftd::executor::Text {
         if self.common.region.value.is_some() {
             n.attrs.insert_if_not_contains(
                 "id",
-                ftd::node::Value::from_string(slug::slugify(&self.text.value.rendered)),
+                ftd::node::Value::from_string(slug::slugify(&self.text.value.original)),
             );
         }
 
@@ -672,6 +672,45 @@ impl ftd::executor::Common {
                 doc_id,
             ),
         );
+
+        if self.sticky.value.is_some() {
+            // When sticky is used, setting top = 0px  and left = 0px
+            d.check_and_insert(
+                "position",
+                ftd::node::Value::from_executor_value(
+                    Some(s("sticky")),
+                    self.sticky.to_owned(),
+                    Some((s("if ({0}) {\"sticky\"} else {\"static\"}"), true)),
+                    doc_id,
+                ),
+            );
+            if self.top.value.is_none()
+                && self.bottom.value.is_none()
+                && self.left.value.is_none()
+                && self.right.value.is_none()
+            {
+                d.check_and_insert(
+                    "top",
+                    ftd::node::Value::from_executor_value_with_default(
+                        Some(s("0px")),
+                        self.sticky.to_owned(),
+                        Some((s("if ({0}) {\"0px\"}"), true)),
+                        doc_id,
+                        self.top.value.as_ref().map(|v| v.to_css_string()),
+                    ),
+                );
+                d.check_and_insert(
+                    "left",
+                    ftd::node::Value::from_executor_value_with_default(
+                        Some(s("0px")),
+                        self.sticky.to_owned(),
+                        Some((s("if ({0}) {\"0px\"}"), true)),
+                        doc_id,
+                        self.top.value.as_ref().map(|v| v.to_css_string()),
+                    ),
+                );
+            }
+        }
 
         d.check_and_insert(
             "top",

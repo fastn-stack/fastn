@@ -421,6 +421,22 @@ multiline: true
 By default, `type` is set to `ftd.text-input-type.text`
 
 
+## `ftd.image` - To render an image
+
+```ftd 
+-- ftd.image: 
+src: $assets.files.static.fifthtry-logo.svg
+```
+
+## `ftd.image` attributes
+
+### `src`: `ftd.image-src`
+
+```ftd
+-- record image-src:
+string light:
+string dark: $light
+```
 
 
 
@@ -793,6 +809,7 @@ optional string font-family:
 ```
 
 - `line-clamp`: `optional integer`
+- `sticky`: `optional boolean`
 
 # Events
 
@@ -913,7 +930,7 @@ if: { !is_empty(names) }
 
 ## `enable_dark_mode()`
 
-This is FScript function. This function enables the dark mode.
+This is FScript as well as a standard ftd function. This function enables the dark mode.
 
 ```ftd
 -- ftd.text: Dark Mode
@@ -924,9 +941,15 @@ $on-click$: $set-dark()
 enable_dark_mode()
 ```
 
+Alternatively you can do
+```ftd
+-- ftd.text: Click to set Dark Mode
+$on-click$: $ftd.enable-dark-mode()
+```
+
 ## `enable_light_mode()`
 
-This is FScript function. This function enables the light mode.
+This is FScript as well as a standard ftd function. This function enables the light mode.
 
 ```ftd
 -- ftd.text: Light Mode
@@ -937,9 +960,15 @@ $on-click$: $set-light()
 enable_light_mode()
 ```
 
+Alternatively you can do
+```ftd
+-- ftd.text: Click to set Light Mode
+$on-click$: $ftd.enable-light-mode()
+```
+
 ## `enable_system_mode()`
 
-This is FScript function. This function enables the system mode.
+This is FScript as well as a standard ftd function. This function enables the system mode.
 
 ```ftd
 -- ftd.text: System Mode
@@ -948,6 +977,12 @@ $on-click$: $set-system()
 -- void set-system():
 
 enable_system_mode()
+```
+
+Alternatively you can do
+```ftd
+-- ftd.text: Click to set System Mode
+$on-click$: $ftd.enable-system-mode()
 ```
 
 ## `http(url: string, method: string, ...request-data)`
@@ -1383,3 +1418,68 @@ The `inherited.colors` has following value:
   1. `eight`: `#d554b3`
   1. `nine`: `#ec8943`
   1. `ten`: `#da7a4a`
+
+
+## Understanding Loop
+
+`$loop$` loops over each item in an array, making the item available in a 
+context argument in component
+
+
+```ftd
+-- string list names:
+
+-- string: Ayushi
+-- string: Arpita
+
+-- end: names
+
+-- ftd.text: $obj
+$loop$: $names as $obj
+```
+
+The output would be:
+
+```
+Ayushi
+Arpita
+```
+
+### `LOOP.COUNTER`
+
+The current iteration of the loop (0-indexed)
+
+```ftd
+-- string list names:
+
+-- string: Ayushi
+-- string: Arpita
+
+-- end: names
+
+-- foo: $obj
+idx: $LOOP.COUNTER
+$loop$: $names as $obj
+
+
+-- component foo:
+caption name:
+integer idx:
+
+-- ftd.row:
+spacing.px: 30
+
+-- ftd.text: $foo.name
+-- ftd.integer: $foo.idx
+
+-- end: ftd.row
+
+-- end: foo
+```
+
+The output would be:
+
+```
+Ayushi     0
+Arpita     1
+```
