@@ -1,10 +1,12 @@
 # FTD Change Log
 
+## 27 January 2023
+- [Merged spacing with spacing-mode](https://github.com/ftd-lang/ftd/pull/557/commits/37569f9df70ce60f161a1260e6fa09827f8f0875)
+
 ## 25 January 2023
 - [Added sticky css](https://github.com/ftd-lang/ftd/pull/553/commits/a3b43d09b7b968d8242559e96dbff7c356104880)
 - [Added `id` attr](https://github.com/ftd-lang/ftd/pull/554/commits/7321ba5253d565683e35e078606567f302633eaf)
 - [Added slugify `id` for `region`s](https://github.com/ftd-lang/ftd/pull/556/commits/a419d0155bd4299c4efab91ad55557f92bc21f0f)
-- [Merged spacing with spacing-mode](https://github.com/ftd-lang/ftd/pull/557/commits/37569f9df70ce60f161a1260e6fa09827f8f0875)
 - [Added `LOOP.COUNTER`](https://github.com/ftd-lang/ftd/commit/9d31c722814d5cd9ded21be9de2b310b1d4cb0b8)
 
 ## 24 January 2023
