@@ -552,6 +552,45 @@ impl ftd::executor::TextInput {
     }
 }
 
+// impl ftd::executor::CheckBox {
+//     pub fn to_node(&self, doc_id: &str) -> Node {
+//         use ftd::node::utils::CheckMap;
+//
+//         let node = "input";
+//
+//         let mut n = Node::from_common(node, "block", &self.common, doc_id);
+//
+//         n.attrs.check_and_insert("type", ftd::node::Value::from_string(s("checkbox")), );
+//
+//         n.attrs.check_and_insert(
+//             "checked",
+//             ftd::node::Value::from_executor_value(
+//                 self.checked.to_owned().map(|v| v.map(|v| {
+//                     if v { "true".to_string() }
+//                     "false".to_string()
+//                 })).value,
+//                 self.value.to_owned(),
+//                 None,
+//                 doc_id,
+//             ),
+//         );
+//
+//         n.attrs.check_and_insert(
+//             "data-dv",
+//             ftd::node::Value::from_executor_value(
+//                 self.default_value.to_owned().value,
+//                 self.default_value.to_owned(),
+//                 None,
+//                 doc_id,
+//             ),
+//         );
+//
+//         n.classes.extend(self.common.add_class());
+//         n.classes.push("ft_md".to_string());
+//         n
+//     }
+// }
+
 impl ftd::executor::Image {
     pub fn to_node(&self, doc_id: &str) -> Node {
         return if self.common.link.value.is_some() {
