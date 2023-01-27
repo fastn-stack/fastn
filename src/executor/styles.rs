@@ -1092,40 +1092,52 @@ impl Spacing {
         }
     }
 
+    pub fn to_gap_css_string(&self) -> String {
+        match self {
+            Spacing::Fixed(f) => f.to_css_string(),
+            _ => "0".to_string(),
+        }
+    }
+
+    pub fn to_justify_content_css_string(&self) -> String {
+        match self {
+            Spacing::SpaceBetween => "space-between".to_string(),
+            Spacing::SpaceEvenly => "space-evenly".to_string(),
+            Spacing::SpaceAround => "space-around".to_string(),
+            Spacing::Fixed(_) => "flex-start".to_string(),
+        }
+    }
+
     pub fn is_fixed_type(&self) -> bool {
         matches!(self, Spacing::Fixed(_))
     }
 
-    pub fn justify_content_pattern() -> (String, bool){
+    pub fn justify_content_pattern() -> (String, bool) {
         (
             indoc::indoc! {"
-                if (\"{{0}}\" == \"space-between\") {{
-                    \"space-between\"
-                }} else if (\"{{0}}\" == \"space_around\") {{
-                    \"space-around\"
-                }} else if (\"{{0}}\" == \"space-evenly\") {{
-                    \"space-evenly\"
-                }} else {{
-                    flex-start
-                }}
-            "}.to_string(),
+                if (\"{0}\" == \"space-between\" || \"{0}\" == \"space-around\" || \"{0}\" == \"space-evenly\") {
+                    \"{0}\"
+                } else {
+                    \"flex-start\"
+                }
+            "}
+            .to_string(),
             true,
         )
     }
 
-    pub fn fixed_content_pattern() -> (String, bool){
+    pub fn fixed_content_pattern() -> (String, bool) {
         (
             indoc::indoc! {"
-                if (\"{{0}}\" != \"space-between\" && \"{{0}}\" != \"space_around\" && \"{{0}}\" != \"space-evenly\") {{
-                    \"{{0}}\"
-                }} else {{
+                if (\"{0}\" != \"space-between\" && \"{0}\" != \"space_around\" && \"{0}\" != \"space-evenly\") {
+                    \"{0}\"
+                } else {
                     null
-                }}
+                }
             "}.to_string(),
             true,
         )
     }
-
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]

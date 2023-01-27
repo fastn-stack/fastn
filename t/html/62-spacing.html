@@ -11,6 +11,7 @@
 "dark": "green",
 "light": "green"
 },
+"foo#num": 0,
 "foo#yellow": {
 "dark": "yellow",
 "light": "yellow"
@@ -540,7 +541,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">false</div><div data-id="1:main" style="align-items: start; background-color: rgba(255,255,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; height: 40px; justify-content: space-evenly; margin: 20px; padding: 10px; text-decoration: none; width: 100%" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 1</div><div data-id="1,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 2</div><div data-id="1,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 3</div></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="align-items: start; background-color: rgba(0,128,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 50px; height: 40px; justify-content: 50px; margin: 20px; padding: 10px; text-decoration: none; width: 100%" ><div data-id="2,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 1b</div><div data-id="2,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 2b</div><div data-id="2,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 3b</div></div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">false</div><div data-id="1:main" style="align-items: start; background-color: rgba(255,255,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; height: 40px; justify-content: start; margin: 20px; padding: 10px; text-decoration: none; width: 100%" ><div data-id="1,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 1</div><div data-id="1,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 2</div><div data-id="1,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 3</div></div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="align-items: start; background-color: rgba(0,128,0,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; gap: 0; height: 40px; justify-content: space-between; margin: 20px; padding: 10px; text-decoration: none; width: 100%" ><div data-id="2,0:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 1b</div><div data-id="2,1:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 2b</div><div data-id="2,2:main" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">hello 3b</div></div></div>
 
 
 <script>
@@ -782,6 +783,13 @@ window["set_value_" + id][var_name](data, value, remaining);
 else {
 set_data_value(data, variable, value);
 }
+};
+exports.is_empty = function (str) {
+return (!str || str.length === 0);
+};
+exports.append = function (array, value) {
+array.push(value);
+return array;
 };
 return exports;
 })();
@@ -1264,20 +1272,80 @@ else {document.querySelector(`[data-id="2:main"]`).style["background-color"] = r
 
 window.node_change_main["2:main__gap"] = function(data) {
 if(function(){
-return resolve_reference("foo#flag", data);
+return (resolve_reference("foo#num", data)%4==0);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["gap"] = "space-evenly";
+document.querySelector(`[data-id="2:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
+"{0}"
+} else {
+null
 }
-else {document.querySelector(`[data-id="2:main"]`).style["gap"] = `{0}px`.format(JSONstringify(50));}
+`.format(JSONstringify("space-between")));
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%4==1);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
+"{0}"
+} else {
+null
+}
+`.format(JSONstringify("space-around")));
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%4==2);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
+"{0}"
+} else {
+null
+}
+`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#num", data, null))))));
+}
+else {document.querySelector(`[data-id="2:main"]`).style["gap"] = eval(`if ("{0}" != "space-between" && "{0}" != "space_around" && "{0}" != "space-evenly") {
+"{0}"
+} else {
+null
+}
+`.format(JSONstringify("space-evenly")));}
 }
 
 window.node_change_main["2:main__justify-content"] = function(data) {
 if(function(){
-return resolve_reference("foo#flag", data);
+return (resolve_reference("foo#num", data)%4==0);
 }()){
-document.querySelector(`[data-id="2:main"]`).style["justify-content"] = "space-evenly";
+document.querySelector(`[data-id="2:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
+"{0}"
+} else {
+"flex-start"
 }
-else {document.querySelector(`[data-id="2:main"]`).style["justify-content"] = `{0}px`.format(JSONstringify(50));}
+`.format(JSONstringify("space-between")));
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%4==1);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
+"{0}"
+} else {
+"flex-start"
+}
+`.format(JSONstringify("space-around")));
+}
+else if(function(){
+return (resolve_reference("foo#num", data)%4==2);
+}()){
+document.querySelector(`[data-id="2:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
+"{0}"
+} else {
+"flex-start"
+}
+`.format(JSONstringify(`{0}px`.format(JSONstringify(resolve_reference("foo#num", data, null))))));
+}
+else {document.querySelector(`[data-id="2:main"]`).style["justify-content"] = eval(`if ("{0}" == "space-between" || "{0}" == "space-around" || "{0}" == "space-evenly") {
+"{0}"
+} else {
+"flex-start"
+}
+`.format(JSONstringify("space-evenly")));}
 }
 window.set_value_main = {};
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
@@ -1289,6 +1357,15 @@ set_data_value(data, "foo#flag", new_value);
 
 if(!!window["node_change_main"] && !!window.node_change_main["0:main__text"]){window.node_change_main["0:main__text"](data);
 }
+};
+
+window.set_value_main["foo#num"] = function (data, new_value, remaining) {
+if (!!remaining) {
+set_data_value(data, "foo#num" + "." + remaining, new_value);
+} else {
+set_data_value(data, "foo#num", new_value);
+}
+
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__gap"]){window.node_change_main["2:main__gap"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["2:main__justify-content"]){window.node_change_main["2:main__justify-content"](data);

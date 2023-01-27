@@ -3,6 +3,7 @@
 -- ftd.color green: green
 
 -- boolean $flag: false
+-- integer $num: 0
 
 -- ftd.boolean: $flag
 
@@ -24,12 +25,15 @@ background.solid: $yellow
 -- ftd.row:
 width: fill-container
 height.fixed.px: 40
-spacing if { flag }: space-between
+spacing if { num % 4 == 0 }: space-between
+spacing if { num % 4 == 1 }: space-around
+spacing.fixed.px if { num % 4 == 2 }: $num
 spacing: space-evenly
 margin.px: 20
 padding.px: 10
 background.solid: $green
-$on-click$: $ftd.toggle($a = $flag)
+;; $on-click$: $ftd.toggle($a = $flag)
+$on-click$: $ftd.increment($a = $num)
 
 -- ftd.text: hello 1b
 

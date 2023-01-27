@@ -157,14 +157,13 @@ impl ftd::executor::Row {
                 self.container
                     .spacing
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
                     .value,
                 self.container.spacing.to_owned(),
                 Some(ftd::executor::Spacing::justify_content_pattern()),
                 doc_id,
             ),
         );
-
 
         n.style.check_and_insert(
             "align-items",
@@ -229,7 +228,7 @@ impl ftd::executor::Column {
                 self.container
                     .spacing
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
                     .value,
                 self.container.spacing.to_owned(),
                 Some(ftd::executor::Spacing::justify_content_pattern()),
@@ -1544,7 +1543,7 @@ impl ftd::executor::Container {
         d.check_and_insert(
             "gap",
             ftd::node::Value::from_executor_value(
-                self.spacing.value.as_ref().map(|v| v.to_css_string()),
+                self.spacing.value.as_ref().map(|v| v.to_gap_css_string()),
                 self.spacing.to_owned(),
                 Some(ftd::executor::Spacing::fixed_content_pattern()),
                 doc_id,
