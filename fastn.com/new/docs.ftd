@@ -28,7 +28,7 @@ width: fill-container
 
 
 -- ftd.row:
-spacing.px: 50
+spacing.fixed.px: 50
 align-self: end
 
 

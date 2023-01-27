@@ -184,7 +184,7 @@ value: Banglore, India
 
 
 -- ftd.column:
-spacing.px: 20
+spacing.fixed.px: 20
 border-width.px: 1
 border-radius.px: 5
 border-color: $inherited.colors.border
@@ -286,7 +286,7 @@ body value:
 
 -- ftd.row:
 width: fill-container
-spacing.px: 5
+spacing.fixed.px: 5
 
 -- ftd.text: $label.name
 color: $$inherited.colors.text

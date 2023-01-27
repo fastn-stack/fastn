@@ -83,7 +83,7 @@ This property is used to aligns text blocks:
 -- ftd.column:
 
 -- ftd.row:
-spacing.px: 10
+spacing.fixed.px: 10
 
 
 -- ftd.text:
