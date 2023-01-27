@@ -169,13 +169,16 @@ fn evalexpr_test() {
     let mut context = ftd::interpreter2::default::default_context().unwrap();
     dbg!(ftd::evalexpr::build_operator_tree("$a >= $b").unwrap());
     dbg!(ftd::evalexpr::build_operator_tree(
-        "(e = \"\"; is_empty(e)) && (d = \
+        "(e = \"\"; ftd.is_empty(e)) && (d = \
         4; d > 7) && (6 > 7)"
     )
     .unwrap());
     dbg!(ftd::evalexpr::build_operator_tree("(6 > 7) && (true)").unwrap());
     assert_eq!(
-        eval_with_context_mut("(e = \"\"; is_empty(e)) && (d = 4; d > 7)", &mut context),
+        eval_with_context_mut(
+            "(e = \"\"; ftd.is_empty(e)) && (d = 4; d > 7)",
+            &mut context
+        ),
         Ok(Value::from(false))
     );
 

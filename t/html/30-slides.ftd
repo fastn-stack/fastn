@@ -258,7 +258,7 @@ integer current:
 -- ftd.row:
 padding.px: 11
 border-radius.px: 10
-spacing.px: 8
+spacing.fixed.px: 8
 min-width.fixed.px: 90
 
 -- ftd.integer: $show-controls.current

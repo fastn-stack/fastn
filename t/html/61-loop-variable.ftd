@@ -25,7 +25,7 @@ integer idx:
 integer $value: 0
 
 -- ftd.row:
-spacing.px: 30
+spacing.fixed.px: 30
 $on-click$: $ftd.increment($a = $foo.value)
 
 -- ftd.text: $foo.name

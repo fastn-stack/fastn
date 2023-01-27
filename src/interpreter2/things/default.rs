@@ -632,12 +632,20 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             }),
         ),
         (
-            ftd::interpreter2::FTD_SPACING_MODE.to_string(),
+            ftd::interpreter2::FTD_SPACING.to_string(),
             ftd::interpreter2::Thing::OrType(ftd::interpreter2::OrType {
-                name: ftd::interpreter2::FTD_SPACING_MODE.to_string(),
+                name: ftd::interpreter2::FTD_SPACING.to_string(),
                 variants: vec![
+                    ftd::interpreter2::OrTypeVariant::Regular(ftd::interpreter2::Field::new(
+                        ftd::interpreter2::FTD_SPACING_FIXED,
+                        ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
+                            .into_kind_data(),
+                        false,
+                        None,
+                        0,
+                    )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_SPACING_MODE_SPACE_BETWEEN,
+                        ftd::interpreter2::FTD_SPACING_SPACE_BETWEEN,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -647,7 +655,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_SPACING_MODE_SPACE_EVENLY,
+                        ftd::interpreter2::FTD_SPACING_SPACE_EVENLY,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -657,7 +665,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                         0,
                     )),
                     ftd::interpreter2::OrTypeVariant::new_constant(ftd::interpreter2::Field::new(
-                        ftd::interpreter2::FTD_SPACING_MODE_SPACE_AROUND,
+                        ftd::interpreter2::FTD_SPACING_SPACE_AROUND,
                         ftd::interpreter2::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -6670,12 +6678,6 @@ pub fn column_function() -> ftd::interpreter2::ComponentDefinition {
 fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
     vec![
         ftd::interpreter2::Argument::default(
-            "spacing",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_LENGTH)
-                .into_optional()
-                .into_kind_data(),
-        ),
-        ftd::interpreter2::Argument::default(
             "wrap",
             ftd::interpreter2::Kind::boolean()
                 .into_optional()
@@ -6688,8 +6690,8 @@ fn container_arguments() -> Vec<ftd::interpreter2::Argument> {
                 .into_kind_data(),
         ),
         ftd::interpreter2::Argument::default(
-            "spacing-mode",
-            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_SPACING_MODE)
+            "spacing",
+            ftd::interpreter2::Kind::or_type(ftd::interpreter2::FTD_SPACING)
                 .into_optional()
                 .into_kind_data(),
         ),

@@ -151,16 +151,16 @@ impl ftd::executor::Row {
             ),
         );
 
-        n.style.upsert(
+        n.style.check_and_insert(
             "justify-content",
             ftd::node::Value::from_executor_value(
                 self.container
-                    .spacing_mode
+                    .spacing
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
                     .value,
-                self.container.spacing_mode.to_owned(),
-                None,
+                self.container.spacing.to_owned(),
+                Some(ftd::executor::Spacing::justify_content_pattern()),
                 doc_id,
             ),
         );
@@ -222,16 +222,16 @@ impl ftd::executor::Column {
             ),
         );
 
-        n.style.upsert(
+        n.style.check_and_insert(
             "justify-content",
             ftd::node::Value::from_executor_value(
                 self.container
-                    .spacing_mode
+                    .spacing
                     .to_owned()
-                    .map(|v| v.map(|v| v.to_css_string()))
+                    .map(|v| v.map(|v| v.to_justify_content_css_string()))
                     .value,
-                self.container.spacing_mode.to_owned(),
-                None,
+                self.container.spacing.to_owned(),
+                Some(ftd::executor::Spacing::justify_content_pattern()),
                 doc_id,
             ),
         );
@@ -1543,9 +1543,9 @@ impl ftd::executor::Container {
         d.check_and_insert(
             "gap",
             ftd::node::Value::from_executor_value(
-                self.spacing.value.as_ref().map(|v| v.to_css_string()),
+                self.spacing.value.as_ref().map(|v| v.to_gap_css_string()),
                 self.spacing.to_owned(),
-                None,
+                Some(ftd::executor::Spacing::fixed_content_pattern()),
                 doc_id,
             ),
         );

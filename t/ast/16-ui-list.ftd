@@ -202,7 +202,7 @@ width: fill-container
 
 -- ftd.row:
 width: fill-container
-spacing.px: 48
+spacing.fixed.px: 48
 
 /-- h.header:
 sections: $chapter-desktop.sections
@@ -501,7 +501,7 @@ boolean $status:
 -- ftd.row:
 if: {toc-instance.toc.url != NULL}
 width: fill-container
-spacing.px: 8
+spacing.fixed.px: 8
 
 -- ftd.image:
 if: {toc-instance.toc.font-icon != NULL}
@@ -523,7 +523,7 @@ color if {toc-instance.toc.is-active}: $inherited.colors.cta-primary.base
 -- ftd.row:
 if: {toc-instance.toc.url == NULL}
 width: fill-container
-spacing.px: 8
+spacing.fixed.px: 8
 
 -- ftd.image:
 if: {toc-instance.toc.font-icon != NULL}
@@ -573,7 +573,7 @@ pr.toc-item toc:
 -- ftd.row:
 if: {childrens.toc.url != NULL}
 width: fill-container
-spacing.px: 8
+spacing.fixed.px: 8
 
 -- ftd.image:
 if: {childrens.toc.font-icon != NULL}
@@ -595,7 +595,7 @@ color if {childrens.toc.is-active}: $inherited.colors.cta-primary.base
 -- ftd.row:
 if: {childrens.toc.url == NULL}
 width: fill-container
-spacing.px: 8
+spacing.fixed.px: 8
 
 -- ftd.image:
 if: {childrens.toc.font-icon != NULL}
