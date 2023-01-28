@@ -1,12 +1,24 @@
 -- $ds.site-name: FTD
 
+
+
+
 -- ds.page: Part 1: Hello World
+
 
 -- ds.youtube:
 v: v1u-TmNE0bA
 
+-- ds.h3: Install FPM for MacOS
 
--- ds.h3: Install FPM
+Run the following command in your machine's terminal:
+
+-- ds.code: Installer Script
+lang: ftd
+
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fpm/main/install-fpm.sh)"
+
+-- ds.h3: Install FPM for Windows
 
 - **First Step:** To install fpm, go to Resource Section of this *Crash Course* in te Overview part.
 
@@ -45,7 +57,6 @@ lang: ftd
 \-- ftd.text: Hello World
 
 
--- ds.markdown:
 
 
 

@@ -12,7 +12,7 @@ In this video course Ajit Garg will teach you about FTD from scratch, how to
 making the following:
 
 
--- expander.box: Test Box
+-- expander.box: Test Box, Click Me!
 
 Package is running component box.
 Body expands and collapse when clicked on the Header triggering on-click event handling.
