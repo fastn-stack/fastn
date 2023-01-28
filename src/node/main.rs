@@ -94,7 +94,9 @@ impl ftd::executor::Element {
             ftd::executor::Element::Code(c) => c.to_node(doc_id),
             ftd::executor::Element::Iframe(i) => i.to_node(doc_id),
             ftd::executor::Element::TextInput(i) => i.to_node(doc_id),
-            ftd::executor::Element::Null => Node {
+            ftd::executor::Element::Null
+            | ftd::executor::Element::RawElement(_)
+            | ftd::executor::Element::IterativeElement(_) => Node {
                 classes: vec![],
                 events: vec![],
                 node: "".to_string(),

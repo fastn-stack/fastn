@@ -13,6 +13,7 @@ mod utils;
 mod value;
 mod youtube_id;
 
+pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{
     Code, Column, Common, Container, Element, Event, Iframe, Image, IterativeElement, RawElement,
     Row, Text, TextInput,

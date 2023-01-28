@@ -33,6 +33,15 @@ impl Element {
             Element::IterativeElement(i) => i.element.get_common(),
         }
     }
+
+    pub(crate) fn get_children(&mut self) -> Option<&mut Vec<Element>> {
+        match self {
+            Element::Row(r) => Some(&mut r.container.children),
+            Element::Column(c) => Some(&mut c.container.children),
+            Element::RawElement(r) => Some(&mut r.children),
+            _ => None,
+        }
+    }
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -44,10 +53,10 @@ pub struct RawElement {
     pub line_number: usize,
 }
 
-#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct IterativeElement {
-    pub element: ftd::executor::Element,
-    pub iteration: Option<ftd::interpreter2::Loop>,
+    pub element: Box<ftd::executor::Element>,
+    pub iteration: ftd::interpreter2::Loop,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
