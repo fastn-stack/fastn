@@ -447,10 +447,19 @@ pub fn text_from_properties(
     condition: &Option<ftd::interpreter2::Expression>,
     doc: &ftd::executor::TDoc,
     local_container: &[usize],
+    is_dummy: bool,
     line_number: usize,
 ) -> ftd::executor::Result<Text> {
-    let text =
-        ftd::executor::value::optional_string("text", properties, arguments, doc, line_number)?;
+    dbg!("text_from_properties", &is_dummy);
+    let text = ftd::executor::value::dummy_optional_string(
+        "text",
+        properties,
+        arguments,
+        doc,
+        is_dummy,
+        line_number,
+    )?;
+    dbg!("1");
     if text.value.is_none() && condition.is_none() {
         // TODO: Check condition if `value is not null` is there
         return ftd::executor::utils::parse_error(

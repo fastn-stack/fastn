@@ -25,9 +25,12 @@ impl DummyElement {
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<ftd::executor::DummyElement> {
+    ) -> ftd::executor::Result<()> {
         let mut found_elements: std::collections::HashSet<String> =
             std::collections::HashSet::new();
+
+        let instruction_id = instruction.name.to_string();
+        let line_number = instruction.line_number;
 
         let element = DummyElement::from_instruction_to_element(
             instruction,
@@ -39,10 +42,13 @@ impl DummyElement {
 
         dbg!("DummyElement::from_instruction", &found_elements);
 
-        Ok(DummyElement::from_element_and_container(
-            element,
-            local_container,
-        ))
+        ElementConstructor::from_list(doc, inherited_variables, line_number, &mut found_elements)?;
+
+        let dummy_element = DummyElement::from_element_and_container(element, local_container);
+
+        doc.dummy_instructions.insert(instruction_id, dummy_element);
+
+        Ok(())
     }
 
     pub(crate) fn from_instruction_to_element(
@@ -52,9 +58,7 @@ impl DummyElement {
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         found_elements: &mut std::collections::HashSet<String>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
-        if let Some(iteration) = instruction.iteration.as_ref().clone() {
-            instruction.iteration = Box::new(None);
-
+        if let Some(iteration) = instruction.iteration.take() {
             return Ok(ftd::executor::Element::IterativeElement(
                 ftd::executor::IterativeElement {
                     element: Box::new(DummyElement::from_instruction_to_element(
@@ -69,13 +73,10 @@ impl DummyElement {
             ));
         }
 
-        let component_definition = {
-            // NOTE: doing unwrap to force bug report if we following fails, this function
-            // must have validated everything, and must not fail at run time
-            doc.itdoc()
-                .get_component(instruction.name.as_str(), instruction.line_number)
-                .unwrap()
-        };
+        let component_definition = doc
+            .itdoc()
+            .get_component(instruction.name.as_str(), instruction.line_number)
+            .unwrap();
 
         let mut element = if component_definition.definition.name.eq("ftd.kernel") {
             ftd::executor::utils::update_inherited_reference_in_instruction(
@@ -90,6 +91,7 @@ impl DummyElement {
                 doc,
                 local_container,
                 &component_definition,
+                true,
             )?
         } else {
             found_elements.insert(instruction.name.to_string());
@@ -103,26 +105,22 @@ impl DummyElement {
             })
         };
 
-        let mut children_elements = vec![];
-
-        for (idx, mut instruction) in instruction
+        let children_elements = instruction
             .get_children(&doc.itdoc())?
             .into_iter()
             .enumerate()
-        {
-            let local_container = {
+            .map(|(idx, mut instruction)| {
                 let mut local_container = local_container.to_vec();
                 local_container.push(idx);
-                local_container
-            };
-            children_elements.push(DummyElement::from_instruction_to_element(
-                instruction,
-                doc,
-                local_container.as_slice(),
-                inherited_variables,
-                found_elements,
-            )?);
-        }
+                DummyElement::from_instruction_to_element(
+                    instruction,
+                    doc,
+                    local_container.as_slice(),
+                    inherited_variables,
+                    found_elements,
+                )
+            })
+            .collect::<ftd::executor::Result<Vec<_>>>()?;
 
         if let Some(children) = element.get_children() {
             children.extend(children_elements);
@@ -136,4 +134,62 @@ impl DummyElement {
 pub struct ElementConstructor {
     pub arguments: Vec<ftd::interpreter2::Argument>,
     pub element: ftd::executor::Element,
+}
+
+impl ElementConstructor {
+    pub(crate) fn new(
+        arguments: &[ftd::interpreter2::Argument],
+        element: ftd::executor::Element,
+    ) -> ElementConstructor {
+        ElementConstructor {
+            arguments: arguments.to_vec(),
+            element,
+        }
+    }
+
+    pub(crate) fn from_list(
+        doc: &mut ftd::executor::TDoc,
+        inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+        line_number: usize,
+        found_elements: &mut std::collections::HashSet<String>,
+    ) -> ftd::executor::Result<()> {
+        for element_name in found_elements.clone() {
+            found_elements.remove(element_name.as_str());
+            if doc.element_constructor.contains_key(element_name.as_str()) {
+                continue;
+            }
+            let element_constructor = ElementConstructor::get(
+                doc,
+                inherited_variables,
+                element_name.as_str(),
+                line_number,
+                found_elements,
+            )?;
+            doc.element_constructor
+                .insert(dbg!(element_name.to_string()), dbg!(element_constructor));
+        }
+        Ok(())
+    }
+
+    pub(crate) fn get(
+        doc: &mut ftd::executor::TDoc,
+        inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
+        component: &str,
+        line_number: usize,
+        found_elements: &mut std::collections::HashSet<String>,
+    ) -> ftd::executor::Result<ElementConstructor> {
+        let component_definition = doc.itdoc().get_component(component, line_number).unwrap();
+        let element = DummyElement::from_instruction_to_element(
+            component_definition.definition,
+            doc,
+            &[],
+            inherited_variables,
+            found_elements,
+        )?;
+
+        Ok(ElementConstructor::new(
+            component_definition.arguments.as_slice(),
+            element,
+        ))
+    }
 }

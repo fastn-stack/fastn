@@ -238,15 +238,13 @@ impl<'a> ExecuteDoc<'a> {
                 }
 
                 if is_dummy {
-                    let instruction_id = instruction.name.to_string();
                     dbg!(&instruction, &container);
-                    let dummy_element = dbg!(ftd::executor::DummyElement::from_instruction(
+                    ftd::executor::DummyElement::from_instruction(
                         instruction,
                         doc,
                         container.as_slice(),
                         &mut inherited_variables,
-                    )?);
-                    doc.dummy_instructions.insert(instruction_id, dummy_element);
+                    )?;
                     break;
                 }
                 let component_definition = {
@@ -272,6 +270,7 @@ impl<'a> ExecuteDoc<'a> {
                             doc,
                             container.as_slice(),
                             &component_definition,
+                            false,
                         )?,
                     );
                     let children_instructions = ExecuteDoc::get_instructions_from_instructions(
@@ -468,6 +467,7 @@ impl<'a> ExecuteDoc<'a> {
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         component_definition: &ftd::interpreter2::ComponentDefinition,
+        is_dummy: bool,
     ) -> ftd::executor::Result<ftd::executor::Element> {
         Ok(match component_definition.name.as_str() {
             "ftd#text" => {
@@ -478,6 +478,7 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.condition.as_ref(),
                     doc,
                     local_container,
+                    is_dummy,
                     instruction.line_number,
                 )?)
             }
