@@ -1,1 +1,54 @@
+-- import: fpm/processors as p
+
 -- ftd.text: DOC 1
+
+
+
+-- component print-toc:
+p.toc-item item:
+
+-- ftd.column:
+margin.px: 20
+padding.px: 20
+background.solid: yellow
+
+-- ftd.text: $print-toc.item.title
+padding.px: 5
+
+-- ftd.text: $print-toc.item.url
+padding-top.px: 5
+padding-left.px: 15
+
+-- end: ftd.column
+
+-- end: print-toc
+
+
+;; full-sitemap example
+
+-- ftd.text: Processor `full-sitemap`
+margin.px: 10
+padding.px: 10
+background.solid: green
+
+
+-- p.sitemap-data full-sitemap:
+$processor$: p.full-sitemap
+
+-- print-toc:
+$loop$: $full-sitemap.toc as $toc
+item: $toc
+
+-- end: print-toc
+
+-- print-toc:
+$loop$: $full-sitemap.sections as $section
+item: $section
+
+-- end: print-toc
+
+-- print-toc:
+$loop$: $full-sitemap.subsections as $subsection
+item: $subsection
+
+-- end: print-toc

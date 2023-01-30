@@ -194,7 +194,7 @@ $always-include$: true
 
 
 
-/-- record toc-item:
+-- record toc-item:
 optional string title:
 optional string url:
 optional string path:
@@ -251,7 +251,7 @@ optional string last-modified-on:
 -- optional string toc-title:
 
 
-/-- record sitemap-data:
+-- record sitemap-data:
 toc-item list sections:
 toc-item list subsections:
 toc-item list toc:

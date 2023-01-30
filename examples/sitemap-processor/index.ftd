@@ -1,31 +1,19 @@
--- import: fpm/processors
-
--- record toc-item:
-optional string title:
-optional string url:
-optional string path:
-optional string number:
-optional ftd.image-src font-icon:
-optional string img-src:
-boolean bury: false
-optional string document:
-
--- record sitemap-data:
-toc-item list sections:
-toc-item list subsections:
-toc-item list toc:
-optional toc-item current-section:
-optional toc-item current-subsection:
-optional toc-item current-page:
+-- import: fpm/processors as p
 
 -- component print-toc:
-toc-item item:
+p.toc-item item:
 
 -- ftd.column:
+margin.px: 20
+padding.px: 20
+background.solid: yellow
 
 -- ftd.text: $print-toc.item.title
+padding.px: 5
 
 -- ftd.text: $print-toc.item.url
+padding-top.px: 5
+padding-left.px: 15
 
 -- end: ftd.column
 
@@ -33,13 +21,16 @@ toc-item item:
 
 
 
-
 ;; sitemap example
 
 -- ftd.text: Processor `sitemap`
+margin.px: 10
+padding.px: 10
+background.solid: green
 
--- sitemap-data sitemap:
-$processor$: processors.sitemap
+
+-- p.sitemap-data sitemap:
+$processor$: p.sitemap
 
 -- print-toc:
 $loop$: $sitemap.toc as $toc
@@ -53,7 +44,7 @@ item: $section
 
 -- end: print-toc
 
--- print-toc:
+/-- print-toc:
 $loop$: $sitemap.subsections as $subsection
 item: $subsection
 
@@ -64,9 +55,13 @@ item: $subsection
 ;; full-sitemap example
 
 -- ftd.text: Processor `full-sitemap`
+margin.px: 10
+padding.px: 10
+background.solid: green
 
--- sitemap-data full-sitemap:
-$processor$: processors.full-sitemap
+
+-- p.sitemap-data full-sitemap:
+$processor$: p.full-sitemap
 
 -- print-toc:
 $loop$: $full-sitemap.toc as $toc
