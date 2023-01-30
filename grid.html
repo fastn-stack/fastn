@@ -1075,7 +1075,14 @@ let ftd_utils = {
                     let data_value = ftd_utils.get_data_value(data, reference[key])
                     result[key] = (data_value !== undefined) ? data_value : value[key];
                 } else {
-                    result[key] = (value[key] === "$VALUE" && obj.value !== undefined) ? obj.value : value[key];
+                    // Special values
+                    if (value[key] === "$VALUE" && obj.value !== undefined) {
+                        result[key] =  obj.value;
+                    } else if (value[key] === "$CHECKED" && obj.checked !== undefined) {
+                        result[key] =  obj.checked;
+                    } else {
+                        result[key] =  value[key];
+                    }
                 }
             }
             for (var key of Object.keys(reference)) {
@@ -1088,7 +1095,13 @@ let ftd_utils = {
         } else if (reference !== null && reference !== undefined && data_value_ref !== undefined) {
             return data_value_ref;
         } else {
-            return (value === "$VALUE" && obj.value !== undefined) ? obj.value : value;
+            if (value[key] === "$VALUE" && obj.value !== undefined) {
+                result[key] =  obj.value;
+            } else if (value[key] === "$CHECKED" && obj.checked !== undefined) {
+                result[key] =  obj.checked;
+            } else {
+                result[key] =  value;
+            }
         }
     },
 
