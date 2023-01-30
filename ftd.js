@@ -46,7 +46,7 @@ let ftd_utils = {
             } else if (value[key] === "$CHECKED" && obj.checked !== undefined) {
                 result[key] =  obj.checked;
             } else {
-                result[key] =  value[key];
+                result[key] =  value;
             }
         }
     },
