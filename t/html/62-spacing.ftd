@@ -1,0 +1,28 @@
+-- ftd.color yellow: yellow
+
+-- ftd.color green: green
+
+-- boolean $flag: false
+-- integer $num: 0
+
+-- ftd.integer: $num
+
+-- ftd.row:
+width: fill-container
+height.fixed.px: 40
+spacing if { num % 4 == 1 }: space-between
+spacing if { num % 4 == 2 }: space-around
+spacing if { num % 4 == 3 }: space-evenly
+spacing.fixed.px: 50
+margin-vertical.px: 20
+padding-vertical.px: 20
+background.solid: $green
+$on-click$: $ftd.increment($a = $num)
+
+-- ftd.text: hello 1
+
+-- ftd.text: hello 2
+
+-- ftd.text: hello 3
+
+-- end: ftd.row

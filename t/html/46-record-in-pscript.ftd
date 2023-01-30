@@ -19,7 +19,7 @@ optional person person-instance:
 
 -- ftd.row:
 padding.px: 40
-spacing.px: 20
+spacing.fixed.px: 20
 
 
 -- ftd.text: $show-person.person-instance.name

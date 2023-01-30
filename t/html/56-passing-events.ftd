@@ -1,7 +1,7 @@
 -- ftd.column:
 width.fixed.px: 650
 padding.px: 40
-spacing.px: 20
+spacing.fixed.px: 20
 align-self: center
 margin-vertical.px: 40
 border-color: $b-color
@@ -63,7 +63,7 @@ dark: #e62f2f
 
 -- ftd.row:
 width: fill-container
-spacing-mode: space-between
+spacing: space-between
 
 -- button: Dark Mode
 color: #2dd4bf

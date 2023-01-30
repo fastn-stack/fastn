@@ -19,8 +19,8 @@ padding-horizontal.percent if { flag } : 10
 
 
 -- ftd.row:
-spacing.px: 20
-spacing.px if { flag }: 40
+spacing.fixed.px: 20
+spacing.fixed.px if { flag }: 40
 wrap: true
 wrap if { flag }: false
 border-width.px: 4
@@ -35,7 +35,7 @@ border-radius.percent: 18
 
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 align-content if { flag }: top-left
 align-content: top-center
 background.solid: red
@@ -50,7 +50,7 @@ border-width.px: 1
 
 
 -- ftd.column:
-spacing.px: 2
+spacing.fixed.px: 2
 align-content if { flag }: top-left
 align-content: top-center
 width.fixed.px: 400
@@ -64,7 +64,7 @@ border-width.px: 1
 
 
 -- ftd.row:
-spacing.px: 20
+spacing.fixed.px: 20
 width.fixed.px: 400
 width if { flag }: hug-content
 height.fixed.percent: 20
