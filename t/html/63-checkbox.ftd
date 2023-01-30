@@ -18,7 +18,8 @@ $is-checked: $flag
 boolean $is-checked: false
 
 -- ftd.row:
-padding-horizontal.px: 10
+padding-horizontal.px: 20
+spacing.fixed.px: 10
 
 -- ftd.text: This is a checkbox
 
