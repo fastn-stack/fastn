@@ -61,7 +61,7 @@ edit = "0.1"
 fluent = "0.16"
 futures = "0.3"
 ignore = "0.4"
-indoc = "1"
+indoc = "2"
 intl-memoizer = "0.5"
 itertools = "0.10"
 oauth2 = { version = "4.3.0", optional = true }
@@ -182,7 +182,7 @@ features = [
 ]
 
 [dev-dependencies]
-indoc = "1"
+indoc = "2"
 pretty_assertions = "1"
 
 [dev-dependencies.fbt-lib]
