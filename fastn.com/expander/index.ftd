@@ -1,21 +1,33 @@
 -- import: fpm
 -- import: gargajit.github.io/expander
+-- import: gargajit.github.io/expander/assets
 
 -- ds.page: Expander Crash Course
+
 
 -- ds.youtube:
 v: jKx-F5wCAVE
 
 -- ds.markdown:
 
-In this video course Ajit Garg will teach you about FTD from scratch, how to
-making the following:
+Welcome to the FTD Crash Course, my name is Ajit Garg.
+
+In this crash course I will help you to create an Expander project from 
+scratch, using FTD language.
+
+
+-- ds.markdown:
+
+We will see how to make the following:
 
 
 -- expander.box: Test Box, Click Me!
 
+
+
 Package is running component box.
-Body expands and collapse when clicked on the Header triggering on-click event handling.
+Body expands and collapse when clicked on the Header triggering on-click event 
+handling.
 
 You can use this package for your project.
 
