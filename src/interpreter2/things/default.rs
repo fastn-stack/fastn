@@ -6419,18 +6419,16 @@ pub fn checkbox_function() -> ftd::interpreter2::ComponentDefinition {
         name: "ftd#checkbox".to_string(),
         arguments: [
             common_arguments(),
-            vec![
-                ftd::interpreter2::Argument::default(
-                    "checked",
-                    ftd::interpreter2::Kind::boolean()
-                        .into_optional()
-                        .into_kind_data(),
-                ),
-            ],
+            vec![ftd::interpreter2::Argument::default(
+                "checked",
+                ftd::interpreter2::Kind::boolean()
+                    .into_optional()
+                    .into_kind_data(),
+            )],
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
         line_number: 0,
     }

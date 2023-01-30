@@ -547,8 +547,8 @@ impl<'a> ExecuteDoc<'a> {
                     instruction.line_number,
                 )?,
             ),
-            "ftd#checkbox" => ftd::executor::Element::CheckBox(
-                ftd::executor::element::checkbox_from_properties(
+            "ftd#checkbox" => {
+                ftd::executor::Element::CheckBox(ftd::executor::element::checkbox_from_properties(
                     instruction.properties.as_slice(),
                     instruction.events.as_slice(),
                     component_definition.arguments.as_slice(),
@@ -556,8 +556,8 @@ impl<'a> ExecuteDoc<'a> {
                     doc,
                     local_container,
                     instruction.line_number,
-                )?,
-            ),
+                )?)
+            }
             _ => unimplemented!(),
         })
     }

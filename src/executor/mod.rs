@@ -13,7 +13,7 @@ mod value;
 mod youtube_id;
 
 pub use element::{
-    Code, Column, Common, Container, Element, Event, Iframe, Image, Row, Text, TextInput, CheckBox
+    CheckBox, Code, Column, Common, Container, Element, Event, Iframe, Image, Row, Text, TextInput,
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{

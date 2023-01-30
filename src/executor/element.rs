@@ -1258,7 +1258,6 @@ pub fn checkbox_from_properties(
     local_container: &[usize],
     line_number: usize,
 ) -> ftd::executor::Result<CheckBox> {
-
     let checked =
         ftd::executor::value::optional_bool("checked", properties, arguments, doc, line_number)?;
 
@@ -1272,8 +1271,5 @@ pub fn checkbox_from_properties(
         line_number,
     )?;
 
-    Ok(CheckBox {
-        checked,
-        common,
-    })
+    Ok(CheckBox { checked, common })
 }

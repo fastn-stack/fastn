@@ -561,14 +561,15 @@ impl ftd::executor::CheckBox {
 
         let mut n = Node::from_common(node, "block", &self.common, doc_id);
 
-        n.attrs.check_and_insert("type", ftd::node::Value::from_string(s("checkbox")), );
+        n.attrs
+            .check_and_insert("type", ftd::node::Value::from_string(s("checkbox")));
 
         n.attrs.check_and_insert(
             "checked",
             ftd::node::Value::from_executor_value(
                 self.checked
                     .to_owned()
-                    .map(|v| v.map(|_| "false".to_string()))
+                    .map(|v| v.map(|b| b.to_string()))
                     .value,
                 self.checked.to_owned(),
                 None,
