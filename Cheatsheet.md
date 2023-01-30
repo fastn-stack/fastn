@@ -420,6 +420,36 @@ multiline: true
 
 By default, `type` is set to `ftd.text-input-type.text`
 
+## `ftd.checkbox` - To render a checkbox
+
+This code will create a simple checkbox.
+```ftd
+-- ftd.checkbox:
+```
+
+To know the current value of checkbox, you can use
+a special variable `$CHECKED` to access it.
+
+```ftd
+-- boolean $is-checked: false
+
+-- ftd.checkbox:
+$on-click$: $ftd.set-bool($a = $is-checked, v = $CHECKED)
+```
+
+## `ftd.checkbox` Attributes
+
+### `checked`: `optional boolean` -> Default checkbox value
+
+By default, `checkbox` is not selected
+
+```ftd
+;; In this case, the checkbox will be 
+;; pre-selected by default
+
+-- ftd.checkbox:
+checked: true
+```
 
 ## `ftd.image` - To render an image
 
