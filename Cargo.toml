@@ -35,7 +35,7 @@ regex = "1"
 format_num = "0.1"
 slug = "0.1"
 include_dir = "0.7"
-indoc = "1"
+indoc = "2"
 itertools = "0.10"
 tracing = "0.1"
 
