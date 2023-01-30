@@ -1,5 +1,8 @@
 # FTD Change Log
 
+## 30 January 2023
+- [Added ftd.checkbox](https://github.com/ftd-lang/ftd/pull/564/commits/483060b31dcce626599fc0bca8d7e6261d0c37a8)
+
 ## 27 January 2023
 - [Merged spacing with spacing-mode](https://github.com/ftd-lang/ftd/pull/557/commits/37569f9df70ce60f161a1260e6fa09827f8f0875)
 

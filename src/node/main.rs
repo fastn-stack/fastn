@@ -94,6 +94,7 @@ impl ftd::executor::Element {
             ftd::executor::Element::Code(c) => c.to_node(doc_id),
             ftd::executor::Element::Iframe(i) => i.to_node(doc_id),
             ftd::executor::Element::TextInput(i) => i.to_node(doc_id),
+            ftd::executor::Element::CheckBox(c) => c.to_node(doc_id),
             ftd::executor::Element::Null => Node {
                 classes: vec![],
                 events: vec![],
@@ -541,6 +542,36 @@ impl ftd::executor::TextInput {
             ftd::node::Value::from_executor_value(
                 self.default_value.to_owned().value,
                 self.default_value.to_owned(),
+                None,
+                doc_id,
+            ),
+        );
+
+        n.classes.extend(self.common.add_class());
+        n.classes.push("ft_md".to_string());
+        n
+    }
+}
+
+impl ftd::executor::CheckBox {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        use ftd::node::utils::CheckMap;
+
+        let node = "input";
+
+        let mut n = Node::from_common(node, "block", &self.common, doc_id);
+
+        n.attrs
+            .check_and_insert("type", ftd::node::Value::from_string(s("checkbox")));
+
+        n.attrs.check_and_insert(
+            "checked",
+            ftd::node::Value::from_executor_value(
+                self.checked
+                    .to_owned()
+                    .map(|v| v.map(|b| b.to_string()))
+                    .value,
+                self.checked.to_owned(),
                 None,
                 doc_id,
             ),

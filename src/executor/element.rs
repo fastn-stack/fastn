@@ -10,6 +10,7 @@ pub enum Element {
     Code(Code),
     Iframe(Iframe),
     TextInput(TextInput),
+    CheckBox(CheckBox),
     Null,
 }
 
@@ -26,6 +27,7 @@ impl Element {
             Element::Code(c) => Some(&c.common),
             Element::Iframe(i) => Some(&i.common),
             Element::TextInput(i) => Some(&i.common),
+            Element::CheckBox(c) => Some(&c.common),
             Element::Null => None,
         }
     }
@@ -1231,4 +1233,35 @@ pub fn text_input_from_properties(
         common,
         type_,
     })
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct CheckBox {
+    pub checked: ftd::executor::Value<Option<bool>>,
+    pub common: Common,
+}
+
+pub fn checkbox_from_properties(
+    properties: &[ftd::interpreter2::Property],
+    events: &[ftd::interpreter2::Event],
+    arguments: &[ftd::interpreter2::Argument],
+    condition: &Option<ftd::interpreter2::Expression>,
+    doc: &ftd::executor::TDoc,
+    local_container: &[usize],
+    line_number: usize,
+) -> ftd::executor::Result<CheckBox> {
+    let checked =
+        ftd::executor::value::optional_bool("checked", properties, arguments, doc, line_number)?;
+
+    let common = common_from_properties(
+        properties,
+        events,
+        arguments,
+        condition,
+        doc,
+        local_container,
+        line_number,
+    )?;
+
+    Ok(CheckBox { checked, common })
 }
