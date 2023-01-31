@@ -4496,14 +4496,14 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     value: None,
                     line_number: 0
                 },ftd::interpreter2::Field {
-                    name: "copy-tight".to_string(),
+                    name: "copy-small".to_string(),
                     kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
                     line_number: 0
                 },ftd::interpreter2::Field {
-                    name: "copy-relaxed".to_string(),
+                    name: "copy-regular".to_string(),
                     kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
@@ -4531,7 +4531,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     value: None,
                     line_number: 0
                 },ftd::interpreter2::Field {
-                    name: "label-big".to_string(),
+                    name: "label-large".to_string(),
                     kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
