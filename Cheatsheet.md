@@ -1232,17 +1232,23 @@ The `inherited.types` variable is of type `ftd.type-data` which is a record.
 
 ```ftd
 -- record type-data:
+ftd.responsive-type heading-hero:
 ftd.responsive-type heading-large:
 ftd.responsive-type heading-medium:
 ftd.responsive-type heading-small:
-ftd.responsive-type heading-hero:
-ftd.responsive-type copy-tight:
-ftd.responsive-type copy-relaxed:
+ftd.responsive-type heading-small:
 ftd.responsive-type copy-large:
+ftd.responsive-type copy-regular:
+ftd.responsive-type copy-small:
 ftd.responsive-type fine-print:
 ftd.responsive-type blockquote:
-ftd.responsive-type label-big:
+ftd.responsive-type source-code:
+ftd.responsive-type label-large:
 ftd.responsive-type label-small:
+ftd.responsive-type button-large:
+ftd.responsive-type button-medium:
+ftd.responsive-type button-small:
+ftd.responsive-type link:
 ```
 
 The fields in record `type-data` are of type `ftd.responsive-type` which is 
@@ -1251,59 +1257,91 @@ another record with `desktop` and `mobile` fields of type `ftd.type`
 In `inherited.types` variable, value of all the fields is same for both 
 `desktop` and `mobile`. So just mentioning the value for one only.
 
+For desktop: 
+
+- `heading-hero`:
+  size: 80
+  line-height: 104
+  weight: 400
+
 - `heading-large`:
-  size: 40
-  line-height: 48
+  size: 50
+  line-height: 65
   weight: 400
 
 - `heading-medium`:
-  size: 32
-  line-height: 44
+  size: 38
+  line-height: 57
   weight: 400
 
 - `heading-small`:
   size: 24
-  line-height: 36
+  line-height: 31
   weight: 400
 
-- `heading-hero`:
-  size: 48
-  line-height: 60
-  weight: 400
-
-- `copy-tight`:
-  size: 16
-  line-height: 20
-  weight: 400
-
-- `copy-relaxed`:
-  size: 16
-  line-height: 24
+- `heading-tiny`:
+  size: 20
+  line-height: 26
   weight: 400
 
 - `copy-large`:
-  size: 20
-  line-height: 28
+  size: 22
+  line-height: 34
+  weight: 400
+
+- `copy-regular`:
+  size: 18
+  line-height: 30
+  weight: 400
+
+- `copy-small`:
+  size: 14
+  line-height: 24
   weight: 400
 
 - `fine-print`:
-  size: 14
+  size: 12
   line-height: 16
   weight: 400
 
 - `blockquote`:
-  size: 14
-  line-height: 16
+  size: 16
+  line-height: 21
   weight: 400
 
-- `label-big`:
-  size: 16
-  line-height: 22
+- `source-code`:
+  size: 18
+  line-height: 30
+  weight: 400
+
+- `label-large`:
+  size: 14
+  line-height: 19
   weight: 400
 
 - `label-small`:
-  size: 14
+  size: 12
   line-height: 16
+  weight: 400
+
+- `button-large`:
+  size: 18
+  line-height: 24
+  weight: 400
+
+- `button-medium`:
+  size: 16
+  line-height: 21
+  weight: 400
+
+- `button-small`:
+  size: 14
+  line-height: 19
+  weight: 400
+
+- `link`:
+  size: 14
+  line-height: 19
   weight: 400
 
 

@@ -1,5 +1,8 @@
 # FTD Change Log
 
+## 31 January 2023
+- [Updated inherited font types](https://github.com/ftd-lang/ftd/pull/566/commits/e1722eacf386d3c515000c79a86e7ffb91f2df6c)
+
 ## 30 January 2023
 - [Added ftd.checkbox](https://github.com/ftd-lang/ftd/pull/564/commits/483060b31dcce626599fc0bca8d7e6261d0c37a8)
 
