@@ -8,7 +8,7 @@
 role: $inherited.types.heading-large
 
 -- ftd.text: hello world 2
-role: $inherited.types.copy-tight
+role: $inherited.types.copy-small
 
 -- ftd.text: hello world 3
 role: $inherited.types.fine-print
