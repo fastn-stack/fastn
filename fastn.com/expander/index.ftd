@@ -25,29 +25,20 @@ We will see how to make the following:
 
 
 
-Package is running component box.
-Body expands and collapse when clicked on the Header triggering on-click event 
-handling.
-
-You can use this package for your project.
-
-
-
--- ds.markdown:
-
+Expander Package is running component box.
 This is a component element and we named it as box.
 
 It takes three events: 
 
-on-click 
+on-click - Body expands and collapses when click on Header area
 
-on-mouse-enter
+on-mouse-enter - Header area is highlighted when mouse hovers over Header area
 
-on-mouse-leave
+on-mouse-leave - Header area is de-highlighted when mouse leaves the Header area
 
--- ds.markdown:
 
-And it also responds to your system mode preference.
+And, it also responds to your system mode preference.
+
 
 
 -- ds.markdown:
