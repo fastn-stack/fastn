@@ -6,8 +6,8 @@ pub struct NodeData {
     pub node: ftd::node::Node,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
     pub aliases: ftd::Map<String>,
-    pub dummy_node: ftd::Map<ftd::node::DummyNode>,
-    pub raw_node: ftd::Map<ftd::node::RawNode>,
+    pub dummy_nodes: ftd::Map<ftd::node::DummyNode>,
+    pub raw_nodes: ftd::Map<ftd::node::RawNode>,
 }
 
 impl NodeData {
@@ -28,8 +28,8 @@ impl NodeData {
             node,
             bag: rt.bag,
             aliases: rt.aliases,
-            dummy_node,
-            raw_node,
+            dummy_nodes: dummy_node,
+            raw_nodes: raw_node,
         }
     }
 }

@@ -539,3 +539,16 @@ fn to_key(key: &str) -> String {
     }
     .to_string()
 }
+
+pub(crate) fn get_new_number(keys: &Vec<String>, name: &str) -> usize {
+    let mut number = 0;
+    for key in keys {
+        if let Some(str_number) = key.strip_prefix(format!("{}_", name).as_str()) {
+            let found_number = str_number.parse::<usize>().unwrap();
+            if found_number >= number {
+                number = found_number;
+            }
+        }
+    }
+    number
+}

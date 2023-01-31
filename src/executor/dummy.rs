@@ -23,13 +23,13 @@ impl DummyElement {
     pub(crate) fn from_instruction(
         instruction: ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
+        dummy_reference: String,
         local_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<()> {
         let mut found_elements: std::collections::HashSet<String> =
             std::collections::HashSet::new();
 
-        let instruction_id = instruction.name.to_string();
         let line_number = instruction.line_number;
 
         let element = DummyElement::from_instruction_to_element(
@@ -44,7 +44,8 @@ impl DummyElement {
 
         let dummy_element = DummyElement::from_element_and_container(element, local_container);
 
-        doc.dummy_instructions.insert(instruction_id, dummy_element);
+        doc.dummy_instructions
+            .insert(dummy_reference, dummy_element);
 
         Ok(())
     }
