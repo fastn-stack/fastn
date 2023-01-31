@@ -47,9 +47,10 @@ impl Element {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct RawElement {
     pub name: String,
-    pub properties: Vec<ftd::interpreter2::Property>,
+    pub properties: Vec<(String, ftd::interpreter2::Property)>,
     pub condition: Option<ftd::interpreter2::Expression>,
     pub children: Vec<Element>,
+    pub events: Vec<Event>,
     pub line_number: usize,
 }
 
@@ -450,7 +451,6 @@ pub fn text_from_properties(
     is_dummy: bool,
     line_number: usize,
 ) -> ftd::executor::Result<Text> {
-    dbg!("text_from_properties", &is_dummy);
     let text = ftd::executor::value::dummy_optional_string(
         "text",
         properties,
@@ -459,7 +459,6 @@ pub fn text_from_properties(
         is_dummy,
         line_number,
     )?;
-    dbg!("1");
     if text.value.is_none() && condition.is_none() {
         // TODO: Check condition if `value is not null` is there
         return ftd::executor::utils::parse_error(

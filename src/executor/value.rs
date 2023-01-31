@@ -535,7 +535,6 @@ pub fn dummy_optional_string(
     is_dummy: bool,
     line_number: usize,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<String>>> {
-    dbg!("optional_string 1");
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         properties,
@@ -544,7 +543,6 @@ pub fn dummy_optional_string(
         line_number,
         is_dummy,
     )?;
-    dbg!("optional_string 2");
 
     match value.value.and_then(|v| v.inner()) {
         Some(ftd::interpreter2::Value::String { text }) => Ok(ftd::executor::Value::new(

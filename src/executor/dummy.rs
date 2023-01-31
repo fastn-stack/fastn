@@ -11,7 +11,7 @@ impl DummyElement {
         container: &[usize],
     ) -> ftd::executor::DummyElement {
         let parent_container = container[..container.len() - 1].to_vec();
-        let start_index = container.last().unwrap().to_owned();
+        let start_index = *container.last().unwrap();
 
         DummyElement {
             parent_container,
@@ -21,7 +21,7 @@ impl DummyElement {
     }
 
     pub(crate) fn from_instruction(
-        mut instruction: ftd::interpreter2::Component,
+        instruction: ftd::interpreter2::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
@@ -39,8 +39,6 @@ impl DummyElement {
             inherited_variables,
             &mut found_elements,
         )?;
-
-        dbg!("DummyElement::from_instruction", &found_elements);
 
         ElementConstructor::from_list(doc, inherited_variables, line_number, &mut found_elements)?;
 
@@ -96,11 +94,28 @@ impl DummyElement {
         } else {
             found_elements.insert(instruction.name.to_string());
 
+            let mut properties = vec![];
+            for argument in component_definition.arguments.iter() {
+                let sources = argument.to_sources();
+                properties.extend(
+                    ftd::executor::value::find_properties_by_source(
+                        sources.as_slice(),
+                        instruction.properties.as_slice(),
+                        doc,
+                        argument,
+                        argument.line_number,
+                    )?
+                    .into_iter()
+                    .map(|v| (argument.name.to_string(), v)),
+                );
+            }
+
             ftd::executor::Element::RawElement(ftd::executor::RawElement {
                 name: instruction.name.to_string(),
-                properties: instruction.properties.to_owned(),
+                properties,
                 condition: *instruction.condition.clone(),
                 children: vec![],
+                events: instruction.events.clone(),
                 line_number: instruction.line_number,
             })
         };
@@ -109,13 +124,13 @@ impl DummyElement {
             .get_children(&doc.itdoc())?
             .into_iter()
             .enumerate()
-            .map(|(idx, mut instruction)| {
+            .map(|(idx, instruction)| {
                 let mut local_container = local_container.to_vec();
                 local_container.push(idx);
                 DummyElement::from_instruction_to_element(
                     instruction,
                     doc,
-                    local_container.as_slice(),
+                    &local_container,
                     inherited_variables,
                     found_elements,
                 )
@@ -134,16 +149,19 @@ impl DummyElement {
 pub struct ElementConstructor {
     pub arguments: Vec<ftd::interpreter2::Argument>,
     pub element: ftd::executor::Element,
+    pub name: String,
 }
 
 impl ElementConstructor {
     pub(crate) fn new(
         arguments: &[ftd::interpreter2::Argument],
         element: ftd::executor::Element,
+        name: &str,
     ) -> ElementConstructor {
         ElementConstructor {
             arguments: arguments.to_vec(),
             element,
+            name: name.to_string(),
         }
     }
 
@@ -166,7 +184,7 @@ impl ElementConstructor {
                 found_elements,
             )?;
             doc.element_constructor
-                .insert(dbg!(element_name.to_string()), dbg!(element_constructor));
+                .insert(element_name.to_string(), element_constructor);
         }
         Ok(())
     }
@@ -178,7 +196,7 @@ impl ElementConstructor {
         line_number: usize,
         found_elements: &mut std::collections::HashSet<String>,
     ) -> ftd::executor::Result<ElementConstructor> {
-        let component_definition = doc.itdoc().get_component(component, line_number).unwrap();
+        let component_definition = doc.itdoc().get_component(component, line_number)?;
         let element = DummyElement::from_instruction_to_element(
             component_definition.definition,
             doc,
@@ -190,6 +208,7 @@ impl ElementConstructor {
         Ok(ElementConstructor::new(
             component_definition.arguments.as_slice(),
             element,
+            component,
         ))
     }
 }

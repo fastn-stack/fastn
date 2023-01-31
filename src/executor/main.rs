@@ -6,6 +6,8 @@ pub struct ExecuteDoc<'a> {
     pub aliases: &'a ftd::Map<String>,
     pub bag: &'a mut ftd::Map<ftd::interpreter2::Thing>,
     pub instructions: &'a [ftd::interpreter2::Component],
+    pub dummy_instructions: &'a mut ftd::Map<ftd::executor::DummyElement>,
+    pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
@@ -14,17 +16,23 @@ pub struct RT {
     pub aliases: ftd::Map<String>,
     pub bag: ftd::Map<ftd::interpreter2::Thing>,
     pub main: ftd::executor::Column,
+    pub dummy_instructions: ftd::Map<ftd::executor::DummyElement>,
+    pub element_constructor: ftd::Map<ftd::executor::ElementConstructor>,
 }
 
 impl<'a> ExecuteDoc<'a> {
     #[tracing::instrument(skip_all)]
     pub fn from_interpreter(document: ftd::interpreter2::Document) -> ftd::executor::Result<RT> {
         let mut document = document;
+        let mut dummy_instructions = Default::default();
+        let mut element_constructor = Default::default();
         let execute_doc = ExecuteDoc {
             name: document.name.as_str(),
             aliases: &document.aliases,
             bag: &mut document.data,
             instructions: &document.tree,
+            dummy_instructions: &mut dummy_instructions,
+            element_constructor: &mut element_constructor,
         }
         .execute()?;
         let mut main = ftd::executor::element::default_column();
@@ -35,6 +43,8 @@ impl<'a> ExecuteDoc<'a> {
             aliases: document.aliases,
             bag: document.data,
             main,
+            dummy_instructions,
+            element_constructor,
         })
     }
     #[tracing::instrument(skip_all)]
@@ -43,8 +53,8 @@ impl<'a> ExecuteDoc<'a> {
             name: self.name,
             aliases: self.aliases,
             bag: self.bag,
-            dummy_instructions: &mut Default::default(),
-            element_constructor: &mut Default::default(),
+            dummy_instructions: self.dummy_instructions,
+            element_constructor: self.element_constructor,
         };
 
         ExecuteDoc::execute_from_instructions_loop(self.instructions, &mut doc)
@@ -204,7 +214,6 @@ impl<'a> ExecuteDoc<'a> {
                 local_container.as_slice(),
             )?;
 
-            dbg!(&component);
             elements.push((true, local_container, component))
         }
         Ok(elements)
@@ -238,7 +247,6 @@ impl<'a> ExecuteDoc<'a> {
                 }
 
                 if is_dummy {
-                    dbg!(&instruction, &container);
                     ftd::executor::DummyElement::from_instruction(
                         instruction,
                         doc,
