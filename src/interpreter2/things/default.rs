@@ -4496,6 +4496,13 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     value: None,
                     line_number: 0
                 },ftd::interpreter2::Field {
+                    name: "heading-tiny".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
                     name: "copy-small".to_string(),
                     kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4525,6 +4532,41 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     line_number: 0
                 },ftd::interpreter2::Field {
                     name: "blockquote".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "source-code".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "button-small".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "button-medium".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "button-large".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "link".to_string(),
                     kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
