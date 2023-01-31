@@ -572,9 +572,9 @@ dependencies = [
 
 [[package]]
 name = "comrak"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c11e55664fcff7f4d37cc2adf3a1996913692f037312f4ab0909047fdd2bf962"
+checksum = "784836d0812dade01579cc0cc9b1684847044e716fd7aa6bffbc172e42199500"
 dependencies = [
  "entities",
  "memchr",
@@ -582,6 +582,7 @@ dependencies = [
  "pest",
  "pest_derive",
  "regex",
+ "slug",
  "typed-arena 2.0.2",
  "unicode_categories",
 ]
@@ -1092,7 +1093,7 @@ dependencies = [
  "env_logger",
  "fbt-lib",
  "fluent",
- "ftd 0.2.0 (git+https://github.com/ftd-lang/ftd?rev=f41253b)",
+ "ftd 0.2.0 (git+https://github.com/ftd-lang/ftd?rev=009d0c0)",
  "futures",
  "hyper",
  "ignore",
@@ -1125,6 +1126,27 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.2.0"
+source = "git+https://github.com/ftd-lang/ftd?rev=009d0c0#009d0c0899d095a2ae12028ec468b90a0be51c26"
+dependencies = [
+ "comrak 0.16.0",
+ "css-color-parser",
+ "format_num",
+ "include_dir",
+ "indoc 2.0.0",
+ "itertools",
+ "once_cell",
+ "regex",
+ "serde",
+ "serde_json",
+ "slug",
+ "syntect",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "ftd"
+version = "0.2.0"
 source = "git+https://github.com/FifthTry/ftd?rev=b698bd6#b698bd6acf4b6dfc1557976ef63f378c473e8432"
 dependencies = [
  "comrak 0.14.0",
@@ -1140,27 +1162,6 @@ dependencies = [
  "slug",
  "syntect",
  "thiserror",
-]
-
-[[package]]
-name = "ftd"
-version = "0.2.0"
-source = "git+https://github.com/ftd-lang/ftd?rev=f41253b#f41253bc0e34eadc9870a9bd24ac2873a60b5b0f"
-dependencies = [
- "comrak 0.15.0",
- "css-color-parser",
- "format_num",
- "include_dir",
- "indoc 1.0.9",
- "itertools",
- "once_cell",
- "regex",
- "serde",
- "serde_json",
- "slug",
- "syntect",
- "thiserror",
- "tracing",
 ]
 
 [[package]]
