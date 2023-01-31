@@ -301,12 +301,51 @@
 "blockquote": {
 "desktop": {
 "font-family": "sans-serif",
-"line-height": "16px",
+"line-height": "21px",
+"size": "16px",
+"weight": 400
+},
+"mobile": {
+"line-height": "21px",
+"size": "16px",
+"weight": 400
+}
+},
+"button-large": {
+"desktop": {
+"font-family": "sans-serif",
+"line-height": "24px",
+"size": "18px",
+"weight": 400
+},
+"mobile": {
+"line-height": "24px",
+"size": "18px",
+"weight": 400
+}
+},
+"button-medium": {
+"desktop": {
+"font-family": "sans-serif",
+"line-height": "21px",
+"size": "16px",
+"weight": 400
+},
+"mobile": {
+"line-height": "21px",
+"size": "16px",
+"weight": 400
+}
+},
+"button-small": {
+"desktop": {
+"font-family": "sans-serif",
+"line-height": "19px",
 "size": "14px",
 "weight": 400
 },
 "mobile": {
-"line-height": "16px",
+"line-height": "19px",
 "size": "14px",
 "weight": 400
 }
@@ -314,21 +353,21 @@
 "copy-large": {
 "desktop": {
 "font-family": "sans-serif",
-"line-height": "28px",
-"size": "20px",
+"line-height": "34px",
+"size": "22px",
 "weight": 400
 },
 "mobile": {
 "line-height": "28px",
-"size": "20px",
+"size": "18px",
 "weight": 400
 }
 },
-"copy-relaxed": {
+"copy-regular": {
 "desktop": {
 "font-family": "sans-serif",
-"line-height": "24px",
-"size": "16px",
+"line-height": "30px",
+"size": "18px",
 "weight": 400
 },
 "mobile": {
@@ -337,16 +376,16 @@
 "weight": 400
 }
 },
-"copy-tight": {
+"copy-small": {
 "desktop": {
 "font-family": "sans-serif",
-"line-height": "20px",
-"size": "16px",
+"line-height": "24px",
+"size": "14px",
 "weight": 400
 },
 "mobile": {
-"line-height": "20px",
-"size": "16px",
+"line-height": "16px",
+"size": "12px",
 "weight": 400
 }
 },
@@ -354,24 +393,25 @@
 "desktop": {
 "font-family": "sans-serif",
 "line-height": "16px",
-"size": "14px",
+"size": "12px",
 "weight": 400
 },
 "mobile": {
 "line-height": "16px",
-"size": "14px",
+"size": "12px",
 "weight": 400
 }
 },
 "heading-hero": {
 "desktop": {
 "font-family": "sans-serif",
-"line-height": "60px",
-"size": "48px",
+"line-height": "104px",
+"size": "80px",
 "weight": 400
 },
 "mobile": {
-"line-height": "60px",
+"font-family": "sans-serif",
+"line-height": "64px",
 "size": "48px",
 "weight": 400
 }
@@ -379,52 +419,65 @@
 "heading-large": {
 "desktop": {
 "font-family": "sans-serif",
-"line-height": "48px",
-"size": "40px",
+"line-height": "65px",
+"size": "50px",
 "weight": 400
 },
 "mobile": {
-"line-height": "48px",
-"size": "40px",
+"line-height": "54px",
+"size": "36px",
 "weight": 400
 }
 },
 "heading-medium": {
 "desktop": {
 "font-family": "sans-serif",
-"line-height": "44px",
-"size": "32px",
+"line-height": "57px",
+"size": "38px",
 "weight": 400
 },
 "mobile": {
-"line-height": "44px",
-"size": "32px",
+"line-height": "40px",
+"size": "26px",
 "weight": 400
 }
 },
 "heading-small": {
 "desktop": {
 "font-family": "sans-serif",
-"line-height": "36px",
+"line-height": "31px",
 "size": "24px",
 "weight": 400
 },
 "mobile": {
-"line-height": "36px",
-"size": "24px",
+"line-height": "29px",
+"size": "22px",
 "weight": 400
 }
 },
-"label-big": {
+"heading-tiny": {
 "desktop": {
 "font-family": "sans-serif",
-"line-height": "22px",
-"size": "16px",
+"line-height": "26px",
+"size": "20px",
 "weight": 400
 },
 "mobile": {
-"line-height": "22px",
-"size": "16px",
+"line-height": "24px",
+"size": "18px",
+"weight": 400
+}
+},
+"label-large": {
+"desktop": {
+"font-family": "sans-serif",
+"line-height": "19px",
+"size": "14px",
+"weight": 400
+},
+"mobile": {
+"line-height": "19px",
+"size": "14px",
 "weight": 400
 }
 },
@@ -432,12 +485,38 @@
 "desktop": {
 "font-family": "sans-serif",
 "line-height": "16px",
-"size": "14px",
+"size": "12px",
 "weight": 400
 },
 "mobile": {
 "line-height": "16px",
+"size": "12px",
+"weight": 400
+}
+},
+"link": {
+"desktop": {
+"font-family": "sans-serif",
+"line-height": "19px",
 "size": "14px",
+"weight": 400
+},
+"mobile": {
+"line-height": "19px",
+"size": "14px",
+"weight": 400
+}
+},
+"source-code": {
+"desktop": {
+"font-family": "sans-serif",
+"line-height": "30px",
+"size": "18px",
+"weight": 400
+},
+"mobile": {
+"line-height": "21px",
+"size": "16px",
 "weight": 400
 }
 }
@@ -532,7 +611,7 @@ animation-direction: alternate;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(243,219,95,1); cursor: pointer; font-family: sans-serif; font-size: 32px; font-weight: 400; height: auto; line-height: 44px; text-decoration: none; width: auto" class="ft_md">Hello</div><div data-id="1:main" style="background-color: rgba(24,24,27,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Hello</div></div>
+<div data-id="main" style="align-items: start; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%; justify-content: start; text-decoration: none; width: 100%" ><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#num&quot;}]]}]', this)" style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; color: rgba(243,219,95,1); cursor: pointer; font-family: sans-serif; font-size: 38px; font-weight: 400; height: auto; line-height: 57px; text-decoration: none; width: auto" class="ft_md">Hello</div><div data-id="1:main" style="background-color: rgba(24,24,27,1); border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px; border-style: solid; border-top-width: 0px; box-sizing: border-box; height: auto; text-decoration: none; width: auto" class="ft_md">Hello</div></div>
 
 
 <script>
