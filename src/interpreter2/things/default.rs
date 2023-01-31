@@ -4614,7 +4614,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                         name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
-                                                // size: 80 / l-height: 104 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
                                                     value: ftd::interpreter2::Value::Record {
@@ -4692,7 +4691,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
                                                     value: ftd::interpreter2::Value::Record {
-                                                        // size: 48 / l-height: 64 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
@@ -4780,7 +4778,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
                                                     value: ftd::interpreter2::Value::Record {
-                                                        // size: 50 / l-height: 65 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
@@ -4855,7 +4852,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
                                                     value: ftd::interpreter2::Value::Record {
-                                                        // size: 36 / l-height: 54 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
@@ -4930,7 +4926,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 38 / l-height: 57 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5005,7 +5000,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 26 / l-height: 40 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5081,7 +5075,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 24 / l-height: 31 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5156,7 +5149,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 22 / l-height: 29 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5232,7 +5224,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 20 / l-height: 26 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5307,7 +5298,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 18 / l-height: 24 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5384,7 +5374,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 22 / l-height: 34 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5460,7 +5449,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
                                                     value: ftd::interpreter2::Value::Record {
-                                                        // size: 18 / l-height: 28 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
@@ -5530,7 +5518,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                 "copy-regular".to_string(),
                                 ftd::interpreter2::PropertyValue::Value {
                                     value: ftd::interpreter2::Value::Record {
-                                        // size: 18 / l-height: 30 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                         name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
@@ -5611,7 +5598,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
                                                     value: ftd::interpreter2::Value::Record {
-                                                        // size: 16 / l-height: 24 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
@@ -5681,7 +5667,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                 "copy-small".to_string(),
                                 ftd::interpreter2::PropertyValue::Value {
                                     value: ftd::interpreter2::Value::Record {
-                                        // size: 14 / l-height: 24 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                         name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
@@ -5761,7 +5746,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 12 / l-height: 16 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5838,7 +5822,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 12 / l-height: 16 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5913,7 +5896,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 12 / l-height: 16 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -5989,7 +5971,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 16 / l-height: 21 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6064,7 +6045,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 16 / l-height: 21 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6140,7 +6120,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 18 / l-height: 30 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6215,7 +6194,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 16 / l-height: 21 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6292,7 +6270,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 14 / l-height: 19 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6367,7 +6344,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 14 / l-height: 19 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6443,7 +6419,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 12 / l-height: 16 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6518,7 +6493,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 12 / l-height: 16 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6595,7 +6569,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 18 / l-height: 24 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6670,7 +6643,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 18 / l-height: 24 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6746,7 +6718,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 16 / l-height: 21 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6821,7 +6792,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 16 / l-height: 21 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6897,7 +6867,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 14 / l-height: 19 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -6972,7 +6941,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 14 / l-height: 19 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -7048,7 +7016,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             (
                                                 "desktop".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 14 / l-height: 19 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
@@ -7123,7 +7090,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                             ), (
                                                 "mobile".to_string(),
                                                 ftd::interpreter2::PropertyValue::Value {
-                                                    // size: 14 / l-height: 19 / l-weight: 300 / r-weight: 400 / m-weight: 500 / b-weight: 700
                                                     value: ftd::interpreter2::Value::Record {
                                                         name: ftd::interpreter2::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
