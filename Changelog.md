@@ -1,7 +1,46 @@
 # FTD Change Log
 
 ## 31 January 2023
-- [Updated inherited font types](https://github.com/ftd-lang/ftd/pull/566/commits/e1722eacf386d3c515000c79a86e7ffb91f2df6c)
+  
+<details>
+
+<summary><b>Breaking change</b> <a href="https://github.com/ftd-lang/ftd/pull/566/commits/e1722eacf386d3c515000c79a86e7ffb91f2df6c">Inherited types changed</a></summary>
+
+Inherited Types changes
+
+Headings: 
+
+- heading-tiny is added
+- rest have weight, line-height, weight updates 
+
+Copy:
+
+- copy-relaxed, copy-tight have been deprecated
+- added copy-regular and copy-small
+- rest have size and line-height changes
+
+Specialized Text:
+
+- source-code is added 
+- rest have size and line-height changes
+
+Labels: 
+
+- label-big is changed to label-large
+- label-small is updated with new size and line-height values
+
+Button: 
+
+- All button types which are added are new
+- added button-large, button-medium, button-small, link types
+
+Existing type changes (Old -> New)
+  
+- copy-relaxed -> copy-regular
+- copy-tight -> copy-small
+- label-big -> label-large
+
+</details>
 
 ## 30 January 2023
 - [Added ftd.checkbox](https://github.com/ftd-lang/ftd/pull/564/commits/483060b31dcce626599fc0bca8d7e6261d0c37a8)
