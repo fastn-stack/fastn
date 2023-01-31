@@ -1236,7 +1236,7 @@ ftd.responsive-type heading-hero:
 ftd.responsive-type heading-large:
 ftd.responsive-type heading-medium:
 ftd.responsive-type heading-small:
-ftd.responsive-type heading-small:
+ftd.responsive-type heading-tiny:
 ftd.responsive-type copy-large:
 ftd.responsive-type copy-regular:
 ftd.responsive-type copy-small:
