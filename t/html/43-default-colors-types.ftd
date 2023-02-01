@@ -4,7 +4,7 @@
 
 -- ftd.text: Hello
 color: $inherited.colors.custom.one
-color if { num % 2 == 0 }: $inherited.colors.custom.two
+color if { num % 2 == 0 }: $inherited.colors.custom.three
 role: $inherited.types.heading-large
 role if { num % 2 == 0 }: $inherited.types.heading-medium
 $on-click$: $fn.increment($a = $num)
@@ -12,3 +12,4 @@ $on-click$: $fn.increment($a = $num)
 
 -- ftd.text: Hello
 background.solid: $inherited.colors.background.base
+color: $inherited.colors.text-strong

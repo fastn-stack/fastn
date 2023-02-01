@@ -953,14 +953,14 @@ fn update_inherited_reference_in_property_value(
     let values = if reference_or_clone.starts_with(ftd::interpreter2::FTD_INHERITED) {
         let reference_or_clone = reference_or_clone
             .trim_start_matches(format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str());
-        inherited_variables.get_value(reference_or_clone)
+        inherited_variables.get_value_and_rem(reference_or_clone)
     } else {
         return;
     };
 
     let mut is_reference_updated = false;
 
-    for (reference, container) in values.iter().rev() {
+    for ((reference, container), rem) in values.iter().rev() {
         if container.len() >= local_container.len() {
             continue;
         }
@@ -973,7 +973,14 @@ fn update_inherited_reference_in_property_value(
         }
         if found {
             is_reference_updated = true;
-            property_value.set_reference_or_clone(reference);
+            property_value.set_reference_or_clone(
+                if let Some(rem) = rem {
+                    format!("{}.{}", reference, rem)
+                } else {
+                    reference.to_string()
+                }
+                .as_str(),
+            );
             break;
         }
     }
@@ -988,12 +995,25 @@ fn update_inherited_reference_in_property_value(
             ftd::interpreter2::PropertyValue::from_ast_value(
                 ftd::ast::VariableValue::String {
                     // TODO: ftd#default-colors, ftd#default-types
-                    value: format!(
-                        "$inherited#{}",
-                        reference_or_clone.trim_start_matches(
-                            format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str()
+                    value: {
+                        format!(
+                            "$ftd#default-{}{}",
+                            if reference_or_clone.starts_with(
+                                format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str()
+                            ) {
+                                "types"
+                            } else {
+                                "colors"
+                            },
+                            reference_or_clone
+                                .trim_start_matches(
+                                    format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str()
+                                )
+                                .trim_start_matches(
+                                    format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()
+                                )
                         )
-                    ),
+                    },
                     line_number: 0,
                 },
                 &mut doc.itdoc(),
@@ -1004,13 +1024,7 @@ fn update_inherited_reference_in_property_value(
             *property_value = property;
         } else {
             property_value.set_reference_or_clone(
-                format!(
-                    "inherited#{}",
-                    reference_or_clone.trim_start_matches(
-                        format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str()
-                    )
-                )
-                .as_str(),
+                format!("ftd#{}", reference_or_clone.trim_start_matches("ftd.")).as_str(),
             );
         }
     }

@@ -3,6 +3,16 @@
 ## 1 February 2023
 
 <details>
+<summary>Breaking Change: Renamed `fpm` To `fastn`</summary>
+`fpm` cli is renamed to `fastn`. We renamed `FPM.ftd` to `FASTN.ftd` and 
+`-- import: fpm` becomes `-- import: fastn`. We have also renamed github 
+repository `fpm` to `fastn`.
+
+- Fastn PR: https://github.com/ftd-lang/fastn/pull/755
+
+</details>
+
+<details>
 <summary>Inbuilt <b>Clamp</b>: no longer supported
 <a href="https://github.com/ftd-lang/ftd/blob/main/Cheatsheet.
 md#clamp">Clamp example</a>
