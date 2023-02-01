@@ -33,6 +33,7 @@ pub(crate) fn is_condition(value: &str, kind: &Option<String>) -> bool {
 }
 
 pub const REFERENCE: &str = "$";
+pub const CLONE: &str = "*$";
 pub const LOOP: &str = "$loop$";
 pub const AS: &str = " as ";
 pub const IF: &str = "if";

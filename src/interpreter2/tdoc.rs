@@ -496,6 +496,7 @@ impl<'a> TDoc<'a> {
         ftd::interpreter2::StateWithThing<(
             ftd::interpreter2::PropertyValueSource,
             ftd::interpreter2::KindData,
+            bool,
         )>,
     > {
         let name = name
@@ -511,41 +512,45 @@ impl<'a> TDoc<'a> {
                 loop_object_name_and_kind,
                 line_number,
             )?
-            .map(|v| (v.0.kind.to_owned(), v.1, v.2));
+            .map(|v| (v.0.kind.to_owned(), v.1, v.2, v.0.mutable));
 
-        let (initial_kind, remaining, source) =
+        let (initial_kind, remaining, source, mutable) =
             if let Some(r) = initial_kind_with_remaining_and_source {
                 r
             } else {
                 let (initial_thing, remaining) =
                     try_ok_state!(self.search_initial_thing(name, line_number)?);
 
-                let initial_kind = match initial_thing {
-                    ftd::interpreter2::Thing::Record(r) => {
+                let (initial_kind, mutable) = match initial_thing {
+                    ftd::interpreter2::Thing::Record(r) => (
                         ftd::interpreter2::Kind::record(r.name.as_str())
                             .into_kind_data()
-                            .caption_or_body()
-                    }
-                    ftd::interpreter2::Thing::OrType(o) => {
+                            .caption_or_body(),
+                        false,
+                    ),
+                    ftd::interpreter2::Thing::OrType(o) => (
                         ftd::interpreter2::Kind::or_type(o.name.as_str())
                             .into_kind_data()
-                            .caption_or_body()
-                    }
-                    ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant } => {
+                            .caption_or_body(),
+                        false,
+                    ),
+                    ftd::interpreter2::Thing::OrTypeWithVariant { or_type, variant } => (
                         ftd::interpreter2::Kind::or_type_with_variant(
                             or_type.as_str(),
                             variant.name().as_str(),
                             variant.name().as_str(),
                         )
                         .into_kind_data()
-                        .caption_or_body()
-                    }
-                    ftd::interpreter2::Thing::Variable(v) => v.kind,
-                    ftd::interpreter2::Thing::Component(c) => {
+                        .caption_or_body(),
+                        false,
+                    ),
+                    ftd::interpreter2::Thing::Variable(v) => (v.kind, v.mutable),
+                    ftd::interpreter2::Thing::Component(c) => (
                         ftd::interpreter2::Kind::ui_with_name(c.name.as_str())
                             .into_kind_data()
-                            .caption_or_body()
-                    }
+                            .caption_or_body(),
+                        false,
+                    ),
                     ftd::interpreter2::Thing::Function(_) => todo!(),
                 };
 
@@ -553,6 +558,7 @@ impl<'a> TDoc<'a> {
                     initial_kind,
                     remaining,
                     ftd::interpreter2::PropertyValueSource::Global,
+                    mutable,
                 )
             };
 
@@ -565,12 +571,14 @@ impl<'a> TDoc<'a> {
                     self,
                     line_number
                 )?),
+                mutable,
             )));
         }
 
         return Ok(ftd::interpreter2::StateWithThing::new_thing((
             source,
             initial_kind,
+            mutable,
         )));
 
         fn get_kind_(

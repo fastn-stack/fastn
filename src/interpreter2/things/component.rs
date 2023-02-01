@@ -795,7 +795,7 @@ impl Loop {
         definition_name_with_arguments: Option<(&str, &[Argument])>,
         doc: &mut ftd::interpreter2::TDoc,
     ) -> ftd::interpreter2::Result<ftd::interpreter2::StateWithThing<Loop>> {
-        let on = try_ok_state!(ftd::interpreter2::PropertyValue::from_string_with_argument(
+        let mut on = try_ok_state!(ftd::interpreter2::PropertyValue::from_string_with_argument(
             ast_loop.on.as_str(),
             doc,
             None,
@@ -804,6 +804,24 @@ impl Loop {
             definition_name_with_arguments,
             &None,
         )?);
+
+        if let Some(reference) = ast_loop
+            .on
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+        {
+            if let Ok(ftd::interpreter2::StateWithThing::Thing(t)) = doc.get_kind_with_argument(
+                reference,
+                ast_loop.line_number,
+                definition_name_with_arguments,
+                &None,
+            ) {
+                on.set_mutable(t.2);
+            }
+        }
+
+        if ast_loop.on.starts_with(ftd::interpreter2::utils::CLONE) {
+            on.set_mutable(true);
+        }
 
         Ok(ftd::interpreter2::StateWithThing::new_thing(Loop::new(
             on,

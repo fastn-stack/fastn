@@ -34,6 +34,17 @@ impl PropertyValue {
         }
     }
 
+    pub(crate) fn set_mutable(&mut self, mutable: bool) {
+        match self {
+            PropertyValue::Value { is_mutable, .. }
+            | PropertyValue::Reference { is_mutable, .. }
+            | PropertyValue::Clone { is_mutable, .. }
+            | PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall { is_mutable, .. }) => {
+                *is_mutable = mutable;
+            }
+        }
+    }
+
     pub(crate) fn is_static(&self, doc: &ftd::interpreter2::TDoc) -> bool {
         match self {
             PropertyValue::Clone { .. } => true,
@@ -1036,7 +1047,7 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::CLONE)
                     .to_string();
 
-                let (source, found_kind) = try_ok_state!(doc.get_kind_with_argument(
+                let (source, found_kind, _) = try_ok_state!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
@@ -1087,7 +1098,7 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
                     .to_string();
 
-                let (source, found_kind) = try_ok_state!(doc.get_kind_with_argument(
+                let (source, found_kind, _) = try_ok_state!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
