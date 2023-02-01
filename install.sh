@@ -88,7 +88,7 @@ setup() {
 
     if ! [[ $DESTINATION_PATH == "/usr/local/bin" ]]; then 
         cat <<EOF
-Unable to create a binary link for your system. Please add the follwing to your .bashrc/.zshrc file
+Unable to create a binary link for your system. Please add the following to your .bashrc/.zshrc file
 
 ${FMT_GREEN}PATH="\$PATH:${DESTINATION_PATH}"${FMT_RESET}
 
