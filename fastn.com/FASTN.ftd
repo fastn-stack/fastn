@@ -1,33 +1,33 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: ftd.dev
+-- fastn.package: ftd.dev
 download-base-url: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 
--- fpm.dependency: fifthtry.github.io/doc-site as ds
--- fpm.dependency: fifthtry.github.io/product-switcher as ps
-;; -- fpm.dependency: fifthtry.github.io/bling as bling
--- fpm.dependency: fifthtry.github.io/admonitions as cbox
-;; -- fpm.dependency: fifthtry.github.io/workshop-page as ws
--- fpm.dependency: fifthtry.github.io/fifthtry-brand-switcher as fbs
+-- fastn.dependency: fifthtry.github.io/doc-site as ds
+-- fastn.dependency: fifthtry.github.io/product-switcher as ps
+;; -- fastn.dependency: fifthtry.github.io/bling as bling
+-- fastn.dependency: fifthtry.github.io/admonitions as cbox
+;; -- fastn.dependency: fifthtry.github.io/workshop-page as ws
+-- fastn.dependency: fifthtry.github.io/fifthtry-brand-switcher as fbs
 
-;; -- fpm.dependency: fifthtry.github.io/dark-mode-switcher as dms
-;; -- fpm.dependency: arjaupashak.com
-;; -- fpm.dependency: fpm.dev
--- fpm.dependency: fifthtry.github.io/roboto as mono
--- fpm.dependency: gargajit.github.io/expander
+;; -- fastn.dependency: fifthtry.github.io/dark-mode-switcher as dms
+;; -- fastn.dependency: arjaupashak.com
+;; -- fastn.dependency: fastn.dev
+-- fastn.dependency: fifthtry.github.io/roboto as mono
+-- fastn.dependency: gargajit.github.io/expander
 
--- fpm.auto-import: ds
--- fpm.auto-import: ws
--- fpm.auto-import: fpm
--- fpm.auto-import: ftd.dev/FPM/config
--- fpm.auto-import: dms
--- fpm.auto-import: cbox
-
-
+-- fastn.auto-import: ds
+-- fastn.auto-import: ws
+-- fastn.auto-import: fastn
+-- fastn.auto-import: ftd.dev/FASTN/config
+-- fastn.auto-import: dms
+-- fastn.auto-import: cbox
 
 
 
--- fpm.sitemap:
+
+
+-- fastn.sitemap:
 
 # Home: /
 

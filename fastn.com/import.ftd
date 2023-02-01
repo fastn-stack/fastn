@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
 -- ds.page: `import`
 
@@ -13,14 +13,14 @@ the process of importing it. It takes input like this :
 
 -- ds.markdown:
 
-Suppose you are gonna use some properties like `color: $fpm.color.main.border` 
-or `padding: $fpm.space.space-4` then you have to write the following piece of 
-code at the top on that particular `ftd page` as well as `FPM.ftd` page :
+Suppose you are gonna use some properties like `color: $fastn.color.main.border` 
+or `padding: $fastn.space.space-4` then you have to write the following piece of 
+code at the top on that particular `ftd page` as well as `FASTN.ftd` page :
 
 -- ds.code: use of import
 lang: ftd
 
-\-- import: fpm 
+\-- import: fastn 
 
 -- ds.markdown:
 

@@ -46,7 +46,7 @@ This will be render like this:
 
 
 -- ftd.text: FTD example
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 
 -- ft.code:
@@ -63,7 +63,7 @@ This will be render like this:
 
 -- ftd.text:
 text: This is an example of how to use ftd.text.
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 
 -- ft.markdown:
@@ -281,13 +281,13 @@ The supported values of themes are:
 
 -- ftd.text: View Themes
 if: not $show-theme-demos
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 
@@ -323,7 +323,7 @@ print("hello world")
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 
@@ -367,7 +367,7 @@ print("hello world")
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 
@@ -427,7 +427,7 @@ print("hello world")
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 

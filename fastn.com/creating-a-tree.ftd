@@ -1,5 +1,5 @@
 -- import: ftd.dev/assets
--- import: fpm
+-- import: fastn
 
 -- ds.page: How to create a tree using `ftd`?
 
@@ -256,7 +256,7 @@ Output
 spacing.fixed.px: 20
 border-width.px: 1
 border-radius.px: 5
-;; border-color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+;; border-color if $ftd.dark-mode: $fastn.color.main.text -- TODO FTD 0.3
 padding.px: 10
 width: fill-container
 
@@ -444,7 +444,7 @@ Output
 spacing.fixed.px: 20
 border-width.px: 1
 border-radius.px: 5
-;; border-color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+;; border-color if $ftd.dark-mode: $fastn.color.main.text -- TODO FTD 0.3
 padding.px: 10
 width: fill-container
 
@@ -493,13 +493,13 @@ children item-wtap:
 padding-left.px: 10
 
 -- ftd.text: $name
-;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+;; color if $ftd.dark-mode: $fastn.color.main.text -- TODO FTD 0.3
 
 -- ftd.column:
 spacing.fixed.px: 20
 border-width.px: 1
 border-radius.px: 5
-;; border-color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+;; border-color if $ftd.dark-mode: $fastn.color.main.text -- TODO FTD 0.3
 padding.px: 10
 width: fill-container
 children: $item1.item-wrap
@@ -521,7 +521,7 @@ children: $item1.item-wrap
 string name:
 
 -- ftd.column:
-;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+;; color if $ftd.dark-mode: $fastn.color.main.text -- TODO FTD 0.3
 
 -- ftd.row:
 padding-left.px: 10
@@ -530,7 +530,7 @@ padding-left.px: 10
 color: $inherited.colors.text
 
 -- ftd.text: $display-item.name
-;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+;; color if $ftd.dark-mode: $fastn.color.main.text -- TODO FTD 0.3
 color: $inherited.colors.text
 
 -- end: ftd.row
@@ -551,7 +551,7 @@ boolean $visible: true
 children item1-wrap: 
 
 -- ftd.column:
-;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+;; color if $ftd.dark-mode: $fastn.color.main.text -- TODO FTD 0.3
 padding-left.px: 10
 
 -- ftd.row:
@@ -562,7 +562,7 @@ color: $inherited.colors.text
 
 -- ftd.text: $display-item1.name
 color: $inherited.colors.text
-;; color if $ftd.dark-mode: $fpm.color.main.text -- TODO FTD 0.3
+;; color if $ftd.dark-mode: $fastn.color.main.text -- TODO FTD 0.3
 
 -- end: ftd.row
 

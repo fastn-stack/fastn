@@ -1,355 +1,355 @@
--- import: fpm
+-- import: fastn
 
--- fpm.snapshot: FPM.ftd
+-- fastn.snapshot: FASTN.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: alternatives.ftd
+-- fastn.snapshot: alternatives.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: auto-nesting.ftd
+-- fastn.snapshot: auto-nesting.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: boolean.ftd
+-- fastn.snapshot: boolean.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: built-in-types.ftd
+-- fastn.snapshot: built-in-types.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: changelog.ftd
+-- fastn.snapshot: changelog.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: column.ftd
+-- fastn.snapshot: column.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: comments.ftd
+-- fastn.snapshot: comments.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: common.ftd
+-- fastn.snapshot: common.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: component.ftd
+-- fastn.snapshot: component.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: container-management.ftd
+-- fastn.snapshot: container-management.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: container.ftd
+-- fastn.snapshot: container.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: creating-a-tree.ftd
+-- fastn.snapshot: creating-a-tree.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: data-modeling.ftd
+-- fastn.snapshot: data-modeling.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: decimal.ftd
+-- fastn.snapshot: decimal.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: development.ftd
+-- fastn.snapshot: development.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: docs.ftd
+-- fastn.snapshot: docs.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: doomsday.ftd
+-- fastn.snapshot: doomsday.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: enums.ftd
+-- fastn.snapshot: enums.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: event-handling.ftd
+-- fastn.snapshot: event-handling.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: examples.ftd
+-- fastn.snapshot: examples.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: examples/comic.ftd
+-- fastn.snapshot: examples/comic.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: examples/conditional-variable.ftd
+-- fastn.snapshot: examples/conditional-variable.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: examples/dark-mode.ftd
+-- fastn.snapshot: examples/dark-mode.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: examples/diagram.ftd
+-- fastn.snapshot: examples/diagram.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: examples/grid.ftd
+-- fastn.snapshot: examples/grid.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: examples/input.ftd
+-- fastn.snapshot: examples/input.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: examples/intro.ftd
+-- fastn.snapshot: examples/intro.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: examples/mygate.ftd
+-- fastn.snapshot: examples/mygate.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: examples/react-banglore-22-01-2022.ftd
+-- fastn.snapshot: examples/react-banglore-22-01-2022.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: examples/slides.ftd
+-- fastn.snapshot: examples/slides.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: faq.ftd
+-- fastn.snapshot: faq.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: id.ftd
+-- fastn.snapshot: id.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: if-attr.ftd
+-- fastn.snapshot: if-attr.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: if.ftd
+-- fastn.snapshot: if.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: iframe.ftd
+-- fastn.snapshot: iframe.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: image.ftd
+-- fastn.snapshot: image.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: images/Docs.png
+-- fastn.snapshot: images/Docs.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/Home.png
+-- fastn.snapshot: images/Home.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/News.png
+-- fastn.snapshot: images/News.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/Resources.png
+-- fastn.snapshot: images/Resources.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/Vector_3.svg
+-- fastn.snapshot: images/Vector_3.svg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/christopher-chedeau.a975949.200.jpg
+-- fastn.snapshot: images/christopher-chedeau.a975949.200.jpg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/dark-mode.svg
+-- fastn.snapshot: images/dark-mode.svg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/dark-mode/created.png
+-- fastn.snapshot: images/dark-mode/created.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/dark-mode/dark-mode-preferences.png
+-- fastn.snapshot: images/dark-mode/dark-mode-preferences.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/dark-mode/light-mode-preferences.png
+-- fastn.snapshot: images/dark-mode/light-mode-preferences.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/dark-mode/new-repo.png
+-- fastn.snapshot: images/dark-mode/new-repo.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/dark-mode/pick-name.png
+-- fastn.snapshot: images/dark-mode/pick-name.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/ddocs.png
+-- fastn.snapshot: images/ddocs.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/ftd-logo-desktop.png
+-- fastn.snapshot: images/ftd-logo-desktop.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/ftd-logo-mobile.png
+-- fastn.snapshot: images/ftd-logo-mobile.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/github-dark.svg
+-- fastn.snapshot: images/github-dark.svg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/github-light.svg
+-- fastn.snapshot: images/github-light.svg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/hamburger.png
+-- fastn.snapshot: images/hamburger.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/home-desktop-dark.png
+-- fastn.snapshot: images/home-desktop-dark.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/home-desktop-light.png
+-- fastn.snapshot: images/home-desktop-light.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/home-mobile-dark.png
+-- fastn.snapshot: images/home-mobile-dark.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/home-mobile-light.png
+-- fastn.snapshot: images/home-mobile-light.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/light-mode.svg
+-- fastn.snapshot: images/light-mode.svg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/logo.svg
+-- fastn.snapshot: images/logo.svg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/picture1.jpeg
+-- fastn.snapshot: images/picture1.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/showcase.png
+-- fastn.snapshot: images/showcase.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/theme/header-dark.png
+-- fastn.snapshot: images/theme/header-dark.png
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/translation/english-with-dropdown.jpg
+-- fastn.snapshot: images/translation/english-with-dropdown.jpg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/eighth.jpeg
+-- fastn.snapshot: images/tree/eighth.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/fifth.jpeg
+-- fastn.snapshot: images/tree/fifth.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/first.jpeg
+-- fastn.snapshot: images/tree/first.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/fourth.jpeg
+-- fastn.snapshot: images/tree/fourth.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/ninth.jpeg
+-- fastn.snapshot: images/tree/ninth.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/second.jpeg
+-- fastn.snapshot: images/tree/second.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/seventh.jpeg
+-- fastn.snapshot: images/tree/seventh.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/sixth.jpeg
+-- fastn.snapshot: images/tree/sixth.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/tenth.jpeg
+-- fastn.snapshot: images/tree/tenth.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/tree/third.jpeg
+-- fastn.snapshot: images/tree/third.jpeg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/undraw_around_the_world.svg
+-- fastn.snapshot: images/undraw_around_the_world.svg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/undraw_typewriter.svg
+-- fastn.snapshot: images/undraw_typewriter.svg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: images/undraw_version_control.svg
+-- fastn.snapshot: images/undraw_version_control.svg
 timestamp: 1644924029748373000
 
--- fpm.snapshot: import.ftd
+-- fastn.snapshot: import.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: index.ftd
+-- fastn.snapshot: index.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: inner-container.ftd
+-- fastn.snapshot: inner-container.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: input.ftd
+-- fastn.snapshot: input.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: integer.ftd
+-- fastn.snapshot: integer.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: internals.ftd
+-- fastn.snapshot: internals.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: journal.ftd
+-- fastn.snapshot: journal.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: kernel.ftd
+-- fastn.snapshot: kernel.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: language.ftd
+-- fastn.snapshot: language.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: libraries.ftd
+-- fastn.snapshot: libraries.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: library.ftd
+-- fastn.snapshot: library.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: list.ftd
+-- fastn.snapshot: list.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: loop.ftd
+-- fastn.snapshot: loop.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: named-list.ftd
+-- fastn.snapshot: named-list.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: new/docs.ftd
+-- fastn.snapshot: new/docs.ftd
 timestamp: 1640864507033419000
 
--- fpm.snapshot: new/home.ftd
+-- fastn.snapshot: new/home.ftd
 timestamp: 1640864507033419000
 
--- fpm.snapshot: new/index.ftd
+-- fastn.snapshot: new/index.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: new/lib.ftd
+-- fastn.snapshot: new/lib.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: new/news.ftd
+-- fastn.snapshot: new/news.ftd
 timestamp: 1640864507033419000
 
--- fpm.snapshot: new/resources.ftd
+-- fastn.snapshot: new/resources.ftd
 timestamp: 1640864507033419000
 
--- fpm.snapshot: new/showcase.ftd
+-- fastn.snapshot: new/showcase.ftd
 timestamp: 1640864507033419000
 
--- fpm.snapshot: news.ftd
+-- fastn.snapshot: news.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: news/react-banglore-22-01-2022.ftd
+-- fastn.snapshot: news/react-banglore-22-01-2022.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: or-type.ftd
+-- fastn.snapshot: or-type.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: p1-grammar.ftd
+-- fastn.snapshot: p1-grammar.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: p1.ftd
+-- fastn.snapshot: p1.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: philosophy.ftd
+-- fastn.snapshot: philosophy.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: reading-data.ftd
+-- fastn.snapshot: reading-data.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: record.ftd
+-- fastn.snapshot: record.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: responsive.ftd
+-- fastn.snapshot: responsive.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: roadmap.ftd
+-- fastn.snapshot: roadmap.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: row.ftd
+-- fastn.snapshot: row.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: run-ftd.ftd
+-- fastn.snapshot: run-ftd.ftd
 timestamp: 1644924029748373000
 
--- fpm.snapshot: rust-toolchain
+-- fastn.snapshot: rust-toolchain
 timestamp: 1644924029748373000
 
--- fpm.snapshot: text-common.ftd
+-- fastn.snapshot: text-common.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: text.ftd
+-- fastn.snapshot: text.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: ui.ftd
+-- fastn.snapshot: ui.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: variables.ftd
+-- fastn.snapshot: variables.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: why.ftd
+-- fastn.snapshot: why.ftd
 timestamp: 1645777086357201000
 
--- fpm.snapshot: why/not-mdx.ftd
+-- fastn.snapshot: why/not-mdx.ftd
 timestamp: 1645777086357201000

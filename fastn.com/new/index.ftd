@@ -1,5 +1,5 @@
 -- import: ftd.dev/assets
--- import: fpm
+-- import: fastn
 
 /-- import: new/lib as lib
 
@@ -47,11 +47,11 @@ id: middle-left-2
 
 
 /-- ftd.text:
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 width: 580
 padding-top: 40
 padding-bottom: 50
-role: $fpm.type.heading-large
+role: $fastn.type.heading-large
 
 Create amazing sites quickly & store data as well
 
@@ -61,7 +61,7 @@ Create amazing sites quickly & store data as well
 
 /-- ftd.row:
 width: 270
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 border-radius: 50
 padding-top: 6
 padding-bottom: 9
@@ -69,7 +69,7 @@ padding-bottom: 9
 
 /-- ftd.text:
 width: fill
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 text-align: center
 
 Create your website
@@ -93,7 +93,7 @@ width: 660
 
 //-- ftd.column:
 width: fill
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 padding-left: 100
 padding-right: 100
 padding-top: 50
@@ -107,7 +107,7 @@ width: fill
 
 /-- ftd.text:
 width: 350
-color: $fpm.color.main.background.base
+color: $fastn.color.main.background.base
 
 FTD is lovingly maintained by the core team of volunteers
 
@@ -118,15 +118,15 @@ align: right
 
 
 /-- ftd.text:
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 Proudly hosted by
 
 
 /-- ftd.text: FifthTry
 link: https://www.fifthtry.com/
-role: $fpm.type.heading-medium
-color: $fpm.color.main.text
+role: $fastn.type.heading-medium
+color: $fastn.color.main.text
 padding-left: 20
 
 
@@ -139,7 +139,7 @@ width: fill
 
 /-- ftd.text:
 width: 500
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 The contents of this website are
 © 2021 under the terms of the BSE License.
@@ -151,7 +151,7 @@ align: right
 
 
 /-- ftd.text:
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 FTD is funded, thanks to its sponsors!
 

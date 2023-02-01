@@ -429,7 +429,7 @@ top: 210
 company: FifthTry, Inc.
 
 Amit is the founder and CEO of FifthTry, Inc. He loves open source
-and has created FTD and FPM.
+and has created FTD and FASTN.
 
 
 --- ft.code: Using Record
@@ -473,7 +473,7 @@ company: FifthTry, Inc.
 company: FifthTry, Inc.
 
 Arpita is a software developer at FifthTry and is the lead contributor
-of FTD and FPM.
+of FTD and FASTN.
 
 
 
@@ -636,7 +636,7 @@ top: 440
 --- ftd.iframe:
 left: 140
 top: 20
-src: https://fpm.dev/new/open-source/
+src: https://fastn.dev/new/open-source/
 width: 1200
 height: 700
 
@@ -650,7 +650,7 @@ lang: ftd
 
 \-- import: fifthtry.github.io/Forest-Theme as ft
 \-- import: ftd-dev.vercel.app/config
-\-- import: fpm
+\-- import: fastn
 
 \-- ft.page:
 
@@ -666,13 +666,13 @@ link: /
 \-- ft.template-list:
 
 \--- ft.theme: Forest
-if: not $fpm.dark-mode
+if: not $fastn.dark-mode
 link: https://github.com/FifthTry/Forest-Template/generate
 image: images/forest.png
 live_preview: https://fifthtry.github.io/Forest-Template/
 
 \--- ft.theme: Forest
-if: $fpm.dark-mode
+if: $fastn.dark-mode
 link: https://github.com/FifthTry/Forest-Template/generate
 image: images/dark-forest.png
 live_preview: https://fifthtry.github.io/Forest-Template/
@@ -768,8 +768,8 @@ $loop$: $strings as $obj
 
 -- ftd.text value: $query
 color: green
-color if $fpm.dark-mode: white
-background-color if $fpm.dark-mode: green
+color if $fastn.dark-mode: white
+background-color if $fastn.dark-mode: green
 padding if $query is not null: 5
 size: 20
 
@@ -779,7 +779,7 @@ size: 20
 -- ftd.column show-data:
 caption text:
 padding: 10
-/background-color if $fpm.dark-mode: white
+/background-color if $fastn.dark-mode: white
 background-color: yellow
 color: red
 
@@ -851,5 +851,5 @@ Email: amitu@fifthtry.com
 
 FTD Site: [ftd.dev](https://ftd.dev)
 
-FPM (FTD Static Site Generator): [fpm.dev](https://fpm.dev)
+FASTN (FTD Static Site Generator): [fastn.dev](https://fastn.dev)
 

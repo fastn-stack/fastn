@@ -21,7 +21,7 @@ align: center
 
 -- ftd.text: toggle
 $on-click$: toggle $open
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 
 -- ftd.column gate-pass:
@@ -47,13 +47,13 @@ width: 100
 color: red
 width: 100
 background-color: white
-color if $fpm.dark-mode: black
+color if $fastn.dark-mode: black
 border-top: 4
 border-left: 4
 border-right: 4
 align: center
 padding: 5
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 $on-click$: toggle $open
 
 --- container: ftd.main
@@ -72,7 +72,7 @@ open: false
 align: center
 padding-top: 20
 padding-bottom: 20
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 $body
 
@@ -80,7 +80,7 @@ $body
 align: center
 width: fill
 padding: 20
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 --- ftd.row:
 align: center
@@ -106,7 +106,7 @@ align: center
 width: fill
 padding: 10
 style: italic
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 --- container: ftd.main
 

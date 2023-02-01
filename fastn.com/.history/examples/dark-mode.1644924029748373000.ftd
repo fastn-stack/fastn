@@ -70,13 +70,13 @@ ideally not exist at all}. Every site that supports dark mode should simply
 honor the operating system preferences set by the user.
 
 -- ft.image:
-if: $fpm.dark-mode
+if: $fastn.dark-mode
 src: images/dark-mode/dark-mode-preferences.png
 width: 600
 align: center
 
 -- ft.image:
-if: not $fpm.dark-mode
+if: not $fastn.dark-mode
 src: images/dark-mode/light-mode-preferences.png
 width: 600
 align: center
@@ -122,7 +122,7 @@ This is some text to show you dark mode. Try clicking on the 🌙 / 🌞 above.
 
 -- ft.markdown:
 
-This UI is connected with "fpm variables" that are also used by the theme so you
+This UI is connected with "fastn variables" that are also used by the theme so you
 can see that it's changing entire page's dark mode setting. Also the settings in
 this are persisted in a cookie, so you do not lose the value.
 
@@ -134,7 +134,7 @@ This is the Three-State dark-mode we would be building in this tutorial.
 
 -- ft.h1: A Note On Packaging
 
-We would be packaging the end product such that you can use it from any `fpm`
+We would be packaging the end product such that you can use it from any `fastn`
 package as a dependency. The name of package we would be creating is
 [fifthtry.github.io/dark-mode-switcher](///fifthtry.github.io/dark-mode-switcher),
 so its source will be stored on Github in
@@ -152,7 +152,7 @@ over to Github to create the new repo:
 src: images/dark-mode/new-repo.png
 width: fill
 
-Pick any name. Note that the name of repo is part of the name of the fpm package
+Pick any name. Note that the name of repo is part of the name of the fastn package
 you are building, people will be importing it etc, so pick the name accordingly:
 
 -- ft.image:
@@ -176,16 +176,16 @@ will have to create a new Git repository as instructed in above message. If you
 picked those items Github would have created and initialised your repository
 that you will have to clone.
 
-An package is pretty bare bones, it needs only two files, `FPM.ftd` and
-`index.ftd`. `FPM.ftd` file is the package meta data of the package, and [this
-is how it looks like for our tutorial](https://github.com/FifthTry/dark-mode-switcher/blob/main/FPM.ftd):
+An package is pretty bare bones, it needs only two files, `FASTN.ftd` and
+`index.ftd`. `FASTN.ftd` file is the package meta data of the package, and [this
+is how it looks like for our tutorial](https://github.com/FifthTry/dark-mode-switcher/blob/main/FASTN.ftd):
 
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.package: fifthtry.github.io/dark-mode-switcher
+\-- fastn.package: fifthtry.github.io/dark-mode-switcher
 zip: github.com/fifthtry/dark-mode-switcher/archive/refs/heads/main.zip
 
 -- ft.markdown:

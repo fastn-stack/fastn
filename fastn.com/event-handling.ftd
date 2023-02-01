@@ -20,12 +20,12 @@ background.solid: $inherited.colors.background.step-2
 -- ftd.text: The heading (click to toggle)
 $on-click$: $ftd.toggle($a = $open)
 color: $inherited.colors.text
-role: $inherited.types.copy-tight
+role: $inherited.types.copy-small
 
 -- ftd.text:
 if: { open }
 color: $inherited.colors.text
-role: $inherited.types.copy-tight
+role: $inherited.types.copy-small
 margin-top.px: 8
 
 This is some **markdown text**.

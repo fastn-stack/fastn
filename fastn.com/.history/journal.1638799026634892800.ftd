@@ -214,11 +214,11 @@ accepted by a component that is expecting image? Why would any component want to
 accept an image specifically?
 
 
--- ft.h1: Started FPM: FTD Package Manager
+-- ft.h1: Started FASTN: FTD Package Manager
 
 FTD is an awesome language, and it deserves a kick-ass package manager. Today you
 can not launch a language without a package manager. So we have started working on
-[`fpm`](/fpm/).
+[`fastn`](/fastn/).
 
 
 -- ft.h1: FTD Logo

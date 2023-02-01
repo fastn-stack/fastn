@@ -7,7 +7,7 @@ Data: 28th Aug 2022
 Venue: To be decided.
 
 
-/-- fpm.toc-item list empty-toc:
+/-- fastn.toc-item list empty-toc:
 
 
 /-- boolean internal-user: false
@@ -58,7 +58,7 @@ backend.
 We will create pricing page, slide show. The website will support dark mode, will be
 mobile responsive and use proper style guide with focus on typography.
 
-Along with `ftd`, you will also learn about `fpm`, which lets you create websites with
+Along with `ftd`, you will also learn about `fastn`, which lets you create websites with
 online content editor, granular access control, and collaborative content editing us
 Github Pull Request like workflow.
 
@@ -146,9 +146,9 @@ lang: ftd
 \-- optional integer id:
 $processor$: get-data
 
--- ds.h2: Dependency: FPM Proxy API
+-- ds.h2: Dependency: FASTN Proxy API
 
-FPM will expose an api `/-/proxy/`, which will take URL. `proxy` will make a
+FASTN will expose an api `/-/proxy/`, which will take URL. `proxy` will make a
 request to `url`, it will use the same method.
 
 -- ds.code:

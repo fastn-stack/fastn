@@ -18,7 +18,7 @@ id: page
 
 10th Feb 2022
 
-Now that we are creating a lot of FPM packages, question of documentation and
+Now that we are creating a lot of FASTN packages, question of documentation and
 best practices starting to dictate our features. One thing I have struggled with
 is how to organize a package.
 
@@ -70,12 +70,12 @@ variable, record or component.
 
 The only main downside is if we see something like above we do not know if
 `header` refers to some imported symbol, in which case I would go review
-`auto-imports` in `FPM.ftd` file, or a component defined locally in current
+`auto-imports` in `FASTN.ftd` file, or a component defined locally in current
 file. Since author files usually won't have components defined or may be one
 component defined, in general we do not have this issue.
 
-As long as we support any feature like alias, we will have to review `FPM.ftd`
-to see the symbol's full name. The only way to avoid jumping to `FPM.ftd` to
+As long as we support any feature like alias, we will have to review `FASTN.ftd`
+to see the symbol's full name. The only way to avoid jumping to `FASTN.ftd` to
 understand each component used, is to not use auto import or dependency alias
 feature, and put explicit import on top of each file.
 
@@ -116,29 +116,29 @@ exact syntax of mutable-by is not fixed but concept is.
 
 We will further allow mutable-by to following package interfect. So e.g.
 
--- ft.code: `fpm.ftd`
+-- ft.code: `fastn.ftd`
 lang: ftd
 
 \-- boolean dark-mode: false
-mutable-by: fpm.dev/dark-mode-switcher
+mutable-by: fastn.dev/dark-mode-switcher
 
 -- ft.markdown:
 
-Now any package that implements `fpm.dev/dark-mode-switcher` will be able to
-modify the `fpm.dark-mode` variable.
+Now any package that implements `fastn.dev/dark-mode-switcher` will be able to
+modify the `fastn.dark-mode` variable.
 
 Further anyone that uses such a package will have to still opt in:
 
--- ft.code: amitu.com/FPM.ftd
+-- ft.code: amitu.com/FASTN.ftd
 lang: ftd
 
-\-- fpm.dependency: arpita.com/dms
-implements: fpm.dev/dark-mode-switcher
+\-- fastn.dependency: arpita.com/dms
+implements: fastn.dev/dark-mode-switcher
 
 -- ft.markdown:
 
-Here `amitu.com/FPM.ftd` has explicitly granted `arpita.com/dms`
-`fpm.dev/dark-mode-switcher` "rights".
+Here `amitu.com/FASTN.ftd` has explicitly granted `arpita.com/dms`
+`fastn.dev/dark-mode-switcher` "rights".
 
 
 -- ft.h1: Reference Vs Value Recap
@@ -306,7 +306,7 @@ debugging nightmare.
 So data only in UI, no globals, and pure expressions over these ui specifi data?
 Or data first, and UI later to modify the data? In Excel/PowerFX it's a bit hard
 to have two "views" that can modify same underlying data. Consider Dark Mode,
-we model it as a global, `fpm.dark-mode`, but in PowerFX it would be managed by
+we model it as a global, `fastn.dark-mode`, but in PowerFX it would be managed by
 a cell, and what if you want to have dark mode switcher in multiple places in
 the UI? Since they are different components either it would not be possible, or
 PowerFX will have an escape hatch and will make some sort of singleton variable
@@ -1088,14 +1088,14 @@ $on-click$: clear $strings
 
 -- ftd.text:
 if: $query is not null
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 You have typed: {value}
 
 --- ftd.text value: $query
 color: green
-color if $fpm.dark-mode: white
-background-color if $fpm.dark-mode: green
+color if $fastn.dark-mode: white
+background-color if $fastn.dark-mode: green
 padding if $query is not null: 5
 size: 20
 
@@ -1107,7 +1107,7 @@ $loop$: $strings as $obj
 -- ftd.column show-data:
 caption text:
 padding: 10
-/background-color if $fpm.dark-mode: white
+/background-color if $fastn.dark-mode: white
 background-color: yellow
 color: red
 
@@ -1144,40 +1144,40 @@ consider using say React for creating UI.
 
 18th Jan 2022
 
-Some variables, like `fpm.document-title`, could be set by more than one ftd
+Some variables, like `fastn.document-title`, could be set by more than one ftd
 documents, each document is telling us what is the document-title for that
-document by setting `fpm.document-title`.
+document by setting `fastn.document-title`.
 
 But we allow authors to import any document from any other document, barring
 cycles, so these variables can get clobbered. Say if there is `a.ftd` and `b.ftd`
 and former wants document title to `A` and later to `B`, they can do both:
-`-- fpm.document-title: A` and so on. But what if `a.ftd` looks like this:
+`-- fastn.document-title: A` and so on. But what if `a.ftd` looks like this:
 
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
-\-- fpm.document-title: A
+\-- fastn.document-title: A
 
 \-- import: b
 
 -- ft.markdown:
 
-`b.ftd` would be imported after `a.ftd` has updated `fpm.document-title`, and
-it will overwrite `fpm.document-title`. We can argue this is fine at some level
+`b.ftd` would be imported after `a.ftd` has updated `fastn.document-title`, and
+it will overwrite `fastn.document-title`. We can argue this is fine at some level
 and user is aware of things.
 
-Further there is another concern, what if `fpm.document-title` was optional, and
+Further there is another concern, what if `fastn.document-title` was optional, and
 the idea was if this is not set, we pick the title from first heading of the
 document. And say this worked out fine, so `a.ftd` will not want to
-`fpm.document-title`, but say it does not work for `b.ftd` so it wants to
+`fastn.document-title`, but say it does not work for `b.ftd` so it wants to
 explicitly set it. But then `a.ftd` imports `b.ftd`. We can not solve by import
 order etc.
 
 Proposal:
 
--- ft.code: `fpm.ftd` file
+-- ft.code: `fastn.ftd` file
 lang: ftd
 
 \-- optional string document-title:
@@ -1197,8 +1197,8 @@ only for setting project variables.
 -- ft.code: `config.ftd`
 lang: ftd
 
-\-- import: fpm
-\-- fpm.site-title: AmitU's Blog
+\-- import: fastn
+\-- fastn.site-title: AmitU's Blog
 $main$: true
 
 -- ft.markdown:
@@ -1238,10 +1238,10 @@ Consider if `b.ftd`:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
-\-- fpm.document-title: B
+\-- import: fastn
+\-- fastn.document-title: B
 
-\-- ftd.text show-title: $fpm.title
+\-- ftd.text show-title: $fastn.title
 
 
 -- ft.markdown:
@@ -1251,8 +1251,8 @@ And say `a.ftd` was:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
-\-- fpm.document-title: A
+\-- import: fastn
+\-- fastn.document-title: A
 \-- import: b
 \-- b.show-title:
 
@@ -1268,16 +1268,16 @@ multiple times, even within the same file:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
-\-- fpm.document-title: B
+\-- import: fastn
+\-- fastn.document-title: B
 
-\-- ftd.text show-title: $fpm.title
+\-- ftd.text show-title: $fastn.title
 
-\-- fpm.document-title: New B
+\-- fastn.document-title: New B
 
 -- ft.markdown:
 
-In this case, the immediate value of `fpm.document-title` is not used by
+In this case, the immediate value of `fastn.document-title` is not used by
 `show-title`, but the "eventual value".
 
 -- ft.h1: Object Gets `$ref` syntax
@@ -1321,15 +1321,15 @@ anti-pattern, we should only support well known object constructors:
 -- ft.code:
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
 \-- ftd.text: Switch To Dark Mode
-$on-click$: message-host $fpm.switch-to-dark-mode
+$on-click$: message-host $fastn.switch-to-dark-mode
 
 -- ft.markdown:
 
 Is superior to `message-host switch-to-dark-mode`, where `switch-to-dark-mode`
-was a string, but `$fpm.switch-to-dark-mode` is a reference to something FTD
+was a string, but `$fastn.switch-to-dark-mode` is a reference to something FTD
 interpreter can verify.
 
 -- ft.h1: `$processor$`, `async`, `Library::get()` and `Document::set_*()`
@@ -1353,10 +1353,10 @@ support complete access to FTD internals from host, and reliably update the FTD
 -- ft.h2: `Library::get()` Simplification
 
 Currently we have a technique where we create "virtual" FTD documents, e.g. there
-is a module `fpm` for our FPM static site generator. This module is dynamically
+is a module `fastn` for our FASTN static site generator. This module is dynamically
 constructed with actual values set for all these variables. This is done so we
 can pass a bunch of data that we have in Rust to FTD files. So we do something
-like [this](https://github.com/FifthTry/fpm/blob/8a0ce82571921e275292532b211a2dcaad618131/src/library/mod.rs#L136-L336):
+like [this](https://github.com/FifthTry/fastn/blob/8a0ce82571921e275292532b211a2dcaad618131/src/library/mod.rs#L136-L336):
 
 -- ft.code: dynamically generating `last_modified_on`
 lang: rs
@@ -1369,7 +1369,7 @@ format!(
         -- ui-data ui:
         last-modified-on: {last_modified_on}
      "},
-    last_modified_on = fpm::i18n::translation::search(
+    last_modified_on = fastn::i18n::translation::search(
         &lang,
         &primary_lang,
         "last-modified-on",
@@ -1383,8 +1383,8 @@ We are setting `last_modified_on` based on string substitution in Rust using
 `format!()` statement.
 
 If we have first class support for setting any variable from Rust, we can keep
-`fpm.ftd` file static, with no data in it, and load it to create FTD variables,
-and then update each of the variables defined by `fpm.ftd` file.
+`fastn.ftd` file static, with no data in it, and load it to create FTD variables,
+and then update each of the variables defined by `fastn.ftd` file.
 
 This means our `ftd::Library::get()` methods can be simplified. It currently
 perform two tasks:
@@ -1431,8 +1431,8 @@ We are basically seeing if we can make the whole interpret pass "pure
 computation". Now we proved `get()` can't be pure yet and we probably will accept
 that design choice. But what about `$processor$`? Can we remove it?
 
-One key difference between `fpm` scenario I described above vs `$processor$` is
-`fpm` was "well known". `fpm` module is well documented (or is going to be), and
+One key difference between `fastn` scenario I described above vs `$processor$` is
+`fastn` was "well known". `fastn` module is well documented (or is going to be), and
 so Rust code knows what all dynamic variables are there, and Rust can update them.
 
 But in case of `$processor$`, it can be applied on any user variable defined in
@@ -1531,7 +1531,7 @@ window["console-print"] = function(v) {
 
 -- ft.markdown:
 
-This JS code has to be provided by the "FTD Host", eg FPM is one such FTD Host.
+This JS code has to be provided by the "FTD Host", eg FASTN is one such FTD Host.
 To create arbitrary functionality, FTD Host interface has to be implemented.
 
 
@@ -1797,10 +1797,10 @@ links etc could be useful as well.
 We have "region" to identify some of these things. The query should allow us to
 query by region, and authors should use regions properly to set this up.
 
-One way to query things is package-query feature that we are working on `fpm`.
+One way to query things is package-query feature that we are working on `fastn`.
 But that is largely for querying information from the entire package. And while
 one can use the same mechanism to also query for information in current page, it
-puts a dependency on `fpm`. Since ftd has access to information in current page,
+puts a dependency on `fastn`. Since ftd has access to information in current page,
 such a query can be conceivably be easily provided by FTD as well.
 
 What would be the result to these queries? Since these queries are to power intra
@@ -1996,7 +1996,7 @@ variable checks pass, else it would be the user visible error message.
 
 Error message in what language? We can't pretend there is only one language now
 can we? Especially when first class translation support is our one of shining
-features in `fpm`? Problem for tomorrow me!
+features in `fastn`? Problem for tomorrow me!
 
 `-- check` can specify some error message as well if the check fails. What if
 there are more than one errors? Make it `.errors`, like Django forms? Auto
@@ -2014,10 +2014,10 @@ lang: ftd
 
 \-- ftd.text welcome-message:
 string who:
-text if $fpm.lang == en: Hello, {$who}
+text if $fastn.lang == en: Hello, {$who}
 
 \--- text:
-if $fpm.lang == hi:
+if $fastn.lang == hi:
 
 नमस्ते {$who},
 
@@ -2064,13 +2064,13 @@ functions.
 
 6th Dec 2021
 
-Was writing a CR about ["fpm actions"](https://www.fifthtry.com/fpm/~/24/), and my
+Was writing a CR about ["fastn actions"](https://www.fifthtry.com/fastn/~/24/), and my
 initial thought was to expose form errors using special variables, but then I
 realised we do not have a mechanism to register for changes in [special
 variables](/ftd/~/121/).
 
 Variable change can only happen on client (it can still be triggered by server
-and sent to client, eg on WebSocket). We are going to have `fpm.js` file to handle
+and sent to client, eg on WebSocket). We are going to have `fastn.js` file to handle
 those variables. We already have methods in `ftd.js` to update any variable, and
 already have variable dependency tracker that updates the rendered DOM tree in an
 efficient way.
@@ -2092,20 +2092,20 @@ used, (and therefore we have [`import: foo as _`](///ftd.dev/~/44/) syntax).
 
 -- ft.h2: "FTD Host"
 
-FPM is proving to be a very good playground to explore what is the meaning of a FTD
-Host. We have the `.get()` method, and FPM is putting a lot of interesting logic
+FASTN is proving to be a very good playground to explore what is the meaning of a FTD
+Host. We have the `.get()` method, and FASTN is putting a lot of interesting logic
 in it, so this part of design is proving fruitful. Then we need special documents
 for "generated" variables, and ftd host will take care of updating them on client
 if needed.
 
-FPM also exposes processors, and that's also working out quite well, there are very
-FPM specific processors.
+FASTN also exposes processors, and that's also working out quite well, there are very
+FASTN specific processors.
 
 This does mean there is issue with portability of FTD documents between different
-"FTD Hosts", would we have more than one hosts of FPM would be the only host?
+"FTD Hosts", would we have more than one hosts of FASTN would be the only host?
 
 We have at least one contender for next FTD host: arbit pages. If you want to use
-ftd to power say your homepage (without using `fpm-repo`), and you must consider,
+ftd to power say your homepage (without using `fastn-repo`), and you must consider,
 you are going to need your own variables with your own way of fetching documents
 and your own
 
@@ -2315,11 +2315,11 @@ accepted by a component that is expecting image? Why would any component want to
 accept an image specifically?
 
 
--- ft.h1: Started FPM: FTD Package Manager
+-- ft.h1: Started FASTN: FTD Package Manager
 
 FTD is an awesome language, and it deserves a kick-ass package manager. Today you
 can not launch a language without a package manager. So we have started working on
-[`fpm`](/fpm/).
+[`fastn`](/fastn/).
 
 
 -- ft.h1: FTD Logo

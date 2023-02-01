@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
 
 -- ds.page: Input
@@ -14,7 +14,7 @@ padding-horizontal: 16
 padding-vertical: 8
 width: 200
 border-width: 1
-border-color: $fpm.color.main.border
+border-color: $fastn.color.main.border
 border-radius: 4
 
 -- ds.output:
@@ -25,7 +25,7 @@ padding-horizontal: 16
 padding-vertical: 8
 width: 200
 border-width: 1
-border-color: $fpm.color.main.border
+border-color: $fastn.color.main.border
 border-radius: 4
 
 

@@ -44,13 +44,13 @@ functions.
 
 6th Dec 2021
 
-Was writing a CR about ["fpm actions"](https://www.fifthtry.com/fpm/~/24/), and my
+Was writing a CR about ["fastn actions"](https://www.fifthtry.com/fastn/~/24/), and my
 initial thought was to expose form errors using special variables, but then I 
 realised we do not have a mechanism to register for changes in [special 
 variables](/ftd/~/121/). 
 
 Variable change can only happen on client (it can still be triggered by server 
-and sent to client, eg on WebSocket). We are going to have `fpm.js` file to handle
+and sent to client, eg on WebSocket). We are going to have `fastn.js` file to handle
 those variables. We already have methods in `ftd.js` to update any variable, and
 already have variable dependency tracker that updates the rendered DOM tree in an
 efficient way.
@@ -72,20 +72,20 @@ used, (and therefore we have [`import: foo as _`](///ftd.dev/~/44/) syntax).
 
 -- ft.h2: "FTD Host"
 
-FPM is proving to be a very good playground to explore what is the meaning of a FTD
-Host. We have the `.get()` method, and FPM is putting a lot of interesting logic
+FASTN is proving to be a very good playground to explore what is the meaning of a FTD
+Host. We have the `.get()` method, and FASTN is putting a lot of interesting logic
 in it, so this part of design is proving fruitful. Then we need special documents
 for "generated" variables, and ftd host will take care of updating them on client 
 if needed. 
 
-FPM also exposes processors, and that's also working out quite well, there are very
-FPM specific processors. 
+FASTN also exposes processors, and that's also working out quite well, there are very
+FASTN specific processors. 
 
 This does mean there is issue with portability of FTD documents between different
-"FTD Hosts", would we have more than one hosts of FPM would be the only host?
+"FTD Hosts", would we have more than one hosts of FASTN would be the only host?
 
 We have at least one contender for next FTD host: arbit pages. If you want to use
-ftd to power say your homepage (without using `fpm-repo`), and you must consider,
+ftd to power say your homepage (without using `fastn-repo`), and you must consider,
 you are going to need your own variables with your own way of fetching documents
 and your own
 
@@ -297,11 +297,11 @@ accepted by a component that is expecting image? Why would any component want to
 accept an image specifically?
 
 
--- ft.h1: Started FPM: FTD Package Manager
+-- ft.h1: Started FASTN: FTD Package Manager
 
 FTD is an awesome language, and it deserves a kick-ass package manager. Today you
 can not launch a language without a package manager. So we have started working on
-[`fpm`](/fpm/).
+[`fastn`](/fastn/).
 
 
 -- ft.h1: FTD Logo

@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 -- import: gargajit.github.io/expander
 -- import: gargajit.github.io/expander/assets
 
@@ -48,7 +48,7 @@ Start with the [part 1 now](/expander/hello-world/).
 
 -- ds.h3: Resource Section
 
-[Get latest release](https://github.com/ftd-lang/fpm/releases)
+[Get latest release](https://github.com/ftd-lang/fastn/releases)
 
 [Live Expander Project](https://ftd-lang.github.io/ftd/25-expander.html)
 
@@ -57,9 +57,9 @@ Start with the [part 1 now](/expander/hello-world/).
 
 -- ds.h3: Get Help
 
-[Raise an issue](https://github.com/ftd-lang/fpm/issues)
+[Raise an issue](https://github.com/ftd-lang/fastn/issues)
 
-[Start a discussion](https://github.com/ftd-lang/fpm/discussions)
+[Start a discussion](https://github.com/ftd-lang/fastn/discussions)
 
 Reach out on [Discord](https://discord.gg/eNXVBMq4xt)
 

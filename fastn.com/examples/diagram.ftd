@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
 /-- ftd.color efefef: #efefef
 dark: #efefef
@@ -109,7 +109,7 @@ border-radius: 4
 spacing: 5
 
 -/-- ftd.text: Notes:
-role: $fpm.type.copy-large
+role: $fastn.type.copy-large
 
 --- start-info:
 if: $info == start-info
@@ -170,7 +170,7 @@ if: $info == container-runtime-info
 
 /-- ftd.scene control-panel:
 background-color: $d9e7f8
-border-color if $MOUSE-IN: $fpm.color.main.text
+border-color if $MOUSE-IN: $fastn.color.main.text
 border-width: 2
 width: 600
 height: 460
@@ -180,7 +180,7 @@ border-radius: 4
 -/-- ftd.text: Control Panel
 top: 5
 left: 5
-role: $fpm.type.copy-large
+role: $fastn.type.copy-large
 
 --- kube-controller-manager:
 top: 50
@@ -230,7 +230,7 @@ padding: 20
 border-width: 2
 border-radius: 10
 background-color: $white
-border-color if $MOUSE-IN: $fpm.color.main.text
+border-color if $MOUSE-IN: $fastn.color.main.text
 $on-click$: $info = etcd-info
 $on-click$: stop-propagation
 $on-click$: prevent-default
@@ -296,8 +296,8 @@ height: 270
 background-color: $fce251
 border-width: 2
 padding: 20
-border-color if $MOUSE-IN: $fpm.color.main.text
-/border-color if $info == $kube-api-server-info: $fpm.color.main.text
+border-color if $MOUSE-IN: $fastn.color.main.text
+/border-color if $info == $kube-api-server-info: $fastn.color.main.text
 
 -/-- ftd.text: Kube Api Server
 align: center
@@ -314,12 +314,12 @@ border-radius: 4
 width: 600
 height: 460
 align: center
-border-color if $MOUSE-IN: $fpm.color.main.text
+border-color if $MOUSE-IN: $fastn.color.main.text
 
 -/-- ftd.text: Nodes
 top: 5
 left: 5
-role: $fpm.type.copy-large
+role: $fastn.type.copy-large
 
 -/-- ftd.column:
 top: 50
@@ -384,13 +384,13 @@ align: center
 open: true
 append-at: box-id
 padding: 15
-border-color if $MOUSE-IN: $fpm.color.main.text
+border-color if $MOUSE-IN: $fastn.color.main.text
 border-radius: 4
 
 -/-- ftd.text: $title
 top: 5
 left: 5
-role: $fpm.type.copy-large
+role: $fastn.type.copy-large
 
 -/-- ftd.row:
 spacing: space-around
@@ -408,7 +408,7 @@ width: 80
 padding: 5
 align: center
 border-width: 2
-border-color if $MOUSE-IN: $fpm.color.main.text
+border-color if $MOUSE-IN: $fastn.color.main.text
 border-radius: 4
 
 /-- ftd.row vertical-line:

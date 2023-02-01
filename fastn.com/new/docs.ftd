@@ -1,5 +1,5 @@
 -- import: ftd.dev/assets
--- import: fpm
+-- import: fastn
 
 
 
@@ -19,7 +19,7 @@ background.solid: $$inherited.colors.background.base
 
 
 -- ftd.image:
-src: $assets.files.images.fpm-logo-1.png
+src: $assets.files.images.fastn-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
 width: fill-container
 

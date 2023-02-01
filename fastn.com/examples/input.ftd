@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
 -- ds.page: Input Example
 
@@ -27,12 +27,12 @@ $on-input$: $query=$VALUE
 $on-change$: message-host $obj
 
 /-- ftd.text:
-color if $ftd.dark-mode: $fpm.color.main.text
+color if $ftd.dark-mode: $fastn.color.main.text
 
 You have typed: {value}
 
 /--- ftd.text value: $query
-color: $fpm.color.main.text
-role: $fpm.type.label-big
+color: $fastn.color.main.text
+role: $fastn.type.label-big
 
 -- end: ds.page

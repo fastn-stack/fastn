@@ -17,16 +17,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: FranzDiebold/github-env-vars-action@v2
-      - name: Install fpm
-        id: install_fpm
+      - name: Install fastn
+        id: install_fastn
         continue-on-error: false
-        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-fpm.sh)"
-      - name: Build the pages with fpm
+        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install.sh)"
+      - name: Build the pages with fastn
         id: build
         continue-on-error: false
         run: |
           echo "Using '$CI_REPOSITORY_NAME_SLUG/' as the base while building"
-          fpm build --base=/$CI_REPOSITORY_NAME/ --edition=2022
+          fastn build --base=/$CI_REPOSITORY_NAME/ 
       - name: copy CNAME
         run: '(test -f CNAME && cp CNAME .build) || echo "CNAME does not exist, skipping step"'
       - name: Deploy

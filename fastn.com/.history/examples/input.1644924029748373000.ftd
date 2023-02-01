@@ -26,7 +26,7 @@ $event-input$: $query=$VALUE
 $event-change$: message-host $obj
 
 -- ftd.text:
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 
 You have typed: {value}
 

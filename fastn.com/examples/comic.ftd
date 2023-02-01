@@ -1,5 +1,5 @@
 -- import: ftd.dev/assets
--- import: fpm
+-- import: fastn
 
 -- ftd.color cadetblue: cadetblue
 dark: cadetblue
@@ -42,7 +42,7 @@ left: 320
 cursor: default
 background-color: $white
 padding: 80
-role: $fpm.type.heading-large
+role: $fastn.type.heading-large
 
 
 

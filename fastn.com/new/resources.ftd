@@ -1,5 +1,5 @@
 -- import: ftd.dev/assets
--- import: fpm
+-- import: fastn
 
 
 
@@ -14,11 +14,11 @@ padding-top: 20
 padding-bottom: 20
 padding-left: 100
 padding-right: 100
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 id: nav-bar-6
 
 /-- ftd.image:
-src: $assets.files.images.fpm-logo-1.png
+src: $assets.files.images.fastn-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
 width: 130
 
@@ -33,36 +33,36 @@ align: right
 
 /-- ftd.text: HOME
 link: https://www.fifthtry.com/ftd/new/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 
 /-- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 
 /-- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 
 /-- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 
 /-- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 
@@ -80,28 +80,28 @@ id: subject-3
 width: 850
 padding: 100
 align: center
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 border-radius: 15
 
 
 /-- ftd.text: Resources
-role: $fpm.type.heading-large
+role: $fastn.type.heading-large
 
 
 /-- ftd.text:
-role: $fpm.type.copy-large
+role: $fastn.type.copy-large
 
 Fifthtry produces  wide  variety of themes and components which could help users to create websites very fastly. Below is a collection of links to some of the most popular Fifthtry resources.
 
 
 /-- ftd.text: Themes
-role: $fpm.type.heading-medium
+role: $fastn.type.heading-medium
 padding-top: 50
 
 
 /-- ftd.text:
-role: $fpm.type.copy-large
-color: $fpm.color.main.text
+role: $fastn.type.copy-large
+color: $fastn.color.main.text
 
 - Theme 1
 - Theme 2

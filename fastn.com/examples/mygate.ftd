@@ -1,9 +1,9 @@
--- import: fpm
+-- import: fastn
 
 -- ds.page:
 
 
-/-- ftd.color color-bg: $fpm.color.main.background.base
+/-- ftd.color color-bg: $fastn.color.main.background.base
 
 
 /-- ftd.column:
@@ -22,13 +22,13 @@ align: center
 
 /-- ftd.text: toggle
 $on-click$: toggle $open
-color if $ftd.dark-mode: $fpm.color.main.text
+color if $ftd.dark-mode: $fastn.color.main.text
 
 
 /-- ftd.column gate-pass:
 width: 400
 align: center
-border-color: $fpm.color.main.text
+border-color: $fastn.color.main.text
 border-width: 5
 caption title:
 body body:
@@ -36,7 +36,7 @@ integer code:
 boolean open: true
 
 /-- ftd.column:
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 width: fill
 padding-top: 40
 
@@ -45,16 +45,16 @@ align: center
 width: 100
 
 /-- ftd.text: $title
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 width: 100
-background-color: $fpm.color.main.background.base
-color if $ftd.dark-mode: $fpm.color.main.text
+background-color: $fastn.color.main.background.base
+color if $ftd.dark-mode: $fastn.color.main.text
 border-top: 4
 border-left: 4
 border-right: 4
 align: center
 padding: 5
-color if $ftd.dark-mode: $fpm.color.main.text
+color if $ftd.dark-mode: $fastn.color.main.text
 $on-click$: toggle $open
 
 /-- container: ftd.main
@@ -62,7 +62,7 @@ $on-click$: toggle $open
 /-- ftd.row:
 align: center
 width: 100
-border-color: $fpm.color.main.text
+border-color: $fastn.color.main.text
 border-bottom: 4
 border-left: 4
 border-right: 4
@@ -73,7 +73,7 @@ open: false
 align: center
 padding-top: 20
 padding-bottom: 20
-color if $ftd.dark-mode: $fpm.color.main.text
+color if $ftd.dark-mode: $fastn.color.main.text
 
 $body
 
@@ -81,19 +81,19 @@ $body
 align: center
 width: fill
 padding: 20
-color if $ftd.dark-mode: $fpm.color.main.text
+color if $ftd.dark-mode: $fastn.color.main.text
 
 /-- ftd.row:
 align: center
-background-color: $fpm.color.main.text
+background-color: $fastn.color.main.text
 padding: 20
 if: $open
 
 /-- ftd.integer:
 value: $code
 align: center
-color: $fpm.color.main.text
-role: $fpm.type.heading-large
+color: $fastn.color.main.text
+role: $fastn.type.heading-large
 
 /-- container: ftd.main
 
@@ -105,8 +105,8 @@ width: fill
 align: center
 width: fill
 padding: 10
-role: $fpm.type.heading-medium
-color if $ftd.dark-mode: $fpm.color.main.text
+role: $fastn.type.heading-medium
+color if $ftd.dark-mode: $fastn.color.main.text
 
 /-- container: ftd.main
 
@@ -117,13 +117,13 @@ height: 20
 
 /-- ftd.row:
 width: fill
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 padding: 20
 
 /-- ftd.text: www-mygate-com
 align: center
 width: fill
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 
 /-- gate-pass: Invitation

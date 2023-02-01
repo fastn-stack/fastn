@@ -324,7 +324,7 @@ slot if $mobile: header
 
 
 -- ftd.text: CLICK HERE!
-color if $fpm.dark-mode: white
+color if $fastn.dark-mode: white
 $event-click$: toggle $mobile
 
 -- ftd.text text: $value

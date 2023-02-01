@@ -72,7 +72,7 @@ progress and ask for help.
 For each step there is a folder, eg the first step is `01-data/01-hello-world`.
 `cd` into this folder, and follow run the commands from that folder.
 
-You will be running `fpm serve` in each folder, so do remember to kill the fpm
+You will be running `fastn serve` in each folder, so do remember to kill the fastn
 server when you are done with a step and moving to another step.
 
 Each step is organized as a series of tasks. Do give a shout out to everyone
@@ -84,7 +84,7 @@ by speaking out during the workshop.
 
 /-- ft.h1: Part 1: Working With Data In FTD
 
-In this part we will install [fpm](https://fpm.dev) and learn about data
+In this part we will install [fastn](https://fastn.dev) and learn about data
 modelling capabilities of FTD.
 
 - [Data-1: Hello World](/workshop/hello-world/)
@@ -126,32 +126,32 @@ boolean $understood:
 ftd.ui button:
 border-width: 2
 border-radius: 5
-border-color: $fpm.color.main.background.step-2
+border-color: $fastn.color.main.background.step-2
 width: fill
 append-at: inner
 open: true
 
 
 /--  ftd.row:
-background-color: $fpm.color.main.background.step-2
+background-color: $fastn.color.main.background.step-2
 width: fill
 padding-horizontal: 20
 padding-vertical: 10
 spacing: 15
 
 /--  ftd.text: DONE
-role: $fpm.type.heading-medium
-color: $fpm.color.main.text
+role: $fastn.type.heading-medium
+color: $fastn.color.main.text
 if: $understood
 
 /--  ftd.text: LESSON
-role: $fpm.type.heading-medium
-color: $fpm.color.main.text
+role: $fastn.type.heading-medium
+color: $fastn.color.main.text
 if: not $understood
 
 /--  ftd.text: $title
-role: $fpm.type.heading-medium
-color: $fpm.color.main.text-strong
+role: $fastn.type.heading-medium
+color: $fastn.color.main.text-strong
 width: fill
 
 /--  container: ftd.main
@@ -179,10 +179,10 @@ padding: 20
 /-- ftd.text understood: Understood
 padding: 10
 border-radius: 5
-background-color: $fpm.color.main.cta-primary.hover
-background-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
-role: $fpm.type.label-big
-color: $fpm.color.main.text-strong
+background-color: $fastn.color.main.cta-primary.hover
+background-color if $MOUSE-IN: $fastn.color.main.cta-primary.base
+role: $fastn.type.label-big
+color: $fastn.color.main.text-strong
 
 /-- container: workshop.wrapper.right-sidebar
 

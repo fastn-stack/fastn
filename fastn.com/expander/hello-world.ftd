@@ -8,7 +8,7 @@
 -- ds.youtube:
 v: v1u-TmNE0bA
 
--- ds.h3: Install FPM for MacOS
+-- ds.h3: Install FASTN for MacOS
 
 -- ds.youtube:
 v: 4kKj1TOL9-g
@@ -20,36 +20,36 @@ Run the following command in your machine's terminal:
 -- ds.code: Installer Script
 lang: ftd
 
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fpm/main/install-fpm.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ftd-lang/fastn/main/install-fastn.sh)"
 
--- ds.h3: Install FPM for Windows
+-- ds.h3: Install FASTN for Windows
 
-- **First Step:** To install fpm, go to Resource Section of this *Crash Course* in te Overview part.
+- **First Step:** To install fastn, go to Resource Section of this *Crash Course* in te Overview part.
 
-- **Second Step:** Set a Path for FPM in your machine's Environment Variable.
+- **Second Step:** Set a Path for FASTN in your machine's Environment Variable.
 
 -- ds.code: New Path
 lang: ftd
 
-C:\FPM
+C:\FASTN
 
--- ds.h3: FPM.ftd
+-- ds.h3: FASTN.ftd
 
-We import FPM
+We import FASTN
 
 -- ds.code: Code
 lang: ftd
 
-\-- import: fpm
+\-- import: fastn
 
 -- ds.markdown:
 
-Then, we create a new fpm package
+Then, we create a new fastn package
 
 -- ds.code: Code
 lang: ftd
 
-\-- fpm.pacakge: <project-name>
+\-- fastn.pacakge: <project-name>
 
 -- ds.h3: index.ftd
 

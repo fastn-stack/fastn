@@ -1,5 +1,5 @@
 -- import: ftd.dev/assets
--- import: fpm
+-- import: fastn
 
 /-- component page:
 component: ftd.column
@@ -40,11 +40,11 @@ padding-left: 100
 padding-right: 100
 padding-top: 20
 padding-bottom: 20
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 id: nav-bar-2
 
 /--- ftd.image:
-src: $assets.files.images.fpm-logo-1.png
+src: $assets.files.images.fastn-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
 width: 130
 
@@ -56,32 +56,32 @@ align: right
 
 /--- ftd.text: HOME
 link: https://www.fifthtry.com/ftd/new/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 /--- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 /--- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 /--- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 /--- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
-color: $fpm.color.main.text
-role: $fpm.type.copy-large
+color: $fastn.color.main.text
+role: $fastn.type.copy-large
 padding-top: 10
 
 
@@ -102,7 +102,7 @@ lang: ftd
 /-- component ftd-footer:
 component: ftd.column
 width: fill
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 padding-left: 100
 padding-right: 100
 padding-top: 50
@@ -113,7 +113,7 @@ width: fill
 
 /--- ftd.text:
 width: 350
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 FTD is lovingly maintained by the core team of volunteers
 
@@ -122,14 +122,14 @@ width: 400
 align: right
 
 /--- ftd.text:
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 Proudly hosted by
 
 /--- ftd.text: FifthTry
 link: https://www.fifthtry.com/
-role: $fpm.type.heading-large
-color: $fpm.color.main.text
+role: $fastn.type.heading-large
+color: $fastn.color.main.text
 padding-left: 20
 
 //--- container: ftd.main
@@ -139,7 +139,7 @@ width: fill
 
 /--- ftd.text:
 width: 500
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 The contents of this website are
 © 2021 under the terms of the BSE License.
@@ -149,6 +149,6 @@ width: 400
 align: right
 
 /--- ftd.text:
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 
 FTD is funded, thanks to its sponsors!

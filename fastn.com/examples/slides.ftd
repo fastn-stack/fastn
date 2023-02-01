@@ -2,7 +2,7 @@
 -- import: ftd.dev/examples/comic
 -- import: ftd.dev/examples/intro
 -- import: ftd.dev/assets
--- import: fpm
+-- import: fastn
 
 
 -- integer count: 0
@@ -17,23 +17,23 @@ height: fill
 
 /-- ftd.text: FTD Slideshow
 slot: left
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 padding: 20
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 width: fill
 
 /-- ftd.text: Previous
 slot: right-1
-color: $fpm.color.main.text
+color: $fastn.color.main.text
 padding: 20
-background-color: $fpm.color.main.background.base
+background-color: $fastn.color.main.background.base
 $on-click$: decrement $count clamp 0 $total
 
 /-- ftd.text: Next
 slot: right-2
 padding: 20
-background-color: $fpm.color.main.background.base
-color: $fpm.color.main.text
+background-color: $fastn.color.main.background.base
+color: $fastn.color.main.text
 $on-click$: increment $count clamp 0 $total
 
 /-- ftd.column:

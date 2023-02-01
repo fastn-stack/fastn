@@ -2,36 +2,36 @@
 -- import: ps
 -- import: fbs
 -- import: ftd.dev/assets
--- import: ws
+/-- import: ws
 
--- fpm.toc-item list empty-toc:
+-- fastn.toc-item list empty-toc:
 
 
 
--- ds.github: https://github.com/fifthtry/ftd/
--- ds.site-url: /
+-- $ds.github: https://github.com/fifthtry/ftd/
+-- $ds.site-url: /
 -- $ds.site-name: FTD
 
 
--- ds.site-logo:
+-- $ds.site-logo:
 light: $assets.files.images.logo-fifthtry-dark.svg.light
 dark: $assets.files.images.logo-fifthtry-dark.svg.dark
 
--- ws.site-logo:
+/-- ws.site-logo:
 light: $assets.files.images.logo-fifthtry-dark.svg.light
 dark: $assets.files.images.logo-fifthtry-dark.svg.dark
 
 
 
 
--- ds.parent-brand: false
+-- $ds.parent-brand: false
 
--- ds.brand-caption: Created by
+-- $ds.brand-caption: Created by
 
--- ds.brand-site-name: FTD
+-- $ds.brand-site-name: FTD
 
 
--- ds.brand-site-logo:
+-- $ds.brand-site-logo:
 light: $assets.files.images.ftd.png.light
 dark:  $assets.files.images.ftd.png.dark
 
@@ -39,21 +39,21 @@ dark:  $assets.files.images.ftd.png.dark
 
 
 
--- fpm.toc-item list why-header:
+-- fastn.toc-item list why-header:
 $processor$: toc
 
 - Overview: /why/
 - Alternatives: /alternatives/
 
 
--- fpm.toc-item list why-toc:
+-- fastn.toc-item list why-toc:
 $processor$: toc
 
 - Why FTD?: /why/
 - Philosophy: /philosophy/
 
 
--- fpm.toc-item list alternatives-toc:
+-- fastn.toc-item list alternatives-toc:
 $processor$: toc
 
 - Why not MDX?: /why/not-mdx/
@@ -62,14 +62,14 @@ $processor$: toc
 
 
 
--- fpm.toc-item list news-toc:
+-- fastn.toc-item list news-toc:
 $processor$: toc
 
 - Latest News: /news/
 - React Bangalore Feb 2022: /news/react-banglore-22-01-2022/
 
 
--- fpm.toc-item list news-header:
+-- fastn.toc-item list news-header:
 $processor$: toc
 
 - Blog: /news/
@@ -81,7 +81,7 @@ $processor$: toc
 
 
 
--- fpm.toc-item list doc-header:
+-- fastn.toc-item list doc-header:
 $processor$: toc
 
 - Start Here: /docs/
@@ -91,7 +91,7 @@ $processor$: toc
 - Development: /development/
 
 
--- fpm.toc-item list doc-toc:
+-- fastn.toc-item list doc-toc:
 $processor$: toc
 
 - Start Here: /docs/
@@ -101,7 +101,7 @@ $processor$: toc
 - Comments In `ftd` Files: /comments/
 
 
--- fpm.toc-item list data-toc:
+-- fastn.toc-item list data-toc:
 $processor$: toc
 
 - Overview: /data-modelling/
@@ -111,7 +111,7 @@ $processor$: toc
 - `or-type`: /or-type/
 - `list`: /list/
 
--- fpm.toc-item list api-toc:
+-- fastn.toc-item list api-toc:
 $processor$: toc
 
 - Reading FTD Files: /reading-data/
@@ -119,7 +119,7 @@ $processor$: toc
   url: /p1/
 
 
--- fpm.toc-item list ui-toc:
+-- fastn.toc-item list ui-toc:
 $processor$: toc
 
 - UI: /ui/
@@ -154,7 +154,7 @@ $processor$: toc
 - Auto Nesting: /auto-nesting/
 
 
--- fpm.toc-item list dev-toc:
+-- fastn.toc-item list dev-toc:
 $processor$: toc
 
 - Roadmap & RFCs: /roadmap/
@@ -164,7 +164,7 @@ $processor$: toc
 
 
 
--- fpm.toc-item list examples-toc:
+-- fastn.toc-item list examples-toc:
 $processor$: toc
 
 - Input: /examples/input/

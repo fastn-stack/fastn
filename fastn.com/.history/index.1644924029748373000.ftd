@@ -202,9 +202,9 @@ in your browser.
 
 FTD can also be used as a configuration language.
 
--- ft.h1: FPM: FTD Package Manager
+-- ft.h1: FASTN: FTD Package Manager
 
-FTD has a sister project, [fpm](https://fpm.dev), a package manager for FTD.
+FTD has a sister project, [fastn](https://fastn.dev), a package manager for FTD.
 
 -- ft.h1: Getting Involved
 

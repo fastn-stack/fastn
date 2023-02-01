@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
 -- ds.page: Reference linking in FTD
 

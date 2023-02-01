@@ -28,7 +28,7 @@ $on-click$: message-host $what-are-lesson-object
 $lesson-status: $what-are-lesson-completed
 
 
-/--  ws.lesson: What is FPM CLI?
+/--  ws.lesson: What is FASTN CLI?
 $status: $what-are-lesson-completed
 button: what-are-lesson-button:
 

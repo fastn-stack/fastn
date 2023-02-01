@@ -156,7 +156,7 @@ margin-bottom: 20
 -- ftd.row:
 width: fill
 background-color: $ft.code-bg-light
-background-color if $fpm.dark-mode: $ft.code-bg-dark
+background-color if $fastn.dark-mode: $ft.code-bg-dark
 padding: 10
 
 
@@ -189,7 +189,7 @@ width: fill
 -- ftd.text:
 width: fill
 color: $ft.neutral-800
-color if $fpm.dark-mode: $ft.neutral
+color if $fastn.dark-mode: $ft.neutral
 font: Roboto
 
 

@@ -1,5 +1,5 @@
 -- import: ftd.dev/assets
--- import: fpm
+-- import: fastn
 
 -- ftd.color red:
 light: red
@@ -1214,7 +1214,7 @@ height: 300
 background-image: https://imgur.com/oCHWQQF.jpg
 
 \-- ftd.text: Sample Text
-role: $fpm.type.heading-large
+role: $fastn.type.heading-large
 align: center
 color: $inherited.colors.text
 
@@ -1231,7 +1231,7 @@ background-image: $assets.files.images.oCHWQQF.jpg
 
 
 /-- ftd.text: Sample Text
-role: $fpm.type.heading-large
+role: $fastn.type.heading-large
 align: center
 color: $inherited.colors.text
 width: fill
@@ -1257,7 +1257,7 @@ background-image: https://imgur.com/LnJ4ziC.png
 background-repeat: true
 
 \-- ftd.text: Sample Text
-role: $fpm.type.heading-large
+role: $fastn.type.heading-large
 align: center
 color: $inherited.colors.text
 width: fill
@@ -1277,7 +1277,7 @@ background-repeat: true
 
 
 /-- ftd.text: Sample Text
-role: $fpm.type.heading-large
+role: $fastn.type.heading-large
 align: center
 color: $inherited.colors.text
 width: fill
@@ -1299,7 +1299,7 @@ background-image: https://imgur.com/oCHWQQF.jpg
 background-parallax: true
 
 \-- ftd.text: Sample Text
-role: $fpm.type.heading-large
+role: $fastn.type.heading-large
 align: center
 color: $inherited.colors.text
 
@@ -1316,7 +1316,7 @@ background-parallax: true
 
 
 /-- ftd.text: Sample Text
-role: $fpm.type.heading-large
+role: $fastn.type.heading-large
 align: center
 color: $inherited.colors.text
 width: fill
