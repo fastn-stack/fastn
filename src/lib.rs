@@ -110,7 +110,7 @@ impl<T: std::cmp::PartialEq> VecMap<T> {
 
     pub fn get_value(&self, key: &str) -> Vec<&T> {
         let mut values = vec![];
-        if let Some(v) = self.value.iter().find_map(|(k, v)| {
+        for v in self.value.iter().filter_map(|(k, v)| {
             if k.eq(key) || k.starts_with(format!("{}.", key).as_str()) {
                 Some(v)
             } else {

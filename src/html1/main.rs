@@ -323,6 +323,12 @@ impl<'a> HtmlGenerator<'a> {
                     return None;
                 }
                 v.value.as_ref().map(|v| {
+                    if k.eq("checked") {
+                        if v.eq("true") {
+                            return s("checked");
+                        }
+                        return s("");
+                    }
                     let v = if k.eq("data-id") {
                         ftd::html1::utils::full_data_id(self.id.as_str(), v)
                     } else {

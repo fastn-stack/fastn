@@ -418,7 +418,7 @@ impl Loop {
 
         let (on, alias) = ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
 
-        if !on.starts_with(ftd::ast::utils::REFERENCE) {
+        if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
             return ftd::ast::parse_error(
                 format!(
                     "Loop should be on some reference, found: `{}`. Help: use `${}` instead",
@@ -477,7 +477,7 @@ impl Loop {
 
         let (on, alias) = ftd::ast::utils::split_at(loop_statement.as_str(), ftd::ast::utils::AS);
 
-        if !on.starts_with(ftd::ast::utils::REFERENCE) {
+        if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
             return ftd::ast::parse_error(
                 format!(
                     "Loop should be on some reference, found: `{}`. Help: use `${}` instead",

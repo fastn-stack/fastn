@@ -40,7 +40,7 @@ impl PropertyValue {
             | PropertyValue::Reference { is_mutable, .. }
             | PropertyValue::Clone { is_mutable, .. }
             | PropertyValue::FunctionCall(ftd::interpreter2::FunctionCall { is_mutable, .. }) => {
-                *is_mutable = mutable
+                *is_mutable = mutable;
             }
         }
     }
@@ -972,6 +972,19 @@ impl PropertyValue {
                     },
                 )))
             }
+            Ok(expression) if expression.eq(ftd::interpreter2::FTD_SPECIAL_CHECKED) => {
+                Ok(ftd::interpreter2::StateWithThing::new_thing(Some(
+                    ftd::interpreter2::PropertyValue::Reference {
+                        name: "CHECKED".to_string(),
+                        kind: ftd::interpreter2::Kind::boolean()
+                            .into_optional()
+                            .into_kind_data(),
+                        source: PropertyValueSource::Global,
+                        is_mutable: false,
+                        line_number: 0,
+                    },
+                )))
+            }
             Ok(expression)
                 if expression.starts_with(ftd::interpreter2::utils::REFERENCE)
                     && ftd::interpreter2::utils::get_function_name(
@@ -1034,7 +1047,7 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::CLONE)
                     .to_string();
 
-                let (source, found_kind) = try_ok_state!(doc.get_kind_with_argument(
+                let (source, found_kind, _) = try_ok_state!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,
@@ -1085,7 +1098,7 @@ impl PropertyValue {
                     .trim_start_matches(ftd::interpreter2::utils::REFERENCE)
                     .to_string();
 
-                let (source, found_kind) = try_ok_state!(doc.get_kind_with_argument(
+                let (source, found_kind, _) = try_ok_state!(doc.get_kind_with_argument(
                     reference.as_str(),
                     value.line_number(),
                     definition_name_with_arguments,

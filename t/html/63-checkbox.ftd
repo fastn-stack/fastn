@@ -1,0 +1,32 @@
+-- boolean $flag: true
+
+-- ftd.boolean: $flag
+padding.px: 20
+
+-- ftd.text: Checkbox not selected
+if: { !flag }
+padding.px: 20
+
+-- ftd.text: Checkbox is selected now
+if: { flag }
+padding.px: 20
+
+-- show-checkbox:
+$is-checked: $flag
+
+-- component show-checkbox:
+boolean $is-checked: false
+
+-- ftd.row:
+padding-horizontal.px: 20
+spacing.fixed.px: 10
+
+-- ftd.text: This is a checkbox
+
+-- ftd.checkbox:
+checked: $show-checkbox.is-checked
+$on-click$: $ftd.set-bool($a = $flag, v = $CHECKED)
+
+-- end: ftd.row
+
+-- end: show-checkbox

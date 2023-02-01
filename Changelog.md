@@ -1,9 +1,107 @@
 # FTD Change Log
 
+## 1 February 2023
+
+<details>
+<summary>Inbuilt <b>Clamp</b>: no longer supported
+<a href="https://github.com/ftd-lang/ftd/blob/main/Cheatsheet.
+md#clamp">Clamp example</a>
+</summary>
+
+- Regular Clamp
+
+```ftd
+-- integer $num: 0
+
+-- ftd.integer: $num
+$on-click$: $clamp($a = $num, by = 1, clamp = 6)
+
+-- void clamp(a,by,clamp):
+integer $a:
+integer by:
+integer clamp:
+
+
+a = (a + by) % clamp
+```
+
+- Clamp with min and max
+
+```ftd
+-- integer $num: 1
+
+-- ftd.integer: $num
+$on-click$: $clamp($a = $num, by = 1, min = 1, max = 6)
+
+-- void clamp(a,by,min,max):
+integer $a:
+integer by: 1
+integer min: 0
+integer max: 5
+
+
+a = (((a - min) + by) % (max - min)) + min
+```
+
+</details>
+
+## 31 January 2023
+  
+<details>
+
+<summary><b>Breaking change</b> <a href="https://github.com/ftd-lang/ftd/pull/566/commits/e1722eacf386d3c515000c79a86e7ffb91f2df6c">Inherited types changed</a></summary>
+
+Breaking changes
+  
+- `$inherited.types.copy-relaxed` -> `$inherited.types.copy-regular`
+- `$inherited.types.copy-tight` -> `$inherited.types.copy-small`
+- `$inherited.types.label-big` -> `$inherited.types.label-large`
+
+
+Headings: 
+
+- `$inherited.types.heading-tiny` is added
+- rest have weight, line-height, weight updates 
+
+Copy:
+
+- added `$inherited.types.copy-regular` and `$inherited.types.copy-small`
+- rest have size and `$inherited.types.line-height` changes
+
+Specialized Text:
+
+- `$inherited.types.source-code` is added 
+- rest have size and line-height changes
+
+Labels: 
+
+- `$inherited.types.label-big` is changed to label-large
+- `$inherited.types.label-small` is updated with new size and line-height values
+
+Button: 
+
+- All button types which are added are new
+- added `$inherited.types.button-large`, `$inherited.types.button-medium`, `$inherited.types.button-small`, link types
+
+</details>
+
+## 30 January 2023
+
+- [Added ftd.checkbox](https://github.com/ftd-lang/ftd/pull/564/commits/483060b31dcce626599fc0bca8d7e6261d0c37a8)
+
 ## 27 January 2023
-- [Merged spacing with spacing-mode](https://github.com/ftd-lang/ftd/pull/557/commits/37569f9df70ce60f161a1260e6fa09827f8f0875)
+
+<details>
+
+<summary><b>Breaking change</b>: <a href="https://github.com/ftd-lang/ftd/pull/557/commits/37569f9df70ce60f161a1260e6fa09827f8f0875">Merged spacing with spacing-mode</a></summary>
+
+  - use `spacing.fixed.px: 20` instead of `spacing.px: 20`
+  - use `spacing: space-around` instead of `spacing-mode: space-around` (same for `space-between` and `space-evenly`)
+
+</details>
 
 ## 25 January 2023
+
 - [Added sticky css](https://github.com/ftd-lang/ftd/pull/553/commits/a3b43d09b7b968d8242559e96dbff7c356104880)
 - [Added `id` attr](https://github.com/ftd-lang/ftd/pull/554/commits/7321ba5253d565683e35e078606567f302633eaf)
 - [Added slugify `id` for `region`s](https://github.com/ftd-lang/ftd/pull/556/commits/a419d0155bd4299c4efab91ad55557f92bc21f0f)

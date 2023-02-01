@@ -1,0 +1,33 @@
+-- string list $names:
+
+-- string: Arpita
+-- string: Ayushi
+
+-- end: $names
+
+
+-- ftd.text: $name
+$loop$: $names as $name
+
+
+-- foo: $name
+$loop$: $names as $name
+
+-- foo: *$name
+$loop$: $names as $name
+;; $loop$: *$names as $name
+
+
+-- component foo:
+caption $name:
+
+-- ftd.text: $foo.name
+$on-click$: $set($a = $foo.name)
+
+-- end: foo
+
+
+-- void set(a):
+string $a:
+
+a = a + " FifthTry"

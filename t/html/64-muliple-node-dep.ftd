@@ -1,0 +1,30 @@
+-- record todo-item:
+boolean is-selected:
+string address:
+
+
+-- todo-item $value:
+is-selected: true
+address: Some address
+
+
+
+-- todo-view: $value
+
+
+-- component todo-view:
+caption todo-item $t:
+
+-- ftd.row:
+
+-- ftd.boolean: $todo-view.t.is-selected
+
+-- ftd.checkbox:
+checked: $todo-view.t.is-selected
+$on-click$: $ftd.set-bool($a = $todo-view.t.is-selected, v = $CHECKED)
+
+-- ftd.text: $todo-view.t.address
+
+-- end: ftd.row
+
+-- end: todo-view

@@ -420,6 +420,36 @@ multiline: true
 
 By default, `type` is set to `ftd.text-input-type.text`
 
+## `ftd.checkbox` - To render a checkbox
+
+This code will create a simple checkbox.
+```ftd
+-- ftd.checkbox:
+```
+
+To know the current value of checkbox, you can use
+a special variable `$CHECKED` to access it.
+
+```ftd
+-- boolean $is-checked: false
+
+-- ftd.checkbox:
+$on-click$: $ftd.set-bool($a = $is-checked, v = $CHECKED)
+```
+
+## `ftd.checkbox` Attributes
+
+### `checked`: `optional boolean` -> Default checkbox value
+
+By default, `checkbox` is not selected
+
+```ftd
+;; In this case, the checkbox will be 
+;; pre-selected by default
+
+-- ftd.checkbox:
+checked: true
+```
 
 ## `ftd.image` - To render an image
 
@@ -1104,17 +1134,55 @@ Response JSON:
 - [Discussions#511](https://github.com/ftd-lang/ftd/discussions/511)
 
 
+# Some frequently used functions
+
+## Clamp
+
+- Regular Clamp
+
+```ftd
+-- integer $num: 0
+
+-- ftd.integer: $num
+$on-click$: $clamp($a = $num, by = 1, clamp = 6)
+
+-- void clamp(a,by,clamp):
+integer $a:
+integer by:
+integer clamp:
+
+
+a = (a + by) % clamp
+```
+
+- Clamp with min and max
+
+```ftd
+-- integer $num: 1
+
+-- ftd.integer: $num
+$on-click$: $clamp($a = $num, by = 1, min = 1, max = 6)
+
+-- void clamp(a,by,min,max):
+integer $a:
+integer by: 1
+integer min: 0
+integer max: 5
+
+
+a = (((a - min) + by) % (max - min)) + min
+```
 
 
 
 
-## How to run examples for FTD: 0.3
+# How to run examples for FTD: 0.3
 
 - Create empty files `<number>-<name>.ftd` and `<number>-<name>.html` in `t/html` 
   folder.
 - Run `cargo test html_test_all -- --nocapture fix=true <optional: path=<prefix of the file name>>`
 
-### Optional commands to check html in examples
+## Optional commands to check html in examples
 - Run `cargo run`
 - Run `cd docs`
 - Run `python3 -m http.server 8000`
@@ -1202,17 +1270,23 @@ The `inherited.types` variable is of type `ftd.type-data` which is a record.
 
 ```ftd
 -- record type-data:
+ftd.responsive-type heading-hero:
 ftd.responsive-type heading-large:
 ftd.responsive-type heading-medium:
 ftd.responsive-type heading-small:
-ftd.responsive-type heading-hero:
-ftd.responsive-type copy-tight:
-ftd.responsive-type copy-relaxed:
+ftd.responsive-type heading-tiny:
 ftd.responsive-type copy-large:
+ftd.responsive-type copy-regular:
+ftd.responsive-type copy-small:
 ftd.responsive-type fine-print:
 ftd.responsive-type blockquote:
-ftd.responsive-type label-big:
+ftd.responsive-type source-code:
+ftd.responsive-type label-large:
 ftd.responsive-type label-small:
+ftd.responsive-type button-large:
+ftd.responsive-type button-medium:
+ftd.responsive-type button-small:
+ftd.responsive-type link:
 ```
 
 The fields in record `type-data` are of type `ftd.responsive-type` which is 
@@ -1221,59 +1295,91 @@ another record with `desktop` and `mobile` fields of type `ftd.type`
 In `inherited.types` variable, value of all the fields is same for both 
 `desktop` and `mobile`. So just mentioning the value for one only.
 
+For desktop: 
+
+- `heading-hero`:
+  size: 80
+  line-height: 104
+  weight: 400
+
 - `heading-large`:
-  size: 40
-  line-height: 48
+  size: 50
+  line-height: 65
   weight: 400
 
 - `heading-medium`:
-  size: 32
-  line-height: 44
+  size: 38
+  line-height: 57
   weight: 400
 
 - `heading-small`:
   size: 24
-  line-height: 36
+  line-height: 31
   weight: 400
 
-- `heading-hero`:
-  size: 48
-  line-height: 60
-  weight: 400
-
-- `copy-tight`:
-  size: 16
-  line-height: 20
-  weight: 400
-
-- `copy-relaxed`:
-  size: 16
-  line-height: 24
+- `heading-tiny`:
+  size: 20
+  line-height: 26
   weight: 400
 
 - `copy-large`:
-  size: 20
-  line-height: 28
+  size: 22
+  line-height: 34
+  weight: 400
+
+- `copy-regular`:
+  size: 18
+  line-height: 30
+  weight: 400
+
+- `copy-small`:
+  size: 14
+  line-height: 24
   weight: 400
 
 - `fine-print`:
-  size: 14
+  size: 12
   line-height: 16
   weight: 400
 
 - `blockquote`:
-  size: 14
-  line-height: 16
+  size: 16
+  line-height: 21
   weight: 400
 
-- `label-big`:
-  size: 16
-  line-height: 22
+- `source-code`:
+  size: 18
+  line-height: 30
+  weight: 400
+
+- `label-large`:
+  size: 14
+  line-height: 19
   weight: 400
 
 - `label-small`:
-  size: 14
+  size: 12
   line-height: 16
+  weight: 400
+
+- `button-large`:
+  size: 18
+  line-height: 24
+  weight: 400
+
+- `button-medium`:
+  size: 16
+  line-height: 21
+  weight: 400
+
+- `button-small`:
+  size: 14
+  line-height: 19
+  weight: 400
+
+- `link`:
+  size: 14
+  line-height: 19
   weight: 400
 
 

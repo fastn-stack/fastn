@@ -142,6 +142,10 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
             ftd::interpreter2::Thing::Component(text_input_function()),
         ),
         (
+            "ftd#checkbox".to_string(),
+            ftd::interpreter2::Thing::Component(checkbox_function()),
+        ),
+        (
             "ftd#image".to_string(),
             ftd::interpreter2::Thing::Component(image_function()),
         ),
@@ -4492,14 +4496,21 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     value: None,
                     line_number: 0
                 },ftd::interpreter2::Field {
-                    name: "copy-tight".to_string(),
+                    name: "heading-tiny".to_string(),
                     kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
                     line_number: 0
                 },ftd::interpreter2::Field {
-                    name: "copy-relaxed".to_string(),
+                    name: "copy-small".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "copy-regular".to_string(),
                     kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
@@ -4527,7 +4538,42 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     value: None,
                     line_number: 0
                 },ftd::interpreter2::Field {
-                    name: "label-big".to_string(),
+                    name: "source-code".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "button-small".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "button-medium".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "button-large".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "link".to_string(),
+                    kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
+                        .into_kind_data(),
+                    mutable: false,
+                    value: None,
+                    line_number: 0
+                },ftd::interpreter2::Field {
+                    name: "label-large".to_string(),
                     kind: ftd::interpreter2::Kind::record(ftd::interpreter2::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
@@ -4602,8 +4648,9 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                     value: ftd::interpreter2::Value::Record {
                         name: ftd::interpreter2::FTD_TYPE_DATA.to_string(),
                         fields: std::iter::IntoIterator::into_iter([
+                            // HEADING TYPES -------------------------------------------
                             (
-                               "heading-large".to_string(),
+                                "heading-hero".to_string(),
                                 ftd::interpreter2::PropertyValue::Value {
                                     value: ftd::interpreter2::Value::Record {
                                         name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
@@ -4636,7 +4683,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 40
+                                                                                    value: 80
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -4656,7 +4703,168 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 104
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ), (
+                                                "mobile".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
                                                                                     value: 48
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 64
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "heading-large".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "desktop".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 50
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 65
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -4698,7 +4906,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 40
+                                                                                    value: 36
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -4718,7 +4926,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 48
+                                                                                    value: 54
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -4785,7 +4993,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 32
+                                                                                    value: 38
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -4805,7 +5013,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 44
+                                                                                    value: 57
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -4847,7 +5055,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 32
+                                                                                    value: 26
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -4867,7 +5075,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 44
+                                                                                    value: 40
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -4954,7 +5162,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 36
+                                                                                    value: 31
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -4996,7 +5204,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 24
+                                                                                    value: 22
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5016,7 +5224,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 36
+                                                                                    value: 29
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5050,7 +5258,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                 }
                             ),
                             (
-                                "heading-hero".to_string(),
+                                "heading-tiny".to_string(),
                                 ftd::interpreter2::PropertyValue::Value {
                                     value: ftd::interpreter2::Value::Record {
                                         name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
@@ -5083,175 +5291,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 48
-                                                                                },
-                                                                                is_mutable: false,
-                                                                                line_number: 0
-                                                                            })
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
-                                                                "line-height".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value: ftd::interpreter2::Value::OrType {
-                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        value: Box::new
-                                                                            (ftd::interpreter2::PropertyValue::Value {
-                                                                                value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 60
-                                                                                },
-                                                                                is_mutable: false,
-                                                                                line_number: 0
-                                                                            })
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
-                                                                "weight".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value:
-                                                                    ftd::interpreter2::Value::Integer {
-                                                                        value: 400
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                        ]).collect()
-                                                    },
-                                                    is_mutable: false,
-                                                    line_number: 0
-                                                }
-                                            ), (
-                                                "mobile".to_string(),
-                                                ftd::interpreter2::PropertyValue::Value {
-                                                    value: ftd::interpreter2::Value::Record {
-                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
-                                                        fields: std::iter::IntoIterator::into_iter([
-                                                            (
-                                                                "size".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value: ftd::interpreter2::Value::OrType {
-                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        value: Box::new
-                                                                            (ftd::interpreter2::PropertyValue::Value {
-                                                                                value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 48
-                                                                                },
-                                                                                is_mutable: false,
-                                                                                line_number: 0
-                                                                            })
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
-                                                                "line-height".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value: ftd::interpreter2::Value::OrType {
-                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        value: Box::new
-                                                                            (ftd::interpreter2::PropertyValue::Value {
-                                                                                value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 60
-                                                                                },
-                                                                                is_mutable: false,
-                                                                                line_number: 0
-                                                                            })
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
-                                                                "weight".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value:
-                                                                    ftd::interpreter2::Value::Integer {
-                                                                        value: 400
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                        ]).collect()
-                                                    },
-                                                    is_mutable: false,
-                                                    line_number: 0
-                                                }
-                                            )
-                                        ]).collect()
-                                    },
-                                    is_mutable: false,
-                                    line_number: 0
-                                }
-                            ),
-                            (
-                                "copy-tight".to_string(),
-                                ftd::interpreter2::PropertyValue::Value {
-                                    value: ftd::interpreter2::Value::Record {
-                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
-                                        fields: std::iter::IntoIterator::into_iter([
-                                            (
-                                                "desktop".to_string(),
-                                                ftd::interpreter2::PropertyValue::Value {
-                                                    value: ftd::interpreter2::Value::Record {
-                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
-                                                        fields: std::iter::IntoIterator::into_iter([
-                                                            (
-                                                                "font-family".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Reference {
-                                                                    name: "ftd#font-copy".to_string(),
-                                                                    kind:
-                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
-                                                                    source:
-                                                                    ftd::interpreter2::PropertyValueSource::Global,
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
-                                                                "size".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value: ftd::interpreter2::Value::OrType {
-                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        value: Box::new
-                                                                            (ftd::interpreter2::PropertyValue::Value {
-                                                                                value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 16
-                                                                                },
-                                                                                is_mutable: false,
-                                                                                line_number: 0
-                                                                            })
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
-                                                                "line-height".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value: ftd::interpreter2::Value::OrType {
-                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        value: Box::new
-                                                                            (ftd::interpreter2::PropertyValue::Value {
-                                                                                value: ftd::interpreter2::Value::Integer {
                                                                                     value: 20
                                                                                 },
                                                                                 is_mutable: false,
@@ -5263,48 +5302,6 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                 }
                                                             ),
                                                             (
-                                                                "weight".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value:
-                                                                    ftd::interpreter2::Value::Integer {
-                                                                        value: 400
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                        ]).collect()
-                                                    },
-                                                    is_mutable: false,
-                                                    line_number: 0
-                                                }
-                                            ), (
-                                                "mobile".to_string(),
-                                                ftd::interpreter2::PropertyValue::Value {
-                                                    value: ftd::interpreter2::Value::Record {
-                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
-                                                        fields: std::iter::IntoIterator::into_iter([
-                                                            (
-                                                                "size".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value: ftd::interpreter2::Value::OrType {
-                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        value: Box::new
-                                                                            (ftd::interpreter2::PropertyValue::Value {
-                                                                                value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 16
-                                                                                },
-                                                                                is_mutable: false,
-                                                                                line_number: 0
-                                                                            })
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
                                                                 "line-height".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Value {
                                                                     value: ftd::interpreter2::Value::OrType {
@@ -5314,94 +5311,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 20
-                                                                                },
-                                                                                is_mutable: false,
-                                                                                line_number: 0
-                                                                            })
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
-                                                                "weight".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value:
-                                                                    ftd::interpreter2::Value::Integer {
-                                                                        value: 400
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                        ]).collect()
-                                                    },
-                                                    is_mutable: false,
-                                                    line_number: 0
-                                                }
-                                            )
-                                        ]).collect()
-                                    },
-                                    is_mutable: false,
-                                    line_number: 0
-                                }
-                            ),
-                            (
-                                "copy-relaxed".to_string(),
-                                ftd::interpreter2::PropertyValue::Value {
-                                    value: ftd::interpreter2::Value::Record {
-                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
-                                        fields: std::iter::IntoIterator::into_iter([
-                                            (
-                                                "desktop".to_string(),
-                                                ftd::interpreter2::PropertyValue::Value {
-                                                    value: ftd::interpreter2::Value::Record {
-                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
-                                                        fields: std::iter::IntoIterator::into_iter([
-                                                            (
-                                                                "font-family".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Reference {
-                                                                    name: "ftd#font-copy".to_string(),
-                                                                    kind:
-                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
-                                                                    source:
-                                                                    ftd::interpreter2::PropertyValueSource::Global,
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
-                                                                "size".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value: ftd::interpreter2::Value::OrType {
-                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        value: Box::new
-                                                                            (ftd::interpreter2::PropertyValue::Value {
-                                                                                value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 16
-                                                                                },
-                                                                                is_mutable: false,
-                                                                                line_number: 0
-                                                                            })
-                                                                    },
-                                                                    is_mutable: false,
-                                                                    line_number: 0
-                                                                }
-                                                            ),
-                                                            (
-                                                                "line-height".to_string(),
-                                                                ftd::interpreter2::PropertyValue::Value {
-                                                                    value: ftd::interpreter2::Value::OrType {
-                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
-                                                                        value: Box::new
-                                                                            (ftd::interpreter2::PropertyValue::Value {
-                                                                                value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 24
+                                                                                    value: 26
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5443,7 +5353,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 16
+                                                                                    value: 18
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5496,6 +5406,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                     line_number: 0
                                 }
                             ),
+                            // COPY TYPES -------------------------------------------
                             (
                                 "copy-large".to_string(),
                                 ftd::interpreter2::PropertyValue::Value {
@@ -5530,7 +5441,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 20
+                                                                                    value: 22
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5550,7 +5461,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 28
+                                                                                    value: 34
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5592,7 +5503,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 20
+                                                                                    value: 18
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5646,6 +5557,305 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                 }
                             ),
                             (
+                                "copy-regular".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "desktop".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-copy".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 18
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 30
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ), (
+                                                "mobile".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 16
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 24
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "copy-small".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "desktop".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-copy".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 14
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 24
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ), (
+                                                "mobile".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 12
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 16
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            // SPECIALIZED TEXT TYPES ---------------------------------
+                            (
                                 "fine-print".to_string(),
                                 ftd::interpreter2::PropertyValue::Value {
                                     value: ftd::interpreter2::Value::Record {
@@ -5679,7 +5889,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 14
+                                                                                    value: 12
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5741,7 +5951,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 14
+                                                                                    value: 12
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5828,7 +6038,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 14
+                                                                                    value: 16
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5848,7 +6058,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 16
+                                                                                    value: 21
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5890,7 +6100,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 14
+                                                                                    value: 16
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5910,7 +6120,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 16
+                                                                                    value: 21
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5944,7 +6154,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                 }
                             ),
                             (
-                                "label-big".to_string(),
+                                "source-code".to_string(),
                                 ftd::interpreter2::PropertyValue::Value {
                                     value: ftd::interpreter2::Value::Record {
                                         name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
@@ -5958,7 +6168,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                             (
                                                                 "font-family".to_string(),
                                                                 ftd::interpreter2::PropertyValue::Reference {
-                                                                    name: "ftd#font-display".to_string(),
+                                                                    name: "ftd#font-code".to_string(),
                                                                     kind:
                                                                     ftd::interpreter2::Kind::string().into_kind_data(),
                                                                     source:
@@ -5977,7 +6187,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 16
+                                                                                    value: 18
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -5997,7 +6207,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 22
+                                                                                    value: 30
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -6059,7 +6269,157 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 22
+                                                                                    value: 21
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            // LABEL TYPES -------------------------------------
+                            (
+                                "label-large".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "desktop".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 14
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 19
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ), (
+                                                "mobile".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 14
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 19
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -6126,7 +6486,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 14
+                                                                                    value: 12
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -6188,7 +6548,7 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                         value: Box::new
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
-                                                                                    value: 14
+                                                                                    value: 12
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -6209,6 +6569,603 @@ pub fn default_bag() -> ftd::Map<ftd::interpreter2::Thing> {
                                                                             (ftd::interpreter2::PropertyValue::Value {
                                                                                 value: ftd::interpreter2::Value::Integer {
                                                                                     value: 16
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            // BUTTON TYPES -------------------------------------
+                            (
+                                "button-large".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "desktop".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 18
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 24
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ), (
+                                                "mobile".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 18
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 24
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "button-medium".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "desktop".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 16
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 21
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ), (
+                                                "mobile".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 16
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 21
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "button-small".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "desktop".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 14
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 19
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ), (
+                                                "mobile".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 14
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 19
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            )
+                                        ]).collect()
+                                    },
+                                    is_mutable: false,
+                                    line_number: 0
+                                }
+                            ),
+                            (
+                                "link".to_string(),
+                                ftd::interpreter2::PropertyValue::Value {
+                                    value: ftd::interpreter2::Value::Record {
+                                        name: ftd::interpreter2::FTD_RESPONSIVE_TYPE.to_string(),
+                                        fields: std::iter::IntoIterator::into_iter([
+                                            (
+                                                "desktop".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "font-family".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Reference {
+                                                                    name: "ftd#font-display".to_string(),
+                                                                    kind:
+                                                                    ftd::interpreter2::Kind::string().into_kind_data(),
+                                                                    source:
+                                                                    ftd::interpreter2::PropertyValueSource::Global,
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 14
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 19
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "weight".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value:
+                                                                    ftd::interpreter2::Value::Integer {
+                                                                        value: 400
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                        ]).collect()
+                                                    },
+                                                    is_mutable: false,
+                                                    line_number: 0
+                                                }
+                                            ), (
+                                                "mobile".to_string(),
+                                                ftd::interpreter2::PropertyValue::Value {
+                                                    value: ftd::interpreter2::Value::Record {
+                                                        name: ftd::interpreter2::FTD_TYPE.to_string(),
+                                                        fields: std::iter::IntoIterator::into_iter([
+                                                            (
+                                                                "size".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 14
+                                                                                },
+                                                                                is_mutable: false,
+                                                                                line_number: 0
+                                                                            })
+                                                                    },
+                                                                    is_mutable: false,
+                                                                    line_number: 0
+                                                                }
+                                                            ),
+                                                            (
+                                                                "line-height".to_string(),
+                                                                ftd::interpreter2::PropertyValue::Value {
+                                                                    value: ftd::interpreter2::Value::OrType {
+                                                                        name: ftd::interpreter2::FTD_FONT_SIZE.to_string(),
+                                                                        variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: ftd::interpreter2::FTD_FONT_SIZE_PX.to_string(),
+                                                                        value: Box::new
+                                                                            (ftd::interpreter2::PropertyValue::Value {
+                                                                                value: ftd::interpreter2::Value::Integer {
+                                                                                    value: 19
                                                                                 },
                                                                                 is_mutable: false,
                                                                                 line_number: 0
@@ -6409,6 +7366,26 @@ pub fn boolean_function() -> ftd::interpreter2::ComponentDefinition {
                         .into_kind_data(),
                 ),
             ],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter2::Component::from_name("ftd.kernel"),
+        line_number: 0,
+    }
+}
+
+pub fn checkbox_function() -> ftd::interpreter2::ComponentDefinition {
+    ftd::interpreter2::ComponentDefinition {
+        name: "ftd#checkbox".to_string(),
+        arguments: [
+            common_arguments(),
+            vec![ftd::interpreter2::Argument::default(
+                "checked",
+                ftd::interpreter2::Kind::boolean()
+                    .into_optional()
+                    .into_kind_data(),
+            )],
         ]
         .concat()
         .into_iter()

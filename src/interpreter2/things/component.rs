@@ -805,23 +805,22 @@ impl Loop {
             &None,
         )?);
 
-        if let Some(on_ref) = on.reference_name() {
-            let mutable = if let Some((v, _, _)) =
-                ftd::interpreter2::utils::get_argument_for_reference_and_remaining(
-                    on_ref,
-                    doc,
-                    definition_name_with_arguments,
-                    &None,
-                    ast_loop.line_number,
-                )? {
-                v.mutable
-            } else if let Ok(v) = doc.get_variable(on_ref, ast_loop.line_number) {
-                v.mutable
-            } else {
-                false
-            };
+        if let Some(reference) = ast_loop
+            .on
+            .strip_prefix(ftd::interpreter2::utils::REFERENCE)
+        {
+            if let Ok(ftd::interpreter2::StateWithThing::Thing(t)) = doc.get_kind_with_argument(
+                reference,
+                ast_loop.line_number,
+                definition_name_with_arguments,
+                &None,
+            ) {
+                on.set_mutable(t.2);
+            }
+        }
 
-            on.set_mutable(mutable);
+        if ast_loop.on.starts_with(ftd::interpreter2::utils::CLONE) {
+            on.set_mutable(true);
         }
 
         Ok(ftd::interpreter2::StateWithThing::new_thing(Loop::new(

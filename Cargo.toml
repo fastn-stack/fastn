@@ -35,7 +35,7 @@ regex = "1"
 format_num = "0.1"
 slug = "0.1"
 include_dir = "0.7"
-indoc = "1"
+indoc = "2"
 itertools = "0.10"
 tracing = "0.1"
 
@@ -62,7 +62,7 @@ features = [
 [dependencies.comrak]
 # We use comrak for markup processing.
 
-version = "0.15"
+version = "0.16"
 # By default comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6
