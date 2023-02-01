@@ -906,6 +906,8 @@ fn update_inherited_reference_in_property_value(
         return;
     };
 
+    let mut is_reference_updated = false;
+
     for (reference, container) in values.iter().rev() {
         if container.len() >= local_container.len() {
             continue;
@@ -918,15 +920,17 @@ fn update_inherited_reference_in_property_value(
             }
         }
         if found {
+            is_reference_updated = true;
             property_value.set_reference_or_clone(reference);
             break;
         }
     }
 
-    if reference_or_clone
-        .starts_with(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
-        || reference_or_clone
-            .starts_with(format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str())
+    if !is_reference_updated
+        && (reference_or_clone
+            .starts_with(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
+            || reference_or_clone
+                .starts_with(format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()))
     {
         if let Ok(ftd::interpreter2::StateWithThing::Thing(property)) =
             ftd::interpreter2::PropertyValue::from_ast_value(
