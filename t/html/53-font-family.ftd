@@ -5,10 +5,10 @@
 -- $ftd.font-code: cursive
 
 -- ftd.text: hello world 1
-role: $ftd.default-types.heading-large
+role: $inherited.types.heading-large
 
 -- ftd.text: hello world 2
-role: $ftd.default-types.copy-small
+role: $inherited.types.copy-small
 
 -- ftd.text: hello world 3
-role: $ftd.default-types.fine-print
+role: $inherited.types.fine-print

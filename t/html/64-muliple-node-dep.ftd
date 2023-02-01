@@ -20,7 +20,7 @@ caption todo-item $t:
 -- ftd.boolean: $todo-view.t.is-selected
 
 -- ftd.checkbox:
-checked: $todo-view.t.is-selected
+checked: *$todo-view.t.is-selected
 $on-click$: $ftd.set-bool($a = $todo-view.t.is-selected, v = $CHECKED)
 
 -- ftd.text: $todo-view.t.address
