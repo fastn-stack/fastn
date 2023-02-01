@@ -174,6 +174,8 @@ pub const FTD_SPECIAL_VALUE: &str = "$VALUE";
 pub const FTD_SPECIAL_CHECKED: &str = "$CHECKED";
 pub const FTD_INHERITED: &str = "inherited";
 pub const FTD_LOOP_COUNTER: &str = "LOOP.COUNTER";
+pub const FTD_DEFAULT_TYPES: &str = "ftd#default-types";
+pub const FTD_DEFAULT_COLORS: &str = "ftd#default-colors";
 
 pub const FTD_BORDER_STYLE: &str = "ftd#border-style";
 pub const FTD_BORDER_STYLE_DOTTED: &str = "ftd#border-style.dotted";

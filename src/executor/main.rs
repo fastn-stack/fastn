@@ -928,7 +928,7 @@ fn update_inherited_reference_in_property_value(
 
     if !is_reference_updated
         && (reference_or_clone
-            .starts_with(format!("{}.types", ftd::interpreter2::FTD_INHERITED).as_str())
+            .starts_with()
             || reference_or_clone
                 .starts_with(format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()))
     {
