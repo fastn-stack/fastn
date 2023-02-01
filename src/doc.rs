@@ -411,15 +411,6 @@ pub async fn resolve_import_2022<'a>(
             0,
         )
     } else if module.ends_with("assets") {
-        let package = lib
-            .config
-            .all_packages
-            .borrow()
-            .get(module.trim_end_matches("/assets"))
-            .unwrap()
-            .clone();
-
-        lib.push_package_under_process(module, &package).await?;
         let foreign_variable = vec!["files".to_string()];
 
         if module.starts_with(current_package.name.as_str()) {
