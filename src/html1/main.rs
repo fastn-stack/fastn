@@ -28,12 +28,12 @@ impl HtmlUI {
 
         for (dependency, dummy_node) in node_data.dummy_nodes {
             let dummy_html = DummyHtmlGenerator::from_node(id, &tdoc, dummy_node.main);
-            // dbg!("dummy_nodes", &dependency, &dummy_html);
+            dbg!("dummy_nodes", &dependency, &dummy_html);
         }
 
         for (dependency, raw_node) in node_data.raw_nodes {
             let raw_html = DummyHtmlGenerator::from_node(id, &tdoc, raw_node.node);
-            // dbg!("raw_nodes", &dependency, &raw_html);
+            dbg!("raw_nodes", &dependency, &raw_html);
         }
 
         Ok(HtmlUI {
@@ -53,6 +53,7 @@ pub(crate) struct DummyHtmlGenerator {
     pub name: String,
     pub html: String,
     pub properties: Vec<(String, ftd::interpreter2::Property)>,
+    pub properties_string: Option<String>,
     pub iteration: Option<ftd::interpreter2::Loop>,
     pub helper_html: ftd::Map<DummyHtmlGenerator>,
     pub children: Vec<DummyHtmlGenerator>,
@@ -90,6 +91,11 @@ impl<'a> HtmlGenerator<'a> {
     ) -> ftd::html1::Result<()> {
         if let Some(raw_data) = node.raw_data {
             dummy_html.iteration = raw_data.iteration;
+            dummy_html.properties_string = ftd::html1::utils::to_properties_string(
+                self.id.as_str(),
+                raw_data.properties.as_slice(),
+                self.doc,
+            );
             dummy_html.properties = raw_data.properties;
             dummy_html.html = node.node.to_string();
             dummy_html.name = node.node.to_string();
@@ -138,6 +144,11 @@ impl<'a> HtmlGenerator<'a> {
                 .insert(node_name.to_string(), Default::default());
             let helper_dummy_html = dummy_html.helper_html.get_mut(node_name.as_str()).unwrap();
             helper_dummy_html.iteration = raw_data.iteration;
+            helper_dummy_html.properties_string = ftd::html1::utils::to_properties_string(
+                self.id.as_str(),
+                raw_data.properties.as_slice(),
+                self.doc,
+            );
             helper_dummy_html.properties = raw_data.properties;
             helper_dummy_html.html = node_name.to_string();
             helper_dummy_html.name = node_name.to_string();
