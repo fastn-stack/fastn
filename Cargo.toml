@@ -1,6 +1,6 @@
 [package]
 name = "fastn"
-version = "0.1.11"
+version = "0.2.0"
 authors = [
     "Abrar Khan <abrark@fifthtry.com>",
     "Amit Upadhyay <upadhyay@gmail.com>",
