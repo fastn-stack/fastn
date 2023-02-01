@@ -109,10 +109,33 @@ impl<T: std::cmp::PartialEq> VecMap<T> {
     }
 
     pub fn get_value(&self, key: &str) -> Vec<&T> {
+        self.get_value_and_rem(key)
+            .into_iter()
+            .map(|(k, _)| k)
+            .collect()
+    }
+
+    pub fn get_value_and_rem(&self, key: &str) -> Vec<(&T, Option<String>)> {
         let mut values = vec![];
         for v in self.value.iter().filter_map(|(k, v)| {
-            if k.eq(key) || k.starts_with(format!("{}.", key).as_str()) {
-                Some(v)
+            if k.eq(key) {
+                Some(
+                    v.into_iter()
+                        .map(|a| (a, None))
+                        .collect::<Vec<(&T, Option<String>)>>(),
+                )
+            } else if let Some(rem) = key.strip_prefix(format!("{}.", k).as_str()) {
+                Some(
+                    v.into_iter()
+                        .map(|a| (a, Some(rem.to_string())))
+                        .collect::<Vec<(&T, Option<String>)>>(),
+                )
+            } else if let Some(rem) = k.strip_prefix(format!("{}.", key).as_str()) {
+                Some(
+                    v.into_iter()
+                        .map(|a| (a, Some(rem.to_string())))
+                        .collect::<Vec<(&T, Option<String>)>>(),
+                )
             } else {
                 None
             }
