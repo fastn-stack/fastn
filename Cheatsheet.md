@@ -1134,17 +1134,55 @@ Response JSON:
 - [Discussions#511](https://github.com/ftd-lang/ftd/discussions/511)
 
 
+# Some frequently used functions
+
+## Clamp
+
+- Regular Clamp
+
+```ftd
+-- integer $num: 0
+
+-- ftd.integer: $num
+$on-click$: $clamp($a = $num, by = 1, clamp = 6)
+
+-- void clamp(a,by,clamp):
+integer $a:
+integer by:
+integer clamp:
+
+
+a = (a + by) % clamp
+```
+
+- Clamp with min and max
+
+```ftd
+-- integer $num: 1
+
+-- ftd.integer: $num
+$on-click$: $clamp($a = $num, by = 1, min = 1, max = 6)
+
+-- void clamp(a,by,min,max):
+integer $a:
+integer by: 1
+integer min: 0
+integer max: 5
+
+
+a = (((a - min) + by) % (max - min)) + min
+```
 
 
 
 
-## How to run examples for FTD: 0.3
+# How to run examples for FTD: 0.3
 
 - Create empty files `<number>-<name>.ftd` and `<number>-<name>.html` in `t/html` 
   folder.
 - Run `cargo test html_test_all -- --nocapture fix=true <optional: path=<prefix of the file name>>`
 
-### Optional commands to check html in examples
+## Optional commands to check html in examples
 - Run `cargo run`
 - Run `cd docs`
 - Run `python3 -m http.server 8000`

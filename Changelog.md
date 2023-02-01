@@ -1,5 +1,50 @@
 # FTD Change Log
 
+## 1 February 2023
+
+<details>
+<summary>Inbuilt <b>Clamp</b>: no longer supported
+<a href="https://github.com/ftd-lang/ftd/blob/main/Cheatsheet.
+md#clamp">Clamp example</a>
+</summary>
+
+- Regular Clamp
+
+```ftd
+-- integer $num: 0
+
+-- ftd.integer: $num
+$on-click$: $clamp($a = $num, by = 1, clamp = 6)
+
+-- void clamp(a,by,clamp):
+integer $a:
+integer by:
+integer clamp:
+
+
+a = (a + by) % clamp
+```
+
+- Clamp with min and max
+
+```ftd
+-- integer $num: 1
+
+-- ftd.integer: $num
+$on-click$: $clamp($a = $num, by = 1, min = 1, max = 6)
+
+-- void clamp(a,by,min,max):
+integer $a:
+integer by: 1
+integer min: 0
+integer max: 5
+
+
+a = (((a - min) + by) % (max - min)) + min
+```
+
+</details>
+
 ## 31 January 2023
   
 <details>
