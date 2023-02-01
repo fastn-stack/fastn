@@ -10,12 +10,9 @@ pub enum Element {
     Code(Code),
     Iframe(Iframe),
     TextInput(TextInput),
-<<<<<<< HEAD
     RawElement(RawElement),
     IterativeElement(IterativeElement),
-=======
     CheckBox(CheckBox),
->>>>>>> a8e35fc584e5ffa3e6ece86cdc1dcfee9005b29a
     Null,
 }
 

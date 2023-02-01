@@ -14,14 +14,10 @@ impl NodeData {
     #[tracing::instrument(skip_all)]
     pub fn from_rt(rt: ftd::executor::RT) -> NodeData {
         let node = rt.main.to_node("foo");
-        let raw_node = dbg!(ftd::node::RawNode::from_element_constructors(
-            rt.element_constructor,
-            rt.name.as_str()
-        ));
-        let dummy_node = dbg!(ftd::node::DummyNode::from_dummy_instructions(
-            rt.dummy_instructions,
-            rt.name.as_str()
-        ));
+        let raw_node =
+            ftd::node::RawNode::from_element_constructors(rt.element_constructor, rt.name.as_str());
+        let dummy_node =
+            ftd::node::DummyNode::from_dummy_instructions(rt.dummy_instructions, rt.name.as_str());
 
         NodeData {
             name: rt.name.to_string(),

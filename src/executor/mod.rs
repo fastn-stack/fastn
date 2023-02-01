@@ -15,12 +15,8 @@ mod youtube_id;
 
 pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{
-<<<<<<< HEAD
-    Code, Column, Common, Container, Element, Event, Iframe, Image, IterativeElement, RawElement,
-    Row, Text, TextInput,
-=======
-    CheckBox, Code, Column, Common, Container, Element, Event, Iframe, Image, Row, Text, TextInput,
->>>>>>> a8e35fc584e5ffa3e6ece86cdc1dcfee9005b29a
+    CheckBox, Code, Column, Common, Container, Element, Event, Iframe, Image, IterativeElement,
+    RawElement, Row, Text, TextInput,
 };
 pub use main::{ExecuteDoc, RT};
 pub use styles::{
