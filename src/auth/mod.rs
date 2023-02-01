@@ -137,7 +137,7 @@ pub fn secret_key() -> String {
         Err(_e) => {
             println!("WARN: SECRET_KEY not set");
             // TODO: Need to change this approach later
-            "FPM_TEMP_SECRET".to_string()
+            "fastn_TEMP_SECRET".to_string()
         }
     }
 }
@@ -149,9 +149,9 @@ pub async fn get_user_data_from_cookies(
     platform: &str,
     requested_field: &str,
     cookies: &std::collections::HashMap<String, String>,
-) -> fpm::Result<Option<String>> {
+) -> fastn::Result<Option<String>> {
     let ud_encrypted = cookies.get(platform).ok_or_else(|| {
-        fpm::Error::GenericError(format!(
+        fastn::Error::GenericError(format!(
             "user detail not found for platform {} in the cookies",
             platform
         ))
@@ -159,20 +159,20 @@ pub async fn get_user_data_from_cookies(
     match ud_encrypted {
         Ok(encrypt_str) => {
             if let Ok(ud_decrypted) = utils::decrypt_str(encrypt_str).await {
-                match fpm::auth::AuthProviders::from_str(platform) {
-                    fpm::auth::AuthProviders::GitHub => {
+                match fastn::auth::AuthProviders::from_str(platform) {
+                    fastn::auth::AuthProviders::GitHub => {
                         let github_ud: github::UserDetail =
                             serde_json::from_str(ud_decrypted.as_str())?;
                         return match requested_field {
                             "username" | "user_name" | "user-name" => Ok(Some(github_ud.user_name)),
                             "token" => Ok(Some(github_ud.token)),
-                            _ => Err(fpm::Error::GenericError(format!(
+                            _ => Err(fastn::Error::GenericError(format!(
                                 "invalid field {} requested for platform {}",
                                 requested_field, platform
                             ))),
                         };
                     }
-                    fpm::auth::AuthProviders::TeleGram => {
+                    fastn::auth::AuthProviders::TeleGram => {
                         let telegram_ud: telegram::UserDetail =
                             serde_json::from_str(ud_decrypted.as_str())?;
                         return match requested_field {
@@ -181,13 +181,13 @@ pub async fn get_user_data_from_cookies(
                             }
                             "uid" | "userid" | "user-id" => Ok(Some(telegram_ud.user_id)),
                             "token" => Ok(Some(telegram_ud.token)),
-                            _ => Err(fpm::Error::GenericError(format!(
+                            _ => Err(fastn::Error::GenericError(format!(
                                 "invalid field {} requested for platform {}",
                                 requested_field, platform
                             ))),
                         };
                     }
-                    fpm::auth::AuthProviders::Discord => {
+                    fastn::auth::AuthProviders::Discord => {
                         let discord_ud: discord::UserDetail =
                             serde_json::from_str(ud_decrypted.as_str())?;
                         return match requested_field {
@@ -196,7 +196,7 @@ pub async fn get_user_data_from_cookies(
                             }
                             "id" | "userid" | "user-id" => Ok(Some(discord_ud.user_id)),
                             "token" => Ok(Some(discord_ud.token)),
-                            _ => Err(fpm::Error::GenericError(format!(
+                            _ => Err(fastn::Error::GenericError(format!(
                                 "invalid field {} requested for platform {}",
                                 requested_field, platform
                             ))),
@@ -216,17 +216,17 @@ pub async fn get_user_data_from_cookies(
 }
 
 // TODO: rename the method later
-// bridge between fpm to auth to check
+// bridge between fastn to auth to check
 pub async fn get_auth_identities(
     cookies: &std::collections::HashMap<String, String>,
-    identities: &[fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
-    let mut matched_identities: Vec<fpm::user_group::UserIdentity> = vec![];
+    identities: &[fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
+    let mut matched_identities: Vec<fastn::user_group::UserIdentity> = vec![];
 
     let github_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::GitHub.as_str())
+        .get(fastn::auth::AuthProviders::GitHub.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("github user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("github user detail not found in the cookies".to_string())
         });
     match github_ud_encrypted {
         Ok(encrypt_str) => {
@@ -242,9 +242,9 @@ pub async fn get_auth_identities(
         }
     };
     let telegram_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::TeleGram.as_str())
+        .get(fastn::auth::AuthProviders::TeleGram.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("telegram user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("telegram user detail not found in the cookies".to_string())
         });
     match telegram_ud_encrypted {
         Ok(encrypt_str) => {
@@ -260,9 +260,9 @@ pub async fn get_auth_identities(
         }
     };
     let discord_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Discord.as_str())
+        .get(fastn::auth::AuthProviders::Discord.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("discord user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("discord user detail not found in the cookies".to_string())
         });
     match discord_ud_encrypted {
         Ok(encrypt_str) => {
@@ -278,9 +278,9 @@ pub async fn get_auth_identities(
         }
     };
     let twitter_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Twitter.as_str())
+        .get(fastn::auth::AuthProviders::Twitter.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("twitter user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("twitter user detail not found in the cookies".to_string())
         });
 
     match twitter_ud_encrypted {
@@ -297,9 +297,9 @@ pub async fn get_auth_identities(
         }
     };
     let amazon_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Amazon.as_str())
+        .get(fastn::auth::AuthProviders::Amazon.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("amazon user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("amazon user detail not found in the cookies".to_string())
         });
     match amazon_ud_encrypted {
         Ok(encrypt_str) => {
@@ -314,9 +314,9 @@ pub async fn get_auth_identities(
         }
     };
     let facebook_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Facebook.as_str())
+        .get(fastn::auth::AuthProviders::Facebook.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("facebook user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("facebook user detail not found in the cookies".to_string())
         });
     match facebook_ud_encrypted {
         Ok(encrypt_str) => {
@@ -332,9 +332,9 @@ pub async fn get_auth_identities(
         }
     };
     let gmail_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Gmail.as_str())
+        .get(fastn::auth::AuthProviders::Gmail.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("gmail user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("gmail user detail not found in the cookies".to_string())
         });
     match gmail_ud_encrypted {
         Ok(encrypt_str) => {
@@ -349,9 +349,9 @@ pub async fn get_auth_identities(
         }
     };
     let slack_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Slack.as_str())
+        .get(fastn::auth::AuthProviders::Slack.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("slack user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("slack user detail not found in the cookies".to_string())
         });
     match slack_ud_encrypted {
         Ok(encrypt_str) => {
@@ -366,9 +366,9 @@ pub async fn get_auth_identities(
         }
     };
     let apple_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Apple.as_str())
+        .get(fastn::auth::AuthProviders::Apple.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("apple user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("apple user detail not found in the cookies".to_string())
         });
     match apple_ud_encrypted {
         Ok(encrypt_str) => {
@@ -383,9 +383,9 @@ pub async fn get_auth_identities(
         }
     };
     let baidu_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Baidu.as_str())
+        .get(fastn::auth::AuthProviders::Baidu.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("baidu user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("baidu user detail not found in the cookies".to_string())
         });
     match baidu_ud_encrypted {
         Ok(encrypt_str) => {
@@ -400,9 +400,9 @@ pub async fn get_auth_identities(
         }
     };
     let bitbucket_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::BitBucket.as_str())
+        .get(fastn::auth::AuthProviders::BitBucket.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("bitbucket user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("bitbucket user detail not found in the cookies".to_string())
         });
     match bitbucket_ud_encrypted {
         Ok(encrypt_str) => {
@@ -421,9 +421,9 @@ pub async fn get_auth_identities(
         }
     };
     let digitalocean_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::DigitalOcean.as_str())
+        .get(fastn::auth::AuthProviders::DigitalOcean.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError(
+            fastn::Error::GenericError(
                 "digitalocean user detail not found in the cookies".to_string(),
             )
         });
@@ -444,9 +444,11 @@ pub async fn get_auth_identities(
         }
     };
     let doorkeeper_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::DoorKeeper.as_str())
+        .get(fastn::auth::AuthProviders::DoorKeeper.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("doorkeeper user detail not found in the cookies".to_string())
+            fastn::Error::GenericError(
+                "doorkeeper user detail not found in the cookies".to_string(),
+            )
         });
     match doorkeeper_ud_encrypted {
         Ok(encrypt_str) => {
@@ -465,9 +467,9 @@ pub async fn get_auth_identities(
         }
     };
     let dropbox_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::DropBox.as_str())
+        .get(fastn::auth::AuthProviders::DropBox.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("DropBox user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("DropBox user detail not found in the cookies".to_string())
         });
     match dropbox_ud_encrypted {
         Ok(encrypt_str) => {
@@ -483,9 +485,9 @@ pub async fn get_auth_identities(
         }
     };
     let gitlab_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::GitLab.as_str())
+        .get(fastn::auth::AuthProviders::GitLab.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("GitLab user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("GitLab user detail not found in the cookies".to_string())
         });
     match gitlab_ud_encrypted {
         Ok(encrypt_str) => {
@@ -500,9 +502,9 @@ pub async fn get_auth_identities(
         }
     };
     let instagram_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Instagram.as_str())
+        .get(fastn::auth::AuthProviders::Instagram.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("Instagram user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("Instagram user detail not found in the cookies".to_string())
         });
     match instagram_ud_encrypted {
         Ok(encrypt_str) => {
@@ -521,9 +523,9 @@ pub async fn get_auth_identities(
         }
     };
     let linkedin_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::LinkedIn.as_str())
+        .get(fastn::auth::AuthProviders::LinkedIn.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("LinkedIn user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("LinkedIn user detail not found in the cookies".to_string())
         });
     match linkedin_ud_encrypted {
         Ok(encrypt_str) => {
@@ -539,9 +541,9 @@ pub async fn get_auth_identities(
         }
     };
     let microsoft_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Microsoft.as_str())
+        .get(fastn::auth::AuthProviders::Microsoft.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("Microsoft user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("Microsoft user detail not found in the cookies".to_string())
         });
     match microsoft_ud_encrypted {
         Ok(encrypt_str) => {
@@ -560,9 +562,9 @@ pub async fn get_auth_identities(
         }
     };
     let okta_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Okta.as_str())
+        .get(fastn::auth::AuthProviders::Okta.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("Okta user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("Okta user detail not found in the cookies".to_string())
         });
     match okta_ud_encrypted {
         Ok(encrypt_str) => {
@@ -576,9 +578,9 @@ pub async fn get_auth_identities(
         }
     };
     let pintrest_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Pintrest.as_str())
+        .get(fastn::auth::AuthProviders::Pintrest.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("Pintrest user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("Pintrest user detail not found in the cookies".to_string())
         });
     match pintrest_ud_encrypted {
         Ok(encrypt_str) => {
@@ -594,9 +596,9 @@ pub async fn get_auth_identities(
         }
     };
     let tiktok_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::TikTok.as_str())
+        .get(fastn::auth::AuthProviders::TikTok.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("TikTok user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("TikTok user detail not found in the cookies".to_string())
         });
     match tiktok_ud_encrypted {
         Ok(encrypt_str) => {
@@ -611,9 +613,9 @@ pub async fn get_auth_identities(
         }
     };
     let twitch_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Twitch.as_str())
+        .get(fastn::auth::AuthProviders::Twitch.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("Twitch user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("Twitch user detail not found in the cookies".to_string())
         });
     match twitch_ud_encrypted {
         Ok(encrypt_str) => {
@@ -628,9 +630,9 @@ pub async fn get_auth_identities(
         }
     };
     let twitter_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Twitter.as_str())
+        .get(fastn::auth::AuthProviders::Twitter.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("Twitter user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("Twitter user detail not found in the cookies".to_string())
         });
     match twitter_ud_encrypted {
         Ok(encrypt_str) => {
@@ -646,9 +648,9 @@ pub async fn get_auth_identities(
         }
     };
     let wechat_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::WeChat.as_str())
+        .get(fastn::auth::AuthProviders::WeChat.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("WeChat user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("WeChat user detail not found in the cookies".to_string())
         });
     match wechat_ud_encrypted {
         Ok(encrypt_str) => {
@@ -663,9 +665,9 @@ pub async fn get_auth_identities(
         }
     };
     let yahoo_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Yahoo.as_str())
+        .get(fastn::auth::AuthProviders::Yahoo.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("Yahoo user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("Yahoo user detail not found in the cookies".to_string())
         });
     match yahoo_ud_encrypted {
         Ok(encrypt_str) => {
@@ -680,9 +682,9 @@ pub async fn get_auth_identities(
         }
     };
     let zoho_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Zoho.as_str())
+        .get(fastn::auth::AuthProviders::Zoho.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("Zoho user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("Zoho user detail not found in the cookies".to_string())
         });
     match zoho_ud_encrypted {
         Ok(encrypt_str) => {
@@ -696,9 +698,9 @@ pub async fn get_auth_identities(
         }
     };
     let google_ud_encrypted = cookies
-        .get(fpm::auth::AuthProviders::Google.as_str())
+        .get(fastn::auth::AuthProviders::Google.as_str())
         .ok_or_else(|| {
-            fpm::Error::GenericError("Google user detail not found in the cookies".to_string())
+            fastn::Error::GenericError("Google user detail not found in the cookies".to_string())
         });
     match google_ud_encrypted {
         Ok(encrypt_str) => {

@@ -1,5 +1,5 @@
--- import: fpm
--- import: fpm/processors
+-- import: fastn
+-- import: fastn/processors
 
 
 -- ftd.text: Hello world
@@ -7,7 +7,7 @@
 
 ;; Document Readers Processor
 
--- fpm.user-group-compat list readers:
+-- fastn.user-group-compat list readers:
 $processor$: processors.document-readers
 
 -- ftd.text: Document Readers
@@ -24,7 +24,7 @@ group: $reader
 
 ;; Document Writers
 
--- fpm.user-group-compat list writers:
+-- fastn.user-group-compat list writers:
 $processor$: processors.document-writers
 
 -- print-user-group:
@@ -36,7 +36,7 @@ group: $writer
 
 
 -- component print-user-group:
-fpm.user-group-compat group:
+fastn.user-group-compat group:
 
 -- ftd.column:
 margin.px: 10

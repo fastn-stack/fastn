@@ -7,11 +7,11 @@ pub struct AutoImport {
 impl AutoImport {
     pub fn from_string(name: &str) -> AutoImport {
         match name.split_once(" as ") {
-            Some((package, alias)) => fpm::AutoImport {
+            Some((package, alias)) => fastn::AutoImport {
                 path: package.trim().to_string(),
                 alias: Some(alias.trim().to_string()),
             },
-            None => fpm::AutoImport {
+            None => fastn::AutoImport {
                 path: name.trim().to_string(),
                 alias: None,
             },

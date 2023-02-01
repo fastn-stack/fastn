@@ -1,11 +1,11 @@
--- import: fpm
--- import: fpm/processors
+-- import: fastn
+-- import: fastn/processors
 
 
 -- ftd.text: Hello world
 
 
--- fpm.toc-item list package-tree:
+-- fastn.toc-item list package-tree:
 $processor$: processors.package-tree
 
 
@@ -15,7 +15,7 @@ item: $item
 
 
 -- component print-toc:
-fpm.toc-item item:
+fastn.toc-item item:
 
 -- ftd.column:
 

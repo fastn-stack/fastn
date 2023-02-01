@@ -1,4 +1,4 @@
--- import: fpm/processors
+-- import: fastn/processors
 
 -- ftd.text: Hello world
 

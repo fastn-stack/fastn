@@ -1,4 +1,4 @@
-use crate::fpm_2022_js;
+use crate::fastn_2022_js;
 
 pub trait ValueOf {
     fn value_of_(&self, name: &str) -> Option<&str>;
@@ -33,7 +33,7 @@ macro_rules! warning {
     ($($t:tt)*) => {{
         use colored::Colorize;
         let msg = format!($($t)*);
-        if fpm::utils::is_traced() {
+        if fastn::utils::is_traced() {
             tracing::warn!(msg);
         } else {
             eprintln!("WARN: {}", msg.yellow());
@@ -45,7 +45,7 @@ macro_rules! warning {
 pub fn print_end(msg: &str, start: std::time::Instant) {
     use colored::Colorize;
 
-    if fpm::utils::is_test() {
+    if fastn::utils::is_test() {
         println!("done in <omitted>");
     } else {
         println!(
@@ -73,7 +73,7 @@ impl<'a> Timer<'a> {
     pub fn it<T>(&self, a: T) -> T {
         use colored::Colorize;
 
-        if !fpm::utils::is_test() {
+        if !fastn::utils::is_test() {
             let duration = format!("{:?}", self.start.elapsed());
             println!("{} in {}", self.msg.green(), duration.red());
         }
@@ -128,13 +128,13 @@ pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
     base_path.join(".tracks").join(format!("{}.track", id))
 }
 
-pub(crate) async fn get_number_of_documents(config: &fpm::Config) -> fpm::Result<String> {
-    let mut no_of_docs = fpm::snapshot::get_latest_snapshots(&config.root)
+pub(crate) async fn get_number_of_documents(config: &fastn::Config) -> fastn::Result<String> {
+    let mut no_of_docs = fastn::snapshot::get_latest_snapshots(&config.root)
         .await?
         .len()
         .to_string();
     if let Ok(original_path) = config.original_path() {
-        let no_of_original_docs = fpm::snapshot::get_latest_snapshots(&original_path)
+        let no_of_original_docs = fastn::snapshot::get_latest_snapshots(&original_path)
             .await?
             .len();
         no_of_docs = format!("{} / {}", no_of_docs, no_of_original_docs);
@@ -142,20 +142,20 @@ pub(crate) async fn get_number_of_documents(config: &fpm::Config) -> fpm::Result
     Ok(no_of_docs)
 }
 
-pub(crate) fn get_extension(file_name: &str) -> fpm::Result<String> {
+pub(crate) fn get_extension(file_name: &str) -> fastn::Result<String> {
     if let Some((_, ext)) = file_name.rsplit_once('.') {
         return Ok(ext.to_string());
     }
-    Err(fpm::Error::UsageError {
+    Err(fastn::Error::UsageError {
         message: format!("extension not found, `{}`", file_name),
     })
 }
 
 pub(crate) async fn get_current_document_last_modified_on(
-    config: &fpm::Config,
+    config: &fastn::Config,
     document_id: &str,
 ) -> Option<String> {
-    fpm::snapshot::get_latest_snapshots(&config.root)
+    fastn::snapshot::get_latest_snapshots(&config.root)
         .await
         .unwrap_or_default()
         .get(document_id)
@@ -163,7 +163,7 @@ pub(crate) async fn get_current_document_last_modified_on(
 }
 
 pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<String> {
-    fpm::snapshot::get_latest_snapshots(path)
+    fastn::snapshot::get_latest_snapshots(path)
         .await
         .unwrap_or_default()
         .values()
@@ -175,21 +175,21 @@ pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<S
 /*
 // todo get_package_title needs to be implemented
     @amitu need to come up with idea
-    This data would be used in fpm.title
-pub(crate) fn get_package_title(config: &fpm::Config) -> String {
-    let fpm = if let Ok(fpm) = std::fs::read_to_string(config.root.join("index.ftd")) {
-        fpm
+    This data would be used in fastn.title
+pub(crate) fn get_package_title(config: &fastn::Config) -> String {
+    let fastn = if let Ok(fastn) = std::fs::read_to_string(config.root.join("index.ftd")) {
+        fastn
     } else {
         return config.package.name.clone();
     };
-    let lib = fpm::Library {
+    let lib = fastn::Library {
         config: config.clone(),
         markdown: None,
         document_id: "index.ftd".to_string(),
         translated_data: Default::default(),
         current_package: std::sync::Arc::new(std::sync::Mutex::new(vec![config.package.clone()])),
     };
-    let main_ftd_doc = match ftd::p2::Document::from("index.ftd", fpm.as_str(), &lib) {
+    let main_ftd_doc = match ftd::p2::Document::from("index.ftd", fastn.as_str(), &lib) {
         Ok(v) => v,
         Err(_) => {
             return config.package.name.clone();
@@ -279,9 +279,9 @@ pub(crate) fn seconds_to_human(s: u64) -> String {
     }
 }
 
-pub(crate) fn validate_base_url(package: &fpm::Package) -> fpm::Result<()> {
+pub(crate) fn validate_base_url(package: &fastn::Package) -> fastn::Result<()> {
     if package.download_base_url.is_none() {
-        warning!("expected base in fpm.package: {:?}", package.name);
+        warning!("expected base in fastn.package: {:?}", package.name);
     }
 
     Ok(())
@@ -320,7 +320,7 @@ fn is_file_in_root(root: &str, file_name: &str) -> bool {
 }
 
 /// returns favicon html tag as string
-/// (if favicon is passed as header in fpm.package or if any favicon.* file is present in the root package folder)
+/// (if favicon is passed as header in fastn.package or if any favicon.* file is present in the root package folder)
 /// otherwise returns None
 fn resolve_favicon(
     root_path: &str,
@@ -346,13 +346,13 @@ fn resolve_favicon(
         (path.to_string(), content_type.to_string())
     }
 
-    // favicon image path from fpm.package if provided
+    // favicon image path from fastn.package if provided
     let fav_path = favicon;
 
     let (full_fav_path, fav_mime_content_type): (String, String) = {
         match fav_path {
             Some(ref path) => {
-                // In this case, favicon is provided with fpm.package in FPM.ftd
+                // In this case, favicon is provided with fastn.package in FASTN.ftd
                 get_favicon_path_and_type(package_name, path)
             }
             None => {
@@ -387,7 +387,7 @@ fn resolve_favicon(
 
 pub fn replace_markers_2021(
     s: &str,
-    config: &fpm::Config,
+    config: &fastn::Config,
     main_id: &str,
     title: &str,
     base_url: &str,
@@ -408,11 +408,11 @@ pub fn replace_markers_2021(
             .unwrap_or_default()
             .as_str(),
         )
-        .replace("__ftd_js__", fpm::ftd_js().as_str())
+        .replace("__ftd_js__", fastn::ftd_js().as_str())
         .replace("__ftd_body_events__", main_rt.body_events.as_str())
-        .replace("__ftd_css__", fpm::ftd_css())
+        .replace("__ftd_css__", fastn::ftd_css())
         .replace("__ftd_element_css__", main_rt.css_collector.as_str())
-        .replace("__fpm_js__", fpm::fpm_js())
+        .replace("__fastn_js__", fastn::fastn_js())
         .replace(
             "__extra_js__",
             get_extra_js(
@@ -431,7 +431,7 @@ pub fn replace_markers_2021(
         )
         .replace(
             "__ftd_data_main__",
-            fpm::font::escape(
+            fastn::font::escape(
                 serde_json::to_string_pretty(&main_rt.data)
                     .expect("failed to convert document to json")
                     .as_str(),
@@ -440,7 +440,7 @@ pub fn replace_markers_2021(
         )
         .replace(
             "__ftd_external_children_main__",
-            fpm::font::escape(
+            fastn::font::escape(
                 serde_json::to_string_pretty(&main_rt.external_children)
                     .expect("failed to convert document to json")
                     .as_str(),
@@ -532,7 +532,7 @@ pub fn replace_markers_2022(
             )
             .replace(
                 "__ftd_js__",
-                format!("{}{}", ftd_js, fpm_2022_js()).as_str(),
+                format!("{}{}", ftd_js, fastn_2022_js()).as_str(),
             )
             .replace(
                 "__extra_js__",
@@ -572,7 +572,7 @@ pub(crate) async fn write(
     root: &camino::Utf8PathBuf,
     file_path: &str,
     data: &[u8],
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     if root.join(file_path).exists() {
         return Ok(());
     }
@@ -584,7 +584,7 @@ pub(crate) async fn update1(
     root: &camino::Utf8PathBuf,
     file_path: &str,
     data: &[u8],
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     use tokio::io::AsyncWriteExt;
 
     let (file_root, file_name) = if let Some((file_root, file_name)) = file_path.rsplit_once('/') {
@@ -608,12 +608,12 @@ pub(crate) async fn update1(
 pub(crate) async fn copy(
     from: impl AsRef<camino::Utf8Path>,
     to: impl AsRef<camino::Utf8Path>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     let content = tokio::fs::read(from.as_ref()).await?;
-    fpm::utils::update(to, content.as_slice()).await
+    fastn::utils::update(to, content.as_slice()).await
 }
 
-pub(crate) async fn update(root: impl AsRef<camino::Utf8Path>, data: &[u8]) -> fpm::Result<()> {
+pub(crate) async fn update(root: impl AsRef<camino::Utf8Path>, data: &[u8]) -> fastn::Result<()> {
     use tokio::io::AsyncWriteExt;
 
     let (file_root, file_name) = if let Some(file_root) = root.as_ref().parent() {
@@ -621,7 +621,7 @@ pub(crate) async fn update(root: impl AsRef<camino::Utf8Path>, data: &[u8]) -> f
             file_root,
             root.as_ref()
                 .file_name()
-                .ok_or_else(|| fpm::Error::UsageError {
+                .ok_or_else(|| fastn::Error::UsageError {
                     message: format!(
                         "Invalid File Path: Can't find file name `{:?}`",
                         root.as_ref()
@@ -629,7 +629,7 @@ pub(crate) async fn update(root: impl AsRef<camino::Utf8Path>, data: &[u8]) -> f
                 })?,
         )
     } else {
-        return Err(fpm::Error::UsageError {
+        return Err(fastn::Error::UsageError {
             message: format!(
                 "Invalid File Path: file path doesn't have parent: {:?}",
                 root.as_ref()
@@ -663,7 +663,7 @@ pub(crate) fn ids_matches(id1: &str, id2: &str) -> bool {
 }
 
 /// Parse argument from CLI
-/// If CLI command: fpm serve --identities a@foo.com,foo
+/// If CLI command: fastn serve --identities a@foo.com,foo
 /// key: --identities -> output: a@foo.com,foo
 pub fn parse_from_cli(key: &str) -> Option<String> {
     use itertools::Itertools;
@@ -693,7 +693,7 @@ pub async fn remove(path: &std::path::Path) -> std::io::Result<()> {
 }
 
 /// Remove from provided `root` except given list
-pub async fn remove_except(root: &camino::Utf8Path, except: &[&str]) -> fpm::Result<()> {
+pub async fn remove_except(root: &camino::Utf8Path, except: &[&str]) -> fastn::Result<()> {
     use itertools::Itertools;
     let except = except
         .iter()
@@ -715,7 +715,7 @@ pub async fn remove_except(root: &camino::Utf8Path, except: &[&str]) -> fpm::Res
 }
 
 /// /api/?a=1&b=2&c=3 => vec[(a, 1), (b, 2), (c, 3)]
-pub fn query(uri: &str) -> fpm::Result<Vec<(String, String)>> {
+pub fn query(uri: &str) -> fastn::Result<Vec<(String, String)>> {
     use itertools::Itertools;
     Ok(
         url::Url::parse(format!("https://fifthtry.com/{}", uri).as_str())?

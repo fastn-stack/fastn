@@ -47,7 +47,7 @@ body sitemap-body:
 
 
 ;; Example: Dynamic Urls
-;; -- fpm.dynamic-urls:
+;; -- fastn.dynamic-urls:
 ;; - /person/<string:name>/
 ;;  document: person.ftd
 ;;  readers: readers/person
@@ -156,8 +156,8 @@ string missing:
 string never-marked:
 string out-dated:
 string upto-date:
-string welcome-fpm-page:
-string welcome-fpm-page-subtitle:
+string welcome-fastn-page:
+string welcome-fastn-page-subtitle:
 string language:
 
 
@@ -426,8 +426,8 @@ option integer self-version:
 -- tracking-info list tracks:
 
 
-;; FPM Apps Installation
-;; for FPM.ftd
+;; fastn Apps Installation
+;; for fastn.ftd
 -- record app-data:
 caption name:
 string package:
@@ -442,7 +442,7 @@ string list writers:
 -- app-data list app:
 
 ;; Send this data from processor
-;; for fpm-apps processor
+;; for fastn-apps processor
 -- record app-ui-item:
 caption name:
 string package:

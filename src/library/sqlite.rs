@@ -1,7 +1,7 @@
 pub async fn processor<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     tokio::task::block_in_place(move || processor_(section, doc, config))
 }
@@ -9,7 +9,7 @@ pub async fn processor<'a>(
 pub fn processor_(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     let db = match section
         .header

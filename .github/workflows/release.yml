@@ -16,7 +16,7 @@ jobs:
     env:
       CARGO_TERM_COLOR: always
       BUILD_TARGET: x86_64-unknown-linux-musl
-      BINARY_NAME: fpm
+      BINARY_NAME: fastn
     steps:
       - uses: actions/checkout@main
       - uses: actions/cache@v2
@@ -44,7 +44,7 @@ jobs:
           args: cargo build --target $BUILD_TARGET --release --features controller
       - uses: actions/upload-artifact@v2
         with:
-          name: fpm_controller_linux_musl_x86_64
+          name: fastn_controller_linux_musl_x86_64
           path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}*
   release-windows:
     name: Build for Windows
@@ -72,7 +72,7 @@ jobs:
         with:
           name: windows_x64_latest
           path: |
-            target/release/fpm.exe
+            target/release/fastn.exe
   release-macos:
     name: Build for MacOS
     runs-on: macos-latest
@@ -99,7 +99,7 @@ jobs:
         with:
           name: macos_x64_latest
           path: |
-            target/release/fpm
+            target/release/fastn
   create-release:
     name: Create github tag and release
     runs-on: ubuntu-latest
@@ -115,23 +115,23 @@ jobs:
           path: ~/download/linux_musl
       - uses: actions/download-artifact@v2
         with:
-          name: fpm_controller_linux_musl_x86_64
-          path: ~/download/fpm_controller_linux_musl
+          name: fastn_controller_linux_musl_x86_64
+          path: ~/download/fastn_controller_linux_musl
       - uses: actions/download-artifact@v2
         with:
           name: windows_x64_latest
           path: ~/download/windows
       - name: Rename assets
         run: |
-          mv ~/download/windows/fpm.exe ~/download/windows/fpm_windows_x86_64.exe
-          mv ~/download/macos/fpm ~/download/macos/fpm_macos_x86_64
-          mv ~/download/linux_musl/fpm ~/download/linux_musl/fpm_linux_musl_x86_64
-          mv ~/download/linux_musl/fpm.d ~/download/linux_musl/fpm_linux_musl_x86_64.d
-          mv ~/download/fpm_controller_linux_musl/fpm ~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64
-          mv ~/download/fpm_controller_linux_musl/fpm.d ~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64.d
+          mv ~/download/windows/fastn.exe ~/download/windows/fastn_windows_x86_64.exe
+          mv ~/download/macos/fastn ~/download/macos/fastn_macos_x86_64
+          mv ~/download/linux_musl/fastn ~/download/linux_musl/fastn_linux_musl_x86_64
+          mv ~/download/linux_musl/fastn.d ~/download/linux_musl/fastn_linux_musl_x86_64.d
+          mv ~/download/fastn_controller_linux_musl/fastn ~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64
+          mv ~/download/fastn_controller_linux_musl/fastn.d ~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64.d
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/windows/fpm_windows_x86_64.exe,~/download/macos/fpm_macos_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64.d,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64.d"
+          artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/macos/fastn_macos_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64.d,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64,~/download/fastn_controller_linux_musl/fastn_controller_linux_musl_x86_64.d"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}

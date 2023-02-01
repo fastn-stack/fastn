@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
 -- ftd.column:
 padding-vertical: 40
@@ -7,15 +7,15 @@ width: fill
 
 -- h0: Translation Status
 
--- title: $fpm.package-title
+-- title: $fastn.package-title
 subtitle: key-value: Last modified on:
-> value: $fpm.last-modified-on
+> value: $fastn.last-modified-on
 > default: Never synced
 
 Here is the list of the translation status for the available languages.
 
 -- key-value: Total number of documents:
-value: $fpm.number-of-documents
+value: $fastn.number-of-documents
 default: Not known
 
 -- language-status:
@@ -56,10 +56,10 @@ region: title
 /style: bold
 /font: apple-system
 align: center
-link: $fpm.home-url
+link: $fastn.home-url
 
---- ftd.text: $fpm.language
-if: $fpm.language is not null
+--- ftd.text: $fastn.language
+if: $fastn.language is not null
 border-radius: 10
 /background-color: #f3f3f3
 padding-vertical: 5
@@ -112,7 +112,7 @@ padding-top: 50
 
 
 -- ftd.row print:
-fpm.status-data data:
+fastn.status-data data:
 width: fill
 border-bottom: 1
 /border-color: white
@@ -196,6 +196,6 @@ padding: 5
 --- container: ftd.main
 
 --- print:
-$loop$: $fpm.status as $obj
+$loop$: $fastn.status as $obj
 data: $obj
 

@@ -1,12 +1,16 @@
-pub async fn diff(config: &fpm::Config, files: Option<Vec<String>>, all: bool) -> fpm::Result<()> {
-    let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
+pub async fn diff(
+    config: &fastn::Config,
+    files: Option<Vec<String>>,
+    all: bool,
+) -> fastn::Result<()> {
+    let snapshots = fastn::snapshot::get_latest_snapshots(&config.root).await?;
     let all = all || files.is_some();
     let documents = if let Some(ref files) = files {
         let files = files
             .iter()
             .map(|x| config.root.join(x))
             .collect::<Vec<camino::Utf8PathBuf>>();
-        fpm::paths_to_files(config.package.name.as_str(), files, config.root.as_path()).await?
+        fastn::paths_to_files(config.package.name.as_str(), files, config.root.as_path()).await?
     } else {
         config.get_files(&config.package).await?
     };
@@ -23,11 +27,11 @@ pub async fn diff(config: &fpm::Config, files: Option<Vec<String>>, all: bool) -
 }
 
 async fn get_diffy(
-    doc: &fpm::File,
+    doc: &fastn::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
-) -> fpm::Result<Option<String>> {
+) -> fastn::Result<Option<String>> {
     if let Some(timestamp) = snapshots.get(&doc.get_id()) {
-        let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
+        let path = fastn::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
         let content = tokio::fs::read_to_string(&doc.get_full_path()).await?;
 
         let existing_doc = tokio::fs::read_to_string(&path).await?;
@@ -45,24 +49,24 @@ async fn get_diffy(
 }
 
 async fn get_track_diff(
-    doc: &fpm::File,
+    doc: &fastn::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
-) -> fpm::Result<()> {
-    let path = fpm::utils::track_path(&doc.get_id(), &doc.get_base_path());
+) -> fastn::Result<()> {
+    let path = fastn::utils::track_path(&doc.get_id(), &doc.get_base_path());
     if std::fs::metadata(&path).is_err() {
         return Ok(());
     }
-    let tracks = fpm::tracker::get_tracks(base_path, &path)?;
+    let tracks = fastn::tracker::get_tracks(base_path, &path)?;
     for track in tracks.values() {
         if let Some(timestamp) = snapshots.get(&track.filename) {
             if track.other_timestamp.is_none() {
                 continue;
             }
             let now_path =
-                fpm::utils::history_path(&track.filename, &doc.get_base_path(), timestamp);
+                fastn::utils::history_path(&track.filename, &doc.get_base_path(), timestamp);
 
-            let then_path = fpm::utils::history_path(
+            let then_path = fastn::utils::history_path(
                 &track.filename,
                 &doc.get_base_path(),
                 track.other_timestamp.as_ref().unwrap(),

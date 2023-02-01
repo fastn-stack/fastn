@@ -2,7 +2,7 @@ pub fn process<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let (section_name, headers, body, line_number) = match value.get_record(doc.name) {
         Ok(val) => (
@@ -38,7 +38,7 @@ pub fn process<'a>(
         let doc_id = config
             .current_document
             .clone()
-            .map(|v| fpm::utils::id_to_path(v.as_str()))
+            .map(|v| fastn::utils::id_to_path(v.as_str()))
             .unwrap_or_else(|| {
                 doc.name
                     .to_string()

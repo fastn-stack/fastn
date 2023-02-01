@@ -32,7 +32,7 @@ impl DiscordScopes {
     }
 }
 // route: /auth/login/
-pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
+pub async fn login(req: actix_web::HttpRequest) -> fastn::Result<fastn::http::Response> {
     // Discord will be redirect to this url after login process completed
 
     let redirect_url: String = format!(
@@ -44,11 +44,11 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
     let client_id = match std::env::var("DISCORD_CLIENT_ID") {
         Ok(id) => id,
         Err(_e) => {
-            return Err(fpm::Error::APIResponseError(
-                "WARN: FPM_TEMP_DISCORD_CLIENT_ID not set.".to_string(),
+            return Err(fastn::Error::APIResponseError(
+                "WARN: FASTN_TEMP_DISCORD_CLIENT_ID not set.".to_string(),
             ));
             // TODO: Need to change this approach later
-            //"FPM_TEMP_DISCORD_CLIENT_ID".to_string()
+            //"FASTN_TEMP_DISCORD_CLIENT_ID".to_string()
         }
     };
     let discord_auth_url = format!(
@@ -72,7 +72,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
 // route: /auth/discord/callback/
 // In this API we are accessing
 // the token and setting it to cookies
-pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+pub async fn callback(req: actix_web::HttpRequest) -> fastn::Result<actix_web::HttpResponse> {
     #[derive(Debug, serde::Deserialize)]
     pub struct QueryParams {
         pub code: String,
@@ -101,10 +101,10 @@ pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::Htt
             return Ok(actix_web::HttpResponse::Found()
                 .cookie(
                     actix_web::cookie::Cookie::build(
-                        fpm::auth::AuthProviders::Discord.as_str(),
-                        fpm::auth::utils::encrypt_str(&user_detail_str).await,
+                        fastn::auth::AuthProviders::Discord.as_str(),
+                        fastn::auth::utils::encrypt_str(&user_detail_str).await,
                     )
-                    .domain(fpm::auth::utils::domain(req.connection_info().host()))
+                    .domain(fastn::auth::utils::domain(req.connection_info().host()))
                     .path("/")
                     .permanent()
                     .finish(),
@@ -118,12 +118,12 @@ pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::Htt
 // it returns identities which matches to given input
 pub async fn matched_identities(
     ud: UserDetail,
-    identities: &[fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     let discord_identities = identities
         .iter()
         .filter(|identity| identity.key.starts_with("discord"))
-        .collect::<Vec<&fpm::user_group::UserIdentity>>();
+        .collect::<Vec<&fastn::user_group::UserIdentity>>();
 
     if discord_identities.is_empty() {
         return Ok(vec![]);
@@ -142,8 +142,8 @@ pub async fn matched_identities(
 }
 pub async fn matched_user_servers(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
 
     let user_servers = identities
@@ -165,7 +165,7 @@ pub async fn matched_user_servers(
     Ok(user_joined_servers
         .into_iter()
         .filter(|user_server| user_servers.contains(&user_server.as_str()))
-        .map(|repo| fpm::user_group::UserIdentity {
+        .map(|repo| fastn::user_group::UserIdentity {
             key: "discord-server".to_string(),
             value: repo,
         })
@@ -173,8 +173,8 @@ pub async fn matched_user_servers(
 }
 pub async fn matched_thread_members(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut user_joined_threads: Vec<String> = vec![];
     let user_threads = identities
@@ -202,7 +202,7 @@ pub async fn matched_thread_members(
     // filter the user joined threads with input
     Ok(user_joined_threads
         .into_iter()
-        .map(|thread| fpm::user_group::UserIdentity {
+        .map(|thread| fastn::user_group::UserIdentity {
             key: "discord-thread".to_string(),
             value: thread,
         })
@@ -210,8 +210,8 @@ pub async fn matched_thread_members(
 }
 pub async fn matched_event_members(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut user_joined_events: Vec<String> = vec![];
     let user_events = identities
@@ -239,7 +239,7 @@ pub async fn matched_event_members(
     // filter the user joined events with input
     Ok(user_joined_events
         .into_iter()
-        .map(|event| fpm::user_group::UserIdentity {
+        .map(|event| fastn::user_group::UserIdentity {
             key: "discord-event".to_string(),
             value: event,
         })
@@ -247,8 +247,8 @@ pub async fn matched_event_members(
 }
 pub async fn matched_member_permission(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let user_roles = identities
         .iter()
@@ -269,7 +269,7 @@ pub async fn matched_member_permission(
     Ok(member_role_list
         .into_iter()
         .filter(|user_role| user_roles.contains(&user_role.as_str()))
-        .map(|permission| fpm::user_group::UserIdentity {
+        .map(|permission| fastn::user_group::UserIdentity {
             key: "discord-permission".to_string(),
             value: permission,
         })
@@ -284,14 +284,14 @@ pub mod apis {
     // API Docs: https://discord.com/developers/docs/getting-started
     //API EndPoints: https://github.com/GregTCLTK/Discord-Api-Endpoints/blob/master/Endpoints.md
     // TODO: It can be stored in the request cookies
-    pub async fn user_details(token: &str) -> fpm::Result<(String, String)> {
+    pub async fn user_details(token: &str) -> fastn::Result<(String, String)> {
         // API Docs: https://discord.com/api/users/@me
         #[derive(serde::Deserialize)]
         struct UserDetails {
             username: String,
             id: String,
         }
-        let user_obj: UserDetails = fpm::auth::utils::get_api(
+        let user_obj: UserDetails = fastn::auth::utils::get_api(
             "https://discord.com/api/users/@me",
             format!("{} {}", "Bearer", token).as_str(),
         )
@@ -301,11 +301,11 @@ pub mod apis {
     }
 
     //This API will only be used to get access token for discord
-    pub async fn discord_token(url: &str, redirect_url: &str, code: &str) -> fpm::Result<String> {
+    pub async fn discord_token(url: &str, redirect_url: &str, code: &str) -> fastn::Result<String> {
         let client_id = match std::env::var("DISCORD_CLIENT_ID") {
             Ok(id) => id,
             Err(_e) => {
-                return Err(fpm::Error::APIResponseError(
+                return Err(fastn::Error::APIResponseError(
                     "WARN: DISCORD_CLIENT_ID not set.".to_string(),
                 ));
             }
@@ -313,7 +313,7 @@ pub mod apis {
         let client_secret = match std::env::var("DISCORD_CLIENT_SECRET") {
             Ok(secret) => secret,
             Err(_e) => {
-                return Err(fpm::Error::APIResponseError(
+                return Err(fastn::Error::APIResponseError(
                     "WARN: DISCORD_SECRET not set.".to_string(),
                 ));
             }
@@ -328,7 +328,7 @@ pub mod apis {
         let response = reqwest::Client::new().post(url).form(&map).send().await?;
 
         if !response.status().eq(&reqwest::StatusCode::OK) {
-            return Err(fpm::Error::APIResponseError(format!(
+            return Err(fastn::Error::APIResponseError(format!(
                 "DISCORD-API-ERROR: {}, Error: {}",
                 url,
                 response.text().await?
@@ -337,7 +337,7 @@ pub mod apis {
         let auth_obj = response.json::<DiscordAuthResp>().await?;
         Ok(auth_obj.access_token)
     }
-    pub async fn user_servers(token: &str) -> fpm::Result<Vec<String>> {
+    pub async fn user_servers(token: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://discord.com/api/users/@me/guilds
         // TODO: Handle paginated response
 
@@ -345,20 +345,20 @@ pub mod apis {
         struct UserGuilds {
             name: String,
         }
-        let user_server_list: Vec<UserGuilds> = fpm::auth::utils::get_api(
+        let user_server_list: Vec<UserGuilds> = fastn::auth::utils::get_api(
             format!("{}?limit=100", "https://discord.com/api/users/@me/guilds").as_str(),
             format!("{} {}", "Bearer", token).as_str(),
         )
         .await?;
         Ok(user_server_list.into_iter().map(|x| x.name).collect())
     }
-    pub async fn thread_members(thread_id: &str) -> fpm::Result<Vec<String>> {
+    pub async fn thread_members(thread_id: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://discord.com/api/channels/{thread-id}/thread-members
         // TODO: Handle paginated response
         let discord_bot_id = match std::env::var("DISCORD_BOT_ID") {
             Ok(id) => id,
             Err(_e) => {
-                return Err(fpm::Error::APIResponseError(
+                return Err(fastn::Error::APIResponseError(
                     "WARN: DISCORD_BOT_ID not set.".to_string(),
                 ));
             }
@@ -367,7 +367,7 @@ pub mod apis {
         struct ThreadMembers {
             user_id: String,
         }
-        let thread_member_list: Vec<ThreadMembers> = fpm::auth::utils::get_api(
+        let thread_member_list: Vec<ThreadMembers> = fastn::auth::utils::get_api(
             format!(
                 "{}{}{}?limit=100",
                 "https://discord.com/api/channels/", thread_id, "/thread-members"
@@ -378,13 +378,13 @@ pub mod apis {
         .await?;
         Ok(thread_member_list.into_iter().map(|x| x.user_id).collect())
     }
-    pub async fn event_members(event_id: &str) -> fpm::Result<Vec<String>> {
+    pub async fn event_members(event_id: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://discord.com/api/guilds/{guild-id}/scheduled-events/{event-id}/users
         // TODO: Handle paginated response
         let discord_bot_id = match std::env::var("DISCORD_BOT_ID") {
             Ok(id) => id,
             Err(_e) => {
-                return Err(fpm::Error::APIResponseError(
+                return Err(fastn::Error::APIResponseError(
                     "WARN: DISCORD_BOT_ID not set.".to_string(),
                 ));
             }
@@ -392,7 +392,7 @@ pub mod apis {
         let discord_guild_id = match std::env::var("DISCORD_GUILD_ID") {
             Ok(id) => id,
             Err(_e) => {
-                return Err(fpm::Error::APIResponseError(
+                return Err(fastn::Error::APIResponseError(
                     "WARN: DISCORD_GUILD_ID not set.".to_string(),
                 ));
             }
@@ -405,7 +405,7 @@ pub mod apis {
         struct EventMemberObj {
             id: String,
         }
-        let event_member_list: Vec<EventMembers> = fpm::auth::utils::get_api(
+        let event_member_list: Vec<EventMembers> = fastn::auth::utils::get_api(
             format!(
                 "{}{}{}{}{}?limit=100",
                 "https://discord.com/api/guilds/",
@@ -420,12 +420,12 @@ pub mod apis {
         .await?;
         Ok(event_member_list.into_iter().map(|x| x.user.id).collect())
     }
-    pub async fn member_roles(user_id: &str) -> fpm::Result<Vec<String>> {
+    pub async fn member_roles(user_id: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://discord.com/api/guilds/{guild-id}/members/{user-id}
         let discord_bot_id = match std::env::var("DISCORD_BOT_ID") {
             Ok(id) => id,
             Err(_e) => {
-                return Err(fpm::Error::APIResponseError(
+                return Err(fastn::Error::APIResponseError(
                     "WARN: DISCORD_BOT_ID not set.".to_string(),
                 ));
             }
@@ -433,7 +433,7 @@ pub mod apis {
         let discord_guild_id = match std::env::var("DISCORD_GUILD_ID") {
             Ok(id) => id,
             Err(_e) => {
-                return Err(fpm::Error::APIResponseError(
+                return Err(fastn::Error::APIResponseError(
                     "WARN: DISCORD_GUILD_ID not set.".to_string(),
                 ));
             }
@@ -442,7 +442,7 @@ pub mod apis {
         struct MemberRoles {
             roles: Vec<String>,
         }
-        let member_roles: MemberRoles = fpm::auth::utils::get_api(
+        let member_roles: MemberRoles = fastn::auth::utils::get_api(
             format!(
                 "{}{}{}{}",
                 "https://discord.com/api/guilds/", discord_guild_id, "/members/", user_id

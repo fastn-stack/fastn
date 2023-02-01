@@ -1,5 +1,5 @@
--- import: fpm
--- import: fpm-lib
+-- import: fastn
+-- import: fastn-lib
 
 -- ftd.image-src i1: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg
 dark: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg
@@ -39,13 +39,13 @@ src: $i1
 width: 16
 height: auto
 
---- ftd.text: $fpm.i18n.unapproved-heading
+--- ftd.text: $fastn.i18n.unapproved-heading
 /color: white
 /style: semi-bold
 /font: apple-system
 padding-right: 20
 
---- ftd.text: $fpm.i18n.show-unapproved-version
+--- ftd.text: $fastn.i18n.show-unapproved-version
 if: $show-main
 $on-click$: toggle $show-main
 $on-click$: message-host show_fallback
@@ -64,7 +64,7 @@ shadow-blur: 6
 /background-color: #d27355
 /color: white
 
---- ftd.text: $fpm.i18n.show-latest-version
+--- ftd.text: $fastn.i18n.show-latest-version
 if: not $show-main
 $on-click$: toggle $show-main
 $on-click$: message-host show_main
@@ -85,4 +85,4 @@ shadow-blur: 6
 
 -- container: outer-container
 
--- fpm-lib.message:
+-- fastn-lib.message:

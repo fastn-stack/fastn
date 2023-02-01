@@ -1,10 +1,10 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: sitemap-processor
+-- fastn.package: sitemap-processor
 download-base-url: https://www.github.com/
 
 
--- fpm.sitemap:
+-- fastn.sitemap:
 
 # Section2: /
 

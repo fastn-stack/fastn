@@ -1,9 +1,9 @@
 pub async fn merge(
-    config: &fpm::Config,
+    config: &fastn::Config,
     src: Option<&str>,
     dest: &str,
     file: Option<&str>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     let src = src.unwrap_or("main");
 
     if src.eq("main") {
@@ -22,23 +22,23 @@ pub async fn merge(
 }
 
 async fn merge_cr_into_cr(
-    _config: &fpm::Config,
+    _config: &fastn::Config,
     _src: usize,
     _dest: usize,
     _file: Option<&str>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     unimplemented!()
 }
 
 async fn merge_main_into_cr(
-    config: &fpm::Config,
+    config: &fastn::Config,
     dest: usize,
     file: Option<&str>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     use itertools::Itertools;
     use sha2::Digest;
 
-    let remote_manifest: std::collections::BTreeMap<String, fpm::history::FileEdit> = config
+    let remote_manifest: std::collections::BTreeMap<String, fastn::history::FileEdit> = config
         .get_remote_manifest(true)
         .await?
         .into_iter()
@@ -62,7 +62,7 @@ async fn merge_main_into_cr(
     let mut conflicted_file_status = vec![];
     let deleted_files_path = config.cr_deleted_file_path(dest);
     let deleted_file_str = config.path_without_root(&deleted_files_path)?;
-    let mut new_file_status: std::collections::BTreeMap<String, fpm::sync_utils::FileStatus> =
+    let mut new_file_status: std::collections::BTreeMap<String, fastn::sync_utils::FileStatus> =
         Default::default();
 
     // True: if file: Option<&str> has some value and it's processed
@@ -77,11 +77,12 @@ async fn merge_main_into_cr(
                 config.history_path(cr_file_path.as_str(), cr_file_edit.version),
             )
             .await?;
-            let mut cr_deleted_list = fpm::cr::resolve_cr_deleted(cr_deleted_files.as_str(), dest)
-                .await?
-                .into_iter()
-                .map(|v| (v.filename.to_string(), v))
-                .collect::<std::collections::HashMap<String, fpm::cr::CRDeleted>>();
+            let mut cr_deleted_list =
+                fastn::cr::resolve_cr_deleted(cr_deleted_files.as_str(), dest)
+                    .await?
+                    .into_iter()
+                    .map(|v| (v.filename.to_string(), v))
+                    .collect::<std::collections::HashMap<String, fastn::cr::CRDeleted>>();
             let mut already_deleted = vec![];
             for (deleted_file_name, cr_deleted) in cr_deleted_list.iter() {
                 if file_processed {
@@ -107,10 +108,10 @@ async fn merge_main_into_cr(
                 }
                 if !file_edit.version.eq(&cr_deleted.version) {
                     // CloneDeletedRemoteEdited
-                    conflicted_file_status.push(fpm::sync_utils::FileStatus::Delete {
+                    conflicted_file_status.push(fastn::sync_utils::FileStatus::Delete {
                         path: deleted_file_name.to_string(),
                         version: cr_deleted.version,
-                        status: fpm::sync_utils::Status::CloneDeletedRemoteEdited(
+                        status: fastn::sync_utils::Status::CloneDeletedRemoteEdited(
                             file_edit.version,
                         ),
                     });
@@ -121,20 +122,20 @@ async fn merge_main_into_cr(
                 cr_deleted_list.retain(|k, _| !already_deleted.contains(k));
                 new_file_status.insert(
                     cr_file_path.to_string(),
-                    fpm::sync_utils::FileStatus::Update {
+                    fastn::sync_utils::FileStatus::Update {
                         path: cr_file_path.to_string(),
-                        content: fpm::cr::generate_deleted_files_content(
+                        content: fastn::cr::generate_deleted_files_content(
                             cr_deleted_list.into_values().collect_vec().as_slice(),
                         )
                         .into_bytes(),
                         version: cr_file_edit.version,
-                        status: fpm::sync_utils::Status::NoConflict,
+                        status: fastn::sync_utils::Status::NoConflict,
                     },
                 );
             }
             continue;
         }
-        let filename = fpm::cr::cr_path_to_file_name(dest, cr_file_path.as_str())?;
+        let filename = fastn::cr::cr_path_to_file_name(dest, cr_file_path.as_str())?;
         if let Some(file) = file {
             if filename.ne(file) {
                 continue;
@@ -171,17 +172,17 @@ async fn merge_main_into_cr(
                 {
                     new_file_status.insert(
                         cr_file_path.to_string(),
-                        fpm::sync_utils::FileStatus::Delete {
+                        fastn::sync_utils::FileStatus::Delete {
                             path: cr_file_path.to_string(),
                             version: cr_file_edit.version,
-                            status: fpm::sync_utils::Status::NoConflict,
+                            status: fastn::sync_utils::Status::NoConflict,
                         },
                     );
                 } else {
-                    conflicted_file_status.push(fpm::sync_utils::FileStatus::Add {
+                    conflicted_file_status.push(fastn::sync_utils::FileStatus::Add {
                         path: filename.to_string(),
                         content: ours_content_bytes.clone(),
-                        status: fpm::sync_utils::Status::CloneAddedRemoteAdded(file_edit.version),
+                        status: fastn::sync_utils::Status::CloneAddedRemoteAdded(file_edit.version),
                     });
                 }
                 continue;
@@ -191,11 +192,11 @@ async fn merge_main_into_cr(
         let track_file_path =
             config.history_path(track_file_path_str.as_str(), track_file_edit.version);
 
-        let mut tracking_infos = fpm::track::get_tracking_info_(&track_file_path)
+        let mut tracking_infos = fastn::track::get_tracking_info_(&track_file_path)
             .await?
             .into_iter()
             .map(|v| (v.filename.to_string(), v))
-            .collect::<std::collections::HashMap<String, fpm::track::TrackingInfo>>();
+            .collect::<std::collections::HashMap<String, fastn::track::TrackingInfo>>();
         let track_info = if let Some(track_info) = tracking_infos.get_mut(&filename) {
             track_info
         } else {
@@ -210,17 +211,17 @@ async fn merge_main_into_cr(
             {
                 new_file_status.insert(
                     cr_file_path.to_string(),
-                    fpm::sync_utils::FileStatus::Delete {
+                    fastn::sync_utils::FileStatus::Delete {
                         path: cr_file_path.to_string(),
                         version: cr_file_edit.version,
-                        status: fpm::sync_utils::Status::NoConflict,
+                        status: fastn::sync_utils::Status::NoConflict,
                     },
                 );
             } else {
-                conflicted_file_status.push(fpm::sync_utils::FileStatus::Add {
+                conflicted_file_status.push(fastn::sync_utils::FileStatus::Add {
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
-                    status: fpm::sync_utils::Status::CloneAddedRemoteAdded(file_edit.version),
+                    status: fastn::sync_utils::Status::CloneAddedRemoteAdded(file_edit.version),
                 });
             }
             continue;
@@ -228,11 +229,11 @@ async fn merge_main_into_cr(
 
         if file_edit.is_deleted() {
             if !track_info.version.eq(&file_edit.version) {
-                conflicted_file_status.push(fpm::sync_utils::FileStatus::Update {
+                conflicted_file_status.push(fastn::sync_utils::FileStatus::Update {
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
                     version: track_info.version,
-                    status: fpm::sync_utils::Status::CloneEditedRemoteDeleted(file_edit.version),
+                    status: fastn::sync_utils::Status::CloneEditedRemoteDeleted(file_edit.version),
                 });
             }
             continue;
@@ -251,11 +252,11 @@ async fn merge_main_into_cr(
             content
         } else {
             // binary file like images, can't resolve conflict
-            conflicted_file_status.push(fpm::sync_utils::FileStatus::Update {
+            conflicted_file_status.push(fastn::sync_utils::FileStatus::Update {
                 path: filename.to_string(),
                 content: ours_content_bytes.clone(),
                 version: track_info.version,
-                status: fpm::sync_utils::Status::Conflict(file_edit.version),
+                status: fastn::sync_utils::Status::Conflict(file_edit.version),
             });
             continue;
         };
@@ -273,34 +274,34 @@ async fn merge_main_into_cr(
             Ok(data) => {
                 new_file_status.insert(
                     cr_file_path.to_string(),
-                    fpm::sync_utils::FileStatus::Update {
+                    fastn::sync_utils::FileStatus::Update {
                         path: cr_file_path.to_string(),
                         content: data.into_bytes(),
                         version: cr_file_edit.version,
-                        status: fpm::sync_utils::Status::NoConflict,
+                        status: fastn::sync_utils::Status::NoConflict,
                     },
                 );
                 track_info.version = file_edit.version;
                 new_file_status.insert(
                     track_file_path_str.to_string(),
-                    fpm::sync_utils::FileStatus::Update {
+                    fastn::sync_utils::FileStatus::Update {
                         path: track_file_path_str.to_string(),
-                        content: fpm::track::generate_tracking_info_content(
+                        content: fastn::track::generate_tracking_info_content(
                             tracking_infos.into_values().collect_vec().as_slice(),
                         )
                         .into_bytes(),
                         version: cr_file_edit.version,
-                        status: fpm::sync_utils::Status::NoConflict,
+                        status: fastn::sync_utils::Status::NoConflict,
                     },
                 );
             }
             Err(_) => {
                 // Can't resolve conflict
-                conflicted_file_status.push(fpm::sync_utils::FileStatus::Update {
+                conflicted_file_status.push(fastn::sync_utils::FileStatus::Update {
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
                     version: track_info.version,
-                    status: fpm::sync_utils::Status::Conflict(file_edit.version),
+                    status: fastn::sync_utils::Status::Conflict(file_edit.version),
                 });
                 continue;
             }
@@ -308,7 +309,7 @@ async fn merge_main_into_cr(
     }
     conflicted_file_status
         .iter()
-        .map(|v| fpm::commands::sync_status::print_status(v, false))
+        .map(|v| fastn::commands::sync_status::print_status(v, false))
         .collect_vec();
 
     if conflicted_file_status.is_empty() {
@@ -316,21 +317,21 @@ async fn merge_main_into_cr(
             .into_values()
             .filter_map(|v| v.sync_request(None))
             .collect_vec();
-        fpm::apis::sync2::do_sync(config, changed_files.as_slice()).await?;
+        fastn::apis::sync2::do_sync(config, changed_files.as_slice()).await?;
     }
     Ok(())
 }
 
 async fn merge_cr_into_main(
-    config: &fpm::Config,
+    config: &fastn::Config,
     src: usize,
     file: Option<&str>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     use itertools::Itertools;
     use sha2::Digest;
 
     //TODO: check if cr is closed
-    let remote_manifest: std::collections::BTreeMap<String, fpm::history::FileEdit> = config
+    let remote_manifest: std::collections::BTreeMap<String, fastn::history::FileEdit> = config
         .get_remote_manifest(true)
         .await?
         .into_iter()
@@ -358,21 +359,21 @@ async fn merge_cr_into_main(
                 if v.is_deleted() {
                     None
                 } else if let Some(file) = file {
-                    let cr_file_name = format!("{}/{}", fpm::cr::cr_path(src), file);
+                    let cr_file_name = format!("{}/{}", fastn::cr::cr_path(src), file);
                     if cr_file_name.eq(k) {
-                        Some(fpm::sync_utils::FileStatus::Delete {
+                        Some(fastn::sync_utils::FileStatus::Delete {
                             path: k.to_string(),
                             version: v.version,
-                            status: fpm::sync_utils::Status::NoConflict,
+                            status: fastn::sync_utils::Status::NoConflict,
                         })
                     } else {
                         None
                     }
                 } else {
-                    Some(fpm::sync_utils::FileStatus::Delete {
+                    Some(fastn::sync_utils::FileStatus::Delete {
                         path: k.to_string(),
                         version: v.version,
-                        status: fpm::sync_utils::Status::NoConflict,
+                        status: fastn::sync_utils::Status::NoConflict,
                     })
                 }
             })
@@ -388,19 +389,19 @@ async fn merge_cr_into_main(
                         .path_without_root(&config.track_path(&config.cr_path(src).join(file)))
                         .unwrap(); // This is safe
                     if cr_track_file_name.eq(k) {
-                        Some(fpm::sync_utils::FileStatus::Delete {
+                        Some(fastn::sync_utils::FileStatus::Delete {
                             path: k.to_string(),
                             version: v.version,
-                            status: fpm::sync_utils::Status::NoConflict,
+                            status: fastn::sync_utils::Status::NoConflict,
                         })
                     } else {
                         None
                     }
                 } else {
-                    Some(fpm::sync_utils::FileStatus::Delete {
+                    Some(fastn::sync_utils::FileStatus::Delete {
                         path: k.to_string(),
                         version: v.version,
-                        status: fpm::sync_utils::Status::NoConflict,
+                        status: fastn::sync_utils::Status::NoConflict,
                     })
                 }
             })
@@ -409,7 +410,7 @@ async fn merge_cr_into_main(
         cr_statuses
     };
 
-    let mut new_file_status: std::collections::BTreeMap<String, fpm::sync_utils::FileStatus> =
+    let mut new_file_status: std::collections::BTreeMap<String, fastn::sync_utils::FileStatus> =
         Default::default();
     let mut conflicted_file_status = vec![];
     let deleted_files_path = config.cr_deleted_file_path(src);
@@ -426,7 +427,7 @@ async fn merge_cr_into_main(
             )
             .await?;
             let cr_deleted_list =
-                fpm::cr::resolve_cr_deleted(cr_deleted_files.as_str(), src).await?;
+                fastn::cr::resolve_cr_deleted(cr_deleted_files.as_str(), src).await?;
 
             for cr_delete in cr_deleted_list {
                 if file_processed {
@@ -443,7 +444,7 @@ async fn merge_cr_into_main(
                     if let Some(file_edit) = remote_manifest.get(cr_delete.filename.as_str()) {
                         file_edit
                     } else {
-                        return fpm::usage_error(format!(
+                        return fastn::usage_error(format!(
                             "Can't find history of `{}` which is marked to be deleted in CR#{}",
                             cr_delete.filename, src
                         ));
@@ -452,10 +453,10 @@ async fn merge_cr_into_main(
                     continue;
                 }
                 if !file_edit.version.eq(&cr_delete.version) {
-                    conflicted_file_status.push(fpm::sync_utils::FileStatus::Delete {
+                    conflicted_file_status.push(fastn::sync_utils::FileStatus::Delete {
                         path: cr_delete.filename.to_string(),
                         version: cr_delete.version,
-                        status: fpm::sync_utils::Status::CloneDeletedRemoteEdited(
+                        status: fastn::sync_utils::Status::CloneDeletedRemoteEdited(
                             file_edit.version,
                         ),
                     });
@@ -468,7 +469,7 @@ async fn merge_cr_into_main(
         }
 
         let cr_file_path = config.history_path(cr_file_name.as_str(), cr_file_edit.version);
-        let filename = fpm::cr::cr_path_to_file_name(src, cr_file_path.as_str())?;
+        let filename = fastn::cr::cr_path_to_file_name(src, cr_file_path.as_str())?;
         if let Some(file) = file {
             if filename.ne(file) {
                 continue;
@@ -484,10 +485,10 @@ async fn merge_cr_into_main(
             // Added file in CR
             new_file_status.insert(
                 filename.to_string(),
-                fpm::sync_utils::FileStatus::Add {
+                fastn::sync_utils::FileStatus::Add {
                     path: cr_file_name.to_string(),
                     content: cr_file_content.clone(),
-                    status: fpm::sync_utils::Status::NoConflict,
+                    status: fastn::sync_utils::Status::NoConflict,
                 },
             );
             continue;
@@ -501,10 +502,10 @@ async fn merge_cr_into_main(
                 // Added file in CR
                 new_file_status.insert(
                     filename.to_string(),
-                    fpm::sync_utils::FileStatus::Add {
+                    fastn::sync_utils::FileStatus::Add {
                         path: cr_file_name.to_string(),
                         content: cr_file_content.clone(),
-                        status: fpm::sync_utils::Status::NoConflict,
+                        status: fastn::sync_utils::Status::NoConflict,
                     },
                 );
                 continue;
@@ -518,11 +519,11 @@ async fn merge_cr_into_main(
         let track_file_path =
             config.history_path(track_file_path_str.as_str(), track_file_edit.version);
 
-        let mut tracking_infos = fpm::track::get_tracking_info_(&track_file_path)
+        let mut tracking_infos = fastn::track::get_tracking_info_(&track_file_path)
             .await?
             .into_iter()
             .map(|v| (v.filename.to_string(), v))
-            .collect::<std::collections::HashMap<String, fpm::track::TrackingInfo>>();
+            .collect::<std::collections::HashMap<String, fastn::track::TrackingInfo>>();
         let track_info = if let Some(track_info) = tracking_infos.get_mut(&filename) {
             track_info
         } else {
@@ -530,10 +531,10 @@ async fn merge_cr_into_main(
             if file_edit.is_deleted() {
                 new_file_status.insert(
                     filename.to_string(),
-                    fpm::sync_utils::FileStatus::Add {
+                    fastn::sync_utils::FileStatus::Add {
                         path: cr_file_name.to_string(),
                         content: cr_file_content.clone(),
-                        status: fpm::sync_utils::Status::NoConflict,
+                        status: fastn::sync_utils::Status::NoConflict,
                     },
                 );
             }
@@ -542,10 +543,10 @@ async fn merge_cr_into_main(
             if !sha2::Sha256::digest(&ours_content_bytes)
                 .eq(&sha2::Sha256::digest(theirs_content_bytes))
             {
-                conflicted_file_status.push(fpm::sync_utils::FileStatus::Add {
+                conflicted_file_status.push(fastn::sync_utils::FileStatus::Add {
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
-                    status: fpm::sync_utils::Status::CloneAddedRemoteAdded(file_edit.version),
+                    status: fastn::sync_utils::Status::CloneAddedRemoteAdded(file_edit.version),
                 });
             }
             continue;
@@ -553,11 +554,11 @@ async fn merge_cr_into_main(
 
         if file_edit.is_deleted() {
             if !track_info.version.eq(&file_edit.version) {
-                conflicted_file_status.push(fpm::sync_utils::FileStatus::Update {
+                conflicted_file_status.push(fastn::sync_utils::FileStatus::Update {
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
                     version: track_info.version,
-                    status: fpm::sync_utils::Status::CloneEditedRemoteDeleted(file_edit.version),
+                    status: fastn::sync_utils::Status::CloneEditedRemoteDeleted(file_edit.version),
                 });
             }
             continue;
@@ -567,11 +568,11 @@ async fn merge_cr_into_main(
             // Edited on cr wrt remote's latest version
             new_file_status.insert(
                 filename.to_string(),
-                fpm::sync_utils::FileStatus::Update {
+                fastn::sync_utils::FileStatus::Update {
                     path: filename,
                     content: cr_file_content,
                     version: track_info.version,
-                    status: fpm::sync_utils::Status::NoConflict,
+                    status: fastn::sync_utils::Status::NoConflict,
                 },
             );
             continue;
@@ -584,11 +585,11 @@ async fn merge_cr_into_main(
             content
         } else {
             // binary file like images, can't resolve conflict
-            conflicted_file_status.push(fpm::sync_utils::FileStatus::Update {
+            conflicted_file_status.push(fastn::sync_utils::FileStatus::Update {
                 path: filename.to_string(),
                 content: ours_content_bytes.clone(),
                 version: track_info.version,
-                status: fpm::sync_utils::Status::Conflict(file_edit.version),
+                status: fastn::sync_utils::Status::Conflict(file_edit.version),
             });
             continue;
         };
@@ -606,21 +607,21 @@ async fn merge_cr_into_main(
             Ok(data) => {
                 new_file_status.insert(
                     filename.to_string(),
-                    fpm::sync_utils::FileStatus::Update {
+                    fastn::sync_utils::FileStatus::Update {
                         path: filename.to_string(),
                         content: data.into_bytes(),
                         version: cr_file_edit.version,
-                        status: fpm::sync_utils::Status::NoConflict,
+                        status: fastn::sync_utils::Status::NoConflict,
                     },
                 );
             }
             Err(_) => {
                 // Can't resolve conflict
-                conflicted_file_status.push(fpm::sync_utils::FileStatus::Update {
+                conflicted_file_status.push(fastn::sync_utils::FileStatus::Update {
                     path: filename.to_string(),
                     content: ours_content_bytes.clone(),
                     version: track_info.version,
-                    status: fpm::sync_utils::Status::Conflict(file_edit.version),
+                    status: fastn::sync_utils::Status::Conflict(file_edit.version),
                 });
                 continue;
             }
@@ -629,7 +630,7 @@ async fn merge_cr_into_main(
 
     conflicted_file_status
         .iter()
-        .map(|v| fpm::commands::sync_status::print_status(v, false))
+        .map(|v| fastn::commands::sync_status::print_status(v, false))
         .collect_vec();
 
     if conflicted_file_status.is_empty() {
@@ -644,52 +645,52 @@ async fn merge_cr_into_main(
                 sync_request_files.push(sync_req);
             }
         }
-        fpm::apis::sync2::do_sync(config, sync_request_files.as_slice()).await?;
+        fastn::apis::sync2::do_sync(config, sync_request_files.as_slice()).await?;
     }
 
     Ok(())
 }
 
 async fn add_close_cr_status(
-    config: &fpm::Config,
+    config: &fastn::Config,
     cr: usize,
-    cr_file_manifest: &std::collections::HashMap<String, fpm::history::FileEdit>,
-) -> fpm::Result<fpm::sync_utils::FileStatus> {
+    cr_file_manifest: &std::collections::HashMap<String, fastn::history::FileEdit>,
+) -> fastn::Result<fastn::sync_utils::FileStatus> {
     let cr_about_path_str = config.path_without_root(&config.cr_meta_path(cr))?;
     let cr_about_file_edit = cr_file_manifest
         .get(cr_about_path_str.as_str())
-        .ok_or_else(|| fpm::Error::CRAboutNotFound {
+        .ok_or_else(|| fastn::Error::CRAboutNotFound {
             message: "Missing cr about".to_string(),
             cr_number: cr,
         })?;
     if cr_about_file_edit.is_deleted() {
-        return Err(fpm::Error::CRAboutNotFound {
+        return Err(fastn::Error::CRAboutNotFound {
             message: "Missing cr about".to_string(),
             cr_number: cr,
         });
     }
     let cr_about_path = config.history_path(cr_about_path_str.as_str(), cr_about_file_edit.version);
     let cr_meta_content = tokio::fs::read_to_string(cr_about_path).await?;
-    let mut cr_about = fpm::cr::resolve_cr_meta(cr_meta_content.as_str(), cr).await?;
+    let mut cr_about = fastn::cr::resolve_cr_meta(cr_meta_content.as_str(), cr).await?;
     cr_about.open = false;
-    let cr_close_content = fpm::cr::generate_cr_meta_content(&cr_about);
-    Ok(fpm::sync_utils::FileStatus::Update {
+    let cr_close_content = fastn::cr::generate_cr_meta_content(&cr_about);
+    Ok(fastn::sync_utils::FileStatus::Update {
         path: cr_about_path_str,
         content: cr_close_content.into_bytes(),
         version: cr_about_file_edit.version,
-        status: fpm::sync_utils::Status::NoConflict,
+        status: fastn::sync_utils::Status::NoConflict,
     })
 }
 
 /*async fn merge_cr_into_main(
-    config: &fpm::Config,
+    config: &fastn::Config,
     src: usize,
     _file: Option<&str>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     let cr_status = config.get_cr_status(src).await?;
     let conflicted_file = cr_status.iter().find(|v| v.is_conflicted());
     if let Some(conflicted_file) = conflicted_file {
-        return fpm::usage_error(format!(
+        return fastn::usage_error(format!(
             "{} is in conflict state: `{:?}`",
             conflicted_file.get_file_path(),
             conflicted_file.status()
@@ -711,10 +712,10 @@ async fn add_close_cr_status(
     let cr_track_map = cr_track_status
         .into_iter()
         .map(|v| (v.get_file_path(), v))
-        .collect::<std::collections::BTreeMap<String, fpm::sync_utils::FileStatus>>(
+        .collect::<std::collections::BTreeMap<String, fastn::sync_utils::FileStatus>>(
     );
 
-    let mut new_file_status: std::collections::BTreeMap<String, fpm::sync_utils::FileStatus> =
+    let mut new_file_status: std::collections::BTreeMap<String, fastn::sync_utils::FileStatus> =
         Default::default();
     for file_status in cr_file_status {
         let cr_file_name = file_status.get_file_path();
@@ -729,7 +730,7 @@ async fn add_close_cr_status(
             };
 
             let deleted_files =
-                fpm::cr::resolve_cr_deleted(String::from_utf8(content)?.as_str(), src).await?;
+                fastn::cr::resolve_cr_deleted(String::from_utf8(content)?.as_str(), src).await?;
             new_file_status.extend(
                 deleted_files
                     .into_iter()
@@ -738,7 +739,7 @@ async fn add_close_cr_status(
             continue;
         }
         let cr_track_path = format!(".tracks/{}", cr_file_name);
-        let file_name = fpm::cr::cr_path_to_file_name(src, cr_file_name.as_str())?;
+        let file_name = fastn::cr::cr_path_to_file_name(src, cr_file_name.as_str())?;
         let file_content = if let Some(file_content) = file_status.get_content() {
             file_content
         } else {
@@ -747,10 +748,10 @@ async fn add_close_cr_status(
 
         if let Some(track) = cr_track_map.get(cr_track_path.as_str()) {
             // status for updated files
-            let content = track.get_content().ok_or_else(|| fpm::Error::UsageError {
+            let content = track.get_content().ok_or_else(|| fastn::Error::UsageError {
                 message: format!("Can't find track content for {}", cr_file_name),
             })?;
-            let cr_tracking_infos = fpm::track::resolve_tracking_info(
+            let cr_tracking_infos = fastn::track::resolve_tracking_info(
                 String::from_utf8(content)?.as_str(),
                 &config.root.join(cr_track_path),
             )
@@ -758,26 +759,26 @@ async fn add_close_cr_status(
             let tracking_info = cr_tracking_infos
                 .into_iter()
                 .find(|v| file_name.eq(&v.filename))
-                .ok_or_else(|| fpm::Error::UsageError {
+                .ok_or_else(|| fastn::Error::UsageError {
                     message: format!("Can't find track info for {}", cr_file_name),
                 })?;
             new_file_status.insert(
                 cr_file_name,
-                fpm::sync_utils::FileStatus::Update {
+                fastn::sync_utils::FileStatus::Update {
                     path: file_name,
                     content: file_content,
                     version: tracking_info.version,
-                    status: fpm::sync_utils::Status::NoConflict,
+                    status: fastn::sync_utils::Status::NoConflict,
                 },
             );
         } else {
             // status for updated files
             new_file_status.insert(
                 cr_file_name,
-                fpm::sync_utils::FileStatus::Add {
+                fastn::sync_utils::FileStatus::Add {
                     path: file_name,
                     content: file_content,
-                    status: fpm::sync_utils::Status::NoConflict,
+                    status: fastn::sync_utils::Status::NoConflict,
                 },
             );
         }
@@ -789,7 +790,7 @@ async fn add_close_cr_status(
 
     let conflicted_file = new_file_status.values().find(|v| v.is_conflicted());
     if let Some(conflicted_file) = conflicted_file {
-        return fpm::usage_error(format!(
+        return fastn::usage_error(format!(
             "{} is in conflict state: `{:?}`",
             conflicted_file.get_file_path(),
             conflicted_file.status()
@@ -801,6 +802,6 @@ async fn add_close_cr_status(
         .filter_map(|v| v.sync_request())
         .collect_vec();
 
-    fpm::commands::sync2::sync(config, changed_files).await?;
+    fastn::commands::sync2::sync(config, changed_files).await?;
     Ok(())
 }*/

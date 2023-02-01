@@ -14,8 +14,8 @@ enum PathParams {
 
 pub fn url_match(
     request_url: &str,
-    sitemap_params: &[fpm::sitemap::PathParams],
-) -> fpm::Result<(bool, Vec<(String, ftd::Value)>)> {
+    sitemap_params: &[fastn::sitemap::PathParams],
+) -> fastn::Result<(bool, Vec<(String, ftd::Value)>)> {
     use itertools::Itertools;
     // request_attrs: [abrark, foo, 28]
     let request_parts = request_url.trim_matches('/').split('/').collect_vec();
@@ -32,7 +32,7 @@ pub fn url_match(
     let mut count = 0;
     for req_part in request_parts {
         match &sitemap_params[count] {
-            fpm::sitemap::PathParams::ValueParam { index: _, value } => {
+            fastn::sitemap::PathParams::ValueParam { index: _, value } => {
                 count += 1;
                 if req_part.eq(value) {
                     continue;
@@ -40,7 +40,7 @@ pub fn url_match(
                     return Ok((false, vec![]));
                 }
             }
-            fpm::sitemap::PathParams::NamedParm {
+            fastn::sitemap::PathParams::NamedParm {
                 index: _,
                 name,
                 param_type,
@@ -56,7 +56,7 @@ pub fn url_match(
     }
     return Ok((true, path_parameters));
 
-    fn get_value_type(value: &str, r#type: &str) -> fpm::Result<ftd::Value> {
+    fn get_value_type(value: &str, r#type: &str) -> fastn::Result<ftd::Value> {
         match r#type {
             "string" => Ok(ftd::Value::String {
                 text: value.to_string(),
@@ -80,10 +80,10 @@ pub fn url_match(
 }
 
 /// Please check test case: `parse_path_params_test_0`
-/// This method is for parsing the dynamic params from fpm.dynamic-urls
+/// This method is for parsing the dynamic params from fastn.dynamic-urls
 pub fn parse_named_params(
     url: &str,
-) -> Result<Vec<fpm::sitemap::PathParams>, fpm::sitemap::ParseError> {
+) -> Result<Vec<fastn::sitemap::PathParams>, fastn::sitemap::ParseError> {
     let mut output = vec![];
     let url = url.trim().trim_matches('/');
 
@@ -99,11 +99,11 @@ pub fn parse_named_params(
                     let type_part = part[1..colon_index].trim();
                     let param_name_part = part[colon_index + 1..part.len() - 1].trim();
                     if type_part.is_empty() || param_name_part.is_empty() {
-                        return Err(fpm::sitemap::ParseError::InvalidDynamicUrls {
+                        return Err(fastn::sitemap::ParseError::InvalidDynamicUrls {
                             message: format!("dynamic-urls format is wrong for: {}", part),
                         });
                     }
-                    output.push(fpm::sitemap::PathParams::named(
+                    output.push(fastn::sitemap::PathParams::named(
                         index,
                         param_name_part.to_string(),
                         type_part.to_string(), // TODO: check the type which are supported in the sitemap
@@ -112,7 +112,7 @@ pub fn parse_named_params(
                 }
             } else {
                 // b
-                output.push(fpm::sitemap::PathParams::value(index, part.to_string()));
+                output.push(fastn::sitemap::PathParams::value(index, part.to_string()));
                 index += 1;
             }
         }
@@ -124,51 +124,51 @@ pub fn parse_named_params(
 mod tests {
     use ftd::TextSource;
 
-    // cargo test --package fpm --lib sitemap::utils::tests::parse_path_params_test_0
+    // cargo test --package fastn --lib sitemap::utils::tests::parse_path_params_test_0
     #[test]
     fn parse_path_params_test_0() {
         let output = super::parse_named_params("/b/<string:username>/<integer:age>/foo/");
         let test_output = vec![
-            fpm::sitemap::PathParams::value(0, "b".to_string()),
-            fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
-            fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
-            fpm::sitemap::PathParams::value(3, "foo".to_string()),
+            fastn::sitemap::PathParams::value(0, "b".to_string()),
+            fastn::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+            fastn::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
+            fastn::sitemap::PathParams::value(3, "foo".to_string()),
         ];
         assert!(output.is_ok());
         assert_eq!(test_output, output.unwrap())
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::parse_path_params_test_01
+    // cargo test --package fastn --lib sitemap::utils::tests::parse_path_params_test_01
     #[test]
     fn parse_path_params_test_01() {
         let output = super::parse_named_params("/b/ <  string  :  username > / <integer:age>/foo/");
         let test_output = vec![
-            fpm::sitemap::PathParams::value(0, "b".to_string()),
-            fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
-            fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
-            fpm::sitemap::PathParams::value(3, "foo".to_string()),
+            fastn::sitemap::PathParams::value(0, "b".to_string()),
+            fastn::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+            fastn::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
+            fastn::sitemap::PathParams::value(3, "foo".to_string()),
         ];
         assert!(output.is_ok());
         assert_eq!(test_output, output.unwrap())
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::parse_path_params_test_01
+    // cargo test --package fastn --lib sitemap::utils::tests::parse_path_params_test_01
     #[test]
     fn parse_path_params_test_02() {
         let output = super::parse_named_params("/b/ <  :  username > / <integer:age>/foo/");
         assert!(output.is_err())
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::url_match -- --nocapture
+    // cargo test --package fastn --lib sitemap::utils::tests::url_match -- --nocapture
     #[test]
     fn url_match() {
         // "/<string:username>/foo/<integer:age>/",
         let output = super::url_match(
             "/arpita/foo/28/",
             &[
-                fpm::sitemap::PathParams::named(0, "username".to_string(), "string".to_string()),
-                fpm::sitemap::PathParams::value(1, "foo".to_string()),
-                fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
+                fastn::sitemap::PathParams::named(0, "username".to_string(), "string".to_string()),
+                fastn::sitemap::PathParams::value(1, "foo".to_string()),
+                fastn::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
             ],
         );
 
@@ -189,7 +189,7 @@ mod tests {
         )
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::url_match_2 -- --nocapture
+    // cargo test --package fastn --lib sitemap::utils::tests::url_match_2 -- --nocapture
     #[test]
     fn url_match_2() {
         // Input:
@@ -200,16 +200,16 @@ mod tests {
         let output = super::url_match(
             "/arpita/foo/28/",
             &[
-                fpm::sitemap::PathParams::named(0, "username".to_string(), "integer".to_string()),
-                fpm::sitemap::PathParams::value(1, "foo".to_string()),
-                fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
+                fastn::sitemap::PathParams::named(0, "username".to_string(), "integer".to_string()),
+                fastn::sitemap::PathParams::value(1, "foo".to_string()),
+                fastn::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
             ],
         );
 
         assert!(!output.unwrap().0)
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::url_match_3
+    // cargo test --package fastn --lib sitemap::utils::tests::url_match_3
     #[test]
     fn url_match_3() {
         // Input:
@@ -221,24 +221,24 @@ mod tests {
         let output = super::url_match(
             "/arpita/foo/",
             &[
-                fpm::sitemap::PathParams::named(0, "username".to_string(), "integer".to_string()),
-                fpm::sitemap::PathParams::value(1, "foo".to_string()),
-                fpm::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
+                fastn::sitemap::PathParams::named(0, "username".to_string(), "integer".to_string()),
+                fastn::sitemap::PathParams::value(1, "foo".to_string()),
+                fastn::sitemap::PathParams::named(2, "age".to_string(), "integer".to_string()),
             ],
         );
         assert!(!output.unwrap().0)
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::url_match_4 -- --nocapture
+    // cargo test --package fastn --lib sitemap::utils::tests::url_match_4 -- --nocapture
     #[test]
     fn url_match_4() {
         // sitemap_url: /b/<string:username>/person/,
         let output = super::url_match(
             "/b/a/person/",
             &[
-                fpm::sitemap::PathParams::value(0, "b".to_string()),
-                fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
-                fpm::sitemap::PathParams::value(2, "person".to_string()),
+                fastn::sitemap::PathParams::value(0, "b".to_string()),
+                fastn::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+                fastn::sitemap::PathParams::value(2, "person".to_string()),
             ],
         );
         let output = output.unwrap();
@@ -255,32 +255,32 @@ mod tests {
         )
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::url_match_4_1
+    // cargo test --package fastn --lib sitemap::utils::tests::url_match_4_1
     #[test]
     fn url_match_4_1() {
         // sitemap_url: /a/<string:username>/person/,
         let output = super::url_match(
             "/b/a/person/",
             &[
-                fpm::sitemap::PathParams::value(0, "a".to_string()),
-                fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
-                fpm::sitemap::PathParams::value(2, "person".to_string()),
+                fastn::sitemap::PathParams::value(0, "a".to_string()),
+                fastn::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+                fastn::sitemap::PathParams::value(2, "person".to_string()),
             ],
         );
         assert!(!output.unwrap().0)
     }
 
-    // cargo test --package fpm --lib sitemap::utils::tests::url_match_5 -- --nocapture
+    // cargo test --package fastn --lib sitemap::utils::tests::url_match_5 -- --nocapture
     #[test]
     fn url_match_5() {
         // sitemap_url: /a/<string:username>/person/<integer:age>
         let output = super::url_match(
             "/a/abrark/person/28/",
             &[
-                fpm::sitemap::PathParams::value(0, "a".to_string()),
-                fpm::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
-                fpm::sitemap::PathParams::value(2, "person".to_string()),
-                fpm::sitemap::PathParams::named(3, "age".to_string(), "integer".to_string()),
+                fastn::sitemap::PathParams::value(0, "a".to_string()),
+                fastn::sitemap::PathParams::named(1, "username".to_string(), "string".to_string()),
+                fastn::sitemap::PathParams::value(2, "person".to_string()),
+                fastn::sitemap::PathParams::named(3, "age".to_string(), "integer".to_string()),
             ],
         );
         let output = output.unwrap();

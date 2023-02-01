@@ -15,12 +15,12 @@ impl KeyValueData {
 
 #[derive(Debug)]
 pub struct Library2022 {
-    pub config: fpm::Config,
+    pub config: fastn::Config,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
     pub document_id: String,
-    pub translated_data: fpm::TranslationData,
+    pub translated_data: fastn::TranslationData,
     pub base_url: String,
     pub module_package_map: std::collections::BTreeMap<String, String>,
 }
@@ -40,7 +40,7 @@ impl Library2022 {
     pub(crate) fn get_current_package(
         &self,
         current_processing_module: &str,
-    ) -> ftd::p11::Result<fpm::Package> {
+    ) -> ftd::p11::Result<fastn::Package> {
         let current_package_name = self
             .module_package_map
             .get(current_processing_module.trim_matches('/'))
@@ -68,12 +68,12 @@ impl Library2022 {
         name: &str,
         current_processing_module: &str,
     ) -> Option<(String, usize)> {
-        if name == "fpm" {
-            return Some((fpm::library::fpm_dot_ftd::get2022(self).await, 0));
+        if name == "fastn" {
+            return Some((fastn::library::fastn_dot_ftd::get2022(self).await, 0));
         }
 
-        if name == "fpm-lib" {
-            return Some((fpm::fpm_lib_ftd().to_string(), 0));
+        if name == "fastn-lib" {
+            return Some((fastn::fastn_lib_ftd().to_string(), 0));
         }
 
         return get_for_package(
@@ -85,7 +85,7 @@ impl Library2022 {
 
         async fn get_for_package(
             name: &str,
-            lib: &mut fpm::Library2022,
+            lib: &mut fastn::Library2022,
             current_processing_module: &str,
         ) -> Option<(String, usize)> {
             let package = lib.get_current_package(current_processing_module).ok()?;
@@ -142,8 +142,8 @@ impl Library2022 {
         #[allow(clippy::await_holding_refcell_ref)]
         async fn get_data_from_package(
             name: &str,
-            package: &fpm::Package,
-            lib: &mut fpm::Library2022,
+            package: &fastn::Package,
+            lib: &mut fastn::Library2022,
         ) -> Option<(String, usize)> {
             lib.push_package_under_process(name, package).await.ok()?;
             let packages = lib.config.all_packages.borrow();
@@ -168,7 +168,7 @@ impl Library2022 {
     pub(crate) async fn push_package_under_process(
         &mut self,
         module: &str,
-        package: &fpm::Package,
+        package: &fastn::Package,
     ) -> ftd::p1::Result<()> {
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
@@ -201,7 +201,7 @@ impl Library2022 {
     }
 
     /// process the $processor$ and return the processor's output
-    #[tracing::instrument(name = "fpm::stuck-on-processor", skip_all, err)]
+    #[tracing::instrument(name = "fastn::stuck-on-processor", skip_all, err)]
     pub async fn process<'a>(
         &'a self,
         ast: ftd::ast::AST,
@@ -259,7 +259,7 @@ impl Library2022 {
                 processor::fetch_file::fetch_files(value, kind, doc, &self.config).await
             }
             "user-details" => processor::user_details::process(value, kind, doc, &self.config),
-            "fpm-apps" => processor::apps::process(value, kind, doc, &self.config),
+            "fastn-apps" => processor::apps::process(value, kind, doc, &self.config),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, &self.config).await,
             "package-query" => processor::sqlite::process(value, kind, doc, &self.config).await,
             "package-tree" => {
@@ -269,7 +269,7 @@ impl Library2022 {
             t => Err(ftd::interpreter2::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,
-                message: format!("FPM-Error: No such processor: {}", t),
+                message: format!("fastn-Error: No such processor: {}", t),
             }),
         }
     }

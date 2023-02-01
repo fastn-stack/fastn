@@ -20,7 +20,7 @@ pub struct TocItem {
     pub confidential: bool,
     /// /books/<string:book_name>/
     /// here book_name is path parameter
-    pub path_parameters: Vec<fpm::sitemap::PathParams>,
+    pub path_parameters: Vec<fastn::sitemap::PathParams>,
 }
 
 impl Default for TocItem {
@@ -50,7 +50,7 @@ impl TocItem {
     /// path: /foo/demo/
     /// path: /
     pub fn path_exists(&self, path: &str) -> bool {
-        if fpm::utils::ids_matches(self.id.as_str(), path) {
+        if fastn::utils::ids_matches(self.id.as_str(), path) {
             return true;
         }
 

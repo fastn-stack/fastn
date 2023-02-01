@@ -17,12 +17,12 @@ impl CRMeta {
 }
 
 pub(crate) async fn get_cr_meta(
-    config: &fpm::Config,
+    config: &fastn::Config,
     cr_number: usize,
-) -> fpm::Result<fpm::cr::CRMeta> {
+) -> fastn::Result<fastn::cr::CRMeta> {
     let cr_meta_path = config.cr_meta_path(cr_number);
     if !cr_meta_path.exists() {
-        return fpm::usage_error(format!("CR#{} doesn't exist", cr_number));
+        return fastn::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
 
     let doc = tokio::fs::read_to_string(&cr_meta_path).await?;
@@ -32,7 +32,7 @@ pub(crate) async fn get_cr_meta(
 pub(crate) async fn resolve_cr_meta(
     content: &str,
     cr_number: usize,
-) -> fpm::Result<fpm::cr::CRMeta> {
+) -> fastn::Result<fastn::cr::CRMeta> {
     #[derive(serde::Deserialize)]
     struct CRMetaTemp {
         pub title: String,
@@ -50,12 +50,12 @@ pub(crate) async fn resolve_cr_meta(
     }
 
     if content.trim().is_empty() {
-        return Err(fpm::Error::UsageError {
+        return Err(fastn::Error::UsageError {
             message: "Content is empty in cr about".to_string(),
         });
     }
-    let lib = fpm::FPMLibrary::default();
-    let b = match fpm::doc::parse_ftd(".about.ftd", content, &lib) {
+    let lib = fastn::FastnLibrary::default();
+    let b = match fastn::doc::parse_ftd(".about.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse .about.ftd for CR#{}: {:?}", cr_number, &e);
@@ -63,15 +63,16 @@ pub(crate) async fn resolve_cr_meta(
         }
     };
 
-    Ok(b.get::<CRMetaTemp>("fpm#cr-meta")?.into_cr_meta(cr_number))
+    Ok(b.get::<CRMetaTemp>("fastn#cr-meta")?
+        .into_cr_meta(cr_number))
 }
 
 pub(crate) async fn create_cr_about(
-    config: &fpm::Config,
-    cr_meta: &fpm::cr::CRMeta,
-) -> fpm::Result<()> {
-    let default_cr_about_content = fpm::package_info_about(config)?;
-    fpm::utils::update(
+    config: &fastn::Config,
+    cr_meta: &fastn::cr::CRMeta,
+) -> fastn::Result<()> {
+    let default_cr_about_content = fastn::package_info_about(config)?;
+    fastn::utils::update(
         &config.cr_about_path(cr_meta.cr_number),
         default_cr_about_content.as_bytes(),
     )
@@ -80,11 +81,11 @@ pub(crate) async fn create_cr_about(
 }
 
 pub(crate) async fn create_cr_meta(
-    config: &fpm::Config,
-    cr_meta: &fpm::cr::CRMeta,
-) -> fpm::Result<()> {
+    config: &fastn::Config,
+    cr_meta: &fastn::cr::CRMeta,
+) -> fastn::Result<()> {
     let meta_content = generate_cr_meta_content(cr_meta);
-    fpm::utils::update(
+    fastn::utils::update(
         &config.cr_meta_path(cr_meta.cr_number),
         meta_content.as_bytes(),
     )
@@ -92,15 +93,18 @@ pub(crate) async fn create_cr_meta(
     Ok(())
 }
 
-pub(crate) fn generate_cr_meta_content(cr_meta: &fpm::cr::CRMeta) -> String {
-    let mut meta_content = format!("-- import: fpm\n\n\n-- fpm.cr-meta: {}", cr_meta.title,);
+pub(crate) fn generate_cr_meta_content(cr_meta: &fastn::cr::CRMeta) -> String {
+    let mut meta_content = format!("-- import: fastn\n\n\n-- fastn.cr-meta: {}", cr_meta.title,);
     if !cr_meta.open {
         meta_content = format!("{}\n{}", meta_content, cr_meta.open);
     }
     format!("{meta_content}\n")
 }
 
-pub(crate) async fn is_open_cr_exists(config: &fpm::Config, cr_number: usize) -> fpm::Result<bool> {
+pub(crate) async fn is_open_cr_exists(
+    config: &fastn::Config,
+    cr_number: usize,
+) -> fastn::Result<bool> {
     get_cr_meta(config, cr_number).await.map(|v| v.open)
 }
 
@@ -118,21 +122,21 @@ impl CRDeleted {
         }
     }
 
-    pub(crate) fn into_file_status(self) -> fpm::sync_utils::FileStatus {
-        fpm::sync_utils::FileStatus::Delete {
+    pub(crate) fn into_file_status(self) -> fastn::sync_utils::FileStatus {
+        fastn::sync_utils::FileStatus::Delete {
             path: self.filename,
             version: self.version,
-            status: fpm::sync_utils::Status::NoConflict,
+            status: fastn::sync_utils::Status::NoConflict,
         }
     }
 }
 
 pub(crate) async fn get_deleted_files(
-    config: &fpm::Config,
+    config: &fastn::Config,
     cr_number: usize,
-) -> fpm::Result<Vec<CRDeleted>> {
+) -> fastn::Result<Vec<CRDeleted>> {
     if !config.cr_path(cr_number).exists() {
-        return fpm::usage_error(format!("CR#{} doesn't exist", cr_number));
+        return fastn::usage_error(format!("CR#{} doesn't exist", cr_number));
     }
     let deleted_files_path = config.cr_deleted_file_path(cr_number);
     if !deleted_files_path.exists() {
@@ -145,12 +149,12 @@ pub(crate) async fn get_deleted_files(
 pub(crate) async fn resolve_cr_deleted(
     content: &str,
     cr_number: usize,
-) -> fpm::Result<Vec<CRDeleted>> {
+) -> fastn::Result<Vec<CRDeleted>> {
     if content.trim().is_empty() {
         return Ok(vec![]);
     }
-    let lib = fpm::FPMLibrary::default();
-    let b = match fpm::doc::parse_ftd("deleted.ftd", content, &lib) {
+    let lib = fastn::FastnLibrary::default();
+    let b = match fastn::doc::parse_ftd("deleted.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse deleted.ftd for CR#{}: {:?}", cr_number, &e);
@@ -158,16 +162,16 @@ pub(crate) async fn resolve_cr_deleted(
         }
     };
 
-    Ok(b.get("fpm#cr-deleted")?)
+    Ok(b.get("fastn#cr-deleted")?)
 }
 
 pub(crate) async fn create_deleted_files(
-    config: &fpm::Config,
+    config: &fastn::Config,
     cr_number: usize,
     cr_deleted: &[CRDeleted],
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     let cr_deleted_content = generate_deleted_files_content(cr_deleted);
-    fpm::utils::update(
+    fastn::utils::update(
         &config.cr_deleted_file_path(cr_number),
         cr_deleted_content.as_bytes(),
     )
@@ -176,11 +180,11 @@ pub(crate) async fn create_deleted_files(
 }
 
 pub(crate) fn generate_deleted_files_content(cr_deleted_files: &[CRDeleted]) -> String {
-    let mut deleted_files_content = vec!["-- import: fpm".to_string()];
+    let mut deleted_files_content = vec!["-- import: fastn".to_string()];
 
     for cr_deleted_file in cr_deleted_files {
         let content = format!(
-            "-- fpm.cr-deleted: {}\nversion: {}",
+            "-- fastn.cr-deleted: {}\nversion: {}",
             cr_deleted_file.filename, cr_deleted_file.version
         );
         deleted_files_content.push(content)
@@ -190,12 +194,12 @@ pub(crate) fn generate_deleted_files_content(cr_deleted_files: &[CRDeleted]) -> 
     format!("{content}\n")
 }
 
-impl fpm::Config {
+impl fastn::Config {
     #[allow(dead_code)]
     pub(crate) async fn get_cr_tracking_info(
         &self,
         cr_number: usize,
-    ) -> fpm::Result<Vec<fpm::track::TrackingInfo>> {
+    ) -> fastn::Result<Vec<fastn::track::TrackingInfo>> {
         let cr_track_paths = ignore::WalkBuilder::new(self.cr_track_dir(cr_number))
             .build()
             .into_iter()
@@ -207,8 +211,9 @@ impl fpm::Config {
 
         for cr_track_path in cr_track_paths {
             let tracked_file = cr_track_path.strip_prefix(self.track_dir())?;
-            let tracked_file_str = fpm::cr::cr_path_to_file_name(cr_number, tracked_file.as_str())?;
-            if let Some(info) = fpm::track::get_tracking_info_(&cr_track_path)
+            let tracked_file_str =
+                fastn::cr::cr_path_to_file_name(cr_number, tracked_file.as_str())?;
+            if let Some(info) = fastn::track::get_tracking_info_(&cr_track_path)
                 .await?
                 .into_iter()
                 .find(|v| tracked_file_str.eq(&v.filename))
@@ -224,7 +229,7 @@ pub(crate) fn cr_path(cr_number: usize) -> String {
     format!("-/{}", cr_number)
 }
 
-pub(crate) fn cr_path_to_file_name(cr_number: usize, cr_file_path: &str) -> fpm::Result<String> {
+pub(crate) fn cr_path_to_file_name(cr_number: usize, cr_file_path: &str) -> fastn::Result<String> {
     let cr_path = cr_path(cr_number);
     Ok(cr_file_path
         .trim_matches('/')
@@ -244,7 +249,7 @@ pub(crate) fn get_cr_path_from_url(path: &str) -> Option<usize> {
     cr_number
 }
 
-pub(crate) fn get_id_from_cr_id(id: &str, cr_number: usize) -> fpm::Result<String> {
+pub(crate) fn get_id_from_cr_id(id: &str, cr_number: usize) -> fastn::Result<String> {
     let cr_path = cr_path(cr_number);
     if let Some(id) = id.trim_start_matches('/').strip_prefix(cr_path.as_str()) {
         return Ok(if !id.ends_with('/') {
@@ -253,7 +258,7 @@ pub(crate) fn get_id_from_cr_id(id: &str, cr_number: usize) -> fpm::Result<Strin
             id.to_string()
         });
     }
-    fpm::usage_error(format!("`{}` is not a cr id", id))
+    fastn::usage_error(format!("`{}` is not a cr id", id))
 }
 
 #[derive(Debug)]
@@ -263,14 +268,14 @@ pub(crate) struct FileInfo {
 }
 
 pub(crate) async fn cr_clone_file_info(
-    config: &fpm::Config,
+    config: &fastn::Config,
     cr_number: usize,
-) -> fpm::Result<std::collections::HashMap<String, FileInfo>> {
+) -> fastn::Result<std::collections::HashMap<String, FileInfo>> {
     use itertools::Itertools;
 
     let mut file_info = std::collections::HashMap::new();
 
-    let remote_manifest: std::collections::BTreeMap<String, fpm::history::FileEdit> = config
+    let remote_manifest: std::collections::BTreeMap<String, fastn::history::FileEdit> = config
         .get_remote_manifest(true)
         .await?
         .into_iter()
@@ -295,7 +300,7 @@ pub(crate) async fn cr_clone_file_info(
         );
     }
 
-    let cr_path = fpm::cr::cr_path(cr_number);
+    let cr_path = fastn::cr::cr_path(cr_number);
 
     let cr_workspace = config
         .get_clone_workspace()
@@ -305,7 +310,7 @@ pub(crate) async fn cr_clone_file_info(
             k.strip_prefix(cr_path.as_str())
                 .map(|path| (path.trim_start_matches('/').to_string(), v))
         })
-        .collect::<std::collections::HashMap<String, fpm::workspace::WorkspaceEntry>>();
+        .collect::<std::collections::HashMap<String, fastn::workspace::WorkspaceEntry>>();
 
     let deleted_files_path = config.cr_deleted_file_path(cr_number);
     let deleted_file_str = config.path_without_root(&deleted_files_path)?;
@@ -320,7 +325,7 @@ pub(crate) async fn cr_clone_file_info(
                 config.root.join(workspace_entry.filename)
             };
             let cr_deleted_files = tokio::fs::read_to_string(cr_deleted_path).await?;
-            fpm::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
+            fastn::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
                 .await?
                 .into_iter()
                 .map(|v| {
@@ -345,14 +350,14 @@ pub(crate) async fn cr_clone_file_info(
 
 #[allow(dead_code)]
 pub(crate) async fn cr_remote_file_info(
-    config: &fpm::Config,
+    config: &fastn::Config,
     cr_number: usize,
-) -> fpm::Result<std::collections::HashMap<String, FileInfo>> {
+) -> fastn::Result<std::collections::HashMap<String, FileInfo>> {
     use itertools::Itertools;
 
     let mut file_info = std::collections::HashMap::new();
 
-    let remote_manifest: std::collections::HashMap<String, fpm::history::FileEdit> = config
+    let remote_manifest: std::collections::HashMap<String, fastn::history::FileEdit> = config
         .get_remote_manifest(true)
         .await?
         .into_iter()
@@ -377,7 +382,7 @@ pub(crate) async fn cr_remote_file_info(
         );
     }
 
-    let cr_manifest: std::collections::HashMap<String, fpm::history::FileEdit> = config
+    let cr_manifest: std::collections::HashMap<String, fastn::history::FileEdit> = config
         .get_cr_manifest(cr_number)
         .await?
         .into_iter()
@@ -386,7 +391,7 @@ pub(crate) async fn cr_remote_file_info(
 
     let deleted_files_path = config.cr_deleted_file_path(cr_number);
     let deleted_file_str = config.path_without_root(&deleted_files_path)?;
-    let cr_path = fpm::cr::cr_path(cr_number);
+    let cr_path = fastn::cr::cr_path(cr_number);
     for (filename, file_edit) in cr_manifest {
         if file_edit.is_deleted() {
             continue;
@@ -395,7 +400,7 @@ pub(crate) async fn cr_remote_file_info(
         if filename.eq(&deleted_file_str) {
             let cr_deleted_path = config.history_path(filename.as_str(), file_edit.version);
             let cr_deleted_files = tokio::fs::read_to_string(cr_deleted_path).await?;
-            fpm::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
+            fastn::cr::resolve_cr_deleted(cr_deleted_files.as_str(), cr_number)
                 .await?
                 .into_iter()
                 .map(|v| {

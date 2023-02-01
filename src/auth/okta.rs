@@ -6,12 +6,12 @@ pub struct UserDetail {
 }
 pub async fn matched_identities(
     _ud: UserDetail,
-    _identities: &[fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    _identities: &[fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     /*let okta_identities = identities
         .iter()
         .filter(|identity| identity.key.starts_with("okta"))
-        .collect::<Vec<&fpm::user_group::UserIdentity>>();
+        .collect::<Vec<&fastn::user_group::UserIdentity>>();
 
     if okta_identities.is_empty() {
         return Ok(vec![]);

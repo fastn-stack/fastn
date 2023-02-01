@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: http-processor
+-- fastn.package: http-processor
 download-base-url: http-processor

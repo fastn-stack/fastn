@@ -1,6 +1,6 @@
-pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
-    let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
-    let workspaces = fpm::snapshot::get_workspace(config).await?;
+pub async fn status(config: &fastn::Config, source: Option<&str>) -> fastn::Result<()> {
+    let snapshots = fastn::snapshot::get_latest_snapshots(&config.root).await?;
+    let workspaces = fastn::snapshot::get_workspace(config).await?;
     match source {
         Some(source) => {
             file_status(
@@ -21,8 +21,8 @@ async fn file_status(
     base_path: &camino::Utf8PathBuf,
     source: &str,
     snapshots: &std::collections::BTreeMap<String, u128>,
-    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
-) -> fpm::Result<()> {
+    workspaces: &std::collections::BTreeMap<String, fastn::snapshot::Workspace>,
+) -> fastn::Result<()> {
     let path = base_path.join(source);
     if !path.exists() {
         if snapshots.contains_key(source) {
@@ -33,7 +33,7 @@ async fn file_status(
         return Ok(());
     }
 
-    let file = fpm::get_file(package_name, &path, base_path).await?;
+    let file = fastn::get_file(package_name, &path, base_path).await?;
 
     let file_status = get_file_status(&file, snapshots, workspaces).await?;
     let track_status = get_track_status(&file, snapshots, base_path.as_str())?;
@@ -54,10 +54,10 @@ async fn file_status(
 }
 
 async fn all_status(
-    config: &fpm::Config,
+    config: &fastn::Config,
     snapshots: &std::collections::BTreeMap<String, u128>,
-    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
-) -> fpm::Result<()> {
+    workspaces: &std::collections::BTreeMap<String, fastn::snapshot::Workspace>,
+) -> fastn::Result<()> {
     use itertools::Itertools;
 
     let mut file_status = std::collections::BTreeMap::new();
@@ -91,22 +91,22 @@ async fn all_status(
 }
 
 pub(crate) async fn get_file_status(
-    doc: &fpm::File,
+    doc: &fastn::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
-    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
-) -> fpm::Result<FileStatus> {
+    workspaces: &std::collections::BTreeMap<String, fastn::snapshot::Workspace>,
+) -> fastn::Result<FileStatus> {
     use sha2::Digest;
     // Added
     // 1. if file do not present in `latest.ftd`
     // NP: If server deleted and client modified so in that case `latest.ftd` won't contain entry
     // For that in that entry will be present in workspace.ftd
-    // Added: If file do not present in `latest.ftd` and also do not present in .fpm/workspace.ftd
+    // Added: If file do not present in `latest.ftd` and also do not present in .fastn/workspace.ftd
 
     if let Some(workspace) = workspaces.get(&doc.get_id()) {
         return Ok(match workspace.workspace {
-            fpm::snapshot::WorkspaceType::Conflicted
-            | fpm::snapshot::WorkspaceType::Revert
-            | fpm::snapshot::WorkspaceType::AbortMerge => {
+            fastn::snapshot::WorkspaceType::Conflicted
+            | fastn::snapshot::WorkspaceType::Revert
+            | fastn::snapshot::WorkspaceType::AbortMerge => {
                 let conflicted_version = workspace.conflicted;
                 match snapshots.get(&doc.get_id()) {
                     Some(latest_version) if conflicted_version.lt(latest_version) => {
@@ -115,17 +115,17 @@ pub(crate) async fn get_file_status(
                     _ => FileStatus::Conflicted,
                 }
             }
-            fpm::snapshot::WorkspaceType::CloneEditedRemoteDeleted => {
+            fastn::snapshot::WorkspaceType::CloneEditedRemoteDeleted => {
                 FileStatus::CloneEditedRemoteDeleted
             }
-            fpm::snapshot::WorkspaceType::CloneDeletedRemoteEdited => {
+            fastn::snapshot::WorkspaceType::CloneDeletedRemoteEdited => {
                 FileStatus::CloneDeletedRemoteEdited
             }
         });
     }
 
     if let Some(timestamp) = snapshots.get(&doc.get_id()) {
-        let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
+        let path = fastn::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
 
         let content = tokio::fs::read(&doc.get_full_path()).await?;
         let existing_doc = tokio::fs::read(&path).await?;
@@ -138,16 +138,16 @@ pub(crate) async fn get_file_status(
 }
 
 fn get_track_status(
-    doc: &fpm::File,
+    doc: &fastn::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
-) -> fpm::Result<std::collections::BTreeMap<String, TrackStatus>> {
-    let path = fpm::utils::track_path(&doc.get_id(), &doc.get_base_path());
+) -> fastn::Result<std::collections::BTreeMap<String, TrackStatus>> {
+    let path = fastn::utils::track_path(&doc.get_id(), &doc.get_base_path());
     let mut track_list = std::collections::BTreeMap::new();
     if !path.exists() {
         return Ok(track_list);
     }
-    let tracks = fpm::tracker::get_tracks(base_path, &path)?;
+    let tracks = fastn::tracker::get_tracks(base_path, &path)?;
     for track in tracks.values() {
         // ignore in case of the translation package
         if doc.get_id().eq(track.filename.as_str()) && track.last_merged_version.is_some() {
@@ -238,7 +238,7 @@ impl ToString for TrackStatus {
             TrackStatus::UptoDate => "Up to date".to_string(),
             TrackStatus::NeverMarked => "Never marked".to_string(),
             TrackStatus::OutOfDate { seconds } => {
-                format!("Out of date({})", fpm::utils::seconds_to_human(*seconds))
+                format!("Out of date({})", fastn::utils::seconds_to_human(*seconds))
             }
         }
     }

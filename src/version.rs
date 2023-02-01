@@ -6,36 +6,38 @@ pub struct Version {
 }
 
 impl Version {
-    pub(crate) fn base() -> fpm::Version {
-        fpm::Version {
+    pub(crate) fn base() -> fastn::Version {
+        fastn::Version {
             major: 0,
             minor: None,
             original: "BASE_VERSION".to_string(),
         }
     }
 
-    pub(crate) fn parse(s: &str) -> fpm::Result<fpm::Version> {
+    pub(crate) fn parse(s: &str) -> fastn::Result<fastn::Version> {
         let v = s.strip_prefix(['v', 'V']).unwrap_or(s);
         let mut minor = None;
         let major = if let Some((major, minor_)) = v.split_once('.') {
             if minor_.contains('.') {
-                return Err(fpm::Error::UsageError {
+                return Err(fastn::Error::UsageError {
                     message: format!("Cannot have more than one dots `.`, found: `{}`", s),
                 });
             }
-            let minor_ = minor_.parse::<u64>().map_err(|e| fpm::Error::UsageError {
-                message: format!("Invalid minor for `{}`: `{:?}`", s, e),
-            })?;
+            let minor_ = minor_
+                .parse::<u64>()
+                .map_err(|e| fastn::Error::UsageError {
+                    message: format!("Invalid minor for `{}`: `{:?}`", s, e),
+                })?;
             minor = Some(minor_);
-            major.parse::<u64>().map_err(|e| fpm::Error::UsageError {
+            major.parse::<u64>().map_err(|e| fastn::Error::UsageError {
                 message: format!("Invalid major for `{}`: `{:?}`", s, e),
             })?
         } else {
-            v.parse::<u64>().map_err(|e| fpm::Error::UsageError {
+            v.parse::<u64>().map_err(|e| fastn::Error::UsageError {
                 message: format!("Invalid major for `{}`: `{:?}`", s, e),
             })?
         };
-        Ok(fpm::Version {
+        Ok(fastn::Version {
             major,
             minor,
             original: s.to_string(),
@@ -62,12 +64,12 @@ impl Ord for Version {
 
 #[allow(dead_code)]
 pub(crate) async fn build_version(
-    config: &fpm::Config,
+    config: &fastn::Config,
     _file: Option<&str>,
     base_url: &str,
     _skip_failed: bool,
     _asset_documents: &std::collections::HashMap<String, String>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     use itertools::Itertools;
     use std::io::Write;
 
@@ -79,18 +81,18 @@ pub(crate) async fn build_version(
             doc.iter()
                 .map(|v| (v.get_id(), (key.original.to_string(), v.to_owned()))),
         );
-        if key.eq(&fpm::Version::base()) {
+        if key.eq(&fastn::Version::base()) {
             continue;
         }
         for (version, doc) in documents.values() {
             let mut doc = doc.clone();
             let id = doc.get_id();
-            if id.eq("FPM.ftd") {
+            if id.eq("FASTN.ftd") {
                 continue;
             }
             let new_id = format!("{}/{}", key.original, id);
-            if !key.original.eq(version) && !fpm::Version::base().original.eq(version) {
-                if let fpm::File::Ftd(_) = doc {
+            if !key.original.eq(version) && !fastn::Version::base().original.eq(version) {
+                if let fastn::File::Ftd(_) = doc {
                     let original_id = format!("{}/{}", version, id);
                     let original_file_rel_path = if original_id.contains("index.ftd") {
                         original_id.replace("index.ftd", "index.html")
@@ -128,7 +130,7 @@ pub(crate) async fn build_version(
 
             todo!()
 
-            // fpm::process_file(
+            // fastn::process_file(
             //     config,
             //     &config.package,
             //     &doc,
@@ -147,7 +149,7 @@ pub(crate) async fn build_version(
 
     todo!()
     // for (_, doc) in documents.values() {
-    //     fpm::process_file(
+    //     fastn::process_file(
     //         config,
     //         &config.package,
     //         doc,

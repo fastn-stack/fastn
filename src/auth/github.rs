@@ -6,7 +6,7 @@ pub struct UserDetail {
     pub user_name: String,
 }
 // route: /auth/login/
-pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
+pub async fn login(req: actix_web::HttpRequest) -> fastn::Result<fastn::http::Response> {
     // GitHub will be redirect to this url after login process completed
 
     let mut next_url = "/".to_string();
@@ -56,7 +56,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
 // route: /auth/github/callback/
 // In this API we are accessing
 // the token and setting it to cookies
-pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+pub async fn callback(req: actix_web::HttpRequest) -> fastn::Result<actix_web::HttpResponse> {
     #[derive(serde::Deserialize)]
     pub struct QueryParams {
         pub code: String,
@@ -87,10 +87,10 @@ pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::Htt
             return Ok(actix_web::HttpResponse::Found()
                 .cookie(
                     actix_web::cookie::Cookie::build(
-                        fpm::auth::AuthProviders::GitHub.as_str(),
-                        fpm::auth::utils::encrypt_str(&user_detail_str).await,
+                        fastn::auth::AuthProviders::GitHub.as_str(),
+                        fastn::auth::utils::encrypt_str(&user_detail_str).await,
                     )
-                    .domain(fpm::auth::utils::domain(req.connection_info().host()))
+                    .domain(fastn::auth::utils::domain(req.connection_info().host()))
                     .path("/")
                     .permanent()
                     // TODO: AbrarK is running on http,
@@ -108,12 +108,12 @@ pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::Htt
 // it returns identities which matches to given input
 pub async fn matched_identities(
     ud: UserDetail,
-    identities: &[fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     let github_identities = identities
         .iter()
         .filter(|identity| identity.key.starts_with("github"))
-        .collect::<Vec<&fpm::user_group::UserIdentity>>();
+        .collect::<Vec<&fastn::user_group::UserIdentity>>();
 
     if github_identities.is_empty() {
         return Ok(vec![]);
@@ -140,8 +140,8 @@ pub async fn matched_identities(
 
 pub async fn matched_starred_repos(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
 
     let starred_repos = identities
@@ -163,7 +163,7 @@ pub async fn matched_starred_repos(
     Ok(user_starred_repos
         .into_iter()
         .filter(|user_repo| starred_repos.contains(&user_repo.as_str()))
-        .map(|repo| fpm::user_group::UserIdentity {
+        .map(|repo| fastn::user_group::UserIdentity {
             key: "github-starred".to_string(),
             value: repo,
         })
@@ -172,8 +172,8 @@ pub async fn matched_starred_repos(
 
 pub async fn matched_watched_repos(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let watched_repos = identities
         .iter()
@@ -193,7 +193,7 @@ pub async fn matched_watched_repos(
     Ok(user_watched_repos
         .into_iter()
         .filter(|user_repo| watched_repos.contains(&user_repo.as_str()))
-        .map(|repo| fpm::user_group::UserIdentity {
+        .map(|repo| fastn::user_group::UserIdentity {
             key: "github-watches".to_string(),
             value: repo,
         })
@@ -202,8 +202,8 @@ pub async fn matched_watched_repos(
 
 pub async fn matched_followed_org(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let followed_orgs = identities
         .iter()
@@ -223,7 +223,7 @@ pub async fn matched_followed_org(
     Ok(user_followed_orgs
         .into_iter()
         .filter(|user_org| followed_orgs.contains(&user_org.as_str()))
-        .map(|org| fpm::user_group::UserIdentity {
+        .map(|org| fastn::user_group::UserIdentity {
             key: "github-follows".to_string(),
             value: org,
         })
@@ -232,8 +232,8 @@ pub async fn matched_followed_org(
 
 pub async fn matched_contributed_repos(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut matched_repo_contributors_list: Vec<String> = vec![];
     let contributed_repos = identities
@@ -261,7 +261,7 @@ pub async fn matched_contributed_repos(
     Ok(matched_repo_contributors_list
         .into_iter()
         .filter(|user_repo| contributed_repos.contains(&user_repo.as_str()))
-        .map(|repo| fpm::user_group::UserIdentity {
+        .map(|repo| fastn::user_group::UserIdentity {
             key: "github-contributor".to_string(),
             value: repo,
         })
@@ -270,8 +270,8 @@ pub async fn matched_contributed_repos(
 
 pub async fn matched_collaborated_repos(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut matched_repo_collaborator_list: Vec<String> = vec![];
     let collaborated_repos = identities
@@ -299,7 +299,7 @@ pub async fn matched_collaborated_repos(
     Ok(matched_repo_collaborator_list
         .into_iter()
         .filter(|user_repo| collaborated_repos.contains(&user_repo.as_str()))
-        .map(|repo| fpm::user_group::UserIdentity {
+        .map(|repo| fastn::user_group::UserIdentity {
             key: "github-collaborator".to_string(),
             value: repo,
         })
@@ -308,8 +308,8 @@ pub async fn matched_collaborated_repos(
 
 pub async fn matched_org_teams(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut matched_org_teams: Vec<String> = vec![];
     let org_teams = identities
@@ -341,7 +341,7 @@ pub async fn matched_org_teams(
     // filter the user joined teams with input
     Ok(matched_org_teams
         .into_iter()
-        .map(|org_team| fpm::user_group::UserIdentity {
+        .map(|org_team| fastn::user_group::UserIdentity {
             key: "github-team".to_string(),
             value: org_team,
         })
@@ -349,8 +349,8 @@ pub async fn matched_org_teams(
 }
 pub async fn matched_sponsored_org(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut sponsored_users_list: Vec<String> = vec![];
 
@@ -377,7 +377,7 @@ pub async fn matched_sponsored_org(
     // return the sponsor list
     Ok(sponsored_users_list
         .into_iter()
-        .map(|sponsor| fpm::user_group::UserIdentity {
+        .map(|sponsor| fastn::user_group::UserIdentity {
             key: "github-sponsor".to_string(),
             value: sponsor,
         })
@@ -400,7 +400,7 @@ pub mod apis {
     // TODO: API to starred a repo on behalf of the user
     // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
 
-    pub async fn starred_repo(token: &str) -> fpm::Result<Vec<String>> {
+    pub async fn starred_repo(token: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
         // TODO: Handle paginated response
 
@@ -408,7 +408,7 @@ pub mod apis {
         struct UserRepos {
             full_name: String,
         }
-        let starred_repo: Vec<UserRepos> = fpm::auth::utils::get_api(
+        let starred_repo: Vec<UserRepos> = fastn::auth::utils::get_api(
             format!("{}?per_page=100", "https://api.github.com/user/starred").as_str(),
             format!("{} {}", "Bearer", token).as_str(),
         )
@@ -416,14 +416,14 @@ pub mod apis {
         Ok(starred_repo.into_iter().map(|x| x.full_name).collect())
     }
 
-    pub async fn followed_org(token: &str) -> fpm::Result<Vec<String>> {
+    pub async fn followed_org(token: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/users/followers#list-followers-of-the-authenticated-user
         // TODO: Handle paginated response
         #[derive(Debug, serde::Deserialize)]
         struct FollowedOrg {
             login: String,
         }
-        let watched_repo: Vec<FollowedOrg> = fpm::auth::utils::get_api(
+        let watched_repo: Vec<FollowedOrg> = fastn::auth::utils::get_api(
             format!("{}?per_page=100", "https://api.github.com/user/following").as_str(),
             format!("{} {}", "Bearer", token).as_str(),
         )
@@ -435,7 +435,7 @@ pub mod apis {
         token: &str,
         org_title: &str,
         team_slug: &str,
-    ) -> fpm::Result<Vec<String>> {
+    ) -> fastn::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/teams/members#list-team-members
         // TODO: Handle paginated response
         #[derive(Debug, serde::Deserialize)]
@@ -443,7 +443,7 @@ pub mod apis {
             login: String,
         }
 
-        let user_orgs: Vec<TeamMembers> = fpm::auth::utils::get_api(
+        let user_orgs: Vec<TeamMembers> = fastn::auth::utils::get_api(
             format!(
                 "{}{}{}{}/members?per_page=100",
                 "https://api.github.com/orgs/", org_title, "/teams/", team_slug
@@ -455,14 +455,14 @@ pub mod apis {
         Ok(user_orgs.into_iter().map(|x| x.login).collect())
     }
 
-    pub async fn watched_repo(token: &str) -> fpm::Result<Vec<String>> {
+    pub async fn watched_repo(token: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/activity/watching#list-repositories-watched-by-the-authenticated-user
         // TODO: Handle paginated response
         #[derive(Debug, serde::Deserialize)]
         struct UserRepos {
             full_name: String,
         }
-        let watched_repo: Vec<UserRepos> = fpm::auth::utils::get_api(
+        let watched_repo: Vec<UserRepos> = fastn::auth::utils::get_api(
             format!(
                 "{}?per_page=100",
                 "https://api.github.com/user/subscriptions"
@@ -473,14 +473,14 @@ pub mod apis {
         .await?;
         Ok(watched_repo.into_iter().map(|x| x.full_name).collect())
     }
-    pub async fn repo_contributors(token: &str, repo_name: &str) -> fpm::Result<Vec<String>> {
+    pub async fn repo_contributors(token: &str, repo_name: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-the-authenticated-user
         // TODO: Handle paginated response
         #[derive(Debug, serde::Deserialize)]
         struct RepoContributor {
             login: String,
         }
-        let repo_contributor: Vec<RepoContributor> = fpm::auth::utils::get_api(
+        let repo_contributor: Vec<RepoContributor> = fastn::auth::utils::get_api(
             format!(
                 "{}{}/contributors?per_page=100",
                 "https://api.github.com/repos/", repo_name
@@ -491,14 +491,14 @@ pub mod apis {
         .await?;
         Ok(repo_contributor.into_iter().map(|x| x.login).collect())
     }
-    pub async fn repo_collaborators(token: &str, repo_name: &str) -> fpm::Result<Vec<String>> {
+    pub async fn repo_collaborators(token: &str, repo_name: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://docs.github.com/en/rest/collaborators/collaborators#list-repository-collaborators
         // TODO: Handle paginated response
         #[derive(Debug, serde::Deserialize)]
         struct RepoCollaborator {
             login: String,
         }
-        let repo_collaborators_list: Vec<RepoCollaborator> = fpm::auth::utils::get_api(
+        let repo_collaborators_list: Vec<RepoCollaborator> = fastn::auth::utils::get_api(
             format!(
                 "{}{}/collaborators?per_page=100",
                 "https://api.github.com/repos/", repo_name
@@ -516,7 +516,7 @@ pub mod apis {
         token: &str,
         user_name: &str,
         sponsored_by: &str,
-    ) -> fpm::Result<bool> {
+    ) -> fastn::Result<bool> {
         // API Docs: https://docs.github.com/en/graphql/reference/queries#user
         // TODO: Handle paginated response
 
@@ -541,14 +541,14 @@ pub mod apis {
         }
     }
     // TODO: It can be stored in the request cookies
-    pub async fn user_details(token: &str) -> fpm::Result<String> {
+    pub async fn user_details(token: &str) -> fastn::Result<String> {
         // API Docs: https://docs.github.com/en/rest/users/users#get-the-authenticated-user
         // TODO: Handle paginated response
         #[derive(Debug, serde::Deserialize)]
         struct UserDetails {
             login: String,
         }
-        let user_obj: UserDetails = fpm::auth::utils::get_api(
+        let user_obj: UserDetails = fastn::auth::utils::get_api(
             "https://api.github.com/user",
             format!("{} {}", "Bearer", token).as_str(),
         )
@@ -561,7 +561,7 @@ pub mod apis {
         url: &str,
         query_str: &str,
         token: &str,
-    ) -> fpm::Result<GraphQLResp> {
+    ) -> fastn::Result<GraphQLResp> {
         let mut map: std::collections::HashMap<&str, &str> = std::collections::HashMap::new();
         map.insert("query", query_str);
 
@@ -575,12 +575,12 @@ pub mod apis {
             .header(reqwest::header::ACCEPT, "application/json")
             .header(
                 reqwest::header::USER_AGENT,
-                reqwest::header::HeaderValue::from_static("fpm"),
+                reqwest::header::HeaderValue::from_static("fastn"),
             )
             .send()
             .await?;
         if !response.status().eq(&reqwest::StatusCode::OK) {
-            return Err(fpm::Error::APIResponseError(format!(
+            return Err(fastn::Error::APIResponseError(format!(
                 "GitHub API ERROR: {}",
                 url
             )));

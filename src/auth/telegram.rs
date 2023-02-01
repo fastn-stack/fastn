@@ -8,7 +8,7 @@ pub struct UserDetail {
 }
 // route: /auth/login/
 
-pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
+pub async fn login(req: actix_web::HttpRequest) -> fastn::Result<fastn::http::Response> {
     // This method will be called to open telegram login dialogue
     let redirect_url: String = format!(
         "{}://{}{}",
@@ -40,7 +40,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
 // route: /auth/telegram/callback/
 // In this API we are accessing
 // the token and setting it to cookies
-pub async fn token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+pub async fn token(req: actix_web::HttpRequest) -> fastn::Result<actix_web::HttpResponse> {
     #[derive(Debug, serde::Deserialize)]
     pub struct QueryParams {
         pub id: String,
@@ -60,10 +60,10 @@ pub async fn token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRe
     return Ok(actix_web::HttpResponse::Found()
         .cookie(
             actix_web::cookie::Cookie::build(
-                fpm::auth::AuthProviders::TeleGram.as_str(),
-                fpm::auth::utils::encrypt_str(&user_detail_str).await,
+                fastn::auth::AuthProviders::TeleGram.as_str(),
+                fastn::auth::utils::encrypt_str(&user_detail_str).await,
             )
-            .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            .domain(fastn::auth::utils::domain(req.connection_info().host()))
             .path("/")
             .permanent()
             .secure(true)
@@ -75,12 +75,12 @@ pub async fn token(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRe
 // it returns identities which matches to given input
 pub async fn matched_identities(
     ud: UserDetail,
-    identities: &[fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     let telegram_identities = identities
         .iter()
         .filter(|identity| identity.key.starts_with("telegram"))
-        .collect::<Vec<&fpm::user_group::UserIdentity>>();
+        .collect::<Vec<&fastn::user_group::UserIdentity>>();
 
     if telegram_identities.is_empty() {
         return Ok(vec![]);
@@ -98,8 +98,8 @@ pub async fn matched_identities(
 
 pub async fn matched_telegram_admin(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut matched_groups: Vec<String> = vec![];
     let group_list = identities
@@ -127,7 +127,7 @@ pub async fn matched_telegram_admin(
     // filter the user joined teams with input
     Ok(matched_groups
         .into_iter()
-        .map(|group_name| fpm::user_group::UserIdentity {
+        .map(|group_name| fastn::user_group::UserIdentity {
             key: "telegram-admin".to_string(),
             value: group_name,
         })
@@ -135,8 +135,8 @@ pub async fn matched_telegram_admin(
 }
 pub async fn matched_telegram_group_member(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut matched_groups: Vec<String> = vec![];
     let group_list = identities
@@ -165,7 +165,7 @@ pub async fn matched_telegram_group_member(
     // filter the user joined teams with input
     Ok(matched_groups
         .into_iter()
-        .map(|group_name| fpm::user_group::UserIdentity {
+        .map(|group_name| fastn::user_group::UserIdentity {
             key: "telegram-group".to_string(),
             value: group_name,
         })
@@ -173,8 +173,8 @@ pub async fn matched_telegram_group_member(
 }
 pub async fn matched_telegram_channel_member(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut matched_groups: Vec<String> = vec![];
     let group_list = identities
@@ -203,7 +203,7 @@ pub async fn matched_telegram_channel_member(
     // filter the user joined teams with input
     Ok(matched_groups
         .into_iter()
-        .map(|group_name| fpm::user_group::UserIdentity {
+        .map(|group_name| fastn::user_group::UserIdentity {
             key: "telegram-channel".to_string(),
             value: group_name,
         })
@@ -232,7 +232,7 @@ pub mod apis {
     // TODO: API to get bot informations
     // API Docs: https://core.telegram.org/bots
 
-    pub async fn group_administrators(group_name: &str) -> fpm::Result<Vec<String>> {
+    pub async fn group_administrators(group_name: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://api.telegram.org/bot{telegram-bot-token}/getChatAdministrators?chat_id="@group_name"
         // TODO: Handle paginated response
 
@@ -255,7 +255,7 @@ pub mod apis {
             .map(|x| x.user.username)
             .collect())
     }
-    pub async fn get_member(group_name: &str, user_id: &str) -> fpm::Result<String> {
+    pub async fn get_member(group_name: &str, user_id: &str) -> fastn::Result<String> {
         // API Docs: https://api.telegram.org/bot{telegram-bot-token}/getChatMember?chat_id="@group_name"&user_id="user_id"
         // TODO: Handle paginated response
 
@@ -276,19 +276,19 @@ pub mod apis {
         Ok(member.result.user.username)
     }
 
-    pub async fn group_administrator_api(url: &str) -> fpm::Result<TelegramAdminResp> {
+    pub async fn group_administrator_api(url: &str) -> fastn::Result<TelegramAdminResp> {
         let response = reqwest::Client::new()
             .get(url)
             .header(reqwest::header::ACCEPT, "application/json")
             .header(
                 reqwest::header::USER_AGENT,
-                reqwest::header::HeaderValue::from_static("fpm"),
+                reqwest::header::HeaderValue::from_static("fastn"),
             )
             .send()
             .await?;
 
         if !response.status().eq(&reqwest::StatusCode::OK) {
-            return Err(fpm::Error::APIResponseError(format!(
+            return Err(fastn::Error::APIResponseError(format!(
                 "Telegram API ERROR: {}",
                 url
             )));
@@ -296,19 +296,19 @@ pub mod apis {
 
         Ok(response.json::<TelegramAdminResp>().await?)
     }
-    pub async fn get_api(url: &str) -> fpm::Result<TelegramMemberResp> {
+    pub async fn get_api(url: &str) -> fastn::Result<TelegramMemberResp> {
         let response = reqwest::Client::new()
             .get(url)
             .header(reqwest::header::ACCEPT, "application/json")
             .header(
                 reqwest::header::USER_AGENT,
-                reqwest::header::HeaderValue::from_static("fpm"),
+                reqwest::header::HeaderValue::from_static("fastn"),
             )
             .send()
             .await?;
 
         if !response.status().eq(&reqwest::StatusCode::OK) {
-            return Err(fpm::Error::APIResponseError(format!(
+            return Err(fastn::Error::APIResponseError(format!(
                 "Telegram API ERROR: {}",
                 url
             )));

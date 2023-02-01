@@ -1,7 +1,7 @@
 pub fn processor(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     let name = match section.header.string(doc.name, section.line_number, "key") {
         Ok(name) => name,
@@ -30,7 +30,7 @@ pub fn processor(
         let doc_id = config
             .current_document
             .clone()
-            .map(|v| fpm::utils::id_to_path(v.as_str()))
+            .map(|v| fastn::utils::id_to_path(v.as_str()))
             .unwrap_or_else(|| {
                 doc.name
                     .to_string()

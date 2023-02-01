@@ -163,7 +163,7 @@ pub struct UserGroupCompat {
     description: Option<String>,
     // It will contain all group members, like group, email and -email, etc...
     #[serde(rename = "group-members")]
-    group_members: Vec<fpm::library2022::KeyValueData>,
+    group_members: Vec<fastn::library2022::KeyValueData>,
     groups: Vec<String>,
 }
 
@@ -176,11 +176,11 @@ impl UserGroup {
             self.identities
                 .clone()
                 .into_iter()
-                .map(|i| fpm::library2022::KeyValueData::from(i.key, i.value)),
+                .map(|i| fastn::library2022::KeyValueData::from(i.key, i.value)),
         );
 
         group_members.extend(self.excluded_identities.iter().map(|i| {
-            fpm::library2022::KeyValueData::from(format!("-{}", i.key), i.value.to_string())
+            fastn::library2022::KeyValueData::from(format!("-{}", i.key), i.value.to_string())
         }));
 
         UserGroupCompat {
@@ -196,13 +196,13 @@ impl UserGroup {
     // Maybe Logic: group.identities + (For all group.groups(g.group - g.excluded_group)).identities
     //              - group.excluded_identities
 
-    pub fn get_identities(&self, config: &fpm::Config) -> fpm::Result<Vec<UserIdentity>> {
+    pub fn get_identities(&self, config: &fastn::Config) -> fastn::Result<Vec<UserIdentity>> {
         let mut identities = vec![];
 
         // A group contains child another groups
         for group in self.groups.iter() {
             let user_group = user_group_by_id(config, group.as_str())?.ok_or_else(|| {
-                fpm::Error::GroupNotFound {
+                fastn::Error::GroupNotFound {
                     id: group.to_string(),
                     message: "group not found while getting identities".to_string(),
                 }
@@ -220,9 +220,9 @@ impl UserGroup {
     /// identities is part of group else return's `false`
     pub fn belongs_to(
         &self,
-        config: &fpm::Config,
+        config: &fastn::Config,
         identities: &[&UserIdentity],
-    ) -> fpm::Result<bool> {
+    ) -> fastn::Result<bool> {
         for group_identity in self.identities.iter() {
             for identity in identities.iter() {
                 if group_identity.eq(identity) {
@@ -233,7 +233,7 @@ impl UserGroup {
 
         for group_id in self.groups.iter() {
             let group = user_group_by_id(config, group_id.as_str())?.ok_or_else(|| {
-                fpm::Error::GroupNotFound {
+                fastn::Error::GroupNotFound {
                     id: group_id.to_string(),
                     message: format!(
                         "group not found while checking belongs_to with group: {}",
@@ -271,10 +271,10 @@ impl UserGroupTemp {
 
     pub fn user_groups(
         user_groups: Vec<UserGroupTemp>,
-    ) -> fpm::Result<std::collections::BTreeMap<String, UserGroup>> {
+    ) -> fastn::Result<std::collections::BTreeMap<String, UserGroup>> {
         Self::are_unique(&user_groups).map_err(|e| {
             crate::sitemap::ParseError::InvalidUserGroup {
-                doc_id: "FPM.ftd".to_string(),
+                doc_id: "FASTN.ftd".to_string(),
                 message: e,
                 row_content: "".to_string(),
             }
@@ -287,7 +287,7 @@ impl UserGroupTemp {
     }
 
     #[allow(clippy::wrong_self_convention)]
-    pub fn to_user_group(self) -> fpm::Result<UserGroup> {
+    pub fn to_user_group(self) -> fastn::Result<UserGroup> {
         use itertools::Itertools;
         let mut identities = vec![];
         let mut excluded_identities = vec![];
@@ -437,7 +437,7 @@ pub fn get_identities(
     config: &crate::Config,
     document_name: &str,
     is_read: bool,
-) -> fpm::Result<Vec<UserIdentity>> {
+) -> fastn::Result<Vec<UserIdentity>> {
     // TODO: cookies or cli parameter
 
     let readers_writers = if let Some(sitemap) = &config.package.sitemap {
@@ -450,7 +450,7 @@ pub fn get_identities(
         vec![]
     };
 
-    let identities: fpm::Result<Vec<Vec<UserIdentity>>> = readers_writers
+    let identities: fastn::Result<Vec<Vec<UserIdentity>>> = readers_writers
         .into_iter()
         .map(|g| g.get_identities(config))
         .collect();
@@ -464,23 +464,29 @@ pub fn get_identities(
 }
 
 // TODO Doc: group-id should not contain / in it
-pub fn user_groups_by_package(config: &fpm::Config, package: &str) -> fpm::Result<Vec<UserGroup>> {
-    // TODO: Need to fix it, It should not read groups from individual FPM.ftd file
+pub fn user_groups_by_package(
+    config: &fastn::Config,
+    package: &str,
+) -> fastn::Result<Vec<UserGroup>> {
+    // TODO: Need to fix it, It should not read groups from individual FASTN.ftd file
     // IT should read groups from package.groups
 
     // let package = config.find_package_by_name(package).await?;
     // Ok(package.groups.into_values().collect_vec())
 
-    let fpm_document = config.get_fpm_document(package)?;
-    fpm_document
-        .get::<Vec<UserGroupTemp>>("fpm#user-group")?
+    let fastn_document = config.get_fastn_document(package)?;
+    fastn_document
+        .get::<Vec<UserGroupTemp>>("fastn#user-group")?
         .into_iter()
         .map(|g| g.to_user_group())
         .collect()
 }
 
 /// group_id: "<package_name>/<group_id>" or "<group_id>"
-pub fn user_group_by_id(config: &fpm::Config, group_id: &str) -> fpm::Result<Option<UserGroup>> {
+pub fn user_group_by_id(
+    config: &fastn::Config,
+    group_id: &str,
+) -> fastn::Result<Option<UserGroup>> {
     // If group `id` does not contain `/` then it is current package group_id
     let (package, group_id) = group_id
         .rsplit_once('/')
@@ -493,10 +499,10 @@ pub fn user_group_by_id(config: &fpm::Config, group_id: &str) -> fpm::Result<Opt
 
 /// return true if: any input identity is match with any input group's identity.
 pub fn belongs_to(
-    config: &fpm::Config,
+    config: &fastn::Config,
     groups: &[&UserGroup],
     identities: &[&UserIdentity],
-) -> fpm::Result<bool> {
+) -> fastn::Result<bool> {
     for group in groups.iter() {
         if group.belongs_to(config, identities)? {
             return Ok(true);
@@ -521,7 +527,7 @@ pub fn parse_identities(identities: &str) -> Vec<UserIdentity> {
 
 /// Get identities from cli `--identities`
 pub fn parse_cli_identities() -> Vec<UserIdentity> {
-    let identities = fpm::utils::parse_from_cli("--identities");
+    let identities = fastn::utils::parse_from_cli("--identities");
     parse_identities(&identities.unwrap_or_default())
 }
 
@@ -536,20 +542,20 @@ access_identities(req: HttpRequest, document_name: str, rw: bool)
  */
 
 pub async fn access_identities(
-    config: &fpm::Config,
-    req: &fpm::http::Request,
+    config: &fastn::Config,
+    req: &fastn::http::Request,
     document_name: &str,
     is_read: bool,
-) -> fpm::Result<Vec<UserIdentity>> {
+) -> fastn::Result<Vec<UserIdentity>> {
     let sitemap_identities = get_identities(config, document_name, is_read)?;
     //dbg!(&sitemap_identities);
-    // github-team: fpm-lang/ftd
-    // github-starred: fpm-lang/ftd
+    // github-team: fastn-lang/ftd
+    // github-starred: fastn-lang/ftd
     // discord-server: abrark.com
-    // github-watches: fpm-lang/ftd
-    match fpm::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await {
+    // github-watches: fastn-lang/ftd
+    match fastn::auth::get_auth_identities(req.cookies(), sitemap_identities.as_slice()).await {
         Ok(ids) => Ok(ids),
-        Err(fpm::Error::GenericError(_err)) => Ok(vec![]),
+        Err(fastn::Error::GenericError(_err)) => Ok(vec![]),
         e => e,
     }
 }
@@ -560,7 +566,7 @@ pub mod processor {
     pub fn user_groups(
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
-        config: &fpm::Config,
+        config: &fastn::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         let g = config
             .package
@@ -574,7 +580,7 @@ pub mod processor {
     pub fn user_group_by_id(
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
-        config: &fpm::Config,
+        config: &fastn::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         let id = section.header.str(doc.name, section.line_number, "id")?;
         let g = config
@@ -593,9 +599,9 @@ pub mod processor {
     pub fn get_identities<'a>(
         section: &ftd::p1::Section,
         doc: &'a ftd::p2::TDoc<'_>,
-        config: &fpm::Config,
+        config: &fastn::Config,
     ) -> ftd::p1::Result<ftd::Value> {
-        let doc_id = fpm::library::document::document_full_id(config, doc)?;
+        let doc_id = fastn::library::document::document_full_id(config, doc)?;
         let identities = super::get_identities(config, doc_id.as_str(), true).map_err(|e| {
             ftd::p1::Error::ParseError {
                 message: e.to_string(),
@@ -631,9 +637,9 @@ pub mod processor {
     pub async fn is_reader<'a>(
         section: &ftd::p1::Section,
         doc: &'a ftd::p2::TDoc<'_>,
-        config: &fpm::Config,
+        config: &fastn::Config,
     ) -> ftd::p1::Result<ftd::Value> {
-        let doc_id = fpm::library::document::document_full_id(config, doc)?;
+        let doc_id = fastn::library::document::document_full_id(config, doc)?;
         let is_reader = config
             .can_read(config.request.as_ref().unwrap(), &doc_id, false)
             .await

@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: toc-processor
+-- fastn.package: toc-processor
 download-base-url: http://localhost:8000

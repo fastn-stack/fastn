@@ -1,15 +1,15 @@
-impl fpm::Package {
+impl fastn::Package {
     #[tracing::instrument(skip_all)]
     pub(crate) async fn fs_fetch_by_file_name(
         &self,
         name: &str,
         package_root: Option<&camino::Utf8PathBuf>,
-    ) -> fpm::Result<Vec<u8>> {
+    ) -> fastn::Result<Vec<u8>> {
         tracing::info!(document = name);
         let package_root = if let Some(package_root) = package_root {
             package_root.to_owned()
         } else {
-            match self.fpm_path.as_ref() {
+            match self.fastn_path.as_ref() {
                 Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
                 _ => {
                     tracing::error!(
@@ -17,7 +17,7 @@ impl fpm::Package {
                         package = self.name,
                         document = name,
                     );
-                    return Err(fpm::Error::PackageError {
+                    return Err(fastn::Error::PackageError {
                         message: format!("package root not found. Package: {}", &self.name),
                     });
                 }
@@ -43,8 +43,8 @@ impl fpm::Package {
         &self,
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
-    ) -> fpm::Result<(String, Vec<u8>)> {
-        if fpm::file::is_static(id)? {
+    ) -> fastn::Result<(String, Vec<u8>)> {
+        if fastn::file::is_static(id)? {
             if let Ok(data) = self.fs_fetch_by_file_name(id, package_root).await {
                 return Ok((id.to_string(), data));
             }
@@ -64,7 +64,7 @@ impl fpm::Package {
             document = id,
             package = self.name
         );
-        Err(fpm::Error::PackageError {
+        Err(fastn::Error::PackageError {
             message: format!(
                 "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                 id, &self.name
@@ -73,14 +73,14 @@ impl fpm::Package {
     }
 
     #[tracing::instrument(skip_all)]
-    async fn http_fetch_by_file_name(&self, name: &str) -> fpm::Result<Vec<u8>> {
+    async fn http_fetch_by_file_name(&self, name: &str) -> fastn::Result<Vec<u8>> {
         let base = self.download_base_url.as_ref().ok_or_else(|| {
             let message = format!(
                 "package base not found. Package: {}, File: {}",
                 &self.name, name
             );
             tracing::error!(msg = message);
-            fpm::Error::PackageError { message }
+            fastn::Error::PackageError { message }
         })?;
 
         crate::http::construct_url_and_get(
@@ -90,8 +90,8 @@ impl fpm::Package {
     }
 
     #[tracing::instrument(skip_all)]
-    async fn http_fetch_by_id(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
-        if fpm::file::is_static(id)? {
+    async fn http_fetch_by_id(&self, id: &str) -> fastn::Result<(String, Vec<u8>)> {
+        if fastn::file::is_static(id)? {
             if let Ok(data) = self.http_fetch_by_file_name(id).await {
                 return Ok((id.to_string(), data));
             }
@@ -108,7 +108,7 @@ impl fpm::Package {
             id, &self.name
         );
         tracing::error!(document = id, msg = message);
-        Err(fpm::Error::PackageError { message })
+        Err(fastn::Error::PackageError { message })
     }
 
     #[tracing::instrument(skip_all)]
@@ -116,15 +116,15 @@ impl fpm::Package {
         &self,
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
-    ) -> fpm::Result<(String, Vec<u8>)> {
+    ) -> fastn::Result<(String, Vec<u8>)> {
         tracing::info!(document = id);
         let package_root = if let Some(package_root) = package_root {
             package_root.to_owned()
         } else {
-            match self.fpm_path.as_ref() {
+            match self.fastn_path.as_ref() {
                 Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
                 _ => {
-                    return Err(fpm::Error::PackageError {
+                    return Err(fastn::Error::PackageError {
                         message: format!("package root not found. Package: {}", &self.name),
                     })
                 }
@@ -132,7 +132,7 @@ impl fpm::Package {
         };
 
         let (file_path, data) = self.http_fetch_by_id(id).await?;
-        fpm::utils::write(
+        fastn::utils::write(
             &package_root,
             file_path.trim_start_matches('/'),
             data.as_slice(),
@@ -147,14 +147,14 @@ impl fpm::Package {
         &self,
         file_path: &str,
         package_root: Option<&camino::Utf8PathBuf>,
-    ) -> fpm::Result<Vec<u8>> {
+    ) -> fastn::Result<Vec<u8>> {
         let package_root = if let Some(package_root) = package_root {
             package_root.to_owned()
         } else {
-            match self.fpm_path.as_ref() {
+            match self.fastn_path.as_ref() {
                 Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
                 _ => {
-                    return Err(fpm::Error::PackageError {
+                    return Err(fastn::Error::PackageError {
                         message: format!("package root not found. Package: {}", &self.name),
                     })
                 }
@@ -162,7 +162,7 @@ impl fpm::Package {
         };
 
         let data = self.http_fetch_by_file_name(file_path).await?;
-        fpm::utils::write(&package_root, file_path, data.as_slice()).await?;
+        fastn::utils::write(&package_root, file_path, data.as_slice()).await?;
 
         Ok(data)
     }
@@ -172,7 +172,7 @@ impl fpm::Package {
         file_path: &str,
         package_root: Option<&camino::Utf8PathBuf>,
         restore_default: bool,
-    ) -> fpm::Result<Vec<u8>> {
+    ) -> fastn::Result<Vec<u8>> {
         if let Ok(response) = self.fs_fetch_by_file_name(file_path, package_root).await {
             return Ok(response);
         }
@@ -184,7 +184,7 @@ impl fpm::Package {
         }
 
         if !restore_default {
-            return Err(fpm::Error::PackageError {
+            return Err(fastn::Error::PackageError {
                 message: format!(
                     "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                     file_path, &self.name
@@ -203,7 +203,7 @@ impl fpm::Package {
                 format!("{}.{}", remaining.trim_end_matches("-dark"), ext)
             }
             _ => {
-                return Err(fpm::Error::PackageError {
+                return Err(fastn::Error::PackageError {
                     message: format!(
                         "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                         file_path, &self.name
@@ -215,10 +215,10 @@ impl fpm::Package {
         let root = if let Some(package_root) = package_root {
             package_root.to_owned()
         } else {
-            match self.fpm_path.as_ref() {
+            match self.fastn_path.as_ref() {
                 Some(path) if path.parent().is_some() => path.parent().unwrap().to_path_buf(),
                 _ => {
-                    return Err(fpm::Error::PackageError {
+                    return Err(fastn::Error::PackageError {
                         message: format!("package root not found. Package: {}", &self.name),
                     })
                 }
@@ -250,7 +250,7 @@ impl fpm::Package {
         &self,
         id: &str,
         package_root: Option<&camino::Utf8PathBuf>,
-    ) -> fpm::Result<(String, Vec<u8>)> {
+    ) -> fastn::Result<(String, Vec<u8>)> {
         tracing::info!(id = id);
         if let Ok(response) = self.fs_fetch_by_id(id, package_root).await {
             return Ok(response);
@@ -279,7 +279,7 @@ impl fpm::Package {
             }
             _ => {
                 tracing::error!(id = id, msg = "id error: can not get the dark");
-                return Err(fpm::Error::PackageError {
+                return Err(fastn::Error::PackageError {
                     message: format!(
                         "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
                         id, &self.name
@@ -289,7 +289,7 @@ impl fpm::Package {
         };
 
         if let Ok(response) = self.fs_fetch_by_id(new_id.as_str(), package_root).await {
-            // fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
+            // fastn::utils::copy(&root.join(new_id), &root.join(id)).await?;
             return Ok(response);
         }
 
@@ -298,7 +298,7 @@ impl fpm::Package {
             .await
         {
             Ok(response) => {
-                // fpm::utils::copy(&root.join(new_id), &root.join(id)).await?;
+                // fastn::utils::copy(&root.join(new_id), &root.join(id)).await?;
                 Ok(response)
             }
             Err(e) => Err(e),
@@ -333,33 +333,33 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
 #[allow(clippy::await_holding_refcell_ref)]
 #[tracing::instrument(skip_all)]
 pub(crate) async fn read_ftd(
-    config: &mut fpm::Config,
-    main: &fpm::Document,
+    config: &mut fastn::Config,
+    main: &fastn::Document,
     base_url: &str,
     download_assets: bool,
-) -> fpm::Result<Vec<u8>> {
+) -> fastn::Result<Vec<u8>> {
     tracing::info!(document = main.id);
     match config.ftd_edition {
-        fpm::FTDEdition::FTD2021 => read_ftd_2021(config, main, base_url, download_assets).await,
-        fpm::FTDEdition::FTD2022 => read_ftd_2022(config, main, base_url, download_assets).await,
+        fastn::FTDEdition::FTD2021 => read_ftd_2021(config, main, base_url, download_assets).await,
+        fastn::FTDEdition::FTD2022 => read_ftd_2022(config, main, base_url, download_assets).await,
     }
 }
 
 #[allow(clippy::await_holding_refcell_ref)]
 #[tracing::instrument(name = "read_ftd_2022", skip_all)]
 pub(crate) async fn read_ftd_2022(
-    config: &mut fpm::Config,
-    main: &fpm::Document,
+    config: &mut fastn::Config,
+    main: &fastn::Document,
     base_url: &str,
     download_assets: bool,
-) -> fpm::Result<Vec<u8>> {
+) -> fastn::Result<Vec<u8>> {
     let lib_config = config.clone();
     let mut all_packages = config.all_packages.borrow_mut();
     let current_package = all_packages
         .get(main.package_name.as_str())
         .unwrap_or(&config.package);
 
-    let mut lib = fpm::Library2022 {
+    let mut lib = fastn::Library2022 {
         config: lib_config,
         markdown: None,
         document_id: main.id.clone(),
@@ -375,7 +375,7 @@ pub(crate) async fn read_ftd_2022(
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
 
     let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
-    let main_ftd_doc = match fpm::doc::interpret_helper(
+    let main_ftd_doc = match fastn::doc::interpret_helper(
         main.id_with_package().as_str(),
         doc_content.as_str(),
         &mut lib,
@@ -388,7 +388,7 @@ pub(crate) async fn read_ftd_2022(
         Ok(v) => v,
         Err(e) => {
             tracing::error!(msg = "failed to parse", doc = main.id.as_str());
-            return Err(fpm::Error::PackageError {
+            return Err(fastn::Error::PackageError {
                 message: format!("failed to parse {:?}", &e),
             });
         }
@@ -406,7 +406,7 @@ pub(crate) async fn read_ftd_2022(
         .extend(lib.config.downloaded_assets);
 
     let font_style = config.get_font_style();
-    let file_content = fpm::utils::replace_markers_2022(
+    let file_content = fastn::utils::replace_markers_2022(
         ftd::build(),
         html_ui,
         ftd::build_js(),
@@ -423,18 +423,18 @@ pub(crate) async fn read_ftd_2022(
 
 #[allow(clippy::await_holding_refcell_ref)]
 pub(crate) async fn read_ftd_2021(
-    config: &mut fpm::Config,
-    main: &fpm::Document,
+    config: &mut fastn::Config,
+    main: &fastn::Document,
     base_url: &str,
     download_assets: bool,
-) -> fpm::Result<Vec<u8>> {
+) -> fastn::Result<Vec<u8>> {
     let lib_config = config.clone();
     let mut all_packages = config.all_packages.borrow_mut();
     let current_package = all_packages
         .get(main.package_name.as_str())
         .unwrap_or(&config.package);
 
-    let mut lib = fpm::Library2 {
+    let mut lib = fastn::Library2 {
         config: lib_config,
         markdown: None,
         document_id: main.id.clone(),
@@ -449,7 +449,7 @@ pub(crate) async fn read_ftd_2021(
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
 
-    let main_ftd_doc = match fpm::time("parser2").it(fpm::doc::parse2(
+    let main_ftd_doc = match fastn::time("parser2").it(fastn::doc::parse2(
         main.id_with_package().as_str(),
         doc_content.as_str(),
         &mut lib,
@@ -460,7 +460,7 @@ pub(crate) async fn read_ftd_2021(
     {
         Ok(v) => v,
         Err(e) => {
-            return Err(fpm::Error::PackageError {
+            return Err(fastn::Error::PackageError {
                 message: format!("failed to parse {:?}", &e),
             });
         }
@@ -477,10 +477,10 @@ pub(crate) async fn read_ftd_2021(
         Some(x) => x.original.clone(),
         _ => main.id.as_str().to_string(),
     };
-    let ftd_doc = fpm::time("to_rt()").it(main_ftd_doc.to_rt("main", &main.id));
+    let ftd_doc = fastn::time("to_rt()").it(main_ftd_doc.to_rt("main", &main.id));
 
-    let file_content = fpm::utils::replace_markers_2021(
-        fpm::ftd_html(),
+    let file_content = fastn::utils::replace_markers_2021(
+        fastn::ftd_html(),
         config,
         main.id_to_path().as_str(),
         doc_title.as_str(),
@@ -492,12 +492,12 @@ pub(crate) async fn read_ftd_2021(
 }
 
 pub(crate) async fn process_ftd(
-    config: &mut fpm::Config,
-    main: &fpm::Document,
+    config: &mut fastn::Config,
+    main: &fastn::Document,
     base_url: &str,
     no_static: bool,
-) -> fpm::Result<Vec<u8>> {
-    if main.id.eq("FPM.ftd") {
+) -> fastn::Result<Vec<u8>> {
+    if main.id.eq("FASTN.ftd") {
         tokio::fs::copy(
             config.root.join(main.id.as_str()),
             config.root.join(".build").join(main.id.as_str()),
@@ -507,9 +507,9 @@ pub(crate) async fn process_ftd(
 
     let main = {
         let mut main = main.to_owned();
-        if main.id.eq("FPM.ftd") {
+        if main.id.eq("FASTN.ftd") {
             main.id = "-.ftd".to_string();
-            let path = config.root.join("FPM").join("info.ftd");
+            let path = config.root.join("fastn").join("info.ftd");
             main.content = if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {
@@ -532,7 +532,7 @@ pub(crate) async fn process_ftd(
     };
 
     let response = read_ftd(config, &main, base_url, !no_static).await?;
-    fpm::utils::write(
+    fastn::utils::write(
         &config.build_dir(),
         file_rel_path.as_str(),
         response.as_slice(),

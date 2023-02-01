@@ -1,4 +1,4 @@
-pub async fn update(config: &fpm::Config) -> fpm::Result<()> {
+pub async fn update(config: &fastn::Config) -> fastn::Result<()> {
     if let Err(e) = std::fs::remove_dir_all(config.root.join(".packages")) {
         match e.kind() {
             std::io::ErrorKind::NotFound => {}
@@ -6,7 +6,7 @@ pub async fn update(config: &fpm::Config) -> fpm::Result<()> {
         }
     };
 
-    let c = fpm::Config::read(None, false, None).await?;
+    let c = fastn::Config::read(None, false, None).await?;
     if c.package.dependencies.is_empty() {
         println!("No dependencies to update.")
     } else if c.package.dependencies.len() == 1 {

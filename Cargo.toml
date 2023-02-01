@@ -1,5 +1,5 @@
 [package]
-name = "fpm"
+name = "fastn"
 version = "0.1.11"
 authors = [
     "Abrar Khan <abrark@fifthtry.com>",
@@ -8,21 +8,21 @@ authors = [
     "Shobhit Sharma <shobhit@fifthtry.com>",
 ]
 edition = "2021"
-description = "fpm: FTD Package Manager"
+description = "fastn: FTD Package Manager"
 license = "MIT"
-repository = "https://github.com/ftd-lang/fpm"
-homepage = "https://fpm.dev"
+repository = "https://github.com/ftd-lang/fastn"
+homepage = "https://fastn.dev"
 
 [features]
 default = ["auth"]
-# FPM comes with some feature to integrate with fpm controller. FPM controller is a
-# separate software, optional. FPM controller is responsible for creating a new fpm
-# package, and deploying it on some server, backing content up and so on. FPM has to
-# speak with FPM controller, when fpm is managed by fpm controller. Enabling the
+# fastn comes with some feature to integrate with fastn controller. fastn controller is a
+# separate software, optional. fastn controller is responsible for creating a new fastn
+# package, and deploying it on some server, backing content up and so on. fastn has to
+# speak with fastn controller, when fastn is managed by fastn controller. Enabling the
 # "controller" feature enables that communication.
 controller = ["remote"]
 
-# fpm runs in local mode (to be used on your local laptop, or single use server), and in
+# fastn runs in local mode (to be used on your local laptop, or single use server), and in
 # remote mode (to be used as a shared server for your entire team). The default is
 # local mode.
 #
@@ -82,8 +82,8 @@ env_logger = "0.10.0"
 
 
 #wit-bindgen-host-wasmtime-rust = { git = "https://github.com/bytecodealliance/wit-bindgen.git", rev = "45604f58336afaa23a79ed619ef50b69de473688" }
-#fpm-utils = { git = "https://github.com/ftd-lang/fpm-utils", rev = "0ce396db408b413f5a4eb6b2c5b87db3829cf879" }
-# fpm-utils = { path = "../fpm-utils/crates/fpm-utils-host"}
+#fastn-utils = { git = "https://github.com/ftd-lang/fastn-utils", rev = "0ce396db408b413f5a4eb6b2c5b87db3829cf879" }
+# fastn-utils = { path = "../fastn-utils/crates/fastn-utils-host"}
 
 [dependencies.tracing-forest]
 version = "0.1"
@@ -125,7 +125,7 @@ features=["macos_kqueue"]
 git = "https://github.com/ftd-lang/ftd"
 rev = "a8e35fc5"
 #
-# If you are testing fpm against local ftd, you can keep ftd and fpm checked out in
+# If you are testing fastn against local ftd, you can keep ftd and fastn checked out in
 # same folder and uncomment the next `path` line to use local ftd.
 #
 # Note: you do not have to comment out the git/rev above, Cargo uses `path` with

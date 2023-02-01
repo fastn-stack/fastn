@@ -1,5 +1,5 @@
-// Discussion: https://github.com/FifthTry/fpm/discussions/475
-// Docs: https://fpm.dev/sitemap/clear-cache/
+// Discussion: https://github.com/FifthTry/fastn/discussions/475
+// Docs: https://fastn.dev/sitemap/clear-cache/
 
 #[derive(Default, Debug)]
 pub struct QueryParams {
@@ -8,9 +8,9 @@ pub struct QueryParams {
     all_dependencies: bool,
 }
 
-fn query(uri: &str) -> fpm::Result<QueryParams> {
+fn query(uri: &str) -> fastn::Result<QueryParams> {
     use itertools::Itertools;
-    let query = fpm::utils::query(uri)?;
+    let query = fastn::utils::query(uri)?;
     Ok(QueryParams {
         file: query
             .iter()
@@ -38,12 +38,12 @@ fn query(uri: &str) -> fpm::Result<QueryParams> {
     })
 }
 
-pub async fn clear(req: &fpm::http::Request) -> fpm::http::Response {
+pub async fn clear(req: &fastn::http::Request) -> fastn::http::Response {
     let query = match query(req.uri()) {
         Ok(q) => q,
         Err(err) => {
-            return fpm::server_error!(
-                "FPM-Error: /-/clear-cache/, uri: {:?}, error: {:?}",
+            return fastn::server_error!(
+                "fastn-Error: /-/clear-cache/, uri: {:?}, error: {:?}",
                 req.uri(),
                 err
             );
@@ -51,20 +51,21 @@ pub async fn clear(req: &fpm::http::Request) -> fpm::http::Response {
     };
 
     if let Err(err) = clear_(&query, req).await {
-        return fpm::server_error!(
-            "FPM-Error: /-/clear-cache/, query: {:?}, error: {:?}",
+        return fastn::server_error!(
+            "fastn-Error: /-/clear-cache/, query: {:?}, error: {:?}",
             query,
             err
         );
     }
     dbg!("cache-cleared");
-    fpm::http::ok("Done".into())
+    fastn::http::ok("Done".into())
 }
 
-pub async fn clear_(query: &QueryParams, req: &fpm::http::Request) -> fpm::Result<()> {
-    let config = fpm::time("Config::read()").it(fpm::Config::read(None, false, Some(req)).await?);
+pub async fn clear_(query: &QueryParams, req: &fastn::http::Request) -> fastn::Result<()> {
+    let config =
+        fastn::time("Config::read()").it(fastn::Config::read(None, false, Some(req)).await?);
     if config.package.download_base_url.is_none() {
-        return Err(fpm::Error::APIResponseError(
+        return Err(fastn::Error::APIResponseError(
             "cannot remove anything, package does not have `download_base_url`".to_string(),
         ));
     }
@@ -76,12 +77,12 @@ pub async fn clear_(query: &QueryParams, req: &fpm::http::Request) -> fpm::Resul
         if main_file_path.exists() {
             let path = tokio::fs::canonicalize(main_file_path).await?;
             if path.starts_with(&config.root) {
-                fpm::utils::remove(path.as_path()).await?;
+                fastn::utils::remove(path.as_path()).await?;
             }
         } else if package_file_path.exists() {
             let path = tokio::fs::canonicalize(package_file_path).await?;
             if path.starts_with(&config.root) {
-                fpm::utils::remove(path.as_path()).await?;
+                fastn::utils::remove(path.as_path()).await?;
             }
         } else {
             println!("Not able to remove file from cache: {}", file);
@@ -92,11 +93,11 @@ pub async fn clear_(query: &QueryParams, req: &fpm::http::Request) -> fpm::Resul
     for package in query.package.iter() {
         if package.eq("main") {
             // TODO: List directories and files other than main
-            fpm::utils::remove_except(&config.root, &[".packages", ".build"]).await?;
+            fastn::utils::remove_except(&config.root, &[".packages", ".build"]).await?;
         } else {
             let path = tokio::fs::canonicalize(config.packages_root.join(package)).await?;
             if path.starts_with(&config.packages_root) {
-                fpm::utils::remove(path.as_path()).await?;
+                fastn::utils::remove(path.as_path()).await?;
             }
         }
     }
@@ -105,9 +106,9 @@ pub async fn clear_(query: &QueryParams, req: &fpm::http::Request) -> fpm::Resul
         tokio::fs::remove_dir_all(&config.packages_root).await?;
     }
 
-    // Download FPM.ftd again after removing all the content
-    if !config.root.join("FPM.ftd").exists() {
-        fpm::commands::serve::download_init_package(config.package.download_base_url).await?;
+    // Download FASTN.ftd again after removing all the content
+    if !config.root.join("FASTN.ftd").exists() {
+        fastn::commands::serve::download_init_package(config.package.download_base_url).await?;
     }
 
     Ok(())

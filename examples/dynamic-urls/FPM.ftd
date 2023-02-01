@@ -1,17 +1,17 @@
 
--- import: fpm
+-- import: fastn
 
--- fpm.package: dynamic-urls
+-- fastn.package: dynamic-urls
 download-base-url: https://www.github.com/
 
 
--- fpm.sitemap:
+-- fastn.sitemap:
 
 # Page 1: /foo/a/
 document: /bar/b/
 
 
--- fpm.dynamic-urls:
+-- fastn.dynamic-urls:
 
 # TOC00
 url: /a/ <  integer  :   age  >  /person/

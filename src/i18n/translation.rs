@@ -1,7 +1,7 @@
 const RES: &str = "translation";
 
-pub static TRANSLATION: once_cell::sync::Lazy<fpm::i18n::Base> =
-    once_cell::sync::Lazy::new(|| fpm::i18n::new_base(RES));
+pub static TRANSLATION: once_cell::sync::Lazy<fastn::i18n::Base> =
+    once_cell::sync::Lazy::new(|| fastn::i18n::new_base(RES));
 
 pub fn search(
     lang: &realm_lang::Language,
@@ -29,5 +29,5 @@ pub fn search(
         "last-modified-on",
         fluent::FluentValue::from(last_modified_on.as_str()),
     );
-    fpm::i18n::lookup(&TRANSLATION, lang, RES, key, None, Some(&args))
+    fastn::i18n::lookup(&TRANSLATION, lang, RES, key, None, Some(&args))
 }

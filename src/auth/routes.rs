@@ -6,8 +6,8 @@ pub async fn login(
     inline_js: Vec<String>,
     external_css: Vec<String>,
     inline_css: Vec<String>,
-) -> fpm::Result<actix_web::HttpResponse> {
-    if fpm::auth::utils::is_login(&req) {
+) -> fastn::Result<actix_web::HttpResponse> {
+    if fastn::auth::utils::is_login(&req) {
         return Ok(actix_web::HttpResponse::Found()
             .append_header((actix_web::http::header::LOCATION, "/".to_string()))
             .finish());
@@ -26,15 +26,15 @@ pub async fn login(
         }
     };
     match query.platform.as_str() {
-        "github" => fpm::auth::github::login(req).await,
-        "telegram" => fpm::auth::telegram::login(req).await,
-        "discord" => fpm::auth::discord::login(req).await,
-        "twitter" => fpm::auth::twitter::login(req).await,
+        "github" => fastn::auth::github::login(req).await,
+        "telegram" => fastn::auth::telegram::login(req).await,
+        "discord" => fastn::auth::discord::login(req).await,
+        "twitter" => fastn::auth::twitter::login(req).await,
         // TODO: Remove this after demo
         _ => {
-            let mut req = fpm::http::Request::from_actix(req, actix_web::web::Bytes::new());
+            let mut req = fastn::http::Request::from_actix(req, actix_web::web::Bytes::new());
             req.path = "/sorry/".to_string();
-            fpm::commands::serve::serve(
+            fastn::commands::serve::serve(
                 req,
                 edition,
                 external_js,
@@ -48,7 +48,7 @@ pub async fn login(
 }
 
 // route: /auth/logout/
-pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+pub fn logout(req: actix_web::HttpRequest) -> fastn::Result<actix_web::HttpResponse> {
     // TODO: Refactor, Not happy with this code, too much of repetition of similar code
     // It is logging out from all the platforms
 
@@ -56,176 +56,176 @@ pub fn logout(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpRespons
     // only from that platform
     Ok(actix_web::HttpResponse::Found()
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::GitHub.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::GitHub.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::TeleGram.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::TeleGram.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Slack.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Slack.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Discord.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Discord.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Google.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Google.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Amazon.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Amazon.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Apple.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Apple.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Baidu.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Baidu.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::BitBucket.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::BitBucket.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::DigitalOcean.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::DigitalOcean.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::DoorKeeper.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::DoorKeeper.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::DropBox.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::DropBox.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Facebook.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Facebook.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::GitLab.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::GitLab.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Instagram.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Instagram.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::LinkedIn.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::LinkedIn.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Microsoft.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Microsoft.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Okta.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Okta.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Pintrest.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Pintrest.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::TikTok.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::TikTok.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Twitch.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Twitch.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Twitter.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Twitter.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::WeChat.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::WeChat.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Yahoo.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Yahoo.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
         )
         .cookie(
-            actix_web::cookie::Cookie::build(fpm::auth::AuthProviders::Zoho.as_str(), "")
-                .domain(fpm::auth::utils::domain(req.connection_info().host()))
+            actix_web::cookie::Cookie::build(fastn::auth::AuthProviders::Zoho.as_str(), "")
+                .domain(fastn::auth::utils::domain(req.connection_info().host()))
                 .path("/")
                 .expires(actix_web::cookie::time::OffsetDateTime::now_utc())
                 .finish(),
@@ -243,7 +243,7 @@ pub async fn handle_auth(
     inline_js: Vec<String>,
     external_css: Vec<String>,
     inline_css: Vec<String>,
-) -> fpm::Result<fpm::http::Response> {
+) -> fastn::Result<fastn::http::Response> {
     match req.path() {
         "/auth/login/" => {
             login(
@@ -256,10 +256,10 @@ pub async fn handle_auth(
             )
             .await
         }
-        fpm::auth::github::CALLBACK_URL => fpm::auth::github::callback(req).await,
-        fpm::auth::telegram::CALLBACK_URL => fpm::auth::telegram::token(req).await,
-        fpm::auth::discord::CALLBACK_URL => fpm::auth::discord::callback(req).await,
-        fpm::auth::twitter::CALLBACK_URL => fpm::auth::twitter::callback(req).await,
+        fastn::auth::github::CALLBACK_URL => fastn::auth::github::callback(req).await,
+        fastn::auth::telegram::CALLBACK_URL => fastn::auth::telegram::token(req).await,
+        fastn::auth::discord::CALLBACK_URL => fastn::auth::discord::callback(req).await,
+        fastn::auth::twitter::CALLBACK_URL => fastn::auth::twitter::callback(req).await,
         "/auth/logout/" => logout(req),
         _ => Ok(actix_web::HttpResponse::new(
             actix_web::http::StatusCode::NOT_FOUND,

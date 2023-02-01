@@ -1,4 +1,4 @@
-extern crate self as fpm;
+extern crate self as fastn;
 
 #[macro_use]
 pub mod utils;
@@ -50,7 +50,7 @@ pub use error::Error;
 pub use file::File;
 pub(crate) use file::{get_file, paths_to_files, Document, Static};
 pub(crate) use font::Font;
-pub use library::{FPMLibrary, Library, Library2};
+pub use library::{FastnLibrary, Library, Library2};
 pub use library2022::Library2022;
 pub(crate) use package::dependency::Dependency;
 pub use package::user_group;
@@ -63,7 +63,7 @@ pub(crate) use utils::{copy_dir_all, time, timestamp_nanosecond};
 pub(crate) use version::Version;
 pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
-pub const FPM_UI_INTERFACE: &str = "ftd-lang.github.io/fpm-ui";
+pub const FASTN_UI_INTERFACE: &str = "ftd-lang.github.io/fastn-ui";
 pub const PACKAGE_THEME_INTERFACE: &str = "ftd-lang.github.io/theme";
 pub const NUMBER_OF_CRS_TO_RESERVE: usize = 5;
 
@@ -73,8 +73,8 @@ pub fn ftd_html() -> &'static str {
     include_str!("../ftd.html")
 }
 
-fn fpm_ftd() -> &'static str {
-    include_str!("../ftd/fpm.ftd")
+fn fastn_ftd() -> &'static str {
+    include_str!("../ftd/FASTN.ftd")
 }
 
 fn processor_ftd() -> &'static str {
@@ -85,36 +85,36 @@ fn design_ftd() -> &'static str {
     include_str!("../ftd/design.ftd")
 }
 
-fn fpm_js() -> &'static str {
-    if fpm::utils::is_test() {
-        return "FPM_JS";
+fn fastn_js() -> &'static str {
+    if fastn::utils::is_test() {
+        return "fastn_JS";
     }
-    include_str!("../fpm.js")
+    include_str!("../fastn.js")
 }
 
-fn fpm_2022_js() -> &'static str {
-    if fpm::utils::is_test() {
-        return "FPM_JS";
+fn fastn_2022_js() -> &'static str {
+    if fastn::utils::is_test() {
+        return "FASTN_JS";
     }
-    include_str!("../fpm2022.js")
+    include_str!("../fastn2022.js")
 }
 
 fn ftd_js() -> String {
-    if fpm::utils::is_test() {
+    if fastn::utils::is_test() {
         return "FTD_JS".to_string();
     }
     ftd::js()
 }
 
 fn ftd_css() -> &'static str {
-    if fpm::utils::is_test() {
+    if fastn::utils::is_test() {
         return "FTD_CSS";
     }
     ftd::css()
 }
 
-fn fpm_lib_ftd() -> &'static str {
-    include_str!("../ftd/fpm-lib.ftd")
+fn fastn_lib_ftd() -> &'static str {
+    include_str!("../ftd/fastn-lib.ftd")
 }
 
 #[allow(dead_code)]
@@ -123,8 +123,10 @@ fn with_message() -> &'static str {
 }
 
 #[allow(dead_code)]
-fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
-    let path = config.root.join("FPM/translation/available-languages.ftd");
+fn available_languages(config: &fastn::Config) -> fastn::Result<String> {
+    let path = config
+        .root
+        .join("fastn/translation/available-languages.ftd");
     Ok(if path.is_file() {
         std::fs::read_to_string(path)?
     } else {
@@ -133,11 +135,11 @@ fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
 }
 
 fn package_info_image(
-    config: &fpm::Config,
-    doc: &fpm::Static,
-    package: &fpm::Package,
-) -> fpm::Result<String> {
-    let path = config.root.join("FPM").join("image.ftd");
+    config: &fastn::Config,
+    doc: &fastn::Static,
+    package: &fastn::Package,
+) -> fastn::Result<String> {
+    let path = config.root.join("fastn").join("image.ftd");
     Ok(if path.is_file() {
         std::fs::read_to_string(path)?
     } else {
@@ -164,8 +166,8 @@ fn package_info_image(
     })
 }
 
-fn package_info_about(config: &fpm::Config) -> fpm::Result<String> {
-    let path = config.root.join("FPM").join("cr.ftd");
+fn package_info_about(config: &fastn::Config) -> fastn::Result<String> {
+    let path = config.root.join("fastn").join("cr.ftd");
     Ok(if path.is_file() {
         std::fs::read_to_string(path)?
     } else {
@@ -187,10 +189,10 @@ fn package_info_about(config: &fpm::Config) -> fpm::Result<String> {
 }
 
 fn package_info_editor(
-    config: &fpm::Config,
+    config: &fastn::Config,
     file_name: &str,
-    diff: fpm::Result<Option<String>>,
-) -> fpm::Result<String> {
+    diff: fastn::Result<Option<String>>,
+) -> fastn::Result<String> {
     let body_prefix = match config.package.generate_prefix_string(false) {
         Some(bp) => bp,
         None => String::new(),
@@ -199,7 +201,7 @@ fn package_info_editor(
             {body_prefix}
     
             -- import: {package_info_package}/editor as pi
-            -- import: fpm/processors as pr
+            -- import: fastn/processors as pr
 
             
             -- pi.editor:
@@ -220,7 +222,7 @@ fn package_info_editor(
     Ok(editor_ftd)
 }
 
-fn package_info_create_cr(config: &fpm::Config) -> fpm::Result<String> {
+fn package_info_create_cr(config: &fastn::Config) -> fastn::Result<String> {
     let body_prefix = match config.package.generate_prefix_string(false) {
         Some(bp) => bp,
         None => String::new(),
@@ -238,12 +240,12 @@ fn package_info_create_cr(config: &fpm::Config) -> fpm::Result<String> {
 }
 
 fn package_info_code(
-    config: &fpm::Config,
+    config: &fastn::Config,
     file_name: &str,
     content: &str,
     extension: &str,
-) -> fpm::Result<String> {
-    let path = config.root.join("FPM").join("code.ftd");
+) -> fastn::Result<String> {
+    let path = config.root.join("fastn").join("code.ftd");
     Ok(if path.is_file() {
         std::fs::read_to_string(path)?
     } else {
@@ -291,14 +293,14 @@ fn package_info_code(
 }
 
 fn package_info_markdown(
-    config: &fpm::Config,
+    config: &fastn::Config,
     file_name: &str,
     content: &str,
-) -> fpm::Result<String> {
-    let path = config.root.join("FPM").join("markdown.ftd");
+) -> fastn::Result<String> {
+    let path = config.root.join("fastn").join("markdown.ftd");
     Ok(if path.is_file() {
         std::fs::read_to_string(path)?
-    } else if !config.ftd_edition.eq(&fpm::config::FTDEdition::FTD2021) {
+    } else if !config.ftd_edition.eq(&fastn::config::FTDEdition::FTD2021) {
         if content.trim().is_empty() {
             content.to_string()
         } else {
@@ -352,10 +354,10 @@ fn package_info_markdown(
 }
 
 #[allow(dead_code)]
-fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
+fn original_package_status(config: &fastn::Config) -> fastn::Result<String> {
     let path = config
         .root
-        .join("FPM")
+        .join("fastn")
         .join("translation")
         .join("original-status.ftd");
     Ok(if path.is_file() {
@@ -374,10 +376,10 @@ fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
 }
 
 #[allow(dead_code)]
-fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
+fn translation_package_status(config: &fastn::Config) -> fastn::Result<String> {
     let path = config
         .root
-        .join("FPM")
+        .join("fastn")
         .join("translation")
         .join("translation-status.ftd");
     Ok(if path.is_file() {
@@ -395,10 +397,13 @@ fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
     })
 }
 
-fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::Result<String> {
+fn get_messages(
+    status: &fastn::TranslatedDocument,
+    config: &fastn::Config,
+) -> fastn::Result<String> {
     Ok(match status {
         TranslatedDocument::Missing { .. } => {
-            let path = config.root.join("FPM/translation/missing.ftd");
+            let path = config.root.join("fastn/translation/missing.ftd");
             if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {
@@ -406,7 +411,7 @@ fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::
             }
         }
         TranslatedDocument::NeverMarked { .. } => {
-            let path = config.root.join("FPM/translation/never-marked.ftd");
+            let path = config.root.join("fastn/translation/never-marked.ftd");
             if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {
@@ -414,7 +419,7 @@ fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::
             }
         }
         TranslatedDocument::Outdated { .. } => {
-            let path = config.root.join("FPM/translation/out-of-date.ftd");
+            let path = config.root.join("fastn/translation/out-of-date.ftd");
             if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {
@@ -422,7 +427,7 @@ fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::
             }
         }
         TranslatedDocument::UptoDate { .. } => {
-            let path = config.root.join("FPM/translation/upto-date.ftd");
+            let path = config.root.join("fastn/translation/upto-date.ftd");
             if path.is_file() {
                 std::fs::read_to_string(path)?
             } else {
@@ -436,7 +441,7 @@ pub fn get_env_ftd_file() -> String {
     std::env::vars()
         .into_iter()
         .filter(|(key, val)| {
-            vec!["CARGO", "VERGEN", "FPM"]
+            vec!["CARGO", "VERGEN", "FASTN"]
                 .iter()
                 .any(|prefix| !key.is_empty() && key.starts_with(prefix) && !val.is_empty())
         })
@@ -449,7 +454,7 @@ pub fn debug_env_vars() -> String {
     std::env::vars()
         .into_iter()
         .filter(|(key, _)| {
-            vec!["CARGO", "VERGEN", "FPM"]
+            vec!["CARGO", "VERGEN", "FASTN"]
                 .iter()
                 .any(|prefix| key.starts_with(prefix))
         })

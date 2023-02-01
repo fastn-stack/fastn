@@ -7,21 +7,21 @@
 // TODO: Need to change it later
 // TODO: https://stackoverflow.com/questions/29445026/converting-number-primitives-i32-f64-etc-to-byte-representations
 
-// TODO: what is this lock protecting? We already have a lock in fpm::commands::serve::LOCK.
+// TODO: what is this lock protecting? We already have a lock in fastn::commands::serve::LOCK.
 static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
     once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
 
-/*pub async fn get(path: &str) -> fpm::Result<usize> {
+/*pub async fn get(path: &str) -> fastn::Result<usize> {
     match LOCK.try_read() {
         Ok(_) => {
             let value = tokio::fs::read_to_string(path).await?;
             Ok(value.parse()?)
         }
-        Err(e) => Err(fpm::Error::GenericError(e.to_string())),
+        Err(e) => Err(fastn::Error::GenericError(e.to_string())),
     }
 }
 
-pub async fn create(path: &str) -> fpm::Result<usize> {
+pub async fn create(path: &str) -> fastn::Result<usize> {
     use tokio::io::AsyncWriteExt;
     match LOCK.try_write() {
         Ok(_) => {
@@ -32,15 +32,15 @@ pub async fn create(path: &str) -> fpm::Result<usize> {
                 .await?;
             Ok(_get_without_lock(path).await?)
         }
-        Err(e) => Err(fpm::Error::GenericError(e.to_string())),
+        Err(e) => Err(fastn::Error::GenericError(e.to_string())),
     }
 }
 
-pub async fn increment(path: &str) -> fpm::Result<usize> {
+pub async fn increment(path: &str) -> fastn::Result<usize> {
     update_get(path, 1).await
 }
 
-pub async fn create_or_inc(path: &str) -> fpm::Result<usize> {
+pub async fn create_or_inc(path: &str) -> fastn::Result<usize> {
     if camino::Utf8Path::new(path).exists() {
         increment(path).await
     } else {
@@ -48,12 +48,12 @@ pub async fn create_or_inc(path: &str) -> fpm::Result<usize> {
     }
 }*/
 
-async fn _get_without_lock(path: &str) -> fpm::Result<usize> {
+async fn _get_without_lock(path: &str) -> fastn::Result<usize> {
     let value = tokio::fs::read_to_string(path).await?;
     Ok(value.parse()?)
 }
 
-async fn _create_without_lock(path: &str) -> fpm::Result<usize> {
+async fn _create_without_lock(path: &str) -> fastn::Result<usize> {
     use tokio::io::AsyncWriteExt;
     let content: usize = 1;
     tokio::fs::File::create(path)
@@ -63,7 +63,7 @@ async fn _create_without_lock(path: &str) -> fpm::Result<usize> {
     _get_without_lock(path).await
 }
 
-async fn update_get(path: &str, value: usize) -> fpm::Result<usize> {
+async fn update_get(path: &str, value: usize) -> fastn::Result<usize> {
     // TODO: why are we not just taking the lock using `let _lock = LOCK.write()`?
     match LOCK.try_write() {
         Some(_lock) => {
@@ -71,13 +71,13 @@ async fn update_get(path: &str, value: usize) -> fpm::Result<usize> {
             tokio::fs::write(path, (old_value + value).to_string().as_bytes()).await?;
             Ok(_get_without_lock(path).await?)
         }
-        None => Err(fpm::Error::GenericError(
+        None => Err(fastn::Error::GenericError(
             "Failed to acquire lock".to_string(),
         )),
     }
 }
 
-async fn update_create(path: &str, value: usize) -> fpm::Result<usize> {
+async fn update_create(path: &str, value: usize) -> fastn::Result<usize> {
     // TODO: why are we not just taking the lock using `let _lock = LOCK.write()`?
     match LOCK.try_write() {
         Some(_lock) => {
@@ -85,13 +85,13 @@ async fn update_create(path: &str, value: usize) -> fpm::Result<usize> {
             tokio::fs::write(path, (old_value + value).to_string().as_bytes()).await?;
             Ok(_get_without_lock(path).await?)
         }
-        None => Err(fpm::Error::GenericError(
+        None => Err(fastn::Error::GenericError(
             "Failed to acquire lock".to_string(),
         )),
     }
 }
 
-pub async fn update(path: &str, value: usize) -> fpm::Result<usize> {
+pub async fn update(path: &str, value: usize) -> fastn::Result<usize> {
     if camino::Utf8Path::new(path).exists() {
         update_get(path, value).await
     } else {

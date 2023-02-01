@@ -1,8 +1,8 @@
 async fn template_contents(project_name: &str, download_base_url: &str) -> (String, String) {
     let ftd = format!(
-        r#"-- import: fpm
+        r#"-- import: fastn
 
--- fpm.package: {}
+-- fastn.package: {}
 download-base-url: {}
 "#,
         project_name, download_base_url
@@ -16,7 +16,7 @@ pub async fn create_package(
     name: &str,
     path: Option<&str>,
     download_base_url: Option<&str>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     use colored::Colorize;
 
     let base_path = {
@@ -29,7 +29,7 @@ pub async fn create_package(
         }
     };
 
-    // Not using config for base path as it requires manifest or FPM.ftd file for building and will throw error
+    // Not using config for base path as it requires manifest or FASTN.ftd file for building and will throw error
     // and since this command should work from anywhere within the system
     // so we dont need to rely on config for using it
 
@@ -48,41 +48,41 @@ pub async fn create_package(
     tokio::fs::create_dir_all(final_dir.as_str()).await?;
 
     let tmp_contents = template_contents(name, download_base_url.unwrap_or(name)).await;
-    let tmp_fpm = tmp_contents.0;
+    let tmp_fastn = tmp_contents.0;
     let tmp_index = tmp_contents.1;
 
-    fpm::utils::update(&final_dir.join("FPM.ftd"), tmp_fpm.as_bytes()).await?;
-    fpm::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes()).await?;
+    fastn::utils::update(&final_dir.join("FASTN.ftd"), tmp_fastn.as_bytes()).await?;
+    fastn::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes()).await?;
 
     // Note: Not required for now
     // let sync_message = "Initial sync".to_string();
-    // let file_list: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
+    // let file_list: std::collections::BTreeMap<String, fastn::history::FileEditTemp> =
     //     IntoIterator::into_iter([
     //         (
-    //             "FPM.ftd".to_string(),
-    //             fpm::history::FileEditTemp {
+    //             "FASTN.ftd".to_string(),
+    //             fastn::history::FileEditTemp {
     //                 message: Some(sync_message.to_string()),
     //                 author: None,
     //                 src_cr: None,
-    //                 operation: fpm::history::FileOperation::Added,
+    //                 operation: fastn::history::FileOperation::Added,
     //             },
     //         ),
     //         (
     //             "index.ftd".to_string(),
-    //             fpm::history::FileEditTemp {
+    //             fastn::history::FileEditTemp {
     //                 message: Some(sync_message.to_string()),
     //                 author: None,
     //                 src_cr: None,
-    //                 operation: fpm::history::FileOperation::Added,
+    //                 operation: fastn::history::FileOperation::Added,
     //             },
     //         ),
     //     ])
     //     .collect();
 
-    // fpm::history::insert_into_history(&final_dir, &file_list, &mut Default::default()).await?;
+    // fastn::history::insert_into_history(&final_dir, &file_list, &mut Default::default()).await?;
 
     println!(
-        "FPM Package Created: {}\nPath: {}",
+        "fastn Package Created: {}\nPath: {}",
         name.green(),
         final_dir.to_string().yellow()
     );

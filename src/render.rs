@@ -1,16 +1,16 @@
-/// `fpm::render()` renders a single ftd file that is part of current FPM package.
-/// It returns `fpm::Result` of rendered HTML as `String`.
+/// `fastn::render()` renders a single ftd file that is part of current fastn package.
+/// It returns `fastn::Result` of rendered HTML as `String`.
 #[allow(dead_code)]
-pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Result<String> {
+pub async fn render(config: &fastn::Config, id: &str, base_url: &str) -> fastn::Result<String> {
     let file = config.get_file_by_id(id, &config.package).await?;
     let asset_documents = config.get_assets().await?;
 
     let main = match file {
-        fpm::File::Ftd(f) => f,
+        fastn::File::Ftd(f) => f,
         _ => unreachable!(),
     };
 
-    let new_main = fpm::Document {
+    let new_main = fastn::Document {
         content: config
             .package
             .get_prefixed_body(main.content.as_str(), &main.id, true),
@@ -22,12 +22,12 @@ pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Resu
     return get_html(config, &new_main, base_url, &asset_documents).await;
 
     async fn get_html(
-        config: &fpm::Config,
-        main: &fpm::Document,
+        config: &fastn::Config,
+        main: &fastn::Document,
         base_url: &str,
         asset_documents: &std::collections::HashMap<String, String>,
-    ) -> fpm::Result<String> {
-        let lib = fpm::Library {
+    ) -> fastn::Result<String> {
+        let lib = fastn::Library {
             config: config.clone(),
             markdown: None,
             document_id: main.id.clone(),
@@ -36,7 +36,7 @@ pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Resu
             base_url: base_url.to_string(),
         };
 
-        let main_ftd_doc = match fpm::doc::parse(
+        let main_ftd_doc = match fastn::doc::parse(
             main.id_with_package().as_str(),
             main.content.as_str(),
             &lib,
@@ -47,7 +47,7 @@ pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Resu
         {
             Ok(v) => v,
             Err(e) => {
-                return Err(fpm::Error::PackageError {
+                return Err(fastn::Error::PackageError {
                     message: format!("failed to parse {:?}", &e),
                 });
             }
@@ -57,8 +57,8 @@ pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Resu
             _ => main.id.as_str().to_string(),
         };
         let ftd_doc = main_ftd_doc.to_rt("main", &main.id);
-        Ok(fpm::utils::replace_markers_2021(
-            fpm::ftd_html(),
+        Ok(fastn::utils::replace_markers_2021(
+            fastn::ftd_html(),
             config,
             main.id_to_path().as_str(),
             doc_title.as_str(),

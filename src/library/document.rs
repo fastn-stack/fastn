@@ -14,11 +14,11 @@ document id
 ///
 /// ## Examples
 /// ```rust
-/// # use fpm::library::convert_to_document_id;
+/// # use fastn::library::convert_to_document_id;
 ///assert_eq!(convert_to_document_id("/bar/index.ftd/"), "/bar/");
 ///assert_eq!(convert_to_document_id("index.ftd"), "/");
 ///assert_eq!(convert_to_document_id("/foo/-/x/"), "/foo/");
-///assert_eq!(convert_to_document_id("/fpm.dev/doc.txt"), "/fpm.dev/doc/");
+///assert_eq!(convert_to_document_id("/fastn.dev/doc.txt"), "/fastn.dev/doc/");
 ///assert_eq!(convert_to_document_id("foo.png/"), "/foo/");
 ///assert_eq!(convert_to_document_id("README.md"), "/README/");
 /// ```
@@ -44,7 +44,7 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
 }
 
 pub fn document_full_id<'a>(
-    config: &fpm::Config,
+    config: &fastn::Config,
     doc: &ftd::p2::TDoc<'a>,
 ) -> ftd::p1::Result<String> {
     let full_document_id = config.doc_id().unwrap_or_else(|| {
@@ -65,7 +65,7 @@ pub mod processor {
     pub fn document_id<'a>(
         _section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc<'a>,
-        config: &fpm::Config,
+        config: &fastn::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
             doc.name
@@ -87,7 +87,7 @@ pub mod processor {
     pub fn document_full_id<'a>(
         _section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc<'a>,
-        config: &fpm::Config,
+        config: &fastn::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         Ok(ftd::Value::String {
             text: super::document_full_id(config, doc)?,
@@ -98,7 +98,7 @@ pub mod processor {
     pub async fn document_name<'a>(
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc<'a>,
-        config: &fpm::Config,
+        config: &fastn::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
             doc.name
@@ -125,7 +125,7 @@ pub mod processor {
     pub fn document_suffix<'a>(
         _section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc<'a>,
-        config: &fpm::Config,
+        config: &fastn::Config,
     ) -> ftd::p1::Result<ftd::Value> {
         let doc_id = config.doc_id().unwrap_or_else(|| {
             doc.name

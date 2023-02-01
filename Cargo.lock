@@ -951,6 +951,52 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn"
+version = "0.1.11"
+dependencies = [
+ "actix-web",
+ "antidote",
+ "async-lock",
+ "async-recursion",
+ "camino",
+ "clap",
+ "colored",
+ "diffy",
+ "edit",
+ "env_logger",
+ "fbt-lib",
+ "fluent",
+ "ftd 0.2.0 (git+https://github.com/ftd-lang/ftd?rev=a8e35fc5)",
+ "futures",
+ "hyper",
+ "ignore",
+ "indoc 2.0.0",
+ "intl-memoizer",
+ "itertools",
+ "magic-crypt",
+ "mime_guess",
+ "notify",
+ "oauth2",
+ "once_cell",
+ "pretty_assertions",
+ "realm-lang",
+ "regex",
+ "reqwest",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "sha2 0.10.6",
+ "slug",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "tracing-forest",
+ "tracing-subscriber",
+ "url",
+ "zip",
+]
+
+[[package]]
 name = "fastrand"
 version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1075,52 +1121,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "14ac05eb8d2eb4ed1eeff847911deae077b0b53332465de9d6a26b0ea9961bc8"
 dependencies = [
  "regex",
-]
-
-[[package]]
-name = "fpm"
-version = "0.1.11"
-dependencies = [
- "actix-web",
- "antidote",
- "async-lock",
- "async-recursion",
- "camino",
- "clap",
- "colored",
- "diffy",
- "edit",
- "env_logger",
- "fbt-lib",
- "fluent",
- "ftd 0.2.0 (git+https://github.com/ftd-lang/ftd?rev=a8e35fc5)",
- "futures",
- "hyper",
- "ignore",
- "indoc 2.0.0",
- "intl-memoizer",
- "itertools",
- "magic-crypt",
- "mime_guess",
- "notify",
- "oauth2",
- "once_cell",
- "pretty_assertions",
- "realm-lang",
- "regex",
- "reqwest",
- "rusqlite",
- "serde",
- "serde_json",
- "sha2 0.10.6",
- "slug",
- "thiserror",
- "tokio",
- "tracing",
- "tracing-forest",
- "tracing-subscriber",
- "url",
- "zip",
 ]
 
 [[package]]

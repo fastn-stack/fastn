@@ -3,21 +3,21 @@
 #[derive(Debug)]
 pub(crate) enum TranslatedDocument {
     Missing {
-        original: fpm::File,
+        original: fastn::File,
     },
     NeverMarked {
-        original: fpm::File,   // main
-        translated: fpm::File, // fallback
+        original: fastn::File,   // main
+        translated: fastn::File, // fallback
     },
     Outdated {
-        original: fpm::File,   // fallback
-        translated: fpm::File, // main
+        original: fastn::File,   // fallback
+        translated: fastn::File, // main
         last_marked_on: u128,
         original_latest: u128,
         translated_latest: u128,
     },
     UptoDate {
-        translated: fpm::File,
+        translated: fastn::File,
     },
 }
 
@@ -45,14 +45,14 @@ impl TranslationData {
 impl TranslatedDocument {
     pub async fn html(
         &self,
-        config: &fpm::Config,
+        config: &fastn::Config,
         _base_url: &str,
         _skip_failed: bool,
         _asset_documents: &std::collections::HashMap<String, String>,
-    ) -> fpm::Result<()> {
+    ) -> fastn::Result<()> {
         // handle the message
         // render with-fallback or with-message
-        let _message = fpm::get_messages(self, config)?;
+        let _message = fastn::get_messages(self, config)?;
         let (_main, _fallback, _translated_data) = match self {
             TranslatedDocument::Missing { original } => {
                 (original, None, TranslationData::new("Missing"))
@@ -90,7 +90,7 @@ impl TranslatedDocument {
         };
 
         todo!();
-        // fpm::process_file(
+        // fastn::process_file(
         //     config,
         //     &config.package,
         //     main,
@@ -108,18 +108,18 @@ impl TranslatedDocument {
 
         /// Gets the diff on original file between last_marked_on and original_latest timestamp
         async fn get_diff(
-            config: &fpm::Config,
-            original: &fpm::File,
+            config: &fastn::Config,
+            original: &fastn::File,
             last_marked_on: &u128,
             original_latest: &u128,
-        ) -> fpm::Result<String> {
-            let last_marked_on_path = fpm::utils::history_path(
+        ) -> fastn::Result<String> {
+            let last_marked_on_path = fastn::utils::history_path(
                 original.get_id().as_str(),
                 config.original_path()?.as_str(),
                 last_marked_on,
             );
             let last_marked_on_data = tokio::fs::read_to_string(last_marked_on_path).await?;
-            let original_latest_path = fpm::utils::history_path(
+            let original_latest_path = fastn::utils::history_path(
                 original.get_id().as_str(),
                 config.original_path()?.as_str(),
                 original_latest,
@@ -132,19 +132,19 @@ impl TranslatedDocument {
     }
 
     pub async fn get_translated_document(
-        config: &fpm::Config,
-        original_documents: std::collections::BTreeMap<String, fpm::File>,
-        translated_documents: std::collections::BTreeMap<String, fpm::File>,
-    ) -> fpm::Result<std::collections::BTreeMap<String, TranslatedDocument>> {
+        config: &fastn::Config,
+        original_documents: std::collections::BTreeMap<String, fastn::File>,
+        translated_documents: std::collections::BTreeMap<String, fastn::File>,
+    ) -> fastn::Result<std::collections::BTreeMap<String, TranslatedDocument>> {
         let original_snapshots =
-            fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
+            fastn::snapshot::get_latest_snapshots(&config.original_path()?).await?;
         let mut translation_status = std::collections::BTreeMap::new();
         for (file, timestamp) in original_snapshots {
             let original_document =
                 if let Some(original_document) = original_documents.get(file.as_str()) {
                     original_document
                 } else {
-                    return Err(fpm::Error::PackageError {
+                    return Err(fastn::Error::PackageError {
                         message: format!("Could not find `{}` in original package", file),
                     });
                 };
@@ -158,7 +158,7 @@ impl TranslatedDocument {
                 continue;
             }
             let translated_document = translated_documents.get(file.as_str()).unwrap();
-            let track_path = fpm::utils::track_path(file.as_str(), config.root.as_str());
+            let track_path = fastn::utils::track_path(file.as_str(), config.root.as_str());
             if !track_path.exists() {
                 translation_status.insert(
                     file,
@@ -169,8 +169,8 @@ impl TranslatedDocument {
                 );
                 continue;
             }
-            let tracks = fpm::tracker::get_tracks(config.root.as_str(), &track_path)?;
-            if let Some(fpm::Track {
+            let tracks = fastn::tracker::get_tracks(config.root.as_str(), &track_path)?;
+            if let Some(fastn::Track {
                 last_merged_version: Some(last_merged_version),
                 self_timestamp,
                 ..
@@ -212,7 +212,7 @@ impl TranslatedDocument {
 pub(crate) fn get_translation_status_counts(
     snapshots: &std::collections::BTreeMap<String, u128>,
     path: &camino::Utf8PathBuf,
-) -> fpm::Result<TranslationStatusSummary> {
+) -> fastn::Result<TranslationStatusSummary> {
     let mut translation_status_count = TranslationStatusSummary {
         never_marked: 0,
         missing: 0,
@@ -225,13 +225,13 @@ pub(crate) fn get_translation_status_counts(
             translation_status_count.missing += 1;
             continue;
         }
-        let track_path = fpm::utils::track_path(file.as_str(), path.as_str());
+        let track_path = fastn::utils::track_path(file.as_str(), path.as_str());
         if !track_path.exists() {
             translation_status_count.never_marked += 1;
             continue;
         }
-        let tracks = fpm::tracker::get_tracks(path.as_str(), &track_path)?;
-        if let Some(fpm::Track {
+        let tracks = fastn::tracker::get_tracks(path.as_str(), &track_path)?;
+        if let Some(fastn::Track {
             last_merged_version: Some(last_merged_version),
             ..
         }) = tracks.get(file)
@@ -246,7 +246,7 @@ pub(crate) fn get_translation_status_counts(
         }
     }
     translation_status_count.last_modified_on =
-        futures::executor::block_on(fpm::utils::get_last_modified_on(path));
+        futures::executor::block_on(fastn::utils::get_last_modified_on(path));
     Ok(translation_status_count)
 }
 

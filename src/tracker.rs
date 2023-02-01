@@ -14,22 +14,22 @@ pub struct Track {
 pub(crate) fn get_tracks(
     base_path: &str,
     path: &camino::Utf8PathBuf,
-) -> fpm::Result<std::collections::BTreeMap<String, Track>> {
+) -> fastn::Result<std::collections::BTreeMap<String, Track>> {
     let mut tracks = std::collections::BTreeMap::new();
     if !path.exists() {
         return Ok(tracks);
     }
 
-    let lib = fpm::FPMLibrary::default();
+    let lib = fastn::FastnLibrary::default();
     let doc = std::fs::read_to_string(path)?;
-    let b = match fpm::doc::parse_ftd(base_path, doc.as_str(), &lib) {
+    let b = match fastn::doc::parse_ftd(base_path, doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse {}: {:?}", base_path, &e);
             todo!();
         }
     };
-    let track_list: Vec<Track> = b.get("fpm#track")?;
+    let track_list: Vec<Track> = b.get("fastn#track")?;
     for track in track_list {
         tracks.insert(track.filename.to_string(), track);
     }

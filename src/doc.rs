@@ -13,7 +13,7 @@ fn cached_parse(
     }
 
     let doc = ftd::interpreter2::ParsedDocument::parse_with_line_number(id, source, line_number)?;
-    if fpm::utils::parse_caching_enabled() {
+    if fastn::utils::parse_caching_enabled() {
         if let Ok(mut l) = PARSED_DOC_CACHE.write() {
             l.insert(id.to_string(), doc.clone());
         }
@@ -31,9 +31,9 @@ fn cached_parse(
 pub async fn parse<'a>(
     name: &str,
     source: &str,
-    lib: &'a fpm::Library,
+    lib: &'a fastn::Library,
     base_url: &str,
-    current_package: Option<&fpm::Package>,
+    current_package: Option<&fastn::Package>,
 ) -> ftd::p1::Result<ftd::p2::Document> {
     let package_name = &Some(lib.config.package.name.clone());
     let mut s = ftd::interpret(name, source, package_name)?;
@@ -62,7 +62,7 @@ pub async fn parse<'a>(
                 state: mut st,
             } => {
                 packages_under_process.truncate(st.document_stack.len());
-                let source = if module.eq("fpm/time") {
+                let source = if module.eq("fastn/time") {
                     st.add_foreign_variable_prefix(module.as_str(), vec![module.to_string()]);
                     packages_under_process.push(
                         packages_under_process
@@ -153,7 +153,7 @@ pub async fn parse<'a>(
 pub async fn interpret_helper<'a>(
     name: &str,
     source: &str,
-    lib: &'a mut fpm::Library2022,
+    lib: &'a mut fastn::Library2022,
     base_url: &str,
     download_assets: bool,
     line_number: usize,
@@ -242,7 +242,7 @@ pub async fn interpret_helper<'a>(
 pub async fn parse2<'a>(
     name: &str,
     source: &str,
-    lib: &'a mut fpm::Library2,
+    lib: &'a mut fastn::Library2,
     base_url: &str,
     download_assets: bool,
 ) -> ftd::p1::Result<ftd::p2::Document> {
@@ -309,7 +309,7 @@ pub async fn parse2<'a>(
                             .global_ids
                             .get(id)
                             .ok_or_else(|| ftd::p1::Error::ForbiddenUsage {
-                                message: fpm::warning!("id: {} not found while linking", id),
+                                message: fastn::warning!("id: {} not found while linking", id),
                                 doc_id: st.id.clone(),
                                 line_number: *ln,
                             })?
@@ -327,14 +327,14 @@ pub async fn parse2<'a>(
 }
 
 pub async fn resolve_import<'a>(
-    lib: &'a mut fpm::Library2,
+    lib: &'a mut fastn::Library2,
     state: &mut ftd::InterpreterState,
     module: &str,
 ) -> ftd::p1::Result<String> {
     lib.packages_under_process
         .truncate(state.document_stack.len());
     let current_package = lib.get_current_package()?;
-    let source = if module.eq("fpm/time") {
+    let source = if module.eq("fastn/time") {
         state.add_foreign_variable_prefix(module, vec![module.to_string()]);
         lib.push_package_under_process(&current_package).await?;
         "".to_string()
@@ -373,17 +373,17 @@ pub async fn resolve_import<'a>(
 
 // source, foreign_variable, foreign_function
 pub async fn resolve_import_2022<'a>(
-    lib: &'a mut fpm::Library2022,
+    lib: &'a mut fastn::Library2022,
     _state: &mut ftd::interpreter2::InterpreterState,
     module: &str,
     caller_module: &str,
 ) -> ftd::interpreter2::Result<(String, Vec<String>, Vec<String>, usize)> {
     let current_package = lib.get_current_package(caller_module)?;
-    let source = if module.eq("fpm/time") {
+    let source = if module.eq("fastn/time") {
         ("".to_string(), vec!["time".to_string()], vec![], 0)
-    } else if module.eq("fpm/processors") {
+    } else if module.eq("fastn/processors") {
         (
-            fpm::processor_ftd().to_string(),
+            fastn::processor_ftd().to_string(),
             vec![],
             vec![
                 "http".to_string(),
@@ -402,7 +402,7 @@ pub async fn resolve_import_2022<'a>(
                 "document-suffix".to_string(),
                 "document-name".to_string(),
                 "user-details".to_string(),
-                "fpm-apps".to_string(),
+                "fastn-apps".to_string(),
                 "is-reader".to_string(),
                 "package-query".to_string(),
                 "package-tree".to_string(),
@@ -477,7 +477,7 @@ pub async fn resolve_import_2022<'a>(
                 "cr-meta".to_string(),
                 "request-data".to_string(),
                 "user-details".to_string(),
-                "fpm-apps".to_string(),
+                "fastn-apps".to_string(),
                 "is-reader".to_string(),
             ],
             ignore_line_numbers,
@@ -486,12 +486,12 @@ pub async fn resolve_import_2022<'a>(
     Ok(source)
 }
 
-#[tracing::instrument(name = "fpm::stuck-on-foreign-variable", err)]
+#[tracing::instrument(name = "fastn::stuck-on-foreign-variable", err)]
 pub async fn resolve_foreign_variable2022(
     variable: &str,
     doc_name: &str,
     _state: &ftd::interpreter2::InterpreterState,
-    lib: &mut fpm::Library2022,
+    lib: &mut fastn::Library2022,
     base_url: &str,
     download_assets: bool,
     caller_module: &str,
@@ -542,11 +542,11 @@ pub async fn resolve_foreign_variable2022(
 
     async fn get_assets_value(
         module: &str,
-        package: &fpm::Package,
+        package: &fastn::Package,
         files: &str,
-        lib: &mut fpm::Library2022,
+        lib: &mut fastn::Library2022,
         base_url: &str,
-        download_assets: bool, // true: in case of `fpm build`
+        download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::p1::Result<ftd::interpreter2::Value> {
         lib.push_package_under_process(module, package).await?;
         let base_url = base_url.trim_end_matches('/');
@@ -600,7 +600,7 @@ pub async fn resolve_foreign_variable2022(
                             doc_id: lib.document_id.to_string(),
                             line_number: 0,
                         })?;
-                    fpm::utils::write(
+                    fastn::utils::write(
                         &lib.config.build_dir().join("-").join(package.name.as_str()),
                         light_path.as_str(),
                         light.as_slice(),
@@ -615,7 +615,7 @@ pub async fn resolve_foreign_variable2022(
                         format!("{}/{}", package.name, light_path),
                         light_mode.to_string(),
                     );
-                    fpm::utils::print_end(
+                    fastn::utils::print_end(
                         format!("Processed {}/{}", package.name.as_str(), light_path).as_str(),
                         start,
                     );
@@ -649,7 +649,7 @@ pub async fn resolve_foreign_variable2022(
                         .resolve_by_file_name(dark_path.as_str(), None, false)
                         .await
                     {
-                        fpm::utils::write(
+                        fastn::utils::write(
                             &lib.config.build_dir().join("-").join(package.name.as_str()),
                             dark_path.as_str(),
                             dark.as_slice(),
@@ -660,7 +660,7 @@ pub async fn resolve_foreign_variable2022(
                             doc_id: lib.document_id.to_string(),
                             line_number: 0,
                         })?;
-                        fpm::utils::print_end(
+                        fastn::utils::print_end(
                             format!("Processed {}/{}", package.name.as_str(), dark_path).as_str(),
                             start,
                         );
@@ -714,7 +714,7 @@ pub async fn resolve_foreign_variable2(
     variable: &str,
     doc_name: &str,
     state: &ftd::InterpreterState,
-    lib: &mut fpm::Library2,
+    lib: &mut fastn::Library2,
     base_url: &str,
     download_assets: bool,
 ) -> ftd::p1::Result<ftd::Value> {
@@ -747,11 +747,11 @@ pub async fn resolve_foreign_variable2(
     return ftd::p2::utils::e2(format!("{} not found 2", variable).as_str(), doc_name, 0);
 
     async fn get_assets_value(
-        package: &fpm::Package,
+        package: &fastn::Package,
         files: &str,
-        lib: &mut fpm::Library2,
+        lib: &mut fastn::Library2,
         base_url: &str,
-        download_assets: bool, // true: in case of `fpm build`
+        download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::p1::Result<ftd::Value> {
         lib.push_package_under_process(package).await?;
         let base_url = base_url.trim_end_matches('/');
@@ -805,7 +805,7 @@ pub async fn resolve_foreign_variable2(
                             doc_id: lib.document_id.to_string(),
                             line_number: 0,
                         })?;
-                    fpm::utils::write(
+                    fastn::utils::write(
                         &lib.config.build_dir().join("-").join(package.name.as_str()),
                         light_path.as_str(),
                         light.as_slice(),
@@ -820,7 +820,7 @@ pub async fn resolve_foreign_variable2(
                         format!("{}/{}", package.name, light_path),
                         light_mode.to_string(),
                     );
-                    fpm::utils::print_end(
+                    fastn::utils::print_end(
                         format!("Processed {}/{}", package.name.as_str(), light_path).as_str(),
                         start,
                     );
@@ -857,7 +857,7 @@ pub async fn resolve_foreign_variable2(
                         .resolve_by_file_name(dark_path.as_str(), None, false)
                         .await
                     {
-                        fpm::utils::write(
+                        fastn::utils::write(
                             &lib.config.build_dir().join("-").join(package.name.as_str()),
                             dark_path.as_str(),
                             dark.as_slice(),
@@ -868,7 +868,7 @@ pub async fn resolve_foreign_variable2(
                             doc_id: lib.document_id.to_string(),
                             line_number: 0,
                         })?;
-                        fpm::utils::print_end(
+                        fastn::utils::print_end(
                             format!("Processed {}/{}", package.name.as_str(), dark_path).as_str(),
                             start,
                         );
@@ -928,8 +928,8 @@ pub async fn resolve_foreign_variable2(
 fn resolve_foreign_variable(
     variable: &str,
     doc_name: &str,
-    package: &fpm::Package,
-    lib: &fpm::Library,
+    package: &fastn::Package,
+    lib: &fastn::Library,
     base_url: &str,
 ) -> ftd::p1::Result<ftd::Value> {
     if let Ok(value) = resolve_ftd_foreign_variable(variable, doc_name) {
@@ -954,9 +954,9 @@ fn resolve_foreign_variable(
     return ftd::p2::utils::e2(format!("{} not found 1", variable).as_str(), doc_name, 0);
 
     fn get_assets_value(
-        package: &fpm::Package,
+        package: &fastn::Package,
         files: &str,
-        lib: &fpm::Library,
+        lib: &fastn::Library,
         doc_name: &str,
         base_url: &str,
     ) -> ftd::p1::Result<ftd::Value> {
@@ -1073,7 +1073,7 @@ fn resolve_foreign_variable(
 pub fn parse_ftd(
     name: &str,
     source: &str,
-    lib: &fpm::FPMLibrary,
+    lib: &fastn::FastnLibrary,
 ) -> ftd::p1::Result<ftd::p2::Document> {
     let mut s = ftd::interpret(name, source, &None)?;
     let document;
@@ -1102,7 +1102,7 @@ pub fn parse_ftd(
                 s = state.continue_after_variable(variable.as_str(), value)?
             }
             ftd::Interpreter::CheckID { .. } => {
-                // No config in fpm::FPMLibrary ignoring processing terms here
+                // No config in fastn::fastnLibrary ignoring processing terms here
                 unimplemented!()
             }
         }
@@ -1111,7 +1111,7 @@ pub fn parse_ftd(
 }
 
 fn resolve_ftd_foreign_variable(variable: &str, doc_name: &str) -> ftd::p1::Result<ftd::Value> {
-    match variable.strip_prefix("fpm/time#") {
+    match variable.strip_prefix("fastn/time#") {
         Some("now-str") => Ok(ftd::Value::String {
             text: std::str::from_utf8(
                 std::process::Command::new("date")
@@ -1132,7 +1132,7 @@ fn resolve_ftd_foreign_variable_2022(
     variable: &str,
     doc_name: &str,
 ) -> ftd::p1::Result<ftd::interpreter2::Value> {
-    match variable.strip_prefix("fpm/time#") {
+    match variable.strip_prefix("fastn/time#") {
         Some("now-str") => Ok(ftd::interpreter2::Value::String {
             text: std::str::from_utf8(
                 std::process::Command::new("date")

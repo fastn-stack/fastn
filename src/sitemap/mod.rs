@@ -1,7 +1,7 @@
-/// `Sitemap` stores the sitemap for the fpm package defines in the FPM.ftd
+/// `Sitemap` stores the sitemap for the fastn package defines in the FASTN.ftd
 ///
 /// ```ftd
-/// -- fpm.sitemap:
+/// -- fastn.sitemap:
 ///
 /// # foo/
 /// ## bar/
@@ -549,8 +549,8 @@ impl SitemapParser {
 impl Sitemap {
     pub async fn parse(
         s: &str,
-        package: &fpm::Package,
-        config: &mut fpm::Config,
+        package: &fastn::Package,
+        config: &mut fastn::Config,
         resolve_sitemap: bool,
     ) -> Result<Self, ParseError> {
         let mut parser = SitemapParser {
@@ -594,9 +594,9 @@ impl Sitemap {
 
     async fn resolve(
         &mut self,
-        package: &fpm::Package,
-        config: &mut fpm::Config,
-    ) -> fpm::Result<()> {
+        package: &fastn::Package,
+        config: &mut fastn::Config,
+    ) -> fastn::Result<()> {
         let package_root = config.get_root_for_package(package);
         let current_package_root = config.root.to_owned();
         for section in self.sections.iter_mut() {
@@ -608,8 +608,8 @@ impl Sitemap {
             section: &mut section::Section,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            config: &mut fpm::Config,
-        ) -> fpm::Result<()> {
+            config: &mut fastn::Config,
+        ) -> fastn::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) = config
                 .get_file_path_and_resolve(&section.get_file_id())
                 .await
@@ -624,7 +624,7 @@ impl Sitemap {
             {
                 (None, None)
             } else {
-                match fpm::Config::get_file_name(
+                match fastn::Config::get_file_name(
                     current_package_root,
                     section.get_file_id().as_str(),
                 ) {
@@ -641,14 +641,14 @@ impl Sitemap {
                     Err(_) => (
                         Some(
                             package_root.join(
-                                fpm::Config::get_file_name(
+                                fastn::Config::get_file_name(
                                     package_root,
                                     section.get_file_id().as_str(),
                                 )
                                     .map_err(|e| {
-                                        fpm::Error::UsageError {
+                                        fastn::Error::UsageError {
                                             message: format!(
-                                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                                "`{}` not found, fix fastn.sitemap in FASTN.ftd. Error: {:?}",
                                                 section.get_file_id(), e
                                             ),
                                         }
@@ -672,8 +672,8 @@ impl Sitemap {
             subsection: &mut section::Subsection,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            config: &mut fpm::Config,
-        ) -> fpm::Result<()> {
+            config: &mut fastn::Config,
+        ) -> fastn::Result<()> {
             if let Some(ref id) = subsection.get_file_id() {
                 let (file_location, translation_file_location) = if let Ok(file_name) =
                     config.get_file_path_and_resolve(id).await
@@ -685,7 +685,7 @@ impl Sitemap {
                 } else if crate::http::url_regex().find(id.as_str()).is_some() {
                     (None, None)
                 } else {
-                    match fpm::Config::get_file_name(current_package_root, id.as_str()) {
+                    match fastn::Config::get_file_name(current_package_root, id.as_str()) {
                         Ok(name) => {
                             if current_package_root.eq(package_root) {
                                 (Some(current_package_root.join(name)), None)
@@ -698,10 +698,10 @@ impl Sitemap {
                         }
                         Err(_) => (
                             Some(package_root.join(
-                                fpm::Config::get_file_name(package_root, id.as_str()).map_err(
-                                    |e| fpm::Error::UsageError {
+                                fastn::Config::get_file_name(package_root, id.as_str()).map_err(
+                                    |e| fastn::Error::UsageError {
                                         message: format!(
-                                            "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                            "`{}` not found, fix fastn.sitemap in FASTN.ftd. Error: {:?}",
                                             id, e
                                         ),
                                     },
@@ -726,8 +726,8 @@ impl Sitemap {
             toc: &mut toc::TocItem,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            config: &mut fpm::Config,
-        ) -> fpm::Result<()> {
+            config: &mut fastn::Config,
+        ) -> fastn::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) =
                 config.get_file_path_and_resolve(&toc.get_file_id()).await
             {
@@ -742,7 +742,7 @@ impl Sitemap {
             {
                 (None, None)
             } else {
-                match fpm::Config::get_file_name(current_package_root, toc.get_file_id().as_str()) {
+                match fastn::Config::get_file_name(current_package_root, toc.get_file_id().as_str()) {
                     Ok(name) => {
                         if current_package_root.eq(package_root) {
                             (Some(current_package_root.join(name)), None)
@@ -756,14 +756,14 @@ impl Sitemap {
                     Err(_) => (
                         Some(
                             package_root.join(
-                                fpm::Config::get_file_name(
+                                fastn::Config::get_file_name(
                                     package_root,
                                     toc.get_file_id().as_str(),
                                 )
                                     .map_err(|e| {
-                                        fpm::Error::UsageError {
+                                        fastn::Error::UsageError {
                                             message: format!(
-                                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                                "`{}` not found, fix fastn.sitemap in FASTN.ftd. Error: {:?}",
                                                 toc.get_file_id(), e
                                             ),
                                         }
@@ -874,7 +874,7 @@ impl Sitemap {
         for (idx, section) in self.sections.iter().enumerate() {
             index = idx;
 
-            if fpm::utils::ids_matches(section.id.as_str(), id) {
+            if fastn::utils::ids_matches(section.id.as_str(), id) {
                 subsections = section
                     .subsections
                     .iter()
@@ -883,7 +883,7 @@ impl Sitemap {
                         let active = v
                             .get_file_id()
                             .as_ref()
-                            .map(|v| fpm::utils::ids_matches(v, id))
+                            .map(|v| fastn::utils::ids_matches(v, id))
                             .unwrap_or(false);
                         active || !v.skip
                     })
@@ -891,7 +891,7 @@ impl Sitemap {
                         let active = v
                             .get_file_id()
                             .as_ref()
-                            .map(|v| fpm::utils::ids_matches(v, id))
+                            .map(|v| fastn::utils::ids_matches(v, id))
                             .unwrap_or(false);
                         let toc = toc::TocItemCompat::new(
                             v.id.clone(),
@@ -921,7 +921,7 @@ impl Sitemap {
                     .find_or_first(|v| {
                         v.get_file_id()
                             .as_ref()
-                            .map(|v| fpm::utils::ids_matches(v, id))
+                            .map(|v| fastn::utils::ids_matches(v, id))
                             .unwrap_or(false)
                     })
                     .or_else(|| section.subsections.first())
@@ -1037,7 +1037,7 @@ impl Sitemap {
                     && subsection
                         .id
                         .as_ref()
-                        .map(|v| fpm::utils::ids_matches(v, id))
+                        .map(|v| fastn::utils::ids_matches(v, id))
                         .unwrap_or(false)
                 {
                     let (toc_list, current_toc) = get_all_toc(subsection.toc.as_slice(), id);
@@ -1153,7 +1153,7 @@ impl Sitemap {
             for toc_item in toc.iter() {
                 let (is_open, children) =
                     get_toc_by_id_(id, toc_item.children.as_slice(), current_page);
-                let is_active = fpm::utils::ids_matches(toc_item.get_file_id().as_str(), id);
+                let is_active = fastn::utils::ids_matches(toc_item.get_file_id().as_str(), id);
                 let current_toc = {
                     let mut current_toc = toc::TocItemCompat::new(
                         get_url(toc_item.id.as_str()),
@@ -1173,7 +1173,7 @@ impl Sitemap {
                 };
 
                 if current_page.is_none() {
-                    found_here = fpm::utils::ids_matches(toc_item.get_file_id().as_str(), id);
+                    found_here = fastn::utils::ids_matches(toc_item.get_file_id().as_str(), id);
                     if found_here {
                         let mut current_toc = current_toc.clone();
                         if let Some(ref title) = toc_item.nav_title {
@@ -1213,7 +1213,7 @@ impl Sitemap {
         id: &str,
     ) -> Option<std::collections::BTreeMap<String, String>> {
         for section in self.sections.iter() {
-            if fpm::utils::ids_matches(section.id.as_str(), id) {
+            if fastn::utils::ids_matches(section.id.as_str(), id) {
                 return Some(section.extra_data.to_owned());
             }
             if let Some(data) = get_extra_data_from_subsections(id, section.subsections.as_slice())
@@ -1231,7 +1231,7 @@ impl Sitemap {
         ) -> Option<std::collections::BTreeMap<String, String>> {
             for subsection in subsections {
                 if subsection.visible
-                    && fpm::utils::ids_matches(
+                    && fastn::utils::ids_matches(
                         subsection.id.as_ref().unwrap_or(&"".to_string()),
                         id,
                     )
@@ -1252,7 +1252,7 @@ impl Sitemap {
             toc: &[toc::TocItem],
         ) -> Option<std::collections::BTreeMap<String, String>> {
             for toc_item in toc {
-                if fpm::utils::ids_matches(toc_item.id.as_str(), id) {
+                if fastn::utils::ids_matches(toc_item.id.as_str(), id) {
                     return Some(toc_item.extra_data.to_owned());
                 }
                 if let Some(data) = get_extra_data_from_toc(id, toc_item.children.as_slice()) {
@@ -1273,8 +1273,8 @@ impl Sitemap {
     pub fn readers<'a>(
         &self,
         doc_path: &str,
-        groups: &'a std::collections::BTreeMap<String, fpm::user_group::UserGroup>,
-    ) -> (Vec<&'a fpm::user_group::UserGroup>, bool) {
+        groups: &'a std::collections::BTreeMap<String, fastn::user_group::UserGroup>,
+    ) -> (Vec<&'a fastn::user_group::UserGroup>, bool) {
         use itertools::Itertools;
 
         for section in self.sections.iter() {
@@ -1389,8 +1389,8 @@ impl Sitemap {
     pub fn writers<'a>(
         &self,
         doc_path: &str,
-        groups: &'a std::collections::BTreeMap<String, fpm::user_group::UserGroup>,
-    ) -> Vec<&'a fpm::user_group::UserGroup> {
+        groups: &'a std::collections::BTreeMap<String, fastn::user_group::UserGroup>,
+    ) -> Vec<&'a fastn::user_group::UserGroup> {
         use itertools::Itertools;
 
         for section in self.sections.iter() {
@@ -1475,7 +1475,7 @@ impl Sitemap {
     pub fn resolve_document(&self, path: &str) -> Option<String> {
         // tracing::info!(path = path);
         fn resolve_in_toc(toc: &toc::TocItem, path: &str) -> Option<String> {
-            if fpm::utils::ids_matches(toc.id.as_str(), path) {
+            if fastn::utils::ids_matches(toc.id.as_str(), path) {
                 return toc.document.clone();
             }
 
@@ -1490,7 +1490,7 @@ impl Sitemap {
 
         fn resolve_in_sub_section(sub_section: &section::Subsection, path: &str) -> Option<String> {
             if let Some(id) = sub_section.id.as_ref() {
-                if fpm::utils::ids_matches(path, id.as_str()) {
+                if fastn::utils::ids_matches(path, id.as_str()) {
                     return sub_section.document.clone();
                 }
             }
@@ -1506,7 +1506,7 @@ impl Sitemap {
         }
 
         fn resolve_in_section(section: &section::Section, path: &str) -> Option<String> {
-            if fpm::utils::ids_matches(section.id.as_str(), path) {
+            if fastn::utils::ids_matches(section.id.as_str(), path) {
                 return section.document.clone();
             }
 
@@ -1662,9 +1662,9 @@ fn construct_tree(elements: Vec<(toc::TocItem, usize)>, smallest_level: usize) -
 }
 
 pub fn resolve(
-    package: &fpm::Package,
+    package: &fastn::Package,
     path: &str,
-) -> fpm::Result<fpm::sitemap::dynamic_urls::ResolveDocOutput> {
+) -> fastn::Result<fastn::sitemap::dynamic_urls::ResolveDocOutput> {
     // resolve in sitemap
     if let Some(sitemap) = package.sitemap.as_ref() {
         if let Some(document) = sitemap.resolve_document(path) {

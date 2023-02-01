@@ -1,8 +1,8 @@
--- import: fpm
--- import: fpm-lib
+-- import: fastn
+-- import: fastn-lib
 
 -- ftd.column:
 width: fill
 /background-color: #f3f3f3
 
--- fpm-lib.message:
+-- fastn-lib.message:

@@ -6,7 +6,7 @@ pub mod user_group;
 #[derive(Debug, Clone)]
 pub struct Package {
     pub name: String,
-    /// The `versioned` stores the boolean value storing of the fpm package is versioned or not
+    /// The `versioned` stores the boolean value storing of the fastn package is versioned or not
     pub versioned: bool,
     pub translation_of: Box<Option<Package>>,
     pub translations: Vec<Package>,
@@ -14,22 +14,22 @@ pub struct Package {
     pub about: Option<String>,
     pub zip: Option<String>,
     pub download_base_url: Option<String>,
-    pub translation_status_summary: Option<fpm::translation::TranslationStatusSummary>,
+    pub translation_status_summary: Option<fastn::translation::TranslationStatusSummary>,
     pub canonical_url: Option<String>,
     /// `dependencies` keeps track of direct dependencies of a given package. This too should be
-    /// moved to `fpm::Package` to support recursive dependencies etc.
+    /// moved to `fastn::Package` to support recursive dependencies etc.
     pub dependencies: Vec<dependency::Dependency>,
     /// `auto_import` keeps track of the global auto imports in the package.
-    pub auto_import: Vec<fpm::AutoImport>,
-    /// `fpm_path` contains the fpm package root. This value is found in `FPM.ftd` or
-    /// `FPM.manifest.ftd` file.
-    pub fpm_path: Option<camino::Utf8PathBuf>,
-    /// `ignored` keeps track of files that are to be ignored by `fpm build`, `fpm sync` etc.
+    pub auto_import: Vec<fastn::AutoImport>,
+    /// `fastn_path` contains the fastn package root. This value is found in `FASTN.ftd` or
+    /// `fastn.manifest.ftd` file.
+    pub fastn_path: Option<camino::Utf8PathBuf>,
+    /// `ignored` keeps track of files that are to be ignored by `fastn build`, `fastn sync` etc.
     pub ignored_paths: Vec<String>,
     /// `fonts` keeps track of the fonts used by the package.
     ///
-    /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
-    pub fonts: Vec<fpm::Font>,
+    /// Note that this too is kind of bad design, we will move fonts to `fastn::Package` struct soon.
+    pub fonts: Vec<fastn::Font>,
     pub import_auto_imports_from_original: bool,
 
     pub groups: std::collections::BTreeMap<String, crate::user_group::UserGroup>,
@@ -37,16 +37,16 @@ pub struct Package {
     /// sitemap stores the structure of the package. The structure includes sections, subsections
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
-    pub sitemap: Option<fpm::sitemap::Sitemap>,
-    pub sitemap_temp: Option<fpm::sitemap::SitemapTemp>,
+    pub sitemap: Option<fastn::sitemap::Sitemap>,
+    pub sitemap_temp: Option<fastn::sitemap::SitemapTemp>,
 
-    pub dynamic_urls: Option<fpm::sitemap::DynamicUrls>,
-    pub dynamic_urls_temp: Option<fpm::sitemap::DynamicUrlsTemp>,
+    pub dynamic_urls: Option<fastn::sitemap::DynamicUrls>,
+    pub dynamic_urls_temp: Option<fastn::sitemap::DynamicUrlsTemp>,
 
     /// Optional path for favicon icon to be used.
     ///
     /// By default if any file favicon.* is present in package and favicon is not specified
-    /// in FPM.ftd, that file will be used.
+    /// in FASTN.ftd, that file will be used.
     ///
     /// If more than one favicon.* file is present, we will use them
     /// in following priority: .ico > .svg > .png > .jpg.
@@ -69,8 +69,8 @@ pub struct Package {
 }
 
 impl Package {
-    pub fn new(name: &str) -> fpm::Package {
-        fpm::Package {
+    pub fn new(name: &str) -> fastn::Package {
+        fastn::Package {
             name: name.to_string(),
             versioned: false,
             translation_of: Box::new(None),
@@ -83,7 +83,7 @@ impl Package {
             canonical_url: None,
             dependencies: vec![],
             auto_import: vec![],
-            fpm_path: None,
+            fastn_path: None,
             ignored_paths: vec![],
             fonts: vec![],
             import_auto_imports_from_original: true,
@@ -144,18 +144,18 @@ impl Package {
         }
     }
 
-    pub fn with_base(mut self, base: String) -> fpm::Package {
+    pub fn with_base(mut self, base: String) -> fastn::Package {
         self.download_base_url = Some(base);
         self
     }
 
-    pub fn get_dependency_for_interface(&self, interface: &str) -> Option<&fpm::Dependency> {
+    pub fn get_dependency_for_interface(&self, interface: &str) -> Option<&fastn::Dependency> {
         self.dependencies
             .iter()
             .find(|dep| dep.implements.contains(&interface.to_string()))
     }
 
-    pub fn get_flattened_dependencies(&self) -> Vec<fpm::Dependency> {
+    pub fn get_flattened_dependencies(&self) -> Vec<fastn::Dependency> {
         self.dependencies
             .clone()
             .into_iter()
@@ -301,7 +301,7 @@ impl Package {
     /// will map aliased imports to full path in the actual body of the document
     /// and return the new document body as string
     ///
-    /// For ftd files apart from FPM.ftd
+    /// For ftd files apart from FASTN.ftd
     ///
     /// If aliased imports of Type-1 and Type-2 are used
     /// then those will be mapped to its corresponding full import paths
@@ -431,7 +431,7 @@ impl Package {
                 } else {
                     url
                 };
-                // Ignore the FPM document as that path won't exist in the reference website
+                // Ignore the fastn document as that path won't exist in the reference website
                 format!(
                     "\n<link rel=\"canonical\" href=\"{canonical_base}{path}\" />",
                     canonical_base = url,
@@ -443,7 +443,7 @@ impl Package {
     }
 
     /// aliases() returns the list of the available aliases at the package level.
-    pub fn aliases(&self) -> std::collections::BTreeMap<&str, &fpm::Package> {
+    pub fn aliases(&self) -> std::collections::BTreeMap<&str, &fastn::Package> {
         let mut resp = std::collections::BTreeMap::new();
         for d in &self.dependencies {
             if let Some(a) = &d.alias {
@@ -454,59 +454,60 @@ impl Package {
         resp
     }
 
-    pub async fn get_assets_doc(&self) -> fpm::Result<String> {
+    pub async fn get_assets_doc(&self) -> fastn::Result<String> {
         // Virtual document that contains the asset information about the package
         Ok(self.get_font_ftd().unwrap_or_default())
     }
 
-    pub(crate) async fn get_fpm(&self) -> fpm::Result<String> {
-        crate::http::construct_url_and_get_str(format!("{}/FPM.ftd", self.name).as_str()).await
+    pub(crate) async fn get_fastn(&self) -> fastn::Result<String> {
+        crate::http::construct_url_and_get_str(format!("{}/FASTN.ftd", self.name).as_str()).await
     }
 
     #[tracing::instrument(skip_all)]
-    pub(crate) async fn resolve(&mut self, fpm_path: &camino::Utf8PathBuf) -> fpm::Result<()> {
-        tracing::info!(path = fpm_path.as_str());
-        let fpm_document = {
-            let doc = tokio::fs::read_to_string(fpm_path).await?;
-            let lib = fpm::FPMLibrary::default();
-            match fpm::doc::parse_ftd("FPM", doc.as_str(), &lib) {
+    pub(crate) async fn resolve(&mut self, fastn_path: &camino::Utf8PathBuf) -> fastn::Result<()> {
+        tracing::info!(path = fastn_path.as_str());
+        let fastn_document = {
+            let doc = tokio::fs::read_to_string(fastn_path).await?;
+            let lib = fastn::FastnLibrary::default();
+            match fastn::doc::parse_ftd("fastn", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
                     tracing::error!(
-                        msg = "failed to pare FPM.ftd file",
-                        path = fpm_path.as_str()
+                        msg = "failed to pare FASTN.ftd file",
+                        path = fastn_path.as_str()
                     );
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.ftd: {:?}", &e),
+                    return Err(fastn::Error::PackageError {
+                        message: format!("failed to parse FASTN.ftd: {:?}", &e),
                     });
                 }
             }
         };
         let mut package = {
-            let temp_package: PackageTemp = fpm_document.get("fpm#package")?;
+            let temp_package: PackageTemp = fastn_document.get("fastn#package")?;
             temp_package.into_package()
         };
-        package.translation_status_summary = fpm_document.get("fpm#translation-status-summary")?;
-        package.fpm_path = Some(fpm_path.to_owned());
-        package.dependencies = fpm_document
-            .get::<Vec<dependency::DependencyTemp>>("fpm#dependency")?
+        package.translation_status_summary =
+            fastn_document.get("fastn#translation-status-summary")?;
+        package.fastn_path = Some(fastn_path.to_owned());
+        package.dependencies = fastn_document
+            .get::<Vec<dependency::DependencyTemp>>("fastn#dependency")?
             .into_iter()
             .map(|v| v.into_dependency())
-            .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+            .collect::<Vec<fastn::Result<fastn::Dependency>>>()
             .into_iter()
-            .collect::<fpm::Result<Vec<fpm::Dependency>>>()?;
+            .collect::<fastn::Result<Vec<fastn::Dependency>>>()?;
 
         let user_groups: Vec<crate::user_group::UserGroupTemp> =
-            fpm_document.get("fpm#user-group")?;
+            fastn_document.get("fastn#user-group")?;
         let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
         package.groups = groups;
-        package.auto_import = fpm_document
-            .get::<Vec<String>>("fpm#auto-import")?
+        package.auto_import = fastn_document
+            .get::<Vec<String>>("fastn#auto-import")?
             .iter()
-            .map(|f| fpm::AutoImport::from_string(f.as_str()))
+            .map(|f| fastn::AutoImport::from_string(f.as_str()))
             .collect();
-        package.fonts = fpm_document.get("fpm#font")?;
-        package.sitemap_temp = fpm_document.get("fpm#sitemap")?;
+        package.fonts = fastn_document.get("fastn#font")?;
+        package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
         *self = package;
         Ok(())
     }
@@ -514,16 +515,16 @@ impl Package {
     pub(crate) async fn get_and_resolve(
         &self,
         package_root: &camino::Utf8PathBuf,
-    ) -> fpm::Result<fpm::Package> {
+    ) -> fastn::Result<fastn::Package> {
         use tokio::io::AsyncWriteExt;
 
-        let file_extract_path = package_root.join("FPM.ftd");
+        let file_extract_path = package_root.join("FASTN.ftd");
         if !file_extract_path.exists() {
             std::fs::create_dir_all(package_root)?;
-            let fpm_string = self.get_fpm().await?;
+            let fastn_string = self.get_fastn().await?;
             tokio::fs::File::create(&file_extract_path)
                 .await?
-                .write_all(fpm_string.as_bytes())
+                .write_all(fastn_string.as_bytes())
                 .await?;
         }
 
@@ -532,40 +533,41 @@ impl Package {
         Ok(package)
     }
 
-    pub fn from_fpm_doc(
+    pub fn from_fastn_doc(
         root: &camino::Utf8Path,
-        fpm_doc: &ftd::p2::Document,
-    ) -> fpm::Result<Package> {
-        let temp_package: Option<PackageTemp> = fpm_doc.get("fpm#package")?;
+        fastn_doc: &ftd::p2::Document,
+    ) -> fastn::Result<Package> {
+        let temp_package: Option<PackageTemp> = fastn_doc.get("fastn#package")?;
 
         let mut package = match temp_package {
             Some(v) => v.into_package(),
             None => {
-                return Err(fpm::Error::PackageError {
-                    message: "FPM.ftd does not contain package definition".to_string(),
+                return Err(fastn::Error::PackageError {
+                    message: "FASTN.ftd does not contain package definition".to_string(),
                 })
             }
         };
 
         // reading dependencies
         let mut deps = {
-            let temp_deps: Vec<fpm::package::dependency::DependencyTemp> =
-                fpm_doc.get("fpm#dependency")?;
+            let temp_deps: Vec<fastn::package::dependency::DependencyTemp> =
+                fastn_doc.get("fastn#dependency")?;
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+                .collect::<Vec<fastn::Result<fastn::Dependency>>>()
                 .into_iter()
-                .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
+                .collect::<fastn::Result<Vec<fastn::Dependency>>>()?
         };
 
-        if package.name != fpm::FPM_UI_INTERFACE
-            && !deps
-                .iter()
-                .any(|dep| dep.implements.contains(&fpm::FPM_UI_INTERFACE.to_string()))
+        if package.name != fastn::FASTN_UI_INTERFACE
+            && !deps.iter().any(|dep| {
+                dep.implements
+                    .contains(&fastn::FASTN_UI_INTERFACE.to_string())
+            })
         {
-            deps.push(fpm::Dependency {
-                package: fpm::Package::new(fpm::FPM_UI_INTERFACE),
+            deps.push(fastn::Dependency {
+                package: fastn::Package::new(fastn::FASTN_UI_INTERFACE),
                 version: None,
                 notes: None,
                 alias: None,
@@ -576,34 +578,35 @@ impl Package {
         };
         // setting dependencies
         package.dependencies = deps;
-        package.fpm_path = Some(root.join("FPM.ftd"));
+        package.fastn_path = Some(root.join("FASTN.ftd"));
 
-        package.auto_import = fpm_doc
-            .get::<Vec<String>>("fpm#auto-import")?
+        package.auto_import = fastn_doc
+            .get::<Vec<String>>("fastn#auto-import")?
             .iter()
-            .map(|f| fpm::AutoImport::from_string(f.as_str()))
+            .map(|f| fastn::AutoImport::from_string(f.as_str()))
             .collect();
 
-        package.ignored_paths = fpm_doc.get::<Vec<String>>("fpm#ignore")?;
-        package.fonts = fpm_doc.get("fpm#font")?;
-        package.sitemap_temp = fpm_doc.get("fpm#sitemap")?;
-        package.dynamic_urls_temp = fpm_doc.get("fpm#dynamic-urls")?;
+        package.ignored_paths = fastn_doc.get::<Vec<String>>("fastn#ignore")?;
+        package.fonts = fastn_doc.get("fastn#font")?;
+        package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
+        package.dynamic_urls_temp = fastn_doc.get("fastn#dynamic-urls")?;
 
         // TODO: resolve group dependent packages, there may be imported group from foreign package
         //   We need to make sure to resolve that package as well before moving ahead
         //   Because in `UserGroup::get_identities` we have to resolve identities of a group
-        let user_groups: Vec<crate::user_group::UserGroupTemp> = fpm_doc.get("fpm#user-group")?;
+        let user_groups: Vec<crate::user_group::UserGroupTemp> =
+            fastn_doc.get("fastn#user-group")?;
         let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
         package.groups = groups;
 
         // validation logic TODO: It should be ordered
-        fpm::utils::validate_base_url(&package)?;
+        fastn::utils::validate_base_url(&package)?;
 
         if package.import_auto_imports_from_original {
             if let Some(ref original_package) = *package.translation_of {
                 if !package.auto_import.is_empty() {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fpm.auto-import` from the {package_name}/FPM.ftd file", package_name=package.name.as_str()),
+                    return Err(fastn::Error::PackageError {
+                        message: format!("Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fastn.auto-import` from the {package_name}/FASTN.ftd file", package_name=package.name.as_str()),
                     });
                 } else {
                     package.auto_import = original_package.auto_import.clone()
@@ -655,7 +658,7 @@ impl Package {
     }
 }
 
-/// Backend Header is a struct that is used to read and store the backend-header from the FPM.ftd file
+/// Backend Header is a struct that is used to read and store the backend-header from the FASTN.ftd file
 #[derive(serde::Deserialize, Debug, Clone)]
 pub struct BackendHeader {
     #[serde(rename = "header-key")]
@@ -663,8 +666,8 @@ pub struct BackendHeader {
     #[serde(rename = "header-value")]
     pub header_value: String,
 }
-/// PackageTemp is a struct that is used for mapping the `fpm.package` data in FPM.ftd file. It is
-/// not used elsewhere in program, it is immediately converted to `fpm::Package` struct during
+/// PackageTemp is a struct that is used for mapping the `fastn.package` data in FASTN.ftd file. It is
+/// not used elsewhere in program, it is immediately converted to `fastn::Package` struct during
 /// deserialization process
 #[derive(serde::Deserialize, Debug, Clone)]
 pub(crate) struct PackageTemp {
@@ -698,10 +701,10 @@ pub(crate) struct PackageTemp {
 
 impl PackageTemp {
     pub fn into_package(self) -> Package {
-        // TODO: change this method to: `validate(self) -> fpm::Result<fpm::Package>` and do all
+        // TODO: change this method to: `validate(self) -> fastn::Result<fastn::Package>` and do all
         //       validations in it. Like a package must not have both translation-of and
         //       `translations` set.
-        let translation_of = self.translation_of.as_ref().map(|v| fpm::Package::new(v));
+        let translation_of = self.translation_of.as_ref().map(|v| fastn::Package::new(v));
         let translations = self
             .translations
             .clone()
@@ -722,7 +725,7 @@ impl PackageTemp {
             canonical_url: self.canonical_url,
             dependencies: vec![],
             auto_import: vec![],
-            fpm_path: None,
+            fastn_path: None,
             ignored_paths: vec![],
             fonts: vec![],
             import_auto_imports_from_original: self.import_auto_imports_from_original,

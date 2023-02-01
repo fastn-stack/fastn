@@ -1,24 +1,24 @@
 pub async fn resolve_conflict(
-    config: &fpm::Config,
+    config: &fastn::Config,
     path: &str,
     use_ours: bool,
     use_theirs: bool,
     print: bool,
     revive_it: bool,
     delete_it: bool,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     let number_of_times_flag_used = [use_ours, use_theirs, print, revive_it, delete_it]
         .iter()
         .fold(0, |val, x| val + (*x as i32));
     if number_of_times_flag_used > 1 {
-        return fpm::usage_error("AmbiguousOptionError: Use only one flag".to_string());
+        return fastn::usage_error("AmbiguousOptionError: Use only one flag".to_string());
     }
     let get_files_status = config.get_files_status().await?;
     let file_status =
         if let Some(file_status) = get_files_status.iter().find(|v| v.get_file_path().eq(path)) {
             file_status
         } else {
-            return Err(fpm::Error::UsageError {
+            return Err(fastn::Error::UsageError {
                 message: format!("{} not found", path),
             });
         };
@@ -27,48 +27,48 @@ pub async fn resolve_conflict(
         let content = conflicted_data
             .ours
             .get_content()
-            .ok_or(fpm::Error::UsageError {
+            .ok_or(fastn::Error::UsageError {
                 message: format!(
-                    "Can't find content, Help: Use `fpm resolve-conflict --delete-it {}`",
+                    "Can't find content, Help: Use `fastn resolve-conflict --delete-it {}`",
                     path
                 ),
             })?;
         if conflicted_data.theirs.deleted() {
-            return fpm::usage_error(format!(
-                "`delete-edit-conflict`, Help: Use `fpm resolve-conflict --revive-it {}`",
+            return fastn::usage_error(format!(
+                "`delete-edit-conflict`, Help: Use `fastn resolve-conflict --revive-it {}`",
                 path
             ));
         }
-        fpm::utils::update(&config.root.join(path), content).await?;
+        fastn::utils::update(&config.root.join(path), content).await?;
     } else if use_theirs {
         let content = conflicted_data
             .theirs
             .get_content()
-            .ok_or(fpm::Error::UsageError {
+            .ok_or(fastn::Error::UsageError {
                 message: format!(
-                    "Can't find content, Help: Use `fpm resolve-conflict --delete-it {}`",
+                    "Can't find content, Help: Use `fastn resolve-conflict --delete-it {}`",
                     path
                 ),
             })?;
         if conflicted_data.ours.deleted() {
-            return fpm::usage_error(format!(
-                "`delete-edit-conflict`, Help: Use `fpm resolve-conflict --revive-it {}`",
+            return fastn::usage_error(format!(
+                "`delete-edit-conflict`, Help: Use `fastn resolve-conflict --revive-it {}`",
                 path
             ));
         }
-        fpm::utils::update(&config.root.join(path), content).await?;
+        fastn::utils::update(&config.root.join(path), content).await?;
     } else if revive_it {
         let content = conflicted_data
             .ours
             .get_content()
             .or_else(|| conflicted_data.theirs.get_content())
-            .ok_or(fpm::Error::UsageError {
+            .ok_or(fastn::Error::UsageError {
                 message: format!("Can't find content: `{}`", path),
             })?;
-        fpm::utils::update(&config.root.join(path), content).await?;
+        fastn::utils::update(&config.root.join(path), content).await?;
     } else if delete_it {
         if !(conflicted_data.ours.deleted() || conflicted_data.theirs.deleted()) {
-            return fpm::usage_error(format!("{} is not in `delete-edit-conflict`", path));
+            return fastn::usage_error(format!("{} is not in `delete-edit-conflict`", path));
         }
         if config.root.join(path).exists() {
             tokio::fs::remove_file(config.root.join(path)).await?;
@@ -76,9 +76,9 @@ pub async fn resolve_conflict(
     } else if print {
         let content = conflicted_data
             .marker
-            .ok_or(fpm::Error::UsageError {
+            .ok_or(fastn::Error::UsageError {
                 message: format!(
-                    "Can't find marked content, Help: Use `fpm resolve-conflict --use-ours {}` && `fpm resolve-conflict --use-theirs {}`",
+                    "Can't find marked content, Help: Use `fastn resolve-conflict --use-ours {}` && `fastn resolve-conflict --use-theirs {}`",
                     path, path
                 ),
             })?;
@@ -87,16 +87,16 @@ pub async fn resolve_conflict(
     } else {
         let content = conflicted_data
             .marker
-            .ok_or(fpm::Error::UsageError {
+            .ok_or(fastn::Error::UsageError {
                 message: format!(
-                    "Can't find marked content, Help: Use `fpm resolve-conflict --use-ours {}` && `fpm resolve-conflict --use-theirs {}`",
+                    "Can't find marked content, Help: Use `fastn resolve-conflict --use-ours {}` && `fastn resolve-conflict --use-theirs {}`",
                     path, path
                 ),
             })?;
-        let edited = edit::edit(content).map_err(|e| fpm::Error::UsageError {
-            message: format!("{}, Help: Use `fpm resolve-conflict --print {}`", e, path,),
+        let edited = edit::edit(content).map_err(|e| fastn::Error::UsageError {
+            message: format!("{}, Help: Use `fastn resolve-conflict --print {}`", e, path,),
         })?;
-        fpm::utils::update(&config.root.join(path), edited.as_bytes()).await?;
+        fastn::utils::update(&config.root.join(path), edited.as_bytes()).await?;
     }
 
     mark_resolve(config, file_status, delete_it).await?;
@@ -104,10 +104,10 @@ pub async fn resolve_conflict(
 }
 
 async fn mark_resolve(
-    config: &fpm::Config,
-    file_status: &fpm::sync_utils::FileStatus,
+    config: &fastn::Config,
+    file_status: &fastn::sync_utils::FileStatus,
     delete_it: bool,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     use itertools::Itertools;
 
     let path = file_status.get_file_path();
@@ -118,16 +118,19 @@ async fn mark_resolve(
     let remote_version = file_status
         .status()
         .and_then(|v| v.conflicted_version())
-        .ok_or(fpm::Error::UsageError {
+        .ok_or(fastn::Error::UsageError {
             message: format!("{} is not in conflict", path),
         })?;
     let mut workspace_map = config.get_workspace_map().await?;
     if delete_it && is_clone_edited_remote_deleted {
         workspace_map.remove(&path);
     } else {
-        let file_workspace_entry = workspace_map.get_mut(&path).ok_or(fpm::Error::UsageError {
-            message: format!("Can't find entry in workspace for `{}`", path),
-        })?;
+        let file_workspace_entry =
+            workspace_map
+                .get_mut(&path)
+                .ok_or(fastn::Error::UsageError {
+                    message: format!("Can't find entry in workspace for `{}`", path),
+                })?;
         file_workspace_entry.version = Some(remote_version);
         file_workspace_entry.deleted = if delete_it { Some(true) } else { None };
         if is_clone_edited_remote_deleted {
@@ -164,11 +167,11 @@ struct ConflictData {
 }
 
 async fn get_conflict_data(
-    config: &fpm::Config,
-    file_status: &fpm::sync_utils::FileStatus,
-) -> fpm::Result<ConflictData> {
+    config: &fastn::Config,
+    file_status: &fastn::sync_utils::FileStatus,
+) -> fastn::Result<ConflictData> {
     match file_status {
-        fpm::sync_utils::FileStatus::Add {
+        fastn::sync_utils::FileStatus::Add {
             path,
             content,
             status,
@@ -176,7 +179,7 @@ async fn get_conflict_data(
             let remote_version = if let Some(version) = status.conflicted_version() {
                 version
             } else {
-                return fpm::usage_error(format!("`{}` is not in conflict state", path));
+                return fastn::usage_error(format!("`{}` is not in conflict state", path));
             };
             let history_path = config.history_path(path, remote_version);
             let history_content = tokio::fs::read(history_path).await?;
@@ -202,7 +205,7 @@ async fn get_conflict_data(
                 marker: None,
             })
         }
-        fpm::sync_utils::FileStatus::Update {
+        fastn::sync_utils::FileStatus::Update {
             path,
             content,
             version,
@@ -211,9 +214,12 @@ async fn get_conflict_data(
             let remote_version = if let Some(version) = status.conflicted_version() {
                 version
             } else {
-                return fpm::usage_error(format!("`{}` is not in conflict state", path));
+                return fastn::usage_error(format!("`{}` is not in conflict state", path));
             };
-            if matches!(status, fpm::sync_utils::Status::CloneEditedRemoteDeleted(_)) {
+            if matches!(
+                status,
+                fastn::sync_utils::Status::CloneEditedRemoteDeleted(_)
+            ) {
                 return Ok(ConflictData {
                     ours: Content::Content(content.to_vec()),
                     theirs: Content::Deleted,
@@ -221,8 +227,8 @@ async fn get_conflict_data(
                 });
             }
 
-            if !matches!(status, fpm::sync_utils::Status::Conflict(_)) {
-                return fpm::usage_error(format!(
+            if !matches!(status, fastn::sync_utils::Status::Conflict(_)) {
+                return fastn::usage_error(format!(
                     "Expected status of the file is Conflict, found: {:?}",
                     status
                 ));
@@ -241,7 +247,7 @@ async fn get_conflict_data(
                     Ok(data) => {
                         // Not possible to reach here
                         tokio::fs::write(path, &data).await?;
-                        return fpm::usage_error(format!("`{}` already resolved", path));
+                        return fastn::usage_error(format!("`{}` already resolved", path));
                     }
                     Err(data) => {
                         return Ok(ConflictData {
@@ -258,16 +264,16 @@ async fn get_conflict_data(
                 marker: None,
             })
         }
-        fpm::sync_utils::FileStatus::Delete { path, status, .. } => {
-            let version = if let fpm::sync_utils::Status::CloneDeletedRemoteEdited(version) = status
-            {
-                version
-            } else {
-                return fpm::usage_error(format!(
-                    "Expected status of the file is CloneDeletedRemoteEdited, found: {:?}",
-                    status
-                ));
-            };
+        fastn::sync_utils::FileStatus::Delete { path, status, .. } => {
+            let version =
+                if let fastn::sync_utils::Status::CloneDeletedRemoteEdited(version) = status {
+                    version
+                } else {
+                    return fastn::usage_error(format!(
+                        "Expected status of the file is CloneDeletedRemoteEdited, found: {:?}",
+                        status
+                    ));
+                };
             let theirs_path = config.history_path(path, *version);
             let theirs_content = tokio::fs::read(theirs_path).await?;
             Ok(ConflictData {
@@ -276,9 +282,11 @@ async fn get_conflict_data(
                 marker: None,
             })
         }
-        fpm::sync_utils::FileStatus::Uptodate { path, version, .. } => fpm::usage_error(format!(
-            "No changes detected for file `{}` with latest version: `{}`",
-            path, version
-        )),
+        fastn::sync_utils::FileStatus::Uptodate { path, version, .. } => {
+            fastn::usage_error(format!(
+                "No changes detected for file `{}` with latest version: `{}`",
+                path, version
+            ))
+        }
     }
 }

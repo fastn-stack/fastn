@@ -2,7 +2,7 @@ pub fn process<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     // TODO: URL params not yet handled
     let req = match config.request.as_ref() {

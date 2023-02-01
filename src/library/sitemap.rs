@@ -3,13 +3,13 @@ use itertools::Itertools;
 pub fn processor(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     if let Some(ref sitemap) = config.package.sitemap {
         let doc_id = config
             .current_document
             .clone()
-            .map(|v| fpm::utils::id_to_path(v.as_str()))
+            .map(|v| fastn::utils::id_to_path(v.as_str()))
             .unwrap_or_else(|| {
                 doc.name
                     .to_string()
@@ -22,14 +22,14 @@ pub fn processor(
             return doc.from_json(&sitemap, section);
         }
     }
-    doc.from_json(&fpm::sitemap::SiteMapCompat::default(), section)
+    doc.from_json(&fastn::sitemap::SiteMapCompat::default(), section)
 }
 
 pub fn document_readers(
     section: &ftd::p1::Section,
     document_id: &str,
     doc: &ftd::p2::TDoc,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     // TODO: document key should be optional
     let document =
@@ -54,7 +54,7 @@ pub fn document_writers(
     section: &ftd::p1::Section,
     document_id: &str,
     doc: &ftd::p2::TDoc,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     // TODO: document key should be optional
     let document =

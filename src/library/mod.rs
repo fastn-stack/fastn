@@ -1,7 +1,7 @@
 mod cr_meta;
 pub(crate) mod document;
+pub(crate) mod fastn_dot_ftd;
 mod fetch_file;
-pub(crate) mod fpm_dot_ftd;
 pub(crate) mod full_sitemap;
 mod get_data;
 mod get_version_data;
@@ -13,16 +13,16 @@ mod sqlite;
 pub(crate) mod toc;
 
 pub use document::convert_to_document_id;
-pub use fpm::Library2022;
+pub use fastn::Library2022;
 
 #[derive(Debug)]
 pub struct Library {
-    pub config: fpm::Config,
+    pub config: fastn::Config,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
     pub document_id: String,
-    pub translated_data: fpm::TranslationData,
+    pub translated_data: fastn::TranslationData,
     /// Hashmap that contains the information about the assets document for the current build
     /// It'll contain a map of <package_name> corresponding to the asset doc for that package
     pub asset_documents: std::collections::HashMap<String, String>,
@@ -34,7 +34,7 @@ impl Library {
     pub async fn get_with_result(
         &self,
         name: &str,
-        packages: &mut Vec<fpm::Package>,
+        packages: &mut Vec<fastn::Package>,
     ) -> ftd::p1::Result<String> {
         match self.get(name, packages).await {
             Some(v) => Ok(v),
@@ -42,22 +42,22 @@ impl Library {
         }
     }
 
-    pub async fn get(&self, name: &str, packages: &mut Vec<fpm::Package>) -> Option<String> {
-        if name == "fpm" {
+    pub async fn get(&self, name: &str, packages: &mut Vec<fastn::Package>) -> Option<String> {
+        if name == "fastn" {
             packages.push(packages.last()?.clone());
-            return Some(fpm_dot_ftd::get(self).await);
+            return Some(fastn_dot_ftd::get(self).await);
         }
-        if name == "fpm-lib" {
+        if name == "fastn-lib" {
             packages.push(packages.last()?.clone());
-            return Some(fpm::fpm_lib_ftd().to_string());
+            return Some(fastn::fastn_lib_ftd().to_string());
         }
 
         return get_for_package(name, packages, self).await;
 
         async fn get_for_package(
             name: &str,
-            packages: &mut Vec<fpm::Package>,
-            lib: &fpm::Library,
+            packages: &mut Vec<fastn::Package>,
+            lib: &fastn::Library,
         ) -> Option<String> {
             let package = packages.last()?;
             if name.starts_with(package.name.as_str()) {
@@ -130,11 +130,11 @@ impl Library {
 
         async fn get_data_from_package(
             name: &str,
-            package: &fpm::Package,
+            package: &fastn::Package,
             lib: &Library,
         ) -> Option<String> {
             let path = lib.config.get_root_for_package(package);
-            fpm::Config::download_required_file(&lib.config.root, name, package)
+            fastn::Config::download_required_file(&lib.config.root, name, package)
                 .await
                 .ok()?;
             // Explicit check for the current package.
@@ -166,14 +166,14 @@ impl Library {
             .str(doc.name, section.line_number, "$processor$")?
         {
             // These processors are implemented both in Rust and Python
-            "http" => fpm::library::http::processor(section, doc, &self.config).await,
-            "package-query" => fpm::library::sqlite::processor(section, doc, &self.config).await,
-            "fetch-file" => fpm::library::fetch_file::processor(section, doc, &self.config).await,
+            "http" => fastn::library::http::processor(section, doc, &self.config).await,
+            "package-query" => fastn::library::sqlite::processor(section, doc, &self.config).await,
+            "fetch-file" => fastn::library::fetch_file::processor(section, doc, &self.config).await,
             "package-tree" => {
-                fpm::library::package_tree::processor(section, doc, &self.config).await
+                fastn::library::package_tree::processor(section, doc, &self.config).await
             }
             "get-version-data" => {
-                fpm::library::get_version_data::processor(
+                fastn::library::get_version_data::processor(
                     section,
                     doc,
                     &self.config,
@@ -183,7 +183,9 @@ impl Library {
                 .await
             }
             "document-name" => document::processor::document_name(section, doc, &self.config).await,
-            "is-reader" => fpm::user_group::processor::is_reader(section, doc, &self.config).await,
+            "is-reader" => {
+                fastn::user_group::processor::is_reader(section, doc, &self.config).await
+            }
             _ => process_sync(&self.config, section, self.document_id.as_str(), doc),
         }
     }
@@ -192,7 +194,7 @@ impl Library {
 /// process_sync implements a bunch of processors that are called from Python. We want sync
 /// API to expose to outside world and async functions do not work so well with them.
 pub fn process_sync<'a>(
-    config: &fpm::Config,
+    config: &fastn::Config,
     section: &ftd::p1::Section,
     document_id: &str,
     doc: &'a ftd::p2::TDoc<'a>,
@@ -201,22 +203,22 @@ pub fn process_sync<'a>(
         .header
         .str(doc.name, section.line_number, "$processor$")?
     {
-        "toc" => fpm::library::toc::processor(section, doc, config),
-        "include" => fpm::library::include::processor(section, doc, config),
-        "get-data" => fpm::library::get_data::processor(section, doc, config),
-        "sitemap" => fpm::library::sitemap::processor(section, doc, config),
-        "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, config),
+        "toc" => fastn::library::toc::processor(section, doc, config),
+        "include" => fastn::library::include::processor(section, doc, config),
+        "get-data" => fastn::library::get_data::processor(section, doc, config),
+        "sitemap" => fastn::library::sitemap::processor(section, doc, config),
+        "full-sitemap" => fastn::library::full_sitemap::processor(section, doc, config),
         "document-readers" => {
-            fpm::library::sitemap::document_readers(section, document_id, doc, config)
+            fastn::library::sitemap::document_readers(section, document_id, doc, config)
         }
         "document-writers" => {
-            fpm::library::sitemap::document_writers(section, document_id, doc, config)
+            fastn::library::sitemap::document_writers(section, document_id, doc, config)
         }
-        "user-groups" => fpm::user_group::processor::user_groups(section, doc, config),
-        "user-group-by-id" => fpm::user_group::processor::user_group_by_id(section, doc, config),
-        "package-query" => fpm::library::sqlite::processor_(section, doc, config),
-        "fetch-file" => fpm::library::fetch_file::processor_sync(section, doc, config),
-        "package-tree" => fpm::library::package_tree::processor_sync(section, doc, config),
+        "user-groups" => fastn::user_group::processor::user_groups(section, doc, config),
+        "user-group-by-id" => fastn::user_group::processor::user_group_by_id(section, doc, config),
+        "package-query" => fastn::library::sqlite::processor_(section, doc, config),
+        "fetch-file" => fastn::library::fetch_file::processor_sync(section, doc, config),
+        "package-tree" => fastn::library::package_tree::processor_sync(section, doc, config),
         "document-id" => document::processor::document_id(section, doc, config),
         "document-full-id" => document::processor::document_full_id(section, doc, config),
         "document-suffix" => document::processor::document_suffix(section, doc, config),
@@ -224,27 +226,27 @@ pub fn process_sync<'a>(
             text: config.package.name.clone(),
             source: ftd::TextSource::Default,
         }),
-        "get-identities" => fpm::user_group::processor::get_identities(section, doc, config),
-        "request-data" => fpm::library::http::request_data_processor(section, doc, config),
+        "get-identities" => fastn::user_group::processor::get_identities(section, doc, config),
+        "request-data" => fastn::library::http::request_data_processor(section, doc, config),
         // TODO: auth feature flag
-        "user-details" => fpm::auth::processor::user_details(section, doc, config),
-        "fpm-apps" => fpm::package::app::processor(section, doc, config),
+        "user-details" => fastn::auth::processor::user_details(section, doc, config),
+        "fastn-apps" => fastn::package::app::processor(section, doc, config),
         t => Err(ftd::p1::Error::NotFound {
             doc_id: document_id.to_string(),
             line_number: section.line_number,
-            key: format!("FPM-Error: No such processor: {}", t),
+            key: format!("fastn-Error: No such processor: {}", t),
         }),
     }
 }
 
 #[derive(Debug)]
 pub struct Library2 {
-    pub config: fpm::Config,
+    pub config: fastn::Config,
     /// If the current module being parsed is a markdown file, `.markdown` contains the name and
     /// content of that file
     pub markdown: Option<(String, String)>,
     pub document_id: String,
-    pub translated_data: fpm::TranslationData,
+    pub translated_data: fastn::TranslationData,
     pub base_url: String,
     pub packages_under_process: Vec<String>,
 }
@@ -252,7 +254,7 @@ pub struct Library2 {
 impl Library2 {
     pub(crate) async fn push_package_under_process(
         &mut self,
-        package: &fpm::Package,
+        package: &fastn::Package,
     ) -> ftd::p1::Result<()> {
         self.packages_under_process.push(package.name.to_string());
         if self
@@ -281,7 +283,7 @@ impl Library2 {
         Ok(())
     }
 
-    pub(crate) fn get_current_package(&self) -> ftd::p1::Result<fpm::Package> {
+    pub(crate) fn get_current_package(&self) -> ftd::p1::Result<fastn::Package> {
         let current_package_name =
             self.packages_under_process
                 .last()
@@ -311,20 +313,20 @@ impl Library2 {
     }
 
     pub async fn get(&mut self, name: &str) -> Option<String> {
-        if name == "fpm" {
+        if name == "fastn" {
             self.packages_under_process
                 .push(self.get_current_package().ok()?.name);
-            return Some(fpm_dot_ftd::get2(self).await);
+            return Some(fastn_dot_ftd::get2(self).await);
         }
-        if name == "fpm-lib" {
+        if name == "fastn-lib" {
             self.packages_under_process
                 .push(self.get_current_package().ok()?.name);
-            return Some(fpm::fpm_lib_ftd().to_string());
+            return Some(fastn::fastn_lib_ftd().to_string());
         }
 
         return get_for_package(format!("{}/", name.trim_end_matches('/')).as_str(), self).await;
 
-        async fn get_for_package(name: &str, lib: &mut fpm::Library2) -> Option<String> {
+        async fn get_for_package(name: &str, lib: &mut fastn::Library2) -> Option<String> {
             let package = lib.get_current_package().ok()?;
             if name.starts_with(package.name.as_str()) {
                 if let Some(r) = get_data_from_package(name, &package, lib).await {
@@ -378,7 +380,7 @@ impl Library2 {
         #[allow(clippy::await_holding_refcell_ref)]
         async fn get_data_from_package(
             name: &str,
-            package: &fpm::Package,
+            package: &fastn::Package,
             lib: &mut Library2,
         ) -> Option<String> {
             lib.push_package_under_process(package).await.ok()?;
@@ -404,7 +406,7 @@ impl Library2 {
     ///
     /// for more details
     ///
-    /// visit www.fpm.dev/glossary/#lazy-processor
+    /// visit www.fastn.dev/glossary/#lazy-processor
     pub fn is_lazy_processor(
         &self,
         section: &ftd::p1::Section,
@@ -425,32 +427,32 @@ impl Library2 {
             .header
             .str(doc.name, section.line_number, "$processor$")?
         {
-            // "toc" => fpm::library::toc::processor(section, doc),
-            "http" => fpm::library::http::processor(section, doc, &self.config).await,
-            "package-query" => fpm::library::sqlite::processor(section, doc, &self.config).await,
-            "toc" => fpm::library::toc::processor(section, doc, &self.config),
-            "include" => fpm::library::include::processor(section, doc, &self.config),
-            "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
-            "sitemap" => fpm::library::sitemap::processor(section, doc, &self.config),
-            "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, &self.config),
-            "user-groups" => fpm::user_group::processor::user_groups(section, doc, &self.config),
-            "document-readers" => fpm::library::sitemap::document_readers(
+            // "toc" => fastn::library::toc::processor(section, doc),
+            "http" => fastn::library::http::processor(section, doc, &self.config).await,
+            "package-query" => fastn::library::sqlite::processor(section, doc, &self.config).await,
+            "toc" => fastn::library::toc::processor(section, doc, &self.config),
+            "include" => fastn::library::include::processor(section, doc, &self.config),
+            "get-data" => fastn::library::get_data::processor(section, doc, &self.config),
+            "sitemap" => fastn::library::sitemap::processor(section, doc, &self.config),
+            "full-sitemap" => fastn::library::full_sitemap::processor(section, doc, &self.config),
+            "user-groups" => fastn::user_group::processor::user_groups(section, doc, &self.config),
+            "document-readers" => fastn::library::sitemap::document_readers(
                 section,
                 self.document_id.as_str(),
                 doc,
                 &self.config,
             ),
-            "document-writers" => fpm::library::sitemap::document_writers(
+            "document-writers" => fastn::library::sitemap::document_writers(
                 section,
                 self.document_id.as_str(),
                 doc,
                 &self.config,
             ),
             "user-group-by-id" => {
-                fpm::user_group::processor::user_group_by_id(section, doc, &self.config)
+                fastn::user_group::processor::user_group_by_id(section, doc, &self.config)
             }
             "get-identities" => {
-                fpm::user_group::processor::get_identities(section, doc, &self.config)
+                fastn::user_group::processor::get_identities(section, doc, &self.config)
             }
             "document-id" => document::processor::document_id(section, doc, &self.config),
             "document-full-id" => document::processor::document_full_id(section, doc, &self.config),
@@ -461,12 +463,12 @@ impl Library2 {
                 source: ftd::TextSource::Default,
             }),
             "package-tree" => {
-                fpm::library::package_tree::processor(section, doc, &self.config).await
+                fastn::library::package_tree::processor(section, doc, &self.config).await
             }
-            "fetch-file" => fpm::library::fetch_file::processor(section, doc, &self.config).await,
+            "fetch-file" => fastn::library::fetch_file::processor(section, doc, &self.config).await,
             // Note: Not needed right now
             "get-version-data" => {
-                fpm::library::get_version_data::processor(
+                fastn::library::get_version_data::processor(
                     section,
                     doc,
                     &self.config,
@@ -476,38 +478,40 @@ impl Library2 {
                 .await
             }
             // Note: Not needed right now
-            "cr-meta" => fpm::library::cr_meta::processor(section, doc, &self.config).await,
+            "cr-meta" => fastn::library::cr_meta::processor(section, doc, &self.config).await,
             "request-data" => {
-                fpm::library::http::request_data_processor(section, doc, &self.config)
+                fastn::library::http::request_data_processor(section, doc, &self.config)
             }
             // TODO: auth feature flag
-            "user-details" => fpm::auth::processor::user_details(section, doc, &self.config),
-            "fpm-apps" => fpm::package::app::processor(section, doc, &self.config),
-            "is-reader" => fpm::user_group::processor::is_reader(section, doc, &self.config).await,
+            "user-details" => fastn::auth::processor::user_details(section, doc, &self.config),
+            "fastn-apps" => fastn::package::app::processor(section, doc, &self.config),
+            "is-reader" => {
+                fastn::user_group::processor::is_reader(section, doc, &self.config).await
+            }
             t => Err(ftd::p1::Error::NotFound {
                 doc_id: self.document_id.to_string(),
                 line_number: section.line_number,
-                key: format!("FPM-Error: No such processor: {}", t),
+                key: format!("fastn-Error: No such processor: {}", t),
             }),
         }
     }
 }
 
 #[derive(Default)]
-pub struct FPMLibrary {}
+pub struct FastnLibrary {}
 
-impl FPMLibrary {
+impl FastnLibrary {
     pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
-        if name == "fpm" {
+        if name == "fastn" {
             Some(format!(
                 "{}\n\n-- optional package-data package:\n",
-                fpm::fpm_ftd()
+                fastn::fastn_ftd()
             ))
         } else if name == "env" {
-            Some(fpm::get_env_ftd_file())
+            Some(fastn::get_env_ftd_file())
         } else {
-            // Note: currently we do not allow users to import other modules from FPM.ftd
-            eprintln!("FPM.ftd can only import `fpm` and `env` module");
+            // Note: currently we do not allow users to import other modules from FASTN.ftd
+            eprintln!("FASTN.ftd can only import `fastn` and `env` module");
             None
         }
     }

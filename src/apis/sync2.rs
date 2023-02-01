@@ -110,25 +110,25 @@ pub struct File {
 }
 
 pub async fn sync2(
-    req: &fpm::http::Request,
+    req: &fastn::http::Request,
     sync_req: SyncRequest,
-) -> fpm::Result<fpm::http::Response> {
+) -> fastn::Result<fastn::http::Response> {
     dbg!("remote server call", &sync_req.package_name);
 
     match sync_worker(req, sync_req).await {
-        Ok(data) => fpm::http::api_ok(data),
-        Err(err) => fpm::http::api_error(err.to_string()),
+        Ok(data) => fastn::http::api_ok(data),
+        Err(err) => fastn::http::api_error(err.to_string()),
     }
 }
 
 pub(crate) async fn do_sync(
-    config: &fpm::Config,
+    config: &fastn::Config,
     files: &[SyncRequestFile],
-) -> fpm::Result<std::collections::HashMap<String, SyncResponseFile>> {
+) -> fastn::Result<std::collections::HashMap<String, SyncResponseFile>> {
     let mut remote_history = config.get_history().await?;
     let remote_manifest =
-        fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), false)?;
-    let mut to_be_in_history: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
+        fastn::history::FileHistory::get_remote_manifest(remote_history.as_slice(), false)?;
+    let mut to_be_in_history: std::collections::BTreeMap<String, fastn::history::FileEditTemp> =
         Default::default();
     let mut synced_files = std::collections::HashMap::new();
     for file in files {
@@ -151,14 +151,14 @@ pub(crate) async fn do_sync(
                     );
                     continue;
                 }
-                fpm::utils::update(&config.root.join(path), content).await?;
+                fastn::utils::update(&config.root.join(path), content).await?;
                 to_be_in_history.insert(
                     path.to_string(),
-                    fpm::history::FileEditTemp {
+                    fastn::history::FileEditTemp {
                         message: None,
                         author: None,
                         src_cr: *src_cr,
-                        operation: fpm::history::FileOperation::Added,
+                        operation: fastn::history::FileOperation::Added,
                     },
                 );
             }
@@ -170,15 +170,15 @@ pub(crate) async fn do_sync(
             } => {
                 if let Some(file_edit) = remote_manifest.get(path) {
                     if file_edit.version.eq(version) {
-                        fpm::utils::update(&config.root.join(path), content).await?;
+                        fastn::utils::update(&config.root.join(path), content).await?;
                         // TODO: get all data like message, author, src-cr from request
                         to_be_in_history.insert(
                             path.to_string(),
-                            fpm::history::FileEditTemp {
+                            fastn::history::FileEditTemp {
                                 message: None,
                                 author: None,
                                 src_cr: *src_cr,
-                                operation: fpm::history::FileOperation::Updated,
+                                operation: fastn::history::FileOperation::Updated,
                             },
                         );
                     } else {
@@ -203,21 +203,21 @@ pub(crate) async fn do_sync(
                         let theirs_path = config.history_path(path, file_edit.version);
                         let theirs_content = tokio::fs::read_to_string(theirs_path).await?;
                         let ours_content = String::from_utf8(content.clone())
-                            .map_err(|e| fpm::Error::APIResponseError(e.to_string()))?;
+                            .map_err(|e| fastn::Error::APIResponseError(e.to_string()))?;
                         match diffy::MergeOptions::new()
                             .set_conflict_style(diffy::ConflictStyle::Merge)
                             .merge(&ancestor_content, &ours_content, &theirs_content)
                         {
                             Ok(data) => {
-                                fpm::utils::update(&config.root.join(path), data.as_bytes())
+                                fastn::utils::update(&config.root.join(path), data.as_bytes())
                                     .await?;
                                 to_be_in_history.insert(
                                     path.to_string(),
-                                    fpm::history::FileEditTemp {
+                                    fastn::history::FileEditTemp {
                                         message: None,
                                         author: None,
                                         src_cr: *src_cr,
-                                        operation: fpm::history::FileOperation::Updated,
+                                        operation: fastn::history::FileOperation::Updated,
                                     },
                                 );
                                 synced_files.insert(
@@ -288,11 +288,11 @@ pub(crate) async fn do_sync(
                     }
                     to_be_in_history.insert(
                         path.to_string(),
-                        fpm::history::FileEditTemp {
+                        fastn::history::FileEditTemp {
                             message: None,
                             author: None,
                             src_cr: *src_cr,
-                            operation: fpm::history::FileOperation::Deleted,
+                            operation: fastn::history::FileOperation::Deleted,
                         },
                     );
                 }
@@ -300,26 +300,27 @@ pub(crate) async fn do_sync(
         }
     }
 
-    fpm::history::insert_into_history(&config.root, &to_be_in_history, &mut remote_history).await?;
+    fastn::history::insert_into_history(&config.root, &to_be_in_history, &mut remote_history)
+        .await?;
     Ok(synced_files)
 }
 
 pub(crate) async fn sync_worker(
-    req: &fpm::http::Request,
+    req: &fastn::http::Request,
     request: SyncRequest,
-) -> fpm::Result<SyncResponse> {
+) -> fastn::Result<SyncResponse> {
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let config = fpm::Config::read(None, false, Some(req)).await?;
+    let config = fastn::Config::read(None, false, Some(req)).await?;
     let mut synced_files = do_sync(&config, request.files.as_slice()).await?;
     let remote_history = config.get_history().await?;
     let remote_manifest =
-        fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
+        fastn::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
 
-    let clone_history = fpm::history::FileHistory::from_ftd(request.history.as_str())?;
+    let clone_history = fastn::history::FileHistory::from_ftd(request.history.as_str())?;
     let client_latest =
-        fpm::history::FileHistory::get_remote_manifest(clone_history.as_slice(), true)?;
+        fastn::history::FileHistory::get_remote_manifest(clone_history.as_slice(), true)?;
 
     client_current_files(&config, &remote_manifest, &client_latest, &mut synced_files).await?;
 
@@ -333,10 +334,10 @@ pub(crate) async fn sync_worker(
 }
 
 async fn clone_history_files(
-    config: &fpm::Config,
-    remote_manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
-    client_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
-) -> fpm::Result<Vec<File>> {
+    config: &fastn::Config,
+    remote_manifest: &std::collections::BTreeMap<String, fastn::history::FileEdit>,
+    client_latest: &std::collections::BTreeMap<String, fastn::history::FileEdit>,
+) -> fastn::Result<Vec<File>> {
     use itertools::Itertools;
 
     let diff = snapshot_diff(remote_manifest, client_latest);
@@ -370,7 +371,7 @@ async fn clone_history_files(
     Ok(dot_history)
 }
 
-fn get_all_versions(path: &str, history: &[String]) -> fpm::Result<Vec<(i32, String)>> {
+fn get_all_versions(path: &str, history: &[String]) -> fastn::Result<Vec<(i32, String)>> {
     let (path_prefix, ext) = if let Some((path_prefix, ext)) = path.rsplit_once('.') {
         (format!("{}.", path_prefix), Some(ext))
     } else {
@@ -392,11 +393,11 @@ fn get_all_versions(path: &str, history: &[String]) -> fpm::Result<Vec<(i32, Str
 }
 
 async fn client_current_files(
-    config: &fpm::Config,
-    remote_manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
-    client_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
+    config: &fastn::Config,
+    remote_manifest: &std::collections::BTreeMap<String, fastn::history::FileEdit>,
+    client_latest: &std::collections::BTreeMap<String, fastn::history::FileEdit>,
     synced_files: &mut std::collections::HashMap<String, SyncResponseFile>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     let diff = snapshot_diff(remote_manifest, client_latest);
     for (path, operation) in diff.iter() {
         if synced_files.contains_key(path) {
@@ -446,10 +447,10 @@ async fn client_current_files(
 }
 
 fn snapshot_diff(
-    remote_manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
-    client_latest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
-) -> std::collections::BTreeMap<String, fpm::history::FileOperation> {
-    let mut diff: std::collections::BTreeMap<String, fpm::history::FileOperation> =
+    remote_manifest: &std::collections::BTreeMap<String, fastn::history::FileEdit>,
+    client_latest: &std::collections::BTreeMap<String, fastn::history::FileEdit>,
+) -> std::collections::BTreeMap<String, fastn::history::FileOperation> {
+    let mut diff: std::collections::BTreeMap<String, fastn::history::FileOperation> =
         Default::default();
     for (snapshot_path, file_edit) in remote_manifest {
         match client_latest.get(snapshot_path) {

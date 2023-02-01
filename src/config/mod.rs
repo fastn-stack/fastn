@@ -1,5 +1,5 @@
-// Document: https://fpm.dev/crate/config/
-// Document: https://fpm.dev/crate/package/
+// Document: https://fastn.dev/crate/config/
+// Document: https://fastn.dev/crate/package/
 
 pub(crate) mod utils;
 
@@ -16,11 +16,11 @@ impl Default for FTDEdition {
 }
 
 impl FTDEdition {
-    pub(crate) fn from_string(s: &str) -> fpm::Result<FTDEdition> {
+    pub(crate) fn from_string(s: &str) -> fastn::Result<FTDEdition> {
         match s {
             "2021" => Ok(FTDEdition::FTD2021),
             "2022" => Ok(FTDEdition::FTD2022),
-            t => fpm::usage_error(format!(
+            t => fastn::usage_error(format!(
                 "Unknown edition `{}`. Help use `2021` or `2022` instead",
                 t
             )),
@@ -31,18 +31,18 @@ impl FTDEdition {
 #[derive(Debug, Clone)]
 pub struct Config {
     // Global Information
-    pub package: fpm::Package,
+    pub package: fastn::Package,
     pub root: camino::Utf8PathBuf,
     pub packages_root: camino::Utf8PathBuf,
     pub original_directory: camino::Utf8PathBuf,
-    pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fpm::Package>>,
+    pub all_packages: std::cell::RefCell<std::collections::BTreeMap<String, fastn::Package>>,
     pub downloaded_assets: std::collections::BTreeMap<String, String>,
     pub global_ids: std::collections::HashMap<String, String>,
     // Related to current request, or per request
     pub extra_data: serde_json::Map<String, serde_json::Value>,
     pub named_parameters: Vec<(String, ftd::Value)>,
     pub current_document: Option<String>,
-    pub request: Option<fpm::http::Request>, // TODO: It should only contain reference
+    pub request: Option<fastn::http::Request>, // TODO: It should only contain reference
     pub ftd_edition: FTDEdition,
     pub ftd_external_js: Vec<String>,
     pub ftd_inline_js: Vec<String>,
@@ -51,7 +51,7 @@ pub struct Config {
 }
 
 impl Config {
-    /// `build_dir` is where the static built files are stored. `fpm build` command creates this
+    /// `build_dir` is where the static built files are stored. `fastn build` command creates this
     /// folder and stores its output here.
     pub fn build_dir(&self) -> camino::Utf8PathBuf {
         self.root.join(".build")
@@ -70,10 +70,10 @@ impl Config {
     }
 
     pub fn cr_path(&self, cr_number: usize) -> camino::Utf8PathBuf {
-        self.root.join(fpm::cr::cr_path(cr_number))
+        self.root.join(fastn::cr::cr_path(cr_number))
     }
 
-    pub fn path_without_root(&self, path: &camino::Utf8PathBuf) -> fpm::Result<String> {
+    pub fn path_without_root(&self, path: &camino::Utf8PathBuf) -> fastn::Result<String> {
         Ok(path.strip_prefix(&self.root)?.to_string())
     }
 
@@ -90,7 +90,7 @@ impl Config {
     }
 
     pub fn cr_track_dir(&self, cr_number: usize) -> camino::Utf8PathBuf {
-        self.track_dir().join(fpm::cr::cr_path(cr_number))
+        self.track_dir().join(fastn::cr::cr_path(cr_number))
     }
 
     pub fn cr_track_path(
@@ -118,13 +118,13 @@ impl Config {
     pub(crate) fn package_info_package(&self) -> &str {
         match self
             .package
-            .get_dependency_for_interface(fpm::FPM_UI_INTERFACE)
+            .get_dependency_for_interface(fastn::FASTN_UI_INTERFACE)
             .or_else(|| {
                 self.package
-                    .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+                    .get_dependency_for_interface(fastn::PACKAGE_THEME_INTERFACE)
             }) {
             Some(dep) => dep.package.name.as_str(),
-            None => fpm::FPM_UI_INTERFACE,
+            None => fastn::FASTN_UI_INTERFACE,
         }
     }
 
@@ -146,7 +146,7 @@ impl Config {
     }
 
     pub(crate) fn history_path(&self, id: &str, version: i32) -> camino::Utf8PathBuf {
-        let id_with_timestamp_extension = fpm::utils::snapshot_id(id, &(version as u128));
+        let id_with_timestamp_extension = fastn::utils::snapshot_id(id, &(version as u128));
         self.remote_history_dir().join(id_with_timestamp_extension)
     }
 
@@ -167,46 +167,46 @@ impl Config {
         }
     }
 
-    /// history of a fpm package is stored in `.history` folder.
+    /// history of a fastn package is stored in `.history` folder.
     ///
-    /// Current design is wrong, we should move this helper to `fpm::Package` maybe.
+    /// Current design is wrong, we should move this helper to `fastn::Package` maybe.
     ///
     /// History of a package is considered part of the package, and when a package is downloaded we
     /// have to chose if we want to download its history as well. For now we do not. Eventually in
     /// we will be able to say download the history also for some package.
     ///
     /// ```ftd
-    /// -- fpm.dependency: django
+    /// -- fastn.dependency: django
     ///  with-history: true
     /// ```
     ///     
-    /// `.history` file is created or updated by `fpm sync` command only, no one else should edit
+    /// `.history` file is created or updated by `fastn sync` command only, no one else should edit
     /// anything in it.
     pub fn history_dir(&self) -> camino::Utf8PathBuf {
         self.root.join(".history")
     }
 
-    pub fn fpm_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".fpm")
+    pub fn fastn_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".fastn")
     }
 
     pub fn conflicted_dir(&self) -> camino::Utf8PathBuf {
-        self.fpm_dir().join("conflicted")
+        self.fastn_dir().join("conflicted")
     }
 
     /// every package's `.history` contains a file `.latest.ftd`. It looks a bit link this:
     ///
     /// ```ftd
-    /// -- import: fpm
+    /// -- import: fastn
     ///
-    /// -- fpm.snapshot: FPM.ftd
+    /// -- fastn.snapshot: FASTN.ftd
     /// timestamp: 1638706756293421000
     ///
-    /// -- fpm.snapshot: blog.ftd
+    /// -- fastn.snapshot: blog.ftd
     /// timestamp: 1638706756293421000
     /// ```
     ///
-    /// One `fpm.snapshot` for every file that is currently part of the package.
+    /// One `fastn.snapshot` for every file that is currently part of the package.
     pub fn latest_ftd(&self) -> camino::Utf8PathBuf {
         self.root.join(".history/.latest.ftd")
     }
@@ -226,28 +226,28 @@ impl Config {
 
     /// original_path() returns the path of the original package if the current package is a
     /// translation package. it returns the path in `.packages` folder where the
-    pub fn original_path(&self) -> fpm::Result<camino::Utf8PathBuf> {
+    pub fn original_path(&self) -> fastn::Result<camino::Utf8PathBuf> {
         let o = match self.package.translation_of.as_ref() {
             Some(ref o) => o,
             None => {
-                return Err(fpm::Error::UsageError {
+                return Err(fastn::Error::UsageError {
                     message: "This package is not a translation package".to_string(),
                 });
             }
         };
-        match &o.fpm_path {
-            Some(fpm_path) => Ok(fpm_path
+        match &o.fastn_path {
+            Some(fastn_path) => Ok(fastn_path
                 .parent()
-                .expect("Expect fpm_path parent. Panic!")
+                .expect("Expect fastn_path parent. Panic!")
                 .to_owned()),
-            _ => Err(fpm::Error::UsageError {
-                message: format!("Unable to find `fpm_path` of the package {}", o.name),
+            _ => Err(fastn::Error::UsageError {
+                message: format!("Unable to find `fastn_path` of the package {}", o.name),
             }),
         }
     }
 
     /*/// aliases() returns the list of the available aliases at the package level.
-    pub fn aliases(&self) -> fpm::Result<std::collections::BTreeMap<&str, &fpm::Package>> {
+    pub fn aliases(&self) -> fastn::Result<std::collections::BTreeMap<&str, &fastn::Package>> {
         let mut resp = std::collections::BTreeMap::new();
         self.package
             .dependencies
@@ -303,7 +303,7 @@ impl Config {
         };
     }
 
-    pub(crate) async fn download_fonts(&self) -> fpm::Result<()> {
+    pub(crate) async fn download_fonts(&self) -> fastn::Result<()> {
         use itertools::Itertools;
 
         let mut fonts = vec![];
@@ -325,27 +325,27 @@ impl Config {
                 let start = std::time::Instant::now();
                 print!("Processing {} ... ", url);
                 let content = self.get_file_and_resolve(url.as_str()).await?.1;
-                fpm::utils::update(&self.build_dir().join(&url), content.as_slice()).await?;
-                fpm::utils::print_end(format!("Processed {}", url).as_str(), start);
+                fastn::utils::update(&self.build_dir().join(&url), content.as_slice()).await?;
+                fastn::utils::print_end(format!("Processed {}", url).as_str(), start);
             }
         }
 
         Ok(())
     }
 
-    /// `attach_data_string()` sets the value of extra data in fpm::Config,
+    /// `attach_data_string()` sets the value of extra data in fastn::Config,
     /// provided as `data` paramater of type `&str`
-    pub fn attach_data_string(&mut self, data: &str) -> fpm::Result<()> {
+    pub fn attach_data_string(&mut self, data: &str) -> fastn::Result<()> {
         self.attach_data(serde_json::from_str(data)?)
     }
 
-    /// `attach_data()` sets the value of extra data in fpm::Config,
+    /// `attach_data()` sets the value of extra data in fastn::Config,
     /// provided as `data` paramater of type `serde_json::Value`
-    pub fn attach_data(&mut self, data: serde_json::Value) -> fpm::Result<()> {
+    pub fn attach_data(&mut self, data: serde_json::Value) -> fastn::Result<()> {
         let data = match data {
             serde_json::Value::Object(o) => o,
             t => {
-                return Err(fpm::Error::UsageError {
+                return Err(fastn::Error::UsageError {
                     message: format!("Expected object type, found: `{:?}`", t),
                 })
             }
@@ -360,7 +360,7 @@ impl Config {
         &mut self,
         doc_id: &str,
         data: &str,
-    ) -> fpm::Result<()> {
+    ) -> fastn::Result<()> {
         /// updates the config.global_ids map
         ///
         /// mapping from [id -> link]
@@ -371,27 +371,27 @@ impl Config {
             id_string: &str,
             doc_name: &str,
             line_number: usize,
-        ) -> fpm::Result<()> {
+        ) -> fastn::Result<()> {
             // returns doc-id from link as String
-            fn fetch_doc_id_from_link(link: &str) -> fpm::Result<String> {
+            fn fetch_doc_id_from_link(link: &str) -> fastn::Result<String> {
                 // link = <document-id>#<slugified-id>
                 let doc_id = link.split_once('#').map(|s| s.0);
                 match doc_id {
                     Some(id) => Ok(id.to_string()),
-                    None => Err(fpm::Error::PackageError {
+                    None => Err(fastn::Error::PackageError {
                         message: format!("Invalid link format {}", link),
                     }),
                 }
             }
 
             let (_header, value) = ftd::p2::utils::split_once(id_string, doc_name, line_number)?;
-            let document_id = fpm::library::convert_to_document_id(doc_name);
+            let document_id = fastn::library::convert_to_document_id(doc_name);
 
             if let Some(id) = value {
                 // check if the current id already exists in the map
                 // if it exists then throw error
                 if global_ids.contains_key(&id) {
-                    return Err(fpm::Error::UsageError {
+                    return Err(fastn::Error::UsageError {
                         message: format!(
                             "conflicting id: \'{}\' used in doc: \'{}\' and doc: \'{}\'",
                             id,
@@ -420,10 +420,10 @@ impl Config {
 
     pub(crate) async fn get_versions(
         &self,
-        package: &fpm::Package,
-    ) -> fpm::Result<std::collections::HashMap<fpm::Version, Vec<fpm::File>>> {
+        package: &fastn::Package,
+    ) -> fastn::Result<std::collections::HashMap<fastn::Version, Vec<fastn::File>>> {
         let path = self.get_root_for_package(package);
-        let mut hash: std::collections::HashMap<fpm::Version, Vec<fpm::File>> =
+        let mut hash: std::collections::HashMap<fastn::Version, Vec<fastn::File>> =
             std::collections::HashMap::new();
 
         let all_files = self.get_all_file_paths1(package, true)?;
@@ -433,7 +433,7 @@ impl Config {
                 continue;
             }
             let version = get_version(&file, &path).await?;
-            let file = fpm::get_file(
+            let file = fastn::get_file(
                 package.name.to_string(),
                 &file,
                 &(if version.original.eq("BASE_VERSION") {
@@ -454,7 +454,7 @@ impl Config {
         async fn get_version(
             x: &camino::Utf8PathBuf,
             path: &camino::Utf8PathBuf,
-        ) -> fpm::Result<fpm::Version> {
+        ) -> fastn::Result<fastn::Version> {
             let id = match tokio::fs::canonicalize(x)
                 .await?
                 .to_str()
@@ -469,23 +469,23 @@ impl Config {
                 ) {
                 Some((_, id)) => id.to_string(),
                 None => {
-                    return Err(fpm::Error::UsageError {
+                    return Err(fastn::Error::UsageError {
                         message: format!("{:?} should be a file", x),
                     });
                 }
             };
             if let Some((v, _)) = id.split_once('/') {
-                fpm::Version::parse(v)
+                fastn::Version::parse(v)
             } else {
-                Ok(fpm::Version::base())
+                Ok(fastn::Version::base())
             }
         }
     }
 
-    pub(crate) fn get_root_for_package(&self, package: &fpm::Package) -> camino::Utf8PathBuf {
-        if let Some(package_fpm_path) = &package.fpm_path {
+    pub(crate) fn get_root_for_package(&self, package: &fastn::Package) -> camino::Utf8PathBuf {
+        if let Some(package_fastn_path) = &package.fastn_path {
             // TODO: Unwrap?
-            package_fpm_path.parent().unwrap().to_owned()
+            package_fastn_path.parent().unwrap().to_owned()
         } else if package.name.eq(&self.package.name) {
             self.root.clone()
         } else {
@@ -493,28 +493,31 @@ impl Config {
         }
     }
 
-    pub(crate) async fn get_files(&self, package: &fpm::Package) -> fpm::Result<Vec<fpm::File>> {
+    pub(crate) async fn get_files(
+        &self,
+        package: &fastn::Package,
+    ) -> fastn::Result<Vec<fastn::File>> {
         let path = self.get_root_for_package(package);
         let all_files = self.get_all_file_paths1(package, true)?;
         // TODO: Unwrap?
-        let mut documents = fpm::paths_to_files(package.name.as_str(), all_files, &path).await?;
+        let mut documents = fastn::paths_to_files(package.name.as_str(), all_files, &path).await?;
         documents.sort_by_key(|v| v.get_id());
 
         Ok(documents)
     }
 
     /// updates the terms map from the files of the current package
-    async fn update_ids_from_package(&mut self) -> fpm::Result<()> {
+    async fn update_ids_from_package(&mut self) -> fastn::Result<()> {
         let path = self.get_root_for_package(&self.package);
         let all_files_path = self.get_all_file_paths1(&self.package, true)?;
 
         let documents =
-            fpm::paths_to_files(self.package.name.as_str(), all_files_path, &path).await?;
+            fastn::paths_to_files(self.package.name.as_str(), all_files_path, &path).await?;
         for document in documents.iter() {
-            if let fpm::File::Ftd(doc) = document {
-                // Ignore fetching id's from FPM.ftd since
+            if let fastn::File::Ftd(doc) = document {
+                // Ignore fetching id's from FASTN.ftd since
                 // id's would be used to link inside sitemap
-                if doc.id.eq("FPM.ftd") {
+                if doc.id.eq("FASTN.ftd") {
                     continue;
                 }
                 self.update_global_ids_from_file(&doc.id, &doc.content)
@@ -526,13 +529,17 @@ impl Config {
 
     pub(crate) fn get_all_file_paths1(
         &self,
-        package: &fpm::Package,
+        package: &fastn::Package,
         ignore_history: bool,
-    ) -> fpm::Result<Vec<camino::Utf8PathBuf>> {
+    ) -> fastn::Result<Vec<camino::Utf8PathBuf>> {
         let path = self.get_root_for_package(package);
         let mut ignore_paths = ignore::WalkBuilder::new(&path);
         // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
-        ignore_paths.overrides(fpm::file::package_ignores(package, &path, ignore_history)?);
+        ignore_paths.overrides(fastn::file::package_ignores(
+            package,
+            &path,
+            ignore_history,
+        )?);
         Ok(ignore_paths
             .build()
             .into_iter()
@@ -543,13 +550,13 @@ impl Config {
 
     pub(crate) fn get_all_file_path(
         &self,
-        package: &fpm::Package,
+        package: &fastn::Package,
         ignore_paths: Vec<String>,
-    ) -> fpm::Result<Vec<camino::Utf8PathBuf>> {
+    ) -> fastn::Result<Vec<camino::Utf8PathBuf>> {
         let path = self.get_root_for_package(package);
         let mut ignore_paths_build = ignore::WalkBuilder::new(&path);
         ignore_paths_build.hidden(false);
-        ignore_paths_build.overrides(fpm::file::ignore_path(package, &path, ignore_paths)?);
+        ignore_paths_build.overrides(fastn::file::ignore_path(package, &path, ignore_paths)?);
         Ok(ignore_paths_build
             .build()
             .into_iter()
@@ -558,13 +565,17 @@ impl Config {
             .collect::<Vec<camino::Utf8PathBuf>>())
     }
 
-    pub async fn get_file_by_id(&self, id: &str, package: &fpm::Package) -> fpm::Result<fpm::File> {
-        let file_name = fpm::Config::get_file_name(&self.root, id)?;
+    pub async fn get_file_by_id(
+        &self,
+        id: &str,
+        package: &fastn::Package,
+    ) -> fastn::Result<fastn::File> {
+        let file_name = fastn::Config::get_file_name(&self.root, id)?;
         self.get_files(package)
             .await?
             .into_iter()
             .find(|v| v.get_id().eq(file_name.as_str()))
-            .ok_or_else(|| fpm::Error::UsageError {
+            .ok_or_else(|| fastn::Error::UsageError {
                 message: format!("No such file found: {}", id),
             })
     }
@@ -573,15 +584,15 @@ impl Config {
         &mut self,
         id: &str,
         cr_number: usize,
-    ) -> fpm::Result<fpm::File> {
+    ) -> fastn::Result<fastn::File> {
         let file_name = self.get_cr_file_and_resolve(id, cr_number).await?.0;
-        let id_without_cr_prefix = fpm::cr::get_id_from_cr_id(id, cr_number)?;
+        let id_without_cr_prefix = fastn::cr::get_id_from_cr_id(id, cr_number)?;
         let package = self
             .find_package_by_id(id_without_cr_prefix.as_str())
             .await?
             .1;
 
-        let mut file = fpm::get_file(
+        let mut file = fastn::get_file(
             package.name.to_string(),
             &self.root.join(file_name),
             &self.get_root_for_package(&package),
@@ -592,9 +603,9 @@ impl Config {
             let url = id_without_cr_prefix
                 .trim_end_matches("/index.html")
                 .trim_matches('/');
-            let extension = if matches!(file, fpm::File::Markdown(_)) {
+            let extension = if matches!(file, fastn::File::Markdown(_)) {
                 "/index.md".to_string()
-            } else if matches!(file, fpm::File::Ftd(_)) {
+            } else if matches!(file, fastn::File::Ftd(_)) {
                 "/index.ftd".to_string()
             } else {
                 "".to_string()
@@ -612,13 +623,13 @@ impl Config {
     // #[tracing::instrument(skip_all)]
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
-        package: &'a fpm::Package,
+        package: &'a fastn::Package,
         path: &'a str,
     ) -> Option<(
         String,
-        &'a fpm::Package,
+        &'a fastn::Package,
         String,
-        Option<&fpm::package::app::App>,
+        Option<&fastn::package::app::App>,
     )> {
         // Problem for recursive dependency is that only current package contains dependency,
         // dependent package does not contain dependency
@@ -662,24 +673,24 @@ impl Config {
         None
     }
 
-    pub async fn update_sitemap(&self, package: &fpm::Package) -> fpm::Result<fpm::Package> {
-        let fpm_path = &self.packages_root.join(&package.name).join("FPM.ftd");
+    pub async fn update_sitemap(&self, package: &fastn::Package) -> fastn::Result<fastn::Package> {
+        let fastn_path = &self.packages_root.join(&package.name).join("FASTN.ftd");
 
-        if !fpm_path.exists() {
+        if !fastn_path.exists() {
             let package = self.resolve_package(package).await?;
             self.add_package(&package);
         }
 
-        let fpm_doc = utils::fpm_doc(fpm_path).await?;
+        let fastn_doc = utils::fastn_doc(fastn_path).await?;
 
         let mut package = package.clone();
 
-        package.sitemap_temp = fpm_doc.get("fpm#sitemap")?;
-        package.dynamic_urls_temp = fpm_doc.get("fpm#dynamic-urls")?;
+        package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
+        package.dynamic_urls_temp = fastn_doc.get("fastn#dynamic-urls")?;
 
         package.sitemap = match package.sitemap_temp.as_ref() {
             Some(sitemap_temp) => {
-                let mut s = fpm::sitemap::Sitemap::parse(
+                let mut s = fastn::sitemap::Sitemap::parse(
                     sitemap_temp.body.as_str(),
                     &package,
                     &mut self.clone(), //TODO: totally wrong
@@ -693,10 +704,10 @@ impl Config {
             None => None,
         };
 
-        // Handling of `-- fpm.dynamic-urls:`
+        // Handling of `-- fastn.dynamic-urls:`
         package.dynamic_urls = {
             match &package.dynamic_urls_temp {
-                Some(urls_temp) => Some(fpm::sitemap::DynamicUrls::parse(
+                Some(urls_temp) => Some(fastn::sitemap::DynamicUrls::parse(
                     &self.global_ids,
                     &package.name,
                     urls_temp.body.as_str(),
@@ -710,7 +721,7 @@ impl Config {
     // -/kameri-app.herokuapp.com/
     // .packages/kameri-app.heroku.com/index.ftd
     #[tracing::instrument(skip_all)]
-    pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fpm::Result<fpm::File> {
+    pub async fn get_file_and_package_by_id(&mut self, path: &str) -> fastn::Result<fastn::File> {
         tracing::info!(path = path);
         // This function will return file and package by given path
         // path can be mounted(mount-point) with other dependencies
@@ -720,7 +731,7 @@ impl Config {
         let package1;
 
         // TODO: The shitty code written by me ever
-        let (path_with_package_name, document, path_params) = if !fpm::file::is_static(path)? {
+        let (path_with_package_name, document, path_params) = if !fastn::file::is_static(path)? {
             let (path_with_package_name, sanitized_package, sanitized_path) =
                 match self.get_mountpoint_sanitized_path(&self.package, path) {
                     Some((new_path, package, remaining_path, _)) => {
@@ -739,7 +750,7 @@ impl Config {
             // It will first resolve in sitemap
             // Then it will resolve in the dynamic urls
             let (document, path_params) =
-                fpm::sitemap::resolve(sanitized_package, &sanitized_path)?;
+                fastn::sitemap::resolve(sanitized_package, &sanitized_path)?;
 
             // document with package-name prefix
             let document = document.map(|doc| {
@@ -759,7 +770,7 @@ impl Config {
         if let Some(id) = document {
             let file_name = self.get_file_path_and_resolve(id.as_str()).await?;
             let package = self.find_package_by_id(id.as_str()).await?.1;
-            let file = fpm::get_file(
+            let file = fastn::get_file(
                 package.name.to_string(),
                 &self.root.join(file_name),
                 &self.get_root_for_package(&package),
@@ -776,7 +787,7 @@ impl Config {
             // .packages/fifthtry.github.io/doc-site/add-todo.ftd
 
             let package = self.find_package_by_id(path).await?.1;
-            let mut file = fpm::get_file(
+            let mut file = fastn::get_file(
                 package.name.to_string(),
                 &self.root.join(file_name.trim_start_matches('/')),
                 &self.get_root_for_package(&package),
@@ -785,9 +796,9 @@ impl Config {
 
             if path.contains("-/") {
                 let url = path.trim_end_matches("/index.html").trim_matches('/');
-                let extension = if matches!(file, fpm::File::Markdown(_)) {
+                let extension = if matches!(file, fastn::File::Markdown(_)) {
                     "/index.md".to_string()
-                } else if matches!(file, fpm::File::Ftd(_)) {
+                } else if matches!(file, fastn::File::Ftd(_)) {
                     "/index.ftd".to_string()
                 } else {
                     "".to_string()
@@ -802,11 +813,11 @@ impl Config {
     pub fn doc_id(&self) -> Option<String> {
         self.current_document
             .clone()
-            .map(|v| fpm::utils::id_to_path(v.as_str()))
+            .map(|v| fastn::utils::id_to_path(v.as_str()))
             .map(|v| v.trim().replace(std::path::MAIN_SEPARATOR, "/"))
     }
 
-    pub async fn get_file_path(&self, id: &str) -> fpm::Result<String> {
+    pub async fn get_file_path(&self, id: &str) -> fastn::Result<String> {
         let (package_name, package) = self.find_package_by_id(id).await?;
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
@@ -838,11 +849,11 @@ impl Config {
         ))
     }
 
-    pub(crate) async fn get_file_path_and_resolve(&self, id: &str) -> fpm::Result<String> {
+    pub(crate) async fn get_file_path_and_resolve(&self, id: &str) -> fastn::Result<String> {
         Ok(self.get_file_and_resolve(id).await?.0)
     }
 
-    pub(crate) async fn get_file_and_resolve(&self, id: &str) -> fpm::Result<(String, Vec<u8>)> {
+    pub(crate) async fn get_file_and_resolve(&self, id: &str) -> fastn::Result<(String, Vec<u8>)> {
         let (package_name, package) = self.find_package_by_id(id).await?;
 
         let package = self.resolve_package(&package).await?;
@@ -878,8 +889,8 @@ impl Config {
         &self,
         cr_id: &str,
         cr_number: usize,
-    ) -> fpm::Result<(String, Vec<u8>)> {
-        let id_without_cr_prefix = fpm::cr::get_id_from_cr_id(cr_id, cr_number)?;
+    ) -> fastn::Result<(String, Vec<u8>)> {
+        let id_without_cr_prefix = fastn::cr::get_id_from_cr_id(cr_id, cr_number)?;
         let (package_name, package) = self
             .find_package_by_id(id_without_cr_prefix.as_str())
             .await?;
@@ -900,7 +911,7 @@ impl Config {
             let mut id = match new_id.split_once("-/") {
                 Some((p1, p2))
                     if !(package_name.eq(self.package.name.as_str())
-                        && fpm::utils::ids_matches(p2, "about")) =>
+                        && fastn::utils::ids_matches(p2, "about")) =>
                 // full id in case of about page as it's a special page
                 {
                     p1.to_string()
@@ -917,11 +928,11 @@ impl Config {
         };
 
         if package.name.eq(self.package.name.as_str()) {
-            let file_info_map = fpm::cr::cr_clone_file_info(self, cr_number).await?;
-            let file_info = fpm::package::package_doc::file_id_to_names(id.as_str())
+            let file_info_map = fastn::cr::cr_clone_file_info(self, cr_number).await?;
+            let file_info = fastn::package::package_doc::file_id_to_names(id.as_str())
                 .into_iter()
                 .find_map(|id| file_info_map.get(&id))
-                .ok_or_else(|| fpm::Error::UsageError {
+                .ok_or_else(|| fastn::Error::UsageError {
                     message: format!("{} is not found", cr_id),
                 })?;
 
@@ -937,7 +948,10 @@ impl Config {
     }
 
     /// Return (package name or alias, package)
-    pub(crate) async fn find_package_by_id(&self, id: &str) -> fpm::Result<(String, fpm::Package)> {
+    pub(crate) async fn find_package_by_id(
+        &self,
+        id: &str,
+    ) -> fastn::Result<(String, fastn::Package)> {
         let sanitized_id = self
             .get_mountpoint_sanitized_path(&self.package, id)
             .map(|(x, _, _, _)| x)
@@ -967,10 +981,10 @@ impl Config {
         }
 
         if let Some(package_root) =
-            utils::find_root_for_file(&self.packages_root.join(id), "FPM.ftd")
+            utils::find_root_for_file(&self.packages_root.join(id), "FASTN.ftd")
         {
-            let mut package = fpm::Package::new("unknown-package");
-            package.resolve(&package_root.join("FPM.ftd")).await?;
+            let mut package = fastn::Package::new("unknown-package");
+            package.resolve(&package_root.join("FASTN.ftd")).await?;
             self.add_package(&package);
             return Ok((package.name.to_string(), package));
         }
@@ -981,8 +995,8 @@ impl Config {
     pub(crate) async fn download_required_file(
         root: &camino::Utf8PathBuf,
         id: &str,
-        package: &fpm::Package,
-    ) -> fpm::Result<String> {
+        package: &fastn::Package,
+    ) -> fastn::Result<String> {
         use tokio::io::AsyncWriteExt;
 
         let id = id.trim_start_matches(package.name.as_str());
@@ -990,7 +1004,7 @@ impl Config {
         let base = package
             .download_base_url
             .clone()
-            .ok_or_else(|| fpm::Error::PackageError {
+            .ok_or_else(|| fastn::Error::PackageError {
                 message: "package base not found".to_string(),
             })?;
 
@@ -1021,7 +1035,7 @@ impl Config {
                     .await?;
                 return Ok(format!(".packages/{}/README.md", package.name));
             }
-            return Err(fpm::Error::UsageError {
+            return Err(fastn::Error::UsageError {
                 message: "File not found".to_string(),
             });
         }
@@ -1085,12 +1099,12 @@ impl Config {
                 .await?;
             return Ok(format!(".packages/{}/{}/README.md", package.name, id));
         }
-        Err(fpm::Error::UsageError {
+        Err(fastn::Error::UsageError {
             message: "File not found".to_string(),
         })
     }
 
-    pub(crate) fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
+    pub(crate) fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fastn::Result<String> {
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
         if let Some(new_id) = id.strip_prefix("-/") {
@@ -1111,7 +1125,7 @@ impl Config {
             if root.join(format!("{}README.md", add_packages)).exists() {
                 return Ok(format!("{}README.md", add_packages));
             }
-            return Err(fpm::Error::UsageError {
+            return Err(fastn::Error::UsageError {
                 message: "File not found".to_string(),
             });
         }
@@ -1134,14 +1148,14 @@ impl Config {
         {
             return Ok(format!("{}{}/README.md", add_packages, id));
         }
-        Err(fpm::Error::UsageError {
+        Err(fastn::Error::UsageError {
             message: "File not found".to_string(),
         })
     }
 
     pub(crate) async fn get_assets(
         &self,
-    ) -> fpm::Result<std::collections::HashMap<String, String>> {
+    ) -> fastn::Result<std::collections::HashMap<String, String>> {
         use itertools::Itertools;
 
         let mut asset_documents = std::collections::HashMap::new();
@@ -1179,50 +1193,50 @@ impl Config {
         Ok(asset_documents)
     }
 
-    async fn get_root_path(directory: &camino::Utf8PathBuf) -> fpm::Result<camino::Utf8PathBuf> {
-        if let Some(fpm_ftd_root) = utils::find_root_for_file(directory, "FPM.ftd") {
-            return Ok(fpm_ftd_root);
+    async fn get_root_path(directory: &camino::Utf8PathBuf) -> fastn::Result<camino::Utf8PathBuf> {
+        if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd") {
+            return Ok(fastn_ftd_root);
         }
-        let fpm_manifest_path = match utils::find_root_for_file(directory, "FPM.manifest.ftd") {
-            Some(fpm_manifest_path) => fpm_manifest_path,
+        let fastn_manifest_path = match utils::find_root_for_file(directory, "fastn.manifest.ftd") {
+            Some(fastn_manifest_path) => fastn_manifest_path,
             None => {
-                return Err(fpm::Error::UsageError {
-                    message: "FPM.ftd or FPM.manifest.ftd not found in any parent directory"
+                return Err(fastn::Error::UsageError {
+                    message: "FASTN.ftd or fastn.manifest.ftd not found in any parent directory"
                         .to_string(),
                 });
             }
         };
 
-        let doc = tokio::fs::read_to_string(fpm_manifest_path.join("FPM.manifest.ftd"));
-        let lib = fpm::FPMLibrary::default();
-        let fpm_manifest_processed =
-            match fpm::doc::parse_ftd("FPM.manifest", doc.await?.as_str(), &lib) {
-                Ok(fpm_manifest_processed) => fpm_manifest_processed,
+        let doc = tokio::fs::read_to_string(fastn_manifest_path.join("fastn.manifest.ftd"));
+        let lib = fastn::FastnLibrary::default();
+        let fastn_manifest_processed =
+            match fastn::doc::parse_ftd("fastn.manifest", doc.await?.as_str(), &lib) {
+                Ok(fastn_manifest_processed) => fastn_manifest_processed,
                 Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.manifest.ftd: {:?}", &e),
+                    return Err(fastn::Error::PackageError {
+                        message: format!("failed to parse fastn.manifest.ftd: {:?}", &e),
                     });
                 }
             };
 
-        let new_package_root = fpm_manifest_processed
-            .get::<String>("FPM.manifest#package-root")?
+        let new_package_root = fastn_manifest_processed
+            .get::<String>("fastn.manifest#package-root")?
             .as_str()
             .split('/')
-            .fold(fpm_manifest_path, |accumulator, part| {
+            .fold(fastn_manifest_path, |accumulator, part| {
                 accumulator.join(part)
             });
 
-        if new_package_root.join("FPM.ftd").exists() {
+        if new_package_root.join("FASTN.ftd").exists() {
             Ok(new_package_root)
         } else {
-            Err(fpm::Error::PackageError {
-                message: "Can't find FPM.ftd. The path specified in FPM.manifest.ftd doesn't contain the FPM.ftd file".to_string(),
+            Err(fastn::Error::PackageError {
+                message: "Can't find FASTN.ftd. The path specified in fastn.manifest.ftd doesn't contain the FASTN.ftd file".to_string(),
             })
         }
     }
 
-    pub fn add_edition(self, edition: Option<String>) -> fpm::Result<Self> {
+    pub fn add_edition(self, edition: Option<String>) -> fastn::Result<Self> {
         match edition {
             Some(e) => {
                 let mut config = self;
@@ -1262,8 +1276,8 @@ impl Config {
     pub async fn read(
         root: Option<String>,
         resolve_sitemap: bool,
-        req: Option<&fpm::http::Request>,
-    ) -> fpm::Result<fpm::Config> {
+        req: Option<&fastn::http::Request>,
+    ) -> fastn::Result<fastn::Config> {
         let (root, original_directory) = match root {
             Some(r) => {
                 let root: camino::Utf8PathBuf = tokio::fs::canonicalize(r.as_str())
@@ -1279,13 +1293,13 @@ impl Config {
                         .await?
                         .try_into()?;
                 (
-                    fpm::Config::get_root_path(&original_directory).await?,
+                    fastn::Config::get_root_path(&original_directory).await?,
                     original_directory,
                 )
             }
         };
-        let fpm_doc = utils::fpm_doc(&root.join("FPM.ftd")).await?;
-        let package = fpm::Package::from_fpm_doc(&root, &fpm_doc)?;
+        let fastn_doc = utils::fastn_doc(&root.join("FASTN.ftd")).await?;
+        let package = fastn::Package::from_fastn_doc(&root, &fastn_doc)?;
         let mut config = Config {
             package: package.clone(),
             packages_root: root.clone().join(".packages"),
@@ -1319,7 +1333,7 @@ impl Config {
 
             match sitemap {
                 Some(sitemap_temp) => {
-                    let mut s = fpm::sitemap::Sitemap::parse(
+                    let mut s = fastn::sitemap::Sitemap::parse(
                         sitemap_temp.body.as_str(),
                         &package,
                         &mut config,
@@ -1334,10 +1348,10 @@ impl Config {
             }
         };
 
-        // Handling of `-- fpm.dynamic-urls:`
+        // Handling of `-- fastn.dynamic-urls:`
         config.package.dynamic_urls = {
             match &package.dynamic_urls_temp {
-                Some(urls_temp) => Some(fpm::sitemap::DynamicUrls::parse(
+                Some(urls_temp) => Some(fastn::sitemap::DynamicUrls::parse(
                     &config.global_ids,
                     &package.name,
                     urls_temp.body.as_str(),
@@ -1348,9 +1362,9 @@ impl Config {
 
         config.add_package(&package);
 
-        // fpm installed Apps
+        // fastn installed Apps
         config.package.apps = {
-            let apps_temp: Vec<fpm::package::app::AppTemp> = fpm_doc.get("fpm#app")?;
+            let apps_temp: Vec<fastn::package::app::AppTemp> = fastn_doc.get("fastn#app")?;
             let mut apps = vec![];
             for app in apps_temp.into_iter() {
                 apps.push(app.into_app(&config).await?);
@@ -1361,15 +1375,15 @@ impl Config {
         Ok(config)
     }
 
-    pub fn set_request(mut self, req: fpm::http::Request) -> Self {
+    pub fn set_request(mut self, req: fastn::http::Request) -> Self {
         self.request = Some(req);
         self
     }
 
     pub(crate) async fn resolve_package(
         &self,
-        package: &fpm::Package,
-    ) -> fpm::Result<fpm::Package> {
+        package: &fastn::Package,
+    ) -> fastn::Result<fastn::Package> {
         if self.package.name.eq(package.name.as_str()) {
             return Ok(self.package.clone());
         }
@@ -1386,36 +1400,39 @@ impl Config {
         Ok(package)
     }
 
-    pub(crate) fn add_package(&self, package: &fpm::Package) {
+    pub(crate) fn add_package(&self, package: &fastn::Package) {
         self.all_packages
             .borrow_mut()
             .insert(package.name.to_string(), package.to_owned());
     }
 
     #[allow(dead_code)]
-    pub(crate) fn get_fpm_document(&self, package_name: &str) -> fpm::Result<ftd::p2::Document> {
-        let package = fpm::Package::new(package_name);
+    pub(crate) fn get_fastn_document(
+        &self,
+        package_name: &str,
+    ) -> fastn::Result<ftd::p2::Document> {
+        let package = fastn::Package::new(package_name);
         let root = self.get_root_for_package(&package);
-        let package_fpm_path = root.join("FPM.ftd");
-        let doc = std::fs::read_to_string(package_fpm_path)?;
-        let lib = fpm::FPMLibrary::default();
-        Ok(fpm::doc::parse_ftd("FPM", doc.as_str(), &lib)?)
+        let package_fastn_path = root.join("FASTN.ftd");
+        let doc = std::fs::read_to_string(package_fastn_path)?;
+        let lib = fastn::FastnLibrary::default();
+        Ok(fastn::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
     }
 
     pub(crate) async fn get_reserved_crs(
         &self,
         number_of_crs_to_reserve: Option<usize>,
-    ) -> fpm::Result<Vec<i32>> {
+    ) -> fastn::Result<Vec<i32>> {
         let number_of_crs_to_reserve =
             if let Some(number_of_crs_to_reserve) = number_of_crs_to_reserve {
                 number_of_crs_to_reserve
             } else {
-                fpm::NUMBER_OF_CRS_TO_RESERVE
+                fastn::NUMBER_OF_CRS_TO_RESERVE
             };
         if !cfg!(feature = "remote") {
-            return fpm::usage_error("Can be used by remote only".to_string());
+            return fastn::usage_error("Can be used by remote only".to_string());
         }
-        let value = fpm::cache::update(
+        let value = fastn::cache::update(
             self.remote_cr().to_string().as_str(),
             number_of_crs_to_reserve,
         )
@@ -1428,10 +1445,10 @@ impl Config {
 
     pub(crate) async fn can_read(
         &self,
-        req: &fpm::http::Request,
+        req: &fastn::http::Request,
         document_path: &str,
         with_confidential: bool, // can read should use confidential property or not
-    ) -> fpm::Result<bool> {
+    ) -> fastn::Result<bool> {
         // Function Docs
         // If user can read the document based on readers, user will have read access to page
         // If user cannot read the document based on readers, and if confidential is false so user
@@ -1455,9 +1472,9 @@ impl Config {
                 return Ok(true);
             }
             let access_identities =
-                fpm::user_group::access_identities(self, req, &document_name, true).await?;
+                fastn::user_group::access_identities(self, req, &document_name, true).await?;
 
-            let belongs_to = fpm::user_group::belongs_to(
+            let belongs_to = fastn::user_group::belongs_to(
                 self,
                 document_readers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
@@ -1476,18 +1493,18 @@ impl Config {
 
     pub(crate) async fn can_write(
         &self,
-        req: &fpm::http::Request,
+        req: &fastn::http::Request,
         document_path: &str,
-    ) -> fpm::Result<bool> {
+    ) -> fastn::Result<bool> {
         use itertools::Itertools;
         let document_name = self.document_name_with_default(document_path);
         if let Some(sitemap) = &self.package.sitemap {
             // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
             let document_writers = sitemap.writers(document_name.as_str(), &self.package.groups);
             let access_identities =
-                fpm::user_group::access_identities(self, req, &document_name, false).await?;
+                fastn::user_group::access_identities(self, req, &document_name, false).await?;
 
-            return fpm::user_group::belongs_to(
+            return fastn::user_group::belongs_to(
                 self,
                 document_writers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),

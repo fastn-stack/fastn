@@ -4,7 +4,7 @@ import json
 
 loop_body_template = """
 
--- import: fpm/processors
+-- import: fastn/processors
 
 
 -- component check-loop:

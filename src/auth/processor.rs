@@ -2,12 +2,12 @@
 pub fn user_details<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     let mut found_cookie = false;
     let is_login = match &config.request {
         Some(req) => {
-            for auth_provider in fpm::auth::AuthProviders::AUTH_ITER.iter() {
+            for auth_provider in fastn::auth::AuthProviders::AUTH_ITER.iter() {
                 if req.cookie(auth_provider.as_str()).is_some() {
                     found_cookie = true;
                 }

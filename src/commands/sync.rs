@@ -1,36 +1,36 @@
-pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
+pub async fn sync(config: &fastn::Config, files: Option<Vec<String>>) -> fastn::Result<()> {
     // Read All the Document
     // Get all the updated, added and deleted files
     // Get Updated Files -> If content differs from latest snapshot
     // Get Added Files -> If files does not present in latest snapshot
     // Get Deleted Files -> If file present in latest.ftd and not present in directory
-    // Send to fpm server
+    // Send to fastn server
 
     let documents = if let Some(ref files) = files {
         let files = files
             .iter()
             .map(|x| config.root.join(x))
             .collect::<Vec<camino::Utf8PathBuf>>();
-        fpm::paths_to_files(config.package.name.as_str(), files, config.root.as_path()).await?
+        fastn::paths_to_files(config.package.name.as_str(), files, config.root.as_path()).await?
     } else {
         config.get_files(&config.package).await?
     };
 
     tokio::fs::create_dir_all(config.history_dir()).await?;
 
-    let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
+    let snapshots = fastn::snapshot::get_latest_snapshots(&config.root).await?;
 
     let latest_ftd = tokio::fs::read_to_string(config.history_dir().join(".latest.ftd"))
         .await
         .unwrap_or_else(|_| "".to_string());
 
     let changed_files = get_changed_files(config, &documents, &snapshots).await?;
-    let request = fpm::apis::sync::SyncRequest {
+    let request = fastn::apis::sync::SyncRequest {
         files: changed_files,
         package_name: config.package.name.to_string(),
         latest_ftd,
     };
-    let response = send_to_fpm_serve(&request).await?;
+    let response = send_to_fastn_serve(&request).await?;
     update_current_directory(config, &response.files).await?;
     update_history(config, &response.dot_history, &response.latest_ftd).await?;
     on_conflict(config, &response, &request).await?;
@@ -38,7 +38,7 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
 
     // Tumhe chalana hi nahi chahte hai hum, koi aur chalaye to chalaye
     if false {
-        let timestamp = fpm::timestamp_nanosecond();
+        let timestamp = fastn::timestamp_nanosecond();
         let mut modified_files = vec![];
         let mut new_snapshots = vec![];
         for doc in documents {
@@ -59,7 +59,7 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
                     continue;
                 }
                 if !snapshot_id.contains(k) {
-                    new_snapshots.push(fpm::Snapshot {
+                    new_snapshots.push(fastn::Snapshot {
                         filename: k.clone(),
                         timestamp: *timestamp,
                     })
@@ -76,7 +76,7 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
         if modified_files.is_empty() {
             println!("Everything is upto date.");
         } else {
-            fpm::snapshot::create_latest_snapshots(config, &new_snapshots).await?;
+            fastn::snapshot::create_latest_snapshots(config, &new_snapshots).await?;
             println!(
                 "Repo for {} is github, directly syncing with .history.",
                 config.package.name
@@ -90,17 +90,17 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
 }
 
 async fn get_changed_files(
-    config: &fpm::Config,
-    files: &[fpm::File],
+    config: &fastn::Config,
+    files: &[fastn::File],
     snapshots: &std::collections::BTreeMap<String, u128>,
-) -> fpm::Result<Vec<fpm::apis::sync::SyncRequestFile>> {
+) -> fastn::Result<Vec<fastn::apis::sync::SyncRequestFile>> {
     use sha2::Digest;
     // Get all the updated, added and deleted files
     // Get Updated Files -> If content differs from latest snapshot
     // Get Added Files -> If files does not present in latest snapshot
     // Get Deleted Files -> If file present in latest.ftd and not present in files directory
 
-    let workspace = fpm::snapshot::get_workspace(config).await?;
+    let workspace = fastn::snapshot::get_workspace(config).await?;
     let mut changed_files = Vec::new();
     for document in files.iter() {
         match workspace.get(&document.get_id()) {
@@ -108,8 +108,11 @@ async fn get_changed_files(
             _ => {}
         }
         if let Some(timestamp) = snapshots.get(&document.get_id()) {
-            let snapshot_file_path =
-                fpm::utils::history_path(&document.get_id(), &document.get_base_path(), timestamp);
+            let snapshot_file_path = fastn::utils::history_path(
+                &document.get_id(),
+                &document.get_base_path(),
+                timestamp,
+            );
             let snapshot_file_content = tokio::fs::read(&snapshot_file_path).await?;
             // Update
             let current_file_content = document.get_content();
@@ -119,13 +122,13 @@ async fn get_changed_files(
                 continue;
             }
 
-            changed_files.push(fpm::apis::sync::SyncRequestFile::Update {
+            changed_files.push(fastn::apis::sync::SyncRequestFile::Update {
                 path: document.get_id(),
                 content: current_file_content,
             });
         } else {
             // Added
-            changed_files.push(fpm::apis::sync::SyncRequestFile::Add {
+            changed_files.push(fastn::apis::sync::SyncRequestFile::Add {
                 path: document.get_id(),
                 content: document.get_content(),
             });
@@ -139,7 +142,7 @@ async fn get_changed_files(
     let deleted_files = snapshots
         .keys()
         .filter(|x| !files_path.contains(*x))
-        .map(|f| fpm::apis::sync::SyncRequestFile::Delete {
+        .map(|f| fastn::apis::sync::SyncRequestFile::Delete {
             path: f.to_string(),
         });
 
@@ -149,10 +152,10 @@ async fn get_changed_files(
 }
 
 async fn write(
-    doc: &fpm::File,
+    doc: &fastn::File,
     timestamp: u128,
     snapshots: &std::collections::BTreeMap<String, u128>,
-) -> fpm::Result<(fpm::Snapshot, bool)> {
+) -> fastn::Result<(fastn::Snapshot, bool)> {
     use sha2::Digest;
     if let Some((dir, _)) = doc.get_id().rsplit_once('/') {
         tokio::fs::create_dir_all(
@@ -164,13 +167,13 @@ async fn write(
     }
 
     if let Some(timestamp) = snapshots.get(&doc.get_id()) {
-        let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
+        let path = fastn::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
         if let Ok(current_doc) = tokio::fs::read(&doc.get_full_path()).await {
             let existing_doc = tokio::fs::read(&path).await?;
 
             if sha2::Sha256::digest(current_doc).eq(&sha2::Sha256::digest(existing_doc)) {
                 return Ok((
-                    fpm::Snapshot {
+                    fastn::Snapshot {
                         filename: doc.get_id(),
                         timestamp: *timestamp,
                     },
@@ -180,12 +183,12 @@ async fn write(
         }
     }
 
-    let new_file_path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), &timestamp);
+    let new_file_path = fastn::utils::history_path(&doc.get_id(), &doc.get_base_path(), &timestamp);
 
     tokio::fs::copy(doc.get_full_path(), new_file_path).await?;
 
     Ok((
-        fpm::Snapshot {
+        fastn::Snapshot {
             filename: doc.get_id(),
             timestamp,
         },
@@ -193,13 +196,13 @@ async fn write(
     ))
 }
 
-async fn send_to_fpm_serve(
-    data: &fpm::apis::sync::SyncRequest,
-) -> fpm::Result<fpm::apis::sync::SyncResponse> {
+async fn send_to_fastn_serve(
+    data: &fastn::apis::sync::SyncRequest,
+) -> fastn::Result<fastn::apis::sync::SyncResponse> {
     #[derive(serde::Deserialize, std::fmt::Debug)]
     struct ApiResponse {
         message: Option<String>,
-        data: Option<fpm::apis::sync::SyncResponse>,
+        data: Option<fastn::apis::sync::SyncResponse>,
         success: bool,
     }
 
@@ -207,7 +210,7 @@ async fn send_to_fpm_serve(
     let response: ApiResponse =
         crate::http::post_json("http://127.0.0.1:8000/-/sync/", data).await?;
     if !response.success {
-        return Err(fpm::Error::APIResponseError(
+        return Err(fastn::Error::APIResponseError(
             response
                 .message
                 .unwrap_or_else(|| "Some Error occurred".to_string()),
@@ -216,38 +219,38 @@ async fn send_to_fpm_serve(
 
     match response.data {
         Some(data) => Ok(data),
-        None => Err(fpm::Error::APIResponseError(
+        None => Err(fastn::Error::APIResponseError(
             "Unexpected API behaviour".to_string(),
         )),
     }
 }
 
 async fn update_current_directory(
-    config: &fpm::Config,
-    files: &[fpm::apis::sync::SyncResponseFile],
-) -> fpm::Result<()> {
+    config: &fastn::Config,
+    files: &[fastn::apis::sync::SyncResponseFile],
+) -> fastn::Result<()> {
     for file in files {
         match file {
-            fpm::apis::sync::SyncResponseFile::Add { path, content, .. } => {
-                fpm::utils::update1(&config.root, path, content).await?;
+            fastn::apis::sync::SyncResponseFile::Add { path, content, .. } => {
+                fastn::utils::update1(&config.root, path, content).await?;
             }
-            fpm::apis::sync::SyncResponseFile::Update {
+            fastn::apis::sync::SyncResponseFile::Update {
                 path,
                 content,
                 status,
             } => {
-                if fpm::apis::sync::SyncStatus::CloneDeletedRemoteEdited.eq(status) {
+                if fastn::apis::sync::SyncStatus::CloneDeletedRemoteEdited.eq(status) {
                     println!("CloneDeletedRemoteEdit: {}", path);
                 }
-                if fpm::apis::sync::SyncStatus::CloneEditedRemoteDeleted.eq(status) {
+                if fastn::apis::sync::SyncStatus::CloneEditedRemoteDeleted.eq(status) {
                     println!("CloneEditedRemoteDeleted: {}", path);
                 }
-                if fpm::apis::sync::SyncStatus::Conflict.eq(status) {
+                if fastn::apis::sync::SyncStatus::Conflict.eq(status) {
                     println!("Conflict: {}", path);
                 }
-                fpm::utils::update1(&config.root, path, content).await?;
+                fastn::utils::update1(&config.root, path, content).await?;
             }
-            fpm::apis::sync::SyncResponseFile::Delete { path, .. } => {
+            fastn::apis::sync::SyncResponseFile::Delete { path, .. } => {
                 if config.root.join(path).exists() {
                     tokio::fs::remove_file(config.root.join(path)).await?;
                 }
@@ -258,24 +261,24 @@ async fn update_current_directory(
 }
 
 async fn update_history(
-    config: &fpm::Config,
-    files: &[fpm::apis::sync::File],
+    config: &fastn::Config,
+    files: &[fastn::apis::sync::File],
     latest_ftd: &str,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     for file in files {
-        fpm::utils::update1(&config.history_dir(), file.path.as_str(), &file.content).await?;
+        fastn::utils::update1(&config.history_dir(), file.path.as_str(), &file.content).await?;
     }
-    fpm::utils::update1(&config.history_dir(), ".latest.ftd", latest_ftd.as_bytes()).await?;
+    fastn::utils::update1(&config.history_dir(), ".latest.ftd", latest_ftd.as_bytes()).await?;
     Ok(())
 }
 
 // Steps
-// create .fpm/workspace.ftd
-// create .fpm/conflict directory
+// create .fastn/workspace.ftd
+// create .fastn/conflict directory
 // If conflict occur
 // - In file content will be with conflict markers
 // - In conflict/<file.ftd> will contain client's content
-// - In .fpm/workspace.ftd will have entry of index.ftd with data
+// - In .fastn/workspace.ftd will have entry of index.ftd with data
 // - name: file_name
 // - base: last successful merge version from request `latest.ftd`
 // - conflicted_version: from response `latest.ftd`
@@ -283,12 +286,12 @@ async fn update_history(
 
 fn get_file_content<'a>(
     file_path: &'a str,
-    files: &'a [fpm::apis::sync::SyncRequestFile],
+    files: &'a [fastn::apis::sync::SyncRequestFile],
 ) -> Option<&'a Vec<u8>> {
     for file in files {
         match file {
-            fpm::apis::sync::SyncRequestFile::Add { path, content }
-            | fpm::apis::sync::SyncRequestFile::Update { path, content } => {
+            fastn::apis::sync::SyncRequestFile::Add { path, content }
+            | fastn::apis::sync::SyncRequestFile::Update { path, content } => {
                 if file_path.eq(path) {
                     return Some(content);
                 }
@@ -300,33 +303,33 @@ fn get_file_content<'a>(
 }
 
 async fn on_conflict(
-    config: &fpm::Config,
-    response: &fpm::apis::sync::SyncResponse,
-    request: &fpm::apis::sync::SyncRequest,
-) -> fpm::Result<()> {
+    config: &fastn::Config,
+    response: &fastn::apis::sync::SyncResponse,
+    request: &fastn::apis::sync::SyncRequest,
+) -> fastn::Result<()> {
     use itertools::Itertools;
 
-    let client_snapshot = fpm::snapshot::resolve_snapshots(&request.latest_ftd).await?;
-    let mut workspace = fpm::snapshot::get_workspace(config).await?;
+    let client_snapshot = fastn::snapshot::resolve_snapshots(&request.latest_ftd).await?;
+    let mut workspace = fastn::snapshot::get_workspace(config).await?;
 
-    fn error(msg: &str) -> fpm::Error {
-        fpm::Error::APIResponseError(msg.to_string())
+    fn error(msg: &str) -> fastn::Error {
+        fastn::Error::APIResponseError(msg.to_string())
     }
 
     for file in response.files.iter() {
         match file {
-            fpm::apis::sync::SyncResponseFile::Update { path, status, .. }
-            | fpm::apis::sync::SyncResponseFile::Add { path, status, .. }
-            | fpm::apis::sync::SyncResponseFile::Delete { path, status, .. } => {
-                if fpm::apis::sync::SyncStatus::Conflict.eq(status) {
+            fastn::apis::sync::SyncResponseFile::Update { path, status, .. }
+            | fastn::apis::sync::SyncResponseFile::Add { path, status, .. }
+            | fastn::apis::sync::SyncResponseFile::Delete { path, status, .. } => {
+                if fastn::apis::sync::SyncStatus::Conflict.eq(status) {
                     let server_snapshot =
-                        fpm::snapshot::resolve_snapshots(&response.latest_ftd).await?;
+                        fastn::snapshot::resolve_snapshots(&response.latest_ftd).await?;
                     let content = get_file_content(path, request.files.as_slice())
                         .ok_or_else(|| error("File should be available in request file"))?;
-                    fpm::utils::update1(&config.conflicted_dir(), path, content).await?;
+                    fastn::utils::update1(&config.conflicted_dir(), path, content).await?;
                     workspace.insert(
                         path.to_string(),
-                        fpm::snapshot::Workspace {
+                        fastn::snapshot::Workspace {
                             filename: path.to_string(),
                             base: *client_snapshot
                                 .get(path)
@@ -334,16 +337,16 @@ async fn on_conflict(
                             conflicted: *server_snapshot
                                 .get(path)
                                 .ok_or_else(|| error("File should be available in request file"))?,
-                            workspace: fpm::snapshot::WorkspaceType::Conflicted,
+                            workspace: fastn::snapshot::WorkspaceType::Conflicted,
                         },
                     );
-                } else if fpm::apis::sync::SyncStatus::CloneEditedRemoteDeleted.eq(status) {
+                } else if fastn::apis::sync::SyncStatus::CloneEditedRemoteDeleted.eq(status) {
                     let content = get_file_content(path, request.files.as_slice())
                         .ok_or_else(|| error("File should be available in request file"))?;
-                    fpm::utils::update1(&config.conflicted_dir(), path, content).await?;
+                    fastn::utils::update1(&config.conflicted_dir(), path, content).await?;
                     workspace.insert(
                         path.to_string(),
-                        fpm::snapshot::Workspace {
+                        fastn::snapshot::Workspace {
                             filename: path.to_string(),
                             base: *client_snapshot
                                 .get(path)
@@ -351,15 +354,15 @@ async fn on_conflict(
                             conflicted: *client_snapshot
                                 .get(path)
                                 .ok_or_else(|| error("File should be available in request file"))?,
-                            workspace: fpm::snapshot::WorkspaceType::CloneEditedRemoteDeleted,
+                            workspace: fastn::snapshot::WorkspaceType::CloneEditedRemoteDeleted,
                         },
                     );
-                } else if fpm::apis::sync::SyncStatus::CloneDeletedRemoteEdited.eq(status) {
+                } else if fastn::apis::sync::SyncStatus::CloneDeletedRemoteEdited.eq(status) {
                     let server_snapshot =
-                        fpm::snapshot::resolve_snapshots(&response.latest_ftd).await?;
+                        fastn::snapshot::resolve_snapshots(&response.latest_ftd).await?;
                     workspace.insert(
                         path.to_string(),
-                        fpm::snapshot::Workspace {
+                        fastn::snapshot::Workspace {
                             filename: path.to_string(),
                             base: *client_snapshot
                                 .get(path)
@@ -367,7 +370,7 @@ async fn on_conflict(
                             conflicted: *server_snapshot
                                 .get(path)
                                 .ok_or_else(|| error("File should be available in request file"))?,
-                            workspace: fpm::snapshot::WorkspaceType::CloneDeletedRemoteEdited,
+                            workspace: fastn::snapshot::WorkspaceType::CloneDeletedRemoteEdited,
                         },
                     );
                 }
@@ -375,16 +378,16 @@ async fn on_conflict(
         }
     }
 
-    fpm::snapshot::create_workspace(config, workspace.into_values().collect_vec().as_slice())
+    fastn::snapshot::create_workspace(config, workspace.into_values().collect_vec().as_slice())
         .await?;
 
     Ok(())
 }
 
-async fn collect_garbage(config: &fpm::Config) -> fpm::Result<()> {
+async fn collect_garbage(config: &fastn::Config) -> fastn::Result<()> {
     use itertools::Itertools;
 
-    let mut workspaces = fpm::snapshot::get_workspace(config).await?;
+    let mut workspaces = fastn::snapshot::get_workspace(config).await?;
 
     let paths = workspaces
         .iter()
@@ -397,7 +400,7 @@ async fn collect_garbage(config: &fpm::Config) -> fpm::Result<()> {
         workspaces.remove(&path);
     }
 
-    fpm::snapshot::create_workspace(config, workspaces.into_values().collect_vec().as_slice())
+    fastn::snapshot::create_workspace(config, workspaces.into_values().collect_vec().as_slice())
         .await?;
     Ok(())
 }

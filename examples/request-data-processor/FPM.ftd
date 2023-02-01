@@ -1,10 +1,10 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: request-data-processor
+-- fastn.package: request-data-processor
 download-base-url: https://www.github.com/
 
 
--- fpm.dynamic-urls:
+-- fastn.dynamic-urls:
 
 # Home
 

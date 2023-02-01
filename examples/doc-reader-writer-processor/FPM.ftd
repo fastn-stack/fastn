@@ -1,19 +1,19 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: doc-reader-writer-processor
+-- fastn.package: doc-reader-writer-processor
 download-base-url: https://www.github.com/
 
--- fpm.user-group: fifthtry-people
+-- fastn.user-group: fifthtry-people
 title: FifthTry People
 github-team: FifthTry/everyone
 discord-channel: discord-server-id
 
--- fpm.user-group: foo-people
+-- fastn.user-group: foo-people
 title: Foo People
 github-team: FifthTry/foo
 
 
--- fpm.sitemap:
+-- fastn.sitemap:
 
 # Home: /
 writers: foo-people

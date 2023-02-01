@@ -2,7 +2,7 @@ pub async fn process<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let (headers, line_number) = if let Ok(val) = value.get_record(doc.name) {
         (val.2.to_owned(), val.5.to_owned())
@@ -36,7 +36,7 @@ pub async fn process<'a>(
     };
 
     let (_, mut url, conf) =
-        fpm::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
+        fastn::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
             ftd::interpreter2::Error::ParseError {
                 message: format!("invalid url: {:?}", e),
                 doc_id: doc.name.to_string(),

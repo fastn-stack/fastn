@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
 
 -- ftd.column:
@@ -6,17 +6,17 @@ padding-vertical: 40
 padding-horizontal: 20
 width: fill
 
--- h0: $fpm.i18n.language-detail-page
+-- h0: $fastn.i18n.language-detail-page
 
--- title: $fpm.package-title
-subtitle: key-value: $fpm.i18n.last-modified-on
-> value: $fpm.last-modified-on
+-- title: $fastn.package-title
+subtitle: key-value: $fastn.i18n.last-modified-on
+> value: $fastn.last-modified-on
 > default: Never synced
 
-$fpm.i18n.language-detail-page-body
+$fastn.i18n.language-detail-page-body
 
--- key-value: $fpm.i18n.total-number-of-documents
-value: $fpm.number-of-documents
+-- key-value: $fastn.i18n.total-number-of-documents
+value: $fastn.number-of-documents
 default: Not known
 
 -- files-status:
@@ -61,10 +61,10 @@ region: title
 /style: bold
 /font: apple-system
 align: center
-link: $fpm.home-url
+link: $fastn.home-url
 
---- ftd.text: $fpm.language
-if: $fpm.language is not null
+--- ftd.text: $fastn.language
+if: $fastn.language is not null
 border-radius: 10
 /background-color: #f3f3f3
 padding-vertical: 5
@@ -145,38 +145,38 @@ width: fill
 padding: 10
 border-top-radius: 5
 
---- ftd.text: $fpm.i18n.document
+--- ftd.text: $fastn.i18n.document
 width: percent 50
 padding: 5
 
---- ftd.text: $fpm.i18n.status
+--- ftd.text: $fastn.i18n.status
 width: percent 50
 padding: 5
 
 --- container: ftd.main
 
 --- print: $obj
-$loop$: $fpm.missing-files as $obj
-status: ftd.text: $fpm.i18n.missing
+$loop$: $fastn.missing-files as $obj
+status: ftd.text: $fastn.i18n.missing
 > padding: 5
 > border-radius: 10
 
 --- print: $obj
-$loop$: $fpm.never-marked-files as $obj
-status: ftd.text: $fpm.i18n.never-marked
-> padding: 5
-> border-radius: 10
-
-
---- print: $obj
-$loop$: $fpm.outdated-files as $obj
-status: ftd.text: $fpm.i18n.out-dated
+$loop$: $fastn.never-marked-files as $obj
+status: ftd.text: $fastn.i18n.never-marked
 > padding: 5
 > border-radius: 10
 
 
 --- print: $obj
-$loop$: $fpm.upto-date-files as $obj
-status: ftd.text: $fpm.i18n.upto-date
+$loop$: $fastn.outdated-files as $obj
+status: ftd.text: $fastn.i18n.out-dated
+> padding: 5
+> border-radius: 10
+
+
+--- print: $obj
+$loop$: $fastn.upto-date-files as $obj
+status: ftd.text: $fastn.i18n.upto-date
 > padding: 5
 > border-radius: 10

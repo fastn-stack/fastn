@@ -1,5 +1,5 @@
 ;; can use `package-query` processor to fetch the cities
--- import: fpm/processors
+-- import: fastn/processors
 
 
 -- component check-loop:

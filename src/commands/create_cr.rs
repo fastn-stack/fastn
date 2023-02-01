@@ -1,15 +1,15 @@
-pub async fn create_cr(config: &fpm::Config, title: Option<&str>) -> fpm::Result<()> {
+pub async fn create_cr(config: &fastn::Config, title: Option<&str>) -> fastn::Result<()> {
     let cr_number = config.extract_cr_number().await?;
-    let cr_meta_content = fpm::cr::generate_cr_meta_content(&fpm::cr::CRMeta {
+    let cr_meta_content = fastn::cr::generate_cr_meta_content(&fastn::cr::CRMeta {
         title: title
             .map(ToString::to_string)
             .unwrap_or(format!("CR#{cr_number}")),
         cr_number: cr_number as usize,
         open: true,
     });
-    /*let cr_meta_content = fpm::cr::resolve_cr_meta(
+    /*let cr_meta_content = fastn::cr::resolve_cr_meta(
         edit::edit(cr_meta_content)
-            .map_err(|e| fpm::Error::UsageError {
+            .map_err(|e| fastn::Error::UsageError {
                 message: e.to_string(),
             })?
             .as_str(),
@@ -17,24 +17,24 @@ pub async fn create_cr(config: &fpm::Config, title: Option<&str>) -> fpm::Result
     )
     .await?;*/
     let cr_meta_content =
-        fpm::cr::resolve_cr_meta(cr_meta_content.as_str(), cr_number as usize).await?;
+        fastn::cr::resolve_cr_meta(cr_meta_content.as_str(), cr_number as usize).await?;
     add_cr_to_workspace(config, &cr_meta_content).await
 }
 
 pub(crate) async fn add_cr_to_workspace(
-    config: &fpm::Config,
-    cr_meta: &fpm::cr::CRMeta,
-) -> fpm::Result<()> {
+    config: &fastn::Config,
+    cr_meta: &fastn::cr::CRMeta,
+) -> fastn::Result<()> {
     use itertools::Itertools;
 
-    fpm::cr::create_cr_meta(config, cr_meta).await?;
-    fpm::cr::create_cr_about(config, cr_meta).await?;
+    fastn::cr::create_cr_meta(config, cr_meta).await?;
+    fastn::cr::create_cr_about(config, cr_meta).await?;
 
     let mut workspace = config.get_workspace_map().await?;
     let cr_meta_filename = config.path_without_root(&config.cr_meta_path(cr_meta.cr_number))?;
     workspace.insert(
         cr_meta_filename.to_string(),
-        fpm::workspace::WorkspaceEntry {
+        fastn::workspace::WorkspaceEntry {
             filename: cr_meta_filename,
             deleted: None,
             version: None,
@@ -45,7 +45,7 @@ pub(crate) async fn add_cr_to_workspace(
     let cr_about_filename = config.path_without_root(&config.cr_about_path(cr_meta.cr_number))?;
     workspace.insert(
         cr_about_filename.to_string(),
-        fpm::workspace::WorkspaceEntry {
+        fastn::workspace::WorkspaceEntry {
             filename: cr_about_filename,
             deleted: None,
             version: None,

@@ -3,11 +3,11 @@ use std::str::FromStr;
 #[derive(Default)]
 pub struct HostExports {}
 
-impl fpm_utils::backend_host_export::host::Host for HostExports {
+impl fastn_utils::backend_host_export::host::Host for HostExports {
     fn http(
         &mut self,
-        request: fpm_utils::backend_host_export::host::Httprequest<'_>,
-    ) -> fpm_utils::backend_host_export::host::Httpresponse {
+        request: fastn_utils::backend_host_export::host::Httprequest<'_>,
+    ) -> fastn_utils::backend_host_export::host::Httpresponse {
         let url = request.path.to_string();
         let request_method = request.method.to_string();
         let request_body = request.payload.to_string();
@@ -40,7 +40,7 @@ impl fpm_utils::backend_host_export::host::Host for HostExports {
         })
         .join()
         .unwrap();
-        fpm_utils::backend_host_export::host::Httpresponse { data: resp }
+        fastn_utils::backend_host_export::host::Httpresponse { data: resp }
     }
 }
 
@@ -64,14 +64,14 @@ pub enum WASMError {
 pub type WasmRunnerResult<T> = std::result::Result<T, WASMError>;
 
 pub async fn handle_wasm(
-    req: fpm::http::Request,
+    req: fastn::http::Request,
     wasm_module: camino::Utf8PathBuf,
-    backend_headers: Option<Vec<fpm::package::BackendHeader>>,
-) -> fpm::http::Response {
+    backend_headers: Option<Vec<fastn::package::BackendHeader>>,
+) -> fastn::http::Response {
     pub async fn inner(
-        req: fpm::http::Request,
+        req: fastn::http::Request,
         wasm_module: camino::Utf8PathBuf,
-        backend_headers: Option<Vec<fpm::package::BackendHeader>>,
+        backend_headers: Option<Vec<fastn::package::BackendHeader>>,
     ) -> WasmRunnerResult<actix_web::HttpResponse> {
         let mut wasm_config = wit_bindgen_host_wasmtime_rust::wasmtime::Config::new();
         wasm_config.cache_config_load_default().unwrap();
@@ -86,23 +86,23 @@ pub async fn handle_wasm(
         )?;
 
         let mut linker: wit_bindgen_host_wasmtime_rust::wasmtime::Linker<
-            fpm::wasm::Context<
-                fpm::wasm::HostExports,
-                fpm_utils::backend_host_import::guest_backend::GuestBackendData,
+            fastn::wasm::Context<
+                fastn::wasm::HostExports,
+                fastn_utils::backend_host_import::guest_backend::GuestBackendData,
             >,
         > = wit_bindgen_host_wasmtime_rust::wasmtime::Linker::new(&engine);
         let mut store = wit_bindgen_host_wasmtime_rust::wasmtime::Store::new(
             &engine,
-            fpm::wasm::Context {
-                imports: fpm::wasm::HostExports {},
-                exports: fpm_utils::backend_host_import::guest_backend::GuestBackendData {},
+            fastn::wasm::Context {
+                imports: fastn::wasm::HostExports {},
+                exports: fastn_utils::backend_host_import::guest_backend::GuestBackendData {},
             },
         );
 
-        fpm_utils::backend_host_export::host::add_to_linker(&mut linker, |cx| &mut cx.imports)?;
+        fastn_utils::backend_host_export::host::add_to_linker(&mut linker, |cx| &mut cx.imports)?;
 
         let (import, _i) =
-            fpm_utils::backend_host_import::guest_backend::GuestBackend::instantiate(
+            fastn_utils::backend_host_import::guest_backend::GuestBackend::instantiate(
                 &mut store,
                 &module,
                 &mut linker,
@@ -133,21 +133,21 @@ pub async fn handle_wasm(
         if let Some(b_headers) = backend_headers {
             b_headers.into_iter().for_each(|header| {
                 let hk = header.header_key;
-                headers.push((format!("X-FPM-{hk}"), header.header_value));
+                headers.push((format!("X-fastn-{hk}"), header.header_value));
             })
         };
         let headers: Vec<(&str, &str)> = headers
             .iter()
             .map(|(k, v)| (k.as_str(), v.as_str()))
             .collect();
-        let request = fpm_utils::backend_host_import::guest_backend::Httprequest {
+        let request = fastn_utils::backend_host_import::guest_backend::Httprequest {
             path: uri.as_str(),
             headers: &(headers)[..],
             querystring: req.query_string(),
             method: req.method(),
             payload: body_str,
         };
-        fpm::time("WASM Guest function").it(match import.handlerequest(&mut store, request) {
+        fastn::time("WASM Guest function").it(match import.handlerequest(&mut store, request) {
             Ok(data) => Ok(actix_web::HttpResponse::Ok()
                 .content_type(actix_web::http::header::ContentType::json())
                 .status(if data.success {
@@ -159,8 +159,8 @@ pub async fn handle_wasm(
             Err(err) => Err(WASMError::WasmFunctionInvoke(err.to_string())),
         })
     }
-    fpm::time("WASM Execution: ").it(match inner(req, wasm_module, backend_headers).await {
+    fastn::time("WASM Execution: ").it(match inner(req, wasm_module, backend_headers).await {
         Ok(resp) => resp,
-        Err(err) => fpm::server_error!("{}", err.to_string()),
+        Err(err) => fastn::server_error!("{}", err.to_string()),
     })
 }

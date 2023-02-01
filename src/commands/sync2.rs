@@ -1,8 +1,8 @@
 pub async fn sync2(
-    config: &fpm::Config,
+    config: &fastn::Config,
     files: Option<Vec<String>>,
     // cr_number: Option<&str>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     simple_sync(config, files).await
     /*if let Some(cr_number) = cr_number {
         let cr_number = cr_number.parse::<usize>()?;
@@ -13,10 +13,10 @@ pub async fn sync2(
 }
 
 /*async fn cr_sync(
-    config: &fpm::Config,
+    config: &fastn::Config,
     files: Option<Vec<String>>,
     cr_number: usize,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     let mut cr_workspace = config.get_cr_workspace(cr_number).await?;
     let changed_files = {
         let mut changed_files = config
@@ -35,7 +35,7 @@ pub async fn sync2(
     };
 }*/
 
-async fn simple_sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
+async fn simple_sync(config: &fastn::Config, files: Option<Vec<String>>) -> fastn::Result<()> {
     use itertools::Itertools;
 
     let mut workspace = config.get_clone_workspace().await?;
@@ -60,17 +60,17 @@ async fn simple_sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::R
 }
 
 pub(crate) async fn sync_(
-    config: &fpm::Config,
-    request_files: Vec<fpm::apis::sync2::SyncRequestFile>,
-    workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
-) -> fpm::Result<()> {
+    config: &fastn::Config,
+    request_files: Vec<fastn::apis::sync2::SyncRequestFile>,
+    workspace: &mut std::collections::BTreeMap<String, fastn::workspace::WorkspaceEntry>,
+) -> fastn::Result<()> {
     let history = tokio::fs::read_to_string(config.history_file()).await?;
-    let sync_request = fpm::apis::sync2::SyncRequest {
+    let sync_request = fastn::apis::sync2::SyncRequest {
         package_name: config.package.name.to_string(),
         files: request_files,
         history,
     };
-    let response = send_to_fpm_serve(&sync_request).await?;
+    let response = send_to_fastn_serve(&sync_request).await?;
     update_current_directory(config, &response).await?;
     update_history(config, &response.dot_history, &response.latest_ftd).await?;
     update_workspace(&response, workspace).await?;
@@ -78,14 +78,14 @@ pub(crate) async fn sync_(
 }
 
 async fn update_workspace(
-    response: &fpm::apis::sync2::SyncResponse,
-    workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
-) -> fpm::Result<()> {
+    response: &fastn::apis::sync2::SyncResponse,
+    workspace: &mut std::collections::BTreeMap<String, fastn::workspace::WorkspaceEntry>,
+) -> fastn::Result<()> {
     use itertools::Itertools;
 
-    let remote_history = fpm::history::FileHistory::from_ftd(response.latest_ftd.as_str())?;
+    let remote_history = fastn::history::FileHistory::from_ftd(response.latest_ftd.as_str())?;
     let remote_manifest =
-        fpm::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
+        fastn::history::FileHistory::get_remote_manifest(remote_history.as_slice(), true)?;
     let conflicted_files = response
         .files
         .iter()
@@ -116,28 +116,28 @@ async fn update_workspace(
 }
 
 async fn update_history(
-    config: &fpm::Config,
-    files: &[fpm::apis::sync2::File],
+    config: &fastn::Config,
+    files: &[fastn::apis::sync2::File],
     latest_ftd: &str,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     for file in files {
-        fpm::utils::update(
+        fastn::utils::update(
             &config.remote_history_dir().join(file.path.as_str()),
             &file.content,
         )
         .await?;
     }
-    fpm::utils::update(&config.history_file(), latest_ftd.as_bytes()).await?;
+    fastn::utils::update(&config.history_file(), latest_ftd.as_bytes()).await?;
     Ok(())
 }
 
 async fn update_current_directory(
-    config: &fpm::Config,
-    response: &fpm::apis::sync2::SyncResponse,
-) -> fpm::Result<()> {
+    config: &fastn::Config,
+    response: &fastn::apis::sync2::SyncResponse,
+) -> fastn::Result<()> {
     for file in response.files.iter() {
         match file {
-            fpm::apis::sync2::SyncResponseFile::Add {
+            fastn::apis::sync2::SyncResponseFile::Add {
                 path,
                 content,
                 status,
@@ -145,10 +145,10 @@ async fn update_current_directory(
                 if status.add_add_conflict() {
                     println!("CloneAddedRemoteAdded: {}", path);
                 } else {
-                    fpm::utils::update(&config.root.join(path), content).await?;
+                    fastn::utils::update(&config.root.join(path), content).await?;
                 }
             }
-            fpm::apis::sync2::SyncResponseFile::Update {
+            fastn::apis::sync2::SyncResponseFile::Update {
                 path,
                 content,
                 status,
@@ -160,10 +160,10 @@ async fn update_current_directory(
                 } else if status.edit_edit_conflict() {
                     println!("Conflict: {}", path);
                 } else {
-                    fpm::utils::update(&config.root.join(path), content).await?;
+                    fastn::utils::update(&config.root.join(path), content).await?;
                 }
             }
-            fpm::apis::sync2::SyncResponseFile::Delete { path, .. } => {
+            fastn::apis::sync2::SyncResponseFile::Delete { path, .. } => {
                 if config.root.join(path).exists() {
                     tokio::fs::remove_file(config.root.join(path)).await?;
                 }
@@ -173,13 +173,13 @@ async fn update_current_directory(
     Ok(())
 }
 
-async fn send_to_fpm_serve(
-    data: &fpm::apis::sync2::SyncRequest,
-) -> fpm::Result<fpm::apis::sync2::SyncResponse> {
+async fn send_to_fastn_serve(
+    data: &fastn::apis::sync2::SyncRequest,
+) -> fastn::Result<fastn::apis::sync2::SyncResponse> {
     #[derive(serde::Deserialize, std::fmt::Debug)]
     struct ApiResponse {
         message: Option<String>,
-        data: Option<fpm::apis::sync2::SyncResponse>,
+        data: Option<fastn::apis::sync2::SyncResponse>,
         success: bool,
     }
 
@@ -190,7 +190,7 @@ async fn send_to_fpm_serve(
     .await?;
 
     if !response.success {
-        return Err(fpm::Error::APIResponseError(
+        return Err(fastn::Error::APIResponseError(
             response
                 .message
                 .unwrap_or_else(|| "Some Error occurred".to_string()),
@@ -199,7 +199,7 @@ async fn send_to_fpm_serve(
 
     match response.data {
         Some(data) => Ok(data),
-        None => Err(fpm::Error::APIResponseError(
+        None => Err(fastn::Error::APIResponseError(
             "Unexpected API behaviour".to_string(),
         )),
     }

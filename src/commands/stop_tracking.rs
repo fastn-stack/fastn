@@ -1,4 +1,4 @@
-async fn stop_tracking(config: &fpm::Config, who: &str, whom: Option<&str>) -> fpm::Result<()> {
+async fn stop_tracking(config: &fastn::Config, who: &str, whom: Option<&str>) -> fastn::Result<()> {
     check(who, whom, config.root.as_str()).await?;
 
     Ok(())
@@ -14,20 +14,20 @@ pub fn command() -> clap::Command {
         .hide(true) // hidden since the feature is not being released yet.
 }
 
-pub async fn handle_command(matches: &clap::ArgMatches) -> fpm::Result<()> {
-    use fpm::utils::ValueOf;
+pub async fn handle_command(matches: &clap::ArgMatches) -> fastn::Result<()> {
+    use fastn::utils::ValueOf;
 
     stop_tracking(
-        &fpm::Config::read(None, true, None).await?,
+        &fastn::Config::read(None, true, None).await?,
         matches.value_of_("source").unwrap(),
         matches.value_of_("target"),
     )
     .await
 }
 
-async fn check(who: &str, whom: Option<&str>, base_path: &str) -> fpm::Result<()> {
-    let file_path = fpm::utils::track_path(who, base_path);
-    let mut tracks = fpm::tracker::get_tracks(base_path, &file_path)?;
+async fn check(who: &str, whom: Option<&str>, base_path: &str) -> fastn::Result<()> {
+    let file_path = fastn::utils::track_path(who, base_path);
+    let mut tracks = fastn::tracker::get_tracks(base_path, &file_path)?;
     if let Some(whom) = whom {
         if tracks.remove(whom).is_some() {
             write(&file_path, &tracks).await?;
@@ -54,16 +54,16 @@ async fn check(who: &str, whom: Option<&str>, base_path: &str) -> fpm::Result<()
 
 async fn write(
     file_path: &camino::Utf8PathBuf,
-    tracks: &std::collections::BTreeMap<String, fpm::Track>,
-) -> fpm::Result<()> {
+    tracks: &std::collections::BTreeMap<String, fastn::Track>,
+) -> fastn::Result<()> {
     use tokio::io::AsyncWriteExt;
 
     let mut f = tokio::fs::File::create(file_path).await?;
-    let mut string = "-- import: fpm".to_string();
+    let mut string = "-- import: fastn".to_string();
 
     for track in tracks.values() {
         string = format!(
-            "{}\n\n-- fpm.track: {}\nself-timestamp: {}",
+            "{}\n\n-- fastn.track: {}\nself-timestamp: {}",
             string, track.filename, track.self_timestamp
         );
         if let Some(ref other_timestamp) = track.other_timestamp {

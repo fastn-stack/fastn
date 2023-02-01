@@ -1,6 +1,6 @@
 #[derive(Debug, Clone)]
 pub struct Dependency {
-    pub package: fpm::Package,
+    pub package: fastn::Package,
     pub version: Option<String>,
     pub notes: Option<String>,
     pub alias: Option<String>,
@@ -43,13 +43,13 @@ pub(crate) struct DependencyTemp {
 }
 
 impl DependencyTemp {
-    pub(crate) fn into_dependency(self) -> fpm::Result<fpm::Dependency> {
+    pub(crate) fn into_dependency(self) -> fastn::Result<fastn::Dependency> {
         let (package_name, alias) = match self.name.as_str().split_once(" as ") {
             Some((package, alias)) => (package, Some(alias.to_string())),
             _ => (self.name.as_str(), None),
         };
-        Ok(fpm::Dependency {
-            package: fpm::Package::new(package_name),
+        Ok(fastn::Dependency {
+            package: fastn::Package::new(package_name),
             version: self.version,
             notes: self.notes,
             alias,
@@ -66,16 +66,16 @@ impl DependencyTemp {
     }
 }
 
-impl fpm::Package {
-    /// `process()` checks the package exists in `.packages` or `FPM_HOME` folder (`FPM_HOME` not
+impl fastn::Package {
+    /// `process()` checks the package exists in `.packages` or `fastn_HOME` folder (`fastn_HOME` not
     /// yet implemented), and if not downloads and unpacks the method.
     ///
     /// This is done in following way:
-    /// Download the FPM.ftd file first for the package to download.
-    /// From FPM.ftd file, there's zip parameter present which contains the url to download zip.
+    /// Download the FASTN.ftd file first for the package to download.
+    /// From FASTN.ftd file, there's zip parameter present which contains the url to download zip.
     /// Then, unzip it and place the content into .package folder
     ///
-    /// It then calls `process_fpm()` which checks the dependencies of the downloaded packages and
+    /// It then calls `process_fastn()` which checks the dependencies of the downloaded packages and
     /// then again call `process()` if dependent package is not downloaded or available
     pub async fn process(
         &mut self,
@@ -83,7 +83,7 @@ impl fpm::Package {
         downloaded_package: &mut Vec<String>,
         download_translations: bool,
         download_dependencies: bool,
-    ) -> fpm::Result<()> {
+    ) -> fastn::Result<()> {
         use std::io::Write;
         // TODO: in future we will check if we have a new version in the package's repo.
         //       for now assume if package exists we have the latest package and if you
@@ -98,7 +98,7 @@ impl fpm::Package {
 
         let root = base_dir.join(".packages").join(self.name.as_str());
 
-        // Just download FPM.ftd of the dependent package and continue
+        // Just download FASTN.ftd of the dependent package and continue
         if !download_translations && !download_dependencies {
             let (path, name) = if let Some((path, name)) = self.name.rsplit_once('/') {
                 (base_dir.join(".packages").join(path), name)
@@ -108,11 +108,11 @@ impl fpm::Package {
             let file_extract_path = path.join(format!("{}.ftd", name));
             if !file_extract_path.exists() {
                 std::fs::create_dir_all(&path)?;
-                let fpm_string = get_fpm(self.name.as_str()).await?;
+                let fastn_string = get_fastn(self.name.as_str()).await?;
                 let mut f = std::fs::File::create(&file_extract_path)?;
-                f.write_all(fpm_string.as_bytes())?;
+                f.write_all(fastn_string.as_bytes())?;
             }
-            return fpm::Package::process_fpm(
+            return fastn::Package::process_fastn(
                 &root,
                 base_dir,
                 downloaded_package,
@@ -126,26 +126,27 @@ impl fpm::Package {
 
         // Download everything of dependent package
         if !root.exists() {
-            // Download the FPM.ftd file first for the package to download.
-            let fpm_string = get_fpm(self.name.as_str()).await?;
+            // Download the FASTN.ftd file first for the package to download.
+            let fastn_string = get_fastn(self.name.as_str()).await?;
 
-            // Read FPM.ftd and get download zip url from `zip` argument
+            // Read FASTN.ftd and get download zip url from `zip` argument
             let download_url = {
-                let lib = fpm::FPMLibrary::default();
-                let ftd_document = match fpm::doc::parse_ftd("FPM", fpm_string.as_str(), &lib) {
+                let lib = fastn::FastnLibrary::default();
+                let ftd_document = match fastn::doc::parse_ftd("fastn", fastn_string.as_str(), &lib)
+                {
                     Ok(v) => v,
                     Err(e) => {
-                        return Err(fpm::Error::PackageError {
-                            message: format!("failed to parse FPM.ftd: {:?}", &e),
+                        return Err(fastn::Error::PackageError {
+                            message: format!("failed to parse FASTN.ftd: {:?}", &e),
                         });
                     }
                 };
 
                 ftd_document
-                    .get::<fpm::package::PackageTemp>("fpm#package")?
+                    .get::<fastn::package::PackageTemp>("fastn#package")?
                     .into_package()
                     .zip
-                    .ok_or(fpm::Error::UsageError {
+                    .ok_or(fastn::Error::UsageError {
                         message: format!(
                             "Unable to download dependency. zip is not provided for {}",
                             self.name
@@ -203,62 +204,62 @@ impl fpm::Package {
                     std::io::copy(&mut c_file, &mut outfile)?;
                 }
             }
-            fpm::utils::print_end(format!("Downloaded {}", self.name.as_str()).as_str(), start);
+            fastn::utils::print_end(format!("Downloaded {}", self.name.as_str()).as_str(), start);
         }
-        let fpm_ftd_path = if root.join("FPM.ftd").exists() {
-            root.join("FPM.ftd")
+        let fastn_ftd_path = if root.join("FASTN.ftd").exists() {
+            root.join("FASTN.ftd")
         } else {
-            let doc = std::fs::read_to_string(&root.join("FPM.manifest.ftd"));
-            let lib = fpm::FPMLibrary::default();
-            match fpm::doc::parse_ftd("FPM.manifest", doc?.as_str(), &lib) {
-                Ok(fpm_manifest_processed) => {
-                    let k: String = fpm_manifest_processed.get("FPM.manifest#package-root")?;
+            let doc = std::fs::read_to_string(&root.join("fastn.manifest.ftd"));
+            let lib = fastn::FastnLibrary::default();
+            match fastn::doc::parse_ftd("fastn.manifest", doc?.as_str(), &lib) {
+                Ok(fastn_manifest_processed) => {
+                    let k: String = fastn_manifest_processed.get("fastn.manifest#package-root")?;
                     let new_package_root = k
                         .as_str()
                         .split('/')
                         .fold(root.clone(), |accumulator, part| accumulator.join(part));
-                    if new_package_root.join("FPM.ftd").exists() {
-                        new_package_root.join("FPM.ftd")
+                    if new_package_root.join("FASTN.ftd").exists() {
+                        new_package_root.join("FASTN.ftd")
                     } else {
-                        return Err(fpm::Error::PackageError {
+                        return Err(fastn::Error::PackageError {
                             message: format!(
-                                "Can't find FPM.ftd file for the dependency package {}",
+                                "Can't find FASTN.ftd file for the dependency package {}",
                                 self.name.as_str()
                             ),
                         });
                     }
                 }
                 Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.manifest.ftd: {:?}", &e),
+                    return Err(fastn::Error::PackageError {
+                        message: format!("failed to parse fastn.manifest.ftd: {:?}", &e),
                     });
                 }
             }
         };
-        return fpm::Package::process_fpm(
+        return fastn::Package::process_fastn(
             &root,
             base_dir,
             downloaded_package,
             self,
             download_translations,
             download_dependencies,
-            &fpm_ftd_path,
+            &fastn_ftd_path,
         )
         .await;
 
-        async fn get_fpm(name: &str) -> fpm::Result<String> {
-            if let Ok(response_fpm) =
-                crate::http::http_get_str(format!("https://{}/FPM.ftd", name).as_str()).await
+        async fn get_fastn(name: &str) -> fastn::Result<String> {
+            if let Ok(response_fastn) =
+                crate::http::http_get_str(format!("https://{}/FASTN.ftd", name).as_str()).await
             {
-                Ok(response_fpm)
-            } else if let Ok(response_fpm) =
-                crate::http::http_get_str(format!("http://{}/FPM.ftd", name).as_str()).await
+                Ok(response_fastn)
+            } else if let Ok(response_fastn) =
+                crate::http::http_get_str(format!("http://{}/FASTN.ftd", name).as_str()).await
             {
-                Ok(response_fpm)
+                Ok(response_fastn)
             } else {
-                Err(fpm::Error::UsageError {
+                Err(fastn::Error::UsageError {
                     message: format!(
-                        "Unable to find the FPM.ftd for the dependency package: {}",
+                        "Unable to find the FASTN.ftd for the dependency package: {}",
                         name
                     ),
                 })
@@ -272,7 +273,7 @@ impl fpm::Package {
         downloaded_package: &mut Vec<String>,
         download_translations: bool,
         download_dependencies: bool,
-    ) -> fpm::Result<()> {
+    ) -> fastn::Result<()> {
         use std::io::Write;
         use tokio::io::AsyncWriteExt;
 
@@ -289,7 +290,7 @@ impl fpm::Package {
 
         let root = base_dir.join(".packages").join(self.name.as_str());
 
-        // Just download FPM.ftd of the dependent package and continue
+        // Just download FASTN.ftd of the dependent package and continue
         // github.abrarnitk.io/abrark
         if !download_translations && !download_dependencies {
             let (path, name) = if let Some((path, name)) = self.name.rsplit_once('/') {
@@ -300,11 +301,11 @@ impl fpm::Package {
             let file_extract_path = path.join(format!("{}.ftd", name));
             if !file_extract_path.exists() {
                 std::fs::create_dir_all(&path)?;
-                let fpm_string = get_fpm(self.name.as_str()).await?;
+                let fastn_string = get_fastn(self.name.as_str()).await?;
                 let mut f = std::fs::File::create(&file_extract_path)?;
-                f.write_all(fpm_string.as_bytes())?;
+                f.write_all(fastn_string.as_bytes())?;
             }
-            return fpm::Package::process_fpm2(
+            return fastn::Package::process_fastn2(
                 &root,
                 base_dir,
                 downloaded_package,
@@ -318,68 +319,68 @@ impl fpm::Package {
 
         // Download everything of dependent package
         if !root.exists() {
-            // Download the FPM.ftd file first for the package to download.
-            let fpm_string = get_fpm(self.name.as_str()).await?;
+            // Download the FASTN.ftd file first for the package to download.
+            let fastn_string = get_fastn(self.name.as_str()).await?;
             std::fs::create_dir_all(&root)?;
-            let mut file = tokio::fs::File::create(root.join("FPM.ftd")).await?;
-            file.write_all(fpm_string.as_bytes()).await?;
+            let mut file = tokio::fs::File::create(root.join("FASTN.ftd")).await?;
+            file.write_all(fastn_string.as_bytes()).await?;
         }
 
-        let fpm_ftd_path = if root.join("FPM.ftd").exists() {
-            root.join("FPM.ftd")
+        let fastn_ftd_path = if root.join("FASTN.ftd").exists() {
+            root.join("FASTN.ftd")
         } else {
-            let doc = std::fs::read_to_string(&root.join("FPM.manifest.ftd"));
-            let lib = fpm::FPMLibrary::default();
-            match fpm::doc::parse_ftd("FPM.manifest", doc?.as_str(), &lib) {
-                Ok(fpm_manifest_processed) => {
-                    let k: String = fpm_manifest_processed.get("FPM.manifest#package-root")?;
+            let doc = std::fs::read_to_string(&root.join("fastn.manifest.ftd"));
+            let lib = fastn::FastnLibrary::default();
+            match fastn::doc::parse_ftd("fastn.manifest", doc?.as_str(), &lib) {
+                Ok(fastn_manifest_processed) => {
+                    let k: String = fastn_manifest_processed.get("fastn.manifest#package-root")?;
                     let new_package_root = k
                         .as_str()
                         .split('/')
                         .fold(root.clone(), |accumulator, part| accumulator.join(part));
-                    if new_package_root.join("FPM.ftd").exists() {
-                        new_package_root.join("FPM.ftd")
+                    if new_package_root.join("FASTN.ftd").exists() {
+                        new_package_root.join("FASTN.ftd")
                     } else {
-                        return Err(fpm::Error::PackageError {
+                        return Err(fastn::Error::PackageError {
                             message: format!(
-                                "Can't find FPM.ftd file for the dependency package {}",
+                                "Can't find FASTN.ftd file for the dependency package {}",
                                 self.name.as_str()
                             ),
                         });
                     }
                 }
                 Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.manifest.ftd: {:?}", &e),
+                    return Err(fastn::Error::PackageError {
+                        message: format!("failed to parse fastn.manifest.ftd: {:?}", &e),
                     });
                 }
             }
         };
 
-        return fpm::Package::process_fpm2(
+        return fastn::Package::process_fastn2(
             &root,
             base_dir,
             downloaded_package,
             self,
             download_translations,
             download_dependencies,
-            &fpm_ftd_path,
+            &fastn_ftd_path,
         )
         .await;
 
-        async fn get_fpm(name: &str) -> fpm::Result<String> {
-            if let Ok(response_fpm) =
-                crate::http::http_get_str(format!("https://{}/FPM.ftd", name).as_str()).await
+        async fn get_fastn(name: &str) -> fastn::Result<String> {
+            if let Ok(response_fastn) =
+                crate::http::http_get_str(format!("https://{}/FASTN.ftd", name).as_str()).await
             {
-                Ok(response_fpm)
-            } else if let Ok(response_fpm) =
-                crate::http::http_get_str(format!("http://{}/FPM.ftd", name).as_str()).await
+                Ok(response_fastn)
+            } else if let Ok(response_fastn) =
+                crate::http::http_get_str(format!("http://{}/FASTN.ftd", name).as_str()).await
             {
-                Ok(response_fpm)
+                Ok(response_fastn)
             } else {
-                Err(fpm::Error::UsageError {
+                Err(fastn::Error::UsageError {
                     message: format!(
-                        "Unable to find the FPM.ftd for the dependency package: {}",
+                        "Unable to find the FASTN.ftd for the dependency package: {}",
                         name
                     ),
                 })
@@ -387,7 +388,7 @@ impl fpm::Package {
         }
     }
 
-    pub(crate) async fn _unzip_package(&self) -> fpm::Result<()> {
+    pub(crate) async fn _unzip_package(&self) -> fastn::Result<()> {
         use std::io::Write;
 
         let download_url = if let Some(ref url) = self.zip {
@@ -447,69 +448,70 @@ impl fpm::Package {
                 std::io::copy(&mut c_file, &mut outfile)?;
             }
         }
-        fpm::utils::print_end(format!("Downloaded {}", self.name.as_str()).as_str(), start);
+        fastn::utils::print_end(format!("Downloaded {}", self.name.as_str()).as_str(), start);
         Ok(())
     }
 
     /// This function is called by `process()` or recursively called by itself.
-    /// It checks the `FPM.ftd` file of dependent package and find out all the dependency packages.
+    /// It checks the `FASTN.ftd` file of dependent package and find out all the dependency packages.
     /// If dependent package is not available, it calls `process()` to download it inside `.packages` directory
     /// and if dependent package is available, it copies it to `.packages` directory
-    /// At the end of both cases, `process_fpm()` is called again
+    /// At the end of both cases, `process_fastn()` is called again
     ///
-    /// `process_fpm()`, together with `process()`, recursively make dependency packages available inside
+    /// `process_fastn()`, together with `process()`, recursively make dependency packages available inside
     /// `.packages` directory
     ///
     #[async_recursion::async_recursion(?Send)]
-    async fn process_fpm(
+    async fn process_fastn(
         root: &camino::Utf8PathBuf,
         base_path: &camino::Utf8PathBuf,
         downloaded_package: &mut Vec<String>,
-        mutpackage: &mut fpm::Package,
+        mutpackage: &mut fastn::Package,
         download_translations: bool,
         download_dependencies: bool,
-        fpm_path: &camino::Utf8PathBuf,
-    ) -> fpm::Result<()> {
+        fastn_path: &camino::Utf8PathBuf,
+    ) -> fastn::Result<()> {
         let ftd_document = {
-            let doc = std::fs::read_to_string(fpm_path)?;
-            let lib = fpm::FPMLibrary::default();
-            match fpm::doc::parse_ftd("FPM", doc.as_str(), &lib) {
+            let doc = std::fs::read_to_string(fastn_path)?;
+            let lib = fastn::FastnLibrary::default();
+            match fastn::doc::parse_ftd("fastn", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.ftd 2: {:?}", &e),
+                    return Err(fastn::Error::PackageError {
+                        message: format!("failed to parse FASTN.ftd 2: {:?}", &e),
                     });
                 }
             }
         };
         let mut package = {
-            let temp_package: fpm::package::PackageTemp = ftd_document.get("fpm#package")?;
+            let temp_package: fastn::package::PackageTemp = ftd_document.get("fastn#package")?;
             temp_package.into_package()
         };
 
-        package.translation_status_summary = ftd_document.get("fpm#translation-status-summary")?;
+        package.translation_status_summary =
+            ftd_document.get("fastn#translation-status-summary")?;
 
         downloaded_package.push(mutpackage.name.to_string());
 
-        package.fpm_path = Some(fpm_path.to_owned());
+        package.fastn_path = Some(fastn_path.to_owned());
         package.dependencies = {
-            let temp_deps: Vec<DependencyTemp> = ftd_document.get("fpm#dependency")?;
+            let temp_deps: Vec<DependencyTemp> = ftd_document.get("fastn#dependency")?;
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Result<Dependency>>>()
+                .collect::<Vec<fastn::Result<Dependency>>>()
                 .into_iter()
-                .collect::<fpm::Result<Vec<Dependency>>>()?
+                .collect::<fastn::Result<Vec<Dependency>>>()?
         };
 
-        let auto_imports: Vec<String> = ftd_document.get("fpm#auto-import")?;
+        let auto_imports: Vec<String> = ftd_document.get("fastn#auto-import")?;
         let auto_import = auto_imports
             .iter()
-            .map(|f| fpm::AutoImport::from_string(f.as_str()))
+            .map(|f| fastn::AutoImport::from_string(f.as_str()))
             .collect();
         package.auto_import = auto_import;
-        package.fonts = ftd_document.get("fpm#font")?;
-        package.sitemap_temp = ftd_document.get("fpm#sitemap")?;
+        package.fonts = ftd_document.get("fastn#font")?;
+        package.sitemap_temp = ftd_document.get("fastn#sitemap")?;
 
         if download_dependencies {
             for dep in package.dependencies.iter_mut() {
@@ -518,16 +520,16 @@ impl fpm::Package {
                 if dep_path.exists() {
                     let dst = base_path.join(".packages").join(dep.package.name.as_str());
                     if !dst.exists() {
-                        fpm::copy_dir_all(dep_path, dst.clone()).await?;
+                        fastn::copy_dir_all(dep_path, dst.clone()).await?;
                     }
-                    fpm::Package::process_fpm(
+                    fastn::Package::process_fastn(
                         &dst,
                         base_path,
                         downloaded_package,
                         &mut dep.package,
                         false,
                         true,
-                        &dst.join("FPM.ftd"),
+                        &dst.join("FASTN.ftd"),
                     )
                     .await?;
                 } else {
@@ -540,7 +542,7 @@ impl fpm::Package {
 
         if download_translations {
             if let Some(translation_of) = package.translation_of.as_ref() {
-                return Err(fpm::Error::PackageError {
+                return Err(fastn::Error::PackageError {
                     message: format!(
                         "Cannot translate a translation package. \
                     suggestion: Translate the original package instead. \
@@ -554,16 +556,16 @@ impl fpm::Package {
                 if original_path.exists() {
                     let dst = base_path.join(".packages").join(translation.name.as_str());
                     if !dst.exists() {
-                        fpm::copy_dir_all(original_path, dst.clone()).await?;
+                        fastn::copy_dir_all(original_path, dst.clone()).await?;
                     }
-                    fpm::Package::process_fpm(
+                    fastn::Package::process_fastn(
                         &dst,
                         base_path,
                         downloaded_package,
                         translation,
                         false,
                         false,
-                        &dst.join("FPM.ftd"),
+                        &dst.join("FASTN.ftd"),
                     )
                     .await?;
                 } else {
@@ -578,55 +580,56 @@ impl fpm::Package {
     }
 
     #[async_recursion::async_recursion]
-    async fn process_fpm2(
+    async fn process_fastn2(
         root: &camino::Utf8PathBuf,
         base_path: &camino::Utf8PathBuf,
         downloaded_package: &mut Vec<String>,
-        mutpackage: &mut fpm::Package,
+        mutpackage: &mut fastn::Package,
         download_translations: bool,
         download_dependencies: bool,
-        fpm_path: &camino::Utf8PathBuf,
-    ) -> fpm::Result<()> {
+        fastn_path: &camino::Utf8PathBuf,
+    ) -> fastn::Result<()> {
         let ftd_document = {
-            let doc = std::fs::read_to_string(fpm_path)?;
-            let lib = fpm::FPMLibrary::default();
-            match fpm::doc::parse_ftd("FPM", doc.as_str(), &lib) {
+            let doc = std::fs::read_to_string(fastn_path)?;
+            let lib = fastn::FastnLibrary::default();
+            match fastn::doc::parse_ftd("fastn", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.ftd 2: {:?}", &e),
+                    return Err(fastn::Error::PackageError {
+                        message: format!("failed to parse FASTN.ftd 2: {:?}", &e),
                     });
                 }
             }
         };
         let mut package = {
-            let temp_package: fpm::package::PackageTemp = ftd_document.get("fpm#package")?;
+            let temp_package: fastn::package::PackageTemp = ftd_document.get("fastn#package")?;
             temp_package.into_package()
         };
 
-        package.translation_status_summary = ftd_document.get("fpm#translation-status-summary")?;
+        package.translation_status_summary =
+            ftd_document.get("fastn#translation-status-summary")?;
 
         downloaded_package.push(mutpackage.name.to_string());
 
-        package.fpm_path = Some(fpm_path.to_owned());
+        package.fastn_path = Some(fastn_path.to_owned());
         package.dependencies = {
-            let temp_deps: Vec<DependencyTemp> = ftd_document.get("fpm#dependency")?;
+            let temp_deps: Vec<DependencyTemp> = ftd_document.get("fastn#dependency")?;
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Result<Dependency>>>()
+                .collect::<Vec<fastn::Result<Dependency>>>()
                 .into_iter()
-                .collect::<fpm::Result<Vec<Dependency>>>()?
+                .collect::<fastn::Result<Vec<Dependency>>>()?
         };
 
-        let auto_imports: Vec<String> = ftd_document.get("fpm#auto-import")?;
+        let auto_imports: Vec<String> = ftd_document.get("fastn#auto-import")?;
         let auto_import = auto_imports
             .iter()
-            .map(|f| fpm::AutoImport::from_string(f.as_str()))
+            .map(|f| fastn::AutoImport::from_string(f.as_str()))
             .collect();
         package.auto_import = auto_import;
-        package.fonts = ftd_document.get("fpm#font")?;
-        package.sitemap_temp = ftd_document.get("fpm#sitemap")?;
+        package.fonts = ftd_document.get("fastn#font")?;
+        package.sitemap_temp = ftd_document.get("fastn#sitemap")?;
 
         if download_dependencies {
             for dep in package.dependencies.iter_mut() {
@@ -635,16 +638,16 @@ impl fpm::Package {
                 if dep_path.exists() {
                     let dst = base_path.join(".packages").join(dep.package.name.as_str());
                     if !dst.exists() {
-                        futures::executor::block_on(fpm::copy_dir_all(dep_path, dst.clone()))?;
+                        futures::executor::block_on(fastn::copy_dir_all(dep_path, dst.clone()))?;
                     }
-                    fpm::Package::process_fpm2(
+                    fastn::Package::process_fastn2(
                         &dst,
                         base_path,
                         downloaded_package,
                         &mut dep.package,
                         false,
                         true,
-                        &dst.join("FPM.ftd"),
+                        &dst.join("FASTN.ftd"),
                     )
                     .await?;
                 } else {
@@ -657,7 +660,7 @@ impl fpm::Package {
 
         if download_translations {
             if let Some(translation_of) = package.translation_of.as_ref() {
-                return Err(fpm::Error::PackageError {
+                return Err(fastn::Error::PackageError {
                     message: format!(
                         "Cannot translate a translation package. \
                     suggestion: Translate the original package instead. \
@@ -671,16 +674,19 @@ impl fpm::Package {
                 if original_path.exists() {
                     let dst = base_path.join(".packages").join(translation.name.as_str());
                     if !dst.exists() {
-                        futures::executor::block_on(fpm::copy_dir_all(original_path, dst.clone()))?;
+                        futures::executor::block_on(fastn::copy_dir_all(
+                            original_path,
+                            dst.clone(),
+                        ))?;
                     }
-                    fpm::Package::process_fpm2(
+                    fastn::Package::process_fastn2(
                         &dst,
                         base_path,
                         downloaded_package,
                         translation,
                         false,
                         false,
-                        &dst.join("FPM.ftd"),
+                        &dst.join("FASTN.ftd"),
                     )
                     .await?;
                 } else {

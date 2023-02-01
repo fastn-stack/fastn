@@ -97,12 +97,12 @@ impl FileStatus {
     pub(crate) fn sync_request(
         self,
         src_cr: Option<usize>,
-    ) -> Option<fpm::apis::sync2::SyncRequestFile> {
+    ) -> Option<fastn::apis::sync2::SyncRequestFile> {
         if self.is_conflicted() {
             return None;
         }
         Some(match self {
-            FileStatus::Add { path, content, .. } => fpm::apis::sync2::SyncRequestFile::Add {
+            FileStatus::Add { path, content, .. } => fastn::apis::sync2::SyncRequestFile::Add {
                 path,
                 content,
                 src_cr,
@@ -112,27 +112,29 @@ impl FileStatus {
                 content,
                 version,
                 ..
-            } => fpm::apis::sync2::SyncRequestFile::Update {
+            } => fastn::apis::sync2::SyncRequestFile::Update {
                 path,
                 content,
                 version,
                 src_cr,
             },
-            FileStatus::Delete { path, version, .. } => fpm::apis::sync2::SyncRequestFile::Delete {
-                path,
-                version,
-                src_cr,
-            },
+            FileStatus::Delete { path, version, .. } => {
+                fastn::apis::sync2::SyncRequestFile::Delete {
+                    path,
+                    version,
+                    src_cr,
+                }
+            }
             FileStatus::Uptodate { .. } => return None,
         })
     }
 }
 
-impl fpm::Config {
-    pub(crate) async fn get_files_status(&self) -> fpm::Result<Vec<FileStatus>> {
+impl fastn::Config {
+    pub(crate) async fn get_files_status(&self) -> fastn::Result<Vec<FileStatus>> {
         use itertools::Itertools;
 
-        let mut workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> =
+        let mut workspace: std::collections::BTreeMap<String, fastn::workspace::WorkspaceEntry> =
             self.get_workspace_map().await?;
         let changed_files = self.get_files_status_with_workspace(&mut workspace).await?;
         self.write_workspace(workspace.into_values().collect_vec().as_slice())
@@ -142,8 +144,8 @@ impl fpm::Config {
 
     pub(crate) async fn get_files_status_with_workspace(
         &self,
-        workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
-    ) -> fpm::Result<Vec<FileStatus>> {
+        workspace: &mut std::collections::BTreeMap<String, fastn::workspace::WorkspaceEntry>,
+    ) -> fastn::Result<Vec<FileStatus>> {
         use itertools::Itertools;
 
         let mut changed_files: std::collections::BTreeMap<String, FileStatus> = self
@@ -159,8 +161,8 @@ impl fpm::Config {
 
     /*async fn update_workspace_using_cr_track(
         &self,
-        cr_workspace: &mut fpm::workspace::CRWorkspace,
-    ) -> fpm::Result<Vec<FileStatus>> {
+        cr_workspace: &mut fastn::workspace::CRWorkspace,
+    ) -> fastn::Result<Vec<FileStatus>> {
         let cr_tracking_infos = self.get_cr_tracking_info(cr_workspace.cr).await?;
         for tracking_info in cr_tracking_infos {
             if cr_workspace.workspace.contains_key(&tracking_info.filename) {
@@ -177,8 +179,8 @@ impl fpm::Config {
 
     async fn get_files_status_wrt_workspace(
         &self,
-        workspace: &std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
-    ) -> fpm::Result<Vec<FileStatus>> {
+        workspace: &std::collections::BTreeMap<String, fastn::workspace::WorkspaceEntry>,
+    ) -> fastn::Result<Vec<FileStatus>> {
         use sha2::Digest;
 
         let mut changed_files = vec![];
@@ -198,7 +200,7 @@ impl fpm::Config {
             if workspace_entry.deleted.unwrap_or(false) {
                 changed_files.push(FileStatus::Delete {
                     path: workspace_entry.filename.to_string(),
-                    version: workspace_entry.version.ok_or(fpm::Error::UsageError {
+                    version: workspace_entry.version.ok_or(fastn::Error::UsageError {
                         message: format!(
                             "{}, which is to be deleted, doesn't define version in workspace",
                             workspace_entry.filename
@@ -234,8 +236,8 @@ impl fpm::Config {
     pub(crate) async fn get_files_status_wrt_remote_manifest(
         &self,
         files: &mut std::collections::BTreeMap<String, FileStatus>,
-        workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
-    ) -> fpm::Result<()> {
+        workspace: &mut std::collections::BTreeMap<String, fastn::workspace::WorkspaceEntry>,
+    ) -> fastn::Result<()> {
         let remote_manifest = self.get_remote_manifest(true).await?;
         let (already_added_files, already_removed_files) = self
             .get_files_status_wrt_manifest(files, &remote_manifest)
@@ -252,8 +254,8 @@ impl fpm::Config {
     async fn get_files_status_wrt_manifest(
         &self,
         files: &mut std::collections::BTreeMap<String, FileStatus>,
-        manifest: &std::collections::BTreeMap<String, fpm::history::FileEdit>,
-    ) -> fpm::Result<(Vec<fpm::workspace::WorkspaceEntry>, Vec<String>)> {
+        manifest: &std::collections::BTreeMap<String, fastn::history::FileEdit>,
+    ) -> fastn::Result<(Vec<fastn::workspace::WorkspaceEntry>, Vec<String>)> {
         use sha2::Digest;
 
         let mut already_removed_files = vec![];
@@ -280,7 +282,7 @@ impl fpm::Config {
                     let history_path = self.history_path(path, server_version);
                     let history_content = tokio::fs::read(history_path).await?;
                     if sha2::Sha256::digest(content).eq(&sha2::Sha256::digest(history_content)) {
-                        already_added_files.push(fpm::workspace::WorkspaceEntry {
+                        already_added_files.push(fastn::workspace::WorkspaceEntry {
                             filename: path.to_string(),
                             deleted: None,
                             version: Some(server_version),
@@ -335,7 +337,7 @@ impl fpm::Config {
                         .merge(&ancestor_content, &ours_content, &theirs_content)
                     {
                         Ok(data) => {
-                            fpm::utils::update(self.root.join(filename), data.as_bytes()).await?;
+                            fastn::utils::update(self.root.join(filename), data.as_bytes()).await?;
                             *content = data.as_bytes().to_vec();
                             *version = server_file_edit.version;
                         }

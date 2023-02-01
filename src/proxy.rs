@@ -18,13 +18,13 @@ static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
 #[tracing::instrument(skip_all)]
 pub(crate) async fn get_out(
     host: &str,
-    req: fpm::http::Request,
+    req: fastn::http::Request,
     path: &str,
     package_name: &str,
     req_headers: &std::collections::HashMap<String, String>,
-) -> fpm::Result<fpm::http::Response> {
+) -> fastn::Result<fastn::http::Response> {
     let headers = req.headers();
-    // TODO: It should be part of fpm::Request::uri()
+    // TODO: It should be part of fastn::Request::uri()
     // let path = &req.uri().to_string()[1..];
 
     tracing::info!("proxy_request: {} {} {}", req.method(), path, host);
@@ -61,16 +61,16 @@ pub(crate) async fn get_out(
 
     // TODO: Some extra headers, possibly Authentication header
     // Authentication header can come from system environment variable
-    // env file path set in FPM.ftd file
+    // env file path set in FASTN.ftd file
     // We can get the data from request parameter
     // Flow will be
     // 1. Add Movie ftd page
-    // 2. fpm will forward request to microservice and that service will redirect to /movie/?id=5
-    // fpm will send back this response to browser
+    // 2. fastn will forward request to microservice and that service will redirect to /movie/?id=5
+    // fastn will send back this response to browser
     // browser will request now /movie/?id=5
     // on this movie.ftd page we will call a processor: `request-data` which will give the
     // `id` from the request query parameter. Than, we will use processor: `http` to call http api
-    // `/api/movie/?id=<id>` of movie-db service, this will happen while fpm is converting ftd code
+    // `/api/movie/?id=<id>` of movie-db service, this will happen while fastn is converting ftd code
     // to html, so all this happening on server side. So we can say server side rendering.
 
     // headers
@@ -84,7 +84,7 @@ pub(crate) async fn get_out(
 
     proxy_request.headers_mut().insert(
         reqwest::header::USER_AGENT,
-        reqwest::header::HeaderValue::from_static("fpm"),
+        reqwest::header::HeaderValue::from_static("fastn"),
     );
 
     if let Some(ip) = req.get_ip() {
@@ -101,17 +101,15 @@ pub(crate) async fn get_out(
         );
     }
 
-    for header in fpm::utils::ignore_headers() {
+    for header in fastn::utils::ignore_headers() {
         proxy_request.headers_mut().remove(header);
     }
 
     *proxy_request.body_mut() = Some(req.body().to_vec().into());
 
-    Ok(
-        fpm::http::ResponseBuilder::from_reqwest(
-            CLIENT.execute(proxy_request).await?,
-            package_name,
-        )
-        .await,
+    Ok(fastn::http::ResponseBuilder::from_reqwest(
+        CLIENT.execute(proxy_request).await?,
+        package_name,
     )
+    .await)
 }

@@ -2,7 +2,7 @@
 pub struct App {
     pub name: String,
     // TODO: Dependency or package??
-    pub package: fpm::Package,
+    pub package: fastn::Package,
     pub mount_point: String,
     pub end_point: Option<String>,
     pub user_id: Option<String>,
@@ -27,16 +27,16 @@ pub struct AppTemp {
 }
 
 impl AppTemp {
-    fn parse_config(config: &[String]) -> fpm::Result<std::collections::HashMap<String, String>> {
+    fn parse_config(config: &[String]) -> fastn::Result<std::collections::HashMap<String, String>> {
         let mut hm = std::collections::HashMap::new();
         for key_value in config.iter() {
             // <key>=<value>
             let (key, value): (&str, &str) = match key_value.trim().split_once('=') {
                 Some(x) => x,
                 None => {
-                    return Err(fpm::Error::PackageError {
+                    return Err(fastn::Error::PackageError {
                         message: format!(
-                            "package-config-error, wrong header in an fpm app, format is <key>=<value>, config: {}",
+                            "package-config-error, wrong header in an fastn app, format is <key>=<value>, config: {}",
                             key_value
                         ),
                     });
@@ -48,16 +48,16 @@ impl AppTemp {
             if value.starts_with("$ENV") {
                 let (_, env_var_name) = match value.trim().split_once('.') {
                     Some(x) => x,
-                    None => return Err(fpm::Error::PackageError {
+                    None => return Err(fastn::Error::PackageError {
                         message: format!(
-                            "package-config-error, wrong $ENV in an fpm app, format is <key>=$ENV.env_var_name, key: {}, value: {}",
+                            "package-config-error, wrong $ENV in an fastn app, format is <key>=$ENV.env_var_name, key: {}, value: {}",
                             key, value
                         ),
                     }),
                 };
 
                 let value =
-                    std::env::var(env_var_name).map_err(|err| fpm::Error::PackageError {
+                    std::env::var(env_var_name).map_err(|err| fastn::Error::PackageError {
                         message: format!(
                             "package-config-error,$ENV {} variable is not set for {}, err: {}",
                             env_var_name, value, err
@@ -71,9 +71,9 @@ impl AppTemp {
         Ok(hm)
     }
 
-    pub async fn into_app(self, config: &fpm::Config) -> fpm::Result<App> {
+    pub async fn into_app(self, config: &fastn::Config) -> fastn::Result<App> {
         let package = config
-            .resolve_package(&fpm::Package::new(self.package.trim().trim_matches('/')))
+            .resolve_package(&fastn::Package::new(self.package.trim().trim_matches('/')))
             .await?;
 
         Ok(App {
@@ -92,7 +92,7 @@ impl AppTemp {
 pub fn processor<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     use itertools::Itertools;
     #[derive(Debug, serde::Serialize)]
@@ -116,12 +116,12 @@ pub fn processor<'a>(
         })
         .collect_vec();
 
-    let indexy_apps = fpm::ds::LengthList::from_owned(apps);
+    let indexy_apps = fastn::ds::LengthList::from_owned(apps);
     doc.from_json(&indexy_apps, section)
 }
 
 // Takes the path /-/<package-name>/<remaining>/ or /mount-point/<remaining>/
-pub async fn can_read(config: &fpm::Config, path: &str) -> fpm::Result<bool> {
+pub async fn can_read(config: &fastn::Config, path: &str) -> fastn::Result<bool> {
     use itertools::Itertools;
     // first get the app
     let readers_groups = if let Some((_, _, _, Some(app))) =
@@ -154,13 +154,13 @@ pub async fn can_read(config: &fpm::Config, path: &str) -> fpm::Result<bool> {
         app_identities.extend(ug.get_identities(config)?)
     }
 
-    let auth_identities = fpm::auth::get_auth_identities(
+    let auth_identities = fastn::auth::get_auth_identities(
         config.request.as_ref().unwrap().cookies(),
         app_identities.as_slice(),
     )
     .await?;
 
-    return fpm::user_group::belongs_to(
+    return fastn::user_group::belongs_to(
         config,
         user_groups.as_slice(),
         auth_identities.iter().collect_vec().as_slice(),

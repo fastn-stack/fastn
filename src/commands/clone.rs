@@ -1,4 +1,4 @@
-pub async fn clone(source: &str) -> fpm::Result<()> {
+pub async fn clone(source: &str) -> fastn::Result<()> {
     let clone_response = call_clone_api(source).await?;
     let package_name = clone_response.package_name;
     let current_directory: camino::Utf8PathBuf =
@@ -8,13 +8,13 @@ pub async fn clone(source: &str) -> fpm::Result<()> {
 
     futures::future::join_all(clone_response.files.into_iter().map(|(path, file)| {
         let current_directory = root.clone();
-        tokio::spawn(
-            async move { fpm::utils::update1(&current_directory, path.as_str(), &file).await },
-        )
+        tokio::spawn(async move {
+            fastn::utils::update1(&current_directory, path.as_str(), &file).await
+        })
     }))
     .await;
 
-    let config = fpm::Config::read(Some(root.as_str().to_string()), false, None).await?;
+    let config = fastn::Config::read(Some(root.as_str().to_string()), false, None).await?;
     config.create_clone_workspace().await?;
     config
         .write_clone_available_cr(clone_response.reserved_crs.as_slice())
@@ -22,11 +22,11 @@ pub async fn clone(source: &str) -> fpm::Result<()> {
     Ok(())
 }
 
-async fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResponse> {
+async fn call_clone_api(source: &str) -> fastn::Result<fastn::apis::clone::CloneResponse> {
     #[derive(serde::Deserialize, std::fmt::Debug)]
     struct ApiResponse {
         message: Option<String>,
-        data: Option<fpm::apis::clone::CloneResponse>,
+        data: Option<fastn::apis::clone::CloneResponse>,
         success: bool,
     }
 
@@ -34,7 +34,7 @@ async fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResp
         crate::http::get_json(format!("{}/-/clone/", source).as_str()).await?;
 
     if !response.success {
-        return Err(fpm::Error::APIResponseError(
+        return Err(fastn::Error::APIResponseError(
             response
                 .message
                 .unwrap_or_else(|| "Some Error occurred".to_string()),
@@ -43,7 +43,7 @@ async fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResp
 
     match response.data {
         Some(data) => Ok(data),
-        None => Err(fpm::Error::APIResponseError(
+        None => Err(fastn::Error::APIResponseError(
             "Unexpected API behaviour".to_string(),
         )),
     }

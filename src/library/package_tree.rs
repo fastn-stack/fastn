@@ -3,7 +3,7 @@ use itertools::Itertools;
 pub async fn processor<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     processor_(section, doc, config)
         .await
@@ -17,7 +17,7 @@ pub async fn processor<'a>(
 pub fn processor_sync<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     futures::executor::block_on(processor_(section, doc, config)).map_err(|e| {
         ftd::p1::Error::ParseError {
@@ -31,11 +31,11 @@ pub fn processor_sync<'a>(
 pub async fn processor_<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
-) -> fpm::Result<ftd::Value> {
+    config: &fastn::Config,
+) -> fastn::Result<ftd::Value> {
     let root = config.get_root_for_package(&config.package);
-    let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
-    let workspaces = fpm::snapshot::get_workspace(config).await?;
+    let snapshots = fastn::snapshot::get_latest_snapshots(&config.root).await?;
+    let workspaces = fastn::snapshot::get_workspace(config).await?;
     let all_files = config
         .get_files(&config.package)
         .await?
@@ -65,11 +65,11 @@ pub async fn processor_<'a>(
 }
 
 pub(crate) async fn construct_tree(
-    config: &fpm::Config,
+    config: &fastn::Config,
     files: &[String],
     snapshots: &std::collections::BTreeMap<String, u128>,
-    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
-) -> fpm::Result<Vec<fpm::sitemap::toc::TocItemCompat>> {
+    workspaces: &std::collections::BTreeMap<String, fastn::snapshot::Workspace>,
+) -> fastn::Result<Vec<fastn::sitemap::toc::TocItemCompat>> {
     let mut tree = vec![];
     for file in files {
         insert(
@@ -88,14 +88,14 @@ pub(crate) async fn construct_tree(
 
 #[async_recursion::async_recursion(?Send)]
 async fn insert(
-    config: &fpm::Config,
-    tree: &mut Vec<fpm::sitemap::toc::TocItemCompat>,
+    config: &fastn::Config,
+    tree: &mut Vec<fastn::sitemap::toc::TocItemCompat>,
     path: &str,
     url: &str,
     full_path: &str,
     snapshots: &std::collections::BTreeMap<String, u128>,
-    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
-) -> fpm::Result<()> {
+    workspaces: &std::collections::BTreeMap<String, fastn::snapshot::Workspace>,
+) -> fastn::Result<()> {
     let (path, rest) = if let Some((path, rest)) = path.split_once('/') {
         (path, Some(rest))
     } else {
@@ -112,7 +112,7 @@ async fn insert(
             .map(|v| full_path.trim_end_matches(v))
             .unwrap_or(full_path);
         tree.push(
-            fpm::sitemap::toc::TocItemCompat::new(
+            fastn::sitemap::toc::TocItemCompat::new(
                 None,
                 Some(path.to_string()),
                 false,
@@ -138,18 +138,21 @@ async fn insert(
             workspaces,
         )
         .await?;
-    } else if let Ok(file) = fpm::get_file(
+    } else if let Ok(file) = fastn::get_file(
         config.package.name.to_string(),
         &config.root.join(full_path),
         &config.root,
     )
     .await
     {
-        let status = fpm::commands::status::get_file_status(&file, snapshots, workspaces).await?;
+        let status = fastn::commands::status::get_file_status(&file, snapshots, workspaces).await?;
         node.url = Some(url.to_string());
         node.number = Some(format!("{:?}", status))
     } else {
-        node.number = Some(format!("{:?}", fpm::commands::status::FileStatus::Deleted))
+        node.number = Some(format!(
+            "{:?}",
+            fastn::commands::status::FileStatus::Deleted
+        ))
     }
 
     Ok(())

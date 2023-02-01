@@ -1,6 +1,6 @@
 use crate::utils::HasElements;
 
-async fn i18n_data(lib: &fpm::Library) -> String {
+async fn i18n_data(lib: &fastn::Library) -> String {
     let lang = match lib.config.package.language {
         Some(ref lang) => {
             realm_lang::Language::from_2_letter_code(lang).unwrap_or(realm_lang::Language::English)
@@ -18,7 +18,7 @@ async fn i18n_data(lib: &fpm::Library) -> String {
     };
 
     let current_document_last_modified_on =
-        fpm::utils::get_current_document_last_modified_on(&lib.config, lib.document_id.as_str())
+        fastn::utils::get_current_document_last_modified_on(&lib.config, lib.document_id.as_str())
             .await;
 
     format!(
@@ -46,189 +46,189 @@ async fn i18n_data(lib: &fpm::Library) -> String {
             translation-not-available: {translation_not_available}
             unapproved-heading: {unapproved_heading}
             upto-date: {upto_date}
-            welcome-fpm-page-subtitle: {welcome_fpm_page_subtitle}
-            welcome-fpm-page: {welcome_fpm_page}
+            welcome-fastn-page-subtitle: {welcome_fastn_page_subtitle}
+            welcome-fastn-page: {welcome_fastn_page}
         "},
-        current_language = fpm::i18n::translation::search(
+        current_language = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "current-language",
             &current_document_last_modified_on
         ),
-        document = fpm::i18n::translation::search(
+        document = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "document",
             &current_document_last_modified_on
         ),
-        language = fpm::i18n::translation::search(
+        language = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "language",
             &current_document_last_modified_on
         ),
-        language_detail_page = fpm::i18n::translation::search(
+        language_detail_page = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "language-detail-page",
             &current_document_last_modified_on
         ),
-        language_detail_page_body = fpm::i18n::translation::search(
+        language_detail_page_body = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "language-detail-page-body",
             &current_document_last_modified_on
         ),
-        last_modified_on = fpm::i18n::translation::search(
+        last_modified_on = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "last-modified-on",
             &current_document_last_modified_on
         ),
-        never_synced = fpm::i18n::translation::search(
+        never_synced = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "never-synced",
             &current_document_last_modified_on
         ),
-        missing = fpm::i18n::translation::search(
+        missing = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "missing",
             &current_document_last_modified_on
         ),
-        never_marked = fpm::i18n::translation::search(
+        never_marked = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "never-marked",
             &current_document_last_modified_on
         ),
-        other_available_languages = fpm::i18n::translation::search(
+        other_available_languages = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "other-available-languages",
             &current_document_last_modified_on
         ),
-        out_dated = fpm::i18n::translation::search(
+        out_dated = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "out-dated",
             &current_document_last_modified_on
         ),
-        out_dated_body = fpm::i18n::translation::search(
+        out_dated_body = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "out-dated-body",
             &current_document_last_modified_on
         ),
-        out_dated_heading = fpm::i18n::translation::search(
+        out_dated_heading = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "out-dated-heading",
             &current_document_last_modified_on
         ),
-        show_latest_version = fpm::i18n::translation::search(
+        show_latest_version = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "show-latest-version",
             &current_document_last_modified_on
         ),
-        show_outdated_version = fpm::i18n::translation::search(
+        show_outdated_version = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "show-outdated-version",
             &current_document_last_modified_on
         ),
-        show_translation_status = fpm::i18n::translation::search(
+        show_translation_status = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "show-translation-status",
             &current_document_last_modified_on
         ),
-        show_unapproved_version = fpm::i18n::translation::search(
+        show_unapproved_version = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "show-unapproved-version",
             &current_document_last_modified_on
         ),
-        status = fpm::i18n::translation::search(
+        status = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "status",
             &current_document_last_modified_on
         ),
-        total_number_of_documents = fpm::i18n::translation::search(
+        total_number_of_documents = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "total-number-of-documents",
             &current_document_last_modified_on
         ),
-        translation_not_available = fpm::i18n::translation::search(
+        translation_not_available = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "translation-not-available",
             &current_document_last_modified_on
         ),
-        unapproved_heading = fpm::i18n::translation::search(
+        unapproved_heading = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "unapproved-heading",
             &current_document_last_modified_on
         ),
-        upto_date = fpm::i18n::translation::search(
+        upto_date = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
             "upto-date",
             &current_document_last_modified_on
         ),
-        welcome_fpm_page = fpm::i18n::translation::search(
+        welcome_fastn_page = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
-            "welcome-fpm-page",
+            "welcome-fastn-page",
             &current_document_last_modified_on
         ),
-        welcome_fpm_page_subtitle = fpm::i18n::translation::search(
+        welcome_fastn_page_subtitle = fastn::i18n::translation::search(
             &lang,
             &primary_lang,
-            "welcome-fpm-page-subtitle",
+            "welcome-fastn-page-subtitle",
             &current_document_last_modified_on
         ),
     )
 }
 
-fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
+fn construct_fastn_cli_variables(_lib: &fastn::Library) -> String {
     format!(
         indoc::indoc! {"
-        -- fpm.build-info info:
+        -- fastn.build-info info:
         cli-version: {cli_version}
         cli-git-commit-hash: {cli_git_commit_hash}
         cli-created-on: {cli_created_on}
         build-created-on: {build_created_on}
         ftd-version: {ftd_version}
     "},
-        cli_version = if fpm::utils::is_test() {
-            "FPM_CLI_VERSION"
+        cli_version = if fastn::utils::is_test() {
+            "fastn_CLI_VERSION"
         } else {
             env!("CARGO_PKG_VERSION")
         },
-        cli_git_commit_hash = if fpm::utils::is_test() {
-            "FPM_CLI_GIT_HASH"
+        cli_git_commit_hash = if fastn::utils::is_test() {
+            "fastn_CLI_GIT_HASH"
         } else {
             option_env!("GITHUB_SHA").unwrap_or("unknown-sha")
         },
-        cli_created_on = if fpm::utils::is_test() {
-            "FPM_CLI_BUILD_TIMESTAMP"
+        cli_created_on = if fastn::utils::is_test() {
+            "fastn_CLI_BUILD_TIMESTAMP"
         } else {
             // TODO: calculate this in github action and pass it, vergen is too heave a dependency
-            option_env!("FPM_CLI_BUILD_TIMESTAMP").unwrap_or("0")
+            option_env!("fastn_CLI_BUILD_TIMESTAMP").unwrap_or("0")
         },
-        ftd_version = if fpm::utils::is_test() {
+        ftd_version = if fastn::utils::is_test() {
             "FTD_VERSION"
         } else {
             ""
             // TODO
         },
-        build_created_on = if fpm::utils::is_test() {
+        build_created_on = if fastn::utils::is_test() {
             String::from("BUILD_CREATE_TIMESTAMP")
         } else {
             std::time::SystemTime::now()
@@ -240,12 +240,12 @@ fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
     )
 }
 
-pub(crate) async fn get2022_(lib: &fpm::Library) -> String {
+pub(crate) async fn get2022_(lib: &fastn::Library) -> String {
     #[allow(clippy::format_in_format_args)]
-    let mut fpm_base = format!(
+    let mut fastn_base = format!(
         indoc::indoc! {"
-            {fpm_base}
-            {capital_fpm}        
+            {fastn_base}
+            {capital_fastn}
 
             {build_info}
 
@@ -254,9 +254,9 @@ pub(crate) async fn get2022_(lib: &fpm::Library) -> String {
             -- string package-name: {package_name}
             -- string home-url: {home_url}
         "},
-        fpm_base = fpm::fpm_ftd(),
-        capital_fpm = capital_fpm(lib),
-        build_info = construct_fpm_cli_variables(lib),
+        fastn_base = fastn::fastn_ftd(),
+        capital_fastn = capital_fastn(lib),
+        build_info = construct_fastn_cli_variables(lib),
         document_id = lib.document_id,
         title = lib.config.package.name,
         package_name = lib.config.package.name,
@@ -264,45 +264,45 @@ pub(crate) async fn get2022_(lib: &fpm::Library) -> String {
     );
 
     if let Ok(number_of_documents) =
-        futures::executor::block_on(fpm::utils::get_number_of_documents(&lib.config))
+        futures::executor::block_on(fastn::utils::get_number_of_documents(&lib.config))
     {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- number-of-documents: {number_of_documents}    
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             number_of_documents = number_of_documents,
         );
     }
 
     if let Some((ref filename, ref content)) = lib.markdown {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- string markdown-filename: {filename}                        
                 -- string markdown-content:
     
                 {content}
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             filename = filename,
             content = content,
         );
     }
 
-    fpm_base
+    fastn_base
 }
 
-pub(crate) async fn get(lib: &fpm::Library) -> String {
+pub(crate) async fn get(lib: &fastn::Library) -> String {
     #[allow(clippy::format_in_format_args)]
-    let mut fpm_base = format!(
+    let mut fastn_base = format!(
         indoc::indoc! {"
-            {fpm_base}
+            {fastn_base}
             {design_ftd}
-            {capital_fpm}
+            {capital_fastn}
 
             {i18n_data}
 
@@ -314,11 +314,11 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
             -- string package-name: {package_name}
             -- string home-url: {home_url}
         "},
-        fpm_base = fpm::fpm_ftd(),
-        design_ftd = fpm::design_ftd(),
-        capital_fpm = capital_fpm(lib),
+        fastn_base = fastn::fastn_ftd(),
+        design_ftd = fastn::design_ftd(),
+        capital_fastn = capital_fastn(lib),
         i18n_data = i18n_data(lib).await,
-        build_info = construct_fpm_cli_variables(lib),
+        build_info = construct_fastn_cli_variables(lib),
         document_id = lib.document_id,
         title = lib.config.package.name,
         package_name = lib.config.package.name,
@@ -326,188 +326,188 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
     );
 
     if lib.config.package.translation_of.is_some() {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- is-translation-package: true
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
         );
     }
 
     if lib.config.package.translations.has_elements() {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- has-translations: true
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
         );
     }
 
     if let Some(ref zip) = lib.config.package.zip {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- package-zip: {package_zip}
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             package_zip = zip,
         );
     }
 
     if let Some(ref diff) = lib.translated_data.diff {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- diff: 
                 
                 {diff}    
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             diff = diff,
         );
     }
 
     if let Some(ref status) = lib.translated_data.status {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- translation-status: 
                 
                 {translation_status}    
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             translation_status = status,
         );
     }
 
     if lib.config.package.translation_of.is_some() || lib.config.package.translations.has_elements()
     {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- translation-status-url: //{package_name}/-/translation-status/
 
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             package_name = lib.config.package.name,
         );
     }
 
     if let Ok(number_of_documents) =
-        futures::executor::block_on(fpm::utils::get_number_of_documents(&lib.config))
+        futures::executor::block_on(fastn::utils::get_number_of_documents(&lib.config))
     {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- number-of-documents: {number_of_documents}    
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             number_of_documents = number_of_documents,
         );
     }
 
     if let Some(last_modified_on) =
-        futures::executor::block_on(fpm::utils::get_last_modified_on(&lib.config.root))
+        futures::executor::block_on(fastn::utils::get_last_modified_on(&lib.config.root))
     {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- last-modified-on: {last_modified_on}    
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             last_modified_on = last_modified_on,
         );
     }
 
     if let Some(last_modified_on) = futures::executor::block_on(
-        fpm::utils::get_current_document_last_modified_on(&lib.config, lib.document_id.as_str()),
+        fastn::utils::get_current_document_last_modified_on(&lib.config, lib.document_id.as_str()),
     ) {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- current-document-last-modified-on: {last_modified_on}    
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             last_modified_on = last_modified_on,
         );
     }
 
     if let Some(ref language) = lib.config.package.language {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- language: {language}     
             "},
-            fpm_base = fpm_base,
-            language = fpm::utils::language_to_human(language),
+            fastn_base = fastn_base,
+            language = fastn::utils::language_to_human(language),
         );
     }
 
     if let Some(ref last_marked_on) = lib.translated_data.last_marked_on {
-        let rfc3339 = fpm::utils::nanos_to_rfc3339(last_marked_on);
-        fpm_base = format!(
+        let rfc3339 = fastn::utils::nanos_to_rfc3339(last_marked_on);
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- last-marked-on: {last_marked_on}
                 -- last-marked-on-rfc3339: {rfc3339}    
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             last_marked_on = last_marked_on,
             rfc3339 = rfc3339,
         );
     }
     if let Some(ref original_latest) = lib.translated_data.original_latest {
-        let rfc3339 = fpm::utils::nanos_to_rfc3339(original_latest);
-        fpm_base = format!(
+        let rfc3339 = fastn::utils::nanos_to_rfc3339(original_latest);
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- original-latest: {original_latest}
                 -- original-latest-rfc3339: {rfc3339}    
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             original_latest = original_latest,
             rfc3339 = rfc3339,
         );
     }
     if let Some(ref translated_latest) = lib.translated_data.translated_latest {
-        let rfc3339 = fpm::utils::nanos_to_rfc3339(translated_latest);
-        fpm_base = format!(
+        let rfc3339 = fastn::utils::nanos_to_rfc3339(translated_latest);
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                         
                 -- translated-latest: {translated_latest}
                 -- translated-latest-rfc3339: {rfc3339}    
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             translated_latest = translated_latest,
             rfc3339 = rfc3339,
         );
     }
     if let Some((ref filename, ref content)) = lib.markdown {
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
                 
                 -- string markdown-filename: {filename}                        
                 -- string markdown-content:
     
                 {content}
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             filename = filename,
             content = content,
         );
@@ -526,10 +526,10 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
             String::from("/")
         };
         if let Ok(original_snapshots) =
-            futures::executor::block_on(fpm::snapshot::get_latest_snapshots(&original_path))
+            futures::executor::block_on(fastn::snapshot::get_latest_snapshots(&original_path))
         {
             if let Ok(translation_status) =
-                fpm::commands::translation_status::get_translation_status(
+                fastn::commands::translation_status::get_translation_status(
                     &original_snapshots,
                     &lib.config.root,
                 )
@@ -574,7 +574,7 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
                     is-heading: false"};
 
                     match status {
-                        fpm::commands::translation_status::TranslationStatus::Missing => {
+                        fastn::commands::translation_status::TranslationStatus::Missing => {
                             missing_files = format!(
                                 indoc::indoc! {"
                                     {list}
@@ -590,7 +590,7 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
                                 static_attrs = static_attrs,
                             );
                         }
-                        fpm::commands::translation_status::TranslationStatus::NeverMarked => {
+                        fastn::commands::translation_status::TranslationStatus::NeverMarked => {
                             never_marked_files = format!(
                                 indoc::indoc! {"
                                     {list}
@@ -607,7 +607,7 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
                                 static_attrs = static_attrs,
                             );
                         }
-                        fpm::commands::translation_status::TranslationStatus::Outdated => {
+                        fastn::commands::translation_status::TranslationStatus::Outdated => {
                             outdated_files = format!(
                                 indoc::indoc! {"
                                     {list}
@@ -624,7 +624,7 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
                                 static_attrs = static_attrs,
                             );
                         }
-                        fpm::commands::translation_status::TranslationStatus::UptoDate => {
+                        fastn::commands::translation_status::TranslationStatus::UptoDate => {
                             upto_date_files = format!(
                                 indoc::indoc! {"
                                     {list}
@@ -644,9 +644,9 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
                     }
                 }
 
-                fpm_base = format!(
+                fastn_base = format!(
                     indoc::indoc! {"
-                        {fpm_base}
+                        {fastn_base}
                         
                         -- record status-data:
                         string file:
@@ -664,7 +664,7 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
                         
                         {upto_date_files}
                     "},
-                    fpm_base = fpm_base,
+                    fastn_base = fastn_base,
                     translation_status_list = translation_status_list,
                     missing_files = missing_files,
                     never_marked_files = never_marked_files,
@@ -724,13 +724,13 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
             }
         }
 
-        fpm_base = format!(
+        fastn_base = format!(
             indoc::indoc! {"
-                {fpm_base}
+                {fastn_base}
             
                 {translation_status_list}
             "},
-            fpm_base = fpm_base,
+            fastn_base = fastn_base,
             translation_status_list = translation_status_list
         );
     }
@@ -740,7 +740,7 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
             let mut other_language_packages = translation_of
                 .translations
                 .iter()
-                .collect::<Vec<&fpm::Package>>();
+                .collect::<Vec<&fastn::Package>>();
             other_language_packages.insert(0, translation_of);
             other_language_packages
         } else {
@@ -748,7 +748,7 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
                 .package
                 .translations
                 .iter()
-                .collect::<Vec<&fpm::Package>>()
+                .collect::<Vec<&fastn::Package>>()
         };
 
     if other_language_packages.has_elements() {
@@ -761,7 +761,7 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
 
         for lang_package in other_language_packages {
             let language = if let Some(ref lang) = lang_package.language {
-                fpm::utils::language_to_human(lang)
+                fastn::utils::language_to_human(lang)
             } else {
                 continue;
             };
@@ -785,26 +785,26 @@ pub(crate) async fn get(lib: &fpm::Library) -> String {
         }
 
         if !languages.trim().is_empty() {
-            fpm_base = format!(
+            fastn_base = format!(
                 indoc::indoc! {"
-                    {fpm_base}
+                    {fastn_base}
                     
                     -- language-toc:
                     $processor$: toc
         
                     {languages}
                 "},
-                fpm_base = fpm_base,
+                fastn_base = fastn_base,
                 languages = languages,
             );
         }
     }
 
-    fpm_base
+    fastn_base
 }
 
-pub(crate) async fn get2(lib: &fpm::Library2) -> String {
-    let lib = fpm::Library {
+pub(crate) async fn get2(lib: &fastn::Library2) -> String {
+    let lib = fastn::Library {
         config: lib.config.clone(),
         markdown: lib.markdown.clone(),
         document_id: lib.document_id.clone(),
@@ -815,8 +815,8 @@ pub(crate) async fn get2(lib: &fpm::Library2) -> String {
     get(&lib).await
 }
 
-pub(crate) async fn get2022(lib: &fpm::Library2022) -> String {
-    let lib = fpm::Library {
+pub(crate) async fn get2022(lib: &fastn::Library2022) -> String {
+    let lib = fastn::Library {
         config: lib.config.clone(),
         markdown: lib.markdown.clone(),
         document_id: lib.document_id.clone(),
@@ -827,7 +827,7 @@ pub(crate) async fn get2022(lib: &fpm::Library2022) -> String {
     get2022_(&lib).await
 }
 
-fn capital_fpm(lib: &fpm::Library) -> String {
+fn capital_fastn(lib: &fastn::Library) -> String {
     let mut s = format!(
         indoc::indoc! {"
             -- package-data package: {package_name}

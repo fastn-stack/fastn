@@ -5,18 +5,18 @@ pub struct CloneResponse {
     pub reserved_crs: Vec<i32>,
 }
 
-pub async fn clone(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
+pub async fn clone(req: fastn::http::Request) -> fastn::Result<fastn::http::Response> {
     // TODO: implement authentication
     match clone_worker(req).await {
-        Ok(data) => fpm::http::api_ok(data),
-        Err(err) => fpm::http::api_error(err.to_string()),
+        Ok(data) => fastn::http::api_ok(data),
+        Err(err) => fastn::http::api_error(err.to_string()),
     }
 }
 
-async fn clone_worker(req: fpm::http::Request) -> fpm::Result<CloneResponse> {
+async fn clone_worker(req: fastn::http::Request) -> fastn::Result<CloneResponse> {
     use itertools::Itertools;
 
-    let config = fpm::Config::read(None, false, Some(&req)).await?;
+    let config = fastn::Config::read(None, false, Some(&req)).await?;
     let all_files = config
         .get_all_file_path(&config.package, Default::default())?
         .into_iter()
@@ -31,7 +31,7 @@ async fn clone_worker(req: fpm::http::Request) -> fpm::Result<CloneResponse> {
                 tokio::spawn(async move {
                     tokio::fs::read(&x)
                         .await
-                        .map_err(fpm::Error::IoError)
+                        .map_err(fastn::Error::IoError)
                         .map(|v| {
                             (
                                 x.strip_prefix(root)
@@ -42,7 +42,7 @@ async fn clone_worker(req: fpm::http::Request) -> fpm::Result<CloneResponse> {
                         })
                 })
             })
-            .collect::<Vec<tokio::task::JoinHandle<fpm::Result<(String, Vec<u8>)>>>>(),
+            .collect::<Vec<tokio::task::JoinHandle<fastn::Result<(String, Vec<u8>)>>>>(),
     )
     .await
     .into_iter()

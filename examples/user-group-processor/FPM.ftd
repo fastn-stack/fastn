@@ -1,20 +1,20 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: user-group-processor
+-- fastn.package: user-group-processor
 download-base-url: https://www.github.com/
 
 
--- fpm.user-group: fifthtry-people
+-- fastn.user-group: fifthtry-people
 title: FifthTry People
 github-team: FifthTry/everyone
 discord-channel: discord-server-id
 
--- fpm.user-group: foo-people
+-- fastn.user-group: foo-people
 title: Foo People
 github-team: FifthTry/foo
 
 
--- fpm.sitemap:
+-- fastn.sitemap:
 
 # Home: /
 readers: fifthtry-people

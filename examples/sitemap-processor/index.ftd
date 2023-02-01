@@ -1,4 +1,4 @@
--- import: fpm/processors as p
+-- import: fastn/processors as p
 
 -- component print-toc:
 p.toc-item item:

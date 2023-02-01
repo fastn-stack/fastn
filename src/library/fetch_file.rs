@@ -1,7 +1,7 @@
 pub async fn processor<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     processor_(section, doc, config)
         .await
@@ -15,7 +15,7 @@ pub async fn processor<'a>(
 pub fn processor_sync<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     let f = futures::executor::block_on(processor_(section, doc, config));
 
@@ -29,8 +29,8 @@ pub fn processor_sync<'a>(
 pub async fn processor_<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
-) -> fpm::Result<ftd::Value> {
+    config: &fastn::Config,
+) -> fastn::Result<ftd::Value> {
     let path = section
         .header
         .string(doc.name, section.line_number, "path")?;

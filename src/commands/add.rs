@@ -1,4 +1,4 @@
-pub async fn add(config: &fpm::Config, file: &str, cr: Option<&str>) -> fpm::Result<()> {
+pub async fn add(config: &fastn::Config, file: &str, cr: Option<&str>) -> fastn::Result<()> {
     if let Some(cr) = cr {
         let cr = cr.parse::<usize>()?;
         cr_add(config, file, cr).await
@@ -7,26 +7,26 @@ pub async fn add(config: &fpm::Config, file: &str, cr: Option<&str>) -> fpm::Res
     }
 }
 
-async fn simple_add(config: &fpm::Config, file: &str) -> fpm::Result<()> {
+async fn simple_add(config: &fastn::Config, file: &str) -> fastn::Result<()> {
     use itertools::Itertools;
 
     let mut workspace = config.get_clone_workspace().await?;
 
     if workspace.contains_key(file) {
-        return Err(fpm::Error::UsageError {
+        return Err(fastn::Error::UsageError {
             message: format!("{} is already in workspace", file),
         });
     }
 
     if !config.root.join(file).exists() {
-        return Err(fpm::Error::UsageError {
+        return Err(fastn::Error::UsageError {
             message: format!("{} doesn't exists", file),
         });
     }
 
     workspace.insert(
         file.to_string(),
-        fpm::workspace::WorkspaceEntry {
+        fastn::workspace::WorkspaceEntry {
             filename: file.to_string(),
             deleted: None,
             version: None,
@@ -41,17 +41,17 @@ async fn simple_add(config: &fpm::Config, file: &str) -> fpm::Result<()> {
     Ok(())
 }
 
-async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> {
+async fn cr_add(config: &fastn::Config, file: &str, cr: usize) -> fastn::Result<()> {
     use itertools::Itertools;
 
-    if !fpm::cr::is_open_cr_exists(config, cr).await? {
-        return fpm::usage_error(format!("CR#{} is closed", cr));
+    if !fastn::cr::is_open_cr_exists(config, cr).await? {
+        return fastn::usage_error(format!("CR#{} is closed", cr));
     };
     let remote_manifest = config.get_remote_manifest(false).await?;
     if remote_manifest.contains_key(file) {
-        return Err(fpm::Error::UsageError {
+        return Err(fastn::Error::UsageError {
             message: format!(
-                "{} is present in remote manifest. Help: Use `fpm edit {} --cr {}",
+                "{} is present in remote manifest. Help: Use `fastn edit {} --cr {}",
                 file, file, cr
             ),
         });
@@ -62,7 +62,7 @@ async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> 
     let cr_file_path = config.cr_path(cr).join(file);
     workspace.insert(
         config.path_without_root(&cr_file_path)?,
-        fpm::workspace::WorkspaceEntry {
+        fastn::workspace::WorkspaceEntry {
             filename: config.path_without_root(&cr_file_path)?,
             deleted: None,
             version: None,
@@ -77,9 +77,9 @@ async fn cr_add(config: &fpm::Config, file: &str, cr: usize) -> fpm::Result<()> 
     let file_path = config.root.join(file);
 
     if file_path.exists() {
-        fpm::utils::copy(&file_path, &cr_file_path).await?;
+        fastn::utils::copy(&file_path, &cr_file_path).await?;
     } else {
-        fpm::utils::update(&cr_file_path, vec![].as_slice()).await?;
+        fastn::utils::update(&cr_file_path, vec![].as_slice()).await?;
     }
 
     Ok(())

@@ -2,7 +2,7 @@ pub fn process_readers<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
     document_id: &str,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     use itertools::Itertools;
@@ -36,7 +36,7 @@ pub fn process_writers<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
     document_id: &str,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     use itertools::Itertools;
@@ -69,7 +69,7 @@ pub fn document_id<'a>(
     _value: ftd::ast::VariableValue,
     _kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let doc_id = config.doc_id().unwrap_or_else(|| {
         doc.name
@@ -98,10 +98,10 @@ pub fn document_full_id<'a>(
     _value: ftd::ast::VariableValue,
     _kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     Ok(ftd::interpreter2::Value::String {
-        text: fpm::library2022::utils::document_full_id(config, doc)?,
+        text: fastn::library2022::utils::document_full_id(config, doc)?,
     })
 }
 
@@ -109,7 +109,7 @@ pub fn document_suffix<'a>(
     _value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let doc_id = config.doc_id().unwrap_or_else(|| {
         doc.name
@@ -136,7 +136,7 @@ pub async fn document_name<'a>(
     value: ftd::ast::VariableValue,
     _kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let doc_id = config.doc_id().unwrap_or_else(|| {
         doc.name

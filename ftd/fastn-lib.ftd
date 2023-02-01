@@ -1,4 +1,4 @@
--- import: fpm
+-- import: fastn
 
 -- ftd.row message:
 width: fill
@@ -11,12 +11,12 @@ padding: 10
 --- ftd.column:
 spacing: 5
 
---- key-value: $fpm.i18n.last-modified-on
-value: $fpm.current-document-last-modified-on
-default: $fpm.i18n.never-synced
+--- key-value: $fastn.i18n.last-modified-on
+value: $fastn.current-document-last-modified-on
+default: $fastn.i18n.never-synced
 
---- ftd.text: $fpm.i18n.show-translation-status
-link: $fpm.translation-status-url
+--- ftd.text: $fastn.i18n.show-translation-status
+link: $fastn.translation-status-url
 /background-color: #d27355
 border-radius: 13
 /color: white
@@ -72,18 +72,18 @@ position: center
 position: center
 boolean show-menu: false
 
---- ftd.text: $fpm.i18n.other-available-languages
-if: $fpm.language is null
+--- ftd.text: $fastn.i18n.other-available-languages
+if: $fastn.language is null
 
 --- ftd.row:
 width: fill
-if: $fpm.language is not null
+if: $fastn.language is not null
 
---- ftd.text: $fpm.i18n.current-language
+--- ftd.text: $fastn.i18n.current-language
 width: 120
 align: center
 
---- ftd.text: $fpm.language
+--- ftd.text: $fastn.language
 border-width: 1
 /border-color: #adaeb3
 margin-top: 5
@@ -115,7 +115,7 @@ margin-top: 26
 $on-click$: toggle $show-menu
 
 --- ftd.text: $obj.title
-$loop$: $fpm.language-toc as $obj
+$loop$: $fastn.language-toc as $obj
 link: $obj.url
 padding: 10
 width: fill

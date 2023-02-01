@@ -7,7 +7,7 @@ Colors: https://m3.material.io/styles/color/the-color-system/tokens
   values may have to be updated.
 
 We are not using Roboto as that would put a dependency on Roboto package
-on every fpm package.
+on every fastn package.
 
 -- string font-copy: sans-serif
 -- string font-display: sans-serif

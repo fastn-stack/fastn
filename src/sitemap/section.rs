@@ -21,7 +21,7 @@ pub struct Section {
     /// Example: In the inheritance.ftd document
     ///
     /// ```ftd
-    /// -- fpm.info DOCUMENT_INFO:
+    /// -- fastn.info DOCUMENT_INFO:
     /// title: Foo Title
     /// ```
     ///
@@ -62,10 +62,10 @@ pub struct Section {
     ///
     /// Example:
     ///
-    /// In `FPM.ftd`
+    /// In `FASTN.ftd`
     ///
-    /// ```fpm
-    /// -- fpm.sitemap:
+    /// ```fastn
+    /// -- fastn.sitemap:
     ///
     /// \# foo/
     /// show: true
@@ -90,7 +90,7 @@ pub struct Section {
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
     pub nav_title: Option<String>,
-    pub subsections: Vec<fpm::sitemap::section::Subsection>,
+    pub subsections: Vec<fastn::sitemap::section::Subsection>,
 
     /// `skip` is used for skipping the section from sitemap processor
     /// Example:
@@ -109,7 +109,7 @@ pub struct Section {
     pub confidential: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
-    /// In FPM.ftd sitemap, we can use `document` for section, subsection and toc.
+    /// In FASTN.ftd sitemap, we can use `document` for section, subsection and toc.
     /// # Section: /books/
     ///   document: /books/python/
     pub document: Option<String>,
@@ -117,7 +117,7 @@ pub struct Section {
     /// `url: /books/<string:book_name>/<integer:price>/`
     /// here book_name and price are path parameters
     /// [(0, books, None), (1, book_name, string), (2, price, integer)]
-    pub path_parameters: Vec<fpm::sitemap::PathParams>,
+    pub path_parameters: Vec<fastn::sitemap::PathParams>,
 }
 
 impl Default for Section {
@@ -155,7 +155,7 @@ pub struct Subsection {
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
     pub nav_title: Option<String>,
-    pub toc: Vec<fpm::sitemap::toc::TocItem>,
+    pub toc: Vec<fastn::sitemap::toc::TocItem>,
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
@@ -168,12 +168,12 @@ pub struct Subsection {
     /// /books/<string:book_name>/
     /// here book_name is path parameter
     /// [(0, books, None), (1, book_name, string)]
-    pub path_parameters: Vec<fpm::sitemap::PathParams>,
+    pub path_parameters: Vec<fastn::sitemap::PathParams>,
 }
 
 impl Section {
     pub fn path_exists(&self, path: &str) -> bool {
-        if fpm::utils::ids_matches(self.id.as_str(), path) {
+        if fastn::utils::ids_matches(self.id.as_str(), path) {
             return true;
         }
 
@@ -197,11 +197,11 @@ impl Section {
 
     // return true if any item in sitemap does contain path_params
     pub fn contains_named_params(sections: &[Section]) -> bool {
-        pub fn any_named_params(v: &[fpm::sitemap::PathParams]) -> bool {
+        pub fn any_named_params(v: &[fastn::sitemap::PathParams]) -> bool {
             v.iter().any(|x| x.is_named_param())
         }
 
-        fn check_toc(toc: &fpm::sitemap::toc::TocItem) -> bool {
+        fn check_toc(toc: &fastn::sitemap::toc::TocItem) -> bool {
             if any_named_params(&toc.path_parameters) {
                 return true;
             }
@@ -278,7 +278,7 @@ impl Subsection {
     /// path: /
     fn path_exists(&self, path: &str) -> bool {
         if let Some(id) = self.id.as_ref() {
-            if fpm::utils::ids_matches(path, id.as_str()) {
+            if fastn::utils::ids_matches(path, id.as_str()) {
                 return true;
             }
         }

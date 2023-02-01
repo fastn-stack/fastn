@@ -63,38 +63,38 @@ pub struct SyncRequest {
 /// If conflict occur, Then send back updated version in latest.ftd with conflicted content
 ///
 pub async fn sync(
-    req: &fpm::http::Request,
+    req: &fastn::http::Request,
     sync_req: SyncRequest,
-) -> fpm::Result<fpm::http::Response> {
+) -> fastn::Result<fastn::http::Response> {
     dbg!("remote server call", &sync_req.package_name);
 
     match sync_worker(req, sync_req).await {
-        Ok(data) => fpm::http::api_ok(data),
-        Err(err) => fpm::http::api_error(err.to_string()),
+        Ok(data) => fastn::http::api_ok(data),
+        Err(err) => fastn::http::api_error(err.to_string()),
     }
 }
 
 pub(crate) async fn sync_worker(
-    req: &fpm::http::Request,
+    req: &fastn::http::Request,
     request: SyncRequest,
-) -> fpm::Result<SyncResponse> {
+) -> fastn::Result<SyncResponse> {
     use itertools::Itertools;
 
     // TODO: Need to call at once only
-    let config = fpm::Config::read(None, false, Some(req)).await?;
-    let mut snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
-    let client_snapshots = fpm::snapshot::resolve_snapshots(&request.latest_ftd).await?;
+    let config = fastn::Config::read(None, false, Some(req)).await?;
+    let mut snapshots = fastn::snapshot::get_latest_snapshots(&config.root).await?;
+    let client_snapshots = fastn::snapshot::resolve_snapshots(&request.latest_ftd).await?;
     // let latest_ftd = tokio::fs::read_to_string(config.history_dir().join(".latest.ftd")).await?;
-    let timestamp = fpm::timestamp_nanosecond();
+    let timestamp = fastn::timestamp_nanosecond();
     let mut synced_files = std::collections::HashMap::new();
     for file in request.files.iter() {
         match file {
             SyncRequestFile::Add { path, content } => {
                 // We need to check if, file is already available on server
-                fpm::utils::update1(&config.root, path, content).await?;
+                fastn::utils::update1(&config.root, path, content).await?;
 
                 let snapshot_path =
-                    fpm::utils::history_path(path, config.root.as_str(), &timestamp);
+                    fastn::utils::history_path(path, config.root.as_str(), &timestamp);
 
                 if let Some((dir, _)) = snapshot_path.as_str().rsplit_once('/') {
                     tokio::fs::create_dir_all(dir).await?;
@@ -111,13 +111,13 @@ pub(crate) async fn sync_worker(
                 // If the value of server's snapshot is greater than client snapshot
                 let remote_timestamp = snapshots
                     .get(path.as_str())
-                    .ok_or_else(|| fpm::Error::APIResponseError("".to_string()))?;
+                    .ok_or_else(|| fastn::Error::APIResponseError("".to_string()))?;
                 let client_timestamp = client_snapshots
                     .get(path.as_str())
-                    .ok_or_else(|| fpm::Error::APIResponseError("".to_string()))?;
+                    .ok_or_else(|| fastn::Error::APIResponseError("".to_string()))?;
 
                 let snapshot_path =
-                    fpm::utils::history_path(path, config.root.as_str(), remote_timestamp);
+                    fastn::utils::history_path(path, config.root.as_str(), remote_timestamp);
 
                 let data = tokio::fs::read(snapshot_path).await?;
 
@@ -143,7 +143,7 @@ pub(crate) async fn sync_worker(
             }
             SyncRequestFile::Update { path, content } => {
                 let client_snapshot_timestamp = client_snapshots.get(path).ok_or_else(|| {
-                    fpm::Error::APIResponseError(format!(
+                    fastn::Error::APIResponseError(format!(
                         "path should be available in latest.ftd {}",
                         path
                     ))
@@ -153,36 +153,36 @@ pub(crate) async fn sync_worker(
                 if let Some(snapshot_timestamp) = snapshots.get(path) {
                     // No conflict case, Only client modified the file
                     if client_snapshot_timestamp.eq(snapshot_timestamp) {
-                        fpm::utils::update1(&config.root, path, content).await?;
+                        fastn::utils::update1(&config.root, path, content).await?;
                         let snapshot_path =
-                            fpm::utils::history_path(path, config.root.as_str(), &timestamp);
+                            fastn::utils::history_path(path, config.root.as_str(), &timestamp);
                         tokio::fs::copy(config.root.join(path), snapshot_path).await?;
                         snapshots.insert(path.to_string(), timestamp);
                     } else {
                         // else: Both has modified the same file
                         // TODO: Need to handle static files like images, don't require merging
-                        let ancestor_path = fpm::utils::history_path(
+                        let ancestor_path = fastn::utils::history_path(
                             path,
                             config.root.as_str(),
                             client_snapshot_timestamp,
                         );
                         let ancestor_content = tokio::fs::read_to_string(ancestor_path).await?;
-                        let ours_path = fpm::utils::history_path(
+                        let ours_path = fastn::utils::history_path(
                             path,
                             config.root.as_str(),
                             snapshot_timestamp,
                         );
                         let theirs_content = tokio::fs::read_to_string(ours_path).await?;
                         let ours_content = String::from_utf8(content.clone())
-                            .map_err(|e| fpm::Error::APIResponseError(e.to_string()))?;
+                            .map_err(|e| fastn::Error::APIResponseError(e.to_string()))?;
 
                         match diffy::MergeOptions::new()
                             .set_conflict_style(diffy::ConflictStyle::Merge)
                             .merge(&ancestor_content, &ours_content, &theirs_content)
                         {
                             Ok(data) => {
-                                fpm::utils::update1(&config.root, path, data.as_bytes()).await?;
-                                let snapshot_path = fpm::utils::history_path(
+                                fastn::utils::update1(&config.root, path, data.as_bytes()).await?;
+                                let snapshot_path = fastn::utils::history_path(
                                     path,
                                     config.root.as_str(),
                                     &timestamp,
@@ -232,11 +232,11 @@ pub(crate) async fn sync_worker(
 
     let history_files = clone_history_files(&config, &snapshots, &client_snapshots).await?;
 
-    fpm::snapshot::create_latest_snapshots(
+    fastn::snapshot::create_latest_snapshots(
         &config,
         &snapshots
             .into_iter()
-            .map(|(filename, timestamp)| fpm::Snapshot {
+            .map(|(filename, timestamp)| fastn::Snapshot {
                 filename,
                 timestamp,
             })
@@ -287,11 +287,11 @@ fn snapshot_diff(
 /// Send latest.ftd file as well
 
 async fn client_current_files(
-    config: &fpm::Config,
+    config: &fastn::Config,
     server_snapshot: &std::collections::BTreeMap<String, u128>,
     client_snapshot: &std::collections::BTreeMap<String, u128>,
     synced_files: &mut std::collections::HashMap<String, SyncResponseFile>,
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     // Newly Added and Updated files
     let diff = snapshot_diff(server_snapshot, client_snapshot);
     for (path, _) in diff.iter() {
@@ -332,10 +332,10 @@ async fn client_current_files(
 }
 
 async fn clone_history_files(
-    config: &fpm::Config,
+    config: &fastn::Config,
     server_snapshot: &std::collections::BTreeMap<String, u128>,
     client_snapshot: &std::collections::BTreeMap<String, u128>,
-) -> fpm::Result<Vec<File>> {
+) -> fastn::Result<Vec<File>> {
     use itertools::Itertools;
 
     let diff = snapshot_diff(server_snapshot, client_snapshot);
@@ -369,7 +369,7 @@ async fn clone_history_files(
     Ok(dot_history)
 }
 
-fn get_all_timestamps(path: &str, history: &[String]) -> fpm::Result<Vec<(u128, String)>> {
+fn get_all_timestamps(path: &str, history: &[String]) -> fastn::Result<Vec<(u128, String)>> {
     let (path_prefix, ext) = if let Some((path_prefix, ext)) = path.rsplit_once('.') {
         (format!("{}.", path_prefix), Some(ext))
     } else {

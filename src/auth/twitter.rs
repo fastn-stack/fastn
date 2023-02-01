@@ -55,7 +55,7 @@ impl TwitterScopes {
     }
 }
 // route: /auth/login/
-pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Response> {
+pub async fn login(req: actix_web::HttpRequest) -> fastn::Result<fastn::http::Response> {
     // Twitter will be redirect to this url after login process completed
 
     let redirect_url: String = format!(
@@ -67,11 +67,11 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
     let client_id = match std::env::var("TWITTER_CLIENT_ID") {
         Ok(id) => id,
         Err(_e) => {
-            return Err(fpm::Error::APIResponseError(
-                "WARN: FPM_TEMP_TWITTER_CLIENT_ID not set.".to_string(),
+            return Err(fastn::Error::APIResponseError(
+                "WARN: FASTN_TEMP_TWITTER_CLIENT_ID not set.".to_string(),
             ));
             // TODO: Need to change this approach later
-            //"FPM_TEMP_TWITTER_CLIENT_ID".to_string()
+            //"FASTN_TEMP_TWITTER_CLIENT_ID".to_string()
         }
     };
     let twitter_auth_url = format!(
@@ -109,7 +109,7 @@ pub async fn login(req: actix_web::HttpRequest) -> fpm::Result<fpm::http::Respon
 // route: /auth/twitter/callback/
 // In this API we are accessing
 // the token and setting it to cookies
-pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::HttpResponse> {
+pub async fn callback(req: actix_web::HttpRequest) -> fastn::Result<actix_web::HttpResponse> {
     #[derive(Debug, serde::Deserialize)]
     pub struct QueryParams {
         pub code: String,
@@ -138,10 +138,10 @@ pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::Htt
             return Ok(actix_web::HttpResponse::Found()
                 .cookie(
                     actix_web::cookie::Cookie::build(
-                        fpm::auth::AuthProviders::Twitter.as_str(),
-                        fpm::auth::utils::encrypt_str(&user_detail_str).await,
+                        fastn::auth::AuthProviders::Twitter.as_str(),
+                        fastn::auth::utils::encrypt_str(&user_detail_str).await,
                     )
-                    .domain(fpm::auth::utils::domain(req.connection_info().host()))
+                    .domain(fastn::auth::utils::domain(req.connection_info().host()))
                     .path("/")
                     .permanent()
                     .finish(),
@@ -154,12 +154,12 @@ pub async fn callback(req: actix_web::HttpRequest) -> fpm::Result<actix_web::Htt
 }
 pub async fn matched_identities(
     ud: UserDetail,
-    identities: &[fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     let twitter_identities = identities
         .iter()
         .filter(|identity| identity.key.starts_with("twitter"))
-        .collect::<Vec<&fpm::user_group::UserIdentity>>();
+        .collect::<Vec<&fastn::user_group::UserIdentity>>();
 
     if twitter_identities.is_empty() {
         return Ok(vec![]);
@@ -180,8 +180,8 @@ pub async fn matched_identities(
 }
 pub async fn matched_liking_member(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut member_liked_tweets: Vec<String> = vec![];
     let tweet_ids = identities
@@ -209,7 +209,7 @@ pub async fn matched_liking_member(
     // filter the user liked tweets with input
     Ok(member_liked_tweets
         .into_iter()
-        .map(|tweet_id| fpm::user_group::UserIdentity {
+        .map(|tweet_id| fastn::user_group::UserIdentity {
             key: "twitter-liking".to_string(),
             value: tweet_id,
         })
@@ -217,8 +217,8 @@ pub async fn matched_liking_member(
 }
 pub async fn matched_retweet_member(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut member_retweeted_tweet: Vec<String> = vec![];
     let tweet_ids = identities
@@ -247,7 +247,7 @@ pub async fn matched_retweet_member(
     // filter the user liked tweets with input
     Ok(member_retweeted_tweet
         .into_iter()
-        .map(|tweet_id| fpm::user_group::UserIdentity {
+        .map(|tweet_id| fastn::user_group::UserIdentity {
             key: "twitter-retweet".to_string(),
             value: tweet_id,
         })
@@ -256,8 +256,8 @@ pub async fn matched_retweet_member(
 //This method will be used to find given user twitter followers.
 pub async fn matched_member_followers(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut followed_member_list: Vec<String> = vec![];
     let member_names = identities
@@ -287,7 +287,7 @@ pub async fn matched_member_followers(
     // filter the user followers with input
     Ok(followed_member_list
         .into_iter()
-        .map(|member_id| fpm::user_group::UserIdentity {
+        .map(|member_id| fastn::user_group::UserIdentity {
             key: "twitter-followers".to_string(),
             value: member_id,
         })
@@ -295,8 +295,8 @@ pub async fn matched_member_followers(
 }
 pub async fn matched_member_followings(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut following_member_list: Vec<String> = vec![];
     let member_names = identities
@@ -326,7 +326,7 @@ pub async fn matched_member_followings(
     // filter the user following with input
     Ok(following_member_list
         .into_iter()
-        .map(|member_id| fpm::user_group::UserIdentity {
+        .map(|member_id| fastn::user_group::UserIdentity {
             key: "twitter-follows".to_string(),
             value: member_id,
         })
@@ -334,8 +334,8 @@ pub async fn matched_member_followings(
 }
 pub async fn matched_space_buyers(
     ud: &UserDetail,
-    identities: &[&fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    identities: &[&fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     use itertools::Itertools;
     let mut space_allowed_list: Vec<String> = vec![];
     let space_ids = identities
@@ -364,7 +364,7 @@ pub async fn matched_space_buyers(
     // filter the user spaces with input
     Ok(space_allowed_list
         .into_iter()
-        .map(|space_id| fpm::user_group::UserIdentity {
+        .map(|space_id| fastn::user_group::UserIdentity {
             key: "twitter-space".to_string(),
             value: space_id,
         })
@@ -386,11 +386,11 @@ pub mod apis {
     // API Docs: https://developer.twitter.com/en/docs/authentication/guides/v2-authentication-mapping
 
     //This API will only be used to get access token for discord
-    pub async fn twitter_token(url: &str, redirect_url: &str, code: &str) -> fpm::Result<String> {
+    pub async fn twitter_token(url: &str, redirect_url: &str, code: &str) -> fastn::Result<String> {
         let client_id = match std::env::var("TWITTER_CLIENT_ID") {
             Ok(id) => id,
             Err(_e) => {
-                return Err(fpm::Error::APIResponseError(
+                return Err(fastn::Error::APIResponseError(
                     "WARN: TWITTER_CLIENT_ID not set.".to_string(),
                 ));
             }
@@ -408,7 +408,7 @@ pub mod apis {
         let response = reqwest::Client::new().post(url).form(&map).send().await?;
 
         if !response.status().eq(&reqwest::StatusCode::OK) {
-            return Err(fpm::Error::APIResponseError(format!(
+            return Err(fastn::Error::APIResponseError(format!(
                 "TWITTER-API-ERROR: {}, Error: {}",
                 url,
                 response.text().await?
@@ -420,7 +420,7 @@ pub mod apis {
 
     // TODO: API to get user detail.
     // TODO: It can be stored in the request cookies
-    pub async fn user_details(token: &str) -> fpm::Result<(String, String)> {
+    pub async fn user_details(token: &str) -> fastn::Result<(String, String)> {
         // API Docs: https://api.twitter.com/2/users/me
         #[derive(serde::Deserialize)]
         struct DataObj {
@@ -431,7 +431,7 @@ pub mod apis {
             username: String,
             id: String,
         }
-        let user_obj: DataObj = fpm::auth::utils::get_api(
+        let user_obj: DataObj = fastn::auth::utils::get_api(
             "https://api.twitter.com/2/users/me",
             format!("{} {}", "Bearer", token).as_str(),
         )
@@ -441,7 +441,7 @@ pub mod apis {
     }
     // TODO: API to get user detail by name.
     // TODO: It can be stored in the request cookies
-    pub async fn user_details_by_name(token: &str, username: &str) -> fpm::Result<String> {
+    pub async fn user_details_by_name(token: &str, username: &str) -> fastn::Result<String> {
         // API Docs: https://api.twitter.com/2/users/by/username/{username}
         #[derive(serde::Deserialize)]
         struct DataObj {
@@ -451,7 +451,7 @@ pub mod apis {
         struct UserDetail {
             id: String,
         }
-        let user_obj: DataObj = fpm::auth::utils::get_api(
+        let user_obj: DataObj = fastn::auth::utils::get_api(
             format!(
                 "{}{}",
                 "https://api.twitter.com/2/users/by/username/", username
@@ -462,11 +462,11 @@ pub mod apis {
         .await?;
         Ok(user_obj.data.id)
     }
-    pub async fn liking_members(token: &str, tweet_id: &str) -> fpm::Result<Vec<String>> {
+    pub async fn liking_members(token: &str, tweet_id: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://api.twitter.com/2/tweets/{tweet-id}/liking_users?max_results=100
         // TODO: Handle paginated response
 
-        let liking_member_list: DataObj = fpm::auth::utils::get_api(
+        let liking_member_list: DataObj = fastn::auth::utils::get_api(
             format!(
                 "{}{}{}?max_results=100",
                 "https://api.twitter.com/2/tweets/", tweet_id, "/liking_users"
@@ -477,11 +477,14 @@ pub mod apis {
         .await?;
         Ok(liking_member_list.data.into_iter().map(|x| x.id).collect())
     }
-    pub async fn tweet_retweeted_members(token: &str, tweet_id: &str) -> fpm::Result<Vec<String>> {
+    pub async fn tweet_retweeted_members(
+        token: &str,
+        tweet_id: &str,
+    ) -> fastn::Result<Vec<String>> {
         // API Docs: https://api.twitter.com/2/tweets/{tweet-id}/retweeted_by?max_results=100
         // TODO: Handle paginated response
 
-        let retweeted_member_list: DataObj = fpm::auth::utils::get_api(
+        let retweeted_member_list: DataObj = fastn::auth::utils::get_api(
             format!(
                 "{}{}{}?max_results=100",
                 "https://api.twitter.com/2/tweets/", tweet_id, "/retweeted_by"
@@ -496,11 +499,11 @@ pub mod apis {
             .map(|x| x.id)
             .collect())
     }
-    pub async fn member_followers(token: &str, member_id: &str) -> fpm::Result<Vec<String>> {
+    pub async fn member_followers(token: &str, member_id: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://api.twitter.com/2/users/{user-id}/followers?max_results=100
         // TODO: Handle paginated response
 
-        let member_follower_list: DataObj = fpm::auth::utils::get_api(
+        let member_follower_list: DataObj = fastn::auth::utils::get_api(
             format!(
                 "{}{}{}?max_results=100",
                 "https://api.twitter.com/2/users/", member_id, "/followers"
@@ -515,11 +518,11 @@ pub mod apis {
             .map(|x| x.id)
             .collect())
     }
-    pub async fn member_followings(token: &str, member_id: &str) -> fpm::Result<Vec<String>> {
+    pub async fn member_followings(token: &str, member_id: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://api.twitter.com/2/users/{user-id}/following?max_results=100
         // TODO: Handle paginated response
 
-        let member_following_list: DataObj = fpm::auth::utils::get_api(
+        let member_following_list: DataObj = fastn::auth::utils::get_api(
             format!(
                 "{}{}{}?max_results=100",
                 "https://api.twitter.com/2/users/", member_id, "/following"
@@ -534,11 +537,11 @@ pub mod apis {
             .map(|x| x.id)
             .collect())
     }
-    pub async fn space_ticket_buyers(token: &str, space_id: &str) -> fpm::Result<Vec<String>> {
+    pub async fn space_ticket_buyers(token: &str, space_id: &str) -> fastn::Result<Vec<String>> {
         // API Docs: https://api.twitter.com/2/spaces/{space_id}/buyers?max_results=100
         // TODO: Handle paginated response
 
-        let space_ticket_buyers_list: DataObj = fpm::auth::utils::get_api(
+        let space_ticket_buyers_list: DataObj = fastn::auth::utils::get_api(
             format!(
                 "{}{}{}?max_results=100",
                 "https://api.twitter.com/2/spaces/", space_id, "/buyers"

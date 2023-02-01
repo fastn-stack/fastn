@@ -1,5 +1,5 @@
--- import: fpm
--- import: fpm-lib
+-- import: fastn
+-- import: fastn-lib
 
 
 -- ftd.image-src i1: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg
@@ -36,7 +36,7 @@ src: $i1
 width: 16
 height: auto
 
---- ftd.text: $fpm.i18n.translation-not-available
+--- ftd.text: $fastn.i18n.translation-not-available
 /color: white
 /style: semi-bold
 /font: apple-system
@@ -44,4 +44,4 @@ height: auto
 
 -- container: outer-container
 
--- fpm-lib.message:
+-- fastn-lib.message:

@@ -2,7 +2,7 @@ pub async fn process<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     processor_(value, kind, doc, config).await
 }
@@ -11,7 +11,7 @@ pub async fn processor_<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let (headers, body) = match value.get_record(doc.name) {
         Ok(val) => (val.2.to_owned(), val.3.to_owned()),

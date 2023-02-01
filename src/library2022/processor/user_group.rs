@@ -2,7 +2,7 @@ pub fn process<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     use itertools::Itertools;
     let g = config
@@ -19,7 +19,7 @@ pub fn process_by_id<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     let headers = match value.get_record(doc.name) {
         Ok(val) => val.2.to_owned(),
@@ -56,14 +56,14 @@ pub fn get_identities<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     use itertools::Itertools;
 
-    let doc_id = fpm::library2022::utils::document_full_id(config, doc)?;
+    let doc_id = fastn::library2022::utils::document_full_id(config, doc)?;
 
     let identities =
-        fpm::user_group::get_identities(config, doc_id.as_str(), true).map_err(|e| {
+        fastn::user_group::get_identities(config, doc_id.as_str(), true).map_err(|e| {
             ftd::p1::Error::ParseError {
                 message: e.to_string(),
                 doc_id,
@@ -95,9 +95,9 @@ pub async fn is_reader<'a>(
     value: ftd::ast::VariableValue,
     _kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
-    let doc_id = fpm::library2022::utils::document_full_id(config, doc)?;
+    let doc_id = fastn::library2022::utils::document_full_id(config, doc)?;
     let is_reader = config
         .can_read(config.request.as_ref().unwrap(), &doc_id, false)
         .await

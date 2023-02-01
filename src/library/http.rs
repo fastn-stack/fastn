@@ -1,7 +1,7 @@
 pub async fn processor<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     {
         let method = section
@@ -32,32 +32,30 @@ pub async fn processor<'a>(
         }
     };
 
-    let (_, mut url, mut conf) =
-        fpm::config::utils::get_clean_url(config, url.as_str()).map_err(|e| {
-            ftd::p1::Error::ParseError {
-                message: format!("invalid url: {:?}", e),
-                doc_id: doc.name.to_string(),
-                line_number: section.line_number,
-            }
+    let (_, mut url, mut conf) = fastn::config::utils::get_clean_url(config, url.as_str())
+        .map_err(|e| ftd::p1::Error::ParseError {
+            message: format!("invalid url: {:?}", e),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
         })?;
 
-    // Setup the x-fpm-user-id header based on the platform and requested field
+    // Setup the x-fastn-user-id header based on the platform and requested field
     if let Some(user_id) = conf.get("user-id") {
         match user_id.split_once('-') {
             Some((platform, requested_field)) => {
                 if let Some(req) = config.request.as_ref() {
-                    if let Some(user_data) = fpm::auth::get_user_data_from_cookies(
+                    if let Some(user_data) = fastn::auth::get_user_data_from_cookies(
                         platform,
                         requested_field,
                         req.cookies(),
                     )
                     .await
                     .map_err(|e| ftd::p1::Error::ForbiddenUsage {
-                        message: format!("fpm auth error: {}", e),
+                        message: format!("fastn auth error: {}", e),
                         doc_id: doc.name.to_string(),
                         line_number: section.line_number,
                     })? {
-                        conf.insert("X-FPM-USER-ID".to_string(), user_data);
+                        conf.insert("X-fastn-USER-ID".to_string(), user_data);
                     }
                 }
             }
@@ -122,7 +120,7 @@ pub async fn processor<'a>(
 pub fn request_data_processor<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     // TODO: URL params not yet handled
     let req = match config.request.as_ref() {

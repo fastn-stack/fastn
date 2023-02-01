@@ -1,5 +1,5 @@
 pub fn document_full_id<'a>(
-    config: &fpm::Config,
+    config: &fastn::Config,
     doc: &ftd::interpreter2::TDoc<'a>,
 ) -> ftd::p1::Result<String> {
     let full_document_id = config.doc_id().unwrap_or_else(|| {

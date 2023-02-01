@@ -1,48 +1,51 @@
 #[macro_export]
 macro_rules! server_error {
     ($($t:tt)*) => {{
-        fpm::http::server_error_(format!($($t)*))
+        fastn::http::server_error_(format!($($t)*))
     }};
 }
 
 #[macro_export]
 macro_rules! unauthorised {
     ($($t:tt)*) => {{
-        fpm::http::unauthorised_(format!($($t)*))
+        fastn::http::unauthorised_(format!($($t)*))
     }};
 }
 
 #[macro_export]
 macro_rules! not_found {
     ($($t:tt)*) => {{
-        fpm::http::not_found_(format!($($t)*))
+        fastn::http::not_found_(format!($($t)*))
     }};
 }
 
-pub fn server_error_(msg: String) -> fpm::http::Response {
-    fpm::warning!("server error: {}", msg);
+pub fn server_error_(msg: String) -> fastn::http::Response {
+    fastn::warning!("server error: {}", msg);
     actix_web::HttpResponse::InternalServerError().body(msg)
 }
 
-pub fn unauthorised_(msg: String) -> fpm::http::Response {
-    fpm::warning!("unauthorised: {}", msg);
+pub fn unauthorised_(msg: String) -> fastn::http::Response {
+    fastn::warning!("unauthorised: {}", msg);
     actix_web::HttpResponse::Unauthorized().body(msg)
 }
 
-pub fn not_found_(msg: String) -> fpm::http::Response {
-    fpm::warning!("page not found: {}", msg);
+pub fn not_found_(msg: String) -> fastn::http::Response {
+    fastn::warning!("page not found: {}", msg);
     actix_web::HttpResponse::NotFound().body(msg)
 }
 
-impl actix_web::ResponseError for fpm::Error {}
+impl actix_web::ResponseError for fastn::Error {}
 
 pub type Response = actix_web::HttpResponse;
 
-pub fn ok(data: Vec<u8>) -> fpm::http::Response {
+pub fn ok(data: Vec<u8>) -> fastn::http::Response {
     actix_web::HttpResponse::Ok().body(data)
 }
 
-pub fn ok_with_content_type(data: Vec<u8>, content_type: mime_guess::Mime) -> fpm::http::Response {
+pub fn ok_with_content_type(
+    data: Vec<u8>,
+    content_type: mime_guess::Mime,
+) -> fastn::http::Response {
     actix_web::HttpResponse::Ok()
         .content_type(content_type)
         .body(data)
@@ -114,19 +117,19 @@ impl Request {
         }
     }
 
-    pub fn json<T: serde::de::DeserializeOwned>(&self) -> fpm::Result<T> {
+    pub fn json<T: serde::de::DeserializeOwned>(&self) -> fastn::Result<T> {
         Ok(serde_json::from_slice(&self.body)?)
     }
 
     pub fn body_as_json(
         &self,
-    ) -> fpm::Result<Option<std::collections::HashMap<String, serde_json::Value>>> {
+    ) -> fastn::Result<Option<std::collections::HashMap<String, serde_json::Value>>> {
         if self.body.is_empty() {
             return Ok(None);
         }
         if self.content_type() != Some(mime_guess::mime::APPLICATION_JSON) {
-            return Err(fpm::Error::UsageError {
-                message: fpm::warning!(
+            return Err(fastn::Error::UsageError {
+                message: fastn::warning!(
                     "expected content type {}, got {:?}",
                     mime_guess::mime::APPLICATION_JSON,
                     self.content_type()
@@ -227,7 +230,7 @@ impl ResponseBuilder {
     pub async fn from_reqwest(
         response: reqwest::Response,
         package_name: &str,
-    ) -> fpm::http::Response {
+    ) -> fastn::http::Response {
         let status = response.status();
 
         // Remove `Connection` as per
@@ -263,7 +266,7 @@ impl ResponseBuilder {
             Ok(b) => b,
             Err(e) => {
                 return actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
-                    fpm::Error::HttpError(e),
+                    fastn::Error::HttpError(e),
                 ))
             }
         };
@@ -277,14 +280,14 @@ pub(crate) fn url_regex() -> regex::Regex {
     ).unwrap()
 }
 
-pub(crate) async fn construct_url_and_get_str(url: &str) -> fpm::Result<String> {
+pub(crate) async fn construct_url_and_get_str(url: &str) -> fastn::Result<String> {
     construct_url_and_return_response(url.to_string(), |f| async move {
         http_get_str(f.as_str()).await
     })
     .await
 }
 
-pub(crate) async fn construct_url_and_get(url: &str) -> fpm::Result<Vec<u8>> {
+pub(crate) async fn construct_url_and_get(url: &str) -> fastn::Result<Vec<u8>> {
     construct_url_and_return_response(
         url.to_string(),
         |f| async move { http_get(f.as_str()).await },
@@ -292,10 +295,13 @@ pub(crate) async fn construct_url_and_get(url: &str) -> fpm::Result<Vec<u8>> {
     .await
 }
 
-pub(crate) async fn construct_url_and_return_response<T, F, D>(url: String, f: F) -> fpm::Result<D>
+pub(crate) async fn construct_url_and_return_response<T, F, D>(
+    url: String,
+    f: F,
+) -> fastn::Result<D>
 where
     F: FnOnce(String) -> T + Copy,
-    T: futures::Future<Output = std::result::Result<D, fpm::Error>> + Send + 'static,
+    T: futures::Future<Output = std::result::Result<D, fastn::Error>> + Send + 'static,
 {
     if url[1..].contains("://") || url.starts_with("//") {
         f(url).await
@@ -306,11 +312,11 @@ where
     }
 }
 
-pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fpm::Result<T> {
+pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fastn::Result<T> {
     Ok(reqwest::Client::new()
         .get(url)
         .header(reqwest::header::CONTENT_TYPE, "application/json")
-        .header(reqwest::header::USER_AGENT, "fpm")
+        .header(reqwest::header::USER_AGENT, "fastn")
         .send()
         .await?
         .json::<T>()
@@ -320,11 +326,11 @@ pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fpm::
 pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
     url: &str,
     body: B,
-) -> fpm::Result<T> {
+) -> fastn::Result<T> {
     Ok(reqwest::Client::new()
         .post(url)
         .header(reqwest::header::CONTENT_TYPE, "application/json")
-        .header(reqwest::header::USER_AGENT, "fpm")
+        .header(reqwest::header::USER_AGENT, "fastn")
         .body(body)
         .send()
         .await?
@@ -332,7 +338,7 @@ pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::B
         .await?)
 }
 
-pub(crate) async fn http_get(url: &str) -> fpm::Result<Vec<u8>> {
+pub(crate) async fn http_get(url: &str) -> fastn::Result<Vec<u8>> {
     http_get_with_cookie(url, None, &std::collections::HashMap::new()).await
 }
 
@@ -341,12 +347,12 @@ pub(crate) async fn http_get_with_cookie(
     url: &str,
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
-) -> fpm::Result<Vec<u8>> {
+) -> fastn::Result<Vec<u8>> {
     tracing::info!(url = url);
     let mut req_headers = reqwest::header::HeaderMap::new();
     req_headers.insert(
         reqwest::header::USER_AGENT,
-        reqwest::header::HeaderValue::from_static("fpm"),
+        reqwest::header::HeaderValue::from_static("fastn"),
     );
     if let Some(cookie) = cookie {
         req_headers.insert(
@@ -376,7 +382,7 @@ pub(crate) async fn http_get_with_cookie(
             res.text().await
         );
         tracing::error!(url = url, msg = message);
-        return Err(fpm::Error::APIResponseError(message));
+        return Err(fastn::Error::APIResponseError(message));
     }
     tracing::info!(msg = "returning success", url = url);
     Ok(res.bytes().await?.into())
@@ -386,14 +392,14 @@ pub(crate) async fn http_get_with_cookie(
 //     url: url::Url,
 //     headers: reqwest::header::HeaderMap,
 //     query: &[(String, String)],
-// ) -> fpm::Result<T> {
+// ) -> fastn::Result<T> {
 //     let c = reqwest::Client::builder()
 //         .default_headers(headers)
 //         .build()?;
 //
 //     let resp = c.get(url.to_string().as_str()).query(query).send().await?;
 //     if !resp.status().eq(&reqwest::StatusCode::OK) {
-//         return Err(fpm::Error::APIResponseError(format!(
+//         return Err(fastn::Error::APIResponseError(format!(
 //             "url: {}, response_status: {}, response: {:?}",
 //             url,
 //             resp.status(),
@@ -403,10 +409,10 @@ pub(crate) async fn http_get_with_cookie(
 //     Ok(resp.json::<T>().await?)
 // }
 
-pub(crate) async fn http_get_str(url: &str) -> fpm::Result<String> {
+pub(crate) async fn http_get_str(url: &str) -> fastn::Result<String> {
     let url_f = format!("{:?}", url);
     match http_get(url).await {
-        Ok(bytes) => String::from_utf8(bytes).map_err(|e| fpm::Error::UsageError {
+        Ok(bytes) => String::from_utf8(bytes).map_err(|e| fastn::Error::UsageError {
             message: format!(
                 "Cannot convert the response to string: URL: {:?}, ERROR: {}",
                 url_f, e
@@ -416,7 +422,7 @@ pub(crate) async fn http_get_str(url: &str) -> fpm::Result<String> {
     }
 }
 
-pub(crate) fn api_ok(data: impl serde::Serialize) -> fpm::Result<fpm::http::Response> {
+pub(crate) fn api_ok(data: impl serde::Serialize) -> fastn::Result<fastn::http::Response> {
     #[derive(serde::Serialize)]
     struct SuccessResponse<T: serde::Serialize> {
         data: T,
@@ -434,7 +440,7 @@ pub(crate) fn api_ok(data: impl serde::Serialize) -> fpm::Result<fpm::http::Resp
     ))
 }
 
-pub(crate) fn api_error<T: Into<String>>(message: T) -> fpm::Result<fpm::http::Response> {
+pub(crate) fn api_error<T: Into<String>>(message: T) -> fastn::Result<fastn::http::Response> {
     #[derive(serde::Serialize, Debug)]
     struct ErrorResponse {
         message: String,

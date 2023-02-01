@@ -25,27 +25,27 @@ pub struct EditResponse {
 }
 
 pub async fn edit(
-    req: &fpm::http::Request,
+    req: &fastn::http::Request,
     req_data: EditRequest,
-) -> fpm::Result<fpm::http::Response> {
-    let mut config = match fpm::Config::read(None, false, Some(req)).await {
+) -> fastn::Result<fastn::http::Response> {
+    let mut config = match fastn::Config::read(None, false, Some(req)).await {
         Ok(config) => config,
-        Err(err) => return fpm::http::api_error(err.to_string()),
+        Err(err) => return fastn::http::api_error(err.to_string()),
     };
     config.current_document = Some(req_data.path.to_string());
 
     match config.can_write(req, req_data.path.as_str()).await {
         Ok(can_write) => {
             if !can_write {
-                return Ok(fpm::unauthorised!(
+                return Ok(fastn::unauthorised!(
                     "You are unauthorized to access: {}",
                     req_data.path.as_str()
                 ));
             }
         }
         Err(e) => {
-            return Ok(fpm::server_error!(
-                "FPM-Error: can_read error: {}, {:?}",
+            return Ok(fastn::server_error!(
+                "fastn-Error: can_read error: {}, {:?}",
                 req_data.path.as_str(),
                 e
             ));
@@ -53,15 +53,15 @@ pub async fn edit(
     };
 
     match edit_worker(config, req_data).await {
-        Ok(data) => fpm::http::api_ok(data),
-        Err(err) => fpm::http::api_error(err.to_string()),
+        Ok(data) => fastn::http::api_ok(data),
+        Err(err) => fastn::http::api_error(err.to_string()),
     }
 }
 
 pub(crate) async fn edit_worker(
-    config: fpm::Config,
+    config: fastn::Config,
     request: EditRequest,
-) -> fpm::Result<EditResponse> {
+) -> fastn::Result<EditResponse> {
     if request.is_delete() {
         let path = config.root.join(&request.path);
         if path.is_dir() {
@@ -80,7 +80,7 @@ pub(crate) async fn edit_worker(
         let rename = match request.data {
             Some(v) if !v.is_empty() => v,
             _ => {
-                return Err(fpm::Error::APIResponseError(
+                return Err(fastn::Error::APIResponseError(
                     "rename value should present".to_string(),
                 ));
             }
@@ -109,17 +109,17 @@ pub(crate) async fn edit_worker(
         .get_file_path_and_resolve(request.path.as_str())
         .await
     {
-        let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
-        let workspaces = fpm::snapshot::get_workspace(&config).await?;
+        let snapshots = fastn::snapshot::get_latest_snapshots(&config.root).await?;
+        let workspaces = fastn::snapshot::get_workspace(&config).await?;
 
-        let file = fpm::get_file(
+        let file = fastn::get_file(
             config.package.name.to_string(),
             &config.root.join(&path),
             &config.root,
         )
         .await?;
         let before_update_status =
-            fpm::commands::status::get_file_status(&file, &snapshots, &workspaces).await?;
+            fastn::commands::status::get_file_status(&file, &snapshots, &workspaces).await?;
 
         (path.to_string(), None, Some(before_update_status))
     } else if request.path.ends_with('/') {
@@ -140,7 +140,7 @@ pub(crate) async fn edit_worker(
         )
     };
 
-    fpm::utils::update1(
+    fastn::utils::update1(
         &config.root,
         file_name.as_str(),
         request.value.unwrap_or_default().into_bytes().as_slice(),
@@ -148,16 +148,16 @@ pub(crate) async fn edit_worker(
     .await?;
 
     if let Some(before_update_status) = before_update_status {
-        let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
-        let workspaces = fpm::snapshot::get_workspace(&config).await?;
-        let file = fpm::get_file(
+        let snapshots = fastn::snapshot::get_latest_snapshots(&config.root).await?;
+        let workspaces = fastn::snapshot::get_workspace(&config).await?;
+        let file = fastn::get_file(
             config.package.name.to_string(),
             &config.root.join(&file_name),
             &config.root,
         )
         .await?;
         let after_update_status =
-            fpm::commands::status::get_file_status(&file, &snapshots, &workspaces).await?;
+            fastn::commands::status::get_file_status(&file, &snapshots, &workspaces).await?;
         if !before_update_status.eq(&after_update_status) {
             return Ok(EditResponse {
                 path: request.path,
@@ -174,20 +174,20 @@ pub(crate) async fn edit_worker(
     })
 }
 
-pub async fn sync(req: fpm::http::Request) -> fpm::Result<fpm::http::Response> {
-    let config = match fpm::Config::read(None, false, Some(&req)).await {
+pub async fn sync(req: fastn::http::Request) -> fastn::Result<fastn::http::Response> {
+    let config = match fastn::Config::read(None, false, Some(&req)).await {
         Ok(config) => config,
-        Err(err) => return fpm::http::api_error(err.to_string()),
+        Err(err) => return fastn::http::api_error(err.to_string()),
     };
-    match fpm::commands::sync::sync(&config, None).await {
+    match fastn::commands::sync::sync(&config, None).await {
         Ok(_) => {
             #[derive(serde::Serialize)]
             struct SyncResponse {
                 reload: bool,
             }
-            fpm::http::api_ok(SyncResponse { reload: true })
+            fastn::http::api_ok(SyncResponse { reload: true })
         }
-        Err(err) => fpm::http::api_error(err.to_string()),
+        Err(err) => fastn::http::api_error(err.to_string()),
     }
 }
 
@@ -197,22 +197,22 @@ pub struct RevertRequest {
 }
 
 pub async fn revert(
-    req: &fpm::http::Request,
+    req: &fastn::http::Request,
     rev: RevertRequest,
-) -> fpm::Result<fpm::http::Response> {
-    let config = match fpm::Config::read(None, false, Some(req)).await {
+) -> fastn::Result<fastn::http::Response> {
+    let config = match fastn::Config::read(None, false, Some(req)).await {
         Ok(config) => config,
-        Err(err) => return fpm::http::api_error(err.to_string()),
+        Err(err) => return fastn::http::api_error(err.to_string()),
     };
 
-    match fpm::commands::revert::revert(&config, rev.path.as_str()).await {
+    match fastn::commands::revert::revert(&config, rev.path.as_str()).await {
         Ok(_) => {
             #[derive(serde::Serialize)]
             struct RevertResponse {
                 reload: bool,
             }
-            fpm::http::api_ok(RevertResponse { reload: true })
+            fastn::http::api_ok(RevertResponse { reload: true })
         }
-        Err(err) => fpm::http::api_error(err.to_string()),
+        Err(err) => fastn::http::api_error(err.to_string()),
     }
 }

@@ -1,5 +1,5 @@
 /// `find_root_for_file()` starts with the given path, which is the current directory where the
-/// application started in, and goes up till it finds a folder that contains `FPM.ftd` file.
+/// application started in, and goes up till it finds a folder that contains `FASTN.ftd` file.
 /// TODO: make async
 pub(crate) fn find_root_for_file(
     dir: &camino::Utf8Path,
@@ -15,14 +15,14 @@ pub(crate) fn find_root_for_file(
     }
 }
 
-pub async fn fpm_doc(path: &camino::Utf8Path) -> fpm::Result<ftd::p2::Document> {
+pub async fn fastn_doc(path: &camino::Utf8Path) -> fastn::Result<ftd::p2::Document> {
     {
         let doc = tokio::fs::read_to_string(path);
-        let lib = fpm::FPMLibrary::default();
-        match fpm::doc::parse_ftd("FPM", doc.await?.as_str(), &lib) {
+        let lib = fastn::FastnLibrary::default();
+        match fastn::doc::parse_ftd("fastn", doc.await?.as_str(), &lib) {
             Ok(v) => Ok(v),
-            Err(e) => Err(fpm::Error::PackageError {
-                message: format!("failed to parse FPM.ftd 3: {:?}", &e),
+            Err(e) => Err(fastn::Error::PackageError {
+                message: format!("failed to parse FASTN.ftd 3: {:?}", &e),
             }),
         }
     }
@@ -51,9 +51,9 @@ pub fn trim_package_name(path: &str, package_name: &str) -> Option<String> {
 // url: /-/<package-name>/api/ => (package-name, endpoint/api/, app or package config)
 #[tracing::instrument(skip_all)]
 pub fn get_clean_url(
-    config: &fpm::Config,
+    config: &fastn::Config,
     url: &str,
-) -> fpm::Result<(
+) -> fastn::Result<(
     Option<String>,
     url::Url,
     std::collections::HashMap<String, String>,
@@ -80,7 +80,7 @@ pub fn get_clean_url(
         let end_point = match config.package.endpoint.as_ref() {
             Some(ep) => ep,
             None => {
-                return Err(fpm::Error::GenericError(format!(
+                return Err(fastn::Error::GenericError(format!(
                     "package does not contain the endpoint: {:?}",
                     config.package.name
                 )));
@@ -113,5 +113,5 @@ pub fn get_clean_url(
 
     let msg = format!("http-processor: end-point not found url: {}", url);
     tracing::error!(msg = msg);
-    Err(fpm::Error::GenericError(msg))
+    Err(fastn::Error::GenericError(msg))
 }

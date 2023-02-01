@@ -6,19 +6,19 @@ pub struct Snapshot {
 
 pub(crate) async fn resolve_snapshots(
     content: &str,
-) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
+) -> fastn::Result<std::collections::BTreeMap<String, u128>> {
     if content.trim().is_empty() {
         return Ok(Default::default());
     }
-    let lib = fpm::FPMLibrary::default();
-    let b = match fpm::doc::parse_ftd(".latest.ftd", content, &lib) {
+    let lib = fastn::FastnLibrary::default();
+    let b = match fastn::doc::parse_ftd(".latest.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse .latest.ftd: {:?}", &e);
             todo!();
         }
     };
-    let snapshots: Vec<fpm::Snapshot> = b.get("fpm#snapshot")?;
+    let snapshots: Vec<fastn::Snapshot> = b.get("fastn#snapshot")?;
     Ok(snapshots
         .into_iter()
         .map(|v| (v.filename, v.timestamp))
@@ -28,7 +28,7 @@ pub(crate) async fn resolve_snapshots(
 // TODO: replace path with config
 pub(crate) async fn get_latest_snapshots(
     path: &camino::Utf8PathBuf,
-) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
+) -> fastn::Result<std::collections::BTreeMap<String, u128>> {
     let latest_file_path = path.join(".history/.latest.ftd");
     if !latest_file_path.exists() {
         // TODO: should we error out here?
@@ -40,17 +40,17 @@ pub(crate) async fn get_latest_snapshots(
 }
 
 pub(crate) async fn create_latest_snapshots(
-    config: &fpm::Config,
+    config: &fastn::Config,
     snapshots: &[Snapshot],
-) -> fpm::Result<()> {
+) -> fastn::Result<()> {
     use tokio::io::AsyncWriteExt;
 
     let new_file_path = config.latest_ftd();
-    let mut snapshot_data = "-- import: fpm".to_string();
+    let mut snapshot_data = "-- import: fastn".to_string();
 
     for snapshot in snapshots {
         snapshot_data = format!(
-            "{}\n\n-- fpm.snapshot: {}\ntimestamp: {}",
+            "{}\n\n-- fastn.snapshot: {}\ntimestamp: {}",
             snapshot_data, snapshot.filename, snapshot.timestamp
         );
     }
@@ -62,7 +62,7 @@ pub(crate) async fn create_latest_snapshots(
     Ok(())
 }
 
-pub(crate) fn get_new_version(history: &[&fpm::history::FileHistory], file: &str) -> i32 {
+pub(crate) fn get_new_version(history: &[&fastn::history::FileHistory], file: &str) -> i32 {
     if let Some(file_history) = history.iter().find(|v| v.filename.eq(file)) {
         if let Some(file_edit) = file_history.file_edit.first() {
             return file_edit.version + 1;
@@ -104,16 +104,16 @@ impl Workspace {
 
 pub(crate) async fn resolve_workspace(
     content: &str,
-) -> fpm::Result<std::collections::BTreeMap<String, Workspace>> {
-    let lib = fpm::FPMLibrary::default();
-    let b = match fpm::doc::parse_ftd("workspace.ftd", content, &lib) {
+) -> fastn::Result<std::collections::BTreeMap<String, Workspace>> {
+    let lib = fastn::FastnLibrary::default();
+    let b = match fastn::doc::parse_ftd("workspace.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse .latest.ftd: {:?}", &e);
             todo!();
         }
     };
-    let snapshots: Vec<fpm::snapshot::Workspace> = b.get("fpm#workspace")?;
+    let snapshots: Vec<fastn::snapshot::Workspace> = b.get("fastn#workspace")?;
     Ok(snapshots
         .into_iter()
         .map(|v| (v.filename.to_string(), v))
@@ -121,20 +121,20 @@ pub(crate) async fn resolve_workspace(
 }
 
 pub(crate) async fn create_workspace(
-    config: &fpm::Config,
+    config: &fastn::Config,
     workspaces: &[Workspace],
-) -> fpm::Result<()> {
-    let mut data = vec!["-- import: fpm".to_string()];
+) -> fastn::Result<()> {
+    let mut data = vec!["-- import: fastn".to_string()];
 
     for workspace in workspaces {
         data.push(format!(
-            "-- fpm.workspace: {}\nbase: {}\nconflicted: {}\nworkspace: {:?}\n",
+            "-- fastn.workspace: {}\nbase: {}\nconflicted: {}\nworkspace: {:?}\n",
             workspace.filename, workspace.base, workspace.conflicted, workspace.workspace
         ));
     }
 
-    fpm::utils::update1(
-        &config.root.join(".fpm"),
+    fastn::utils::update1(
+        &config.root.join(".fastn"),
         "workspace.ftd",
         data.join("\n\n").as_bytes(),
     )
@@ -143,9 +143,9 @@ pub(crate) async fn create_workspace(
 }
 
 pub(crate) async fn get_workspace(
-    config: &fpm::Config,
-) -> fpm::Result<std::collections::BTreeMap<String, Workspace>> {
-    let latest_file_path = config.root.join(".fpm").join("workspace.ftd");
+    config: &fastn::Config,
+) -> fastn::Result<std::collections::BTreeMap<String, Workspace>> {
+    let latest_file_path = config.root.join(".fastn").join("workspace.ftd");
     if !latest_file_path.exists() {
         // TODO: should we error out here?
         return Ok(Default::default());

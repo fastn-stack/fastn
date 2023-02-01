@@ -6,12 +6,12 @@ pub struct UserDetail {
 }
 pub async fn matched_identities(
     _ud: UserDetail,
-    _identities: &[fpm::user_group::UserIdentity],
-) -> fpm::Result<Vec<fpm::user_group::UserIdentity>> {
+    _identities: &[fastn::user_group::UserIdentity],
+) -> fastn::Result<Vec<fastn::user_group::UserIdentity>> {
     /*let gitlab_identities = identities
         .iter()
         .filter(|identity| identity.key.starts_with("gitlab"))
-        .collect::<Vec<&fpm::user_group::UserIdentity>>();
+        .collect::<Vec<&fastn::user_group::UserIdentity>>();
 
     if gitlab_identities.is_empty() {
         return Ok(vec![]);

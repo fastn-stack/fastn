@@ -1,17 +1,17 @@
--- import: fpm
+-- import: fastn
 
--- fpm.package: fpm-apps-processor
+-- fastn.package: fastn-apps-processor
 download-base-url: https://www.github.com/
 
 
--- fpm.app: Todos for Family
+-- fastn.app: Todos for Family
 mount-point: /todos/
 package: kameri-app.herokuapp.com
 readers: abrark-fans
 end-point: https://kameri-service.herokuapp.com
 
--- fpm.app: Todos for Me
+-- fastn.app: Todos for Me
 mount-point: /me-todos/
 package: kameri-app.herokuapp.com
 end-point: https://kameri-service.herokuapp.com
-readers: fpm-fans
+readers: fastn-fans

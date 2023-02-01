@@ -2,22 +2,22 @@ pub const COMMAND: &str = "sync-status";
 
 pub fn command() -> clap::Command {
     clap::Command::new(COMMAND)
-        .about("Show the sync status of files in this fpm package")
+        .about("Show the sync status of files in this fastn package")
         .arg(clap::arg!(file: <FILE>... "The file(s) to see status of (leave empty to see status of entire package)").required(false))
         .hide(true) // hidden since the feature is not being released yet.
 }
 
-pub async fn handle_command(matches: &clap::ArgMatches) -> fpm::Result<()> {
-    use fpm::utils::ValueOf;
+pub async fn handle_command(matches: &clap::ArgMatches) -> fastn::Result<()> {
+    use fastn::utils::ValueOf;
 
     sync_status(
-        &fpm::Config::read(None, true, None).await?,
+        &fastn::Config::read(None, true, None).await?,
         matches.value_of_("file"), // TODO: handle multiple files
     )
     .await
 }
 
-async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
+async fn sync_status(config: &fastn::Config, source: Option<&str>) -> fastn::Result<()> {
     use itertools::Itertools;
 
     let get_files_status = config.get_files_status().await?;
@@ -29,7 +29,7 @@ async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<
             print_status(file_status, true);
             return Ok(());
         }
-        return Err(fpm::Error::UsageError {
+        return Err(fastn::Error::UsageError {
             message: format!("{} not found", source),
         });
     }
@@ -40,12 +40,12 @@ async fn sync_status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<
     Ok(())
 }
 
-pub(crate) fn print_status(file_status: &fpm::sync_utils::FileStatus, print_untracked: bool) {
+pub(crate) fn print_status(file_status: &fastn::sync_utils::FileStatus, print_untracked: bool) {
     let (file_status, path, status) = match file_status {
-        fpm::sync_utils::FileStatus::Add { path, status, .. } => ("Added", path, status),
-        fpm::sync_utils::FileStatus::Update { path, status, .. } => ("Updated", path, status),
-        fpm::sync_utils::FileStatus::Delete { path, status, .. } => ("Deleted", path, status),
-        fpm::sync_utils::FileStatus::Uptodate { path, .. } => {
+        fastn::sync_utils::FileStatus::Add { path, status, .. } => ("Added", path, status),
+        fastn::sync_utils::FileStatus::Update { path, status, .. } => ("Updated", path, status),
+        fastn::sync_utils::FileStatus::Delete { path, status, .. } => ("Deleted", path, status),
+        fastn::sync_utils::FileStatus::Uptodate { path, .. } => {
             if print_untracked {
                 println!("Up-to-date: {}", path);
             }
@@ -53,15 +53,15 @@ pub(crate) fn print_status(file_status: &fpm::sync_utils::FileStatus, print_untr
         }
     };
     match status {
-        fpm::sync_utils::Status::Conflict(_) => println!("Conflicted: {}", path),
-        fpm::sync_utils::Status::CloneEditedRemoteDeleted(_) => {
+        fastn::sync_utils::Status::Conflict(_) => println!("Conflicted: {}", path),
+        fastn::sync_utils::Status::CloneEditedRemoteDeleted(_) => {
             println!("CloneEditedRemoteDeleted: {}", path)
         }
-        fpm::sync_utils::Status::CloneDeletedRemoteEdited(_) => {
+        fastn::sync_utils::Status::CloneDeletedRemoteEdited(_) => {
             println!("CloneDeletedRemoteEdited: {}", path)
         }
-        fpm::sync_utils::Status::NoConflict => println!("{}: {}", file_status, path),
-        fpm::sync_utils::Status::CloneAddedRemoteAdded(_) => {
+        fastn::sync_utils::Status::NoConflict => println!("{}: {}", file_status, path),
+        fastn::sync_utils::Status::CloneAddedRemoteAdded(_) => {
             println!("CloneAddedRemoteAdded: {}", path)
         }
     }

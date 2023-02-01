@@ -37,7 +37,7 @@ pub enum Error {
     StripPrefixError(#[from] std::path::StripPrefixError),
 
     #[error("SitemapParseError: {}", _0)]
-    SitemapParseError(#[from] fpm::sitemap::ParseError),
+    SitemapParseError(#[from] fastn::sitemap::ParseError),
 
     #[error("URLParseError: {}", _0)]
     UrlParseError(#[from] url::ParseError),
@@ -76,7 +76,7 @@ pub enum Error {
     QueryPayloadError(#[from] actix_web::error::QueryPayloadError),
 
     #[error("TokioMPSCError1: {}", _0)]
-    TokioMPSCError1(#[from] tokio::sync::mpsc::error::SendError<fpm::watcher::WatcherSender>),
+    TokioMPSCError1(#[from] tokio::sync::mpsc::error::SendError<fastn::watcher::WatcherSender>),
 
     #[error("TokioMPSCError2: {}", _0)]
     TokioMPSCError2(#[from] tokio::sync::mpsc::error::SendError<usize>),
@@ -87,7 +87,7 @@ impl Error {
         Self::GenericError(error.to_string())
     }
 
-    pub fn generic_err<T: AsRef<str> + ToString, O>(error: T) -> fpm::Result<O> {
+    pub fn generic_err<T: AsRef<str> + ToString, O>(error: T) -> fastn::Result<O> {
         Err(Self::generic(error))
     }
 }

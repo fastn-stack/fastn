@@ -1,10 +1,10 @@
-pub async fn mark_resolved(config: &fpm::Config, path: &str) -> fpm::Result<()> {
+pub async fn mark_resolved(config: &fastn::Config, path: &str) -> fastn::Result<()> {
     use itertools::Itertools;
 
-    let mut workspaces = fpm::snapshot::get_workspace(config).await?;
+    let mut workspaces = fastn::snapshot::get_workspace(config).await?;
     workspaces.remove(path);
 
-    fpm::snapshot::create_workspace(config, workspaces.into_values().collect_vec().as_slice())
+    fastn::snapshot::create_workspace(config, workspaces.into_values().collect_vec().as_slice())
         .await?;
     // TODO: Check workspace value and then delete it
     // This is certainly bad idea

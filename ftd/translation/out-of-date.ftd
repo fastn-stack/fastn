@@ -1,6 +1,6 @@
--- import: fpm
+-- import: fastn
 
--- import: fpm-lib
+-- import: fastn-lib
 
 -- boolean show-main: true
 
@@ -41,13 +41,13 @@ src: $i1
 width: 16
 height: auto
 
---- ftd.text: $fpm.i18n.out-dated-heading
+--- ftd.text: $fastn.i18n.out-dated-heading
 /color: white
 /style: semi-bold
 /font: apple-system
 padding-right: 20
 
---- ftd.text: $fpm.i18n.show-latest-version
+--- ftd.text: $fastn.i18n.show-latest-version
 if: $show-main
 $on-click$: toggle $show-main
 $on-click$: stop-propagation
@@ -67,7 +67,7 @@ shadow-blur: 6
 /background-color: #d27355
 /color: white
 
---- ftd.text: $fpm.i18n.show-outdated-version
+--- ftd.text: $fastn.i18n.show-outdated-version
 if: not $show-main
 $on-click$: toggle $show-main
 $on-click$: stop-propagation
@@ -88,7 +88,7 @@ shadow-blur: 6
 /color: white
 
 
--- ftd.text: $fpm.i18n.out-dated-body
+-- ftd.text: $fastn.i18n.out-dated-body
 /size: 18
 padding-horizontal: 40
 padding-vertical: 10
@@ -104,13 +104,13 @@ if: $show-detail
 
 --- ftd.code:
 lang: diff
-if: $fpm.diff is not null
+if: $fastn.diff is not null
 padding: 10
 border-radius: 5
 /background-color: #2b303b
 
-$fpm.diff
+$fastn.diff
 
 -- container: outer-container
 
--- fpm-lib.message:
+-- fastn-lib.message:

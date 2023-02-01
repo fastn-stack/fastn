@@ -14,7 +14,7 @@ async fn traced_main() {
         .unwrap_or(tracing_forest::util::LevelFilter::INFO);
 
     // only difference between the two branches of this if condition is the extra forest layer.
-    if fpm::utils::is_traced() {
+    if fastn::utils::is_traced() {
         tracing_forest::worker_task()
             .set_global(true)
             .build_with(|_layer: tracing_forest::ForestLayer<_, _>| {
@@ -41,18 +41,18 @@ async fn outer_main() {
     }
 }
 
-async fn async_main() -> fpm::Result<()> {
+async fn async_main() -> fastn::Result<()> {
     use colored::Colorize;
-    use fpm::utils::ValueOf;
+    use fastn::utils::ValueOf;
 
     let matches = app(version()).get_matches();
 
     match matches.subcommand() {
-        Some((fpm::commands::stop_tracking::COMMAND, matches)) => {
-            return fpm::commands::stop_tracking::handle_command(matches).await;
+        Some((fastn::commands::stop_tracking::COMMAND, matches)) => {
+            return fastn::commands::stop_tracking::handle_command(matches).await;
         }
-        Some((fpm::commands::sync_status::COMMAND, matches)) => {
-            return fpm::commands::sync_status::handle_command(matches).await;
+        Some((fastn::commands::sync_status::COMMAND, matches)) => {
+            return fastn::commands::sync_status::handle_command(matches).await;
         }
         _ => {}
     }
@@ -63,7 +63,7 @@ async fn async_main() -> fpm::Result<()> {
         // project-path is optional
         let path = project.value_of_("path");
         let download_base_url = project.value_of_("download-base-url");
-        return fpm::create_package(name, path, download_base_url).await;
+        return fastn::create_package(name, path, download_base_url).await;
     }
 
     if let Some(serve) = matches.subcommand_matches("serve") {
@@ -84,11 +84,11 @@ async fn async_main() -> fpm::Result<()> {
         let inline_css = serve.values_of_("css");
 
         if serve.get_flag("cached-parse") {
-            fpm::warning!("using cached parser, files modifications may be ignored");
-            fpm::utils::enable_parse_caching(true);
+            fastn::warning!("using cached parser, files modifications may be ignored");
+            fastn::utils::enable_parse_caching(true);
         }
 
-        return fpm::listen(
+        return fastn::listen(
             bind.as_str(),
             port,
             download_base_url.map(ToString::to_string),
@@ -102,17 +102,17 @@ async fn async_main() -> fpm::Result<()> {
     }
 
     if let Some(clone) = matches.subcommand_matches("clone") {
-        return fpm::clone(clone.value_of_("source").unwrap()).await;
+        return fastn::clone(clone.value_of_("source").unwrap()).await;
     }
 
-    let mut config = fpm::Config::read(None, true, None).await?;
+    let mut config = fastn::Config::read(None, true, None).await?;
 
     if matches.subcommand_matches("update").is_some() {
-        return fpm::update(&config).await;
+        return fastn::update(&config).await;
     }
 
     if let Some(edit) = matches.subcommand_matches("edit") {
-        return fpm::edit(
+        return fastn::edit(
             &config,
             edit.value_of_("file").unwrap(),
             edit.value_of_("cr").unwrap(),
@@ -122,15 +122,15 @@ async fn async_main() -> fpm::Result<()> {
 
     if let Some(add) = matches.subcommand_matches("add") {
         // TODO: support multiple files
-        return fpm::add(&config, add.value_of_("file").unwrap(), add.value_of_("cr")).await;
+        return fastn::add(&config, add.value_of_("file").unwrap(), add.value_of_("cr")).await;
     }
 
     if let Some(rm) = matches.subcommand_matches("rm") {
-        return fpm::rm(&config, rm.value_of_("file").unwrap(), rm.value_of_("cr")).await;
+        return fastn::rm(&config, rm.value_of_("file").unwrap(), rm.value_of_("cr")).await;
     }
 
     if let Some(merge) = matches.subcommand_matches("merge") {
-        return fpm::merge(
+        return fastn::merge(
             &config,
             merge.value_of_("src"),
             merge.value_of_("dest").unwrap(),
@@ -141,7 +141,7 @@ async fn async_main() -> fpm::Result<()> {
 
     if let Some(build) = matches.subcommand_matches("build") {
         if matches.get_flag("verbose") {
-            println!("{}", fpm::debug_env_vars());
+            println!("{}", fastn::debug_env_vars());
         }
 
         let edition = build.value_of_("edition").map(ToString::to_string);
@@ -157,7 +157,7 @@ async fn async_main() -> fpm::Result<()> {
             .add_external_css(external_css)
             .add_inline_css(inline_css);
 
-        return fpm::build(
+        return fastn::build(
             &mut config,
             build.value_of_("file"), // TODO: handle more than one files
             build.value_of_("base").unwrap_or("/"),
@@ -167,44 +167,44 @@ async fn async_main() -> fpm::Result<()> {
     }
 
     if let Some(mark_resolve) = matches.subcommand_matches("mark-resolved") {
-        return fpm::mark_resolved(&config, mark_resolve.value_of_("path").unwrap()).await;
+        return fastn::mark_resolved(&config, mark_resolve.value_of_("path").unwrap()).await;
     }
 
     if let Some(abort_merge) = matches.subcommand_matches("abort-merge") {
-        return fpm::abort_merge(&config, abort_merge.value_of_("path").unwrap()).await;
+        return fastn::abort_merge(&config, abort_merge.value_of_("path").unwrap()).await;
     }
 
     if let Some(revert) = matches.subcommand_matches("revert") {
-        return fpm::revert(&config, revert.value_of_("path").unwrap()).await;
+        return fastn::revert(&config, revert.value_of_("path").unwrap()).await;
     }
 
     if let Some(sync) = matches.subcommand_matches("sync") {
         return if let Some(source) = sync.get_many::<String>("file") {
             let sources = source.map(|v| v.to_string()).collect();
-            fpm::sync2(&config, Some(sources)).await
+            fastn::sync2(&config, Some(sources)).await
         } else {
-            fpm::sync2(&config, None).await
+            fastn::sync2(&config, None).await
         };
     }
     if let Some(create_cr) = matches.subcommand_matches("create-cr") {
-        return fpm::create_cr(&config, create_cr.value_of_("title")).await;
+        return fastn::create_cr(&config, create_cr.value_of_("title")).await;
     }
     if let Some(close_cr) = matches.subcommand_matches("close-cr") {
-        return fpm::close_cr(&config, close_cr.value_of_("cr").unwrap()).await;
+        return fastn::close_cr(&config, close_cr.value_of_("cr").unwrap()).await;
     }
     if let Some(status) = matches.subcommand_matches("status") {
         // TODO: handle multiple files
-        return fpm::status(&config, status.value_of_("file")).await;
+        return fastn::status(&config, status.value_of_("file")).await;
     }
     if matches.subcommand_matches("translation-status").is_some() {
-        return fpm::translation_status(&config).await;
+        return fastn::translation_status(&config).await;
     }
     if let Some(diff) = matches.subcommand_matches("diff") {
         let all = diff.get_flag("all");
         return if let Some(source) = diff.get_many::<String>("file") {
-            fpm::diff(&config, Some(source.map(|v| v.to_string()).collect()), all).await
+            fastn::diff(&config, Some(source.map(|v| v.to_string()).collect()), all).await
         } else {
-            fpm::diff(&config, None, all).await
+            fastn::diff(&config, None, all).await
         };
     }
 
@@ -215,7 +215,7 @@ async fn async_main() -> fpm::Result<()> {
         let revive_it = resolve_conflict.get_flag("revive-it");
         let delete_it = resolve_conflict.get_flag("delete-it");
         let source = resolve_conflict.value_of_("file").unwrap(); // TODO: handle multiple files
-        return fpm::resolve_conflict(
+        return fastn::resolve_conflict(
             &config, source, use_ours, use_theirs, print, revive_it, delete_it,
         )
         .await;
@@ -223,19 +223,19 @@ async fn async_main() -> fpm::Result<()> {
     if let Some(tracks) = matches.subcommand_matches("start-tracking") {
         let source = tracks.value_of_("source").unwrap();
         let target = tracks.value_of_("target").unwrap();
-        return fpm::start_tracking(&config, source, target).await;
+        return fastn::start_tracking(&config, source, target).await;
     }
     if let Some(mark) = matches.subcommand_matches("mark-upto-date") {
         let source = mark.value_of_("source").unwrap();
         let target = mark.value_of_("target");
-        return fpm::mark_upto_date(&config, source, target).await;
+        return fastn::mark_upto_date(&config, source, target).await;
     }
 
     unreachable!("No subcommand matched");
 }
 
 fn app(version: &'static str) -> clap::Command {
-    clap::Command::new("fpm: FTD Package Manager")
+    clap::Command::new("fastn: FTD Package Manager")
         .version(version)
         .arg_required_else_help(true)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
@@ -243,18 +243,18 @@ fn app(version: &'static str) -> clap::Command {
         .arg(clap::arg!(--trace "Activate tracing").hide(true))
         .subcommand(
             // Initial subcommand format
-            // fpm create-package <project-name> [project-path]
+            // fastn create-package <project-name> [project-path]
             //                   -n or --name   -p or --path
             // Necessary <project-name> with Optional [project-path]
             clap::Command::new("create-package")
-                .about("Create a new FPM package")
+                .about("Create a new fastn package")
                 .arg(clap::arg!(name: <NAME> "The name of the package to create"))
                 .arg(clap::arg!(-p --path [PATH] "Where to create the package (relative or absolute path, default value: the name)"))
                 .arg(clap::arg!(--"download-base-url" <DOWNLOAD_BASE_URL> "base url of the package where it can downloaded"))
         )
         .subcommand(
             clap::Command::new("build")
-                .about("Build static site from this fpm package")
+                .about("Build static site from this fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to build (if specified only these are built, else entire package is built)"))
                 .arg(clap::arg!(-b --base [BASE] "The base path.").default_value("/"))
                 .arg(clap::arg!(--"ignore-failed" "Ignore failed files."))
@@ -327,17 +327,17 @@ fn app(version: &'static str) -> clap::Command {
         )
         .subcommand(
             clap::Command::new("sync")
-                .about("Sync with fpm-repo (or .history folder if not using fpm-repo)")
+                .about("Sync with fastn-repo (or .history folder if not using fastn-repo)")
                 .arg(clap::arg!(file: <FILE>... "The file(s) to sync (leave empty to sync entire package)"))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("status")
-                .about("Show the status of files in this fpm package")
+                .about("Show the status of files in this fastn package")
                 .arg(clap::arg!(file: <FILE>... "The file(s) to see status of (leave empty to see status of entire package)").required(false))
                 .hide(true) // hidden since the feature is not being released yet.
         )
-        .subcommand(fpm::commands::sync_status::command())
+        .subcommand(fastn::commands::sync_status::command())
         .subcommand(
             clap::Command::new("create-cr")
                 .about("Create a Change Request")
@@ -352,19 +352,19 @@ fn app(version: &'static str) -> clap::Command {
         )
         .subcommand(
             clap::Command::new("translation-status")
-                .about("Show the translation status of files in this fpm package")
+                .about("Show the translation status of files in this fastn package")
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("diff")
-                .about("Show un-synced changes to files in this fpm package")
+                .about("Show un-synced changes to files in this fastn package")
                 .arg(clap::arg!(file: <FILE>... "The file(s) to see diff of (leave empty to see diff of entire package)").required(false))
                 .arg(clap::arg!(-a --all "Show all changes."))
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
             clap::Command::new("resolve-conflict")
-                .about("Show un-synced changes to files in this fpm package")
+                .about("Show un-synced changes to files in this fastn package")
                 .arg(clap::arg!(--"use-ours" "Use our version of the file"))
                 .arg(clap::arg!(--"use-theirs" "Use their version of the file"))
                 .arg(clap::arg!(--"revive-it" "Revive the file"))
@@ -375,7 +375,7 @@ fn app(version: &'static str) -> clap::Command {
         )
         .subcommand(
             clap::Command::new("check")
-                .about("Check if everything is fine with current fpm package")
+                .about("Check if everything is fine with current fastn package")
                 .hide(true) // hidden since the feature is not being released yet.
         )
         .subcommand(
@@ -392,7 +392,7 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--target <TARGET> "The target file that will track the source").required(true))
                 .hide(true) // hidden since the feature is not being released yet.
         )
-        .subcommand(fpm::commands::stop_tracking::command())
+        .subcommand(fastn::commands::stop_tracking::command())
         .subcommand(sub_command::serve())
 }
 
@@ -400,9 +400,9 @@ mod sub_command {
     pub fn serve() -> clap::Command {
         let serve = clap::Command::new("serve")
             .about("Serve package content over HTTP")
-            .after_help("FPM packages can have dynamic features. If your package uses any \
-            dynamic feature, then you want to use `fpm serve` instead of `fpm build`.\n\n\
-            Read more about it on https://fpm.dev/serve/")
+            .after_help("fastn packages can have dynamic features. If your package uses any \
+            dynamic feature, then you want to use `fastn serve` instead of `fastn build`.\n\n\
+            Read more about it on https://fastn.dev/serve/")
             .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
             .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
             .arg(clap::arg!(--"cached-parse" "Use cached parser"))
@@ -421,7 +421,7 @@ mod sub_command {
         } else {
             serve
                 .arg(
-                    clap::arg!(identities: --identities <IDENTITIES> "Http request identities, fpm allows these identities to access documents")
+                    clap::arg!(identities: --identities <IDENTITIES> "Http request identities, fastn allows these identities to access documents")
                         .hide(true) // this is only for testing purpose
                 )
         }

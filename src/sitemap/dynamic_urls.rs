@@ -9,7 +9,7 @@ pub struct DynamicUrlsTemp {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct DynamicUrls {
-    pub sections: Vec<fpm::sitemap::section::Section>,
+    pub sections: Vec<fastn::sitemap::section::Section>,
 }
 
 impl DynamicUrls {
@@ -17,10 +17,10 @@ impl DynamicUrls {
         global_ids: &std::collections::HashMap<String, String>,
         package_name: &str,
         body: &str,
-    ) -> Result<Self, fpm::sitemap::ParseError> {
+    ) -> Result<Self, fastn::sitemap::ParseError> {
         // Note: Using Sitemap Parser, because format of dynamic-urls is same as sitemap
-        let mut parser = fpm::sitemap::SitemapParser {
-            state: fpm::sitemap::ParsingState::WaitingForSection,
+        let mut parser = fastn::sitemap::SitemapParser {
+            state: fastn::sitemap::ParsingState::WaitingForSection,
             sections: vec![],
             temp_item: None,
             doc_name: package_name.to_string(),
@@ -35,11 +35,11 @@ impl DynamicUrls {
         }
 
         let dynamic_urls = DynamicUrls {
-            sections: fpm::sitemap::construct_tree_util(parser.finalize()?),
+            sections: fastn::sitemap::construct_tree_util(parser.finalize()?),
         };
 
         if dynamic_urls.any_without_named_params() {
-            return Err(fpm::sitemap::ParseError::InvalidDynamicUrls {
+            return Err(fastn::sitemap::ParseError::InvalidDynamicUrls {
                 message: "All the dynamic urls must contain dynamic params".to_string(),
             });
         }
@@ -50,11 +50,11 @@ impl DynamicUrls {
     // If any one does not have path parameters so return true
     // any_without_named_params
     pub fn any_without_named_params(&self) -> bool {
-        fn any_named_params(v: &[fpm::sitemap::PathParams]) -> bool {
+        fn any_named_params(v: &[fastn::sitemap::PathParams]) -> bool {
             v.iter().any(|x| x.is_named_param())
         }
 
-        fn check_toc(toc: &fpm::sitemap::toc::TocItem) -> bool {
+        fn check_toc(toc: &fastn::sitemap::toc::TocItem) -> bool {
             if !any_named_params(&toc.path_parameters) {
                 return true;
             }
@@ -67,7 +67,7 @@ impl DynamicUrls {
             false
         }
 
-        fn check_sub_section(sub_section: &fpm::sitemap::section::Subsection) -> bool {
+        fn check_sub_section(sub_section: &fastn::sitemap::section::Subsection) -> bool {
             // Note: No need to check subsection
             // if sub_section.path_parameters.is_empty() {
             //     return true;
@@ -81,7 +81,7 @@ impl DynamicUrls {
             false
         }
 
-        fn check_section(section: &fpm::sitemap::section::Section) -> bool {
+        fn check_section(section: &fastn::sitemap::section::Section) -> bool {
             // Note: No need to check section
             // if section.path_parameters.is_empty() {
             //     return true;
@@ -104,17 +104,18 @@ impl DynamicUrls {
     }
 
     #[tracing::instrument(name = "dynamic-urls-resolve-document")]
-    pub fn resolve_document(&self, path: &str) -> fpm::Result<ResolveDocOutput> {
+    pub fn resolve_document(&self, path: &str) -> fastn::Result<ResolveDocOutput> {
         fn resolve_in_toc(
-            toc: &fpm::sitemap::toc::TocItem,
+            toc: &fastn::sitemap::toc::TocItem,
             path: &str,
-        ) -> fpm::Result<ResolveDocOutput> {
+        ) -> fastn::Result<ResolveDocOutput> {
             if !toc.path_parameters.is_empty() {
                 // path: /arpita/foo/28/
                 // request: arpita foo 28
                 // sitemap: [string,integer]
                 // Mapping: arpita -> string, foo -> foo, 28 -> integer
-                let params = fpm::sitemap::utils::url_match(path, toc.path_parameters.as_slice())?;
+                let params =
+                    fastn::sitemap::utils::url_match(path, toc.path_parameters.as_slice())?;
 
                 if params.0 {
                     return Ok((toc.document.clone(), params.1));
@@ -132,16 +133,16 @@ impl DynamicUrls {
         }
 
         fn resolve_in_sub_section(
-            sub_section: &fpm::sitemap::section::Subsection,
+            sub_section: &fastn::sitemap::section::Subsection,
             path: &str,
-        ) -> fpm::Result<ResolveDocOutput> {
+        ) -> fastn::Result<ResolveDocOutput> {
             if !sub_section.path_parameters.is_empty() {
                 // path: /arpita/foo/28/
                 // request: arpita foo 28
                 // sitemap: [string,integer]
                 // Mapping: arpita -> string, foo -> foo, 28 -> integer
                 let params =
-                    fpm::sitemap::utils::url_match(path, sub_section.path_parameters.as_slice())?;
+                    fastn::sitemap::utils::url_match(path, sub_section.path_parameters.as_slice())?;
 
                 if params.0 {
                     return Ok((sub_section.document.clone(), params.1));
@@ -158,9 +159,9 @@ impl DynamicUrls {
         }
 
         fn resolve_in_section(
-            section: &fpm::sitemap::section::Section,
+            section: &fastn::sitemap::section::Section,
             path: &str,
-        ) -> fpm::Result<ResolveDocOutput> {
+        ) -> fastn::Result<ResolveDocOutput> {
             // path: /abrark/foo/28/
             // In sitemap url: /<string:username>/foo/<integer:age>/
             if !section.path_parameters.is_empty() {
@@ -169,7 +170,7 @@ impl DynamicUrls {
                 // sitemap: [string,integer]
                 // params_matches: abrark -> string, foo -> foo, 28 -> integer
                 let params =
-                    fpm::sitemap::utils::url_match(path, section.path_parameters.as_slice())?;
+                    fastn::sitemap::utils::url_match(path, section.path_parameters.as_slice())?;
 
                 if params.0 {
                     return Ok((section.document.clone(), params.1));
@@ -203,7 +204,7 @@ mod tests {
 
     #[test]
     fn parse_dynamic_urls() {
-        let left = fpm::sitemap::DynamicUrls::parse(
+        let left = fastn::sitemap::DynamicUrls::parse(
             &std::collections::HashMap::new(),
             "abrark.com",
             r#"
@@ -221,8 +222,8 @@ mod tests {
 "#,
         );
 
-        let right = Ok(fpm::sitemap::DynamicUrls {
-            sections: vec![fpm::sitemap::section::Section {
+        let right = Ok(fastn::sitemap::DynamicUrls {
+            sections: vec![fastn::sitemap::section::Section {
                 id: "Dynamic Urls Section".to_string(),
                 icon: None,
                 bury: false,
@@ -232,7 +233,7 @@ mod tests {
                 extra_data: Default::default(),
                 is_active: false,
                 nav_title: None,
-                subsections: vec![fpm::sitemap::section::Subsection {
+                subsections: vec![fastn::sitemap::section::Subsection {
                     id: None,
                     icon: None,
                     bury: false,
@@ -244,7 +245,7 @@ mod tests {
                     is_active: false,
                     nav_title: None,
                     toc: vec![
-                        fpm::sitemap::toc::TocItem {
+                        fastn::sitemap::toc::TocItem {
                             id: "/person/<string:name>/".to_string(),
                             icon: None,
                             bury: false,
@@ -269,15 +270,15 @@ mod tests {
                             document: Some("person.ftd".to_string()),
                             confidential: true,
                             path_parameters: vec![
-                                fpm::sitemap::PathParams::value(0, "person".to_string()),
-                                fpm::sitemap::PathParams::named(
+                                fastn::sitemap::PathParams::value(0, "person".to_string()),
+                                fastn::sitemap::PathParams::named(
                                     1,
                                     "name".to_string(),
                                     "string".to_string(),
                                 ),
                             ],
                         },
-                        fpm::sitemap::toc::TocItem {
+                        fastn::sitemap::toc::TocItem {
                             id: "/person/<string:name>/".to_string(),
                             icon: None,
                             bury: false,
@@ -302,8 +303,8 @@ mod tests {
                             document: Some("person.ftd".to_string()),
                             confidential: true,
                             path_parameters: vec![
-                                fpm::sitemap::PathParams::value(0, "person".to_string()),
-                                fpm::sitemap::PathParams::named(
+                                fastn::sitemap::PathParams::value(0, "person".to_string()),
+                                fastn::sitemap::PathParams::named(
                                     1,
                                     "name".to_string(),
                                     "string".to_string(),

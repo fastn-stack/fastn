@@ -1,7 +1,7 @@
 pub fn processor(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     let doc_path = match section
         .header
@@ -178,7 +178,7 @@ pub fn sanitize_anchored_lines(s: &str) -> String {
 }
 
 impl IncludeCode {
-    pub fn parse(s: &str, config: &fpm::Config) -> Result<Self, ParseError> {
+    pub fn parse(s: &str, config: &fastn::Config) -> Result<Self, ParseError> {
         let doc = IncludeDocument::parse(s)?;
         let extension = match &doc.path.rsplit_once('.') {
             Some((_, ex)) => ex,

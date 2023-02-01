@@ -14,7 +14,7 @@ fn watcher() -> (
     let (g_tx, mut g_rx) = tokio::sync::mpsc::channel::<usize>(32);
     let (f_tx, mut f_rx) = tokio::sync::mpsc::channel::<()>(32);
 
-    if fpm::utils::is_test() {
+    if fastn::utils::is_test() {
         // we do not want to run the watcher in tests
         return (tx, g_tx);
     }
@@ -81,7 +81,7 @@ fn next_id() -> usize {
     GLOBAL_POLL_COUNT.fetch_add(1, std::sync::atomic::Ordering::SeqCst)
 }
 
-pub async fn poll() -> fpm::Result<fpm::http::Response> {
+pub async fn poll() -> fastn::Result<fastn::http::Response> {
     let id = next_id();
     let (tx, mut rx) = tokio::sync::mpsc::channel::<()>(32);
 
@@ -92,5 +92,5 @@ pub async fn poll() -> fpm::Result<fpm::http::Response> {
         WATCHER.1.send(id).await?;
     }
 
-    fpm::http::api_ok(got_something)
+    fastn::http::api_ok(got_something)
 }

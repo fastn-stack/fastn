@@ -3,7 +3,7 @@ use itertools::Itertools;
 pub async fn processor<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
     document_id: &str,
     base_url: &str,
 ) -> ftd::p1::Result<ftd::Value> {
@@ -18,13 +18,13 @@ pub async fn processor<'a>(
             })?;
 
     let version = if let Some((v, _)) = document_id.split_once('/') {
-        fpm::Version::parse(v).map_err(|e| ftd::p1::Error::ParseError {
+        fastn::Version::parse(v).map_err(|e| ftd::p1::Error::ParseError {
             message: format!("{:?}", e),
             doc_id: doc.name.to_string(),
             line_number: section.line_number,
         })?
     } else {
-        fpm::Version::base()
+        fastn::Version::base()
     };
 
     let doc_id = if let Some(doc) = document_id.split_once('/').map(|(_, v)| v) {
@@ -55,7 +55,7 @@ pub async fn processor<'a>(
         }
     };
     let mut found = false;
-    if let Some(doc) = versions.get(&fpm::Version::base()) {
+    if let Some(doc) = versions.get(&fastn::Version::base()) {
         if doc.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
             found = true;
         }
@@ -63,7 +63,7 @@ pub async fn processor<'a>(
 
     let mut version_toc = vec![];
     for key in versions.keys().sorted() {
-        if key.eq(&fpm::Version::base()) {
+        if key.eq(&fastn::Version::base()) {
             continue;
         }
         let doc = versions[key].to_owned();
@@ -73,7 +73,7 @@ pub async fn processor<'a>(
             }
             found = true;
         }
-        version_toc.push(fpm::library::toc::TocItem {
+        version_toc.push(fastn::library::toc::TocItem {
             id: None,
             title: Some(key.original.to_string()),
             url: Some(format!("{}{}", key.original, url)),
@@ -92,7 +92,7 @@ pub async fn processor<'a>(
     let toc_items = version_toc
         .iter()
         .map(|item| item.to_toc_item_compat())
-        .collect::<Vec<fpm::library::toc::TocItemCompat>>();
+        .collect::<Vec<fastn::library::toc::TocItemCompat>>();
 
     doc.from_json(&toc_items, section)
 }

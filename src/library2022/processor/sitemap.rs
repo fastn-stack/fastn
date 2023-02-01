@@ -2,13 +2,13 @@ pub fn process<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     if let Some(ref sitemap) = config.package.sitemap {
         let doc_id = config
             .current_document
             .clone()
-            .map(|v| fpm::utils::id_to_path(v.as_str()))
+            .map(|v| fastn::utils::id_to_path(v.as_str()))
             .unwrap_or_else(|| {
                 doc.name
                     .to_string()
@@ -22,7 +22,7 @@ pub fn process<'a>(
         }
     }
     doc.from_json(
-        &fpm::sitemap::SiteMapCompat::default(),
+        &fastn::sitemap::SiteMapCompat::default(),
         &kind,
         value.line_number(),
     )
@@ -32,13 +32,13 @@ pub fn full_sitemap_process<'a>(
     value: ftd::ast::VariableValue,
     kind: ftd::interpreter2::Kind,
     doc: &ftd::interpreter2::TDoc<'a>,
-    config: &fpm::Config,
+    config: &fastn::Config,
 ) -> ftd::interpreter2::Result<ftd::interpreter2::Value> {
     if let Some(ref sitemap) = config.package.sitemap {
         let doc_id = config
             .current_document
             .clone()
-            .map(|v| fpm::utils::id_to_path(v.as_str()))
+            .map(|v| fastn::utils::id_to_path(v.as_str()))
             .unwrap_or_else(|| {
                 doc.name
                     .to_string()
@@ -51,7 +51,7 @@ pub fn full_sitemap_process<'a>(
         return doc.from_json(&sitemap_compat, &kind, value.line_number());
     }
     doc.from_json(
-        &fpm::sitemap::SiteMapCompat::default(),
+        &fastn::sitemap::SiteMapCompat::default(),
         &kind,
         value.line_number(),
     )
@@ -63,12 +63,12 @@ pub struct TocItemCompat {
     pub title: Option<String>,
     pub bury: bool,
     #[serde(rename = "extra-data")]
-    pub extra_data: Vec<fpm::library2022::KeyValueData>,
+    pub extra_data: Vec<fastn::library2022::KeyValueData>,
     #[serde(rename = "is-active")]
     pub is_active: bool,
     #[serde(rename = "nav-title")]
     pub nav_title: Option<String>,
-    pub children: Vec<fpm::sitemap::toc::TocItemCompat>,
+    pub children: Vec<fastn::sitemap::toc::TocItemCompat>,
     pub skip: bool,
     pub readers: Vec<String>,
     pub writers: Vec<String>,
@@ -81,7 +81,7 @@ pub struct SubSectionCompat {
     pub bury: bool,
     pub visible: bool,
     #[serde(rename = "extra-data")]
-    pub extra_data: Vec<fpm::library2022::KeyValueData>,
+    pub extra_data: Vec<fastn::library2022::KeyValueData>,
     #[serde(rename = "is-active")]
     pub is_active: bool,
     #[serde(rename = "nav-title")]
@@ -98,7 +98,7 @@ pub struct SectionCompat {
     title: Option<String>,
     bury: bool,
     #[serde(rename = "extra-data")]
-    extra_data: Vec<fpm::library2022::KeyValueData>,
+    extra_data: Vec<fastn::library2022::KeyValueData>,
     #[serde(rename = "is-active")]
     is_active: bool,
     #[serde(rename = "nav-title")]
@@ -116,15 +116,15 @@ pub struct SiteMapCompat {
 }
 
 pub fn to_sitemap_compat(
-    sitemap: &fpm::sitemap::Sitemap,
+    sitemap: &fastn::sitemap::Sitemap,
     current_document: &str,
-) -> fpm::sitemap::SiteMapCompat {
+) -> fastn::sitemap::SiteMapCompat {
     use itertools::Itertools;
     fn to_toc_compat(
-        toc_item: &fpm::sitemap::toc::TocItem,
+        toc_item: &fastn::sitemap::toc::TocItem,
         current_document: &str,
-    ) -> fpm::sitemap::toc::TocItemCompat {
-        let toc_compat = fpm::sitemap::toc::TocItemCompat {
+    ) -> fastn::sitemap::toc::TocItemCompat {
+        let toc_compat = fastn::sitemap::toc::TocItemCompat {
             url: Some(toc_item.id.clone()),
             number: None,
             title: toc_item.title.clone(),
@@ -133,7 +133,7 @@ pub fn to_sitemap_compat(
             font_icon: toc_item.icon.clone().map(|v| v.into()),
             bury: toc_item.bury,
             extra_data: toc_item.extra_data.to_owned(),
-            is_active: fpm::utils::ids_matches(toc_item.id.as_str(), current_document),
+            is_active: fastn::utils::ids_matches(toc_item.id.as_str(), current_document),
             is_open: false,
             nav_title: toc_item.nav_title.clone(),
             children: toc_item
@@ -152,10 +152,10 @@ pub fn to_sitemap_compat(
     }
 
     fn to_subsection_compat(
-        subsection: &fpm::sitemap::section::Subsection,
+        subsection: &fastn::sitemap::section::Subsection,
         current_document: &str,
-    ) -> fpm::sitemap::toc::TocItemCompat {
-        fpm::sitemap::toc::TocItemCompat {
+    ) -> fastn::sitemap::toc::TocItemCompat {
+        fastn::sitemap::toc::TocItemCompat {
             url: subsection.id.clone(),
             title: subsection.title.clone(),
             path: None,
@@ -164,7 +164,7 @@ pub fn to_sitemap_compat(
             bury: subsection.bury,
             extra_data: subsection.extra_data.to_owned(),
             is_active: if let Some(ref subsection_id) = subsection.id {
-                fpm::utils::ids_matches(subsection_id.as_str(), current_document)
+                fastn::utils::ids_matches(subsection_id.as_str(), current_document)
             } else {
                 false
             },
@@ -185,10 +185,10 @@ pub fn to_sitemap_compat(
     }
 
     fn to_section_compat(
-        section: &fpm::sitemap::section::Section,
+        section: &fastn::sitemap::section::Section,
         current_document: &str,
-    ) -> fpm::sitemap::toc::TocItemCompat {
-        fpm::sitemap::toc::TocItemCompat {
+    ) -> fastn::sitemap::toc::TocItemCompat {
+        fastn::sitemap::toc::TocItemCompat {
             url: Some(section.id.to_string()),
             number: None,
             title: section.title.clone(),
@@ -197,7 +197,7 @@ pub fn to_sitemap_compat(
             font_icon: section.icon.clone().map(|v| v.into()),
             bury: section.bury,
             extra_data: section.extra_data.to_owned(),
-            is_active: fpm::utils::ids_matches(section.id.as_str(), current_document),
+            is_active: fastn::utils::ids_matches(section.id.as_str(), current_document),
             is_open: false,
             nav_title: section.nav_title.clone(),
             children: section
@@ -215,7 +215,7 @@ pub fn to_sitemap_compat(
         }
     }
 
-    fpm::sitemap::SiteMapCompat {
+    fastn::sitemap::SiteMapCompat {
         sections: sitemap
             .sections
             .iter()

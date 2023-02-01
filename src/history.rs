@@ -17,8 +17,8 @@ pub struct FileEdit {
 }
 
 impl FileEdit {
-    pub(crate) fn into_workspace(self, file_name: &str) -> fpm::workspace::WorkspaceEntry {
-        fpm::workspace::WorkspaceEntry {
+    pub(crate) fn into_workspace(self, file_name: &str) -> fastn::workspace::WorkspaceEntry {
+        fastn::workspace::WorkspaceEntry {
             filename: file_name.to_string(),
             deleted: Some(self.operation.eq(&FileOperation::Deleted)),
             version: Some(self.version),
@@ -66,8 +66,8 @@ impl FileOperation {
     }
 }
 
-impl fpm::Config {
-    pub async fn get_history(&self) -> fpm::Result<Vec<FileHistory>> {
+impl fastn::Config {
+    pub async fn get_history(&self) -> fastn::Result<Vec<FileHistory>> {
         let history_file_path = self.history_file();
         let history_content = tokio::fs::read_to_string(history_file_path).await?;
         FileHistory::from_ftd(history_content.as_str())
@@ -76,12 +76,12 @@ impl fpm::Config {
     pub async fn get_remote_manifest(
         &self,
         with_deleted: bool,
-    ) -> fpm::Result<std::collections::BTreeMap<String, fpm::history::FileEdit>> {
+    ) -> fastn::Result<std::collections::BTreeMap<String, fastn::history::FileEdit>> {
         let history_list = self.get_history().await?;
         if with_deleted {
-            fpm::history::FileHistory::get_remote_manifest(history_list.as_slice(), with_deleted)
+            fastn::history::FileHistory::get_remote_manifest(history_list.as_slice(), with_deleted)
         } else {
-            Ok(fpm::history::FileHistory::get_remote_manifest(
+            Ok(fastn::history::FileHistory::get_remote_manifest(
                 history_list.as_slice(),
                 with_deleted,
             )?
@@ -94,11 +94,11 @@ impl fpm::Config {
     pub async fn get_cr_manifest(
         &self,
         cr_number: usize,
-    ) -> fpm::Result<std::collections::BTreeMap<String, fpm::history::FileEdit>> {
+    ) -> fastn::Result<std::collections::BTreeMap<String, fastn::history::FileEdit>> {
         let history_list = self.get_history().await?;
-        let cr_path_prefix = fpm::cr::cr_path(cr_number);
+        let cr_path_prefix = fastn::cr::cr_path(cr_number);
         Ok(
-            fpm::history::FileHistory::get_remote_manifest(history_list.as_slice(), true)?
+            fastn::history::FileHistory::get_remote_manifest(history_list.as_slice(), true)?
                 .into_iter()
                 .filter(|(k, _)| {
                     k.starts_with(cr_path_prefix.as_str())
@@ -110,7 +110,7 @@ impl fpm::Config {
 
     pub async fn get_non_deleted_latest_file_paths(
         &self,
-    ) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
+    ) -> fastn::Result<Vec<(String, camino::Utf8PathBuf)>> {
         use itertools::Itertools;
 
         Ok(self
@@ -131,7 +131,7 @@ impl FileHistory {
     pub(crate) fn get_remote_manifest(
         list: &[FileHistory],
         with_deleted: bool,
-    ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
+    ) -> fastn::Result<std::collections::BTreeMap<String, FileEdit>> {
         Ok(list
             .iter()
             .filter_map(|v| {
@@ -156,10 +156,10 @@ impl FileHistory {
         None
     }
 
-    pub(crate) fn to_ftd(history: &[&fpm::history::FileHistory]) -> String {
-        let mut files_history = vec!["-- import: fpm".to_string()];
+    pub(crate) fn to_ftd(history: &[&fastn::history::FileHistory]) -> String {
+        let mut files_history = vec!["-- import: fastn".to_string()];
         for file_history in history {
-            let mut file_history_data = format!("-- fpm.history: {}\n", file_history.filename);
+            let mut file_history_data = format!("-- fastn.history: {}\n", file_history.filename);
             for file_edit in &file_history.file_edit {
                 let author = file_edit
                     .author
@@ -186,23 +186,23 @@ impl FileHistory {
         files_history.join("\n\n\n")
     }
 
-    pub(crate) fn from_ftd(file: &str) -> fpm::Result<Vec<FileHistory>> {
+    pub(crate) fn from_ftd(file: &str) -> fastn::Result<Vec<FileHistory>> {
         let doc = {
-            let lib = fpm::FPMLibrary::default();
-            fpm::doc::parse_ftd("history.ftd", file, &lib)?
+            let lib = fastn::FastnLibrary::default();
+            fastn::doc::parse_ftd("history.ftd", file, &lib)?
         };
-        Ok(doc.get("fpm#history")?)
+        Ok(doc.get("fastn#history")?)
     }
 }
 
 pub(crate) async fn insert_into_history(
     root: &camino::Utf8PathBuf,
-    file_list: &std::collections::BTreeMap<String, fpm::history::FileEditTemp>,
-    history: &mut Vec<fpm::history::FileHistory>,
-) -> fpm::Result<()> {
+    file_list: &std::collections::BTreeMap<String, fastn::history::FileEditTemp>,
+    history: &mut Vec<fastn::history::FileHistory>,
+) -> fastn::Result<()> {
     use itertools::Itertools;
 
-    let mut file_history: std::collections::BTreeMap<String, fpm::history::FileHistory> = history
+    let mut file_history: std::collections::BTreeMap<String, fastn::history::FileHistory> = history
         .iter_mut()
         .map(|v| (v.filename.to_string(), v.clone()))
         .collect();
@@ -213,15 +213,15 @@ pub(crate) async fn insert_into_history(
 
 pub(crate) async fn insert_into_history_(
     root: &camino::Utf8PathBuf,
-    file_list: &std::collections::BTreeMap<String, fpm::history::FileEditTemp>,
-    file_history: &mut std::collections::BTreeMap<String, fpm::history::FileHistory>,
-) -> fpm::Result<()> {
+    file_list: &std::collections::BTreeMap<String, fastn::history::FileEditTemp>,
+    file_history: &mut std::collections::BTreeMap<String, fastn::history::FileHistory>,
+) -> fastn::Result<()> {
     use itertools::Itertools;
 
-    let timestamp = fpm::timestamp_nanosecond();
+    let timestamp = fastn::timestamp_nanosecond();
     for (file, file_op) in file_list {
         let version =
-            fpm::snapshot::get_new_version(file_history.values().collect_vec().as_slice(), file);
+            fastn::snapshot::get_new_version(file_history.values().collect_vec().as_slice(), file);
         if let Some(file_history) = file_history.get_mut(file) {
             file_history
                 .file_edit
@@ -243,9 +243,9 @@ pub(crate) async fn insert_into_history_(
 
         if !file_op.operation.eq(&FileOperation::Deleted) {
             let new_file_path =
-                remote_state.join(fpm::utils::snapshot_id(file, &(version as u128)));
+                remote_state.join(fastn::utils::snapshot_id(file, &(version as u128)));
             let content = tokio::fs::read(root.join(file)).await?;
-            fpm::utils::update(&new_file_path, content.as_slice()).await?;
+            fastn::utils::update(&new_file_path, content.as_slice()).await?;
         }
     }
 

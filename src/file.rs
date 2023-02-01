@@ -74,7 +74,7 @@ pub struct Document {
 
 impl Document {
     pub fn id_to_path(&self) -> String {
-        fpm::utils::id_to_path(self.id.as_str())
+        fastn::utils::id_to_path(self.id.as_str())
     }
 
     pub fn id_with_package(&self) -> String {
@@ -100,7 +100,7 @@ pub(crate) async fn paths_to_files(
     package_name: &str,
     files: Vec<camino::Utf8PathBuf>,
     base_path: &camino::Utf8Path,
-) -> fpm::Result<Vec<fpm::File>> {
+) -> fastn::Result<Vec<fastn::File>> {
     let pkg = package_name.to_string();
     Ok(futures::future::join_all(
         files
@@ -108,19 +108,19 @@ pub(crate) async fn paths_to_files(
             .map(|x| {
                 let base = base_path.to_path_buf();
                 let p = pkg.clone();
-                tokio::spawn(async move { fpm::get_file(p, &x, &base).await })
+                tokio::spawn(async move { fastn::get_file(p, &x, &base).await })
             })
-            .collect::<Vec<tokio::task::JoinHandle<fpm::Result<fpm::File>>>>(),
+            .collect::<Vec<tokio::task::JoinHandle<fastn::Result<fastn::File>>>>(),
     )
     .await
     .into_iter()
     .flatten()
     .flatten()
-    .collect::<Vec<fpm::File>>())
+    .collect::<Vec<fastn::File>>())
 }
 
 pub fn package_ignores(
-    package: &fpm::Package,
+    package: &fastn::Package,
     root_path: &camino::Utf8PathBuf,
     ignore_history: bool,
 ) -> Result<ignore::overrides::Override, ignore::Error> {
@@ -130,7 +130,7 @@ pub fn package_ignores(
     }
     overrides.add("!.packages")?;
     overrides.add("!.tracks")?;
-    overrides.add("!FPM")?;
+    overrides.add("!fastn")?;
     overrides.add("!rust-toolchain")?;
     overrides.add("!.build")?;
     for ignored_path in &package.ignored_paths {
@@ -140,7 +140,7 @@ pub fn package_ignores(
 }
 
 pub fn ignore_path(
-    package: &fpm::Package,
+    package: &fastn::Package,
     root_path: &camino::Utf8PathBuf,
     ignore_paths: Vec<String>,
 ) -> Result<ignore::overrides::Override, ignore::Error> {
@@ -160,9 +160,9 @@ pub(crate) async fn get_file(
     package_name: String,
     doc_path: &camino::Utf8Path,
     base_path: &camino::Utf8Path,
-) -> fpm::Result<File> {
+) -> fastn::Result<File> {
     if doc_path.is_dir() {
-        return Err(fpm::Error::UsageError {
+        return Err(fastn::Error::UsageError {
             message: format!("{} should be a file", doc_path.as_str()),
         });
     }
@@ -180,7 +180,7 @@ pub(crate) async fn get_file(
         ) {
         Some((_, id)) => id.to_string(),
         None => {
-            return Err(fpm::Error::UsageError {
+            return Err(fastn::Error::UsageError {
                 message: format!("{:?} should be a file", doc_path),
             });
         }
@@ -225,7 +225,7 @@ pub(crate) async fn get_file(
     })
 }
 
-pub fn is_static(path: &str) -> fpm::Result<bool> {
+pub fn is_static(path: &str) -> fastn::Result<bool> {
     Ok(match path.rsplit_once('.') {
         Some((_, "ftd")) | Some((_, "md")) => false,
         Some((_, "svg")) | Some((_, "woff")) | Some((_, "woff2")) => true,

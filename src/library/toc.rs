@@ -1,7 +1,7 @@
 pub fn processor(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc,
-    _config: &fpm::Config,
+    _config: &fastn::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     let toc_items = ToC::parse(
         section.body(section.line_number, doc.name)?.as_str(),
