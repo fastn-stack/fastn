@@ -935,6 +935,7 @@ fn update_inherited_reference_in_property_value(
         if let Ok(ftd::interpreter2::StateWithThing::Thing(property)) =
             ftd::interpreter2::PropertyValue::from_ast_value(
                 ftd::ast::VariableValue::String {
+                    // TODO: ftd#default-colors, ftd#default-types
                     value: format!(
                         "$inherited#{}",
                         reference_or_clone.trim_start_matches(
