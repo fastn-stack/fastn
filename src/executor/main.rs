@@ -936,10 +936,7 @@ fn update_inherited_reference_in_property_value(
             ftd::interpreter2::PropertyValue::from_ast_value(
                 ftd::ast::VariableValue::String {
                     // TODO: ftd#default-colors, ftd#default-types
-                    value: format!(
-                        "$ftd#{}",
-                        reference_or_clone.trim_start_matches("ftd.")
-                    ),
+                    value: format!("$ftd#{}", reference_or_clone.trim_start_matches("ftd.")),
                     line_number: 0,
                 },
                 &mut doc.itdoc(),
@@ -950,11 +947,7 @@ fn update_inherited_reference_in_property_value(
             *property_value = property;
         } else {
             property_value.set_reference_or_clone(
-                format!(
-                    "ftd#{}",
-                    reference_or_clone.trim_start_matches("ftd.")
-                )
-                .as_str(),
+                format!("ftd#{}", reference_or_clone.trim_start_matches("ftd.")).as_str(),
             );
         }
     }
