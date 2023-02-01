@@ -1,0 +1,15 @@
+-- import: function as fn
+
+-- integer $num: 0
+
+-- ftd.text: Hello
+color: $ftd.default-colors.custom.one
+color if { num % 2 == 0 }: $ftd.default-colors.custom.three
+role: $ftd.default-types.heading-large
+role if { num % 2 == 0 }: $ftd.default-types.heading-medium
+$on-click$: $fn.increment($a = $num)
+
+
+-- ftd.text: Hello
+background.solid: $ftd.default-colors.background.base
+color: $ftd.default-colors.text-strong

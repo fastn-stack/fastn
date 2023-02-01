@@ -928,19 +928,17 @@ fn update_inherited_reference_in_property_value(
 
     if !is_reference_updated
         && (reference_or_clone
-            .starts_with()
+            .starts_with(format!("ftd.{}", ftd::interpreter2::FTD_DEFAULT_TYPES).as_str())
             || reference_or_clone
-                .starts_with(format!("{}.colors", ftd::interpreter2::FTD_INHERITED).as_str()))
+                .starts_with(format!("ftd.{}", ftd::interpreter2::FTD_DEFAULT_COLORS).as_str()))
     {
         if let Ok(ftd::interpreter2::StateWithThing::Thing(property)) =
             ftd::interpreter2::PropertyValue::from_ast_value(
                 ftd::ast::VariableValue::String {
                     // TODO: ftd#default-colors, ftd#default-types
                     value: format!(
-                        "$inherited#{}",
-                        reference_or_clone.trim_start_matches(
-                            format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str()
-                        )
+                        "$ftd#{}",
+                        reference_or_clone.trim_start_matches("ftd.")
                     ),
                     line_number: 0,
                 },
@@ -953,10 +951,8 @@ fn update_inherited_reference_in_property_value(
         } else {
             property_value.set_reference_or_clone(
                 format!(
-                    "inherited#{}",
-                    reference_or_clone.trim_start_matches(
-                        format!("{}.", ftd::interpreter2::FTD_INHERITED).as_str()
-                    )
+                    "ftd#{}",
+                    reference_or_clone.trim_start_matches("ftd.")
                 )
                 .as_str(),
             );
