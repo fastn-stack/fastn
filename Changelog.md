@@ -6,49 +6,57 @@
 
 <summary><b>Breaking change</b> <a href="https://github.com/ftd-lang/ftd/pull/566/commits/e1722eacf386d3c515000c79a86e7ffb91f2df6c">Inherited types changed</a></summary>
 
-Inherited Types changes
+Breaking changes
+  
+- `$inherited.types.copy-relaxed` -> `$inherited.types.copy-regular`
+- `$inherited.types.copy-tight` -> `$inherited.types.copy-small`
+- `$inherited.types.label-big` -> `$inherited.types.label-large`
+
 
 Headings: 
 
-- heading-tiny is added
+- `$inherited.types.heading-tiny` is added
 - rest have weight, line-height, weight updates 
 
 Copy:
 
-- copy-relaxed, copy-tight have been deprecated
-- added copy-regular and copy-small
-- rest have size and line-height changes
+- added `$inherited.types.copy-regular` and `$inherited.types.copy-small`
+- rest have size and `$inherited.types.line-height` changes
 
 Specialized Text:
 
-- source-code is added 
+- `$inherited.types.source-code` is added 
 - rest have size and line-height changes
 
 Labels: 
 
-- label-big is changed to label-large
-- label-small is updated with new size and line-height values
+- `$inherited.types.label-big` is changed to label-large
+- `$inherited.types.label-small` is updated with new size and line-height values
 
 Button: 
 
 - All button types which are added are new
-- added button-large, button-medium, button-small, link types
-
-Existing type changes (Old -> New)
-  
-- copy-relaxed -> copy-regular
-- copy-tight -> copy-small
-- label-big -> label-large
+- added `$inherited.types.button-large`, `$inherited.types.button-medium`, `$inherited.types.button-small`, link types
 
 </details>
 
 ## 30 January 2023
+
 - [Added ftd.checkbox](https://github.com/ftd-lang/ftd/pull/564/commits/483060b31dcce626599fc0bca8d7e6261d0c37a8)
 
 ## 27 January 2023
-- [Merged spacing with spacing-mode](https://github.com/ftd-lang/ftd/pull/557/commits/37569f9df70ce60f161a1260e6fa09827f8f0875)
+
+<details>
+
+<summary><b>Breaking change</b>: <a href="https://github.com/ftd-lang/ftd/pull/557/commits/37569f9df70ce60f161a1260e6fa09827f8f0875">Merged spacing with spacing-mode</a></summary>
+
+  - use `spacing.fixed.px: 20` instead of `spacing.px: 20`
+  - use `spacing: space-around` instead of `spacing-mode: space-around` (same for `space-between` and `space-evenly`)
+
+</details>
 
 ## 25 January 2023
+
 - [Added sticky css](https://github.com/ftd-lang/ftd/pull/553/commits/a3b43d09b7b968d8242559e96dbff7c356104880)
 - [Added `id` attr](https://github.com/ftd-lang/ftd/pull/554/commits/7321ba5253d565683e35e078606567f302633eaf)
 - [Added slugify `id` for `region`s](https://github.com/ftd-lang/ftd/pull/556/commits/a419d0155bd4299c4efab91ad55557f92bc21f0f)
