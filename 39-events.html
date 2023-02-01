@@ -14,13 +14,7 @@
 "mobile": 768
 },
 "ftd#dark-mode": false,
-"ftd#device": "desktop",
-"ftd#follow-system-dark-mode": true,
-"ftd#font-code": "sans-serif",
-"ftd#font-copy": "sans-serif",
-"ftd#font-display": "sans-serif",
-"ftd#system-dark-mode": false,
-"inherited#colors": {
+"ftd#default-colors": {
 "accent": {
 "primary": {
 "dark": "#2dd4bf",
@@ -300,7 +294,7 @@
 }
 }
 },
-"inherited#types": {
+"ftd#default-types": {
 "blockquote": {
 "desktop": {
 "font-family": "sans-serif",
@@ -523,7 +517,13 @@
 "weight": 400
 }
 }
-}
+},
+"ftd#device": "desktop",
+"ftd#follow-system-dark-mode": true,
+"ftd#font-code": "sans-serif",
+"ftd#font-copy": "sans-serif",
+"ftd#font-display": "sans-serif",
+"ftd#system-dark-mode": false
 }
 </script>
 <script type="ftd" id="ftd-external-children">
@@ -1477,13 +1477,13 @@ set_data_value(data, "ftd#dark-mode" + "." + remaining, new_value);
 set_data_value(data, "ftd#dark-mode", new_value);
 }
 
-if(!!window["node_change_main"] && !!window.node_change_main["3:main__color"]){window.node_change_main["3:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["2:main__color"]){window.node_change_main["2:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["3:main__color"]){window.node_change_main["3:main__color"](data);
 }
 if(!!window["node_change_main"] && !!window.node_change_main["1:main__color"]){window.node_change_main["1:main__color"](data);
 }
-if(!!window["node_change_main"] && !!window.node_change_main["0:main__color"]){window.node_change_main["0:main__color"](data);
+if(!!window["node_change_main"] && !!window.node_change_main["2:main__color"]){window.node_change_main["2:main__color"](data);
 }
 };
 
