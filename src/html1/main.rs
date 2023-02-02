@@ -28,18 +28,11 @@ impl HtmlUI {
         let (html, outer_events) =
             HtmlGenerator::new(id, &tdoc).to_html_and_outer_events(node_data.node)?;
 
-        /*for (dependency, dummy_node) in node_data.dummy_nodes {
-            let dummy_html = RawHtmlGenerator::from_node(id, &tdoc, dummy_node.main);
-            dbg!("dummy_nodes", &dependency, &dummy_html);
-        }*/
-
         let dummy_html =
             ftd::html1::DummyHtmlGenerator::new(id, &tdoc).from_dummy_nodes(&node_data.dummy_nodes);
-        dbg!(&dummy_html);
 
         let raw_html =
             ftd::html1::HelperHtmlGenerator::new(id, &tdoc).from_raw_nodes(&node_data.raw_nodes);
-        dbg!(&raw_html);
 
         /*for (dependency, raw_node) in node_data.raw_nodes {
             let raw_html = RawHtmlGenerator::from_node(id, &tdoc, raw_node.node);

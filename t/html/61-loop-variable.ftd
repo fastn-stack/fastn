@@ -8,8 +8,12 @@
 -- end: $names
 
 
--- ftd.text: Click here
-$on-click$: $append($a = $names, v = FifthTry)
+-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+$on-change$: $append($a = $names, v = $VALUE)
 
 -- foo: $obj
 idx: $LOOP.COUNTER
