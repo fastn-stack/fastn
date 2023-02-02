@@ -91,7 +91,7 @@ impl DummyElement {
                 local_container,
                 &component_definition,
                 true,
-                inherited_variables,
+                &mut Default::default(),
             )?
         } else {
             found_elements.insert(instruction.name.to_string());

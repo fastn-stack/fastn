@@ -60,6 +60,7 @@ pub(crate) struct DummyHtmlGenerator {
 }
 
 impl DummyHtmlGenerator {
+    // pub(crate) fn from_dummy_element( dummy_node: ftd::Map<ftd::node::DummyNode>,)
     pub(crate) fn from_node(
         id: &str,
         doc: &ftd::interpreter2::TDoc,
