@@ -1,3 +1,3 @@
-# fpm.dev
+# fastn.io
 
-This repo contains the documentation of fpm
+This repo contains the documentation of fastn
