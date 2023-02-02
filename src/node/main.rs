@@ -153,9 +153,9 @@ impl ftd::executor::Row {
         );
 
         // TODO: Need to fix this later for condition
-        if let Some(v) = n.style.get("justify-content"){
+        if let Some(v) = n.style.get("justify-content") {
             if let Some(jc) = &v.value {
-                if jc.eq("start"){
+                if jc.eq("start") {
                     n.style.check_and_insert(
                         "justify-content",
                         ftd::node::Value::from_executor_value(
@@ -231,9 +231,9 @@ impl ftd::executor::Column {
         );
 
         // TODO: Need to fix this later for condition
-        if let Some(v) = n.style.get("justify-content"){
+        if let Some(v) = n.style.get("justify-content") {
             if let Some(jc) = &v.value {
-                if jc.eq("start"){
+                if jc.eq("start") {
                     n.style.check_and_insert(
                         "justify-content",
                         ftd::node::Value::from_executor_value(
