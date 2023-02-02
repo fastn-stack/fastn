@@ -1,5 +1,7 @@
 -- boolean $flag: true
 
+-- ftd.boolean: $flag
+
 -- ftd.checkbox:
 checked: true
 enabled: true

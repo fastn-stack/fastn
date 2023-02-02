@@ -1175,9 +1175,9 @@ impl TextInput {
         (
             indoc::indoc! {"
                 if ({0}) {
-                    \"\"
+                    \"set-property-to-false\"
                 } else {
-                    \"disabled\"
+                    \"\"
                 }
             "}
             .to_string(),
@@ -1268,9 +1268,9 @@ impl CheckBox {
         (
             indoc::indoc! {"
                 if ({0}) {
-                    \"checked\"
-                } else {
                     \"\"
+                } else {
+                    \"set-property-to-false\"
                 }
             "}
             .to_string(),
@@ -1282,9 +1282,9 @@ impl CheckBox {
         (
             indoc::indoc! {"
                 if ({0}) {
-                    \"\"
+                    \"set-property-to-false\"
                 } else {
-                    \"disabled\"
+                    \"\"
                 }
             "}
             .to_string(),
