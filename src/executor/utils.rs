@@ -458,6 +458,29 @@ fn update_inherited_reference_in_property_value(
         }
         if found {
             is_reference_updated = true;
+            let reference_name = if let Some(rem) = rem {
+                format!("{}.{}", reference, rem)
+            } else {
+                reference.to_string()
+            };
+
+            if let Ok(ftd::interpreter2::StateWithThing::Thing(property)) =
+                ftd::interpreter2::PropertyValue::from_ast_value(
+                    ftd::ast::VariableValue::String {
+                        // TODO: ftd#default-colors, ftd#default-types
+                        value: format!("${}", reference_name),
+                        line_number: 0,
+                    },
+                    &mut doc.itdoc(),
+                    property_value.is_mutable(),
+                    Some(&property_value.kind().into_kind_data()),
+                )
+            {
+                *property_value = property;
+            } else {
+                property_value.set_reference_or_clone(reference_name.as_str());
+            }
+
             property_value.set_reference_or_clone(
                 if let Some(rem) = rem {
                     format!("{}.{}", reference, rem)
